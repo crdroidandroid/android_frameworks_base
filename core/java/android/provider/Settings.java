@@ -7520,6 +7520,13 @@ public final class Settings {
         public static final String QS_TILE_ANIMATION_STYLE = "qs_tile_animation_style";
 
         /**
+         * Whether to control brightness from status bar
+         * 0 = 0ff, 1 = on
+         * @hide
+         */
+        public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
