@@ -75,6 +75,8 @@ interface ShadeViewController {
     /** Sends an external (e.g. Status Bar) intercept touch event to the Shade touch handler. */
     fun handleExternalInterceptTouch(event: MotionEvent): Boolean
 
+    fun fling(vel: Float, expand: Boolean, expandBecauseOfFalsing: Boolean)
+
     /**
      * Triggered when an input focus transfer gesture has started.
      *
