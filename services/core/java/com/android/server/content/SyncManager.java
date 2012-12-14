@@ -69,6 +69,7 @@ import android.os.PowerManager;
 import android.os.RemoteCallback;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
@@ -395,12 +396,17 @@ public class SyncManager {
 
     private BroadcastReceiver mShutdownIntentReceiver =
             new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    Log.w(TAG, "Writing sync state before shutdown...");
-                    getSyncStorageEngine().writeAllState();
-                }
-            };
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final StrictMode.ThreadPolicy savedPolicy = StrictMode.allowThreadDiskWrites();
+            try {
+                Log.w(TAG, "Writing sync state before shutdown...");
+                getSyncStorageEngine().writeAllState();
+            } finally {
+                StrictMode.setThreadPolicy(savedPolicy);
+            }
+        }
+    };
 
     private BroadcastReceiver mUserIntentReceiver = new BroadcastReceiver() {
         @Override
