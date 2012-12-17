@@ -72,6 +72,10 @@ public class TunerServiceImpl extends TunerService {
     // Do not add Lineage specific keys here as they are blacklisted automatically
     private static final String[] RESET_BLACKLIST = new String[] {
             Clock.STATUS_BAR_CLOCK_SECONDS,
+            Clock.STATUS_BAR_CLOCK_DATE_DISPLAY,
+            Clock.STATUS_BAR_CLOCK_DATE_STYLE,
+            Clock.STATUS_BAR_CLOCK_DATE_POSITION,
+            Clock.STATUS_BAR_CLOCK_DATE_FORMAT,
             QSTileHost.TILES_SETTING,
             Settings.Secure.DOZE_ALWAYS_ON,
             StatusBar.SCREEN_BRIGHTNESS_MODE,
