@@ -40,7 +40,7 @@ public class ClockController implements TunerService.Tunable {
     private static final String STATUS_BAR_CLOCK =
             "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK;
 
-    private Clock mActiveClock, mCenterClock, mLeftClock, mRightClock;
+    private Clock mCenterClock, mLeftClock, mRightClock;
 
     private int mClockPosition = CLOCK_POSITION_LEFT;
 
@@ -49,39 +49,29 @@ public class ClockController implements TunerService.Tunable {
         mLeftClock = statusBar.findViewById(R.id.clock);
         mRightClock = statusBar.findViewById(R.id.clock_right);
 
-        mActiveClock = mLeftClock;
-
         Dependency.get(TunerService.class).addTunable(this,
                 STATUS_BAR_CLOCK);
-    }
-
-    public Clock getClock() {
-        return mActiveClock;
     }
 
     private void updateActiveClock() {
         switch (mClockPosition) {
             case CLOCK_POSITION_RIGHT:
-                mActiveClock = mRightClock;
                 mLeftClock.setClockVisibleByUser(false);
                 mCenterClock.setClockVisibleByUser(false);
                 mRightClock.setClockVisibleByUser(true);
                 break;
             case CLOCK_POSITION_CENTER:
-                mActiveClock = mCenterClock;
                 mLeftClock.setClockVisibleByUser(false);
                 mRightClock.setClockVisibleByUser(false);
                 mCenterClock.setClockVisibleByUser(true);
                 break;
             case CLOCK_POSITION_LEFT:
             default:
-                mActiveClock = mLeftClock;
                 mCenterClock.setClockVisibleByUser(false);
                 mRightClock.setClockVisibleByUser(false);
                 mLeftClock.setClockVisibleByUser(true);
                 break;
             case CLOCK_POSITION_HIDE:
-                mActiveClock = null;
                 mLeftClock.setClockVisibleByUser(false);
                 mCenterClock.setClockVisibleByUser(false);
                 mRightClock.setClockVisibleByUser(false);
