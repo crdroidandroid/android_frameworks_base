@@ -72,6 +72,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     private int mTickerEnabled;
     private View mTickerViewFromStub;
+    private LinearLayout mCenterClockLayout;
 
     private static final String STATUS_BAR_SHOW_TICKER =
             "system:" + Settings.System.STATUS_BAR_SHOW_TICKER;
@@ -125,6 +126,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mWeatherRight = mStatusBar.findViewById(R.id.weather_temp_right);
         mWeatherImageRight = mStatusBar.findViewById(R.id.weather_image_right);
         mBatteryBar = mStatusBar.findViewById(R.id.battery_bar);
+        mCenterClockLayout = (LinearLayout) mStatusBar.findViewById(R.id.center_clock_layout);
         mSignalClusterView = mStatusBar.findViewById(R.id.signal_cluster);
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mSignalClusterView);
         // Default to showing until we know otherwise.
@@ -229,6 +231,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void hideSystemIconArea(boolean animate) {
+        animateHide(mCenterClockLayout, animate);
         animateHide(mBatteryBar, animate);
         animateHide(mCustomIconArea, animate);
         animateHide(mCrDroidLogoRight, animate);
@@ -244,6 +247,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         animateShow(mCrDroidLogoRight, animate);
         animateShow(mCustomIconArea, animate);
         animateShow(mBatteryBar, animate);
+        animateShow(mCenterClockLayout, animate);
     }
 
     public void hideNotificationIconArea(boolean animate) {
