@@ -20,4 +20,11 @@
     <string name="reboot_to_recovery_message" translatable="false">Rebooting to recovery</string>
     <string name="reboot_to_bootloader_title" translatable="false">Bootloader</string>
     <string name="reboot_to_bootloader_message" translatable="false">Rebooting to bootloader</string>
+
+    <!-- ADB over network notification -->
+    <string name="adb_net_active_notification_title">ADB over network enabled</string>
+    <!-- ADB over USB and network notification -->
+    <string name="adb_both_active_notification_title">ADB over USB &amp; network enabled</string>
+    <!-- ADB notification message-->
+    <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
 </resources>
