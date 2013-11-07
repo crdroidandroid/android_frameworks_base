@@ -551,6 +551,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
                             SQLiteSession.TRANSACTION_MODE_IMMEDIATE,
                     transactionListener,
                     getThreadDefaultConnectionFlags(false /*readOnly*/), null);
+        } catch (SQLiteDatabaseCorruptException ex) {
+            onCorruption();
+            throw ex;
         } finally {
             releaseReference();
         }
@@ -564,6 +567,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
         acquireReference();
         try {
             getThreadSession().endTransaction(null);
+        } catch (SQLiteDatabaseCorruptException ex) {
+            onCorruption();
+            throw ex;
         } finally {
             releaseReference();
         }
@@ -681,6 +687,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
         acquireReference();
         try {
             return getThreadSession().yieldTransaction(sleepAfterYieldDelay, throwIfUnsafe, null);
+        } catch (SQLiteDatabaseCorruptException ex) {
+            onCorruption();
+            throw ex;
         } finally {
             releaseReference();
         }
