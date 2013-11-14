@@ -74,6 +74,7 @@ import com.android.server.dreams.DreamManagerService;
 import com.android.server.emergency.EmergencyAffordanceService;
 import com.android.server.fingerprint.FingerprintService;
 import com.android.server.hdmi.HdmiControlService;
+import com.android.server.gesture.EdgeGestureService;
 import com.android.server.gesture.GestureService;
 import com.android.server.input.InputManagerService;
 import com.android.server.job.JobSchedulerService;
@@ -722,6 +723,7 @@ public final class SystemServer {
         ILockSettings lockSettings = null;
         AssetAtlasService atlas = null;
         MediaRouterService mediaRouter = null;
+        EdgeGestureService edgeGestureService = null;
         GestureService gestureService = null;
 
         // Bring up services needed for UI.
@@ -1251,6 +1253,14 @@ public final class SystemServer {
             mSystemServiceManager.startService(ShortcutService.Lifecycle.class);
 
             mSystemServiceManager.startService(LauncherAppsService.class);
+
+            try {
+                Slog.i(TAG, "EdgeGesture service");
+                edgeGestureService = new EdgeGestureService(context, inputManager);
+                ServiceManager.addService("edgegestureservice", edgeGestureService);
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting EdgeGesture service", e);
+            }
         }
 
         if (!disableNonCoreServices && !disableMediaProjection) {
@@ -1411,6 +1421,14 @@ public final class SystemServer {
             reportWtf("making Display Manager Service ready", e);
         }
         Trace.traceEnd(Trace.TRACE_TAG_SYSTEM_SERVER);
+
+        if (edgeGestureService != null) {
+            try {
+                edgeGestureService.systemReady();
+            } catch (Throwable e) {
+                reportWtf("making EdgeGesture service ready", e);
+            }
+        }
 
         if (gestureService != null) {
             try {
