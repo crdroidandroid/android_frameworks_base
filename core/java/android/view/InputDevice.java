@@ -305,6 +305,15 @@ public final class InputDevice implements Parcelable {
     public static final int SOURCE_ANY = 0xffffff00;
 
     /**
+     * The input source is a custom virtual key event sent programmatically to emulate different events.
+     *
+     * The key requested is different from the actual key's event.
+     *
+     * @hide
+     */
+    public static final int SOURCE_CUSTOM = 0x08000000 | SOURCE_CLASS_BUTTON;
+
+    /**
      * Constant for retrieving the range of values for {@link MotionEvent#AXIS_X}.
      *
      * @see #getMotionRange

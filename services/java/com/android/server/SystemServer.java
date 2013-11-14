@@ -78,6 +78,7 @@ import com.android.server.display.DisplayManagerService;
 import com.android.server.dreams.DreamManagerService;
 import com.android.server.emergency.EmergencyAffordanceService;
 import com.android.server.fingerprint.FingerprintService;
+import com.android.server.gesture.EdgeGestureService;
 import com.android.server.hdmi.HdmiControlService;
 import com.android.server.input.InputManagerService;
 import com.android.server.job.JobSchedulerService;
@@ -989,6 +990,7 @@ public final class SystemServer {
         CountryDetectorService countryDetector = null;
         ILockSettings lockSettings = null;
         MediaRouterService mediaRouter = null;
+        EdgeGestureService edgeGestureService = null;
 
         // Bring up services needed for UI.
         if (mFactoryTestMode != FactoryTest.FACTORY_TEST_LOW_LEVEL) {
@@ -1595,6 +1597,13 @@ public final class SystemServer {
             Slog.i(TAG, "Starting PocketService");
             mSystemServiceManager.startService(PocketService.class);
 
+            try {
+                Slog.i(TAG, "EdgeGesture service");
+                edgeGestureService = new EdgeGestureService(context, inputManager);
+                ServiceManager.addService("edgegestureservice", edgeGestureService);
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting EdgeGesture service", e);
+            }
         }
 
         if (!isWatch) {
@@ -1784,6 +1793,13 @@ public final class SystemServer {
         traceEnd();
 
         mSystemServiceManager.setSafeMode(safeMode);
+        if (edgeGestureService != null) {
+            try {
+                edgeGestureService.systemReady();
+            } catch (Throwable e) {
+                reportWtf("making EdgeGesture service ready", e);
+            }
+        }
 
         // Start device specific services
         traceBeginAndSlog("StartDeviceSpecificServices");
