@@ -235,6 +235,7 @@ import android.provider.Settings;
 import android.service.dreams.DreamManagerInternal;
 import android.service.dreams.DreamService;
 import android.service.dreams.IDreamManager;
+import android.service.gesture.EdgeGestureManager;
 import android.service.vr.IPersistentVrStateCallbacks;
 import android.speech.RecognizerIntent;
 import android.telecom.TelecomManager;
@@ -295,6 +296,8 @@ import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.ScreenshotHelper;
 import com.android.internal.util.ScreenShapeHelper;
 import com.android.internal.util.crdroid.Utils;
+import com.android.internal.util.gesture.EdgeGesturePosition;
+import com.android.internal.util.gesture.EdgeServiceConstants;
 import com.android.internal.utils.ActionHandler;
 import com.android.internal.view.RotationPolicy;
 import com.android.internal.widget.PointerLocationView;
@@ -1282,6 +1285,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.NAVIGATION_BAR_WIDTH), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.USE_EDGE_SERVICE_FOR_GESTURES), false, this,
+                    UserHandle.USER_ALL);
             updateSettings();
         }
 
@@ -1414,6 +1420,69 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mAudioManagerInternal.silenceRingerModeInternal("volume_hush");
         Settings.Secure.putInt(mContext.getContentResolver(), Settings.Secure.HUSH_GESTURE_USED, 1);
         mLogger.action(MetricsProto.MetricsEvent.ACTION_HUSH_GESTURE, mRingerToggleChord);
+    }
+
+    private EdgeGestureManager.EdgeGestureActivationListener mEdgeGestureActivationListener
+            = new EdgeGestureManager.EdgeGestureActivationListener() {
+
+        @Override
+        public void onEdgeGestureActivation(int touchX, int touchY,
+            EdgeGesturePosition position, int flags) {
+            WindowState target = null;
+
+            if (position == EdgeGesturePosition.TOP) {
+                target = mStatusBar;
+            } else if ((position == EdgeGesturePosition.BOTTOM) && (mNavigationBarPosition == NAV_BAR_BOTTOM)) {
+                target = mNavigationBar;
+            } else if ((position == EdgeGesturePosition.RIGHT) && (mNavigationBarPosition == NAV_BAR_RIGHT)) {
+                target = mNavigationBar;
+            } else if ((position == EdgeGesturePosition.LEFT) && (mNavigationBarPosition == NAV_BAR_LEFT)) {
+                target = mNavigationBar;
+            }
+
+            if (target != null) {
+                requestTransientBars(target);
+                dropEventsUntilLift();
+                mEdgeListenerActivated = true;
+            } else {
+                restoreListenerState();
+            }
+        }
+    };
+    private EdgeGestureManager mEdgeGestureManager = null;
+    private int mLastEdgePositions = 0;
+    private boolean mEdgeListenerActivated = false;
+    private boolean mUsingEdgeGestureServiceForGestures = false;
+
+    private void updateEdgeGestureListenerState() {
+        int flags = 0;
+        if (mUsingEdgeGestureServiceForGestures) {
+            flags = EdgeServiceConstants.LONG_LIVING | EdgeServiceConstants.UNRESTRICTED;
+            if (mStatusBar != null && !mStatusBar.isVisibleLw()) {
+                flags |= EdgeGesturePosition.TOP.FLAG;
+            }
+            if (mNavigationBar != null && !mNavigationBar.isVisibleLw()
+                     && !isStatusBarKeyguard()) {
+                if (mNavigationBarPosition == NAV_BAR_BOTTOM) {
+                    flags |= EdgeGesturePosition.BOTTOM.FLAG;
+                } else if (mNavigationBarPosition == NAV_BAR_RIGHT){
+                    flags |= EdgeGesturePosition.RIGHT.FLAG;
+                } else if (mNavigationBarPosition == NAV_BAR_LEFT) {
+                    flags |= EdgeGesturePosition.LEFT.FLAG;
+                }
+            }
+        }
+        if (mEdgeListenerActivated) {
+            mEdgeGestureActivationListener.restoreListenerState();
+            mEdgeListenerActivated = false;
+        }
+        if (flags != mLastEdgePositions) {
+            if (mEdgeGestureManager != null ){
+                mEdgeGestureManager.updateEdgeGestureActivationListener(mEdgeGestureActivationListener,
+                    flags);
+                mLastEdgePositions = flags;
+            }
+        }
     }
 
     IStatusBarService getStatusBarService() {
@@ -3243,6 +3312,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             mUserRotationAngles = Settings.System.getInt(resolver,
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES, -1);
+
+            final boolean useEdgeService = Settings.System.getIntForUser(resolver,
+                    Settings.System.USE_EDGE_SERVICE_FOR_GESTURES, 1, UserHandle.USER_CURRENT) == 1;
+            if (useEdgeService ^ mUsingEdgeGestureServiceForGestures && mSystemReady) {
+                if (!mUsingEdgeGestureServiceForGestures && useEdgeService) {
+                    mUsingEdgeGestureServiceForGestures = true;
+                    mWindowManagerFuncs.unregisterPointerEventListener(mSystemGestures);
+                } else if (mUsingEdgeGestureServiceForGestures && !useEdgeService) {
+                    mUsingEdgeGestureServiceForGestures = false;
+                    mWindowManagerFuncs.registerPointerEventListener(mSystemGestures);
+                }
+                updateEdgeGestureListenerState();
+            }
 
             if (mSystemReady) {
                 int pointerLocation = Settings.System.getIntForUser(resolver,
@@ -5484,6 +5566,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     public int adjustSystemUiVisibilityLw(int visibility) {
         mStatusBarController.adjustSystemUiVisibilityLw(mLastSystemUiFlags, visibility);
         mNavigationBarController.adjustSystemUiVisibilityLw(mLastSystemUiFlags, visibility);
+        updateEdgeGestureListenerState();
 
         // Reset any bits in mForceClearingStatusBarVisibility that
         // are now clear.
@@ -6822,6 +6905,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         // update since mAllowLockscreenWhenOn might have changed
         updateLockScreenTimeout();
+        updateEdgeGestureListenerState();
         return changes;
     }
 
@@ -8874,6 +8958,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         mANBIHandler = new ANBIHandler(mContext);
+
+        mEdgeGestureManager = EdgeGestureManager.getInstance();
+
+        if (mEdgeGestureManager != null) {
+            mEdgeGestureManager.setEdgeGestureActivationListener(mEdgeGestureActivationListener);
+        }
 
         mLineageHardware = LineageHardwareManager.getInstance(mContext);
         // Ensure observe happens in systemReady() since we need
