@@ -4872,7 +4872,13 @@ public final class Settings {
          * @hide
          */
         public static final String NOTIFICATION_SOUND_VIB_SCREEN_ON = "notification_sound_vib_screen_on";
-        
+
+        /**
+         * Whether to mute annoying notifications
+         * @hide
+         */
+        public static final String MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD = "mute_annoying_notifications_threshold";
+
         /**
          * Whether the phone vibrates on call connect
          * @hide
