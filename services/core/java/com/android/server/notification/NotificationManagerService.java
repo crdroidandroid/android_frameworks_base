@@ -238,6 +238,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -383,6 +384,11 @@ public class NotificationManagerService extends SystemService {
 
     // The last key in this list owns the hardware.
     ArrayList<String> mLights = new ArrayList<>();
+
+    @GuardedBy("mNotificationLock")
+    private HashMap<String, Long> mAnnoyingNotifications = new HashMap<String, Long>();
+
+    private long mAnnoyingNotificationThreshold = 30000; // 30 seconds
 
     private AppOpsManager mAppOps;
     private UsageStatsManagerInternal mAppUsageStats;
@@ -1200,6 +1206,8 @@ public class NotificationManagerService extends SystemService {
                 = Settings.Global.getUriFor(Settings.Global.MAX_NOTIFICATION_ENQUEUE_RATE);
         private final Uri NOTIFICATION_SOUND_VIB_SCREEN_ON
                 = Settings.System.getUriFor(Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON);
+        private final Uri MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI
+                = Settings.System.getUriFor(Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD);
 
         SettingsObserver(Handler handler) {
             super(handler);
@@ -1214,6 +1222,8 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(NOTIFICATION_RATE_LIMIT_URI,
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(NOTIFICATION_SOUND_VIB_SCREEN_ON,
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI,
                     false, this, UserHandle.USER_ALL);
             update(null);
         }
@@ -1244,6 +1254,11 @@ public class NotificationManagerService extends SystemService {
                 mSoundVibScreenOn = Settings.System.getIntForUser(resolver,
                         Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON, 1,
                         UserHandle.USER_CURRENT) == 1;
+            }
+            if (uri == null || MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI.equals(uri)) {
+                mAnnoyingNotificationThreshold = Settings.System.getLongForUser(resolver,
+                       Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD, 30000,
+                       UserHandle.USER_CURRENT);
             }
         }
     }
@@ -4603,6 +4618,27 @@ public class NotificationManagerService extends SystemService {
         }
     }
 
+    @GuardedBy("mNotificationLock")
+    private boolean notificationIsAnnoying(String key, String pkg) {
+        if (key == null
+                || mAnnoyingNotificationThreshold <= 0
+                || (pkg != null && "android".equals(pkg))) {
+            return false;
+        }
+
+        long currentTime = System.currentTimeMillis();
+        if (mAnnoyingNotifications.containsKey(key)
+                && (currentTime - mAnnoyingNotifications.get(key)
+                < mAnnoyingNotificationThreshold)) {
+            // less than threshold; it's an annoying notification!!
+            return true;
+        } else {
+            // not in map or time to re-add
+            mAnnoyingNotifications.put(key, currentTime);
+            return false;
+        }
+    }
+
     /**
      * If the notification differs enough visually, consider it a new interruptive notification.
      */
@@ -4833,6 +4869,7 @@ public class NotificationManagerService extends SystemService {
 
         final Notification notification = record.sbn.getNotification();
         final String key = record.getKey();
+        final String pkg = record.sbn.getPackageName();
 
         // Should this notification make noise, vibe, or use the LED?
         final boolean aboveThreshold =
@@ -4853,8 +4890,9 @@ public class NotificationManagerService extends SystemService {
         }
 
         if (aboveThreshold && isNotificationForCurrentUser(record)) {
-
-            boolean beNoisy = !mScreenOn || (mScreenOn && mSoundVibScreenOn);
+            boolean notificationIsAnnoying = notificationIsAnnoying(key, pkg);
+            boolean beNoisy = (!mScreenOn && !notificationIsAnnoying)
+                    || (mScreenOn && mSoundVibScreenOn && !notificationIsAnnoying);
             if (!isInSoundTimeoutPeriod(record) && mSystemReady && mAudioManager != null && beNoisy) {
                 Uri soundUri = record.getSound();
                 hasValidSound = soundUri != null && !Uri.EMPTY.equals(soundUri);
