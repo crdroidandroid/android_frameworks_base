@@ -38,6 +38,8 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.util.ArraySet;
 import android.util.AttributeSet;
@@ -1983,7 +1985,12 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
     }
 
     public boolean isUserExpanded() {
-        return mUserExpanded;
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.FORCE_EXPANDED_NOTIFICATIONS, 0, UserHandle.USER_CURRENT) != 1) {
+            return mUserExpanded;
+        } else {
+            return true;
+        }
     }
 
     /**
