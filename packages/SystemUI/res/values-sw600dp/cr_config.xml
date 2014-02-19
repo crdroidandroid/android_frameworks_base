@@ -20,16 +20,6 @@
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds. -->
 <resources>
-
-    <!-- Sensivity of pie gestures controlls.
-        Must be minimum 1 and maximum 10 (See @EdgeServiceConstants.java).
-        Default for pie is high sensivity -->
-    <integer name="pie_gesture_sensivity">8</integer>
-
-    <!-- Doze: shake accelerometer threshold minimum is 2 and maximum is 10-->
-    <integer name="doze_shake_accelerometer_threshold">10</integer>
-
     <!-- Default value how much apps show the app screenshot on recents view entry -->
-    <integer name="expanded_items_default">2</integer>
-
+    <integer name="expanded_items_default">3</integer>
 </resources>
