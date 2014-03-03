@@ -3795,6 +3795,12 @@ public final class Settings {
         public static final String PIE_TRIGGER_SENSITIVITY = "pie_trigger_sensitivity";
 
         /**
+         * Toast Animations
+         * @hide
+         */
+        public static final String TOAST_ANIMATION = "toast_animation";
+
+        /**
          * Locale for secondary overlay on dialer for t9 search input
          * @hide
          */
