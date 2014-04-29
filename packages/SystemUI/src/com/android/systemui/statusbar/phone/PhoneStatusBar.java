@@ -145,6 +145,7 @@ import com.android.systemui.stackdivider.Divider;
 import com.android.systemui.stackdivider.WindowManagerProxy;
 import com.android.systemui.statusbar.ActivatableNotificationView;
 import com.android.systemui.statusbar.BackDropView;
+import com.android.systemui.statusbar.AppSidebar;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.DismissView;
@@ -320,6 +321,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_COLOR;
     private static final String STATUS_BAR_CRDROID_LOGO_STYLE =
             "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_STYLE;
+    private static final String APP_SIDEBAR_POSITION =
+            "system:" + Settings.System.APP_SIDEBAR_POSITION;
 
     static {
         boolean onlyCoreApps;
@@ -849,7 +852,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 LOCKSCREEN_MAX_NOTIF_CONFIG,
                 STATUS_BAR_CRDROID_LOGO,
                 STATUS_BAR_CRDROID_LOGO_COLOR,
-                STATUS_BAR_CRDROID_LOGO_STYLE);
+                STATUS_BAR_CRDROID_LOGO_STYLE,
+                APP_SIDEBAR_POSITION);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -960,6 +964,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         addGestureAnywhereView();
+
+        addSidebarView();
 
         mAssistManager = new AssistManager(this, context);
 
@@ -1153,6 +1159,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         // receive broadcasts
         IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
@@ -3801,6 +3808,24 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 finishBarAnimations();
                 resetUserExpandedStates();
             }
+            else if (Intent.ACTION_CONFIGURATION_CHANGED.equals(action)) {
+                Configuration config = mContext.getResources().getConfiguration();
+                try {
+                    // position app sidebar on left if in landscape orientation and device has a navbar
+                    if (mWindowManagerService.hasNavigationBar() &&
+                            config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        mWindowManager.updateViewLayout(mAppSidebar,
+                                getAppSidebarLayoutParams(AppSidebar.SIDEBAR_POSITION_LEFT));
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAppSidebar.setPosition(AppSidebar.SIDEBAR_POSITION_LEFT);
+                            }
+                        }, 500);
+                    }
+                } catch (RemoteException e) {
+                }
+            }
             else if (Intent.ACTION_SCREEN_ON.equals(action)) {
                 mScreenOn = true;
                 notifyNavigationBarScreenOn(true);
@@ -5435,6 +5460,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mCrDroidLogoColor =
                         newValue == null ? 0xFFFFFFFF : Integer.parseInt(newValue);
                 showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoStyle);
+                break;
+            case APP_SIDEBAR_POSITION:
+                mSidebarPosition =
+                        newValue == null ? AppSidebar.SIDEBAR_POSITION_LEFT : Integer.parseInt(newValue);
+                removeSidebarView();
+                addSidebarView();
                 break;
             default:
                 break;
