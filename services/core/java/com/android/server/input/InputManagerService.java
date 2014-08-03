@@ -393,6 +393,16 @@ public class InputManagerService extends IInputManager.Stub
         mHandler.sendEmptyMessage(MSG_RELOAD_DEVICE_ALIASES);
         mHandler.sendEmptyMessage(MSG_UPDATE_KEYBOARD_LAYOUTS);
 
+        synchronized(mInputDevicesLock) {
+            if (mInputDevices.length > 0
+                    && !mInputDevicesChangedPending
+                    && !mKeyboardLayoutNotificationShown) {
+                mInputDevicesChangedPending = true;
+                mHandler.obtainMessage(MSG_DELIVER_INPUT_DEVICES_CHANGED,
+                         new InputDevice[0]).sendToTarget();
+            }
+        }
+
         if (mWiredAccessoryCallbacks != null) {
             mWiredAccessoryCallbacks.systemReady();
         }
