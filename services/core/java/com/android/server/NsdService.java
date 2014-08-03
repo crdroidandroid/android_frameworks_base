@@ -376,10 +376,15 @@ public class NsdService extends INsdManager.Stub {
                         servInfo = (NsdServiceInfo) msg.obj;
                         clientInfo = mClients.get(msg.replyTo);
 
-
-                        if (clientInfo.mResolvedService != null) {
+                        try {
+                            if (clientInfo.mResolvedService != null) {
+                                replyToMessage(msg, NsdManager.RESOLVE_SERVICE_FAILED,
+                                        NsdManager.FAILURE_ALREADY_ACTIVE);
+                                break;
+                            }
+                        } catch (NullPointerException e) {
                             replyToMessage(msg, NsdManager.RESOLVE_SERVICE_FAILED,
-                                    NsdManager.FAILURE_ALREADY_ACTIVE);
+                                    NsdManager.FAILURE_INTERNAL_ERROR);
                             break;
                         }
 
