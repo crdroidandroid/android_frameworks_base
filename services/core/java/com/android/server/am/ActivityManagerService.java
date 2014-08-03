@@ -5094,8 +5094,11 @@ public final class ActivityManagerService extends ActivityManagerNative
                 return;
             }
 
-            ArrayList<ActivityRecord> activities = new ArrayList<>(mHeavyWeightProcess.activities);
-            for (int i = 0; i < activities.size(); i++) {
+            mHandler.sendMessage(mHandler.obtainMessage(CANCEL_HEAVY_NOTIFICATION_MSG,
+                    mHeavyWeightProcess.userId, 0));
+            ArrayList<ActivityRecord> activities = new ArrayList<ActivityRecord>(
+                    mHeavyWeightProcess.activities);
+            for (int i=0; i<activities.size(); i++) {
                 ActivityRecord r = activities.get(i);
                 if (!r.finishing && r.isInStackLocked()) {
                     r.task.stack.finishActivityLocked(r, Activity.RESULT_CANCELED,
@@ -5103,8 +5106,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
 
-            mHandler.sendMessage(mHandler.obtainMessage(CANCEL_HEAVY_NOTIFICATION_MSG,
-                    mHeavyWeightProcess.userId, 0));
             mHeavyWeightProcess = null;
         }
     }
