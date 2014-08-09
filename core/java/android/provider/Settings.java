@@ -3638,6 +3638,12 @@ public final class Settings {
         public static final String PIE_IME_CONTROL = "pie_ime_control";
 
         /**
+         * Pie trigger sensitivity
+         * @hide
+         */
+        public static final String PIE_TRIGGER_SENSITIVITY = "pie_trigger_sensitivity";
+
+        /**
          * Locale for secondary overlay on dialer for t9 search input
          * @hide
          */
