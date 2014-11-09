@@ -43,7 +43,7 @@ public class DeadZone {
     public static final int HORIZONTAL = 0;  // Consume taps along the top edge.
     public static final int VERTICAL = 1;  // Consume taps along the left edge.
 
-    private static final boolean CHATTY = true; // print to logcat when we eat a click
+    private static final boolean CHATTY = false; // print to logcat when we eat a click
     private final NavigationBarController mNavBarController;
     private final NavigationBarView mNavigationBarView;
 
