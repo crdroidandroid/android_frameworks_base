@@ -60,6 +60,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.UserHandle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -754,23 +755,26 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
      */
     private void saveScreenshotAndToast(Consumer<Uri> finisher) {
         // Play the shutter sound to notify that we've taken a screenshot
-        mScreenshotHandler.post(() -> {
-            switch (mAudioManager.getRingerMode()) {
-                case AudioManager.RINGER_MODE_SILENT:
-                    // do nothing
-                    break;
-                case AudioManager.RINGER_MODE_VIBRATE:
-                    if (mVibrator != null && mVibrator.hasVibrator()) {
-                        mVibrator.vibrate(VibrationEffect.createOneShot(50,
-                                VibrationEffect.DEFAULT_AMPLITUDE));
-                    }
-                    break;
-                case AudioManager.RINGER_MODE_NORMAL:
-                    // Play the shutter sound to notify that we've taken a screenshot
-                    mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
-                    break;
-            }
-        });
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) != 0) {
+            mScreenshotHandler.post(() -> {
+                switch (mAudioManager.getRingerMode()) {
+                    case AudioManager.RINGER_MODE_SILENT:
+                        // do nothing
+                        break;
+                    case AudioManager.RINGER_MODE_VIBRATE:
+                        if (mVibrator != null && mVibrator.hasVibrator()) {
+                            mVibrator.vibrate(VibrationEffect.createOneShot(50,
+                                    VibrationEffect.DEFAULT_AMPLITUDE));
+                        }
+                        break;
+                    case AudioManager.RINGER_MODE_NORMAL:
+                        // Play the shutter sound to notify that we've taken a screenshot
+                        mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
+                        break;
+                }
+            });
+        }
 
         saveScreenshotInWorkerThread(finisher, new ActionsReadyListener() {
             @Override
@@ -824,20 +828,23 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
                     }
                 });
 
-                switch (mAudioManager.getRingerMode()) {
-                    case AudioManager.RINGER_MODE_SILENT:
-                        // do nothing
-                        break;
-                    case AudioManager.RINGER_MODE_VIBRATE:
-                        if (mVibrator != null && mVibrator.hasVibrator()) {
-                            mVibrator.vibrate(VibrationEffect.createOneShot(50,
-                                    VibrationEffect.DEFAULT_AMPLITUDE));
-                        }
-                        break;
-                    case AudioManager.RINGER_MODE_NORMAL:
-                        // Play the shutter sound to notify that we've taken a screenshot
-                        mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
-                        break;
+                if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) != 0) {
+                    switch (mAudioManager.getRingerMode()) {
+                        case AudioManager.RINGER_MODE_SILENT:
+                            // do nothing
+                            break;
+                        case AudioManager.RINGER_MODE_VIBRATE:
+                            if (mVibrator != null && mVibrator.hasVibrator()) {
+                                mVibrator.vibrate(VibrationEffect.createOneShot(50,
+                                        VibrationEffect.DEFAULT_AMPLITUDE));
+                            }
+                            break;
+                        case AudioManager.RINGER_MODE_NORMAL:
+                            // Play the shutter sound to notify that we've taken a screenshot
+                            mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
+                            break;
+                    }
                 }
 
                 mScreenshotPreview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
