@@ -62,6 +62,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -764,9 +765,12 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
      */
     private void saveScreenshotAndToast(Consumer<Uri> finisher) {
         // Play the shutter sound to notify that we've taken a screenshot
-        mScreenshotHandler.post(() -> {
-            playShutterSound();
-        });
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) != 0) {
+            mScreenshotHandler.post(() -> {
+                playShutterSound();
+            });
+        }
 
         saveScreenshotInWorkerThread(finisher, new ActionsReadyListener() {
             @Override
@@ -820,7 +824,10 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
                     }
                 });
 
-                playShutterSound();
+                if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) != 0) {
+                    playShutterSound();
+                }
 
                 mScreenshotPreview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
                 mScreenshotPreview.buildLayer();
