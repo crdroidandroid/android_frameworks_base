@@ -5189,6 +5189,12 @@ public final class Settings {
         public static final String ANBI_ENABLED = "anbi_enabled";
 
         /**
+         * Enable/Disable screenshot sound
+         * @hide
+         */
+        public static final String SCREENSHOT_SOUND = "screenshot_sound";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
