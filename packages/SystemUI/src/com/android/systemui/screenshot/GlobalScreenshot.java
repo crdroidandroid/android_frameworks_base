@@ -83,6 +83,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.DeviceConfig;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Slog;
@@ -999,6 +1000,10 @@ class GlobalScreenshot {
         mScreenshotLayout.post(new Runnable() {
             @Override
             public void run() {
+                if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) == 0) {
+                    return;
+                }
                 switch (mAudioManager.getRingerMode()) {
                     case AudioManager.RINGER_MODE_SILENT:
                         // do nothing
