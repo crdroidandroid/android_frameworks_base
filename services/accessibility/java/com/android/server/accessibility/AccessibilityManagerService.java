@@ -1126,9 +1126,10 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
      * @param service The service.
      */
     private void removeServiceLocked(Service service, UserState userState) {
-        userState.mBoundServices.remove(service);
         userState.mComponentNameToServiceMap.remove(service.mComponentName);
-        service.onRemoved();
+        if (userState.mBoundServices.remove(service)) {
+            service.onRemoved();
+        }
     }
 
     /**
