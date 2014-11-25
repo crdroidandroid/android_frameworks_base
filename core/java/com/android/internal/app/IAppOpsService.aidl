@@ -50,4 +50,7 @@ interface IAppOpsService {
     void removeUser(int userHandle);
 
     boolean isOperationActive(int code, int uid, String packageName);
+
+    // AppOps accounting
+    void resetCounters();
 }
