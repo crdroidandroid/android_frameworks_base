@@ -3081,6 +3081,18 @@ public final class Settings {
                 "mute_annoying_notifications_threshold";
 
         /**
+         * show clear all recents button
+         *  @hide
+         */
+        public static final String SHOW_CLEAR_ALL_RECENTS = "show_clear_all_recents";
+
+        /**
+         * location of the clear all rectents button
+         * @hide
+         */
+        public static final String RECENTS_CLEAR_ALL_LOCATION = "recents_clear_all_location";
+
+        /**
           * Volume keys control cursor in text fields (default is 0)
           * 0 - Disabled
           * 1 - Volume up/down moves cursor left/right
