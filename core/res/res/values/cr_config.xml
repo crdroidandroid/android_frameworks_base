@@ -23,4 +23,7 @@
     <!-- Sets whether IME switcher on statusbar should be shown or not. -->
     <bool name="config_show_IMESwitcher">true</bool>
 
+    <!-- Wether doze feature is enabled by default in settings. -->
+    <bool name="config_doze_enabled_by_default">true</bool>
+
 </resources>

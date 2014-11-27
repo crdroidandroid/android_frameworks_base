@@ -20,4 +20,7 @@
   <!-- Config IME switcher -->
   <java-symbol type="bool" name="config_show_IMESwitcher" />
 
+  <!-- Doze feature -->
+  <java-symbol type="bool" name="config_doze_enabled_by_default" />
+
 </resources>
