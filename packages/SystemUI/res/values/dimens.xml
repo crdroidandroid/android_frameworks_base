@@ -34,17 +34,22 @@
     <dimen name="status_bar_icon_size">@*android:dimen/status_bar_icon_size</dimen>
 
     <!-- Height of the battery icon in the status bar. -->
-    <dimen name="status_bar_battery_icon_height">14.5dp</dimen>
+    <dimen name="status_bar_battery_icon_height">15.5dp</dimen>
 
     <!-- Width of the battery icon in the status bar. -->
-    <dimen name="status_bar_battery_icon_width">9.5dp</dimen>
-    <dimen name="status_bar_battery_icon_layout_width">12.5dp</dimen>
+    <dimen name="status_bar_battery_icon_width">14.5dp</dimen>
+
+    <!-- Height of the battery circle icon in the status bar. -->
+    <dimen name="status_bar_battery_circle_icon_height">17.5dp</dimen>
+
+    <!-- Width of the battery circle icon in the status bar. -->
+    <dimen name="status_bar_battery_circle_icon_width">18.5dp</dimen>
 
     <!-- The font size for the clock in the status bar. -->
     <dimen name="status_bar_clock_size">14sp</dimen>
 
     <!-- The starting padding for the clock in the status bar. -->
-    <dimen name="status_bar_clock_starting_padding">4dp</dimen>
+    <dimen name="status_bar_clock_starting_padding">3dp</dimen>
 
     <!-- The end padding for the clock in the status bar. -->
     <dimen name="status_bar_clock_end_padding">0dp</dimen>
