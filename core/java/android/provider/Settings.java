@@ -4470,6 +4470,19 @@ public final class Settings {
         public static final String SHOW_BATTERY_PERCENT = "show_battery_percent";
 
         /**
+         * Display style of the status bar battery information
+         * 0: Display the battery an icon in portrait mode
+         * 1: Display the battery as a circle
+         * 2: Display the battery as a dotted circle
+         * 3: Display the battery as a square
+         * 4: Display the battery as a text
+         * 5: Hide the battery completely
+         * default: 0
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
