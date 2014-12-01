@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2015 SlimRoms Project
+* Copyright (C) 2015 crDroid Android Project
 *
 * Class of SlimRoms Team (A big thanks to the Team)
 *
