@@ -50,7 +50,9 @@ import android.widget.FrameLayout;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardStatusView;
+import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.systemui.DejankUtils;
 import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
@@ -108,6 +110,8 @@ public class NotificationPanelView extends PanelView implements
             "system:" + Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN;
     private static final String QS_SMART_PULLDOWN =
             "system:" + Settings.System.QS_SMART_PULLDOWN;
+    private static final String LOCKSCREEN_ENABLE_QS =
+            "global:" + Settings.Global.LOCKSCREEN_ENABLE_QS;
 
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
 
@@ -159,6 +163,7 @@ public class NotificationPanelView extends PanelView implements
     private boolean mQsExpandedWhenExpandingStarted;
     private boolean mQsFullyExpanded;
     private boolean mKeyguardShowing;
+    private boolean mKeyguardOrShadeShowing;
     private boolean mDozing;
     private boolean mDozingOnDown;
     protected int mStatusBarState;
@@ -236,6 +241,9 @@ public class NotificationPanelView extends PanelView implements
     private FalsingManager mFalsingManager;
     private String mLastCameraLaunchSource = KeyguardBottomAreaView.CAMERA_LAUNCH_SOURCE_AFFORDANCE;
 
+    private LockPatternUtils mLockPatternUtils;
+    private boolean mStatusBarAllowedOnSecureKeyguard;
+
     private Runnable mHeadsUpExistenceChangedRunnable = new Runnable() {
         @Override
         public void run() {
@@ -278,6 +286,7 @@ public class NotificationPanelView extends PanelView implements
                 return true;
             }
         });
+        mLockPatternUtils = new LockPatternUtils(mContext);
     }
 
     public void setStatusBar(StatusBar bar) {
@@ -315,7 +324,8 @@ public class NotificationPanelView extends PanelView implements
                 STATUS_BAR_QUICK_QS_PULLDOWN,
                 DOUBLE_TAP_SLEEP_GESTURE,
                 DOUBLE_TAP_SLEEP_LOCKSCREEN,
-                QS_SMART_PULLDOWN);
+                QS_SMART_PULLDOWN,
+                LOCKSCREEN_ENABLE_QS);
     }
 
     @Override
@@ -621,10 +631,15 @@ public class NotificationPanelView extends PanelView implements
         requestLayout();
     }
 
+    private boolean isQSEventBlocked() {
+        return mLockPatternUtils.isSecure(KeyguardUpdateMonitor.getCurrentUser())
+            && !mStatusBarAllowedOnSecureKeyguard && mKeyguardOrShadeShowing;
+    }
+
     public void setQsExpansionEnabled(boolean qsExpansionEnabled) {
-        mQsExpansionEnabled = qsExpansionEnabled;
+        mQsExpansionEnabled = qsExpansionEnabled && !isQSEventBlocked();
         if (mQs == null) return;
-        mQs.setHeaderClickable(qsExpansionEnabled);
+        mQs.setHeaderClickable(mQsExpansionEnabled);
     }
 
     @Override
@@ -1171,11 +1186,14 @@ public class NotificationPanelView extends PanelView implements
             boolean goingToFullShade) {
         int oldState = mStatusBarState;
         boolean keyguardShowing = statusBarState == StatusBarState.KEYGUARD;
+        boolean keyguardOrShadeShowing = statusBarState == StatusBarState.KEYGUARD
+                || statusBarState == StatusBarState.SHADE_LOCKED;
         setKeyguardStatusViewVisibility(statusBarState, keyguardFadingAway, goingToFullShade);
         setKeyguardBottomAreaVisibility(statusBarState, goingToFullShade);
 
         mStatusBarState = statusBarState;
         mKeyguardShowing = keyguardShowing;
+        mKeyguardOrShadeShowing = keyguardOrShadeShowing;
         if (mQs != null) {
             mQs.setKeyguardShowing(mKeyguardShowing);
         }
@@ -2748,6 +2766,10 @@ public class NotificationPanelView extends PanelView implements
             case QS_SMART_PULLDOWN:
                 mQsSmartPullDown =
                         newValue == null ? 0 : Integer.parseInt(newValue);
+                break;
+            case LOCKSCREEN_ENABLE_QS:
+                mStatusBarAllowedOnSecureKeyguard =
+                        newValue == null || Integer.parseInt(newValue) != 0;
                 break;
             default:
                 break;
