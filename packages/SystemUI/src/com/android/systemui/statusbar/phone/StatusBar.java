@@ -1653,6 +1653,18 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         mEntryManager.updateNotifications();
     }
 
+    protected boolean hasActiveVisibleNotifications() {
+        return mEntryManager.getNotificationData().hasActiveVisibleNotifications();
+    }
+
+    protected boolean hasActiveOngoingNotifications() {
+        return mEntryManager.getNotificationData().hasActiveOngoingNotifications();
+    }
+
+    protected boolean hasActiveClearableNotificationsQS() {
+        return hasActiveClearableNotifications();
+    }
+
     protected void setAreThereNotifications() {
 
         if (SPEW) {
