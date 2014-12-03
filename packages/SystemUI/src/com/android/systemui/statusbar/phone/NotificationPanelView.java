@@ -106,6 +106,8 @@ public class NotificationPanelView extends PanelView implements
             "lineagesystem:" + LineageSettings.System.DOUBLE_TAP_SLEEP_GESTURE;
     private static final String DOUBLE_TAP_SLEEP_LOCKSCREEN =
             "system:" + Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN;
+    private static final String QS_SMART_PULLDOWN =
+            "system:" + Settings.System.QS_SMART_PULLDOWN;
 
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
 
@@ -255,6 +257,7 @@ public class NotificationPanelView extends PanelView implements
     private boolean mUserSetupComplete;
 
     private int mOneFingerQuickSettingsIntercept;
+    private int mQsSmartPullDown;
     private boolean mDoubleTapToSleepEnabled;
     private boolean mIsLockscreenDoubleTapEnabled;
     private int mStatusBarHeaderHeight;
@@ -311,7 +314,8 @@ public class NotificationPanelView extends PanelView implements
         Dependency.get(TunerService.class).addTunable(this,
                 STATUS_BAR_QUICK_QS_PULLDOWN,
                 DOUBLE_TAP_SLEEP_GESTURE,
-                DOUBLE_TAP_SLEEP_LOCKSCREEN);
+                DOUBLE_TAP_SLEEP_LOCKSCREEN,
+                QS_SMART_PULLDOWN);
     }
 
     @Override
@@ -988,6 +992,12 @@ public class NotificationPanelView extends PanelView implements
                 break;
         }
         showQsOverride &= mStatusBarState == StatusBarState.SHADE;
+
+        if (mQsSmartPullDown == 1 && !mStatusBar.hasActiveClearableNotificationsQS()
+                || mQsSmartPullDown == 2 && !mStatusBar.hasActiveOngoingNotifications()
+                || mQsSmartPullDown == 3 && !mStatusBar.hasActiveVisibleNotifications()) {
+                showQsOverride = true;
+        }
 
         return twoFingerDrag || showQsOverride || stylusButtonClickDrag || mouseButtonClickDrag;
     }
@@ -2734,6 +2744,10 @@ public class NotificationPanelView extends PanelView implements
                 break;
             case DOUBLE_TAP_SLEEP_LOCKSCREEN:
                 mIsLockscreenDoubleTapEnabled = newValue == null || Integer.parseInt(newValue) == 1;
+                break;
+            case QS_SMART_PULLDOWN:
+                mQsSmartPullDown =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
                 break;
             default:
                 break;
