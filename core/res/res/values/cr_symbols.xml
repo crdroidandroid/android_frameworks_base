@@ -5,4 +5,7 @@
   <java-symbol type="id" name="option4" />
   <java-symbol type="id" name="option5" />
 
+  <!-- Hardware keys on/off option -->
+  <java-symbol type="bool" name="config_hwKeysPref" />
+
 </resources>
