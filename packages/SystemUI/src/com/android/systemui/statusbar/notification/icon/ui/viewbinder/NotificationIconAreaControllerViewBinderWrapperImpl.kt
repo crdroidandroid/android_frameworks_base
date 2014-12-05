@@ -128,6 +128,8 @@ constructor(
 
     private var newIconStyle = Settings.System.getIntForUser(
              context.contentResolver, Settings.System.STATUSBAR_COLORED_ICONS, 0, UserHandle.USER_CURRENT) != 0
+    private var showIconCount = Settings.System.getIntForUser(
+             context.contentResolver, Settings.System.STATUSBAR_NOTIF_COUNT, 0, UserHandle.USER_CURRENT) != 0
 
     @VisibleForTesting
     val settingsListener: NotificationListener.NotificationSettingsListener =
@@ -156,6 +158,16 @@ constructor(
                 }
             }
         }, STATUSBAR_COLORED_ICONS)
+
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, value: String?) {
+                val isShowIconCount = TunerService.parseIntegerSwitch(value, false)
+                if (showIconCount != isShowIconCount) {
+                    showIconCount = isShowIconCount
+                    updateNotificationIcons()
+                }
+            }
+        }, STATUSBAR_NOTIF_COUNT)
     }
 
     @VisibleForTesting
@@ -570,6 +582,8 @@ constructor(
                 hostLayout.addView(v, i, params)
                 v.setIconStyle(newIconStyle)
                 v.updateDrawable()
+                v.setShowCount(showIconCount)
+                v.updateIconForced()
             }
         }
         hostLayout.setChangingViewPositions(true)
@@ -712,5 +726,7 @@ constructor(
 
         internal val STATUSBAR_COLORED_ICONS =
             "system:" + Settings.System.STATUSBAR_COLORED_ICONS
+        internal val STATUSBAR_NOTIF_COUNT =
+            "system:" + Settings.System.STATUSBAR_NOTIF_COUNT
     }
 }
