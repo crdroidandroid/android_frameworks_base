@@ -13,4 +13,7 @@
     <color name="rippleDark">#14000000</color>
     <color name="neumorph_outline_start">#FFBDBDBD</color>
     <color name="neumorph_outline_end">#FFF0F0F0</color>
+
+    <!-- Notification counter -->
+    <color name="notification_number_text_color">#ff000000</color>
 </resources>
