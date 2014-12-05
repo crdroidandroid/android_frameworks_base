@@ -84,6 +84,8 @@ public class LegacyNotificationIconAreaControllerImpl implements
 
     public static final String STATUSBAR_COLORED_ICONS =
             "system:" + Settings.System.STATUSBAR_COLORED_ICONS;
+    public static final String STATUSBAR_NOTIF_COUNT =
+            "system:" + Settings.System.STATUSBAR_NOTIF_COUNT;
 
     private static final long AOD_ICONS_APPEAR_DURATION = 200;
     @ColorInt
@@ -119,6 +121,7 @@ public class LegacyNotificationIconAreaControllerImpl implements
     private boolean mAodIconsVisible;
     private boolean mShowLowPriority = true;
     private boolean mNewIconStyle = false;
+    private boolean mShowNotificationCount = false;
 
     @VisibleForTesting
     final NotificationListener.NotificationSettingsListener mSettingsListener =
@@ -167,6 +170,7 @@ public class LegacyNotificationIconAreaControllerImpl implements
 
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, STATUSBAR_COLORED_ICONS);
+        tunerService.addTunable(this, STATUSBAR_NOTIF_COUNT);
     }
 
     @Override
@@ -177,6 +181,14 @@ public class LegacyNotificationIconAreaControllerImpl implements
                     TunerService.parseIntegerSwitch(newValue, false);
                 if (mNewIconStyle != newIconStyle) {
                     mNewIconStyle = newIconStyle;
+                    updateNotificationIcons();
+                }
+                break;
+            case STATUSBAR_NOTIF_COUNT:
+                boolean showIconCount =
+                    TunerService.parseIntegerSwitch(newValue, false);
+                if (mShowNotificationCount != showIconCount) {
+                    mShowNotificationCount = showIconCount;
                     updateNotificationIcons();
                 }
                 break;
@@ -480,6 +492,8 @@ public class LegacyNotificationIconAreaControllerImpl implements
             }
             v.setIconStyle(mNewIconStyle);
             v.updateDrawable();
+            v.setShowCount(mShowNotificationCount);
+            v.updateIconForced();
         }
 
         hostLayout.setChangingViewPositions(true);
