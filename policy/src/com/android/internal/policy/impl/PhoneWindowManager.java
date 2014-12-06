@@ -1751,7 +1751,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             } else {
                 // Height of the navigation bar when presented horizontally at bottom *******
                 mNavigationBarHeightForRotation[mPortraitRotation] =
-                mNavigationBarHeightForRotation[mUpsideDownRotation] = mNavigationBarHeight;
+                mNavigationBarHeightForRotation[mUpsideDownRotation] =
+                mNavigationBarHeightForRotation[mLandscapeRotation] =
+                mNavigationBarHeightForRotation[mSeascapeRotation] = mNavigationBarHeight;
 
                 // Width of the navigation bar when presented vertically along one side
                 mNavigationBarWidthForRotation[mPortraitRotation] =
