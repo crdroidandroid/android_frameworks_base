@@ -198,6 +198,7 @@ public abstract class KeyguardPinBasedInputView extends KeyguardAbsKeyInputView
                 randomButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        mCallback.userActivity();
                         doHapticKeyClick();
                         buildRandomNumPadKey();
                     }
