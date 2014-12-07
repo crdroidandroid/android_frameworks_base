@@ -145,6 +145,7 @@ public abstract class KeyguardPinBasedInputView extends KeyguardAbsKeyInputView
             if (mQuickUnlock) {
                 mOkButton.setVisibility(View.INVISIBLE);
             } else {
+                mOkButton.setVisibility(View.VISIBLE);
                 mOkButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -188,8 +189,8 @@ public abstract class KeyguardPinBasedInputView extends KeyguardAbsKeyInputView
                 mContext.getContentResolver(), Settings.Secure.LOCK_NUMPAD_RANDOM,
                 1, UserHandle.USER_CURRENT);
 
+        final View randomButton = findViewById(R.id.key_random);
         if (randomDigitMode > 0) {
-            final View randomButton = findViewById(R.id.key_random);
             if (randomDigitMode == 1) {
                 buildRandomNumPadKey();
             }
@@ -205,6 +206,8 @@ public abstract class KeyguardPinBasedInputView extends KeyguardAbsKeyInputView
                 });
                 randomButton.setOnHoverListener(new LiftToActivateListener(getContext()));
             }
+        } else {
+            randomButton.setVisibility(View.INVISIBLE);
         }
 
         mPasswordEntry.requestFocus();
