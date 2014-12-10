@@ -182,7 +182,7 @@ public abstract class KeyguardPinBasedInputView extends KeyguardAbsKeyInputView
 
         final int randomDigitMode = Settings.Secure.getIntForUser(
                 mContext.getContentResolver(), Settings.Secure.LOCK_NUMPAD_RANDOM,
-                1, UserHandle.USER_CURRENT);
+                0, UserHandle.USER_CURRENT);
 
         final View randomButton = findViewById(R.id.key_random);
         if (randomDigitMode > 0) {
