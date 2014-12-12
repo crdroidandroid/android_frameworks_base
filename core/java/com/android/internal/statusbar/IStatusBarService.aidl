@@ -70,4 +70,6 @@ interface IStatusBarService
     void setPieTriggerMask(int newMask, boolean lock);
     void setAutoRotate(boolean enabled);
     void toggleSmartPulldown();
+    void hideHeadsUpCandidate(String packageName);
+    void scheduleHeadsUpClose();
 }

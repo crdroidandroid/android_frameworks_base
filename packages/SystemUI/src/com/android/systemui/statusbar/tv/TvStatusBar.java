@@ -114,6 +114,10 @@ public class TvStatusBar extends BaseStatusBar {
     public void setAutoRotate(boolean enabled) {
     }
 
+    @Override // CommandQueue
+    public void hideHeadsUpCandidate(String packageName) {
+    }
+
     @Override
     protected WindowManager.LayoutParams getSearchLayoutParams(
             LayoutParams layoutParams) {
@@ -161,7 +165,7 @@ public class TvStatusBar extends BaseStatusBar {
     public void scheduleHeadsUpEscalation() {
     }
 
-    @Override
+    @Override // CommandQueue
     public void scheduleHeadsUpClose() {
     }
 

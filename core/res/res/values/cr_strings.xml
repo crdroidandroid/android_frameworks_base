@@ -35,4 +35,8 @@
     <!-- Error message if user want to try to disable all navigation options -->
     <string name="disable_navigation_pie_error">You cannot disable the navigation bar. No other navigation is enabled. Enable first pie controls to turn off the navigation bar.</string>
 
+    <!-- Heads up -->
+    <string name="permlab_changeHeadsUpState">enable or disable heads up</string>
+    <string name="permdesc_changeHeadsUpState">Allows the application to change whether another application is allowed to show normal notifications as heads up notification.</string>
+
 </resources>

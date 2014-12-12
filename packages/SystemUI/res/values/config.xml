@@ -140,7 +140,7 @@
     <bool name="config_show4GForLTE">true</bool>
 
     <!-- milliseconds before the heads up notification auto-dismisses. -->
-    <integer name="heads_up_notification_decay">10000</integer>
+    <integer name="heads_up_notification_decay">6000</integer>
 
     <!-- milliseconds after a heads up notification is pushed back
      before the app can interrupt again. -->
@@ -155,6 +155,9 @@
     <bool name="config_disableWifiAndBluetooth">false</bool>
 
     <bool name="config_showRsrpSignalLevelforLTE">false</bool>
+
+    <!-- milliseconds how long heads up should be in snooze. -->
+    <integer name="heads_up_snooze_time">300000</integer>
 
     <!-- The duration in seconds to wait before the dismiss buttons are shown. -->
     <integer name="recents_task_bar_dismiss_delay_seconds">1</integer>

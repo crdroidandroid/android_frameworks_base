@@ -144,6 +144,9 @@
     <!-- Fingerprint -->
     <uses-permission android:name="android.permission.ACCESS_FINGERPRINT_SERVICE" />
 
+    <!-- Heads up -->
+    <uses-permission android:name="android.permission.CHANGE_HEADS_UP_STATE" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
