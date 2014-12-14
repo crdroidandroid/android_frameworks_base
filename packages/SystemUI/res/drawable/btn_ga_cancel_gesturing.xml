@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-     Copyright (C) 2015 crDroid Android
+<!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,17 +13,15 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
 
-    <!-- Color for the RAM bar text in the recent view -->
-    <color name="ram_bar_text">#FFFFFFFF</color>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_window_focused="false" android:state_enabled="true"
+        android:drawable="@drawable/btn_ga_cancel_gesturing_normal" />
+    <item android:state_pressed="true"
+        android:drawable="@drawable/btn_ga_cancel_gesturing_pressed" />
+    <item android:state_enabled="true"
+        android:drawable="@drawable/btn_ga_cancel_gesturing_normal" />
+    <item
+         android:drawable="@drawable/btn_ga_cancel_gesturing_normal" />
+</selector>
 
-    <!-- Floating action button -->
-    <color name="fab_color">#ff009688</color>
-    <color name="floating_action_button_icon_color">#ffffff</color>
-
-    <!-- Gesture Anywhere specific colors -->
-    <color name="gesture_overlay_background_fill_color">#80000000</color>
-    <color name="gesture_color">@android:color/holo_blue_light</color>
-
-</resources>
