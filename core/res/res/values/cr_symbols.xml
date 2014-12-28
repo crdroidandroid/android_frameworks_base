@@ -21,4 +21,7 @@
 
   <!-- Whether auto face unlock is enabled by default -->
   <java-symbol type="bool" name="config_face_unlock_enabled_by_default" />
+
+  <!-- Screenrecord -->
+  <java-symbol type="bool" name="config_enableScreenrecordChord" />
 </resources>
