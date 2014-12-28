@@ -216,6 +216,9 @@
     <protected-broadcast android:name="com.android.settingslib.action.REGISTER_SLICE_RECEIVER" />
     <protected-broadcast android:name="com.android.settingslib.action.UNREGISTER_SLICE_RECEIVER" />
 
+    <!-- screenrecord -->
+    <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
@@ -273,6 +276,27 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+
+        <!-- started from PhoneWindowManager
+             TODO: Should have an android:permission attribute -->
+        <service android:name=".crdroid.screenrecord.TakeScreenrecordService"
+            android:process=":screenrecord"
+            android:exported="false" />
+
+        <!-- Springboard for launching the share activity -->
+        <receiver android:name=".crdroid.screenrecord.GlobalScreenrecord$ShareReceiver"
+            android:process=":screenrecord"
+            android:exported="false" />
+
+        <!-- Callback for dismissing screenrecord notification after a share target is picked -->
+        <receiver android:name=".crdroid.screenrecord.GlobalScreenrecord$TargetChosenReceiver"
+            android:process=":screenrecord"
+            android:exported="false" />
+
+        <!-- Callback for deleting screenrecord notification -->
+        <receiver android:name=".crdroid.screenrecord.GlobalScreenrecord$DeleteScreenrecordReceiver"
+            android:process=":screenrecord"
+            android:exported="false" />
 
         <service android:name=".ImageWallpaper"
                 android:permission="android.permission.BIND_WALLPAPER"
