@@ -32,4 +32,7 @@
            1. Lenient threshold
     -->
     <integer name="config_LTE_RSRP_threshold_type">0</integer>   
+
+    <!-- If this is true, key chords can be used to take a screen record on the device. -->
+    <bool name="config_enableScreenrecordChord">true</bool>
 </resources>
