@@ -144,4 +144,7 @@
     <java-symbol type="string" name="singlehandmode_slide_hint_message" />
 
     <java-symbol type="layout" name="single_hand_window" />
+
+    <!-- Intent chooser -->
+    <java-symbol type="id" name="filtered_item_container" />
 </resources>
