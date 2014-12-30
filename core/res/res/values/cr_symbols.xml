@@ -136,4 +136,7 @@
     <!-- On-The-Go -->
     <java-symbol type="string" name="global_action_onthego" />
     <java-symbol type="drawable" name="ic_lock_onthego" />
+
+    <!-- Intent chooser -->
+    <java-symbol type="id" name="filtered_item_container" />
 </resources>
