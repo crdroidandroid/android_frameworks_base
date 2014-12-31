@@ -320,7 +320,6 @@ public class LockPatternUtils {
      */
     public byte[] verifyPattern(List<LockPatternView.Cell> pattern, long challenge, int userId)
             throws RequestThrottledException {
-        throwIfCalledOnMainThread();
         try {
             VerifyCredentialResponse response =
                 getLockSettings().verifyPattern(patternToString(pattern, userId), challenge, userId);
@@ -361,7 +360,6 @@ public class LockPatternUtils {
     public boolean checkPattern(List<LockPatternView.Cell> pattern, int userId,
             @Nullable CheckCredentialProgressCallback progressCallback)
             throws RequestThrottledException {
-        throwIfCalledOnMainThread();
         try {
             VerifyCredentialResponse response =
                     getLockSettings().checkPattern(patternToString(pattern, userId), userId,
@@ -390,7 +388,6 @@ public class LockPatternUtils {
      */
     public byte[] verifyPassword(String password, long challenge, int userId)
             throws RequestThrottledException {
-        throwIfCalledOnMainThread();
         try {
             VerifyCredentialResponse response =
                     getLockSettings().verifyPassword(password, challenge, userId);
@@ -419,7 +416,6 @@ public class LockPatternUtils {
      */
     public byte[] verifyTiedProfileChallenge(String password, boolean isPattern, long challenge,
             int userId) throws RequestThrottledException {
-        throwIfCalledOnMainThread();
         try {
             VerifyCredentialResponse response =
                     getLockSettings().verifyTiedProfileChallenge(password, isPattern, challenge,
@@ -456,7 +452,6 @@ public class LockPatternUtils {
     public boolean checkPassword(String password, int userId,
             @Nullable CheckCredentialProgressCallback progressCallback)
             throws RequestThrottledException {
-        throwIfCalledOnMainThread();
         try {
             VerifyCredentialResponse response =
                     getLockSettings().checkPassword(password, userId, wrapCallback(progressCallback));
@@ -1474,12 +1469,6 @@ public class LockPatternUtils {
 
     private boolean shouldEncryptWithCredentials(boolean defaultValue) {
         return isCredentialRequiredToDecrypt(defaultValue) && !isDoNotAskCredentialsOnBootSet();
-    }
-
-    private void throwIfCalledOnMainThread() {
-        if (Looper.getMainLooper().isCurrentThread()) {
-            throw new IllegalStateException("should not be called from the main thread.");
-        }
     }
 
     public void registerStrongAuthTracker(final StrongAuthTracker strongAuthTracker) {
