@@ -3470,6 +3470,12 @@ public final class Settings {
          */
         public static final String VOLUME_PANEL_TIMEOUT = "volume_panel_timeout";
 
+        /** Whether to vibrate when quick settings tile is pressed.
+         *
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_TILES_VIBRATE = "quick_settings_vibrate";
+
         /**
          * Whether to enable voice wakeup.  The value is boolean (1 or 0).
          * @hide
