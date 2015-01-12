@@ -132,6 +132,8 @@ public class PointerLocationView extends View implements InputDeviceListener,
     private final FasterStringBuilder mText = new FasterStringBuilder();
     
     private boolean mPrintCoords = true;
+
+    private boolean mDown = false;
     
     public PointerLocationView(Context c) {
         super(c);
@@ -526,6 +528,15 @@ public class PointerLocationView extends View implements InputDeviceListener,
     public void onPointerEvent(MotionEvent event) {
         final int action = event.getAction();
         int NP = mPointers.size();
+
+        if (!mDown) {
+            if (action != MotionEvent.ACTION_DOWN) {
+                Log.w(TAG, "Invalid motion event: " + event.toString());
+                return;
+            } else {
+                mDown = true;
+            }
+        }
 
         if (action == MotionEvent.ACTION_DOWN
                 || (action & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_POINTER_DOWN) {
