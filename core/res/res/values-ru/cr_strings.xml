@@ -23,4 +23,32 @@
     <string name="permlab_changeHeadsUpState">Включить/выключить уведомления \"поверх\"</string>
     <string name="permdesc_changeHeadsUpState">Разрешает приложению показывать уведомления \"поверх\" вместо обычных уведомлений.</string>
 
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">Затухание</string>
+    <string name="animation_slide_right">Слайд справа</string>
+    <string name="animation_slide_left">Слайд слева</string>
+    <string name="animation_slide_right_no_fade">Слайд справа (Без затухания)</string>
+    <string name="animation_slide_left_no_fade">Слайд слева (Без затухания)</string>
+    <string name="animation_slide_up">Слайд снизу</string>
+    <string name="animation_slide_down">Слайд сверху</string>
+    <string name="animation_default">По умолчанию</string>
+    <string name="animation_translucent">Полупрозрачный переход</string>
+    <string name="animation_grow_shrink">Приближение (Верх)</string>
+    <string name="animation_grow_shrink_center">Приближение (Центр)</string>
+    <string name="animation_grow_shrink_bottom">Приближение (Низ)</string>
+    <string name="animation_grow_shrink_left">Приближение (Лево)</string>
+    <string name="animation_grow_shrink_right">Приближение (Право)</string>
+    <string name="action_null">Пусто</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_recordScreen">Записывать контент, отображаемый на экране</string>
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_recordScreen">Разрешить приложению производить запись пользовательского экрана</string>
+
+    <!-- label for screen record item in phone options dialog -->
+    <string name="global_action_screen_record">Запись экрана</string>
+
+    <string name="default_string">По умолчанию</string>
+
 </resources>
