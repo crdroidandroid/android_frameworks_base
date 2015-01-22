@@ -51,6 +51,11 @@
     <string name="quick_settings_navbar_title">NavBar</string>
     <string name="quick_settings_navbar">NavBar Enabled</string>
     <string name="quick_settings_navbar_off">NavBar Disabled</string>
+    <string name="quick_settings_nfc_label">NFC</string>
+    <string name="accessibility_quick_settings_nfc_off">NFC off.</string>
+    <string name="accessibility_quick_settings_nfc_on">NFC on.</string>
+    <string name="accessibility_quick_settings_nfc_changed_off">NFC turned off.</string>
+    <string name="accessibility_quick_settings_nfc_changed_on">NFC turned on.</string>
 
     <!-- Text to use when the number in a notification info is too large
          (greater than status_bar_notification_info_maxnum, defined in
