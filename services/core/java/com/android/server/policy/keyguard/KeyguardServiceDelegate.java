@@ -391,7 +391,7 @@ public class KeyguardServiceDelegate {
 
     public void showScrim() {
         synchronized (mKeyguardState) {
-            if (!mKeyguardState.deviceHasKeyguard) return;
+            if (!mKeyguardState.deviceHasKeyguard || !mScrim.isAttachedToWindow()) return;
             mScrimHandler.post(new Runnable() {
                 @Override
                 public void run() {
