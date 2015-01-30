@@ -1008,6 +1008,7 @@ public abstract class WallpaperService extends Service {
         }
         
         void detach() {
+           synchronized (mLock) {
             if (mDestroyed) {
                 return;
             }
@@ -1052,6 +1053,7 @@ public abstract class WallpaperService extends Service {
                     mInputChannel = null;
                 }
             }
+           }
         }
 
         private final DisplayListener mDisplayListener = new DisplayListener() {
@@ -1162,13 +1164,17 @@ public abstract class WallpaperService extends Service {
                     }
                     Engine engine = onCreateEngine();
                     mEngine = engine;
-                    mActiveEngines.add(engine);
+                    synchronized (mActiveEngines) {
+                        mActiveEngines.add(engine);
+                    }
                     engine.attach(this);
                     return;
                 }
                 case DO_DETACH: {
-                    mActiveEngines.remove(mEngine);
-                    mEngine.detach();
+                        mEngine.detach();
+                    synchronized (mActiveEngines) {
+                        mActiveEngines.remove(mEngine);
+                    }
                     return;
                 }
                 case DO_SET_DESIRED_SIZE: {
@@ -1254,8 +1260,12 @@ public abstract class WallpaperService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        for (int i=0; i<mActiveEngines.size(); i++) {
-            mActiveEngines.get(i).detach();
+        synchronized (mActiveEngines) {
+           for (int i=0; i<mActiveEngines.size(); i++) {
+                Engine engine = mActiveEngines.get(i);
+                engine.detach();
+           }
+           mActiveEngines.clear();
         }
         mActiveEngines.clear();
     }
