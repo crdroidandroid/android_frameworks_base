@@ -62,6 +62,7 @@ public class QSPanel extends ViewGroup {
     private final H mHandler = new H();
 
     private int mColumns;
+    private int mNumberOfColumns;
     private int mCellWidth;
     private int mCellHeight;
     private int mLargeCellWidth;
@@ -143,6 +144,22 @@ public class QSPanel extends ViewGroup {
         return brightnessSliderEnabled;
     }
 
+    /**
+     * Use three or four columns.
+     */
+    private int useFourColumns() {
+        final Resources res = mContext.getResources();
+        boolean shouldUseFourColumns = Settings.Secure.getInt(
+            mContext.getContentResolver(), Settings.Secure.QS_USE_FOUR_COLUMNS,
+                0) == 1;
+        if (shouldUseFourColumns) {
+            mNumberOfColumns = 4;
+        } else {
+            mNumberOfColumns = res.getInteger(R.integer.quick_settings_num_columns);
+        }
+        return mNumberOfColumns;
+    }
+
     private void updateDetailText() {
         mDetailDoneButton.setText(R.string.quick_settings_done);
         mDetailSettingsButton.setText(R.string.quick_settings_more_settings);
@@ -179,7 +196,7 @@ public class QSPanel extends ViewGroup {
 
     public void updateResources() {
         final Resources res = mContext.getResources();
-        final int columns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
+        final int columns = Math.max(1, useFourColumns());
         mCellHeight = res.getDimensionPixelSize(R.dimen.qs_tile_height);
         mCellWidth = (int)(mCellHeight * TILE_ASPECT);
         mLargeCellHeight = res.getDimensionPixelSize(R.dimen.qs_dual_tile_height);
