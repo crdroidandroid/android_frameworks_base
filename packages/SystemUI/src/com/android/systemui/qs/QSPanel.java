@@ -201,11 +201,11 @@ public class QSPanel extends ViewGroup {
         mCellHeight = res.getDimensionPixelSize(R.dimen.qs_tile_height);
         if (mUseFourColumns) {
             mCellWidth = (int)(mCellHeight * 0.8f);
-            mLargeCellWidth = (int)(mLargeCellHeight * 0.8f);
         } else {
             mCellWidth = (int)(mCellHeight * TILE_ASPECT);
-            mLargeCellWidth = (int)(mLargeCellHeight * TILE_ASPECT);
+            
         }
+        mLargeCellWidth = (int)(mLargeCellHeight * TILE_ASPECT);
         mLargeCellHeight = res.getDimensionPixelSize(R.dimen.qs_dual_tile_height);
         mPanelPaddingBottom = res.getDimensionPixelSize(R.dimen.qs_panel_padding_bottom);
         mDualTileUnderlap = res.getDimensionPixelSize(R.dimen.qs_dual_tile_padding_vertical);
