@@ -469,8 +469,13 @@ public class NotificationPanelView extends PanelView implements
         requestLayout();
     }
 
+    private boolean isQSEventBlocked() {
+        return mLockPatternUtils.isSecure()
+            && mStatusBarLockedOnSecureKeyguard && mKeyguardShowing;
+    }
+
     public void setQsExpansionEnabled(boolean qsExpansionEnabled) {
-        mQsExpansionEnabled = qsExpansionEnabled;
+        mQsExpansionEnabled = qsExpansionEnabled && !isQSEventBlocked();
         mHeader.setClickable(qsExpansionEnabled);
     }
 
@@ -695,12 +700,9 @@ public class NotificationPanelView extends PanelView implements
             return true;
         }
 
-        boolean isQSEventBlocked = mLockPatternUtils.isSecure()
-                && mStatusBarLockedOnSecureKeyguard && mKeyguardShowing;
-
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN && getExpandedFraction() == 1f
                 && mStatusBar.getBarState() != StatusBarState.KEYGUARD && !mQsExpanded
-                && mQsExpansionEnabled && !isQSEventBlocked) {
+                && mQsExpansionEnabled) {
 
             // Down in the empty area while fully expanded - go to QS.
             mQsTracking = true;
@@ -710,7 +712,7 @@ public class NotificationPanelView extends PanelView implements
             mInitialTouchY = event.getX();
             mInitialTouchX = event.getY();
         }
-        if (mExpandedHeight != 0 && !isQSEventBlocked) {
+        if (mExpandedHeight != 0) {
             handleQsDown(event);
         }
         if (!mQsExpandImmediate && mQsTracking) {
