@@ -474,6 +474,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             // Heads-up
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_NOTIFCATION_DECAY), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_TOUCH_OUTSIDE), false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -553,6 +555,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     oldClockView.setVisibility(View.GONE);
                 }
             }
+
+            mHeadsUpTouchOutside = Settings.System.getInt(
+                    resolver, Settings.System.HEADS_UP_TOUCH_OUTSIDE, 0) == 1;
 
             if (mNavigationBarView != null) {
                 boolean navLeftInLandscape = Settings.System.getIntForUser(resolver,
@@ -709,6 +714,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private PorterDuffXfermode mSrcOverXferMode = new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER);
 
     private boolean mHeadsUpSwype;
+    public boolean mHeadsUpTouchOutside;
 
     private MediaSessionManager mMediaSessionManager;
     private MediaController mMediaController;
@@ -2804,14 +2810,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mStatusBarView.collapseAllPanels(true);
         }
 
-        // Hide HeadsUp if is showing when animateCollapsePanels() is called,
-        // i.e. within home button pressing.
-        // Hide after 0.5 sec from pressing home button.
-        mHandler.postDelayed(new Runnable() {
-            public void run() {
-                scheduleHeadsUpClose();
-            }
-        }, 500);
+        if(mHeadsUpTouchOutside) {
+            // Hide HeadsUp if is showing when animateCollapsePanels() is called,
+            // i.e. within home button pressing.
+            // Hide after 0.5 sec from pressing home button.
+            mHandler.postDelayed(new Runnable() {
+                public void run() {
+                    scheduleHeadsUpClose();
+                }
+            }, 500);
+        }
     }
 
     private void runPostCollapseRunnables() {
