@@ -22,4 +22,7 @@
     <string name="quick_settings_navbar_on">NavBar On</string>
     <string name="quick_settings_navbar_off">NavBar Off</string>
 
+    <!-- Power menu -->
+    <string name="quick_settings_power_menu_label">Power Menu</string>
+
 </resources>
