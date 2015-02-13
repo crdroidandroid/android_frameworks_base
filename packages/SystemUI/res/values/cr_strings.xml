@@ -54,4 +54,10 @@
     <!-- Battery Saver Dimss -->
     <string name="battery_saver_dismiss_title">Dismiss</string>
 
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_power_button">Power button</string>
+
+    <!-- Content description of the power button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_power">Power</string>
+
 </resources>
