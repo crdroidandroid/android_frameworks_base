@@ -3433,6 +3433,12 @@ public final class Settings {
         public static final String RECENTS_SHOW_SEARCH_BAR = "recents_show_search_bar";
 
         /**
+         * Timeout for volume panel
+         * @hide
+         */
+        public static final String VOLUME_PANEL_TIMEOUT = "volume_panel_timeout";
+
+        /**
          * Whether to enable voice wakeup.  The value is boolean (1 or 0).
          * @hide
          */
