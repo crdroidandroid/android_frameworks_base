@@ -25,4 +25,7 @@
     <!-- Power menu -->
     <string name="quick_settings_power_menu_label">Power Menu</string>
 
+    <!-- Power menu on navring targets -->
+    <string name="navring_action_power_menu">Power Menu</string>
+
 </resources>
