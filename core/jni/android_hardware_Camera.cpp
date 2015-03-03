@@ -1116,6 +1116,18 @@ static int32_t android_hardware_Camera_getAudioRestriction(
     return ret;
 }
 
+static void android_hardware_Camera_sendVendorCommand(JNIEnv *env, jobject thiz,
+        jint cmd, jint arg1, jint arg2)
+{
+    ALOGV("sendVendorCommand");
+    sp<Camera> camera = get_native_camera(env, thiz, NULL);
+    if (camera == 0) return;
+
+    if (camera->sendCommand(cmd, arg1, arg2) != NO_ERROR) {
+        jniThrowRuntimeException(env, "sending vendor command failed");
+    }
+}
+
 //-------------------------------------------------
 
 static const JNINativeMethod camMethods[] = {
@@ -1218,6 +1230,9 @@ static const JNINativeMethod camMethods[] = {
   { "getAudioRestriction",
     "()I",
     (void *)android_hardware_Camera_getAudioRestriction},
+  { "_sendVendorCommand",
+    "(III)V",
+    (void *)android_hardware_Camera_sendVendorCommand },
 };
 
 struct field {
