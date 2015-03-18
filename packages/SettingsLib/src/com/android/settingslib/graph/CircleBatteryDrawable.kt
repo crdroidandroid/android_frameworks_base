@@ -42,6 +42,7 @@ class CircleBatteryDrawable(private val context: Context, frameColor: Int) : Dra
     private val padding = Rect()
     private val frame = RectF()
     private val boltFrame = RectF()
+    private val pathEffect = DashPathEffect(floatArrayOf(3f,2f),0f)
 
     private var chargeColor: Int
     private var iconTint = Color.WHITE
@@ -76,6 +77,12 @@ class CircleBatteryDrawable(private val context: Context, frameColor: Int) : Dra
         }
 
     var batteryLevel = -1
+        set(value) {
+            field = value
+            postInvalidate()
+        }
+
+    var usePathEffect = false
         set(value) {
             field = value
             postInvalidate()
@@ -158,6 +165,13 @@ class CircleBatteryDrawable(private val context: Context, frameColor: Int) : Dra
         framePaint.style = Paint.Style.STROKE
         batteryPaint.strokeWidth = strokeWidth
         batteryPaint.style = Paint.Style.STROKE
+        if (usePathEffect) {
+            batteryPaint.pathEffect = pathEffect
+            powerSavePaint.pathEffect = pathEffect
+        } else {
+            batteryPaint.pathEffect = null
+            powerSavePaint.pathEffect = null
+        }
         powerSavePaint.strokeWidth = strokeWidth
         frame[
                 strokeWidth / 2.0f + padding.left, strokeWidth / 2.0f,
