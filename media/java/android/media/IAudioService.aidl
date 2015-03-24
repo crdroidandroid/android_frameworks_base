@@ -124,6 +124,8 @@ interface IAudioService {
     @UnsupportedAppUsage
     int getStreamMaxVolume(int streamType);
 
+    void setStreamMaxVolume(int streamType, int maxVol);
+
     List<AudioVolumeGroup> getAudioVolumeGroups();
 
     void setVolumeGroupVolumeIndex(int groupId, int index, int flags, String callingPackage,
