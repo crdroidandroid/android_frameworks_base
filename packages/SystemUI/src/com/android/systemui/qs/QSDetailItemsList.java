@@ -18,23 +18,28 @@
 package com.android.systemui.qs;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import android.widget.TextView;
 import com.android.systemui.R;
 
+import java.util.List;
+
 /**
  * Quick settings common detail list view with line items.
  */
-public class QSDetailItemsList extends FrameLayout {
+public class QSDetailItemsList extends LinearLayout {
     private static final String TAG = "QSDetailItemsList";
 
     private ListView mListView;
@@ -44,6 +49,8 @@ public class QSDetailItemsList extends FrameLayout {
 
     public QSDetailItemsList(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
+        mTag = TAG;
     }
 
     public static QSDetailItemsList convertOrInflate(Context context,
@@ -86,5 +93,78 @@ public class QSDetailItemsList extends FrameLayout {
         mEmptyText = (TextView) mEmpty.findViewById(android.R.id.title);
         mEmptyIcon = (ImageView) mEmpty.findViewById(android.R.id.icon);
         mListView.setEmptyView(mEmpty);
+    }
+
+    public static class QSDetailListAdapter extends ArrayAdapter<QSDetailItems.Item> {
+        private QSDetailItems.Callback mCallback;
+
+        public QSDetailListAdapter(Context context, List<QSDetailItems.Item> objects) {
+            super(context, R.layout.qs_detail_item, objects);
+        }
+
+        public void setCallback(QSDetailItems.Callback cb) {
+            mCallback = cb;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            LinearLayout view = (LinearLayout) inflater.inflate(
+                    R.layout.qs_detail_item, parent, false);
+
+            view.setClickable(false); // let list view handle this
+
+            final QSDetailItems.Item item = getItem(position);
+            if (item.doDisableFocus) {
+                view.setFocusable(false);
+            }
+
+            final ImageView iv = (ImageView) view.findViewById(android.R.id.icon);
+            if (item.doDisableTint) {
+                iv.setColorFilter(null);
+                iv.setImageTintList(null);
+            }
+            if (item.icon != null) {
+                iv.setImageDrawable(item.icon.getDrawable(iv.getContext()));
+            } else {
+                iv.setImageResource(item.iconResId);
+            }
+            iv.getOverlay().clear();
+            if (item.overlay != null) {
+                item.overlay.setBounds(0, 0, item.overlay.getIntrinsicWidth(),
+                        item.overlay.getIntrinsicHeight());
+                iv.getOverlay().add(item.overlay);
+            }
+            final TextView title = (TextView) view.findViewById(android.R.id.title);
+            Typeface tf = null;
+            if (item.fontPath != null) {
+                Typeface.Builder builder = new Typeface.Builder(item.fontPath);
+                tf = builder.build();
+                title.setTypeface(tf);
+            }
+            title.setText(item.line1);
+            final TextView summary = (TextView) view.findViewById(android.R.id.summary);
+            final boolean twoLines = !TextUtils.isEmpty(item.line2);
+            if (twoLines && tf != null) {
+                summary.setTypeface(tf);
+            }
+            title.setMaxLines(twoLines ? 1 : 2);
+            summary.setVisibility(twoLines ? VISIBLE : GONE);
+            summary.setText(twoLines ? item.line2 : null);
+            view.setMinimumHeight(getContext().getResources().getDimensionPixelSize(
+                    twoLines ? R.dimen.qs_detail_item_height_twoline : R.dimen.qs_detail_item_height));
+
+            final ImageView disconnect = (ImageView) view.findViewById(android.R.id.icon2);
+            disconnect.setVisibility(item.canDisconnect ? VISIBLE : GONE);
+            disconnect.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mCallback != null) {
+                        mCallback.onDetailItemDisconnect(item);
+                    }
+                }
+            });
+            return view;
+        }
     }
 }
