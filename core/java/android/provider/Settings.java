@@ -5642,6 +5642,12 @@ public final class Settings {
         public static final String FLASHLIGHT_ON_CALL_RATE = "flashlight_on_call_rate";
 
         /**
+         * Allow disable of screenshot shutter sound
+         * @hide
+         */
+        public static final String SCREENSHOT_SHUTTER_SOUND = "screenshot_shutter_sound";
+
+        /**
          * Whether or not gaming mode is enabled.
          * Default 0
          * @hide
