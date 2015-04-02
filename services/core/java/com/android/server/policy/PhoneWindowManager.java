@@ -684,6 +684,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mVolumeUpWakeTriggered;
     boolean mVolumeMuteWakeTriggered;
 
+    boolean mVolumeAnswerCall;
+
     // Click volume down + power for partial screenshot
     boolean mClickPartialScreenshot;
 
@@ -1073,6 +1075,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.VOLUME_WAKE_SCREEN), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(LineageSettings.System.getUriFor(
+                    LineageSettings.System.VOLUME_ANSWER_CALL), false, this,
                     UserHandle.USER_ALL);
             updateSettings();
         }
@@ -3402,6 +3407,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     && ((mDeviceHardwareWakeKeys & KEY_MASK_APP_SWITCH) != 0);
             mWakeOnVolumeKeyPress = (LineageSettings.System.getIntForUser(resolver,
                     LineageSettings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1)
+                    && ((mDeviceHardwareWakeKeys & KEY_MASK_VOLUME) != 0);
+            mVolumeAnswerCall = (LineageSettings.System.getIntForUser(resolver,
+                    LineageSettings.System.VOLUME_ANSWER_CALL, 0, UserHandle.USER_CURRENT) == 1)
                     && ((mDeviceHardwareWakeKeys & KEY_MASK_VOLUME) != 0);
 
             // Configure wake gesture.
@@ -5812,6 +5820,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         // When {@link #mHandleVolumeKeysInWM} is set, volume key events
                         // should be dispatched to WM.
                         if (telecomManager.isRinging()) {
+                            if (mVolumeAnswerCall) {
+                                telecomManager.acceptRingingCall();
+                            }
+
                             // If an incoming call is ringing, either VOLUME key means
                             // "silence ringer".  We handle these keys here, rather than
                             // in the InCallScreen, to make sure we'll respond to them
