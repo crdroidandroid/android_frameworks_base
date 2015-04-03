@@ -131,6 +131,9 @@ constructor(
                 initialValue = null,
             )
 
+    /** The current pattern size. */
+    val patternSize: StateFlow<Byte> = repository.patternSize
+
     /** Whether the pattern should be visible for the currently-selected user. */
     val isPatternVisible: StateFlow<Boolean> = repository.isPatternVisible
 
@@ -335,7 +338,8 @@ constructor(
                 LockscreenCredential.createPattern(
                     input
                         .map { it as AuthenticationPatternCoordinate }
-                        .map { LockPatternView.Cell.of(it.y, it.x) }
+                        .map { LockPatternView.Cell.of(it.y, it.x, patternSize.value) },
+                    patternSize.value
                 )
             else -> null
         }
