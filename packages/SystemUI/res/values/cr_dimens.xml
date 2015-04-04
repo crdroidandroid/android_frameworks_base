@@ -44,4 +44,7 @@
 
     <!-- Network traffic monitor multi-line text size -->
     <dimen name="net_traffic_multi_text_size">8dp</dimen>
+
+    <!-- Floating action button -->
+    <dimen name="floating_action_button_translation_z">12dp</dimen>
 </resources>
