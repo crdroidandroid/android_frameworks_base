@@ -44,4 +44,7 @@
     <dimen name="pie_touch_offset">15dp</dimen>
     <dimen name="pie_tab_title_height">24dp</dimen>
     <dimen name="pie_panel_padding">20dp</dimen>
+
+    <!-- Floating action button -->
+    <dimen name="floating_action_button_translation_z">12dp</dimen>
 </resources>
