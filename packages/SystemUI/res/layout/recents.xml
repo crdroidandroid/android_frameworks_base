@@ -34,6 +34,8 @@
         android:focusable="true">
     </com.android.systemui.recents.views.RecentsView>
 
+    <include layout="@layout/recents_membar" />
+
     <!-- Empty View -->
     <ViewStub android:id="@+id/empty_view_stub"
            android:layout="@layout/recents_empty"

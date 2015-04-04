@@ -3431,6 +3431,12 @@ public final class Settings {
          */
         public static final String EGG_MODE = "egg_mode";
 
+        /**
+         * show the membar in recents
+         *  @hide
+         */
+        public static final String SYSTEMUI_RECENTS_MEM_DISPLAY = "systemui_recents_mem_display";
+
         /** @hide */
         public static final Validator EGG_MODE_VALIDATOR = new Validator() {
             @Override
