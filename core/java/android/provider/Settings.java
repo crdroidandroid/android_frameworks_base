@@ -2652,14 +2652,6 @@ public final class Settings {
         public static final String TIME_12_24 = "time_12_24";
 
         /**
-         * Developer options - Navigation Bar show switch
-         * @deprecated Use {@link android.provider.Settings.Secure#DEV_FORCE_SHOW_NAVBAR} instead
-         * @hide
-         */
-        @Deprecated
-        public static final String DEV_FORCE_SHOW_NAVBAR = Secure.DEV_FORCE_SHOW_NAVBAR;
-
-        /**
          * Date format string
          *   mm/dd/yyyy
          *   dd/mm/yyyy
