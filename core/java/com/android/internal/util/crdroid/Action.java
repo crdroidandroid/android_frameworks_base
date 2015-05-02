@@ -89,29 +89,9 @@ public class Action {
                     || action.equals(ActionConstants.ACTION_MENU_BIG)) {
                 triggerVirtualKeypress(KeyEvent.KEYCODE_MENU, isLongpress);
                 return;
-            } else if (action.equals(ActionConstants.ACTION_IME_NAVIGATION_LEFT)) {
-                triggerVirtualKeypress(KeyEvent.KEYCODE_DPAD_LEFT, isLongpress);
-                return;
-            } else if (action.equals(ActionConstants.ACTION_IME_NAVIGATION_RIGHT)) {
-                triggerVirtualKeypress(KeyEvent.KEYCODE_DPAD_RIGHT, isLongpress);
-                return;
-            } else if (action.equals(ActionConstants.ACTION_IME_NAVIGATION_UP)) {
-                triggerVirtualKeypress(KeyEvent.KEYCODE_DPAD_UP, isLongpress);
-                return;
-            } else if (action.equals(ActionConstants.ACTION_IME_NAVIGATION_DOWN)) {
-                triggerVirtualKeypress(KeyEvent.KEYCODE_DPAD_DOWN, isLongpress);
-                return;
             } else if (action.equals(ActionConstants.ACTION_POWER)) {
                 PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
                 pm.goToSleep(SystemClock.uptimeMillis());
-                return;
-            } else if (action.equals(ActionConstants.ACTION_IME)) {
-                if (isKeyguardShowing) {
-                    return;
-                }
-                context.sendBroadcastAsUser(
-                        new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"),
-                        new UserHandle(UserHandle.USER_CURRENT));
                 return;
             } else if (action.equals(ActionConstants.ACTION_ASSIST)
                     || action.equals(ActionConstants.ACTION_KEYGUARD_SEARCH)) {
