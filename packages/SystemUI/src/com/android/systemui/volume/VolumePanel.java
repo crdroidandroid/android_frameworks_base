@@ -1588,12 +1588,12 @@ public class VolumePanel extends Handler implements DemoMode {
 
             case MSG_TIMEOUT: {
                 if (isShowing()) {
-                    hideVolumePanel();
                     if (mDialog != null) {
                         mView.animate().y(-mView.getHeight())
                                 .setDuration(ANIMATION_DURATION)
                                 .withEndAction(new Runnable() {
                             public void run() {
+                                hideVolumePanel();
                                 mDialog.dismiss();
                                 clearRemoteStreamController();
                                 mActiveStreamType = -1;
