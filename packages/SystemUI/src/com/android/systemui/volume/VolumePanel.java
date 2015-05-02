@@ -106,6 +106,7 @@ public class VolumePanel extends Handler implements DemoMode {
     private static final int TIMEOUT_DELAY_SAFETY_WARNING = 5000;
     private static final int TIMEOUT_DELAY_EXPANDED = 10000;
     private static final int TIMEOUT_DELAY_VOL_PANEL = 3000;
+    private static final int ANIMATION_DURATION = 500; // ms
 
     private static final int MSG_VOLUME_CHANGED = 0;
     private static final int MSG_FREE_RESOURCES = 1;
@@ -1309,14 +1310,31 @@ public class VolumePanel extends Handler implements DemoMode {
             // when the stream is for remote playback, use -1 to reset the stream type evaluation
             if (mDialog != null) {
                 mDialog.show();
+                Runnable r = new Runnable() {
+                    public void run() {
+                        mView.setY(-mView.getHeight());
+                        mView.animate().y(0).setDuration(ANIMATION_DURATION)
+                            .withEndAction(new Runnable() {
+                                public void run() {
+                                    if (mCallback != null) {
+                                        mCallback.onVisible(true);
+                                    }
+                                    announceDialogShown();
+                                }
+                        });
+                    }
+                };
+                if (mView.getHeight() == 0) {
+                    new Handler().post(r);
+                } else {
+                    r.run();
+                }
+            } else {
+                Log.d(mTag, "Bad, mDialog is null...");
             }
             if (stream != STREAM_MASTER) {
                 mAudioManager.forceVolumeControlStream(stream);
             }
-            if (mCallback != null) {
-                mCallback.onVisible(true);
-            }
-            announceDialogShown();
         }
 
         // Do a little vibrate if applicable (only when going into vibrate mode)
@@ -1572,12 +1590,18 @@ public class VolumePanel extends Handler implements DemoMode {
                 if (isShowing()) {
                     hideVolumePanel();
                     if (mDialog != null) {
-                        mDialog.dismiss();
-                        clearRemoteStreamController();
-                        mActiveStreamType = -1;
-                        if (mCallback != null) {
-                            mCallback.onVisible(false);
-                        }
+                        mView.animate().y(-mView.getHeight())
+                                .setDuration(ANIMATION_DURATION)
+                                .withEndAction(new Runnable() {
+                            public void run() {
+                                mDialog.dismiss();
+                                clearRemoteStreamController();
+                                mActiveStreamType = -1;
+                                if (mCallback != null) {
+                                    mCallback.onVisible(false);
+                                }
+                            }
+                        });
                     }
                 }
                 synchronized (sSafetyWarningLock) {
