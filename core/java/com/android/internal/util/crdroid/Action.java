@@ -37,6 +37,8 @@ import android.provider.Settings;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.InputDevice;
+import android.view.IWindowManager;
+
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.WindowManagerGlobal;
@@ -89,9 +91,44 @@ public class Action {
                     || action.equals(ActionConstants.ACTION_MENU_BIG)) {
                 triggerVirtualKeypress(KeyEvent.KEYCODE_MENU, isLongpress);
                 return;
+            } else if (action.equals(ActionConstants.ACTION_POWER_MENU)) {
+                try {
+                    IWindowManager windowManagerService = IWindowManager.Stub.asInterface(
+                    ServiceManager.getService(Context.WINDOW_SERVICE));
+                    windowManagerService.toggleGlobalMenu();
+                } catch (RemoteException e) {
+                }
+                return;
             } else if (action.equals(ActionConstants.ACTION_POWER)) {
                 PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
                 pm.goToSleep(SystemClock.uptimeMillis());
+                return;
+            } else if (action.equals(ActionConstants.ACTION_KILL)) {
+                if (isKeyguardShowing) {
+                    return;
+                }
+                try {
+                    barService.toggleKillApp();
+                } catch (RemoteException e) {
+                }
+                return;
+            } else if (action.equals(ActionConstants.ACTION_LAST_APP)) {
+                if (isKeyguardShowing) {
+                    return;
+                }
+                try {
+                    barService.toggleLastApp();
+                } catch (RemoteException e) {
+                }
+                return;
+            } else if (action.equals(ActionConstants.ACTION_RECENTS)) {
+                if (isKeyguardShowing) {
+                    return;
+                }
+                try {
+                    barService.toggleRecentApps();
+                } catch (RemoteException e) {
+                }
                 return;
             } else if (action.equals(ActionConstants.ACTION_ASSIST)
                     || action.equals(ActionConstants.ACTION_KEYGUARD_SEARCH)) {

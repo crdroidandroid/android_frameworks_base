@@ -455,6 +455,33 @@ public class StatusBarManagerService extends IStatusBarService.Stub {
         }
     }
 
+    @Override
+    public void setPieTriggerMask(int newMask, boolean lock) {
+        if (mBar != null) {
+            try {
+                mBar.setPieTriggerMask(newMask, lock);
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void toggleLastApp() {
+        if (mBar != null) {
+            try {
+                mBar.toggleLastApp();
+            } catch (RemoteException ex) {}
+        }
+    }
+
+    @Override
+    public void toggleKillApp() {
+        if (mBar != null) {
+            try {
+                mBar.toggleKillApp();
+            } catch (RemoteException ex) {}
+        }
+    }
+
     /**
      * Ask keyguard to invoke a custom intent after dismissing keyguard
      * @hide

@@ -4230,6 +4230,36 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    private void setPieTriggerMask(boolean isPortrait) {
+        int newMask = EdgeGesturePosition.LEFT.FLAG;
+        if (mHasNavigationBar) {
+            if (mNavigationBarOnBottom) {
+                newMask |= EdgeGesturePosition.RIGHT.FLAG;
+                if (mNavigationBarHeight == 0) {
+                    newMask |= EdgeGesturePosition.BOTTOM.FLAG;
+                }
+            } else {
+                newMask |= EdgeGesturePosition.BOTTOM.FLAG;
+                if (mNavigationBarWidth == 0) {
+                    newMask |= EdgeGesturePosition.RIGHT.FLAG;
+                }
+            }
+        } else {
+            newMask |= EdgeGesturePosition.RIGHT.FLAG
+                    | EdgeGesturePosition.BOTTOM.FLAG;
+        }
+        try {
+            IStatusBarService statusbar = getStatusBarService();
+            if (statusbar != null) {
+                statusbar.setPieTriggerMask(newMask, false);
+            }
+        } catch (RemoteException e) {
+            Slog.e(TAG, "RemoteException when updating PIE trigger mask", e);
+            // Re-acquire status bar service next time it is needed.
+            mStatusBarService = null;
+        }
+    }
+
     /** {@inheritDoc} */
     @Override
     public int getSystemDecorLayerLw() {

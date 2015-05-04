@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (c) 2015, The crDroid Android Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+-->
+<resources>
+
+    <!-- Pie controls -->
+    <!-- Padding between the pie controls and the screen border -->
+    <dimen name="pie_padding">4dp</dimen>
+
+    <!-- Radius of the snap points a the border of the screen -->
+    <dimen name="pie_snap_radius">45dp</dimen>
+
+    <!-- Stroke width of the snap points -->
+    <dimen name="pie_snap_outline">4dp</dimen>
+
+    <dimen name="pie_outline">2dp</dimen>
+    <dimen name="pie_textsize">14sp</dimen>
+    <dimen name="pie_item_size">30dp</dimen>
+
+    <dimen name="pie_navbar_radius">70dp</dimen>
+    <dimen name="pie_navbar_second_layer_radius">160dp</dimen>
+    <dimen name="pie_navbar_height">85dp</dimen>
+
+    <dimen name="pie_sysinfo_radius">165dp</dimen>
+    <dimen name="pie_sysinfo_second_layer_radius">255dp</dimen>
+    <dimen name="pie_sysinfo_height">85sp</dimen>
+
+</resources>

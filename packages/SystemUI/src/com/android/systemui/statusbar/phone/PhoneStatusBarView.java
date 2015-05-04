@@ -24,6 +24,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.android.internal.util.gesture.EdgeGesturePosition;
+
 import com.android.systemui.EventLogTags;
 import com.android.systemui.R;
 
@@ -117,6 +119,8 @@ public class PhoneStatusBarView extends PanelBar {
             }
         });
         mLastFullyOpenedPanel = null;
+
+        mBar.restorePieTriggerMask();
     }
 
     @Override

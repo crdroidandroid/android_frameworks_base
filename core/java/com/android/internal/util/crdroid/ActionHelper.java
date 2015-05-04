@@ -134,6 +134,78 @@ public class ActionHelper {
         return d;
     }
 
+    // Get and set the pie configs from provider and return proper arraylist objects
+    // @ActionConfig
+    public static ArrayList<ActionConfig> getPieConfig(Context context) {
+        return (ConfigSplitHelper.getActionConfigValues(context,
+            getPieProvider(context), null, null, false));
+    }
+
+    public static ArrayList<ActionConfig> getPieConfigWithDescription(
+            Context context, String values, String entries) {
+        return (ConfigSplitHelper.getActionConfigValues(context,
+            getPieProvider(context), values, entries, false));
+    }
+
+    private static String getPieProvider(Context context) {
+        String config = Settings.System.getStringForUser(
+                    context.getContentResolver(),
+                    Settings.System.PIE_BUTTONS_CONFIG,
+                    UserHandle.USER_CURRENT);
+        if (config == null) {
+            config = ActionConstants.NAVIGATION_CONFIG_DEFAULT;
+        }
+        return config;
+    }
+
+    public static void setPieConfig(Context context,
+            ArrayList<ActionConfig> actionConfig, boolean reset) {
+        String config;
+        if (reset) {
+            config = ActionConstants.NAVIGATION_CONFIG_DEFAULT;
+        } else {
+            config = ConfigSplitHelper.setActionConfig(actionConfig, false);
+        }
+        Settings.System.putString(context.getContentResolver(),
+                    Settings.System.PIE_BUTTONS_CONFIG,
+                    config);
+    }
+
+    public static ArrayList<ActionConfig> getPieSecondLayerConfig(Context context) {
+        return (ConfigSplitHelper.getActionConfigValues(context,
+            getPieSecondLayerProvider(context), null, null, false));
+    }
+
+    public static ArrayList<ActionConfig> getPieSecondLayerConfigWithDescription(
+            Context context, String values, String entries) {
+        return (ConfigSplitHelper.getActionConfigValues(context,
+            getPieSecondLayerProvider(context), values, entries, false));
+    }
+
+    private static String getPieSecondLayerProvider(Context context) {
+        String config = Settings.System.getStringForUser(
+                    context.getContentResolver(),
+                    Settings.System.PIE_BUTTONS_CONFIG_SECOND_LAYER,
+                    UserHandle.USER_CURRENT);
+        if (config == null) {
+            config = ActionConstants.PIE_SECOND_LAYER_CONFIG_DEFAULT;
+        }
+        return config;
+    }
+
+    public static void setPieSecondLayerConfig(Context context,
+            ArrayList<ActionConfig> actionConfig, boolean reset) {
+        String config;
+        if (reset) {
+            config = ActionConstants.PIE_SECOND_LAYER_CONFIG_DEFAULT;
+        } else {
+            config = ConfigSplitHelper.setActionConfig(actionConfig, false);
+        }
+        Settings.System.putString(context.getContentResolver(),
+                    Settings.System.PIE_BUTTONS_CONFIG_SECOND_LAYER,
+                    config);
+    }
+
     private static int getActionSystemIcon(Resources systemUiResources, String clickAction) {
         int resId = -1;
 
