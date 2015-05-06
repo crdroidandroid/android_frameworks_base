@@ -16,4 +16,4 @@
 
 <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
     android:src="@drawable/ic_navring_power_menu_alpha"
-    android:tint="#FFFFFFFF" />
+    android:tint="#FF000000" />
