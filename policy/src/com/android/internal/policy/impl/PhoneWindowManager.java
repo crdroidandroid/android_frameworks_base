@@ -5940,7 +5940,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         IDreamManager dreamManager = getDreamManager();
 
         try {
-            if (dreamManager != null && dreamManager.isDreaming()) {
+            if (dreamManager != null && dreamManager.isDreaming() && !dreamManager.isDozing()) {
                 return true;
             }
         } catch (RemoteException e) {
@@ -6882,9 +6882,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mPowerManager.setKeyboardVisibility(isBuiltInKeyboardVisible());
 
         if (mLidState == LID_CLOSED && mLidControlsSleep) {
-            mPowerManager.goToSleep(SystemClock.uptimeMillis(),
-                    PowerManager.GO_TO_SLEEP_REASON_LID_SWITCH,
-                    PowerManager.GO_TO_SLEEP_FLAG_NO_DOZE);
+            if (mFocusedWindow != null && (mFocusedWindow.getAttrs().flags
+                    & WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON) != 0) {
+                // if an application requests that the screen be turned on
+                // and there's a closed device cover, don't turn the screen off!
+                return;
+            }
+
+            TelecomManager telephonyService = getTelecommService();
+            if (!(telephonyService == null
+                    || telephonyService.isRinging())) {
+                mPowerManager.goToSleep(SystemClock.uptimeMillis(),
+                        PowerManager.GO_TO_SLEEP_REASON_LID_SWITCH,
+                        PowerManager.GO_TO_SLEEP_FLAG_NO_DOZE);
+            }
+
         }
 
         synchronized (mLock) {
