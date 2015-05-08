@@ -3712,11 +3712,22 @@ public final class Settings {
                 "volume_keys_control_ring_stream";
 
         /**
-         * Heads Up Notifications
+         * Whether the user has enabled headsup (Default 1)
+         * HeadsUp is enabled by default within its Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED
+         * setting. Avoid changing low level implementations and use a System setting to
+         * override per-user heads up on/off preference.
          *
+         * Enable headsup = 1 (on by default)
+         * Disable headsup = 0
+         *
+         * @see com.android.systemui.statusbar.BaseStatusBar#addNotification
          * @hide
          */
-        public static final String HEADS_UP_NOTIFICATION = "heads_up_enabled";
+        public static final String HEADS_UP_USER_ENABLED =
+                "heads_up_user_enabled";
+
+        /** @hide */ public static final int HEADS_UP_USER_OFF = 0;
+        /** @hide */ public static final int HEADS_UP_USER_ON = 1;
 
         /**
          * Hide notification instead of remove when swiping headsup
