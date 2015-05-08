@@ -73,4 +73,13 @@
 
     <!-- notification controls -->
     <string name="tuner_notification_control">Power notification controls</string>
+
+    <!-- PA Pie controls -->
+    <string name="pie_date_format" translatable="false">ccc, dd MMM yyyy</string>
+    <string name="pie_hour_format_12">hh:mm</string>
+    <string name="pie_hour_format_24">HH:mm</string>
+    <string name="pie_am_pm">a</string>
+
+    <!-- Kill app toast -->
+    <string name="app_killed_message">App Killed</string>
 </resources>
