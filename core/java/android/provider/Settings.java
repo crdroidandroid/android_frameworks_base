@@ -3718,6 +3718,13 @@ public final class Settings {
                 "volume_keys_control_ring_stream";
 
         /**
+         * The statusbar configuration to be used for its creation in SystemUI
+         * Fallback is the config_statusBarComponent value
+         * @hide
+         */
+        public static final String STATUSBAR_COMPONENT = "statusbar_component";
+
+        /**
          * Whether the user has enabled headsup (Default 1)
          * HeadsUp is enabled by default within its Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED
          * setting. Avoid changing low level implementations and use a System setting to
