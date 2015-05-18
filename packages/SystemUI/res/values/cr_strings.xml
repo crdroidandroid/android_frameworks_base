@@ -45,4 +45,7 @@
     <string name="heads_up_enabled">Heads up notifications are enabled</string>
     <string name="heads_up_disabled">Heads up notifications are disabled</string>
 
+    <!-- SU notification -->
+    <string name="su_session_active">SU session active</string>
+
 </resources>

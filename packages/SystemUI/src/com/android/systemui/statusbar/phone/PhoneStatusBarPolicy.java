@@ -48,6 +48,7 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.CastController;
 import com.android.systemui.statusbar.policy.CastController.CastDevice;
 import com.android.systemui.statusbar.policy.SuController;
+import com.android.systemui.statusbar.policy.SuControllerImpl;
 
 /**
  * This class contains all of the policy about which icons are installed in the status
@@ -406,7 +407,10 @@ public class PhoneStatusBarPolicy {
     }
 
     private void updateSu() {
-        mService.setIconVisibility(SLOT_SU, mSuController.hasActiveSessions());
+        mService.setIconVisibility(SLOT_SU, mSuController.hasActiveSessions()
+            && (Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.SU_INDICATOR, 1,
+            UserHandle.USER_CURRENT) == SuControllerImpl.SU_INDICATOR_ICON));
     }
 
     private final CastController.Callback mCastCallback = new CastController.Callback() {
