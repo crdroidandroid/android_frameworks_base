@@ -1018,6 +1018,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                     values.put(PackageTable.PACKAGE_NAME, pkg);
                     mContext.getContentResolver().insert(SPAM_MESSAGE_URI, values);
                     removeNotification(sbn.getKey(), null);
+                    onNotificationClear(sbn);
                 }
             });
 
