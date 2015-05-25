@@ -147,7 +147,7 @@ public class RankingHelper implements RankingConfig {
                             NotificationListenerService.Ranking.VISIBILITY_NO_OVERRIDE);
                     int keyguard = safeInt(parser, ATT_KEYGUARD,
                             Notification.SHOW_ALL_NOTI_ON_KEYGUARD);
-                    int headsUp = safeInt(parser, ATT_HEADSUP, Notification.HEADS_UP_NEVER);
+                    int headsUp = safeInt(parser, ATT_HEADSUP, Notification.HEADS_UP_ALLOWED);
                     String name = parser.getAttributeValue(null, ATT_NAME);
 
                     if (!TextUtils.isEmpty(name)) {
@@ -175,7 +175,7 @@ public class RankingHelper implements RankingConfig {
                             }
                             keyguardByUid.put(uid, keyguard);
                         }
-                        if (headsUp != Notification.HEADS_UP_NEVER) {
+                        if (headsUp != Notification.HEADS_UP_ALLOWED) {
                             SparseIntArray headsUpByUid = mPackageHeadsUp.get(name);
                             if (headsUpByUid == null) {
                                 headsUpByUid = new SparseIntArray();
@@ -255,7 +255,7 @@ public class RankingHelper implements RankingConfig {
                 }
                 if (headsUpByUid != null) {
                     final int headsUp = headsUpByUid.get(uid);
-                    if (headsUp != Notification.HEADS_UP_NEVER) {
+                    if (headsUp != Notification.HEADS_UP_ALLOWED) {
                         out.attribute(null, ATT_HEADSUP, Integer.toString(headsUp));
                     }
                 }
@@ -426,10 +426,10 @@ public class RankingHelper implements RankingConfig {
 
     @Override
     public int getHeadsUpNotificationsEnabledForPackage(String packageName, int uid) {
-        int headsUp = Notification.HEADS_UP_NEVER;
+        int headsUp = Notification.HEADS_UP_ALLOWED;
         SparseIntArray headsUpByUid = mPackageHeadsUp.get(packageName);
         if (headsUpByUid != null) {
-            headsUp = headsUpByUid.get(uid, Notification.HEADS_UP_NEVER);
+            headsUp = headsUpByUid.get(uid, Notification.HEADS_UP_ALLOWED);
         }
         return headsUp;
     }
