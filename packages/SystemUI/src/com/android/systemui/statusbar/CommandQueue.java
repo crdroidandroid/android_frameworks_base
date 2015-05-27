@@ -65,6 +65,7 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_TOGGLE_SCREENSHOT                  = 23 << MSG_SHIFT;
     private static final int MSG_SET_PIE_TRIGGER_MASK               = 24 << MSG_SHIFT;
     private static final int MSG_SET_AUTOROTATE_STATUS              = 25 << MSG_SHIFT;
+    private static final int MSG_SMART_PULLDOWN                     = 26 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -115,6 +116,7 @@ public class CommandQueue extends IStatusBar.Stub {
         public void toggleScreenshot();
         public void setPieTriggerMask(int newMask, boolean lock);
         public void setAutoRotate(boolean enabled);
+        public void toggleSmartPulldown();
     }
 
     public CommandQueue(Callbacks callbacks, StatusBarIconList list) {
@@ -320,6 +322,13 @@ public class CommandQueue extends IStatusBar.Stub {
         }
     }
 
+    public void toggleSmartPulldown() {
+        synchronized (mList) {
+            mHandler.removeMessages(MSG_SMART_PULLDOWN);
+            mHandler.obtainMessage(MSG_SMART_PULLDOWN, 0, 0, null).sendToTarget();
+        }
+    }
+
     private final class H extends Handler {
         public void handleMessage(Message msg) {
             if (mPaused) {
@@ -426,6 +435,9 @@ public class CommandQueue extends IStatusBar.Stub {
                     break;
                 case MSG_SET_AUTOROTATE_STATUS:
                     mCallbacks.setAutoRotate(msg.arg1 != 0);
+                    break;
+                case MSG_SMART_PULLDOWN:
+                    mCallbacks.toggleSmartPulldown();
                     break;
             }
         }

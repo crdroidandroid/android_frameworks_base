@@ -134,6 +134,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.util.cm.ActionUtils;
@@ -240,6 +241,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private static final int MSG_OPEN_SETTINGS_PANEL = 1002;
     private static final int MSG_LAUNCH_TRANSITION_TIMEOUT = 1003;
     private static final int MSG_UPDATE_NOTIFICATIONS = 1004;
+    private static final int MSG_SMART_PULLDOWN = 1005;
     // 1020-1040 reserved for BaseStatusBar
 
     // Time after we abort the launch transition.
@@ -3381,6 +3383,30 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 Settings.System.ACCELEROMETER_ROTATION,
                 enabled ? 1 : 0);
     }
+
+    @Override  // CommandQueue
+    public void toggleSmartPulldown() {
+        int smartPulldownMode = Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.QS_SMART_PULLDOWN,
+                0, UserHandle.USER_CURRENT);
+        if (smartPulldownMode == 1 && !hasActiveClearableNotifications()) {
+            animateExpandSettingsPanel();
+        } else if (smartPulldownMode == 2 && !hasActiveVisibleNotifications()) {
+            animateExpandSettingsPanel();
+        } else if (smartPulldownMode == 3 && !hasActiveVisibleNotifications() &&
+                !hasActiveClearableNotifications()) {
+            animateExpandSettingsPanel();
+        } else if (smartPulldownMode == 0) {
+            Toast.makeText(mContext,
+                    R.string.smart_pulldown_disabled,
+                    Toast.LENGTH_LONG).show();
+        } else {
+            animateExpandNotificationsPanel();
+        }
+        mHandler.removeMessages(MSG_SMART_PULLDOWN);
+        mHandler.sendEmptyMessage(MSG_SMART_PULLDOWN);
+    }
+
 
     private int computeBarMode(int oldVis, int newVis, BarTransitions transitions,
             int transientFlag, int translucentFlag) {

@@ -51,5 +51,6 @@ oneway interface IStatusBar
     void toggleScreenshot();
     void setPieTriggerMask(int newMask, boolean lock);
     void setAutoRotate(boolean enabled);
+    void toggleSmartPulldown();
 }
 
