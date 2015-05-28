@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 SlimRoms Project
+ * Copyright (C) 2014-2015 SlimRoms Project
  * This code is loosely based on portions of the CyanogenMod Project (Jens Doll) Copyright (C) 2013
  * and the ParanoidAndroid Project source, Copyright (C) 2012.
  *
@@ -18,6 +18,7 @@
 package com.android.systemui.statusbar.policy;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -277,7 +278,8 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
         }
     };
 
-    public PieController(Context context, BaseStatusBar statusBar, NavigationBarOverlay nbo) {
+    public PieController(Context context, BaseStatusBar statusBar,
+            EdgeGestureManager pieManager, NavigationBarOverlay nbo) {
         mContext = context;
         mStatusBar = statusBar;
         mNavigationBarOverlay = nbo;
@@ -291,7 +293,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
                     (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         }
 
-        mPieManager = EdgeGestureManager.getInstance();
+        mPieManager = pieManager;
         mPieManager.setEdgeGestureActivationListener(mPieActivationListener);
     }
 
@@ -461,17 +463,17 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
         mBackAltIcon = mContext.getResources().getDrawable(R.drawable.ic_sysbar_back_ime);
         mBackAltIcon = prepareBackIcon(mBackAltIcon, false);
 
-        ArrayList<ActionConfig> actionConfig;
+        ArrayList<ActionConfig> buttonsConfig;
 
         // First we construct first buttons layer
-        actionConfig = ActionHelper.getPieConfig(mContext);
-        getCustomActionsAndConstruct(resolver, actionConfig, false, minimumImageSize);
+        buttonsConfig = ActionHelper.getPieConfig(mContext);
+        getCustomActionsAndConstruct(resolver, buttonsConfig, false, minimumImageSize);
 
         if (mSecondLayerActive) {
             // If second layer is active we construct second layer now
             mNavigationSliceSecondLayer.clear();
-            actionConfig = ActionHelper.getPieSecondLayerConfig(mContext);
-            getCustomActionsAndConstruct(resolver, actionConfig, true, minimumImageSize);
+            buttonsConfig = ActionHelper.getPieSecondLayerConfig(mContext);
+            getCustomActionsAndConstruct(resolver, buttonsConfig, true, minimumImageSize);
         }
 
         mShowMenuVisibility = Settings.System.getIntForUser(mContext.getContentResolver(),
@@ -483,19 +485,19 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
     }
 
     private void getCustomActionsAndConstruct(ContentResolver resolver,
-            ArrayList<ActionConfig> actionConfig, boolean secondLayer, int minimumImageSize) {
+            ArrayList<ActionConfig> buttonsConfig, boolean secondLayer, int minimumImageSize) {
 
-        int buttonWidth = 10 / actionConfig.size();
-        ActionConfig ActionConfig;
+        int buttonWidth = 10 / buttonsConfig.size();
+        ActionConfig buttonConfig;
 
-        for (int j = 0; j < actionConfig.size(); j++) {
-            ActionConfig = actionConfig.get(j);
+        for (int j = 0; j < buttonsConfig.size(); j++) {
+            buttonConfig = buttonsConfig.get(j);
             if (secondLayer) {
                 addItemToLayer(mNavigationSliceSecondLayer,
-                        ActionConfig, buttonWidth, minimumImageSize);
+                        buttonConfig, buttonWidth, minimumImageSize);
             } else {
                 addItemToLayer(mNavigationSlice,
-                        ActionConfig, buttonWidth, minimumImageSize);
+                        buttonConfig, buttonWidth, minimumImageSize);
             }
         }
 
@@ -508,17 +510,17 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
         }
     }
 
-    private void addItemToLayer(PieSliceContainer layer, ActionConfig ActionConfig,
+    private void addItemToLayer(PieSliceContainer layer, ActionConfig buttonConfig,
             int buttonWidth, int minimumImageSize) {
         layer.addItem(constructItem(buttonWidth,
-                ActionConfig.getClickAction(),
-                ActionConfig.getLongpressAction(),
-                ActionConfig.getIcon(), minimumImageSize));
+                buttonConfig.getClickAction(),
+                buttonConfig.getLongpressAction(),
+                buttonConfig.getIcon(), minimumImageSize));
 
-        if (ActionConfig.getClickAction().equals(ActionConstants.ACTION_HOME)) {
+        if (buttonConfig.getClickAction().equals(ActionConstants.ACTION_HOME)) {
             layer.addItem(constructItem(buttonWidth,
                     ActionConstants.ACTION_KEYGUARD_SEARCH,
-                    ActionConfig.getLongpressAction(),
+                    buttonConfig.getLongpressAction(),
                     ActionConstants.ICON_EMPTY,
                     minimumImageSize));
         }
@@ -584,8 +586,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
             size = mContext.getResources().getDimensionPixelSize(
                     com.android.internal.R.dimen.app_icon_size);
         } else {
-            if (dOriginal != null)
-                size = Math.max(dOriginal.getIntrinsicHeight(), dOriginal.getIntrinsicWidth());
+            size = Math.max(dOriginal.getIntrinsicHeight(), dOriginal.getIntrinsicWidth());
         }
 
         Drawable dResized = ImageHelper.resize(
@@ -643,6 +644,12 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 PixelFormat.TRANSLUCENT);
+        // Turn on hardware acceleration for high end gfx devices.
+        if (ActivityManager.isHighEndGfx()) {
+            lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+            lp.privateFlags |=
+                    WindowManager.LayoutParams.PRIVATE_FLAG_FORCE_HARDWARE_ACCELERATED;
+        }
         // This title is for debugging only. See: dumpsys window
         lp.setTitle("PieControlPanel");
         lp.windowAnimations = android.R.style.Animation;
@@ -892,4 +899,5 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
         }
         return mContext.getString(R.string.pie_battery_status_discharging, mBatteryLevel);
     }
+
 }

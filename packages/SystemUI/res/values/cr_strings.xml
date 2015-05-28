@@ -48,4 +48,7 @@
     <!-- SU notification -->
     <string name="su_session_active">SU session active</string>
 
+    <!-- Screenshot -->
+    <string name="shortcut_screenshot">Screenshot</string>
+
 </resources>

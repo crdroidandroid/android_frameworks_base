@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 SlimRoms Project
+ * Copyright (C) 2014-2015 SlimRoms Project
  * This code is loosely based on portions of the CyanogenMod Project (Jens Doll) Copyright (C) 2013
  * and the ParanoidAndroid Project source, Copyright (C) 2012.
  *

@@ -46,6 +46,9 @@ public class EdgeGestureTracker {
     private int mGracePeriodDistance;
     private long mTimeOut;
 
+    private boolean mIsImeIsActive;
+    private boolean mOverwriteImeIsActive;
+
     private int mDisplayWidth;
     private int mDisplayHeight;
 
@@ -97,6 +100,14 @@ public class EdgeGestureTracker {
 
     public void reset() {
         mActive = false;
+    }
+
+    public void setImeIsActive(boolean enabled) {
+        mIsImeIsActive = enabled;
+    }
+
+    public void setOverwriteImeIsActive(boolean enabled) {
+        mOverwriteImeIsActive = enabled;
     }
 
     public void updateDisplay(Display display) {

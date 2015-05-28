@@ -19,7 +19,7 @@ package com.android.internal.util.crdroid;
 public class ActionConstants {
 
     // key must fit with the values arrays from Settings to use
-    // SlimActions.java actions
+    // Action.java actions
     public static final String ACTION_HOME                 = "**home**";
     public static final String ACTION_BACK                 = "**back**";
     public static final String ACTION_SEARCH               = "**search**";
@@ -28,8 +28,10 @@ public class ActionConstants {
     public static final String ACTION_MENU_BIG             = "**menu_big**";
     public static final String ACTION_POWER                = "**power**";
     public static final String ACTION_NOTIFICATIONS        = "**notifications**";
+    public static final String ACTION_SETTINGS_PANEL       = "**settings_panel**";
     public static final String ACTION_RECENTS              = "**recents**";
     public static final String ACTION_SCREENSHOT           = "**screenshot**";
+    public static final String ACTION_IME                  = "**ime**";
     public static final String ACTION_LAST_APP             = "**lastapp**";
     public static final String ACTION_KILL                 = "**kill**";
     public static final String ACTION_ASSIST               = "**assist**";
@@ -43,6 +45,10 @@ public class ActionConstants {
     public static final String ACTION_KEYGUARD_SEARCH      = "**keyguard_search**";
     public static final String ACTION_PIE                  = "**pie**";
     public static final String ACTION_NAVBAR               = "**nav_bar**";
+    public static final String ACTION_IME_NAVIGATION_LEFT  = "**ime_nav_left**";
+    public static final String ACTION_IME_NAVIGATION_RIGHT = "**ime_nav_right**";
+    public static final String ACTION_IME_NAVIGATION_UP    = "**ime_nav_up**";
+    public static final String ACTION_IME_NAVIGATION_DOWN  = "**ime_nav_down**";
     public static final String ACTION_CAMERA               = "**camera**";
     public static final String ACTION_MEDIA_PREVIOUS       = "**media_previous**";
     public static final String ACTION_MEDIA_NEXT           = "**media_next**";
@@ -90,6 +96,7 @@ public class ActionConstants {
         + ACTION_SCREENSHOT    + ACTION_DELIMITER
         + ACTION_NULL          + ACTION_DELIMITER
         + ICON_EMPTY           + ACTION_DELIMITER
+        + ACTION_IME           + ACTION_DELIMITER
         + ACTION_NULL          + ACTION_DELIMITER
         + ICON_EMPTY;
 

@@ -23,6 +23,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.input.InputManager;
+import android.hardware.ITorchService;
 import android.media.AudioManager;
 import android.media.session.MediaSessionLegacyHelper;
 import android.media.ToneGenerator;
@@ -38,10 +39,10 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.IWindowManager;
-
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.WindowManagerGlobal;
+import android.widget.Toast;
 
 import com.android.internal.statusbar.IStatusBarService;
 
@@ -77,6 +78,18 @@ public class Action {
                 return; // ouch
             }
 
+            final IWindowManager windowManagerService = IWindowManager.Stub.asInterface(
+                    ServiceManager.getService(Context.WINDOW_SERVICE));
+            if (windowManagerService == null) {
+                return; // ouch
+            }
+
+            boolean isKeyguardSecure = false;
+            try {
+                isKeyguardSecure = windowManagerService.isKeyguardSecure();
+            } catch (RemoteException e) {
+            }
+
             // process the actions
             if (action.equals(ActionConstants.ACTION_HOME)) {
                 triggerVirtualKeypress(KeyEvent.KEYCODE_HOME, isLongpress);
@@ -87,21 +100,106 @@ public class Action {
             } else if (action.equals(ActionConstants.ACTION_SEARCH)) {
                 triggerVirtualKeypress(KeyEvent.KEYCODE_SEARCH, isLongpress);
                 return;
-            } else if (action.equals(ActionConstants.ACTION_MENU)
-                    || action.equals(ActionConstants.ACTION_MENU_BIG)) {
-                triggerVirtualKeypress(KeyEvent.KEYCODE_MENU, isLongpress);
+            } else if (action.equals(ActionConstants.ACTION_KILL)) {
+                if (isKeyguardShowing) return;
+                try {
+                    barService.toggleKillApp();
+                } catch (RemoteException e) {}
+                return;
+            } else if (action.equals(ActionConstants.ACTION_NOTIFICATIONS)) {
+                if (isKeyguardShowing && isKeyguardSecure) {
+                    return;
+                }
+                try {
+                    barService.expandNotificationsPanel();
+                } catch (RemoteException e) {
+                }
+                return;
+            } else if (action.equals(ActionConstants.ACTION_SETTINGS_PANEL)) {
+                if (isKeyguardShowing && isKeyguardSecure) {
+                    return;
+                }
+                try {
+                    barService.expandSettingsPanel();
+                } catch (RemoteException e) {}
+            } else if (action.equals(ActionConstants.ACTION_LAST_APP)) {
+                if (isKeyguardShowing) {
+                    return;
+                }
+                try {
+                    barService.toggleLastApp();
+                } catch (RemoteException e) {
+                }
+                return;
+            } else if (action.equals(ActionConstants.ACTION_TORCH)) {
+                try {
+                    ITorchService torchService = ITorchService.Stub.asInterface(
+                            ServiceManager.getService(Context.TORCH_SERVICE));
+                    torchService.toggleTorch();
+                } catch (RemoteException e) {
+                }
                 return;
             } else if (action.equals(ActionConstants.ACTION_POWER_MENU)) {
                 try {
-                    IWindowManager windowManagerService = IWindowManager.Stub.asInterface(
-                    ServiceManager.getService(Context.WINDOW_SERVICE));
+                    //IWindowManager windowManagerService = IWindowManager.Stub.asInterface(
+                    //ServiceManager.getService(Context.WINDOW_SERVICE));
                     windowManagerService.toggleGlobalMenu();
                 } catch (RemoteException e) {
                 }
                 return;
+            } else if (action.equals(ActionConstants.ACTION_MENU)
+                    || action.equals(ActionConstants.ACTION_MENU_BIG)) {
+                triggerVirtualKeypress(KeyEvent.KEYCODE_MENU, isLongpress);
+                return;
+            } else if (action.equals(ActionConstants.ACTION_IME_NAVIGATION_LEFT)) {
+                triggerVirtualKeypress(KeyEvent.KEYCODE_DPAD_LEFT, isLongpress);
+                return;
+            } else if (action.equals(ActionConstants.ACTION_IME_NAVIGATION_RIGHT)) {
+                triggerVirtualKeypress(KeyEvent.KEYCODE_DPAD_RIGHT, isLongpress);
+                return;
+            } else if (action.equals(ActionConstants.ACTION_IME_NAVIGATION_UP)) {
+                triggerVirtualKeypress(KeyEvent.KEYCODE_DPAD_UP, isLongpress);
+                return;
+            } else if (action.equals(ActionConstants.ACTION_IME_NAVIGATION_DOWN)) {
+                triggerVirtualKeypress(KeyEvent.KEYCODE_DPAD_DOWN, isLongpress);
+                return;
             } else if (action.equals(ActionConstants.ACTION_POWER)) {
                 PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
                 pm.goToSleep(SystemClock.uptimeMillis());
+                return;
+            } else if (action.equals(ActionConstants.ACTION_IME)) {
+                if (isKeyguardShowing) {
+                    return;
+                }
+                context.sendBroadcastAsUser(
+                        new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"),
+                        new UserHandle(UserHandle.USER_CURRENT));
+                return;
+            } else if (action.equals(ActionConstants.ACTION_PIE)) {
+                boolean pieState = isPieEnabled(context);
+                if (pieState && !isNavBarEnabled(context) && isNavBarDefault(context)) {
+                    Toast.makeText(context,
+                            com.android.internal.R.string.disable_pie_navigation_error,
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Settings.System.putIntForUser(
+                        context.getContentResolver(),
+                        Settings.System.PIE_CONTROLS,
+                        pieState ? 0 : 1, UserHandle.USER_CURRENT);
+                return;
+            } else if (action.equals(ActionConstants.ACTION_NAVBAR)) {
+                boolean navBarState = isNavBarEnabled(context);
+                if (navBarState && !isPieEnabled(context) && isNavBarDefault(context)) {
+                    Toast.makeText(context,
+                            com.android.internal.R.string.disable_navigation_pie_error,
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Settings.System.putIntForUser(
+                        context.getContentResolver(),
+                        Settings.System.NAVIGATION_BAR_SHOW,
+                        navBarState ? 0 : 1, UserHandle.USER_CURRENT);
                 return;
             } else if (action.equals(ActionConstants.ACTION_KILL)) {
                 if (isKeyguardShowing) {
@@ -118,6 +216,12 @@ public class Action {
                 }
                 try {
                     barService.toggleLastApp();
+                } catch (RemoteException e) {
+                }
+                return;
+            } else if (action.equals(ActionConstants.ACTION_SCREENSHOT)) {
+                try {
+                    barService.toggleScreenshot();
                 } catch (RemoteException e) {
                 }
                 return;
@@ -153,7 +257,7 @@ public class Action {
                     }
                     startActivity(context, intent, barService, isKeyguardShowing);
                 } catch (ActivityNotFoundException e) {
-                    Log.e("SlimActions:", "No activity to handle assist long press action.", e);
+                    Log.e("Action:", "No activity to handle assist long press action.", e);
                 }
                 return;
             } else if (action.equals(ActionConstants.ACTION_VIB)) {
@@ -236,19 +340,41 @@ public class Action {
                     powerManager.wakeUp(SystemClock.uptimeMillis());
                 }
                 return;
+            } else if (action.equals(ActionConstants.ACTION_SCREENSHOT)) {
+                try {
+                    barService.toggleScreenshot();
+                } catch (RemoteException e) {}
+                return;
             } else {
                 // we must have a custom uri
                 Intent intent = null;
                 try {
                     intent = Intent.parseUri(action, 0);
                 } catch (URISyntaxException e) {
-                    Log.e("SlimActions:", "URISyntaxException: [" + action + "]");
+                    Log.e("Action:", "URISyntaxException: [" + action + "]");
                     return;
                 }
                 startActivity(context, intent, barService, isKeyguardShowing);
                 return;
             }
 
+    }
+
+    public static boolean isPieEnabled(Context context) {
+        return Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.PIE_CONTROLS,
+                0, UserHandle.USER_CURRENT) == 1;
+    }
+
+    public static boolean isNavBarEnabled(Context context) {
+        return Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.NAVIGATION_BAR_SHOW,
+                isNavBarDefault(context) ? 1 : 0, UserHandle.USER_CURRENT) == 1;
+    }
+
+    public static boolean isNavBarDefault(Context context) {
+        return context.getResources().getBoolean(
+                com.android.internal.R.bool.config_showNavigationBar);
     }
 
     public static boolean isActionKeyEvent(String action) {

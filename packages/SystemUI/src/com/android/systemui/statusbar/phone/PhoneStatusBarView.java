@@ -119,8 +119,8 @@ public class PhoneStatusBarView extends PanelBar {
             }
         });
         mLastFullyOpenedPanel = null;
-
         mBar.restorePieTriggerMask();
+        mBar.setOverwriteImeIsActive(false);
     }
 
     @Override
@@ -130,6 +130,14 @@ public class PhoneStatusBarView extends PanelBar {
             openPanel.sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
         }
         mLastFullyOpenedPanel = openPanel;
+        // Panel is open disable bottom edge and enable all other
+        // if the user activated them
+//        if (mShouldFade) {
+            mBar.updatePieTriggerMask(EdgeGesturePosition.LEFT.FLAG
+                    | EdgeGesturePosition.RIGHT.FLAG
+                    | EdgeGesturePosition.TOP.FLAG, true);
+            mBar.setOverwriteImeIsActive(true);
+//        }
     }
 
     @Override
