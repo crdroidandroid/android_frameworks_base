@@ -39,6 +39,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.ViewGroup;
+import android.os.Vibrator;
 
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
@@ -52,13 +53,31 @@ import cyanogenmod.app.StatusBarPanelCustomTile;
 public class NotificationsTile extends QSTile<NotificationsTile.NotificationsState> {
     private final ZenModeController mZenController;
     private final AudioManager mAudioManager;
+    private final Vibrator mVibrator;
 
     private boolean mListening;
+
+    private static final int[] RINGERS = new int[] {
+        AudioManager.RINGER_MODE_NORMAL,
+        AudioManager.RINGER_MODE_VIBRATE,
+        AudioManager.RINGER_MODE_SILENT,
+        AudioManager.RINGER_MODE_NORMAL,
+        AudioManager.RINGER_MODE_SILENT
+    };
+    private static final int[] ZENS = new int[] {
+        Global.ZEN_MODE_OFF,
+        Global.ZEN_MODE_OFF,
+        Global.ZEN_MODE_OFF,
+        Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS,
+        Global.ZEN_MODE_NO_INTERRUPTIONS
+    };
+    private int mRingerIndex;
 
     public NotificationsTile(Host host) {
         super(host);
         mZenController = host.getZenModeController();
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     @Override
@@ -87,6 +106,33 @@ public class NotificationsTile extends QSTile<NotificationsTile.NotificationsSta
 
     @Override
     protected void handleClick() {
+        mRingerIndex++;
+        if (mRingerIndex >= RINGERS.length) {
+            mRingerIndex = 0;
+        }
+        int ringerMode = RINGERS[mRingerIndex];
+        int zenMode = ZENS[mRingerIndex];
+
+        // If we are setting a vibrating state, vibrate to indicate it
+        if (ringerMode == AudioManager.RINGER_MODE_VIBRATE && mVibrator != null) {
+            boolean hasVibrator = mVibrator.hasVibrator();
+            if (hasVibrator) {
+                mVibrator.vibrate(200);
+            }
+        }
+
+        mAudioManager.setRingerMode(ringerMode);
+        mZenController.setZen(zenMode);
+    }
+
+    @Override
+    protected void handleLongClick() {
+        super.handleLongClick();
+        showDetail(true);
+    }
+
+    @Override
+    protected void handleSecondaryClick() {
         showDetail(true);
     }
 
