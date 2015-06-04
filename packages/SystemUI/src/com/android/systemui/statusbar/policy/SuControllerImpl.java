@@ -63,9 +63,9 @@ public class SuControllerImpl implements SuController {
 
     private static final int SU_INDICATOR_NOTIFICATION_ID = 0x101101;
 
-    public static final int SU_INDICATOR_NONE         = 0;
-    public static final int SU_INDICATOR_ICON         = 1;
-    public static final int SU_INDICATOR_NOTIFICATION = 2;
+    public static final int SU_INDICATOR_ICON         = 0;
+    public static final int SU_INDICATOR_NOTIFICATION = 1;
+    public static final int SU_INDICATOR_NONE         = 2;
 
     public SuControllerImpl(Context context) {
         mContext = context;
