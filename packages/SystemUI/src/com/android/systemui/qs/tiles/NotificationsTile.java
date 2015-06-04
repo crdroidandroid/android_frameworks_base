@@ -34,6 +34,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.util.Log;
 import android.view.View;
@@ -51,6 +52,9 @@ import cyanogenmod.app.StatusBarPanelCustomTile;
 
 /** Quick settings tile: Notifications **/
 public class NotificationsTile extends QSTile<NotificationsTile.NotificationsState> {
+
+    private static final Intent SOUND_SETTINGS = new Intent(Settings.ACTION_SOUND_SETTINGS);
+
     private final ZenModeController mZenController;
     private final AudioManager mAudioManager;
     private final Vibrator mVibrator;
@@ -127,13 +131,7 @@ public class NotificationsTile extends QSTile<NotificationsTile.NotificationsSta
 
     @Override
     protected void handleLongClick() {
-        super.handleLongClick();
-        showDetail(true);
-    }
-
-    @Override
-    protected void handleSecondaryClick() {
-        showDetail(true);
+        mHost.startSettingsActivity(SOUND_SETTINGS);
     }
 
     @Override
