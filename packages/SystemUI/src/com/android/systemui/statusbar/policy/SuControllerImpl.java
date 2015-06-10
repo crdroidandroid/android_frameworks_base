@@ -194,7 +194,7 @@ public class SuControllerImpl implements SuController {
             return;
         }
         if (Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SU_INDICATOR, 1, UserHandle.USER_CURRENT)
+                Settings.System.SU_INDICATOR, 0, UserHandle.USER_CURRENT)
                 != SU_INDICATOR_NOTIFICATION) {
             mNotificationManager.cancel(SU_INDICATOR_NOTIFICATION_ID);
             return;

@@ -409,7 +409,7 @@ public class PhoneStatusBarPolicy {
     private void updateSu() {
         mService.setIconVisibility(SLOT_SU, mSuController.hasActiveSessions()
             && (Settings.System.getIntForUser(mContext.getContentResolver(),
-            Settings.System.SU_INDICATOR, 1,
+            Settings.System.SU_INDICATOR, 0,
             UserHandle.USER_CURRENT) == SuControllerImpl.SU_INDICATOR_ICON));
     }
 
