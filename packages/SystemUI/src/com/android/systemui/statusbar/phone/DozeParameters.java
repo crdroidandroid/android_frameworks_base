@@ -118,17 +118,21 @@ public class DozeParameters {
     }
 
     public int getPulseInDuration(int reason) {
+        if (getOverwriteValue()) {
+            return Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.DOZE_PULSE_DURATION_IN, R.integer.doze_pulse_duration_in,
+                    UserHandle.USER_CURRENT);
+        }
         switch(reason) {
         case DozeLog.PULSE_REASON_SENSOR_PICKUP:
                 return getInt("doze.pulse.duration.in.pickup", R.integer.doze_pulse_duration_in_pickup);
         case DozeLog.PULSE_REASON_INTENT:
-                return getInt("doze.pulse.duration.in.intent", R.integer.doze_pulse_duration_in_intent);
-        default:
-                if (getOverwriteValue()) {
-                    return Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.DOZE_PULSE_DURATION_IN, R.integer.doze_pulse_duration_in,
-                            UserHandle.USER_CURRENT);
+                if (!getOverwriteValue()) {
+                    return getInt("doze.pulse.duration.in.intent", R.integer.doze_pulse_duration_in_intent);
+                } else {
+                    return getInt("doze.pulse.duration.in.intent", R.integer.doze_pulse_duration_in);
                 }
+        default:
                 return getInt("doze.pulse.duration.in", R.integer.doze_pulse_duration_in);
         }
     }
