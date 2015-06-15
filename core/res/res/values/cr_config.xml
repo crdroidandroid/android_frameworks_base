@@ -23,4 +23,7 @@
     <!-- Hardware keys on/off option -->
     <bool name="config_hwKeysPref">false</bool>
 
+    <!-- Doze: force using accelerometer as pick up sensor -->
+    <bool name="config_dozeUseAccelerometer">false</bool>
+
 </resources>

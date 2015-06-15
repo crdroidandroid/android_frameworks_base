@@ -47,7 +47,8 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.Date;
 
-public class DozeService extends DreamService {
+public class DozeService extends DreamService implements ProximitySensorManager.ProximityListener,
+                                ShakeSensorManager.ShakeListener {
     private static final String TAG = "DozeService";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
@@ -91,6 +92,13 @@ public class DozeService extends DreamService {
     private long mEarliestPulseDueToLight;
     private int mScheduleResetsRemaining;
 
+    private boolean mUseAccelerometer;
+    private boolean mIsFar = true;
+
+    // sensor
+    private ProximitySensorManager mProximitySensorManager;
+    private ShakeSensorManager mShakeSensorManager;
+
     public DozeService() {
         if (DEBUG) Log.d(mTag, "new DozeService()");
         setDebug(DEBUG);
@@ -129,12 +137,18 @@ public class DozeService extends DreamService {
         setWindowless(true);
 
         mSensors = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
-        mSigMotionSensor = new TriggerSensor(Sensor.TYPE_SIGNIFICANT_MOTION,
+        mUseAccelerometer = mDozeParameters.setUsingAccelerometerAsSensorPickUp();
+        if (!mUseAccelerometer) {
+            mSigMotionSensor = new TriggerSensor(Sensor.TYPE_SIGNIFICANT_MOTION,
                 mDozeParameters.getPulseOnSigMotion(), mDozeParameters.getVibrateOnSigMotion(),
                 DozeLog.PULSE_REASON_SENSOR_SIGMOTION);
-        mPickupSensor = new TriggerSensor(Sensor.TYPE_PICK_UP_GESTURE,
+            mPickupSensor = new TriggerSensor(Sensor.TYPE_PICK_UP_GESTURE,
                 mDozeParameters.getPulseOnPickup(), mDozeParameters.getVibrateOnPickup(),
                 DozeLog.PULSE_REASON_SENSOR_PICKUP);
+        } else {
+            mProximitySensorManager = new ProximitySensorManager(mContext, this);
+            mShakeSensorManager = new ShakeSensorManager(mContext, this);
+        }
         mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, mTag);
         mWakeLock.setReferenceCounted(true);
@@ -151,11 +165,84 @@ public class DozeService extends DreamService {
     }
 
     @Override
+    public synchronized void onShake() {
+        if (mDozeParameters.getPocketMode()) {
+            startPulsingFromSensor();
+        } else {
+            requestPulse(DozeLog.PULSE_REASON_INTENT);
+        }
+    }
+
+    private void startPulsingFromSensor() {
+        requestPulseFromAccelerometer();
+        // reset the notification pulse schedule, but only if we think we were not triggered
+        // by a notification-related vibration
+        final long timeSinceNotification = System.currentTimeMillis()
+                    - mNotificationPulseTime;
+        final boolean withinVibrationThreshold =
+                    timeSinceNotification < mDozeParameters.getPickupVibrationThreshold();
+        if (withinVibrationThreshold) {
+            if (DEBUG) Log.d(mTag, "Not resetting schedule, recent notification");
+        } else {
+            resetNotificationResets();
+        }
+    }
+
+    @Override
+    public synchronized void onNear() {
+        if (mIsFar) {
+            mIsFar = false;
+            if (mDozeParameters.getShakeMode()) {
+                mShakeSensorManager.disable();
+            }
+        }
+    }
+
+    @Override
+    public synchronized void onFar() {
+        if (!mIsFar) {
+            mIsFar = true;
+            if (mDozeParameters.getShakeMode()) {
+                mShakeSensorManager.enable(mDozeParameters.getShakeAccelerometerThreshold());
+            }
+            startPulsingFromSensor();
+        }
+    }
+
+    private void requestPulseFromAccelerometer() {
+        if (mHost != null && mDreaming && !mPulsing && mIsFar) {
+            // Let the host know we want to pulse.  Wait for it to be ready, then
+            // turn the screen on.  When finished, turn the screen off again.
+            // Here we need a wakelock to stay awake until the pulse is finished.
+            mWakeLock.acquire();
+            mPulsing = true;
+
+            mHost.pulseWhileDozing(new DozeHost.PulseCallback() {
+                @Override
+                public void onPulseStarted() {
+                    if (mPulsing && mDreaming) {
+                        turnDisplayOn();
+                    }
+                }
+
+                @Override
+                public void onPulseFinished() {
+                    if (mPulsing && mDreaming) {
+                        mPulsing = false;
+                        turnDisplayOff();
+                    }
+                    mWakeLock.release(); // needs to be unconditional to balance acquire
+                }
+            }, DozeLog.PULSE_REASON_INTENT);
+        }
+    }
+
+    @Override
     public void onDreamingStarted() {
         super.onDreamingStarted();
 
         if (mHost == null) {
-            finish();
+            finishNow();
             return;
         }
 
@@ -234,6 +321,7 @@ public class DozeService extends DreamService {
                 @Override
                 public void onProximityResult(int result) {
                     final boolean isNear = result == RESULT_NEAR;
+                    final boolean isAccSensor = mUseAccelerometer && mDozeParameters.getShakeMode();
                     final long end = SystemClock.uptimeMillis();
                     DozeLog.traceProximityResult(isNear, end - start, reason);
                     if (nonBlocking) {
@@ -244,7 +332,14 @@ public class DozeService extends DreamService {
                     if (isNear) {
                         mPulsing = false;
                         mWakeLock.release();
+                        if (isAccSensor) {
+                            mShakeSensorManager.disable();
+                        }
                         return;
+                    }
+
+                    if (isAccSensor) {
+                        mShakeSensorManager.enable(mDozeParameters.getShakeAccelerometerThreshold());
                     }
 
                     // not in-pocket, continue pulsing
@@ -287,20 +382,48 @@ public class DozeService extends DreamService {
 
     private void finishToSavePower() {
         Log.w(mTag, "Exiting ambient mode due to low power battery saver");
-        finish();
+        finishNow();
     }
 
     private void finishForCarMode() {
         Log.w(mTag, "Exiting ambient mode, not allowed in car mode");
+        finishNow();
+    }
+
+    private void finishNow() {
+        listenForSignalsSensor(false);
         finish();
     }
 
     private void listenForPulseSignals(boolean listen) {
         if (DEBUG) Log.d(mTag, "listenForPulseSignals: " + listen);
-        mSigMotionSensor.setListening(listen);
-        mPickupSensor.setListening(listen);
+        if (!mUseAccelerometer) {
+            mSigMotionSensor.setListening(listen);
+            mPickupSensor.setListening(listen);
+        } else {
+            listenForSignalsSensor(listen);
+        }
         listenForBroadcasts(listen);
         listenForNotifications(listen);
+    }
+
+    private void listenForSignalsSensor(boolean listen) {
+        if (listen && mDozeParameters.getFullMode()) {
+            mProximitySensorManager.enable();
+        } else {
+            // its safe to call this everytime
+            mProximitySensorManager.disable(true);
+            mShakeSensorManager.disable();
+        }
+    }
+
+    private void listenForHalfMode(boolean listen) {
+        if (!mUseAccelerometer || mDozeParameters.getFullMode()) return;
+        if (listen && mDozeParameters.getHalfMode()) {
+            mProximitySensorManager.enable();
+        } else {
+            mProximitySensorManager.disable(true);
+        }
     }
 
     private void listenForBroadcasts(boolean listen) {
@@ -425,7 +548,11 @@ public class DozeService extends DreamService {
                 final long instance = intent.getLongExtra(EXTRA_INSTANCE, -1);
                 if (DEBUG) Log.d(mTag, "Received notification pulse intent instance=" + instance);
                 DozeLog.traceNotificationPulse(instance);
-                requestPulse(DozeLog.PULSE_REASON_NOTIFICATION);
+                if (mUseAccelerometer && mDozeParameters.getPocketMode()) {
+                    requestPulseFromAccelerometer();
+                } else {
+                    requestPulse(DozeLog.PULSE_REASON_NOTIFICATION);
+                }
                 rescheduleNotificationPulse(mNotificationLightOn);
             }
             if (UiModeManager.ACTION_ENTER_CAR_MODE.equals(intent.getAction())) {
@@ -455,6 +582,7 @@ public class DozeService extends DreamService {
             if (DEBUG) Log.d(mTag, "onNotificationLight on=" + on);
             if (mNotificationLightOn == on) return;
             mNotificationLightOn = on;
+            listenForHalfMode(mNotificationLightOn);
             if (mNotificationLightOn) {
                 updateNotificationPulseDueToLight();
             }
@@ -583,8 +711,9 @@ public class DozeService extends DreamService {
                 return;
             }
             // the pickup sensor interferes with the prox event, disable it until we have a result
-            mPickupSensor.setDisabled(true);
-
+            if (!mUseAccelerometer) {
+                mPickupSensor.setDisabled(true);
+            }
             mMaxRange = sensor.getMaximumRange();
             mSensors.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL, 0, mHandler);
             mHandler.postDelayed(this, TIMEOUT_DELAY_MS);
@@ -615,7 +744,9 @@ public class DozeService extends DreamService {
                 mHandler.removeCallbacks(this);
                 mSensors.unregisterListener(this);
                 // we're done - reenable the pickup sensor
-                mPickupSensor.setDisabled(false);
+                if (!mUseAccelerometer) {
+                    mPickupSensor.setDisabled(false);
+                }
                 mRegistered = false;
             }
             onProximityResult(result);
