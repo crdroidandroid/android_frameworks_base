@@ -19,6 +19,7 @@ package com.android.internal.os;
 import android.app.ActivityManagerNative;
 import android.app.ActivityThread;
 import android.app.ApplicationErrorReport;
+import android.app.IActivityManager;
 import android.os.Build;
 import android.os.DeadObjectException;
 import android.os.Debug;
@@ -94,8 +95,11 @@ public class RuntimeInit {
                 }
 
                 // Bring up crash dialog, wait for it to be dismissed
-                ActivityManagerNative.getDefault().handleApplicationCrash(
-                        mApplicationObject, new ApplicationErrorReport.CrashInfo(e));
+                final IActivityManager mgr = ActivityManagerNative.getDefault();
+                if (mgr != null) {
+                    mgr.handleApplicationCrash(
+                            mApplicationObject, new ApplicationErrorReport.CrashInfo(e));
+                }
             } catch (Throwable t2) {
                 if (t2 instanceof DeadObjectException) {
                     // System process is dead; ignore
