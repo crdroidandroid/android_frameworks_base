@@ -8183,7 +8183,9 @@ public final class ActivityThread extends ClientTransactionHandler
             RuntimeInit.setApplicationObject(mAppThread.asBinder());
             final IActivityManager mgr = ActivityManager.getService();
             try {
-                mgr.attachApplication(mAppThread, startSeq);
+                if (mgr != null) {
+                    mgr.attachApplication(mAppThread, startSeq);
+                }
             } catch (RemoteException ex) {
                 throw ex.rethrowFromSystemServer();
             }
@@ -8201,8 +8203,11 @@ public final class ActivityThread extends ClientTransactionHandler
                                 + " total=" + (runtime.totalMemory()/1024)
                                 + " used=" + (dalvikUsed/1024));
                         mSomeActivitiesChanged = false;
+                        final IActivityTaskManager atmgr = ActivityTaskManager.getService();
                         try {
-                            ActivityTaskManager.getService().releaseSomeActivities(mAppThread);
+                            if (atmgr != null) {
+                                atmgr.releaseSomeActivities(mAppThread);
+                            }
                         } catch (RemoteException e) {
                             throw e.rethrowFromSystemServer();
                         }
