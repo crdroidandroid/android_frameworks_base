@@ -57,7 +57,6 @@ import com.android.systemui.statusbar.policy.CastController;
 import com.android.systemui.statusbar.policy.CastController.CastDevice;
 import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.SuController;
-import com.android.systemui.statusbar.policy.SuControllerImpl;
 
 import java.util.ArrayList;
 
@@ -439,10 +438,7 @@ public class PhoneStatusBarPolicy {
     }
 
     private void updateSu() {
-        mService.setIconVisibility(SLOT_SU, mSuController.hasActiveSessions()
-            && (Settings.System.getIntForUser(mContext.getContentResolver(),
-            Settings.System.SU_INDICATOR, 0,
-            UserHandle.USER_CURRENT) == SuControllerImpl.SU_INDICATOR_ICON));
+        mService.setIconVisibility(SLOT_SU, mSuController.hasActiveSessions());
         if (mSuController.hasActiveSessions()) {
             publishSuCustomTile();
         } else {
