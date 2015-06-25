@@ -2424,7 +2424,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         // incoming call should be allowed to process
         // to handle non-intrusive ui correctly
-        int defHeadsUp = isIncomingCall(pkg)
+        int defHeadsUp = (isIncomingCall(pkg) && isNonIntrusiveEnabled())
                 ? Notification.HEADS_UP_ALLOWED
                 : Notification.HEADS_UP_NEVER;
         int asHeadsUp = notification.extras.getInt(Notification.EXTRA_AS_HEADS_UP,
@@ -2481,6 +2481,17 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     private boolean isIncomingCall(String packageName) {
         return packageName.equals("com.android.dialer");
+    }
+
+    private boolean isNonIntrusiveEnabled() {
+        final String result = Settings.System.getString(mContext.getContentResolver(),
+            Settings.System.USE_NON_INTRUSIVE_CALL);
+
+        // should be on by default
+        if (result == null)
+            return true;
+
+        return !result.equals("0");
     }
 
     public void setInteracting(int barWindow, boolean interacting) {

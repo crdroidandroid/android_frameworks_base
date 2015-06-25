@@ -2916,6 +2916,14 @@ public final class Settings {
         public static final String VIBRATE_WHEN_RINGING = "vibrate_when_ringing";
 
         /**
+         * Whether the incoming call should be shown as non-intrusive notification.
+         * The value is boolean (1 or 0).
+         *    0 - Fullscreen
+         *    1 - Non-intrusive
+         */
+        public static final String USE_NON_INTRUSIVE_CALL = "use_non_intrusive_call";
+
+        /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
          */
@@ -4162,6 +4170,7 @@ public final class Settings {
             SIP_RECEIVE_CALLS,
             POINTER_SPEED,
             VIBRATE_WHEN_RINGING,
+            USE_NON_INTRUSIVE_CALL,
             RINGTONE,
             LOCK_TO_APP_ENABLED,
             NOTIFICATION_SOUND,
