@@ -28,8 +28,6 @@ import com.android.systemui.R;
 /** Quick settings tile: Ambient Display **/
 public class AmbientDisplayTile extends QSTile<QSTile.BooleanState> {
 
-    private static final Intent DISPLAY_SETTINGS = new Intent("android.settings.DISPLAY_SETTINGS");
-
     private final SecureSetting mSetting;
 
     public AmbientDisplayTile(Host host) {
@@ -56,7 +54,10 @@ public class AmbientDisplayTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleLongClick() {
-        mHost.startSettingsActivity(DISPLAY_SETTINGS);
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setClassName("com.android.settings",
+            "com.android.settings.Settings$AmbientSettingsActivity");
+        mHost.startSettingsActivity(intent);
     }
 
     private void setEnabled(boolean enabled) {
