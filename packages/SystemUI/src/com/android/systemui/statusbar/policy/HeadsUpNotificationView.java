@@ -35,6 +35,8 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.ImageButton;
 
@@ -103,13 +105,14 @@ public class HeadsUpNotificationView extends LinearLayout implements SwipeHelper
         final int width = getResources().getDimensionPixelSize(R.dimen.notification_panel_width);
         final int gravity = getResources().getInteger(R.integer.notification_panel_layout_gravity);
         if (mBelowContentContainer != null) {
-            final LayoutParams lp = (LayoutParams) mBelowContentContainer.getLayoutParams();
+            final FrameLayout.LayoutParams lp =
+                    (FrameLayout.LayoutParams) mBelowContentContainer.getLayoutParams();
             lp.width = width;
-            lp.gravity = gravity;
             mBelowContentContainer.setLayoutParams(lp);
         }
         if (mContentHolder != null) {
-            final LayoutParams lp = (LayoutParams) mContentHolder.getLayoutParams();
+            final LinearLayout.LayoutParams lp =
+                    (LinearLayout.LayoutParams) mContentHolder.getLayoutParams();
             lp.width = width;
             lp.gravity = gravity;
             mContentHolder.setLayoutParams(lp);
@@ -157,6 +160,11 @@ public class HeadsUpNotificationView extends LinearLayout implements SwipeHelper
             mContentHolder.setVisibility(View.VISIBLE);
             mContentHolder.setAlpha(mMaxAlpha);
             mContentHolder.addView(mHeadsUp.row);
+
+            if (mBelowContentContainer != null) {
+                mContentHolder.addView(mBelowContentContainer);
+            }
+
             sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED);
 
             mSwipeHelper.snapChild(mContentHolder, 1f);
@@ -507,7 +515,7 @@ public class HeadsUpNotificationView extends LinearLayout implements SwipeHelper
         info.setTouchableInsets(ViewTreeObserver.InternalInsetsInfo.TOUCHABLE_INSETS_REGION);
         info.touchableRegion.set(mTmpTwoArray[0], mTmpTwoArray[1],
                 mTmpTwoArray[0] + mContentHolder.getWidth(),
-                mTmpTwoArray[1] + mContentHolder.getHeight());
+                mTmpTwoArray[1] + mContentHolder.getHeight() + (mSnoozeButton.getHeight() / 2));
     }
 
     public void escalate() {
