@@ -1353,7 +1353,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void updateRecents() {
         boolean slimRecents = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.USE_SLIM_RECENTS, 1, UserHandle.USER_CURRENT) == 1;
+                Settings.System.USE_SLIM_RECENTS, 0, UserHandle.USER_CURRENT) == 1;
         if (slimRecents) {
             mSlimRecents = new RecentController(mContext, mLayoutDirection);
             mSlimRecents.setCallback(this);
