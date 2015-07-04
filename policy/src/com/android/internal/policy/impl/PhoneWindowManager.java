@@ -353,6 +353,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mNavigationBarHeight;
     int mNavigationBarWidth;
 
+    boolean mBootMessageNeedsHiding;
     KeyguardServiceDelegate mKeyguardDelegate;
     final Runnable mWindowManagerDrawCallback = new Runnable() {
         @Override
@@ -366,7 +367,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         public void onShown(IBinder windowToken) {
             if (DEBUG_WAKEUP) Slog.d(TAG, "mKeyguardDelegate.ShowListener.onShown.");
             mHandler.sendEmptyMessage(MSG_KEYGUARD_DRAWN_COMPLETE);
-            hideBootMessages();
         }
     };
 
@@ -6359,6 +6359,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (!mKeyguardDrawnOnce && mAwake) {
                 mKeyguardDrawnOnce = true;
                 enableScreen = true;
+                if (mBootMessageNeedsHiding) {
+                    mBootMessageNeedsHiding = false;
+                    hideBootMessages();
+                }
             } else {
                 enableScreen = false;
             }
@@ -6378,8 +6382,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private void handleHideBootMessage() {
         synchronized (mLock) {
-            if (!mKeyguardDrawComplete) {
-                return; // keyguard hasn't completed drawing, not done booting.
+            if (!mKeyguardDrawnOnce) {
+                mBootMessageNeedsHiding = true;
+                return; // keyguard hasn't drawn the first time yet, not done booting
             }
         }
 
