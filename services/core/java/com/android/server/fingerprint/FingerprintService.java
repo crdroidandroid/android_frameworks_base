@@ -196,6 +196,12 @@ public class FingerprintService extends SystemService {
                     final int fingerId = arg1;
                     final int remaining = arg2;
                     if (mState == STATE_ENROLLING) {
+                        // Update the database with new finger id.
+                        if (remaining == 0) {
+                            FingerprintUtils.addFingerprintIdForUser(fingerId,
+                                    mContext, clientData.userId);
+                            newState = STATE_IDLE;
+                        }
                         try {
                             if (clientData != null && clientData.receiver != null) {
                                 clientData.receiver.onEnrollResult(fingerId, remaining);
@@ -203,13 +209,6 @@ public class FingerprintService extends SystemService {
                         } catch (RemoteException e) {
                             Slog.e(TAG, "can't send message to client. Did it die?", e);
                             it.remove();
-                        }
-                        // Update the database with new finger id.
-                        // TODO: move to client code (Settings)
-                        if (remaining == 0) {
-                            FingerprintUtils.addFingerprintIdForUser(fingerId,
-                                    mContext, clientData.userId);
-                            newState = STATE_IDLE;
                         }
                     } else {
                         if (DEBUG) Slog.w(TAG, "Client not enrolling");
@@ -507,6 +506,12 @@ public class FingerprintService extends SystemService {
          */
         @Override
         protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+            if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
+                    != PackageManager.PERMISSION_GRANTED) {
+                pw.println("Permission Denial: can't dump telephony.registry from from pid="
+                        + Binder.getCallingPid() + ", uid=" + Binder.getCallingUid());
+                return;
+            }
             if (mHal == 0) {
                 pw.println("Fingerprint sensor not available");
             } else if (args.length != 0 && DUMP_CMD_PRINT_ENROLLMENTS.equals(args[0])) {
