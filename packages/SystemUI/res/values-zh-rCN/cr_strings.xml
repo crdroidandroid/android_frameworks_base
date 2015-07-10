@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!--
+/**
+ * Copyright (c) 2015, The crDroid Android Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0 
+ *
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
+ * limitations under the License.
+ */
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- NavBar tile -->
+    <string name="quick_settings_navbar_on">开启虚拟键</string>
+    <string name="quick_settings_navbar_off">关闭虚拟键</string>
+    <!-- Power menu -->
+    <string name="quick_settings_power_menu_label">电源菜单</string>
+    <!-- Power menu on navring targets -->
+    <string name="navring_action_power_menu">电源菜单</string>
+    <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">充电中（<xliff:g id="percent">%d</xliff:g>%%）</string>
+    <string name="pie_battery_status_full">已充满</string>
+    <string name="pie_battery_status_discharging">剩余<xliff:g id="percent">%d</xliff:g>%%</string>
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">无服务</string>
+    <string name="pie_phone_status_airplane_mode">飞行模式已开启</string>
+    <string name="pie_phone_status_emergency_only">只能进行紧急呼叫</string>
+    <!-- Kill app toast -->
+    <string name="app_killed_message">应用已关闭</string>
+    <!-- Heads up toast -->
+    <string name="heads_up_enabled">浮动通知已启用</string>
+    <string name="heads_up_disabled">浮动通知已禁用</string>
+    <!-- Screenshot -->
+    <string name="shortcut_screenshot">屏幕截图</string>
+    <!-- Heads up snooze toast -->
+    <string name="heads_up_snooze_message">浮动通知将会在已忽视的程序中暂停 <xliff:g id="number">%d</xliff:g> 分钟</string>
+</resources>
