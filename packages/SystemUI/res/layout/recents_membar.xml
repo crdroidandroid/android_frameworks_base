@@ -23,7 +23,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:layout_gravity="top"
-    android:elevation="@dimen/floating_action_button_translation_z">
+    android:elevation="@dimen/clear_all_padding_top">
 
     <ProgressBar android:id="@+id/recents_memory_bar"
         style="?android:attr/progressBarStyleHorizontal"
