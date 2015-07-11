@@ -143,7 +143,6 @@
 
     <!-- Fingerprint -->
     <uses-permission android:name="android.permission.ACCESS_FINGERPRINT_SERVICE" />
-    <uses-permission android:name="com.cyngn.stats.SEND_ANALYTICS" />
 
     <application
         android:name=".SystemUIApplication"
