@@ -3667,6 +3667,13 @@ public final class Settings {
         public static final String DIM_NAV_BUTTONS_ANIMATE_DURATION = "dim_nav_buttons_animate_duration";
 
         /**
+         * Whether to listen on the entire screen for touches to un-dim
+         * the buttons instead of just listening on the navbar
+         * @hide
+         */
+        public static final String DIM_NAV_BUTTONS_TOUCH_ANYWHERE = "dim_nav_buttons_touch_anywhere";
+
+        /**
          * Whether to use the custom status bar header or not
          * @hide
          */

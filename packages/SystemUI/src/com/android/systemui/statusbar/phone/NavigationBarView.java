@@ -116,6 +116,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
     private boolean mIsAnimating = false;
     private boolean mDimNavButtonsAnimate;
     private int mDimNavButtonsAnimateDuration;
+    private boolean mDimNavButtonsTouchAnywhere;
 
     private NavigationBarViewTaskSwitchHelper mTaskSwitchHelper;
     private DelegateViewHelper mDelegateHelper;
@@ -328,6 +329,9 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         if (mDelegateHelper != null && mDelegateIntercepted) {
             boolean ret = mDelegateHelper.onInterceptTouchEvent(event);
             if (ret) return true;
+        }
+        if (mDimNavButtonsTouchAnywhere) {
+            onNavButtonTouched();
         }
         return super.onTouchEvent(event);
     }
@@ -1002,6 +1006,8 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
                     Settings.System.DIM_NAV_BUTTONS_ANIMATE), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.DIM_NAV_BUTTONS_ANIMATE_DURATION), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DIM_NAV_BUTTONS_TOUCH_ANYWHERE), false, this, UserHandle.USER_ALL);
             // intialize mModlockDisabled
             onChange(false);
         }
@@ -1041,6 +1047,9 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
             mDimNavButtonsAnimateDuration = Settings.System.getIntForUser(resolver,
                     Settings.System.DIM_NAV_BUTTONS_ANIMATE_DURATION, 2000,
                     UserHandle.USER_CURRENT);
+            mDimNavButtonsTouchAnywhere = (Settings.System.getIntForUser(resolver,
+                    Settings.System.DIM_NAV_BUTTONS_TOUCH_ANYWHERE, 0,
+                    UserHandle.USER_CURRENT) == 1);
             // reset saved side button visibilities
             for (int i = 0; i < mSideButtonVisibilities.length; i++) {
                 for (int j = 0; j < mSideButtonVisibilities[i].length; j++) {
