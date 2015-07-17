@@ -203,6 +203,15 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         }
     };
 
+    // provides a listener for the empty space in the navbar
+    private final OnTouchListener mNavButtonsTouchListener = new OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+                onNavButtonTouched();
+            return true;
+        }
+    };
+
     public void onNavButtonTouched() {
         mHandler.removeCallbacks(mNavButtonDimmer);
         if (getNavButtons() != null) {
@@ -615,6 +624,11 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
 
         getImeSwitchButton().setOnClickListener(mImeSwitcherClickListener);
 
+        if (mDimNavButtons) {
+            if (getNavButtons() != null)
+                getNavButtons().setOnTouchListener(mNavButtonsTouchListener);
+        }
+
         updateRTLOrder();
     }
 
@@ -642,6 +656,11 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         mEditBar = new NavbarEditor(mCurrentView, mVertical, mIsLayoutRtl);
         updateSettings();
         getImeSwitchButton().setOnClickListener(mImeSwitcherClickListener);
+
+        if (mDimNavButtons) {
+            if (getNavButtons() != null)
+                getNavButtons().setOnTouchListener(mNavButtonsTouchListener);
+        }
 
         mDeadZone = (DeadZone) mCurrentView.findViewById(R.id.deadzone);
         mDeadZone.setStartFromRight(mLeftInLandscape);
