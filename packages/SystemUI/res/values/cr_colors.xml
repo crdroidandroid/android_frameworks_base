@@ -45,4 +45,7 @@
     <!-- Used by selector -->
     <color name="card_pressed">#7e3c3c3c</color>
 
+    <!-- Recents Membar -->
+    <color name="recents_memory_text_text">#ffffffff</color>
+
 </resources>
