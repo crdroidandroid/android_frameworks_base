@@ -15,9 +15,6 @@
 -->
 <resources>
     <string name="default_string">Varsayılan</string>
-    <!-- Zen mode buttons -->
-    <string name="silent_mode_priority">Öncelikli</string>
-    <string name="silent_mode_none">Hiçbiri</string>
     <!-- status message in phone options dialog for when pie is on -->
     <string name="global_actions_pie_mode_on_status">SlimPie AÇIK</string>
     <!-- status message in phone options dialog for when pie is off -->

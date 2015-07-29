@@ -15,9 +15,6 @@
 -->
 <resources>
     <string name="default_string">默认</string>
-    <!-- Zen mode buttons -->
-    <string name="silent_mode_priority">优先级</string>
-    <string name="silent_mode_none">无</string>
     <!-- status message in phone options dialog for when pie is on -->
     <string name="global_actions_pie_mode_on_status">SlimPie已开启</string>
     <!-- status message in phone options dialog for when pie is off -->
