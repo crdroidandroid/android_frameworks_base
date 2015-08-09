@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!-- Copyright (C) 2015 The crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="default_string">Par défaut</string>
+    <!-- status message in phone options dialog for when pie is on -->
+    <string name="global_actions_pie_mode_on_status">SlimPie activé</string>
+    <!-- status message in phone options dialog for when pie is off -->
+    <string name="global_actions_pie_mode_off_status">SlimPie désactivé</string>
+    <!-- Error message if user want to try to disable all navigation options -->
+    <string name="disable_pie_navigation_error">Vous ne pouvez pas désactiver les contrôles Pie. Aucune autre fonction de navigation est activée.Activer d\'abord la barre de navigation avant de désactiver les contrôles Pie.</string>
+    <!-- status message in phone options dialog for when navigation bar is on -->
+    <!-- status message in phone options dialog for when navigation bar is off -->
+    <string name="global_actions_nav_bar_mode_off_status">La barre de navigation est désactivée</string>
+    <!-- Error message if user want to try to disable all navigation options -->
+    <string name="disable_navigation_pie_error">Vous ne pouvez pas désactiver la barre de navigation. Aucune autre fonction de navigation est activée.Activer d\'abord les contrôles Pie avant de désactiver la barre de navigation.</string>
+</resources>
