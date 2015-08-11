@@ -48,6 +48,13 @@
 #define ENCODING_DTS_UHD 27
 #define ENCODING_DRA 28
 
+#define ENCODING_AMR_NB     100
+#define ENCODING_AMR_WB     101
+#define ENCODING_EVRC       102
+#define ENCODING_EVRC_B     103
+#define ENCODING_EVRC_WB    104
+#define ENCODING_EVRC_NW    105
+
 #define ENCODING_INVALID    0
 #define ENCODING_DEFAULT    1
 
@@ -94,6 +101,18 @@ static inline audio_format_t audioFormatToNative(int audioFormat)
         return AUDIO_FORMAT_AC4;
     case ENCODING_E_AC3_JOC:
         return AUDIO_FORMAT_E_AC3_JOC;
+    case ENCODING_AMR_NB:
+        return AUDIO_FORMAT_AMR_NB;
+    case ENCODING_AMR_WB:
+        return AUDIO_FORMAT_AMR_WB;
+    case ENCODING_EVRC:
+        return AUDIO_FORMAT_EVRC;
+    case ENCODING_EVRC_B:
+        return AUDIO_FORMAT_EVRCB;
+    case ENCODING_EVRC_WB:
+        return AUDIO_FORMAT_EVRCWB;
+    case ENCODING_EVRC_NW:
+        return AUDIO_FORMAT_EVRCNW;
     case ENCODING_DEFAULT:
         return AUDIO_FORMAT_DEFAULT;
     case ENCODING_DOLBY_MAT:
@@ -189,6 +208,18 @@ static inline int audioFormatFromNative(audio_format_t nativeFormat)
         return ENCODING_DTS_UHD;
     case AUDIO_FORMAT_DRA:
         return ENCODING_DRA;
+    case AUDIO_FORMAT_AMR_NB:
+        return ENCODING_AMR_NB;
+    case AUDIO_FORMAT_AMR_WB:
+        return ENCODING_AMR_WB;
+    case AUDIO_FORMAT_EVRC:
+        return ENCODING_EVRC;
+    case AUDIO_FORMAT_EVRCB:
+        return ENCODING_EVRC_B;
+    case AUDIO_FORMAT_EVRCWB:
+        return ENCODING_EVRC_WB;
+    case AUDIO_FORMAT_EVRCNW:
+        return ENCODING_EVRC_NW;
     case AUDIO_FORMAT_DEFAULT:
         return ENCODING_DEFAULT;
     default:
