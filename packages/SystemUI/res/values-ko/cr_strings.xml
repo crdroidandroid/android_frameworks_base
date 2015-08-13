@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!--
+/**
+ * Copyright (c) 2015, The crDroid Android Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0 
+ *
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
+ * limitations under the License.
+ */
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- NavBar tile -->
+    <string name="quick_settings_navbar_on">네비게이션바 활성</string>
+    <string name="quick_settings_navbar_off">네비게이션바 비활성</string>
+    <!-- Power menu -->
+    <string name="quick_settings_power_menu_label">전원메뉴</string>
+    <!-- Power menu on navring targets -->
+    <string name="navring_action_power_menu">전원메뉴</string>
+    <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">충전 중 (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">충전 됨</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% 남은 배터리 양</string>
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">서비스 불가</string>
+    <string name="pie_phone_status_airplane_mode">비행기 모드 켜기</string>
+    <string name="pie_phone_status_emergency_only">긴급 통화만 사용</string>
+    <!-- Kill app toast -->
+    <string name="app_killed_message">애플리케이션 중지</string>
+    <!-- Heads up toast -->
+    <string name="heads_up_enabled">팝업 알림 활성</string>
+    <string name="heads_up_disabled">팝업 알림 비활성</string>
+    <!-- Screenshot -->
+    <string name="shortcut_screenshot">화면 캡처</string>
+    <!-- Heads up snooze toast -->
+    <string name="heads_up_snooze_message">알림해제가 <xliff:g id="number">%d</xliff:g>분 간격으로 됩니다.</string>
+</resources>
