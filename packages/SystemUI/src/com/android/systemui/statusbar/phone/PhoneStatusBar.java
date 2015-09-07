@@ -4108,10 +4108,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     public void resetQsPanelVisibility() {
-        mShowTaskList = mShowTaskList;
-        if (mShowTaskList) {
+        Resources res = mContext.getResources();
+        ImageView image = (ImageView)
+                mHeader.findViewById(R.id.task_manager_button);
+        if (mShowTaskList && mShowTaskManager) {
             mQSPanel.setVisibility(View.VISIBLE);
             mTaskManagerPanel.setVisibility(View.GONE);
+            image.setImageDrawable(res.getDrawable(
+                R.drawable.ic_tasklist_switch_normal));
             mShowTaskList = false;
         }
     }
