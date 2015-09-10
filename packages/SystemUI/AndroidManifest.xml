@@ -622,6 +622,11 @@
         <service android:name=".recordissue.IssueRecordingServiceLegacy"
                 android:foregroundServiceType="systemExempted"/>
 
+        <!-- started from PhoneWindowManager -->
+        <service android:name=".crdroid.onthego.OnTheGoService"
+            android:process=":onthego"
+            android:exported="true" />
+
         <receiver android:name=".SysuiRestartReceiver"
             android:exported="false">
             <intent-filter>
