@@ -117,6 +117,8 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
+import com.android.internal.util.crdroid.OnTheGoActions;
+
 /**
  * Helper to show the global actions dialog.  Each item is an {@link Action} that
  * may show depending on whether the keyguard is showing, and whether the device
@@ -430,6 +432,8 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
                 continue;
             } else if (GLOBAL_ACTION_KEY_SCREENSHOT.equals(actionKey)) {
                 mItems.add(new ScreenshotAction());
+            } else if (GLOBAL_ACTION_KEY_ONTHEGO.equals(actionKey)) {
+                mItems.add(getOnTheGoAction());
             } else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) {
                 mItems.add(mAirplaneModeOn);
             } else if (GLOBAL_ACTION_KEY_BUGREPORT.equals(actionKey)) {
@@ -710,6 +714,27 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
         }
     }
 
+    private Action getOnTheGoAction() {
+        return new SinglePressAction(com.android.internal.R.drawable.ic_lock_onthego,
+                com.android.systemui.R.string.global_action_onthego) {
+            @Override
+            public void onPress() {
+                OnTheGoActions.processAction(mContext,
+                        OnTheGoActions.ACTION_ONTHEGO_TOGGLE);
+            }
+
+            @Override
+            public boolean showDuringKeyguard() {
+                return true;
+            }
+
+            @Override
+            public boolean showBeforeProvisioning() {
+                return true;
+            }
+        };
+    }
+
     private class BugReportAction extends SinglePressAction implements LongPressAction {
 
         public BugReportAction() {
@@ -951,6 +976,15 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
                 }
             }
         }
+    }
+
+    private void startOnTheGo() {
+        final ComponentName cn = new ComponentName("com.android.systemui",
+                "com.android.systemui.crdroid.onthego.OnTheGoService");
+        final Intent startIntent = new Intent();
+        startIntent.setComponent(cn);
+        startIntent.setAction("start");
+        mContext.startService(startIntent);
     }
 
     /**
