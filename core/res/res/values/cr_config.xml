@@ -43,6 +43,7 @@
         <item>settings</item>
         <item>lockdown</item>
         <item>torch</item>
+        <item>onthego</item>
     </string-array>
 
     <!-- Whether device supports sensor based doze customizations -->

@@ -361,6 +361,12 @@
             android:excludeFromRecents="true" />
         <service android:name=".screenrecord.RecordingService" />
 
+        <!-- started from PhoneWindowManager
+             TODO: Should have an android:permission attribute -->
+        <service android:name=".crdroid.onthego.OnTheGoService"
+            android:process=":onthego"
+            android:exported="false" />
+
         <receiver android:name=".SysuiRestartReceiver"
             android:exported="false">
             <intent-filter>
