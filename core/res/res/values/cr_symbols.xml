@@ -120,4 +120,8 @@
     <java-symbol type="style" name="PowerMenuTnAnimation" />
     <java-symbol type="style" name="PowerMenuflyAnimation" />
     <java-symbol type="style" name="PowerMenuCardAnimation" />
+
+    <!-- On-The-Go -->
+    <java-symbol type="string" name="global_action_onthego" />
+    <java-symbol type="drawable" name="ic_lock_onthego" />
 </resources>

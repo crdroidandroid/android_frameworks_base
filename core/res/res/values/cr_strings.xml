@@ -38,4 +38,7 @@
     <string name="animation_grow_shrink_right">Grow in (Right)</string>
     <string name="animation_random">Random</string>
     <string name="action_null">Blank</string>
+
+    <!-- On-The-Go -->
+    <string name="global_action_onthego">On-The-Go Mode</string>
 </resources>

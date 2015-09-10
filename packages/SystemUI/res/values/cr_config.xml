@@ -34,4 +34,8 @@
     <integer name="recents_animate_fab_enter_delay">275</integer>
     <!-- The min animation duration for animating the fab out. -->
     <integer name="recents_animate_fab_exit_duration">125</integer>
+
+    <!-- On-The-Go -->
+    <integer name="quick_settings_onthego_dialog_short_timeout">3000</integer>
+    <integer name="quick_settings_onthego_dialog_long_timeout">6000</integer>
 </resources>
