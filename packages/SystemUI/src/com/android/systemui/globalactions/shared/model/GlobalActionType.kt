@@ -29,6 +29,7 @@ enum class GlobalActionType(val configKey: String) {
     VOICEASSIST("voiceassist"),
     ASSIST("assist"),
     RESTART("restart"),
+    ONTHEGO("onthego"),
     LOGOUT("logout"),
     EMERGENCY("emergency"),
     SCREENSHOT("screenshot"),
