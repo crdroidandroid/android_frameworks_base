@@ -30,6 +30,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-permission android:name="android.permission.INJECT_EVENTS" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.DUMP" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
@@ -244,6 +245,10 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
        </receiver>
+
+        <service android:name=".crdroid.onthego.OnTheGoService"
+            android:process=":onthego"
+            android:exported="false" />
 
         <service android:name=".ImageWallpaper"
                 android:permission="android.permission.BIND_WALLPAPER"
