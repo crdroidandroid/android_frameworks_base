@@ -125,4 +125,8 @@
 
     <!-- Doze invert -->
     <java-symbol type="bool" name="config_invert_colors_on_doze" />
+
+  <!-- On-The-Go -->
+  <java-symbol type="string" name="global_action_onthego" />
+  <java-symbol type="drawable" name="ic_lock_onthego" />
 </resources>
