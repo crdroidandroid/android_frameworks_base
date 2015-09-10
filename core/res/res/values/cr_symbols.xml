@@ -139,4 +139,7 @@
   <java-symbol type="drawable" name="spidey_clock_dial_ambient" />
   <java-symbol type="drawable" name="spidey_clock_hand_hour" />
   <java-symbol type="drawable" name="spidey_clock_hand_minute" />
+
+  <!-- On-The-Go -->
+  <java-symbol type="drawable" name="ic_lock_onthego" />
 </resources>
