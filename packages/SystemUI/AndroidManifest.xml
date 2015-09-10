@@ -363,6 +363,11 @@
 
         <service android:name=".screenrecord.RecordingService" />
 
+        <!-- started from PhoneWindowManager -->
+        <service android:name=".crdroid.onthego.OnTheGoService"
+            android:process=":onthego"
+            android:exported="true" />
+
         <receiver android:name=".SysuiRestartReceiver"
             android:exported="false">
             <intent-filter>
