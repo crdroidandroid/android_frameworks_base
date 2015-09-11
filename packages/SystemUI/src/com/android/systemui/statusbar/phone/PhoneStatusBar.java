@@ -1319,6 +1319,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 ((BatteryMeterView) mStatusBarView.findViewById(R.id.battery));
         batteryMeterView.setBatteryStateRegistar(mBatteryController);
         batteryMeterView.setBatteryController(mBatteryController);
+        batteryMeterView.setAnimationsEnabled(false);
         ((BatteryLevelTextView) mStatusBarView.findViewById(R.id.battery_level_text))
                 .setBatteryStateRegistar(mBatteryController);
         mKeyguardStatusBar.setBatteryController(mBatteryController);
