@@ -577,6 +577,9 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
     }
 
     private Drawable resizeIcon(ImageView view, Drawable d, boolean useSystemDimens) {
+        if (view == null && d == null) {
+            return null;
+        }
         int size = 0;
         Drawable dOriginal = d;
         if (d == null) {
