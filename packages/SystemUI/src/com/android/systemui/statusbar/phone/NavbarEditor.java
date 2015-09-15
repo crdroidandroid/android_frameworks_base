@@ -144,7 +144,7 @@ public class NavbarEditor implements View.OnTouchListener {
     public static final ButtonInfo NAVBAR_POWER = new ButtonInfo("power",
             R.string.navbar_power_button, R.string.accessibility_power,
             KeyEvent.KEYCODE_POWER, R.drawable.ic_navbar_power, R.drawable.ic_navbar_power_land,
-            R.drawable.ic_navbar_power_side);
+            R.drawable.ic_navbar_power);
 
     private static final ButtonInfo[] ALL_BUTTONS = new ButtonInfo[] {
         NAVBAR_EMPTY, NAVBAR_HOME, NAVBAR_BACK, NAVBAR_SEARCH,
