@@ -101,6 +101,9 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
     private Drawable mRecentLandIcon;
     private Drawable mHomeIcon, mHomeLandIcon;
 
+    private FrameLayout mRot0;
+    private FrameLayout mRot90;
+
     private NavigationBarViewTaskSwitchHelper mTaskSwitchHelper;
     private DelegateViewHelper mDelegateHelper;
     private DeadZone mDeadZone;
@@ -116,8 +119,6 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
     public int[][] mSideButtonVisibilities = new int[][] {
         {-1, -1} /* portrait */, {-1, -1} /* vertical */
     };
-
-    private FrameLayout mFlayout;
 
     // workaround for LayoutTransitions leaving the nav buttons in a weird state (bug 5549288)
     final static boolean WORKAROUND_INVALID_LAYOUT = true;
@@ -572,6 +573,9 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
 
     @Override
     public void onFinishInflate() {
+        mRot0 = (FrameLayout) findViewById(R.id.rot0);
+        mRot90 = (FrameLayout) findViewById(R.id.rot90);
+
         mRotatedViews[Configuration.ORIENTATION_PORTRAIT] = findViewById(R.id.rot0);
         mRotatedViews[Configuration.ORIENTATION_LANDSCAPE] = findViewById(R.id.rot90);
         mCurrentView = mRotatedViews[mContext.getResources().getConfiguration().orientation];
@@ -756,9 +760,11 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
     }
 
     public void setForgroundColor(Drawable drawable) {
-        try {
-            mFlayout.setForeground(drawable);
-        } catch (Exception e) {
+        if (mRot0 != null) {
+            mRot0.setForeground(drawable);
+        }
+        if (mRot90 != null) {
+            mRot90.setForeground(drawable);
         }
     }
 

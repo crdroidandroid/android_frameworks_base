@@ -485,8 +485,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             // Pie controls
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PIE_CONTROLS), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_SHOW), false, this, UserHandle.USER_ALL);
             // Heads-up
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_NOTIFCATION_DECAY), false, this, UserHandle.USER_ALL);
@@ -527,9 +525,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (uri.equals(Settings.System.getUriFor(
                     Settings.System.PIE_CONTROLS))) {
                 attachPieContainer(isPieEnabled());
-            } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_SHOW))) {
-                mNavigationBarOverlay.setIsExpanded(noNavBar());
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_NOTIFCATION_DECAY))) {
                     mHeadsUpNotificationDecay = Settings.System.getIntForUser(
@@ -661,12 +656,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PIE_CONTROLS, 0,
                 UserHandle.USER_CURRENT) == 1;
-    }
-
-    private boolean noNavBar() {
-        return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.NAVIGATION_BAR_SHOW, 0,
-                UserHandle.USER_CURRENT) == 0;
     }
 
     // ensure quick settings is disabled until the current user makes it through the setup wizard
@@ -1027,6 +1016,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         updateShowSearchHoldoff();
 
+        // Setup pie container if enabled
+        attachPieContainer(isPieEnabled());
+
         if (mNavigationBarView == null) {
             mNavigationBarView =
                 (NavigationBarView) View.inflate(context, R.layout.navigation_bar, null);
@@ -1036,6 +1028,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mNavigationBarView.setDisabledFlags(mDisabled);
         mNavigationBarView.setBar(this);
         addNavigationBarCallback(mNavigationBarView);
+        mNavigationBarView.setOnVerticalChangedListener(
+                new NavigationBarView.OnVerticalChangedListener() {
+            @Override
+            public void onVerticalChanged(boolean isVertical) {
+                if (mSearchPanelView != null) {
+                    mSearchPanelView.setHorizontal(isVertical);
+                }
+                mNotificationPanel.setQsScrimEnabled(!isVertical);
+            }
+        });
         mNavigationBarView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -1043,9 +1045,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 return false;
             }
         });
-
-        // Setup pie container if enabled
-        attachPieContainer(isPieEnabled());
 
         // figure out which pixel-format to use for the status bar.
         mPixelFormat = PixelFormat.OPAQUE;
@@ -1680,7 +1679,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         // Pie controls
         mNavigationBarOverlay.setNavigationBar(mNavigationBarView);
-        mNavigationBarOverlay.setIsExpanded(noNavBar());
     }
 
     private void repositionNavigationBar() {
@@ -4171,8 +4169,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mNotificationIconArea.setVisibility(View.INVISIBLE);
             mSystemIconArea.setVisibility(View.INVISIBLE);
         }
-
-        restorePieTriggerMask();
     }
 
     private void removeAllViews(ViewGroup parent) {
@@ -4204,6 +4200,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (updateStatusBar) {
             mContext.recreateTheme();
             recreateStatusBar();
+            attachPieContainer(isPieEnabled());
 
             // detect crDroid logo state when theme change.
             mCrdroidLogo = Settings.System.getInt(
