@@ -68,10 +68,11 @@
             android:scaleType="centerInside"
             android:layout_height="80dp"
             android:layout_width="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
             systemui:keyRepeat="true" />
         <com.android.systemui.statusbar.policy.KeyButtonView
             android:id="@+id/three"
+            android:scaleType="centerInside"
             android:layout_height="80dp"
             android:layout_width="match_parent"
             systemui:keyRepeat="true"
@@ -110,7 +111,7 @@
             android:scaleType="centerInside"
             android:layout_height="80dp"
             android:layout_width="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
             systemui:keyRepeat="true" />
     </LinearLayout>
     <FrameLayout
