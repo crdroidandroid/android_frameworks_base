@@ -561,7 +561,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
 
         mShowMenu = show;
 
-        // Only show Menu if IME switcher not shown.
+        // Only show Menu, Search and Power buttons if IME switcher not shown.
         final boolean shouldShow = mShowMenu &&
                 ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) == 0);
         final boolean shouldShowAlwaysMenu = (mNavigationIconHints &
@@ -569,6 +569,7 @@ public class NavigationBarView extends LinearLayout implements BaseStatusBar.Nav
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_ALWAYS_MENU, shouldShowAlwaysMenu);
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_CONDITIONAL_MENU, shouldShow);
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_SEARCH, shouldShowAlwaysMenu);
+        setButtonWithTagVisibility(NavbarEditor.NAVBAR_POWER, shouldShowAlwaysMenu);
     }
 
     @Override
