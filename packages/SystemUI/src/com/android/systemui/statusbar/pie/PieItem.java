@@ -239,6 +239,7 @@ public class PieItem extends PieView.PieDrawable {
                 colorize = false;
             }
 
+            drawable.mutate();
             if (colorize && drawableColorMode != 3) {
                 drawable = ImageHelper.getColoredDrawable(drawable, drawableColor);
             }
