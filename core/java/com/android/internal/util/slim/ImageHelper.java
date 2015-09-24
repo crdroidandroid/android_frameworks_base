@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-package com.android.internal.util.crdroid;
+package com.android.internal.util.slim;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -61,7 +61,7 @@ public class ImageHelper {
     }
 
     public static Bitmap drawableToBitmap (Drawable drawable) {
-     if (drawable == null) {
+        if (drawable == null) {
             return null;
         } else if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
@@ -70,6 +70,31 @@ public class ImageHelper {
                 drawable.getIntrinsicHeight(), Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    public static Bitmap drawableToShortcutIconBitmap (
+            Context context, Drawable drawable, int dp) {
+        if (drawable == null) {
+            return null;
+        } else if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        int size = Converter.dpToPx(context, dp);
+
+        // ensure that the drawable is not larger than target size
+        while (size < drawable.getIntrinsicHeight()
+                || size < drawable.getIntrinsicWidth()) {
+            size = size + 12;
+        }
+        Bitmap bitmap = Bitmap.createBitmap(size, size, Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds((size - drawable.getIntrinsicWidth()) / 2,
+                (size - drawable.getIntrinsicHeight()) / 2,
+                (size + drawable.getIntrinsicWidth()) / 2,
+                (size + drawable.getIntrinsicHeight()) / 2);
         drawable.draw(canvas);
         return bitmap;
     }
@@ -97,7 +122,6 @@ public class ImageHelper {
         if (image == null || context == null) {
             return null;
         }
-
         if (image instanceof VectorDrawable) {
             return image;
         } else {

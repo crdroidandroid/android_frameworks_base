@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-package com.android.internal.util.crdroid;
+package com.android.internal.util.slim;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -68,41 +68,41 @@ public class ActionHelper {
 
     // get and set the navbar configs from provider and return propper arraylist objects
     // @ActionConfig
-    /*public static ArrayList<ActionConfig> getNavBarConfig(Context context) {
-        return (ConfigSplitHelper.getActionConfigValues(context,
-            getNavBarProvider(context), null, null, false));
-    }
+    //public static ArrayList<ActionConfig> getNavBarConfig(Context context) {
+    //    return (ConfigSplitHelper.getActionConfigValues(context,
+    //        getNavBarProvider(context), null, null, false));
+    //}
 
     // get @ActionConfig with description if needed and other then an app description
-    public static ArrayList<ActionConfig> getNavBarConfigWithDescription(
-            Context context, String values, String entries) {
-        return (ConfigSplitHelper.getActionConfigValues(context,
-            getNavBarProvider(context), values, entries, false));
-    }
+    //public static ArrayList<ActionConfig> getNavBarConfigWithDescription(
+    //        Context context, String values, String entries) {
+    //    return (ConfigSplitHelper.getActionConfigValues(context,
+    //        getNavBarProvider(context), values, entries, false));
+    //}
 
-    private static String getNavBarProvider(Context context) {
-        String config = Settings.System.getStringForUser(
-                    context.getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_CONFIG,
-                    UserHandle.USER_CURRENT);
-        if (config == null) {
-            config = ActionConstants.NAVIGATION_CONFIG_DEFAULT;
-        }
-        return config;
-    }
+    //private static String getNavBarProvider(Context context) {
+    //    String config = Settings.System.getStringForUser(
+    //                context.getContentResolver(),
+    //                Settings.System.NAVIGATION_BAR_CONFIG,
+    //                UserHandle.USER_CURRENT);
+    //    if (config == null) {
+    //        config = ActionConstants.NAVIGATION_CONFIG_DEFAULT;
+    //    }
+    //    return config;
+    //}
 
-    public static void setNavBarConfig(Context context,
-            ArrayList<ActionConfig> actionConfig, boolean reset) {
-        String config;
-        if (reset) {
-            config = ActionConstants.NAVIGATION_CONFIG_DEFAULT;
-        } else {
-            config = ConfigSplitHelper.setActionConfig(actionConfig, false);
-        }
-        Settings.System.putString(context.getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_CONFIG,
-                    config);
-    }*/
+    //public static void setNavBarConfig(Context context,
+    //        ArrayList<ActionConfig> actionConfig, boolean reset) {
+    //    String config;
+    //    if (reset) {
+    //        config = ActionConstants.NAVIGATION_CONFIG_DEFAULT;
+    //    } else {
+    //        config = ConfigSplitHelper.setActionConfig(actionConfig, false);
+    //    }
+    //    Settings.System.putString(context.getContentResolver(),
+    //                Settings.System.NAVIGATION_BAR_CONFIG,
+    //                config);
+    //}
 
     // Get and set the pie configs from provider and return proper arraylist objects
     // @ActionConfig
@@ -260,6 +260,7 @@ public class ActionHelper {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_recent", null, null);
         } else if (clickAction.equals(ActionConstants.ACTION_SEARCH)
+                || clickAction.equals(ActionConstants.ACTION_VOICE_SEARCH)
                 || clickAction.equals(ActionConstants.ACTION_ASSIST)
                 || clickAction.equals(ActionConstants.ACTION_KEYGUARD_SEARCH)) {
             resId = systemUiResources.getIdentifier(
@@ -288,6 +289,9 @@ public class ActionHelper {
         } else if (clickAction.equals(ActionConstants.ACTION_VIB_SILENT)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_ring_vib_silent", null, null);
+        } else if (clickAction.equals(ActionConstants.ACTION_EXPANDED_DESKTOP)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_expanded_desktop", null, null);
         } else if (clickAction.equals(ActionConstants.ACTION_KILL)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_killtask", null, null);
@@ -300,6 +304,9 @@ public class ActionHelper {
         } else if (clickAction.equals(ActionConstants.ACTION_SETTINGS_PANEL)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_qs", null, null);
+        } else if (clickAction.equals(ActionConstants.ACTION_SMART_PULLDOWN)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_notifications", null, null);
         } else if (clickAction.equals(ActionConstants.ACTION_PIE)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_pie", null, null);
@@ -312,6 +319,9 @@ public class ActionHelper {
         } else if (clickAction.equals(ActionConstants.ACTION_TORCH)) {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_torch", null, null);
+        } else if (clickAction.equals(ActionConstants.ACTION_CAMERA)) {
+            resId = systemUiResources.getIdentifier(
+                        SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_camera", null, null);
         } else {
             resId = systemUiResources.getIdentifier(
                         SYSTEMUI_METADATA_NAME + ":drawable/ic_sysbar_null", null, null);

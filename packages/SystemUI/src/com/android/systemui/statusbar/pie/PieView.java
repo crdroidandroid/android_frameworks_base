@@ -37,7 +37,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.android.internal.util.gesture.EdgeGesturePosition;
-import com.android.internal.util.crdroid.ActionConstants;
+import com.android.internal.util.slim.ActionConstants;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;

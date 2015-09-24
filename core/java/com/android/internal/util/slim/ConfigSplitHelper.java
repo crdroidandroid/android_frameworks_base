@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-package com.android.internal.util.crdroid;
+package com.android.internal.util.slim;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
