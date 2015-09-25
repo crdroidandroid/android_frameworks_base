@@ -7506,6 +7506,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     com.android.internal.R.bool.config_showNavigationBar);
     }
 
+    public boolean needsNavigationBar() {
+        return mHasNavigationBar;
+    }
+
     @Override
     public boolean hasPermanentMenuKey() {
         return !hasNavigationBar() && mHasPermanentMenuKey;
