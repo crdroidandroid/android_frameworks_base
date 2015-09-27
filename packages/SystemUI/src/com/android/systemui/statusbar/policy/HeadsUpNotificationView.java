@@ -599,7 +599,6 @@ public class HeadsUpNotificationView extends LinearLayout implements SwipeHelper
                             if (DEBUG_EDGE_SWIPE) Log.d(TAG, "found an open");
                             mBar.animateExpandNotificationsPanel();
                             mBar.onHeadsUpDismissed(true);
-                            releaseAndClose();
                         }
                         mConsuming = true;
                     }
