@@ -35,7 +35,6 @@ import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.android.systemui.ExpandHelper;
 import com.android.systemui.Gefingerpoken;
@@ -222,9 +221,6 @@ public class HeadsUpNotificationView extends FrameLayout implements SwipeHelper.
         if (mMostRecentPackageName != null) {
             mSnoozedPackages.put(snoozeKey(mMostRecentPackageName, mUser),
                     SystemClock.elapsedRealtime() + mSnoozeLengthMs);
-            Toast.makeText(mContext,
-                    mContext.getString(R.string.heads_up_snooze_message,
-                    mSnoozeLengthMs / 60 / 1000), Toast.LENGTH_LONG).show();
         }
         releaseAndClose();
     }
@@ -512,12 +508,10 @@ public class HeadsUpNotificationView extends FrameLayout implements SwipeHelper.
                     final float daX = Math.abs(ev.getX() - mFirstX);
                     final float daY = Math.abs(dY);
                     if (!mConsuming && daX < daY && daY > mTouchSlop) {
+                        snooze();
                         if (dY > 0) {
                             if (DEBUG_EDGE_SWIPE) Log.d(TAG, "found an open");
                             mBar.animateExpandNotificationsPanel();
-                            releaseAndClose();
-                        } else if (dY < 0) {
-                            snooze();
                         }
                         mConsuming = true;
                     }
