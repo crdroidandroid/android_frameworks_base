@@ -3993,13 +3993,6 @@ public final class Settings {
         public static final String HEADS_UP_BLACKLIST_VALUES = "heads_up_blacklist_values";
 
         /**
-         * Defines the global heads up notification decay
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_NOTIFCATION_DECAY = "heads_up_notification_decay";
-
-        /**
          * Force expanded notifications on all apps that support it.
          * @hide
          */
