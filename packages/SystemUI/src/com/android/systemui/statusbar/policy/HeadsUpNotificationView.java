@@ -340,14 +340,12 @@ public class HeadsUpNotificationView extends FrameLayout implements SwipeHelper.
         switch (ev.getAction()) {
             case MotionEvent.ACTION_OUTSIDE:
                 if (mTouchOutside) return true;
-                if (mBar.mHeadsUpTouchOutside) {
-                    // Hide headsup, after 1 sec.
-                    mBar.getHandler().postDelayed(new Runnable() {
-                        public void run() {
-                            mBar.scheduleHeadsUpClose();
-                        }
-                    }, 1000);
-                }
+                // Hide headsup, after 1 sec.
+                mBar.getHandler().postDelayed(new Runnable() {
+                    public void run() {
+                        mBar.scheduleHeadsUpClose();
+                    }
+                }, 1000);
                 mTouchOutside = true;
                 return true;
             default:

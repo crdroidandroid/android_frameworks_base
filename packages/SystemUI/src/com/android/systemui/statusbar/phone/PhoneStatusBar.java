@@ -492,8 +492,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             // Heads-up
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_NOTIFCATION_DECAY), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.HEADS_UP_TOUCH_OUTSIDE), false, this, UserHandle.USER_ALL);
             // SlimRecents
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.USE_SLIM_RECENTS), false, this, UserHandle.USER_ALL);
@@ -596,11 +594,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 }
             }
 
-            mHeadsUpTouchOutside = Settings.System.getInt(
-                    resolver, Settings.System.HEADS_UP_TOUCH_OUTSIDE, 0) == 1;
-
             boolean navLeftInLandscape = Settings.System.getIntForUser(resolver,
                     Settings.System.NAVBAR_LEFT_IN_LANDSCAPE, 0, UserHandle.USER_CURRENT) == 1;
+
             if (mNavigationBarView != null) {
                 mNavigationBarView.setLeftInLandscape(navLeftInLandscape);
             }
@@ -750,7 +746,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private VisualizerView mVisualizerView;
 
     private boolean mHeadsUpSwype;
-    public boolean mHeadsUpTouchOutside;
 
     private MediaSessionManager mMediaSessionManager;
     private MediaController mMediaController;
@@ -2930,16 +2925,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mStatusBarView.collapseAllPanels(true);
         }
 
-        if(mHeadsUpTouchOutside) {
-            // Hide HeadsUp if is showing when animateCollapsePanels() is called,
-            // i.e. within home button pressing.
-            // Hide after 0.5 sec from pressing home button.
-            mHandler.postDelayed(new Runnable() {
-                public void run() {
-                    scheduleHeadsUpClose();
-                }
-            }, 500);
-        }
+        // Hide HeadsUp if is showing when animateCollapsePanels() is called,
+        // i.e. within home button pressing.
+        // Hide after 0.5 sec from pressing home button.
+        mHandler.postDelayed(new Runnable() {
+            public void run() {
+                scheduleHeadsUpClose();
+            }
+        }, 500);
     }
 
     private void runPostCollapseRunnables() {
