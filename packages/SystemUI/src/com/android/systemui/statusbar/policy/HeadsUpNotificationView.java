@@ -593,8 +593,12 @@ public class HeadsUpNotificationView extends LinearLayout implements SwipeHelper
                     final float daY = Math.abs(dY);
                     if (!mConsuming && daX < daY && daY > mTouchSlop) {
                         if (dY > 0) {
+                            // User want to swipe in notification panel. Allow it
+                            // and hide the headsup notification so that the user
+                            // can see it now in the notification panel.
                             if (DEBUG_EDGE_SWIPE) Log.d(TAG, "found an open");
                             mBar.animateExpandNotificationsPanel();
+                            mBar.onHeadsUpDismissed(true);
                             releaseAndClose();
                         }
                         mConsuming = true;
