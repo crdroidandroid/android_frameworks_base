@@ -543,7 +543,7 @@ public class NotificationStackScrollLayout extends ViewGroup
         mInterceptDelegateEnabled = interceptDelegateEnabled;
     }
 
-    public void onChildDismissed(View v, boolean direction) {
+    public void onChildDismissed(View v) {
         if (mDismissAllInProgress) {
             return;
         }

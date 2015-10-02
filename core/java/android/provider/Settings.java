@@ -3967,32 +3967,6 @@ public final class Settings {
         public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
 
         /**
-         * Heads Up Notifications
-         * @hide
-         */
-        public static final String HEADS_UP_NOTIFICATION = "heads_up_enabled";
-
-        /**
-         * Hide notification instead of remove when swiping headsup
-         * @hide
-         */
-        public static final String HEADS_UP_DISMISS_ON_REMOVE = "heads_up_dismiss_on_remove";
-
-        /**
-         * Which applications to disable heads up notifications for
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_CUSTOM_VALUES = "heads_up_custom_values";
-
-        /**
-         * Which applications to disable heads up notifications for
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_BLACKLIST_VALUES = "heads_up_blacklist_values";
-
-        /**
          * Force expanded notifications on all apps that support it.
          * @hide
          */
