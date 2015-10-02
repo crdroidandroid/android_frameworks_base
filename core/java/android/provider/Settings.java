@@ -4018,13 +4018,6 @@ public final class Settings {
         public static final String HEADS_UP_TOUCH_OUTSIDE = "heads_up_touch_outside";
 
         /**
-         * Defines global heads up snooze time if user want to snooze it.
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_SNOOZE_TIME = "heads_up_snooze_time";
-
-        /**
          * Force expanded notifications on all apps that support it.
          * @hide
          */

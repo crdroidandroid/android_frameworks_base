@@ -32,7 +32,4 @@
     <!-- Default value how much apps show the app screenshot on recents view entry -->
     <integer name="expanded_items_default">2</integer>
 
-    <!-- milliseconds how long heads up should be in snooze. -->
-    <integer name="heads_up_snooze_time">300000</integer>
-
 </resources>
