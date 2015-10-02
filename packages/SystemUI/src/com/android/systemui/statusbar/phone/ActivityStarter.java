@@ -25,5 +25,4 @@ import android.content.Intent;
  */
 public interface ActivityStarter {
     public void startActivity(Intent intent, boolean dismissShade);
-    public void startAction(boolean dismissShade);
 }

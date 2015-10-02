@@ -41,10 +41,6 @@
     <!-- Kill app toast -->
     <string name="app_killed_message">App Killed</string>
 
-    <!-- Heads up toast -->
-    <string name="heads_up_enabled">Heads up notifications are enabled</string>
-    <string name="heads_up_disabled">Heads up notifications are disabled</string>
-
     <!-- Screenshot -->
     <string name="shortcut_screenshot">Screenshot</string>
 
