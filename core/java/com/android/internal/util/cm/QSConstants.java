@@ -48,7 +48,6 @@ public class QSConstants {
     public static final String TILE_SCREEN_TIMEOUT = "screen_timeout";
     public static final String TILE_LIVE_DISPLAY = "live_display";
     public static final String TILE_USB_TETHER = "usb_tether";
-    public static final String TILE_HEADS_UP = "heads_up";
     public static final String TILE_AMBIENT_DISPLAY = "ambient_display";
     public static final String TILE_NAVBAR = "toggleNavBar";
     public static final String TILE_POWER_MENU = "power_menu";
@@ -91,7 +90,6 @@ public class QSConstants {
         STATIC_TILES_AVAILABLE.add(TILE_SCREEN_TIMEOUT);
         STATIC_TILES_AVAILABLE.add(TILE_LIVE_DISPLAY);
         STATIC_TILES_AVAILABLE.add(TILE_USB_TETHER);
-        STATIC_TILES_AVAILABLE.add(TILE_HEADS_UP);
         STATIC_TILES_AVAILABLE.add(TILE_AMBIENT_DISPLAY);
         STATIC_TILES_AVAILABLE.add(TILE_NAVBAR);
         STATIC_TILES_AVAILABLE.add(TILE_POWER_MENU);
@@ -104,5 +102,24 @@ public class QSConstants {
 
         TILES_AVAILABLE.addAll(STATIC_TILES_AVAILABLE);
         TILES_AVAILABLE.addAll(DYNAMIC_TILES_AVAILABLE);
+        TILES_AVAILABLE.addAll(TILES_DEFAULT);
+        TILES_AVAILABLE.add(TILE_INVERSION);
+        TILES_AVAILABLE.add(TILE_HOTSPOT);
+        TILES_AVAILABLE.add(TILE_NOTIFICATIONS);
+        TILES_AVAILABLE.add(TILE_DATA);
+        TILES_AVAILABLE.add(TILE_ROAMING);
+        TILES_AVAILABLE.add(TILE_DDS);
+        TILES_AVAILABLE.add(TILE_APN);
+        TILES_AVAILABLE.add(TILE_PROFILES);
+        TILES_AVAILABLE.add(TILE_PERFORMANCE);
+        TILES_AVAILABLE.add(TILE_ADB_NETWORK);
+        TILES_AVAILABLE.add(TILE_NFC);
+        TILES_AVAILABLE.add(TILE_COMPASS);
+        TILES_AVAILABLE.add(TILE_LOCKSCREEN);
+        TILES_AVAILABLE.add(TILE_LTE);
+        TILES_AVAILABLE.add(TILE_VISUALIZER);
+        TILES_AVAILABLE.add(TILE_SCREEN_TIMEOUT);
+        TILES_AVAILABLE.add(TILE_LIVE_DISPLAY);
+        TILES_AVAILABLE.add(TILE_USB_TETHER);
     }
 }

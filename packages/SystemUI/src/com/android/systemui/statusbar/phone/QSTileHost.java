@@ -47,7 +47,6 @@ import com.android.systemui.qs.tiles.CustomQSTile;
 import com.android.systemui.qs.tiles.DataTile;
 import com.android.systemui.qs.tiles.DdsTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
-import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.LiveDisplayTile;
 import com.android.systemui.qs.tiles.LocationTile;
@@ -377,8 +376,6 @@ public class QSTileHost implements QSTile.Host {
                 return new LiveDisplayTile(this);
             case QSConstants.TILE_USB_TETHER:
                 return new UsbTetherTile(this);
-            case QSConstants.TILE_HEADS_UP:
-                return new HeadsUpTile(this);
             case QSConstants.TILE_AMBIENT_DISPLAY:
                 return new AmbientDisplayTile(this);
             case QSConstants.TILE_NAVBAR:
