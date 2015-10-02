@@ -3967,22 +3967,10 @@ public final class Settings {
         public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
 
         /**
-         * Whether the user has enabled headsup (Default 1)
-         * HeadsUp is enabled by default within its Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED
-         * setting. Avoid changing low level implementations and use a System setting to
-         * override per-user heads up on/off preference.
-         *
-         * Enable headsup = 1 (on by default)
-         * Disable headsup = 0
-         *
-         * @see com.android.systemui.statusbar.BaseStatusBar#addNotification
+         * Heads Up Notifications
          * @hide
          */
-        public static final String HEADS_UP_USER_ENABLED =
-                "heads_up_user_enabled";
-
-        /** @hide */ public static final int HEADS_UP_USER_OFF = 0;
-        /** @hide */ public static final int HEADS_UP_USER_ON = 1;
+        public static final String HEADS_UP_NOTIFICATION = "heads_up_enabled";
 
         /**
          * Hide notification instead of remove when swiping headsup

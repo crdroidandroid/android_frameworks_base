@@ -86,7 +86,6 @@ import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.DateTimeView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -220,7 +219,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected boolean mUseHeadsUp = false;
     protected boolean mHeadsUpTicker = false;
     protected boolean mDisableNotificationAlerts = false;
-    protected boolean mHeadsUpUserEnabled = false;
 
     protected DevicePolicyManager mDevicePolicyManager;
     protected IDreamManager mDreamManager;
@@ -315,10 +313,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     @Override  // NotificationData.Environment
     public boolean isDeviceProvisioned() {
         return mDeviceProvisioned;
-    }
-
-    public Handler getHandler() {
-        return mHandler != null ? mHandler : createHandler();
     }
 
     protected final ContentObserver mSettingsObserver = new ContentObserver(mHandler) {
@@ -2079,7 +2073,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected abstract void tick(StatusBarNotification n, boolean firstTime);
     protected abstract void updateExpandedViewPos(int expandedPosition);
     protected abstract boolean shouldDisableNavbarGestures();
-    public abstract boolean isExpandedVisible();
 
     public abstract void addNotification(StatusBarNotification notification,
             RankingMap ranking);
@@ -2357,12 +2350,6 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
 
         // some predicates to make the boolean logic legible
-        int ZEN_MODE_OFF = Settings.Global.ZEN_MODE_OFF;
-        int ZEN_MODE_NO_INTERRUPTIONS = Settings.Global.ZEN_MODE_NO_INTERRUPTIONS;
-        int asHeadsUp = notification.extras.getInt(Notification.EXTRA_AS_HEADS_UP,
-                Notification.HEADS_UP_ALLOWED);
-        boolean zenBlocksHeadsUp = Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.ZEN_MODE, ZEN_MODE_OFF) == ZEN_MODE_NO_INTERRUPTIONS;
         boolean isNoisy = (notification.defaults & Notification.DEFAULT_SOUND) != 0
                 || (notification.defaults & Notification.DEFAULT_VIBRATE) != 0
                 || notification.sound != null
@@ -2370,24 +2357,20 @@ public abstract class BaseStatusBar extends SystemUI implements
         boolean isHighPriority = sbn.getScore() >= INTERRUPTION_THRESHOLD;
         boolean isFullscreen = notification.fullScreenIntent != null;
         boolean hasTicker = mHeadsUpTicker && !TextUtils.isEmpty(notification.tickerText);
-        boolean isAllowed = asHeadsUp != Notification.HEADS_UP_NEVER;
+        boolean isAllowed = notification.extras.getInt(Notification.EXTRA_AS_HEADS_UP,
+                Notification.HEADS_UP_ALLOWED) != Notification.HEADS_UP_NEVER;
         boolean isOngoing = sbn.isOngoing();
-        boolean isClearable = sbn.isClearable(); // not used yet
         boolean accessibilityForcesLaunch = isFullscreen
                 && mAccessibilityManager.isTouchExplorationEnabled();
 
-        boolean interrupt = (isFullscreen || (isHighPriority && (isNoisy || hasTicker))
-                || asHeadsUp == Notification.HEADS_UP_REQUESTED)
+        boolean interrupt = (isFullscreen || (isHighPriority && (isNoisy || hasTicker)))
                 && isAllowed
                 && !isOngoing
                 && !accessibilityForcesLaunch
                 && mPowerManager.isScreenOn()
                 && (!mStatusBarKeyguardViewManager.isShowing()
                         || mStatusBarKeyguardViewManager.isOccluded())
-                && !mStatusBarKeyguardViewManager.isInputRestricted()
-                && !zenBlocksHeadsUp
-                && !isImeShowing();
-
+                && !mStatusBarKeyguardViewManager.isInputRestricted();
         try {
             interrupt = interrupt && !mDreamManager.isDreaming();
         } catch (RemoteException e) {
@@ -2406,16 +2389,6 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         if (DEBUG) Log.d(TAG, "interrupt: " + interrupt);
         return interrupt;
-    }
-
-    /**
-     * @return Whether IME input is showing.
-     */
-    public boolean isImeShowing() {
-        final InputMethodManager inputMethodManager = (InputMethodManager)
-                mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        return inputMethodManager != null ? inputMethodManager.isImeShowing() : false;
     }
 
     private String getTopLevelPackage() {
