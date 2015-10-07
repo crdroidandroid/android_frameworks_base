@@ -523,6 +523,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ENABLE_TASK_MANAGER),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_TOUCH_OUTSIDE), false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -638,6 +640,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             boolean navLeftInLandscape = Settings.System.getIntForUser(resolver,
                     Settings.System.NAVBAR_LEFT_IN_LANDSCAPE, 0, UserHandle.USER_CURRENT) == 1;
+
+            mHeadsUpTouchOutside = Settings.System.getInt(
+                    resolver, Settings.System.HEADS_UP_TOUCH_OUTSIDE, 0) == 1;
 
             if (mNavigationBarView != null) {
                 mNavigationBarView.setLeftInLandscape(navLeftInLandscape);
@@ -773,6 +778,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private PorterDuffXfermode mSrcOverXferMode = new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER);
 
     private VisualizerView mVisualizerView;
+
+    public boolean mHeadsUpTouchOutside;
 
     private MediaSessionManager mMediaSessionManager;
     private MediaController mMediaController;
@@ -1798,7 +1805,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                         | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
-                        | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                        | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
+                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                     PixelFormat.TRANSLUCENT);
             lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
             lp.gravity = Gravity.TOP;
@@ -2977,6 +2985,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             mStatusBarWindow.cancelExpandHelper();
             mStatusBarView.collapseAllPanels(true);
+        }
+
+        if (mHeadsUpTouchOutside) {
+            // Hide HeadsUp if is showing when animateCollapsePanels() is called,
+            // i.e. within home button pressing or touching outside. Hide after 0.5 sec
+            mHandler.postDelayed(new Runnable() {
+                public void run() {
+                    scheduleHeadsUpClose();
+                }
+            }, 500);
         }
     }
 

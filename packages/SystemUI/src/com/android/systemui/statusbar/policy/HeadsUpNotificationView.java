@@ -87,6 +87,8 @@ public class HeadsUpNotificationView extends LinearLayout implements SwipeHelper
 
     private static int sRoundedRectCornerRadius = 0;
 
+    private boolean mTouchOutside;
+
     public HeadsUpNotificationView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -146,6 +148,8 @@ public class HeadsUpNotificationView extends LinearLayout implements SwipeHelper
         if (mContentHolder != null) {
             mContentHolder.removeAllViews();
         }
+
+        mTouchOutside = false;
 
         if (mHeadsUp != null) {
             mMostRecentPackageName = mHeadsUp.notification.getPackageName();
@@ -333,6 +337,8 @@ public class HeadsUpNotificationView extends LinearLayout implements SwipeHelper
         }
 
         getViewTreeObserver().addOnComputeInternalInsetsListener(this);
+
+        mTouchOutside = false;
     }
 
     @Override
@@ -373,10 +379,25 @@ public class HeadsUpNotificationView extends LinearLayout implements SwipeHelper
         if (SystemClock.elapsedRealtime() < mStartTouchTime) {
             return false;
         }
-        mBar.resetHeadsUpDecayTimer();
-        return mEdgeSwipeHelper.onTouchEvent(ev)
-                || mSwipeHelper.onTouchEvent(ev)
-                || super.onTouchEvent(ev);
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_OUTSIDE:
+                if (mTouchOutside) return true;
+                if (mBar.mHeadsUpTouchOutside) {
+                    // Hide headsup, after 0.5 sec.
+                    mBar.getHandler().postDelayed(new Runnable() {
+                        public void run() {
+                            mBar.scheduleHeadsUpClose();
+                        }
+                    }, 500);
+                }
+                mTouchOutside = true;
+                return true;
+            default:
+                mBar.resetHeadsUpDecayTimer();
+                return mEdgeSwipeHelper.onTouchEvent(ev)
+                        || mSwipeHelper.onTouchEvent(ev)
+                        || super.onTouchEvent(ev);
+        }
     }
 
     @Override

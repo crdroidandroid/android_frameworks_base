@@ -316,6 +316,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         return mDeviceProvisioned;
     }
 
+    public Handler getHandler() {
+        return mHandler != null ? mHandler : createHandler();
+    }
+
     protected final ContentObserver mSettingsObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
