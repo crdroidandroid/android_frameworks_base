@@ -420,17 +420,15 @@ public class ZenModeHelper implements AudioManagerInternal.RingerModeDelegate {
         int newZen = -1;
         switch (ringerModeNew) {
             case AudioManager.RINGER_MODE_SILENT:
-                /*if (isChange) {
-                    if (mZenMode == Global.ZEN_MODE_OFF &&
-                        mContext.getResources().getBoolean(com.android.internal.R.bool.config_setZenModeWhenSilentModeOn))
-                    {
+                if (isChange) {
+                    if (mZenMode == Global.ZEN_MODE_OFF) {
                         newZen = Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
                     }
                     ringerModeInternalOut = !isVibrate ? AudioManager.RINGER_MODE_VIBRATE
                             : AudioManager.RINGER_MODE_SILENT;
                 } else {
                     ringerModeInternalOut = ringerModeInternal;
-                }*/
+                }
                 break;
             case AudioManager.RINGER_MODE_VIBRATE:
             case AudioManager.RINGER_MODE_NORMAL:
