@@ -799,6 +799,10 @@ public final class DefaultPermissionGrantPolicy {
         // Google Calendar
         grantSystemFixedPermissionsToSystemPackage("com.google.android.calendar", userId, CALENDAR_PERMISSIONS,
                 CONTACTS_PERMISSIONS, PHONE_PERMISSIONS);
+
+        // Chromium Sign-in
+        grantSystemFixedPermissionsToSystemPackage("org.chromium.chrome", userId, CONTACTS_PERMISSIONS,
+                STORAGE_PERMISSIONS);
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(String category, int userId) {
