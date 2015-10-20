@@ -2299,6 +2299,12 @@ public final class Settings {
         public static final String HEADS_UP_TOUCH_OUTSIDE = "heads_up_touch_outside";
 
         /**
+         * Hide notification instead of remove when swiping headsup
+         * @hide
+         */
+        public static final String HEADS_UP_DISMISS_ON_REMOVE = "heads_up_dismiss_on_remove";
+
+        /**
          * Quick Settings Quick Pulldown
          * 0 = off, 1 = right, 2 = left
          * @deprecated Use {@link cyanogenmod.providers.CMSettings.System#QS_QUICK_PULLDOWN} instead

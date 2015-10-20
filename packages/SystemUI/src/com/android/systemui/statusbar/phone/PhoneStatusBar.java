@@ -523,6 +523,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.HEADS_UP_SNOOZE_TIME),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_DISMISS_ON_REMOVE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_GLOBAL_SWITCH),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -651,6 +654,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             mHeadsUpTouchOutside = Settings.System.getInt(
                     resolver, Settings.System.HEADS_UP_TOUCH_OUTSIDE, 0) == 1;
+
+            mHeadsUpSwype = Settings.System.getInt(
+                    resolver, Settings.System.HEADS_UP_DISMISS_ON_REMOVE, 1) == 1;
 
             if (mNavigationBarView != null) {
                 mNavigationBarView.setLeftInLandscape(navLeftInLandscape);
@@ -791,6 +797,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private VisualizerView mVisualizerView;
 
     public boolean mHeadsUpTouchOutside;
+    private boolean mHeadsUpSwype;
 
     private MediaSessionManager mMediaSessionManager;
     private MediaController mMediaController;
@@ -4182,7 +4189,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // the notification will stay in our notification
         // drawer. Left swipe as usual dismisses the notification
         // completely if the notification is clearable.
-        if (direction) {
+        if (mHeadsUpSwype) {
             scheduleHeadsUpClose();
         } else {
             mHeadsUpNotificationView.dismiss();
