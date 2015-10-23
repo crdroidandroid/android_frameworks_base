@@ -20,14 +20,19 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.NonNull;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.os.Handler;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 
 import com.android.systemui.doze.DozeHost;
 import com.android.systemui.doze.DozeLog;
+import com.android.systemui.R;
 
 /**
  * Controller which handles all the doze animations of the scrims.
@@ -43,6 +48,7 @@ public class DozeScrimController {
     private final Interpolator mDozeAnimationInterpolator;
     private final Handler mHandler = new Handler();
     private final ScrimController mScrimController;
+    private Context mContext;
 
     private boolean mDozing;
     private DozeHost.PulseCallback mPulseCallback;
@@ -51,12 +57,18 @@ public class DozeScrimController {
     private Animator mBehindAnimator;
     private float mInFrontTarget;
     private float mBehindTarget;
+    private int mDozePulseDurationVisible;
 
     public DozeScrimController(ScrimController scrimController, Context context) {
         mScrimController = scrimController;
+        mContext = context;
         mDozeParameters = new DozeParameters(context);
         mDozeAnimationInterpolator = mPulseInInterpolatorPickup =
                 AnimationUtils.loadInterpolator(context, android.R.interpolator.linear_out_slow_in);
+
+        // Settings observer
+        SettingsObserver observer = new SettingsObserver(mHandler);
+        observer.observe();
     }
 
     public void setDozing(boolean dozing, boolean animate) {
@@ -239,7 +251,7 @@ public class DozeScrimController {
         public void run() {
             if (DEBUG) Log.d(TAG, "Pulse in finished, mDozing=" + mDozing);
             if (!mDozing) return;
-            mHandler.postDelayed(mPulseOut, mDozeParameters.getPulseVisibleDuration());
+            mHandler.postDelayed(mPulseOut, mDozePulseDurationVisible);
         }
     };
 
@@ -263,4 +275,36 @@ public class DozeScrimController {
             pulseFinished();
         }
     };
+
+    /**
+     * Settings observer
+     * for user settings.
+     */
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DOZE_PULSE_DURATION_VISIBLE),
+                    false, this, UserHandle.USER_ALL);
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            update();
+        }
+
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+
+            mDozePulseDurationVisible = Settings.System.getIntForUser(resolver,
+                    Settings.System.DOZE_PULSE_DURATION_VISIBLE, R.integer.doze_pulse_duration_visible,
+                    UserHandle.USER_CURRENT);
+        }
+    }
 }

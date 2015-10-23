@@ -73,13 +73,6 @@ public class DozeParameters {
         pw.print("    getPickupPerformsProxCheck(): "); pw.println(getPickupPerformsProxCheck());
     }
 
-    public boolean getOverwriteValue() {
-        final int values = Settings.System.getIntForUser(mContext.getContentResolver(),
-               Settings.System.DOZE_OVERWRITE_VALUE, 0,
-                    UserHandle.USER_CURRENT);
-        return values != 0;
-    }
-
     public boolean getPocketMode() {
         final int values = Settings.System.getIntForUser(mContext.getContentResolver(),
                Settings.System.DOZE_POCKET_MODE, 0,
@@ -118,20 +111,11 @@ public class DozeParameters {
     }
 
     public int getPulseInDuration(int reason) {
-        if (getOverwriteValue()) {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DOZE_PULSE_DURATION_IN, R.integer.doze_pulse_duration_in,
-                    UserHandle.USER_CURRENT);
-        }
         switch(reason) {
         case DozeLog.PULSE_REASON_SENSOR_PICKUP:
                 return getInt("doze.pulse.duration.in.pickup", R.integer.doze_pulse_duration_in_pickup);
         case DozeLog.PULSE_REASON_INTENT:
-                if (!getOverwriteValue()) {
-                    return getInt("doze.pulse.duration.in.intent", R.integer.doze_pulse_duration_in_intent);
-                } else {
-                    return getInt("doze.pulse.duration.in.intent", R.integer.doze_pulse_duration_in);
-                }
+                return getInt("doze.pulse.duration.in.intent", R.integer.doze_pulse_duration_in_intent);
         default:
                 return getInt("doze.pulse.duration.in", R.integer.doze_pulse_duration_in);
         }
@@ -149,20 +133,10 @@ public class DozeParameters {
     }
 
     public int getPulseVisibleDuration() {
-        if (getOverwriteValue()) {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DOZE_PULSE_DURATION_VISIBLE, R.integer.doze_pulse_duration_visible,
-                    UserHandle.USER_CURRENT);
-        }
         return getInt("doze.pulse.duration.visible", R.integer.doze_pulse_duration_visible);
     }
 
     public int getPulseOutDuration() {
-        if (getOverwriteValue()) {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DOZE_PULSE_DURATION_OUT, R.integer.doze_pulse_duration_out,
-                    UserHandle.USER_CURRENT);
-        }
         return getInt("doze.pulse.duration.out", R.integer.doze_pulse_duration_out);
     }
 
@@ -198,7 +172,7 @@ public class DozeParameters {
     }
 
     public boolean getPulseOnNotifications() {
-        if (getOverwriteValue() || setUsingAccelerometerAsSensorPickUp()) {
+        if (setUsingAccelerometerAsSensorPickUp()) {
             final int values = Settings.System.getIntForUser(mContext.getContentResolver(),
                    Settings.System.DOZE_PULSE_ON_NOTIFICATIONS, 1,
                     UserHandle.USER_CURRENT);
@@ -215,6 +189,14 @@ public class DozeParameters {
         return sPulseSchedule;
     }
 
+    public PulseSchedule getAlternatePulseSchedule() {
+        final String spec = getString("doze.pulse.schedule", R.string.doze_pulse_schedule_alternate);
+        if (sPulseSchedule == null || !sPulseSchedule.mSpec.equals(spec)) {
+            sPulseSchedule = PulseSchedule.parse(spec);
+        }
+        return sPulseSchedule;
+    }
+
     public int getPulseScheduleResets() {
         return getInt("doze.pulse.schedule.resets", R.integer.doze_pulse_schedule_resets);
     }
@@ -224,11 +206,6 @@ public class DozeParameters {
     }
 
     public int getShakeAccelerometerThreshold() {
-        if (getOverwriteValue()) {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DOZE_SHAKE_ACC_THRESHOLD, R.integer.doze_shake_accelerometer_threshold,
-                    UserHandle.USER_CURRENT);
-        }
         return getInt("doze.shake.acc.threshold", R.integer.doze_shake_accelerometer_threshold);
     }
 

@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -34,7 +35,9 @@ import android.media.AudioAttributes;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.os.UserHandle;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.service.dreams.DreamService;
 import android.util.Log;
 import android.view.Display;
@@ -91,6 +94,10 @@ public class DozeService extends DreamService implements ProximitySensorManager.
     private long mNotificationPulseTime;
     private long mEarliestPulseDueToLight;
     private int mScheduleResetsRemaining;
+
+    private boolean mDozeSchedule;
+
+    private PulseSchedule mSchedule = null;
 
     private boolean mUseAccelerometer;
     private boolean mIsFar = true;
@@ -258,6 +265,10 @@ public class DozeService extends DreamService implements ProximitySensorManager.
             finishForCarMode();
             return;
         }
+
+        // Settings observer
+        SettingsObserver observer = new SettingsObserver(mHandler);
+        observer.observe();
 
         mDreaming = true;
         rescheduleNotificationPulse(false /*predicate*/);  // cancel any pending pulse alarms
@@ -502,13 +513,12 @@ public class DozeService extends DreamService implements ProximitySensorManager.
             if (DEBUG) Log.d(mTag, "  don't reschedule: predicate is false");
             return;
         }
-        final PulseSchedule schedule = mDozeParameters.getPulseSchedule();
-        if (schedule == null) {
-            if (DEBUG) Log.d(mTag, "  don't reschedule: schedule is null");
+        if (mSchedule == null) {
+            if (DEBUG) Log.d(mTag, "  don't reschedule: mSchedule is null");
             return;
         }
         final long now = System.currentTimeMillis();
-        final long time = schedule.getNextTime(now, mNotificationPulseTime);
+        final long time = mSchedule.getNextTime(now, mNotificationPulseTime);
         if (time <= 0) {
             if (DEBUG) Log.d(mTag, "  don't reschedule: time is " + time);
             return;
@@ -596,6 +606,38 @@ public class DozeService extends DreamService implements ProximitySensorManager.
             }
         }
     };
+
+    /**
+     * Settings observer
+     * for user settings.
+     */
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            update();
+        }
+
+        public void update() {
+            updateDozeSchedule();
+        }
+
+        private void updateDozeSchedule() {
+            if (mDozeSchedule) {
+                mSchedule = mDozeParameters.getPulseSchedule();
+            } else {
+                mSchedule = mDozeParameters.getAlternatePulseSchedule();
+            }
+        }
+    }
 
     private class TriggerSensor extends TriggerEventListener {
         private final Sensor mSensor;

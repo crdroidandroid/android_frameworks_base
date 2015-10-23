@@ -35,4 +35,7 @@
     <!-- Whether to enable to show task manager or not -->
     <bool name="config_showTaskManagerSwitcher">true</bool>
 
+    <!-- Doze: alternate schedule -->
+    <string name="doze_pulse_schedule_alternate" translatable="false">1s</string>
+
 </resources>
