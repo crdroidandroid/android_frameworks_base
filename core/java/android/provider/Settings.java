@@ -14558,6 +14558,12 @@ public final class Settings {
         public static final String POWER_MENU_EMERGENCY_AFFORDANCE = "power_menu_emergency_affordance";
 
         /**
+         * Whether to show power menu on LockScreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_ENABLE_POWER_MENU = "lockscreen_enable_power_menu";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
