@@ -20,6 +20,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.UiModeManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -617,6 +618,11 @@ public class DozeService extends DreamService implements ProximitySensorManager.
         }
 
         void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+          
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DOZE_SCHEDULE),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -627,6 +633,11 @@ public class DozeService extends DreamService implements ProximitySensorManager.
         }
 
         public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            
+            mDozeSchedule = (Settings.System.getIntForUser(resolver,
+                    Settings.System.DOZE_SCHEDULE, 1,
+                    UserHandle.USER_CURRENT) == 1);
             updateDozeSchedule();
         }
 
