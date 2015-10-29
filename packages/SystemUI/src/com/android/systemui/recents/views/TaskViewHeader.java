@@ -36,7 +36,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,7 +48,7 @@ import com.android.systemui.recents.Constants;
 import com.android.systemui.recents.RecentsConfiguration;
 import com.android.systemui.recents.misc.Utilities;
 import com.android.systemui.recents.model.Task;
-import com.android.systemui.utils.LockAppUtils;
+
 
 /* The task bar view */
 public class TaskViewHeader extends FrameLayout {
@@ -58,12 +57,8 @@ public class TaskViewHeader extends FrameLayout {
 
     // Header views
     ImageView mDismissButton;
-    ImageView mLockAppButton;
     ImageView mApplicationIcon;
     TextView mActivityDescription;
-
-    Context ct;
-    LockAppUtils lockAppUtils;
 
     // Header drawables
     boolean mCurrentPrimaryColorIsDark;
@@ -107,8 +102,6 @@ public class TaskViewHeader extends FrameLayout {
             }
         });
 
-        this.ct = context;
-        lockAppUtils = new LockAppUtils(context);
         // Load the dismiss resources
         Resources res = context.getResources();
         mLightDismissDrawable = res.getDrawable(R.drawable.recents_dismiss_light);
@@ -141,7 +134,6 @@ public class TaskViewHeader extends FrameLayout {
         mApplicationIcon = (ImageView) findViewById(R.id.application_icon);
         mActivityDescription = (TextView) findViewById(R.id.activity_description);
         mDismissButton = (ImageView) findViewById(R.id.dismiss_task);
-        mLockAppButton = (ImageView) findViewById(R.id.set_lock_app);
 
         // Hide the backgrounds if they are ripple drawables
         if (!Constants.DebugFlags.App.EnableTaskFiltering) {
@@ -159,11 +151,6 @@ public class TaskViewHeader extends FrameLayout {
         mBackground.setColor(ColorStateList.valueOf(0));
         mBackground.setDrawableByLayerId(mBackground.getId(0), mBackgroundColorDrawable);
         setBackground(mBackground);
-    }
-
-    private void refreshBackground(boolean is_color_light, boolean iswhite) {
-        mLockAppButton.setImageDrawable(ct.getDrawable((iswhite ? (is_color_light ? R.drawable.ic_lock_light : R.drawable.ic_lock_dark) 
-            : (is_color_light ? R.drawable.ic_lock_open_light : R.drawable.ic_lock_open_dark))));
     }
 
     @Override
@@ -203,10 +190,6 @@ public class TaskViewHeader extends FrameLayout {
     public void rebindToTask(Task t) {
         // If an activity icon is defined, then we use that as the primary icon to show in the bar,
         // otherwise, we fall back to the application icon
-
-        lockAppUtils.refreshLockAppMap();
-        t.pkgName = t.key.baseIntent.getComponent().getPackageName();
-        t.isLockedApp = lockAppUtils.isLockedApp(t.pkgName) ;
         if (t.activityIcon != null) {
             mApplicationIcon.setImageDrawable(t.activityIcon);
         } else if (t.applicationIcon != null) {
@@ -216,24 +199,6 @@ public class TaskViewHeader extends FrameLayout {
         if (!mActivityDescription.getText().toString().equals(t.activityLabel)) {
             mActivityDescription.setText(t.activityLabel);
         }
-        final Task tt = t;
-        refreshBackground(t.useLightOnPrimaryColor,t.isLockedApp);
-        mLockAppButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                lockAppUtils.refreshLockAppMap();
-
-                if (tt.isLockedApp) {
-                    lockAppUtils.removeApp(tt.pkgName);
-                    tt.isLockedApp = false;
-                } else {
-                    lockAppUtils.addApp(tt.pkgName);
-                    tt.isLockedApp = true;
-                }
-                refreshBackground(tt.useLightOnPrimaryColor,tt.isLockedApp);
-            }
-        });
         // Try and apply the system ui tint
         int existingBgColor = (getBackground() instanceof ColorDrawable) ?
                 ((ColorDrawable) getBackground()).getColor() : 0;
@@ -268,18 +233,6 @@ public class TaskViewHeader extends FrameLayout {
                     .withLayer()
                     .start();
         }
-
-        if (mLockAppButton.getVisibility() == View.VISIBLE) {
-            mLockAppButton.animate().cancel();
-            mLockAppButton.animate()
-                    .alpha(0f)
-                    .setStartDelay(0)
-                    .setInterpolator(mConfig.fastOutSlowInInterpolator)
-                    .setDuration(mConfig.taskViewExitToAppDuration)
-                    .withLayer()
-                    .start();
-        }
-
     }
 
     /** Animates this task bar if the user does not interact with the stack after a certain time. */
@@ -295,19 +248,6 @@ public class TaskViewHeader extends FrameLayout {
                     .withLayer()
                     .start();
         }
-
-        if (mLockAppButton.getVisibility() != View.VISIBLE) {
-            mLockAppButton.setVisibility(View.VISIBLE);
-            mLockAppButton.setAlpha(0f);
-            mLockAppButton.animate()
-                    .alpha(1f)
-                    .setStartDelay(0)
-                    .setInterpolator(mConfig.fastOutLinearInInterpolator)
-                    .setDuration(mConfig.taskViewEnterFromAppDuration)
-                    .withLayer()
-                    .start();
-        }
-
     }
 
     /** Mark this task view that the user does has not interacted with the stack after a certain time. */
@@ -317,17 +257,11 @@ public class TaskViewHeader extends FrameLayout {
             mDismissButton.setVisibility(View.VISIBLE);
             mDismissButton.setAlpha(1f);
         }
-        if (mLockAppButton.getVisibility() != View.VISIBLE) {
-            mLockAppButton.animate().cancel();
-            mLockAppButton.setVisibility(View.VISIBLE);
-            mLockAppButton.setAlpha(1f);
-        }
     }
 
     /** Resets the state tracking that the user has not interacted with the stack after a certain time. */
     void resetNoUserInteractionState() {
         mDismissButton.setVisibility(View.INVISIBLE);
-        mLockAppButton.setVisibility(View.INVISIBLE);
     }
 
     @Override

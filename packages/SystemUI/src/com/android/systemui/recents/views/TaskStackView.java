@@ -555,16 +555,8 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
     }
 
     public void dismissAllTasks() {
-        final ArrayList<Task> tasks_tmp = new ArrayList<Task>();
-        tasks_tmp.addAll(mStack.getTasks());
-
-        ArrayList<Task> tasks = new ArrayList<Task>();
-        for (int i = 0; i < tasks_tmp.size(); i++) {
-            Task t = tasks_tmp.get(i);
-            if (!t.isLockedApp) {
-                tasks.add(t);
-            }
-        }
+        final ArrayList<Task> tasks = new ArrayList<Task>();
+        tasks.addAll(mStack.getTasks());
 
         // Remove visible TaskViews
         long dismissDelay = 0;
@@ -573,17 +565,15 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
             int delay = mConfig.taskViewRemoveAnimDuration / childCount;
             for (int i = 0; i < childCount; i++) {
                 TaskView tv = (TaskView) getChildAt(i);
-                if(!tv.getTask().isLockedApp) {
-                    tasks_tmp.remove(tv.getTask());
-                    tv.dismissTask(dismissDelay);
-                    dismissDelay += delay;
-                }
+                tasks.remove(tv.getTask());
+                tv.dismissTask(dismissDelay);
+                dismissDelay += delay;
             }
         }
 
         // Remove any other Tasks
         for (Task t : tasks) {
-            if (mStack.getTasks().contains(t) && !t.isLockedApp) {
+            if (mStack.getTasks().contains(t)) {
                 mStack.removeTask(t);
             }
         }
@@ -979,22 +969,28 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
         /*
         // Stash the scroll and filtered task for us to restore to when we unfilter
         mStashedScroll = getStackScroll();
+
         // Calculate the current task transforms
         ArrayList<TaskViewTransform> curTaskTransforms =
                 getStackTransforms(curTasks, getStackScroll(), null, true);
+
         // Update the task offsets
         mLayoutAlgorithm.updateTaskOffsets(mStack.getTasks());
+
         // Scroll the item to the top of the stack (sans-peek) rect so that we can see it better
         updateMinMaxScroll(false);
         float overlapHeight = mLayoutAlgorithm.getTaskOverlapHeight();
         setStackScrollRaw((int) (newStack.indexOfTask(filteredTask) * overlapHeight));
         boundScrollRaw();
+
         // Compute the transforms of the items in the new stack after setting the new scroll
         final ArrayList<Task> tasks = mStack.getTasks();
         final ArrayList<TaskViewTransform> taskTransforms =
                 getStackTransforms(mStack.getTasks(), getStackScroll(), null, true);
+
         // Animate
         mFilterAlgorithm.startFilteringAnimation(curTasks, curTaskTransforms, tasks, taskTransforms);
+
         // Notify any callbacks
         mCb.onTaskStackFilterTriggered();
         */
@@ -1006,20 +1002,26 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
         // Calculate the current task transforms
         final ArrayList<TaskViewTransform> curTaskTransforms =
                 getStackTransforms(curTasks, getStackScroll(), null, true);
+
         // Update the task offsets
         mLayoutAlgorithm.updateTaskOffsets(mStack.getTasks());
+
         // Restore the stashed scroll
         updateMinMaxScroll(false);
         setStackScrollRaw(mStashedScroll);
         boundScrollRaw();
+
         // Compute the transforms of the items in the new stack after restoring the stashed scroll
         final ArrayList<Task> tasks = mStack.getTasks();
         final ArrayList<TaskViewTransform> taskTransforms =
                 getStackTransforms(tasks, getStackScroll(), null, true);
+
         // Animate
         mFilterAlgorithm.startFilteringAnimation(curTasks, curTaskTransforms, tasks, taskTransforms);
+
         // Clear the saved vars
         mStashedScroll = 0;
+
         // Notify any callbacks
         mCb.onTaskStackUnfilterTriggered();
         */

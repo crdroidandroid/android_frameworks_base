@@ -61,7 +61,6 @@ import android.view.accessibility.AccessibilityManager;
 import com.android.systemui.R;
 import com.android.systemui.recents.AlternateRecentsComponent;
 import com.android.systemui.recents.Constants;
-import com.android.systemui.utils.LockAppUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,7 +96,6 @@ public class SystemServicesProxy {
     Paint mBgProtectionPaint;
     Canvas mBgProtectionCanvas;
 
-    Context ct;
     static {
         sBitmapOptions = new BitmapFactory.Options();
         sBitmapOptions.inMutable = true;
@@ -129,7 +127,6 @@ public class SystemServicesProxy {
         mBgProtectionPaint.setColor(0xFFffffff);
         mBgProtectionCanvas = new Canvas();
 
-        ct = context;
         // Resolve the assist intent
         Intent assist = mSm.getAssistIntent(context, false);
         if (assist != null) {
@@ -330,12 +327,9 @@ public class SystemServicesProxy {
             return;
         }
         Iterator<ActivityManager.RecentTaskInfo> iter = tasks.iterator();
-        LockAppUtils.refreshLockAppMap();
         while (iter.hasNext()) {
             ActivityManager.RecentTaskInfo t = iter.next();
-            String pkgName = t.baseIntent.getComponent().getPackageName();
-            boolean isLockedApp = LockAppUtils.isLockedApp(pkgName) ;
-            if (t.persistentId > 0 && !isLockedApp) {
+            if (t.persistentId > 0) {
                 removeTask(t.persistentId);
             }
         }
