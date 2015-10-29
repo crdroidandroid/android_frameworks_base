@@ -4249,6 +4249,12 @@ public final class Settings {
         public static final Validator POINTER_LOCATION_VALIDATOR = BOOLEAN_VALIDATOR;
 
         /**
+         * Enable FC Notifications
+         * @hide
+         */
+        public static final String ENABLE_FC_NOTIFICATIONS = "enable_fc_notifications";
+
+        /**
          * Show touch positions on screen?
          * 0 = no
          * 1 = yes

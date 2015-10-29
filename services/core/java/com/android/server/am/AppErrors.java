@@ -828,7 +828,10 @@ class AppErrors {
             if ((mService.mAtmInternal.canShowErrorDialogs() || showBackground)
                     && !crashSilenced
                     && (showFirstCrash || showFirstCrashDevOption || data.repeating)) {
-                proc.crashDialog = dialogToShow = new AppErrorDialog(mContext, mService, data);
+                        if (Settings.System.getInt(mContext.getContentResolver(), 
+                        Settings.System.ENABLE_FC_NOTIFICATIONS, 1) != 0) {
+                            proc.crashDialog = dialogToShow = new AppErrorDialog(mContext, mService, data);
+                        }
             } else {
                 // The device is asleep, so just pretend that the user
                 // saw a crash dialog and hit "force quit".
