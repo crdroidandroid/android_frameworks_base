@@ -150,25 +150,25 @@
     <integer name="touch_acceptance_delay">700</integer>
 
     <!-- The duration in seconds to wait before the dismiss buttons are shown. -->
-    <integer name="recents_task_bar_dismiss_delay_seconds">1000</integer>
+    <integer name="recents_task_bar_dismiss_delay_seconds">1</integer>
 
     <!-- The duration for animating the task decorations in after transitioning from an app. -->
-    <integer name="recents_task_enter_from_app_duration">200</integer>
+    <integer name="recents_task_enter_from_app_duration">100</integer>
 
     <!-- The duration for animating the task decorations in after transitioning from an app. -->
-    <integer name="recents_task_enter_from_affiliated_app_duration">125</integer>
+    <integer name="recents_task_enter_from_affiliated_app_duration">100</integer>
 
     <!-- The duration for animating the task decorations out before transitioning to an app. -->
-    <integer name="recents_task_exit_to_app_duration">125</integer>
+    <integer name="recents_task_exit_to_app_duration">100</integer>
 
     <!-- The min animation duration for animating the nav bar scrim in. -->
-    <integer name="recents_nav_bar_scrim_enter_duration">400</integer>
+    <integer name="recents_nav_bar_scrim_enter_duration">200</integer>
 
     <!-- The animation duration for scrolling the stack to a particular item. -->
-    <integer name="recents_animate_task_stack_scroll_duration">200</integer>
+    <integer name="recents_animate_task_stack_scroll_duration">150</integer>
 
     <!-- The animation duration for scrolling the stack to a particular item. -->
-    <integer name="recents_auto_advance_duration">750</integer>
+    <integer name="recents_auto_advance_duration">500</integer>
 
     <!-- The animation duration for subsequent scrolling the stack to a particular item. -->
     <integer name="recents_subsequent_auto_advance_duration">1000</integer>
