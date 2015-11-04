@@ -78,7 +78,7 @@ public class EdgeGestureTracker {
     private void setSensitivity(int sensitivity) {
         float factor = 0.0f;
         if (sensitivity >= 1) {
-             factor = (sensitivity - 1) / 4.0f;
+             factor = (sensitivity - 1) / 10.0f;
         }
         if (DEBUG) {
             Slog.d(TAG, "sensitivity: " + sensitivity + " => factor:" + factor);
@@ -131,7 +131,7 @@ public class EdgeGestureTracker {
         setSensitivity(sensitivity);
 
         if ((positions & EdgeGesturePosition.LEFT.FLAG) != 0) {
-            if (x < mThickness && (unrestricted || (fy > 0.1f && fy < 0.9f))) {
+            if (x < mThickness && (unrestricted || (fy > 0.1f && fy < (isImeActive(positions) ? 0.6f : 0.9f)))) {
                 startWithPosition(motionEvent, EdgeGesturePosition.LEFT);
                 return true;
             }
@@ -143,7 +143,7 @@ public class EdgeGestureTracker {
             }
         }
         if ((positions & EdgeGesturePosition.RIGHT.FLAG) != 0) {
-            if (x > mDisplayWidth - mThickness && (unrestricted || (fy > 0.1f && fy < 0.9f))) {
+            if (x > mDisplayWidth - mThickness && (unrestricted || (fy > 0.1f && fy < (isImeActive(positions) ? 0.6f : 0.9f)))) {
                 startWithPosition(motionEvent, EdgeGesturePosition.RIGHT);
                 return true;
             }
@@ -155,6 +155,11 @@ public class EdgeGestureTracker {
             }
         }
         return false;
+    }
+
+    private boolean isImeActive(int positions) {
+        return (positions & EdgeServiceConstants.IME_CONTROL) != 0
+                && mIsImeIsActive && !mOverwriteImeIsActive;
     }
 
     private void startWithPosition(MotionEvent motionEvent, EdgeGesturePosition position) {

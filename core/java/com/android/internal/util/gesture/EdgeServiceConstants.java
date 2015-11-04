@@ -56,7 +56,7 @@ public final class EdgeServiceConstants {
     /**
      * Default sensitivity, picked by the edge gesture service automatically.
      */
-    public static final int SENSITIVITY_DEFAULT = 2;
+    public static final int SENSITIVITY_DEFAULT = 5;
 
     /**
      * Lowest valid sensitivity value.
@@ -66,7 +66,7 @@ public final class EdgeServiceConstants {
     /**
      * Highest sensitivity value.
      */
-    public static final int SENSITIVITY_HIGHEST = 4;
+    public static final int SENSITIVITY_HIGHEST = 10;
 
     /**
      * Do not cut 10% area on th edges
@@ -82,6 +82,6 @@ public final class EdgeServiceConstants {
     /**
      * Allow IME to reduce left and right trigger height.
      */
-    public static final int IME_CONTROL = 0x10;
+    public static final int IME_CONTROL = 0x30;
 
 }
