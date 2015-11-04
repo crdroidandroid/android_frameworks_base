@@ -144,7 +144,7 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
     private boolean mPieTriggerMaskLocked;
     private int mRestorePieTriggerMask;
     private EdgeGesturePosition mPosition;
-    private int mSensitivity = 10;
+    private int mSensitivity;
 
     private EdgeGestureManager.EdgeGestureActivationListener mPieActivationListener =
             new EdgeGestureManager.EdgeGestureActivationListener(Looper.getMainLooper()) {
@@ -418,8 +418,10 @@ public class PieController implements BaseStatusBar.NavigationBarCallback, PieVi
                 Settings.System.PIE_GRAVITY, EdgeGesturePosition.LEFT.FLAG,
                 UserHandle.USER_CURRENT);
 
-        mSensitivity = Settings.System.getInt(resolver,
-                Settings.System.PIE_TRIGGER_SENSITIVITY, mSensitivity);
+        int sensitivity = mContext.getResources().getInteger(R.integer.pie_gesture_sensivity);
+        mSensitivity = Settings.System.getIntForUser(resolver,
+                Settings.System.PIE_TRIGGER_SENSITIVITY, sensitivity,
+                UserHandle.USER_CURRENT);
 
         if (mSensitivity < EdgeServiceConstants.SENSITIVITY_LOWEST
                 || mSensitivity > EdgeServiceConstants.SENSITIVITY_HIGHEST) {
