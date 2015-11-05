@@ -27,11 +27,14 @@ import android.util.PrefixPrinter;
 import android.util.Printer;
 
 import java.io.Closeable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
+
+import static android.database.sqlite.SQLiteConnection.PreparedStatement;
 
 /**
  * Maintains a pool of active SQLite database connections.
@@ -325,6 +328,23 @@ public final class SQLiteConnectionPool implements Closeable {
         }
     }
 
+    void releaseStmtRef(WeakReference<PreparedStatement> stmt, WeakReference client,
+            SQLiteConnection currentConnection) {
+        final PreparedStatement p = stmt.get();
+        if (p == null) {
+            return;
+        }
+
+        synchronized (mLock) {
+            p.owner.queueClientDereferenceLocked(stmt, client); // do it later!
+            if (p.owner == currentConnection
+                    || p.owner == mAvailablePrimaryConnection
+                    || mAvailableNonPrimaryConnections.contains(p.owner)) {
+                p.owner.handleDereferenceQueueLocked(); // actually, do it now!
+            }
+        }
+    }
+
     /**
      * Acquires a connection from the pool.
      * <p>
@@ -368,6 +388,7 @@ public final class SQLiteConnectionPool implements Closeable {
                         + "because the specified connection was not acquired "
                         + "from this pool or has already been released.");
             }
+            connection.handleDereferenceQueueLocked();
 
             if (!mIsOpen) {
                 closeConnectionAndLogExceptionsLocked(connection);
