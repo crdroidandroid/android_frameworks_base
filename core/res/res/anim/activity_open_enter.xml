@@ -22,7 +22,7 @@
         android:fromYDelta="4.1%"
         android:toYDelta="0"
         android:interpolator="@interpolator/fast_out_slow_in"
-        android:duration="425"/>
+        android:duration="300"/>
     <cliprect
         android:fromLeft="0%"
         android:fromTop="95.9%"
@@ -33,5 +33,5 @@
         android:toRight="100%"
         android:toBottom="100%"
         android:interpolator="@interpolator/fast_out_extra_slow_in"
-        android:duration="425"/>
+        android:duration="300"/>
 </set>
