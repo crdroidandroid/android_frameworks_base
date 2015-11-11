@@ -2056,9 +2056,9 @@ public class NotificationPanelView extends PanelView implements
     @Override
     protected float getCannedFlingDurationFactor() {
         if (mQsExpanded) {
-            return 0.7f;
+            return 0.4f;
         } else {
-            return 0.6f;
+            return 0.5f;
         }
     }
 

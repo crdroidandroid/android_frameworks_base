@@ -141,7 +141,7 @@ public class AppTransition implements Dump {
     /** Fraction of animation at which the recents thumbnail becomes completely transparent */
     private static final float RECENTS_THUMBNAIL_FADEOUT_FRACTION = 0.5f;
 
-    static final int DEFAULT_APP_TRANSITION_DURATION = 336;
+    static final int DEFAULT_APP_TRANSITION_DURATION = 270;
 
     /** Interpolator to be used for animations that respond directly to a touch */
     static final Interpolator TOUCH_RESPONSE_INTERPOLATOR =
@@ -154,8 +154,8 @@ public class AppTransition implements Dump {
      * Maximum duration for the clip reveal animation. This is used when there is a lot of movement
      * involved, to make it more understandable.
      */
-    private static final int MAX_CLIP_REVEAL_TRANSITION_DURATION = 420;
-    private static final int THUMBNAIL_APP_TRANSITION_DURATION = 336;
+    private static final int MAX_CLIP_REVEAL_TRANSITION_DURATION = 270;
+    private static final int THUMBNAIL_APP_TRANSITION_DURATION = 270;
     private static final long APP_TRANSITION_TIMEOUT_MS = 5000;
 
     private final Context mContext;
