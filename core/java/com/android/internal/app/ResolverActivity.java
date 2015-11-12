@@ -567,7 +567,18 @@ public class ResolverActivity extends Activity {
             // so we will now finish ourself since being no longer visible,
             // the user probably can't get back to us.
             if (!isChangingConfigurations()) {
-                finish();
+                if (mResolvingHome) {
+                    List<android.app.ActivityManager.RunningTaskInfo> tasks = null;
+                    try {
+                        tasks = ActivityManagerNative.getDefault().getTasks(2, 0);
+                    } catch (RemoteException e) {
+                    }
+                    if (tasks != null && tasks.size() > 1) {
+                        finish();
+                    }
+                } else {
+                    finish();
+                }
             }
         }
     }
