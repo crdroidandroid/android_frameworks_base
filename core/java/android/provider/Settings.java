@@ -2419,6 +2419,12 @@ public final class Settings {
         public static final String SHOW_SU_INDICATOR = "show_su_indicator";
 
         /**
+         * Timeout of long-pressing the Back button
+         * @hide
+         */
+        public static final String KILL_APP_LONGPRESS_TIMEOUT = "kill_app_longpress_timeout";
+
+        /**
          * Scaling factor for fonts, float.
          */
         public static final String FONT_SCALE = "font_scale";
