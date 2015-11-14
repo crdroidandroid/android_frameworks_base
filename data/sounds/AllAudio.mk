@@ -104,8 +104,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/notifications/pizzicato.ogg:system/media/audio/notifications/pizzicato.ogg \
     $(LOCAL_PATH)/notifications/regulus.ogg:system/media/audio/notifications/regulus.ogg \
     $(LOCAL_PATH)/notifications/sirius.ogg:system/media/audio/notifications/sirius.ogg \
-    $(LOCAL_PATH)/notifications/tweeters.ogg:system/media/audio/notifications/tweeters.ogg \
-    $(LOCAL_PATH)/notifications/vega.ogg:system/media/audio/notifications/vega.ogg \
+    $(LOCAL_PATH)/notifications/tweeters.ogg:system/media/audio/notifications/tweeters.ogg
 
 ifeq ($(TARGET_NEEDS_BOOSTED_SOUNDS),true)
 PRODUCT_COPY_FILES += \
