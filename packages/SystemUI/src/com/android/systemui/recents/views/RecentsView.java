@@ -93,6 +93,8 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
     List<TaskStackView> mTaskStackViews = new ArrayList<>();
     RecentsAppWidgetHostView mSearchBar;
     RecentsViewCallbacks mCb;
+    View mClearRecents;
+
     TextView mMemText;
     ProgressBar mMemBar;
 
@@ -201,6 +203,17 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
             }
         }
         return returnTask;
+    }
+
+    public void dismissAllTasksAnimated() {
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = getChildAt(i);
+            if (child != mSearchBar) {
+                TaskStackView stackView = (TaskStackView) child;
+                stackView.dismissAllTasks();
+            }
+        }
     }
 
     /** Launches the focused task from the first stack if possible */
@@ -377,6 +390,14 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         mConfig.getAvailableTaskStackBounds(width, height, mConfig.systemInsets.top,
                 mConfig.systemInsets.right, searchBarSpaceBounds, taskStackBounds);
 
+        if (mClearRecents != null) {
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
+                    mClearRecents.getLayoutParams();
+            params.topMargin = taskStackBounds.top;
+            params.rightMargin = width - taskStackBounds.right;
+            mClearRecents.setLayoutParams(params);
+        }
+
         // Measure each TaskStackView with the full width and height of the window since the
         // transition view is a child of that stack view
         List<TaskStackView> stackViews = getTaskStackViews();
@@ -395,6 +416,23 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         }
 
         setMeasuredDimension(width, height);
+    }
+
+    public void noUserInteraction() {
+        if (mClearRecents != null) {
+            mClearRecents.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow () {
+        super.onAttachedToWindow();
+        mClearRecents = ((View)getParent()).findViewById(R.id.clear_recents);
+        mClearRecents.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dismissAllTasksAnimated();
+            }
+        });
     }
 
     private boolean showMemDisplay() {

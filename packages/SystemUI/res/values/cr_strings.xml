@@ -17,4 +17,8 @@
     <!-- Screen record notification error title -->
     <string name="screenrecord_notif_error">Unable to record screen</string>
 
+    <!-- The text for the button in the notification window-shade that clears
+         all of the currently visible notifications. [CHAR LIMIT=10]-->
+    <string name="clear_recents">Close all recent</string>
+
 </resources>
