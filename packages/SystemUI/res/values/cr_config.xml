@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!--Recents FAB -->
+    <!-- The min animation duration for animating the task bar in. -->
+    <integer name="recents_animate_task_bar_enter_duration">225</integer>
+    <!-- The animation delay for animating the first task in. This should roughly be the animation
+     duration of the transition in to recents. -->
+    <integer name="recents_animate_task_bar_enter_delay">275</integer>
+    <!-- The min animation duration for animating the task bar out. -->
+    <integer name="recents_animate_task_bar_exit_duration">125</integer>
+
+</resources>
