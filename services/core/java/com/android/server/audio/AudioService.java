@@ -3895,17 +3895,15 @@ public class AudioService extends IAudioService.Stub
             } else if (direction == AudioManager.ADJUST_RAISE
                     || direction == AudioManager.ADJUST_TOGGLE_MUTE
                     || direction == AudioManager.ADJUST_UNMUTE) {
-                if (!mVolumePolicy.volumeUpToExitSilent) {
-                    result |= AudioManager.FLAG_SHOW_SILENT_HINT;
+                if (mVolumePolicy.volumeUpToExitSilent && mRingerModeDelegate.canVolumeUpExitSilent()) {
+                     // go straight back to normal.
+                    ringerMode = RINGER_MODE_NORMAL;
                 } else {
-                  if (mHasVibrator && direction == AudioManager.ADJUST_RAISE) {
-                      ringerMode = RINGER_MODE_VIBRATE;
-                  } else {
-                      // If we don't have a vibrator or they were toggling mute
-                      // go straight back to normal.
-                      ringerMode = RINGER_MODE_NORMAL;
-                  }
+                    result |= AudioManager.FLAG_SHOW_SILENT_HINT;
                 }
+            } else if (direction == AudioManager.ADJUST_LOWER) {
+                // volume down when already in silent
+                mRingerModeDelegate.onVolumeDownInSilent(mVolumePolicy);
             }
             result &= ~FLAG_ADJUST_VOLUME;
             break;
