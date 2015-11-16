@@ -57,6 +57,10 @@ public abstract class AudioManagerInternal {
 
         boolean canVolumeDownEnterSilent();
 
+        boolean canVolumeUpExitSilent();
+
+        void onVolumeDownInSilent(VolumePolicy policy);
+
         int getRingerModeAffectedStreams(int streams);
     }
 }
