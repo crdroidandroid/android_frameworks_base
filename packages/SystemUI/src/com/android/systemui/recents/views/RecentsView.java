@@ -95,6 +95,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
     RecentsAppWidgetHostView mSearchBar;
     RecentsViewCallbacks mCb;
     View mClearRecents;
+    View mFloatingButton;
 
     TextView mMemText;
     ProgressBar mMemBar;
@@ -394,27 +395,38 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         boolean showClearAllRecents = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.SHOW_CLEAR_ALL_RECENTS, 1, UserHandle.USER_CURRENT) != 0;
 
-        if (mClearRecents != null && showClearAllRecents) {
+        if (mFloatingButton != null && showClearAllRecents) {
             int clearRecentsLocation = Settings.System.getIntForUser(
                 mContext.getContentResolver(), Settings.System.RECENTS_CLEAR_ALL_LOCATION,
-            Constants.DebugFlags.App.RECENTS_CLEAR_ALL_TOP_RIGHT, UserHandle.USER_CURRENT);
+            Constants.DebugFlags.App.RECENTS_CLEAR_ALL_BOTTOM_RIGHT, UserHandle.USER_CURRENT);
 
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
-                    mClearRecents.getLayoutParams();
+                    mFloatingButton.getLayoutParams();
             params.topMargin = taskStackBounds.top;
-            params.rightMargin = width - taskStackBounds.right;
             switch (clearRecentsLocation) {
                 case Constants.DebugFlags.App.RECENTS_CLEAR_ALL_TOP_LEFT:
                     params.gravity = Gravity.TOP | Gravity.LEFT;
                     break;
                 case Constants.DebugFlags.App.RECENTS_CLEAR_ALL_TOP_RIGHT:
-                default:
                     params.gravity = Gravity.TOP | Gravity.RIGHT;
                     break;
+                case Constants.DebugFlags.App.RECENTS_CLEAR_ALL_TOP_CENTER:
+                    params.gravity = Gravity.TOP | Gravity.CENTER;
+                    break;
+                case Constants.DebugFlags.App.RECENTS_CLEAR_ALL_BOTTOM_LEFT:
+                    params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+                    break;
+                case Constants.DebugFlags.App.RECENTS_CLEAR_ALL_BOTTOM_RIGHT:
+                default:
+                    params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+                    break;
+                case Constants.DebugFlags.App.RECENTS_CLEAR_ALL_BOTTOM_CENTER:
+                    params.gravity = Gravity.BOTTOM | Gravity.CENTER;
+                    break;
             }
-            mClearRecents.setLayoutParams(params);
+            mFloatingButton.setLayoutParams(params);
         } else {
-            mClearRecents.setVisibility(View.GONE);
+            mFloatingButton.setVisibility(View.GONE);
         }
 
         // Measure each TaskStackView with the full width and height of the window since the
@@ -446,6 +458,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
     @Override
     protected void onAttachedToWindow () {
         super.onAttachedToWindow();
+        mFloatingButton = ((View)getParent()).findViewById(R.id.floating_action_button);
         mMemText = (TextView) ((View)getParent()).findViewById(R.id.recents_memory_text);
         mMemBar = (ProgressBar) ((View)getParent()).findViewById(R.id.recents_memory_bar);
         updateMemoryStatus();
