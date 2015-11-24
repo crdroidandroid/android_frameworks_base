@@ -45,4 +45,7 @@
     <color name="tooltip_text_light">@color/foreground_material_light</color>
     <!-- tooltip dark text color -->
     <color name="tooltip_text_dark">@color/foreground_material_dark</color>
+
+    <!-- App permission tint -->
+    <color name="app_permission_icon_tint">@android:color/black</color>
 </resources>
