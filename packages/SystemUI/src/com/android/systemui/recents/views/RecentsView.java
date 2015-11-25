@@ -438,6 +438,13 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         }
         return memory / 1048576;
     }
+    
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mMemText = (TextView) ((View)getParent()).findViewById(R.id.recents_memory_text);
+        mMemBar = (ProgressBar) ((View)getParent()).findViewById(R.id.recents_memory_bar);
+    }
 
     /**
      * This is called with the full size of the window since we are handling our own insets.
