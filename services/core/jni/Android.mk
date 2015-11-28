@@ -3,6 +3,7 @@
 LOCAL_REL_DIR := core/jni
 
 LOCAL_CFLAGS += -Wall -Werror -Wno-unused-parameter
+LOCAL_CFLAGS += -fno-strict-aliasing
 
 ifneq ($(ENABLE_CPUSETS),)
 ifneq ($(ENABLE_SCHED_BOOST),)
