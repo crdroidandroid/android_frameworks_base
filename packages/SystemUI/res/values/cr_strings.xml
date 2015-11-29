@@ -84,4 +84,8 @@
 
     <!-- Screenshot tile -->
     <string name="quick_settings_screenshot_label">Screenshot</string>
+
+    <!-- Reboot tile -->
+    <string name="quick_settings_reboot_label">Reboot</string>
+    <string name="quick_settings_reboot_recovery_label">Recovery</string>
 </resources>
