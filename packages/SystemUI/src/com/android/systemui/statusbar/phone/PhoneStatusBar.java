@@ -956,6 +956,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         });
 
         addGestureAnywhereView();
+        addAppCircleSidebar();
 
         if (mAssistManager == null) {
             mAssistManager = new AssistManager(this, context);

@@ -11,4 +11,9 @@
     <!-- Content description of the power button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_power">Power</string>
 
+    <!-- App circle sidebar -->
+    <string name="app_float_maximize_item_title">Maximize</string>
+    <string name="app_float_item_title">Float view</string>
+    <string name="app_stop_item_title">Kill app</string>
+
 </resources>
