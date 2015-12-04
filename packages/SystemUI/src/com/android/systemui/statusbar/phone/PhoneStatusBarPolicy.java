@@ -381,8 +381,13 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
 
         if (DndTile.isVisible(mContext) || DndTile.isCombinedIcon(mContext)) {
             zenVisible = zen != Global.ZEN_MODE_OFF;
-            zenIconId = zen == Global.ZEN_MODE_NO_INTERRUPTIONS
-                    ? R.drawable.stat_sys_dnd_total_silence : R.drawable.stat_sys_dnd;
+			if (zen == Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS) {
+				zenIconId = R.drawable.stat_sys_dnd_priority;
+			} else if (zen == Global.ZEN_MODE_NO_INTERRUPTIONS) {
+				zenIconId = R.drawable.stat_sys_dnd_total_silence;
+			} else {
+				zenIconId = R.drawable.stat_sys_dnd;
+			}
             zenDescription = mContext.getString(R.string.quick_settings_dnd_label);
         } else if (zen == Global.ZEN_MODE_NO_INTERRUPTIONS) {
             zenVisible = true;
