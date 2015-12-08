@@ -3996,6 +3996,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 || (mNavigationBarView != null && mNavigationBarView.isInEditMode());
     }
 
+    public void postStartActivityDismissingKeyguard(final PendingIntent intent) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                startPendingIntentDismissingKeyguard(intent);
+            }
+        });
+    }
+
     public void postStartActivityDismissingKeyguard(final Intent intent, int delay) {
         mHandler.postDelayed(new Runnable() {
             @Override

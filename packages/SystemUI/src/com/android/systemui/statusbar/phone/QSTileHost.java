@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.phone;
 
 import android.app.ActivityManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -187,6 +188,11 @@ public class QSTileHost implements QSTile.Host, Tunable {
             mCustomTileListenerService.removeCustomTile(customTile.getPackage(),
                     customTile.getTag(), customTile.getId());
         }
+    }
+
+    @Override
+    public void startActivityDismissingKeyguard(PendingIntent intent) {
+        mStatusBar.postStartActivityDismissingKeyguard(intent);
     }
 
     @Override
