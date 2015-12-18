@@ -18,7 +18,7 @@ package com.android.internal.util.crdroid;
 
 import android.content.Context;
 
-public class CrUtils {
+public class crUtils {
 
     public static boolean isNavBarDefault(Context context) {
         return context.getResources().getBoolean(
