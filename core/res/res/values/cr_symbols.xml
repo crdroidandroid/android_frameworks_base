@@ -17,9 +17,6 @@
   <java-symbol type="style" name="Animation.Toast.SlideRightLeft" />
   <java-symbol type="style" name="Animation.Toast.SlideLeftRight" />
 
-  <!-- Screen record shortcut -->
-  <java-symbol type="bool" name="config_enableScreenrecordChord" />
-
   <!-- Hardware keys on/off option -->
   <java-symbol type="bool" name="config_hwKeysPref" />
 
