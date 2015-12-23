@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Screen is being recorded</string>
-
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Recording screen</string>
-
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Stop</string>
-
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Show pointer</string>
-    <string name="screenrecord_notif_pointer_off">Hide pointer</string>
-
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Unable to record screen</string>
-
     <!-- The text for the button in the notification window-shade that clears
          all of the currently visible notifications. [CHAR LIMIT=10]-->
     <string name="clear_recents">Close all recent</string>
