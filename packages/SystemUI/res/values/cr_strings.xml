@@ -5,4 +5,10 @@
          all of the currently visible notifications. [CHAR LIMIT=10]-->
     <string name="clear_recents">Close all recent</string>
 
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_power_button">Power button</string>
+
+    <!-- Content description of the power button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_power">Power</string>
+
 </resources>
