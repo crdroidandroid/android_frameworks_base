@@ -3125,6 +3125,13 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         return mStatusBarView.getBarTransitions();
     }
 
+    @Override  // CommandQueue
+    public void setAutoRotate(boolean enabled) {
+        Settings.System.putIntForUser(mContext.getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION,
+                enabled ? 1 : 0, UserHandle.USER_CURRENT);
+    }
+
     protected int computeBarMode(int oldVis, int newVis,
             int transientFlag, int translucentFlag, int transparentFlag) {
         final int oldMode = barMode(oldVis, transientFlag, translucentFlag, transparentFlag);
