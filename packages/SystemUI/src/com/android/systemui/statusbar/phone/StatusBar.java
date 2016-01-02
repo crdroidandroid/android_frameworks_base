@@ -402,12 +402,19 @@ public class StatusBar extends SystemUI implements DemoMode,
      */
     private static final float SRC_MIN_ALPHA = 0.002f;
 
+    private boolean mCustomMaxKeyguard;
+    private int mMaxKeyguardNotifConfig;
+
     private static final String SCREEN_BRIGHTNESS_MODE =
             "system:" + Settings.System.SCREEN_BRIGHTNESS_MODE;
     private static final String STATUS_BAR_BRIGHTNESS_CONTROL =
             "lineagesystem:" + LineageSettings.System.STATUS_BAR_BRIGHTNESS_CONTROL;
     private static final String LOCKSCREEN_MEDIA_METADATA =
             "lineagesecure:" + LineageSettings.Secure.LOCKSCREEN_MEDIA_METADATA;
+    private static final String LOCK_SCREEN_CUSTOM_NOTIF =
+            "system:" + Settings.System.LOCK_SCREEN_CUSTOM_NOTIF;
+    private static final String LOCKSCREEN_MAX_NOTIF_CONFIG =
+            "system:" + Settings.System.LOCKSCREEN_MAX_NOTIF_CONFIG;
 
     static {
         boolean onlyCoreApps;
@@ -1077,7 +1084,9 @@ public class StatusBar extends SystemUI implements DemoMode,
         Dependency.get(TunerService.class).addTunable(this,
                 SCREEN_BRIGHTNESS_MODE,
                 STATUS_BAR_BRIGHTNESS_CONTROL,
-                LOCKSCREEN_MEDIA_METADATA);
+                LOCKSCREEN_MEDIA_METADATA,
+                LOCK_SCREEN_CUSTOM_NOTIF,
+                LOCKSCREEN_MAX_NOTIF_CONFIG);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController);
@@ -5241,13 +5250,18 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     protected int getMaxKeyguardNotifications(boolean recompute) {
-        if (recompute) {
-            mMaxKeyguardNotifications = Math.max(1,
-                    mNotificationPanel.computeMaxKeyguardNotifications(
-                            mMaxAllowedKeyguardNotifications));
-            return mMaxKeyguardNotifications;
+        if (mCustomMaxKeyguard) {
+            return mMaxKeyguardNotifConfig;
+        } else {
+           if (recompute) {
+               mMaxKeyguardNotifications = Math.max(1,
+                       mNotificationPanel.computeMaxKeyguardNotifications(
+                               mMaxAllowedKeyguardNotifications));
+               return mMaxKeyguardNotifications;
+           } else {
+               return mMaxKeyguardNotifications;
+           }
         }
-        return mMaxKeyguardNotifications;
     }
 
     public int getMaxKeyguardNotifications() {
@@ -7917,6 +7931,14 @@ public class StatusBar extends SystemUI implements DemoMode,
                 break;
             case LOCKSCREEN_MEDIA_METADATA:
                 mShowMediaMetadata = newValue == null || Integer.parseInt(newValue) == 1;
+                break;
+            case LOCK_SCREEN_CUSTOM_NOTIF:
+                mCustomMaxKeyguard =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                break;
+            case LOCKSCREEN_MAX_NOTIF_CONFIG:
+                mMaxKeyguardNotifConfig =
+                        newValue == null ? 5 : Integer.parseInt(newValue);
                 break;
             default:
                 break;
