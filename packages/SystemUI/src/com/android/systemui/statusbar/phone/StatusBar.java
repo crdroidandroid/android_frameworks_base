@@ -232,6 +232,8 @@ import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout
         .OnChildLocationsChangedListener;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
+import com.android.systemui.tuner.TunerService;
+import com.android.systemui.tuner.TunerServiceImpl;
 import com.android.systemui.util.NotificationChannels;
 import com.android.systemui.util.leak.LeakDetector;
 import com.android.systemui.volume.VolumeComponent;
@@ -255,7 +257,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         OnHeadsUpChangedListener, VisualStabilityManager.Callback, CommandQueue.Callbacks,
         ActivatableNotificationView.OnActivatedListener,
         ExpandableNotificationRow.ExpansionLogger, NotificationData.Environment,
-        ExpandableNotificationRow.OnExpandClickListener, InflationCallback {
+        ExpandableNotificationRow.OnExpandClickListener, InflationCallback, TunerService.Tunable {
     public static final boolean MULTIUSER_DEBUG = false;
 
     public static final boolean ENABLE_REMOTE_INPUT =
@@ -451,6 +453,14 @@ public class StatusBar extends SystemUI implements DemoMode,
     int mMaxAllowedKeyguardNotifications;
 
     boolean mExpandedVisible;
+
+    private static final String LOCK_SCREEN_CUSTOM_NOTIF =
+            "system:" + Settings.System.LOCK_SCREEN_CUSTOM_NOTIF;
+    private static final String LOCKSCREEN_MAX_NOTIF_CONFIG =
+            "system:" + Settings.System.LOCKSCREEN_MAX_NOTIF_CONFIG;
+
+    private boolean mCustomMaxKeyguard;
+    private int mMaxKeyguardNotifConfig;
 
     // the tracker view
     int mTrackingPosition; // the position of the top of the tracking view.
@@ -955,6 +965,26 @@ public class StatusBar extends SystemUI implements DemoMode,
             }
         };
         Dependency.get(ConfigurationController.class).addCallback(mConfigurationListener);
+
+        Dependency.get(TunerService.class).addTunable(this,
+                LOCK_SCREEN_CUSTOM_NOTIF,
+                LOCKSCREEN_MAX_NOTIF_CONFIG);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case LOCK_SCREEN_CUSTOM_NOTIF:
+                mCustomMaxKeyguard =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                break;
+            case LOCKSCREEN_MAX_NOTIF_CONFIG:
+                mMaxKeyguardNotifConfig =
+                        newValue == null ? 5 : Integer.parseInt(newValue);
+                break;
+            default:
+                break;
+        }
     }
 
     protected void createIconController() {
@@ -4618,13 +4648,18 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     protected int getMaxKeyguardNotifications(boolean recompute) {
-        if (recompute) {
-            mMaxKeyguardNotifications = Math.max(1,
-                    mNotificationPanel.computeMaxKeyguardNotifications(
-                            mMaxAllowedKeyguardNotifications));
-            return mMaxKeyguardNotifications;
+        if (mCustomMaxKeyguard) {
+            return mMaxKeyguardNotifConfig;
+        } else {
+           if (recompute) {
+               mMaxKeyguardNotifications = Math.max(1,
+                       mNotificationPanel.computeMaxKeyguardNotifications(
+                               mMaxAllowedKeyguardNotifications));
+               return mMaxKeyguardNotifications;
+           } else {
+               return mMaxKeyguardNotifications;
+           }
         }
-        return mMaxKeyguardNotifications;
     }
 
     public int getMaxKeyguardNotifications() {
