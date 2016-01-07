@@ -3836,6 +3836,12 @@ public final class Settings {
                 "lockscreen_shortcuts_longpress";
 
         /**
+         * List of Apps hidden from recents
+         * @hide
+         */
+        public static final String HIDE_FROM_RECENTS_LIST = "hide_from_recents_list";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
