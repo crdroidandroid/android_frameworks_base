@@ -1058,13 +1058,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mUserSwitcherController, mUserInfoController, mKeyguardMonitor,
                     mSecurityController, mBatteryController, mIconController,
                     mNextAlarmController);
-            mBrightnessMirrorController = new BrightnessMirrorController(mStatusBarWindow);
+            mBrightnessMirrorController = new BrightnessMirrorController(mContext, mStatusBarWindow);
             container.addInflateListener(new InflateListener() {
                 @Override
                 public void onInflated(View v) {
                     QSContainer qsContainer = (QSContainer) v.findViewById(
                             R.id.quick_settings_container);
                     qsContainer.setHost(qsh);
+                    mBrightnessMirrorController.onDensityOrFontScaleChanged();
                     mQSPanel = qsContainer.getQsPanel();
                     mQSPanel.setBrightnessMirror(mBrightnessMirrorController);
                     mKeyguardStatusBar.setQSPanel(mQSPanel);
