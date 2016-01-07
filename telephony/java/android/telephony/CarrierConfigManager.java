@@ -1102,6 +1102,12 @@ public class CarrierConfigManager {
     public static final String KEY_SHOW_PRECISE_FAILED_CAUSE_BOOL =
             "show_precise_failed_cause_bool";
 
+    /**
+     * Flag specifying whether CDMA call waiting and call forwarding are enabled
+     * @hide
+     */
+    public static final String KEY_CDMA_CW_CF_ENABLED_BOOL = "cdma_cw_cf_enabled_bool";
+
     // These variables are used by the MMS service and exposed through another API, {@link
     // SmsManager}. The variable names and string values are copied from there.
     public static final String KEY_MMS_ALIAS_ENABLED_BOOL = "aliasEnabled";
@@ -2108,6 +2114,7 @@ public class CarrierConfigManager {
         // Todo: This will be fixed in Q when IWLAN full refactoring is completed.
         sDefaults.putStringArray(KEY_CARRIER_METERED_IWLAN_APN_TYPES_STRINGS,
                 new String[]{"default"});
+        sDefaults.putBoolean(KEY_CDMA_CW_CF_ENABLED_BOOL, false);
 
         sDefaults.putIntArray(KEY_ONLY_SINGLE_DC_ALLOWED_INT_ARRAY,
                 new int[]{
