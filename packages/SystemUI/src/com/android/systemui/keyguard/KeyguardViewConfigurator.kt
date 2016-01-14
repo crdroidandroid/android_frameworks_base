@@ -136,6 +136,7 @@ constructor(
                 keyguardRootViewModel,
                 keyguardBlueprintViewModel,
                 configuration,
+                context,
                 shadeInteractor,
                 smartspaceViewModel,
                 deviceEntryHapticsInteractor,
