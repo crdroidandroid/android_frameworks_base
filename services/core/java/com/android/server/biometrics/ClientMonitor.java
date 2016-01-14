@@ -22,8 +22,10 @@ import android.hardware.biometrics.BiometricConstants;
 import android.media.AudioAttributes;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.util.Slog;
 
 import com.android.internal.logging.MetricsLogger;
@@ -296,6 +298,11 @@ public abstract class ClientMonitor extends LoggableMonitor implements IBinder.D
     }
 
     public final void vibrateSuccess() {
+        boolean FingerprintVib = Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.FP_SUCCESS_VIBRATE, 1, UserHandle.USER_CURRENT) == 1;
+        if (!FingerprintVib)
+            return;
+
         Vibrator vibrator = mContext.getSystemService(Vibrator.class);
         if (vibrator != null) {
             vibrator.vibrate(mSuccessVibrationEffect, FINGERPRINT_SONFICATION_ATTRIBUTES);
@@ -303,6 +310,11 @@ public abstract class ClientMonitor extends LoggableMonitor implements IBinder.D
     }
 
     public final void vibrateError() {
+        boolean FingerprintVib = Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.FP_ERROR_VIBRATE, 1, UserHandle.USER_CURRENT) == 1;
+        if (!FingerprintVib)
+            return;
+
         Vibrator vibrator = mContext.getSystemService(Vibrator.class);
         if (vibrator != null) {
             vibrator.vibrate(mErrorVibrationEffect, FINGERPRINT_SONFICATION_ATTRIBUTES);
