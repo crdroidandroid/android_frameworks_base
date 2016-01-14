@@ -20,8 +20,11 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.DrawableRes
 import android.annotation.SuppressLint
+import android.content.Context;
 import android.graphics.Point
 import android.graphics.Rect
+import android.os.UserHandle;
+import android.provider.Settings
 import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.View
@@ -99,6 +102,7 @@ object KeyguardRootViewBinder {
         viewModel: KeyguardRootViewModel,
         blueprintViewModel: KeyguardBlueprintViewModel,
         configuration: ConfigurationState,
+        context: Context,
         occludingAppDeviceEntryMessageViewModel: OccludingAppDeviceEntryMessageViewModel?,
         chipbarCoordinator: ChipbarCoordinator?,
         screenOffAnimationController: ScreenOffAnimationController,
@@ -327,21 +331,31 @@ object KeyguardRootViewBinder {
                     if (deviceEntryHapticsInteractor != null && vibratorHelper != null) {
                         launch {
                             deviceEntryHapticsInteractor.playSuccessHaptic.collect {
-                                vibratorHelper.performHapticFeedback(
-                                    view,
-                                    HapticFeedbackConstants.CONFIRM,
-                                    HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING,
-                                )
+                                var FingerprintVib : Boolean = Settings.System.getIntForUser(
+                                            context.contentResolver,
+                                            Settings.System.FP_SUCCESS_VIBRATE, 1, UserHandle.USER_CURRENT) == 1
+                                if (FingerprintVib) {
+                                    vibratorHelper.performHapticFeedback(
+                                        view,
+                                        HapticFeedbackConstants.CONFIRM,
+                                        HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING,
+                                    )
+                                }
                             }
                         }
 
                         launch {
                             deviceEntryHapticsInteractor.playErrorHaptic.collect {
-                                vibratorHelper.performHapticFeedback(
-                                    view,
-                                    HapticFeedbackConstants.REJECT,
-                                    HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING,
-                                )
+                                var FingerprintVibErr : Boolean = Settings.System.getIntForUser(
+                                            context.contentResolver,
+                                            Settings.System.FP_ERROR_VIBRATE, 1, UserHandle.USER_CURRENT) == 1
+                                if (FingerprintVibErr) {
+                                    vibratorHelper.performHapticFeedback(
+                                        view,
+                                        HapticFeedbackConstants.REJECT,
+                                        HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING,
+                                    )
+                                }
                             }
                         }
                     }
