@@ -19,6 +19,7 @@ package com.android.systemui.statusbar.phone;
 import static android.app.StatusBarManager.SESSION_KEYGUARD;
 
 import android.annotation.IntDef;
+import android.content.Context;
 import android.content.res.Resources;
 import android.hardware.biometrics.BiometricFaceConstants;
 import android.hardware.biometrics.BiometricFingerprintConstants;
@@ -29,6 +30,8 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.Trace;
+import android.os.UserHandle;
+import android.provider.Settings;
 
 import androidx.annotation.Nullable;
 
@@ -172,6 +175,7 @@ public class BiometricUnlockController extends KeyguardUpdateMonitorCallback imp
     private final LatencyTracker mLatencyTracker;
     private final VibratorHelper mVibratorHelper;
     private final BiometricUnlockLogger mLogger;
+    private final Context mContext;
 
     private long mLastFpFailureUptimeMillis;
     private int mNumConsecutiveFpFailures;
@@ -279,7 +283,8 @@ public class BiometricUnlockController extends KeyguardUpdateMonitorCallback imp
             SessionTracker sessionTracker,
             LatencyTracker latencyTracker,
             ScreenOffAnimationController screenOffAnimationController,
-            VibratorHelper vibrator) {
+            VibratorHelper vibrator,
+            Context context) {
         mPowerManager = powerManager;
         mShadeController = shadeController;
         mUpdateMonitor = keyguardUpdateMonitor;
@@ -306,6 +311,7 @@ public class BiometricUnlockController extends KeyguardUpdateMonitorCallback imp
         mScreenOffAnimationController = screenOffAnimationController;
         mVibratorHelper = vibrator;
         mLogger = biometricUnlockLogger;
+        mContext = context;
 
         dumpManager.registerDumpable(getClass().getName(), this);
     }
@@ -720,13 +726,21 @@ public class BiometricUnlockController extends KeyguardUpdateMonitorCallback imp
 
     //these haptics are for device-entry only
     private void vibrateSuccess(BiometricSourceType type) {
-        mVibratorHelper.vibrateAuthSuccess(
+        boolean FingerprintVib = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.FP_SUCCESS_VIBRATE, 1, UserHandle.USER_CURRENT) == 1;
+        if (FingerprintVib) {
+            mVibratorHelper.vibrateAuthSuccess(
                 getClass().getSimpleName() + ", type =" + type + "device-entry::success");
+        }
     }
 
     private void vibrateError(BiometricSourceType type) {
-        mVibratorHelper.vibrateAuthError(
-                getClass().getSimpleName() + ", type =" + type + "device-entry::error");
+        boolean FingerprintVib = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.FP_ERROR_VIBRATE, 1, UserHandle.USER_CURRENT) == 1;
+        if (FingerprintVib) {
+            mVibratorHelper.vibrateAuthError(
+                    getClass().getSimpleName() + ", type =" + type + "device-entry::error");
+        }
     }
 
     private void cleanup() {
