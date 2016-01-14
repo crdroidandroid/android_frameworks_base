@@ -21,6 +21,7 @@ import static android.app.StatusBarManager.SESSION_KEYGUARD;
 import static com.android.systemui.keyguard.WakefulnessLifecycle.UNKNOWN_LAST_WAKE_TIME;
 
 import android.annotation.IntDef;
+import android.content.Context;
 import android.content.res.Resources;
 import android.hardware.biometrics.BiometricFaceConstants;
 import android.hardware.biometrics.BiometricFingerprintConstants;
@@ -30,6 +31,8 @@ import android.metrics.LogMaker;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.Trace;
+import android.os.UserHandle;
+import android.provider.Settings;
 
 import androidx.annotation.Nullable;
 
@@ -173,6 +176,7 @@ public class BiometricUnlockController extends KeyguardUpdateMonitorCallback imp
     private final VibratorHelper mVibratorHelper;
     private final BiometricUnlockLogger mLogger;
     private final SystemClock mSystemClock;
+    private final Context mContext;
 
     private long mLastFpFailureUptimeMillis;
     private int mNumConsecutiveFpFailures;
@@ -280,7 +284,8 @@ public class BiometricUnlockController extends KeyguardUpdateMonitorCallback imp
             LatencyTracker latencyTracker,
             ScreenOffAnimationController screenOffAnimationController,
             VibratorHelper vibrator,
-            SystemClock systemClock
+            SystemClock systemClock,
+            Context context
     ) {
         mPowerManager = powerManager;
         mUpdateMonitor = keyguardUpdateMonitor;
@@ -308,6 +313,7 @@ public class BiometricUnlockController extends KeyguardUpdateMonitorCallback imp
         mVibratorHelper = vibrator;
         mLogger = biometricUnlockLogger;
         mSystemClock = systemClock;
+        mContext = context;
 
         dumpManager.registerDumpable(getClass().getName(), this);
     }
@@ -750,8 +756,12 @@ public class BiometricUnlockController extends KeyguardUpdateMonitorCallback imp
             mLogger.d("Skip auth success haptic. Power button was recently pressed.");
             return;
         }
-        mVibratorHelper.vibrateAuthSuccess(
+        boolean FingerprintVib = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.FP_SUCCESS_VIBRATE, 1, UserHandle.USER_CURRENT) == 1;
+        if (FingerprintVib) {
+            mVibratorHelper.vibrateAuthSuccess(
                 getClass().getSimpleName() + ", type =" + type + "device-entry::success");
+        }
     }
 
     private boolean lastWakeupFromPowerButtonWithinHapticThreshold() {
@@ -764,8 +774,12 @@ public class BiometricUnlockController extends KeyguardUpdateMonitorCallback imp
     }
 
     private void vibrateError(BiometricSourceType type) {
-        mVibratorHelper.vibrateAuthError(
-                getClass().getSimpleName() + ", type =" + type + "device-entry::error");
+        boolean FingerprintVib = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.FP_ERROR_VIBRATE, 1, UserHandle.USER_CURRENT) == 1;
+        if (FingerprintVib) {
+            mVibratorHelper.vibrateAuthError(
+                    getClass().getSimpleName() + ", type =" + type + "device-entry::error");
+        }
     }
 
     private void cleanup() {
