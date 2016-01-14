@@ -27,6 +27,8 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Slog;
 
 /**
@@ -194,7 +196,9 @@ public abstract class AcquisitionClient<T> extends HalClientMonitor<T> implement
 
     protected final void vibrateSuccess() {
         Vibrator vibrator = getContext().getSystemService(Vibrator.class);
-        if (vibrator != null) {
+        boolean shouldVib = Settings.System.getIntForUser(getContext().getContentResolver(),
+            Settings.System.FP_SUCCESS_VIBRATE, 1, UserHandle.USER_CURRENT) == 1;
+        if (vibrator != null && shouldVib) {
             vibrator.vibrate(Process.myUid(),
                     getContext().getOpPackageName(),
                     SUCCESS_VIBRATION_EFFECT,
@@ -205,7 +209,9 @@ public abstract class AcquisitionClient<T> extends HalClientMonitor<T> implement
 
     protected final void vibrateError() {
         Vibrator vibrator = getContext().getSystemService(Vibrator.class);
-        if (vibrator != null) {
+        boolean shouldVib = Settings.System.getIntForUser(getContext().getContentResolver(),
+            Settings.System.FP_ERROR_VIBRATE, 1, UserHandle.USER_CURRENT) == 1;
+        if (vibrator != null && shouldVib) {
             vibrator.vibrate(Process.myUid(),
                     getContext().getOpPackageName(),
                     ERROR_VIBRATION_EFFECT,
