@@ -3729,6 +3729,12 @@ public final class Settings {
 
 
         /**
+         * Transparent qs shade
+         * @hide
+         */
+        public static final String QS_TRANSPARENT_SHADE = "qs_transparent_shade";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
