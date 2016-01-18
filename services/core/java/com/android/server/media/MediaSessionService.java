@@ -1117,7 +1117,13 @@ public class MediaSessionService extends SystemService implements Monitor {
             @Override
             public void onSendFinished(PendingIntent pendingIntent, Intent intent, int resultCode,
                     String resultData, Bundle resultExtras) {
-                onReceiveResult(resultCode, null);
+                final int rc = resultCode;
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        onReceiveResult(rc, null);
+                    }
+                });
             }
         };
 
