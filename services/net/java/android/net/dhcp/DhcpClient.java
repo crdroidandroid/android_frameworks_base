@@ -640,6 +640,8 @@ public class DhcpClient extends StateMachine {
     }
 
     public boolean isValidPacket(DhcpPacket packet) {
+        if (packet == null)
+            return false;
         // TODO: check checksum.
         int xid = packet.getTransactionId();
         if (xid != mTransactionId) {
