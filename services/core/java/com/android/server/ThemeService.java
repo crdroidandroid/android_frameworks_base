@@ -96,7 +96,7 @@ public class ThemeService extends IThemeService.Stub {
     private static final boolean DEBUG = false;
 
     private static final String GOOGLE_SETUPWIZARD_PACKAGE = "com.google.android.setupwizard";
-    private static final String CM_SETUPWIZARD_PACKAGE = "com.cyanogenmod.account";
+    private static final String CM_SETUPWIZARD_PACKAGE = "com.cyanogenmod.setupwizard";
     private static final String MANAGED_PROVISIONING_PACKAGE = "com.android.managedprovisioning";
 
     private static final long MAX_ICON_CACHE_SIZE = 33554432L; // 32MB
@@ -453,8 +453,8 @@ public class ThemeService extends IThemeService.Stub {
 
     private void doApplyDefaultTheme() {
         final ContentResolver resolver = mContext.getContentResolver();
-        final String defaultThemePkg = Settings.Secure.getString(resolver,
-                Settings.Secure.DEFAULT_THEME_PACKAGE);
+        final String defaultThemePkg = CMSettings.Secure.getString(resolver,
+                CMSettings.Secure.DEFAULT_THEME_PACKAGE);
         if (!TextUtils.isEmpty(defaultThemePkg)) {
             String defaultThemeComponents = CMSettings.Secure.getString(resolver,
                     CMSettings.Secure.DEFAULT_THEME_COMPONENTS);
