@@ -4340,6 +4340,26 @@ public final class Settings {
         public static final String QS_EXPAND_INDICATOR_TOGGLE = "qs_expand_indicator_toggle";
 
         /**
+         * Settings for clock font style
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_FONT_STYLE = "statusbar_clock_font_style";
+
+        /**
+         * Settings for clock font size
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_FONT_SIZE = "statusbar_clock_font_size";
+
+        /**
+         * Position of date
+         * 0 - Left of clock
+         * 1 - Right of clock
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_DATE_POSITION = "statusbar_clock_date_position";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
