@@ -2652,6 +2652,13 @@ public class NotificationPanelView extends PanelView implements
             mQSShadeAlpha = Settings.System.getInt(
                     resolver, Settings.System.QS_TRANSPARENT_SHADE, 255);
             setQSBackgroundAlpha();
+
+            boolean liveLockScreenEnabled = CMSettings.Secure.getInt(
+                    resolver, CMSettings.Secure.LIVE_LOCK_SCREEN_ENABLED, 0) == 1;
+            if (liveLockScreenEnabled != mLiveLockScreenEnabled) {
+                mLiveLockScreenEnabled = liveLockScreenEnabled;
+                updateExternalKeyguardView();
+            }
         }
     }
 
@@ -2662,13 +2669,6 @@ public class NotificationPanelView extends PanelView implements
         }
         if (mQsPanel != null) {
             mQsPanel.setQSShadeAlphaValue(mQSShadeAlpha);
-
-            boolean liveLockScreenEnabled = CMSettings.Secure.getInt(
-                    resolver, CMSettings.Secure.LIVE_LOCK_SCREEN_ENABLED, 0) == 1;
-            if (liveLockScreenEnabled != mLiveLockScreenEnabled) {
-                mLiveLockScreenEnabled = liveLockScreenEnabled;
-                updateExternalKeyguardView();
-            }
         }
     }
 
