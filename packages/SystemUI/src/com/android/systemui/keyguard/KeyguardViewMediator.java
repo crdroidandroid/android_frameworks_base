@@ -203,7 +203,6 @@ public class KeyguardViewMediator extends SystemUI {
     private AudioManager mAudioManager;
     private StatusBarManager mStatusBarManager;
     private boolean mSwitchingUser;
-    private ProfileManager mProfileManager;
     private boolean mSystemReady;
     private boolean mBootCompleted;
     private boolean mBootSendUserPresent;
@@ -290,7 +289,7 @@ public class KeyguardViewMediator extends SystemUI {
     /**
      * Whether we are disabling the lock screen internally
      */
-    private Boolean mInternallyDisabled = null;
+    private boolean mInternallyDisabled = false;
 
     /**
      * we send this intent when the keyguard is dismissed.
@@ -517,7 +516,10 @@ public class KeyguardViewMediator extends SystemUI {
                     break;
                 case READY:
                     synchronized (this) {
-                        if (mShowing) {
+                        if ((mInternallyDisabled || isProfileDisablingKeyguard())
+                                && !mUpdateMonitor.isSimPinSecure()) {
+                            hideLocked();
+                        } else if (mShowing) {
                             resetStateLocked();
                         }
                     }
@@ -625,7 +627,6 @@ public class KeyguardViewMediator extends SystemUI {
 
         mShowKeyguardWakeLock = mPM.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "show keyguard");
         mShowKeyguardWakeLock.setReferenceCounted(false);
-        mProfileManager = ProfileManager.getInstance(mContext);
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(DELAYED_KEYGUARD_ACTION));
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(DISMISS_KEYGUARD_SECURELY_ACTION),
                 android.Manifest.permission.CONTROL_KEYGUARD, null);
@@ -691,18 +692,12 @@ public class KeyguardViewMediator extends SystemUI {
                         getPersistedDefaultOldSetting() ? 1 : 0,
                         UserHandle.USER_CURRENT) == 0;
 
-                if (mKeyguardBound) {
-                    if (mInternallyDisabled == null) {
-                        // if it's enabled on boot, don't go through the notions of
-                        // setting it enabled, as it might cause a flicker, just set the state
-                        if (newDisabledState) {
-                            setKeyguardEnabledInternal(false); // will set mInternallyDisabled
-                        } else {
-                            mInternallyDisabled = false;
+                synchronized (KeyguardViewMediator.this) {
+                    if (mKeyguardBound) {
+                        if (newDisabledState != mInternallyDisabled) {
+                            // it was updated,
+                            setKeyguardEnabledInternal(!newDisabledState);
                         }
-                    } else if (newDisabledState != mInternallyDisabled) {
-                        // it was updated,
-                        setKeyguardEnabledInternal(!newDisabledState);
                     }
                 }
             }
@@ -761,7 +756,7 @@ public class KeyguardViewMediator extends SystemUI {
                     Slog.w(TAG, "Failed to call onKeyguardExitResult(false)", e);
                 }
                 mExitSecureCallback = null;
-                if (!mExternallyEnabled) {
+                if (!mInternallyDisabled && !mExternallyEnabled) {
                     hideLocked();
                 }
             } else if (mShowing) {
@@ -914,15 +909,16 @@ public class KeyguardViewMediator extends SystemUI {
             if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by setting");
             return true;
         }
-        Profile profile = mProfileManager.getActiveProfile();
-        if (profile != null) {
-            if (profile.getScreenLockMode().getValue() == Profile.LockMode.DISABLE) {
-                if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by profile");
-                return true;
-            }
-         }
+        if (mInternallyDisabled) {
+            if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled internally");
+            return true;
+        }
+        if (isProfileDisablingKeyguard()) {
+            if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by profile");
+            return true;
+        }
         return false;
-     }
+    }
 
     /**
      * A dream started.  We should lock after the usual screen-off lock timeout but only
@@ -955,6 +951,10 @@ public class KeyguardViewMediator extends SystemUI {
      */
     public void setKeyguardEnabledInternal(boolean enabled) {
         mInternallyDisabled = !enabled;
+        if (!mUpdateMonitor.isSimPinSecure()) {
+            // disable when sim is ready
+            return;
+        }
         setKeyguardEnabled(enabled);
         if (mInternallyDisabled) {
             mNeedToReshowWhenReenabled = false;
@@ -965,6 +965,12 @@ public class KeyguardViewMediator extends SystemUI {
         return !mInternallyDisabled;
     }
 
+    public boolean isProfileDisablingKeyguard() {
+        final Profile activeProfile = ProfileManager.getInstance(mContext).getActiveProfile();
+        return activeProfile != null
+                && activeProfile.getScreenLockMode().getValue() == Profile.LockMode.DISABLE;
+    }
+
     /**
      * Same semantics as {@link android.view.WindowManagerPolicy#enableKeyguard}; provide
      * a way for external stuff to override normal keyguard behavior.  For instance
@@ -973,14 +979,14 @@ public class KeyguardViewMediator extends SystemUI {
     public void setKeyguardEnabled(boolean enabled) {
         synchronized (this) {
             if (DEBUG) Log.d(TAG, "setKeyguardEnabled(" + enabled + ")");
-
-            if (mInternallyDisabled && enabled && !lockscreenEnforcedByDevicePolicy()) {
+            mExternallyEnabled = enabled;
+            if (mInternallyDisabled
+                    && enabled
+                    && !lockscreenEnforcedByDevicePolicy()) {
                 // if keyguard is forcefully disabled internally (by lock screen tile), don't allow
                 // it to be enabled externally, unless the device policy manager says so.
                 return;
             }
-
-            mExternallyEnabled = enabled;
 
             if (!enabled && mShowing) {
                 if (mExitSecureCallback != null) {
@@ -993,7 +999,7 @@ public class KeyguardViewMediator extends SystemUI {
                 // hiding keyguard that is showing, remember to reshow later
                 if (DEBUG) Log.d(TAG, "remembering to reshow, hiding keyguard, "
                         + "disabling status bar expansion");
-                mNeedToReshowWhenReenabled = true;
+                mNeedToReshowWhenReenabled = !isProfileDisablingKeyguard();
                 updateInputRestrictedLocked();
                 hideLocked();
             } else if (enabled && mNeedToReshowWhenReenabled) {
@@ -1173,22 +1179,6 @@ public class KeyguardViewMediator extends SystemUI {
      * Enable the keyguard if the settings are appropriate.
      */
     private void doKeyguardLocked(Bundle options) {
-        // if another app is disabling us, don't show
-        if (!mExternallyEnabled) {
-            if (DEBUG) Log.d(TAG, "doKeyguard: not showing because externally disabled");
-
-            // note: we *should* set mNeedToReshowWhenReenabled=true here, but that makes
-            // for an occasional ugly flicker in this situation:
-            // 1) receive a call with the screen on (no keyguard) or make a call
-            // 2) screen times out
-            // 3) user hits key to turn screen back on
-            // instead, we reenable the keyguard when we know the screen is off and the call
-            // ends (see the broadcast receiver below)
-            // TODO: clean this up when we have better support at the window manager level
-            // for apps that wish to be on top of the keyguard
-            return;
-        }
-
         // if the keyguard is already showing, don't bother
         if (mStatusBarKeyguardViewManager.isShowing()) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because it is already showing");
@@ -1211,9 +1201,30 @@ public class KeyguardViewMediator extends SystemUI {
             return;
         }
 
+        // if another app is disabling us, don't show
+        if (!mExternallyEnabled && !lockedOrMissing) {
+            if (DEBUG) Log.d(TAG, "doKeyguard: not showing because externally disabled");
+
+            // note: we *should* set mNeedToReshowWhenReenabled=true here, but that makes
+            // for an occasional ugly flicker in this situation:
+            // 1) receive a call with the screen on (no keyguard) or make a call
+            // 2) screen times out
+            // 3) user hits key to turn screen back on
+            // instead, we reenable the keyguard when we know the screen is off and the call
+            // ends (see the broadcast receiver below)
+            // TODO: clean this up when we have better support at the window manager level
+            // for apps that wish to be on top of the keyguard
+            return;
+        }
+
         if (isKeyguardDisabled(KeyguardUpdateMonitor.getCurrentUser())
                 && !lockedOrMissing) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because lockscreen is off");
+            // update state
+            setShowingLocked(false);
+            updateActivityLockScreenState();
+            adjustStatusBarLocked();
+            userActivity();
             return;
         }
 
@@ -1541,6 +1552,10 @@ public class KeyguardViewMediator extends SystemUI {
 
     private void playSound(int soundId) {
         if (soundId == 0) return;
+        if (mInternallyDisabled) {
+            Log.d(TAG, "suppressing lock screen sounds because it is disabled");
+            return;
+        }
         final ContentResolver cr = mContext.getContentResolver();
         if (Settings.System.getInt(cr, Settings.System.LOCKSCREEN_SOUNDS_ENABLED, 1) == 1) {
 
@@ -1726,7 +1741,7 @@ public class KeyguardViewMediator extends SystemUI {
     private void handleReset() {
         synchronized (KeyguardViewMediator.this) {
             if (DEBUG) Log.d(TAG, "handleReset");
-            mStatusBarKeyguardViewManager.reset();
+            mStatusBarKeyguardViewManager.reset(false);
         }
     }
 
