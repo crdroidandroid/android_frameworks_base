@@ -96,6 +96,10 @@ public class PersistentDataBlockService extends SystemService {
     private int getAllowedUid(int userHandle) {
         String allowedPackage = mContext.getResources()
                 .getString(R.string.config_persistentDataPackageName);
+        if ("".equals(allowedPackage)) {
+            return -1;
+        }
+
         PackageManager pm = mContext.getPackageManager();
         int allowedUid = -1;
         try {
