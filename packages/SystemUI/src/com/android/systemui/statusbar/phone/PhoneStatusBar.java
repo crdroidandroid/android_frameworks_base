@@ -242,7 +242,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private static final int MSG_CLOSE_PANELS = 1001;
     private static final int MSG_OPEN_SETTINGS_PANEL = 1002;
     private static final int MSG_LAUNCH_TRANSITION_TIMEOUT = 1003;
-    private static final int MSG_UPDATE_NOTIFICATIONS = 1004;
     // 1020-1040 reserved for BaseStatusBar
 
     // Time after we abort the launch transition.
@@ -1889,18 +1888,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return entry.row.getParent() instanceof NotificationStackScrollLayout;
     }
 
-    private void handleUpdateNotifications() {
+    @Override
+    protected void updateNotifications() {
         mNotificationData.filterAndSort();
 
         updateNotificationShade();
         mIconController.updateNotificationIcons(mNotificationData);
-    }
-
-    @Override
-    protected void updateNotifications() {
-        if (!mHandler.hasMessages(MSG_UPDATE_NOTIFICATIONS)) {
-            mHandler.sendEmptyMessage(MSG_UPDATE_NOTIFICATIONS);
-        }
     }
 
     @Override
@@ -2120,11 +2113,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }
 
-        // apply user lockscreen image
-        if (mMediaMetadata == null && backdropBitmap == null) {
-            backdropBitmap = mKeyguardWallpaper;
-        }
-
         // HACK: Consider keyguard as visible if showing sim pin security screen
         KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
         boolean keyguardVisible = mState != StatusBarState.SHADE || updateMonitor.isSimPinSecure();
@@ -2138,7 +2126,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             == PlaybackState.STATE_PLAYING);
         }
 
-        if (backdropBitmap == null && mMediaMetadata == null) {
+        // apply user lockscreen image
+        if (backdropBitmap == null && mMediaMetadata == null &&
+                !mNotificationPanel.hasExternalKeyguardView()) {
             backdropBitmap = mKeyguardWallpaper;
         }
 
@@ -2555,9 +2545,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     break;
                 case MSG_LAUNCH_TRANSITION_TIMEOUT:
                     onLaunchTransitionTimeout();
-                    break;
-                case MSG_UPDATE_NOTIFICATIONS:
-                    handleUpdateNotifications();
                     break;
             }
         }
