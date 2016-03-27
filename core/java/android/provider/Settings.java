@@ -4156,6 +4156,12 @@ public final class Settings {
         public static final String PA_PIE_ALWAYS_RIGHT = "pa_pie_always_right";
 
         /**
+         * Heads up timeout configuration
+         * @hide
+         */
+        public static final String HEADS_UP_TIMEOUT = "heads_up_timeout";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
