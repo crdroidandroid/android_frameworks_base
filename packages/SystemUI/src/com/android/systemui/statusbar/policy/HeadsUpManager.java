@@ -63,7 +63,7 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
     private static final boolean DEBUG = false;
     private static final int TAG_CLICKED_NOTIFICATION = R.id.is_clicked_heads_up_tag;
 
-    private final int mHeadsUpNotificationDecay;
+    private int mHeadsUpNotificationDecay;
     private final int mMinimumDisplayTime;
 
     private final int mTouchAcceptanceDelay;
@@ -124,7 +124,10 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
         mTouchAcceptanceDelay = resources.getInteger(R.integer.touch_acceptance_delay);
         mSnoozedPackages = new ArrayMap<>();
         mMinimumDisplayTime = resources.getInteger(R.integer.heads_up_notification_minimum_time);
-        mHeadsUpNotificationDecay = resources.getInteger(R.integer.heads_up_notification_decay);
+        mHeadsUpNotificationDecay = Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.HEADS_UP_TIMEOUT,
+                context.getResources().getInteger(R.integer.heads_up_notification_decay),
+                UserHandle.USER_CURRENT);
         mSnoozeLengthMs = Settings.System.getIntForUser(context.getContentResolver(),
                 Settings.System.HEADS_UP_NOTIFICATION_SNOOZE,
                 context.getResources().getInteger(R.integer.heads_up_default_snooze_length_ms),
@@ -696,6 +699,10 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
         }
 
         public void updateEntry(boolean updatePostTime) {
+            mHeadsUpNotificationDecay = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.HEADS_UP_TIMEOUT,
+                    mContext.getResources().getInteger(R.integer.heads_up_notification_decay),
+                    UserHandle.USER_CURRENT);
             mSnoozeLengthMs = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.HEADS_UP_NOTIFICATION_SNOOZE,
                 mContext.getResources().getInteger(R.integer.heads_up_default_snooze_length_ms),
