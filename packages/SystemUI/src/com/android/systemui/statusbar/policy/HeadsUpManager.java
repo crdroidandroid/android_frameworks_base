@@ -24,6 +24,7 @@ import android.app.Notification;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.ArrayMap;
 import android.view.accessibility.AccessibilityManager;
@@ -86,7 +87,11 @@ public abstract class HeadsUpManager extends AlertingNotificationManager {
         mUiEventLogger = Dependency.get(UiEventLogger.class);
         Resources resources = context.getResources();
         mMinimumDisplayTime = resources.getInteger(R.integer.heads_up_notification_minimum_time);
-        mAutoDismissNotificationDecay = resources.getInteger(R.integer.heads_up_notification_decay);
+        int defaultHeadsUpNotificationDecayMs =
+                resources.getInteger(R.integer.heads_up_notification_decay);
+        mAutoDismissNotificationDecay = Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.HEADS_UP_TIMEOUT,
+                defaultHeadsUpNotificationDecayMs, UserHandle.USER_CURRENT);
         mTouchAcceptanceDelay = resources.getInteger(R.integer.touch_acceptance_delay);
         mSnoozedPackages = new ArrayMap<>();
         int defaultSnoozeLengthMs =
