@@ -282,8 +282,9 @@ bool RenderThread::threadLoop() {
                 "RenderThread Looper POLL_ERROR!");
 
         nsecs_t nextWakeup;
+        nsecs_t cutoff = systemTime(SYSTEM_TIME_MONOTONIC);
         // Process our queue, if we have anything
-        while (RenderTask* task = nextTask(&nextWakeup)) {
+        while (RenderTask* task = nextTask(cutoff, &nextWakeup)) {
             task->run();
             // task may have deleted itself, do not reference it again
         }
@@ -318,6 +319,13 @@ bool RenderThread::threadLoop() {
 }
 
 void RenderThread::queue(RenderTask* task) {
+    // prevent scheduling in the past; helps avoid starvation
+    // of vsync polling and other tasks.
+    nsecs_t now = systemTime(SYSTEM_TIME_MONOTONIC);
+    if (task->mRunAt < now) {
+        task->mRunAt = now;
+    }
+
     AutoMutex _lock(mLock);
     mQueue.queue(task);
     if (mNextWakeup && task->mRunAt < mNextWakeup) {
@@ -340,6 +348,8 @@ void RenderThread::queueAndWait(RenderTask* task) {
 }
 
 void RenderThread::queueAtFront(RenderTask* task) {
+    // adding non-zero mRunAt's at the front of the queue could mess up the order of future inserts
+    LOG_ALWAYS_FATAL_IF(task->mRunAt != 0, "queueAtFront task with non-zero mRunAt");
     AutoMutex _lock(mLock);
     mQueue.queueAtFront(task);
     mLooper->wake();
@@ -372,15 +382,14 @@ void RenderThread::pushBackFrameCallback(IFrameCallback* callback) {
     }
 }
 
-RenderTask* RenderThread::nextTask(nsecs_t* nextWakeup) {
+RenderTask* RenderThread::nextTask(nsecs_t now, nsecs_t* nextWakeup) {
     AutoMutex _lock(mLock);
     RenderTask* next = mQueue.peek();
     if (!next) {
         mNextWakeup = LLONG_MAX;
     } else {
         mNextWakeup = next->mRunAt;
-        // Most tasks won't be delayed, so avoid unnecessary systemTime() calls
-        if (next->mRunAt <= 0 || next->mRunAt <= systemTime(SYSTEM_TIME_MONOTONIC)) {
+        if (next->mRunAt <= now) {
             next = mQueue.next();
         } else {
             next = nullptr;

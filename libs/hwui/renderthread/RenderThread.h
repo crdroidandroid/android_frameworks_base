@@ -115,10 +115,11 @@ private:
     void dispatchFrameCallbacks();
     void requestVsync();
 
-    // Returns the next task to be run. If this returns NULL nextWakeup is set
+    // Returns the next task to be run, provided it is scheduled to run at
+    // or before the cutoff value. If this returns NULL nextWakeup is set
     // to the time to requery for the nextTask to run. mNextWakeup is also
     // set to this time
-    RenderTask* nextTask(nsecs_t* nextWakeup);
+    RenderTask* nextTask(nsecs_t cutoff, nsecs_t* nextWakeup);
 
     sp<Looper> mLooper;
     Mutex mLock;
