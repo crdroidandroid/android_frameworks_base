@@ -4812,6 +4812,12 @@ public final class Settings {
         public static final String ALARM_BLOCKING_ENABLED = "alarm_blocking_enabled";
 
         /**
+         * Defines the global heads up notification snooze
+         * @hide
+         */
+        public static final String HEADS_UP_NOTIFICATION_SNOOZE = "heads_up_notification_snooze";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
