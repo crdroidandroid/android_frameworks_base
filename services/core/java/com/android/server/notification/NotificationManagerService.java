@@ -3454,7 +3454,11 @@ public class NotificationManagerService extends SystemService {
             event.getText().add(tickerText);
         }
 
-        manager.sendAccessibilityEvent(event);
+        try {
+            manager.sendAccessibilityEvent(event);
+        } catch (IllegalStateException e) {
+            Slog.e(TAG, "sendAccessibilityEvent failed.", e);
+        }
     }
 
     private void cancelNotificationLocked(NotificationRecord r, boolean sendDelete, int reason) {
