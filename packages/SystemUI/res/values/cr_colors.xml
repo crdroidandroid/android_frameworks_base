@@ -50,4 +50,7 @@
 
     <!-- QS edit page background color -->
     <color name="qs_edit_item_decoration_bg">@*android:color/secondary_device_default_settings</color>
+
+    <!-- OMS -->
+    <color name="navbutton_ripple_color">#ffffffff</color>
 </resources>
