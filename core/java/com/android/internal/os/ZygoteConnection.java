@@ -685,7 +685,10 @@ class ZygoteConnection {
      */
     public static void applyInvokeWithSystemProperty(Arguments args) {
         if (args.invokeWith == null && args.niceName != null) {
-            String property = "wrap." + args.niceName;
+            /* note: niceName can contain ':' (ie. com.drawelements.deqp:testercore)
+             * which is invalid in a property name
+             */
+            String property = "wrap." + args.niceName.replace(':', '.');
             if (property.length() > 31) {
                 // Properties with a trailing "." are illegal.
                 if (property.charAt(30) != '.') {
