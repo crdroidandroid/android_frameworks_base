@@ -386,6 +386,7 @@ public class NotificationPanelView extends PanelView implements
 
         mSwipeHelper = new SwipeHelper(SwipeHelper.X,
                 SwipeHelper.SWIPE_ZONE_LEFT, mSwipeCallback, mContext);
+        mSwipeHelper.setSwipeProgressFadeEnd(1.0f);
         mMinimumFlingVelocity = ViewConfiguration.get(getContext())
                 .getScaledMinimumFlingVelocity();
 
@@ -1123,7 +1124,7 @@ public class NotificationPanelView extends PanelView implements
 
     private void handleQsDown(MotionEvent event) {
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN
-                && shouldQuickSettingsIntercept(event.getX(), event.getY(), -1)) {
+                && shouldQuickSettingsIntercept(event.getX(), event.getRawY(), -1)) {
             mQsTracking = true;
             onQsExpansionStarted();
             mInitialHeightOnTouch = mQsExpansionHeight;
