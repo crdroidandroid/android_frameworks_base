@@ -36,6 +36,14 @@ import android.service.quicksettings.Tile;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -74,6 +82,8 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
             "system:" + Settings.System.ANIM_TILE_STYLE;
     public static final String ANIM_TILE_DURATION =
             "system:" + Settings.System.ANIM_TILE_DURATION;
+    public static final String ANIM_TILE_INTERPOLATOR =
+            "system:" + Settings.System.ANIM_TILE_INTERPOLATOR;
 
     protected final Context mContext;
     protected final ArrayList<TileRecord> mRecords = new ArrayList<>();
@@ -105,7 +115,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
     private View mDivider;
 
     private int mBrightnessSlider = 1;
-    private int animStyle, animDuration;
+    private int animStyle, animDuration, interpolatorType;
 
     public QSPanel(Context context) {
         this(context, null);
@@ -203,6 +213,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         tunerService.addTunable(this, QS_SHOW_BRIGHTNESS_SLIDER);
         tunerService.addTunable(this, ANIM_TILE_STYLE);
         tunerService.addTunable(this, ANIM_TILE_DURATION);
+        tunerService.addTunable(this, ANIM_TILE_INTERPOLATOR);
 
         if (mHost != null) {
             setTiles(mHost.getTiles());
@@ -247,6 +258,11 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
             }
         } else if (ANIM_TILE_DURATION.equals(key)) {
             animDuration = newValue == null ? 0 : Integer.parseInt(newValue);
+            if (mHost != null) {
+                setTiles(mHost.getTiles());
+            }
+        } else if (ANIM_TILE_INTERPOLATOR.equals(key)) {
+            interpolatorType = newValue == null ? 0 : Integer.parseInt(newValue);
             if (mHost != null) {
                 setTiles(mHost.getTiles());
             }
@@ -741,6 +757,34 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
             animTile = ObjectAnimator.ofFloat(v, "rotation", 0f, 360f);
         }
         if (animTile != null) {
+            switch (interpolatorType) {
+                    case 0:
+                        animTile.setInterpolator(new LinearInterpolator());
+                        break;
+                    case 1:
+                        animTile.setInterpolator(new AccelerateInterpolator());
+                        break;
+                    case 2:
+                        animTile.setInterpolator(new DecelerateInterpolator());
+                        break;
+                    case 3:
+                        animTile.setInterpolator(new AccelerateDecelerateInterpolator());
+                        break;
+                    case 4:
+                        animTile.setInterpolator(new BounceInterpolator());
+                        break;
+                    case 5:
+                        animTile.setInterpolator(new OvershootInterpolator());
+                        break;
+                    case 6:
+                        animTile.setInterpolator(new AnticipateInterpolator());
+                        break;
+                    case 7:
+                        animTile.setInterpolator(new AnticipateOvershootInterpolator());
+                        break;
+                    default:
+                        break;
+            }
             animTile.setDuration(animDuration);
             animTile.start();
         }
