@@ -53,4 +53,7 @@
 
     <!-- Whether to use old mobile type icons as default -->
     <java-symbol type="bool" name="config_useOldMobileIcons" />
+
+    <!-- Whether device has dash charging support -->
+    <java-symbol type="bool" name="config_hasDashCharger" />
 </resources>
