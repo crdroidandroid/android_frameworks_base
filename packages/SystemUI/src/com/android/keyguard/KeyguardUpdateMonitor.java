@@ -27,6 +27,7 @@ import static android.os.BatteryManager.EXTRA_MAX_CHARGING_VOLTAGE;
 import static android.os.BatteryManager.EXTRA_TEMPERATURE;
 import static android.os.BatteryManager.EXTRA_PLUGGED;
 import static android.os.BatteryManager.EXTRA_STATUS;
+import static android.os.BatteryManager.EXTRA_DASH_CHARGER;
 
 import android.app.ActivityManager;
 import android.app.AlarmManager;
@@ -757,10 +758,11 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener,
                 } else {
                     maxChargingMicroWatt = -1;
                 }
+                final boolean dashChargeStatus = intent.getBooleanExtra(EXTRA_DASH_CHARGER, false);
                 final Message msg = mHandler.obtainMessage(
                         MSG_BATTERY_UPDATE, new BatteryStatus(status, level, plugged, health,
                                 maxChargingMicroAmp, maxChargingMicroVolt, maxChargingMicroWatt,
-                                temperature));
+                                temperature, dashChargeStatus));
                 mHandler.sendMessage(msg);
             } else if (TelephonyIntents.ACTION_SIM_STATE_CHANGED.equals(action)) {
                 SimData args = SimData.fromIntent(intent);
@@ -936,6 +938,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener,
         public static final int CHARGING_SLOWLY = 0;
         public static final int CHARGING_REGULAR = 1;
         public static final int CHARGING_FAST = 2;
+        public static final int CHARGING_DASH = 3;
 
         public final int status;
         public final int level;
@@ -945,9 +948,10 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener,
         public final int maxChargingVoltage;
         public final int maxChargingWattage;
         public final int temperature;
+        public final boolean dashChargeStatus;
         public BatteryStatus(int status, int level, int plugged, int health,
                 int maxChargingCurrent, int maxChargingVoltage, int maxChargingWattage,
-                int temperature) {
+                int temperature, boolean dashChargeStatus) {
             this.status = status;
             this.level = level;
             this.plugged = plugged;
@@ -956,6 +960,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener,
             this.maxChargingVoltage = maxChargingVoltage;
             this.maxChargingWattage = maxChargingWattage;
             this.temperature = temperature;
+            this.dashChargeStatus = dashChargeStatus;
         }
 
         /**
@@ -987,7 +992,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener,
         }
 
         public final int getChargingSpeed(int slowThreshold, int fastThreshold) {
-            return maxChargingWattage <= 0 ? CHARGING_UNKNOWN :
+            return dashChargeStatus ? CHARGING_DASH :
+                    maxChargingWattage <= 0 ? CHARGING_UNKNOWN :
                     maxChargingWattage < slowThreshold ? CHARGING_SLOWLY :
                     maxChargingWattage > fastThreshold ? CHARGING_FAST :
                     CHARGING_REGULAR;
@@ -1142,7 +1148,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener,
         }
 
         // Take a guess at initial SIM state, battery status and PLMN until we get an update
-        mBatteryStatus = new BatteryStatus(BATTERY_STATUS_UNKNOWN, 100, 0, 0, 0, 0 ,0, 0);
+        mBatteryStatus = new BatteryStatus(BATTERY_STATUS_UNKNOWN, 100, 0, 0, 0, 0 ,0, 0, false);
 
         // Watch for interesting updates
         final IntentFilter filter = new IntentFilter();
@@ -1648,6 +1654,11 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener,
 
         // change in charging current while plugged in
         if (nowPluggedIn && current.maxChargingWattage != old.maxChargingWattage) {
+            return true;
+        }
+
+        // change in dash charging while plugged in
+        if (nowPluggedIn && current.dashChargeStatus != old.dashChargeStatus) {
             return true;
         }
 
