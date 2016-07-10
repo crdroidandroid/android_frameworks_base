@@ -50,4 +50,7 @@
 
     <!-- Whether to use old mobile type icons as default -->
     <bool name="config_useOldMobileIcons">false</bool>
+
+    <!-- Whether device has dash charging support -->
+    <bool name="config_hasDashCharger">false</bool>
 </resources>
