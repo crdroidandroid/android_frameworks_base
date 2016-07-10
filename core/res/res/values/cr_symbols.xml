@@ -19,4 +19,7 @@
   <!-- Light / Regular style fonts -->
   <java-symbol type="string" name="config_lightFontFamily" />
   <java-symbol type="string" name="config_regularFontFamily" />
+
+  <!-- Whether device has dash charging support -->
+  <java-symbol type="bool" name="config_hasDashCharger" />
 </resources>
