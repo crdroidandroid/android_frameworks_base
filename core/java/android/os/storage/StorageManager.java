@@ -959,6 +959,9 @@ public class StorageManager {
     public static @NonNull StorageVolume[] getVolumeList(int userId, int flags) {
         final IMountService mountService = IMountService.Stub.asInterface(
                 ServiceManager.getService("mount"));
+        if (mountService == null) {
+            throw new RuntimeException("mount service not ready yet");
+        }
         try {
             String packageName = ActivityThread.currentOpPackageName();
             if (packageName == null) {
@@ -1262,6 +1265,9 @@ public class StorageManager {
     public static File maybeTranslateEmulatedPathToInternal(File path) {
         final IMountService mountService = IMountService.Stub.asInterface(
                 ServiceManager.getService("mount"));
+        if (mountService == null) {
+            return path;
+        }
         try {
             final VolumeInfo[] vols = mountService.getVolumes(0);
             for (VolumeInfo vol : vols) {
