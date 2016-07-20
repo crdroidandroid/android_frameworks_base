@@ -279,13 +279,15 @@ public class MobileSignalController extends SignalController<
     }
 
     private boolean isRoaming() {
-        if (isCdma()) {
+        if (mServiceState == null) {
+            return false;
+        } else if (isCdma()) {
             final int iconMode = mServiceState.getCdmaEriIconMode();
             return mServiceState.getCdmaEriIconIndex() != EriInfo.ROAMING_INDICATOR_OFF
                     && (iconMode == EriInfo.ROAMING_ICON_MODE_NORMAL
                         || iconMode == EriInfo.ROAMING_ICON_MODE_FLASH);
         } else {
-            return mServiceState != null && mServiceState.getRoaming();
+            return mServiceState.getRoaming();
         }
     }
 
@@ -395,7 +397,8 @@ public class MobileSignalController extends SignalController<
             mCurrentState.iconGroup = mDefaultIcons;
         }
         mCurrentState.dataConnected = mCurrentState.connected
-                && mDataState == TelephonyManager.DATA_CONNECTED;
+                && mDataState == TelephonyManager.DATA_CONNECTED
+                && mCurrentState.dataSim;
 
         mCurrentState.showSeparateRoaming = false;
         if (isCarrierNetworkChangeActive()) {

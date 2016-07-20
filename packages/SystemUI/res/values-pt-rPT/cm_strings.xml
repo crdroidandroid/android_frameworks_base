@@ -78,7 +78,7 @@
   <string name="quick_settings_title_show_brightness_slider">Mostrar o controlo deslizante de brilho</string>
   <string name="quick_settings_title_enlarge_first_row">Ampliar a primeira linha</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
-  <string name="screen_pinning_description_no_navbar">Isto mantém visível até soltar. Toque e segure o botão Voltar até soltar.</string>
+  <string name="screen_pinning_description_no_navbar">Irá ficar visível até que o solte. Toque e segure o botão Voltar para soltar.</string>
   <string name="quick_settings_custom_tile_detail_title">Mosaicos personalizados</string>
   <string name="quick_settings_remove">Remover mosaico</string>
   <string name="quick_settings_network_adb_label">ADB através da rede</string>
@@ -214,4 +214,9 @@
   <string name="accessibility_dock_battery_level">Bateria da dock <xliff:g id="number">%d</xliff:g> por cento.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Mostrar a fila de reprodução</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
+  <!-- Weather string format in keyguard -->
+  <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> <xliff:g id="condition">%2$s</xliff:g></string>
 </resources>

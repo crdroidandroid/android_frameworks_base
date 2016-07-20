@@ -24,7 +24,6 @@ import static org.xmlpull.v1.XmlPullParser.END_DOCUMENT;
 import static org.xmlpull.v1.XmlPullParser.END_TAG;
 import static org.xmlpull.v1.XmlPullParser.START_TAG;
 
-import android.annotation.Nullable;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AppGlobals;
@@ -64,9 +63,6 @@ import android.media.AudioManager;
 import android.media.AudioManagerInternal;
 import android.media.AudioSystem;
 import android.media.IRingtonePlayer;
-import android.media.session.MediaController;
-import android.media.session.MediaSessionManager;
-import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -124,6 +120,8 @@ import com.android.server.notification.ManagedServices.ManagedServiceInfo;
 import com.android.server.notification.ManagedServices.UserProfiles;
 import com.android.server.statusbar.StatusBarManagerInternal;
 
+import cyanogenmod.media.AudioSessionInfo;
+import cyanogenmod.media.CMAudioManager;
 import cyanogenmod.providers.CMSettings;
 import cyanogenmod.util.ColorUtils;
 
@@ -338,6 +336,8 @@ public class NotificationManagerService extends SystemService {
     private NotificationUsageStats mUsageStats;
     private boolean mDisableDuckingWhileMedia;
     private boolean mActiveMedia;
+
+    private boolean mMultiColorNotificationLed;
 
     private static final int MY_UID = Process.myUid();
     private static final int MY_PID = Process.myPid();
@@ -1094,15 +1094,39 @@ public class NotificationManagerService extends SystemService {
         }
     }
 
+    private BroadcastReceiver mMediaSessionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateForActiveSessions();
+        }
+    };
+
+    private void updateForActiveSessions() {
+        CMAudioManager manager = CMAudioManager.getInstance(getContext());
+        List<AudioSessionInfo> sessions = manager.listAudioSessions(AudioManager.STREAM_MUSIC);
+        mActiveMedia = false;
+        for (AudioSessionInfo sessionInfo : sessions) {
+            if (sessionInfo.getSessionId() > 0) {
+                mActiveMedia = true;
+                break;
+            }
+        }
+    }
+
     private void updateDisableDucking() {
         if (!mSystemReady) {
             return;
         }
-        final MediaSessionManager mediaSessionManager = (MediaSessionManager) getContext()
-                .getSystemService(Context.MEDIA_SESSION_SERVICE);
-        mediaSessionManager.removeOnActiveSessionsChangedListener(mSessionListener);
+        try {
+            getContext().unregisterReceiver(mMediaSessionReceiver);
+        } catch (IllegalArgumentException e) {
+            // Never registered
+        }
         if (mDisableDuckingWhileMedia) {
-            mediaSessionManager.addOnActiveSessionsChangedListener(mSessionListener, null);
+            updateForActiveSessions();
+            IntentFilter intentFilter = new IntentFilter(CMAudioManager
+                    .ACTION_AUDIO_SESSIONS_CHANGED);
+            getContext().registerReceiver(mMediaSessionReceiver, intentFilter);
         }
     }
 
@@ -1199,6 +1223,9 @@ public class NotificationManagerService extends SystemService {
                 R.integer.config_defaultNotificationLedOn);
         mDefaultNotificationLedOff = resources.getInteger(
                 R.integer.config_defaultNotificationLedOff);
+
+        mMultiColorNotificationLed = resources.getBoolean(
+                R.bool.config_multiColorNotificationLed);
 
         mNotificationPulseCustomLedValues = new HashMap<String, NotificationLedValues>();
 
@@ -1551,6 +1578,20 @@ public class NotificationManagerService extends SystemService {
         public int getPackageVisibilityOverride(String pkg, int uid) {
             checkCallerIsSystem();
             return mRankingHelper.getPackageVisibilityOverride(pkg, uid);
+        }
+
+        @Override
+        public void setShowNotificationForPackageOnKeyguard(
+                String pkg, int uid, int status) {
+            checkCallerIsSystem();
+            mRankingHelper.setShowNotificationForPackageOnKeyguard(pkg, uid, status);
+            savePolicyFile();
+        }
+
+        @Override
+        public int getShowNotificationForPackageOnKeyguard(String pkg, int uid) {
+            enforceSystemOrSystemUI("INotificationManager.getShowNotificationForPackageOnKeyguard");
+            return mRankingHelper.getShowNotificationForPackageOnKeyguard(pkg, uid);
         }
 
         /**
@@ -2626,21 +2667,6 @@ public class NotificationManagerService extends SystemService {
         return false;
     }
 
-    private MediaSessionManager.OnActiveSessionsChangedListener mSessionListener =
-            new MediaSessionManager.OnActiveSessionsChangedListener() {
-        @Override
-        public void onActiveSessionsChanged(@Nullable List<MediaController> controllers) {
-            for (MediaController activeSession : controllers) {
-                PlaybackState playbackState = activeSession.getPlaybackState();
-                if (playbackState != null && playbackState.getState() == PlaybackState.STATE_PLAYING) {
-                    mActiveMedia = true;
-                    return;
-                }
-            }
-            mActiveMedia = false;
-        }
-    };
-
     private void buzzBeepBlinkLocked(NotificationRecord record) {
         boolean buzz = false;
         boolean beep = false;
@@ -3516,6 +3542,9 @@ public class NotificationManagerService extends SystemService {
 
     private int generateLedColorForNotification(NotificationRecord ledNotification) {
         if (!mAutoGenerateNotificationColor) {
+            return mDefaultNotificationColor;
+        }
+        if (!mMultiColorNotificationLed) {
             return mDefaultNotificationColor;
         }
         final String packageName = ledNotification.sbn.getPackageName();

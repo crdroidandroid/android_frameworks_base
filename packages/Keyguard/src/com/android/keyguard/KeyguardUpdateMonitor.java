@@ -69,6 +69,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import cyanogenmod.providers.CMSettings;
+
 import static android.os.BatteryManager.BATTERY_HEALTH_UNKNOWN;
 import static android.os.BatteryManager.BATTERY_STATUS_FULL;
 import static android.os.BatteryManager.BATTERY_STATUS_UNKNOWN;
@@ -379,6 +381,36 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             mSubscriptionInfo = sil;
         }
         return mSubscriptionInfo;
+    }
+
+    public boolean isEmergencyOnly() {
+        boolean isEmerg = false;
+        ServiceState state;
+        for (int slotId = 0; slotId < TelephonyManager.getDefault().getPhoneCount(); slotId++) {
+            state = null;
+            int[] subId = mSubscriptionManager.getSubId(slotId);
+            if (subId != null && subId.length > 0) {
+                state = mServiceStates.get(subId[0]);
+            }
+            if (state != null) {
+                if (state.getVoiceRegState() == ServiceState.STATE_IN_SERVICE)
+                    return false;
+                else if (state.isEmergencyOnly()) {
+                    isEmerg = true;
+                }
+            }
+        }
+        return isEmerg;
+    }
+
+    public int getPresentSubId() {
+        for (int slotId = 0; slotId < TelephonyManager.getDefault().getPhoneCount(); slotId++) {
+            int[] subId = mSubscriptionManager.getSubId(slotId);
+            if (subId != null && subId.length > 0 && getSimState(subId[0]) != State.ABSENT) {
+                return subId[0];
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -1048,9 +1080,16 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     private boolean shouldListenForFingerprint() {
-        return (mKeyguardIsVisible || !mDeviceInteractive || mBouncer || mGoingToSleep)
-                && !mSwitchingUser && !mFingerprintAlreadyAuthenticated
-                && !isFingerprintDisabled(getCurrentUser());
+        if (!mSwitchingUser && !mFingerprintAlreadyAuthenticated
+                && !isFingerprintDisabled(getCurrentUser())) {
+            if (mContext.getResources().getBoolean(
+                    com.android.keyguard.R.bool.config_fingerprintWakeAndUnlock)) {
+                return mKeyguardIsVisible || !mDeviceInteractive || mBouncer || mGoingToSleep;
+            } else {
+                return mDeviceInteractive && (mKeyguardIsVisible || mBouncer);
+            }
+        }
+        return false;
     }
 
     private void startListeningForFingerprint() {
@@ -1088,8 +1127,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     private boolean isDeviceProvisionedInSettingsDb() {
-        return Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.DEVICE_PROVISIONED, 0) != 0;
+        return CMSettings.Secure.getInt(mContext.getContentResolver(),
+                CMSettings.Secure.CM_SETUP_WIZARD_COMPLETED, 0) != 0;
     }
 
     private void watchForDeviceProvisioning() {
@@ -1106,7 +1145,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         };
 
         mContext.getContentResolver().registerContentObserver(
-                Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONED),
+                CMSettings.Secure.getUriFor(CMSettings.Secure.CM_SETUP_WIZARD_COMPLETED),
                 false, mDeviceProvisionedObserver);
 
         // prevent a race condition between where we check the flag and where we register the

@@ -72,6 +72,8 @@ import com.android.systemui.statusbar.policy.AccessibilityController;
 import com.android.systemui.statusbar.policy.FlashlightController;
 import com.android.systemui.statusbar.policy.PreviewInflater;
 
+import java.util.Objects;
+
 import static android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK;
 import static android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 
@@ -88,6 +90,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     public static final String CAMERA_LAUNCH_SOURCE_AFFORDANCE = "lockscreen_affordance";
     public static final String CAMERA_LAUNCH_SOURCE_WIGGLE = "wiggle_gesture";
     public static final String CAMERA_LAUNCH_SOURCE_POWER_DOUBLE_TAP = "power_double_tap";
+    public static final String CAMERA_LAUNCH_SOURCE_SCREEN_GESTURE = "screen_gesture";
 
     public static final String EXTRA_CAMERA_LAUNCH_SOURCE
             = "com.android.systemui.camera_launch_source";
@@ -130,6 +133,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private final WindowManager.LayoutParams mWindowLayoutParams;
     private OnInterceptTouchEventListener mInterceptTouchListener;
     private BroadcastReceiver mDevicePolicyReceiver;
+    private Intent mLastCameraIntent;
 
     private final ServiceConnection mPrewarmConnection = new ServiceConnection() {
 
@@ -146,14 +150,12 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     @Override
     public void setVisibility(int visibility) {
-        if (visibility != getVisibility()) {
-            if (visibility == View.VISIBLE) {
-                if (!mBottomAreaAttached) {
-                    addKeyguardBottomArea(false);
-                }
-            } else if (mBottomAreaAttached) {
-                removeKeyguardBottomArea();
+        if (visibility == View.VISIBLE) {
+            if (!mBottomAreaAttached) {
+                addKeyguardBottomArea(false);
             }
+        } else if (mBottomAreaAttached) {
+            removeKeyguardBottomArea();
         }
         super.setVisibility(visibility);
     }
@@ -568,8 +570,9 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     public void launchCamera(String source) {
         final Intent intent;
-        if (source.equals(CAMERA_LAUNCH_SOURCE_POWER_DOUBLE_TAP) || !mShortcutHelper
-                .isTargetCustom(LockscreenShortcutsHelper.Shortcuts.RIGHT_SHORTCUT)) {
+        if (source.equals(CAMERA_LAUNCH_SOURCE_POWER_DOUBLE_TAP) ||
+                source.equals(CAMERA_LAUNCH_SOURCE_SCREEN_GESTURE) ||
+                !mShortcutHelper.isTargetCustom(LockscreenShortcutsHelper.Shortcuts.RIGHT_SHORTCUT)) {
             intent = getCameraIntent();
         } else {
             intent = mShortcutHelper.getIntent(LockscreenShortcutsHelper.Shortcuts.RIGHT_SHORTCUT);
@@ -721,9 +724,18 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         if (isTargetCustom(Shortcuts.RIGHT_SHORTCUT)) {
             mPreviewContainer.removeView(mCameraPreview);
         } else {
-            mCameraPreview = mPreviewInflater.inflatePreview(getCameraIntent());
+            Intent cameraIntent = getCameraIntent();
+            if (!Objects.equals(cameraIntent, mLastCameraIntent)) {
+                if (mCameraPreview != null) {
+                    mPreviewContainer.removeView(mCameraPreview);
+                }
+                mCameraPreview = mPreviewInflater.inflatePreview(cameraIntent);
+                if (mCameraPreview != null) {
+                    mPreviewContainer.addView(mCameraPreview);
+                }
+            }
+            mLastCameraIntent = cameraIntent;
             if (mCameraPreview != null) {
-                mPreviewContainer.addView(mCameraPreview);
                 mCameraPreview.setVisibility(View.GONE);
             }
         }
@@ -777,6 +789,10 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                 .setInterpolator(mLinearOutSlowInInterpolator)
                 .setStartDelay(delay)
                 .setDuration(DOZE_ANIMATION_ELEMENT_DURATION);
+    }
+
+    public void cleanup() {
+        removeKeyguardBottomArea();
     }
 
     private final class DevicePolicyBroadcastReceiver extends BroadcastReceiver {

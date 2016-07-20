@@ -364,6 +364,11 @@ public class StorageNotification extends SystemUI {
                     .setContentIntent(browseIntent)
                     .setCategory(Notification.CATEGORY_SYSTEM)
                     .setPriority(Notification.PRIORITY_LOW);
+            // USB disks notification can be persistent
+            if (disk.isUsb()) {
+                builder.setOngoing(mContext.getResources().getBoolean(
+                        R.bool.config_persistUsbDriveNotification));
+            }
             // Non-adoptable disks can't be snoozed.
             if (disk.isAdoptable()) {
                 builder.setDeleteIntent(buildSnoozeIntent(vol.getFsUuid()));

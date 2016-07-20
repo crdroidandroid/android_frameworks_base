@@ -89,7 +89,7 @@
   <string name="quick_settings_heads_up_label">התראות קופצות</string>
   <string name="quick_settings_battery_saver_label">שומר סוללה</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
-  <string name="quick_settings_battery_saver_label_charging">שומר סוללה (בטעינה)</string>
+  <string name="quick_settings_battery_saver_label_charging">שומר הסוללה (בטעינה)</string>
   <string name="quick_settings_caffeine_label">קפאין</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">סנכרון כבוי.</string>
@@ -104,7 +104,7 @@
   <string name="quick_settings_usb_tether_label">קשירת USB</string>
   <string name="quick_settings_screen_timeout_detail_title">זמן קצוב למסך</string>
   <string name="quick_settings_lockscreen_label">מסך נעילה</string>
-  <string name="quick_settings_ambient_display_label">התראות ברקע</string>
+  <string name="quick_settings_ambient_display_label">תצוגת התראות עמומה</string>
   <string name="quick_settings_lockscreen_label_enforced">מסך הנעילה נאכף</string>
   <string name="quick_settings_lockscreen_label_locked_by_profile">הושבת על-ידי הפרופיל</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -142,13 +142,13 @@
   <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">מסך נעילה הופעל.</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_off">תצוגת התראות ברקע כבויה.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">תצוגת התראות עמומה כבויה.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_on">תצוגת התראות ברקע פעילה.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">תצוגת התראות עמומה פעילה.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_off">תצוגת התראות ברקע כובתה.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">תצוגת התראות עמומה כובתה.</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_on">תצוגת התראות ברקע הופעלה.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">תצוגת התראות עמומה הופעלה.</string>
   <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">התראות קופצות כבויות.</string>
   <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -206,6 +206,8 @@
   <!-- Wi-Fi hotspot label when enabled -->
   <plurals name="wifi_hotspot_connected_clients_label">
     <item quantity="one">לקוח %1$d</item>
+    <item quantity="two">%1$d לקוחות</item>
+    <item quantity="many">%1$d לקוחות</item>
     <item quantity="other">%1$d לקוחות</item>
   </plurals>
   <!-- CellularTile data sim not configured state string -->
@@ -214,4 +216,9 @@
   <string name="accessibility_dock_battery_level">סוללה חיצונית - <xliff:g id="number">%d</xliff:g> אחוז.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">הצג תור השמעה</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
+  <!-- Weather string format in keyguard -->
+  <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> <xliff:g id="condition">%2$s</xliff:g></string>
 </resources>

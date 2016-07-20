@@ -30,6 +30,8 @@ import static com.android.server.wm.WindowManagerService.LayoutFields.SET_ORIENT
 import static com.android.server.wm.WindowManagerService.LayoutFields.SET_WALLPAPER_ACTION_PENDING;
 
 import android.content.Context;
+import android.database.ContentObserver;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.util.Slog;
 import android.util.SparseArray;
@@ -43,6 +45,8 @@ import android.view.animation.Animation;
 import android.view.Choreographer;
 
 import com.android.server.wm.WindowManagerService.LayoutFields;
+
+import cyanogenmod.providers.CMSettings;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -98,7 +102,7 @@ public class WindowAnimator {
     /** Use one animation for all entering activities after keyguard is dismissed. */
     Animation mPostKeyguardExitAnimation;
 
-    private final boolean mBlurUiEnabled;
+    private boolean mKeyguardBlurEnabled;
 
     // forceHiding states.
     static final int KEYGUARD_NOT_SHOWN     = 0;
@@ -120,8 +124,13 @@ public class WindowAnimator {
         mContext = service.mContext;
         mPolicy = service.mPolicy;
 
-        mBlurUiEnabled = mContext.getResources().getBoolean(
+        boolean blurUiEnabled = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_ui_blur_enabled);
+
+        if (blurUiEnabled) {
+            SettingsObserver observer = new SettingsObserver(new Handler());
+            observer.observe(mContext);
+        }
 
         mAnimationFrameCallback = new Choreographer.FrameCallback() {
             public void doFrame(long frameTimeNs) {
@@ -211,7 +220,9 @@ public class WindowAnimator {
         // Show SHOW_WHEN_LOCKED windows that turn on the screen
         allowWhenLocked |= (win.mAttrs.flags & FLAG_SHOW_WHEN_LOCKED) != 0 && win.mTurnOnScreen;
         // Show windows that use TYPE_STATUS_BAR_SUB_PANEL when locked
-        allowWhenLocked |= win.mAttrs.type == WindowManager.LayoutParams.TYPE_KEYGUARD_PANEL;
+        allowWhenLocked |= win.mAttrs.type == WindowManager.LayoutParams.TYPE_KEYGUARD_PANEL &&
+                winShowWhenLocked == null;
+
 
         if (appShowWhenLocked != null) {
             allowWhenLocked |= appShowWhenLocked == win.mAppToken
@@ -223,7 +234,14 @@ public class WindowAnimator {
 
         // Only hide windows if the keyguard is active and not animating away.
         boolean keyguardOn = mPolicy.isKeyguardShowingOrOccluded()
-                && (mForceHiding != KEYGUARD_ANIMATING_OUT && !mBlurUiEnabled);
+                && mForceHiding != KEYGUARD_ANIMATING_OUT;
+
+        final WindowState winKeyguardPanel = (WindowState) mPolicy.getWinKeyguardPanelLw();
+        // If a keyguard panel is currently being shown, we should
+        // continue to hide the windows as if blur is disabled.
+        if (winKeyguardPanel == null) {
+            keyguardOn &= !mKeyguardBlurEnabled;
+        }
         return keyguardOn && !allowWhenLocked && (win.getDisplayId() == Display.DEFAULT_DISPLAY);
     }
 
@@ -232,7 +250,7 @@ public class WindowAnimator {
 
         final WindowList windows = mService.getWindowListLocked(displayId);
 
-        if (mKeyguardGoingAway && !mBlurUiEnabled) {
+        if (mKeyguardGoingAway && !mKeyguardBlurEnabled) {
             for (int i = windows.size() - 1; i >= 0; i--) {
                 WindowState win = windows.get(i);
                 if (!mPolicy.isKeyguardHostWindow(win.mAttrs)) {
@@ -247,7 +265,7 @@ public class WindowAnimator {
                         // Create a new animation to delay until keyguard is gone on its own.
                         winAnimator.mAnimation = new AlphaAnimation(1.0f, 1.0f);
                         winAnimator.mAnimation.setDuration(
-                                mBlurUiEnabled ? 0 : KEYGUARD_ANIM_TIMEOUT_MS);
+                                mKeyguardBlurEnabled ? 0 : KEYGUARD_ANIM_TIMEOUT_MS);
                         winAnimator.mAnimationIsEntrance = false;
                         winAnimator.mAnimationStartTime = -1;
                         winAnimator.mKeyguardGoingAwayAnimation = true;
@@ -337,7 +355,7 @@ public class WindowAnimator {
                         if (nowAnimating && win.mWinAnimator.mKeyguardGoingAwayAnimation) {
                             mForceHiding = KEYGUARD_ANIMATING_OUT;
                         } else {
-                            mForceHiding = win.isDrawnLw()  && !mBlurUiEnabled ?
+                            mForceHiding = win.isDrawnLw()  && !mKeyguardBlurEnabled ?
                                 KEYGUARD_SHOWN : KEYGUARD_NOT_SHOWN;
                         }
                     }
@@ -889,5 +907,31 @@ public class WindowAnimator {
 
     private class DisplayContentsAnimator {
         ScreenRotationAnimation mScreenRotationAnimation = null;
+    }
+
+    private class SettingsObserver extends ContentObserver {
+        public SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        public void observe(Context context) {
+            context.getContentResolver().registerContentObserver(
+                    CMSettings.Secure.getUriFor(CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED),
+                    false,
+                    this);
+
+            onChange(true);
+        }
+
+        public void unobserve(Context context) {
+            context.getContentResolver().unregisterContentObserver(this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            // default to being enabled since we are here because the blur config was set to true
+            mKeyguardBlurEnabled = CMSettings.Secure.getInt(mContext.getContentResolver(),
+                    CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, 1) == 1;
+        }
     }
 }

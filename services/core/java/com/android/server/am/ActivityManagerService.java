@@ -264,6 +264,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+
+import cyanogenmod.power.PerformanceManagerInternal;
+
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
@@ -1093,6 +1096,8 @@ public final class ActivityManagerService extends ActivityManagerNative
      * sleeping while it is active.
      */
     private IVoiceInteractionSession mRunningVoice;
+
+    PerformanceManagerInternal mPerf;
 
     /**
      * For some direct access we need to power manager.
@@ -2206,6 +2211,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
                 try {
                     Intent protectedAppIntent = new Intent();
+                    protectedAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     protectedAppIntent.setComponent(
                             new ComponentName("com.android.settings",
                                     "com.android.settings.applications.ProtectedAppsActivity"));
@@ -2238,6 +2244,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                             .build();
                     try {
                         int[] outId = new int[1];
+                        inm.cancelNotificationWithTag("android", null,
+                                R.string.notify_package_component_protected_title, msg.arg1);
                         inm.enqueueNotificationWithTag("android", "android", null,
                                 R.string.notify_package_component_protected_title,
                                 notification, outId, mCurrentUserId);
@@ -3016,7 +3024,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (!app.killed) {
                 Slog.wtfStack(TAG, "Removing process that hasn't been killed: " + app);
                 Process.killProcessQuiet(app.pid);
-                killProcessGroup(app.info.uid, app.pid);
+                killProcessGroup(app.uid, app.pid);
             }
             if (lrui <= mLruProcessActivityStart) {
                 mLruProcessActivityStart--;
@@ -3391,7 +3399,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             // clean it up now.
             if (DEBUG_PROCESSES || DEBUG_CLEANUP) Slog.v(TAG_PROCESSES, "App died: " + app);
             checkTime(startTime, "startProcess: bad proc running, killing");
-            killProcessGroup(app.info.uid, app.pid);
+            killProcessGroup(app.uid, app.pid);
             handleAppDiedLocked(app, true, true);
             checkTime(startTime, "startProcess: done killing old proc");
         }
@@ -3444,6 +3452,17 @@ public final class ActivityManagerService extends ActivityManagerNative
             String hostingType, String hostingNameStr) {
         startProcessLocked(app, hostingType, hostingNameStr, null /* abiOverride */,
                 null /* entryPoint */, null /* entryPointArgs */);
+    }
+
+    void launchBoost(int pid, String packageName) {
+        if (mPerf == null) {
+            mPerf = LocalServices.getService(PerformanceManagerInternal.class);
+            if (mPerf == null) {
+                Slog.e(TAG, "PerformanceManager not ready!");
+                return;
+            }
+        }
+        mPerf.launchBoost(pid, packageName);
     }
 
     private final void startProcessLocked(ProcessRecord app, String hostingType,
@@ -3608,6 +3627,9 @@ public final class ActivityManagerService extends ActivityManagerNative
             checkTime(startTime, "startProcess: building log message");
             StringBuilder buf = mStringBuilder;
             buf.setLength(0);
+            if (hostingType.equals("activity")) {
+                launchBoost(startResult.pid, app.processName);
+            }
             buf.append("Start proc ");
             buf.append(startResult.pid);
             buf.append(':');
@@ -4927,7 +4949,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (!fromBinderDied) {
                 Process.killProcessQuiet(pid);
             }
-            killProcessGroup(app.info.uid, pid);
+            killProcessGroup(app.uid, pid);
             app.killed = true;
         }
 
@@ -9053,6 +9075,27 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
     }
 
+    private void cleanupProtectedComponentTasksLocked() {
+        for (int i = mRecentTasks.size() - 1; i >= 0; i--) {
+            TaskRecord tr = mRecentTasks.get(i);
+
+            for (int j = tr.mActivities.size() - 1; j >= 0; j--) {
+                ActivityRecord r = tr.mActivities.get(j);
+                ComponentName cn = r.realActivity;
+
+                try {
+                    boolean isProtected = AppGlobals.getPackageManager()
+                        .isComponentProtected(null, -1, cn, getCurrentUserIdLocked());
+                    if (isProtected) {
+                        removeTaskByIdLocked(tr.taskId, false);
+                    }
+                } catch (RemoteException re) {
+
+                }
+            }
+        }
+    }
+
     /**
      * Removes the task with the specified task id.
      *
@@ -12052,6 +12095,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
             mRecentTasks.clear();
             mRecentTasks.addAll(mTaskPersister.restoreTasksLocked());
+            cleanupProtectedComponentTasksLocked();
             mRecentTasks.cleanupLocked(UserHandle.USER_ALL);
             mTaskPersister.startPersisting();
 
@@ -12558,6 +12602,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         synchronized (sb) {
             bufferWasEmpty = sb.length() == 0;
             appendDropBoxProcessHeaders(process, processName, sb);
+            sb.append("CM Version: ").append(cyanogenmod.os.Build.CYANOGENMOD_VERSION).append("\n");
             sb.append("Build: ").append(Build.FINGERPRINT).append("\n");
             sb.append("System-App: ").append(isSystemApp).append("\n");
             sb.append("Uptime-Millis: ").append(info.violationUptimeMillis).append("\n");
@@ -12827,6 +12872,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (subject != null) {
             sb.append("Subject: ").append(subject).append("\n");
         }
+        sb.append("CM Version: ").append(cyanogenmod.os.Build.CYANOGENMOD_VERSION).append("\n");
         sb.append("Build: ").append(Build.FINGERPRINT).append("\n");
         if (Debug.isDebuggerConnected()) {
             sb.append("Debugger: Connected\n");
@@ -17092,6 +17138,14 @@ public final class ActivityManagerService extends ActivityManagerNative
                 case Proxy.PROXY_CHANGE_ACTION:
                     ProxyInfo proxy = intent.getParcelableExtra(Proxy.EXTRA_PROXY_INFO);
                     mHandler.sendMessage(mHandler.obtainMessage(UPDATE_HTTP_PROXY_MSG, proxy));
+                    break;
+                case cyanogenmod.content.Intent.ACTION_PROTECTED_CHANGED:
+                    final boolean state =
+                            intent.getBooleanExtra(
+                                    cyanogenmod.content.Intent.EXTRA_PROTECTED_STATE, false);
+                    if (state == PackageManager.COMPONENT_PROTECTED_STATUS) {
+                        cleanupProtectedComponentTasksLocked();
+                    }
                     break;
             }
         }

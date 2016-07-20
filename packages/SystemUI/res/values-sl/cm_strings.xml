@@ -38,7 +38,7 @@
   <string name="navbar_dialog_title">Izberite dejanje za dodelitev</string>
   <string name="navbar_home_button">Gumb Domov</string>
   <string name="navbar_recent_button">Gumb Nedavno</string>
-  <string name="navbar_search_button">Gumb Iskanje</string>
+  <string name="navbar_search_button">Gumb Išči</string>
   <string name="navbar_back_button">Gumb Nazaj</string>
   <string name="navbar_empty_button">Gumb Prazno</string>
   <string name="navbar_menu_conditional_button">Menijski gumb (sam. skrivanje)</string>
@@ -216,4 +216,9 @@
   <string name="accessibility_dock_battery_level"><xliff:g id="number">%d</xliff:g> odstotkov baterije v postaji.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Prikaži čak. vrsto pred.</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
+  <!-- Weather string format in keyguard -->
+  <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> <xliff:g id="condition">%2$s</xliff:g></string>
 </resources>

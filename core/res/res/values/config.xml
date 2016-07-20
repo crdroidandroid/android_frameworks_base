@@ -504,6 +504,12 @@
     <!-- Integer indicating RSSI boost given to current network -->
     <integer translatable="false" name="config_wifi_framework_current_network_boost">25</integer>
 
+    <!-- Integer indicating the number of selective channel scan when Wifi turn on -->
+    <integer translatable="false" name="config_max_initial_scans_on_selective_channels">2</integer>
+
+    <!-- Integer indicating the interval for selective channel scan when Wifi turn on -->
+    <integer translatable="false" name="config_initial_saved_channel_scan_interval">2000</integer>
+
     <!-- Integer indicating how to handle beacons with uninitialized RSSI value of 0 -->
     <integer translatable="false" name="config_wifi_framework_scan_result_rssi_level_patchup_value">-85</integer>
 
@@ -2482,7 +2488,7 @@
    <!-- Configuration to play sms ringtone during MO/MT call -->
    <bool name="config_sms_ringtone_incall">false</bool>
     <!-- IpReachability monitor enable/Disable -->
-    <bool translatable="false" name="config_wifi_ipreachability_monitor">false</bool>
+    <bool translatable="false" name="config_wifi_ipreachability_monitor">true</bool>
 
     <!-- Configuration that determines if ACTIVATE_REJECT_GGSN is to be treated as
          a permanent error -->
@@ -2566,4 +2572,7 @@
     <!-- Older rotation sensors are not setting event.timestamp correctly. Setting to
          true will use SystemClock.elapsedRealtimeNanos() to set timestamp. -->
     <bool name="config_useSystemClockforRotationSensor">false</bool>
+
+    <!-- Whether to persist the notification for when a usb drive device is plugged in -->
+    <bool name="config_persistUsbDriveNotification">false</bool>
 </resources>

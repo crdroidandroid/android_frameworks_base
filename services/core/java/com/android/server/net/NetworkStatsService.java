@@ -81,6 +81,7 @@ import android.net.INetworkManagementEventObserver;
 import android.net.INetworkStatsService;
 import android.net.INetworkStatsSession;
 import android.net.LinkProperties;
+import android.net.NetworkCapabilities;
 import android.net.NetworkIdentity;
 import android.net.NetworkInfo;
 import android.net.NetworkState;
@@ -123,6 +124,7 @@ import com.android.internal.util.FileRotator;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.server.EventLogTags;
 import com.android.server.LocalServices;
+import com.android.server.NetPluginDelegate;
 import com.android.server.connectivity.Tethering;
 
 import java.io.File;
@@ -940,7 +942,11 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
 
         final ArraySet<String> mobileIfaces = new ArraySet<>();
         for (NetworkState state : states) {
-            if (state.networkInfo.isConnected()) {
+            if (state.networkInfo.isConnected() && (state.networkCapabilities == null
+                        || !state.networkCapabilities.hasTransport(
+                                    NetworkCapabilities.TRANSPORT_CELLULAR)
+                        || state.networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_INTERNET))) {
                 final boolean isMobile = isNetworkTypeMobile(state.networkInfo.getType());
                 final NetworkIdentity ident = NetworkIdentity.buildNetworkIdentity(mContext, state);
 

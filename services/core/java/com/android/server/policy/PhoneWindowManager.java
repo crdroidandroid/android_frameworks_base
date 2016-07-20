@@ -1456,8 +1456,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     boolean isUserSetupComplete() {
-        return Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                Settings.Secure.USER_SETUP_COMPLETE, 0, UserHandle.USER_CURRENT) != 0;
+        return CMSettings.Secure.getIntForUser(mContext.getContentResolver(),
+                CMSettings.Secure.CM_SETUP_WIZARD_COMPLETED, 0, UserHandle.USER_CURRENT) != 0;
     }
 
     private void handleShortPressOnHome() {
@@ -1780,10 +1780,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                 mNavigationBarLeftInLandscape) {
                             requestTransientBars(mNavigationBar);
                         }
-                        if (mShowKeyguardOnLeftSwipe && isKeyguardShowingOrOccluded()) {
+                        boolean focusedWindowIsExternalKeyguard = false;
+                        if (mFocusedWindow != null) {
+                            focusedWindowIsExternalKeyguard = (mFocusedWindow.getAttrs().type
+                                    & WindowManager.LayoutParams.TYPE_KEYGUARD_PANEL) != 0;
+                        }
+                        if (mShowKeyguardOnLeftSwipe && isKeyguardShowingOrOccluded()
+                                && focusedWindowIsExternalKeyguard) {
                             // Show keyguard
                             mKeyguardDelegate.showKeyguard();
-                            mShowKeyguardOnLeftSwipe = false;
                         }
                     }
                     @Override
@@ -2776,6 +2781,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return mWinShowWhenLocked;
     }
 
+    @Override
+    public WindowState getWinKeyguardPanelLw() {
+        return mKeyguardPanel;
+    }
+
     /** {@inheritDoc} */
     @Override
     public View addStartingWindow(IBinder appToken, String packageName, int theme,
@@ -3242,6 +3252,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // timeout.
         if (keyCode == KeyEvent.KEYCODE_HOME) {
 
+            if (mTopFullscreenOpaqueWindowState != null &&
+                    (mTopFullscreenOpaqueWindowState.getAttrs().privateFlags
+                            & WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS) != 0
+                    && mScreenOnFully) {
+                return 0;
+            }
+
             // Disable home key if hw keys is set to off
             if (scanCode != 0 && !hasHwKeysEnabled()) {
                 Log.i(TAG, "Ignoring Home Key: we have hw keys disabled");
@@ -3341,17 +3358,23 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_MENU) {
-
-            // Disable menu key if hw keys is set to off
-            if (scanCode != 0 && !hasHwKeysEnabled()) {
-                Log.i(TAG, "Ignoring Menu Key: we have hw keys disabled");
-                return 0;
-            }
-
             // Hijack modified menu keys for debugging features
             final int chordBug = KeyEvent.META_SHIFT_ON;
             if (virtualKey || keyguardOn) {
                 // Let the app handle the key
+                return 0;
+            }
+
+            if (mTopFullscreenOpaqueWindowState != null &&
+                    (mTopFullscreenOpaqueWindowState.getAttrs().privateFlags
+                            & WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS) != 0
+                    && mScreenOnFully) {
+                return 0;
+            }
+
+            // Disable menu key if hw keys is set to off
+            if (scanCode != 0 && !hasHwKeysEnabled()) {
+                Log.i(TAG, "Ignoring Menu Key: we have hw keys disabled");
                 return 0;
             }
 
@@ -3427,6 +3450,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return 0;
         } else if (keyCode == KeyEvent.KEYCODE_APP_SWITCH) {
+            if (mTopFullscreenOpaqueWindowState != null &&
+                    (mTopFullscreenOpaqueWindowState.getAttrs().privateFlags
+                            & WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS) != 0
+                    && mScreenOnFully) {
+                return 0;
+            }
 
             // Disable app switch key if hw keys is set to off
             if (scanCode != 0 && !hasHwKeysEnabled()) {
@@ -5989,7 +6018,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_POWER: {
                 if (mTopFullscreenOpaqueWindowState != null &&
                         (mTopFullscreenOpaqueWindowState.getAttrs().privateFlags
-                        & WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_POWER_KEY) != 0
+                        & (WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS |
+                            WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_POWER_KEY)) != 0
                         && mScreenOnFully) {
                     return result;
                 }
@@ -6101,7 +6131,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         if (isWakeKey) {
-            wakeUp(event.getEventTime(), mAllowTheaterModeWakeFromKey, "android.policy:KEY", true);
+            wakeUp(event.getEventTime(), mAllowTheaterModeWakeFromKey, "android.policy:KEY",
+                    event.getKeyCode() == KeyEvent.KEYCODE_WAKEUP /* check prox only on wake key*/);
         }
 
         return result;
@@ -6539,7 +6570,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private void wakeUpFromPowerKey(long eventTime) {
-        wakeUp(eventTime, mAllowTheaterModeWakeFromPowerKey, "android.policy:POWER", true);
+        wakeUp(eventTime, mAllowTheaterModeWakeFromPowerKey, "android.policy:POWER");
     }
 
     private boolean wakeUp(long wakeTime, boolean wakeInTheaterMode, String reason) {

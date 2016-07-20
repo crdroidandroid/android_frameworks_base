@@ -248,14 +248,12 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     public void showDialog(boolean keyguardShowing, boolean isDeviceProvisioned) {
         mKeyguardShowing = keyguardShowing;
         mDeviceProvisioned = isDeviceProvisioned;
-        if (mDialog != null && mUiContext == null) {
+        if (mDialog != null) {
             mDialog.dismiss();
             mDialog = null;
-            mDialog = createDialog();
             // Show delayed, so that the dismiss of the previous dialog completes
             mHandler.sendEmptyMessage(MESSAGE_SHOW);
         } else {
-            mDialog = createDialog();
             handleShow();
         }
     }
@@ -274,6 +272,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private void handleShow() {
         awakenIfNecessary();
+        mDialog = createDialog();
         prepareDialog();
 
         // If we only have 1 item and it's a simple press action, just do this action.
@@ -293,7 +292,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private Context getUiContext() {
         if (mUiContext == null) {
             mUiContext = ThemeUtils.createUiContext(mContext);
-            mUiContext.setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
+            mUiContext.setTheme(com.android.internal.R.style.Theme_Power_Dialog);
         }
         return mUiContext != null ? mUiContext : mContext;
     }
@@ -417,7 +416,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         params.mOnClickListener = this;
         params.mForceInverseBackground = true;
 
-        GlobalActionsDialog dialog = new GlobalActionsDialog(getUiContext(), params);
+        GlobalActionsDialog dialog = new GlobalActionsDialog(/** system context **/ mContext,
+                /** themed context **/ getUiContext(), params);
         dialog.setCanceledOnTouchOutside(false); // Handled by the custom class.
 
         dialog.getListView().setItemsCanFocus(true);
@@ -1457,6 +1457,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private static final class GlobalActionsDialog extends Dialog implements DialogInterface {
         private final Context mContext;
+        private Context mSystemContext = null;
         private final int mWindowTouchSlop;
         private final AlertController mAlert;
         private final MyAdapter mAdapter;
@@ -1466,13 +1467,26 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         private boolean mIntercepted;
         private boolean mCancelOnUp;
 
-        public GlobalActionsDialog(Context context, AlertParams params) {
+        private GlobalActionsDialog(Context context, AlertParams params) {
             super(context, getDialogTheme(context));
             mContext = getContext();
             mAlert = new AlertController(mContext, this, getWindow());
             mAdapter = (MyAdapter) params.mAdapter;
             mWindowTouchSlop = ViewConfiguration.get(context).getScaledWindowTouchSlop();
             params.apply(mAlert);
+        }
+
+        /**
+         * Utilized for a working global actions dialog for both accessibility services (which
+         * require a system context) and
+         * @param systemContext Base context (should be from system process)
+         * @param themedContext Themed context (created from system ui)
+         * @param params
+         */
+        public GlobalActionsDialog(Context systemContext, Context themedContext,
+                AlertParams params) {
+            this(themedContext, params);
+            mSystemContext = systemContext;
         }
 
         private static int getDialogTheme(Context context) {
@@ -1488,8 +1502,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             // of dismissing the dialog on touch outside. This is because the dialog
             // is dismissed on the first down while the global gesture is a long press
             // with two fingers anywhere on the screen.
-            if (EnableAccessibilityController.canEnableAccessibilityViaGesture(mContext)) {
-                mEnableAccessibilityController = new EnableAccessibilityController(mContext,
+            if (EnableAccessibilityController.canEnableAccessibilityViaGesture(mSystemContext)) {
+                mEnableAccessibilityController = new EnableAccessibilityController(mSystemContext,
                         new Runnable() {
                     @Override
                     public void run() {

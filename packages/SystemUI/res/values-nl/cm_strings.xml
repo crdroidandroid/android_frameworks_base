@@ -74,7 +74,7 @@
   <string name="quick_settings_tile_reset_to_default">Standaardindeling herstellen</string>
   <string name="quick_settings_title_header">Koptekst</string>
   <string name="quick_settings_title_tiles">Tegels</string>
-  <string name="quick_settings_title_show_weather">Weer weergeven</string>
+  <string name="quick_settings_title_show_weather">Weer tonen</string>
   <string name="quick_settings_title_show_brightness_slider">Schuifregelaar helderheid</string>
   <string name="quick_settings_title_enlarge_first_row">Eerst rij vergroten</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
@@ -214,4 +214,8 @@
   <string name="accessibility_dock_battery_level">Dock-accu <xliff:g id="number">%d</xliff:g> procent.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Wachtrij weergeven</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
+  <!-- Weather string format in keyguard -->
 </resources>

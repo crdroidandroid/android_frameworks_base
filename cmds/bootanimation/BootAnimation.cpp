@@ -27,6 +27,7 @@
 #include <time.h>
 #include <pthread.h>
 #include <sys/select.h>
+#include <sys/syscall.h>
 
 #include <cutils/properties.h>
 
@@ -72,6 +73,7 @@
 #define OEM_SHUTDOWN_ANIMATION_FILE "/oem/media/shutdownanimation.zip"
 #define SYSTEM_SHUTDOWN_ANIMATION_FILE "/system/media/shutdownanimation.zip"
 #define SYSTEM_ENCRYPTED_SHUTDOWN_ANIMATION_FILE "/system/media/shutdownanimation-encrypted.zip"
+#define THEME_SHUTDOWN_ANIMATION_FILE "/data/system/theme/shutdownanimation.zip"
 
 #define OEM_BOOT_MUSIC_FILE "/oem/media/boot.wav"
 #define SYSTEM_BOOT_MUSIC_FILE "/system/media/boot.wav"
@@ -407,14 +409,9 @@ status_t BootAnimation::readyToRun() {
             (access(getAnimationFileName(IMG_ENC), R_OK) == 0) &&
             ((zipFile = ZipFileRO::open(getAnimationFileName(IMG_ENC))) != NULL)) ||
 
-            ((access(THEME_BOOTANIMATION_FILE, R_OK) == 0) &&
-            ((zipFile = ZipFileRO::open(THEME_BOOTANIMATION_FILE)) != NULL)) ||
+            ((access(getAnimationFileName(IMG_THM), R_OK) == 0) &&
+            ((zipFile = ZipFileRO::open(getAnimationFileName(IMG_THM))) != NULL)) ||
 
-            ((access(OEM_BOOTANIMATION_FILE, R_OK) == 0) &&
-            ((zipFile = ZipFileRO::open(OEM_BOOTANIMATION_FILE)) != NULL)) ||
-
-            ((access(SYSTEM_BOOTANIMATION_FILE, R_OK) == 0) &&
-            ((zipFile = ZipFileRO::open(SYSTEM_BOOTANIMATION_FILE)) != NULL)) ||
 
             ((access(getAnimationFileName(IMG_DATA), R_OK) == 0) &&
             ((zipFile = ZipFileRO::open(getAnimationFileName(IMG_DATA))) != NULL)) ||
@@ -438,19 +435,14 @@ status_t BootAnimation::readyToRun() {
         return NO_ERROR;
 
     if (fd != NULL) {
-        // We could use readahead..
-        // ... if bionic supported it :(
-        //readahead(fd, 0, INT_MAX);
-        void *crappyBuffer = malloc(2*1024*1024);
-        if (crappyBuffer != NULL) {
-            // Read all the zip
-            while (!feof(fd))
-                fread(crappyBuffer, 1024, 2*1024, fd);
-
-            free(crappyBuffer);
-        } else {
-            ALOGW("Unable to allocate memory to preload the animation");
-        }
+        // Since including fcntl.h doesn't give us the wrapper, use the syscall.
+        // 32 bits takes LO/HI offset (we don't care about endianness of 0).
+#if defined(__aarch64__) || defined(__x86_64__)
+        if (syscall(__NR_readahead, fd, 0, INT_MAX))
+#else
+        if (syscall(__NR_readahead, fd, 0, 0, INT_MAX))
+#endif
+            ALOGW("Unable to cache the animation");
         fclose(fd);
     }
 #endif
@@ -892,12 +884,14 @@ bool BootAnimation::movie()
 
 const char *BootAnimation::getAnimationFileName(ImageID image)
 {
-    const char *fileName[2][3] = { { OEM_BOOTANIMATION_FILE,
+    const char *fileName[2][4] = { { OEM_BOOTANIMATION_FILE,
             SYSTEM_BOOTANIMATION_FILE,
-            SYSTEM_ENCRYPTED_BOOTANIMATION_FILE }, {
+            SYSTEM_ENCRYPTED_BOOTANIMATION_FILE,
+            THEME_BOOTANIMATION_FILE }, {
             OEM_SHUTDOWN_ANIMATION_FILE,
             SYSTEM_SHUTDOWN_ANIMATION_FILE,
-            SYSTEM_ENCRYPTED_SHUTDOWN_ANIMATION_FILE} };
+            SYSTEM_ENCRYPTED_SHUTDOWN_ANIMATION_FILE,
+            THEME_SHUTDOWN_ANIMATION_FILE} };
     int state;
     char sku[PROPERTY_VALUE_MAX];
     char skusuffix[PATH_MAX];

@@ -118,8 +118,6 @@ import com.android.server.LocalServices;
 import com.android.server.am.ActivityStack.ActivityState;
 import com.android.server.wm.WindowManagerService;
 
-import cyanogenmod.power.PerformanceManagerInternal;
-
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -276,8 +274,6 @@ public final class ActivityStackSupervisor implements DisplayListener {
 
     PowerManager mPm;
 
-    PerformanceManagerInternal mPerf;
-
     /**
      * Is the privacy guard currently enabled? Shared between ActivityStacks
      */
@@ -354,17 +350,6 @@ public final class ActivityStackSupervisor implements DisplayListener {
         mHandler = new ActivityStackSupervisorHandler(mService.mHandler.getLooper());
     }
 
-    private void launchBoost() {
-        if (mPerf == null) {
-            mPerf = LocalServices.getService(PerformanceManagerInternal.class);
-        }
-        if (mPerf == null) {
-            Slog.e(TAG, "PerformanceManager not ready!");
-        } else {
-            mPerf.launchBoost();
-        }
-    }
-    
     /**
      * At the time when the constructor runs, the power manager has not yet been
      * initialized.  So we initialize our wakelocks afterwards.
@@ -974,8 +959,13 @@ public final class ActivityStackSupervisor implements DisplayListener {
 
             try {
                 //TODO: This needs to be a flushed out API in the future.
-                if (intent.getComponent() != null && AppGlobals.getPackageManager()
-                        .isComponentProtected(callingPackage, intent.getComponent(), userId)) {
+                boolean isProtected = intent.getComponent() != null
+                        && AppGlobals.getPackageManager()
+                        .isComponentProtected(callingPackage, callingUid,
+                                intent.getComponent(), userId) &&
+                        (intent.getFlags()&Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0;
+
+                if (isProtected) {
                     Message msg = mService.mHandler.obtainMessage(
                             ActivityManagerService.POST_COMPONENT_PROTECTED_MSG);
                     //Store start flags, userid
@@ -988,6 +978,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+
             final int realCallingPid = Binder.getCallingPid();
             final int realCallingUid = Binder.getCallingUid();
             int callingPid;
@@ -1468,8 +1459,6 @@ public final class ActivityStackSupervisor implements DisplayListener {
                             Display.DEFAULT_DISPLAY : mFocusedStack.mDisplayId) :
                             (container.mActivityDisplay == null ? Display.DEFAULT_DISPLAY :
                                     container.mActivityDisplay.mDisplayId)));
-            /* Acquire perf lock during new app launch */
-            launchBoost();
         }
 
         ActivityRecord sourceRecord = null;
@@ -1884,6 +1873,29 @@ public final class ActivityStackSupervisor implements DisplayListener {
         if (inTask != null && !inTask.inRecents) {
             Slog.w(TAG, "Starting activity in task not in recents: " + inTask);
             inTask = null;
+        }
+
+        try {
+            //TODO: This needs to be a flushed out API in the future.
+            boolean isProtected = intent.getComponent() != null
+                    && AppGlobals.getPackageManager()
+                    .isComponentProtected(sourceRecord == null ? "android" :
+                                    sourceRecord.launchedFromPackage, r.launchedFromUid,
+                            intent.getComponent(), r.userId) &&
+                    (intent.getFlags()&Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0;
+
+            if (isProtected && r.state == INITIALIZING) {
+                Message msg = mService.mHandler.obtainMessage(
+                        ActivityManagerService.POST_COMPONENT_PROTECTED_MSG);
+                //Store start flags, userid
+                intent.setFlags(startFlags);
+                intent.putExtra("com.android.settings.PROTECTED_APPS_USER_ID", r.userId);
+                msg.obj = intent;
+                mService.mHandler.sendMessage(msg);
+                return ActivityManager.START_NOT_CURRENT_USER_ACTIVITY;
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
 
         final boolean launchSingleTop = r.launchMode == ActivityInfo.LAUNCH_SINGLE_TOP;
@@ -2822,7 +2834,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
         ActivityRecord top = task.stack.topRunningActivityLocked(null);
         /* App is launching from recent apps and it's a new process */
         if(top != null && top.state == ActivityState.DESTROYED) {
-            launchBoost();
+            mService.launchBoost(-1, top.packageName);
         }
 
         if ((flags & ActivityManager.MOVE_TASK_NO_USER_ACTION) == 0) {
@@ -3107,15 +3119,15 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 final ActivityRecord ar = stack.findTaskLocked(r);
                 if (ar != null) {
                     if (ar.state == ActivityState.DESTROYED) {
-                        launchBoost();
+                        mService.launchBoost(-1, r.packageName);
                     }
                     return ar;
                 }
             }
         }
-        if (DEBUG_TASKS) Slog.d(TAG_TASKS, "No task found");
-        launchBoost();
+        mService.launchBoost(-1, r.packageName);
 
+        if (DEBUG_TASKS) Slog.d(TAG_TASKS, "No task found");
         return null;
     }
 

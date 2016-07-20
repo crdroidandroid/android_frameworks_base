@@ -53,9 +53,11 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
+import com.android.systemui.qs.tiles.CustomQSTile;
 import com.android.systemui.qs.tiles.EditTile;
 import com.android.systemui.settings.BrightnessController;
 import com.android.systemui.settings.ToggleSlider;
+import com.android.systemui.statusbar.phone.NotificationPanelView;
 import com.android.systemui.statusbar.phone.QSTileHost;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.tuner.QsTuner;
@@ -63,7 +65,6 @@ import com.viewpagerindicator.CirclePageIndicator;
 import cyanogenmod.app.StatusBarPanelCustomTile;
 import cyanogenmod.providers.CMSettings;
 import org.cyanogenmod.internal.logging.CMMetricsLogger;
-import org.cyanogenmod.internal.util.QSConstants;
 import org.cyanogenmod.internal.util.QSUtils;
 
 import java.util.ArrayList;
@@ -73,6 +74,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 public class QSDragPanel extends QSPanel implements View.OnDragListener, View.OnLongClickListener {
 
@@ -88,6 +91,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     protected final ArrayList<QSPage> mPages = new ArrayList<>();
 
+    private NotificationPanelView mPanelView;
     protected QSViewPager mViewPager;
     protected PagerAdapter mPagerAdapter;
     QSPanelTopView mQsPanelTop;
@@ -96,6 +100,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     private TextView mDetailRemoveButton;
     private DragTileRecord mDraggingRecord, mLastDragRecord;
+    private ViewGroup mDetailButtons;
     private boolean mEditing;
     private boolean mDragging;
     private float mLastTouchLocationX, mLastTouchLocationY;
@@ -113,15 +118,13 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     List<TileRecord> mCurrentlyAnimating
             = Collections.synchronizedList(new ArrayList<TileRecord>());
 
-    private Point mDisplaySize;
-    private int[] mTmpLoc;
-
     private Runnable mResetPage = new Runnable() {
         @Override
         public void run() {
-            if (!mListening) {
+            if (!mExpanded) {
                 // only reset when the user isn't interacting at all
                 mViewPager.setCurrentItem(0);
+                mPagerAdapter.notifyDataSetChanged();
             }
         }
     };
@@ -139,6 +142,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         updateResources();
 
         mDetail = LayoutInflater.from(mContext).inflate(R.layout.qs_detail, this, false);
+        mDetailButtons = (ViewGroup) mDetail.findViewById(R.id.buttons);
         mDetailContent = (ViewGroup) mDetail.findViewById(android.R.id.content);
         mDetailRemoveButton = (TextView) mDetail.findViewById(android.R.id.button3);
         mDetailSettingsButton = (TextView) mDetail.findViewById(android.R.id.button2);
@@ -364,7 +368,14 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     protected void drawTile(TileRecord r, QSTile.State state) {
         if (mEditing) {
-            state.visible = true;
+            if ((r.tile instanceof CustomQSTile)
+                    && (((CustomQSTile) r.tile).isUserRemoved()
+                    || ((CustomQSTile) r.tile).getTile() == null)) {
+                // don't modify visibility state if removed, or not yet published
+            } else {
+                state.visible = true;
+                state.enabled = true;
+            }
         }
         final int visibility = state.visible ? VISIBLE : GONE;
         setTileVisibility(r.tileView, visibility);
@@ -376,12 +387,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     public void setListening(boolean listening) {
         if (mListening == listening) return;
         mListening = listening;
-        // reset the page when inactive for a while
-        if (listening) {
-            removeCallbacks(mResetPage);
-        } else {
-            postDelayed(mResetPage, PAGE_RESET_DELAY);
-        }
         for (TileRecord r : mRecords) {
             r.tile.setListening(mListening);
         }
@@ -611,6 +616,13 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         final Iterator<QSTile<?>> newTileIterator = tilesCollection.iterator();
         while (newTileIterator.hasNext()) {
             QSTile<?> tile = newTileIterator.next();
+            if (tile instanceof CustomQSTile) {
+                if (((CustomQSTile) tile).isUserRemoved()
+                        || ((CustomQSTile) tile).getTile() == null) {
+                    // tile not published yet
+                    continue;
+                }
+            }
             final int tileDestPage = getPagesForCount(runningCount + 1) - 1;
 
             if (DEBUG_TILES) {
@@ -771,13 +783,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        mTmpLoc = null;
-        mDisplaySize = null;
-    }
-
-    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int width = MeasureSpec.getSize(widthMeasureSpec);
 
@@ -791,37 +796,18 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         if (mFooter.hasFooter()) {
             h += mFooter.getView().getMeasuredHeight();
         }
+        mGridHeight = h;
+
         mDetail.measure(exactly(width), MeasureSpec.UNSPECIFIED);
+
         if (mDetail.getMeasuredHeight() < h) {
             mDetail.measure(exactly(width), exactly(h));
         }
-
-        // Check if the detail view would be overflowing below the physical height of the device
-        // and cutting the content off. If it is, reduce the detail height to fit.
-        if (isShowingDetail()) {
-            if (mDisplaySize == null) {
-                mDisplaySize = new Point();
-                getDisplay().getSize(mDisplaySize);
-            }
-            if (mTmpLoc == null) {
-                mTmpLoc = new int[2];
-                mDetail.getLocationOnScreen(mTmpLoc);
-            }
-
-            final int containerTop = mTmpLoc[1];
-            final int detailBottom = containerTop + mDetail.getMeasuredHeight();
-            if (detailBottom >= mDisplaySize.y) {
-                // panel is hanging below the screen
-                final int detailMinHeight = mDisplaySize.y - containerTop;
-                mDetail.measure(exactly(width), exactly(detailMinHeight));
-            }
-            setMeasuredDimension(width, mDetail.getMeasuredHeight());
-            mGridHeight = mDetail.getMeasuredHeight();
-        } else {
-            setMeasuredDimension(width, h);
-            mGridHeight = h;
+        if (isShowingDetail() && !isClosingDetail() && mExpanded) {
+            h = mDetail.getMeasuredHeight();
         }
 
+        setMeasuredDimension(width, h);
         for (TileRecord record : mRecords) {
             setupRecord(record);
         }
@@ -851,11 +837,13 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             }
             r.tile.setDetailListening(show);
             int x = (int) ((DragTileRecord) r).destination.x + r.tileView.getWidth() / 2;
-            int y = mViewPager.getTop() + (int) ((DragTileRecord) r).destination.y + r.tileView.getHeight() / 2;
+            int y = mViewPager.getTop()
+                    + (int) ((DragTileRecord) r).destination.y + r.tileView.getHeight() / 2;
             handleShowDetailImpl(r, show, x, y);
         } else {
             super.handleShowDetailTile(r, show);
         }
+        mPageIndicator.setVisibility(!show ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
@@ -868,9 +856,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         // view pager laid out from top of brightness view to bottom to page through settings
         mViewPager.layout(0, 0, w, viewPagerBottom);
 
-        // layout page indicator inside viewpager inset
-        mPageIndicator.layout(0, b - mPageIndicatorHeight, w, b);
-
         mDetail.layout(0, 0, w, mDetail.getMeasuredHeight());
 
         if (mFooter.hasFooter()) {
@@ -881,7 +866,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
         if (!isShowingDetail() && !isClosingDetail()) {
             mQsPanelTop.bringToFront();
+
         }
+        // layout page indicator inside viewpager inset
+        mPageIndicator.layout(0, b - mPageIndicatorHeight, w, b);
     }
 
     protected int getRowTop(int row) {
@@ -1082,6 +1070,17 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                             }
                         });
                         break;
+                    } else if (mDraggingRecord.tile instanceof CustomQSTile) {
+                        ((CustomQSTile) mDraggingRecord.tile).setUserRemoved(true);
+                        final String spec = mHost.getSpec(mDraggingRecord.tile);
+                        restoreDraggingTilePosition(v, new Runnable() {
+                            @Override
+                            public void run() {
+                                // it might get added back later by the app, but that's ok,
+                                // we just want to reset its position after it has been removed.
+                                mHost.remove(spec);
+                            }
+                        });
                     } else {
                         mRestored = true;
                         removeDraggingRecord();
@@ -1805,17 +1804,27 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 }
             });
         }
+        mPanelView.setDetailRequestedScrollLock(mExpanded && show
+                && getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE);
     }
 
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         FontSizeUtils.updateFontSize(mDetailRemoveButton, R.dimen.qs_detail_button_text_size);
+        mPanelView.setDetailRequestedScrollLock(mExpanded && isShowingDetail()
+                && getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE);
     }
 
     @Override
     public void setExpanded(boolean expanded) {
         super.setExpanded(expanded);
+        // reset the page when inactive for a while
+        if (expanded) {
+            removeCallbacks(mResetPage);
+        } else {
+            postDelayed(mResetPage, PAGE_RESET_DELAY);
+        }
         if (!expanded) {
             if (mEditing) {
                 mHost.setEditing(false);
@@ -1842,10 +1851,11 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             for (TileRecord r : mRecords) {
                 r.tile.clearState();
             }
+            updateDetailText();
+            mQsPanelTop.updateResources();
             if (mListening) {
                 refreshAllTiles();
             }
-            updateDetailText();
         }
     }
 
@@ -1857,6 +1867,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         if (mSettingsObserver != null) {
             mSettingsObserver.unobserve();
         }
+    }
+
+    public void setPanelView(NotificationPanelView panelView) {
+        this.mPanelView = panelView;
     }
 
     public static class TilesListAdapter extends BaseExpandableListAdapter
@@ -1885,7 +1899,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             final Iterator<String> i = tiles.iterator();
             while (i.hasNext()) {
                 final String spec = i.next();
-                if (QSUtils.isStaticQsTile(spec) || QSUtils.isDynamicQsTile(spec)) {
+                if (QSUtils.isStaticQsTile(spec)
+                        || QSUtils.isDynamicQsTile(extractTileTagFromSpec(spec))) {
                     List<String> packageList = mPackageTileMap.get(PACKAGE_ANDROID);
                     packageList.add(spec);
                 } else {
@@ -1898,13 +1913,122 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 }
             }
 
+            final Map<String, ?> stringMap = CustomQSTile.getCustomQSTilePrefs(mContext).getAll();
+            for (Map.Entry<String, ?> entry : stringMap.entrySet()) {
+                if (entry.getValue() instanceof Boolean) {
+                    if ((Boolean)entry.getValue()) {
+                        final String key = entry.getKey();
+                        if (QSUtils.isDynamicQsTile(extractTileTagFromSpec(key))) {
+                            mPackageTileMap.get(PACKAGE_ANDROID).add(key);
+                        } else {
+                            final String customTilePackage = getCustomTilePackage(key);
+                            List<String> packageList = mPackageTileMap.get(customTilePackage);
+                            if (packageList == null) {
+                                mPackageTileMap.put(customTilePackage,
+                                        packageList = new ArrayList<>());
+                            }
+                            packageList.add(key);
+
+                        }
+                    }
+                }
+            };
+
             final List<String> systemTiles = mPackageTileMap.get(PACKAGE_ANDROID);
             Collections.sort(systemTiles);
         }
 
         private String getCustomTilePackage(String spec) {
-            StatusBarPanelCustomTile sbc = mHost.getCustomTileData().get(spec).sbc;
-            return sbc.getPackage();
+            if (mHost.getCustomTileData().get(spec) != null) {
+                StatusBarPanelCustomTile sbc = mHost.getCustomTileData().get(spec).sbc;
+                return sbc.getPackage();
+            } else {
+                return extractPackageFromCustomTileSpec(spec);
+            }
+        }
+
+        private static String extractPackageFromCustomTileSpec(String spec) {
+            if (spec != null && !spec.isEmpty()) {
+                final String[] split = spec.split("\\|");
+                if (split != null && split.length > 2) {
+                    return split[1];
+                }
+                return spec;
+            }
+            return null;
+        }
+
+        private static String extractTileTagFromSpec(String spec) {
+            if (spec != null && !spec.isEmpty()) {
+                final String[] split = spec.split("\\|");
+                if (split != null && split.length == 5) {
+                    /** for {@link cyanogenmod.app.StatusBarPanelCustomTile#key() **/
+                    return split[3];
+                } else if (split != null && split.length == 3) {
+                    /** for {@link cyanogenmod.app.StatusBarPanelCustomTile#persistableKey()} **/
+                    return split[2];
+                }
+                return spec;
+            }
+            return null;
+        }
+
+        private Drawable getQSTileIcon(String spec) {
+            if (QSUtils.isDynamicQsTile(extractTileTagFromSpec(spec))) {
+                return QSTile.ResourceIcon.get(QSUtils.getDynamicQSTileResIconId(mContext,
+                        UserHandle.myUserId(), extractTileTagFromSpec(spec))).getDrawable(mContext);
+            } else if (QSUtils.isStaticQsTile(spec)) {
+                final int res = QSTileHost.getIconResource(spec);
+                if (res != 0) {
+                    return QSTile.ResourceIcon.get(res).getDrawable(mContext);
+                } else {
+                    return mContext.getPackageManager().getDefaultActivityIcon();
+                }
+            } else {
+                QSTile<?> tile = mHost.getTile(spec);
+                if (tile != null) {
+                    QSTile.State state = tile.getState();
+                    if (state != null && state.icon != null) {
+                        return state.icon.getDrawable(mContext);
+                    }
+                }
+                return getPackageDrawable(getCustomTilePackage(spec));
+            }
+        }
+
+        private String getPackageLabel(String packageName) {
+            try {
+                return mContext.getPackageManager().getApplicationLabel(
+                        mContext.getPackageManager().getApplicationInfo(packageName, 0)).toString();
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private Drawable getPackageDrawable(String packageName) {
+            try {
+                return mContext.getPackageManager().getApplicationIcon(packageName);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private String getQSTileLabel(String spec) {
+            if (QSUtils.isStaticQsTile(spec)) {
+                int resource = QSTileHost.getLabelResource(spec);
+                if (resource != 0) {
+                    return mContext.getText(resource).toString();
+                } else {
+                    return spec;
+                }
+            } else if (QSUtils.isDynamicQsTile(extractTileTagFromSpec(spec))) {
+                return QSUtils.getDynamicQSTileLabel(mContext,
+                        UserHandle.myUserId(), extractTileTagFromSpec(spec));
+            } else {
+                return getPackageLabel(getCustomTilePackage(spec));
+            }
         }
 
         @Override
@@ -1967,6 +2091,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 // special icon
                 systemOrAppIcon.setImageResource(R.drawable.ic_qs_tile_category_system);
             } else {
+                group = getPackageLabel(group);
                 systemOrAppIcon.setImageResource(R.drawable.ic_qs_tile_category_other);
             }
             title.setText(group);
@@ -2003,65 +2128,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             icon.setImageDrawable(getQSTileIcon(spec));
 
             return child;
-        }
-
-        private String getQSTileLabel(String spec) {
-            if (QSUtils.isStaticQsTile(spec)) {
-                int resource = QSTileHost.getLabelResource(spec);
-                if (resource != 0) {
-                    return mContext.getText(resource).toString();
-                } else {
-                    return spec;
-                }
-            } else if (QSUtils.isDynamicQsTile(spec)) {
-                return QSUtils.getDynamicQSTileLabel(mContext,
-                        UserHandle.myUserId(), spec);
-            } else {
-                return getPackageLabel(getCustomTilePackage(spec));
-            }
-        }
-
-        private Drawable getQSTileIcon(String spec) {
-            if (QSUtils.isDynamicQsTile(spec)) {
-                return QSTile.ResourceIcon.get(
-                        QSUtils.getDynamicQSTileResIconId(mContext, UserHandle.myUserId(), spec))
-                        .getDrawable(mContext);
-            } else if (QSUtils.isStaticQsTile(spec)) {
-                final int res = QSTileHost.getIconResource(spec);
-                if (res != 0) {
-                    return QSTile.ResourceIcon.get(res).getDrawable(mContext);
-                } else {
-                    return mContext.getPackageManager().getDefaultActivityIcon();
-                }
-            } else {
-                QSTile<?> tile = mHost.getTile(spec);
-                if (tile != null) {
-                    QSTile.State state = tile.getState();
-                    if (state != null && state.icon != null) {
-                        return state.icon.getDrawable(mContext);
-                    }
-                }
-                return getPackageDrawable(getCustomTilePackage(spec));
-            }
-        }
-
-        private String getPackageLabel(String packageName) {
-            try {
-                return mContext.getPackageManager().getApplicationLabel(
-                        mContext.getPackageManager().getApplicationInfo(packageName, 0)).toString();
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        private Drawable getPackageDrawable(String packageName) {
-            try {
-                return mContext.getPackageManager().getApplicationIcon(packageName);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-            return null;
         }
 
         @Override
@@ -2104,7 +2170,21 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 public boolean onChildClick(ExpandableListView parent, View v,
                                             int groupPosition, int childPosition, long id) {
                     String spec = getChild(groupPosition, childPosition);
-                    mPanel.add(spec);
+
+                    final QSTile<?> tile = mHost.getTile(spec);
+                    if (tile != null && tile instanceof CustomQSTile) {
+                        // already present
+                        ((CustomQSTile) tile).setUserRemoved(false);
+                        mPanel.refreshAllTiles();
+                    } else {
+                        // reset its state just in case it's not published
+                        CustomQSTile.getCustomQSTilePrefs(mContext)
+                                .edit()
+                                .remove(spec)
+                                .apply();
+                        mPanel.add(spec);
+                        // TODO notify user the app isn't publishing the tile, but it now can be!
+                    }
                     mPanel.closeDetail();
                     return true;
                 }

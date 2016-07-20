@@ -16,7 +16,14 @@
 
 package com.android.server;
 
+import static android.content.pm.PackageManager.INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS;
+import static android.content.pm.PackageManager.INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ASK;
+import static android.content.pm.PackageManager.INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_NEVER;
+import static android.content.pm.PackageManager.INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_UNDEFINED;
+import static android.content.pm.PackageManager.INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS_ASK;
+
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.pm.FeatureInfo;
 import android.content.pm.Signature;
 import android.os.*;
@@ -98,10 +105,13 @@ public class SystemConfig {
 
     // These are the package names of apps which should be in the 'always'
     // URL-handling state upon factory reset.
-    final ArraySet<String> mLinkedApps = new ArraySet<>();
+    final ArraySet<AppLink> mLinkedApps = new ArraySet<>();
 
     final ArrayMap<Signature, ArraySet<String>> mSignatureAllowances
             = new ArrayMap<Signature, ArraySet<String>>();
+
+    // These are the permitted backup transport service components
+    final ArraySet<ComponentName> mBackupTransportWhitelist = new ArraySet<>();
 
     public static SystemConfig getInstance() {
         synchronized (SystemConfig.class) {
@@ -144,12 +154,16 @@ public class SystemConfig {
         return mFixedImeApps;
     }
 
-    public ArraySet<String> getLinkedApps() {
+    public ArraySet<AppLink> getLinkedApps() {
         return mLinkedApps;
     }
 
     public ArrayMap<Signature, ArraySet<String>> getSignatureAllowances() {
         return mSignatureAllowances;
+    }
+
+    public ArraySet<ComponentName> getBackupTransportWhitelist() {
+        return mBackupTransportWhitelist;
     }
 
     SystemConfig() {
@@ -418,11 +432,29 @@ public class SystemConfig {
 
                 } else if ("app-link".equals(name)) {
                     String pkgname = parser.getAttributeValue(null, "package");
+                    String state = parser.getAttributeValue(null, "state");
                     if (pkgname == null) {
                         Slog.w(TAG, "<app-link> without package in " + permFile + " at "
                                 + parser.getPositionDescription());
                     } else {
-                        mLinkedApps.add(pkgname);
+                        mLinkedApps.add(makeLink(pkgname, state));
+                    }
+                    XmlUtils.skipCurrentTag(parser);
+                } else if ("backup-transport-whitelisted-service".equals(name)) {
+                    String serviceName = parser.getAttributeValue(null, "service");
+                    if (serviceName == null) {
+                        Slog.w(TAG, "<backup-transport-whitelisted-service> without service in "
+                                + permFile + " at " + parser.getPositionDescription());
+                    } else {
+                        ComponentName cn = ComponentName.unflattenFromString(serviceName);
+                        if (cn == null) {
+                            Slog.w(TAG,
+                                    "<backup-transport-whitelisted-service> with invalid service name "
+                                    + serviceName + " in "+ permFile
+                                    + " at " + parser.getPositionDescription());
+                        } else {
+                            mBackupTransportWhitelist.add(cn);
+                        }
                     }
                     XmlUtils.skipCurrentTag(parser);
 
@@ -444,6 +476,23 @@ public class SystemConfig {
                 Slog.d(TAG, "Removed unavailable feature " + fname);
             }
         }
+    }
+
+    private AppLink makeLink(String pkgname, String state) {
+        AppLink al = new AppLink();
+        al.pkgname = pkgname;
+        if (state == null || "always".equals(state)) { // default
+            al.state = INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS;
+        } else if ("always-ask".equals(state)) {
+            al.state = INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS_ASK;
+        } else if ("ask".equals("state")) {
+            al.state = INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ASK;
+        } else if ("never".equals("state")) {
+            al.state = INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_NEVER;
+        } else {
+            al.state = INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_UNDEFINED;
+        }
+        return al;
     }
 
     void readPermission(XmlPullParser parser, String name)
@@ -478,6 +527,22 @@ public class SystemConfig {
                 }
             }
             XmlUtils.skipCurrentTag(parser);
+        }
+    }
+
+    /** Simple value class to hold an app-link entry.
+     *  It is public because PackageManagerService needs to see it */
+    public static class AppLink {
+        public String pkgname;
+        public int state;
+
+        @Override
+        public int hashCode() { return pkgname.hashCode(); }
+
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof AppLink)) { return false; }
+            return pkgname.equals(((AppLink)other).pkgname);
         }
     }
 }
