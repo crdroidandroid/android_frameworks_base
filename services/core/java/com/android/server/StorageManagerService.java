@@ -2250,6 +2250,12 @@ class StorageManagerService extends IStorageManager.Stub
         try {
             mVold.fdeCheckPassword(password);
             mHandler.postDelayed(() -> {
+                // unmount the internal emulated volume first
+                try {
+                    mVold.unmount(findVolumeByIdOrThrow("emulated").id);
+                } catch (Exception e) {
+                    Slog.e(TAG, "unable to shut down internal volume", e);
+                }
                 try {
                     mVold.fdeRestart();
                 } catch (Exception e) {
