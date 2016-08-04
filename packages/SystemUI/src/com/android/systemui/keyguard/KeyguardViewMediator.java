@@ -365,7 +365,7 @@ public class KeyguardViewMediator extends SystemUI {
                 UserInfo info = UserManager.get(mContext).getUserInfo(userId);
                 if (info != null && info.isGuest()) {
                     // If we just switched to a guest, try to dismiss keyguard.
-                    dismiss();
+                    dismiss(false /* allowWhileOccluded */);
                 }
             }
         }
@@ -503,6 +503,17 @@ public class KeyguardViewMediator extends SystemUI {
                         userId);
             }
         }
+
+        @Override
+        public void onTrustChanged(int userId) {
+            if (userId == KeyguardUpdateMonitor.getCurrentUser()) {
+                synchronized (KeyguardViewMediator.this) {
+                    notifyTrustedChangedLocked(mUpdateMonitor.getUserHasTrust(userId));
+                }
+            }
+        }
+
+
     };
 
     ViewMediatorCallback mViewMediatorCallback = new ViewMediatorCallback() {
@@ -1251,15 +1262,16 @@ public class KeyguardViewMediator extends SystemUI {
 
     /**
      * Dismiss the keyguard through the security layers.
+     * @param allowWhileOccluded if true, dismiss the keyguard even if it's currently occluded.
      */
-    public void handleDismiss() {
-        if (mShowing && !mOccluded) {
+    public void handleDismiss(boolean allowWhileOccluded) {
+        if (mShowing && (allowWhileOccluded || !mOccluded)) {
             mStatusBarKeyguardViewManager.dismiss();
         }
     }
 
-    public void dismiss() {
-        mHandler.sendEmptyMessage(DISMISS);
+    public void dismiss(boolean allowWhileOccluded) {
+        mHandler.obtainMessage(DISMISS, allowWhileOccluded ? 1 : 0, 0).sendToTarget();
     }
 
     /**
@@ -1349,6 +1361,9 @@ public class KeyguardViewMediator extends SystemUI {
      */
     public void setCurrentUser(int newUserId) {
         KeyguardUpdateMonitor.setCurrentUser(newUserId);
+        synchronized (this) {
+            notifyTrustedChangedLocked(mUpdateMonitor.getUserHasTrust(newUserId));
+        }
     }
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -1440,7 +1455,7 @@ public class KeyguardViewMediator extends SystemUI {
                     }
                     break;
                 case DISMISS:
-                    handleDismiss();
+                    handleDismiss(msg.arg1 == 1 ? true : false /* allowWhileOccluded */);
                     break;
                 case START_KEYGUARD_EXIT_ANIM:
                     StartKeyguardExitAnimParams params = (StartKeyguardExitAnimParams) msg.obj;
@@ -1929,6 +1944,20 @@ public class KeyguardViewMediator extends SystemUI {
         }
     }
 
+    private void notifyTrustedChangedLocked(boolean trusted) {
+        int size = mKeyguardStateCallbacks.size();
+        for (int i = size - 1; i >= 0; i--) {
+            try {
+                mKeyguardStateCallbacks.get(i).onTrustedChanged(trusted);
+            } catch (RemoteException e) {
+                Slog.w(TAG, "Failed to call notifyTrustedChangedLocked", e);
+                if (e instanceof DeadObjectException) {
+                    mKeyguardStateCallbacks.remove(i);
+                }
+            }
+        }
+    }
+
     public void addStateMonitorCallback(IKeyguardStateCallback callback) {
         synchronized (this) {
             mKeyguardStateCallbacks.add(callback);
@@ -1936,8 +1965,10 @@ public class KeyguardViewMediator extends SystemUI {
                 callback.onSimSecureStateChanged(mUpdateMonitor.isSimPinSecure());
                 callback.onShowingStateChanged(mShowing);
                 callback.onInputRestrictedStateChanged(mInputRestricted);
+                callback.onTrustedChanged(mUpdateMonitor.getUserHasTrust(
+                        KeyguardUpdateMonitor.getCurrentUser()));
             } catch (RemoteException e) {
-                Slog.w(TAG, "Failed to call onShowingStateChanged or onSimSecureStateChanged or onInputRestrictedStateChanged", e);
+                Slog.w(TAG, "Failed to call to IKeyguardStateCallback", e);
             }
         }
     }

@@ -4177,6 +4177,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    @Override
+    public boolean canShowDismissingWindowWhileLockedLw() {
+        return false;
+    }
+
     private void launchAssistLongPressAction() {
         performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
         sendCloseSystemWindows(SYSTEM_DIALOG_REASON_ASSIST);
@@ -5884,7 +5889,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mKeyguardDelegate.dismiss();
+                            mKeyguardDelegate.dismiss(false /* allowWhileOccluded */);
                         }
                     });
                 }
@@ -7321,7 +7326,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 @Override
                 public void run() {
                     // ask the keyguard to prompt the user to authenticate if necessary
-                    mKeyguardDelegate.dismiss();
+                    mKeyguardDelegate.dismiss(false /* allowWhileOccluded */);
                 }
             });
         }
