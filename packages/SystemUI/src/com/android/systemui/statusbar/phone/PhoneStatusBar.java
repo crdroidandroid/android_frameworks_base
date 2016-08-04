@@ -1955,7 +1955,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     @Override
-    protected void updateNotifications() {
+    public void updateNotifications() {
         mNotificationData.filterAndSort();
 
         updateNotificationShade();
@@ -3854,6 +3854,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // fix notification panel being shifted to the left by calling
         // instantCollapseNotificationPanel()
         instantCollapseNotificationPanel();
+
+        restartHalo();
 
         mStatusBarWindow.requestLayout();
         mStatusBarWindow.getViewTreeObserver().addOnGlobalLayoutListener(
