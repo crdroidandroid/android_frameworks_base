@@ -82,10 +82,11 @@
         android:id="@+id/halo_button"
         android:src="@drawable/ic_notify_halo"
         android:contentDescription="@string/accessibility_halo"
-        android:layout_width="50dp"
+        android:layout_width="40dp"
         android:layout_height="@dimen/status_bar_header_height"
         android:layout_toStartOf="@id/settings_button_container"
         style="@android:style/Widget.Material.Button.Borderless"
+        android:layout_marginStart="7dp"
         android:background="@drawable/ripple_drawable" />
 
     <LinearLayout android:id="@+id/system_icons_super_container"
