@@ -486,12 +486,12 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
             return;
         }
 
-        /*try {
-            launchFloating();
+        try {
+            launchNotification();
             ActivityManagerNative.getDefault().resumeAppSwitches();
         } catch (RemoteException e) {
             // ...
-        }*/
+        }
         mDismissDelay = 1500;
 
         if (intent!= null) {
@@ -1452,22 +1452,22 @@ public class Halo extends FrameLayout implements Ticker.TickerCallback {
         mEffect.invalidate();
     }
 
-    /*private void launchFloating() {
+    private void launchNotification() {
         StatusBarNotification notification;
         for (int i = 0; i < mNotificationData.size(); i++) {
             notification = mNotificationData.get(i).notification;
             Notification n = notification.notification;
             if (notification.notification.contentIntent == null) return;
 
-            Intent overlay = new Intent();
-            overlay.addFlags(Intent.FLAG_FLOATING_WINDOW);
+            Intent notif = new Intent();
+            notif.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
-                n.contentIntent.send(mContext, 0, overlay);
+                n.contentIntent.send(mContext, 0, notif);
             } catch (PendingIntent.CanceledException e) {
                 // Do nothing
             }
         }
-    }*/
+    }
 
     void tick(NotificationData.Entry entry, int delay, int duration,
                 boolean alwaysFlip, boolean showContent) {
