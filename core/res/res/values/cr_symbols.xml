@@ -117,4 +117,9 @@
     <java-symbol type="style" name="PowerMenuTnAnimation" />
     <java-symbol type="style" name="PowerMenuflyAnimation" />
     <java-symbol type="style" name="PowerMenuCardAnimation" />
+
+    <!-- Notification icon/text dynamic tint -->
+    <java-symbol type="bool" name="config_allowNotificationIconTextTinting" />
+    <java-symbol type="color" name="notification_text_default_color" />
+    <java-symbol type="color" name="sender_text_color" />
 </resources>
