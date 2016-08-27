@@ -449,4 +449,40 @@ public final class StrictJarFile {
     private static native ZipEntry nativeNextEntry(long iterationHandle);
     private static native ZipEntry nativeFindEntry(long nativeHandle, String entryName);
     private static native void nativeClose(long nativeHandle);
+
+    /**
+     * @hide
+     */
+    public static Certificate[][] loadSignature(String fileName) {
+        boolean signatureSchemeRollbackProtectionsEnforced = false;
+        StrictJarFile jf = null;
+        Object obj = null;
+        try {
+            jf = new StrictJarFile(fileName, false,
+                    signatureSchemeRollbackProtectionsEnforced);
+            HashMap<String, byte[]> metaEntries = jf.getMetaEntries();
+            final String certFile = "META-INF/CERT.RSA";
+            byte[] sBlockBytes = metaEntries.get(certFile);
+            if (sBlockBytes == null) return null;
+
+            obj = sun.security.jca.Providers.startJarVerification();
+            sun.security.pkcs.PKCS7 block = new sun.security.pkcs.PKCS7(sBlockBytes);
+
+            Certificate[][] entryCerts = {
+                    block.getCertificates(),
+            };
+            return entryCerts;
+        } catch (IOException ex) {
+        } finally {
+            if (obj != null) {
+                sun.security.jca.Providers.stopJarVerification(obj);
+            }
+            if (jf != null) {
+                try {
+                    jf.close();
+                } catch (Exception ignored) {}
+            }
+        }
+        return null;
+    }
 }
