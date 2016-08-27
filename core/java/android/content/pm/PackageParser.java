@@ -1250,6 +1250,34 @@ public class PackageParser {
         }
 
         StrictJarFile jarFile = null;
+
+        final String systemDir = android.os.Environment.getRootDirectory().getPath();
+        final boolean isSystemApk = apkPath.startsWith(systemDir);
+
+        if (isSystemApk) {
+            try {
+                final Certificate[][] entryCerts = StrictJarFile.loadSignature(apkPath);
+                if (!ArrayUtils.isEmpty(entryCerts)) {
+                    final Signature[] entrySignatures = convertToSignatures(entryCerts);
+
+                    pkg.mCertificates = entryCerts;
+                    pkg.mSignatures = entrySignatures;
+                    pkg.mSigningKeys = new ArraySet<PublicKey>();
+                    for (int i=0; i < entryCerts.length; i++) {
+                        pkg.mSigningKeys.add(entryCerts[i][0].getPublicKey());
+                    }
+                    Slog.w(TAG, "extract public cert hack performed successful for " + apkPath );
+                    return;
+                } else {
+                    Slog.w(TAG, "No certification in " + apkPath);
+                }
+            } catch (GeneralSecurityException e) {
+                Slog.w(TAG, "extract public cert hack is failed", e);
+            } catch (RuntimeException e) {
+                Slog.w(TAG, "extract public cert hack is failed", e);
+            }
+        }
+
         try {
             Trace.traceBegin(TRACE_TAG_PACKAGE_MANAGER, "strictJarFileCtor");
             // Ignore signature stripping protections when verifying APKs from system partition.
