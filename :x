@@ -1,0 +1,32 @@
+Fix Google dialer FC due to missing permissions
+
+In past verisons you could not download the Google dialer unless
+you were on a Nexus/Pixel. Now that we're able to download it on pretty
+much every device running 8.1, we need to protect the user from the user.
+
+Some users are smarter than others, is that simple. Some users will realize
+that the reason this FCs is because of missing permissions. Some won't be that
+smart and will come to us and report this as a bug. This commit fixes this.
+
+[@AgentFabulous - POSP]
+- Adapt for android-10.0.0_r2
+- Use grantSystemFixedPermissionsToSystemPackage to simplify syntax
+
+Change-Id: I125b42f5c68bd84aece41f2f9124716af06a88d6
+Signed-off-by: Kshitij Gupta <kshitijgm@gmail.com>
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Author:    Alex Cruz <du.alexcruz@gmail.com>
+#
+# interactive rebase in progress; onto d117ba6360d
+# Last commands done (6 commands done):
+#    edit a70a9d33639 Allow chromium to sign in
+#    edit 6bef19cae95 Fix Google dialer FC due to missing permissions
+# No commands remaining.
+# You are currently rebasing.
+#
+# Changes to be committed:
+#	modified:   services/core/java/com/android/server/pm/permission/DefaultPermissionGrantPolicy.java
+#
