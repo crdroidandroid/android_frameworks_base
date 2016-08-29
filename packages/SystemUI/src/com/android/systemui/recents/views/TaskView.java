@@ -402,6 +402,14 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
         EventBus.getDefault().send(dismissEvent);
     }
 
+    void screenPinning() {
+        boolean screenPinningRequested = false;
+        mActionButtonView.setTranslationZ(0f);
+        screenPinningRequested = true;
+        EventBus.getDefault().send(new LaunchTaskEvent(this, mTask, null, INVALID_STACK_ID,
+                screenPinningRequested));
+    }
+
     /**
      * Returns whether this view should be clipped, or any views below should clip against this
      * view.

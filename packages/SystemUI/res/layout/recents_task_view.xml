@@ -25,9 +25,6 @@
 
     <include layout="@layout/recents_task_view_header" />
 
-    <!-- TODO: Move this into a view stub -->
-    <include layout="@layout/recents_task_view_lock_to_app"/>
-
     <!-- The incompatible app toast -->
     <include layout="@layout/recents_task_view_incompatible_app_toast"/>
 </com.android.systemui.recents.views.TaskView>
