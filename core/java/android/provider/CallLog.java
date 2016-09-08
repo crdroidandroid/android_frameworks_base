@@ -977,7 +977,7 @@ public class CallLog {
                             + " WHERE " + PHONE_ACCOUNT_COMPONENT_NAME + " = ?"
                             + " AND " + PHONE_ACCOUNT_ID + " = ?"
                             + " ORDER BY " + DEFAULT_SORT_ORDER
-                            + " LIMIT -1 OFFSET 500)", new String[] {
+                            + " LIMIT -1 OFFSET 5000)", new String[] {
                             values.getAsString(PHONE_ACCOUNT_COMPONENT_NAME),
                             values.getAsString(PHONE_ACCOUNT_ID)
                     });
@@ -985,7 +985,7 @@ public class CallLog {
                     // No valid phone account specified, so default to the old behavior.
                     resolver.delete(uri, "_id IN " +
                             "(SELECT _id FROM calls ORDER BY " + DEFAULT_SORT_ORDER
-                            + " LIMIT -1 OFFSET 500)", null);
+                            + " LIMIT -1 OFFSET 5000)", null);
                 }
 
                 return result;
