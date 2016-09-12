@@ -955,6 +955,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     Settings.Secure.SHOW_IME_WITH_HARD_KEYBOARD), false, this, userId);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.ACCESSIBILITY_SOFT_KEYBOARD_MODE), false, this, userId);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_IME_SWITCHER), false, this, userId);
             mRegistered = true;
         }
 
@@ -963,6 +965,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     Settings.Secure.SHOW_IME_WITH_HARD_KEYBOARD);
             final Uri accessibilityRequestingNoImeUri = Settings.Secure.getUriFor(
                     Settings.Secure.ACCESSIBILITY_SOFT_KEYBOARD_MODE);
+            final Uri imeSwitcherUri = Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_IME_SWITCHER);
             synchronized (mMethodMap) {
                 if (showImeUri.equals(uri)) {
                     updateKeyboardFromSettingsLocked();
@@ -980,6 +984,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     } else if (mShowRequested) {
                         showCurrentInputLocked(InputMethodManager.SHOW_IMPLICIT, null);
                     }
+                } else if (imeSwitcherUri.equals(uri)) {
+                    updateImeSwitcher();
                 } else {
                     boolean enabledChanged = false;
                     String newEnabled = mSettings.getEnabledInputMethodsStr();
@@ -1618,12 +1624,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     mStatusBar.setIconVisibility(mSlotIme, false);
                 }
                 updateSystemUiLocked(mImeWindowVis, mBackDisposition);
-                mShowOngoingImeSwitcherForPhones = mRes.getBoolean(
-                        com.android.internal.R.bool.show_ongoing_ime_switcher);
-                if (mShowOngoingImeSwitcherForPhones) {
-                    mWindowManagerInternal.setOnHardKeyboardStatusChangeListener(
-                            mHardKeyboardListener);
-                }
+
+                updateImeSwitcher();
 
                 mMyPackageMonitor.register(mContext, null, UserHandle.ALL, true);
                 mSettingsObserver.registerContentObserverLocked(currentUserId);
@@ -2668,6 +2670,18 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         // the same enabled IMEs list.
         mSwitchingController.resetCircularListLocked(mContext);
 
+    }
+
+    private void updateImeSwitcher() {
+        boolean defaultImeSwitcherForPhones = mRes.getBoolean(
+                com.android.internal.R.bool.show_ongoing_ime_switcher);
+        mShowOngoingImeSwitcherForPhones = Settings.System.getIntForUser(
+            mContext.getContentResolver(), Settings.System.STATUS_BAR_IME_SWITCHER,
+            defaultImeSwitcherForPhones ? 1 : 0, mSettings.getCurrentUserId()) == 1;
+        if (mShowOngoingImeSwitcherForPhones) {
+            mWindowManagerInternal.setOnHardKeyboardStatusChangeListener(
+                 mHardKeyboardListener);
+        }
     }
 
     public void updateKeyboardFromSettingsLocked() {
