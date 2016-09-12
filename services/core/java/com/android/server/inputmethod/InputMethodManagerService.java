@@ -970,6 +970,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
                         LineageSettings.Secure.FEATURE_TOUCH_HOVERING), false, this, userId);
             }
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_IME_SWITCHER), false, this, userId);
             mRegistered = true;
         }
 
@@ -982,6 +984,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     LineageSettings.System.HIGH_TOUCH_SENSITIVITY_ENABLE);
             final Uri touchHoveringUri = LineageSettings.Secure.getUriFor(
                     LineageSettings.Secure.FEATURE_TOUCH_HOVERING);
+            final Uri imeSwitcherUri = Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_IME_SWITCHER);
             synchronized (mMethodMap) {
                 if (showImeUri.equals(uri)) {
                     updateKeyboardFromSettingsLocked();
@@ -1003,6 +1007,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     updateTouchSensitivity();
                 } else if (touchHoveringUri.equals(uri)) {
                     updateTouchHovering();
+                } else if (imeSwitcherUri.equals(uri)) {
+                    updateImeSwitcher();
                 } else {
                     boolean enabledChanged = false;
                     String newEnabled = mSettings.getEnabledInputMethodsStr();
@@ -1651,12 +1657,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     mStatusBar.setIconVisibility(mSlotIme, false);
                 }
                 updateSystemUiLocked(mImeWindowVis, mBackDisposition);
-                mShowOngoingImeSwitcherForPhones = mRes.getBoolean(
-                        com.android.internal.R.bool.show_ongoing_ime_switcher);
-                if (mShowOngoingImeSwitcherForPhones) {
-                    mWindowManagerInternal.setOnHardKeyboardStatusChangeListener(
-                            mHardKeyboardListener);
-                }
+
+                updateImeSwitcher();
 
                 mMyPackageMonitor.register(mContext, null, UserHandle.ALL, true);
                 mSettingsObserver.registerContentObserverLocked(currentUserId);
@@ -2719,6 +2721,18 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         final boolean enabled = LineageSettings.Secure.getInt(mContext.getContentResolver(),
                 LineageSettings.Secure.FEATURE_TOUCH_HOVERING, 0) == 1;
         mLineageHardware.set(LineageHardwareManager.FEATURE_TOUCH_HOVERING, enabled);
+    }
+
+    private void updateImeSwitcher() {
+        boolean defaultImeSwitcherForPhones = mRes.getBoolean(
+                com.android.internal.R.bool.show_ongoing_ime_switcher);
+        mShowOngoingImeSwitcherForPhones = Settings.System.getIntForUser(
+            mContext.getContentResolver(), Settings.System.STATUS_BAR_IME_SWITCHER,
+            defaultImeSwitcherForPhones ? 1 : 0, mSettings.getCurrentUserId()) == 1;
+        if (mShowOngoingImeSwitcherForPhones) {
+            mWindowManagerInternal.setOnHardKeyboardStatusChangeListener(
+                 mHardKeyboardListener);
+        }
     }
 
     public void updateKeyboardFromSettingsLocked() {
