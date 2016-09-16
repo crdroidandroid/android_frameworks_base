@@ -17,6 +17,7 @@
 package com.android.systemui.qs.tiles;
 
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -109,14 +110,21 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
 
     @Override
     protected void handleClick() {
-        if (!mWifiController.canConfigWifi()) {
-            mHost.startActivityDismissingKeyguard(new Intent(Settings.ACTION_WIFI_SETTINGS));
-            return;
-        }
-        showDetail(true);
-        if (!mState.value) {
-            mController.setWifiEnabled(true);
-            mState.value = true;
+        boolean easyToggle = isWiFiEasyToggleEnabled();
+        if (easyToggle) {
+            mState.copyTo(mStateBeforeClick);
+            MetricsLogger.action(mContext, getMetricsCategory(), !mState.value);
+            mController.setWifiEnabled(!mState.value);
+        } else {
+            if (!mWifiController.canConfigWifi()) {
+                mHost.startActivityDismissingKeyguard(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                return;
+            }
+            showDetail(true);
+            if (!mState.value) {
+                mController.setWifiEnabled(true);
+                mState.value = true;
+            }
         }
     }
 
@@ -187,6 +195,11 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
         state.dualLabelContentDescription = wifiName;
         state.expandedAccessibilityClassName = Button.class.getName();
         state.minimalAccessibilityClassName = Switch.class.getName();
+    }
+
+    public boolean isWiFiEasyToggleEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QS_WIFI_EASY_TOGGLE, 0) == 1;
     }
 
     @Override
