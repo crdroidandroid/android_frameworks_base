@@ -1667,11 +1667,6 @@ final class TaskRecord {
 
     /** Returns the bounds that should be used to launch this task. */
     Rect getLaunchBounds() {
-        // If we're over lockscreen, forget about stack bounds and use fullscreen.
-        if (mService.mLockScreenShown == LOCK_SCREEN_SHOWN) {
-            return null;
-        }
-
         if (stack == null) {
             return null;
         }
