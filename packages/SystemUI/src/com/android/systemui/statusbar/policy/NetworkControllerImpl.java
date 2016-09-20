@@ -16,7 +16,9 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -877,5 +879,13 @@ public class NetworkControllerImpl extends BroadcastReceiver
             config.hideLtePlus = res.getBoolean(R.bool.config_hideLtePlus);
             return config;
         }
+    }
+
+    /**
+     * Check the advanced data tile setting
+     */
+    public boolean isAdvancedDataTileEnabled() {
+        return Settings.Secure.getInt(mContext.getContentResolver(),
+            Settings.Secure.QS_DATA_ADVANCED, 0) == 1;
     }
 }
