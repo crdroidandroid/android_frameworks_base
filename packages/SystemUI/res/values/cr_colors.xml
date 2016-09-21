@@ -53,4 +53,6 @@
 
     <!-- OMS -->
     <color name="navbutton_ripple_color">#ffffffff</color>
+    <color name="navbar_tuner_background_color">@android:color/white</color>
+    <color name="navbar_tuner_text_color">@*android:color/material_deep_teal_500</color>
 </resources>
