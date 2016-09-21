@@ -391,7 +391,7 @@ public final class JobPackageTracker {
         final String pkg = job.getSourcePackageName();
         PackageEntry cur = mCurDataSet.getEntry(uid, pkg);
         PackageEntry last = mLastDataSets[0] != null ? mLastDataSets[0].getEntry(uid, pkg) : null;
-        if (cur == null && last == null) {
+        if (cur == null || last == null) {
             return 0;
         }
         final long now = SystemClock.uptimeMillis();
@@ -400,10 +400,8 @@ public final class JobPackageTracker {
             time += cur.getActiveTime(now) + cur.getPendingTime(now);
         }
         long period = mCurDataSet.getTotalTime(now);
-        if (last != null) {
-            time += last.getActiveTime(now) + last.getPendingTime(now);
-            period += mLastDataSets[0].getTotalTime(now);
-        }
+        time += last.getActiveTime(now) + last.getPendingTime(now);
+        period += mLastDataSets[0].getTotalTime(now);
         return time / (float)period;
     }
 
