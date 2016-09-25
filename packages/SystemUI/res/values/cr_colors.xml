@@ -26,4 +26,22 @@
 
     <!-- Custom Carrier Label -->
     <color name="status_bar_carrier_color">#FFFFFFFF</color>
+
+    <!-- Pie colors -->
+    <color name="pie_foreground">#ff8a8a8a</color>
+    <color name="pie_background">#ffffffff</color>
+    <color name="pie_icon">#4dffffff</color>
+    <color name="pie_line">#ffffff</color>
+    <color name="pie_selected">#ff000000</color>
+    <color name="pie_back_button">#ff8a8a8a</color>
+    <color name="pie_home_button">#ff8a8a8a</color>
+    <color name="pie_recent_button">#ff8a8a8a</color>
+    <color name="pie_background_circle">#33000000</color>
+    <color name="pie_dark_background">#212121</color>
+    <color name="pie_dark_snap_point">#4a4a4a</color>
+    <color name="pie_battery">#76c124</color>
+    <color name="pie_battery_med">#ff3d00</color>
+    <color name="pie_battery_low">#f90028</color>
+    <color name="pie_shader_start">#FF4d4d4d</color>
+    <color name="pie_shader_end">#FF212121</color>
 </resources>

@@ -28,4 +28,7 @@
 
     <!-- We have only space for one notification on phone landscape layouts. -->
     <integer name="keyguard_max_notification_count">1</integer>
+
+    <!-- Maximum amount of notification icons allowed to show in PIE -->
+    <integer name="pie_maximum_notifications">5</integer>
 </resources>

@@ -206,4 +206,12 @@
     <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
     <string name="chamber_name_toast">Using default name</string>
     <string name="shortcut_clear_notifications">Clear notifications</string>
+
+    <!-- Pie controls -->
+    <string name="pie_date_format" translatable="false">EEEE, dd MMMM yyyy</string>
+    <string name="pie_hour_format_12" translatable="false">hh:mm</string>
+    <string name="pie_hour_format_24" translatable="false">HH:mm</string>
+    <string name="pie_state_summary">Use pie controls while in immersive mode</string>
+    <string name="pie_battery_level">"BATTERY LEVEL "</string>
+    <string name="quick_settings_pie">Pie</string>
 </resources>
