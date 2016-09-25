@@ -15,6 +15,7 @@
 package com.android.systemui.qs;
 
 import android.graphics.Path;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
@@ -38,7 +39,8 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
 
     private static final String TAG = "QSAnimator";
 
-    private static final String ALLOW_FANCY_ANIMATION = "sysui_qs_fancy_anim";
+    private static final String ALLOW_FANCY_ANIMATION =
+            "system:" + Settings.System.QS_FANCY_ANIMATION;
     private static final String MOVE_FULL_ROWS = "sysui_qs_move_whole_rows";
 
     public static final float EXPANDED_TILE_DELAY = .86f;
