@@ -52,6 +52,7 @@ import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.MusicTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
+import com.android.systemui.qs.tiles.PieTile;
 import com.android.systemui.qs.tiles.ReadingModeTile;
 import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
@@ -121,6 +122,7 @@ public class QSFactoryImpl implements QSFactory {
         else if (tileSpec.equals("always_on_display")) return new AlwaysOnDisplayTile(mHost);
         else if (tileSpec.equals("hw_keys")) return new HWKeysTile(mHost);
         else if (tileSpec.equals("smartpixels")) return new SmartPixelsTile(mHost);
+        else if (tileSpec.equals("pie")) return new PieTile(mHost);
         // Intent tiles.
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(mHost, tileSpec);
         else if (tileSpec.startsWith(CustomTile.PREFIX)) return CustomTile.create(mHost, tileSpec);
