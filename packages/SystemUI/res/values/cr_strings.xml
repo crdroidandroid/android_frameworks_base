@@ -27,4 +27,9 @@
     <string name="quick_settings_caffeine_label">Caffeine</string>
     <string name="accessibility_quick_settings_caffeine_off">Caffeine off</string>
     <string name="accessibility_quick_settings_caffeine_on">Caffeine on</string>
+
+    <!-- ADB network tile -->
+    <string name="quick_settings_adb_network">ADB network</string>
+    <string name="quick_settings_network_adb_enabled_label">Adb over Net</string>
+    <string name="quick_settings_network_adb_disabled_label">Adb over Net</string>
 </resources>
