@@ -172,6 +172,10 @@
     <uses-permission android:name="cyanogenmod.permission.WRITE_SETTINGS" />
     <uses-permission android:name="cyanogenmod.permission.WRITE_SECURE_SETTINGS" />
 
+    <!-- Sync tile -->
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
