@@ -48,6 +48,7 @@ import com.android.systemui.qs.tiles.CellularTile;
 import com.android.systemui.qs.tiles.ColorInversionTile;
 import com.android.systemui.qs.tiles.DataSaverTile;
 import com.android.systemui.qs.tiles.DndTile;
+import com.android.systemui.qs.tiles.ExpandedDesktopTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.IntentTile;
@@ -433,6 +434,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("battery")) return new BatteryTile(this);
         else if (tileSpec.equals("saver")) return new DataSaverTile(this);
         else if (tileSpec.equals("night")) return new NightDisplayTile(this);
+        else if (tileSpec.equals("expanded_desktop")) return new ExpandedDesktopTile(this);
         // Intent tiles.
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else if (tileSpec.startsWith(CustomTile.PREFIX)) return CustomTile.create(this,tileSpec);
