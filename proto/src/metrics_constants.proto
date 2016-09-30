@@ -2218,5 +2218,8 @@ message MetricsEvent {
 
     // crDroid Settings
     CRDROID_SETTINGS = 998;
+
+    // Quick setting tiles
+    QUICK_SETTINGS = 999;
   }
 }
