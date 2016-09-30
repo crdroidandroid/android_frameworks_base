@@ -2210,5 +2210,8 @@ message MetricsEvent {
     // ---- End N-MR1 Constants, all N-MR1 constants go above this line ----
     // Add new aosp constants above this line.
     // END OF AOSP CONSTANTS
+
+    // Quick setting tiles
+    QUICK_SETTINGS = 496;
   }
 }
