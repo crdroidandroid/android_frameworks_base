@@ -33,6 +33,7 @@ import android.os.Handler;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.telecom.TelecomManager;
 import android.util.Log;
@@ -51,15 +52,15 @@ import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.SuController;
-
-import cyanogenmod.providers.CMSettings;
+import com.android.systemui.tuner.TunerService;
 
 /**
  * This class contains all of the policy about which icons are installed in the status
  * bar at boot time.  It goes through the normal API for icons, even though it probably
  * strictly doesn't need to.
  */
-public class PhoneStatusBarPolicy implements Callback, RotationLockController.RotationLockControllerCallback, DataSaverController.Listener {
+public class PhoneStatusBarPolicy implements Callback, RotationLockController.RotationLockControllerCallback,
+        DataSaverController.Listener, TunerService.Tunable {
     private static final String TAG = "PhoneStatusBarPolicy";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
@@ -88,6 +89,7 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
     private final DataSaverController mDataSaver;
     private StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
     private final SuController mSuController;
+    private boolean mSuIndicatorVisible;
 
     // Assume it's all good unless we hear otherwise.  We don't always seem
     // to get broadcasts that it *is* there.
@@ -105,6 +107,9 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
     private boolean mManagedProfileInQuietMode = false;
 
     private BluetoothController mBluetooth;
+
+    private static final String SHOW_SU_INDICATOR =
+            "system:" + Settings.System.SHOW_SU_INDICATOR;
 
     public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController,
             CastController cast, HotspotController hotspot, UserInfoController userInfoController,
@@ -209,6 +214,22 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
                 context.getString(R.string.accessibility_data_saver_on));
         mIconController.setIconVisibility(mSlotDataSaver, false);
         mDataSaver.addListener(this);
+
+        TunerService.get(mContext).addTunable(this,
+                SHOW_SU_INDICATOR);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+       switch (key) {
+            case SHOW_SU_INDICATOR:
+                mSuIndicatorVisible =
+                        newValue == null || Integer.parseInt(newValue) != 0;
+                updateSu();
+                break;
+            default:
+                break;
+        }
     }
 
     public void setStatusBarKeyguardViewManager(
@@ -528,7 +549,7 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
     };
 
     private void updateSu() {
-        mIconController.setIconVisibility(mSlotSu, mSuController.hasActiveSessions());
+        mIconController.setIconVisibility(mSlotSu, mSuController.hasActiveSessions() && mSuIndicatorVisible);
     }
 
     private final CastController.Callback mCastCallback = new CastController.Callback() {
