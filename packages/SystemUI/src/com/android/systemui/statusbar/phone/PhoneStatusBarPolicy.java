@@ -151,9 +151,12 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
     private BluetoothController mBluetooth;
 
     private boolean mShowBluetoothBattery;
+    private boolean mSuIndicatorVisible;
 
     private static final String BLUETOOTH_SHOW_BATTERY =
             "system:" + Settings.System.BLUETOOTH_SHOW_BATTERY;
+    private static final String SHOW_SU_INDICATOR =
+            "system:" + Settings.System.SHOW_SU_INDICATOR;
 
     public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController) {
         mContext = context;
@@ -277,7 +280,8 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
         });
 
         Dependency.get(TunerService.class).addTunable(this,
-                BLUETOOTH_SHOW_BATTERY);
+                BLUETOOTH_SHOW_BATTERY,
+                SHOW_SU_INDICATOR);
     }
 
     @Override
@@ -287,6 +291,11 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
                 mShowBluetoothBattery =
                         newValue != null && Integer.parseInt(newValue) == 1;
                 updateBluetooth();
+                break;
+            case SHOW_SU_INDICATOR:
+                mSuIndicatorVisible =
+                        newValue == null || Integer.parseInt(newValue) != 0;
+                updateSu();
                 break;
             default:
                 break;
@@ -718,7 +727,7 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
     };
 
     private void updateSu() {
-        mIconController.setIconVisibility(mSlotSu, mSuController.hasActiveSessions());
+        mIconController.setIconVisibility(mSlotSu, mSuController.hasActiveSessions() && mSuIndicatorVisible);
     }
 
     private final CastController.Callback mCastCallback = new CastController.Callback() {
