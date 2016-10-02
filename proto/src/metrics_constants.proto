@@ -6501,5 +6501,8 @@ message MetricsEvent {
 
     // Add new aosp constants above this line.
     // END OF AOSP CONSTANTS
+
+    // crDroid Settings
+    CRDROID_SETTINGS = 4000;
   }
 }
