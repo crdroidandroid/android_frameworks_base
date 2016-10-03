@@ -27,6 +27,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.PowerManager;
@@ -104,6 +105,20 @@ public class NotificationPanelView extends PanelView implements
             "cmsecure:" + CMSettings.Secure.LOCK_SCREEN_WEATHER_ENABLED;
     private static final String DOUBLE_TAP_SLEEP_ANYWHERE =
             "system:" + Settings.System.DOUBLE_TAP_SLEEP_ANYWHERE;
+    private static final String QS_TRANSPARENT_SHADE =
+            "system:" + Settings.System.QS_TRANSPARENT_SHADE;
+    private static final String QS_STROKE =
+            "system:" + Settings.System.QS_STROKE;
+    private static final String QS_STROKE_COLOR =
+            "system:" + Settings.System.QS_STROKE_COLOR;
+    private static final String QS_STROKE_THICKNESS =
+            "system:" + Settings.System.QS_STROKE_THICKNESS;
+    private static final String QS_CORNER_RADIUS =
+            "system:" + Settings.System.QS_CORNER_RADIUS;
+    private static final String QS_STROKE_DASH_WIDTH =
+            "system:" + Settings.System.QS_STROKE_DASH_WIDTH;
+    private static final String QS_STROKE_DASH_GAP =
+            "system:" + Settings.System.QS_STROKE_DASH_GAP;
 
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
 
@@ -232,6 +247,17 @@ public class NotificationPanelView extends PanelView implements
     private int mStatusBarHeaderHeight;
     private GestureDetector mDoubleTapGesture;
 
+    // QS alpha
+    private int mQSShadeAlpha;
+
+    // QS stroke
+    private int mQSStroke;
+    private int mCustomStrokeColor;
+    private int mCustomStrokeThickness;
+    private int mCustomCornerRadius;
+    private int mCustomDashWidth;
+    private int mCustomDashGap;
+
     private boolean mKeyguardWeatherEnabled;
     private TextView mKeyguardWeatherInfo;
     private WeatherControllerImpl mWeatherController;
@@ -308,6 +334,8 @@ public class NotificationPanelView extends PanelView implements
         });
 
         mKeyguardWeatherInfo = (TextView) mKeyguardStatusView.findViewById(R.id.weather_info);
+        setQSStroke();
+        setQSBackgroundAlpha();
     }
 
     @Override
@@ -398,7 +426,14 @@ public class NotificationPanelView extends PanelView implements
                 STATUS_BAR_QUICK_QS_PULLDOWN,
                 DOUBLE_TAP_SLEEP_GESTURE,
                 LOCK_SCREEN_WEATHER_ENABLED,
-                DOUBLE_TAP_SLEEP_ANYWHERE);
+                DOUBLE_TAP_SLEEP_ANYWHERE,
+                QS_TRANSPARENT_SHADE,
+                QS_STROKE,
+                QS_STROKE_COLOR,
+                QS_STROKE_THICKNESS,
+                QS_CORNER_RADIUS,
+                QS_STROKE_DASH_WIDTH,
+                QS_STROKE_DASH_GAP);
     }
 
     @Override
@@ -2474,8 +2509,84 @@ public class NotificationPanelView extends PanelView implements
             case DOUBLE_TAP_SLEEP_ANYWHERE:
                 mDoubleTapToSleepAnywhere = newValue == null || Integer.parseInt(newValue) == 1;
                 break;
+            case QS_TRANSPARENT_SHADE:
+                mQSShadeAlpha =
+                        newValue == null ? 255 : Integer.parseInt(newValue);
+                setQSStroke();
+                setQSBackgroundAlpha();
+                break;
+            case QS_STROKE:
+                mQSStroke =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                setQSStroke();
+                setQSBackgroundAlpha();
+                break;
+            case QS_STROKE_COLOR:
+                mCustomStrokeColor =
+                        newValue == null ? mContext.getResources().getColor(R.color.system_accent_color) : Integer.parseInt(newValue);
+                setQSStroke();
+                setQSBackgroundAlpha();
+                break;
+            case QS_STROKE_THICKNESS:
+                mCustomStrokeThickness =
+                        newValue == null ? 4 : Integer.parseInt(newValue);
+                setQSStroke();
+                setQSBackgroundAlpha();
+                break;
+            case QS_CORNER_RADIUS:
+                mCustomCornerRadius =
+                        newValue == null ? 5 : Integer.parseInt(newValue);
+                setQSStroke();
+                setQSBackgroundAlpha();
+                break;
+            case QS_STROKE_DASH_WIDTH:
+                mCustomDashWidth =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                setQSStroke();
+                setQSBackgroundAlpha();
+                break;
+            case QS_STROKE_DASH_GAP:
+                mCustomDashGap =
+                        newValue == null ? 10 : Integer.parseInt(newValue);
+                setQSStroke();
+                setQSBackgroundAlpha();
+                break;
             default:
                 break;
+        }
+    }
+
+    private void setQSBackgroundAlpha() {
+        if (mQsContainer != null) {
+            mQsContainer.getBackground().setAlpha(mQSShadeAlpha);
+        }
+        /*if (mQsPanel != null) {
+            mQsPanel.setQSShadeAlphaValue(mQSShadeAlpha);
+        }*/
+    }
+
+    private void setQSStroke() {
+        final GradientDrawable qSGd = new GradientDrawable();
+        if (mQsContainer != null) {
+            if (mQSStroke == 0) {
+                /*qSGd.setColor(mContext.getResources().getColor(R.color.system_primary_color));
+                qSGd.setStroke(0, mContext.getResources().getColor(R.color.system_accent_color));
+                qSGd.setCornerRadius(mCustomCornerRadius);
+                mQsContainer.setBackground(qSGd);*/
+                // Don't do anything when disabled, it fucks up themes that use drawable instead of color
+            } else if (mQSStroke == 1) { // use accent color for border
+                qSGd.setColor(mContext.getResources().getColor(R.color.system_primary_color));
+                qSGd.setStroke(mCustomStrokeThickness, mContext.getResources().getColor(R.color.system_accent_color),
+                        mCustomDashWidth, mCustomDashGap);
+            } else if (mQSStroke == 2) { // use custom border color
+                qSGd.setColor(mContext.getResources().getColor(R.color.system_primary_color));
+                qSGd.setStroke(mCustomStrokeThickness, mCustomStrokeColor, mCustomDashWidth, mCustomDashGap);
+            }
+
+            if (mQSStroke != 0) {
+                qSGd.setCornerRadius(mCustomCornerRadius);
+                mQsContainer.setBackground(qSGd);
+            }
         }
     }
 }
