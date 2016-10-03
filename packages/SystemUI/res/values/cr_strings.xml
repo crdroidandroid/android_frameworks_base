@@ -67,4 +67,10 @@
          values/config.xml) and must be truncated.
          [CHAR LIMIT=4] -->
     <string name="status_bar_notification_info_overflow" translatable="false">\u221E</string>
+
+    <!-- statusbar items tuner -->
+    <string name="statusbar_icons_blacklist">Status bar icons</string>
+
+    <!-- notification controls -->
+    <string name="tuner_notification_control">Power notification controls</string>
 </resources>
