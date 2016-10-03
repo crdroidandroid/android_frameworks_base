@@ -54,7 +54,6 @@ import com.android.systemui.statusbar.policy.NextAlarmController.NextAlarmChange
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserInfoController.OnUserInfoChangedListener;
 import com.android.systemui.statusbar.policy.WeatherController;
-import com.android.systemui.tuner.TunerService;
 
 public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         NextAlarmChangeCallback, OnClickListener, OnLongClickListener, OnUserInfoChangedListener {
@@ -65,8 +64,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
 
     private ActivityStarter mActivityStarter;
     private NextAlarmController mNextAlarmController;
-    private SettingsButton mSettingsButton;
-    protected View mSettingsContainer;
+    private View mSettingsButton;
 
     private TextView mAlarmStatus;
     private View mAlarmStatusCollapsed;
@@ -135,8 +133,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
 
         mHeaderQsPanel = (QuickQSPanel) findViewById(R.id.quick_qs_panel);
 
-        mSettingsButton = (SettingsButton) findViewById(R.id.settings_button);
-        mSettingsContainer = findViewById(R.id.settings_button_container);
+        mSettingsButton = findViewById(R.id.settings_button);
         mSettingsButton.setOnClickListener(this);
         mSettingsButton.setOnLongClickListener(this);
 
@@ -294,7 +291,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         updateDateTimePosition();
         mEmergencyOnly.setVisibility(mExpanded && mShowEmergencyCallsOnly
                 ? View.VISIBLE : View.INVISIBLE);
-        mSettingsContainer.findViewById(R.id.tuner_icon).setVisibility(View.INVISIBLE);
+        mSettingsButton.setVisibility(mExpanded ? View.VISIBLE : View.INVISIBLE);
         final boolean isDemo = UserManager.isDeviceInDemoMode(mContext);
         mMultiUserSwitch.setVisibility(mExpanded && mMultiUserSwitch.hasMultipleUsers() && !isDemo
                 ? View.VISIBLE : View.INVISIBLE);
@@ -349,24 +346,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
             MetricsLogger.action(mContext,
                     mExpanded ? MetricsProto.MetricsEvent.ACTION_QS_EXPANDED_SETTINGS_LAUNCH
                             : MetricsProto.MetricsEvent.ACTION_QS_COLLAPSED_SETTINGS_LAUNCH);
-            if (mSettingsButton.isTunerClick()) {
-                mHost.startRunnableDismissingKeyguard(() -> post(() -> {
-                    if (TunerService.isTunerEnabled(mContext)) {
-                        TunerService.showResetRequest(mContext, () -> {
-                            // Relaunch settings so that the tuner disappears.
-                            startSettingsActivity();
-                        });
-                    } else {
-                        Toast.makeText(getContext(), R.string.tuner_toast,
-                                Toast.LENGTH_LONG).show();
-                        TunerService.setTunerEnabled(mContext, true);
-                    }
-                    startSettingsActivity();
-
-                }));
-            } else {
-                startSettingsActivity();
-            }
+            startSettingsActivity();
         } else if (v == mAlarmStatus && mNextAlarm != null) {
             PendingIntent showIntent = mNextAlarm.getShowIntent();
             if (showIntent != null && showIntent.isActivity()) {
