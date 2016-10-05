@@ -6686,6 +6686,12 @@ public final class Settings {
         public static final String QS_TILES = "sysui_qs_tiles";
 
         /**
+         * Count of small QS tiles.
+         * @hide
+         */
+        public static final String QQS_COUNT = "sysui_qqs_count";
+
+        /**
          * Enable single click to turn WiFi on or off.
          *
          * @hide
