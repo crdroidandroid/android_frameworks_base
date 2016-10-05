@@ -55,4 +55,7 @@
     <color name="navbutton_ripple_color">#ffffffff</color>
     <color name="navbar_tuner_background_color">@android:color/white</color>
     <color name="navbar_tuner_text_color">@*android:color/material_deep_teal_500</color>
+    <color name="qs_alarm_status_text_color">#64ffffff</color>
+    <color name="qs_edit_toolbar_text_color">#FFFFFF</color>
+    <color name="qs_edit_button_text_color">#64FFFFFF</color> 
 </resources>
