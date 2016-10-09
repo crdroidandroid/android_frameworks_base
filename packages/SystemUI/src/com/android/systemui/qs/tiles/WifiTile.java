@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.provider.Settings;
+import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -198,8 +199,8 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
     }
 
     public boolean isWiFiEasyToggleEnabled() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.QS_WIFI_EASY_TOGGLE, 0) == 1;
+        return Settings.Secure.getInt(mContext.getContentResolver(),
+                 Settings.Secure.QS_WIFI_EASY_TOGGLE, 0) == 1;
     }
 
     @Override
