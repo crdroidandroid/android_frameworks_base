@@ -53,4 +53,7 @@
     <string name="accessibility_quick_settings_nfc_on">NFC on.</string>
     <string name="accessibility_quick_settings_nfc_changed_off">NFC turned off.</string>
     <string name="accessibility_quick_settings_nfc_changed_on">NFC turned on.</string>
+    <string name="qs_lte_label">LTE</string>
+    <string name="lte_on">LTE ON </string>
+    <string name="lte_off">LTE OFF</string>
 </resources>
