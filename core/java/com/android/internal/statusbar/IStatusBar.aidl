@@ -115,4 +115,5 @@ oneway interface IStatusBar
     void remQsTile(in ComponentName tile);
     void clickQsTile(in ComponentName tile);
     void handleSystemNavigationKey(in int key);
+    void toggleNavigationBar(boolean enable);
 }
