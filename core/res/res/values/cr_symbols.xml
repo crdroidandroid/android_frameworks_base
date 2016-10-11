@@ -129,4 +129,7 @@
     <java-symbol type="style" name="PowerMenuTnAnimation" />
     <java-symbol type="style" name="PowerMenuflyAnimation" />
     <java-symbol type="style" name="PowerMenuCardAnimation" />
+
+    <!-- Notifications Battery Really Full -->
+    <java-symbol type="integer" name="config_notificationsBatteryReallyFullARGB" />
 </resources>
