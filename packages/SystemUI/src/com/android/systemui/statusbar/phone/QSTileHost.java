@@ -56,6 +56,7 @@ import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.ImeTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.LocationTile;
+import com.android.systemui.qs.tiles.LteTile;
 import com.android.systemui.qs.tiles.MusicTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
@@ -453,6 +454,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("ime")) return new ImeTile(this);
         else if (tileSpec.equals("caffeine")) return new CaffeineTile(this);
         else if (tileSpec.equals("nfc")) return new NfcTile(this);
+        else if (tileSpec.equals("lte")) return  new LteTile(this);
         // Intent tiles.
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else if (tileSpec.startsWith(CustomTile.PREFIX)) return CustomTile.create(this,tileSpec);
