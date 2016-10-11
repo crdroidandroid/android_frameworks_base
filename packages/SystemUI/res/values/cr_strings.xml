@@ -96,4 +96,9 @@
 
     <!-- Ime tile -->
     <string name="quick_settings_ime_tile_label">Input method</string>
+
+    <!-- LTE tile -->
+    <string name="qs_lte_label">LTE</string>
+    <string name="lte_on">LTE ON </string>
+    <string name="lte_off">LTE OFF</string>
 </resources>
