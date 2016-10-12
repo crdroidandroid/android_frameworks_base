@@ -325,6 +325,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_COLOR;
     private static final String STATUS_BAR_CRDROID_LOGO_STYLE =
             "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_STYLE;
+    private static final String QS_ROWS_PORTRAIT =
+            Settings.Secure.QS_ROWS_PORTRAIT;
+    private static final String QS_ROWS_LANDSCAPE =
+            Settings.Secure.QS_ROWS_LANDSCAPE;
+    private static final String QS_COLUMNS =
+            Settings.Secure.QS_COLUMNS;
 
     static {
         boolean onlyCoreApps;
@@ -835,7 +841,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 LOCKSCREEN_MAX_NOTIF_CONFIG,
                 STATUS_BAR_CRDROID_LOGO,
                 STATUS_BAR_CRDROID_LOGO_COLOR,
-                STATUS_BAR_CRDROID_LOGO_STYLE);
+                STATUS_BAR_CRDROID_LOGO_STYLE,
+                QS_ROWS_PORTRAIT,
+                QS_ROWS_LANDSCAPE,
+                QS_COLUMNS);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -5537,6 +5546,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mCrDroidLogoColor =
                         newValue == null ? 0xFFFFFFFF : Integer.parseInt(newValue);
                 showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoStyle);
+                break;
+            case QS_ROWS_PORTRAIT:
+            case QS_ROWS_LANDSCAPE:
+            case QS_COLUMNS:
+                updateResources();
                 break;
             default:
                 break;
