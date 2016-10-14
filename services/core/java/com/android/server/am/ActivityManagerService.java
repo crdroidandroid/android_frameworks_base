@@ -13670,8 +13670,8 @@ public final class ActivityManagerService extends ActivityManagerNative
     /* Native crash reporting uses this inner version because it needs to be somewhat
      * decoupled from the AM-managed cleanup lifecycle
      */
-    void handleApplicationCrashInner(String eventType, ProcessRecord r, String processName,
-            ApplicationErrorReport.CrashInfo crashInfo) {
+    void handleApplicationCrashInner(String eventType, final ProcessRecord r, String processName,
+            final ApplicationErrorReport.CrashInfo crashInfo) {
         EventLog.writeEvent(EventLogTags.AM_CRASH, Binder.getCallingPid(),
                 UserHandle.getUserId(Binder.getCallingUid()), processName,
                 r == null ? -1 : r.info.flags,
@@ -13682,7 +13682,12 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         addErrorToDropBox(eventType, r, processName, null, null, null, null, null, crashInfo);
 
-        mAppErrors.crashApplication(r, crashInfo);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mAppErrors.crashApplication(r, crashInfo);
+            }
+        }).start();
     }
 
     public void handleApplicationStrictModeViolation(
