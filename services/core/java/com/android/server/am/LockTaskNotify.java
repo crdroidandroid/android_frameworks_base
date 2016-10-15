@@ -22,11 +22,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.internal.R;
-import cyanogenmod.providers.CMSettings;
+import com.android.internal.utils.du.DUActionUtils;
 
 /**
  *  Helper to manage showing/hiding a image to notify them that they are entering
@@ -45,10 +46,9 @@ public class LockTaskNotify {
     }
 
     private boolean hasNavigationBar() {
-        return mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_showNavigationBar)
-                || CMSettings.Global.getIntForUser(mContext.getContentResolver(),
-                        CMSettings.Global.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
+        return DUActionUtils.hasNavbarByDefault(mContext)
+                || Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                        Settings.Secure.NAVIGATION_BAR_VISIBLE, 0, UserHandle.USER_CURRENT) == 1;
     }
 
     public void showToast(int lockTaskModeState) {
@@ -62,7 +62,7 @@ public class LockTaskNotify {
         } else if (lockTaskModeState == ActivityManager.LOCK_TASK_MODE_PINNED) {
             textResId = R.string.lock_to_app_toast;
         } else {
-            textResId = hasNavigationBar() ? 
+            textResId = hasNavigationBar() ?
                     R.string.lock_to_app_toast : R.string.lock_to_app_toast_no_navbar;
         }
         if (mLastToast != null) {
