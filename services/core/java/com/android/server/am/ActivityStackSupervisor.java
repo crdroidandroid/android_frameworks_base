@@ -3896,6 +3896,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
                             }
                             getStatusBarService().disable(flags, mToken,
                                     mService.mContext.getPackageName());
+                            getStatusBarService().screenPinningStateChanged(true);
                         }
                         mWindowManager.disableKeyguard(mToken, LOCK_TASK_TAG);
                         if (getDevicePolicyManager() != null) {
@@ -3912,6 +3913,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
                         if (getStatusBarService() != null) {
                             getStatusBarService().disable(StatusBarManager.DISABLE_NONE, mToken,
                                     mService.mContext.getPackageName());
+                            getStatusBarService().screenPinningStateChanged(false);
                         }
                         mWindowManager.reenableKeyguard(mToken);
                         if (getDevicePolicyManager() != null) {

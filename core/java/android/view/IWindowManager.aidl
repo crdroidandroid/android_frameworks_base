@@ -331,6 +331,11 @@ interface IWindowManager
     oneway void statusBarVisibilityChanged(int visibility);
 
     /**
+     * Device requires a software navigation bar.
+     */
+    boolean needsNavigationBar();
+
+    /**
      * Device has a software navigation bar (separate from the status bar).
      */
     boolean hasNavigationBar();
