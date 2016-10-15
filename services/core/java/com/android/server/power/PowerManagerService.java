@@ -753,8 +753,8 @@ public final class PowerManagerService extends SystemService
             resolver.registerContentObserver(CMSettings.Global.getUriFor(
                     CMSettings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED),
                     false, mSettingsObserver, UserHandle.USER_ALL);
-            resolver.registerContentObserver(CMSettings.Global.getUriFor(
-                    CMSettings.Global.DEV_FORCE_SHOW_NAVBAR),
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.NAVIGATION_BAR_VISIBLE),
                     false, mSettingsObserver, UserHandle.USER_ALL);
             resolver.registerContentObserver(CMSettings.System.getUriFor(
                     CMSettings.System.PROXIMITY_ON_WAKE),
@@ -903,12 +903,11 @@ public final class PowerManagerService extends SystemService
         mKeyboardBrightness = CMSettings.Secure.getIntForUser(resolver,
                 CMSettings.Secure.KEYBOARD_BRIGHTNESS, mKeyboardBrightnessSettingDefault,
                 UserHandle.USER_CURRENT);
-        mForceNavbar = CMSettings.Global.getIntForUser(resolver,
-                CMSettings.Global.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
         mProximityWakeEnabled = CMSettings.System.getInt(resolver,
                 CMSettings.System.PROXIMITY_ON_WAKE,
                 mProximityWakeEnabledByDefaultConfig ? 1 : 0) == 1;
-
+        mForceNavbar = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.NAVIGATION_BAR_VISIBLE, 0, UserHandle.USER_CURRENT) == 1;
         mDirty |= DIRTY_SETTINGS;
     }
 
