@@ -319,6 +319,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             "cmsystem:" + CMSettings.System.NAVBAR_LEFT_IN_LANDSCAPE;
     private static final String LOCKSCREEN_MAX_NOTIF_CONFIG =
             "system:" + Settings.System.LOCKSCREEN_MAX_NOTIF_CONFIG;
+    private static final String STATUS_BAR_CRDROID_LOGO =
+            "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO;
+    private static final String STATUS_BAR_CRDROID_LOGO_COLOR =
+            "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_COLOR;
+    private static final String STATUS_BAR_CRDROID_LOGO_STYLE =
+            "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_STYLE;
 
     static {
         boolean onlyCoreApps;
@@ -368,6 +374,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private int mMaxKeyguardNotifConfig;
     private boolean mCustomMaxKeyguard;
+
+    // crDroid logo
+    private boolean mCrDroidLogo;
+    private int mCrDroidLogoColor;
+    private ImageView mCrDroidLogoRight;
+    private ImageView mCrDroidLogoLeft;
+    private int mCrDroidLogoStyle;
 
     Display mDisplay;
     Point mCurrentDisplaySize = new Point();
@@ -819,7 +832,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 SCREEN_BRIGHTNESS_MODE,
                 NAVBAR_LEFT_IN_LANDSCAPE,
                 STATUS_BAR_BRIGHTNESS_CONTROL,
-                LOCKSCREEN_MAX_NOTIF_CONFIG);
+                LOCKSCREEN_MAX_NOTIF_CONFIG,
+                STATUS_BAR_CRDROID_LOGO,
+                STATUS_BAR_CRDROID_LOGO_COLOR,
+                STATUS_BAR_CRDROID_LOGO_STYLE);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -3838,6 +3854,32 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }, cancelAction, afterKeyguardGone);
     }
 
+    public void showCrDroidLogo(boolean show, int color, int style) {
+        if (mStatusBarView == null) return;
+        mCrDroidLogoLeft = (ImageView) mStatusBarView.findViewById(R.id.left_crdroid_logo);
+        mCrDroidLogoRight = (ImageView) mStatusBarView.findViewById(R.id.crdroid_logo);
+
+        if (!show) {
+            mCrDroidLogoRight.setVisibility(View.GONE);
+            mCrDroidLogoLeft.setVisibility(View.GONE);
+            return;
+        }
+        if (color != 0xFFFFFFFF) {
+            mCrDroidLogoRight.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            mCrDroidLogoLeft.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        } else {
+            mCrDroidLogoRight.clearColorFilter();
+            mCrDroidLogoLeft.clearColorFilter();
+        }
+        if (style == 0) {
+            mCrDroidLogoRight.setVisibility(View.GONE);
+            mCrDroidLogoLeft.setVisibility(View.VISIBLE);
+        } else {
+            mCrDroidLogoLeft.setVisibility(View.GONE);
+            mCrDroidLogoRight.setVisibility(View.VISIBLE);
+        }
+    }
+
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -5481,6 +5523,20 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             case LOCKSCREEN_MAX_NOTIF_CONFIG:
                 mMaxKeyguardNotifConfig =
                         newValue == null ? 5 : Integer.parseInt(newValue);
+                break;
+            case STATUS_BAR_CRDROID_LOGO_STYLE:
+                mCrDroidLogoStyle =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoStyle);
+                break;
+            case STATUS_BAR_CRDROID_LOGO:
+                mCrDroidLogo = newValue != null && Integer.parseInt(newValue) == 1;
+                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoStyle);
+                break;
+            case STATUS_BAR_CRDROID_LOGO_COLOR:
+                mCrDroidLogoColor =
+                        newValue == null ? 0xFFFFFFFF : Integer.parseInt(newValue);
+                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoStyle);
                 break;
             default:
                 break;
