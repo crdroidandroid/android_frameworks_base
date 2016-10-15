@@ -102,6 +102,7 @@ import com.android.systemui.RecentsComponent;
 import com.android.systemui.SwipeHelper;
 import com.android.systemui.SystemUI;
 import com.android.systemui.assist.AssistManager;
+import com.android.systemui.navigation.Navigator;
 import com.android.systemui.recents.Recents;
 import com.android.systemui.statusbar.NotificationData.Entry;
 import com.android.systemui.statusbar.NotificationGuts.OnGutsClosedListener;
@@ -189,9 +190,6 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected int mLayoutDirection = -1; // invalid
     protected AccessibilityManager mAccessibilityManager;
-
-    // on-screen navigation buttons
-    protected NavigationBarView mNavigationBarView = null;
 
     protected boolean mDeviceInteractive;
 
@@ -1334,6 +1332,11 @@ public abstract class BaseStatusBar extends SystemUI implements
         int msg = MSG_SHOW_PREV_AFFILIATED_TASK;
         mHandler.removeMessages(msg);
         mHandler.sendEmptyMessage(msg);
+    }
+
+    @Override
+    public void screenPinningStateChanged(boolean enabled) {
+        Log.d(TAG, "StatusBar API screenPinningStateChanged = " + enabled);
     }
 
     protected H createHandler() {
