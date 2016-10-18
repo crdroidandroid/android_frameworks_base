@@ -1859,7 +1859,7 @@ public class ScrollView extends FrameLayout {
 
         @Override
         public String toString() {
-            return "HorizontalScrollView.SavedState{"
+            return "ScrollView.SavedState{"
                     + Integer.toHexString(System.identityHashCode(this))
                     + " scrollPosition=" + scrollPosition + "}";
         }
