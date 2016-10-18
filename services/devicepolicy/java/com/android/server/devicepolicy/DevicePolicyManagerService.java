@@ -4237,6 +4237,9 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
     @Override
     public boolean approveCaCert(String alias, int userId, boolean approval) {
         enforceManageUsers();
+        if (!isLockScreenSecureUnchecked(userId)) {
+            return false;
+        }
         synchronized (this) {
             Set<String> certs = getUserData(userId).mAcceptedCaCertificates;
             boolean changed = (approval ? certs.add(alias) : certs.remove(alias));
