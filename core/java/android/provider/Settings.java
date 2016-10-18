@@ -11781,6 +11781,14 @@ public final class Settings {
         public static final String DISABLE_TRANSITION_ANIMATIONS = "disable_transition_animations";
 
         /**
+         * Whether applications can fake a signature.
+         * 1 = permit apps to fake signature
+         * 0 = disable this feature
+         * @hide
+         */
+        public static final String ALLOW_SIGNATURE_FAKE = "allow_signature_fake";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
