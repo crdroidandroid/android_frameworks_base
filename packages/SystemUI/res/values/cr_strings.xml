@@ -101,4 +101,14 @@
     <string name="qs_lte_label">LTE</string>
     <string name="lte_on">LTE ON </string>
     <string name="lte_off">LTE OFF</string>
+
+    <!-- PULSE tile -->
+    <string name="quick_settings_pulse_enabled">Pulse Enabled</string>
+    <string name="quick_settings_pulse_disabled">No Visualizer</string>
+    <string name="quick_settings_pulse_label">Navigationbar Visualizer</string>
+    <string name="quick_settings_pulse_label">Pulse</string>
+    <string name="quick_settings_pulse_off">Pulse off</string>
+    <string name="quick_settings_pulse_on">Pulse on</string>
+    <string name="quick_settings_pulse_changed_off">Pulse turned off</string>
+    <string name="quick_settings_pulse_changed_on">Pulse turned on</string>
 </resources>
