@@ -17309,8 +17309,10 @@ public final class ActivityManagerService extends ActivityManagerNative
     public List<ActivityManager.RunningServiceInfo> getServices(int maxNum,
             int flags) {
         enforceNotIsolatedCaller("getServices");
+
+        boolean granted = ActiveServices.checkIntractAcrossUsersFullPermission();
         synchronized (this) {
-            return mServices.getRunningServiceInfoLocked(maxNum, flags);
+            return mServices.getRunningServiceInfoLocked(maxNum, flags, granted);
         }
     }
 
