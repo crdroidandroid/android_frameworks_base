@@ -92,6 +92,15 @@
                 android:paddingStart="2dip"
                 android:paddingEnd="1dip"
                 android:visibility="gone" />
+
+            <com.android.systemui.crdroid.carrierlabel.CarrierLabel
+                android:id="@+id/statusbar_carrier_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.StatusBar.CarrierLabel"
+                android:visibility="gone"
+                android:singleLine="true"/>
         </com.android.keyguard.AlphaOptimizedLinearLayout>
 
         <!-- The alpha of this area is controlled from both PhoneStatusBarTransitions and
