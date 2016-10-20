@@ -307,8 +307,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             "cmsystem:" + CMSettings.System.STATUS_BAR_BRIGHTNESS_CONTROL;
     private static final String NAVBAR_LEFT_IN_LANDSCAPE =
             "cmsystem:" + CMSettings.System.NAVBAR_LEFT_IN_LANDSCAPE;
-    private static final String NAVIGATION_BAR_SHOW =
-            "system:" + Settings.System.NAVIGATION_BAR_SHOW;
     private static final String LOCKSCREEN_MAX_NOTIF_CONFIG =
             "system:" + Settings.System.LOCKSCREEN_MAX_NOTIF_CONFIG;
     private static final String STATUS_BAR_CRDROID_LOGO =
@@ -369,9 +367,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     SuControllerImpl mSuController;
 
     int mNaturalBarHeight = -1;
-
-    private boolean mHasNavigationBar = false;
-    private boolean mNavigationBarAttached = false;
 
     private int mMaxKeyguardNotifConfig;
     private boolean mCustomMaxKeyguard;
@@ -539,8 +534,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         mNavigationBarView.setDisabledFlags(mDisabled1);
         addNavigationBar();
-
-        mNavigationBarAttached = true;
     }
 
     // ensure quick settings is disabled until the current user makes it through the setup wizard
@@ -831,7 +824,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mShowOperatorNameObserver);
         }
 
-        updateNavigationBarVisibility();
+        addNavigationBar();
 
         // Developer options - Force Navigation bar
         try {
@@ -848,7 +841,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 SCREEN_BRIGHTNESS_MODE,
                 NAVBAR_LEFT_IN_LANDSCAPE,
                 STATUS_BAR_BRIGHTNESS_CONTROL,
-                NAVIGATION_BAR_SHOW,
                 LOCKSCREEN_MAX_NOTIF_CONFIG,
                 STATUS_BAR_CRDROID_LOGO,
                 STATUS_BAR_CRDROID_LOGO_COLOR,
@@ -1545,20 +1537,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     }
 
-    private void updateNavigationBarVisibility() {
-        final int showByDefault = mContext.getResources().getBoolean(
-                    com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
-        mHasNavigationBar = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_SHOW, showByDefault,
-                    UserHandle.USER_CURRENT) == 1;
-
-        if (mHasNavigationBar) {
-            addNavigationBar();
-        } else {
-            removeNavigationBar();
-        }
-    }
-
     private void prepareNavigationBarView() {
         mNavigationBarView.reorient();
 
@@ -1582,25 +1560,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     // For small-screen devices (read: phones) that lack hardware navigation buttons
     protected void addNavigationBar() {
         if (DEBUG) Log.v(TAG, "addNavigationBar: about to add " + mNavigationBarView);
-        if (mNavigationBarAttached) return;
-
-        if (mNavigationBarView == null) {
-            // Recreate navigationbarview
-            createNavigationBarView(mContext);
-        } 
+        if (mNavigationBarView == null) return;
 
         prepareNavigationBarView();
 
         mWindowManager.addView(mNavigationBarView, getNavigationBarLayoutParams());
-
-        mNavigationBarAttached = true;
     }
 
     private void removeNavigationBar() {
         if (DEBUG) Log.d(TAG, "removeNavigationBar: about to remove " + mNavigationBarView);
-        if (mNavigationBarView == null || !mNavigationBarAttached) return;
+        if (mNavigationBarView == null) return;
 
-        mNavigationBarAttached = false;
         mWindowManager.removeView(mNavigationBarView);
         mNavigationBarView = null;
     }
@@ -2877,7 +2847,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         mExpandedVisible = true;
-       if (mNavigationBarView != null && mNavigationBarAttached)
+        if (mNavigationBarView != null)
             mNavigationBarView.setSlippery(true);
 
         // Expand the window to encompass the full screen in anticipation of the drag.
@@ -5412,9 +5382,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 break;
             case STATUS_BAR_BRIGHTNESS_CONTROL:
                 mBrightnessControl = newValue != null && Integer.parseInt(newValue) == 1;
-                break;
-            case NAVIGATION_BAR_SHOW:
-                updateNavigationBarVisibility();
                 break;
             case LOCKSCREEN_MAX_NOTIF_CONFIG:
                 mMaxKeyguardNotifConfig =
