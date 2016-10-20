@@ -3240,14 +3240,6 @@ public final class Settings {
                 new DiscreteValueValidator(new String[] {"12", "24"});
 
         /**
-        * Developer options - Navigation Bar show switch
-        * @deprecated Moved to CMSettings.Secure.DEV_FORCE_SHOW_NAVBAR
-        * @hide
-        */
-        public static final String DEV_FORCE_SHOW_NAVBAR = "dev_force_show_navbar";
-
-
-        /**
          * Date format string
          *   mm/dd/yyyy
          *   dd/mm/yyyy
