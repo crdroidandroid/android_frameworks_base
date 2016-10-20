@@ -23,4 +23,7 @@
     <color name="floating_action_button_icon_color">@android:color/white</color>
 
     <color name="legacy_icon_background">#FFFFFF</color>
+
+    <!-- Custom Carrier Label -->
+    <color name="status_bar_carrier_color">#FFFFFFFF</color>
 </resources>
