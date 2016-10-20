@@ -55,4 +55,7 @@
     <!-- Custom headers -->
     <dimen name="qs_panel_top_offset_normal">80dp</dimen>
     <dimen name="qs_panel_top_offset_header">110dp</dimen>
+
+    <!-- Custom Carrier Label -->
+    <dimen name="status_bar_carrier_height">14dp</dimen>
 </resources>

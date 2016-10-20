@@ -47,4 +47,7 @@
 
     <!-- OmniJaws detailed view temperature text -->
     <color name="omni_jaws_detailed_temperature_color">@android:color/white</color>
+
+    <!-- Custom Carrier Label -->
+    <color name="status_bar_carrier_color">@android:color/white</color>
 </resources>

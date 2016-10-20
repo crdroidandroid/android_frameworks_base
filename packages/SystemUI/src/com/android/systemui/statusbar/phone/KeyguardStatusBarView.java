@@ -61,6 +61,8 @@ public class KeyguardStatusBarView extends RelativeLayout
             "cmsystem:" + CMSettings.System.STATUS_BAR_BATTERY_STYLE;
     private static final String TEXT_CHARGING_SYMBOL =
             Settings.Secure.TEXT_CHARGING_SYMBOL;
+    private static final String STATUS_BAR_SHOW_CARRIER =
+            "system:" + Settings.System.STATUS_BAR_SHOW_CARRIER;
 
     private boolean mBatteryCharging;
     private boolean mKeyguardUserSwitcherShowing;
@@ -87,6 +89,8 @@ public class KeyguardStatusBarView extends RelativeLayout
     private int currentLevel;
     private boolean isPlugged;
     private boolean mHideContents;
+
+    private int mShowCarrierLabel;
 
     public KeyguardStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -198,6 +202,13 @@ public class KeyguardStatusBarView extends RelativeLayout
             mBatteryLevel.setVisibility(
                     mBatteryCharging || mShowBatteryText ? View.VISIBLE : View.GONE);
         }
+        if (mCarrierLabel != null) {
+            if (mShowCarrierLabel == 1 || mShowCarrierLabel == 3) {
+                mCarrierLabel.setVisibility(View.VISIBLE);
+            } else {
+                mCarrierLabel.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void updateSystemIconsLayoutParams() {
@@ -225,7 +236,8 @@ public class KeyguardStatusBarView extends RelativeLayout
             TunerService.get(getContext()).addTunable(this,
                     STATUS_BAR_SHOW_BATTERY_PERCENT,
                     STATUS_BAR_BATTERY_STYLE,
-                    TEXT_CHARGING_SYMBOL);
+                    TEXT_CHARGING_SYMBOL,
+                    STATUS_BAR_SHOW_CARRIER);
             mBatteryController.addStateChangedCallback(this);
         } else {
             mBatteryController.removeStateChangedCallback(this);
@@ -384,6 +396,11 @@ public class KeyguardStatusBarView extends RelativeLayout
                 mTextChargingSymbol =
                         newValue == null ? 0 : Integer.parseInt(newValue);
                 updateChargingSymbol();
+                break;
+            case STATUS_BAR_SHOW_CARRIER:
+                mShowCarrierLabel =
+                        newValue == null ? 1 : Integer.parseInt(newValue);
+                updateVisibilities();
                 break;
         }
     }
