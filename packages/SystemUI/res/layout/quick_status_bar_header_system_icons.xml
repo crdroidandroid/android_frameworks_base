@@ -28,7 +28,7 @@
     android:orientation="horizontal">
 
 
-    <com.android.keyguard.CarrierText
+    <com.android.systemui.crdroid.carrierlabel.CarrierLabelQS
         android:id="@+id/qs_carrier_text"
         android:layout_width="0dp"
         android:layout_height="match_parent"
