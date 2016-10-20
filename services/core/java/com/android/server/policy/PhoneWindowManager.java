@@ -983,9 +983,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             } else if (ActionHandler.INTENT_SCREENSHOT.equals(action)) {
                 mHandler.removeCallbacks(mScreenshotRunnable);
                 mHandler.post(mScreenshotRunnable);
-            } else if (ActionHandler.INTENT_TOGGLE_SCREENRECORD.equals(action)) {
-                mHandler.removeCallbacks(mScreenrecordRunnable);
-                mHandler.post(mScreenrecordRunnable);
             }
         }
     };
@@ -2032,7 +2029,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         filter = new IntentFilter();
         filter.addAction(ActionHandler.INTENT_SHOW_POWER_MENU);
         filter.addAction(ActionHandler.INTENT_SCREENSHOT);
-        filter.addAction(ActionHandler.INTENT_TOGGLE_SCREENRECORD);
         context.registerReceiver(mDUReceiver, filter);
 
         // monitor for system gestures
