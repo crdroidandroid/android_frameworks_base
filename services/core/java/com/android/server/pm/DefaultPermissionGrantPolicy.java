@@ -757,6 +757,29 @@ final class DefaultPermissionGrantPolicy {
                 grantRuntimePermissionsLPw(elevenPackage, PHONE_PERMISSIONS, true, userId);
                 grantRuntimePermissionsLPw(elevenPackage, STORAGE_PERMISSIONS, true, userId);
             }
+
+            // Clock
+            PackageParser.Package deskclockpackage = getSystemPackageLPr(
+                    "com.android.deskclock");
+            if (deskclockpackage != null && doesPackageSupportRuntimePermissions(deskclockpackage)) {
+                grantRuntimePermissionsLPw(deskclockpackage, PHONE_PERMISSIONS, true, userId);
+                grantRuntimePermissionsLPw(deskclockpackage, STORAGE_PERMISSIONS, true, userId);
+            }
+
+            // Google Clock
+            PackageParser.Package gdeskclockpackage = getSystemPackageLPr(
+                    "com.google.android.deskclock");
+            if (gdeskclockpackage != null && doesPackageSupportRuntimePermissions(gdeskclockpackage)) {
+                grantRuntimePermissionsLPw(gdeskclockpackage, STORAGE_PERMISSIONS, true, userId);
+            }
+
+            // Default Launcher
+            PackageParser.Package launcherpackage = getSystemPackageLPr(
+                    "com.android.launcher3");
+            if (launcherpackage != null && doesPackageSupportRuntimePermissions(launcherpackage)) {
+                grantRuntimePermissionsLPw(launcherpackage, PHONE_PERMISSIONS, true, userId);
+                grantRuntimePermissionsLPw(launcherpackage, STORAGE_PERMISSIONS, true, userId);
+            }
             mService.mSettings.onDefaultRuntimePermissionsGrantedLPr(userId);
         }
     }
