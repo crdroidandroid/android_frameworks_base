@@ -43,4 +43,7 @@
     <string name="animation_grow_shrink_right">Grow in (Right)</string>
     <string name="animation_random">Random</string>
     <string name="action_null">Blank</string>
+
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
 </resources>

@@ -59,6 +59,7 @@ import android.os.Trace;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.os.WorkSource;
+import android.pocket.PocketManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.service.dreams.DreamManagerInternal;
@@ -2033,13 +2034,16 @@ public final class PowerManagerService extends SystemService
                 final int screenOffTimeout = getScreenOffTimeoutLocked(sleepTimeout);
                 final int screenDimDuration = getScreenDimDurationLocked(screenOffTimeout);
                 final boolean userInactiveOverride = mUserInactiveOverrideFromWindowManager;
+                final PocketManager pocketManager = (PocketManager) mContext.getSystemService(Context.POCKET_SERVICE);
+                final boolean isDeviceInPocket = pocketManager != null && pocketManager.isDeviceInPocket();
 
                 mUserActivitySummary = 0;
                 if (mWakefulness == WAKEFULNESS_AWAKE && mLastUserActivityTime >= mLastWakeTime) {
                     nextTimeout = mLastUserActivityTime
                             + screenOffTimeout - screenDimDuration;
                     if (now < nextTimeout) {
-                        if (mHardwareKeysDisable || now > mLastUserActivityTime + BUTTON_ON_DURATION) {
+                        if (mHardwareKeysDisable || isDeviceInPocket ||
+                            now > mLastUserActivityTime + BUTTON_ON_DURATION) {
                             mButtonsLight.setBrightness(0);
                         } else {
                             if (!mProximityPositive) {
