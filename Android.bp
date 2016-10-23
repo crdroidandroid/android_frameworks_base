@@ -55,6 +55,8 @@ java_library {
         "core/java/android/accounts/IAccountManagerResponse.aidl",
         "core/java/android/accounts/IAccountAuthenticator.aidl",
         "core/java/android/accounts/IAccountAuthenticatorResponse.aidl",
+        "core/java/android/pocket/IPocketService.aidl",
+        "core/java/android/pocket/IPocketCallback.aidl",
         "core/java/android/app/IActivityController.aidl",
         "core/java/android/app/IActivityManager.aidl",
         "core/java/android/app/IActivityPendingResult.aidl",
