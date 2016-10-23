@@ -3906,6 +3906,16 @@ public abstract class Context {
     public static final String USAGE_STATS_SERVICE = "usagestats";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a
+     * {@link android.os.PocketManager} for accessing and listening to device pocket state.
+     *
+     * @hide
+     * @see #getSystemService
+     * @see android.os.PocketManager
+     */
+    public static final String POCKET_SERVICE = "pocket";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a {@link
      * android.app.job.JobScheduler} instance for managing occasional
      * background tasks.
