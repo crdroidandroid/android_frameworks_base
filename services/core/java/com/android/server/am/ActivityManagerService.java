@@ -17349,10 +17349,22 @@ public final class ActivityManagerService extends ActivityManagerNative
                 mPidsSelfLocked.remove(app.pid);
                 mHandler.removeMessages(PROC_START_TIMEOUT_MSG, app);
             }
-            mBatteryStatsService.noteProcessFinish(app.processName, app.info.uid);
-            if (app.isolated) {
-                mBatteryStatsService.removeIsolatedUid(app.uid, app.info.uid);
-            }
+
+            final int infoUid = app.info.uid;
+            final int uid = app.uid;
+            final String processName = app.processName;
+            final boolean isolated = app.isolated;
+            // post BatteryStatsService.noteProcessFinish to handler thread
+            // as it does not need to acquire mPidsSelfLocked.
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mBatteryStatsService.noteProcessFinish(processName, infoUid);
+                    if (isolated) {
+                        mBatteryStatsService.removeIsolatedUid(uid, infoUid);
+                    }
+                }
+            });
             app.setPid(0);
         }
         return false;
