@@ -149,6 +149,7 @@ public class UsageStatsService extends SystemService implements
     @GuardedBy("mLock")
     private AppIdleHistory mAppIdleHistory;
 
+    @GuardedBy("mLock")
     private ArrayList<UsageStatsManagerInternal.AppIdleStateChangeListener>
             mPackageAccessListeners = new ArrayList<>();
 
@@ -983,14 +984,18 @@ public class UsageStatsService extends SystemService implements
     }
 
     void informListeners(String packageName, int userId, boolean isIdle) {
-        for (AppIdleStateChangeListener listener : mPackageAccessListeners) {
-            listener.onAppIdleStateChanged(packageName, userId, isIdle);
+        synchronized (mLock) {
+            for (AppIdleStateChangeListener listener : mPackageAccessListeners) {
+                listener.onAppIdleStateChanged(packageName, userId, isIdle);
+            }
         }
     }
 
     void informParoleStateChanged() {
-        for (AppIdleStateChangeListener listener : mPackageAccessListeners) {
-            listener.onParoleStateChanged(mAppIdleParoled);
+        synchronized (mLock) {
+            for (AppIdleStateChangeListener listener : mPackageAccessListeners) {
+                listener.onParoleStateChanged(mAppIdleParoled);
+            }
         }
     }
 
