@@ -37,6 +37,8 @@ import android.provider.Settings;
 
 import com.android.systemui.statusbar.policy.BatteryController;
 
+import cyanogenmod.providers.CMSettings;
+
 public class BatteryMeterDrawable extends Drawable implements
         BatteryController.BatteryStateChangeCallback {
 
@@ -49,6 +51,13 @@ public class BatteryMeterDrawable extends Drawable implements
     private static final int FULL = 96;
 
     private static final float BOLT_LEVEL_THRESHOLD = 0.3f;  // opaque bolt below this fraction
+
+    // Values for the different battery styles
+    public static final int BATTERY_STYLE_PORTRAIT  = 0;
+    public static final int BATTERY_STYLE_CIRCLE    = 2;
+    public static final int BATTERY_STYLE_HIDDEN    = 4;
+    public static final int BATTERY_STYLE_LANDSCAPE = 5;
+    public static final int BATTERY_STYLE_TEXT      = 6;
 
     private final int[] mColors;
     private final int mIntrinsicWidth;
@@ -182,7 +191,8 @@ public class BatteryMeterDrawable extends Drawable implements
     public void startListening() {
         mListening = true;
         mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(SHOW_PERCENT_SETTING), false, mSettingObserver);
+                CMSettings.System.getUriFor(CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT),
+                false, mSettingObserver);
         updateShowPercent();
         mBatteryController.addStateChangedCallback(this);
     }
@@ -266,8 +276,8 @@ public class BatteryMeterDrawable extends Drawable implements
     }
 
     private void updateShowPercent() {
-        mShowPercent = 0 != Settings.System.getInt(mContext.getContentResolver(),
-                SHOW_PERCENT_SETTING, 0);
+        mShowPercent = CMSettings.System.getInt(mContext.getContentResolver(),
+                CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0) == 1;
     }
 
     private int getColorForLevel(int percent) {
