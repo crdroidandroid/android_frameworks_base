@@ -1333,6 +1333,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mNavigationController.getBar().getBaseView().setVisibility(View.GONE);
         }
         mNavigationController.getBar().notifyInflateFromUser();
+        mNavigationController.getBar().setNavigationIconHints(mNavigationIconHints);
         addNavigationBar();
     }
 
