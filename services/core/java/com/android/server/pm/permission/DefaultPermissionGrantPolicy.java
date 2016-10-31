@@ -893,6 +893,10 @@ public final class DefaultPermissionGrantPolicy {
         grantSystemFixedPermissionsToSystemPackage(pm,
                 getDefaultProviderAuthorityPackage("com.android.providers.contacts.ContactsProvider2", userId), userId,
                 CONTACTS_PERMISSIONS, STORAGE_PERMISSIONS);
+
+        // Google Calendar
+        grantSystemFixedPermissionsToSystemPackage(pm, "com.google.android.calendar", userId, CALENDAR_PERMISSIONS,
+                CONTACTS_PERMISSIONS, PHONE_PERMISSIONS);
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(PackageManagerWrapper pm,
