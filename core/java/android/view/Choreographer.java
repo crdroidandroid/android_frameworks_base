@@ -557,6 +557,19 @@ public final class Choreographer {
                 msg.setAsynchronous(true);
                 mHandler.sendMessageAtTime(msg, nextFrameTime);
             }
+        } else {
+            if (USE_VSYNC) {
+                if (mHandler.hasMessages(MSG_DO_SCHEDULE_VSYNC)) {
+                    // If running on the Looper thread, then schedule the vsync immediately.
+                    if (isRunningOnLooperThreadLocked()) {
+                        if (DEBUG_FRAMES) {
+                            Log.d(TAG, "Scheduling next frame on vsync.");
+                        }
+                        scheduleVsyncLocked();
+                        mHandler.removeMessages(MSG_DO_SCHEDULE_VSYNC);
+                    }
+                }
+            }
         }
     }
 
