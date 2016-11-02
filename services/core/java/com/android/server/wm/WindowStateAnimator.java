@@ -583,6 +583,10 @@ class WindowStateAnimator {
             return;
         }
 
+        if (mWin.mReplacingRemoveRequested) {
+            return;
+        }
+
         if (WindowManagerService.localLOGV || DEBUG_ADD_REMOVE) Slog.v(TAG,
                 "Exit animation finished in " + this + ": remove=" + mWin.mRemoveOnExit);
 
