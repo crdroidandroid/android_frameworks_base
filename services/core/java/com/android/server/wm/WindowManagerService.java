@@ -2373,6 +2373,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 // animation.
                 win.mAnimatingExit = true;
                 win.mReplacingRemoveRequested = true;
+                updateFocusedWindowLocked(UPDATE_FOCUS_WILL_PLACE_SURFACES, true);
                 Binder.restoreCallingIdentity(origId);
                 return;
             }
