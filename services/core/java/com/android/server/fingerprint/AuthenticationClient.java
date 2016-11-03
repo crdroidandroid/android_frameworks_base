@@ -145,6 +145,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
             Slog.e(TAG, "stopAuthentication failed", e);
             return ERROR_ESRCH;
         }
+        mIsCanceling = true;
         return 0; // success
     }
 

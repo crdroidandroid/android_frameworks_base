@@ -117,6 +117,7 @@ public abstract class EnrollClient extends ClientMonitor {
         if (initiatedByClient) {
             onError(FingerprintManager.FINGERPRINT_ERROR_CANCELED);
         }
+        mIsCanceling = true;
         return 0;
     }
 
