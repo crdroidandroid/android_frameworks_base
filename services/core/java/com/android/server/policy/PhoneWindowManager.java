@@ -699,6 +699,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private LineageButtons mLineageButtons;
 
+    private int mVolButtonScreenshotType;
+
     private PocketManager mPocketManager;
     private PocketLock mPocketLock;
     private boolean mPocketLockShowing;
@@ -998,6 +1000,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.THREE_FINGER_GESTURE), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SCREENSHOT_TYPE), false, this,
                     UserHandle.USER_ALL);
             updateSettings();
         }
@@ -1632,8 +1637,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             + SCREENSHOT_CHORD_DEBOUNCE_DELAY_MILLIS) {
                 mScreenshotChordVolumeDownKeyConsumed = true;
                 cancelPendingPowerKeyAction();
-                mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_FULLSCREEN);
-                mHandler.postDelayed(mScreenshotRunnable, getScreenshotChordLongPressDelay());
+                if (mVolButtonScreenshotType != 1) {
+                    takeScreenshotDelayed(TAKE_SCREENSHOT_FULLSCREEN, getScreenshotChordLongPressDelay());
+                } else {
+                    takeScreenshotDelayed(TAKE_SCREENSHOT_SELECTED_REGION, getScreenshotChordLongPressDelay());
+                }
             }
         }
     }
@@ -1732,9 +1740,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private final ScreenshotRunnable mScreenshotRunnable = new ScreenshotRunnable();
 
     private void takeScreenshot(int screenshotType) {
+        takeScreenshotDelayed(screenshotType, 0);
+    }
+
+    private void takeScreenshotDelayed(int screenshotType, long delay) {
         mHandler.removeCallbacks(mScreenshotRunnable);
         mScreenshotRunnable.setScreenshotType(screenshotType);
-        mHandler.post(mScreenshotRunnable);
+        mHandler.postDelayed(mScreenshotRunnable, delay);
     }
 
     private final Runnable mCloseApp = new Runnable() {
@@ -2616,6 +2628,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Global.POWER_BUTTON_VERY_LONG_PRESS,
                     mContext.getResources().getInteger(
                             com.android.internal.R.integer.config_veryLongPressOnPowerBehavior));
+            mVolButtonScreenshotType = Settings.System.getIntForUser(resolver,
+                    Settings.System.SCREENSHOT_TYPE, 0, UserHandle.USER_CURRENT);
 
         }
         if (updateRotation) {
