@@ -628,7 +628,7 @@ public class ListPopupWindow implements ShowableListMenu {
             } else if (mDropDownHeight == ViewGroup.LayoutParams.WRAP_CONTENT) {
                 heightSpec = height;
             } else {
-                heightSpec = mDropDownHeight;
+                heightSpec = Math.max(1, mDropDownHeight);
             }
 
             mPopup.setOutsideTouchable(!mForceIgnoreOutsideTouch && !mDropDownAlwaysVisible);
@@ -655,7 +655,7 @@ public class ListPopupWindow implements ShowableListMenu {
                 if (mDropDownHeight == ViewGroup.LayoutParams.WRAP_CONTENT) {
                     heightSpec = height;
                 } else {
-                    heightSpec = mDropDownHeight;
+                    heightSpec = Math.max(1, mDropDownHeight);
                 }
             }
 
