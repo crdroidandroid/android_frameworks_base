@@ -65,6 +65,7 @@ public class UsbTetherTile extends QSTileImpl<BooleanState> {
             final IntentFilter filter = new IntentFilter();
             filter.addAction(UsbManager.ACTION_USB_STATE);
             mContext.registerReceiver(mReceiver, filter);
+            refreshState();
         } else {
             mContext.unregisterReceiver(mReceiver);
         }
