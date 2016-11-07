@@ -1130,7 +1130,12 @@ class ActivityStarter {
 
             sendPowerHintForLaunchStartIfNeeded(false /* forceSend */);
 
+            final ActivityRecord intentActivity = mReusedActivity;
             mReusedActivity = setTargetStackAndMoveToFrontIfNeeded(mReusedActivity);
+            if (mReusedActivity == null && ((mLaunchFlags & FLAG_ACTIVITY_CLEAR_TOP) != 0
+                    || mLaunchSingleInstance || mLaunchSingleTask)) {
+                mReusedActivity = intentActivity;
+            }
 
             if ((mStartFlags & START_FLAG_ONLY_IF_NEEDED) != 0) {
                 // We don't need to start a new activity, and the client said not to do anything
