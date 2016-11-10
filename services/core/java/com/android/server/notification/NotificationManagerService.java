@@ -3800,6 +3800,15 @@ public class NotificationManagerService extends SystemService {
                 }
             }
 
+            // Skip if auto-grouped summary have one more non-clearable childrens
+            if ((r.getFlags() & Notification.FLAG_AUTOGROUP_SUMMARY) != 0) {
+                boolean hasNonClearableChild = false;
+
+                //TODO
+
+                if (hasNonClearableChild) continue;
+            }
+
             if ((r.getFlags() & (Notification.FLAG_ONGOING_EVENT
                             | Notification.FLAG_NO_CLEAR)) == 0) {
                 mNotificationList.remove(i);
