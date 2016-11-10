@@ -1476,18 +1476,24 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         for (int i = 0; i < numChildren; i++) {
             final View child = mStackScroller.getChildAt(i);
             if (child instanceof ExpandableNotificationRow) {
-                if (mStackScroller.canChildBeDismissed(child)) {
-                    if (child.getVisibility() == View.VISIBLE) {
-                        viewsToHide.add(child);
-                    }
-                }
+                int summaryInsertIdx = viewsToHide.size();
+                boolean hasNonClearableChild = false;
+
                 ExpandableNotificationRow row = (ExpandableNotificationRow) child;
                 List<ExpandableNotificationRow> children = row.getNotificationChildren();
                 if (row.areChildrenExpanded() && children != null) {
                     for (ExpandableNotificationRow childRow : children) {
-                        if (childRow.getVisibility() == View.VISIBLE) {
+                        if (childRow.isClearable() && childRow.getVisibility() == View.VISIBLE) {
                             viewsToHide.add(childRow);
+                        } else {
+                            hasNonClearableChild = true;
                         }
+                    }
+                }
+
+                if (!hasNonClearableChild && mStackScroller.canChildBeDismissed(child)) {
+                    if (child.getVisibility() == View.VISIBLE) {
+                        viewsToHide.add(summaryInsertIdx, child);
                     }
                 }
             }
