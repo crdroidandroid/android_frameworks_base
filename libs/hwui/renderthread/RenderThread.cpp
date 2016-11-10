@@ -272,7 +272,7 @@ void RenderThread::requestVsync() {
 }
 
 bool RenderThread::threadLoop() {
-    setpriority(PRIO_PROCESS, 0, PRIORITY_REALTIME);
+    setpriority(PRIO_PROCESS, 0, PRIORITY_DISPLAY);
     initThreadLocals();
 
     int timeoutMillis = -1;
