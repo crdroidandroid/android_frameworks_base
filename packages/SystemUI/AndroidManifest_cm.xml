@@ -32,7 +32,7 @@
 
     <application>
 
-        <!-- <activity-alias
+        <activity-alias
             android:name=".tuner.NavBarTuner"
             android:targetActivity=".tuner.TunerActivity"
             android:icon="@drawable/tuner"
@@ -44,7 +44,7 @@
                 <action android:name="com.android.settings.action.NAV_BAR_TUNER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity-alias> -->
+        </activity-alias>
 
         <activity
             android:name=".cm.LockscreenShortcutsActivity"
