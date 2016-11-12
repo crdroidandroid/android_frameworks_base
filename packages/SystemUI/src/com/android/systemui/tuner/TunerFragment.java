@@ -90,7 +90,7 @@ public class TunerFragment extends PreferenceFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle(R.string.system_ui_tuner);
+        getActivity().setTitle(R.string.statusbar_icons_blacklist);
 
         MetricsLogger.visibility(getContext(), MetricsEvent.TUNER, true);
     }
