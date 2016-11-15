@@ -1107,7 +1107,7 @@ class AlarmManagerService extends SystemService {
         // Try to prevent spamming by making sure we aren't firing alarms in the immediate future
         final long minTrigger = nowElapsed + mConstants.MIN_FUTURITY;
         final long triggerElapsed = (nominalTrigger > minTrigger) ? nominalTrigger : minTrigger;
-
+        triggerAtTime = (nominalTrigger > minTrigger) ? triggerAtTime : triggerAtTime + mConstants.MIN_FUTURITY;
         final long maxElapsed;
         if (windowLength == AlarmManager.WINDOW_EXACT) {
             maxElapsed = triggerElapsed;
