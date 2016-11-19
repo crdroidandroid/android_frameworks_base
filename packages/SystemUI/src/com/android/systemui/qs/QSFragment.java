@@ -20,6 +20,7 @@ import android.app.Fragment;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.util.Log;
@@ -32,6 +33,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.HorizontalScrollView;
 
+import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.R.id;
@@ -40,8 +42,9 @@ import com.android.systemui.qs.customize.QSCustomizer;
 import com.android.systemui.statusbar.phone.NotificationPanelView;
 import com.android.systemui.statusbar.phone.NotificationsQuickSettingsContainer;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
+import com.android.systemui.tuner.TunerService;
 
-public class QSFragment extends Fragment implements QS {
+public class QSFragment extends Fragment implements QS, TunerService.Tunable {
     private static final String TAG = "QS";
     private static final boolean DEBUG = false;
     private static final String EXTRA_EXPANDED = "expanded";
@@ -67,6 +70,14 @@ public class QSFragment extends Fragment implements QS {
     private QSFooter mFooter;
 
     private HorizontalScrollView mQuickQsPanelScroller;
+
+    private static boolean mTranslucentQuickSettings;
+    private static int mQSTranslucencyPercentage;
+
+    private static final String BLUR_QUICKSETTINGS_ENABLED =
+            "system:" + Settings.System.BLUR_QUICKSETTINGS_ENABLED;
+    private static final String BLUR_QUICKSETTINGS_PERCENTAGE =
+            "system:" + Settings.System.BLUR_QUICKSETTINGS_PERCENTAGE;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -103,6 +114,10 @@ public class QSFragment extends Fragment implements QS {
             mQSCustomizer.setEditLocation(x, y);
             mQSCustomizer.restoreInstanceState(savedInstanceState);
         }
+
+        Dependency.get(TunerService.class).addTunable(this,
+                BLUR_QUICKSETTINGS_ENABLED,
+                BLUR_QUICKSETTINGS_PERCENTAGE);
     }
 
     @Override
@@ -110,6 +125,36 @@ public class QSFragment extends Fragment implements QS {
         super.onDestroy();
         if (mListening) {
             setListening(false);
+        }
+        Dependency.get(TunerService.class).removeTunable(this);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case BLUR_QUICKSETTINGS_ENABLED:
+                mTranslucentQuickSettings =
+                        newValue != null && Integer.parseInt(newValue) == 1;
+                handleQuickSettingsBackround();
+                break;
+            case BLUR_QUICKSETTINGS_PERCENTAGE:
+                int value =
+                        newValue == null ? 60 : Integer.parseInt(newValue);
+                mQSTranslucencyPercentage = 255 - ((value * 255) / 100);
+                handleQuickSettingsBackround();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void handleQuickSettingsBackround() {
+        if (mContainer == null)
+            return;
+        if (mKeyguardShowing) {
+            mContainer.getBackground().setAlpha(255);
+        } else {
+            mContainer.getBackground().setAlpha(mTranslucentQuickSettings ? mQSTranslucencyPercentage : 255);
         }
     }
 
@@ -200,6 +245,7 @@ public class QSFragment extends Fragment implements QS {
         mFooter.setExpanded((mKeyguardShowing && !mHeaderAnimating)
                 || (mQsExpanded && !mStackScrollerOverscrolling));
         mQSPanel.setVisibility(expandVisually ? View.VISIBLE : View.INVISIBLE);
+        handleQuickSettingsBackround();
     }
 
     public QSPanel getQsPanel() {
