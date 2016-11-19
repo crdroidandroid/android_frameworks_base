@@ -988,12 +988,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mHandler.sendEmptyMessage(MSG_DISPATCH_SHOW_GLOBAL_ACTIONS);
             } else if (ActionHandler.INTENT_SCREENSHOT.equals(action)) {
                 mHandler.removeCallbacks(mScreenshotRunnable);
-                checkSettings();
                 mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_FULLSCREEN);
                 mHandler.post(mScreenshotRunnable);
             } else if (ActionHandler.INTENT_REGION_SCREENSHOT.equals(action)) {
                 mHandler.removeCallbacks(mScreenshotRunnable);
-                checkSettings();
                 mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_SELECTED_REGION);
                 mHandler.post(mScreenshotRunnable);
             }
