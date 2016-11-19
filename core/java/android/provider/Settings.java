@@ -4886,6 +4886,36 @@ public final class Settings {
         public static final String SMART_PIXELS_ON_POWER_SAVE = "smart_pixels_on_power_save";
 
         /**
+         * Blur personalization settings
+         * @hide
+         */
+        public static final String BLUR_STATUSBAR_ENABLED = "blur_statusbar_enabled";
+
+        public static final String BLUR_STATUSBAR_SCALE = "blur_statusbar_scale";
+
+        public static final String BLUR_STATUSBAR_RADIUS = "blur_statusbar_radius";
+
+        public static final String BLUR_NOTIFICATIONS_ENABLED = "blur_notifications_enabled";
+
+        public static final String BLUR_NOTIFICATIONS_PERCENTAGE = "blur_notifications_percentage";
+
+        public static final String BLUR_QUICKSETTINGS_ENABLED = "blur_quicksettings_enabled";
+
+        public static final String BLUR_QUICKSETTINGS_PERCENTAGE = "blur_quicksettings_percentage";
+
+        public static final String BLUR_RECENT_ENABLED = "blur_recent_enabled";
+
+        public static final String BLUR_RECENT_SCALE = "blur_recent_scale";
+
+        public static final String BLUR_RECENT_RADIUS = "blur_recent_radius";
+
+        public static final String BLUR_DARK_COLOR = "blur_dark_color";
+
+        public static final String BLUR_LIGHT_COLOR = "blur_light_color";
+
+        public static final String BLUR_MIXED_COLOR = "blur_mixed_color";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *

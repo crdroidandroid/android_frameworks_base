@@ -79,13 +79,14 @@ import com.android.systemui.statusbar.stack.ExpandableViewState;
 import com.android.systemui.statusbar.stack.NotificationChildrenContainer;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.StackScrollState;
+import com.android.systemui.tuner.TunerService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
 public class ExpandableNotificationRow extends ActivatableNotificationView
-        implements PluginListener<NotificationMenuRowPlugin> {
+        implements PluginListener<NotificationMenuRowPlugin>, TunerService.Tunable {
 
     private static final int DEFAULT_DIVIDER_ALPHA = 0x29;
     private static final int COLORED_DIVIDER_ALPHA = 0x7B;
@@ -260,6 +261,14 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
     private float mTranslationWhenRemoved;
     private boolean mWasChildInGroupWhenRemoved;
     private int mNotificationColorAmbient;
+
+    private static int mTranslucencyPercentage;
+    private static boolean mTranslucentNotifications;
+
+    private static final String BLUR_NOTIFICATIONS_ENABLED =
+            "system:" + Settings.System.BLUR_NOTIFICATIONS_ENABLED;
+    private static final String BLUR_NOTIFICATIONS_PERCENTAGE =
+            "system:" + Settings.System.BLUR_NOTIFICATIONS_PERCENTAGE;
 
     @Override
     public boolean isGroupExpansionChanging() {
@@ -825,12 +834,16 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         super.onAttachedToWindow();
         Dependency.get(PluginManager.class).addPluginListener(this,
                 NotificationMenuRowPlugin.class, false /* Allow multiple */);
+        Dependency.get(TunerService.class).addTunable(this,
+                BLUR_NOTIFICATIONS_ENABLED,
+                BLUR_NOTIFICATIONS_PERCENTAGE);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         Dependency.get(PluginManager.class).removePluginListener(this);
+        Dependency.get(TunerService.class).removeTunable(this);
     }
 
     @Override
@@ -848,6 +861,23 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         }
         if (existed) {
             createMenu();
+        }
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case BLUR_NOTIFICATIONS_ENABLED:
+                mTranslucentNotifications =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                break;
+            case BLUR_NOTIFICATIONS_PERCENTAGE:
+                int value =
+                        newValue == null ? 70 : Integer.parseInt(newValue);
+                mTranslucencyPercentage = 255 - ((value * 255) / 100);
+                break;
+            default:
+                break;
         }
     }
 
@@ -1137,11 +1167,11 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             contentAlpha = 1.0f;
         }
         for (NotificationContentView l : mLayouts) {
-            l.setAlpha(contentAlpha);
+            l.setAlpha(mTranslucentNotifications ? mTranslucencyPercentage : contentAlpha);
             l.setTranslationY(translationY);
         }
         if (mChildrenContainer != null) {
-            mChildrenContainer.setAlpha(contentAlpha);
+            mChildrenContainer.setAlpha(mTranslucentNotifications ? mTranslucencyPercentage : contentAlpha);
             mChildrenContainer.setTranslationY(translationY);
             // TODO: handle children fade out better
         }
@@ -1836,10 +1866,10 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             mPrivateLayout.animate().cancel();
             if (mChildrenContainer != null) {
                 mChildrenContainer.animate().cancel();
-                mChildrenContainer.setAlpha(1f);
+                mChildrenContainer.setAlpha(mTranslucentNotifications ? mTranslucencyPercentage : 1f);
             }
-            mPublicLayout.setAlpha(1f);
-            mPrivateLayout.setAlpha(1f);
+            mPublicLayout.setAlpha(mTranslucentNotifications ? mTranslucencyPercentage : 1f);
+            mPrivateLayout.setAlpha(mTranslucentNotifications ? mTranslucencyPercentage : 1f);
             mPublicLayout.setVisibility(mShowingPublic ? View.VISIBLE : View.INVISIBLE);
             updateChildrenVisibility();
         } else {
@@ -1928,7 +1958,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             ColorDrawable background = (ColorDrawable) v.getBackground();
             background.mutate();
             background.setColor(color);
-            background.setAlpha(alpha);
+            background.setAlpha(mTranslucentNotifications ? mTranslucencyPercentage : alpha);
         }
     }
 
@@ -1964,11 +1994,11 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
             // During the animation the visible view might have changed, so let's make sure all
             // alphas are reset
             if (mChildrenContainer != null) {
-                mChildrenContainer.setAlpha(1.0f);
+                mChildrenContainer.setAlpha(mTranslucentNotifications ? mTranslucencyPercentage : 1.0f);
                 mChildrenContainer.setLayerType(LAYER_TYPE_NONE, null);
             }
             for (NotificationContentView l : mLayouts) {
-                l.setAlpha(1.0f);
+                l.setAlpha(mTranslucentNotifications ? mTranslucencyPercentage : 1.0f);
                 l.setLayerType(LAYER_TYPE_NONE, null);
             }
         }

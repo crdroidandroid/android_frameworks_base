@@ -24,18 +24,30 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.util.AttributeSet;
+import android.provider.Settings;
 import android.view.View;
+import com.android.systemui.Dependency;
+import com.android.systemui.statusbar.phone.NotificationPanelView;
+import com.android.systemui.tuner.TunerService;
 
 /**
  * A view that can be used for both the dimmed and normal background of an notification.
  */
-public class NotificationBackgroundView extends View {
+public class NotificationBackgroundView extends View implements TunerService.Tunable {
 
     private Drawable mBackground;
     private int mClipTopAmount;
     private int mActualHeight;
     private int mClipBottomAmount;
     private int mTintColor;
+
+    private static int mTranslucencyPercentage;
+    private static boolean mTranslucentNotifications;
+
+    private static final String BLUR_NOTIFICATIONS_ENABLED =
+            "system:" + Settings.System.BLUR_NOTIFICATIONS_ENABLED;
+    private static final String BLUR_NOTIFICATIONS_PERCENTAGE =
+            "system:" + Settings.System.BLUR_NOTIFICATIONS_PERCENTAGE;
 
     public NotificationBackgroundView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -50,8 +62,34 @@ public class NotificationBackgroundView extends View {
         int bottom = mActualHeight - mClipBottomAmount;
         if (drawable != null && bottom > mClipTopAmount) {
             drawable.setBounds(0, mClipTopAmount, getWidth(), bottom);
+            if (mTranslucentNotifications) {
+                if (drawable.getAlpha() != mTranslucencyPercentage)
+                    drawable.setAlpha(mTranslucencyPercentage);
+                if (NotificationPanelView.mKeyguardShowing) {
+                    drawable.setAlpha(179);
+                }
+                if (NotificationPanelView.mHeadsUpShowing || NotificationPanelView.mHeadsUpAnimatingAway) {
+                    drawable.setAlpha(255);
+                }
+            } else {
+                drawable.setAlpha(255);
+            }
             drawable.draw(canvas);
         }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        Dependency.get(TunerService.class).addTunable(this,
+                BLUR_NOTIFICATIONS_ENABLED,
+                BLUR_NOTIFICATIONS_PERCENTAGE);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Dependency.get(TunerService.class).removeTunable(this);
     }
 
     @Override
@@ -74,6 +112,23 @@ public class NotificationBackgroundView extends View {
     public void drawableHotspotChanged(float x, float y) {
         if (mBackground != null) {
             mBackground.setHotspot(x, y);
+        }
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case BLUR_NOTIFICATIONS_ENABLED:
+                mTranslucentNotifications =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                break;
+            case BLUR_NOTIFICATIONS_PERCENTAGE:
+                int value =
+                        newValue == null ? 70 : Integer.parseInt(newValue);
+                mTranslucencyPercentage = 255 - ((value * 255) / 100);
+                break;
+            default:
+                break;
         }
     }
 
