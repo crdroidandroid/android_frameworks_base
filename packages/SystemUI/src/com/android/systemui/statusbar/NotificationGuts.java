@@ -32,6 +32,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.provider.Settings;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.AttributeSet;
@@ -50,18 +51,21 @@ import android.widget.TextView;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.settingslib.Utils;
+import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.plugins.statusbar.NotificationMenuRowPlugin;
 import com.android.systemui.plugins.statusbar.NotificationMenuRowPlugin.MenuItem;
+import com.android.systemui.statusbar.phone.NotificationPanelView;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
+import com.android.systemui.tuner.TunerService;
 
 import java.util.Set;
 
 /**
  * The guts of a notification revealed when performing a long press.
  */
-public class NotificationGuts extends FrameLayout {
+public class NotificationGuts extends FrameLayout implements TunerService.Tunable {
     private static final String TAG = "NotificationGuts";
     private static final long CLOSE_GUTS_DELAY = 8000;
 
@@ -78,6 +82,14 @@ public class NotificationGuts extends FrameLayout {
     private OnHeightChangedListener mHeightListener;
 
     private GutsContent mGutsContent;
+
+    private static int mTranslucencyPercentage;
+    private static boolean mTranslucentNotifications;
+
+    private static final String BLUR_NOTIFICATIONS_ENABLED =
+            "system:" + Settings.System.BLUR_NOTIFICATIONS_ENABLED;
+    private static final String BLUR_NOTIFICATIONS_PERCENTAGE =
+            "system:" + Settings.System.BLUR_NOTIFICATIONS_PERCENTAGE;
 
     public interface GutsContent {
 
@@ -176,7 +188,50 @@ public class NotificationGuts extends FrameLayout {
         int bottom = mActualHeight - mClipBottomAmount;
         if (drawable != null && top < bottom) {
             drawable.setBounds(0, top, getWidth(), bottom);
+            if (mTranslucentNotifications) {
+                if (drawable.getAlpha() != mTranslucencyPercentage)
+                    drawable.setAlpha(mTranslucencyPercentage);
+                if (NotificationPanelView.mKeyguardShowing) {
+                    drawable.setAlpha(179);
+                }
+                if (NotificationPanelView.mHeadsUpShowing || NotificationPanelView.mHeadsUpAnimatingAway) {
+                    drawable.setAlpha(255);
+                }
+            } else {
+                drawable.setAlpha(255);
+            }
             drawable.draw(canvas);
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        Dependency.get(TunerService.class).addTunable(this,
+                BLUR_NOTIFICATIONS_ENABLED,
+                BLUR_NOTIFICATIONS_PERCENTAGE);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Dependency.get(TunerService.class).removeTunable(this);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case BLUR_NOTIFICATIONS_ENABLED:
+                mTranslucentNotifications =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                break;
+            case BLUR_NOTIFICATIONS_PERCENTAGE:
+                int value =
+                        newValue == null ? 70 : Integer.parseInt(newValue);
+                mTranslucencyPercentage = 255 - ((value * 255) / 100);
+                break;
+            default:
+                break;
         }
     }
 
