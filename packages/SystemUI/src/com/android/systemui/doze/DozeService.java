@@ -165,7 +165,12 @@ public class DozeService extends DreamService {
     public void onDreamingStarted() {
         super.onDreamingStarted();
 
-        if (mHost == null) {
+        boolean dozeEnabled = Settings.Secure.getInt(
+                getContentResolver(), Settings.Secure.DOZE_ENABLED,
+                mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_doze_enabled_by_default) ? 1 : 0) != 0;
+
+        if (mHost == null || !dozeEnabled) {
             finish();
             return;
         }
