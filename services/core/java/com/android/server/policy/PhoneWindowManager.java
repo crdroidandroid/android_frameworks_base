@@ -5926,6 +5926,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // represent should be hidden or if we should hide the lockscreen. For attached app
             // windows we defer the decision to the window it is attached to.
             if (appWindow && attached == null) {
+                // The new app window is visible and we know whether to show the keyguard,
+                // so we need to reset the keyguard status at first.
+                mHideLockScreen = false;
+                mWinShowWhenLocked = null;
+
                 if (showWhenLocked) {
                     // Remove any previous windows with the same appToken.
                     mAppsToBeHidden.remove(appToken);
