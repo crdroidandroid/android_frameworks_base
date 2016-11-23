@@ -60,14 +60,17 @@ public class BatteryTile extends QSTile<QSTile.State> implements BatteryControll
     private boolean mDetailShown;
     private boolean mPluggedIn;
     private int mBatteryStyle;
+    private int mBatteryStyleTile;
 
     public BatteryTile(Host host) {
         super(host);
         mBatteryController = host.getBatteryController();
         mBatteryStyle = CMSettings.System.getInt(host.getContext().getContentResolver(),
                 CMSettings.System.STATUS_BAR_BATTERY_STYLE, BatteryMeterDrawable.BATTERY_STYLE_PORTRAIT);
+        mBatteryStyleTile = Settings.Secure.getInt(host.getContext().getContentResolver(),
+                Settings.Secure.STATUS_BAR_BATTERY_STYLE_TILE, 1);
         if (mBatteryStyle == BatteryMeterDrawable.BATTERY_STYLE_HIDDEN || 
-                mBatteryStyle == BatteryMeterDrawable.BATTERY_STYLE_TEXT) {
+                mBatteryStyle == BatteryMeterDrawable.BATTERY_STYLE_TEXT || mBatteryStyleTile == 0) {
             mBatteryStyle = BatteryMeterDrawable.BATTERY_STYLE_PORTRAIT;
         }
     }
@@ -158,8 +161,10 @@ public class BatteryTile extends QSTile<QSTile.State> implements BatteryControll
             public Drawable getDrawable(Context context) {
                 mBatteryStyle = CMSettings.System.getInt(context.getContentResolver(),
                         CMSettings.System.STATUS_BAR_BATTERY_STYLE, BatteryMeterDrawable.BATTERY_STYLE_PORTRAIT);
+                mBatteryStyleTile = Settings.Secure.getInt(context.getContentResolver(),
+                        Settings.Secure.STATUS_BAR_BATTERY_STYLE_TILE, 1);
                 if (mBatteryStyle == BatteryMeterDrawable.BATTERY_STYLE_HIDDEN ||
-                        mBatteryStyle == BatteryMeterDrawable.BATTERY_STYLE_TEXT) {
+                        mBatteryStyle == BatteryMeterDrawable.BATTERY_STYLE_TEXT || mBatteryStyleTile == 0) {
                     mBatteryStyle = BatteryMeterDrawable.BATTERY_STYLE_PORTRAIT;
                 }
                 BatteryMeterDrawable drawable =
