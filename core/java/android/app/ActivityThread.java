@@ -4152,6 +4152,10 @@ public final class ActivityThread {
 
     private void handleStopActivity(IBinder token, boolean show, int configChanges, int seq) {
         ActivityClientRecord r = mActivities.get(token);
+        if (r == null) {
+            Log.w(TAG, "handleStopActivity: no activity for token:" + token);
+            return;
+        }
         if (!checkAndUpdateLifecycleSeq(seq, r, "stopActivity")) {
             return;
         }
