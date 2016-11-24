@@ -25,6 +25,7 @@ import android.app.VoiceInteractor.PickOptionRequest;
 import android.app.VoiceInteractor.PickOptionRequest.Option;
 import android.app.VoiceInteractor.Prompt;
 import android.content.pm.ComponentInfo;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -376,6 +377,12 @@ public class ResolverActivity extends Activity {
                 : MetricsProto.MetricsEvent.ACTION_SHOW_APP_DISAMBIG_NONE_FEATURED,
                 intent.getAction() + ":" + intent.getType() + ":"
                         + (categories != null ? Arrays.toString(categories.toArray()) : ""));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mAdapter.handlePackagesChanged();
     }
 
     public final void setFilteredComponents(ComponentName[] components) {
