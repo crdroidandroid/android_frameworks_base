@@ -20,6 +20,7 @@ import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.provider.Settings;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -69,6 +70,8 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
     private boolean mCustomizing;
     private NotificationsQuickSettingsContainer mNotifQsContainer;
     private QSContainer mQsContainer;
+    private GridLayoutManager mLayout;
+    private int mDefaultColumns;
 
     public QSCustomizer(Context context, AttributeSet attrs) {
         super(new ContextThemeWrapper(context, R.style.edit_theme), attrs);
@@ -91,18 +94,24 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         mToolbar.getMenu().add(Menu.NONE, MENU_RESET, 0,
                 mContext.getString(com.android.internal.R.string.reset));
         mToolbar.setTitle(R.string.qs_edit);
+        mDefaultColumns = Math.max(1,
+                    mContext.getResources().getInteger(R.integer.quick_settings_num_columns));
 
         mRecyclerView = (RecyclerView) findViewById(android.R.id.list);
         mTileAdapter = new TileAdapter(getContext());
         mRecyclerView.setAdapter(mTileAdapter);
         mTileAdapter.getItemTouchHelper().attachToRecyclerView(mRecyclerView);
-        GridLayoutManager layout = new GridLayoutManager(getContext(), 3);
-        layout.setSpanSizeLookup(mTileAdapter.getSizeLookup());
-        mRecyclerView.setLayoutManager(layout);
+        int columns = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.QS_COLUMNS, mDefaultColumns);
+        mLayout = new GridLayoutManager(getContext(), columns);
+        mLayout.setSpanSizeLookup(mTileAdapter.getSizeLookup());
+        mRecyclerView.setLayoutManager(mLayout);
         mRecyclerView.addItemDecoration(mTileAdapter.getItemDecoration());
         DefaultItemAnimator animator = new DefaultItemAnimator();
         animator.setMoveDuration(TileAdapter.MOVE_DURATION);
         mRecyclerView.setItemAnimator(animator);
+
+        updateSettings();
     }
 
     @Override
@@ -250,4 +259,11 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
             mNotifQsContainer.setCustomizerAnimating(false);
         }
     };
+
+    public void updateSettings() {
+        int columns = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.QS_COLUMNS, mDefaultColumns);
+        mTileAdapter.setColumnCount(columns);
+        mLayout.setSpanCount(columns);
+    }
 }
