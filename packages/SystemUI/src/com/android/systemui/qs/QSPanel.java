@@ -589,4 +589,10 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
             if (mVibrator.hasVibrator()) { mVibrator.vibrate(duration); }
         }
     }
+
+    public void updateSettings() {
+        if (mCustomizePanel != null) {
+            mCustomizePanel.updateSettings();
+        }
+    }
 }

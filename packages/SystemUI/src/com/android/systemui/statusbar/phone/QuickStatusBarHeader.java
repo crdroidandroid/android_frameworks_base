@@ -430,4 +430,11 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     public void setWeatherController(WeatherController weatherController) {
         // not used
     }
+
+    @Override
+    public void updateSettings() {
+        if (mQsPanel != null) {
+            mQsPanel.updateSettings();
+        }
+    }
 }
