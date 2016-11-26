@@ -16,4 +16,6 @@
 -->
 <resources>
 
+    <!-- Navbar icon Colors -->
+    <color name="dark_nav_bar">#ff585858</color>
 </resources>
