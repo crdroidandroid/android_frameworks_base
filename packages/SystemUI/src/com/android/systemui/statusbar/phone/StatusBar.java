@@ -292,6 +292,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             "lineagesystem:" + LineageSettings.System.FORCE_SHOW_NAVBAR;
     public static final String BERRY_GLOBAL_STYLE =
             "lineagesystem:" + LineageSettings.System.BERRY_GLOBAL_STYLE;
+    private static final String QS_TILE_TITLE_VISIBILITY =
+            "system:" + Settings.System.QS_TILE_TITLE_VISIBILITY;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -723,6 +725,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, LOCKSCREEN_MEDIA_METADATA);
         tunerService.addTunable(this, FORCE_SHOW_NAVBAR);
         tunerService.addTunable(this, BERRY_GLOBAL_STYLE);
+        tunerService.addTunable(this, QS_TILE_TITLE_VISIBILITY);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -5972,6 +5975,11 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 break;
             case BERRY_GLOBAL_STYLE:
                 updateTheme();
+                break;
+            case QS_TILE_TITLE_VISIBILITY:
+                if (mQSPanel != null) {
+                    mQSPanel.updateResources();
+                }
                 break;
             default:
                 break;
