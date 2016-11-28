@@ -293,6 +293,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_COLUMNS_PORTRAIT;
     private static final String QS_COLUMNS_LANDSCAPE =
             "system:" + Settings.System.QS_COLUMNS_LANDSCAPE;
+    private static final String QS_TILE_TITLE_VISIBILITY =
+            "system:" + Settings.System.QS_TILE_TITLE_VISIBILITY;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -944,6 +946,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, QS_ROWS_LANDSCAPE);
         mTunerService.addTunable(this, QS_COLUMNS_PORTRAIT);
         mTunerService.addTunable(this, QS_COLUMNS_LANDSCAPE);
+        mTunerService.addTunable(this, QS_TILE_TITLE_VISIBILITY);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -4718,6 +4721,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             case QS_ROWS_LANDSCAPE:
             case QS_COLUMNS_PORTRAIT:
             case QS_COLUMNS_LANDSCAPE:
+            case QS_TILE_TITLE_VISIBILITY:
                 if (mQSPanel != null) {
                     mQSPanel.updateResources();
                 }
