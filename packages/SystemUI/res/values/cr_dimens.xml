@@ -30,4 +30,7 @@
     <dimen name="opa_overshoot_translation">8.0dip</dimen>
     <dimen name="opa_return_translation">-1.0dip</dimen>
     <dimen name="opa_rest_to_collapse">7.0dip</dimen>
+
+    <!-- QS tile text visibility -->
+    <dimen name="qs_tile_height_wo_label">48dp</dimen>
 </resources>
