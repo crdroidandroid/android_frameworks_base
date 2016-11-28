@@ -454,6 +454,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_COLUMNS_PORTRAIT;
     private static final String QS_COLUMNS_LANDSCAPE =
             "system:" + Settings.System.QS_COLUMNS_LANDSCAPE;
+    private static final String QS_TILE_TITLE_VISIBILITY =
+            "system:" + Settings.System.QS_TILE_TITLE_VISIBILITY;
 
     static {
         boolean onlyCoreApps;
@@ -1153,7 +1155,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 QS_ROWS_PORTRAIT,
                 QS_ROWS_LANDSCAPE,
                 QS_COLUMNS_PORTRAIT,
-                QS_COLUMNS_LANDSCAPE);
+                QS_COLUMNS_LANDSCAPE,
+                QS_TILE_TITLE_VISIBILITY);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController);
@@ -8325,6 +8328,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             case QS_ROWS_LANDSCAPE:
             case QS_COLUMNS_PORTRAIT:
             case QS_COLUMNS_LANDSCAPE:
+            case QS_TILE_TITLE_VISIBILITY:
                 if (mQSPanel != null) {
                     mQSPanel.updateResources();
                 }
