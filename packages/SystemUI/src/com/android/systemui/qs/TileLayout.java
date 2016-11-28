@@ -1,7 +1,10 @@
 package com.android.systemui.qs;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +60,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         mRecords.add(tile);
         tile.tile.setListening(this, mListening);
         addView(tile.tileView);
+        tile.tileView.textVisibility();
     }
 
     @Override
@@ -77,16 +81,28 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     public boolean updateResources() {
         final Resources res = mContext.getResources();
         final int columns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
-        mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height);
+        final ContentResolver resolver = mContext.getContentResolver();
+
+        if (Settings.System.getIntForUser(resolver,
+                Settings.System.QS_TILE_TITLE_VISIBILITY, 1,
+                UserHandle.USER_CURRENT) == 1) {
+            mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height);
+        } else {
+            mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height_wo_label);
+        }
         mCellMarginHorizontal = res.getDimensionPixelSize(R.dimen.qs_tile_margin_horizontal);
         mCellMarginVertical= res.getDimensionPixelSize(R.dimen.qs_tile_margin_vertical);
         mCellMarginTop = res.getDimensionPixelSize(R.dimen.qs_tile_margin_top);
         mSidePadding = res.getDimensionPixelOffset(R.dimen.qs_tile_layout_margin_side);
+        for (TileRecord record : mRecords) {
+            record.tileView.textVisibility();
+        }
         if (mColumns != columns) {
             mColumns = columns;
             requestLayout();
             return true;
         }
+        requestLayout();
         return false;
     }
 
