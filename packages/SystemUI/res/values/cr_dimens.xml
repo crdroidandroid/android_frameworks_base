@@ -23,4 +23,7 @@
     <dimen name="status_bar_battery_icon_height_landscape">10.5dp</dimen>
     <!-- Width of the landscape battery icon in the status bar. -->
     <dimen name="status_bar_battery_icon_width_landscape">20dp</dimen>
+
+    <!-- QS tile text visibility -->
+    <dimen name="qs_tile_height_wo_label">64dp</dimen>
 </resources>
