@@ -87,11 +87,14 @@ public class BatteryMeterView extends LinearLayout implements
     private int mShowBatteryPercent;
     private int mStyle = BatteryMeterDrawableBase.BATTERY_STYLE_CIRCLE;
     private boolean mCharging;
+    private int mTextChargingSymbol;
 
     private static final String SHOW_BATTERY_PERCENT =
             "system:" + Settings.System.SHOW_BATTERY_PERCENT;
     private static final String STATUS_BAR_BATTERY_STYLE =
             "system:" + Settings.System.STATUS_BAR_BATTERY_STYLE;
+    private static final String TEXT_CHARGING_SYMBOL =
+            "system:" + Settings.System.TEXT_CHARGING_SYMBOL;
 
     public BatteryMeterView(Context context) {
         this(context, null, 0);
@@ -189,6 +192,10 @@ public class BatteryMeterView extends LinearLayout implements
                 mShowBatteryPercent =
                         newValue == null ? 0 : Integer.parseInt(newValue);
                 break;
+            case TEXT_CHARGING_SYMBOL:
+                mTextChargingSymbol =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                break;
             default:
                 break;
         }
@@ -260,6 +267,7 @@ public class BatteryMeterView extends LinearLayout implements
         mBatteryController.addCallback(this);
         Dependency.get(TunerService.class).addTunable(this, SHOW_BATTERY_PERCENT);
         Dependency.get(TunerService.class).addTunable(this, STATUS_BAR_BATTERY_STYLE);
+        Dependency.get(TunerService.class).addTunable(this, TEXT_CHARGING_SYMBOL);
         Dependency.get(ConfigurationController.class).addCallback(this);
     }
 
@@ -301,6 +309,19 @@ public class BatteryMeterView extends LinearLayout implements
             return;
 
         String pct = NumberFormat.getPercentInstance().format(mLevel / 100f);
+
+        if (mCharging && mStyle == BatteryMeterDrawableBase.BATTERY_STYLE_TEXT
+                && mTextChargingSymbol > 0) {
+            switch (mTextChargingSymbol) {
+                case 1:
+                default:
+                    pct = "⚡️ " + pct;
+                   break;
+                case 2:
+                    pct = "~ " + pct;
+                    break;
+            }
+        }
 
         if (mBatteryIconView != null) pct = pct + " ";
 
