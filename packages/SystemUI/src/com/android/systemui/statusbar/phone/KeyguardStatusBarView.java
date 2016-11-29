@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -53,6 +54,8 @@ public class KeyguardStatusBarView extends RelativeLayout
             "cmsystem:" + CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT;
     private static final String STATUS_BAR_BATTERY_STYLE =
             "cmsystem:" + CMSettings.System.STATUS_BAR_BATTERY_STYLE;
+    private static final String TEXT_CHARGING_SYMBOL =
+            Settings.Secure.TEXT_CHARGING_SYMBOL;
 
     private boolean mBatteryCharging;
     private boolean mKeyguardUserSwitcherShowing;
@@ -74,6 +77,10 @@ public class KeyguardStatusBarView extends RelativeLayout
 
     private boolean mShowBatteryText;
     private Boolean mForceBatteryText;
+
+    private int mTextChargingSymbol;
+    private int currentLevel;
+    private boolean isPlugged;
 
     public KeyguardStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -210,7 +217,9 @@ public class KeyguardStatusBarView extends RelativeLayout
         mBatteryListening = listening;
         if (mBatteryListening) {
             TunerService.get(getContext()).addTunable(this,
-                    STATUS_BAR_SHOW_BATTERY_PERCENT, STATUS_BAR_BATTERY_STYLE);
+                    STATUS_BAR_SHOW_BATTERY_PERCENT,
+                    STATUS_BAR_BATTERY_STYLE,
+                    TEXT_CHARGING_SYMBOL);
             mBatteryController.addStateChangedCallback(this);
         } else {
             mBatteryController.removeStateChangedCallback(this);
@@ -250,8 +259,9 @@ public class KeyguardStatusBarView extends RelativeLayout
 
     @Override
     public void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging) {
-        String percentage = NumberFormat.getPercentInstance().format((double) level / 100.0);
-        mBatteryLevel.setText(percentage);
+        currentLevel = level;
+        isPlugged = pluggedIn;
+        updateChargingSymbol();
         boolean changed = mBatteryCharging != charging;
         mBatteryCharging = charging;
         if (changed) {
@@ -349,6 +359,7 @@ public class KeyguardStatusBarView extends RelativeLayout
         switch (key) {
             case STATUS_BAR_SHOW_BATTERY_PERCENT:
                 mShowBatteryText = newValue != null && Integer.parseInt(newValue) == 2;
+                updateVisibilities();
                 break;
             case STATUS_BAR_BATTERY_STYLE:
                 if (newValue != null) {
@@ -361,8 +372,31 @@ public class KeyguardStatusBarView extends RelativeLayout
                         mForceBatteryText = null;
                     }
                 }
+                updateVisibilities();
+                break;
+            case TEXT_CHARGING_SYMBOL:
+                mTextChargingSymbol =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                updateChargingSymbol();
                 break;
         }
-        updateVisibilities();
+    }
+
+    private void updateChargingSymbol() {
+        if (!isPlugged) {
+            mBatteryLevel.setText(NumberFormat.getPercentInstance().format((double) currentLevel / 100.0));
+        } else {
+            switch (mTextChargingSymbol) {
+                case 1:
+                    mBatteryLevel.setText("⚡️" + NumberFormat.getPercentInstance().format((double) currentLevel / 100.0));
+                    break;
+                case 2:
+                    mBatteryLevel.setText("~" + NumberFormat.getPercentInstance().format((double) currentLevel / 100.0));
+                    break;
+                default:
+                    mBatteryLevel.setText(NumberFormat.getPercentInstance().format((double) currentLevel / 100.0));
+                    break;
+            }
+        }
     }
 }

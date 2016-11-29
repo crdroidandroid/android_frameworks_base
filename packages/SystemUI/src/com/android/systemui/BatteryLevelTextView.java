@@ -18,6 +18,7 @@ package com.android.systemui;
 
 import android.content.Context;
 import android.icu.text.NumberFormat;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
@@ -34,10 +35,16 @@ public class BatteryLevelTextView extends TextView implements
             "cmsystem:" + CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT;
     private static final String STATUS_BAR_BATTERY_STYLE =
             "cmsystem:" + CMSettings.System.STATUS_BAR_BATTERY_STYLE;
+    private static final String TEXT_CHARGING_SYMBOL =
+            Settings.Secure.TEXT_CHARGING_SYMBOL;
 
     private BatteryController mBatteryController;
 
     private boolean mRequestedVisibility;
+
+    private int mTextChargingSymbol;
+    private int currentLevel;
+    private boolean isPlugged;
 
     public BatteryLevelTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,14 +52,18 @@ public class BatteryLevelTextView extends TextView implements
 
     @Override
     public void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging) {
-        setText(NumberFormat.getPercentInstance().format((double) level / 100.0));
+        currentLevel = level;
+        isPlugged = pluggedIn;
+        updateChargingSymbol();
     }
 
     public void setBatteryController(BatteryController batteryController) {
         mBatteryController = batteryController;
         mBatteryController.addStateChangedCallback(this);
         TunerService.get(getContext()).addTunable(this,
-                STATUS_BAR_SHOW_BATTERY_PERCENT, STATUS_BAR_BATTERY_STYLE);
+                STATUS_BAR_SHOW_BATTERY_PERCENT,
+                STATUS_BAR_BATTERY_STYLE,
+                TEXT_CHARGING_SYMBOL);
     }
 
     @Override
@@ -92,8 +103,31 @@ public class BatteryLevelTextView extends TextView implements
                         break;
                 }
                 break;
+            case TEXT_CHARGING_SYMBOL:
+                mTextChargingSymbol =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                updateChargingSymbol();
+                break;
             default:
                 break;
+        }
+    }
+
+    private void updateChargingSymbol() {
+        if (!isPlugged) {
+            setText(NumberFormat.getPercentInstance().format((double) currentLevel / 100.0));
+        } else {
+            switch (mTextChargingSymbol) {
+                case 1:
+                    setText("⚡️" + NumberFormat.getPercentInstance().format((double) currentLevel / 100.0));
+                    break;
+                case 2:
+                    setText("~" + NumberFormat.getPercentInstance().format((double) currentLevel / 100.0));
+                    break;
+                default:
+                    setText(NumberFormat.getPercentInstance().format((double) currentLevel / 100.0));
+                    break;
+            }
         }
     }
 }
