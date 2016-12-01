@@ -81,6 +81,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
 
     private ViewGroup mDateTimeGroup;
     private ViewGroup mDateTimeAlarmGroup;
+    private ViewGroup mDateTimeAlarmCenterGroup;
     private TextView mEmergencyOnly;
 
     protected ExpandableIndicator mExpandIndicator;
@@ -107,6 +108,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     private boolean isEdit;
     private boolean isExpandIndicator;
     private boolean isMultiUserSwitch;
+    private boolean mDateTimeGroupCenter;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -124,6 +126,8 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
 
         mDateTimeAlarmGroup = (ViewGroup) findViewById(R.id.date_time_alarm_group);
         mDateTimeAlarmGroup.findViewById(R.id.empty_time_view).setVisibility(View.GONE);
+        mDateTimeAlarmCenterGroup = (ViewGroup) findViewById(R.id.date_time_alarm_center_group);
+        mDateTimeAlarmCenterGroup.setVisibility(View.GONE);
         mDateTimeGroup = (ViewGroup) findViewById(R.id.date_time_group);
         mDateTimeGroup.setPivotX(0);
         mDateTimeGroup.setPivotY(0);
@@ -204,6 +208,17 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
             });
         } else {
             mDateTimeGroup.setPivotX(isRtl ? mDateTimeGroup.getWidth() : 0);
+        }
+    }
+
+    private void updateDateTimeCenter() {
+        mDateTimeGroupCenter = isDateTimeGroupCenter();
+        if (mDateTimeGroupCenter && !(isSettingsIcon && isEdit && isMultiUserSwitch && isExpandIndicator)) {
+            mDateTimeAlarmGroup.setVisibility(View.GONE);
+            mDateTimeAlarmCenterGroup.setVisibility(View.VISIBLE);
+        } else {
+            mDateTimeAlarmCenterGroup.setVisibility(View.GONE);
+            mDateTimeAlarmGroup.setVisibility(View.VISIBLE);
         }
     }
 
@@ -313,6 +328,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     private void updateDateTimePosition() {
         mDateTimeAlarmGroup.setTranslationY(mShowEmergencyCallsOnly
                 ? mExpansionAmount * mDateTimeTranslation : 0);
+        updateDateTimeCenter();
     }
 
     private void updateListeners() {
@@ -481,5 +497,10 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     public boolean isMultiUserSwitchEnabled() {
         return Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.QS_MULTIUSER_SWITCH_TOGGLE, 1) == 1;
+    }
+
+    public boolean isDateTimeGroupCenter() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.QS_DATE_TIME_CENTER, 1) == 1;
     }
 }
