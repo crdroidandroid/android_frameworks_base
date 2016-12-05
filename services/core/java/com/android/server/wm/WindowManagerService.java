@@ -2576,10 +2576,6 @@ public class WindowManagerService extends IWindowManager.Stub
 
         win.mRemoved = true;
 
-        if (mInputMethodTarget == win) {
-            moveInputMethodWindowsIfNeededLocked(false);
-        }
-
         if (false) {
             RuntimeException e = new RuntimeException("here");
             e.fillInStackTrace();
@@ -2593,6 +2589,10 @@ public class WindowManagerService extends IWindowManager.Stub
         }
         mPolicy.removeWindowLw(win);
         win.removeLocked();
+
+        if (mInputMethodTarget == win) {
+            moveInputMethodWindowsIfNeededLocked(false);
+        }
 
         if (DEBUG_ADD_REMOVE) Slog.v(TAG_WM, "removeWindowInnerLocked: " + win);
         mWindowMap.remove(win.mClient.asBinder());
