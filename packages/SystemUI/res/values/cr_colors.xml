@@ -36,4 +36,8 @@
     <color name="system_primary_color">@*android:color/primary_material_settings</color>
     <color name="system_secondary_color">@*android:color/secondary_material_settings</color>
     <color name="system_accent_color">@*android:color/accent_material_dark</color>
+
+    <!-- Floating action button -->
+    <color name="fab_color">?android:attr/colorAccent</color>
+    <color name="floating_action_button_icon_color">@android:color/white</color>
 </resources>
