@@ -21,4 +21,11 @@
     <dimen name="ticker_icon_end_margin">4dp</dimen>
     <dimen name="ticker_text_top_padding">2dp</dimen>
     <dimen name="ticker_text_end_padding">10dp</dimen>
+
+    <!-- Floating action button -->
+    <dimen name="floating_action_button_height">56dp</dimen>
+    <dimen name="floating_action_button_width">56dp</dimen>
+    <dimen name="floating_action_button_translation_z">6dp</dimen>
+    <dimen name="floating_action_button_margin_side">54dp</dimen>
+    <dimen name="floating_action_button_margin_bottom">54dp</dimen>
 </resources>
