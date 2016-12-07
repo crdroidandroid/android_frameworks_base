@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2018 crDroid Android Project
+     Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,14 +14,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
 
-    <!-- Navbar icon Colors -->
-    <color name="dark_nav_bar">#ff585858</color>
-
-    <color name="qs_icon_active_color">@*android:color/qs_icon_active_color</color>
-
-    <!-- Floating action button -->
-    <color name="fab_color">@*android:color/accent_device_default_light</color>
-    <color name="floating_action_button_icon_color">@android:color/white</color>
-</resources>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@android:color/white">
+    <shape
+            android:shape="oval"
+            android:tint="@color/fab_color">
+    </shape>
+</ripple>
