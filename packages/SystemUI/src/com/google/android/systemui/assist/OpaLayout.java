@@ -43,6 +43,10 @@ import com.android.systemui.statusbar.policy.KeyButtonView;
 import java.util.ArrayList;
 
 public class OpaLayout extends FrameLayout implements ButtonInterface {
+
+    private static final int OPA_FADE_IN_DURATION = 50;
+    private static final int OPA_FADE_OUT_DURATION = 250;
+
     private final Interpolator HOME_DISAPPEAR_INTERPOLATOR;
     private final ArrayList<View> mAnimatedViews;
     private int mAnimationState;
@@ -107,6 +111,7 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
             public void run() {
                 cancelCurrentAnimation("retract");
                 startRetractAnimation();
+                hideAllOpa();
             }
         };
         mOverviewProxyListener = new OverviewProxyService.OverviewProxyListener() {
@@ -158,6 +163,7 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
         mAnimatedViews.add(mHalo);
         mOverviewProxyService = (OverviewProxyService) Dependency.get(OverviewProxyService.class);
         mSettingsObserver.observe();
+        hideAllOpa();
     }
 
     @Override
@@ -365,6 +371,7 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
     }
 
     private void startAll(ArraySet<Animator> arraySet) {
+        showAllOpa();
         for (int size = arraySet.size() - 1; size >= 0; size--) {
             arraySet.valueAt(size).start();
         }
@@ -638,7 +645,7 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
         boolean shouldShowSwipeUpUI = mOverviewProxyService.shouldShowSwipeUpUI();
         boolean z = true;
         boolean z2 = mOpaEnabled && !shouldShowSwipeUpUI;
-        mHalo.setVisibility(z2 ? 0 : 4);
+        mHalo.setVisibility(View.GONE);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mHalo.getLayoutParams();
         if (z2 || shouldShowSwipeUpUI) {
             z = false;
@@ -804,5 +811,45 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
         ofFloat.setDuration((long) i);
         ofFloat.setInterpolator(interpolator);
         return ofFloat;
+    }
+
+    private void hideAllOpa() {
+        fadeOutButton(mBlue);
+        fadeOutButton(mRed);
+        fadeOutButton(mYellow);
+        fadeOutButton(mGreen);
+    }
+
+    private void showAllOpa() {
+        fadeInButton(mBlue);
+        fadeInButton(mRed);
+        fadeInButton(mYellow);
+        fadeInButton(mGreen);
+    }
+
+    private void fadeInButton(View viewToFade){
+        if (viewToFade == null) return;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(viewToFade, View.ALPHA, 0.0f, 1.0f);
+        animator.setDuration(OpaLayout.OPA_FADE_IN_DURATION); //ms
+        animator.start();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                viewToFade.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void fadeOutButton(View viewToFade){
+        if (viewToFade == null) return;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(viewToFade, View.ALPHA, 1.0f, 0.0f);
+        animator.setDuration(OpaLayout.OPA_FADE_OUT_DURATION); //ms
+        animator.start();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                viewToFade.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 }
