@@ -45,6 +45,7 @@ public class AmbientDisplayConfiguration {
     private final boolean mAlwaysOnByDefault;
     private final boolean mPickupGestureEnabledByDefault;
     private final boolean mScreenOffUdfpsEnabledByDefault;
+    private final boolean mDozeEnabledByDefault;
 
     /** Copied from android.provider.Settings.Secure since these keys are hidden. */
     private static final String[] DOZE_SETTINGS = {
@@ -74,6 +75,8 @@ public class AmbientDisplayConfiguration {
                 mContext.getResources().getBoolean(R.bool.config_dozePickupGestureEnabled);
         mScreenOffUdfpsEnabledByDefault =
                 mContext.getResources().getBoolean(R.bool.config_screen_off_udfps_enabled);
+        mDozeEnabledByDefault =
+                mContext.getResources().getBoolean(R.bool.config_doze_enabled_by_default);
     }
 
     /** @hide */
@@ -95,7 +98,7 @@ public class AmbientDisplayConfiguration {
 
     /** @hide */
     public boolean pulseOnNotificationEnabled(int user) {
-        return boolSettingDefaultOn(Settings.Secure.DOZE_ENABLED, user)
+        return boolSetting(Settings.Secure.DOZE_ENABLED, user, mDozeEnabledByDefault ? 1 : 0)
                 && pulseOnNotificationAvailable();
     }
 
