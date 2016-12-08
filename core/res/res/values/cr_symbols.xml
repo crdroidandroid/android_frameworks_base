@@ -20,4 +20,7 @@
     <java-symbol type="bool" name="config_dozePulseTilt" />
     <java-symbol type="bool" name="config_dozePulseProximity" />
     <java-symbol type="bool" name="config_deviceHaveWakeUpProximity" />
+
+    <!-- Whether doze feature is enabled by default in settings -->
+    <java-symbol type="bool" name="config_doze_enabled_by_default" />
 </resources>
