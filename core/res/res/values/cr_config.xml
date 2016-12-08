@@ -20,4 +20,7 @@
     <bool name="config_dozePulseTilt">false</bool>
     <bool name="config_dozePulseProximity">false</bool>
     <bool name="config_deviceHaveWakeUpProximity">false</bool>
+
+    <!-- Whether doze feature is enabled by default in settings -->
+    <bool name="config_doze_enabled_by_default">false</bool>
 </resources>
