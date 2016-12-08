@@ -172,6 +172,7 @@ bool ManifestFixer::buildRules(xml::XmlActionExecutor* executor, IDiagnostics* d
     });
 
     manifestAction[u"original-package"];
+    manifestAction[u"overlay"];
     manifestAction[u"protected-broadcast"];
     manifestAction[u"uses-permission"];
     manifestAction[u"permission"];
