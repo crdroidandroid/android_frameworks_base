@@ -16,7 +16,7 @@
 
 package com.android.internal.os;
 
-
+import android.os.Build;
 import android.os.Trace;
 import dalvik.system.ZygoteHooks;
 import android.system.ErrnoException;
@@ -54,6 +54,14 @@ public final class Zygote {
     public static final int MOUNT_EXTERNAL_READ = 2;
     /** Read-write external storage should be mounted. */
     public static final int MOUNT_EXTERNAL_WRITE = 3;
+
+    private static final String[] PIXEL_SERVICES = {
+        "com.google.process.gapps",
+        "com.google.android.apps.nexuslauncher",
+        "com.google.android.googlequicksearchbox",
+        "com.google.android.gms",
+        "com.google.android.apps.photos"
+    };
 
     private static final ZygoteHooks VM_HOOKS = new ZygoteHooks();
 
@@ -101,6 +109,14 @@ public final class Zygote {
 
             // Note that this event ends at the end of handleChildProc,
             Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, "PostFork");
+
+            // Pixelate the model
+            // This is for providing support of pixel services to other devices
+            for(String s : PIXEL_SERVICES)
+                if(niceName.contains(s)) {
+                    Build.MODEL = "Pixel XL";
+                    break;
+                }
         }
         VM_HOOKS.postForkCommon();
         return pid;
