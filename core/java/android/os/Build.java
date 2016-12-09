@@ -77,7 +77,7 @@ public class Build {
     public static final String BRAND = getString("ro.product.brand");
 
     /** The end-user-visible name for the end product. */
-    public static final String MODEL = getString("ro.product.model");
+    public static String MODEL = getString("ro.product.model");
 
     /** The system bootloader version number. */
     public static final String BOOTLOADER = getString("ro.bootloader");
