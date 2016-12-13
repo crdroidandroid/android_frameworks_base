@@ -182,12 +182,6 @@ public class ConditionProviders extends ManagedServices {
         super.onPackagesChanged(removingPackage, pkgList);
     }
 
-    public ManagedServiceInfo checkServiceToken(IConditionProvider provider) {
-        synchronized(mMutex) {
-            return checkServiceTokenLocked(provider);
-        }
-    }
-
     private Condition[] removeDuplicateConditions(String pkg, Condition[] conditions) {
         if (conditions == null || conditions.length == 0) return null;
         final int N = conditions.length;
@@ -251,9 +245,11 @@ public class ConditionProviders extends ManagedServices {
 
     public IConditionProvider findConditionProvider(ComponentName component) {
         if (component == null) return null;
-        for (ManagedServiceInfo service : mServices) {
-            if (component.equals(service.component)) {
-                return provider(service);
+        synchronized (mMutex) {
+            for (ManagedServiceInfo service : mServices) {
+                if (component.equals(service.component)) {
+                    return provider(service);
+                }
             }
         }
         return null;
@@ -273,7 +269,7 @@ public class ConditionProviders extends ManagedServices {
         final ConditionRecord r = getRecordLocked(conditionId, component, true /*create*/);
         if (r.info == null) {
             // ... and is associated with the in-process service
-            r.info = checkServiceTokenLocked(provider);
+            r.info = checkServiceToken(provider);
         }
     }
 
