@@ -52,6 +52,7 @@ import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
 
+import com.android.internal.annotations.GuardedBy;
 import com.android.server.notification.NotificationManagerService.DumpFilter;
 
 import java.io.PrintWriter;
@@ -87,6 +88,7 @@ abstract public class ManagedServices {
 
     // contains connections to all connected services, including app services
     // and system services
+    @GuardedBy("mMutex")
     protected final ArrayList<ManagedServiceInfo> mServices = new ArrayList<ManagedServiceInfo>();
     // things that will be put into mServices as soon as they're ready
     private final ArrayList<String> mServicesBinding = new ArrayList<String>();
@@ -171,13 +173,15 @@ abstract public class ManagedServices {
             pw.println("      " + cmpt);
         }
 
-        pw.println("    Live " + getCaption() + "s (" + mServices.size() + "):");
-        for (ManagedServiceInfo info : mServices) {
-            if (filter != null && !filter.matches(info.component)) continue;
-            pw.println("      " + info.component
-                    + " (user " + info.userid + "): " + info.service
-                    + (info.isSystem?" SYSTEM":"")
-                    + (info.isGuest(this)?" GUEST":""));
+        synchronized (mMutex) {
+            pw.println("    Live " + getCaption() + "s (" + mServices.size() + "):");
+            for (ManagedServiceInfo info : mServices) {
+                if (filter != null && !filter.matches(info.component)) continue;
+                pw.println("      " + info.component
+                        + " (user " + info.userid + "): " + info.service
+                        + (info.isSystem ? " SYSTEM" : "")
+                        + (info.isGuest(this) ? " GUEST" : ""));
+            }
         }
 
         pw.println("    Snoozed " + getCaption() + "s (" +
@@ -259,7 +263,7 @@ abstract public class ManagedServices {
         rebindServices(false);
     }
 
-    public ManagedServiceInfo getServiceFromTokenLocked(IInterface service) {
+    private ManagedServiceInfo getServiceFromTokenLocked(IInterface service) {
         if (service == null) {
             return null;
         }
@@ -272,7 +276,7 @@ abstract public class ManagedServices {
         return null;
     }
 
-    public ManagedServiceInfo checkServiceTokenLocked(IInterface service) {
+    private ManagedServiceInfo checkServiceTokenLocked(IInterface service) {
         checkNotNull(service);
         ManagedServiceInfo info = getServiceFromTokenLocked(service);
         if (info != null) {
@@ -280,6 +284,12 @@ abstract public class ManagedServices {
         }
         throw new SecurityException("Disallowed call from unknown " + getCaption() + ": "
                 + service);
+    }
+
+    public ManagedServiceInfo checkServiceToken(IInterface service) {
+        synchronized(mMutex) {
+            return checkServiceTokenLocked(service);
+        }
     }
 
     public void unregisterService(IInterface service, int userid) {

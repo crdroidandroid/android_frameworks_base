@@ -1807,7 +1807,7 @@ public class NotificationManagerService extends SystemService {
             long identity = Binder.clearCallingIdentity();
             try {
                 synchronized (mNotificationList) {
-                    final ManagedServiceInfo info = mListeners.checkServiceTokenLocked(token);
+                    final ManagedServiceInfo info = mListeners.checkServiceToken(token);
                     if (keys != null) {
                         final int N = keys.length;
                         for (int i = 0; i < N; i++) {
@@ -1858,7 +1858,7 @@ public class NotificationManagerService extends SystemService {
             long identity = Binder.clearCallingIdentity();
             try {
                 // allow bound services to disable themselves
-                final ManagedServiceInfo info = mListeners.checkServiceTokenLocked(token);
+                final ManagedServiceInfo info = mListeners.checkServiceToken(token);
                 info.getOwner().setComponentState(info.component, false);
             } finally {
                 Binder.restoreCallingIdentity(identity);
@@ -1870,7 +1870,7 @@ public class NotificationManagerService extends SystemService {
             long identity = Binder.clearCallingIdentity();
             try {
                 synchronized (mNotificationList) {
-                    final ManagedServiceInfo info = mListeners.checkServiceTokenLocked(token);
+                    final ManagedServiceInfo info = mListeners.checkServiceToken(token);
                     if (keys != null) {
                         final int N = keys.length;
                         for (int i = 0; i < N; i++) {
@@ -1921,7 +1921,7 @@ public class NotificationManagerService extends SystemService {
             long identity = Binder.clearCallingIdentity();
             try {
                 synchronized (mNotificationList) {
-                    final ManagedServiceInfo info = mListeners.checkServiceTokenLocked(token);
+                    final ManagedServiceInfo info = mListeners.checkServiceToken(token);
                     if (info.supportsProfiles()) {
                         Log.e(TAG, "Ignoring deprecated cancelNotification(pkg, tag, id) "
                                 + "from " + info.component
@@ -1950,7 +1950,7 @@ public class NotificationManagerService extends SystemService {
         public ParceledListSlice<StatusBarNotification> getActiveNotificationsFromListener(
                 INotificationListener token, String[] keys, int trim) {
             synchronized (mNotificationList) {
-                final ManagedServiceInfo info = mListeners.checkServiceTokenLocked(token);
+                final ManagedServiceInfo info = mListeners.checkServiceToken(token);
                 final boolean getKeys = keys != null;
                 final int N = getKeys ? keys.length : mNotificationList.size();
                 final ArrayList<StatusBarNotification> list
@@ -1975,7 +1975,7 @@ public class NotificationManagerService extends SystemService {
             final long identity = Binder.clearCallingIdentity();
             try {
                 synchronized (mNotificationList) {
-                    final ManagedServiceInfo info = mListeners.checkServiceTokenLocked(token);
+                    final ManagedServiceInfo info = mListeners.checkServiceToken(token);
                     final int disableEffectsMask = HINT_HOST_DISABLE_EFFECTS
                             | HINT_HOST_DISABLE_NOTIFICATION_EFFECTS
                             | HINT_HOST_DISABLE_CALL_EFFECTS;
@@ -2006,7 +2006,7 @@ public class NotificationManagerService extends SystemService {
             final long identity = Binder.clearCallingIdentity();
             try {
                 synchronized (mNotificationList) {
-                    final ManagedServiceInfo info = mListeners.checkServiceTokenLocked(token);
+                    final ManagedServiceInfo info = mListeners.checkServiceToken(token);
                     mZenModeHelper.requestFromListener(info.component, interruptionFilter);
                     updateInterruptionFilterLocked();
                 }
@@ -2027,7 +2027,7 @@ public class NotificationManagerService extends SystemService {
         public void setOnNotificationPostedTrimFromListener(INotificationListener token, int trim)
                 throws RemoteException {
             synchronized (mNotificationList) {
-                final ManagedServiceInfo info = mListeners.checkServiceTokenLocked(token);
+                final ManagedServiceInfo info = mListeners.checkServiceToken(token);
                 if (info == null) return;
                 mListeners.setOnNotificationPostedTrimLocked(info, trim);
             }
@@ -2369,7 +2369,7 @@ public class NotificationManagerService extends SystemService {
             final long identity = Binder.clearCallingIdentity();
             try {
                 synchronized (mNotificationList) {
-                    mRankerServices.checkServiceTokenLocked(token);
+                    mRankerServices.checkServiceToken(token);
                     applyAdjustmentLocked(adjustment);
                 }
                 maybeAddAutobundleSummary(adjustment);
@@ -2386,7 +2386,7 @@ public class NotificationManagerService extends SystemService {
             final long identity = Binder.clearCallingIdentity();
             try {
                 synchronized (mNotificationList) {
-                    mRankerServices.checkServiceTokenLocked(token);
+                    mRankerServices.checkServiceToken(token);
                     for (Adjustment adjustment : adjustments) {
                         applyAdjustmentLocked(adjustment);
                     }
@@ -2717,7 +2717,7 @@ public class NotificationManagerService extends SystemService {
                 sbn.getNotification().flags =
                         (r.mOriginalFlags & ~Notification.FLAG_FOREGROUND_SERVICE);
                 mRankingHelper.sort(mNotificationList);
-                mListeners.notifyPostedLocked(sbn, sbn /* oldSbn */);
+                mListeners.notifyPosted(sbn, sbn /* oldSbn */);
             }
         }
     };
@@ -2928,11 +2928,11 @@ public class NotificationManagerService extends SystemService {
 
                 if (notification.getSmallIcon() != null) {
                     StatusBarNotification oldSbn = (old != null) ? old.sbn : null;
-                    mListeners.notifyPostedLocked(n, oldSbn);
+                    mListeners.notifyPosted(n, oldSbn);
                 } else {
                     Slog.e(TAG, "Not posting notification without small icon: " + notification);
                     if (old != null && !old.isCanceled) {
-                        mListeners.notifyRemovedLocked(n);
+                        mListeners.notifyRemoved(n);
                     }
                     // ATTENTION: in a future release we will bail out here
                     // so that we do not play sounds, show lights, etc. for invalid
@@ -3447,9 +3447,7 @@ public class NotificationManagerService extends SystemService {
     }
 
     private void handleSendRankingUpdate() {
-        synchronized (mNotificationList) {
-            mListeners.notifyRankingUpdateLocked();
-        }
+        mListeners.notifyRankingUpdate();
     }
 
     private void scheduleListenerHintsChanged(int state) {
@@ -3466,9 +3464,7 @@ public class NotificationManagerService extends SystemService {
     }
 
     private void handleListenerHintsChanged(int hints) {
-        synchronized (mNotificationList) {
-            mListeners.notifyListenerHintsChangedLocked(hints);
-        }
+        mListeners.notifyListenerHintsChanged(hints);
     }
 
     private void handleListenerInterruptionFilterChanged(int interruptionFilter) {
@@ -3581,7 +3577,7 @@ public class NotificationManagerService extends SystemService {
         // status bar
         if (r.getNotification().getSmallIcon() != null) {
             r.isCanceled = true;
-            mListeners.notifyRemovedLocked(r.sbn);
+            mListeners.notifyRemoved(r.sbn);
         }
 
         final String canceledKey = r.getKey();
@@ -4234,27 +4230,29 @@ public class NotificationManagerService extends SystemService {
         }
 
         public void onNotificationEnqueued(final NotificationRecord r) {
-            final StatusBarNotification sbn = r.sbn;
-            TrimCache trimCache = new TrimCache(sbn);
+            synchronized (mMutex) {
+                final StatusBarNotification sbn = r.sbn;
+                TrimCache trimCache = new TrimCache(sbn);
 
-            // mServices is the list inside ManagedServices of all the rankers,
-            // There should be only one, but it's a list, so while we enforce
-            // singularity elsewhere, we keep it general here, to avoid surprises.
-            for (final ManagedServiceInfo info : NotificationRankers.this.mServices) {
-                boolean sbnVisible = isVisibleToListener(sbn, info);
-                if (!sbnVisible) {
-                    continue;
-                }
-
-                final int importance = r.getImportance();
-                final boolean fromUser = r.isImportanceFromUser();
-                final StatusBarNotification sbnToPost =  trimCache.ForListener(info);
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyEnqueued(info, sbnToPost, importance, fromUser);
+                // mServices is the list inside ManagedServices of all the rankers,
+                // There should be only one, but it's a list, so while we enforce
+                // singularity elsewhere, we keep it general here, to avoid surprises.
+                for (final ManagedServiceInfo info : NotificationRankers.this.mServices) {
+                    boolean sbnVisible = isVisibleToListener(sbn, info);
+                    if (!sbnVisible) {
+                        continue;
                     }
-                });
+
+                    final int importance = r.getImportance();
+                    final boolean fromUser = r.isImportanceFromUser();
+                    final StatusBarNotification sbnToPost = trimCache.ForListener(info);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            notifyEnqueued(info, sbnToPost, importance, fromUser);
+                        }
+                    });
+                }
             }
         }
 
@@ -4270,12 +4268,14 @@ public class NotificationManagerService extends SystemService {
         }
 
         public boolean isEnabled() {
-            return !mServices.isEmpty();
+            synchronized (mMutex) {
+                return !mServices.isEmpty();
+            }
         }
 
         @Override
         public void onUserSwitched(int user) {
-            synchronized (mNotificationList) {
+            synchronized (mMutex) {
                 int i = mServices.size()-1;
                 while (i --> 0) {
                     final ManagedServiceInfo info = mServices.get(i);
@@ -4396,106 +4396,116 @@ public class NotificationManagerService extends SystemService {
          * Also takes care of removing a notification that has been visible to a listener before,
          * but isn't anymore.
          */
-        public void notifyPostedLocked(StatusBarNotification sbn, StatusBarNotification oldSbn) {
-            // Lazily initialized snapshots of the notification.
-            TrimCache trimCache = new TrimCache(sbn);
+        public void notifyPosted(StatusBarNotification sbn, StatusBarNotification oldSbn) {
+            synchronized (mMutex) {
+                // Lazily initialized snapshots of the notification.
+                TrimCache trimCache = new TrimCache(sbn);
 
-            for (final ManagedServiceInfo info : mServices) {
-                boolean sbnVisible = isVisibleToListener(sbn, info);
-                boolean oldSbnVisible = oldSbn != null ? isVisibleToListener(oldSbn, info) : false;
-                // This notification hasn't been and still isn't visible -> ignore.
-                if (!oldSbnVisible && !sbnVisible) {
-                    continue;
-                }
-                final NotificationRankingUpdate update = makeRankingUpdateLocked(info);
+                for (final ManagedServiceInfo info : mServices) {
+                    boolean sbnVisible = isVisibleToListener(sbn, info);
+                    boolean oldSbnVisible = oldSbn != null ? isVisibleToListener(oldSbn, info) : false;
+                    // This notification hasn't been and still isn't visible -> ignore.
+                    if (!oldSbnVisible && !sbnVisible) {
+                        continue;
+                    }
+                    final NotificationRankingUpdate update = makeRankingUpdateLocked(info);
 
-                // This notification became invisible -> remove the old one.
-                if (oldSbnVisible && !sbnVisible) {
-                    final StatusBarNotification oldSbnLightClone = oldSbn.cloneLight();
+                    // This notification became invisible -> remove the old one.
+                    if (oldSbnVisible && !sbnVisible) {
+                        final StatusBarNotification oldSbnLightClone = oldSbn.cloneLight();
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                notifyRemoved(info, oldSbnLightClone, update);
+                            }
+                        });
+                        continue;
+                    }
+
+                    final StatusBarNotification sbnToPost = trimCache.ForListener(info);
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            notifyRemoved(info, oldSbnLightClone, update);
+                            notifyPosted(info, sbnToPost, update);
                         }
                     });
-                    continue;
                 }
-
-                final StatusBarNotification sbnToPost =  trimCache.ForListener(info);
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyPosted(info, sbnToPost, update);
-                    }
-                });
             }
         }
 
         /**
          * asynchronously notify all listeners about a removed notification
          */
-        public void notifyRemovedLocked(StatusBarNotification sbn) {
-            // make a copy in case changes are made to the underlying Notification object
-            // NOTE: this copy is lightweight: it doesn't include heavyweight parts of the
-            // notification
-            final StatusBarNotification sbnLight = sbn.cloneLight();
-            for (final ManagedServiceInfo info : mServices) {
-                if (!isVisibleToListener(sbn, info)) {
-                    continue;
-                }
-                final NotificationRankingUpdate update = makeRankingUpdateLocked(info);
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyRemoved(info, sbnLight, update);
+        public void notifyRemoved(StatusBarNotification sbn) {
+            synchronized (mMutex) {
+                // make a copy in case changes are made to the underlying Notification object
+                // NOTE: this copy is lightweight: it doesn't include heavyweight parts of the
+                // notification
+                final StatusBarNotification sbnLight = sbn.cloneLight();
+                for (final ManagedServiceInfo info : mServices) {
+                    if (!isVisibleToListener(sbn, info)) {
+                        continue;
                     }
-                });
+                    final NotificationRankingUpdate update = makeRankingUpdateLocked(info);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            notifyRemoved(info, sbnLight, update);
+                        }
+                    });
+                }
             }
         }
 
         /**
          * asynchronously notify all listeners about a reordering of notifications
          */
-        public void notifyRankingUpdateLocked() {
-            for (final ManagedServiceInfo serviceInfo : mServices) {
-                if (!serviceInfo.isEnabledForCurrentProfiles()) {
-                    continue;
-                }
-                final NotificationRankingUpdate update = makeRankingUpdateLocked(serviceInfo);
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyRankingUpdate(serviceInfo, update);
+        public void notifyRankingUpdate() {
+            synchronized (mMutex) {
+                for (final ManagedServiceInfo serviceInfo : mServices) {
+                    if (!serviceInfo.isEnabledForCurrentProfiles()) {
+                        continue;
                     }
-                });
+                    final NotificationRankingUpdate update = makeRankingUpdateLocked(serviceInfo);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            notifyRankingUpdate(serviceInfo, update);
+                        }
+                    });
+                }
             }
         }
 
-        public void notifyListenerHintsChangedLocked(final int hints) {
-            for (final ManagedServiceInfo serviceInfo : mServices) {
-                if (!serviceInfo.isEnabledForCurrentProfiles()) {
-                    continue;
-                }
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyListenerHintsChanged(serviceInfo, hints);
+        public void notifyListenerHintsChanged(final int hints) {
+            synchronized (mMutex) {
+                for (final ManagedServiceInfo serviceInfo : mServices) {
+                    if (!serviceInfo.isEnabledForCurrentProfiles()) {
+                        continue;
                     }
-                });
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            notifyListenerHintsChanged(serviceInfo, hints);
+                        }
+                    });
+                }
             }
         }
 
         public void notifyInterruptionFilterChanged(final int interruptionFilter) {
-            for (final ManagedServiceInfo serviceInfo : mServices) {
-                if (!serviceInfo.isEnabledForCurrentProfiles()) {
-                    continue;
-                }
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyInterruptionFilterChanged(serviceInfo, interruptionFilter);
+            synchronized (mMutex) {
+                for (final ManagedServiceInfo serviceInfo : mServices) {
+                    if (!serviceInfo.isEnabledForCurrentProfiles()) {
+                        continue;
                     }
-                });
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            notifyInterruptionFilterChanged(serviceInfo, interruptionFilter);
+                        }
+                    });
+                }
             }
         }
 
@@ -4558,7 +4568,7 @@ public class NotificationManagerService extends SystemService {
                 return false;
             }
             // TODO: clean up locking object later
-            synchronized (mNotificationList) {
+            synchronized (mMutex) {
                 for (final ManagedServiceInfo serviceInfo : mServices) {
                     if (packageName.equals(serviceInfo.component.getPackageName())) {
                         return true;
