@@ -81,6 +81,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
             // allow system-defined limit of number of attempts before giving up
             boolean inLockoutMode =  handleFailedAttempt();
             // send lockout event in case driver doesn't enforce it.
+            stop(true);
             if (inLockoutMode) {
                 try {
                     Slog.w(TAG, "Forcing lockout (fp driver code should do this!)");
