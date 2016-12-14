@@ -36,6 +36,7 @@ import java.lang.reflect.Modifier;
 import java.util.TimeZone;
 import java.util.logging.LogManager;
 import org.apache.harmony.luni.internal.util.TimezoneGetter;
+import android.system.Os;
 
 /**
  * Main entry point for runtime initialization.  Not for
@@ -306,7 +307,20 @@ public class RuntimeInit {
             throws ZygoteInit.MethodAndArgsCaller {
         if (DEBUG) Slog.d(TAG, "RuntimeInit: Starting application from wrapper");
 
-        applicationInit(targetSdkVersion, argv, null);
+        ClassLoader cl = null;
+        for (int i = 0; i < argv.length; i++) {
+            // if it's SystemServer, then follow ZygoteInit.handleSystemServerProcess to provide class loader
+            if (ZygoteInit.SYSTEMSERVER_CLASSNAME.equals(argv[i])) {
+                final String systemServerClasspath = Os.getenv("SYSTEMSERVERCLASSPATH");
+                if (systemServerClasspath != null) {
+                    cl = ZygoteInit.createSystemServerClassLoader(systemServerClasspath, targetSdkVersion);
+                    Thread.currentThread().setContextClassLoader(cl);
+                }
+                break;
+            }
+        }
+
+        applicationInit(targetSdkVersion, argv, cl);
     }
 
     private static void applicationInit(int targetSdkVersion, String[] argv, ClassLoader classLoader)
