@@ -441,6 +441,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.RECENTS_ICON_PACK;
     private static final String USE_SLIM_RECENTS =
             "system:" + Settings.System.USE_SLIM_RECENTS;
+    private static final String NAVBAR_DYNAMIC =
+            "system:" + Settings.System.NAVBAR_DYNAMIC;
 
     static {
         boolean onlyCoreApps;
@@ -1127,7 +1129,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 LOCKSCREEN_MAX_NOTIF_CONFIG,
                 NAVIGATION_BAR_VISIBLE,
                 RECENTS_ICON_PACK,
-                USE_SLIM_RECENTS);
+                USE_SLIM_RECENTS,
+                NAVBAR_DYNAMIC);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController);
@@ -8223,6 +8226,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mUseSlimRecents =
                         newValue != null && Integer.parseInt(newValue) != 0;
                 updateRecentsMode();
+                break;
+            case NAVBAR_DYNAMIC:
+                if (mNavigationBar != null && mNavigationBarView != null) {
+                    mNavigationBar.updateNavbarOverlay(mContext.getResources());
+                }
                 break;
             default:
                 break;
