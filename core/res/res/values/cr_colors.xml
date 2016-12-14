@@ -16,4 +16,6 @@
 -->
 <resources>
 
+    <!-- Dynamic Navbar -->
+    <color name="input_method_navigation_guard_dynamic">@android:color/transparent</color>
 </resources>
