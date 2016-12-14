@@ -341,6 +341,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             Settings.Secure.QS_COLUMNS;
     private static final String STATUS_BAR_SHOW_TICKER =
             "system:" + Settings.System.STATUS_BAR_SHOW_TICKER;
+    private static final String NAVBAR_DYNAMIC =
+            "system:" + Settings.System.NAVBAR_DYNAMIC;
 
     static {
         boolean onlyCoreApps;
@@ -843,7 +845,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 QS_ROWS_PORTRAIT,
                 QS_ROWS_LANDSCAPE,
                 QS_COLUMNS,
-                STATUS_BAR_SHOW_TICKER);
+                STATUS_BAR_SHOW_TICKER,
+                NAVBAR_DYNAMIC);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -5678,6 +5681,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mTickerEnabled =
                         newValue != null && Integer.parseInt(newValue) == 1;
                 initTickerView();
+                break;
+            case NAVBAR_DYNAMIC:
+                if (mNavigationController != null) {
+                    mNavigationController.updateNavbarOverlay(mContext.getResources());
+                }
                 break;
             default:
                 break;
