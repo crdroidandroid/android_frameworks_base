@@ -49,6 +49,7 @@ import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -1262,6 +1263,8 @@ public class DecorView extends FrameLayout implements RootViewSurfaceTaker, Wind
 
     private WindowInsets updateStatusGuard(WindowInsets insets) {
         boolean showStatusGuard = false;
+        boolean isDynamic = Settings.System.getInt(mContext.getContentResolver(),
+            		Settings.System.NAVBAR_DYNAMIC, 0) == 1;
         // Show the status guard when the non-overlay contextual action bar is showing
         if (mPrimaryActionModeView != null) {
             if (mPrimaryActionModeView.getLayoutParams() instanceof MarginLayoutParams) {
@@ -1285,8 +1288,13 @@ public class DecorView extends FrameLayout implements RootViewSurfaceTaker, Wind
 
                         if (mStatusGuard == null) {
                             mStatusGuard = new View(mContext);
-                            mStatusGuard.setBackgroundColor(mContext.getColor(
-                                    R.color.input_method_navigation_guard));
+                            if (!isDynamic) {
+                                mStatusGuard.setBackgroundColor(mContext.getColor(
+                                        R.color.input_method_navigation_guard));
+                            } else {
+                                mStatusGuard.setBackgroundColor(mContext.getColor(
+                                        R.color.input_method_navigation_guard_dynamic));
+                            }
                             addView(mStatusGuard, indexOfChild(mStatusColorViewState.view),
                                     new LayoutParams(LayoutParams.MATCH_PARENT,
                                             mlp.topMargin, Gravity.START | Gravity.TOP));
@@ -1331,6 +1339,8 @@ public class DecorView extends FrameLayout implements RootViewSurfaceTaker, Wind
     }
 
     private WindowInsets updateNavigationGuard(WindowInsets insets) {
+        boolean isDynamic = Settings.System.getInt(mContext.getContentResolver(),
+            		Settings.System.NAVBAR_DYNAMIC, 0) == 1;
         // IME windows lay out below the nav bar, but the content view must not (for back compat)
         // Only make this adjustment if the window is not requesting layout in overscan
         if (mWindow.getAttributes().type == WindowManager.LayoutParams.TYPE_INPUT_METHOD
@@ -1347,8 +1357,13 @@ public class DecorView extends FrameLayout implements RootViewSurfaceTaker, Wind
             // position the navigation guard view, creating it if necessary
             if (mNavigationGuard == null) {
                 mNavigationGuard = new View(mContext);
-                mNavigationGuard.setBackgroundColor(mContext.getColor(
-                        R.color.input_method_navigation_guard));
+                if (!isDynamic) {
+                            mNavigationGuard.setBackgroundColor(mContext.getColor(
+                                    R.color.input_method_navigation_guard));
+                } else {
+                            mNavigationGuard.setBackgroundColor(mContext.getColor(
+                                    R.color.input_method_navigation_guard_dynamic));
+                }
                 addView(mNavigationGuard, indexOfChild(mNavigationColorViewState.view),
                         new LayoutParams(LayoutParams.MATCH_PARENT,
                                 insets.getSystemWindowInsetBottom(),

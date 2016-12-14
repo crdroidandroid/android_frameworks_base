@@ -56,4 +56,7 @@
     <java-symbol type="anim" name="recent_screen_enter" />
     <java-symbol type="anim" name="recent_screen_enter_left" />
     <java-symbol type="anim" name="recent_screen_fade_out" />
+
+    <!-- Dynamic Navbar -->
+    <java-symbol type="color" name="input_method_navigation_guard_dynamic" />
 </resources>

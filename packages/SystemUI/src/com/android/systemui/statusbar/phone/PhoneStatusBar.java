@@ -377,6 +377,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             "system:" + Settings.System.BLUR_LIGHT_COLOR_PREFERENCE_KEY;
     private static final String BLUR_MIXED_COLOR_PREFERENCE_KEY =
             "system:" + Settings.System.BLUR_MIXED_COLOR_PREFERENCE_KEY;
+    private static final String NAVBAR_DYNAMIC =
+            "system:" + Settings.System.NAVBAR_DYNAMIC;
 
     static {
         boolean onlyCoreApps;
@@ -906,7 +908,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 RECENT_APPS_RADIUS_PREFERENCE_KEY,
                 BLUR_DARK_COLOR_PREFERENCE_KEY,
                 BLUR_LIGHT_COLOR_PREFERENCE_KEY,
-                BLUR_MIXED_COLOR_PREFERENCE_KEY);
+                BLUR_MIXED_COLOR_PREFERENCE_KEY,
+                NAVBAR_DYNAMIC);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -6051,6 +6054,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mBlurMixedColorFilter =
                         newValue == null ? Color.GRAY : Integer.parseInt(newValue);
                 setBlurSettings();
+                break;
+            case NAVBAR_DYNAMIC:
+                if (mNavigationController != null) {
+                    mNavigationController.updateNavbarOverlay(mContext.getResources());
+                }
                 break;
             default:
                 break;
