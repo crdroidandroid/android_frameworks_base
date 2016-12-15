@@ -513,6 +513,8 @@ class ZygoteConnection {
                         throw new IllegalArgumentException(
                                 "--invoke-with requires argument");
                     }
+                    // Signal invoke-with to the fork.
+                    debugFlags |= Zygote.DEBUG_INVOKE_WITH;
                 } else if (arg.startsWith("--nice-name=")) {
                     if (niceName != null) {
                         throw new IllegalArgumentException(
@@ -700,6 +702,9 @@ class ZygoteConnection {
             args.invokeWith = SystemProperties.get(property);
             if (args.invokeWith != null && args.invokeWith.length() == 0) {
                 args.invokeWith = null;
+            }
+            if (args.invokeWith != null) {
+                args.debugFlags |= Zygote.DEBUG_INVOKE_WITH;
             }
         }
     }
