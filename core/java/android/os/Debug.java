@@ -2226,6 +2226,14 @@ public final class Debug
     public static native void dumpNativeBacktraceToFile(int pid, String file);
 
     /**
+     * Have the stack traces of the given native process dumped to the
+     * specified file.  Will be appended to the file.
+     * @param timeoutSecs time to wait, in seconds.
+     * @hide
+     */
+    public static native void dumpNativeBacktraceToFileTimeout(int pid, String file, int timeoutSecs);
+
+    /**
      * Get description of unreachable native memory.
      * @param limit the number of leaks to provide info on, 0 to only get a summary.
      * @param contents true to include a hex dump of the contents of unreachable memory.
