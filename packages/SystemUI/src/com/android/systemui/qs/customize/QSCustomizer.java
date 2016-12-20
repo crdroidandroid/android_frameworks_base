@@ -18,10 +18,12 @@ package com.android.systemui.qs.customize;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
+import android.app.ThemeManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.provider.Settings;
+import android.content.res.TypedArray;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +39,7 @@ import android.widget.Toolbar;
 import android.widget.Toolbar.OnMenuItemClickListener;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.MetricsProto;
+import com.android.settingslib.Utils;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSContainer;
 import com.android.systemui.qs.QSDetailClipper;
@@ -75,7 +78,7 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
     private int mDefaultColumns;
 
     public QSCustomizer(Context context, AttributeSet attrs) {
-        super(new ContextThemeWrapper(context, R.style.edit_theme), attrs);
+        super(new ContextThemeWrapper(context, Utils.getColorAccent(context)), attrs);
         mClipper = new QSDetailClipper(this);
 
         LayoutInflater.from(getContext()).inflate(R.layout.qs_customize_panel_content, this);
@@ -98,6 +101,12 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         mDefaultColumns = Math.max(1,
                     mContext.getResources().getInteger(R.integer.quick_settings_num_columns));
 
+        if (!ThemeManager.isOverlayEnabled()) {
+            final TypedArray ta = context.obtainStyledAttributes(new int[]{
+                    android.R.attr.textColorPrimary});
+            mToolbar.setTitleTextColor(ta.getColor(0, 0));
+            ta.recycle();
+        }
         mRecyclerView = (RecyclerView) findViewById(android.R.id.list);
         mTileAdapter = new TileAdapter(getContext());
         mRecyclerView.setAdapter(mTileAdapter);

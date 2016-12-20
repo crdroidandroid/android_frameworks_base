@@ -26,4 +26,16 @@
     <color name="material_pixel_blue_bright">#ff4285F4</color><!-- Pixel Light Accent Color-->
     <color name="material_pixel_grey_dark">#ff616161</color><!-- Pixel Tertiary Color-->
     <color name="material_pixel_grey_light">#ff9e9e9e</color><!-- Pixel Quaternary Color-->
+
+    <color name="dark_primary_color">@color/black</color>
+    <color name="grey_primary_color">#ff303030</color>
+    <color name="blue_accent_color">#4285F4</color>
+    <color name="red_accent_color">#f90028</color>
+    <color name="orange_accent_color">#ffab00</color>
+    <color name="green_accent_color">#76c124</color>
+    <color name="yellow_accent_color">#ffc90f</color>
+    <color name="purple_accent_color">#6f24d6</color>
+    <color name="pink_accent_color">#ff1b70</color>
+    <color name="cyan_accent_color">#24b7d6</color>
+    <color name="grey_accent_color">#ff5d5d5d</color>
 </resources>
