@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     opyright (c) 2016 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- LiveDisplay drawables -->
+    <string-array name="live_display_drawables" translatable="false">
+        <item>@drawable/ic_livedisplay_auto</item>
+        <item>@drawable/ic_livedisplay_off</item>
+        <item>@drawable/ic_livedisplay_day</item>
+        <item>@drawable/ic_livedisplay_night</item>
+        <item>@drawable/ic_livedisplay_outdoor</item>
+    </string-array>
+
+    <!-- LiveDisplay description-->
+    <string-array name="live_display_description" translatable="false">
+        <item>@string/accessibility_quick_settings_live_display_auto</item>
+        <item>@string/accessibility_quick_settings_live_display_off</item>
+        <item>@string/accessibility_quick_settings_live_display_day</item>
+        <item>@string/accessibility_quick_settings_live_display_night</item>
+        <item>@string/accessibility_quick_settings_live_display_outdoor</item>
+    </string-array>
+
+    <!-- LiveDisplay announcement-->
+    <string-array name="live_display_announcement" translatable="false">
+        <item>@string/accessibility_quick_settings_live_display_changed_auto</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_off</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_day</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_night</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_outdoor</item>
+    </string-array>
+</resources>
