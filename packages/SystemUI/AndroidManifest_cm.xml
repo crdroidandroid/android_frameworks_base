@@ -22,6 +22,10 @@
     <uses-permission android:name="cyanogenmod.permission.WRITE_SECURE_SETTINGS" />
     <uses-permission android:name="cyanogenmod.permission.WRITE_SETTINGS" />
 
+    <!-- LiveDisplay -->
+    <uses-permission android:name="cyanogenmod.permission.HARDWARE_ABSTRACTION_ACCESS" />
+    <uses-permission android:name="cyanogenmod.permission.MANAGE_LIVEDISPLAY" />
+
     <!-- Visualizer -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
