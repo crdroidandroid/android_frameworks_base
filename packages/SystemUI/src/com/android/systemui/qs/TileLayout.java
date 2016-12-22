@@ -80,7 +80,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
         final ContentResolver resolver = mContext.getContentResolver();
         final int columnsConfig = Settings.Secure.getInt(resolver,
-                Settings.Secure.QS_COLUMNS, 3);
+                Settings.Secure.QS_COLUMNS, 4);
         final int columns = Math.max(1, columnsConfig);
 
         mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height);
