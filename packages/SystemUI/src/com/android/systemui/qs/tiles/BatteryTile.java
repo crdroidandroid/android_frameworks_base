@@ -22,6 +22,7 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
@@ -103,6 +104,21 @@ public class BatteryTile extends QSTile<QSTile.State> implements BatteryControll
         }
     }
 
+    public boolean isSaverEasyToggleEnabled() {
+        return Settings.Secure.getInt(mContext.getContentResolver(),
+            Settings.Secure.QS_BATTERY_EASY_TOGGLE, 0) == 1;
+    }
+
+    @Override
+    protected void handleLongClick() {
+        boolean easyToggle = isSaverEasyToggleEnabled();
+        if (easyToggle) {
+            showDetail(true);
+        } else {
+            mHost.startActivityDismissingKeyguard(new Intent(Intent.ACTION_POWER_USAGE_SUMMARY));
+        }
+    }
+
     @Override
     public Intent getLongClickIntent() {
         return new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
@@ -110,7 +126,12 @@ public class BatteryTile extends QSTile<QSTile.State> implements BatteryControll
 
     @Override
     protected void handleClick() {
-        showDetail(true);
+    boolean batteryeasy = isSaverEasyToggleEnabled();
+        if (!batteryeasy) {
+            showDetail(true);
+        } else {
+            mBatteryController.setPowerSaveMode(!mPowerSave);
+        }
     }
 
     @Override
