@@ -24,22 +24,22 @@
     <color name="background_floating_material_dark">@color/material_grey_800</color>
     <color name="background_floating_material_light">@color/white</color>
 
-    <color name="primary_material_dark">@color/material_grey_900</color>
+    <color name="primary_material_dark">@color/material_pixel_primary_material_dark</color>
     <color name="primary_material_light">@color/material_grey_100</color>
-    <color name="primary_material_settings">@color/material_grey_900</color>
-    <color name="primary_dark_material_dark">@color/black</color>
+    <color name="primary_material_settings">@color/primary_material_dark</color>
+    <color name="primary_dark_material_dark">@color/material_pixel_primary_dark_material_dark</color>
     <color name="primary_dark_material_light">@color/material_grey_600</color>
     <color name="primary_dark_material_light_light_status_bar">@color/material_grey_300</color>
-    <color name="primary_dark_material_settings">@color/black</color>
+    <color name="primary_dark_material_settings">@color/material_blue_grey_950</color>
 
-    <color name="secondary_material_settings">@color/material_blue_grey_800</color>
-    <color name="tertiary_material_settings">@color/material_blue_grey_700</color>
-    <color name="quaternary_material_settings">@color/material_blue_grey_200</color>
+    <color name="secondary_material_settings">@color/material_pixel_primary_material_light</color>
+    <color name="tertiary_material_settings">@color/material_pixel_grey_dark</color>
+    <color name="quaternary_material_settings">@color/material_pixel_grey_light</color>
 
-    <color name="accent_material_700">@color/material_deep_teal_700</color>
-    <color name="accent_material_light">@color/material_deep_teal_500</color>
-    <color name="accent_material_dark">@color/material_deep_teal_200</color>
-    <color name="accent_material_50">@color/material_deep_teal_50</color>
+    <color name="accent_material_700">@color/material_pixel_blue_bright</color>
+    <color name="accent_material_light">@color/material_pixel_blue_bright</color>
+    <color name="accent_material_dark">@color/material_pixel_blue_bright</color>
+    <color name="accent_material_50">@color/material_pixel_blue_bright</color>
 
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
@@ -86,18 +86,18 @@
     <color name="material_grey_100">#fff5f5f5</color>
     <color name="material_grey_50">#fffafafa</color>
 
-    <color name="material_deep_teal_50">#ffe0f2f1</color>
-    <color name="material_deep_teal_100">#ffb2dfdb</color>
-    <color name="material_deep_teal_200">#ff80cbc4</color>
-    <color name="material_deep_teal_300">#ff4db6ac</color>
-    <color name="material_deep_teal_500">#ff009688</color>
-    <color name="material_deep_teal_700">#ff00796b</color>
+    <color name="material_deep_teal_50">@color/accent_material_dark</color>
+    <color name="material_deep_teal_100">@color/accent_material_dark</color>
+    <color name="material_deep_teal_200">@color/accent_material_dark</color>
+    <color name="material_deep_teal_300">@color/accent_material_dark</color>
+    <color name="material_deep_teal_500">@color/accent_material_dark</color>
+    <color name="material_deep_teal_700">@color/accent_material_dark</color>
 
     <color name="material_blue_grey_200">#ffb0bec5</color>
     <color name="material_blue_grey_700">#ff455a64</color>
     <color name="material_blue_grey_800">#ff37474f</color>
     <color name="material_blue_grey_900">#ff263238</color>
-    <color name="material_blue_grey_950">#ff21272b</color>
+    <color name="material_blue_grey_950">#ff242424</color>
 
     <!-- Time picker defaults when no theme is set -->
     <eat-comment />
