@@ -206,6 +206,12 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         updateOutlineAlpha();
     }
 
+    public void updateNotificationView() {
+        updateBackground();
+        updateBackgroundTint();
+        updateOutlineAlpha();
+    }
+
     private final Runnable mTapTimeoutRunnable = new Runnable() {
         @Override
         public void run() {
