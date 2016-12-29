@@ -565,6 +565,7 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
             throw new PackageManagerException(INSTALL_FAILED_CONTAINER_ERROR,
                     "Failed to resolve stage location", e);
         }
+        final boolean quickInstall = (params.installFlags & PackageManager.INSTALL_QUICK) != 0;
 
         // Verify that stage looks sane with respect to existing application.
         // This currently only ensures packageName, versionCode, and certificate
@@ -572,7 +573,9 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
         validateInstallLocked(pkgInfo, appInfo);
 
         Preconditions.checkNotNull(mPackageName);
-        Preconditions.checkNotNull(mSignatures);
+        if (!quickInstall) {
+            Preconditions.checkNotNull(mSignatures);
+        }
         Preconditions.checkNotNull(mResolvedBaseFile);
 
         if (!mPermissionsAccepted) {
@@ -683,6 +686,7 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
      */
     private void validateInstallLocked(PackageInfo pkgInfo, ApplicationInfo appInfo)
             throws PackageManagerException {
+        final boolean quickInstall = (params.installFlags & PackageManager.INSTALL_QUICK) != 0;
         mPackageName = null;
         mVersionCode = -1;
         mSignatures = null;
@@ -711,8 +715,9 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
         for (File addedFile : addedFiles) {
             final ApkLite apk;
             try {
-                apk = PackageParser.parseApkLite(
-                        addedFile, PackageParser.PARSE_COLLECT_CERTIFICATES);
+             // TODO: fix b/25118622; always use PARSE_COLLECT_CERTIFICATES
+                final int parseFlags = quickInstall ? 0 : PackageParser.PARSE_COLLECT_CERTIFICATES;
+                apk = PackageParser.parseApkLite(addedFile, parseFlags);
             } catch (PackageParserException e) {
                 throw PackageManagerException.from(e);
             }
@@ -853,6 +858,7 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
 
     private void assertApkConsistent(String tag, ApkLite apk)
             throws PackageManagerException {
+        final boolean quickInstall = (params.installFlags & PackageManager.INSTALL_QUICK) != 0;
         if (!mPackageName.equals(apk.packageName)) {
             throw new PackageManagerException(INSTALL_FAILED_INVALID_APK, tag + " package "
                     + apk.packageName + " inconsistent with " + mPackageName);
@@ -867,7 +873,7 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
                     + " version code " + apk.versionCode + " inconsistent with "
                     + mVersionCode);
         }
-        if (!Signature.areExactMatch(mSignatures, apk.signatures)) {
+        if (!quickInstall && !Signature.areExactMatch(mSignatures, apk.signatures)) {
             throw new PackageManagerException(INSTALL_FAILED_INVALID_APK,
                     tag + " signatures are inconsistent");
         }

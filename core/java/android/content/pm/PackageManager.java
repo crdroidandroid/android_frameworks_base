@@ -704,6 +704,14 @@ public abstract class PackageManager {
     public static final int INSTALL_FORCE_SDK = 0x00002000;
 
     /**
+     * Flag parameter for {@link #installPackage} to indicate that this package is
+     * to be installed quickly.
+     *
+     * @hide
+     */
+    public static final int INSTALL_QUICK = 0x00004000;
+
+    /**
      * Flag parameter for
      * {@link #setComponentEnabledSetting(android.content.ComponentName, int, int)} to indicate
      * that you don't want to kill the app containing the component.  Be careful when you set this
