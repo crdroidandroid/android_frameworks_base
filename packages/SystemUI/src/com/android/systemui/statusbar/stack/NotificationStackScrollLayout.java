@@ -782,7 +782,7 @@ public class NotificationStackScrollLayout extends ViewGroup
 
     public int getFirstItemMinHeight() {
         final ExpandableView firstChild = getFirstChildNotGone();
-        return firstChild != null ? firstChild.getMinHeight() : mCollapsedSize;
+        return firstChild != null ? firstChild.getIntrinsicHeight() : mCollapsedSize;
     }
 
     public int getBottomStackPeekSize() {
@@ -2224,10 +2224,7 @@ public class NotificationStackScrollLayout extends ViewGroup
     }
 
     public int getPeekHeight() {
-        final ExpandableView firstChild = getFirstChildNotGone();
-        final int firstChildMinHeight = firstChild != null ? firstChild.getCollapsedHeight()
-                : mCollapsedSize;
-        return mIntrinsicPadding + firstChildMinHeight + mBottomStackPeekSize
+        return mIntrinsicPadding + getFirstItemMinHeight() + mBottomStackPeekSize
                 + mBottomStackSlowDownHeight;
     }
 
