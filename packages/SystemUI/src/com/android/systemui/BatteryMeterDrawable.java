@@ -68,6 +68,7 @@ public class BatteryMeterDrawable extends Drawable implements
 
     // Values for the different battery styles
     public static final int BATTERY_STYLE_PORTRAIT  = 0;
+    public static final int BATTERY_STYLE_SOLID     = 1;
     public static final int BATTERY_STYLE_CIRCLE    = 2;
     public static final int BATTERY_STYLE_HIDDEN    = 4;
     public static final int BATTERY_STYLE_LANDSCAPE = 5;
@@ -339,7 +340,8 @@ public class BatteryMeterDrawable extends Drawable implements
                     return getBoltColor();
                 }
             } else {
-                if (mStyle == BATTERY_STYLE_CIRCLE && !mPluggedIn) {
+                if ((mStyle == BATTERY_STYLE_SOLID || mStyle == BATTERY_STYLE_CIRCLE)
+                       && !mPluggedIn) {
                     return mColors[1];
                 } else if (!isChargeLevel) {
                     return getBoltColor();
@@ -375,10 +377,12 @@ public class BatteryMeterDrawable extends Drawable implements
         mCurrentBackgroundColor = getBackgroundColor(darkIntensity);
         mCurrentFillColor = getFillColor(darkIntensity);
         mIconTint = mCurrentFillColor;
-        // Make bolt fully opaque for increased visibility
-        mBoltDrawable.setTint(0xff000000 | mCurrentFillColor);
         mFrameDrawable.setTint(mCurrentBackgroundColor);
-        updateBoltDrawableLayer(mBatteryDrawable, mBoltDrawable);
+        // Make bolt fully opaque for increased visibility
+        if (mBoltDrawable != null) {
+            mBoltDrawable.setTint(0xff000000 | mCurrentFillColor);
+            updateBoltDrawableLayer(mBatteryDrawable, mBoltDrawable);
+        }
         invalidateSelf();
         mOldDarkIntensity = darkIntensity;
     }
@@ -460,7 +464,9 @@ public class BatteryMeterDrawable extends Drawable implements
         final Drawable levelDrawable = mBatteryDrawable.findDrawableByLayerId(R.id.battery_fill);
         mLevelDrawable = new StopMotionVectorDrawable(levelDrawable);
         mBoltDrawable = mBatteryDrawable.findDrawableByLayerId(R.id.battery_charge_indicator);
-        mBoltDrawable.setTint(getBoltColor());
+        if (mBoltDrawable != null) {
+            mBoltDrawable.setTint(getBoltColor());
+        }
     }
 
     private boolean isThemeApplied() {
@@ -488,14 +494,9 @@ public class BatteryMeterDrawable extends Drawable implements
         final LayerDrawable layerDrawable = (LayerDrawable) batteryDrawable;
         final Drawable frame = layerDrawable.findDrawableByLayerId(R.id.battery_frame);
         final Drawable level = layerDrawable.findDrawableByLayerId(R.id.battery_fill);
-        final Drawable bolt = layerDrawable.findDrawableByLayerId(R.id.battery_charge_indicator);
         // Now, check that the required layers exist and are of the correct type
         if (frame == null) {
             throw new BatteryMeterDrawableException("Missing battery_frame drawble");
-        }
-        if (bolt == null) {
-            throw new BatteryMeterDrawableException(
-                    "Missing battery_charge_indicator drawable");
         }
         if (level != null) {
             // Check that the level drawable is an AnimatedVectorDrawable
@@ -520,6 +521,8 @@ public class BatteryMeterDrawable extends Drawable implements
         switch (style) {
             case BATTERY_STYLE_LANDSCAPE:
                 return R.drawable.ic_battery_landscape;
+            case BATTERY_STYLE_SOLID:
+                return R.drawable.ic_battery_solid;
             case BATTERY_STYLE_CIRCLE:
                 return R.drawable.ic_battery_circle;
             case BATTERY_STYLE_PORTRAIT:
@@ -533,6 +536,8 @@ public class BatteryMeterDrawable extends Drawable implements
         switch (style) {
             case BATTERY_STYLE_LANDSCAPE:
                 return R.style.BatteryMeterViewDrawable_Landscape;
+            case BATTERY_STYLE_SOLID:
+                return R.style.BatteryMeterViewDrawable_Solid;
             case BATTERY_STYLE_CIRCLE:
                 return R.style.BatteryMeterViewDrawable_Circle;
             case BATTERY_STYLE_PORTRAIT:
@@ -544,7 +549,8 @@ public class BatteryMeterDrawable extends Drawable implements
 
     private int getBoltColor() {
         if (mBoltOverlay) {
-            return mContext.getResources().getColor(mStyle == BATTERY_STYLE_CIRCLE ? R.color.batterymeter_bolt_color : R.color.system_primary_color);
+            return mContext.getResources().getColor((mStyle == BATTERY_STYLE_SOLID ||
+                mStyle == BATTERY_STYLE_CIRCLE) ? R.color.batterymeter_bolt_color : R.color.system_primary_color);
         }
         return mContext.getResources().getColor(R.color.batterymeter_bolt_color);
     }
@@ -560,6 +566,7 @@ public class BatteryMeterDrawable extends Drawable implements
         // text size is width / 2 - 2dp for wiggle room
         final float textSize;
         switch(mStyle) {
+            case BATTERY_STYLE_SOLID:
             case BATTERY_STYLE_CIRCLE:
                 textSize = widthDiv2 - mContext.getResources().getDisplayMetrics().density / 1.3f;
                 break;
@@ -603,7 +610,9 @@ public class BatteryMeterDrawable extends Drawable implements
             mTextY = widthDiv2 + bounds.height() / 2.0f;
         }
 
-        updateBoltDrawableLayer(mBatteryDrawable, mBoltDrawable);
+        if (mBoltDrawable != null) {
+            updateBoltDrawableLayer(mBatteryDrawable, mBoltDrawable);
+        }
 
         mInitialized = true;
     }
@@ -625,7 +634,7 @@ public class BatteryMeterDrawable extends Drawable implements
             newBoltDrawable.setBounds(bounds);
         }
         newBoltDrawable.getPaint().set(mTextAndBoltPaint);
-        if (mBoltOverlay) {
+        if (mBoltOverlay && mBoltDrawable != null) {
             newBoltDrawable.setTint(getBoltColor());
         }
         batteryDrawable.setDrawableByLayerId(R.id.battery_charge_indicator, newBoltDrawable);
@@ -659,17 +668,19 @@ public class BatteryMeterDrawable extends Drawable implements
 
         // Make sure we don't draw the charge indicator if not plugged in
         final Drawable d = mBatteryDrawable.findDrawableByLayerId(R.id.battery_charge_indicator);
-        if (d instanceof BitmapDrawable) {
-            // In case we are using a BitmapDrawable, which we should be unless something bad
-            // happened, we need to change the paint rather than the alpha in case the blendMode
-            // has been set to clear.  Clear always clears regardless of alpha level ;)
-            final BitmapDrawable bd = (BitmapDrawable) d;
-            bd.getPaint().set(mPluggedIn ? mTextAndBoltPaint : mClearPaint);
-            if (mBoltOverlay) {
-                mBoltDrawable.setTint(getBoltColor());
+        if (d != null) {
+            if (d instanceof BitmapDrawable) {
+                // In case we are using a BitmapDrawable, which we should be unless something bad
+                // happened, we need to change the paint rather than the alpha in case the blendMode
+                // has been set to clear.  Clear always clears regardless of alpha level ;)
+                final BitmapDrawable bd = (BitmapDrawable) d;
+                bd.getPaint().set(mPluggedIn ? mTextAndBoltPaint : mClearPaint);
+                if (mBoltOverlay && mBoltDrawable != null) {
+                    mBoltDrawable.setTint(getBoltColor());
+                }
+            } else {
+                d.setAlpha(mPluggedIn ? 255 : 0);
             }
-        } else {
-            d.setAlpha(mPluggedIn ? 255 : 0);
         }
 
         // Now draw the level indicator
@@ -687,12 +698,12 @@ public class BatteryMeterDrawable extends Drawable implements
 
     private void drawPercentageText(Canvas canvas) {
         final int level = mLevel;
-        if (level > mCriticalLevel && mShowPercent && level != 100) {
+        if (level > mCriticalLevel && mShowPercent && level != 100 && !mBoltOverlay) {
             // Draw the percentage text
             String pctText = String.valueOf(SINGLE_DIGIT_PERCENT ? (level / 10) : level);
             mTextAndBoltPaint.setColor(getColorForLevel(level));
             canvas.drawText(pctText, mTextX, mTextY, mTextAndBoltPaint);
-            if (mBoltOverlay) {
+            if (mBoltDrawable != null) {
                 mBoltDrawable.setTint(getBoltColor());
             }
         } else if (level <= mCriticalLevel) {
