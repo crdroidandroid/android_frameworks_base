@@ -68,6 +68,9 @@ interface IStatusBarService
     void clickTile(in ComponentName tile);
     void handleSystemNavigationKey(in int key);
 
+    // SystemUI Restart API for masquerade
+    void restartUI();
+
     // Start DU methods
     void toggleRecentApps();
     void toggleSplitScreen();
