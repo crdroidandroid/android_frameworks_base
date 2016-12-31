@@ -41,4 +41,9 @@
 
     <!-- On-The-Go -->
     <string name="global_action_onthego">On-The-Go mode</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_restartUI">Restart the system bars</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_restartUI">Restart SystemUIService so that system bars can load themed resources</string>
 </resources>

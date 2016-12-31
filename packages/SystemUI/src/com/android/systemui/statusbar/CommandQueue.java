@@ -78,6 +78,7 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_DISMISS_KEYBOARD_SHORTCUTS    = 32 << MSG_SHIFT;
     private static final int MSG_HANDLE_SYSNAV_KEY             = 33 << MSG_SHIFT;
     private static final int MSG_SCREEN_PINNING_STATE_CHANGED  = 34 << MSG_SHIFT;
+    private static final int MSG_RESTART_UI                    = 35 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -135,6 +136,7 @@ public class CommandQueue extends IStatusBar.Stub {
 
         void handleSystemNavigationKey(int arg1);
         void screenPinningStateChanged(boolean enabled);
+        void restartUI();
     }
 
     public CommandQueue(Callbacks callbacks) {
@@ -146,6 +148,13 @@ public class CommandQueue extends IStatusBar.Stub {
             mHandler.removeMessages(MSG_SCREEN_PINNING_STATE_CHANGED);
             mHandler.obtainMessage(MSG_SCREEN_PINNING_STATE_CHANGED,
                     enabled ? 1 : 0, 0, null).sendToTarget();
+        }
+    }
+
+    public void restartUI() {
+        synchronized (mLock) {
+            mHandler.removeMessages(MSG_RESTART_UI);
+            mHandler.sendEmptyMessage(MSG_RESTART_UI);
         }
     }
 
@@ -529,6 +538,9 @@ public class CommandQueue extends IStatusBar.Stub {
                     break;
                 case MSG_SCREEN_PINNING_STATE_CHANGED:
                     mCallbacks.screenPinningStateChanged(msg.arg1 != 0);
+                    break;
+                case MSG_RESTART_UI:
+                    mCallbacks.restartUI();
                     break;
             }
         }
