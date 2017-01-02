@@ -6706,6 +6706,24 @@ public class TelephonyManager {
        }
     }
 
+   /**
+    * Returns the IMS Registration Status
+    * using subId
+    * @hide
+    */
+   public boolean isImsRegisteredForSubscriber(int subId) {
+       try {
+           ITelephony telephony = getITelephony();
+           if (telephony == null)
+               return false;
+           return telephony.isImsRegisteredForSubscriber(subId);
+       } catch (RemoteException ex) {
+           return false;
+       } catch (NullPointerException ex) {
+           return false;
+       }
+   }
+
     /**
      * The current status of Voice over LTE for the subscription associated with this instance when
      * it was created using {@link #createForSubscriptionId(int)}. If an invalid subscription ID was

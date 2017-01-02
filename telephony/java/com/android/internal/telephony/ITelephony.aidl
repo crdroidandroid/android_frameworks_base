@@ -1164,6 +1164,11 @@ interface ITelephony {
     boolean isImsRegistered(int subId);
 
     /**
+     * Get IMS Registration Status using subId
+     */
+    boolean isImsRegisteredForSubscriber(int subId);
+
+    /**
      * Returns the Status of Wi-Fi Calling for the subscription id specified.
      */
     boolean isWifiCallingAvailable(int subId);
