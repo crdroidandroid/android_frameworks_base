@@ -96,6 +96,11 @@
     <string name="quick_settings_pulse_enabled">Pulse Enabled</string>
     <string name="quick_settings_pulse_disabled">No Visualizer</string>
     <string name="quick_settings_pulse_label">Navigationbar Visualizer</string>
+    <string name="quick_settings_pulse_label">Pulse</string>
+    <string name="accessibility_quick_settings_pulse_off">Pulse off</string>
+    <string name="accessibility_quick_settings_pulse_on">Pulse on</string>
+    <string name="accessibility_quick_settings_pulse_changed_off">Pulse turned off</string>
+    <string name="accessibility_quick_settings_pulse_changed_on">Pulse turned on</string>
     <string name="live_display_title" translatable="false">LiveDisplay</string>
     <string name="accessibility_quick_settings_live_display_off">LiveDisplay off.</string>
     <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: auto mode.</string>
