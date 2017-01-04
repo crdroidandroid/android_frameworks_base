@@ -160,7 +160,8 @@ final class RemotePrintService implements DeathRecipient {
     }
 
     private void handleBinderDied() {
-        mPrintService.asBinder().unlinkToDeath(this, 0);
+        if (mPrintService != null)
+            mPrintService.asBinder().unlinkToDeath(this, 0);
         mPrintService = null;
         mServiceDied = true;
         mCallbacks.onServiceDied(this);
