@@ -40,4 +40,6 @@
     <!-- Floating action button -->
     <color name="fab_color">?android:attr/colorAccent</color>
     <color name="floating_action_button_icon_color">@android:color/white</color>
+
+    <color name="alarm_status_color">#E0E0E0</color>
 </resources>
