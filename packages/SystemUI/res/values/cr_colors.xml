@@ -42,4 +42,6 @@
     <color name="floating_action_button_icon_color">@android:color/white</color>
 
     <color name="recents_membar_text_color">@android:color/white</color>
+
+    <color name="alarm_status_color">#E0E0E0</color>
 </resources>
