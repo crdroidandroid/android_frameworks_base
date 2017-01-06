@@ -40,5 +40,5 @@
     <string name="action_null">Blank</string>
 
     <!-- On-The-Go -->
-    <string name="global_action_onthego">On-The-Go Mode</string>
+    <string name="global_action_onthego">On-The-Go mode</string>
 </resources>
