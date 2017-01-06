@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:layout_marginTop="-4dp"
-        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
+        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock.Shadow"
         android:textSize="@dimen/qs_time_collapsed_size"
         android:gravity="top"
         android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -74,7 +74,7 @@
         android:drawablePadding="8dp"
         android:drawableStart="@drawable/ic_access_alarms_small"
         android:textColor="@color/qs_alarm_status_text_color"
-        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
+        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date.Shadow"
         android:gravity="top"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:visibility="gone" />
