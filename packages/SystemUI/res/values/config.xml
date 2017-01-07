@@ -120,8 +120,8 @@
     <bool name="quick_settings_rssi_tile_capitalization">true</bool>
 
     <!-- Timeouts for brightness dialog to disappear -->
-    <integer name="quick_settings_brightness_dialog_short_timeout">2000</integer>
-    <integer name="quick_settings_brightness_dialog_long_timeout">4000</integer>
+    <integer name="quick_settings_brightness_dialog_short_timeout">1000</integer>
+    <integer name="quick_settings_brightness_dialog_long_timeout">3000</integer>
 
     <!-- Should "4G" be shown instead of "LTE" when the network is NETWORK_TYPE_LTE? -->
     <bool name="config_show4GForLTE">true</bool>
@@ -143,25 +143,25 @@
     <integer name="touch_acceptance_delay">700</integer>
 
     <!-- The duration in seconds to wait before the dismiss buttons are shown. -->
-    <integer name="recents_task_bar_dismiss_delay_seconds">1000</integer>
+    <integer name="recents_task_bar_dismiss_delay_seconds">10</integer>
 
     <!-- The duration for animating the task decorations in after transitioning from an app. -->
-    <integer name="recents_task_enter_from_app_duration">200</integer>
+    <integer name="recents_task_enter_from_app_duration">100</integer>
 
     <!-- The duration for animating the task decorations in after transitioning from an app. -->
-    <integer name="recents_task_enter_from_affiliated_app_duration">125</integer>
+    <integer name="recents_task_enter_from_affiliated_app_duration">75</integer>
 
     <!-- The duration for animating the task decorations out before transitioning to an app. -->
-    <integer name="recents_task_exit_to_app_duration">125</integer>
+    <integer name="recents_task_exit_to_app_duration">75</integer>
 
     <!-- The min animation duration for animating the nav bar scrim in. -->
-    <integer name="recents_nav_bar_scrim_enter_duration">400</integer>
+    <integer name="recents_nav_bar_scrim_enter_duration">100</integer>
 
     <!-- The animation duration for scrolling the stack to a particular item. -->
-    <integer name="recents_animate_task_stack_scroll_duration">200</integer>
+    <integer name="recents_animate_task_stack_scroll_duration">100</integer>
 
     <!-- The animation duration for scrolling the stack to a particular item. -->
-    <integer name="recents_auto_advance_duration">750</integer>
+    <integer name="recents_auto_advance_duration">450</integer>
 
     <!-- The animation duration for subsequent scrolling the stack to a particular item. -->
     <integer name="recents_subsequent_auto_advance_duration">1000</integer>
@@ -177,7 +177,7 @@
     <bool name="recents_grow_in_multiwindow">true</bool>
 
     <!-- Animation duration when using long press on recents to dock -->
-    <integer name="long_press_dock_anim_duration">250</integer>
+    <integer name="long_press_dock_anim_duration">200</integer>
 
     <!-- Recents: The relative range of visible tasks from the current scroll position
          while the stack is focused. -->
