@@ -76,6 +76,7 @@ import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.KeyguardAffordanceView;
 import com.android.systemui.statusbar.KeyguardIndicationController;
+import com.android.systemui.statusbar.phone.NotificationPanelView;
 import com.android.systemui.statusbar.policy.AccessibilityController;
 import com.android.systemui.statusbar.policy.ExtensionController;
 import com.android.systemui.statusbar.policy.ExtensionController.Extension;
@@ -341,7 +342,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     private void updateRightAffordanceIcon() {
         IconState state = mRightButton.getIcon();
-        mRightAffordanceView.setVisibility(!mDozing && state.isVisible ? View.VISIBLE : View.GONE);
+        mRightAffordanceView.setVisibility(!mDozing && state.isVisible
+                && !NotificationPanelView.isQSEventBlocked() ? View.VISIBLE : View.GONE);
         mRightAffordanceView.setImageDrawable(state.drawable, state.tint);
         mRightAffordanceView.setContentDescription(state.contentDescription);
     }
@@ -379,8 +381,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             // Things are not set up yet; reply hazy, ask again later
             return;
         }
-        mRightAffordanceView.setVisibility(!mDozing && mRightButton.getIcon().isVisible
-                ? View.VISIBLE : View.GONE);
+        updateRightAffordanceIcon();
     }
 
     /**
@@ -393,7 +394,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     private void updateLeftAffordanceIcon() {
         IconState state = mLeftButton.getIcon();
-        mLeftAffordanceView.setVisibility(!mDozing && state.isVisible ? View.VISIBLE : View.GONE);
+        mLeftAffordanceView.setVisibility(!mDozing && state.isVisible
+                && !NotificationPanelView.isQSEventBlocked() ? View.VISIBLE : View.GONE);
         mLeftAffordanceView.setImageDrawable(state.drawable, state.tint);
         mLeftAffordanceView.setContentDescription(state.contentDescription);
     }

@@ -163,7 +163,7 @@ public class NotificationPanelView extends PanelView implements
     private boolean mQsExpandedWhenExpandingStarted;
     private boolean mQsFullyExpanded;
     private boolean mKeyguardShowing;
-    private boolean mKeyguardOrShadeShowing;
+    private static boolean mKeyguardOrShadeShowing;
     private boolean mDozing;
     private boolean mDozingOnDown;
     protected int mStatusBarState;
@@ -241,8 +241,8 @@ public class NotificationPanelView extends PanelView implements
     private FalsingManager mFalsingManager;
     private String mLastCameraLaunchSource = KeyguardBottomAreaView.CAMERA_LAUNCH_SOURCE_AFFORDANCE;
 
-    private LockPatternUtils mLockPatternUtils;
-    private boolean mStatusBarAllowedOnSecureKeyguard;
+    private static LockPatternUtils mLockPatternUtils;
+    private static boolean mStatusBarAllowedOnSecureKeyguard = true;
 
     private Runnable mHeadsUpExistenceChangedRunnable = new Runnable() {
         @Override
@@ -631,7 +631,7 @@ public class NotificationPanelView extends PanelView implements
         requestLayout();
     }
 
-    private boolean isQSEventBlocked() {
+    public static boolean isQSEventBlocked() {
         return mLockPatternUtils.isSecure(KeyguardUpdateMonitor.getCurrentUser())
             && !mStatusBarAllowedOnSecureKeyguard && mKeyguardOrShadeShowing;
     }
