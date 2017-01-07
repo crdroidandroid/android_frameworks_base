@@ -246,8 +246,8 @@ public class QSContainer extends FrameLayout {
         mQsExpansion = expansion;
         final float translationScaleY = expansion - 1;
         if (!mHeaderAnimating) {
-            setTranslationY(mKeyguardShowing ? (translationScaleY * mHeader.getHeight())
-                    : headerTranslation);
+            setTranslationY((mKeyguardShowing || NotificationPanelView.isQSEventBlocked())  ?
+                    (translationScaleY * mHeader.getHeight()) : headerTranslation);
         }
         mHeader.setExpansion(mKeyguardShowing ? 1 : expansion);
         mQSPanel.setTranslationY(translationScaleY * mQSPanel.getHeight());
@@ -263,6 +263,9 @@ public class QSContainer extends FrameLayout {
     }
 
     public void animateHeaderSlidingIn(long delay) {
+        if (NotificationPanelView.isQSEventBlocked()) {
+            return;
+        }
         if (DEBUG) Log.d(TAG, "animateHeaderSlidingIn");
         // If the QS is already expanded we don't need to slide in the header as it's already
         // visible.
@@ -274,6 +277,9 @@ public class QSContainer extends FrameLayout {
     }
 
     public void animateHeaderSlidingOut() {
+        if (NotificationPanelView.isQSEventBlocked()) {
+            return;
+        }
         if (DEBUG) Log.d(TAG, "animateHeaderSlidingOut");
         mHeaderAnimating = true;
         animate().y(-mHeader.getHeight())
@@ -318,6 +324,9 @@ public class QSContainer extends FrameLayout {
     };
 
     public int getQsMinExpansionHeight() {
+        if (NotificationPanelView.isQSEventBlocked()) {
+            return 0;
+        }
         return mHeader.getHeight();
     }
 
