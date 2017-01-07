@@ -36,6 +36,7 @@ import com.android.systemui.R;
 import com.android.systemui.R.id;
 import com.android.systemui.plugins.qs.QS;
 import com.android.systemui.qs.customize.QSCustomizer;
+import com.android.systemui.statusbar.phone.NotificationPanelView;
 import com.android.systemui.statusbar.phone.NotificationsQuickSettingsContainer;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
 
@@ -265,8 +266,8 @@ public class QSFragment extends Fragment implements QS {
         final float translationScaleY = expansion - 1;
         if (!mHeaderAnimating) {
             int height = mHeader.getHeight();
-            getView().setTranslationY(mKeyguardShowing ? (translationScaleY * height)
-                    : headerTranslation);
+            getView().setTranslationY((mKeyguardShowing || NotificationPanelView.isQSEventBlocked()) ?
+                    (translationScaleY * height) : headerTranslation);
         }
         mHeader.setExpansion(mKeyguardShowing ? 1 : expansion);
         mFooter.setExpansion(mKeyguardShowing ? 1 : expansion);
@@ -288,6 +289,9 @@ public class QSFragment extends Fragment implements QS {
 
     @Override
     public void animateHeaderSlidingIn(long delay) {
+        if (NotificationPanelView.isQSEventBlocked()) {
+            return;
+        }
         if (DEBUG) Log.d(TAG, "animateHeaderSlidingIn");
         // If the QS is already expanded we don't need to slide in the header as it's already
         // visible.
@@ -300,6 +304,9 @@ public class QSFragment extends Fragment implements QS {
 
     @Override
     public void animateHeaderSlidingOut() {
+        if (NotificationPanelView.isQSEventBlocked()) {
+            return;
+        }
         if (DEBUG) Log.d(TAG, "animateHeaderSlidingOut");
         mHeaderAnimating = true;
         getView().animate().y(-mHeader.getHeight())
@@ -368,6 +375,9 @@ public class QSFragment extends Fragment implements QS {
 
     @Override
     public int getQsMinExpansionHeight() {
+        if (NotificationPanelView.isQSEventBlocked()) {
+            return 0;
+        }
         return mHeader.getHeight();
     }
 
