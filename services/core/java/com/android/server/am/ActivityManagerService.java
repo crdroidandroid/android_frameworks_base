@@ -12557,7 +12557,7 @@ public class ActivityManagerService extends IActivityManager.Stub
     }
 
     boolean isSleepingLocked() {
-        return mSleeping;
+        return mSleeping && mWakefulness == PowerManagerInternal.WAKEFULNESS_ASLEEP;
     }
 
     void onWakefulnessChanged(int wakefulness) {
