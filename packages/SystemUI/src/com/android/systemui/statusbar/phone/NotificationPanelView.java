@@ -387,8 +387,6 @@ public class NotificationPanelView extends PanelView implements
         });
 
         mKeyguardWeatherInfo = (TextView) mKeyguardStatusView.findViewById(R.id.weather_info);
-        setQSStroke();
-        setQSBackgroundAlpha();
 
         mNotificationPanelView = this;
 
@@ -410,7 +408,12 @@ public class NotificationPanelView extends PanelView implements
 
         mBlurredView.setVisibility(View.INVISIBLE);
 
-        handleQuickSettingsBackround();
+        setQSStroke();
+        if (mTranslucentQuickSettings) {
+            handleQuickSettingsBackround();
+        } else {
+            setQSBackgroundAlpha();
+        }
     }
 
     private static void handleQuickSettingsBackround() {
@@ -436,7 +439,9 @@ public class NotificationPanelView extends PanelView implements
         }
         if (mNotificationPanelView == null)
             return;
-        if (mKeyguardShowing || mHeadsUpShowing || mHeadsUpAnimatingAway)
+        if (mHeadsUpShowing || mHeadsUpAnimatingAway)
+            return;
+        if (mKeyguardShowing && mTranslucentQuickSettings)
             return;
 
         BlurTask.setBlurTaskCallback(new BlurUtils.BlurTaskCallback() {
@@ -1410,7 +1415,11 @@ public class NotificationPanelView extends PanelView implements
         resetVerticalPanelPosition();
         updateQsState();
         try {
-            handleQuickSettingsBackround();
+            if (mTranslucentQuickSettings) {
+                handleQuickSettingsBackround();
+            } else {
+                setQSBackgroundAlpha();
+            }
         } catch (Exception e){
         }
     }
@@ -2779,44 +2788,37 @@ public class NotificationPanelView extends PanelView implements
             case QS_TRANSPARENT_SHADE:
                 mQSShadeAlpha =
                         newValue == null ? 255 : Integer.parseInt(newValue);
-                setQSStroke();
-                setQSBackgroundAlpha();
+                setQSSettings();
                 break;
             case QS_STROKE:
                 mQSStroke =
                         newValue == null ? 0 : Integer.parseInt(newValue);
-                setQSStroke();
-                setQSBackgroundAlpha();
+                setQSSettings();
                 break;
             case QS_STROKE_COLOR:
                 mCustomStrokeColor =
                         newValue == null ? mContext.getResources().getColor(R.color.system_accent_color) : Integer.parseInt(newValue);
-                setQSStroke();
-                setQSBackgroundAlpha();
+                setQSSettings();
                 break;
             case QS_STROKE_THICKNESS:
                 mCustomStrokeThickness =
                         newValue == null ? 4 : Integer.parseInt(newValue);
-                setQSStroke();
-                setQSBackgroundAlpha();
+                setQSSettings();
                 break;
             case QS_CORNER_RADIUS:
                 mCustomCornerRadius =
                         newValue == null ? 5 : Integer.parseInt(newValue);
-                setQSStroke();
-                setQSBackgroundAlpha();
+                setQSSettings();
                 break;
             case QS_STROKE_DASH_WIDTH:
                 mCustomDashWidth =
                         newValue == null ? 0 : Integer.parseInt(newValue);
-                setQSStroke();
-                setQSBackgroundAlpha();
+                setQSSettings();
                 break;
             case QS_STROKE_DASH_GAP:
                 mCustomDashGap =
                         newValue == null ? 10 : Integer.parseInt(newValue);
-                setQSStroke();
-                setQSBackgroundAlpha();
+                setQSSettings();
                 break;
             case BLUR_SCALE_PREFERENCE_KEY:
                 mBlurScale =
@@ -2863,6 +2865,15 @@ public class NotificationPanelView extends PanelView implements
         }
     }
 
+    private void setQSSettings() {
+        setQSStroke();
+        if (mTranslucentQuickSettings) {
+            handleQuickSettingsBackround();
+        } else {
+            setQSBackgroundAlpha();
+        }
+    }
+
     private void setBlurSettings() {
         mQSTranslucencyPercentage = 255 - ((mQSTranslucencyPercentage * 255) / 100);
         handleQuickSettingsBackround();
@@ -2872,9 +2883,6 @@ public class NotificationPanelView extends PanelView implements
         if (mQsContainer != null) {
             mQsContainer.getBackground().setAlpha(mQSShadeAlpha);
         }
-        /*if (mQsPanel != null) {
-            mQsPanel.setQSShadeAlphaValue(mQSShadeAlpha);
-        }*/
     }
 
     private void setQSStroke() {
