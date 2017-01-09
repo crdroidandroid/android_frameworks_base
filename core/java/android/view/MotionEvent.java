@@ -3161,31 +3161,33 @@ public final class MotionEvent extends InputEvent implements Parcelable {
 
     @Override
     public String toString() {
-        StringBuilder msg = new StringBuilder();
-        msg.append("MotionEvent { action=").append(actionToString(getAction()));
-        msg.append(", actionButton=").append(buttonStateToString(getActionButton()));
+        synchronized (gRecyclerLock) {
+            StringBuilder msg = new StringBuilder();
+            msg.append("MotionEvent { action=").append(actionToString(getAction()));
+            msg.append(", actionButton=").append(buttonStateToString(getActionButton()));
 
-        final int pointerCount = getPointerCount();
-        for (int i = 0; i < pointerCount; i++) {
-            msg.append(", id[").append(i).append("]=").append(getPointerId(i));
-            msg.append(", x[").append(i).append("]=").append(getX(i));
-            msg.append(", y[").append(i).append("]=").append(getY(i));
-            msg.append(", toolType[").append(i).append("]=").append(
-                    toolTypeToString(getToolType(i)));
+            final int pointerCount = getPointerCount();
+            for (int i = 0; i < pointerCount; i++) {
+                msg.append(", id[").append(i).append("]=").append(getPointerId(i));
+                msg.append(", x[").append(i).append("]=").append(getX(i));
+                msg.append(", y[").append(i).append("]=").append(getY(i));
+                msg.append(", toolType[").append(i).append("]=").append(
+                        toolTypeToString(getToolType(i)));
+            }
+
+            msg.append(", buttonState=").append(MotionEvent.buttonStateToString(getButtonState()));
+            msg.append(", metaState=").append(KeyEvent.metaStateToString(getMetaState()));
+            msg.append(", flags=0x").append(Integer.toHexString(getFlags()));
+            msg.append(", edgeFlags=0x").append(Integer.toHexString(getEdgeFlags()));
+            msg.append(", pointerCount=").append(pointerCount);
+            msg.append(", historySize=").append(getHistorySize());
+            msg.append(", eventTime=").append(getEventTime());
+            msg.append(", downTime=").append(getDownTime());
+            msg.append(", deviceId=").append(getDeviceId());
+            msg.append(", source=0x").append(Integer.toHexString(getSource()));
+            msg.append(" }");
+            return msg.toString();
         }
-
-        msg.append(", buttonState=").append(MotionEvent.buttonStateToString(getButtonState()));
-        msg.append(", metaState=").append(KeyEvent.metaStateToString(getMetaState()));
-        msg.append(", flags=0x").append(Integer.toHexString(getFlags()));
-        msg.append(", edgeFlags=0x").append(Integer.toHexString(getEdgeFlags()));
-        msg.append(", pointerCount=").append(pointerCount);
-        msg.append(", historySize=").append(getHistorySize());
-        msg.append(", eventTime=").append(getEventTime());
-        msg.append(", downTime=").append(getDownTime());
-        msg.append(", deviceId=").append(getDeviceId());
-        msg.append(", source=0x").append(Integer.toHexString(getSource()));
-        msg.append(" }");
-        return msg.toString();
     }
 
     /**
