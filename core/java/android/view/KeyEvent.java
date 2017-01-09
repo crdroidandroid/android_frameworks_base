@@ -2832,22 +2832,24 @@ public class KeyEvent extends InputEvent implements Parcelable {
 
     @Override
     public String toString() {
-        StringBuilder msg = new StringBuilder();
-        msg.append("KeyEvent { action=").append(actionToString(mAction));
-        msg.append(", keyCode=").append(keyCodeToString(mKeyCode));
-        msg.append(", scanCode=").append(mScanCode);
-        if (mCharacters != null) {
-            msg.append(", characters=\"").append(mCharacters).append("\"");
+        synchronized (gRecyclerLock) {
+            StringBuilder msg = new StringBuilder();
+            msg.append("KeyEvent { action=").append(actionToString(mAction));
+            msg.append(", keyCode=").append(keyCodeToString(mKeyCode));
+            msg.append(", scanCode=").append(mScanCode);
+            if (mCharacters != null) {
+                msg.append(", characters=\"").append(mCharacters).append("\"");
+            }
+            msg.append(", metaState=").append(metaStateToString(mMetaState));
+            msg.append(", flags=0x").append(Integer.toHexString(mFlags));
+            msg.append(", repeatCount=").append(mRepeatCount);
+            msg.append(", eventTime=").append(mEventTime);
+            msg.append(", downTime=").append(mDownTime);
+            msg.append(", deviceId=").append(mDeviceId);
+            msg.append(", source=0x").append(Integer.toHexString(mSource));
+            msg.append(" }");
+            return msg.toString();
         }
-        msg.append(", metaState=").append(metaStateToString(mMetaState));
-        msg.append(", flags=0x").append(Integer.toHexString(mFlags));
-        msg.append(", repeatCount=").append(mRepeatCount);
-        msg.append(", eventTime=").append(mEventTime);
-        msg.append(", downTime=").append(mDownTime);
-        msg.append(", deviceId=").append(mDeviceId);
-        msg.append(", source=0x").append(Integer.toHexString(mSource));
-        msg.append(" }");
-        return msg.toString();
     }
 
     /**
