@@ -47,6 +47,9 @@ public class InvokeDispatcher<T> implements Dispatchable<T> {
         } catch (IllegalArgumentException e) {
             // Impossible
             Log.wtf(TAG, "IllegalArgumentException while invoking " + method, e);
+        } catch (NullPointerException e) {
+            // Happens on hammerhead using Google Camera 4.2.x
+            Log.wtf(TAG, "NullPointerException while invoking " + method, e);
         }
 
         // unreachable
