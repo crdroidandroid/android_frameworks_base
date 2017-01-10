@@ -4513,7 +4513,7 @@ final class ActivityStack {
         int numTasks = mTaskHistory.size();
         for (int taskNdx = numTasks - 1; taskNdx >= 1; --taskNdx) {
             final TaskRecord task = mTaskHistory.get(taskNdx);
-            if (task.isOverHomeStack()) {
+            if (task.isOverHomeStack() && task.mActivities != null && task.mActivities.size() > 0) {
                 break;
             }
             if (taskNdx == 1) {
