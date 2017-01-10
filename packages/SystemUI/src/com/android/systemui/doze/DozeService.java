@@ -298,6 +298,7 @@ public class DozeService extends DreamService {
 
     private void turnDisplayOn() {
         if (DEBUG) Log.d(mTag, "Display on");
+        setDozeScreenBrightness(mDozeParameters.getDozeBrightness());
         setDozeScreenState(mDisplayStateSupported ? Display.STATE_DOZE : Display.STATE_ON);
     }
 
