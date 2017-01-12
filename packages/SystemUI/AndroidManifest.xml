@@ -184,6 +184,8 @@
     <!-- Device gestures -->
     <protected-broadcast android:name="com.android.systemui.doze.pulse" />
 
+    <protected-broadcast android:name="android.intent.action.SCREEN_STATE_SERVICE_UPDATE" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
@@ -244,6 +246,13 @@
         <service android:name=".crdroid.onthego.OnTheGoService"
             android:process=":onthego"
             android:exported="false" />
+
+        <service android:name=".crdroid.screenstate.ScreenStateService"
+                android:exported="true" >
+            <intent-filter>
+               <android name="android.intent.action.SCREEN_STATE_SERVICE_UPDATE"/>
+            </intent-filter>
+        </service>
 
         <service android:name=".ImageWallpaper"
                 android:permission="android.permission.BIND_WALLPAPER"
