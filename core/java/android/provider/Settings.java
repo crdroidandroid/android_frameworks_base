@@ -5950,105 +5950,97 @@ public final class Settings {
 
         /**
          * Navigation bar mode
-         *
          * @hide
          */
         public static final String NAVIGATION_BAR_MODE = "navigation_bar_mode";
 
         /**
          * Fling actions
-         *
          * @hide
          */
         public static final String FLING_GESTURE_ACTIONS = "fling_gesture_configs";
 
         /**
          * Fling logo visible
-         *
          * @hide
          */
         public static final String FLING_LOGO_VISIBLE = "fling_logo_visible";
 
         /**
          * Fling logo animates
-         *
          * @hide
          */
         public static final String FLING_LOGO_ANIMATES= "fling_logo_animates";
 
         /**
          * Fling logo animates
-         *
          * @hide
          */
         public static final String FLING_LOGO_COLOR = "fling_logo_color";
 
         /**
          * Fling pulse music visualizer
-         *
          * @hide
          */
         public static final String FLING_PULSE_ENABLED = "fling_pulse_enabled";
 
         /**
          * Fling pulse music visualizer color
-         *
          * @hide
          */
         public static final String FLING_PULSE_COLOR = "fling_pulse_color";
 
         /**
          * Fling ripple effect
-         *
          * @hide
          */
         public static final String FLING_RIPPLE_ENABLED = "fling_ripple_enabled";
 
         /**
          * Fling ripple color
-         *
          * @hide
          */
         public static final String FLING_RIPPLE_COLOR = "fling_ripple_color";
 
         /**
          * Fling gesture trails on/off
-         *
          * @hide
          */
         public static final String FLING_TRAILS_ENABLED = "fling_trails_enabled";
 
         /**
          * Fling gesture trails color
-         *
          * @hide
          */
         public static final String FLING_TRAILS_COLOR = "fling_trails_color";
 
         /**
          * Fling pulse lavalamp psychedelic colors
-         *
          * @hide
          */
         public static final String FLING_PULSE_LAVALAMP_ENABLED = "fling_pulse_lavalamp_enabled";
 
         /**
          * Fling pulse lavalamp animation speed
-         *
          * @hide
          */
         public static final String FLING_PULSE_LAVALAMP_SPEED = "fling_pulse_lavalamp_speed";
 
         /**
+         * Fling pulse lavalamp start and end colors
+         * @hide
+         */
+        public static final String FLING_PULSE_LAVALAMP_COLOR_FROM = "fling_lavalamp_color_from";
+        public static final String FLING_PULSE_LAVALAMP_COLOR_TO = "fling_lavalamp_color_to";
+
+        /**
          * Pulse renderer implementation
-         *
          * @hide
          */
         public static final String PULSE_RENDER_STYLE_URI = "pulse_render_style";
 
         /**
          * time it takes to execute Fling long press action
-         *
          * @hide
          */
         public static final String FLING_LONGPRESS_TIMEOUT = "fling_longpress_timeout";
@@ -6056,7 +6048,6 @@ public final class Settings {
         /**
          * distance to swipe right when device is in portrait orientation to
          * trigger action
-         *
          * @hide
          */
         public static final String FLING_LONGSWIPE_THRESHOLD_RIGHT_PORT = "fling_longswipe_threshold_right_port";
@@ -6080,7 +6071,6 @@ public final class Settings {
         /**
          * distance to swipe left when device is in landscape orientation to
          * trigger action. Apples to a horizontal layout (tablet/phablet)
-         *
          * @hide
          */
         public static final String FLING_LONGSWIPE_THRESHOLD_LEFT_LAND = "fling_longswipe_threshold_left_land";
@@ -6088,7 +6078,6 @@ public final class Settings {
         /**
          * distance to swipe up when device is in landscape orientation to
          * trigger action. Apples to a vertical layout (phones)
-         *
          * @hide
          */
         public static final String FLING_LONGSWIPE_THRESHOLD_UP_LAND = "fling_longswipe_threshold_up_land";
@@ -6096,14 +6085,12 @@ public final class Settings {
         /**
          * distance to swipe down when device is in landscape orientation to
          * trigger action. Apples to a horizontal layout (phones)
-         *
          * @hide
          */
         public static final String FLING_LONGSWIPE_THRESHOLD_DOWN_LAND = "fling_longswipe_threshold_down_land";
 
         /**
          * width of Fling trails stroke, in density pixels
-         *
          * @hide
          */
         public static final String FLING_TRAILS_WIDTH = "fling_trails_width";
