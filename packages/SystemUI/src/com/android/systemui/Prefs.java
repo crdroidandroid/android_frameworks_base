@@ -47,6 +47,8 @@ public final class Prefs {
         Key.QS_INVERT_COLORS_ADDED,
         Key.QS_WORK_ADDED,
         Key.QS_NIGHTDISPLAY_ADDED,
+        Key.QS_AMBIENT_DOZE,
+        Key.QS_AMBIENT_PICKUP,
     })
     public @interface Key {
         @Deprecated
@@ -68,6 +70,8 @@ public final class Prefs {
         String QS_INVERT_COLORS_ADDED = "QsInvertColorsAdded";
         String QS_WORK_ADDED = "QsWorkAdded";
         String QS_NIGHTDISPLAY_ADDED = "QsNightDisplayAdded";
+        String QS_AMBIENT_DOZE = "QsAmbientDoze";
+        String QS_AMBIENT_PICKUP = "QsAmbientPickup";
     }
 
     public static boolean getBoolean(Context context, @Key String key, boolean defaultValue) {
