@@ -95,4 +95,8 @@
     <!-- Additional gesture navbar lengths -->
     <dimen name="navigation_home_handle_width_medium">110dp</dimen>
     <dimen name="navigation_home_handle_width_long">140dp</dimen>
+
+    <!-- Burn-in protection -->
+    <dimen name="burnin_protection_horizontal_shift">3dp</dimen>
+    <dimen name="burnin_protection_vertical_shift">1dp</dimen>
 </resources>
