@@ -3916,6 +3916,12 @@ public final class Settings {
         public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
 
         /**
+         *  Enable smartbar double tap to sleep gesture
+         * @hide
+         */
+        public static final String SMARTBAR_DOUBLETAP_SLEEP = "smartbar_doubletap_sleep";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
