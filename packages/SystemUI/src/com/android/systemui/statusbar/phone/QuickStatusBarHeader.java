@@ -57,7 +57,7 @@ import com.android.systemui.statusbar.policy.WeatherController;
 import com.android.systemui.tuner.TunerService;
 
 public class QuickStatusBarHeader extends BaseStatusBarHeader implements
-        NextAlarmChangeCallback, OnClickListener, OnUserInfoChangedListener {
+        NextAlarmChangeCallback, OnClickListener, OnUserInfoChangedListener, TunerService.Tunable {
 
     private static final String TAG = "QuickStatusBarHeader";
 
@@ -108,7 +108,21 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
     private boolean isEdit;
     private boolean isExpandIndicator;
     private boolean isMultiUserSwitch;
+    private boolean isDateTimeGroupCenter;
     private boolean mDateTimeGroupCenter;
+
+    private static final String QS_SETTINGS_ICON_TOGGLE =
+            "system:" + Settings.System.QS_SETTINGS_ICON_TOGGLE;
+    private static final String QS_SETTINGS_EXPANDED_TOGGLE =
+            "system:" + Settings.System.QS_SETTINGS_EXPANDED_TOGGLE;
+    private static final String QS_EDIT_TOGGLE =
+            "system:" + Settings.System.QS_EDIT_TOGGLE;
+    private static final String QS_EXPAND_INDICATOR_TOGGLE =
+            "system:" + Settings.System.QS_EXPAND_INDICATOR_TOGGLE;
+    private static final String QS_MULTIUSER_SWITCH_TOGGLE =
+            "system:" + Settings.System.QS_MULTIUSER_SWITCH_TOGGLE;
+    private static final String QS_DATE_TIME_CENTER =
+            "system:" + Settings.System.QS_DATE_TIME_CENTER;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -211,17 +225,6 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         }
     }
 
-    private void updateDateTimeCenter() {
-        mDateTimeGroupCenter = isDateTimeGroupCenter();
-        if (mDateTimeGroupCenter && !(isSettingsIcon && isEdit && isMultiUserSwitch && isExpandIndicator)) {
-            mDateTimeAlarmGroup.setVisibility(View.GONE);
-            mDateTimeAlarmCenterGroup.setVisibility(View.VISIBLE);
-        } else {
-            mDateTimeAlarmCenterGroup.setVisibility(View.GONE);
-            mDateTimeAlarmGroup.setVisibility(View.VISIBLE);
-        }
-    }
-
     @Override
     public int getCollapsedHeight() {
         return getHeight();
@@ -275,6 +278,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mHost.getUserInfoController().remListener(this);
         mHost.getNetworkController().removeEmergencyListener(this);
         super.onDetachedFromWindow();
+        TunerService.get(mContext).removeTunable(this);
     }
 
     private void updateAlarmVisibilities() {
@@ -310,25 +314,25 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         final boolean isDemo = UserManager.isDeviceInDemoMode(mContext);
         mMultiUserSwitch.setVisibility(mExpanded && mMultiUserSwitch.hasMultipleUsers() && !isDemo
                 ? View.VISIBLE : View.GONE);
-        isEdit = isEditEnabled();
         mEdit.setVisibility(!isEdit || isDemo || !mExpanded ? View.GONE : View.VISIBLE);
-        isSettingsIcon = isSettingsIconEnabled();
-        isSettingsExpanded = isSettingsExpandedEnabled();
         mSettingsButton.setVisibility(mExpanded && isSettingsExpanded || isSettingsIcon
                 ? View.VISIBLE : View.GONE);
         mSettingsContainer.setVisibility(
                 mExpanded && isSettingsExpanded || isSettingsIcon ? View.VISIBLE : View.GONE);
-        isExpandIndicator = isExpandIndicatorEnabled();
         mExpandIndicator.setVisibility(isExpandIndicator ? View.VISIBLE : View.GONE);
-        isMultiUserSwitch = isMultiUserSwitchEnabled();
         mMultiUserSwitch.setVisibility(isMultiUserSwitch ? View.VISIBLE : View.GONE);
         mMultiUserAvatar.setVisibility(isMultiUserSwitch ? View.VISIBLE : View.GONE);
+        mDateTimeGroupCenter = isDateTimeGroupCenter && !((isSettingsIcon || isSettingsExpanded)
+                && isEdit && isMultiUserSwitch && isExpandIndicator);
+        mDateTimeAlarmGroup.setVisibility(mDateTimeGroupCenter ? View.GONE : View.VISIBLE);
+        mDateTimeAlarmCenterGroup.setVisibility(mDateTimeGroupCenter ? View.VISIBLE : View.GONE);
     }
 
     private void updateDateTimePosition() {
         mDateTimeAlarmGroup.setTranslationY(mShowEmergencyCallsOnly
                 ? mExpansionAmount * mDateTimeTranslation : 0);
-        updateDateTimeCenter();
+        mDateTimeAlarmCenterGroup.setTranslationY(mShowEmergencyCallsOnly
+                ? mExpansionAmount * mDateTimeTranslation : 0);
     }
 
     private void updateListeners() {
@@ -474,33 +478,53 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         }
     }
 
-    public boolean isSettingsIconEnabled() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-            Settings.System.QS_SETTINGS_ICON_TOGGLE, 1) == 1;
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        TunerService.get(mContext).addTunable(this,
+                QS_SETTINGS_ICON_TOGGLE,
+                QS_SETTINGS_EXPANDED_TOGGLE,
+                QS_EDIT_TOGGLE,
+                QS_EXPAND_INDICATOR_TOGGLE,
+                QS_MULTIUSER_SWITCH_TOGGLE,
+                QS_DATE_TIME_CENTER);
     }
 
-    public boolean isSettingsExpandedEnabled() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-            Settings.System.QS_SETTINGS_EXPANDED_TOGGLE, 0) == 1;
-    }
-
-    public boolean isEditEnabled() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-            Settings.System.QS_EDIT_TOGGLE, 1) == 1;
-    }
-
-    public boolean isExpandIndicatorEnabled() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-            Settings.System.QS_EXPAND_INDICATOR_TOGGLE, 1) == 1;
-    }
-
-    public boolean isMultiUserSwitchEnabled() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-            Settings.System.QS_MULTIUSER_SWITCH_TOGGLE, 1) == 1;
-    }
-
-    public boolean isDateTimeGroupCenter() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-            Settings.System.QS_DATE_TIME_CENTER, 1) == 1;
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QS_SETTINGS_ICON_TOGGLE:
+                isSettingsIcon =
+                        newValue == null || Integer.parseInt(newValue) == 1;
+                updateVisibilities();
+                break;
+            case QS_SETTINGS_EXPANDED_TOGGLE:
+                isSettingsExpanded =
+                        newValue != null && Integer.parseInt(newValue) == 1;
+                updateVisibilities();
+                break;
+            case QS_EDIT_TOGGLE:
+                isEdit =
+                        newValue == null || Integer.parseInt(newValue) == 1;
+                updateVisibilities();
+                break;
+            case QS_EXPAND_INDICATOR_TOGGLE:
+                isExpandIndicator =
+                        newValue == null || Integer.parseInt(newValue) == 1;
+                updateVisibilities();
+                break;
+            case QS_MULTIUSER_SWITCH_TOGGLE:
+                isMultiUserSwitch =
+                        newValue == null || Integer.parseInt(newValue) == 1;
+                updateVisibilities();
+                break;
+            case QS_DATE_TIME_CENTER:
+                isDateTimeGroupCenter =
+                        newValue != null && Integer.parseInt(newValue) == 1;
+                updateVisibilities();
+                break;
+            default:
+                break;
+        }
     }
 }
