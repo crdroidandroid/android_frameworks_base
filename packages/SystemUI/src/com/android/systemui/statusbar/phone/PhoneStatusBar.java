@@ -353,8 +353,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             Settings.Secure.QS_ROWS_PORTRAIT;
     private static final String QS_ROWS_LANDSCAPE =
             Settings.Secure.QS_ROWS_LANDSCAPE;
-    private static final String QS_COLUMNS =
-            Settings.Secure.QS_COLUMNS;
+    private static final String QS_COLUMNS_PORTRAIT =
+            Settings.Secure.QS_COLUMNS_PORTRAIT;
+    private static final String QS_COLUMNS_LANDSCAPE =
+            Settings.Secure.QS_COLUMNS_LANDSCAPE;
     private static final String STATUS_BAR_SHOW_TICKER =
             "system:" + Settings.System.STATUS_BAR_SHOW_TICKER;
     private static final String BLUR_SCALE_PREFERENCE_KEY =
@@ -960,7 +962,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 STATUS_BAR_CRDROID_LOGO_STYLE,
                 QS_ROWS_PORTRAIT,
                 QS_ROWS_LANDSCAPE,
-                QS_COLUMNS,
+                QS_COLUMNS_PORTRAIT,
+                QS_COLUMNS_LANDSCAPE,
                 STATUS_BAR_SHOW_TICKER,
                 BLUR_SCALE_PREFERENCE_KEY,
                 BLUR_RADIUS_PREFERENCE_KEY,
@@ -6112,7 +6115,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             case QS_ROWS_LANDSCAPE:
                 updateResources();
                 break;
-            case QS_COLUMNS:
+            case QS_COLUMNS_PORTRAIT:
+            case QS_COLUMNS_LANDSCAPE:
                 if (mHeader != null) {
                     mHeader.updateSettings();
                 }

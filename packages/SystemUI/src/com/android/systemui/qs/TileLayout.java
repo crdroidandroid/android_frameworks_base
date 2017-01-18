@@ -28,6 +28,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     protected final ArrayList<TileRecord> mRecords = new ArrayList<>();
     private int mCellMarginTop;
+    private int mDefaultColumns;
     private boolean mListening;
 
     public TileLayout(Context context) {
@@ -79,15 +80,19 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         final Resources res = mContext.getResources();
 
         final ContentResolver resolver = mContext.getContentResolver();
-        final int columnsConfig = Settings.Secure.getInt(resolver,
-                Settings.Secure.QS_COLUMNS, 4);
-        final int columns = Math.max(1, columnsConfig);
 
+        mDefaultColumns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
+        boolean isPortrait = res.getConfiguration().orientation
+                == Configuration.ORIENTATION_PORTRAIT;
+        int columns = Settings.Secure.getInt(resolver,
+                Settings.Secure.QS_COLUMNS_PORTRAIT, mDefaultColumns);
+        int columnsLandscape = Settings.Secure.getInt(resolver,
+                Settings.Secure.QS_COLUMNS_LANDSCAPE, mDefaultColumns);
         mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height);
         mCellMargin = res.getDimensionPixelSize(R.dimen.qs_tile_margin);
         mCellMarginTop = res.getDimensionPixelSize(R.dimen.qs_tile_margin_top);
-        if (mColumns != columns) {
-            mColumns = columns;
+        if (mColumns != (isPortrait ? columns : columnsLandscape)) {
+            mColumns = isPortrait ? columns : columnsLandscape;
             requestLayout();
             return true;
         }

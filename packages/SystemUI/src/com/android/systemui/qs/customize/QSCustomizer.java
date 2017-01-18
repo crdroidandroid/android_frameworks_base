@@ -20,6 +20,7 @@ import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.provider.Settings;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -102,7 +103,7 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         mRecyclerView.setAdapter(mTileAdapter);
         mTileAdapter.getItemTouchHelper().attachToRecyclerView(mRecyclerView);
         int columns = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.QS_COLUMNS, mDefaultColumns);
+                Settings.Secure.QS_COLUMNS_PORTRAIT, mDefaultColumns);
         mLayout = new GridLayoutManager(getContext(), columns);
         mLayout.setSpanSizeLookup(mTileAdapter.getSizeLookup());
         mRecyclerView.setLayoutManager(mLayout);
@@ -123,6 +124,7 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
                     || newConfig.orientation != Configuration.ORIENTATION_LANDSCAPE;
             navBackdrop.setVisibility(shouldShow ? View.VISIBLE : View.GONE);
         }
+        updateSettings();
     }
 
     public void setHost(QSTileHost host) {
@@ -261,9 +263,14 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
     };
 
     public void updateSettings() {
+        final Resources res = mContext.getResources();
+        boolean isPortrait = res.getConfiguration().orientation
+                == Configuration.ORIENTATION_PORTRAIT;
         int columns = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.QS_COLUMNS, mDefaultColumns);
-        mTileAdapter.setColumnCount(columns);
-        mLayout.setSpanCount(columns);
+                Settings.Secure.QS_COLUMNS_PORTRAIT, mDefaultColumns);
+        int columnsLandscape = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.QS_COLUMNS_LANDSCAPE, mDefaultColumns);
+        mTileAdapter.setColumnCount(isPortrait ? columns : columnsLandscape);
+        mLayout.setSpanCount(isPortrait ? columns : columnsLandscape);
     }
 }
