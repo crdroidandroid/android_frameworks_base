@@ -4504,6 +4504,21 @@ final class ActivityStack {
                 prevIsHome = true;
             }
         }
+
+        //Check if over home stack there are any tasks with activities that are not finishing.
+        if (!prevIsHome) {
+            int indexOf = mTaskHistory.indexOf(tr);
+            for (int i = indexOf - 1; i >= 0; i--) {
+                TaskRecord taskRecord = mTaskHistory.get(i);
+                if (taskRecord.isOverHomeStack()) {
+                    if (taskRecord.topRunningActivityLocked() == null) {
+                        prevIsHome = true;
+                    }
+                    break;
+                }
+            }
+        }
+
         mTaskHistory.remove(tr);
         mTaskHistory.add(0, tr);
         updateTaskMovement(tr, false);
