@@ -42,4 +42,11 @@
         <item>@string/accessibility_quick_settings_live_display_changed_night</item>
         <item>@string/accessibility_quick_settings_live_display_changed_outdoor</item>
     </string-array>
+
+    <!-- Advanced Location tile mode -->
+    <string-array name="location_mode_entries" translatable="false">
+        <item>@string/quick_settings_location_battery_saving_label</item>
+        <item>@string/quick_settings_location_gps_only_label</item>
+        <item>@string/quick_settings_location_high_accuracy_label</item>
+    </string-array>
 </resources>
