@@ -268,11 +268,8 @@ class DisplayContent {
             }
             mHomeStack = stack;
         }
-        if (onTop) {
-            mStacks.add(stack);
-        } else {
-            mStacks.add(0, stack);
-        }
+        mStacks.add(0, stack);
+        moveStack(stack, onTop);
         layoutNeeded = true;
     }
 
