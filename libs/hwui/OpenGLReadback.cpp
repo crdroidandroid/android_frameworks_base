@@ -225,7 +225,7 @@ inline CopyResult copyTextureInto(Caches& caches, RenderState& renderState,
                 .build();
         Matrix4 ortho;
         ortho.loadOrtho(destWidth, destHeight);
-        renderState.render(glop, ortho);
+        renderState.render(glop, ortho, false);
 
         glReadPixels(0, 0, bitmap->width(), bitmap->height(), format,
                 type, bitmap->getPixels());

@@ -104,7 +104,7 @@ public:
     // more thinking...
     void postDecStrong(VirtualLightRefBase* object);
 
-    void render(const Glop& glop, const Matrix4& orthoMatrix);
+    void render(const Glop& glop, const Matrix4& orthoMatrix, bool firstDraw);
 
     Blend& blend() { return *mBlend; }
     MeshState& meshState() { return *mMeshState; }
