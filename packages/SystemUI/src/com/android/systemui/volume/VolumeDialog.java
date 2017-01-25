@@ -876,8 +876,7 @@ public class VolumeDialog implements TunerService.Tunable {
     }
 
     private void updateVolumeRowHeaderVisibleH(VolumeRow row) {
-        final boolean dynamic = row.ss != null && row.ss.dynamic;
-        final boolean showHeaders = mExpanded && (mShowHeaders || dynamic);
+        final boolean showHeaders = mExpanded && mShowHeaders;
         if (row.cachedShowHeaders != showHeaders) {
             row.cachedShowHeaders = showHeaders;
             Util.setVisOrGone(row.header, showHeaders);
