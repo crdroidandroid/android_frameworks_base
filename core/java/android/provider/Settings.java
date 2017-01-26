@@ -4645,6 +4645,18 @@ public final class Settings {
         public static final String DOZE_SCREEN_BRIGHTNESS = "doze_screen_brightness";
 
         /**
+         * Vibrate on pulsing while pickup
+         * @hide
+         */
+        public static final String DOZE_VIBRATE_ON_PICKUP = "doze_vibrate_on_pickup";
+
+        /**
+         * Check proximity sensor before pulsing
+         * @hide
+         */
+        public static final String DOZE_PROXIMITY_CHECK_BEFORE_PULSE = "doze_check_proximity_before_pulse";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
