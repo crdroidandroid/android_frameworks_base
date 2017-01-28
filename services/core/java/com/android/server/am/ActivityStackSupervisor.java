@@ -4594,4 +4594,20 @@ public final class ActivityStackSupervisor implements DisplayListener {
         }
         return topActivityTokens;
     }
+
+    void ensureTasksMinDimensionsLocked() {
+        for (int displayNdx = mActivityDisplays.size() - 1; displayNdx >= 0; --displayNdx) {
+            final ArrayList<ActivityStack> stacks = mActivityDisplays.valueAt(displayNdx).mStacks;
+            final int topStackNdx = stacks.size() - 1;
+            for (int stackNdx = topStackNdx; stackNdx >= 0; --stackNdx) {
+                final ArrayList<TaskRecord> tasks = stacks.get(stackNdx).getAllTasks();
+                for (int taskNdx = tasks.size() - 1; taskNdx >= 0; --taskNdx) {
+                    final TaskRecord task = tasks.get(taskNdx);
+                    if (task.getRootActivity() != null) {
+                        task.setMinDimensions(task.getRootActivity().info);
+                    }
+                }
+            }
+        }
+    }
 }

@@ -480,10 +480,20 @@ final class TaskRecord {
     }
 
     /** Sets the original minimal width and height. */
-    private void setMinDimensions(ActivityInfo info) {
+    void setMinDimensions(ActivityInfo info) {
         if (info != null && info.windowLayout != null) {
             mMinWidth = info.windowLayout.minWidth;
             mMinHeight = info.windowLayout.minHeight;
+            final int densityDpi = mService.mConfiguration.densityDpi;
+            if (DisplayMetrics.DENSITY_DEVICE_STABLE > 0) {
+                // adjust min dimensions if system density is changed.
+                if (mMinWidth != INVALID_MIN_SIZE) {
+                   mMinWidth = (mMinWidth * densityDpi) / DisplayMetrics.DENSITY_DEVICE_STABLE;
+                }
+                if (mMinHeight != INVALID_MIN_SIZE) {
+                   mMinHeight = (mMinHeight * densityDpi) / DisplayMetrics.DENSITY_DEVICE_STABLE;
+                }
+            }
         } else {
             mMinWidth = INVALID_MIN_SIZE;
             mMinHeight = INVALID_MIN_SIZE;
