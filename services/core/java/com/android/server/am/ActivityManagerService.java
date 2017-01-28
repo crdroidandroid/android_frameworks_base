@@ -19232,6 +19232,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
                     killAllBackgroundProcessesExcept(Build.VERSION_CODES.N,
                             ActivityManager.PROCESS_STATE_FOREGROUND_SERVICE);
+                    mStackSupervisor.ensureTasksMinDimensionsLocked();
                 }
 
                 for (int i=mLruProcesses.size()-1; i>=0; i--) {
