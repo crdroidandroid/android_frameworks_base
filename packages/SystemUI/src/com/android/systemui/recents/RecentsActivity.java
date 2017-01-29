@@ -37,7 +37,6 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -901,38 +900,32 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
     }
 
     private void setImmersiveRecents() {
-        boolean isPrimary = UserHandle.getCallingUserId() == UserHandle.USER_OWNER;
-        int immersiveRecents = isPrimary ? getImmersiveRecents() : 0;
+        int immersiveRecents = Settings.System.getIntForUser(getContentResolver(),
+                Settings.System.IMMERSIVE_RECENTS, 0, UserHandle.USER_CURRENT);
 
         switch (immersiveRecents) {
-            case 0:
-                // default AOSP action
+            case 0: // default AOSP action
                 break;
-            case 1:
-                // full screen action
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            case 1: // full immersive
+                getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
                 break;
-            case 2:
-                // status bar action
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            case 2: // status bar only
+                getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
                 break;
-            case 3:
-                // navigation bar action
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            case 3: // navigation bar only
+                getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
                 break;
         }
-    }
-
-    private int getImmersiveRecents() {
-        return Settings.System.getInt(getContentResolver(),
-                Settings.System.IMMERSIVE_RECENTS, 0);
     }
 
     /**** EventBus events ****/
