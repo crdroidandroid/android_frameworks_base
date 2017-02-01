@@ -212,10 +212,11 @@ public final class ObexHelper {
                     case 0x40:
                         boolean trimTail = true;
                         index++;
-                        length = (headerArray[index] << 8) + headerArray[index + 1];
+                        length = ((0xFF & headerArray[index]) << 8) +
+                                 (0xFF & headerArray[index + 1]);
                         index += 2;
                         if (length <= OBEX_BYTE_SEQ_HEADER_LEN) {
-                            Log.e(TAG, "Remote sent an OBEX Connect response with " +
+                            Log.e(TAG, "Remote sent an OBEX packet with " +
                                   "incorrect header length = " + length);
                             break;
                         }
