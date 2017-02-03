@@ -100,7 +100,7 @@
 
             <com.android.systemui.statusbar.AlphaOptimizedImageView
                 android:id="@android:id/edit"
-                android:layout_width="48dp"
+                android:layout_width="46dp"
                 android:layout_height="48dp"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
@@ -111,9 +111,21 @@
                 android:src="@drawable/ic_mode_edit"
                 android:tint="?android:attr/colorForeground"/>
 
+            <com.android.keyguard.AlphaOptimizedImageButton
+                android:id="@+id/running_services_button"
+                android:layout_width="46dp"
+                android:layout_height="48dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:clipToPadding="false"
+                android:focusable="true"
+                android:padding="15dp"
+                android:src="@drawable/ic_settings_memory"
+                android:tint="?android:attr/colorForeground"/>
+
             <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
                 android:id="@+id/settings_button_container"
-                android:layout_width="48dp"
+                android:layout_width="46dp"
                 android:layout_height="48dp"
                 android:clipChildren="false"
                 android:clipToPadding="false">
