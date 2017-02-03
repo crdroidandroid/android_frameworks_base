@@ -63,4 +63,7 @@
     <color name="qs_battery_accent">@*android:color/accent_device_default_light</color>
 
     <color name="alarm_status_color">#E0E0E0</color>
+
+    <!-- Keyguard affordance circle background -->
+    <color name="keyguard_affordance_circle_background">@android:color/white</color>
 </resources>
