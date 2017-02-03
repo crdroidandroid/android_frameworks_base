@@ -56,6 +56,7 @@ public class QSFooterView extends FrameLayout {
     private PageIndicator mPageIndicator;
     private TextView mBuildText;
     private boolean mShouldShowBuildText;
+    private View mRunningServicesButton;
 
     private boolean mQsDisabled;
 
@@ -98,6 +99,7 @@ public class QSFooterView extends FrameLayout {
 
         mPageIndicator = findViewById(R.id.footer_page_indicator);
 
+        mRunningServicesButton = findViewById(R.id.running_services_button);
         mSettingsButton = findViewById(R.id.settings_button);
         mSettingsContainer = findViewById(R.id.settings_button_container);
 
@@ -112,6 +114,9 @@ public class QSFooterView extends FrameLayout {
         // settings), so disable it for this view
         if (mSettingsButton.getBackground() instanceof RippleDrawable) {
             ((RippleDrawable) mSettingsButton.getBackground()).setForceSoftware(true);
+        }
+        if (mRunningServicesButton.getBackground() instanceof RippleDrawable) {
+            ((RippleDrawable) mRunningServicesButton.getBackground()).setForceSoftware(true);
         }
         updateResources();
 
@@ -260,6 +265,7 @@ public class QSFooterView extends FrameLayout {
     private void updateClickabilities() {
         mMultiUserSwitch.setClickable(mMultiUserSwitch.getVisibility() == View.VISIBLE);
         mEdit.setClickable(mEdit.getVisibility() == View.VISIBLE);
+        mRunningServicesButton.setClickable(mRunningServicesButton.getVisibility() == View.VISIBLE);
         mSettingsButton.setClickable(mSettingsButton.getVisibility() == View.VISIBLE);
         mBuildText.setLongClickable(mBuildText.getVisibility() == View.VISIBLE);
     }
@@ -270,6 +276,7 @@ public class QSFooterView extends FrameLayout {
         final boolean isDemo = UserManager.isDeviceInDemoMode(mContext);
         mMultiUserSwitch.setVisibility(
                 showUserSwitcher(multiUserEnabled) ? View.VISIBLE : View.GONE);
+        mRunningServicesButton.setVisibility(isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE);
         mSettingsButton.setVisibility(isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE);
 
         mBuildText.setVisibility(mExpanded && mShouldShowBuildText ? View.VISIBLE : View.INVISIBLE);
