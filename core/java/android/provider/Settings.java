@@ -4105,6 +4105,18 @@ public final class Settings {
         public static final String QS_SMART_PULLDOWN = "qs_smart_pulldown";
 
         /**
+         * Whether to display data activity arrows for data connections
+         * @hide
+         */
+        public static final String DATA_ACTIVITY_ARROWS = "data_activity_arrows";
+
+        /**
+         * Whether to display data activity arrows for wifi connections
+         * @hide
+         */
+        public static final String WIFI_ACTIVITY_ARROWS = "wifi_activity_arrows";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
