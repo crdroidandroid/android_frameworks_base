@@ -25,6 +25,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
+import android.provider.Settings;
 import android.telephony.SubscriptionInfo;
 import android.util.ArraySet;
 import android.util.AttributeSet;
@@ -109,6 +110,11 @@ public class SignalClusterView
     private boolean mBlockWifi;
     private boolean mBlockEthernet;
 
+    private boolean mDataWifiActivityArrows;
+
+    private static final String DATA_ACTIVITY_ARROWS =
+            "system:" + Settings.System.DATA_ACTIVITY_ARROWS;
+
     public SignalClusterView(Context context) {
         this(context, null);
     }
@@ -138,24 +144,31 @@ public class SignalClusterView
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (!StatusBarIconController.ICON_BLACKLIST.equals(key)) {
-            return;
-        }
-        ArraySet<String> blockList = StatusBarIconController.getIconBlacklist(newValue);
-        boolean blockAirplane = blockList.contains(SLOT_AIRPLANE);
-        boolean blockMobile = blockList.contains(SLOT_MOBILE);
-        boolean blockWifi = blockList.contains(SLOT_WIFI);
-        boolean blockEthernet = blockList.contains(SLOT_ETHERNET);
+        switch (key) {
+            case StatusBarIconController.ICON_BLACKLIST:
+                 ArraySet<String> blockList = StatusBarIconController.getIconBlacklist(newValue);
+                 boolean blockAirplane = blockList.contains(SLOT_AIRPLANE);
+                 boolean blockMobile = blockList.contains(SLOT_MOBILE);
+                 boolean blockWifi = blockList.contains(SLOT_WIFI);
+                 boolean blockEthernet = blockList.contains(SLOT_ETHERNET);
 
-        if (blockAirplane != mBlockAirplane || blockMobile != mBlockMobile
-                || blockEthernet != mBlockEthernet || blockWifi != mBlockWifi) {
-            mBlockAirplane = blockAirplane;
-            mBlockMobile = blockMobile;
-            mBlockEthernet = blockEthernet;
-            mBlockWifi = blockWifi;
-            // Re-register to get new callbacks.
-            mNC.removeSignalCallback(this);
-            mNC.addSignalCallback(this);
+                 if (blockAirplane != mBlockAirplane || blockMobile != mBlockMobile
+                         || blockEthernet != mBlockEthernet || blockWifi != mBlockWifi) {
+                     mBlockAirplane = blockAirplane;
+                     mBlockMobile = blockMobile;
+                     mBlockEthernet = blockEthernet;
+                     mBlockWifi = blockWifi;
+                     // Re-register to get new callbacks.
+                     mNC.removeSignalCallback(this);
+                     mNC.addSignalCallback(this);
+                 }
+                break;
+            case DATA_ACTIVITY_ARROWS:
+                     mDataWifiActivityArrows =
+                        newValue == null || Integer.parseInt(newValue) != 0;
+                break;
+            default:
+                break;
         }
     }
 
@@ -224,7 +237,9 @@ public class SignalClusterView
         int endPadding = mMobileSignalGroup.getChildCount() > 0 ? mMobileSignalGroupEndPadding : 0;
         mMobileSignalGroup.setPaddingRelative(0, 0, endPadding, 0);
 
-        TunerService.get(mContext).addTunable(this, StatusBarIconController.ICON_BLACKLIST);
+        TunerService.get(mContext).addTunable(this,
+                StatusBarIconController.ICON_BLACKLIST,
+                DATA_ACTIVITY_ARROWS);
 
         apply();
         applyIconTint();
@@ -510,7 +525,11 @@ public class SignalClusterView
                     (mWifiVisible ? "VISIBLE" : "GONE"),
                     mWifiStrengthId));
 
-        mWifiActivity.setVisibility(mWifiActivityId != 0 ? View.VISIBLE : View.GONE);
+        if (mDataWifiActivityArrows) {
+            mWifiActivity.setVisibility(mWifiActivityId != 0 ? View.VISIBLE : View.GONE);
+        } else {
+            mWifiActivity.setVisibility(View.GONE);
+        }
 
         boolean anyMobileVisible = false;
         int firstMobileTypeId = 0;
@@ -677,7 +696,12 @@ public class SignalClusterView
                         (mMobileVisible ? "VISIBLE" : "GONE"), mMobileStrengthId, mMobileTypeId));
 
             mMobileType.setVisibility(mMobileTypeId != 0 ? View.VISIBLE : View.GONE);
-            mMobileActivity.setVisibility(mMobileActivityId != 0 ? View.VISIBLE : View.GONE);
+
+            if (mDataWifiActivityArrows) {
+                mMobileActivity.setVisibility(mMobileActivityId != 0 ? View.VISIBLE : View.GONE);
+            } else {
+                mMobileActivity.setVisibility(View.GONE);
+            }
 
             return mMobileVisible;
         }
