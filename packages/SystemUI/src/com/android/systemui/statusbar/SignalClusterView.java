@@ -122,15 +122,20 @@ public class SignalClusterView extends LinearLayout implements NetworkController
     private boolean mBlockMobile;
     private boolean mBlockWifi;
     private boolean mBlockEthernet;
-    private boolean mActivityEnabled;
     private boolean mForceBlockWifi;
 
     private final IconLogger mIconLogger = Dependency.get(IconLogger.class);
 
     private boolean mVoLTEicon;
+    private boolean mDataActivityEnabled;
+    private boolean mWifiActivityEnabled;
 
     private static final String SHOW_VOLTE_ICON =
             "system:" + Settings.System.SHOW_VOLTE_ICON;
+    private static final String DATA_ACTIVITY_ARROWS =
+            "system:" + Settings.System.DATA_ACTIVITY_ARROWS;
+    private static final String WIFI_ACTIVITY_ARROWS =
+            "system:" + Settings.System.WIFI_ACTIVITY_ARROWS;
 
     public SignalClusterView(Context context) {
         this(context, null);
@@ -159,7 +164,6 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         mIconScaleFactor = typedValue.getFloat();
         mNetworkController = Dependency.get(NetworkController.class);
         mSecurityController = Dependency.get(SecurityController.class);
-        updateActivityEnabled();
 
         TelephonyExtUtils.getInstance(context).addListener(this);
     }
@@ -213,6 +217,20 @@ public class SignalClusterView extends LinearLayout implements NetworkController
             case SHOW_VOLTE_ICON:
                 mVoLTEicon =
                         newValue != null && Integer.parseInt(newValue) == 1;
+                apply();
+                break;
+            case DATA_ACTIVITY_ARROWS:
+                if (newValue == null)
+                    mDataActivityEnabled = updateActivityEnabled();
+                else
+                    mDataActivityEnabled = Integer.parseInt(newValue) != 0;
+                apply();
+                break;
+            case WIFI_ACTIVITY_ARROWS:
+                if (newValue == null)
+                    mWifiActivityEnabled = updateActivityEnabled();
+                else
+                    mWifiActivityEnabled = Integer.parseInt(newValue) != 0;
                 apply();
                 break;
         }
@@ -278,7 +296,9 @@ public class SignalClusterView extends LinearLayout implements NetworkController
 
         Dependency.get(TunerService.class).addTunable(this,
                 StatusBarIconController.ICON_BLACKLIST,
-                SHOW_VOLTE_ICON);
+                SHOW_VOLTE_ICON,
+                DATA_ACTIVITY_ARROWS,
+                WIFI_ACTIVITY_ARROWS);
 
         apply();
         applyIconTint();
@@ -318,8 +338,8 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         });
     }
 
-    private void updateActivityEnabled() {
-        mActivityEnabled = mContext.getResources().getBoolean(R.bool.config_showActivity);
+    private boolean updateActivityEnabled() {
+        return mContext.getResources().getBoolean(R.bool.config_showActivity);
     }
 
     @Override
@@ -328,8 +348,8 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         mWifiVisible = statusIcon.visible && !mBlockWifi;
         mWifiStrengthId = statusIcon.icon;
         mWifiDescription = statusIcon.contentDescription;
-        mWifiIn = activityIn && mActivityEnabled && mWifiVisible;
-        mWifiOut = activityOut && mActivityEnabled && mWifiVisible;
+        mWifiIn = activityIn && mWifiActivityEnabled && mWifiVisible;
+        mWifiOut = activityOut && mWifiActivityEnabled && mWifiVisible;
 
         apply();
     }
@@ -350,8 +370,8 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         state.mIsMobileTypeIconWide = statusType != 0 && isWide;
         state.mRoaming = roaming;
         mMobileIms = isMobileIms;
-        state.mActivityIn = activityIn && mActivityEnabled;
-        state.mActivityOut = activityOut && mActivityEnabled;
+        state.mActivityIn = activityIn && mDataActivityEnabled;
+        state.mActivityOut = activityOut && mDataActivityEnabled;
 
         apply();
     }
