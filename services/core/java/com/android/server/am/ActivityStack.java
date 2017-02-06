@@ -2612,7 +2612,7 @@ final class ActivityStack {
             final int numTasks = mTaskHistory.size();
             for (int i = index + 1; i < numTasks; ++i) {
                 TaskRecord task = mTaskHistory.get(i);
-                if (task.userId == targetTask.userId) {
+                if (task.userId == targetTask.userId && task.mActivities.size() > 0) {
                     return task;
                 }
             }
