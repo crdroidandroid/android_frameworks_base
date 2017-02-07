@@ -1214,6 +1214,9 @@ class ActivityStarter {
             setTaskFromReuseOrCreateNewTask(taskToAffiliate);
 
             if (mSupervisor.isLockTaskModeViolation(mStartActivity.task)) {
+                if (mReuseTask == null) {
+                    mTargetStack.removeTask(mStartActivity.task, "LockTaskModeViolation");
+                }
                 Slog.e(TAG, "Attempted Lock Task Mode violation mStartActivity=" + mStartActivity);
                 return START_RETURN_LOCK_TASK_MODE_VIOLATION;
             }
