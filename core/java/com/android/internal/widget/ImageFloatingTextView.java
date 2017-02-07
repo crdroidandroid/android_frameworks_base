@@ -75,6 +75,12 @@ public class ImageFloatingTextView extends TextView {
                 .setEllipsizedWidth(ellipsisWidth)
                 .setBreakStrategy(Layout.BREAK_STRATEGY_HIGH_QUALITY)
                 .setHyphenationFrequency(Layout.HYPHENATION_FREQUENCY_FULL);
+        if (shouldEllipsize) {
+            int maxLines = getMaxLines();
+            if (maxLines > -1) {
+                builder.setMaxLines(maxLines);
+            }
+        }
         // we set the endmargin on the requested number of lines.
         int endMargin = getContext().getResources().getDimensionPixelSize(
                 R.dimen.notification_content_picture_margin);
