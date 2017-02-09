@@ -245,7 +245,6 @@ void GlopBuilder::setFill(int color, float alphaScale,
                     colorScale * SkColorGetB(color),
                     alpha
             };
-            mDescription.isColorOpaque = (alpha == 1.0); // fast path shader for this case
         } else {
             mOutGlop->fill.color = { 1, 1, 1, alpha };
         }
