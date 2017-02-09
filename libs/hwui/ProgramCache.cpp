@@ -65,8 +65,6 @@ const char* gVS_Header_Varyings_HasColors =
         "varying vec4 outColors;\n";
 const char* gVS_Header_Varyings_HasVertexAlpha =
         "varying float alpha;\n";
-const char* gVS_Header_Varyings_HasVertexAlphaVec2 =
-        "varying vec2 alphaVec2;\n";
 const char* gVS_Header_Varyings_HasBitmap =
         "varying highp vec2 outBitmapTexCoords;\n";
 const char* gVS_Header_Varyings_HasGradient[6] = {
@@ -125,9 +123,6 @@ const char* gVS_Main_Position =
 
 const char* gVS_Main_VertexAlpha =
         "    alpha = vtxAlpha;\n";
-
-const char* gVS_Main_VertexAlphaVec2 =
-        "    alphaVec2 = vec2(vtxAlpha, 0.5);\n";
 
 const char* gVS_Main_HasRoundRectClip =
         "    roundRectPos = (roundRectInvTransform * transformedPosition).xy;\n";
@@ -236,10 +231,8 @@ const char* gFS_Main_ModulateColor =
 const char* gFS_Main_ApplyVertexAlphaLinearInterp =
         "    fragColor *= alpha;\n";
 const char* gFS_Main_ApplyVertexAlphaShadowInterp =
-        // color.rgb is always 0.0 for shadows - this allows the compiler to optimise it away
-        "    fragColor.rgb = vec3(0.0);\n"
         // map alpha through shadow alpha sampler
-        "    fragColor *= texture2D(baseSampler, alphaVec2).a;\n";
+        "    fragColor *= texture2D(baseSampler, vec2(alpha, 0.5)).a;\n";
 const char* gFS_Main_FetchTexture[2] = {
         // Don't modulate
         "    fragColor = texture2D(baseSampler, outTexCoords);\n",
@@ -474,11 +467,7 @@ String8 ProgramCache::generateVertexShader(const ProgramDescription& description
         shader.append(gVS_Header_Varyings_HasTexture);
     }
     if (description.hasVertexAlpha) {
-        if (description.useShadowAlphaInterp) {
-            shader.append(gVS_Header_Varyings_HasVertexAlphaVec2);
-        } else {
-            shader.append(gVS_Header_Varyings_HasVertexAlpha);
-        }
+        shader.append(gVS_Header_Varyings_HasVertexAlpha);
     }
     if (description.hasColors) {
         shader.append(gVS_Header_Varyings_HasColors);
@@ -501,11 +490,7 @@ String8 ProgramCache::generateVertexShader(const ProgramDescription& description
             shader.append(gVS_Main_OutTexCoords);
         }
         if (description.hasVertexAlpha) {
-            if (description.useShadowAlphaInterp) {
-                shader.append(gVS_Main_VertexAlphaVec2);
-            } else {
-                shader.append(gVS_Main_VertexAlpha);
-            }
+            shader.append(gVS_Main_VertexAlpha);
         }
         if (description.hasColors) {
             shader.append(gVS_Main_OutColors);
@@ -555,11 +540,7 @@ String8 ProgramCache::generateFragmentShader(const ProgramDescription& descripti
         shader.append(gVS_Header_Varyings_HasTexture);
     }
     if (description.hasVertexAlpha) {
-        if (description.useShadowAlphaInterp) {
-            shader.append(gVS_Header_Varyings_HasVertexAlphaVec2);
-        } else {
-            shader.append(gVS_Header_Varyings_HasVertexAlpha);
-        }
+        shader.append(gVS_Header_Varyings_HasVertexAlpha);
     }
     if (description.hasColors) {
         shader.append(gVS_Header_Varyings_HasColors);
