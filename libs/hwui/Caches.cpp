@@ -61,10 +61,6 @@ Caches::Caches(RenderState& renderState)
     initConstraints();
     initStaticProperties();
     initExtensions();
-
-    // Used to choose between glDrawRangeElements and glDrawElements
-    // TODO: Better way to pass this information to render state?
-    mRenderState->setES3(mExtensions.getMajorGlVersion() >= 3);
 }
 
 bool Caches::init() {
