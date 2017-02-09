@@ -20833,8 +20833,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                                 }
                             }
                         }
-                    } else if (oldSchedGroup == ProcessList.SCHED_GROUP_TOP_APP &&
-                               app.curSchedGroup != ProcessList.SCHED_GROUP_TOP_APP) {
+                    } else if (oldSchedGroup == ProcessList.SCHED_GROUP_TOP_APP) {
                         // Reset VR thread to SCHED_OTHER
                         // Safe to do even if we're not in VR mode
                         if (app.vrThreadTid != 0) {
