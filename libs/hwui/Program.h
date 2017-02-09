@@ -85,9 +85,6 @@ namespace uirenderer {
 #define PROGRAM_HAS_DEBUG_HIGHLIGHT 42
 #define PROGRAM_HAS_ROUND_RECT_CLIP 43
 
-#define PROGRAM_IS_SIMPLE_MATRIX 44
-#define PROGRAM_IS_VERY_SIMPLE_GRADIENT 45
-
 #define PROGRAM_IS_FAST_COLOR 46
 #define PROGRAM_IS_FAST_COLOR_OPAQUE 47
 
@@ -109,7 +106,6 @@ typedef uint64_t programid;
 struct ProgramDescription {
     enum class ColorFilterMode {
         None = 0,
-        SimpleMatrix,
         Matrix,
         Blend
     };
@@ -146,7 +142,6 @@ struct ProgramDescription {
     bool hasGradient;
     Gradient gradientType;
     bool isSimpleGradient;
-    bool isVerySimpleGradient;
 
     SkXfermode::Mode shadersMode;
 
@@ -190,7 +185,6 @@ struct ProgramDescription {
         hasGradient = false;
         gradientType = kGradientLinear;
         isSimpleGradient = false;
-        isVerySimpleGradient = false;
 
         shadersMode = SkXfermode::kClear_Mode;
 
@@ -271,9 +265,6 @@ struct ProgramDescription {
             key |= (shadersMode & PROGRAM_MAX_XFERMODE) << PROGRAM_XFERMODE_SHADER_SHIFT;
         }
         switch (colorOp) {
-            case ColorFilterMode::SimpleMatrix:
-                key |= programid(0x1) << PROGRAM_IS_SIMPLE_MATRIX;
-                break;
             case ColorFilterMode::Matrix:
                 key |= PROGRAM_KEY_COLOR_MATRIX;
                 break;
@@ -292,7 +283,6 @@ struct ProgramDescription {
         if (hasExternalTexture) key |= programid(0x1) << PROGRAM_HAS_EXTERNAL_TEXTURE_SHIFT;
         if (hasTextureTransform) key |= programid(0x1) << PROGRAM_HAS_TEXTURE_TRANSFORM_SHIFT;
         if (isSimpleGradient) key |= programid(0x1) << PROGRAM_IS_SIMPLE_GRADIENT;
-        if (isVerySimpleGradient) key |= programid(0x1) << PROGRAM_IS_VERY_SIMPLE_GRADIENT;
         if (hasColors) key |= programid(0x1) << PROGRAM_HAS_COLORS;
         if (hasDebugHighlight) key |= programid(0x1) << PROGRAM_HAS_DEBUG_HIGHLIGHT;
         if (hasRoundRectClip) key |= programid(0x1) << PROGRAM_HAS_ROUND_RECT_CLIP;
