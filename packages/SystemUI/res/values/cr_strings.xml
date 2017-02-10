@@ -19,4 +19,7 @@
     <string name="global_action_restart_advanced">Advanced reboot</string>
     <string name="global_action_restart_recovery">Recovery</string>
     <string name="global_action_restart_bootloader">Bootloader</string>
+
+    <!-- High Brightness Mode Tile -->
+    <string name="quick_settings_high_brightness">High brightness</string>
 </resources>
