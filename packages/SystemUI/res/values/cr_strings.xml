@@ -16,4 +16,6 @@
 -->
 <resources>
 
+    <!-- High Brightness Mode Tile -->
+    <string name="quick_settings_high_brightness">High brightness</string>
 </resources>
