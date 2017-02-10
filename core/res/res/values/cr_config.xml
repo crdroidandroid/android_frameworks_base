@@ -16,4 +16,7 @@
 -->
 <resources>
 
+    <!-- High Brightness Mode -->
+    <add-resource type="bool" name="config_supportHighBrightness"></add-resource>
+    <bool name="config_supportHighBrightness">false</bool>
 </resources>
