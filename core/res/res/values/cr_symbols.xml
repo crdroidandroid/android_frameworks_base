@@ -20,4 +20,7 @@
   <java-symbol type="string" name="reboot_to_recovery_message" />
   <java-symbol type="string" name="reboot_to_bootloader_title" />
   <java-symbol type="string" name="reboot_to_bootloader_message" />
+
+  <!-- High Brightness Mode -->
+  <java-symbol type="bool" name="config_supportHighBrightness" />
 </resources>
