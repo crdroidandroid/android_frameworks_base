@@ -47,4 +47,7 @@
 
     <!-- PiP Tile -->
     <string name="quick_settings_pip_label">PiP</string>
+
+    <!-- High Brightness Mode Tile -->
+    <string name="quick_settings_high_brightness">High brightness</string>
 </resources>
