@@ -603,25 +603,14 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         @Override
         public void onPress() {
-            if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.SCREENSHOT_TYPE, 0) == 1) {
-                 mHandler.sendEmptyMessage(MESSAGE_DISMISS);
-                 takeScreenshot(true);
-            } else {
-                 takeScreenshot(false);
-            }
+            takeScreenshot(false);
         }
 
 
         @Override
         public boolean onLongPress() {
-            if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.SCREENSHOT_TYPE, 0) == 1) {
-                 mHandler.sendEmptyMessage(MESSAGE_DISMISS);
-                 takeScreenshot(true);
-            } else {
-                 takeScreenshot(false);
-            }
+            mHandler.sendEmptyMessage(MESSAGE_DISMISS);
+            takeScreenshot(true /* partial */);
             return true;
         }
 
