@@ -495,7 +495,7 @@ public class BatteryMeterDrawable extends Drawable implements
         }
 
         final int drawableResId = getBatteryDrawableResourceForStyle(style);
-        mBatteryDrawable = (LayerDrawable) res.getDrawable(drawableResId, null);
+        mBatteryDrawable = (LayerDrawable) mContext.getDrawable(drawableResId);
         mFrameDrawable = mBatteryDrawable.findDrawableByLayerId(R.id.battery_frame);
         mFrameDrawable.setTint(mCurrentBackgroundColor != 0
                 ? mCurrentBackgroundColor : res.getColor(R.color.batterymeter_frame_color));
@@ -518,7 +518,7 @@ public class BatteryMeterDrawable extends Drawable implements
         final int resId = getBatteryDrawableResourceForStyle(style);
         final Drawable batteryDrawable;
         try {
-            batteryDrawable = res.getDrawable(resId, null);
+            batteryDrawable = mContext.getDrawable(resId);
         } catch (Resources.NotFoundException e) {
             throw new BatteryMeterDrawableException(res.getResourceName(resId) + " is an " +
                     "invalid drawable", e);
