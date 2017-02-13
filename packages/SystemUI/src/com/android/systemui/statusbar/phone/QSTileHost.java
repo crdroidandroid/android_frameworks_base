@@ -46,6 +46,7 @@ import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.CastTile;
 import com.android.systemui.qs.tiles.CellularTile;
 import com.android.systemui.qs.tiles.ColorInversionTile;
+import com.android.systemui.qs.tiles.CompassTile;
 import com.android.systemui.qs.tiles.DataSaverTile;
 import com.android.systemui.qs.tiles.DndTile;
 import com.android.systemui.qs.tiles.ExpandedDesktopTile;
@@ -463,6 +464,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("lte")) return  new LteTile(this);
         else if (tileSpec.equals("pulse")) return new PulseTile(this);
         else if (tileSpec.equals("live_display")) return new LiveDisplayTile(this);
+        else if (tileSpec.equals("compass")) return new CompassTile(this);
         // Intent tiles.
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else if (tileSpec.startsWith(CustomTile.PREFIX)) return CustomTile.create(this,tileSpec);
