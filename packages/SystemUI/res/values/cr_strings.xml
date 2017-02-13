@@ -130,4 +130,7 @@
     <string name="screenrecord_stopdot_label">Show stop dot\nLongpress to move it</string>
     <string name="screenrecord_lowquality_label">Lower quality for smaller file size</string>
     <string name="screenrecord_longer_timeout_switch_label">Bigger file size limit\nLimit recording size to 15GiB</string>
+
+    <!-- Text to use when the number in a notification info is too large -->
+    <string name="status_bar_notification_info_overflow" translatable="false">\u221E</string>
 </resources>
