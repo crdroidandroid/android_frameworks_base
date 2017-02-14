@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Falsificar a assinatura de pacote</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Permite que o aplicativo finja ser um aplicativo diferente. Aplicativos mal-intencionados podem ser capazes de usar isto para acessar dados de aplicativo particular. Conceda essa permissão com cautela!</string>
+
+    <!-- Custom system animations -->
+    <string name="animation_fade">Esmaecer</string>
+    <string name="animation_slide_right">Deslizar para direita</string>
+    <string name="animation_slide_left">Deslize para a esquerda</string>
+    <string name="animation_slide_right_no_fade">Deslize para direita (Sem desvanecer)</string>
+    <string name="animation_slide_left_no_fade">Deslize para esquerda(Sem desvanecer)</string>
+    <string name="animation_slide_up">Deslize para baixo</string>
+    <string name="animation_slide_down">Deslize para cima</string>
+    <string name="animation_default">Padrão</string>
+    <string name="animation_translucent">Translúcido</string>
+    <string name="animation_grow_shrink">Crescer no (Topo)</string>
+    <string name="animation_grow_shrink_center">Crescer no (Centro)</string>
+    <string name="animation_grow_shrink_bottom">Crescer na (Parte inferior)</string>
+    <string name="animation_grow_shrink_left">Crescer (À Esquerda)</string>
+    <string name="animation_grow_shrink_right">Crescer (À Direita)</string>
+    <string name="action_null">Em branco</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_modifyOverlays">Modificar as sobreposições de tema</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_modifyOverlays">Permite que o aplicativo faça modificações de sobreposições de tema usando OverlayManagerService</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_restartUI">Reiniciar as barras do sistema</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_restartUI">Reiniciar o SystemUI para que as barras de sistema possam carregar recursos do tema</string>
+
+    <!-- On-The-Go -->
+    <string name="global_action_onthego">Modo On-The-Go</string>
+
+    <string name="singlehandmode_click_hint_message">Toque fora da tela para sair do modo de tela pequeno</string>
+    <string name="singlehandmode_slide_hint_message">Deslize seu dedo através da barra de navegação para alternar entre os modos de exibição de tela padrão e pequeno</string>
+</resources>
