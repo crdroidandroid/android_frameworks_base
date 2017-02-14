@@ -119,4 +119,7 @@
     <string name="omnijaws_detail_header">Weather</string>
     <string name="omnijaws_label_default">Weather</string>
     <string name="omnijaws_current_text">Now</string>
+
+    <!-- volte icon switch -->
+    <string name="status_bar_volte">VoLTE</string>
 </resources>

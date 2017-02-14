@@ -5054,6 +5054,23 @@ public class TelephonyManager {
            return false;
        }
    }
+   /**
+    * Returns the IMS Registration Status
+    * using subId
+    * @hide
+    */
+   public boolean isImsRegisteredForSubscriber(int subId) {
+       try {
+           ITelephony telephony = getITelephony();
+           if (telephony == null)
+               return false;
+           return telephony.isImsRegisteredForSubscriber(subId);
+       } catch (RemoteException ex) {
+           return false;
+       } catch (NullPointerException ex) {
+           return false;
+       }
+   }
 
    /**
     * Returns the IMS Registration Status
