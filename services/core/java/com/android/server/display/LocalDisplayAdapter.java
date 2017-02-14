@@ -355,6 +355,10 @@ final class LocalDisplayAdapter extends DisplayAdapter {
         public DisplayDeviceInfo getDisplayDeviceInfoLocked() {
             if (mInfo == null) {
                 SurfaceControl.PhysicalDisplayInfo phys = mDisplayInfos[mActivePhysIndex];
+                int defaultIndex = findDisplayInfoIndexLocked(mDefaultModeId);
+                if (defaultIndex >= 0) {
+                    phys = mDisplayInfos[defaultIndex];
+                }
                 mInfo = new DisplayDeviceInfo();
                 mInfo.width = phys.width;
                 mInfo.height = phys.height;
