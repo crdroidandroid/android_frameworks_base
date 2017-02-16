@@ -177,6 +177,38 @@ void android_os_Process_setThreadGroup(JNIEnv* env, jobject clazz, int tid, jint
     }
 }
 
+/*
+    If CONFIG_CPUSETS for Linux kernel is set, "tasks" can be found under
+    /dev/cpuset mounted in init.rc; otherwise, that file does not exist
+    even though the directory, /dev/cpuset, is still created (by init.rc).
+
+    A couple of other candidates (under cpuset mount directory):
+        notify_on_release
+        release_agent
+
+    Yet another way to decide if cpuset is enabled is to parse
+    /proc/self/status and search for lines begin with "Mems_allowed".
+
+    If CONFIG_PROC_PID_CPUSET is set, the existence "/proc/self/cpuset" can
+    be used to decide if CONFIG_CPUSETS is set, so we don't have a dependency
+    on where init.rc mounts cpuset. That's why we'd better require this
+    configuration be set if CONFIG_CPUSETS is set.
+
+    With runtime check using the following function, build time
+    variables like ENABLE_CPUSETS (used in Android.mk) or cpusets (used
+    in Android.bp) are not needed.
+ */
+#define CPUSET_CHECK_FILE "/dev/cpuset/tasks"
+
+static int cpusets_enabled() {
+    static int enabled = -1;
+
+    if (enabled == -1) // We only need to check this once.
+        enabled = (access(CPUSET_CHECK_FILE, F_OK) == 0) ? 1 : 0;
+
+    return enabled;
+}
+
 void android_os_Process_setProcessGroup(JNIEnv* env, jobject clazz, int pid, jint grp)
 {
     ALOGV("%s pid=%d grp=%" PRId32, __func__, pid, grp);
@@ -253,25 +285,26 @@ void android_os_Process_setProcessGroup(JNIEnv* env, jobject clazz, int pid, jin
             if (t_pri >= ANDROID_PRIORITY_BACKGROUND) {
                 // This task wants to stay at background
                 // update its cpuset so it doesn't only run on bg core(s)
-#ifdef ENABLE_CPUSETS
-                int err = set_cpuset_policy(t_pid, sp);
-                if (err != NO_ERROR) {
-                    signalExceptionForGroupError(env, -err, t_pid);
-                    break;
+                if (cpusets_enabled()) {
+                    int err = set_cpuset_policy(t_pid, sp);
+                    if (err != NO_ERROR) {
+                        signalExceptionForGroupError(env, -err, t_pid);
+                        break;
+                    }
                 }
-#endif
                 continue;
             }
         }
         int err;
-#ifdef ENABLE_CPUSETS
-        // set both cpuset and cgroup for general threads
-        err = set_cpuset_policy(t_pid, sp);
-        if (err != NO_ERROR) {
-            signalExceptionForGroupError(env, -err, t_pid);
-            break;
+
+        if (cpusets_enabled()) {
+            // set both cpuset and cgroup for general threads
+            err = set_cpuset_policy(t_pid, sp);
+            if (err != NO_ERROR) {
+                signalExceptionForGroupError(env, -err, t_pid);
+                break;
+            }
         }
-#endif
 
         err = set_sched_policy(t_pid, sp);
         if (err != NO_ERROR) {
@@ -292,7 +325,6 @@ jint android_os_Process_getProcessGroup(JNIEnv* env, jobject clazz, jint pid)
     return (int) sp;
 }
 
-#ifdef ENABLE_CPUSETS
 /** Sample CPUset list format:
  *  0-3,4,6-8
  */
@@ -368,7 +400,6 @@ static void get_cpuset_cores_for_policy(SchedPolicy policy, cpu_set_t *cpu_set)
     }
     return;
 }
-#endif
 
 
 /**
@@ -377,22 +408,22 @@ static void get_cpuset_cores_for_policy(SchedPolicy policy, cpu_set_t *cpu_set)
  * them in the passed in cpu_set_t
  */
 void get_exclusive_cpuset_cores(SchedPolicy policy, cpu_set_t *cpu_set) {
-#ifdef ENABLE_CPUSETS
-    int i;
-    cpu_set_t tmp_set;
-    get_cpuset_cores_for_policy(policy, cpu_set);
-    for (i = 0; i < SP_CNT; i++) {
-        if ((SchedPolicy) i == policy) continue;
-        get_cpuset_cores_for_policy((SchedPolicy)i, &tmp_set);
-        // First get cores exclusive to one set or the other
-        CPU_XOR(&tmp_set, cpu_set, &tmp_set);
-        // Then get the ones only in cpu_set
-        CPU_AND(cpu_set, cpu_set, &tmp_set);
+    if (cpusets_enabled()) {
+        int i;
+        cpu_set_t tmp_set;
+        get_cpuset_cores_for_policy(policy, cpu_set);
+        for (i = 0; i < SP_CNT; i++) {
+            if ((SchedPolicy) i == policy) continue;
+            get_cpuset_cores_for_policy((SchedPolicy)i, &tmp_set);
+            // First get cores exclusive to one set or the other
+            CPU_XOR(&tmp_set, cpu_set, &tmp_set);
+            // Then get the ones only in cpu_set
+            CPU_AND(cpu_set, cpu_set, &tmp_set);
+        }
+    } else {
+        (void) policy;
+        CPU_ZERO(cpu_set);
     }
-#else
-    (void) policy;
-    CPU_ZERO(cpu_set);
-#endif
     return;
 }
 
