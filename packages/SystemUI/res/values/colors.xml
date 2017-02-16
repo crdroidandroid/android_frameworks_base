@@ -135,8 +135,8 @@
     <color name="volume_settings_icon_color">#7fffffff</color>
     <color name="volume_slider_inactive">@*android:color/quaternary_device_default_settings</color>
 
-    <color name="docked_divider_background">#ff000000</color>
-    <color name="docked_divider_handle">#ffffff</color>
+    <color name="docked_divider_background">@*android:color/accent_device_default_light</color>
+    <color name="docked_divider_handle">@*android:color/material_blue_grey_900</color>
     <drawable name="forced_resizable_background">#59000000</drawable>
     <color name="minimize_dock_shadow_start">#60000000</color>
     <color name="minimize_dock_shadow_end">#00000000</color>
