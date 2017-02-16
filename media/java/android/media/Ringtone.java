@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
+import android.media.AudioDeviceInfo;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Binder;
@@ -77,12 +78,14 @@ public class Ringtone {
     private Uri mUri;
     private String mTitle;
 
+    private AudioAttributes mFinalAudioAttributes;
+
     private AudioAttributes mAudioAttributes = new AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build();
 
-    private AudioAttributes mAudioAttributesWiredHeadset = new AudioAttributes.Builder()
+    private AudioAttributes mAudioAttributesHeadset = new AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_NOTIFICATION)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build();
@@ -271,13 +274,46 @@ public class Ringtone {
 
         if (title == null) {
             title = context.getString(com.android.internal.R.string.ringtone_unknown);
-            
+
             if (title == null) {
                 title = "";
             }
         }
-        
+
         return title;
+    }
+
+    public void setCustomAudioAttributes() {
+        int focusmode = getRingtoneFocusMode();
+        boolean isHeadsetConnected = false;
+        AudioDeviceInfo[] connectedDevices = mAudioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
+        for (AudioDeviceInfo device : connectedDevices) {
+            if (device.getType() == AudioDeviceInfo.TYPE_WIRED_HEADSET ||
+                    device.getType() == AudioDeviceInfo.TYPE_WIRED_HEADPHONES ||
+                    device.getType() == AudioDeviceInfo.TYPE_BLUETOOTH_SCO) {
+                isHeadsetConnected = true;
+                break;
+            }
+        }
+        switch (focusmode) {
+            case 0: //play ringtone only from headset if music playing, otherwise from speakerphone
+                if (isHeadsetConnected && mAudioManager.isMusicActive()) {
+                    mFinalAudioAttributes = mAudioAttributesHeadset;
+                } else {
+                    mFinalAudioAttributes = mAudioAttributes;
+                }
+                break;
+            default:
+            case 1: //aosp behavior, ringtone always from both headset and speakerphone
+                    mFinalAudioAttributes = mAudioAttributes;
+                break;
+        }
+    }
+
+    private int getRingtoneFocusMode() {
+        int mode = Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.RINGTONE_FOCUS_MODE, 0);
+        return mode;
     }
 
     /**
@@ -301,11 +337,8 @@ public class Ringtone {
         mLocalPlayer = new MediaPlayer();
         try {
             mLocalPlayer.setDataSource(mContext, mUri);
-            if (!mAudioManager.isWiredHeadsetOn() || !mAudioManager.isMusicActive() || mAudioManager.isSpeakerphoneOn()) {
-                mLocalPlayer.setAudioAttributes(mAudioAttributes);
-            } else {
-                mLocalPlayer.setAudioAttributes(mAudioAttributesWiredHeadset);
-            }
+            setCustomAudioAttributes();
+            mLocalPlayer.setAudioAttributes(mFinalAudioAttributes);
             synchronized (mPlaybackSettingsLock) {
                 applyPlaybackProperties_sync();
             }
