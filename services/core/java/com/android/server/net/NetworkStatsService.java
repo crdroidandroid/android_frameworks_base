@@ -369,7 +369,7 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
 
         // listen for uid removal to clean stats
         final IntentFilter removedFilter = new IntentFilter(ACTION_UID_REMOVED);
-        mContext.registerReceiver(mRemovedReceiver, removedFilter, null, mHandler);
+        mContext.registerReceiverAsUser(mRemovedReceiver, UserHandle.ALL, removedFilter, null, mHandler);
 
         // listen for user changes to clean stats
         final IntentFilter userFilter = new IntentFilter(ACTION_USER_REMOVED);
