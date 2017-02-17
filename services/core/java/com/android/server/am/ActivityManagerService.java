@@ -11588,7 +11588,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 final List<ApplicationInfo> apps = AppGlobals.getPackageManager()
                         .getPersistentApplications(STOCK_PM_FLAGS | matchFlags).getList();
                 for (ApplicationInfo app : apps) {
-                    if (!"android".equals(app.packageName)) {
+                    if (!"android".equals(app.packageName) && app.enabled) {
                         addAppLocked(app, false, null /* ABI override */);
                     }
                 }
