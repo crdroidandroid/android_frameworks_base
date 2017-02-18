@@ -342,7 +342,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         if ((Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_CRDROID_LOGO, 0) == 1) &&
                 (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_CRDROID_LOGO_STYLE, 0) == 0)) {
+                Settings.System.STATUS_BAR_CRDROID_LOGO_POSITION, 0) == 0)) {
             animateHide(mCrDroidLogoLeft, animate);
         }
     }
@@ -353,7 +353,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         if ((Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_CRDROID_LOGO, 0) == 1) &&
                 (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_CRDROID_LOGO_STYLE, 0) == 0)) {
+                Settings.System.STATUS_BAR_CRDROID_LOGO_POSITION, 0) == 0)) {
             animateShow(mCrDroidLogoLeft, animate);
         }
     }
