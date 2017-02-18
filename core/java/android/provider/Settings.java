@@ -3932,12 +3932,12 @@ public final class Settings {
         public static final String STATUS_BAR_CRDROID_LOGO_COLOR = "status_bar_crdroid_logo_color";
 
         /**
-         * Style of Status bar logo
+         * Position of Status bar logo
          * 0 - Left (default)
          * 1 - Right
          * @hide
          */
-        public static final String STATUS_BAR_CRDROID_LOGO_STYLE = "status_bar_crdroid_logo_style";
+        public static final String STATUS_BAR_CRDROID_LOGO_POSITION = "status_bar_crdroid_logo_position";
 
         /**
          * Whether to show the battery bar

@@ -340,8 +340,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO;
     private static final String STATUS_BAR_CRDROID_LOGO_COLOR =
             "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_COLOR;
-    private static final String STATUS_BAR_CRDROID_LOGO_STYLE =
-            "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_STYLE;
+    private static final String STATUS_BAR_CRDROID_LOGO_POSITION =
+            "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_POSITION;
     private static final String QS_ROWS_PORTRAIT =
             Settings.Secure.QS_ROWS_PORTRAIT;
     private static final String QS_ROWS_LANDSCAPE =
@@ -434,7 +434,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private int mCrDroidLogoColor;
     private ImageView mCrDroidLogoRight;
     private ImageView mCrDroidLogoLeft;
-    private int mCrDroidLogoStyle;
+    private int mCrDroidLogoPosition;
 
     Display mDisplay;
     Point mCurrentDisplaySize = new Point();
@@ -910,7 +910,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 LOCKSCREEN_MAX_NOTIF_CONFIG,
                 STATUS_BAR_CRDROID_LOGO,
                 STATUS_BAR_CRDROID_LOGO_COLOR,
-                STATUS_BAR_CRDROID_LOGO_STYLE,
+                STATUS_BAR_CRDROID_LOGO_POSITION,
                 QS_ROWS_PORTRAIT,
                 QS_ROWS_LANDSCAPE,
                 QS_COLUMNS,
@@ -4136,7 +4136,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }, cancelAction, afterKeyguardGone);
     }
 
-    public void showCrDroidLogo(boolean show, int color, int style) {
+    public void showCrDroidLogo(boolean show, int color, int position) {
         if (mStatusBarView == null) return;
         mCrDroidLogoLeft = (ImageView) mStatusBarView.findViewById(R.id.left_crdroid_logo);
         mCrDroidLogoRight = (ImageView) mStatusBarView.findViewById(R.id.crdroid_logo);
@@ -4153,7 +4153,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mCrDroidLogoRight.clearColorFilter();
             mCrDroidLogoLeft.clearColorFilter();
         }
-        if (style == 0) {
+        if (position == 0) {
             mCrDroidLogoRight.setVisibility(View.GONE);
             mCrDroidLogoLeft.setVisibility(View.VISIBLE);
         } else {
@@ -5819,19 +5819,19 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mMaxKeyguardNotifConfig =
                         newValue == null ? 5 : Integer.parseInt(newValue);
                 break;
-            case STATUS_BAR_CRDROID_LOGO_STYLE:
-                mCrDroidLogoStyle =
+            case STATUS_BAR_CRDROID_LOGO_POSITION:
+                mCrDroidLogoPosition =
                         newValue == null ? 0 : Integer.parseInt(newValue);
-                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoStyle);
+                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoPosition);
                 break;
             case STATUS_BAR_CRDROID_LOGO:
                 mCrDroidLogo = newValue != null && Integer.parseInt(newValue) == 1;
-                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoStyle);
+                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoPosition);
                 break;
             case STATUS_BAR_CRDROID_LOGO_COLOR:
                 mCrDroidLogoColor =
                         newValue == null ? 0xFFFFFFFF : Integer.parseInt(newValue);
-                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoStyle);
+                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoPosition);
                 break;
             case QS_ROWS_PORTRAIT:
             case QS_ROWS_LANDSCAPE:
