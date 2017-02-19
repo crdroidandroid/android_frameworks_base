@@ -3940,6 +3940,12 @@ public final class Settings {
         public static final String STATUS_BAR_CRDROID_LOGO_POSITION = "status_bar_crdroid_logo_position";
 
         /**
+         * Statusbar crDroid logo custom style
+         * @hide
+         */
+        public static final String STATUS_BAR_CRDROID_LOGO_STYLE = "status_bar_crdroid_logo_style";
+
+        /**
          * Whether to show the battery bar
          * @hide
          */
