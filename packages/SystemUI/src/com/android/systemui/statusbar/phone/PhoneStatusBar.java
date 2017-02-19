@@ -342,6 +342,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_COLOR;
     private static final String STATUS_BAR_CRDROID_LOGO_POSITION =
             "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_POSITION;
+    private static final String STATUS_BAR_CRDROID_LOGO_STYLE =
+            "system:" + Settings.System.STATUS_BAR_CRDROID_LOGO_STYLE;
     private static final String QS_ROWS_PORTRAIT =
             Settings.Secure.QS_ROWS_PORTRAIT;
     private static final String QS_ROWS_LANDSCAPE =
@@ -435,6 +437,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private ImageView mCrDroidLogoRight;
     private ImageView mCrDroidLogoLeft;
     private int mCrDroidLogoPosition;
+    private int mCrDroidLogoStyle;
 
     Display mDisplay;
     Point mCurrentDisplaySize = new Point();
@@ -911,6 +914,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 STATUS_BAR_CRDROID_LOGO,
                 STATUS_BAR_CRDROID_LOGO_COLOR,
                 STATUS_BAR_CRDROID_LOGO_POSITION,
+                STATUS_BAR_CRDROID_LOGO_STYLE,
                 QS_ROWS_PORTRAIT,
                 QS_ROWS_LANDSCAPE,
                 QS_COLUMNS,
@@ -4136,24 +4140,100 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }, cancelAction, afterKeyguardGone);
     }
 
-    public void showCrDroidLogo(boolean show, int color, int position) {
+    public void updateCrDroidLogo() {
         if (mStatusBarView == null) return;
         mCrDroidLogoLeft = (ImageView) mStatusBarView.findViewById(R.id.left_crdroid_logo);
         mCrDroidLogoRight = (ImageView) mStatusBarView.findViewById(R.id.crdroid_logo);
+        Drawable drawable = null;
 
-        if (!show) {
+        if (!mCrDroidLogo) {
             mCrDroidLogoRight.setVisibility(View.GONE);
             mCrDroidLogoLeft.setVisibility(View.GONE);
             return;
         }
-        if (color != 0xFFFFFFFF) {
-            mCrDroidLogoRight.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            mCrDroidLogoLeft.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
+        if (mCrDroidLogoColor != 0xFFFFFFFF) {
+            mCrDroidLogoRight.setColorFilter(mCrDroidLogoColor, PorterDuff.Mode.SRC_IN);
+            mCrDroidLogoLeft.setColorFilter(mCrDroidLogoColor, PorterDuff.Mode.SRC_IN);
         } else {
             mCrDroidLogoRight.clearColorFilter();
             mCrDroidLogoLeft.clearColorFilter();
         }
-        if (position == 0) {
+
+        if (mCrDroidLogoStyle == 0) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_crdroid_logo);
+        } else if (mCrDroidLogoStyle == 1) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_android_logo);
+        } else if (mCrDroidLogoStyle == 2) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_apple_logo);
+        } else if (mCrDroidLogoStyle == 3) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_ios_logo);
+        } else if (mCrDroidLogoStyle == 4) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_emoticon);
+        } else if (mCrDroidLogoStyle == 5) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_emoticon_cool);
+        } else if (mCrDroidLogoStyle == 6) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_emoticon_dead);
+        } else if (mCrDroidLogoStyle == 7) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_emoticon_devil);
+        } else if (mCrDroidLogoStyle == 8) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_emoticon_happy);
+        } else if (mCrDroidLogoStyle == 9) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_emoticon_neutral);
+        } else if (mCrDroidLogoStyle == 10) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_emoticon_poop);
+        } else if (mCrDroidLogoStyle == 11) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_emoticon_sad);
+        } else if (mCrDroidLogoStyle == 12) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_emoticon_tongue);
+        } else if (mCrDroidLogoStyle == 13) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_blackberry);
+        } else if (mCrDroidLogoStyle == 14) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_cake);
+        } else if (mCrDroidLogoStyle == 15) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_blogger);
+        } else if (mCrDroidLogoStyle == 16) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_biohazard);
+        } else if (mCrDroidLogoStyle == 17) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_linux);
+        } else if (mCrDroidLogoStyle == 18) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_yin_yang);
+        } else if (mCrDroidLogoStyle == 19) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_windows);
+        } else if (mCrDroidLogoStyle == 20) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_robot);
+        } else if (mCrDroidLogoStyle == 21) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_ninja);
+        } else if (mCrDroidLogoStyle == 22) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_heart);
+        } else if (mCrDroidLogoStyle == 23) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_flower);
+        } else if (mCrDroidLogoStyle == 24) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_ghost);
+        } else if (mCrDroidLogoStyle == 25) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_google);
+        } else if (mCrDroidLogoStyle == 26) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_human_male);
+        } else if (mCrDroidLogoStyle == 27) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_human_male_female);
+        } else if (mCrDroidLogoStyle == 28) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_human_male_female);
+        } else if (mCrDroidLogoStyle == 29) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_gender_male);
+        } else if (mCrDroidLogoStyle == 30) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_gender_female);
+        } else if (mCrDroidLogoStyle == 31) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_gender_male_female);
+        } else if (mCrDroidLogoStyle == 32) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_guitar_electric);
+        }
+
+        mCrDroidLogoLeft.setImageDrawable(null);
+        mCrDroidLogoLeft.setImageDrawable(drawable);
+        mCrDroidLogoRight.setImageDrawable(null);
+        mCrDroidLogoRight.setImageDrawable(drawable);
+
+        if (mCrDroidLogoPosition == 0) {
             mCrDroidLogoRight.setVisibility(View.GONE);
             mCrDroidLogoLeft.setVisibility(View.VISIBLE);
         } else {
@@ -5819,19 +5899,24 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mMaxKeyguardNotifConfig =
                         newValue == null ? 5 : Integer.parseInt(newValue);
                 break;
-            case STATUS_BAR_CRDROID_LOGO_POSITION:
-                mCrDroidLogoPosition =
-                        newValue == null ? 0 : Integer.parseInt(newValue);
-                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoPosition);
-                break;
             case STATUS_BAR_CRDROID_LOGO:
                 mCrDroidLogo = newValue != null && Integer.parseInt(newValue) == 1;
-                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoPosition);
+                updateCrDroidLogo();
                 break;
             case STATUS_BAR_CRDROID_LOGO_COLOR:
                 mCrDroidLogoColor =
                         newValue == null ? 0xFFFFFFFF : Integer.parseInt(newValue);
-                showCrDroidLogo(mCrDroidLogo, mCrDroidLogoColor, mCrDroidLogoPosition);
+                updateCrDroidLogo();
+                break;
+            case STATUS_BAR_CRDROID_LOGO_POSITION:
+                mCrDroidLogoPosition =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                updateCrDroidLogo();
+                break;
+            case STATUS_BAR_CRDROID_LOGO_STYLE:
+                mCrDroidLogoStyle =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                updateCrDroidLogo();
                 break;
             case QS_ROWS_PORTRAIT:
             case QS_ROWS_LANDSCAPE:
