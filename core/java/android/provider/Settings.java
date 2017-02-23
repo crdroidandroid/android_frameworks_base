@@ -6348,6 +6348,11 @@ public final class Settings {
         public static final String LOCK_SHOW_ERROR_PATH = "lock_pattern_show_error_path";
 
         /**
+         * @hide
+         */
+        public static final String LOCK_HIDE_STATUS_BAR = "lockscreen_hide_status_bar";
+
+        /**
          * This preference allows the device to be locked given time after screen goes off,
          * subject to current DeviceAdmin policy limits.
          * @hide
