@@ -193,6 +193,9 @@
     <!-- Device gestures -->
     <protected-broadcast android:name="com.android.systemui.doze.pulse" />
 
+    <!-- OmniJaws -->
+    <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
