@@ -407,16 +407,11 @@ class AppErrors {
                 }
             }
             if (res == AppErrorDialog.FORCE_QUIT) {
-                long orig = Binder.clearCallingIdentity();
-                try {
-                    // Kill it with fire!
-                    mService.mStackSupervisor.handleAppCrashLocked(r);
-                    if (!r.persistent) {
-                        mService.removeProcessLocked(r, false, false, "crash");
-                        mService.mStackSupervisor.resumeFocusedStackTopActivityLocked();
-                    }
-                } finally {
-                    Binder.restoreCallingIdentity(orig);
+                // Kill it with fire!
+                mService.mStackSupervisor.handleAppCrashLocked(r);
+                if (!r.persistent) {
+                    mService.removeProcessLocked(r, false, false, "crash");
+                    mService.mStackSupervisor.resumeFocusedStackTopActivityLocked();
                 }
             }
             if (res == AppErrorDialog.FORCE_QUIT_AND_REPORT) {
