@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2017 crDroid Android Project
+     Copyright (C) 2017 crDroid Android Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,14 +14,10 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+<!-- These resources are around just to allow their values to be customized
+     for different hardware and product builds. -->
 <resources>
 
-     <!-- Enable Pie relocation to either stick to a physical side or default to the right side -->
-    <bool name="config_relocatePieOnRotation">false</bool>
-
-    <!-- Enable force pie centered -->
-    <bool name="config_forcePieCentered">false</bool>
-
     <!-- Default value how much apps show the app screenshot on recents view entry -->
-    <integer name="expanded_items_default">3</integer>
+    <integer name="expanded_items_default">1</integer>
 </resources>

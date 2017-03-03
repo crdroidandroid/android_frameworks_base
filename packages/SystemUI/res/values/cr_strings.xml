@@ -132,4 +132,8 @@
     <string name="onthego_transparency">Transparency</string>
     <string name="onthego_front_camera">Use front camera</string>
     <string name="onthego_service_toggle">Automatically restart service</string>
+
+    <!-- Slim recents -->
+    <string name="slim_recent_keyguard">Unlock your device to view recents</string>
+    <string name="recents_multiwin_warning">A multiwindow session is already active.\nJust tap an app if you want to dock it now.</string>
 </resources>
