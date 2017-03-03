@@ -52,9 +52,6 @@
     <dimen name="floating_action_button_margin_side">32dp</dimen>
     <dimen name="floating_action_button_margin_bottom">46dp</dimen>
 
-    <dimen name="navbar_single_hand_mode_horizontal_threshhold">90dp</dimen>
-    <dimen name="navbar_single_hand_mode_vertical_threshhold">48dp</dimen>
-
     <!-- Custom headers -->
     <dimen name="qs_panel_top_offset_normal">80dp</dimen>
     <dimen name="qs_panel_top_offset_header">110dp</dimen>

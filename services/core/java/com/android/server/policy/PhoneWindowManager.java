@@ -883,8 +883,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mTorchLongPressPowerEnabled;
     private boolean mTorchEnabled;
 
-    int mDesiredRotation = -1;
-
     private class PolicyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -7133,12 +7131,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     /** {@inheritDoc} */
     @Override
     public int interceptMotionBeforeQueueingNonInteractive(long whenNanos, int policyFlags) {
-        if ((WindowManagerPolicy.POLICY_FLAG_REMOVE_HANDYMODE & policyFlags) !=0) {
-            Slog.i(TAG, "interceptMotionBeforeQueueingNonInteractive policyFlags: "+policyFlags);
-            Settings.Global.putString(mContext.getContentResolver(),
-                Settings.Global.SINGLE_HAND_MODE, "");
-            return 0;
-        }
         if ((policyFlags & FLAG_WAKE) != 0) {
             if (wakeUp(whenNanos / 1000000, mAllowTheaterModeWakeFromMotion,
                     "android.policy:MOTION")) {
@@ -7444,20 +7436,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    class OverscanTimeout implements Runnable {
-        @Override
-        public void run() {
-            Slog.i(TAG, "OverscanTimeout run");
-            Settings.Global.putString(mContext.getContentResolver(), Settings.Global.SINGLE_HAND_MODE, "");
-        }
-    }
-    OverscanTimeout mOverscanTimeout = new OverscanTimeout();
-
     // Called on the PowerManager's Notifier thread.
     @Override
     public void finishedGoingToSleep(int why) {
-        mHandler.removeCallbacks(mOverscanTimeout);
-        mHandler.postDelayed(mOverscanTimeout, 200);
         EventLog.writeEvent(70000, 0);
         if (DEBUG_WAKEUP) Slog.i(TAG, "Finished going to sleep... (why=" + why + ")");
         MetricsLogger.histogram(mContext, "screen_timeout", mLockScreenTimeout / 1000);
@@ -7860,11 +7841,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             final int preferredRotation;
-            if (mDesiredRotation >= 0) {
-                preferredRotation = mDesiredRotation;
-                Slog.i(TAG, "mDesiredRotation:" + mDesiredRotation);
-                return preferredRotation;
-            }
             if (mLidState == LID_OPEN && mLidOpenRotation >= 0) {
                 // Ignore sensor when lid switch is open and rotation is forced.
                 preferredRotation = mLidOpenRotation;
@@ -9290,9 +9266,5 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (!cameraId.equals(mRearFlashCameraId)) return;
             mTorchEnabled = false;
         }
-    }
-
-    public void freezeOrThawRotation(int rotation) {
-        mDesiredRotation = rotation;
     }
 }

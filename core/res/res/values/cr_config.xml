@@ -30,8 +30,6 @@
     <!-- Default value for led color when battery is really fully charged -->
     <integer name="config_notificationsBatteryReallyFullARGB">0xFF00FF00</integer>
 
-    <bool name="single_hand_mode">true</bool>
-
     <!-- The duration (in milliseconds) of recent app screen animation. -->
     <integer name="config_recentDefaultDur">300</integer>
 
