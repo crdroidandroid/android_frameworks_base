@@ -407,10 +407,10 @@ public class KeyguardStatusBarView extends RelativeLayout
     }
 
     public void toggleContents(boolean hideContents) {
-        boolean shouldHideContents = Settings.Secure.getIntForUser(
-                getContext().getContentResolver(), Settings.Secure.LOCK_HIDE_STATUS_BAR, 0,
-                UserHandle.USER_CURRENT) == 1;
-        if (!shouldHideContents) {
+        boolean shouldShowContents = Settings.Secure.getIntForUser(
+                getContext().getContentResolver(), Settings.Secure.LOCK_HIDE_STATUS_BAR, 1,
+                UserHandle.USER_CURRENT) != 0;
+        if (shouldShowContents) {
             hideContents = false;
         }
         if (mHideContents == hideContents) {
