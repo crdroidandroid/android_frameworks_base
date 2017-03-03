@@ -554,8 +554,6 @@ public final class PowerManagerService extends SystemService
     private static native void nativeSetFeature(int featureId, int data);
     private static native int nativeGetFeature(int featureId);
 
-    private boolean mForceNavbar;
-
     private PerformanceManagerInternal mPerf;
 
     private boolean mKeyboardVisible = false;
@@ -918,8 +916,6 @@ public final class PowerManagerService extends SystemService
         mProximityWakeEnabled = CMSettings.System.getInt(resolver,
                 CMSettings.System.PROXIMITY_ON_WAKE,
                 mProximityWakeEnabledByDefaultConfig ? 1 : 0) == 1;
-        mForceNavbar = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.NAVIGATION_BAR_VISIBLE, 0, UserHandle.USER_CURRENT) == 1;
         mDirty |= DIRTY_SETTINGS;
     }
 
@@ -1855,11 +1851,7 @@ public final class PowerManagerService extends SystemService
                                 buttonBrightness = mButtonBrightnessOverrideFromWindowManager;
                                 keyboardBrightness = mButtonBrightnessOverrideFromWindowManager;
                             } else {
-                                if (!mForceNavbar) {
-                                    buttonBrightness = mButtonBrightness;
-                                } else {
-                                    buttonBrightness = 0;
-                                }
+                                buttonBrightness = mButtonBrightness;
                                 keyboardBrightness = mKeyboardBrightness;
                             }
 
