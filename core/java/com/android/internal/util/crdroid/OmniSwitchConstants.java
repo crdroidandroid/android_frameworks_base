@@ -17,7 +17,9 @@
 */
 package com.android.internal.util.crdroid;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.UserHandle;
 
 public class OmniSwitchConstants {
     /**
@@ -41,8 +43,23 @@ public class OmniSwitchConstants {
     public static final String ACTION_TOGGLE_OVERLAY = APP_PACKAGE_NAME + ".ACTION_TOGGLE_OVERLAY";
 
     /**
+     * Intent broadcast action for restoring the home stack
+     */
+    public static final String ACTION_RESTORE_HOME_STACK = APP_PACKAGE_NAME + ".ACTION_RESTORE_HOME_STACK";
+
+    /**
      * Intent for launching the omniswitch settings actvity
      */
     public static Intent INTENT_LAUNCH_APP = new Intent(Intent.ACTION_MAIN)
             .setClassName(APP_PACKAGE_NAME, APP_PACKAGE_NAME + ".SettingsActivity");
+
+    public static void toggleOmniSwitchRecents(Context context, UserHandle user) {
+        final Intent showIntent = new Intent(OmniSwitchConstants.ACTION_TOGGLE_OVERLAY);
+        context.sendBroadcastAsUser(showIntent, user);
+    }
+
+    public static void restoreHomeStack(Context context, UserHandle user) {
+        final Intent showIntent = new Intent(OmniSwitchConstants.ACTION_RESTORE_HOME_STACK);
+        context.sendBroadcastAsUser(showIntent, user);
+    }
 }
