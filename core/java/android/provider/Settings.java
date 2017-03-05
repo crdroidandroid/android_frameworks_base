@@ -7997,12 +7997,6 @@ public final class Settings {
         public static final String ONE_HANDED_MODE_UI = "one_handed_mode_ui";
 
         /**
-         * Hardware keys toggle
-         * @hide
-         */
-        public static final String HARDWARE_KEYS_DISABLE = "hardware_keys_disable";
-
-        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear

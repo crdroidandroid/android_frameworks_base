@@ -3734,9 +3734,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean longPress = (flags & KeyEvent.FLAG_LONG_PRESS) != 0;
         final boolean virtualKey = event.getDeviceId() == KeyCharacterMap.VIRTUAL_KEYBOARD;
         final int keyCode = event.getKeyCode();
-        final boolean mHwKeysDisabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                Settings.Secure.HARDWARE_KEYS_DISABLE, 0,
-                UserHandle.USER_CURRENT) == 1;
 
         if (DEBUG_INPUT) {
             Log.d(TAG, "interceptKeyTi keyCode=" + keyCode + " down=" + down + " repeatCount="
@@ -3788,14 +3785,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         if (keyCode == KeyEvent.KEYCODE_BACK && !down) {
             mHandler.removeCallbacks(mBackLongPress);
-        }
-
-        if (mHwKeysDisabled && (keyCode == KeyEvent.KEYCODE_HOME
-                || keyCode == KeyEvent.KEYCODE_MENU
-                || keyCode == KeyEvent.KEYCODE_APP_SWITCH
-                || keyCode == KeyEvent.KEYCODE_ASSIST
-                || keyCode == KeyEvent.KEYCODE_BACK)) {
-                return -1;
         }
 
         // First we always handle the home key here, so applications
@@ -6636,21 +6625,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return result;
         }
 
-        boolean mHwKeysDisabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                Settings.Secure.HARDWARE_KEYS_DISABLE, 0,
-                UserHandle.USER_CURRENT) == 1;
-
         boolean useHapticFeedback = down
                 && (policyFlags & WindowManagerPolicy.FLAG_VIRTUAL) != 0
                 && event.getRepeatCount() == 0;
-
-        if (mHwKeysDisabled && (keyCode == KeyEvent.KEYCODE_HOME
-                || keyCode == KeyEvent.KEYCODE_MENU
-                || keyCode == KeyEvent.KEYCODE_APP_SWITCH
-                || keyCode == KeyEvent.KEYCODE_ASSIST
-                || keyCode == KeyEvent.KEYCODE_BACK)) {
-            useHapticFeedback = false;
-        }
 
         // Specific device key handling
         if (dispatchKeyToKeyHandlers(event)) {
