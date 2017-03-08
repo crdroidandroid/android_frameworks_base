@@ -103,13 +103,13 @@ public class Toast {
      */
     public Toast(Context context) {
         mContext = context;
-        mTN = new TN();
+        mTN = new TN(context.getPackageName());
         mTN.mY = context.getResources().getDimensionPixelSize(
                 com.android.internal.R.dimen.toast_y_offset);
         mTN.mGravity = context.getResources().getInteger(
                 com.android.internal.R.integer.config_toastDefaultGravity);
     }
-    
+
     /**
      * Show the view for the specified duration.
      */
@@ -136,15 +136,9 @@ public class Toast {
      * after the appropriate duration.
      */
     public void cancel() {
-        mTN.hide();
-
-        try {
-            getService().cancelToast(mContext.getPackageName(), mTN);
-        } catch (RemoteException e) {
-            // Empty
-        }
+        mTN.cancel();
     }
-    
+
     /**
      * Set the view to show.
      * @see #getView
@@ -334,18 +328,40 @@ public class Toast {
         final Runnable mHide = new Runnable() {
             @Override
             public void run() {
-                handleHide();
-                // Don't do this in handleHide() because it is also invoked by handleShow()
-                mNextView = null;
             }
         };
 
         private final WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
+
+        private static final int SHOW = 0;
+        private static final int HIDE = 1;
+        private static final int CANCEL = 2;
         final Handler mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                IBinder token = (IBinder) msg.obj;
-                handleShow(token);
+                switch (msg.what) {
+                    case SHOW: {
+                        IBinder token = (IBinder) msg.obj;
+                        handleShow(token);
+                        break;
+                    }
+                    case HIDE: {
+                        handleHide();
+                        // Don't do this in handleHide() because it is also invoked by handleShow()
+                        mNextView = null;
+                        break;
+                    }
+                    case CANCEL: {
+                        handleHide();
+                        // Don't do this in handleHide() because it is also invoked by handleShow()
+                        mNextView = null;
+                        try {
+                            getService().cancelToast(mPackageName, TN.this);
+                        } catch (RemoteException e) {
+                        }
+                        break;
+                    }
+                }
             }
         };
 
@@ -361,10 +377,12 @@ public class Toast {
 
         WindowManager mWM;
 
+        String mPackageName;
+
         static final long SHORT_DURATION_TIMEOUT = 5000;
         static final long LONG_DURATION_TIMEOUT = 10000;
 
-        TN() {
+        TN(String packageName) {
             // XXX This should be changed to use a Dialog, with a Theme.Toast
             // defined that sets up the layout params appropriately.
             final WindowManager.LayoutParams params = mParams;
@@ -377,6 +395,8 @@ public class Toast {
             params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+
+            mPackageName = packageName;
         }
 
         /**
@@ -385,7 +405,7 @@ public class Toast {
         @Override
         public void show(IBinder windowToken) {
             if (localLOGV) Log.v(TAG, "SHOW: " + this);
-            mHandler.obtainMessage(0, windowToken).sendToTarget();
+            mHandler.obtainMessage(SHOW, windowToken).sendToTarget();
         }
 
         /**
@@ -394,7 +414,12 @@ public class Toast {
         @Override
         public void hide() {
             if (localLOGV) Log.v(TAG, "HIDE: " + this);
-            mHandler.post(mHide);
+            mHandler.obtainMessage(HIDE).sendToTarget();
+        }
+
+        public void cancel() {
+            if (localLOGV) Log.v(TAG, "CANCEL: " + this);
+            mHandler.obtainMessage(CANCEL).sendToTarget();
         }
 
         public void handleShow(IBinder windowToken) {
