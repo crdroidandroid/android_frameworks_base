@@ -33,7 +33,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
     private final float mIconAlphaWhenOpaque;
 
     private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mClock, mNetworkTraffic,
-            mCrDroidLogoRight, mCrDroidLogoLeft, mMinitBattery;
+            mCrDroidLogoRight, mCrDroidLogoLeft, mMinitBattery, mWeatherLeft, mWeatherRight,
+            mWeatherImageViewLeft, mWeatherImageView;
     private Animator mCurrentAnimation;
 
     public PhoneStatusBarTransitions(PhoneStatusBarView view) {
@@ -53,6 +54,10 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         mCrDroidLogoRight = mView.findViewById(R.id.crdroid_logo);
         mCrDroidLogoLeft = mView.findViewById(R.id.left_crdroid_logo);
         mMinitBattery = mView.findViewById(R.id.minitBattery);
+        mWeatherLeft = mView.findViewById(R.id.left_weather_temp);
+        mWeatherRight = mView.findViewById(R.id.weather_temp);
+        mWeatherImageView = mView.findViewById(R.id.weather_image);
+        mWeatherImageViewLeft = mView.findViewById(R.id.left_weather_image);
         applyModeBackground(-1, getMode(), false /*animate*/);
         applyMode(getMode(), false /*animate*/);
     }
@@ -101,7 +106,11 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
                     animateTransitionTo(mClock, newAlphaBC),
                     animateTransitionTo(mCrDroidLogoRight, newAlphaBC),
                     animateTransitionTo(mCrDroidLogoLeft, newAlphaBC),
-                    animateTransitionTo(mMinitBattery, newAlphaBC)
+                    animateTransitionTo(mMinitBattery, newAlphaBC),
+                    animateTransitionTo(mWeatherLeft, newAlphaBC),
+                    animateTransitionTo(mWeatherRight, newAlphaBC),
+                    animateTransitionTo(mWeatherImageView, newAlphaBC),
+                    animateTransitionTo(mWeatherImageViewLeft, newAlphaBC)
                     );
             if (isLightsOut(mode)) {
                 anims.setDuration(LIGHTS_OUT_DURATION);
@@ -118,6 +127,10 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             mCrDroidLogoRight.setAlpha(newAlphaBC);
             mCrDroidLogoLeft.setAlpha(newAlphaBC);
             mMinitBattery.setAlpha(newAlphaBC);
+            mWeatherLeft.setAlpha(newAlphaBC);
+            mWeatherRight.setAlpha(newAlphaBC);
+            mWeatherImageView.setAlpha(newAlphaBC);
+            mWeatherImageViewLeft.setAlpha(newAlphaBC);
         }
     }
 }

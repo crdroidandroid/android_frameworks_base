@@ -37,6 +37,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.systemui.BatteryLevelTextView;
@@ -85,6 +86,12 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     private NetworkTraffic mNetworkTraffic;
     private ImageView mCrDroidLogoRight;
     private ImageView mCrDroidLogoLeft;
+
+    private TextView mWeather;
+    private TextView mWeatherLeft;
+    private ImageView mWeatherImageView;
+    private ImageView mLeftWeatherImageView;
+    private int mStatusBarWeatherEnabled;
 
     private int mIconSize;
     private int mIconHPadding;
@@ -151,6 +158,10 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mCenterClockLayout = statusBar.findViewById(R.id.center_clock_layout);
         mCrDroidLogoRight = (ImageView) statusBar.findViewById(R.id.crdroid_logo);
         mCrDroidLogoLeft = (ImageView) statusBar.findViewById(R.id.left_crdroid_logo);
+        mWeather = (TextView) statusBar.findViewById(R.id.weather_temp);
+        mWeatherLeft = (TextView) statusBar.findViewById(R.id.left_weather_temp);
+        mWeatherImageView = (ImageView) statusBar.findViewById(R.id.weather_image);
+        mLeftWeatherImageView = (ImageView) statusBar.findViewById(R.id.left_weather_image);
         loadDimens();
 
         mBatteryLevelView = (BatteryLevelTextView) statusBar.findViewById(R.id.battery_level);
@@ -345,6 +356,24 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                 Settings.System.STATUS_BAR_CRDROID_LOGO_POSITION, 0) == 0)) {
             animateHide(mCrDroidLogoLeft, animate);
         }
+
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_WEATHER_TEMP_STYLE, 0,
+                UserHandle.USER_CURRENT) == 1) {
+            mStatusBarWeatherEnabled = Settings.System.getIntForUser(
+                    mContext.getContentResolver(), Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0,
+                    UserHandle.USER_CURRENT);
+            if (mStatusBarWeatherEnabled == 1
+                        || mStatusBarWeatherEnabled == 2
+                        || mStatusBarWeatherEnabled == 5) {
+                animateHide(mLeftWeatherImageView, animate);
+            }
+            if (mStatusBarWeatherEnabled == 0 || mStatusBarWeatherEnabled == 5) {
+                return;
+            } else {
+                animateHide(mWeatherLeft, animate);
+            }
+        }
     }
 
     public void showSystemIconArea(boolean animate) {
@@ -355,6 +384,24 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                 (Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_CRDROID_LOGO_POSITION, 0) == 0)) {
             animateShow(mCrDroidLogoLeft, animate);
+        }
+
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_WEATHER_TEMP_STYLE, 0,
+                UserHandle.USER_CURRENT) == 1) {
+            mStatusBarWeatherEnabled = Settings.System.getIntForUser(
+                    mContext.getContentResolver(), Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0,
+                    UserHandle.USER_CURRENT);
+            if (mStatusBarWeatherEnabled == 1
+                        || mStatusBarWeatherEnabled == 2
+                        || mStatusBarWeatherEnabled == 5) {
+                animateShow(mLeftWeatherImageView,animate);
+            }
+            if (mStatusBarWeatherEnabled == 0 || mStatusBarWeatherEnabled == 5) {
+                return;
+            } else {
+                animateShow(mWeatherLeft,animate);
+            }
         }
     }
 
@@ -574,6 +621,18 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                 UserHandle.USER_CURRENT) == 0xFFFFFFFF) {
             mCrDroidLogoRight.setImageTintList(ColorStateList.valueOf(mIconTint));
             mCrDroidLogoLeft.setImageTintList(ColorStateList.valueOf(mIconTint));
+        }
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_WEATHER_COLOR, 0xFFFFFFFF,
+                UserHandle.USER_CURRENT) == 0xFFFFFFFF) {
+            mWeather.setTextColor(mIconTint);
+            mWeatherLeft.setTextColor(mIconTint);
+        }
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_WEATHER_IMAGE_COLOR, 0xFFFFFFFF,
+                UserHandle.USER_CURRENT) == 0xFFFFFFFF) {
+            mWeatherImageView.setImageTintList(ColorStateList.valueOf(mIconTint));
+            mLeftWeatherImageView.setImageTintList(ColorStateList.valueOf(mIconTint));
         }
     }
 
