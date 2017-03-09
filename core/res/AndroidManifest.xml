@@ -558,6 +558,8 @@
     <!-- Superuser  -->
     <protected-broadcast android:name="android.intent.action.SU_SESSION_CHANGED" />
 
+    <protected-broadcast android:name="projekt.substratum.APP_CRASHED" />
+
     <!-- ====================================================================== -->
     <!--                          RUNTIME PERMISSIONS                           -->
     <!-- ====================================================================== -->
