@@ -1825,22 +1825,16 @@ final class Settings {
                 }
             }
 
-            str.close();
-
             mNextAppLinkGeneration.put(userId, maxAppLinkGeneration + 1);
 
-        } catch (XmlPullParserException e) {
+        } catch (XmlPullParserException | java.io.IOException e) {
             mReadMessages.append("Error reading: " + e.toString());
             PackageManagerService.reportSettingsProblem(Log.ERROR,
-                    "Error reading stopped packages: " + e);
-            Slog.wtf(PackageManagerService.TAG, "Error reading package manager stopped packages",
+                    "Error reading package restrictions: " + e);
+            Slog.wtf(PackageManagerService.TAG, "Error reading package manager package restrictions",
                     e);
-
-        } catch (java.io.IOException e) {
-            mReadMessages.append("Error reading: " + e.toString());
-            PackageManagerService.reportSettingsProblem(Log.ERROR, "Error reading settings: " + e);
-            Slog.wtf(PackageManagerService.TAG, "Error reading package manager stopped packages",
-                    e);
+        } finally {
+            IoUtils.closeQuietly(str);
         }
     }
 
@@ -2189,7 +2183,6 @@ final class Settings {
                     "Unable to write package manager user packages state, "
                     + " current changes will be lost at reboot", e);
         }
-
         // Clean up partially written files
         if (userPackagesStateFile.exists()) {
             if (!userPackagesStateFile.delete()) {
@@ -2421,22 +2414,14 @@ final class Settings {
                     XmlUtils.skipCurrentTag(parser);
                 }
             }
-
-            str.close();
-
-        } catch (XmlPullParserException e) {
+        } catch (XmlPullParserException | java.io.IOException e) {
             mReadMessages.append("Error reading: " + e.toString());
             PackageManagerService.reportSettingsProblem(Log.ERROR,
                     "Error reading stopped packages: " + e);
             Slog.wtf(PackageManagerService.TAG, "Error reading package manager stopped packages",
                     e);
-
-        } catch (java.io.IOException e) {
-            mReadMessages.append("Error reading: " + e.toString());
-            PackageManagerService.reportSettingsProblem(Log.ERROR, "Error reading settings: " + e);
-            Slog.wtf(PackageManagerService.TAG, "Error reading package manager stopped packages",
-                    e);
-
+        } finally {
+            IoUtils.closeQuietly(str);
         }
     }
 
@@ -2594,13 +2579,11 @@ final class Settings {
             writeAllRuntimePermissionsLPr();
             return;
 
-        } catch(XmlPullParserException e) {
-            Slog.wtf(PackageManagerService.TAG, "Unable to write package manager settings, "
-                    + "current changes will be lost at reboot", e);
-        } catch(java.io.IOException e) {
+        } catch(XmlPullParserException | java.io.IOException e) {
             Slog.wtf(PackageManagerService.TAG, "Unable to write package manager settings, "
                     + "current changes will be lost at reboot", e);
         }
+
         // Clean up partially written files
         if (mSettingsFilename.exists()) {
             if (!mSettingsFilename.delete()) {
@@ -3174,18 +3157,12 @@ final class Settings {
                     XmlUtils.skipCurrentTag(parser);
                 }
             }
-
-            str.close();
-
-        } catch (XmlPullParserException e) {
+        } catch (XmlPullParserException | java.io.IOException e) {
             mReadMessages.append("Error reading: " + e.toString());
             PackageManagerService.reportSettingsProblem(Log.ERROR, "Error reading settings: " + e);
             Slog.wtf(PackageManagerService.TAG, "Error reading package manager settings", e);
-
-        } catch (java.io.IOException e) {
-            mReadMessages.append("Error reading: " + e.toString());
-            PackageManagerService.reportSettingsProblem(Log.ERROR, "Error reading settings: " + e);
-            Slog.wtf(PackageManagerService.TAG, "Error reading package manager settings", e);
+        } finally {
+            IoUtils.closeQuietly(str);
         }
 
         // If the build is setup to drop runtime permissions
@@ -3322,9 +3299,7 @@ final class Settings {
                     continue;
                 }
                 readDefaultPreferredActivitiesLPw(service, parser, userId);
-            } catch (XmlPullParserException e) {
-                Slog.w(TAG, "Error reading apps file " + f, e);
-            } catch (IOException e) {
+            } catch (XmlPullParserException | IOException e) {
                 Slog.w(TAG, "Error reading apps file " + f, e);
             } finally {
                 if (str != null) {
