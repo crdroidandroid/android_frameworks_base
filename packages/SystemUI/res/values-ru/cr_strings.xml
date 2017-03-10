@@ -122,4 +122,16 @@
     <string name="onthego_transparency">Прозрачность</string>
     <string name="onthego_front_camera">Использовать фронтальную камеру</string>
     <string name="onthego_service_toggle">Автоматически перезапускать службу</string>
+
+    <!-- Slim recents -->
+    <string name="slim_recent_keyguard">Разблокируйте устройство для просмотра недавних приложений</string>
+    <string name="recents_multiwin_warning">Сеанс с несколькими окнами уже активен.\nНажмите на приложение, если хотите открыть его в другой половине экрана.</string>
+    <string name="recents_multiwin_nolastapp">Вы удалили все недавние приложения, пожалуйста, выберите приложение в лаунчере.</string>
+
+    <!-- OmniJaws -->
+    <string name="omnijaws_service_error">Ошибка</string>
+    <string name="omnijaws_service_unkown">Нет данных о погоде</string>
+    <string name="omnijaws_detail_header">Погода</string>
+    <string name="omnijaws_label_default">Погода</string>
+    <string name="omnijaws_current_text">Сейчас</string>
 </resources>
