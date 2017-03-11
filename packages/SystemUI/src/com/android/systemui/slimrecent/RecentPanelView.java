@@ -42,6 +42,7 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
 import android.os.RemoteException;
@@ -60,7 +61,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.systemui.R;
 import com.android.systemui.SystemUIApplication;
@@ -203,24 +203,32 @@ public class RecentPanelView {
                     } else if (id == OPTION_MARKET) {
                         intent = getStoreIntent();
                     } else if (id == OPTION_MULTIWINDOW) {
+                        boolean wasDocked = false;
                         int dockSide = WindowManagerProxy.getInstance().getDockSide();
                         if (dockSide != WindowManager.DOCKED_INVALID) {
                             try {
-                                ActivityManagerNative.getDefault().moveTasksToFullscreenStack(
-                                        ActivityManager.StackId.DOCKED_STACK_ID, false /* onTop */);
+                                //resize the docked stack to fullscreen to disable current multiwindow mode
+                                ActivityManagerNative.getDefault().resizeStack(
+                                                    ActivityManager.StackId.DOCKED_STACK_ID, null, true, true, false, -1);
                             } catch (RemoteException e) {}
+                            wasDocked = true;
                         }
-
                         ActivityOptions options = ActivityOptions.makeBasic();
                         options.setDockCreateMode(0);
                         options.setLaunchStackId(ActivityManager.StackId.DOCKED_STACK_ID);
-                        try {
-                            ActivityManagerNative.getDefault()
-                                    .startActivityFromRecents(task.persistentTaskId, options.toBundle());
-                            mController.openLastApptoBottom();
-                            clearOptions();
-                        } catch (RemoteException e) {}
-                        return; 
+                        Handler mHandler = new Handler();
+                        mHandler.postDelayed(new Runnable() {
+                            public void run() {
+                                try {
+                                    ActivityManagerNative.getDefault()
+                                            .startActivityFromRecents(task.persistentTaskId, options.toBundle());
+                                    mController.openLastApptoBottom();
+                                    clearOptions();
+                                } catch (RemoteException e) {}
+                            }
+                        //if we disabled a running multiwindow mode, just wait a little bit before docking the new apps
+                        }, wasDocked ? 100 : 0);
+                        return;
                     }
                     if (intent != null) {
                         RecentController.sendCloseSystemWindows("close_recents");
@@ -424,14 +432,16 @@ public class RecentPanelView {
                 unwantedDrag = true;
                 areOptionsHidden = false;
 
+                boolean wasDocked = false;
                 int dockSide = WindowManagerProxy.getInstance().getDockSide();
                 if (dockSide != WindowManager.DOCKED_INVALID) {
                     try {
-                        ActivityManagerNative.getDefault().moveTasksToFullscreenStack(
-                                ActivityManager.StackId.DOCKED_STACK_ID, false /* onTop */);
+                        //resize the docked stack to fullscreen to disable current multiwindow mode
+                        ActivityManagerNative.getDefault().resizeStack(
+                                            ActivityManager.StackId.DOCKED_STACK_ID, null, true, true, false, -1);
                     } catch (RemoteException e) {}
+                    wasDocked = true;
                 }
-
                 ActivityOptions options = ActivityOptions.makeBasic();
                 /* Activity Manager let's dock the app to top or bottom dinamically,
                 with the setDockCreateMode DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT is 0,
@@ -439,15 +449,21 @@ public class RecentPanelView {
                 dock app to bottom, if we drag up dock app to top*/
                 options.setDockCreateMode(finalPos > initPos ? 0 : 1);
                 options.setLaunchStackId(ActivityManager.StackId.DOCKED_STACK_ID);
-                try {
-                    ActivityManagerNative.getDefault()
-                            .startActivityFromRecents(taskid, options.toBundle());
-                    card = (RecentCard) mCardAdapter.getCard(finalPos);
-                    int newTaskid = card.task.persistentTaskId;
-                    /*after we docked our main app, on the other side of the screen we
-                    open the app we dragged the main app over*/
-                    mController.openOnDraggedApptoOtherSide(newTaskid);
-                } catch (RemoteException e) {}
+                Handler mHandler = new Handler();
+                mHandler.postDelayed(new Runnable() {
+                    public void run() {
+                        try {
+                            ActivityManagerNative.getDefault()
+                                    .startActivityFromRecents(taskid, options.toBundle());
+                            card = (RecentCard) mCardAdapter.getCard(finalPos);
+                            int newTaskid = card.task.persistentTaskId;
+                            /*after we docked our main app, on the other side of the screen we
+                            open the app we dragged the main app over*/
+                            mController.openOnDraggedApptoOtherSide(newTaskid);
+                        } catch (RemoteException e) {}
+                    }
+                //if we disabled a running multiwindow mode, just wait a little bit before docking the new apps
+                }, wasDocked ? 100 : 0);
             }
 
             @Override
