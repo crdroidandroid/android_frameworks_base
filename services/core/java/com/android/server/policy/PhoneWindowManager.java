@@ -991,10 +991,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (ActionHandler.INTENT_SHOW_POWER_MENU.equals(action)) {
                 mHandler.removeMessages(MSG_DISPATCH_SHOW_GLOBAL_ACTIONS);
                 mHandler.sendEmptyMessage(MSG_DISPATCH_SHOW_GLOBAL_ACTIONS);
-            } else if (ActionHandler.INTENT_SCREENSHOT.equals(action) ||
-                        ActionHandler.INTENT_REGION_SCREENSHOT.equals(action)) {
-                mHandler.removeCallbacks(mScreenshotRunnable);
-                mHandler.post(mScreenshotRunnable);
             }
         }
     };
@@ -2120,8 +2116,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // DU action handler
         filter = new IntentFilter();
         filter.addAction(ActionHandler.INTENT_SHOW_POWER_MENU);
-        filter.addAction(ActionHandler.INTENT_SCREENSHOT);
-        filter.addAction(ActionHandler.INTENT_REGION_SCREENSHOT);
         context.registerReceiver(mDUReceiver, filter);
 
         // monitor for system gestures
