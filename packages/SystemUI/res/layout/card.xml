@@ -88,11 +88,11 @@
 
             <com.android.systemui.slimrecent.RecentImageView
                 android:id="@+id/screenshot"
-                android:background="@android:color/darker_gray"
-                android:layout_width="@dimen/recent_thumbnail_width"
+                android:background="@android:color/transparent"
+                android:layout_width="match_parent"
                 android:visibility="gone"
                 android:layout_margin="4dp"
-                android:layout_height="@dimen/recent_thumbnail_height" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
