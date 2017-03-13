@@ -4164,14 +4164,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             return;
         }
 
-        if (mCrDroidLogoColor != 0xFFFFFFFF) {
-            mCrDroidLogoRight.setColorFilter(mCrDroidLogoColor, PorterDuff.Mode.SRC_IN);
-            mCrDroidLogoLeft.setColorFilter(mCrDroidLogoColor, PorterDuff.Mode.SRC_IN);
-        } else {
-            mCrDroidLogoRight.clearColorFilter();
-            mCrDroidLogoLeft.clearColorFilter();
-        }
-
         if (mCrDroidLogoStyle == 0) {
             drawable = mContext.getResources().getDrawable(R.drawable.ic_crdroid_logo);
         } else if (mCrDroidLogoStyle == 1) {
@@ -4244,6 +4236,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mCrDroidLogoLeft.setImageDrawable(drawable);
         mCrDroidLogoRight.setImageDrawable(null);
         mCrDroidLogoRight.setImageDrawable(drawable);
+
+        if (mCrDroidLogoColor != 0xFFFFFFFF) {
+            mCrDroidLogoRight.setColorFilter(mCrDroidLogoColor, PorterDuff.Mode.SRC_IN);
+            mCrDroidLogoLeft.setColorFilter(mCrDroidLogoColor, PorterDuff.Mode.SRC_IN);
+        } else {
+            mCrDroidLogoRight.clearColorFilter();
+            mCrDroidLogoLeft.clearColorFilter();
+        }
 
         if (mCrDroidLogoPosition == 0) {
             mCrDroidLogoRight.setVisibility(View.GONE);
