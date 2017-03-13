@@ -177,7 +177,6 @@ public class AppIconLoader {
         private IconCallback mCallback;
         private final WeakReference<Context> rContext;
 
-        //private int mOrigPri;
         private float mScaleFactor;
 
         public BitmapDownloaderTask(IconCallback callback,
