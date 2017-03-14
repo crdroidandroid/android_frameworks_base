@@ -205,4 +205,9 @@ public class ISmsBaseImpl extends ISms.Stub {
             throws android.os.RemoteException {
         throw new RemoteException();
     }
+
+    @Override
+    public int getSmsCapacityOnIccForSubscriber(int subId) throws android.os.RemoteException {
+        throw new RemoteException();
+    }
 }
