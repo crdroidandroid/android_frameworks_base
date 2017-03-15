@@ -148,6 +148,11 @@ public class SystemSensorManager extends SensorManager {
             Log.e(TAG, "maxBatchReportLatencyUs and delayUs should be non-negative");
             return false;
         }
+        if (mSensorListeners.size() >= MAX_LISTENER_COUNT) {
+            throw new IllegalStateException("register failed, " +
+                "the sensor listeners size has exceeded the maximum limit " +
+                MAX_LISTENER_COUNT);
+        }
 
         // Invariants to preserve:
         // - one Looper per SensorEventListener
@@ -212,6 +217,12 @@ public class SystemSensorManager extends SensorManager {
         if (listener == null) throw new IllegalArgumentException("listener cannot be null");
 
         if (sensor.getReportingMode() != Sensor.REPORTING_MODE_ONE_SHOT) return false;
+
+        if (mTriggerListeners.size() >= MAX_LISTENER_COUNT) {
+            throw new IllegalStateException("request failed, " +
+                    "the trigger listeners size has exceeded the maximum limit " +
+                    MAX_LISTENER_COUNT);
+        }
 
         synchronized (mTriggerListeners) {
             TriggerEventQueue queue = mTriggerListeners.get(listener);
