@@ -204,6 +204,30 @@ class MobileIconInteractorImpl(
                 true
             )
 
+    private final val ROAMING_INDICATOR_ICON: String =
+            "system:" + Settings.System.ROAMING_INDICATOR_ICON;
+
+    private val shouldShowRoamingIcon: StateFlow<Boolean> =
+        conflatedCallbackFlow {
+                val callback =
+                    object : TunerService.Tunable {
+                        override fun onTuningChanged(key: String, newValue: String?) {
+                            when (key) {
+                                ROAMING_INDICATOR_ICON -> 
+                                    trySend(TunerService.parseIntegerSwitch(newValue, true))
+                            }
+                        }
+                    }
+                Dependency.get(TunerService::class.java).addTunable(callback, ROAMING_INDICATOR_ICON)
+
+                awaitClose { Dependency.get(TunerService::class.java).removeTunable(callback) }
+            }
+            .stateIn(
+                scope,
+                started = SharingStarted.WhileSubscribed(),
+                true
+            )
+
     // True if there exists _any_ icon override for this carrierId. Note that overrides can include
     // any or none of the icon groups defined in MobileMappings, so we still need to check on a
     // per-network-type basis whether or not the given icon group is overridden
@@ -305,13 +329,19 @@ class MobileIconInteractorImpl(
                 connectionRepository.isGsm,
                 connectionRepository.isRoaming,
                 connectionRepository.cdmaRoaming,
-            ) { carrierNetworkChangeActive, isGsm, isRoaming, cdmaRoaming ->
-                if (carrierNetworkChangeActive) {
-                    false
-                } else if (isGsm) {
-                    isRoaming
+                shouldShowRoamingIcon,
+            ) { carrierNetworkChangeActive, isGsm, isRoaming, cdmaRoaming,
+                shouldShowRoamingIcon ->
+                if (shouldShowRoamingIcon) {
+                    if (carrierNetworkChangeActive) {
+                        false
+                    } else if (isGsm) {
+                        isRoaming
+                    } else {
+                        cdmaRoaming
+                    }
                 } else {
-                    cdmaRoaming
+                    false
                 }
             }
             .stateIn(scope, SharingStarted.WhileSubscribed(), false)
