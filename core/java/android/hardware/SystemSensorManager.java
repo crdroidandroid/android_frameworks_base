@@ -16,12 +16,10 @@
 
 package android.hardware;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.MessageQueue;
@@ -49,6 +47,7 @@ import java.util.Map;
 public class SystemSensorManager extends SensorManager {
     //TODO: disable extra logging before release
     private static boolean DEBUG_DYNAMIC_SENSOR = true;
+    private static final int MAX_LISTENER_COUNT = 128;
 
     private static native void nativeClassInit();
     private static native long nativeCreate(String opPackageName);
@@ -131,6 +130,11 @@ public class SystemSensorManager extends SensorManager {
     protected boolean registerListenerImpl(SensorEventListener listener, Sensor sensor,
             int delayUs, Handler handler, int maxBatchReportLatencyUs, int reservedFlags) {
         android.util.SeempLog.record_sensor_rate(381, sensor, delayUs);
+        if (mSensorListeners.size() >= MAX_LISTENER_COUNT) {
+            throw new IllegalStateException("register failed, " +
+                "the sensor listeners size has exceeded the maximum limit " +
+                MAX_LISTENER_COUNT);
+        }
         if (listener == null || sensor == null) {
             Log.e(TAG, "sensor or listener is null");
             return false;
@@ -198,6 +202,11 @@ public class SystemSensorManager extends SensorManager {
     /** @hide */
     @Override
     protected boolean requestTriggerSensorImpl(TriggerEventListener listener, Sensor sensor) {
+        if (mTriggerListeners.size() >= MAX_LISTENER_COUNT) {
+            throw new IllegalStateException("request failed, " +
+                    "the trigger listeners size has exceeded the maximum limit " +
+                    MAX_LISTENER_COUNT);
+        }
         if (sensor == null) throw new IllegalArgumentException("sensor cannot be null");
 
         if (listener == null) throw new IllegalArgumentException("listener cannot be null");
