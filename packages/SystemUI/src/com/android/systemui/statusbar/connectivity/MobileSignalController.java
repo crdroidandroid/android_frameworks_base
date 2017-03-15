@@ -127,9 +127,12 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
     private int mCallState = TelephonyManager.CALL_STATE_IDLE;
 
     private int mVoLTEicon = 0;
+    private boolean mRoamingIconAllowed;
 
     private static final String VOLTE_ICON_STYLE =
             "system:" + Settings.System.VOLTE_ICON_STYLE;
+    private static final String ROAMING_INDICATOR_ICON =
+            "system:" + Settings.System.ROAMING_INDICATOR_ICON;
 
     private final MobileStatusTracker.Callback mMobileCallback =
             new MobileStatusTracker.Callback() {
@@ -294,6 +297,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         mProviderModelSetting = featureFlags.isProviderModelSettingEnabled();
 
         Dependency.get(TunerService.class).addTunable(this, VOLTE_ICON_STYLE);
+        Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
     }
 
     @Override
@@ -303,6 +307,11 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
                 mVoLTEicon =
                     TunerService.parseInteger(newValue, 0);
                 notifyListeners();
+                break;
+            case ROAMING_INDICATOR_ICON:
+                mRoamingIconAllowed =
+                    TunerService.parseIntegerSwitch(newValue, true);
+                updateTelephony();
                 break;
             default:
                 break;
@@ -918,7 +927,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         }
         mCurrentState.dataConnected = mCurrentState.isDataConnected();
 
-        mCurrentState.roaming = isRoaming();
+        mCurrentState.roaming = isRoaming() && mRoamingIconAllowed;
         if (isCarrierNetworkChangeActive()) {
             mCurrentState.iconGroup = TelephonyIcons.CARRIER_NETWORK_CHANGE;
         } else if (isDataDisabled() && !mConfig.alwaysShowDataRatIcon) {
