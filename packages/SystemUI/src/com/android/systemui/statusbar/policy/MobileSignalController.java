@@ -21,6 +21,7 @@ import android.database.ContentObserver;
 import android.net.NetworkCapabilities;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
@@ -36,11 +37,13 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.cdma.EriInfo;
 import com.android.settingslib.graph.SignalDrawable;
+import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.NetworkController.IconState;
 import com.android.systemui.statusbar.policy.NetworkController.SignalCallback;
 import com.android.systemui.statusbar.policy.NetworkControllerImpl.Config;
 import com.android.systemui.statusbar.policy.NetworkControllerImpl.SubscriptionDefaults;
+import com.android.systemui.tuner.TunerService;
 
 import java.io.PrintWriter;
 import java.util.BitSet;
@@ -48,7 +51,7 @@ import java.util.Objects;
 
 
 public class MobileSignalController extends SignalController<
-        MobileSignalController.MobileState, MobileSignalController.MobileIconGroup> {
+        MobileSignalController.MobileState, MobileSignalController.MobileIconGroup> implements TunerService.Tunable {
     private final TelephonyManager mPhone;
     private final SubscriptionDefaults mDefaults;
     private final String mNetworkNameDefault;
@@ -71,6 +74,11 @@ public class MobileSignalController extends SignalController<
     private SignalStrength mSignalStrength;
     private MobileIconGroup mDefaultIcons;
     private Config mConfig;
+
+    private boolean mRoamingIconAllowed;
+
+    private static final String ROAMING_INDICATOR_ICON =
+            "system:" + Settings.System.ROAMING_INDICATOR_ICON;
 
     // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
     // need listener lists anymore.
@@ -108,6 +116,21 @@ public class MobileSignalController extends SignalController<
                 updateTelephony();
             }
         };
+
+        Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case ROAMING_INDICATOR_ICON:
+                     mRoamingIconAllowed =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                     updateTelephony();
+                break;
+            default:
+                break;
+        }
     }
 
     public void setConfiguration(Config config) {
@@ -465,7 +488,7 @@ public class MobileSignalController extends SignalController<
         mCurrentState.dataConnected = mCurrentState.connected
                 && mDataState == TelephonyManager.DATA_CONNECTED;
 
-        mCurrentState.roaming = isRoaming();
+        mCurrentState.roaming = isRoaming() && mRoamingIconAllowed;
         if (isCarrierNetworkChangeActive()) {
             mCurrentState.iconGroup = TelephonyIcons.CARRIER_NETWORK_CHANGE;
         } else if (isDataDisabled() && !mConfig.alwaysShowDataRatIcon) {
