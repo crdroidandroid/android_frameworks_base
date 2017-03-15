@@ -4519,6 +4519,12 @@ public final class Settings {
         public static final String VOLTE_ICON_STYLE = "volte_icon_style";
 
         /**
+         * Whether to display roaming indicator for roaming signal connection
+         * @hide
+         */
+        public static final String ROAMING_INDICATOR_ICON = "roaming_indicator_icon";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
