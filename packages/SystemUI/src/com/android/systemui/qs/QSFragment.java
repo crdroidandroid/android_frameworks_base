@@ -78,6 +78,7 @@ public class QSFragment extends Fragment implements QS, CommandQueue.Callbacks, 
 
     private static boolean mTranslucentQuickSettings;
     private static int mQSTranslucencyPercentage;
+    private boolean mSecureExpandDisabled;
 
     private static final String BLUR_QUICKSETTINGS_ENABLED =
             "system:" + Settings.System.BLUR_QUICKSETTINGS_ENABLED;
@@ -344,7 +345,7 @@ public class QSFragment extends Fragment implements QS, CommandQueue.Callbacks, 
         final float translationScaleY = expansion - 1;
         if (!mHeaderAnimating) {
             getView().setTranslationY(
-                    mKeyguardShowing
+                    mKeyguardShowing || mSecureExpandDisabled
                             ? translationScaleY * mHeader.getHeight()
                             : headerTranslation);
         }
@@ -384,6 +385,7 @@ public class QSFragment extends Fragment implements QS, CommandQueue.Callbacks, 
 
     @Override
     public void animateHeaderSlidingIn(long delay) {
+        if (mSecureExpandDisabled) return;
         if (DEBUG) Log.d(TAG, "animateHeaderSlidingIn");
         // If the QS is already expanded we don't need to slide in the header as it's already
         // visible.
@@ -396,6 +398,7 @@ public class QSFragment extends Fragment implements QS, CommandQueue.Callbacks, 
 
     @Override
     public void animateHeaderSlidingOut() {
+        if (mSecureExpandDisabled) return;
         if (DEBUG) Log.d(TAG, "animateHeaderSlidingOut");
         mHeaderAnimating = true;
         getView().animate().y(-mHeader.getHeight())
@@ -459,6 +462,7 @@ public class QSFragment extends Fragment implements QS, CommandQueue.Callbacks, 
 
     @Override
     public int getQsMinExpansionHeight() {
+        if (mSecureExpandDisabled) return 0;
         return mHeader.getHeight();
     }
 
@@ -466,6 +470,11 @@ public class QSFragment extends Fragment implements QS, CommandQueue.Callbacks, 
     public void hideImmediately() {
         getView().animate().cancel();
         getView().setY(-mHeader.getHeight());
+    }
+
+    @Override
+    public void setSecureExpandDisabled(boolean value) {
+        mSecureExpandDisabled = value;
     }
 
     private final ViewTreeObserver.OnPreDrawListener mStartHeaderSlidingIn
