@@ -501,6 +501,12 @@ public class RecentController implements RecentPanelView.OnExitListener,
 
     // Show the recent window.
     private void showRecents() {
+        try {
+            if (ActivityManagerNative.getDefault().isInLockTaskMode()) {
+                return;
+            }
+        } catch (RemoteException e) {}
+
         if (DEBUG) Log.d(TAG, "in animation starting");
         mIsShowing = true;
         sendCloseSystemWindows(BaseStatusBar.SYSTEM_DIALOG_REASON_RECENT_APPS);

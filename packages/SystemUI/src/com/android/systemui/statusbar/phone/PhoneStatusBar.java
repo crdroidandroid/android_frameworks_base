@@ -1685,17 +1685,26 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     @Override
     protected void toggleSplitScreenMode(int metricsDockAction, int metricsUndockAction) {
+        boolean isInLockTaskMode = false;
+        try {
+            IActivityManager activityManager = ActivityManagerNative.getDefault();
+            if (activityManager.isInLockTaskMode()) {
+                isInLockTaskMode = true;
+            }
+        } catch (RemoteException e) {}
         if (mSlimRecents != null) {
-            int dockSide = WindowManagerProxy.getInstance().getDockSide();
-            if (dockSide == WindowManager.DOCKED_INVALID) {
-                mSlimRecents.startMultiWindow();
-                if (metricsDockAction != -1) {
-                    MetricsLogger.action(mContext, metricsDockAction);
-                }
-            } else {
-                EventBus.getDefault().send(new UndockingTaskEvent());
-                if (metricsUndockAction != -1) {
-                    MetricsLogger.action(mContext, metricsUndockAction);
+            if (!isInLockTaskMode) {
+                int dockSide = WindowManagerProxy.getInstance().getDockSide();
+                if (dockSide == WindowManager.DOCKED_INVALID) {
+                    mSlimRecents.startMultiWindow();
+                    if (metricsDockAction != -1) {
+                        MetricsLogger.action(mContext, metricsDockAction);
+                    }
+                } else {
+                    EventBus.getDefault().send(new UndockingTaskEvent());
+                    if (metricsUndockAction != -1) {
+                        MetricsLogger.action(mContext, metricsUndockAction);
+                    }
                 }
             }
         } else if (mRecents != null) {
