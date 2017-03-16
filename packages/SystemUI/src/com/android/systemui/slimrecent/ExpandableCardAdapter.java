@@ -124,7 +124,9 @@ public class ExpandableCardAdapter extends RecyclerView.Adapter<ExpandableCardAd
                 color = mContext.getColor(R.color.recents_task_bar_dark_text_color);
             }
             holder.appName.setTextColor(color);
-            holder.expandButton.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+            if (card.expandVisible || card.customIcon) {
+                holder.expandButton.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+            }
         }
 
         holder.hideOptions(-1, -1);
