@@ -196,6 +196,11 @@ public class CarQSFragment extends Fragment implements QS {
         // No ability to expand the quick settings.
     }
 
+    @Override
+    public void setSecureExpandDisabled(boolean value) {
+        // No ability to expand the quick settings.
+    }
+
     public class UserSwitchCallback {
         private boolean mShowing;
 
