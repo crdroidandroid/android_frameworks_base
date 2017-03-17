@@ -623,6 +623,9 @@ public class RecentController implements RecentPanelView.OnExitListener,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.RECENT_APP_SIDEBAR_SCALE_FACTOR),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SLIM_RECENTS_ICON_PACK),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -690,6 +693,10 @@ public class RecentController implements RecentPanelView.OnExitListener,
             mAppSidebarScaleFactor = Settings.System.getIntForUser(
                     resolver, Settings.System.RECENT_APP_SIDEBAR_SCALE_FACTOR, 100,
                     UserHandle.USER_CURRENT) / 100.0f;
+
+            String currentIconPack = Settings.System.getString(resolver,
+                Settings.System.SLIM_RECENTS_ICON_PACK);
+            IconPackHelper.getInstance(mContext).updatePrefs(currentIconPack);
         }
     }
 
