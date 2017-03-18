@@ -44,16 +44,19 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.service.notification.ZenModeConfig;
 import android.telecom.TelecomManager;
 import android.text.format.DateFormat;
+import android.util.ArraySet;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 
+import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.dagger.qualifiers.DisplayId;
@@ -85,6 +88,7 @@ import com.android.systemui.statusbar.policy.RotationLockController.RotationLock
 import com.android.systemui.statusbar.policy.SensorPrivacyController;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.ZenModeController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.RingerModeTracker;
 import com.android.systemui.util.kotlin.JavaAdapter;
 import com.android.systemui.util.time.DateFormatUtil;
@@ -111,9 +115,13 @@ public class PhoneStatusBarPolicy
                 KeyguardStateController.Callback,
                 PrivacyItemController.Callback,
                 LocationController.LocationChangeCallback,
-                RecordingController.RecordingStateChangeCallback {
+                RecordingController.RecordingStateChangeCallback,
+                TunerService.Tunable {
     private static final String TAG = "PhoneStatusBarPolicy";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
+
+    private static final String BLUETOOTH_SHOW_BATTERY =
+            "system:" + Settings.System.BLUETOOTH_SHOW_BATTERY;
 
     static final int LOCATION_STATUS_ICON_ID = PrivacyType.TYPE_LOCATION.getIconId();
 
@@ -188,6 +196,9 @@ public class PhoneStatusBarPolicy
     private AlarmManager.AlarmClockInfo mNextAlarm;
 
     private NfcAdapter mAdapter;
+
+    private boolean mShowBluetoothBattery;
+    private boolean mHideBluetooth;
 
     @Inject
     public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController,
@@ -273,6 +284,10 @@ public class PhoneStatusBarPolicy
         mDisplayId = displayId;
         mSharedPreferences = sharedPreferences;
         mDateFormatUtil = dateFormatUtil;
+
+        Dependency.get(TunerService.class).addTunable(this,
+                BLUETOOTH_SHOW_BATTERY,
+                StatusBarIconController.ICON_HIDE_LIST);
     }
 
     /** Initialize the object after construction. */
@@ -422,6 +437,27 @@ public class PhoneStatusBarPolicy
         updateVolumeZen();
     }
 
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case BLUETOOTH_SHOW_BATTERY:
+                mShowBluetoothBattery =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                updateBluetooth();
+                break;
+            case StatusBarIconController.ICON_HIDE_LIST:
+                ArraySet<String> hideList = StatusBarIconController.getIconHideList(mContext, newValue);
+                boolean hideBluetooth = hideList.contains(mSlotBluetooth);
+                if (hideBluetooth != mHideBluetooth) {
+                    mHideBluetooth = hideBluetooth;
+                    updateBluetooth();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     private void updateAlarm() {
         final AlarmClockInfo alarm = mAlarmManager.getNextAlarmClock(mUserTracker.getUserId());
         final boolean hasAlarm = alarm != null && alarm.getTriggerTime() > 0;
@@ -535,14 +571,14 @@ public class PhoneStatusBarPolicy
                     && (mBluetooth.isBluetoothAudioActive()
                     || !mBluetooth.isBluetoothAudioProfileOnly())) {
                 bluetoothVisible = mBluetooth.isBluetoothEnabled();
-                batteryLevel = mBluetooth.getBatteryLevel();
+                batteryLevel = mShowBluetoothBattery ? mBluetooth.getBatteryLevel() : -1;
                 contentDescription = mResources.getString(
                         R.string.accessibility_bluetooth_connected);
             }
         }
 
         mIconController.setBluetoothIcon(mSlotBluetooth,
-                new BluetoothIconState(bluetoothVisible, batteryLevel, contentDescription));
+                new BluetoothIconState(!mHideBluetooth && bluetoothVisible, batteryLevel, contentDescription));
     }
 
     private final void updateTTY() {
