@@ -82,6 +82,8 @@ import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.RotationLockController.RotationLockControllerCallback;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.ZenModeController;
+import com.android.systemui.tuner.TunerService;
+import com.android.systemui.tuner.TunerServiceImpl;
 import com.android.systemui.util.NotificationChannels;
 
 import java.util.List;
@@ -93,7 +95,7 @@ import java.util.List;
  */
 public class PhoneStatusBarPolicy implements Callback, Callbacks,
         RotationLockControllerCallback, Listener, LocationChangeCallback,
-        ZenModeController.Callback, DeviceProvisionedListener, KeyguardMonitor.Callback {
+        ZenModeController.Callback, DeviceProvisionedListener, KeyguardMonitor.Callback, TunerService.Tunable {
     private static final String TAG = "PhoneStatusBarPolicy";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
@@ -144,6 +146,11 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
     private boolean mManagedProfileInQuietMode = false;
 
     private BluetoothController mBluetooth;
+
+    private boolean mShowBluetoothBattery;
+
+    private static final String BLUETOOTH_SHOW_BATTERY =
+            "system:" + Settings.System.BLUETOOTH_SHOW_BATTERY;
 
     public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController) {
         mContext = context;
@@ -258,6 +265,22 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
             mDockedStackExists = exists;
             updateForegroundInstantApps();
         });
+
+        Dependency.get(TunerService.class).addTunable(this,
+                BLUETOOTH_SHOW_BATTERY);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case BLUETOOTH_SHOW_BATTERY:
+                mShowBluetoothBattery =
+                        newValue != null && Integer.parseInt(newValue) == 1;
+                updateBluetooth();
+                break;
+            default:
+                break;
+        }
     }
 
     public void destroy() {
@@ -410,7 +433,9 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
             bluetoothEnabled = mBluetooth.isBluetoothEnabled();
             if (mBluetooth.isBluetoothConnected()) {
                 int batteryLevel = mBluetooth.getLastDevice().getBatteryLevel();
-                if (batteryLevel == 100) {
+                if (!mShowBluetoothBattery) {
+                    iconId = R.drawable.stat_sys_data_bluetooth_connected;
+                } else if (batteryLevel == 100) {
                     iconId = R.drawable.stat_sys_data_bluetooth_connected_battery_5;
                 } else if (batteryLevel > 75) {
                     iconId = R.drawable.stat_sys_data_bluetooth_connected_battery_4;
