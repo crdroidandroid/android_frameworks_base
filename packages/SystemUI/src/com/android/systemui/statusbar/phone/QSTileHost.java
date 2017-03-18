@@ -42,7 +42,6 @@ import com.android.systemui.qs.external.TileLifecycleManager;
 import com.android.systemui.qs.external.TileServices;
 import com.android.systemui.qs.tiles.AdbOverNetworkTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
-import com.android.systemui.qs.tiles.AmbientLiftToWakeTile;
 import com.android.systemui.qs.tiles.BatteryTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.CaffeineTile;
@@ -467,7 +466,6 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("pie")) return new PieTile(this);
         else if (tileSpec.equals("pulse")) return new PulseTile(this);
         else if (tileSpec.equals("live_display")) return new LiveDisplayTile(this);
-        else if (tileSpec.equals("ambient")) return new AmbientLiftToWakeTile(this);
         else if (tileSpec.equals("weather")) return new WeatherTile(this);
         // Intent tiles.
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
