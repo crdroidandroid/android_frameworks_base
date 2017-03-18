@@ -31,6 +31,7 @@ import android.bluetooth.BluetoothAssignedNumbers;
 import android.bluetooth.BluetoothHeadset;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -38,6 +39,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
+import android.database.ContentObserver;
 import android.graphics.drawable.Icon;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -146,6 +148,8 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
 
     private boolean mManagedProfileIconVisible = false;
     private boolean mManagedProfileInQuietMode = false;
+
+    private boolean mShowBluetoothBattery;
 
     private BluetoothController mBluetooth;
 
@@ -268,6 +272,42 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
             mDockedStackExists = exists;
             updateForegroundInstantApps();
         });
+
+        Handler mHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            Uri uri = Settings.System.getUriFor(Settings.System.BLUETOOTH_SHOW_BATTERY);
+            resolver.registerContentObserver(uri, false,
+                    this, UserHandle.USER_ALL);
+            updateSettings();
+        }
+
+        /*
+         *  @hide
+         */
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
+
+    private void updateSettings() {
+        ContentResolver resolver = mContext.getContentResolver();
+
+        mShowBluetoothBattery = Settings.System.getIntForUser(resolver,
+                Settings.System.BLUETOOTH_SHOW_BATTERY, 1,
+                UserHandle.USER_CURRENT) == 1;
+
+        updateBluetooth();
     }
 
     public void destroy() {
@@ -440,9 +480,9 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
         if (mBluetooth != null) {
             bluetoothEnabled = mBluetooth.isBluetoothEnabled();
             if (mBluetooth.isBluetoothConnected()) {
-                if (mBluetoothBatteryLevel == null) {
+                if (mBluetoothBatteryLevel == null || !mShowBluetoothBattery) {
                     iconId = R.drawable.stat_sys_data_bluetooth_connected;
-                } else {
+                } else if (mBluetoothBatteryLevel != null && mShowBluetoothBattery) {
                     if (mBluetoothBatteryLevel<=0.15f) {
                         iconId = R.drawable.stat_sys_data_bluetooth_connected_battery_1;
                     } else if (mBluetoothBatteryLevel<=0.375f) {
