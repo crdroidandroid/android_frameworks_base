@@ -67,7 +67,6 @@ import com.android.systemui.qs.tiles.PulseTile;
 import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
-import com.android.systemui.qs.tiles.SyncTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
 import com.android.systemui.qs.tiles.UserTile;
 import com.android.systemui.qs.tiles.WeatherTile;
@@ -452,7 +451,6 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("expanded_desktop")) return new ExpandedDesktopTile(this);
         else if (tileSpec.equals("screenshot")) return new ScreenshotTile(this);
         else if (tileSpec.equals("adb_network")) return new AdbOverNetworkTile(this);
-        else if (tileSpec.equals("sync")) return new SyncTile(this);
         else if (tileSpec.equals("reboot")) return new RebootTile(this);
         else if (tileSpec.equals("usb_tether")) return new UsbTetherTile(this);
         else if (tileSpec.equals("music")) return new MusicTile(this);
