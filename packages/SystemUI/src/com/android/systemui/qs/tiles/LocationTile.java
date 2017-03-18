@@ -19,9 +19,6 @@ package com.android.systemui.qs.tiles;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.view.View;
@@ -51,9 +48,9 @@ public class LocationTile extends QSTile<QSTile.State> {
     private final Callback mCallback = new Callback();
 
     private String[] mEntries;
-    private Integer[] mValues = {Settings.Secure.LOCATION_MODE_BATTERY_SAVING,
-                Settings.Secure.LOCATION_MODE_SENSORS_ONLY,
-                Settings.Secure.LOCATION_MODE_HIGH_ACCURACY
+    private final Integer[] mValues = {Settings.Secure.LOCATION_MODE_BATTERY_SAVING,
+            Settings.Secure.LOCATION_MODE_SENSORS_ONLY,
+            Settings.Secure.LOCATION_MODE_HIGH_ACCURACY
     };
     private boolean mShowingDetail;
     ArrayList<Integer> mAnimationList
@@ -74,7 +71,7 @@ public class LocationTile extends QSTile<QSTile.State> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsEvent.QS_LOCATION;
+        return MetricsEvent.ABC;
     }
 
     @Override
@@ -106,24 +103,36 @@ public class LocationTile extends QSTile<QSTile.State> {
     @Override
     protected void handleClick() {
         boolean mIsEasy = isLocationEasyToggleEnabled();
-            if(mIsEasy) {
-                 final boolean wasEnabled = (Boolean) mState.value;
-                 MetricsLogger.action(mContext, getMetricsCategory(), !wasEnabled);
-                 mController.setLocationEnabled(!wasEnabled);
+        if(mIsEasy) {
+            MetricsLogger.action(mContext, getMetricsCategory());
+            int currentMode = mController.getLocationCurrentState();
+            if (currentMode == mValues[0]) {
+                //from battery saving to off
+                mController.setLocationEnabled(false);
+            } else if (currentMode == mValues[1]) {
+                //from sensor only to high precision
+                mController.setLocationMode(mValues[2]);
+            } else if (currentMode == mValues[2]) {
+                //from high precision to battery saving
+                mController.setLocationMode(mValues[0]);
             } else {
-                 mShowingDetail = true;
-                 mAnimationList.clear();
-                 MetricsLogger.action(mContext, getMetricsCategory());
-                 if (!mController.isLocationEnabled()) {
-                     mController.setLocationEnabled(true);
-                 }
-                showDetail(true);
+                //from off to sensor only
+                mController.setLocationMode(mValues[1]);
             }
+        } else {
+            mShowingDetail = true;
+            mAnimationList.clear();
+            MetricsLogger.action(mContext, getMetricsCategory());
+            if (!mController.isLocationEnabled()) {
+                mController.setLocationEnabled(true);
+            }
+            showDetail(true);
+        }
     }
 
     public boolean isLocationEasyToggleEnabled() {
         return Settings.Secure.getInt(mContext.getContentResolver(),
-            Settings.Secure.QS_LOCATION_EASY_TOGGLE, 0) == 1;
+                Settings.Secure.QS_EASY_TOGGLE, 0) == 1;
     }
 
     @Override
@@ -139,53 +148,45 @@ public class LocationTile extends QSTile<QSTile.State> {
             mAnimationList.clear();
             MetricsLogger.action(mContext, getMetricsCategory());
             if (!mController.isLocationEnabled()) {
-                 mController.setLocationEnabled(true);
-                 }
+                mController.setLocationEnabled(true);
+            }
             showDetail(true);
         } else {
             mHost.startActivityDismissingKeyguard(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
         }
-
     }
 
     @Override
     protected void handleUpdateState(QSTile.State state, Object arg) {
-         final boolean locationEnabled =  mController.isLocationEnabled();
-         boolean mIsEasy = isLocationEasyToggleEnabled();
-         if (mIsEasy) {
-               // Work around for bug 15916487: don't show location tile on top of lock screen. After the
-               // bug is fixed, this should be reverted to only hiding it on secure lock screens:
-               // state.visible = !(mKeyguard.isSecure() && mKeyguard.isShowing());
-               state.value = locationEnabled;
-               checkIfRestrictionEnforcedByAdminOnly(state, UserManager.DISALLOW_SHARE_LOCATION);
-               if (locationEnabled) {
-                   state.icon = mEnable;
-                   state.label = mContext.getString(R.string.quick_settings_location_label);
-                   state.contentDescription = mContext.getString(
-                                 R.string.accessibility_quick_settings_location_on);
-               } else {
-                   state.icon = mDisable;
-                   state.label = mContext.getString(R.string.quick_settings_location_label);
-                   state.contentDescription = mContext.getString(
-                                 R.string.accessibility_quick_settings_location_off);
-                    if (mAnimationList.isEmpty() && mShowingDetail && arg == null) {
-                    return;
-                    }
-               }
-        } else {
+        if (mAnimationList.isEmpty() && mShowingDetail && arg == null) {
+            return;
+        }
         int currentMode = mController.getLocationCurrentState();
+        boolean mIsEasy = isLocationEasyToggleEnabled();
         switch (currentMode) {
             case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
+                if (mIsEasy) {
+                    state.value = true;
+                    checkIfRestrictionEnforcedByAdminOnly(state, UserManager.DISALLOW_SHARE_LOCATION);
+                }
                 state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_battery_saving);
                 state.label = mContext.getString(R.string.quick_settings_location_battery_saving_label);
                 state.icon = ResourceIcon.get(R.drawable.ic_qs_location_battery_saving);
                 break;
             case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
+                if (mIsEasy) {
+                    state.value = true;
+                    checkIfRestrictionEnforcedByAdminOnly(state, UserManager.DISALLOW_SHARE_LOCATION);
+                }
                 state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_gps_only);
                 state.label = mContext.getString(R.string.quick_settings_location_gps_only_label);
                 state.icon = mEnable;
                 break;
             case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
+                if (mIsEasy) {
+                    state.value = true;
+                    checkIfRestrictionEnforcedByAdminOnly(state, UserManager.DISALLOW_SHARE_LOCATION);
+                }
                 state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_high_accuracy);
                 state.label = mContext.getString(R.string.quick_settings_location_high_accuracy_label);
                 state.icon = ResourceIcon.get(R.drawable.ic_qs_location_high_accuracy);
@@ -194,8 +195,11 @@ public class LocationTile extends QSTile<QSTile.State> {
                 state.contentDescription = mContext.getString(R.string.accessibility_quick_settings_location_off);
                 state.label = mContext.getString(R.string.quick_settings_location_off_label);
                 state.icon = mDisable;
-                break;
+                if (mIsEasy) {
+                    state.value = false;
+                    checkIfRestrictionEnforcedByAdminOnly(state, UserManager.DISALLOW_SHARE_LOCATION);
                 }
+                break;
         }
     }
 
