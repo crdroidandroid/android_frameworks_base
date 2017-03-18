@@ -28,7 +28,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.UserInfo;
-import android.database.ContentObserver;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -54,15 +53,16 @@ import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.SuController;
-
-import cyanogenmod.providers.CMSettings;
+import com.android.systemui.tuner.TunerService;
 
 /**
  * This class contains all of the policy about which icons are installed in the status
  * bar at boot time.  It goes through the normal API for icons, even though it probably
  * strictly doesn't need to.
  */
-public class PhoneStatusBarPolicy implements Callback, RotationLockController.RotationLockControllerCallback, DataSaverController.Listener {
+public class PhoneStatusBarPolicy implements
+        Callback, RotationLockController.RotationLockControllerCallback,
+        DataSaverController.Listener, TunerService.Tunable {
     private static final String TAG = "PhoneStatusBarPolicy";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
@@ -110,6 +110,9 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
 
     private BluetoothController mBluetooth;
 
+    private static final String SHOW_SU_INDICATOR =
+            "system:" + Settings.System.SHOW_SU_INDICATOR;
+
     public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController,
             CastController cast, HotspotController hotspot, UserInfoController userInfoController,
             BluetoothController bluetooth, RotationLockController rotationLockController,
@@ -141,7 +144,6 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
         mSlotDataSaver = context.getString(com.android.internal.R.string.status_bar_data_saver);
         mSlotSu = context.getString(com.android.internal.R.string.status_bar_su);
         mRotationLockController.addRotationLockControllerCallback(this);
-        mSettingsObserver.onChange(true);
 
         // listen for broadcasts
         IntentFilter filter = new IntentFilter();
@@ -200,9 +202,6 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
         mHotspot.addCallback(mHotspotCallback);
 
         // su
-        mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(Settings.System.SHOW_SU_INDICATOR),
-                false, mSettingsObserver);
         mIconController.setIcon(mSlotSu, R.drawable.stat_sys_su, null);
         mIconController.setIconVisibility(mSlotSu, false);
         mSuController.addCallback(mSuCallback);
@@ -219,19 +218,31 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
         mDataSaver.addListener(this);
     }
 
-    private ContentObserver mSettingsObserver = new ContentObserver(null) {
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            mSuIndicatorVisible = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.SHOW_SU_INDICATOR, 0) == 1;
-            updateSu();
-        }
+    @Override
+    protected void onAttachedToWindow() {
+        TunerService.get(mContext).addTunable(this,
+                SHOW_SU_INDICATOR);
+        super.onAttachedToWindow();
+    }
 
-        @Override
-        public void onChange(boolean selfChange) {
-            onChange(selfChange, null);
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        TunerService.get(mContext).removeTunable(this);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+       switch (key) {
+            case SHOW_SU_INDICATOR:
+                mSuIndicatorVisible =
+                        newValue == null || Integer.parseInt(newValue) != 0;
+                updateSu();
+                break;
+            default:
+                break;
         }
-    };
+    }
 
     public void setStatusBarKeyguardViewManager(
             StatusBarKeyguardViewManager statusBarKeyguardViewManager) {
