@@ -4722,6 +4722,12 @@ public final class Settings {
         public static final String BERRY_THEME_OVERRIDE = "berry_theme_override";
 
         /**
+         * Enable\Disable Bluetooth Battery bar
+         * @hide
+         */
+        public static final String BLUETOOTH_SHOW_BATTERY = "bluetooth_show_battery";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
