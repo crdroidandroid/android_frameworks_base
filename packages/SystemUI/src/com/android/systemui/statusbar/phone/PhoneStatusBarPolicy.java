@@ -90,6 +90,7 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
     private StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
     private final SuController mSuController;
     private boolean mSuIndicatorVisible;
+    private boolean mShowBluetoothBattery;
 
     // Assume it's all good unless we hear otherwise.  We don't always seem
     // to get broadcasts that it *is* there.
@@ -110,6 +111,8 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
 
     private static final String SHOW_SU_INDICATOR =
             "system:" + Settings.System.SHOW_SU_INDICATOR;
+    private static final String BLUETOOTH_SHOW_BATTERY =
+            "system:" + Settings.System.BLUETOOTH_SHOW_BATTERY;
 
     public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController,
             CastController cast, HotspotController hotspot, UserInfoController userInfoController,
@@ -216,7 +219,8 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
         mDataSaver.addListener(this);
 
         TunerService.get(mContext).addTunable(this,
-                SHOW_SU_INDICATOR);
+                SHOW_SU_INDICATOR,
+                BLUETOOTH_SHOW_BATTERY);
     }
 
     @Override
@@ -226,6 +230,10 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
                 mSuIndicatorVisible =
                         newValue == null || Integer.parseInt(newValue) != 0;
                 updateSu();
+                break;
+            case BLUETOOTH_SHOW_BATTERY:
+                mShowBluetoothBattery =
+                        newValue != null && Integer.parseInt(newValue) == 1;
                 break;
             default:
                 break;
@@ -384,9 +392,9 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
         if (mBluetooth != null) {
             bluetoothEnabled = mBluetooth.isBluetoothEnabled();
             if (mBluetooth.isBluetoothConnected()) {
-                if (mBluetoothBatteryLevel == null) {
+                if (mBluetoothBatteryLevel == null || !mShowBluetoothBattery) {
                     iconId = R.drawable.stat_sys_data_bluetooth_connected;
-                } else {
+                } else if (mBluetoothBatteryLevel != null && mShowBluetoothBattery) {
                     if (mBluetoothBatteryLevel<=0.15f) {
                         iconId = R.drawable.stat_sys_data_bluetooth_connected_battery_1;
                     } else if (mBluetoothBatteryLevel<=0.375f) {
