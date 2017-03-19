@@ -36,25 +36,12 @@
     <string name="quick_settings_adb_network">ADB по сети</string>
     <string name="quick_settings_network_adb_enabled_label">Включено</string>
     <string name="quick_settings_network_adb_disabled_label">Выключено</string>
-    <string name="quick_settings_sync_label">Синхронизация</string>
-    <string name="accessibility_quick_settings_sync_off">Синхронизация выключена</string>
-    <string name="accessibility_quick_settings_sync_on">Синхронизация включена</string>
-    <string name="accessibility_quick_settings_sync_changed_off">Синхронизация отключена</string>
-    <string name="accessibility_quick_settings_sync_changed_on">Синхронизация включена</string>
     <string name="quick_settings_reboot_label">Перезагрузка</string>
     <string name="quick_settings_reboot_recovery_label">Режим восстановления</string>
-    <string name="accessibility_quick_settings_usb_tether_off">USB-модем выкл.</string>
-    <string name="accessibility_quick_settings_usb_tether_on">USB-модем вкл.</string>
-    <string name="accessibility_quick_settings_usb_tether_changed_off">USB-модем выключен</string>
-    <string name="accessibility_quick_settings_usb_tether_changed_on">USB-модем включен</string>
-    <string name="quick_settings_usb_tether_label">USB модем</string>
     <string name="quick_settings_music_label">Музыка</string>
     <string name="quick_settings_music_play">Воспр.</string>
     <string name="quick_settings_music_pause">Пауза</string>
     <string name="quick_settings_ime_tile_label">Способ ввода</string>
-    <string name="quick_settings_caffeine_label">Запрет сна</string>
-    <string name="accessibility_quick_settings_caffeine_off">Запрет сна выкл.</string>
-    <string name="accessibility_quick_settings_caffeine_on">Запрет сна вкл.</string>
     <string name="quick_settings_nfc_label">NFC</string>
     <string name="accessibility_quick_settings_nfc_off">NFC выкл.</string>
     <string name="accessibility_quick_settings_nfc_on">NFC on.</string>
@@ -68,11 +55,6 @@
     <string name="quick_settings_smartbar_off">SmartBar выкл.</string>
     <string name="quick_settings_fling">Fling</string>
     <string name="quick_settings_fling_off">Fling выкл.</string>
-    <string name="quick_settings_heads_up_label">Всплывающие уведомления</string>
-    <string name="accessibility_quick_settings_heads_up_off">Всплывающие уведомления выкл.</string>
-    <string name="accessibility_quick_settings_heads_up_on">Всплывающие уведомления вкл.</string>
-    <string name="accessibility_quick_settings_heads_up_changed_off">Всплывающие уведомления откл</string>
-    <string name="accessibility_quick_settings_heads_up_changed_on">Всплывающие уведомления вкл</string>
     <string name="quick_settings_pie_label">Pie</string>
     <string name="quick_settings_pulse_enabled">Pulse включён</string>
     <string name="quick_settings_pulse_disabled">Pulse выключен</string>
@@ -96,9 +78,6 @@
     <string name="quick_settings_nfc_label">NFC</string>
     <string name="quick_settings_nfc_off">NFC выкл.</string>
     <string name="quick_settings_nfc_on">NFC вкл.</string>
-    <string name="quick_settings_doze_notifications_label">Индикация событий</string>
-    <string name="quick_settings_doze_notifications_user">Индикация событий</string>
-    <string name="quick_settings_doze_notifications_off">Индикация событий выкл.</string>
     <string name="accessibility_quick_settings_location_battery_saving">Определение местоположения: по координатам сети.</string>
     <string name="accessibility_quick_settings_location_gps_only">Определение местоположения: по спутникам GPS.</string>
     <string name="accessibility_quick_settings_location_high_accuracy">Определение местоположения: по всем источникам.</string>
@@ -125,8 +104,9 @@
 
     <!-- Slim recents -->
     <string name="slim_recent_keyguard">Разблокируйте устройство для просмотра недавних приложений</string>
-    <string name="recents_multiwin_warning">Сеанс с несколькими окнами уже активен.\nНажмите на приложение, если хотите открыть его в другой половине экрана.</string>
-    <string name="recents_multiwin_nolastapp">Вы удалили все недавние приложения, пожалуйста, выберите приложение в лаунчере.</string>
+    <string name="recents_multiwin_warning">Многооконный режим уже активен.\nПросто выберите приложение и нажмите на него.</string>
+    <string name="recents_multiwin_nolastapp">Вы очистили недавние приложения, пожалуйста, выберите приложение на рабочем столе или меню.</string>
+    <string name="recents_killapp_warning">Пожалуйста, удерживайте, чтобы закрыть приложение</string>
 
     <!-- OmniJaws -->
     <string name="omnijaws_service_error">Ошибка</string>
