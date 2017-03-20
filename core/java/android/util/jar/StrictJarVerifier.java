@@ -27,6 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -79,8 +80,7 @@ class StrictJarVerifier {
     private final Hashtable<String, HashMap<String, Attributes>> signatures =
             new Hashtable<String, HashMap<String, Attributes>>(5);
 
-    private final Hashtable<String, Certificate[]> certificates =
-            new Hashtable<String, Certificate[]>(5);
+    private final Hashtable<String, List<Certificate[]>> certificates = new Hashtable<>(5);
 
     private final Hashtable<String, Certificate[][]> verifiedEntries =
             new Hashtable<String, Certificate[][]>();
@@ -152,16 +152,6 @@ class StrictJarVerifier {
                 " in " + jarName);
     }
 
-    private static SecurityException failedVerification(String jarName, String signatureFile) {
-        throw new SecurityException(jarName + " failed verification of " + signatureFile);
-    }
-
-    private static SecurityException failedVerification(String jarName, String signatureFile,
-                                                      Throwable e) {
-        throw new SecurityException(jarName + " failed verification of " + signatureFile, e);
-    }
-
-
     /**
      * Constructs and returns a new instance of {@code JarVerifier}.
      *
@@ -216,9 +206,9 @@ class StrictJarVerifier {
             if (hm.get(name) != null) {
                 // Found an entry for entry name in .SF file
                 String signatureFile = entry.getKey();
-                Certificate[] certChain = certificates.get(signatureFile);
+                List<Certificate[]> certChain = certificates.get(signatureFile);
                 if (certChain != null) {
-                    certChains.add(certChain);
+                    certChains.addAll(certChain);
                 }
             }
         }
@@ -286,13 +276,28 @@ class StrictJarVerifier {
         }
 
         Iterator<String> it = metaEntries.keySet().iterator();
+        List<String> certFiles = new ArrayList<>();
         while (it.hasNext()) {
             String key = it.next();
             if (key.endsWith(".DSA") || key.endsWith(".RSA") || key.endsWith(".EC")) {
-                verifyCertificate(key);
-                it.remove();
+                certFiles.add(key);
             }
         }
+
+        // Sort the list of certificate files so that we iterate over them in a well defined
+        // (lexicographic order).
+        Collections.sort(certFiles);
+        for (String certFile : certFiles) {
+            verifyCertificate(certFile);
+            metaEntries.remove(certFile);
+        }
+
+        // Multiple certificate files might map to the same signature file so we get rid of
+        // the signatures after we've processed all of them.
+        for (String signatureFile : certFiles) {
+            metaEntries.put(getSignatureFileName(signatureFile), null);
+        }
+
         return true;
     }
 
@@ -341,11 +346,17 @@ class StrictJarVerifier {
     }
 
     /**
-     * @param certFile
+     * Returns the signature file for a given cert file. The signature file has the same
+     * "base" name but with an extension of {@code .SF}. As an example, the signature file
+     * for {@code CERT.RSA} is {@code CERT.SF}.
      */
+    private static String getSignatureFileName(String certFile) {
+        return certFile.substring(0, certFile.lastIndexOf('.')) + ".SF";
+    }
+
     private void verifyCertificate(String certFile) {
         // Found Digital Sig, .SF should already have been read
-        String signatureFile = certFile.substring(0, certFile.lastIndexOf('.')) + ".SF";
+        String signatureFile = getSignatureFileName(certFile);
         byte[] sfBytes = metaEntries.get(signatureFile);
         if (sfBytes == null) {
             return;
@@ -361,10 +372,16 @@ class StrictJarVerifier {
         try {
             Certificate[] signerCertChain = verifyBytes(sBlockBytes, sfBytes);
             if (signerCertChain != null) {
-                certificates.put(signatureFile, signerCertChain);
+                List<Certificate[]> certs = certificates.get(signatureFile);
+                if (certs == null) {
+                    certs = new ArrayList<>();
+                    certificates.put(signatureFile, certs);
+                }
+                certs.add(signerCertChain);
             }
         } catch (GeneralSecurityException e) {
-          throw failedVerification(jarName, signatureFile, e);
+            throw new SecurityException(jarName + " failed verification. certFile= "
+                    + certFile, e);
         }
 
         // Verify manifest hash in .sf file
@@ -434,7 +451,7 @@ class StrictJarVerifier {
         if (mainAttributesEnd > 0 && !createdBySigntool) {
             String digestAttribute = "-Digest-Manifest-Main-Attributes";
             if (!verify(attributes, digestAttribute, manifestBytes, 0, mainAttributesEnd, false, true)) {
-                throw failedVerification(jarName, signatureFile);
+                throw new SecurityException(jarName + " failed verification. certFile= " + certFile);
             }
         }
 
@@ -454,7 +471,7 @@ class StrictJarVerifier {
                 }
             }
         }
-        metaEntries.put(signatureFile, null);
+
         signatures.put(signatureFile, entries);
     }
 
