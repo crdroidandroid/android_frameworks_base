@@ -19,44 +19,34 @@
 
 package com.android.systemui.crdroid.statusbarweather;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.database.ContentObserver;
 import android.graphics.Typeface;
-import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.android.systemui.R;
-import com.android.systemui.crdroid.DetailedWeatherView;
 import com.android.systemui.crdroid.OmniJawsClient;
+import com.android.systemui.tuner.TunerService;
 
 import java.util.Arrays;
 
 public class StatusBarWeather extends TextView implements
-        OmniJawsClient.OmniJawsObserver {
+        OmniJawsClient.OmniJawsObserver, TunerService.Tunable {
 
     private static final String TAG = StatusBarWeather.class.getSimpleName();
 
-    private static final boolean DEBUG = false;
-
     private Context mContext;
 
-    private int mStatusBarWeatherEnabled;
-    private TextView mStatusBarWeatherInfo;
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherData;
-    private boolean mEnabled;
+    private int mStatusBarWeatherEnabled;
     private int mWeatherTempStyle;
-    private int mWeatherTempState;
     private int mWeatherTempColor;
     private int mWeatherTempSize;
-    private int mWeatherTempFontStyle = FONT_NORMAL;
+    private int mWeatherTempFontStyle;
 
     // Weather temperature
     public static final int FONT_NORMAL = 0;
@@ -85,42 +75,19 @@ public class StatusBarWeather extends TextView implements
     public static final int FONT_NOTOSERIF_BOLD = 23;
     public static final int FONT_NOTOSERIF_BOLD_ITALIC = 24;
 
-    Handler mHandler;
-
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP), false, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_WEATHER_TEMP_STYLE), false, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                  Settings.System.STATUS_BAR_WEATHER_SIZE),
-                  false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                  Settings.System.STATUS_BAR_WEATHER_FONT_STYLE),
-                  false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                  Settings.System.STATUS_BAR_WEATHER_COLOR),
-                  false, this, UserHandle.USER_ALL);
-            updateSettings(false);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings(true);
-        }
-    }
+    private static final String STATUS_BAR_SHOW_WEATHER_TEMP =
+            "system:" + Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP;
+    private static final String STATUS_BAR_WEATHER_TEMP_STYLE =
+            "system:" + Settings.System.STATUS_BAR_WEATHER_TEMP_STYLE;
+    private static final String STATUS_BAR_WEATHER_SIZE =
+            "system:" + Settings.System.STATUS_BAR_WEATHER_SIZE;
+    private static final String STATUS_BAR_WEATHER_FONT_STYLE =
+            "system:" + Settings.System.STATUS_BAR_WEATHER_FONT_STYLE;
+    private static final String STATUS_BAR_WEATHER_COLOR =
+            "system:" + Settings.System.STATUS_BAR_WEATHER_COLOR;
 
     public StatusBarWeather(Context context) {
         this(context, null);
-
     }
 
     public StatusBarWeather(Context context, AttributeSet attrs) {
@@ -130,189 +97,189 @@ public class StatusBarWeather extends TextView implements
     public StatusBarWeather(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
-        mHandler = new Handler();
         mWeatherClient = new OmniJawsClient(mContext);
-        mEnabled = mWeatherClient.isOmniJawsEnabled();
-        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
-        settingsObserver.observe();
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mEnabled = mWeatherClient.isOmniJawsEnabled();
         mWeatherClient.addObserver(this);
-        queryAndUpdateWeather();
+        TunerService.get(mContext).addTunable(this,
+                STATUS_BAR_SHOW_WEATHER_TEMP,
+                STATUS_BAR_WEATHER_TEMP_STYLE,
+                STATUS_BAR_WEATHER_SIZE,
+                STATUS_BAR_WEATHER_FONT_STYLE,
+                STATUS_BAR_WEATHER_COLOR);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        TunerService.get(mContext).removeTunable(this);
         mWeatherClient.removeObserver(this);
         mWeatherClient.cleanupObserver();
     }
 
     @Override
+    public void onTuningChanged(String key, String newValue) {
+       switch (key) {
+            case STATUS_BAR_SHOW_WEATHER_TEMP:
+                mStatusBarWeatherEnabled =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                queryAndUpdateWeather();
+                break;
+            case STATUS_BAR_WEATHER_TEMP_STYLE:
+                mWeatherTempStyle =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                queryAndUpdateWeather();
+                break;
+            case STATUS_BAR_WEATHER_SIZE:
+                mWeatherTempSize =
+                        newValue == null ? 14 : Integer.parseInt(newValue);
+                updateattributes();
+                break;
+            case STATUS_BAR_WEATHER_FONT_STYLE:
+                mWeatherTempFontStyle =
+                        newValue == null ? FONT_NORMAL : Integer.parseInt(newValue);
+                updateattributes();
+                break;
+            case STATUS_BAR_WEATHER_COLOR:
+                mWeatherTempColor =
+                        newValue == null ? 0xFFFFFFFF : Integer.parseInt(newValue);
+                updateattributes();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void weatherUpdated() {
-        if (DEBUG) Log.d(TAG, "weatherUpdated");
         queryAndUpdateWeather();
     }
 
-    public void updateSettings(boolean onChange) {
-        ContentResolver resolver = mContext.getContentResolver();
-        mStatusBarWeatherEnabled = Settings.System.getIntForUser(
-                resolver, Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0,
-                UserHandle.USER_CURRENT);
-        mWeatherTempStyle = Settings.System.getIntForUser(mContext.getContentResolver(), 
-                Settings.System.STATUS_BAR_WEATHER_TEMP_STYLE, 0,
-                UserHandle.USER_CURRENT);
-        mWeatherTempSize = Settings.System.getIntForUser(resolver,
-                Settings.System.STATUS_BAR_WEATHER_SIZE, 14,
-                UserHandle.USER_CURRENT);
-        mWeatherTempFontStyle = Settings.System.getIntForUser(resolver,
-                Settings.System.STATUS_BAR_WEATHER_FONT_STYLE, FONT_NORMAL,
-                UserHandle.USER_CURRENT);
-        mWeatherTempColor = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_WEATHER_COLOR, 0xFFFFFFFF,
-                UserHandle.USER_CURRENT);
-        if(mWeatherTempStyle == 1) {
+    private void queryAndUpdateWeather() {
+        if (mStatusBarWeatherEnabled == 0) {
             setVisibility(View.GONE);
-            return;
-        }
-        if (mStatusBarWeatherEnabled != 0 && mStatusBarWeatherEnabled != 5) {
-            mWeatherClient.setOmniJawsEnabled(true);
-            queryAndUpdateWeather();
-        } else {
-            setVisibility(View.GONE);
-        }
-
-        if (onChange && mStatusBarWeatherEnabled == 0) {
             // Disable OmniJaws if tile isn't used either
-            String[] tiles = Settings.Secure.getStringForUser(resolver,
+            String[] tiles = Settings.Secure.getStringForUser(mContext.getContentResolver(),
                     Settings.Secure.QS_TILES, UserHandle.USER_CURRENT).split(",");
             boolean weatherTileEnabled = Arrays.asList(tiles).contains("weather");
-            Log.d(TAG, "Weather tile enabled " + weatherTileEnabled);
             if (!weatherTileEnabled) {
                 mWeatherClient.setOmniJawsEnabled(false);
             }
+            return;
         }
-    }
 
-    private void queryAndUpdateWeather() {
+        if(mWeatherTempStyle == 1 || mStatusBarWeatherEnabled == 5) {
+            setVisibility(View.GONE);
+            return;
+        }
+
+        if (!mWeatherClient.isOmniJawsEnabled())
+            mWeatherClient.setOmniJawsEnabled(true);
+
+        updateattributes();
         try {
-            if (DEBUG) Log.d(TAG, "queryAndUpdateWeather " + mEnabled);
-            if (mEnabled) {
-                mWeatherClient.queryWeather();
-                mWeatherData = mWeatherClient.getWeatherInfo();
-                if (mWeatherData != null) {
-                    if (mStatusBarWeatherEnabled != 0
-                            || mStatusBarWeatherEnabled != 5) {
-                        if (mStatusBarWeatherEnabled == 2 || mStatusBarWeatherEnabled == 4) {
-                            setText(mWeatherData.temp);
-                        } else {
-                            setText(mWeatherData.temp + mWeatherData.tempUnits);
-                        }
-                        if (mStatusBarWeatherEnabled != 0 && mStatusBarWeatherEnabled != 5) {
-                            setVisibility(View.VISIBLE);
-                            updateattributes();
-                        }
-                    }
-                } else {
-                    setVisibility(View.GONE);
-                }
-            } else {
+            mWeatherClient.queryWeather();
+            mWeatherData = mWeatherClient.getWeatherInfo();
+            if (mWeatherData == null) {
                 setVisibility(View.GONE);
+                return;
             }
+            if (mStatusBarWeatherEnabled == 2 || mStatusBarWeatherEnabled == 4) {
+                setText(mWeatherData.temp);
+            } else {
+                setText(mWeatherData.temp + mWeatherData.tempUnits);
+            }
+            setVisibility(View.VISIBLE);
         } catch(Exception e) {
             // Do nothing
         }
-       if(mWeatherTempStyle == 1) {
-          setVisibility(View.GONE);
-       }
     }
 
-   public void updateattributes() {
+    public void updateattributes() {
         try {
             setTextColor(mWeatherTempColor);
             setTextSize(mWeatherTempSize);
             switch (mWeatherTempFontStyle) {
-                        case FONT_NORMAL:
-                        default:
-                              setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
-                            break;
-                        case FONT_ITALIC:
-                              setTypeface(Typeface.create("sans-serif", Typeface.ITALIC));
-                            break;
-                        case FONT_BOLD:
-                              setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
-                            break;
-                        case FONT_BOLD_ITALIC:
-                              setTypeface(Typeface.create("sans-serif", Typeface.BOLD_ITALIC));
-                            break;
-                        case FONT_LIGHT:
-                              setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
-                            break;
-                        case FONT_LIGHT_ITALIC:
-                              setTypeface(Typeface.create("sans-serif-light", Typeface.ITALIC));
-                            break;
-                        case FONT_THIN:
-                              setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
-                            break;
-                        case FONT_THIN_ITALIC:
-                              setTypeface(Typeface.create("sans-serif-thin", Typeface.ITALIC));
-                            break;
-                        case FONT_CONDENSED:
-                              setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
-                            break;
-                        case FONT_CONDENSED_ITALIC:
-                              setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC));
-                            break;
-                        case FONT_CONDENSED_LIGHT:
-                              setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.NORMAL));
-                            break;
-                        case FONT_CONDENSED_LIGHT_ITALIC:
-                              setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.ITALIC));
-                            break;
-                        case FONT_CONDENSED_BOLD:
-                              setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
-                            break;
-                        case FONT_CONDENSED_BOLD_ITALIC:
-                              setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD_ITALIC));
-                            break;
-                        case FONT_MEDIUM:
-                              setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-                            break;
-                        case FONT_MEDIUM_ITALIC:
-                              setTypeface(Typeface.create("sans-serif-medium", Typeface.ITALIC));
-                            break;
-                        case FONT_BLACK:
-                              setTypeface(Typeface.create("sans-serif-black", Typeface.NORMAL));
-                            break;
-                        case FONT_BLACK_ITALIC:
-                              setTypeface(Typeface.create("sans-serif-black", Typeface.ITALIC));
-                            break;
-                        case FONT_DANCINGSCRIPT:
-                              setTypeface(Typeface.create("cursive", Typeface.NORMAL));
-                            break;
-                        case FONT_DANCINGSCRIPT_BOLD:
-                              setTypeface(Typeface.create("cursive", Typeface.BOLD));
-                            break;
-                        case FONT_COMINGSOON:
-                              setTypeface(Typeface.create("casual", Typeface.NORMAL));
-                            break;
-                        case FONT_NOTOSERIF:
-                              setTypeface(Typeface.create("serif", Typeface.NORMAL));
-                            break;
-                        case FONT_NOTOSERIF_ITALIC:
-                              setTypeface(Typeface.create("serif", Typeface.ITALIC));
-                            break;
-                        case FONT_NOTOSERIF_BOLD:
-                              setTypeface(Typeface.create("serif", Typeface.BOLD));
-                            break;
-                        case FONT_NOTOSERIF_BOLD_ITALIC:
-                              setTypeface(Typeface.create("serif", Typeface.BOLD_ITALIC));
-                            break;
-                }
+                case FONT_NORMAL:
+                default:
+                    setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+                    break;
+                case FONT_ITALIC:
+                    setTypeface(Typeface.create("sans-serif", Typeface.ITALIC));
+                    break;
+                case FONT_BOLD:
+                    setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+                    break;
+                case FONT_BOLD_ITALIC:
+                    setTypeface(Typeface.create("sans-serif", Typeface.BOLD_ITALIC));
+                    break;
+                case FONT_LIGHT:
+                    setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                    break;
+                case FONT_LIGHT_ITALIC:
+                    setTypeface(Typeface.create("sans-serif-light", Typeface.ITALIC));
+                    break;
+                case FONT_THIN:
+                    setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
+                    break;
+                case FONT_THIN_ITALIC:
+                    setTypeface(Typeface.create("sans-serif-thin", Typeface.ITALIC));
+                    break;
+                case FONT_CONDENSED:
+                    setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
+                    break;
+                case FONT_CONDENSED_ITALIC:
+                    setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC));
+                    break;
+                case FONT_CONDENSED_LIGHT:
+                    setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.NORMAL));
+                    break;
+                case FONT_CONDENSED_LIGHT_ITALIC:
+                    setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.ITALIC));
+                    break;
+                case FONT_CONDENSED_BOLD:
+                    setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
+                    break;
+                case FONT_CONDENSED_BOLD_ITALIC:
+                    setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD_ITALIC));
+                    break;
+                case FONT_MEDIUM:
+                    setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                    break;
+                case FONT_MEDIUM_ITALIC:
+                    setTypeface(Typeface.create("sans-serif-medium", Typeface.ITALIC));
+                    break;
+                case FONT_BLACK:
+                    setTypeface(Typeface.create("sans-serif-black", Typeface.NORMAL));
+                    break;
+                case FONT_BLACK_ITALIC:
+                    setTypeface(Typeface.create("sans-serif-black", Typeface.ITALIC));
+                    break;
+                case FONT_DANCINGSCRIPT:
+                    setTypeface(Typeface.create("cursive", Typeface.NORMAL));
+                    break;
+                case FONT_DANCINGSCRIPT_BOLD:
+                    setTypeface(Typeface.create("cursive", Typeface.BOLD));
+                    break;
+                case FONT_COMINGSOON:
+                    setTypeface(Typeface.create("casual", Typeface.NORMAL));
+                    break;
+                case FONT_NOTOSERIF:
+                    setTypeface(Typeface.create("serif", Typeface.NORMAL));
+                    break;
+                case FONT_NOTOSERIF_ITALIC:
+                    setTypeface(Typeface.create("serif", Typeface.ITALIC));
+                    break;
+                case FONT_NOTOSERIF_BOLD:
+                    setTypeface(Typeface.create("serif", Typeface.BOLD));
+                    break;
+                case FONT_NOTOSERIF_BOLD_ITALIC:
+                    setTypeface(Typeface.create("serif", Typeface.BOLD_ITALIC));
+                    break;
+            }
         } catch(Exception e) {
             // Do nothing
         }

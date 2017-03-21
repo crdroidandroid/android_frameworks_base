@@ -19,38 +19,37 @@
 
 package com.android.systemui.crdroid.statusbarweather;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.database.ContentObserver;
-import android.os.Handler;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.android.systemui.R;
-import com.android.systemui.crdroid.DetailedWeatherView;
 import com.android.systemui.crdroid.OmniJawsClient;
+import com.android.systemui.tuner.TunerService;
 
 public class StatusBarWeatherImageLeft extends ImageView implements
-        OmniJawsClient.OmniJawsObserver {
+        OmniJawsClient.OmniJawsObserver, TunerService.Tunable {
 
     private String TAG = StatusBarWeatherImageLeft.class.getSimpleName();
 
-    private static final boolean DEBUG = false;
-
     private Context mContext;
 
-    private int mStatusBarWeatherEnabled;
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherData;
-    private boolean mEnabled;
+    private int mStatusBarWeatherEnabled;
     private int mWeatherTempStyle;
     private int mWeatherImageColor;
 
-    Handler mHandler;
+    private static final String STATUS_BAR_SHOW_WEATHER_TEMP =
+            "system:" + Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP;
+    private static final String STATUS_BAR_WEATHER_TEMP_STYLE =
+            "system:" + Settings.System.STATUS_BAR_WEATHER_TEMP_STYLE;
+    private static final String STATUS_BAR_WEATHER_IMAGE_COLOR =
+            "system:" + Settings.System.STATUS_BAR_WEATHER_IMAGE_COLOR;
+    private static final String OMNIJAWS_WEATHER_ICON_PACK =
+            "system:" + Settings.System.OMNIJAWS_WEATHER_ICON_PACK;
 
     public StatusBarWeatherImageLeft(Context context) {
         this(context, null);
@@ -63,11 +62,7 @@ public class StatusBarWeatherImageLeft extends ImageView implements
     public StatusBarWeatherImageLeft(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
-        mHandler = new Handler();
         mWeatherClient = new OmniJawsClient(mContext);
-        mEnabled = mWeatherClient.isOmniJawsEnabled();
-        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
-        settingsObserver.observe();
     }
 
     @Override
@@ -78,104 +73,89 @@ public class StatusBarWeatherImageLeft extends ImageView implements
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mEnabled = mWeatherClient.isOmniJawsEnabled();
         mWeatherClient.addObserver(this);
-        queryAndUpdateWeather();
+        TunerService.get(mContext).addTunable(this,
+                STATUS_BAR_SHOW_WEATHER_TEMP,
+                STATUS_BAR_WEATHER_TEMP_STYLE,
+                STATUS_BAR_WEATHER_IMAGE_COLOR,
+                OMNIJAWS_WEATHER_ICON_PACK);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        TunerService.get(mContext).removeTunable(this);
         mWeatherClient.removeObserver(this);
         mWeatherClient.cleanupObserver();
     }
 
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP), false, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_WEATHER_TEMP_STYLE), false, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_WEATHER_IMAGE_COLOR),
-                    false, this, UserHandle.USER_ALL);
-            updateSettings();
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+       switch (key) {
+            case STATUS_BAR_SHOW_WEATHER_TEMP:
+                mStatusBarWeatherEnabled =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                queryAndUpdateWeather();
+                break;
+            case STATUS_BAR_WEATHER_TEMP_STYLE:
+                mWeatherTempStyle =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                queryAndUpdateWeather();
+                break;
+            case STATUS_BAR_WEATHER_IMAGE_COLOR:
+                mWeatherImageColor =
+                        newValue == null ? 0xFFFFFFFF : Integer.parseInt(newValue);
+                updateattributes();
+                break;
+            case OMNIJAWS_WEATHER_ICON_PACK:
+                queryAndUpdateWeather();
+                break;
+            default:
+                break;
         }
     }
 
     @Override
     public void weatherUpdated() {
-        if (DEBUG) Log.d(TAG, "weatherUpdated");
         queryAndUpdateWeather();
     }
 
-    public void updateSettings() {
-        ContentResolver resolver = mContext.getContentResolver();
-        mStatusBarWeatherEnabled = Settings.System.getIntForUser(
-                resolver, Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0,
-                UserHandle.USER_CURRENT);
-        mWeatherTempStyle = Settings.System.getIntForUser(mContext.getContentResolver(), 
-                Settings.System.STATUS_BAR_WEATHER_TEMP_STYLE, 0,
-                UserHandle.USER_CURRENT);
-        mWeatherImageColor = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.STATUS_BAR_WEATHER_IMAGE_COLOR, 0xFFFFFFFF, UserHandle.USER_CURRENT);
-        if(mWeatherTempStyle == 0) {
+    private void queryAndUpdateWeather() {
+        if (mWeatherTempStyle == 0 || mStatusBarWeatherEnabled == 0 ||
+                mStatusBarWeatherEnabled == 3 || mStatusBarWeatherEnabled == 4) {
             setVisibility(View.GONE);
             return;
         }
-        if (mStatusBarWeatherEnabled == 1
-                || mStatusBarWeatherEnabled == 2
-                || mStatusBarWeatherEnabled == 5) {
+
+        if (!mWeatherClient.isOmniJawsEnabled())
             mWeatherClient.setOmniJawsEnabled(true);
-            queryAndUpdateWeather();
-        } else {
-            setVisibility(View.GONE);
+
+        updateattributes();
+        try {
+            //setImageDrawable(mWeatherClient.getDefaultWeatherConditionImage());
+            mWeatherClient.queryWeather();
+            mWeatherData = mWeatherClient.getWeatherInfo();
+            if (mWeatherData == null) {
+                setVisibility(View.GONE);
+                return;
+            }
+            setImageDrawable(mWeatherClient.getWeatherConditionImage(
+                  mWeatherData.conditionCode));
+            setVisibility(View.VISIBLE);
+        } catch(Exception e) {
+            // Do nothing
         }
     }
 
-    private void queryAndUpdateWeather() {
+    public void updateattributes() {
         try {
-            if (DEBUG) Log.d(TAG, "queryAndUpdateWeather " + mEnabled);
-            setImageDrawable(mWeatherClient.getDefaultWeatherConditionImage());
-            if (mEnabled) {
-                mWeatherClient.queryWeather();
-                mWeatherData = mWeatherClient.getWeatherInfo();
-                if (mWeatherData != null) {
-                    if (mStatusBarWeatherEnabled == 1
-                            || mStatusBarWeatherEnabled == 2
-                            || mStatusBarWeatherEnabled == 5) {
-                        setImageDrawable(mWeatherClient.getWeatherConditionImage(
-                                mWeatherData.conditionCode));
-                        setVisibility(View.VISIBLE);
-                        if(mWeatherImageColor != 0xFFFFFFFF) {
-                           setColorFilter(mWeatherImageColor);
-                        } else {
-                          clearColorFilter();
-                        }
-                    }
-                } else {
-                    setVisibility(View.GONE);
-                }
+            if (mWeatherImageColor != 0xFFFFFFFF) {
+                setColorFilter(mWeatherImageColor);
             } else {
-                setVisibility(View.GONE);
+                clearColorFilter();
             }
         } catch(Exception e) {
             // Do nothing
         }
-       if(mWeatherTempStyle == 0) {
-          setVisibility(View.GONE);
-       }
     }
 }

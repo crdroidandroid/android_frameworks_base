@@ -70,12 +70,14 @@
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Weather.Detailed"
                 android:gravity="left|center_vertical"
+                android:paddingStart="2dip"
                 android:paddingEnd="1dip" />
 
             <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherImageLeft
                 android:id="@+id/left_weather_image"
                 android:layout_width="24dp"
                 android:layout_height="match_parent"
+                android:paddingStart="2dip"
                 android:paddingEnd="1dip" />
         </com.android.keyguard.AlphaOptimizedLinearLayout>
 
@@ -109,13 +111,15 @@
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Weather.Detailed"
                 android:gravity="right|center_vertical"
-                android:paddingEnd="1dip" />
+                android:paddingStart="1dip"
+                android:paddingEnd="2dip" />
 
             <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherImage
                 android:id="@+id/weather_image"
                 android:layout_width="24dp"
                 android:layout_height="match_parent"
-                android:paddingEnd="1dip" />
+                android:paddingStart="1dip"
+                android:paddingEnd="2dip" />
 
             <include layout="@layout/system_icons" />
 
