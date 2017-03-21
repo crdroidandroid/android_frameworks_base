@@ -57,6 +57,25 @@
             android:scaleType="center"
             android:visibility="gone" />
 
+        <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherImage
+            android:id="@+id/weather_image"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:paddingStart="2dip"
+            android:paddingEnd="1dip"
+            android:visibility="gone" />
+
+        <com.android.systemui.crdroid.statusbarweather.StatusBarWeather
+            android:id="@+id/weather_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Weather.Detailed"
+            android:gravity="left|center_vertical"
+            android:paddingStart="2dip"
+            android:paddingEnd="1dip"
+            android:visibility="gone" />
+
         <!-- The alpha of this area is controlled from both PhoneStatusBarTransitions and
              PhoneStatusBar (DISABLE_NOTIFICATION_ICONS). -->
         <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
@@ -86,6 +105,25 @@
                     android:gravity="end|center_vertical"/>
 
             </com.android.systemui.statusbar.LineageStatusBarItemHolder>
+
+            <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherImageRight
+                android:id="@+id/weather_image_right"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:paddingStart="1dip"
+                android:paddingEnd="2dip"
+                android:visibility="gone" />
+
+            <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherRight
+                android:id="@+id/weather_temp_right"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Weather.Detailed"
+                android:gravity="right|center_vertical"
+                android:paddingStart="1dip"
+                android:paddingEnd="2dip"
+                android:visibility="gone" />
 
             <include layout="@layout/system_icons" />
 

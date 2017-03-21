@@ -34,6 +34,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
 
     private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mClock, mNetworkTraffic;
     private View mCrDroidLogo, mCrDroidLogoRight;
+    private View mWeather, mWeatherImage, mWeatherRight, mWeatherImageRight;
     private Animator mCurrentAnimation;
     private View mBatteryBar;
 
@@ -47,11 +48,15 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
     public void init() {
         mLeftSide = mView.findViewById(R.id.notification_icon_area);
         mCrDroidLogo = mView.findViewById(R.id.crdroid_logo);
+        mWeather = mView.findViewById(R.id.weather_temp);
+        mWeatherImage = mView.findViewById(R.id.weather_image);
         mStatusIcons = mView.findViewById(R.id.statusIcons);
         mSignalCluster = mView.findViewById(R.id.signal_cluster);
         mBattery = mView.findViewById(R.id.battery);
         mClock = mView.findViewById(R.id.clock);
         mNetworkTraffic = mView.findViewById(R.id.network_traffic);
+        mWeatherRight = mView.findViewById(R.id.weather_temp_right);
+        mWeatherImageRight = mView.findViewById(R.id.weather_image_right);
         mCrDroidLogoRight = mView.findViewById(R.id.crdroid_logo_right);
         mBatteryBar = mView.findViewById(R.id.battery_bar);
         applyModeBackground(-1, getMode(), false /*animate*/);
@@ -95,10 +100,14 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             AnimatorSet anims = new AnimatorSet();
             anims.playTogether(
                     animateTransitionTo(mCrDroidLogo, newAlpha),
+                    animateTransitionTo(mWeather, newAlpha),
+                    animateTransitionTo(mWeatherImage, newAlpha),
                     animateTransitionTo(mLeftSide, newAlpha),
                     animateTransitionTo(mStatusIcons, newAlpha),
                     animateTransitionTo(mSignalCluster, newAlpha),
                     animateTransitionTo(mNetworkTraffic, newAlpha),
+                    animateTransitionTo(mWeatherRight, newAlpha),
+                    animateTransitionTo(mWeatherImageRight, newAlpha),
                     animateTransitionTo(mCrDroidLogoRight, newAlpha),
                     animateTransitionTo(mBatteryBar, newAlphaBC),
                     animateTransitionTo(mBattery, newAlphaBC),
@@ -111,10 +120,14 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             mCurrentAnimation = anims;
         } else {
             mCrDroidLogo.setAlpha(newAlpha);
+            mWeather.setAlpha(newAlpha);
+            mWeatherImage.setAlpha(newAlpha);
             mLeftSide.setAlpha(newAlpha);
             mStatusIcons.setAlpha(newAlpha);
             mSignalCluster.setAlpha(newAlpha);
             mNetworkTraffic.setAlpha(newAlpha);
+            mWeatherRight.setAlpha(newAlpha);
+            mWeatherImageRight.setAlpha(newAlpha);
             mCrDroidLogoRight.setAlpha(newAlpha);
             mBatteryBar.setAlpha(newAlphaBC);
             mBattery.setAlpha(newAlphaBC);
