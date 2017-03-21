@@ -60,6 +60,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private NetworkController mNetworkController;
     private LinearLayout mSystemIconArea;
     private View mCrDroidLogo, mCrDroidLogoRight;
+    private View mWeather, mWeatherImage, mWeatherRight, mWeatherImageRight;
     private View mNotificationIconAreaInner;
     private int mDisabled1;
     private StatusBar mStatusBarComponent;
@@ -120,6 +121,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mSystemIconArea = mStatusBar.findViewById(R.id.system_icon_area);
         mCrDroidLogo = mStatusBar.findViewById(R.id.crdroid_logo);
         mCrDroidLogoRight = mStatusBar.findViewById(R.id.crdroid_logo_right);
+        mWeather = mStatusBar.findViewById(R.id.weather_temp);
+        mWeatherImage = mStatusBar.findViewById(R.id.weather_image);
+        mWeatherRight = mStatusBar.findViewById(R.id.weather_temp_right);
+        mWeatherImageRight = mStatusBar.findViewById(R.id.weather_image_right);
         mBatteryBar = mStatusBar.findViewById(R.id.battery_bar);
         mSignalClusterView = mStatusBar.findViewById(R.id.signal_cluster);
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mSignalClusterView);
@@ -228,11 +233,19 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         animateHide(mBatteryBar, animate);
         animateHide(mCrDroidLogo, animate);
         animateHide(mCrDroidLogoRight, animate);
+        animateHide(mWeather, animate);
+        animateHide(mWeatherImage, animate);
+        animateHide(mWeatherRight, animate);
+        animateHide(mWeatherImageRight, animate);
         animateHide(mSystemIconArea, animate);
     }
 
     public void showSystemIconArea(boolean animate) {
         animateShow(mSystemIconArea, animate);
+        animateShow(mWeatherImageRight, animate);
+        animateShow(mWeatherRight, animate);
+        animateShow(mWeatherImage, animate);
+        animateShow(mWeather, animate);
         animateShow(mCrDroidLogoRight, animate);
         animateShow(mCrDroidLogo, animate);
         animateShow(mBatteryBar, animate);
