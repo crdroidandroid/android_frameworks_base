@@ -48,11 +48,6 @@
     <string name="quick_settings_music_play">Play</string>
     <string name="quick_settings_music_pause">Pause</string>
     <string name="quick_settings_ime_tile_label">Input method</string>
-    <string name="quick_settings_nfc_label">NFC</string>
-    <string name="accessibility_quick_settings_nfc_off">NFC off.</string>
-    <string name="accessibility_quick_settings_nfc_on">NFC on.</string>
-    <string name="accessibility_quick_settings_nfc_changed_off">NFC turned off.</string>
-    <string name="accessibility_quick_settings_nfc_changed_on">NFC turned on.</string>
     <string name="qs_lte_label">LTE</string>
     <string name="lte_on">LTE ON </string>
     <string name="lte_off">LTE OFF</string>
