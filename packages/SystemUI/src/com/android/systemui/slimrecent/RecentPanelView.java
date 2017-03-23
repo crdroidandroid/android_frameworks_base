@@ -1159,18 +1159,18 @@ public class RecentPanelView {
 
             final ExpandableCard ec = card;
 
-            final Bitmap appIcon =
+            final Drawable appIcon =
                     CacheController.getInstance(mContext).getBitmapFromMemCache(task.identifier);
             if (appIcon != null) {
-                ec.appIcon = new BitmapDrawable(mContext.getResources(), appIcon);
-                //mCardAdapter.notifyItemChanged(index);
+                ec.appIcon = appIcon;
+                mCardAdapter.notifyItemChanged(index);
             } else {
                 AppIconLoader.getInstance(mContext).loadAppIcon(task.resolveInfo,
                         task.identifier, new AppIconLoader.IconCallback() {
                             @Override
                             public void onDrawableLoaded(Drawable drawable) {
                                 ec.appIcon = drawable;
-                                //mCardAdapter.notifyItemChanged(index);
+                                mCardAdapter.notifyItemChanged(index);
                             }
                 }, mScaleFactor);
             }
@@ -1178,7 +1178,7 @@ public class RecentPanelView {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap) {
                     ec.screenshot = bitmap;
-                    //mCardAdapter.notifyItemChanged(index);
+                    mCardAdapter.notifyItemChanged(index);
                 }
             }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, task.persistentTaskId);
             card.cardClickListener = new View.OnClickListener() {
