@@ -22,6 +22,8 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src) $(call all-Iaidl-files-unde
 
 LOCAL_SRC_FILES += $(call all-java-files-under, ../../../../packages/apps/DUI/src)
 
+LOCAL_SRC_FILES += $(call all-java-files-under, ../../../../packages/apps/SlimRecents/src)
+
 LOCAL_STATIC_JAVA_LIBRARIES := \
     Keyguard \
     android-support-v7-recyclerview \
@@ -36,7 +38,8 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     org.cyanogenmod.platform.internal \
     uicommon \
     trail-drawing \
-    rebound
+    rebound \
+    android-support-v7-cardview
 
 LOCAL_JAVA_LIBRARIES := telephony-common org.dirtyunicorns.utils
 LOCAL_FULL_LIBS_MANIFEST_FILES := $(LOCAL_PATH)/AndroidManifest_cm.xml
@@ -55,11 +58,13 @@ LOCAL_RESOURCE_DIR := \
     frameworks/support/v7/appcompat/res \
     frameworks/support/v7/recyclerview/res \
     frameworks/support/v17/leanback/res \
-    packages/apps/DUI/res
+    packages/apps/DUI/res \
+    packages/apps/SlimRecents/res \
+    frameworks/support/v7/cardview/res
 
 LOCAL_AAPT_FLAGS := --auto-add-overlay \
     --extra-packages com.android.keyguard:android.support.v7.recyclerview:android.support.v7.preference:android.support.v14.preference:android.support.v7.appcompat \
-	--extra-packages android.support.v17.leanback
+	--extra-packages android.support.v17.leanback:android.support.v7.cardview
 
 ifneq ($(SYSTEM_UI_INCREMENTAL_BUILDS),)
     LOCAL_PROGUARD_ENABLED := disabled

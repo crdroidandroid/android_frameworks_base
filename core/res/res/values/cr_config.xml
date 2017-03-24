@@ -26,4 +26,10 @@
 
     <!-- Whether doze feature is enabled by default in settings. -->
     <bool name="config_doze_enabled_by_default">false</bool>
+
+    <!-- The duration (in milliseconds) of recent app screen animation. -->
+    <integer name="config_recentDefaultDur">300</integer>
+
+    <!-- The duration (in milliseconds) of recent app screen exit animation. -->
+    <integer name="config_recentExitDur">450</integer>
 </resources>
