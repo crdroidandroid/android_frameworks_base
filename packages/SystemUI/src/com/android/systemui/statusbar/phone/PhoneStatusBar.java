@@ -4241,25 +4241,26 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             drawable = mContext.getResources().getDrawable(R.drawable.ic_guitar_electric);
         }
 
-        mCrDroidLogoLeft.setImageDrawable(null);
-        mCrDroidLogoLeft.setImageDrawable(drawable);
-        mCrDroidLogoRight.setImageDrawable(null);
-        mCrDroidLogoRight.setImageDrawable(drawable);
-
-        if (mCrDroidLogoColor != 0xFFFFFFFF) {
-            mCrDroidLogoRight.setColorFilter(mCrDroidLogoColor, PorterDuff.Mode.SRC_IN);
-            mCrDroidLogoLeft.setColorFilter(mCrDroidLogoColor, PorterDuff.Mode.SRC_IN);
-        } else {
-            mCrDroidLogoRight.clearColorFilter();
-            mCrDroidLogoLeft.clearColorFilter();
-        }
-
         if (mCrDroidLogoPosition == 0) {
             mCrDroidLogoRight.setVisibility(View.GONE);
             mCrDroidLogoLeft.setVisibility(View.VISIBLE);
+            mCrDroidLogoLeft.setImageDrawable(null);
+            mCrDroidLogoLeft.setImageDrawable(drawable);
+            if (mCrDroidLogoColor != 0xFFFFFFFF) {
+                mCrDroidLogoLeft.setColorFilter(mCrDroidLogoColor, PorterDuff.Mode.SRC_IN);
+            } else {
+                mCrDroidLogoLeft.clearColorFilter();
+            }
         } else {
             mCrDroidLogoLeft.setVisibility(View.GONE);
             mCrDroidLogoRight.setVisibility(View.VISIBLE);
+            mCrDroidLogoRight.setImageDrawable(null);
+            mCrDroidLogoRight.setImageDrawable(drawable);
+            if (mCrDroidLogoColor != 0xFFFFFFFF) {
+                mCrDroidLogoRight.setColorFilter(mCrDroidLogoColor, PorterDuff.Mode.SRC_IN);
+            } else {
+                mCrDroidLogoRight.clearColorFilter();
+            }
         }
     }
 
