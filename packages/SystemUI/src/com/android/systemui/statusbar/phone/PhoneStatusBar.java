@@ -1685,17 +1685,38 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     @Override
     protected void toggleSplitScreenMode(int metricsDockAction, int metricsUndockAction) {
-        if (mRecents == null) {
-            return;
-        }
-        int dockSide = WindowManagerProxy.getInstance().getDockSide();
-        if (dockSide == WindowManager.DOCKED_INVALID) {
-            mRecents.dockTopTask(NavigationBarGestureHelper.DRAG_MODE_NONE,
-                    ActivityManager.DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT, null, metricsDockAction);
-        } else {
-            EventBus.getDefault().send(new UndockingTaskEvent());
-            if (metricsUndockAction != -1) {
-                MetricsLogger.action(mContext, metricsUndockAction);
+        boolean isInLockTaskMode = false;
+        try {
+            IActivityManager activityManager = ActivityManagerNative.getDefault();
+            if (activityManager.isInLockTaskMode()) {
+                isInLockTaskMode = true;
+            }
+        } catch (RemoteException e) {}
+        if (mSlimRecents != null) {
+            if (!isInLockTaskMode) {
+                int dockSide = WindowManagerProxy.getInstance().getDockSide();
+                if (dockSide == WindowManager.DOCKED_INVALID) {
+                    mSlimRecents.startMultiWindow();
+                    if (metricsDockAction != -1) {
+                        MetricsLogger.action(mContext, metricsDockAction);
+                    }
+                } else {
+                    EventBus.getDefault().send(new UndockingTaskEvent());
+                    if (metricsUndockAction != -1) {
+                        MetricsLogger.action(mContext, metricsUndockAction);
+                    }
+                }
+            }
+        } else if (mRecents != null) {
+            int dockSide = WindowManagerProxy.getInstance().getDockSide();
+            if (dockSide == WindowManager.DOCKED_INVALID) {
+                mRecents.dockTopTask(NavigationBarGestureHelper.DRAG_MODE_NONE,
+                        ActivityManager.DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT, null, metricsDockAction);
+            } else {
+                EventBus.getDefault().send(new UndockingTaskEvent());
+                if (metricsUndockAction != -1) {
+                    MetricsLogger.action(mContext, metricsUndockAction);
+                }
             }
         }
     }
