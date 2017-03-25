@@ -25,6 +25,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.provider.Settings;
+import android.os.UserHandle;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
