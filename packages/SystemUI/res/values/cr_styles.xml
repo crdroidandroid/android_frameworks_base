@@ -54,15 +54,6 @@
         <item name="android:shadowRadius">4</item>
     </style>
 
-    <!-- Slim recents -->
-
-    <style name="card_header_favorite_icon">
-        <item name="android:layout_width">@dimen/recent_favorite_icon_size</item>
-        <item name="android:layout_height">@dimen/recent_favorite_icon_size</item>
-        <item name="android:layout_marginStart">-18dp</item>
-        <item name="android:layout_marginTop">5dp</item>
-    </style>
-
     <!-- OmniJaws -->
     <style name="TextAppearance.StatusBar.Expanded.Weather">
         <item name="android:textSize">12sp</item>

@@ -36,9 +36,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     org.cyanogenmod.platform.internal \
     uicommon \
     trail-drawing \
-    rebound \
-    android-support-v7-cardview \
-    android-opt-cards
+    rebound
 
 LOCAL_JAVA_LIBRARIES := telephony-common org.dirtyunicorns.utils
 LOCAL_FULL_LIBS_MANIFEST_FILES := $(LOCAL_PATH)/AndroidManifest_cm.xml
@@ -57,14 +55,11 @@ LOCAL_RESOURCE_DIR := \
     frameworks/support/v7/appcompat/res \
     frameworks/support/v7/recyclerview/res \
     frameworks/support/v17/leanback/res \
-    packages/apps/DUI/res \
-    frameworks/support/v7/cardview/res \
-    frameworks/opt/cards/res
+    packages/apps/DUI/res
 
 LOCAL_AAPT_FLAGS := --auto-add-overlay \
     --extra-packages com.android.keyguard:android.support.v7.recyclerview:android.support.v7.preference:android.support.v14.preference:android.support.v7.appcompat \
-    --extra-packages android.support.v17.leanback:android.support.v7.cardview \
-    --extra-packages com.android.cards
+	--extra-packages android.support.v17.leanback
 
 ifneq ($(SYSTEM_UI_INCREMENTAL_BUILDS),)
     LOCAL_PROGUARD_ENABLED := disabled

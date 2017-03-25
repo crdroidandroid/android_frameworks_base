@@ -4742,69 +4742,6 @@ public final class Settings {
         public static final String WAKELOCK_BLOCKING_LIST = "wakelock_blocking_list";
 
         /**
-         * Whether to use slim recents
-         * @hide
-         */
-        public static final String USE_SLIM_RECENTS = "use_slim_recents";
-
-        /**
-         * Whether to only show actually running tasks
-         * @hide
-         */
-        public static final String RECENT_SHOW_RUNNING_TASKS = "show_running_tasks";
-
-        /**
-         * Amount of apps to show in recents
-         * @hide
-         */
-        public static final String RECENTS_MAX_APPS = "recents_max_apps";
-
-        /**
-         * Whether recent panel gravity is left or right (default = Gravity.RIGHT).
-         * @hide
-         */
-        public static final String RECENT_PANEL_GRAVITY = "recent_panel_gravity";
-
-        /**
-         * Size of recent panel view in percent (default = 100).
-         * @hide
-         */
-        public static final String RECENT_PANEL_SCALE_FACTOR = "recent_panel_scale_factor";
-
-        /**
-         * User favorite tasks for recent panel.
-         * @hide
-         */
-        public static final String RECENT_PANEL_FAVORITES = "recent_panel_favorites";
-
-        /**
-         * Recent panel expanded mode (auto = 0, always = 1, never = 2).
-         * default = 0.
-         *
-         * @hide
-         */
-        public static final String RECENT_PANEL_EXPANDED_MODE = "recent_panel_expanded_mode";
-
-        /**
-         * Recent panel: Show topmost task
-         * @hide
-         */
-        public static final String RECENT_PANEL_SHOW_TOPMOST = "recent_panel_show_topmost";
-
-        /**
-         * Recent panel background color
-         * @hide
-         */
-        public static final String RECENT_PANEL_BG_COLOR = "recent_panel_bg_color";
-
-        /**
-         * Recent card background color
-         *
-         * @hide
-         */
-        public static final String RECENT_CARD_BG_COLOR = "recent_card_bg_color";
-
-        /**
          * Disable FC Notifications
          * @hide
          */
@@ -4826,47 +4763,6 @@ public final class Settings {
          * @hide
          */
         public static final String DND_WHEN_CALL = "dnd_when_call";
-
-        /**
-         * Recent app sidebar content
-         *
-         * @hide
-         */
-        public static final String RECENT_APP_SIDEBAR_CONTENT = "recent_app_sidebar_content";
-
-        /**
-         * Disable text labels for the slim recent app sidebar items
-         *
-         * @hide
-         */
-        public static final String RECENT_APP_SIDEBAR_DISABLE_LABELS = "recent_app_sidebar_disable_labels";
-
-        /**
-         * Slim recent app sidebar background color
-         *
-         * @hide
-         */
-        public static final String RECENT_APP_SIDEBAR_BG_COLOR = "recent_app_sidebar_bg_color";
-
-        /**
-         * Slim recent app sidebar text color
-         *
-         * @hide
-         */
-        public static final String RECENT_APP_SIDEBAR_TEXT_COLOR = "recent_app_sidebar_text_color";
-
-        /**
-         * Size of recent app sidebar in percent (default = 100).
-         *
-         * @hide
-         */
-        public static final String RECENT_APP_SIDEBAR_SCALE_FACTOR = "recent_app_sidebar_scale_factor";
-
-        /**
-         * Custom icon pack name to use for Slim Recents
-         * @hide
-         */
-        public static final String SLIM_RECENTS_ICON_PACK = "slim_recents_icon_pack";
 
         /**
          * Enable\Disable Bluetooth Battery bar
