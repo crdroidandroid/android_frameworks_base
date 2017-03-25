@@ -161,17 +161,25 @@ public class StatusBarWeather extends TextView implements
     private void queryAndUpdateWeather() {
         if (mStatusBarWeatherEnabled == 0) {
             setVisibility(View.GONE);
-            // Disable OmniJaws if tile isn't used either
-            String[] tiles = Settings.Secure.getStringForUser(mContext.getContentResolver(),
-                    Settings.Secure.QS_TILES, UserHandle.USER_CURRENT).split(",");
-            boolean weatherTileEnabled = Arrays.asList(tiles).contains("weather");
-            if (!weatherTileEnabled) {
-                mWeatherClient.setOmniJawsEnabled(false);
+
+            if (!mWeatherClient.isOmniJawsEnabled())
+                return;
+
+            try {
+                // Disable OmniJaws if tile isn't used either
+                String[] tiles = Settings.Secure.getStringForUser(mContext.getContentResolver(),
+                        Settings.Secure.QS_TILES, UserHandle.USER_CURRENT).split(",");
+                boolean weatherTileEnabled = Arrays.asList(tiles).contains("weather");
+                if (!weatherTileEnabled) {
+                    mWeatherClient.setOmniJawsEnabled(false);
+                }
+                return;
+            } catch (Exception e) {
+                return;
             }
-            return;
         }
 
-        if(mWeatherTempStyle == 1 || mStatusBarWeatherEnabled == 5) {
+        if (mWeatherTempStyle == 1 || mStatusBarWeatherEnabled == 5) {
             setVisibility(View.GONE);
             return;
         }
@@ -193,7 +201,7 @@ public class StatusBarWeather extends TextView implements
                 setText(mWeatherData.temp + mWeatherData.tempUnits);
             }
             setVisibility(View.VISIBLE);
-        } catch(Exception e) {
+        } catch (Exception e) {
             // Do nothing
         }
     }
@@ -280,7 +288,7 @@ public class StatusBarWeather extends TextView implements
                     setTypeface(Typeface.create("serif", Typeface.BOLD_ITALIC));
                     break;
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             // Do nothing
         }
     }
