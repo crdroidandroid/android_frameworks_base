@@ -71,6 +71,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     private PhoneStatusBar mPhoneStatusBar;
     private DemoStatusIcons mDemoStatusIcons;
 
+    private LinearLayout mCustomIconArea;
     private LinearLayout mSystemIconArea;
     private LinearLayout mStatusIcons;
     private SignalClusterView mSignalCluster;
@@ -132,6 +133,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                 com.android.internal.R.array.config_statusBarIcons));
         mContext = context;
         mPhoneStatusBar = phoneStatusBar;
+        mCustomIconArea =  (LinearLayout) statusBar.findViewById(R.id.left_custom_layout);
         mSystemIconArea = (LinearLayout) statusBar.findViewById(R.id.system_icon_area);
         mStatusIcons = (LinearLayout) statusBar.findViewById(R.id.statusIcons);
         mSignalCluster = (SignalClusterView) statusBar.findViewById(R.id.signal_cluster);
@@ -348,61 +350,15 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     }
 
     public void hideSystemIconArea(boolean animate) {
+        animateHide(mCustomIconArea, animate);
         animateHide(mSystemIconArea, animate);
         animateHide(mCenterClockLayout, animate);
-        if ((Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_CRDROID_LOGO, 0) == 1) &&
-                (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_CRDROID_LOGO_POSITION, 0) == 0)) {
-            animateHide(mCrDroidLogoLeft, animate);
-        }
-
-        if (Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_WEATHER_TEMP_STYLE, 0,
-                UserHandle.USER_CURRENT) == 1) {
-            mStatusBarWeatherEnabled = Settings.System.getIntForUser(
-                    mContext.getContentResolver(), Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0,
-                    UserHandle.USER_CURRENT);
-            if (mStatusBarWeatherEnabled == 1
-                        || mStatusBarWeatherEnabled == 2
-                        || mStatusBarWeatherEnabled == 5) {
-                animateHide(mLeftWeatherImageView, animate);
-            }
-            if (mStatusBarWeatherEnabled == 0 || mStatusBarWeatherEnabled == 5) {
-                return;
-            } else {
-                animateHide(mWeatherLeft, animate);
-            }
-        }
     }
 
     public void showSystemIconArea(boolean animate) {
+        animateShow(mCustomIconArea, animate);
         animateShow(mSystemIconArea, animate);
         animateShow(mCenterClockLayout, animate);
-        if ((Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_CRDROID_LOGO, 0) == 1) &&
-                (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_CRDROID_LOGO_POSITION, 0) == 0)) {
-            animateShow(mCrDroidLogoLeft, animate);
-        }
-
-        if (Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_WEATHER_TEMP_STYLE, 0,
-                UserHandle.USER_CURRENT) == 1) {
-            mStatusBarWeatherEnabled = Settings.System.getIntForUser(
-                    mContext.getContentResolver(), Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0,
-                    UserHandle.USER_CURRENT);
-            if (mStatusBarWeatherEnabled == 1
-                        || mStatusBarWeatherEnabled == 2
-                        || mStatusBarWeatherEnabled == 5) {
-                animateShow(mLeftWeatherImageView,animate);
-            }
-            if (mStatusBarWeatherEnabled == 0 || mStatusBarWeatherEnabled == 5) {
-                return;
-            } else {
-                animateShow(mWeatherLeft,animate);
-            }
-        }
     }
 
     public void hideNotificationIconArea(boolean animate) {
