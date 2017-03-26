@@ -74,6 +74,7 @@ public class SignalClusterView
     private int mEthernetIconId = 0;
     private int mLastEthernetIconId = -1;
     private boolean mWifiVisible = false;
+    private boolean mMobileIms = false;
     private int mWifiStrengthId = 0;
     private int mLastWifiStrengthId = -1;
     private int mWifiActivityId = 0;
@@ -91,7 +92,7 @@ public class SignalClusterView
 
     ViewGroup mEthernetGroup, mWifiGroup;
     View mNoSimsCombo;
-    ImageView mVpn, mEthernet, mWifi, mAirplane, mNoSims, mEthernetDark, mWifiDark, mNoSimsDark;
+    ImageView mVpn, mEthernet, mWifi, mAirplane, mNoSims, mEthernetDark, mWifiDark, mNoSimsDark, mMobileImsImageView;
     ImageView mWifiActivity;
     View mWifiAirplaneSpacer;
     View mWifiSignalSpacer;
@@ -111,9 +112,12 @@ public class SignalClusterView
     private boolean mBlockEthernet;
 
     private boolean mDataWifiActivityArrows;
+    private boolean mVoLTEicon;
 
     private static final String DATA_ACTIVITY_ARROWS =
             "system:" + Settings.System.DATA_ACTIVITY_ARROWS;
+    private static final String VOLTE_ICON =
+            "system:" + Settings.System.VOLTE_ICON;
 
     public SignalClusterView(Context context) {
         this(context, null);
@@ -166,6 +170,12 @@ public class SignalClusterView
             case DATA_ACTIVITY_ARROWS:
                      mDataWifiActivityArrows =
                         newValue == null || Integer.parseInt(newValue) != 0;
+                     apply();
+                break;
+            case VOLTE_ICON:
+                     mVoLTEicon =
+                        newValue != null && Integer.parseInt(newValue) == 1;
+                     apply();
                 break;
             default:
                 break;
@@ -200,6 +210,7 @@ public class SignalClusterView
         mAirplane       = (ImageView) findViewById(R.id.airplane);
         mNoSims         = (ImageView) findViewById(R.id.no_sims);
         mNoSimsDark     = (ImageView) findViewById(R.id.no_sims_dark);
+        mMobileImsImageView = (ImageView) findViewById(R.id.ims_hd);
         mNoSimsCombo    =             findViewById(R.id.no_sims_combo);
         mWifiAirplaneSpacer =         findViewById(R.id.wifi_airplane_spacer);
         mWifiSignalSpacer =           findViewById(R.id.wifi_signal_spacer);
@@ -239,7 +250,8 @@ public class SignalClusterView
 
         TunerService.get(mContext).addTunable(this,
                 StatusBarIconController.ICON_BLACKLIST,
-                DATA_ACTIVITY_ARROWS);
+                DATA_ACTIVITY_ARROWS,
+                VOLTE_ICON);
 
         apply();
         applyIconTint();
@@ -294,7 +306,7 @@ public class SignalClusterView
     @Override
     public void setMobileDataIndicators(IconState statusIcon, IconState qsIcon, int statusType,
             int qsType, boolean activityIn, boolean activityOut, String typeContentDescription,
-            String description, boolean isWide, int subId) {
+            String description, boolean isWide, int subId, boolean isMobileIms) {
         PhoneState state = getState(subId);
         if (state == null) {
             return;
@@ -309,6 +321,7 @@ public class SignalClusterView
                 : activityIn ? R.drawable.stat_sys_signal_in
                 : activityOut ? R.drawable.stat_sys_signal_out
                 : 0;
+        mMobileIms = isMobileIms;
 
         apply();
     }
@@ -325,6 +338,7 @@ public class SignalClusterView
     @Override
     public void setNoSims(boolean show) {
         mNoSimsVisible = show && !mBlockMobile;
+        mMobileIms = !mNoSimsVisible && mMobileIms;
         apply();
     }
 
@@ -565,6 +579,12 @@ public class SignalClusterView
             mWifiSignalSpacer.setVisibility(View.GONE);
         }
 
+        if (mMobileIms && mVoLTEicon){
+            mMobileImsImageView.setVisibility(View.VISIBLE);
+        } else {
+            mMobileImsImageView.setVisibility(View.GONE);
+        }
+
         mNoSimsCombo.setVisibility(mNoSimsVisible ? View.VISIBLE : View.GONE);
     }
 
@@ -597,6 +617,7 @@ public class SignalClusterView
     private void applyIconTint() {
         setTint(mVpn, StatusBarIconController.getTint(mTintArea, mVpn, mIconTint));
         setTint(mAirplane, StatusBarIconController.getTint(mTintArea, mAirplane, mIconTint));
+        setTint(mMobileImsImageView, StatusBarIconController.getTint(mTintArea, mMobileImsImageView, mIconTint));
         applyDarkIntensity(
                 StatusBarIconController.getDarkIntensity(mTintArea, mNoSims, mDarkIntensity),
                 mNoSims, mNoSimsDark);

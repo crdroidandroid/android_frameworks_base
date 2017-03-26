@@ -4730,6 +4730,12 @@ public final class Settings {
         public static final String DATA_ACTIVITY_ARROWS = "data_activity_arrows";
 
         /**
+         * Whether to display VoLTE icon when VoLTE present
+         * @hide
+         */
+        public static final String VOLTE_ICON = "volte_icon";
+
+        /**
          * Enable blocking wakelock
          * @hide
          */
