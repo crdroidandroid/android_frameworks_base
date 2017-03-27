@@ -97,12 +97,6 @@
     <string name="onthego_front_camera">Использовать фронтальную камеру</string>
     <string name="onthego_service_toggle">Автоматически перезапускать службу</string>
 
-    <!-- Slim recents -->
-    <string name="slim_recent_keyguard">Разблокируйте устройство для просмотра недавних приложений</string>
-    <string name="recents_multiwin_warning">Многооконный режим уже активен.\nПросто выберите приложение и нажмите на него.</string>
-    <string name="recents_multiwin_nolastapp">Вы очистили недавние приложения, пожалуйста, выберите приложение на рабочем столе или меню.</string>
-    <string name="recents_killapp_warning">Пожалуйста, удерживайте, чтобы закрыть приложение</string>
-
     <!-- OmniJaws -->
     <string name="omnijaws_service_error">Ошибка</string>
     <string name="omnijaws_service_unkown">Нет данных о погоде</string>
