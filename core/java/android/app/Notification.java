@@ -82,7 +82,9 @@ import com.android.internal.util.Preconditions;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.reflect.Constructor;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -2905,10 +2907,10 @@ public class Notification implements Parcelable
                         Log.d(TAG, "Unknown style class: " + templateClass);
                     } else {
                         try {
-                            final Constructor<? extends Style> ctor =
-                                    styleClass.getDeclaredConstructor();
-                            ctor.setAccessible(true);
-                            final Style style = ctor.newInstance();
+                            final MethodHandle ctor =
+                                    MethodHandles.lookup().findConstructor(
+                                        styleClass, MethodType.methodType(void.class));
+                            final Style style = (Style) ctor.invoke();
                             style.restoreFromExtras(mN.extras);
 
                             if (style != null) {
