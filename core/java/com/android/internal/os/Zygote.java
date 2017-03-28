@@ -22,8 +22,9 @@ import dalvik.system.ZygoteHooks;
 import android.system.ErrnoException;
 import android.system.Os;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodType;
+import java.lang.invoke.WrongMethodTypeException;
 
 /** @hide */
 public final class Zygote {

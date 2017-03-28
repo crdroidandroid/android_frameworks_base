@@ -31,9 +31,10 @@ import android.util.Slog;
 import com.android.internal.logging.AndroidConfig;
 import com.android.server.NetworkManagementSocketTagger;
 import dalvik.system.VMRuntime;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.invoke.WrongMethodTypeException;
 import java.util.TimeZone;
 import java.util.logging.LogManager;
 import org.apache.harmony.luni.internal.util.TimezoneGetter;
@@ -243,21 +244,14 @@ public class RuntimeInit {
                     ex);
         }
 
-        Method m;
+        MethodHandle main;
         try {
-            m = cl.getMethod("main", new Class[] { String[].class });
+            MethodType mainMethodType = MethodType.methodType(void.class, String[].class);
+            main = MethodHandles.lookup().findStatic(cl, "main", mainMethodType);
         } catch (NoSuchMethodException ex) {
-            throw new RuntimeException(
-                    "Missing static main on " + className, ex);
-        } catch (SecurityException ex) {
-            throw new RuntimeException(
-                    "Problem getting static main on " + className, ex);
-        }
-
-        int modifiers = m.getModifiers();
-        if (! (Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers))) {
-            throw new RuntimeException(
-                    "Main method is not public and static on " + className);
+            throw new RuntimeException("Missing static main on " + className, ex);
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException("Problem getting static main on " + className, ex);
         }
 
         /*
@@ -266,7 +260,7 @@ public class RuntimeInit {
          * clears up all the stack frames that were required in setting
          * up the process.
          */
-        return new MethodAndArgsCaller(m, argv);
+        return new MethodAndArgsCaller(main, argv);
     }
 
     public static final void main(String[] argv) {
@@ -425,22 +419,38 @@ public class RuntimeInit {
      */
     static class MethodAndArgsCaller implements Runnable {
         /** method to call */
-        private final Method mMethod;
+        private final MethodHandle mMethod;
 
         /** argument array */
         private final String[] mArgs;
 
-        public MethodAndArgsCaller(Method method, String[] args) {
+        /**
+         * Constructs a new {@code MethodAndArgsCaller}.
+         *
+         * @param  method
+         *         The {@code java.lang.invoke.MethodHandle} to invoke. The MethodHandles method
+         *         type must be {@code (String[])void}.
+         * @param  args
+         *         The arguments to invoke the method with.
+         */
+        public MethodAndArgsCaller(MethodHandle method, String[] args) {
+            MethodType expectedMethodType = MethodType.methodType(void.class, String[].class);
+            if (method.type() != expectedMethodType) {
+                throw new IllegalArgumentException("method has wrong type: " +
+                                                   method.type() +
+                                                   " != " +
+                                                   expectedMethodType);
+            }
             mMethod = method;
             mArgs = args;
         }
 
         public void run() {
             try {
-                mMethod.invoke(null, new Object[] { mArgs });
-            } catch (IllegalAccessException ex) {
+                mMethod.invokeExact(mArgs);
+            } catch (WrongMethodTypeException ex) {
                 throw new RuntimeException(ex);
-            } catch (InvocationTargetException ex) {
+            } catch (Throwable ex) {
                 Throwable cause = ex.getCause();
                 if (cause instanceof RuntimeException) {
                     throw (RuntimeException) cause;

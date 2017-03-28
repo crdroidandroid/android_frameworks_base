@@ -22,8 +22,9 @@ import android.os.SystemClock;
 import android.os.Trace;
 import android.util.Slog;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 
 /**
@@ -92,8 +93,10 @@ public class SystemServiceManager {
             }
             final T service;
             try {
-                Constructor<T> constructor = serviceClass.getConstructor(Context.class);
-                service = constructor.newInstance(mContext);
+                MethodType constructorType = MethodType.methodType(void.class, Context.class);
+                MethodHandle constructor =
+                        MethodHandles.lookup().findConstructor(serviceClass, constructorType);
+                service = (T) constructor.invoke(mContext);
             } catch (InstantiationException ex) {
                 throw new RuntimeException("Failed to create service " + name
                         + ": service could not be instantiated", ex);
@@ -103,7 +106,7 @@ public class SystemServiceManager {
             } catch (NoSuchMethodException ex) {
                 throw new RuntimeException("Failed to create service " + name
                         + ": service must have a public constructor with a Context argument", ex);
-            } catch (InvocationTargetException ex) {
+            } catch (Throwable ex) {
                 throw new RuntimeException("Failed to create service " + name
                         + ": service constructor threw an exception", ex);
             }
