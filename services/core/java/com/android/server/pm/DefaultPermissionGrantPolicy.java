@@ -686,6 +686,23 @@ final class DefaultPermissionGrantPolicy {
                     && doesPackageSupportRuntimePermissions(storageManagerPckg)) {
                 grantRuntimePermissionsLPw(storageManagerPckg, STORAGE_PERMISSIONS, true, userId);
             }
+
+            // Gallery
+            PackageParser.Package gallerypackage = getSystemPackageLPr(
+                    "com.android.gallery3d");
+            if (gallerypackage != null && doesPackageSupportRuntimePermissions(gallerypackage)) {
+                grantRuntimePermissionsLPw(gallerypackage, LOCATION_PERMISSIONS, userId);
+                grantRuntimePermissionsLPw(gallerypackage, STORAGE_PERMISSIONS, userId);
+            }
+
+            // File Manager
+            PackageParser.Package fmpackage = getSystemPackageLPr(
+                    "com.crdroid.filemanager");
+            if (fmpackage != null && doesPackageSupportRuntimePermissions(fmpackage)) {
+                grantRuntimePermissionsLPw(fmpackage, CONTACTS_PERMISSIONS, userId);
+                grantRuntimePermissionsLPw(fmpackage, STORAGE_PERMISSIONS, userId);
+            }
+
             mService.mSettings.onDefaultRuntimePermissionsGrantedLPr(userId);
         }
     }
