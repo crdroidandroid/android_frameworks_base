@@ -1251,7 +1251,7 @@ public class ApplicationsState {
                     return compareResult;
                 }
             }
-            return object1.info.uid - object2.info.uid;
+            return (object1.info != null ? object1.info.uid : 0) - (object2.info != null ? object2.info.uid : 0);
         }
     };
 
