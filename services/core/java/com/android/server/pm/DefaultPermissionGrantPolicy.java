@@ -841,6 +841,38 @@ final class DefaultPermissionGrantPolicy {
                 grantRuntimePermissionsLPw(conpro2Package, STORAGE_PERMISSIONS, true, userId);
             }
 
+            // Gallery
+            PackageParser.Package gallerypackage = getSystemPackageLPr(
+                    "com.android.gallery3d");
+            if (gallerypackage != null && doesPackageSupportRuntimePermissions(gallerypackage)) {
+                grantRuntimePermissionsLPw(gallerypackage, LOCATION_PERMISSIONS, userId);
+                grantRuntimePermissionsLPw(gallerypackage, STORAGE_PERMISSIONS, userId);
+            }
+
+            // File Manager
+            PackageParser.Package fmpackage = getSystemPackageLPr(
+                    "com.crdroid.filemanager");
+            if (fmpackage != null && doesPackageSupportRuntimePermissions(fmpackage)) {
+                grantRuntimePermissionsLPw(fmpackage, CONTACTS_PERMISSIONS, userId);
+                grantRuntimePermissionsLPw(fmpackage, STORAGE_PERMISSIONS, userId);
+            }
+
+            // Music
+            PackageParser.Package musicpackage = getSystemPackageLPr(
+                    "com.crdroid.music");
+            if (musicpackage != null && doesPackageSupportRuntimePermissions(musicpackage)) {
+                grantRuntimePermissionsLPw(musicpackage, STORAGE_PERMISSIONS, userId);
+            }
+
+            // Browser
+            PackageParser.Package browserpackage = getSystemPackageLPr(
+                    "com.android.browser");
+            if (browserpackage != null && doesPackageSupportRuntimePermissions(browserpackage)) {
+                grantRuntimePermissionsLPw(browserpackage, CONTACTS_PERMISSIONS, userId);
+                grantRuntimePermissionsLPw(browserpackage, LOCATION_PERMISSIONS, userId);
+                grantRuntimePermissionsLPw(browserpackage, STORAGE_PERMISSIONS, userId);
+            }
+
             mService.mSettings.onDefaultRuntimePermissionsGrantedLPr(userId);
         }
     }
