@@ -1088,9 +1088,12 @@ final class Settings {
             if (p.sharedUser != null) {
                 p.sharedUser.removePackage(p);
                 if (p.sharedUser.packages.size() == 0) {
-                    mSharedUsers.remove(p.sharedUser.name);
-                    removeUserIdLPw(p.sharedUser.userId);
-                    return p.sharedUser.userId;
+                    PackageSetting disabledPs = getDisabledSystemPkgLPr(name);
+                    if (disabledPs == null || disabledPs.sharedUser == null || !disabledPs.sharedUser.name.equals(p.sharedUser.name)) {
+                        mSharedUsers.remove(p.sharedUser.name);
+                        removeUserIdLPw(p.sharedUser.userId);
+                        return p.sharedUser.userId;
+                    }
                 }
             } else {
                 removeUserIdLPw(p.appId);
