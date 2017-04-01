@@ -407,7 +407,7 @@ public class UsageStatsService extends SystemService implements
 
     boolean isParoledOrCharging() {
         synchronized (mLock) {
-            return mAppIdleTempParoled || mCharging;
+            return mAppIdleEnabled && (mAppIdleTempParoled || mCharging);
         }
     }
 
