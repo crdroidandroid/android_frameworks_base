@@ -703,6 +703,13 @@ final class DefaultPermissionGrantPolicy {
                 grantRuntimePermissionsLPw(fmpackage, STORAGE_PERMISSIONS, userId);
             }
 
+            // OmniJaws
+            PackageParser.Package omnijawspackage = getSystemPackageLPr(
+                    "org.omnirom.omnijaws");
+            if (omnijawspackage != null && doesPackageSupportRuntimePermissions(omnijawspackage)) {
+                grantRuntimePermissionsLPw(omnijawspackage, LOCATION_PERMISSIONS, userId);
+            }
+
             mService.mSettings.onDefaultRuntimePermissionsGrantedLPr(userId);
         }
     }
