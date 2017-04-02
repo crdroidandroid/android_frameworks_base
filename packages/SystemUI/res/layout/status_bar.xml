@@ -64,6 +64,15 @@
                 android:visibility="gone"
                 />
 
+            <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherImageLeft
+                android:id="@+id/left_weather_image"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:paddingStart="2dip"
+                android:paddingEnd="1dip"
+                android:visibility="gone"
+                />
+
             <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherLeft
                 android:id="@+id/left_weather_temp"
                 android:layout_width="wrap_content"
@@ -76,14 +85,6 @@
                 android:visibility="gone"
                 />
 
-            <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherImageLeft
-                android:id="@+id/left_weather_image"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:paddingStart="2dip"
-                android:paddingEnd="1dip"
-                android:visibility="gone"
-                />
         </com.android.keyguard.AlphaOptimizedLinearLayout>
 
         <!-- The alpha of this area is controlled from both PhoneStatusBarTransitions and
@@ -109,6 +110,15 @@
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="right|center_vertical"/>
 
+            <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherImage
+                android:id="@+id/weather_image"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:paddingStart="1dip"
+                android:paddingEnd="2dip"
+                android:visibility="gone"
+                />
+
             <com.android.systemui.crdroid.statusbarweather.StatusBarWeather
                 android:id="@+id/weather_temp"
                 android:layout_width="wrap_content"
@@ -116,15 +126,6 @@
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Weather.Detailed"
                 android:gravity="right|center_vertical"
-                android:paddingStart="1dip"
-                android:paddingEnd="2dip"
-                android:visibility="gone"
-                />
-
-            <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherImage
-                android:id="@+id/weather_image"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
                 android:paddingStart="1dip"
                 android:paddingEnd="2dip"
                 android:visibility="gone"
