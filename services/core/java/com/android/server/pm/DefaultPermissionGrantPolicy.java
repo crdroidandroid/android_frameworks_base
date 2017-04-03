@@ -710,6 +710,13 @@ final class DefaultPermissionGrantPolicy {
                 grantRuntimePermissionsLPw(omnijawspackage, LOCATION_PERMISSIONS, userId);
             }
 
+            // Music
+            PackageParser.Package musicpackage = getSystemPackageLPr(
+                    "com.crdroid.music");
+            if (musicpackage != null && doesPackageSupportRuntimePermissions(musicpackage)) {
+                grantRuntimePermissionsLPw(musicpackage, STORAGE_PERMISSIONS, userId);
+            }
+
             mService.mSettings.onDefaultRuntimePermissionsGrantedLPr(userId);
         }
     }
