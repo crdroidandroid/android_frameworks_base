@@ -30,6 +30,7 @@ import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Outline;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -137,6 +138,8 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
     private TextView mMemText;
     private ProgressBar mMemBar;
     private ActivityManager mAm;
+    private int mMembarcolor;
+    private int mMemtextcolor;
 
     private static final String SHOW_CLEAR_ALL_RECENTS =
             "system:" + Settings.System.SHOW_CLEAR_ALL_RECENTS;
@@ -144,6 +147,10 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
             "system:" + Settings.System.RECENTS_CLEAR_ALL_LOCATION;
     private static final String SYSTEMUI_RECENTS_MEM_DISPLAY =
             "system:" + Settings.System.SYSTEMUI_RECENTS_MEM_DISPLAY;
+    private static final String SYSTEMUI_RECENTS_MEM_BARCOLOR =
+            "system:" + Settings.System.SYSTEMUI_RECENTS_MEM_BARCOLOR;
+    private static final String SYSTEMUI_RECENTS_MEM_TEXTCOLOR =
+            "system:" + Settings.System.SYSTEMUI_RECENTS_MEM_TEXTCOLOR;
 
     public RecentsView(Context context) {
         this(context, null);
@@ -394,7 +401,9 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
         TunerService.get(mContext).addTunable(this,
                 SHOW_CLEAR_ALL_RECENTS,
                 RECENTS_CLEAR_ALL_LOCATION,
-                SYSTEMUI_RECENTS_MEM_DISPLAY);
+                SYSTEMUI_RECENTS_MEM_DISPLAY,
+                SYSTEMUI_RECENTS_MEM_BARCOLOR,
+                SYSTEMUI_RECENTS_MEM_TEXTCOLOR);
         super.onAttachedToWindow();
     }
 
@@ -424,6 +433,17 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
                         newValue != null && Integer.parseInt(newValue) == 1;
                 setClearRecentsLocation();
                 showMemDisplay();
+                break;
+            case SYSTEMUI_RECENTS_MEM_BARCOLOR:
+                mMembarcolor =
+                        newValue != null ? Integer.parseInt(newValue) : 0x00ffffff;
+                showMemDisplay();
+                break;
+            case SYSTEMUI_RECENTS_MEM_TEXTCOLOR:
+                mMemtextcolor =
+                        newValue != null ? Integer.parseInt(newValue) : 0x00ffffff;
+                showMemDisplay();
+                break;
             default:
                 break;
         }
@@ -504,12 +524,18 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
     }
 
     private void showMemDisplay() {
+        mMemBar.getProgressDrawable().setColorFilter(mMembarcolor == 0x00ffffff
+                ? mContext.getResources().getColor(R.color.system_accent_color)
+                : mMembarcolor, Mode.MULTIPLY);
+        mMemText.setTextColor(mMemtextcolor == 0x00ffffff
+                ? mContext.getResources().getColor(R.color.recents_membar_text_color)
+                : mMemtextcolor);
         if (mShowMemDisplay) {
-            mMemText.setVisibility(View.VISIBLE);
             mMemBar.setVisibility(View.VISIBLE);
+            mMemText.setVisibility(View.VISIBLE);
         } else {
-            mMemText.setVisibility(View.GONE);
             mMemBar.setVisibility(View.GONE);
+            mMemText.setVisibility(View.GONE);
         }
     }
 
