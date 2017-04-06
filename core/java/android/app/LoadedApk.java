@@ -1330,7 +1330,7 @@ public final class LoadedApk {
 
         try {
             final java.lang.ClassLoader cl = getClassLoader();
-            if (!mPackageName.equals("android")) {
+            if (!ActivityThread.isSystem()) {
                 Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER,
                         "initializeJavaContextClassLoader");
                 initializeJavaContextClassLoader();
