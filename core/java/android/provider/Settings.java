@@ -4210,6 +4210,48 @@ public final class Settings {
         public static final String SCREENSHOT_DEFAULT_MODE = "screenshot_default_mode";
 
         /**
+         * Pulse notifications on tilt
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_TILT = "doze_trigger_tilt";
+
+        /**
+         * Pulse notifications on pick up
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_PICKUP = "doze_trigger_pickup";
+
+        /**
+         * Pulse notifications on hand wave
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_HANDWAVE = "doze_trigger_handwave";
+
+        /**
+         * Pulse notifications on removal from pocket
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_POCKET = "doze_trigger_pocket";
+
+        /**
+         * Vibrate when pulsing notifications on tilt
+         * @hide
+         */
+        public static final String DOZE_VIBRATE_TILT = "doze_vibrate_tilt";
+
+        /**
+         * Vibrate when pulsing notifications on pick up
+         * @hide
+         */
+        public static final String DOZE_VIBRATE_PICKUP = "doze_vibrate_pickup";
+
+        /**
+         * Vibrate when pulsing notifications using proximity sensor
+         * @hide
+         */
+        public static final String DOZE_VIBRATE_PROX = "doze_vibrate_prox";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
