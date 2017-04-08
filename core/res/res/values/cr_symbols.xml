@@ -131,4 +131,9 @@
 
   <!-- Whether device supports variable refresh rate -->
   <java-symbol type="bool" name="config_hasVariableRefreshRate" />
+
+  <!-- Whether device supports sensor based doze customizations -->
+  <java-symbol type="bool" name="config_hasDozeTiltSensor" />
+  <java-symbol type="bool" name="config_hasDozePickupSensor" />
+  <java-symbol type="bool" name="config_hasDozeProximitySensor" />
 </resources>
