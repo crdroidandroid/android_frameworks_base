@@ -4379,12 +4379,6 @@ public final class Settings {
         public static final String DOZE_SCREEN_BRIGHTNESS = "doze_screen_brightness";
 
         /**
-         * Vibrate on pulsing while pickup
-         * @hide
-         */
-        public static final String DOZE_VIBRATE_ON_PICKUP = "doze_vibrate_on_pickup";
-
-        /**
          * Check proximity sensor before pulsing
          * @hide
          */
@@ -4413,6 +4407,24 @@ public final class Settings {
          * @hide
          */
         public static final String DOZE_TRIGGER_POCKET = "doze_trigger_pocket";
+
+        /**
+         * Vibrate when pulsing notifications on tilt
+         * @hide
+         */
+        public static final String DOZE_VIBRATE_TILT = "doze_vibrate_tilt";
+
+        /**
+         * Vibrate when pulsing notifications on pick up
+         * @hide
+         */
+        public static final String DOZE_VIBRATE_PICKUP = "doze_vibrate_pickup";
+
+        /**
+         * Vibrate when pulsing notifications using proximity sensor
+         * @hide
+         */
+        public static final String DOZE_VIBRATE_PROX = "doze_vibrate_prox";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

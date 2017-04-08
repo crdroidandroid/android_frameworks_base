@@ -91,14 +91,11 @@ public class DozeService extends DreamService implements TunerService.Tunable {
     private AmbientDisplayConfiguration mConfig;
 
     private boolean mOverwriteValue;
-    private boolean mVibratePickUp;
     private boolean mCheckProximity;
     private int mScreenBrightness;
 
     private static final String DOZE_OVERWRITE_VALUE =
             "system:" + Settings.System.DOZE_OVERWRITE_VALUE;
-    private static final String DOZE_VIBRATE_ON_PICKUP =
-            "system:" + Settings.System.DOZE_VIBRATE_ON_PICKUP;
     private static final String DOZE_PROXIMITY_CHECK_BEFORE_PULSE =
             "system:" + Settings.System.DOZE_PROXIMITY_CHECK_BEFORE_PULSE;
     private static final String DOZE_SCREEN_BRIGHTNESS =
@@ -130,13 +127,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
         mDozeParameters.dump(pw);
     }
 
-    public boolean getVibOnPickup() {
-        if (mOverwriteValue) {
-            return mVibratePickUp;
-        }
-        return mDozeParameters.getVibrateOnPickup();
-    }
-
     @Override
     public void onCreate() {
         if (DEBUG) Log.d(mTag, "onCreate");
@@ -163,12 +153,12 @@ public class DozeService extends DreamService implements TunerService.Tunable {
                         mSensorManager.getDefaultSensor(Sensor.TYPE_PICK_UP_GESTURE),
                         Settings.Secure.DOZE_PULSE_ON_PICK_UP,
                         mConfig.pulseOnPickupAvailable(),
-                        getVibOnPickup(),
+                        mDozeParameters.getVibrateOnPickup(),
                         DozeLog.PULSE_REASON_SENSOR_PICKUP),
                 new TriggerSensor(
                         findSensorWithType(mConfig.doubleTapSensorType()),
                         Settings.Secure.DOZE_PULSE_ON_DOUBLE_TAP, true,
-                        getVibOnPickup(),
+                        mDozeParameters.getVibrateOnPickup(),
                         DozeLog.PULSE_REASON_SENSOR_DOUBLE_TAP)
         };
         mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
@@ -186,7 +176,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
 
         TunerService.get(mContext).addTunable(this,
                 DOZE_OVERWRITE_VALUE,
-                DOZE_VIBRATE_ON_PICKUP,
                 DOZE_PROXIMITY_CHECK_BEFORE_PULSE,
                 DOZE_SCREEN_BRIGHTNESS);
     }
@@ -202,10 +191,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
         switch (key) {
             case DOZE_OVERWRITE_VALUE:
                      mOverwriteValue =
-                        newValue != null && Integer.parseInt(newValue) == 1;
-                break;
-            case DOZE_VIBRATE_ON_PICKUP:
-                     mVibratePickUp =
                         newValue != null && Integer.parseInt(newValue) == 1;
                 break;
             case DOZE_PROXIMITY_CHECK_BEFORE_PULSE:
