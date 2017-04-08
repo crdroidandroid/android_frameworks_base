@@ -4391,6 +4391,30 @@ public final class Settings {
         public static final String DOZE_PROXIMITY_CHECK_BEFORE_PULSE = "doze_check_proximity_before_pulse";
 
         /**
+         * Pulse notifications on tilt
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_TILT = "doze_trigger_tilt";
+
+        /**
+         * Pulse notifications on pick up
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_PICKUP = "doze_trigger_pickup";
+
+        /**
+         * Pulse notifications on hand wave
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_HANDWAVE = "doze_trigger_handwave";
+
+        /**
+         * Pulse notifications on removal from pocket
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_POCKET = "doze_trigger_pocket";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
