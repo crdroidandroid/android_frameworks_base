@@ -75,6 +75,9 @@ public class AmbientDisplayConfiguration {
                 || wakeLockScreenGestureEnabled(user)
                 || wakeDisplayGestureEnabled(user)
                 || pickupGestureEnabled(user)
+                || tiltGestureEnabled(user)
+                || handwaveGestureEnabled(user)
+                || pocketGestureEnabled(user)
                 || tapGestureEnabled(user)
                 || doubleTapGestureEnabled(user)
                 || quickPickupSensorEnabled(user)
@@ -102,6 +105,34 @@ public class AmbientDisplayConfiguration {
     /** @hide */
     public boolean dozePickupSensorAvailable() {
         return mContext.getResources().getBoolean(R.bool.config_dozePulsePickup);
+    }
+
+    /** {@hide} */
+    public boolean tiltGestureEnabled(int user) {
+        return boolSettingDefaultOff(Settings.Secure.DOZE_TILT_GESTURE, user)
+                && dozeTiltSensorAvailable();
+    }
+
+    /** {@hide} */
+    public boolean dozeTiltSensorAvailable() {
+        return mContext.getResources().getBoolean(R.bool.config_dozePulseTilt);
+    }
+
+    /** {@hide} */
+    public boolean handwaveGestureEnabled(int user) {
+        return boolSettingDefaultOff(Settings.Secure.DOZE_HANDWAVE_GESTURE, user)
+                && dozeProximitySensorAvailable();
+    }
+
+    /** {@hide} */
+    public boolean pocketGestureEnabled(int user) {
+        return boolSettingDefaultOff(Settings.Secure.DOZE_POCKET_GESTURE, user)
+                && dozeProximitySensorAvailable();
+    }
+
+    /** {@hide} */
+    public boolean dozeProximitySensorAvailable() {
+        return mContext.getResources().getBoolean(R.bool.config_dozePulseProximity);
     }
 
     /** @hide */
