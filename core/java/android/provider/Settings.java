@@ -8361,7 +8361,7 @@ public final class Settings {
          * Whether the device should pulse on pick up gesture.
          * @hide
          */
-        public static final String DOZE_PICK_UP_GESTURE = "doze_pulse_on_pick_up";
+        public static final String DOZE_PICK_UP_GESTURE = "doze_pick_up_gesture";
 
         /**
          * Whether the device should pulse on long press gesture.
@@ -8399,6 +8399,30 @@ public final class Settings {
          * @hide
          */
         public static final String SUPPRESS_DOZE = "suppress_doze";
+
+        /**
+         * Pulse notifications on tilt
+         * @hide
+         */
+        public static final String DOZE_TILT_GESTURE = "doze_tilt_gesture";
+
+        /**
+         * Pulse notifications on hand wave
+         * @hide
+         */
+        public static final String DOZE_HANDWAVE_GESTURE = "doze_handwave_gesture";
+
+        /**
+         * Pulse notifications on removal from pocket
+         * @hide
+         */
+        public static final String DOZE_POCKET_GESTURE = "doze_pocket_gesture";
+
+        /**
+         * Vibrate when pulsing notifications on gesture
+         * @hide
+         */
+        public static final String DOZE_GESTURE_VIBRATE = "doze_gesture_vibrate";
 
         /**
          * Gesture that skips media.
