@@ -87,4 +87,9 @@
     <string name="config_pocketJudgeVendorSensorName"></string>
     <item name="config_pocketJudgeVendorSensorValue" format="float" type="dimen">1.0</item>
     <string name="config_pocketJudgeVendorProximitySensorName"></string>
+
+    <!-- Whether device supports sensor based doze customizations -->
+    <bool name="config_dozePulseTilt">false</bool>
+    <bool name="config_dozePulseProximity">false</bool>
+    <bool name="config_deviceHaveWakeUpProximity">false</bool>
 </resources>
