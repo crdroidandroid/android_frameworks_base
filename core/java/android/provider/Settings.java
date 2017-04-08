@@ -4349,10 +4349,16 @@ public final class Settings {
         public static final String DOZE_OVERWRITE_VALUE = "doze_overwrite_value";
 
         /**
-         * Duration in for ambient display
+         * Doze pulse screen fade in delay
          * @hide
          */
-        public static final String DOZE_PULSE_DURATION_IN = "doze_pulse_duration_in";
+        public static final String DOZE_FADE_IN_PICKUP = "doze_fade_in_pickup";
+
+        /**
+         * Doze pulse screen fade in delay
+         * @hide
+         */
+        public static final String DOZE_FADE_IN_DOUBLETAP = "doze_fade_in_doubletap";
 
         /**
          * Duration out for ambient display

@@ -91,9 +91,10 @@ public class DozeParameters {
 
     public int getPulseInDuration(boolean pickupOrDoubleTap) {
         if (getOverwriteValue()) {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DOZE_PULSE_DURATION_IN, 500,
-                    UserHandle.USER_CURRENT);
+            return pickupOrDoubleTap ? Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.DOZE_FADE_IN_PICKUP, 500, UserHandle.USER_CURRENT)
+                : Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.DOZE_FADE_IN_DOUBLETAP, 500, UserHandle.USER_CURRENT);
         }
         return pickupOrDoubleTap
                 ? getInt("doze.pulse.duration.in.pickup", R.integer.doze_pulse_duration_in_pickup)
@@ -127,20 +128,10 @@ public class DozeParameters {
     }
 
     public boolean getVibrateOnPickup() {
-        if (getOverwriteValue()) {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DOZE_VIBRATE_ON_PICKUP, 0,
-                    UserHandle.USER_CURRENT) == 1;
-        }
         return SystemProperties.getBoolean("doze.vibrate.pickup", false);
     }
 
     public boolean getProxCheckBeforePulse() {
-        if (getOverwriteValue()) {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DOZE_PROXIMITY_CHECK_BEFORE_PULSE, 0,
-                    UserHandle.USER_CURRENT) == 1;
-        }
         return getBoolean("doze.pulse.proxcheck", R.bool.doze_proximity_check_before_pulse);
     }
 
@@ -176,17 +167,6 @@ public class DozeParameters {
         }
 
         return sPickupSubtypePerformsProxMatcher.isIn(subType);
-    }
-
-    public int getDozeBrightness() {
-        final int dozeBrightnessDefault = mContext.getResources().getInteger(
-                    com.android.internal.R.integer.config_screenBrightnessDoze);
-        if (getOverwriteValue()) {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DOZE_SCREEN_BRIGHTNESS, dozeBrightnessDefault,
-                    UserHandle.USER_CURRENT);
-        }
-        return dozeBrightnessDefault;
     }
 
     /**
