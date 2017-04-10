@@ -105,8 +105,12 @@ import android.util.ArraySet;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.Log;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.view.Display;
 import android.view.IRotationWatcher;
 import android.view.KeyEvent;
@@ -123,9 +127,6 @@ import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -3875,28 +3876,25 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (mTickerEnabled == 0) return;
             mTicking = true;
             mStatusBarContents.setVisibility(View.GONE);
-            mStatusBarContents.startAnimation(loadAnim(com.android.internal.R.anim.push_up_out,
-                    null));
+            mStatusBarContents.startAnimation(loadAnim(true, null));
             if (ClockController.mActiveClock == ClockController.mCenterClock) {
                 mCenterClock.setVisibility(View.GONE);
-                mCenterClock.startAnimation(loadAnim(com.android.internal.R.anim.push_up_out, null));
+                mCenterClock.startAnimation(loadAnim(true, null));
             }
             mTickerView.setVisibility(View.VISIBLE);
-            mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.push_up_in, null));
+            mTickerView.startAnimation(loadAnim(false, null));
         }
 
         @Override
         public void tickerDone() {
             if (mTickerEnabled == 0) return;
             mStatusBarContents.setVisibility(View.VISIBLE);
-            mStatusBarContents.startAnimation(loadAnim(com.android.internal.R.anim.push_down_in,
-                    null));
+            mStatusBarContents.startAnimation(loadAnim(false, null));
             mTickerView.setVisibility(View.GONE);
-            mTickerView.startAnimation(loadAnim(com.android.internal.R.anim.push_down_out,
-                        mTickingDoneListener));
+            mTickerView.startAnimation(loadAnim(true, mTickingDoneListener));
             if (ClockController.mActiveClock == ClockController.mCenterClock) {
                 mCenterClock.setVisibility(View.VISIBLE);
-                mCenterClock.startAnimation(loadAnim(com.android.internal.R.anim.push_down_in, null));
+                mCenterClock.startAnimation(loadAnim(false, null));
             }
         }
 
@@ -3904,11 +3902,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (mTickerEnabled == 0) return;
             if (mStatusBarContents.getVisibility() != View.VISIBLE) {
                 mStatusBarContents.setVisibility(View.VISIBLE);
-                mStatusBarContents
-                        .startAnimation(loadAnim(com.android.internal.R.anim.fade_in, null));
+                mStatusBarContents.startAnimation(loadAnim(false, null));
                 if (ClockController.mActiveClock == ClockController.mCenterClock) {
                     mCenterClock.setVisibility(View.VISIBLE);
-                    mCenterClock.startAnimation(loadAnim(com.android.internal.R.anim.fade_in, null));
+                    mCenterClock.startAnimation(loadAnim(false, null));
                 }
             }
             mTickerView.setVisibility(View.GONE);
@@ -3926,12 +3923,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     };
 
-    private Animation loadAnim(int id, Animation.AnimationListener listener) {
-        Animation anim = AnimationUtils.loadAnimation(mContext, id);
+    private Animation loadAnim(boolean outAnim, Animation.AnimationListener listener) {
+        AlphaAnimation animation = new AlphaAnimation((outAnim ? 1.0f : 0.0f), (outAnim ? 0.0f : 1.0f));
+        Interpolator interpolator = AnimationUtils.loadInterpolator(mContext,
+                (outAnim ? android.R.interpolator.accelerate_quad : android.R.interpolator.decelerate_quad));
+        animation.setInterpolator(interpolator);
+        animation.setDuration(350);
+
         if (listener != null) {
-            anim.setAnimationListener(listener);
+            animation.setAnimationListener(listener);
         }
-        return anim;
+
+        return animation;
     }
 
     public static String viewInfo(View v) {
