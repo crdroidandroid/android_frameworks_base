@@ -37,4 +37,6 @@
     <!-- Screenshot action colors -->
     <color name="screenshot_flash_color">@android:color/white</color>
     <color name="screenshot_background_color">@android:color/black</color>
+    <!-- Separate QS text label tint from icon tint -->
+    <color name="qs_tile_label_tint_unavailable">@color/qs_tile_tint_unavailable</color>
 </resources>
