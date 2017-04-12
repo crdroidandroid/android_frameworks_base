@@ -1503,6 +1503,14 @@ public final class CameraManager {
                     throw new IllegalArgumentException("cameraId was null");
                 }
 
+                /* Force to expose only two cameras
+                 * if the package name does not falls in this bucket
+                 */
+                boolean exposeAuxCamera = Camera.shouldExposeAuxCamera();
+                if (exposeAuxCamera == false && (Integer.parseInt(cameraId) >= 2)) {
+                    throw new IllegalArgumentException("invalid cameraId");
+                }
+
                 ICameraService cameraService = getCameraService();
                 if (cameraService == null) {
                     throw new CameraAccessException(CameraAccessException.CAMERA_DISCONNECTED,
@@ -1835,6 +1843,15 @@ public final class CameraManager {
             if (DEBUG) {
                 Log.v(TAG,
                         String.format("Camera id %s has torch status changed to 0x%x", id, status));
+            }
+
+            /* Force to ignore the aux or composite camera torch status update
+             * if the package name does not falls in this bucket
+             */
+            boolean exposeAuxCamera = Camera.shouldExposeAuxCamera();
+            if (!exposeAuxCamera == false && Integer.parseInt(id) >= 2) {
+                Log.w(TAG, "ignore the torch status update of camera: " + id);
+                return;
             }
 
             if (!validTorchStatus(status)) {
