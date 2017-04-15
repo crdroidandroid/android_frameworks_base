@@ -6077,6 +6077,7 @@ package android.telephony.ims.stub {
   public class ImsUtImplBase {
     ctor public ImsUtImplBase();
     method public void close();
+    method public int queryCFForServiceClass(int, java.lang.String, int);
     method public int queryCallBarring(int);
     method public int queryCallBarringForServiceClass(int, int);
     method public int queryCallForward(int, java.lang.String);
