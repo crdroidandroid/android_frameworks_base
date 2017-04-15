@@ -63,12 +63,12 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
     private static final int TAG_CLICKED_NOTIFICATION = R.id.is_clicked_heads_up_tag;
 
     private int mHeadsUpNotificationDecay;
+    private int mSnoozeLengthMs;
     private final int mMinimumDisplayTime;
 
     private final int mTouchAcceptanceDelay;
     private final ArrayMap<String, Long> mSnoozedPackages;
     private final HashSet<OnHeadsUpChangedListener> mListeners = new HashSet<>();
-    private final int mDefaultSnoozeLengthMs;
     private final Handler mHandler = new Handler();
     private final Pools.Pool<HeadsUpEntry> mEntryPool = new Pools.Pool<HeadsUpEntry>() {
 
@@ -95,7 +95,6 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
     private final Context mContext;
     private final NotificationGroupManager mGroupManager;
     private PhoneStatusBar mBar;
-    private int mSnoozeLengthMs;
     private ContentObserver mSettingsObserver;
     private HashMap<String, HeadsUpEntry> mHeadsUpEntries = new HashMap<>();
     private HashSet<String> mSwipedOutKeys = new HashSet<>();
