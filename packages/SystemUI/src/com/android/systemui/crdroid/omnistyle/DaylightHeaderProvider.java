@@ -17,7 +17,7 @@
  *
  */
 
-package com.android.systemui.omnistyle.crdroid;
+package com.android.systemui.crdroid.omnistyle;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
