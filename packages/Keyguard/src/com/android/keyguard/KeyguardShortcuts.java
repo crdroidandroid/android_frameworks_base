@@ -15,7 +15,10 @@
  */
 package com.android.keyguard;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -55,6 +58,19 @@ public class KeyguardShortcuts extends LinearLayout {
 
     public KeyguardShortcuts(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        // On boot, keyguard is inflated before icons can be loaded.
+        // To work around that, recreate shorcuts on boot completed
+        context.registerReceiver(
+            new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    recreateShortcuts();
+                }
+            },
+            new IntentFilter(Intent.ACTION_LOCKED_BOOT_COMPLETED)
+        );
+
         mContext = context;
         mPackageManager = mContext.getPackageManager();
         mLockPatternUtils = new LockPatternUtils(mContext);
@@ -169,7 +185,7 @@ public class KeyguardShortcuts extends LinearLayout {
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_SHORTCUTS_LONGPRESS),
                     false, this, UserHandle.USER_ALL);
-            update();
+            recreateShortcuts();
         }
 
         void unobserve() {
@@ -178,17 +194,17 @@ public class KeyguardShortcuts extends LinearLayout {
 
         @Override
         public void onChange(boolean selfChange) {
-            update();
+            recreateShortcuts();
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            update();
+            recreateShortcuts();
         }
+    }
 
-        public void update() {
-            removeAllViews();
-            createShortcuts();
-        }
+    private void recreateShortcuts() {
+        removeAllViews();
+        createShortcuts();
     }
 }
