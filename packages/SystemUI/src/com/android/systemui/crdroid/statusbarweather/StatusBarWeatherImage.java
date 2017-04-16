@@ -121,7 +121,7 @@ public class StatusBarWeatherImage extends ImageView implements
     }
 
     private void queryAndUpdateWeather() {
-        if (mWeatherTempStyle == 1 || mStatusBarWeatherEnabled == 0 ||
+        if (mWeatherTempStyle == 0 || mStatusBarWeatherEnabled == 0 ||
                 mStatusBarWeatherEnabled == 3 || mStatusBarWeatherEnabled == 4) {
             setVisibility(View.GONE);
             return;

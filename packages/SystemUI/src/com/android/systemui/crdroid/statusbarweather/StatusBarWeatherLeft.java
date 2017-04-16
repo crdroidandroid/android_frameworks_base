@@ -156,7 +156,7 @@ public class StatusBarWeatherLeft extends TextView implements
     }
 
     private void queryAndUpdateWeather() {
-        if (mWeatherTempStyle == 0 || mStatusBarWeatherEnabled == 0 ||
+        if (mWeatherTempStyle == 1 || mStatusBarWeatherEnabled == 0 ||
                 mStatusBarWeatherEnabled == 5) {
             setVisibility(View.GONE);
             return;

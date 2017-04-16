@@ -179,7 +179,7 @@ public class StatusBarWeather extends TextView implements
             }
         }
 
-        if (mWeatherTempStyle == 1 || mStatusBarWeatherEnabled == 5) {
+        if (mWeatherTempStyle == 0 || mStatusBarWeatherEnabled == 5) {
             setVisibility(View.GONE);
             return;
         }
