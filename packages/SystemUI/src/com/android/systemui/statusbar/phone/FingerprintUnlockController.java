@@ -213,6 +213,7 @@ public class FingerprintUnlockController extends KeyguardUpdateMonitorCallback {
                 mStatusBarWindowManager.setStatusBarFocusable(false);
                 mDozeScrimController.abortPulsing();
                 mKeyguardViewMediator.onWakeAndUnlocking();
+                mScrimController.setWakeAndUnlocking();
                 if (mPhoneStatusBar.getNavigationBarView() != null) {
                     mPhoneStatusBar.getNavigationBarView().setWakeAndUnlocking(true);
                 }
@@ -222,7 +223,9 @@ public class FingerprintUnlockController extends KeyguardUpdateMonitorCallback {
             case MODE_NONE:
                 break;
         }
-        mStatusBarWindowManager.setForceDozeBrightness(false);
+        if (mMode != MODE_WAKE_AND_UNLOCK_PULSING) {
+            mStatusBarWindowManager.setForceDozeBrightness(false);
+        }
         mPhoneStatusBar.notifyFpAuthModeChanged();
         Trace.endSection();
     }

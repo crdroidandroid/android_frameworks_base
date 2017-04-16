@@ -1818,14 +1818,9 @@ public class KeyguardViewMediator extends SystemUI {
                 }
             }
 
-            boolean wakeAndUnlocking = mWakeAndUnlocking;
             mWakeAndUnlocking = false;
             setShowingLocked(false);
-            if (wakeAndUnlocking) {
-                mStatusBarKeyguardViewManager.hideNoAnimation();
-            } else {
-                mStatusBarKeyguardViewManager.hide(startTime, fadeoutDuration);
-            }
+            mStatusBarKeyguardViewManager.hide(startTime, fadeoutDuration);
             resetKeyguardDonePendingLocked();
             mHideAnimationRun = false;
             updateActivityLockScreenState();
