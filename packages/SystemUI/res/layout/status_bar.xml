@@ -64,6 +64,17 @@
                 android:visibility="gone"
                 />
 
+            <com.android.systemui.crdroid.carrierlabel.CarrierLabel
+                android:id="@+id/statusbar_carrier_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.StatusBar.CarrierLabel"
+                android:gravity="left|center_vertical"
+                android:paddingEnd="1dip"
+                android:visibility="gone"
+                />
+
             <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherImageLeft
                 android:id="@+id/left_weather_image"
                 android:layout_width="24dp"
