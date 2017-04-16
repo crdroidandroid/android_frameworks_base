@@ -286,7 +286,7 @@ public class NetworkControllerBaseTest extends SysuiTestCase {
                     iconArg.capture(),
                     ArgumentCaptor.forClass(Integer.class).capture(),
                     typeIconArg.capture(), dataInArg.capture(), dataOutArg.capture(),
-                    anyString(), anyString(), anyBoolean(), anyInt(), anyBoolean());
+                    anyString(), anyString(), anyBoolean(), anyInt(), anyBoolean(), anyBoolean());
         IconState iconState = iconArg.getValue();
         assertEquals("Visibility in, quick settings", visible, iconState.visible);
         assertEquals("Signal icon in, quick settings", icon, iconState.icon);
@@ -312,7 +312,7 @@ public class NetworkControllerBaseTest extends SysuiTestCase {
                 any(),
                 typeIconArg.capture(),
                 anyInt(), anyBoolean(), anyBoolean(), anyString(), anyString(), anyBoolean(),
-                anyInt(), eq(roaming));
+                anyInt(), eq(roaming), anyBoolean());
         IconState iconState = iconArg.getValue();
 
         assertEquals("Signal icon in status bar", icon, iconState.icon);
@@ -336,7 +336,7 @@ public class NetworkControllerBaseTest extends SysuiTestCase {
                 qsTypeIconArg.capture(),
                 dataInArg.capture(),
                 dataOutArg.capture(),
-                anyString(), anyString(), anyBoolean(), anyInt(), anyBoolean());
+                anyString(), anyString(), anyBoolean(), anyInt(), anyBoolean(), anyBoolean());
 
         IconState iconState = iconArg.getValue();
 

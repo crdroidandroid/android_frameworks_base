@@ -105,8 +105,9 @@ public class CallbackHandlerTest extends AndroidTestCase {
         boolean wide = true;
         int subId = 5;
         boolean roaming = true;
+        boolean volte = false;
         mHandler.setMobileDataIndicators(status, qs, type, qsType, in, out, typeDescription,
-                description, wide, subId, roaming);
+                description, wide, subId, roaming, volte);
         waitForCallbacks();
 
         ArgumentCaptor<IconState> statusArg = ArgumentCaptor.forClass(IconState.class);
@@ -122,7 +123,7 @@ public class CallbackHandlerTest extends AndroidTestCase {
         Mockito.verify(mSignalCallback).setMobileDataIndicators(statusArg.capture(),
                 qsArg.capture(), typeIconArg.capture(), qsTypeIconArg.capture(), inArg.capture(),
                 outArg.capture(), typeContentArg.capture(), descArg.capture(), wideArg.capture(),
-                subIdArg.capture(), eq(roaming));
+                subIdArg.capture(), eq(roaming), eq(volte));
         assertEquals(status, statusArg.getValue());
         assertEquals(qs, qsArg.getValue());
         assertEquals(type, (int) typeIconArg.getValue());
