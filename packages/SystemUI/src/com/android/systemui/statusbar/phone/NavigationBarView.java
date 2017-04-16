@@ -440,7 +440,7 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
     }
 
     public void setWakeAndUnlocking(boolean wakeAndUnlocking) {
-        setUseFadingAnimations(wakeAndUnlocking);
+        setUseFadingAnimations(!wakeAndUnlocking);
         mWakeAndUnlocking = wakeAndUnlocking;
         updateLayoutTransitionsEnabled();
     }
