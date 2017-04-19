@@ -62,7 +62,7 @@ public class StatusCode implements Parcelable {
     /**  No Change in Capabilities */
     public static final int UCE_NO_CHANGE_IN_CAP = 13;
     /**  Service is unknown. */
-    public static final int UCE_SERVICE_UNKNOWN = 14;
+    public static final int UCE_INVALID_FEATURE_TAG = 14;
 
 
     private int mStatusCode = UCE_SUCCESS;
