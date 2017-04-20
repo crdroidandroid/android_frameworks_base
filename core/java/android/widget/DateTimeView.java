@@ -451,8 +451,7 @@ public class DateTimeView extends TextView {
         }
 
         static final Context getApplicationContextIfAvailable(Context context) {
-            final Context ac = context.getApplicationContext();
-            return ac != null ? ac : ActivityThread.currentApplication().getApplicationContext();
+            return ActivityThread.currentApplication().getApplicationContext();
         }
 
         void register(Context context) {
