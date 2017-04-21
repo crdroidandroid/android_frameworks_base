@@ -4264,7 +4264,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         } else if (mCrDroidLogoStyle == 26) {
             drawable = mContext.getResources().getDrawable(R.drawable.ic_human_male);
         } else if (mCrDroidLogoStyle == 27) {
-            drawable = mContext.getResources().getDrawable(R.drawable.ic_human_male_female);
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_human_female);
         } else if (mCrDroidLogoStyle == 28) {
             drawable = mContext.getResources().getDrawable(R.drawable.ic_human_male_female);
         } else if (mCrDroidLogoStyle == 29) {
