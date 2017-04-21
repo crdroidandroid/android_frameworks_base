@@ -360,18 +360,21 @@ public class AssetAtlasService extends IAssetAtlas.Stub {
         List<WorkerResult> results = Collections.synchronizedList(new ArrayList<WorkerResult>());
 
         // Don't bother with an extra thread if there's only one processor
-        int cpuCount = Runtime.getRuntime().availableProcessors();
+        int cpuCount = Math.min((MAX_SIZE - MIN_SIZE) / STEP, Runtime.getRuntime().availableProcessors());
         if (cpuCount == 1) {
             new ComputeWorker(MIN_SIZE, MAX_SIZE, STEP, bitmaps, pixelCount, results, null).run();
         } else {
-            int start = MIN_SIZE + (cpuCount - 1) * STEP;
-            int end = MAX_SIZE;
-            int step = STEP * cpuCount;
+            int step_per_thrd = (((MAX_SIZE - MIN_SIZE) / cpuCount) + STEP - 1) / STEP;
+
+            // Adjust the CPU threads needed based on our actual per thread steps
+            cpuCount = (MAX_SIZE - MIN_SIZE) / (step_per_thrd * STEP);
+
+            int end = MIN_SIZE + step_per_thrd * cpuCount * STEP;
 
             final CountDownLatch signal = new CountDownLatch(cpuCount);
 
-            for (int i = 0; i < cpuCount; i++, start -= STEP, end -= STEP) {
-                ComputeWorker worker = new ComputeWorker(start, end, step,
+            for (int i = 0; i < cpuCount; i++, end -= STEP) {
+                ComputeWorker worker = new ComputeWorker(MIN_SIZE, end, STEP * cpuCount,
                         bitmaps, pixelCount, results, signal);
                 new Thread(worker, "Atlas Worker #" + (i + 1)).start();
             }
