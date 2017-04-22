@@ -55,6 +55,7 @@
     <string name="omnijaws_label_default">Weather</string>
     <string name="omnijaws_current_text">Now</string>
     <string name="omnijaws_service_error_long">Error loading weather data</string>
+    <string name="omnijaws_service_disabled">Service disabled</string>
 
     <!-- Navigation bar tile -->
     <string name="quick_settings_navigation_bar">Navigation bar</string>
