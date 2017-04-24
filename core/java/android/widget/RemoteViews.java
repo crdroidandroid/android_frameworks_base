@@ -393,6 +393,30 @@ public class RemoteViews implements Parcelable, Filter {
         recalculateMemoryUsage();
     }
 
+    private static class RemoteViewsContextWrapper extends ContextWrapper {
+        private final Context mContextForResources;
+
+        RemoteViewsContextWrapper(Context context, Context contextForResources) {
+            super(context);
+            mContextForResources = contextForResources;
+        }
+
+        @Override
+        public Resources getResources() {
+            return mContextForResources.getResources();
+        }
+
+        @Override
+        public Resources.Theme getTheme() {
+            return mContextForResources.getTheme();
+        }
+
+        @Override
+        public String getPackageName() {
+            return mContextForResources.getPackageName();
+        }
+    }
+
     private class SetEmptyView extends Action {
         int viewId;
         int emptyViewId;
@@ -3189,20 +3213,7 @@ public class RemoteViews implements Parcelable, Filter {
         // still returns the current users userId so settings like data / time formats
         // are loaded without requiring cross user persmissions.
         final Context contextForResources = getContextForResources(context);
-        Context inflationContext = new ContextWrapper(context) {
-            @Override
-            public Resources getResources() {
-                return contextForResources.getResources();
-            }
-            @Override
-            public Resources.Theme getTheme() {
-                return contextForResources.getTheme();
-            }
-            @Override
-            public String getPackageName() {
-                return contextForResources.getPackageName();
-            }
-        };
+        Context inflationContext = new RemoteViewsContextWrapper(context, contextForResources);
 
         LayoutInflater inflater = (LayoutInflater)
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
