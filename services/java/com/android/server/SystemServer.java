@@ -90,6 +90,7 @@ import com.android.server.os.RegionalizationService;
 import com.android.server.om.OverlayManagerService;
 import com.android.server.os.SchedulingPolicyService;
 import com.android.server.pocket.PocketService;
+import com.android.server.pocket.PocketBridgeService;
 import com.android.server.pm.BackgroundDexOptService;
 import com.android.server.pm.Installer;
 import com.android.server.pm.LauncherAppsService;
@@ -1296,6 +1297,11 @@ public final class SystemServer {
 
             Slog.i(TAG, "Starting PocketService");
             mSystemServiceManager.startService(PocketService.class);
+            if (!context.getResources().getString(
+                    com.android.internal.R.string.config_pocketBridgeSysfsInpocket).isEmpty()) {
+                Slog.i(TAG, "Starting PocketBridgeService");
+                mSystemServiceManager.startService(PocketBridgeService.class);
+            }
         }
 
         if (!disableNonCoreServices && !disableMediaProjection) {
