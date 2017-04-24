@@ -420,6 +420,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
             String tileSpec = previousTiles.get(i);
             if (!tileSpec.startsWith(CustomTile.PREFIX)) continue;
             if (!newTiles.contains(tileSpec)) {
+                // Get the custom tile ready to be removed
                 ComponentName component = CustomTile.getComponentFromSpec(tileSpec);
                 Intent intent = new Intent().setComponent(component);
                 TileLifecycleManager lifecycleManager = new TileLifecycleManager(new Handler(),
@@ -505,5 +506,34 @@ public class QSTileHost implements QSTile.Host, Tunable {
             }
         }
         return tiles;
+    }
+
+    /**
+     * Remove custom tiles with the same package name
+     **/
+    public void removeTilesWithSamePkg(String pkgName) {
+        List<String> newTileSpecs = new ArrayList<>();
+            newTileSpecs.addAll(mTileSpecs);
+            for (String spec : mTileSpecs) {
+            if (!spec.startsWith(CustomTile.PREFIX)) continue;
+            if (spec.contains(pkgName)) {
+                // Get the custom tile ready to be removed
+                ComponentName component = CustomTile.getComponentFromSpec(spec);
+                Intent intent = new Intent().setComponent(component);
+                TileLifecycleManager lifecycleManager = new TileLifecycleManager(new Handler(),
+                        mContext, mServices, new Tile(), intent,
+                        new UserHandle(ActivityManager.getCurrentUser()));
+                lifecycleManager.onStopListening();
+                lifecycleManager.onTileRemoved();
+                lifecycleManager.flushMessagesAndUnbind();
+                // Remove spec from newTileSpecs
+                newTileSpecs.remove(spec);
+            }
+        }
+        // Save into Settings
+        if (newTileSpecs.size() != mTileSpecs.size()) {
+            Secure.putStringForUser(getContext().getContentResolver(), QSTileHost.TILES_SETTING,
+                    TextUtils.join(",", newTileSpecs), ActivityManager.getCurrentUser());
+        }
     }
 }

@@ -89,8 +89,6 @@ public class TileServiceManager {
         filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         filter.addDataScheme("package");
         Context context = mServices.getContext();
-        context.registerReceiverAsUser(mUninstallReceiver,
-                new UserHandle(ActivityManager.getCurrentUser()), filter, null, mHandler);
         ComponentName component = tileLifecycleManager.getComponent();
         if (!TileLifecycleManager.isTileAdded(context, component)) {
             TileLifecycleManager.setTileAdded(context, component, true);
@@ -143,7 +141,6 @@ public class TileServiceManager {
     }
 
     public void handleDestroy() {
-        mServices.getContext().unregisterReceiver(mUninstallReceiver);
         mStateManager.handleDestroy();
     }
 
@@ -234,39 +231,6 @@ public class TileServiceManager {
         public void run() {
             mJustBound = false;
             mServices.recalculateBindAllowance();
-        }
-    };
-
-    private final BroadcastReceiver mUninstallReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (!Intent.ACTION_PACKAGE_REMOVED.equals(intent.getAction())) {
-                return;
-            }
-
-            Uri data = intent.getData();
-            String pkgName = data.getEncodedSchemeSpecificPart();
-            final ComponentName component = mStateManager.getComponent();
-            if (!Objects.equal(pkgName, component.getPackageName())) {
-                return;
-            }
-
-            // If the package is being updated, verify the component still exists.
-            if (intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
-                Intent queryIntent = new Intent(TileService.ACTION_QS_TILE);
-                queryIntent.setPackage(pkgName);
-                PackageManager pm = context.getPackageManager();
-                List<ResolveInfo> services = pm.queryIntentServicesAsUser(
-                        queryIntent, 0, ActivityManager.getCurrentUser());
-                for (ResolveInfo info : services) {
-                    if (Objects.equal(info.serviceInfo.packageName, component.getPackageName())
-                            && Objects.equal(info.serviceInfo.name, component.getClassName())) {
-                        return;
-                    }
-                }
-            }
-
-            mServices.getHost().removeTile(component);
         }
     };
 }

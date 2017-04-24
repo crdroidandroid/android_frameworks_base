@@ -15,6 +15,7 @@
  */
 package com.android.systemui.qs.external;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,7 +23,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -44,6 +47,10 @@ import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+
+import libcore.util.Objects;
 
 /**
  * Runs the day-to-day operations of which tiles should be bound and when.
@@ -61,6 +68,8 @@ public class TileServices extends IQSService.Stub {
     private final QSTileHost mHost;
 
     private int mMaxBound = DEFAULT_MAX_BOUND;
+
+    private HashMap<String, PackageUninstallListener> mPkgListeners = new HashMap<>();
 
     public TileServices(QSTileHost host, Looper looper) {
         mHost = host;
@@ -86,6 +95,19 @@ public class TileServices extends IQSService.Stub {
             mServices.put(tile, service);
             mTiles.put(component, tile);
             mTokenMap.put(service.getToken(), tile);
+
+            // initialize package uninstall listener
+            String pkgName = component.getPackageName();
+            if (!mPkgListeners.containsKey(pkgName)) {
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+                filter.addDataScheme("package");
+                PackageUninstallListener listener = new PackageUninstallListener(pkgName);
+                getContext().registerReceiverAsUser(listener,
+                        new UserHandle(ActivityManager.getCurrentUser()), filter, null, mHandler);
+                mPkgListeners.put(pkgName, listener);
+            }
+            mPkgListeners.get(pkgName).addComponent(component);
         }
         return service;
     }
@@ -108,6 +130,24 @@ public class TileServices extends IQSService.Stub {
                     mHost.getIconController().removeIcon(slot);
                 }
             });
+
+            // destroy package uninstall listener
+            String pkgName = tile.getComponent().getPackageName();
+            if (mPkgListeners.containsKey(pkgName)) {
+                mPkgListeners.get(pkgName).removeComponent(tile.getComponent());
+                // Check if there's any alive tile with same package name
+                boolean pkgExists = false;
+                for (ComponentName component : mTiles.keySet()) {
+                    if (pkgName.equals(component.getPackageName())) {
+                        pkgExists = true;
+                        break;
+                    }
+                }
+                if (!pkgExists) {
+                    getContext().unregisterReceiver(mPkgListeners.get(pkgName));
+                    mPkgListeners.remove(pkgName);
+                }
+            }
         }
     }
 
@@ -323,4 +363,65 @@ public class TileServices extends IQSService.Stub {
             return -Integer.compare(left.getBindPriority(), right.getBindPriority());
         }
     };
+
+    /**
+     * After a package is uninstalled, this listener would trigger removing custom tiles the package
+     * added. We monitor each package that has custom tiles with one this listener.
+     */
+    private final class PackageUninstallListener extends BroadcastReceiver {
+        private String mPackageName;
+        private List<ComponentName> mComponents = new ArrayList<>();
+
+        PackageUninstallListener(String pkgName) {
+            mPackageName = pkgName;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!Intent.ACTION_PACKAGE_REMOVED.equals(intent.getAction())) {
+                return;
+            }
+
+            Uri data = intent.getData();
+            String pkgName = data.getEncodedSchemeSpecificPart();
+            if (!mPackageName.equals(pkgName)) {
+                return;
+            }
+
+            // If package is being updated, verify the component still exists.
+            if (intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
+                Intent queryIntent = new Intent(TileService.ACTION_QS_TILE);
+                queryIntent.setPackage(pkgName);
+                PackageManager pm = context.getPackageManager();
+                List<ResolveInfo> services = pm.queryIntentServicesAsUser(
+                        queryIntent, 0, ActivityManager.getCurrentUser());
+                List<ComponentName> componentsToBeRemoved = new ArrayList<>(mComponents);// copy of original list
+                // Check if any component doesn't exist after package updated
+                for (ResolveInfo info : services) {
+                    for (ComponentName component : componentsToBeRemoved) {
+                        if (Objects.equal(info.serviceInfo.packageName, component.getPackageName())
+                                && Objects.equal(info.serviceInfo.name, component.getClassName())) {
+                            componentsToBeRemoved.remove(component);
+                            break;
+                        }
+                    }
+                }
+                // Remove tiles that its updated package deleted this custom tile.
+                for (ComponentName component : componentsToBeRemoved) {
+                    getHost().removeTile(component);
+                }
+            } else {
+                // Package uninstalled.
+                getHost().removeTilesWithSamePkg(pkgName);
+            }
+        }
+
+        void addComponent(ComponentName component) {
+            mComponents.add(component);
+        }
+
+        void removeComponent(ComponentName component) {
+            mComponents.remove(component);
+        }
+    }
 }
