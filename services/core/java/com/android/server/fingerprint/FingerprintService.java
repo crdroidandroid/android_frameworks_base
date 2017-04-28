@@ -394,10 +394,8 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
     private void startClient(ClientMonitor newClient, boolean initiatedByClient) {
         ClientMonitor currentClient = mCurrentClient;
         if (currentClient != null) {
-            if(!currentClient.getIsCanceling()) {
-                if (DEBUG) Slog.v(TAG, "request stop current client " + currentClient.getOwnerString());
-                currentClient.stop(initiatedByClient);
-            }
+            if (DEBUG) Slog.v(TAG, "request stop current client " + currentClient.getOwnerString());
+            currentClient.stop(initiatedByClient);
             mPendingClient = newClient;
             mHandler.removeCallbacks(mResetClientState);
             mHandler.postDelayed(mResetClientState, CANCEL_TIMEOUT_LIMIT);
