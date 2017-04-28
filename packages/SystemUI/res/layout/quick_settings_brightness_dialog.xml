@@ -21,18 +21,6 @@
     android:paddingRight="16dp"
     style="@style/BrightnessDialogContainer">
 
-    <ImageView
-        android:id="@+id/brightness_icon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_qs_brightness_auto_off_new"
-        android:contentDescription="@null"
-        android:visibility="gone"
-        android:scaleType="center"
-        android:layout_marginStart="8dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless" />
-
     <com.android.systemui.settings.ToggleSlider
         android:id="@+id/brightness_slider"
         android:layout_width="0dp"
@@ -43,12 +31,16 @@
         android:importantForAccessibility="no"
         systemui:text="@string/status_bar_settings_auto_brightness_label" />
 
-    <CheckBox
-        android:id="@+id/brightness_auto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/brightness_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center_vertical"
-        android:text="@string/status_bar_settings_auto_brightness_label"
-        android:visibility="gone"/>
+        android:layout_marginStart="8dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_qs_brightness_auto_off_new"
+        android:contentDescription="@null"
+        android:visibility="gone"
+        android:background="?android:attr/selectableItemBackgroundBorderless" />
 
 </LinearLayout>
