@@ -1376,10 +1376,13 @@ public class BaseBundle {
      * it to be passed through an IBinder connection.
      * @param parcel The parcel to copy this bundle to.
      */
-    synchronized void writeToParcelInner(Parcel parcel, int flags) {
+    void writeToParcelInner(Parcel parcel, int flags) {
         // Keep implementation in sync with writeToParcel() in
         // frameworks/native/libs/binder/PersistableBundle.cpp.
-        final Parcel parcelledData = mParcelledData;
+        final Parcel parcelledData;
+        synchronized (this) {
+            parcelledData = mParcelledData;
+        }
         if (parcelledData != null) {
             if (isEmptyParcel()) {
                 parcel.writeInt(0);
