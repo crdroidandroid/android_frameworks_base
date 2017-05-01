@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.UserManager;
 import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,6 @@ import com.android.systemui.qs.QSDetailItems.Item;
 import com.android.systemui.qs.QSDetailItemsList;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.QSTile.DetailAdapter;
-import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.LocationController.LocationSettingsChangeCallback;
 
@@ -105,74 +103,25 @@ public class LocationTile extends QSTile<QSTile.State> {
 
     @Override
     protected void handleClick() {
-        boolean mIsEasy = isLocationEasyToggleEnabled();
-            if(mIsEasy) {
-                 final boolean wasEnabled = (Boolean) mState.value;
-                 MetricsLogger.action(mContext, getMetricsCategory(), !wasEnabled);
-                 mController.setLocationEnabled(!wasEnabled);
-            } else {
-                 mShowingDetail = true;
-                 mAnimationList.clear();
-                 MetricsLogger.action(mContext, getMetricsCategory());
-                 if (!mController.isLocationEnabled()) {
-                     mController.setLocationEnabled(true);
-                 }
-                showDetail(true);
-            }
-    }
-
-    public boolean isLocationEasyToggleEnabled() {
-        return Settings.Secure.getInt(mContext.getContentResolver(),
-            Settings.Secure.QS_LOCATION_EASY_TOGGLE, 0) == 1;
+        mShowingDetail = true;
+        mAnimationList.clear();
+        MetricsLogger.action(mContext, getMetricsCategory());
+        if (!mController.isLocationEnabled()) {
+            mController.setLocationEnabled(true);
+        }
+        showDetail(true);
     }
 
     @Override
     public Intent getLongClickIntent() {
-        return null;
-    }
-
-    @Override
-    protected void handleLongClick() {
-        boolean mIsEasy = isLocationEasyToggleEnabled();
-        if (mIsEasy) {
-            mShowingDetail = true;
-            mAnimationList.clear();
-            MetricsLogger.action(mContext, getMetricsCategory());
-            if (!mController.isLocationEnabled()) {
-                 mController.setLocationEnabled(true);
-                 }
-            showDetail(true);
-        } else {
-            mHost.startActivityDismissingKeyguard(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-        }
-
+        return new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
     }
 
     @Override
     protected void handleUpdateState(QSTile.State state, Object arg) {
-         final boolean locationEnabled =  mController.isLocationEnabled();
-         boolean mIsEasy = isLocationEasyToggleEnabled();
-         if (mIsEasy) {
-               // Work around for bug 15916487: don't show location tile on top of lock screen. After the
-               // bug is fixed, this should be reverted to only hiding it on secure lock screens:
-               // state.visible = !(mKeyguard.isSecure() && mKeyguard.isShowing());
-               state.value = locationEnabled;
-               checkIfRestrictionEnforcedByAdminOnly(state, UserManager.DISALLOW_SHARE_LOCATION);
-               if (locationEnabled) {
-                   state.icon = mEnable;
-                   state.label = mContext.getString(R.string.quick_settings_location_label);
-                   state.contentDescription = mContext.getString(
-                                 R.string.accessibility_quick_settings_location_on);
-               } else {
-                   state.icon = mDisable;
-                   state.label = mContext.getString(R.string.quick_settings_location_label);
-                   state.contentDescription = mContext.getString(
-                                 R.string.accessibility_quick_settings_location_off);
-                    if (mAnimationList.isEmpty() && mShowingDetail && arg == null) {
-                    return;
-                    }
-               }
-        } else {
+        if (mAnimationList.isEmpty() && mShowingDetail && arg == null) {
+            return;
+        }
         int currentMode = mController.getLocationCurrentState();
         switch (currentMode) {
             case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
@@ -195,7 +144,6 @@ public class LocationTile extends QSTile<QSTile.State> {
                 state.label = mContext.getString(R.string.quick_settings_location_off_label);
                 state.icon = mDisable;
                 break;
-                }
         }
     }
 

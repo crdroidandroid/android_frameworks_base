@@ -8175,12 +8175,6 @@ public final class Settings {
         public static final String QS_BATTERY_EASY_TOGGLE = "qs_battery_easy_toggle";
 
         /**
-         * Enable single click to turn Location services on or off.
-         * @hide
-         */
-        public static final String QS_LOCATION_EASY_TOGGLE = "qs_location_easy_toggle";
-
-        /**
          * Number of rows used for the Quick Settings (portrait)
          *
          * @hide
