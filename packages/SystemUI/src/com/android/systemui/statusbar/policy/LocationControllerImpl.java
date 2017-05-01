@@ -54,7 +54,6 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
     private StatusBarManager mStatusBarManager;
 
     private boolean mAreActiveLocationRequests;
-    private int mLastActiveMode;
 
     private ArrayList<LocationSettingsChangeCallback> mSettingsChangeCallbacks =
             new ArrayList<LocationSettingsChangeCallback>();
@@ -64,11 +63,6 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
     public LocationControllerImpl(Context context, Looper bgLooper) {
         mContext = context;
         mSlotLocation = mContext.getString(com.android.internal.R.string.status_bar_location);
-
-        // Initialize last active mode. If state was off use the default high accuracy mode
-        mLastActiveMode = getLocationCurrentState();
-        if(mLastActiveMode == Settings.Secure.LOCATION_MODE_OFF)
-            mLastActiveMode = Settings.Secure.LOCATION_MODE_HIGH_ACCURACY;
 
         // Register to listen for changes in location settings.
         IntentFilter filter = new IntentFilter();
@@ -114,57 +108,14 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
             return false;
         }
         final ContentResolver cr = mContext.getContentResolver();
-
-        // Store last active mode if we are switching off
-        // so we can restore it at the next enable
-        if(!enabled)
-            mLastActiveMode = getLocationCurrentState();
         // When enabling location, a user consent dialog will pop up, and the
         // setting won't be fully enabled until the user accepts the agreement.
         int mode = enabled
-                ? mLastActiveMode : Settings.Secure.LOCATION_MODE_OFF;
+                ? Settings.Secure.LOCATION_MODE_PREVIOUS : Settings.Secure.LOCATION_MODE_OFF;
         // QuickSettings always runs as the owner, so specifically set the settings
         // for the current foreground user.
         return Settings.Secure
                 .putIntForUser(cr, Settings.Secure.LOCATION_MODE, mode, currentUserId);
-    }
-
-    /**
-     * Enable or disable location in settings to a specific mode.
-     *
-     * <p>This will attempt to enable/disable every type of location setting
-     * (e.g. high and balanced power).
-     *
-     * <p>If enabling, a user consent dialog will pop up prompting the user to accept.
-     * If the user doesn't accept, network location won't be enabled.
-     *
-     * @return true if attempt to change setting was successful.
-     */
-    public boolean setLocationMode(int mode) {
-        int currentUserId = ActivityManager.getCurrentUser();
-        if (isUserLocationRestricted(currentUserId)) {
-            return false;
-        }
-        final ContentResolver cr = mContext.getContentResolver();
-        // When enabling location, a user consent dialog will pop up, and the
-        // setting won't be fully enabled until the user accepts the agreement.
-        // QuickSettings always runs as the owner, so specifically set the settings
-        // for the current foreground user.
-        return Settings.Secure.putIntForUser(cr, Settings.Secure.LOCATION_MODE,
-                mode, currentUserId);
-    }
-
-    /**
-     * Returns int corresponding to current location mode in settings.
-     */
-    public int getLocationCurrentState() {
-        int currentUserId = ActivityManager.getCurrentUser();
-        if (isUserLocationRestricted(currentUserId)) {
-            return Settings.Secure.LOCATION_MODE_OFF;
-        }
-        final ContentResolver cr = mContext.getContentResolver();
-        return Settings.Secure.getIntForUser(cr, Settings.Secure.LOCATION_MODE,
-                Settings.Secure.LOCATION_MODE_OFF, currentUserId);
     }
 
     /**

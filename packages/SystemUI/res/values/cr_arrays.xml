@@ -16,13 +16,6 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <!-- Advanced Location tile mode -->
-    <string-array name="location_mode_entries" translatable="false">
-        <item>@string/quick_settings_location_battery_saving_label</item>
-        <item>@string/quick_settings_location_gps_only_label</item>
-        <item>@string/quick_settings_location_high_accuracy_label</item>
-    </string-array>
-
     <!-- LiveDisplay drawables -->
     <string-array name="live_display_drawables" translatable="false">
         <item>@drawable/ic_livedisplay_auto</item>
