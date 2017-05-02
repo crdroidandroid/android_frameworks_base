@@ -120,6 +120,13 @@ public class StatusBarWeatherImageLeft extends ImageView implements
         queryAndUpdateWeather();
     }
 
+    @Override
+    public void weatherError(int errorReason) {
+        if (mWeatherData != null) {
+            setVisibility(View.GONE);
+        }
+    }
+
     private void queryAndUpdateWeather() {
         if (mWeatherTempStyle == 1 || mStatusBarWeatherEnabled == 0 ||
                 mStatusBarWeatherEnabled == 3 || mStatusBarWeatherEnabled == 4) {
