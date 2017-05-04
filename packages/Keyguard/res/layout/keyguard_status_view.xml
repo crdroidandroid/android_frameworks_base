@@ -49,17 +49,7 @@
 
         <include layout="@layout/keyguard_status_area" />
 
-        <TextView android:id="@+id/weather_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/clock_white"
-            style="@style/widget_label"
-            android:textAllCaps="true"
-            android:letterSpacing="0.15"
-            android:gravity="center"
-            android:singleLine="true"
-            android:visibility="gone"/>
+        <include layout="@layout/keyguard_weather_view" />
 
         <TextView
             android:id="@+id/owner_info"

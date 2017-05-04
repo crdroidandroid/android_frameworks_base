@@ -396,7 +396,7 @@ public class NotificationPanelView extends PanelView implements
             }
         });
 
-        mKeyguardWeatherInfo = (TextView) mKeyguardStatusView.findViewById(R.id.weather_info);
+        mKeyguardWeatherInfo = (TextView) mKeyguardStatusView.findViewById(R.id.current_temp);
 
         mNotificationPanelView = this;
 
@@ -2778,10 +2778,6 @@ public class NotificationPanelView extends PanelView implements
         if (!mKeyguardWeatherEnabled || Double.isNaN(info.temp) || info.condition == null) {
             mKeyguardWeatherInfo.setVisibility(GONE);
         } else {
-            mKeyguardWeatherInfo.setText(mContext.getString(
-                    R.string.keyguard_status_view_weather_format,
-                    WeatherUtils.formatTemperature(info.temp, info.tempUnit),
-                    info.condition));
             mKeyguardWeatherInfo.setVisibility(VISIBLE);
         }
     }
