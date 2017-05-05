@@ -26,6 +26,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class ArrayMapTests {
     static final int OP_ADD = 1;
@@ -105,6 +108,43 @@ public class ArrayMapTests {
         @Override
         public final String toString() {
             return Integer.toString(mValue);
+        }
+    }
+
+    static class ArrayMapStressLoop implements Runnable {
+        ArrayMap<String, String> mMap;
+        AtomicBoolean mRunning;
+        CountDownLatch mStopNotify;
+        boolean mHasClassCastException;
+
+        ArrayMapStressLoop(ArrayMap<String, String> map, AtomicBoolean running, CountDownLatch stopNotify) {
+            mMap = map;
+            mRunning = running;
+            mStopNotify = stopNotify;
+            mHasClassCastException = false;
+        }
+
+        boolean hasClassCastException() {
+            return mHasClassCastException;
+        }
+
+        @Override
+        public void run() {
+            while (mRunning.get()) {
+                try {
+                    if (mMap.size() > 10) {
+                        mMap.clear();
+                    }
+                    mMap.put(Long.toString(System.currentTimeMillis()), "");
+                } catch (ClassCastException e) {
+                    mHasClassCastException = true;
+                    mRunning.set(false);
+                } catch (Exception ignore) {
+                    // IndexOutOfBoundsException or NullPointerException
+                    // they are all multh-thread issues, just ignore them.
+                }
+            }
+            mStopNotify.countDown();
         }
     }
 
@@ -446,6 +486,10 @@ public class ArrayMapTests {
             return;
         }
 
+        if (!testClassCastException()) {
+            return;
+        }
+
         Log.e("test", "Test successful; printing final map.");
         dump(hashMap, arrayMap);
 
@@ -524,6 +568,41 @@ public class ArrayMapTests {
         if (compare(set1, set2) || compare(set1, set3) || compare(set3, set1)) {
             Log.e("test", "ArraySet equals failure for set contents " + set1 + ", " +
                     set2 + ", " + set3);
+            return false;
+        }
+
+        return true;
+    }
+
+    private static boolean testClassCastException() {
+        ArrayMap<String, String> shared = new ArrayMap(); // ArrayMap for multi-thread
+        ArrayMap<String, String> single = new ArrayMap(); // ArrayMap for single thread
+        AtomicBoolean running = new AtomicBoolean(true);  // running flag
+
+        CountDownLatch countLatch = new CountDownLatch(3); // 3 threads
+        ArrayMapStressLoop sharedLoop1 = new ArrayMapStressLoop(shared,
+                running, countLatch);
+        ArrayMapStressLoop sharedLoop2 = new ArrayMapStressLoop(shared,
+                running, countLatch);
+        ArrayMapStressLoop singleLoop  = new ArrayMapStressLoop(single,
+                running, countLatch);
+
+        new Thread(sharedLoop1).start();
+        new Thread(sharedLoop2).start();
+        new Thread(singleLoop).start();
+
+        // Multi-thread Stress test for 500ms
+        try {
+            countLatch.await(500, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            // do nothing
+        }
+
+        running.set(false); // stop all threads
+        if (sharedLoop1.hasClassCastException() || sharedLoop2.hasClassCastException() ||
+                singleLoop.hasClassCastException()) {
+            Log.e("test", "testClassCastException failed. "
+                    + "Application using ArrayMap may crash after this failed.");
             return false;
         }
 
