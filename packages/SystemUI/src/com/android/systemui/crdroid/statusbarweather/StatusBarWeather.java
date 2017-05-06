@@ -19,6 +19,7 @@
 
 package com.android.systemui.crdroid.statusbarweather;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.UserHandle;
@@ -173,11 +174,16 @@ public class StatusBarWeather extends TextView implements
                 return;
 
             try {
-                // Disable OmniJaws if tile isn't used either
-                String[] tiles = Settings.Secure.getStringForUser(mContext.getContentResolver(),
+                ContentResolver resolver = mContext.getContentResolver();
+
+                // Disable OmniJaws if not required
+                String[] tiles = Settings.Secure.getStringForUser(resolver,
                         Settings.Secure.QS_TILES, UserHandle.USER_CURRENT).split(",");
                 boolean weatherTileEnabled = Arrays.asList(tiles).contains("weather");
-                if (!weatherTileEnabled) {
+                boolean weatherLSEnabled = Settings.System.getInt(resolver,
+                    Settings.System.LOCK_SCREEN_SHOW_WEATHER, 0) == 1;
+
+                if (!weatherTileEnabled && !weatherLSEnabled) {
                     mWeatherClient.setOmniJawsEnabled(false);
                 }
                 return;
