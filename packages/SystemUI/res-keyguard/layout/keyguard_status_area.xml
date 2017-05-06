@@ -21,6 +21,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:androidprv="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/keyguard_status_area"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
