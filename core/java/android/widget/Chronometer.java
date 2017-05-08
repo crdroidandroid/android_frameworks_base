@@ -155,6 +155,32 @@ public class Chronometer extends TextView {
     }
 
     /**
+     * Set the time that the count-up timer is in reference to.
+     *
+     * @param base include two time: DeskClockSysTime and DeskClockTime respectively.
+     * @hide
+     */
+    @android.view.RemotableViewMethod
+    public void setBaseNoDelay(String base) {
+        String arr[]= base.split(",");
+        if(arr!=null && arr.length == 2) {
+            long DeskClockSysTime = Long.parseLong(arr[0]);
+            long DeskClockTime = Long.parseLong(arr[1]);
+            mBase = DeskClockSysTime - DeskClockTime;
+            dispatchChronometerTick();
+            if(mStarted) {
+                updateText(SystemClock.elapsedRealtime());
+            } else {
+                //pause status, update langue only, whitout time change caused by function cost.
+                updateText(DeskClockSysTime);
+            }
+        }else {
+            Log.e(TAG, "setBaseNoDelay error!" );
+            return;
+        }
+    }
+
+    /**
      * Return the base time as set through {@link #setBase}.
      */
     public long getBase() {
