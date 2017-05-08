@@ -4756,12 +4756,6 @@ public final class Settings {
         public static final String ANIM_TILE_INTERPOLATOR = "anim_tile_interpolator";
 
         /**
-         * Quick Settings nougat animation
-         * @hide
-         */
-        public static final String QS_FANCY_ANIMATION = "qs_fancy_animation";
-
-        /**
          * What color to use for the battery LED while charging - really full (100%)
          * @hide
          */
