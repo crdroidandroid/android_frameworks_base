@@ -717,6 +717,7 @@ public class AudioService extends IAudioService.Stub
     };
 
     private boolean mVisualizerLocked;
+    private int mLaunchPlayer;
 
     ///////////////////////////////////////////////////////////////////////////
     // Construction
@@ -741,6 +742,9 @@ public class AudioService extends IAudioService.Stub
 
         mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         mHasVibrator = mVibrator == null ? false : mVibrator.hasVibrator();
+
+        mLaunchPlayer = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HEADSET_CONNECT_PLAYER, 0, UserHandle.USER_CURRENT);
 
         // Initialize volume
         int maxCallVolume = SystemProperties.getInt("ro.config.vc_call_vol_steps", -1);
@@ -3876,6 +3880,24 @@ public class AudioService extends IAudioService.Stub
                 result |= handleDeviceConnection(isActive, outDeviceType, address, btDeviceName);
             }
         }
+        switch (mLaunchPlayer) {
+            case 0:
+            case 1:
+                //do nothing
+                break;
+            case 2:
+            case 4:
+                //launch the player if bt headset is not a carkit
+                for (int outDeviceType : outDeviceTypes)
+                    if (outDeviceType != AudioSystem.DEVICE_OUT_BLUETOOTH_SCO_CARKIT)
+                        startMusicPlayer();
+                break;
+            case 3:
+            case 5:
+                //launch the player for all bt headsets
+                startMusicPlayer();
+                break;
+        }
         // handleDeviceConnection() && result to make sure the method get executed
         result = handleDeviceConnection(isActive, inDevice, address, btDeviceName) && result;
         return result;
@@ -5918,6 +5940,8 @@ public class AudioService extends IAudioService.Stub
                     mContentResolver, Settings.Global.ENCODED_SURROUND_OUTPUT_ENABLED_FORMATS);
             mContentResolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.ENCODED_SURROUND_OUTPUT_ENABLED_FORMATS), false, this);
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADSET_CONNECT_PLAYER), false, this);
         }
 
         @Override
@@ -5948,6 +5972,8 @@ public class AudioService extends IAudioService.Stub
                     updateStreamVolumeAlias(true, TAG);
                 }
             }
+            mLaunchPlayer = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.HEADSET_CONNECT_PLAYER, 0, UserHandle.USER_CURRENT);
         }
 
         private void updateEncodedSurroundOutput() {
@@ -6408,13 +6434,15 @@ public class AudioService extends IAudioService.Stub
 
         if (device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) {
             connType = AudioRoutesInfo.MAIN_HEADSET;
-            if (state == 1) {
+            if ((mLaunchPlayer == 1 || mLaunchPlayer == 4 || mLaunchPlayer == 5)
+                    && state ==1) {
                 startMusicPlayer();
             }
         } else if (device == AudioSystem.DEVICE_OUT_WIRED_HEADPHONE ||
                    device == AudioSystem.DEVICE_OUT_LINE) {
             connType = AudioRoutesInfo.MAIN_HEADPHONES;
-            if (state == 1) {
+            if ((mLaunchPlayer == 1 || mLaunchPlayer == 4 || mLaunchPlayer == 5)
+                    && state ==1) {
                 startMusicPlayer();
             }
         } else if (device == AudioSystem.DEVICE_OUT_HDMI ||
@@ -6496,11 +6524,8 @@ public class AudioService extends IAudioService.Stub
     }
 
     private void startMusicPlayer() {
-        boolean launchPlayer = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.HEADSET_CONNECT_PLAYER, 0, UserHandle.USER_CURRENT) != 0;
         TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
-
-        if (launchPlayer && !tm.isInCall()) {
+        if (!tm.isInCall()) {
             try {
                 Intent playerIntent = new Intent(Intent.ACTION_MAIN);
                 playerIntent.addCategory(Intent.CATEGORY_APP_MUSIC);
