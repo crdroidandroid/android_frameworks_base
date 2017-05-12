@@ -161,7 +161,7 @@ public class StatusBarWeather extends TextView implements
 
     @Override
     public void weatherError(int errorReason) {
-        if (mWeatherData != null) {
+        if (mWeatherData == null) {
             setVisibility(View.GONE);
         }
     }
