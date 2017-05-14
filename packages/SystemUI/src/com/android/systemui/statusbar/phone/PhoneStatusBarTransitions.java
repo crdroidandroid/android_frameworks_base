@@ -33,6 +33,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
     private final float mIconAlphaWhenOpaque;
 
     private View mLeftSide, mStatusIcons, mBattery, mClock, mNetworkTraffic;
+    private View mCrDroidLogo, mCrDroidLogoRight;
     private Animator mCurrentAnimation;
 
     public PhoneStatusBarTransitions(PhoneStatusBarView view) {
@@ -47,6 +48,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         mStatusIcons = mView.findViewById(R.id.statusIcons);
         mBattery = mView.findViewById(R.id.battery);
         mNetworkTraffic = mView.findViewById(R.id.network_traffic);
+        mCrDroidLogo = mView.findViewById(R.id.crdroid_logo);
+        mCrDroidLogoRight = mView.findViewById(R.id.crdroid_logo_right);
         applyModeBackground(-1, getMode(), false /*animate*/);
         applyMode(getMode(), false /*animate*/);
     }
@@ -90,7 +93,9 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
                     animateTransitionTo(mLeftSide, newAlpha),
                     animateTransitionTo(mStatusIcons, newAlpha),
                     animateTransitionTo(mBattery, newAlphaBC),
-                    animateTransitionTo(mNetworkTraffic, newAlpha)
+                    animateTransitionTo(mNetworkTraffic, newAlpha),
+                    animateTransitionTo(mCrDroidLogo, newAlpha),
+                    animateTransitionTo(mCrDroidLogoRight, newAlpha)
                     );
             if (isLightsOut(mode)) {
                 anims.setDuration(LIGHTS_OUT_DURATION);
@@ -102,6 +107,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             mStatusIcons.setAlpha(newAlpha);
             mNetworkTraffic.setAlpha(newAlpha);
             mBattery.setAlpha(newAlphaBC);
+            mCrDroidLogo.setAlpha(newAlpha);
+            mCrDroidLogoRight.setAlpha(newAlpha);
         }
     }
 }
