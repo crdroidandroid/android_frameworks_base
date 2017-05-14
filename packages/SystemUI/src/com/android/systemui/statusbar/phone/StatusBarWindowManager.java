@@ -59,6 +59,10 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
             "cmsystem:" + CMSettings.System.LOCKSCREEN_ROTATION;
     private static final String LOCK_SCREEN_BLUR_ENABLED =
             "cmsecure:" + CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED;
+    private static final String DOZE_OVERWRITE_VALUE =
+            "system:" + Settings.System.DOZE_OVERWRITE_VALUE;
+    private static final String DOZE_SCREEN_BRIGHTNESS =
+            "system:" + Settings.System.DOZE_SCREEN_BRIGHTNESS;
 
     private static final int TYPE_LAYER_MULTIPLIER = 10000; // Refer to WindowManagerService.TYPE_LAYER_MULTIPLIER
     private static final int TYPE_LAYER_OFFSET = 1000;      // Refer to WindowManagerService.TYPE_LAYER_OFFSET
@@ -76,20 +80,20 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
     private boolean mHasTopUiChanged;
     private int mBarHeight;
     private boolean mKeyguardScreenRotation;
-    private final float mScreenBrightnessDoze;
     private final State mCurrentState = new State();
 
     private BlurLayer mBlurLayer;
     private boolean mShowingMedia;
     private boolean mKeyguardBlurEnabled;
 
+    private boolean mOverwriteValue;
+    private int mScreenBrightness;
+
     public StatusBarWindowManager(Context context) {
         mContext = context;
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mActivityManager = ActivityManagerNative.getDefault();
         mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
-        mScreenBrightnessDoze = mContext.getResources().getInteger(
-                com.android.internal.R.integer.config_screenBrightnessDoze) / 255f;
     }
 
     private boolean shouldEnableKeyguardScreenRotation() {
@@ -145,7 +149,9 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
 
         TunerService.get(mContext).addTunable(this,
                 ACCELEROMETER_ROTATION,
-                LOCKSCREEN_ROTATION);
+                LOCKSCREEN_ROTATION,
+                DOZE_OVERWRITE_VALUE,
+                DOZE_SCREEN_BRIGHTNESS);
     }
 
     private void applyKeyguardFlags(State state) {
@@ -285,9 +291,17 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
         }
     }
 
+    public int getDozeBrightness() {
+        if (mOverwriteValue) {
+            return mScreenBrightness;
+        }
+        return mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_screenBrightnessDoze);
+    }
+
     private void applyBrightness(State state) {
         if (state.forceDozeBrightness) {
-            mLpChanged.screenBrightness = mScreenBrightnessDoze;
+            mLpChanged.screenBrightness = getDozeBrightness() / 255f;
         } else {
             mLpChanged.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
         }
@@ -512,6 +526,16 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
                 break;
             case LOCK_SCREEN_BLUR_ENABLED:
                 mKeyguardBlurEnabled = newValue != null && Integer.parseInt(newValue) == 1;
+                break;
+            case DOZE_OVERWRITE_VALUE:
+                     mOverwriteValue =
+                        newValue != null && Integer.parseInt(newValue) == 1;
+                break;
+            case DOZE_SCREEN_BRIGHTNESS:
+                     mScreenBrightness =
+                        newValue == null ? mContext.getResources().getInteger(
+                        com.android.internal.R.integer.config_screenBrightnessDoze)
+                        : Integer.parseInt(newValue);
                 break;
             default:
                 return;

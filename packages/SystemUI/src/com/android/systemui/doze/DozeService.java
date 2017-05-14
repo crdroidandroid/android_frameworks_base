@@ -202,6 +202,7 @@ public class DozeService extends DreamService implements TunerService.Tunable {
                         newValue == null ? mContext.getResources().getInteger(
                         com.android.internal.R.integer.config_screenBrightnessDoze)
                         : Integer.parseInt(newValue);
+                     setDozeScreenBrightness(getDozeBrightness());
                 break;
             default:
                 break;
