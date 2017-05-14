@@ -77,6 +77,14 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal" >
 
+                    <com.android.systemui.crdroid.logo.LogoImageView
+                        android:id="@+id/crdroid_logo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingEnd="1dip"
+                        android:scaleType="center"
+                        android:visibility="gone" />
+
                     <com.android.systemui.statusbar.policy.Clock
                         android:id="@+id/clock"
                         android:layout_width="wrap_content"
