@@ -60,6 +60,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private LinearLayout mSystemIconArea;
     private LinearLayout mCustomIconArea;
     private LinearLayout mCenterClockLayout;
+    private View mCrDroidLogoRight;
     private View mNotificationIconAreaInner;
     private int mDisabled1;
     private StatusBar mStatusBarComponent;
@@ -103,6 +104,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mSystemIconArea = mStatusBar.findViewById(R.id.system_icon_area);
         mCustomIconArea = mStatusBar.findViewById(R.id.left_icon_area);
         mCenterClockLayout = (LinearLayout) mStatusBar.findViewById(R.id.center_clock_layout);
+        mCrDroidLogoRight = mStatusBar.findViewById(R.id.crdroid_logo_right);
         mClockController = new ClockController(mStatusBar);
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
@@ -223,10 +225,12 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     public void hideSystemIconArea(boolean animate) {
         animateHide(mSystemIconArea, animate);
+        animateHide(mCrDroidLogoRight, animate);
     }
 
     public void showSystemIconArea(boolean animate) {
         animateShow(mSystemIconArea, animate);
+        animateShow(mCrDroidLogoRight, animate);
     }
 
     /**
