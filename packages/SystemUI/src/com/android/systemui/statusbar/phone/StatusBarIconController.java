@@ -28,7 +28,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.UserHandle;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.TypedValue;
@@ -71,7 +70,6 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     private PhoneStatusBar mPhoneStatusBar;
     private DemoStatusIcons mDemoStatusIcons;
 
-    private LinearLayout mCustomIconArea;
     private LinearLayout mSystemIconArea;
     private LinearLayout mStatusIcons;
     private SignalClusterView mSignalCluster;
@@ -85,8 +83,6 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     private ClockController mClockController;
     private View mCenterClockLayout;
     private NetworkTraffic mNetworkTraffic;
-    private ImageView mCrDroidLogoRight;
-    private ImageView mCrDroidLogoLeft;
 
     private TextView mWeather;
     private TextView mWeatherLeft;
@@ -134,7 +130,6 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                 com.android.internal.R.array.config_statusBarIcons));
         mContext = context;
         mPhoneStatusBar = phoneStatusBar;
-        mCustomIconArea =  (LinearLayout) statusBar.findViewById(R.id.left_custom_layout);
         mSystemIconArea = (LinearLayout) statusBar.findViewById(R.id.system_icon_area);
         mStatusIcons = (LinearLayout) statusBar.findViewById(R.id.statusIcons);
         mSignalCluster = (SignalClusterView) statusBar.findViewById(R.id.signal_cluster);
@@ -154,8 +149,6 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mBatteryMeterViewKeyguard = (BatteryMeterView) keyguardStatusBar.findViewById(R.id.battery);
         scaleBatteryMeterViews(context);
         mNetworkTraffic = (NetworkTraffic) statusBar.findViewById(R.id.networkTraffic);
-        mCrDroidLogoRight = (ImageView) statusBar.findViewById(R.id.crdroid_logo);
-        mCrDroidLogoLeft = (ImageView) statusBar.findViewById(R.id.left_crdroid_logo);
         mWeather = (TextView) statusBar.findViewById(R.id.weather_temp);
         mWeatherLeft = (TextView) statusBar.findViewById(R.id.left_weather_temp);
         mWeatherImageView = (ImageView) statusBar.findViewById(R.id.weather_image);
@@ -352,13 +345,11 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     }
 
     public void hideSystemIconArea(boolean animate) {
-        animateHide(mCustomIconArea, animate);
         animateHide(mSystemIconArea, animate);
         animateHide(mCenterClockLayout, animate);
     }
 
     public void showSystemIconArea(boolean animate) {
-        animateShow(mCustomIconArea, animate);
         animateShow(mSystemIconArea, animate);
         animateShow(mCenterClockLayout, animate);
     }
@@ -574,12 +565,6 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mClockController.setTextColor(mTintArea, mIconTint);
         mBatteryLevelView.setTextColor(getTint(mTintArea, mBatteryLevelView, mIconTint));
         mNetworkTraffic.setDarkIntensity(mDarkIntensity);
-        if (Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_CRDROID_LOGO_COLOR, 0xFFFFFFFF,
-                UserHandle.USER_CURRENT) == 0xFFFFFFFF) {
-            mCrDroidLogoRight.setImageTintList(ColorStateList.valueOf(mIconTint));
-            mCrDroidLogoLeft.setImageTintList(ColorStateList.valueOf(mIconTint));
-        }
         if (Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_WEATHER_COLOR, 0xFFFFFFFF,
                 UserHandle.USER_CURRENT) == 0xFFFFFFFF) {
