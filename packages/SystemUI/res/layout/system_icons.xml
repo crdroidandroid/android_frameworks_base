@@ -51,5 +51,13 @@
             android:gravity="center_vertical|start"
             android:visibility="gone"
         />
+
+        <com.android.systemui.crdroid.logo.LogoImageViewRight
+            android:id="@+id/crdroid_logo_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="2dip"
+            android:scaleType="center"
+            android:visibility="gone" />
     </com.android.keyguard.AlphaOptimizedLinearLayout>
 </LinearLayout>
