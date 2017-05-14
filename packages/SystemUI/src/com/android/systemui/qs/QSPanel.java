@@ -64,8 +64,7 @@ import cyanogenmod.providers.CMSettings;
 /** View that represents the quick settings tile panel. **/
 public class QSPanel extends LinearLayout implements Tunable, Callback {
 
-    public static final String QS_SHOW_BRIGHTNESS =
-            Settings.Secure.QS_SHOW_BRIGHTNESS;
+    public static final String QS_SHOW_BRIGHTNESS = "qs_show_brightness";
     public static final String QS_SHOW_BRIGHTNESS_ICON =
             "system:" + Settings.System.QS_SHOW_BRIGHTNESS_ICON;
 
