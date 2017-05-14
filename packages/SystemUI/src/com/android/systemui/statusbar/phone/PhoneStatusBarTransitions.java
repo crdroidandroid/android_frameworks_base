@@ -34,6 +34,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
 
     private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mNetworkTraffic;
     private View mClock, mClockCenter, mClockLeft;
+    private View mCrDroidLogo, mCrDroidLogoRight;
     private Animator mCurrentAnimation;
     private View mBatteryBar;
 
@@ -46,6 +47,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
 
     public void init() {
         mLeftSide = mView.findViewById(R.id.notification_icon_area);
+        mCrDroidLogo = mView.findViewById(R.id.crdroid_logo);
         mStatusIcons = mView.findViewById(R.id.statusIcons);
         mSignalCluster = mView.findViewById(R.id.signal_cluster);
         mBattery = mView.findViewById(R.id.battery);
@@ -53,6 +55,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         mClockCenter = mView.findViewById(R.id.clock_center);
         mClockLeft = mView.findViewById(R.id.clock_left);
         mNetworkTraffic = mView.findViewById(R.id.network_traffic);
+        mCrDroidLogoRight = mView.findViewById(R.id.crdroid_logo_right);
         mBatteryBar = mView.findViewById(R.id.battery_bar);
         applyModeBackground(-1, getMode(), false /*animate*/);
         applyMode(getMode(), false /*animate*/);
@@ -94,10 +97,12 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         if (animate) {
             AnimatorSet anims = new AnimatorSet();
             anims.playTogether(
+                    animateTransitionTo(mCrDroidLogo, newAlpha),
                     animateTransitionTo(mLeftSide, newAlpha),
                     animateTransitionTo(mStatusIcons, newAlpha),
                     animateTransitionTo(mSignalCluster, newAlpha),
                     animateTransitionTo(mNetworkTraffic, newAlpha),
+                    animateTransitionTo(mCrDroidLogoRight, newAlpha),
                     animateTransitionTo(mBatteryBar, newAlphaBC),
                     animateTransitionTo(mBattery, newAlphaBC),
                     animateTransitionTo(mClock, newAlphaBC),
@@ -110,10 +115,12 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             anims.start();
             mCurrentAnimation = anims;
         } else {
+            mCrDroidLogo.setAlpha(newAlpha);
             mLeftSide.setAlpha(newAlpha);
             mStatusIcons.setAlpha(newAlpha);
             mSignalCluster.setAlpha(newAlpha);
             mNetworkTraffic.setAlpha(newAlpha);
+            mCrDroidLogoRight.setAlpha(newAlpha);
             mBatteryBar.setAlpha(newAlphaBC);
             mBattery.setAlpha(newAlphaBC);
             mClock.setAlpha(newAlphaBC);
