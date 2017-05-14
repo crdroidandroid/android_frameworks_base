@@ -59,6 +59,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private KeyguardMonitor mKeyguardMonitor;
     private NetworkController mNetworkController;
     private LinearLayout mSystemIconArea;
+    private View mCrDroidLogo, mCrDroidLogoRight;
     private View mNotificationIconAreaInner;
     private int mDisabled1;
     private StatusBar mStatusBarComponent;
@@ -118,6 +119,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mDarkIconManager = new DarkIconManager(view.findViewById(R.id.statusIcons));
         Dependency.get(StatusBarIconController.class).addIconGroup(mDarkIconManager);
         mSystemIconArea = mStatusBar.findViewById(R.id.system_icon_area);
+        mCrDroidLogo = mStatusBar.findViewById(R.id.crdroid_logo);
+        mCrDroidLogoRight = mStatusBar.findViewById(R.id.crdroid_logo_right);
         mBatteryBar = mStatusBar.findViewById(R.id.battery_bar);
         mSignalClusterView = mStatusBar.findViewById(R.id.signal_cluster);
         mClockController = new ClockController(mStatusBar);
@@ -225,12 +228,16 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     public void hideSystemIconArea(boolean animate) {
         animateHide(mBatteryBar, animate);
+        animateHide(mCrDroidLogo, animate);
+        animateHide(mCrDroidLogoRight, animate);
         animateHide(mSystemIconArea, animate);
         animateHide(mClockController.getClock(), animate);
     }
 
     public void showSystemIconArea(boolean animate) {
         animateShow(mBatteryBar, animate);
+        animateShow(mCrDroidLogo, animate);
+        animateShow(mCrDroidLogoRight, animate);
         animateShow(mSystemIconArea, animate);
         animateShow(mClockController.getClock(), animate);
     }
