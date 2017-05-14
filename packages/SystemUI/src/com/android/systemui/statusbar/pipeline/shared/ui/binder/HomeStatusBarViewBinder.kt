@@ -35,6 +35,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.android.app.animation.Interpolators
 import com.android.systemui.crdroid.batterybar.BatteryBarController
+import com.android.systemui.crdroid.logo.LogoImage
 import com.android.systemui.display.dagger.SystemUIDisplaySubcomponent.PerDisplaySingleton
 import com.android.systemui.lifecycle.repeatWhenAttached
 import com.android.systemui.res.R
@@ -139,6 +140,7 @@ constructor(
         val rightPaddingInit = rightClock.capturePadding()
 
         val batteryBar: BatteryBarController = view.requireViewById(R.id.battery_bar)
+        val leftLogo: LogoImage = view.requireViewById(R.id.statusbar_logo)
 
         // CollapsedStatusBarFragment doesn't need this
         if (StatusBarRootModernization.isEnabled) {
@@ -149,6 +151,7 @@ constructor(
             centerClock.hideInitially(state = View.GONE)
             rightClock.hideInitially(state = View.GONE)
             batteryBar.hideInitially()
+            leftLogo.hideInitially()
             notificationIconsArea.hideInitially()
         }
 
@@ -523,6 +526,7 @@ constructor(
                         viewModel.isNotificationIconContainerVisible.collect {
                             notificationIconsArea.adjustVisibility(it)
                             batteryBar.adjustVisibility(it)
+                            leftLogo.adjustVisibility(it)
                         }
                     }
 
