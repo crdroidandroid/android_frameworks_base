@@ -3902,6 +3902,8 @@ status_t ResTable::getError() const
 
 void ResTable::uninit()
 {
+    AutoMutex _lock(mLock);
+
     mError = NO_INIT;
     size_t N = mPackageGroups.size();
     for (size_t i=0; i<N; i++) {
