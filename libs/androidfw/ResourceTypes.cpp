@@ -3348,6 +3348,7 @@ struct ResTable::PackageGroup
                 cacheEntry.filteredConfigs.clear();
 
                 bag_set** typeBags = cacheEntry.cachedBags;
+                cacheEntry.cachedBags = NULL;
                 if (kDebugTableNoisy) {
                     printf("typeBags=%p\n", typeBags);
                 }
@@ -3360,10 +3361,10 @@ struct ResTable::PackageGroup
                     for (size_t j = 0; j < N; j++) {
                         if (typeBags[j] && typeBags[j] != (bag_set*)0xFFFFFFFF) {
                             free(typeBags[j]);
+                            typeBags[j] = NULL;
                         }
                     }
                     free(typeBags);
-                    cacheEntry.cachedBags = NULL;
                 }
             }
         }
