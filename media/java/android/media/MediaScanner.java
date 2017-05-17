@@ -959,17 +959,25 @@ public class MediaScanner implements AutoCloseable {
                         values.put(Images.Media.LONGITUDE, latlng[1]);
                     }
 
-                    long time = exif.getGpsDateTime();
-                    if (time != -1) {
-                        values.put(Images.Media.DATE_TAKEN, time);
+                    long[] datetime = exif.getDateTime();
+
+                    long localtime = datetime[0];
+                    long utctime = datetime[1];
+                    if (utctime != -1) {
+                        values.put(Images.Media.DATE_TAKEN, utctime);
                     } else {
-                        // If no time zone information is available, we should consider using
-                        // EXIF local time as taken time if the difference between file time
-                        // and EXIF local time is not less than 1 Day, otherwise MediaProvider
-                        // will use file time as taken time.
-                        time = exif.getDateTime();
-                        if (time != -1 && Math.abs(mLastModified * 1000 - time) >= 86400000) {
-                            values.put(Images.Media.DATE_TAKEN, time);
+                        utctime = exif.getGpsDateTime();
+                        if (utctime != -1) {
+                            values.put(Images.Media.DATE_TAKEN, utctime);
+                        } else {
+                            // If no time zone information is available, we should consider using
+                            // EXIF local time as taken time if the difference between file time
+                            // and EXIF local time is not less than 1 Day, otherwise MediaProvider
+                            // will use file time as taken time.
+                            if (localtime != -1
+                                    && Math.abs(mLastModified * 1000 - localtime) >= 86400000) {
+                                values.put(Images.Media.DATE_TAKEN, localtime);
+                            }
                         }
                     }
 
