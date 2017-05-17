@@ -241,6 +241,7 @@ public class AlarmManager {
         final OnAlarmListener mListener;
         Handler mHandler;
         IAlarmCompleteListener mCompletion;
+        int mRefCount;
 
         public ListenerWrapper(OnAlarmListener listener) {
             mListener = listener;
@@ -248,6 +249,7 @@ public class AlarmManager {
 
         public void setHandler(Handler h) {
            mHandler = h;
+           mRefCount++;
         }
 
         public void cancel() {
@@ -275,7 +277,8 @@ public class AlarmManager {
             // Remove this listener from the wrapper cache first; the server side
             // already considers it gone
             synchronized (AlarmManager.class) {
-                if (sWrappers != null) {
+                mRefCount--;
+                if (mRefCount == 0 && sWrappers != null) {
                     sWrappers.remove(mListener);
                 }
             }
@@ -710,10 +713,10 @@ public class AlarmManager {
                     recipientWrapper = new ListenerWrapper(listener);
                     sWrappers.put(listener, recipientWrapper);
                 }
-            }
 
-            final Handler handler = (targetHandler != null) ? targetHandler : mMainThreadHandler;
-            recipientWrapper.setHandler(handler);
+                final Handler handler = (targetHandler != null) ? targetHandler : mMainThreadHandler;
+                recipientWrapper.setHandler(handler);
+            }
         }
 
         try {
