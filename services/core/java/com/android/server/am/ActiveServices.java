@@ -119,6 +119,8 @@ public final class ActiveServices {
     // allowing the next pending start to run.
     static final int BG_START_TIMEOUT = 15*1000;
 
+    static final int MAX_SERVICE_COUNT = 10000;
+
     final ActivityManagerService mAm;
 
     // Maximum number of services that we allow to start in the background
@@ -377,6 +379,12 @@ public final class ActiveServices {
                     callingUid, service, callerFg, userId)) {
                 return null;
             }
+        }
+
+        if (r.deliveredStarts.size() + r.pendingStarts.size() >= MAX_SERVICE_COUNT) {
+            Slog.e(TAG_SERVICE, r + " has already start " + MAX_SERVICE_COUNT
+                    + " services. Not allow to start more.");
+            return null;
         }
 
         if (unscheduleServiceRestartLocked(r, callingUid, false)) {
@@ -988,6 +996,14 @@ public final class ActiveServices {
         }
 
         final long origId = Binder.clearCallingIdentity();
+
+        IBinder ibinder = connection.asBinder();
+        ArrayList<ConnectionRecord> list = s.connections.get(ibinder);
+        if (list != null && list.size() >= MAX_SERVICE_COUNT) {
+            Slog.e(TAG_SERVICE, s + " has already bind " + MAX_SERVICE_COUNT
+                    + " connections. Not allow to bind more.");
+            return 0;
+        }
 
         try {
             if (unscheduleServiceRestartLocked(s, callerApp.info.uid, false)) {
