@@ -104,10 +104,7 @@ public class KeyguardIndicationController {
     public void setVisible(boolean visible) {
         mVisible = visible;
         mTextView.setVisibility(visible ? View.VISIBLE : View.GONE);
-        if (visible) {
-            hideTransientIndication();
-            updateIndication();
-        }
+        hideTransientIndication();
     }
 
     /**
@@ -157,23 +154,26 @@ public class KeyguardIndicationController {
         if (mTransientIndication != null) {
             mTransientIndication = null;
             mHandler.removeMessages(MSG_HIDE_TRANSIENT);
-            updateIndication();
         }
+        updateIndication();
     }
 
     private void updateIndication() {
         if (mVisible) {
+           boolean showbatteryInfo = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_BATTERY_INFO, 0, UserHandle.USER_CURRENT) == 1;
+
             // Walk down a precedence-ordered list of what should indication
             // should be shown based on user or device state
             if (!mUserManager.isUserUnlocked(ActivityManager.getCurrentUser())) {
                 mTextView.switchIndication(com.android.internal.R.string.lockscreen_storage_locked);
                 mTextView.setTextColor(Color.WHITE);
 
-            } else if (!TextUtils.isEmpty(mTransientIndication)) {
+            } else if (mTransientIndication != null && !TextUtils.isEmpty(mTransientIndication)) {
                 mTextView.switchIndication(mTransientIndication);
                 mTextView.setTextColor(mTransientTextColor);
 
-            } else if (mPowerPluggedIn) {
+            } else if (mPowerPluggedIn && showbatteryInfo) {
                 String indication = computePowerIndication();
                 if (DEBUG_CHARGING_SPEED) {
                     indication += ",  " + (mChargingWattage / 1000) + " mW";
@@ -223,24 +223,20 @@ public class KeyguardIndicationController {
         }
 
         String batteryInfo = "";
-        boolean showbatteryInfo = Settings.System.getIntForUser(mContext.getContentResolver(),
-            Settings.System.LOCKSCREEN_BATTERY_INFO, 0, UserHandle.USER_CURRENT) == 1;
 
-        if (showbatteryInfo) {
-            if (mChargingCurrent > 0) {
-                batteryInfo = batteryInfo + (mChargingCurrent / 1000) + "mA";
-            }
-            if (mChargingVoltage > 0) {
-                batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
-                        String.format("%.1f", (mChargingVoltage / 1000 / 1000)) + "V";
-            }
-            if (mTemperature > 0) {
-                batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
-                        mTemperature / 10 + "°C";
-            }
-            if (batteryInfo != "") {
-                batteryInfo = "\n" + batteryInfo;
-            }
+        if (mChargingCurrent > 0) {
+            batteryInfo = batteryInfo + (mChargingCurrent / 1000) + "mA";
+        }
+        if (mChargingVoltage > 0) {
+            batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
+                    String.format("%.1f", (mChargingVoltage / 1000 / 1000)) + "V";
+        }
+        if (mTemperature > 0) {
+            batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
+                    mTemperature / 10 + "°C";
+        }
+        if (batteryInfo != "") {
+            batteryInfo = "\n" + batteryInfo;
         }
 
         if (hasChargingTime) {
@@ -261,7 +257,7 @@ public class KeyguardIndicationController {
         public void onRefreshBatteryInfo(KeyguardUpdateMonitor.BatteryStatus status) {
             boolean isChargingOrFull = status.status == BatteryManager.BATTERY_STATUS_CHARGING
                     || status.status == BatteryManager.BATTERY_STATUS_FULL;
-            mPowerPluggedIn = status.isPluggedIn() && isChargingOrFull;
+            mPowerPluggedIn = status.isPluggedIn() || isChargingOrFull;
             mPowerCharged = status.isCharged();
             mChargingCurrent = status.maxChargingCurrent;
             mChargingVoltage = status.maxChargingVoltage;
@@ -353,18 +349,14 @@ public class KeyguardIndicationController {
 
         @Override
         public void onUserUnlocked() {
-            if (mVisible) {
-                updateIndication();
-            }
+            updateIndication();
         }
     };
 
     BroadcastReceiver mTickReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mVisible) {
-                updateIndication();
-            }
+            updateIndication();
         }
     };
 
@@ -372,13 +364,10 @@ public class KeyguardIndicationController {
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == MSG_HIDE_TRANSIENT && mTransientIndication != null) {
-                mTransientIndication = null;
-                updateIndication();
-            } else if (msg.what == MSG_CLEAR_FP_MSG) {
+            if (msg.what == MSG_CLEAR_FP_MSG) {
                 mLockIcon.setTransientFpError(false);
-                hideTransientIndication();
             }
+            hideTransientIndication();
         }
     };
 
