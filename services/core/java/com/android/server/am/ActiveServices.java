@@ -343,7 +343,7 @@ public final class ActiveServices {
 
         ServiceRecord r = res.record;
 
-        if (!mAm.mUserController.exists(r.userId)) {
+        if (!mAm.mUserController.isUserRunningLocked(r.userId, 0)) {
             Slog.w(TAG, "Trying to start service with non-existent user! " + r.userId);
             return null;
         }

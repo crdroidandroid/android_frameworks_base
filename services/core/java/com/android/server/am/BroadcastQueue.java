@@ -1109,6 +1109,15 @@ public final class BroadcastQueue {
                         + " to " + r.curApp + ": process crashing");
                 skip = true;
             }
+
+            if (!skip && !mService.mUserController.isUserRunningLocked(UserHandle.getUserId(
+                    info.activityInfo.applicationInfo.uid), 0)) {
+                Slog.w(TAG, "Skipping delivery to " + info.activityInfo.packageName + " / "
+                                + info.activityInfo.applicationInfo.uid
+                                + " : user is stopped");
+                skip = true;
+            }
+
             if (!skip) {
                 boolean isAvailable = false;
                 try {
