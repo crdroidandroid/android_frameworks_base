@@ -3610,9 +3610,7 @@ final class ActivityStack {
             // it is done pausing; else we can just directly finish it here.
             if (DEBUG_PAUSE) Slog.v(TAG_PAUSE, "Finish not pausing: " + r);
             if (r.visible) {
-                mWindowManager.prepareAppTransition(transit, false);
                 mWindowManager.setAppVisibility(r.appToken, false);
-                mWindowManager.executeAppTransition();
                 if (!mStackSupervisor.mWaitingVisibleActivities.contains(r)) {
                     mStackSupervisor.mWaitingVisibleActivities.add(r);
                 }
