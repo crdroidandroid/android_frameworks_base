@@ -1327,7 +1327,7 @@ public class AnimatedVectorDrawable extends Drawable implements Animatable2 {
             } else if (!mDrawable.mAnimatedVectorState.mShouldIgnoreInvalidAnim) {
                 // Should never get here
                 throw new UnsupportedOperationException("Target should be either VGroup, VPath, " +
-                        "or ConstantState, " + target == null ? "Null target" : target.getClass() +
+                        "or ConstantState, " + (target == null ? "Null target" : target.getClass()) +
                         " is not supported");
             }
         }
