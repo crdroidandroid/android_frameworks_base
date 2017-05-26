@@ -293,7 +293,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         lp.width = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_width);
         lp.height = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_height);
         mCameraImageView.setLayoutParams(lp);
-        mCameraImageView.setImageDrawable(mContext.getDrawable(R.drawable.ic_camera_alt_24dp));
+        updateRightAffordanceIcon();
 
         lp = mLockIcon.getLayoutParams();
         lp.width = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_width);
@@ -334,7 +334,9 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     public void setUserSetupComplete(boolean userSetupComplete) {
         mUserSetupComplete = userSetupComplete;
+        updateCameraVisibility();
         updateRightAffordanceIcon();
+        updateLeftButtonVisibility();
         updateLeftAffordanceIcon();
     }
 
@@ -828,8 +830,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
         @Override
         public void onUserUnlocked() {
-            updateLeftAffordance();
             updateRightAffordance();
+            updateLeftAffordance();
         }
     };
 
