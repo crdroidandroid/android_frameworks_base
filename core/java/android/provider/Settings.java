@@ -8253,6 +8253,12 @@ public final class Settings {
         public static final String LOCK_ENABLE_QS = "lockscreen_enable_qs";
 
         /**
+         * Recents lock
+         * @hide
+         */
+        public static final String LOCKED_RECENT_TASK_LIST = "locked_recent_task_list";
+
+        /**
          * One Handed mode toggle
          * @hide
          */
