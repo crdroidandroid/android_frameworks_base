@@ -201,6 +201,7 @@ public class TaskViewHeader extends FrameLayout
 
     private CountDownTimer mFocusTimerCountDown;
     private Context mContext;
+    private boolean mShowLockIcon;
 
     private static final String RECENTS_USE_OMNISWITCH =
             "system:" + Settings.System.RECENTS_USE_OMNISWITCH;
@@ -291,7 +292,9 @@ public class TaskViewHeader extends FrameLayout
                     LockTaskHelper.clearLockedTaskMap();
                 break;
             case RECENTS_LOCK_ICON:
-                if (newValue != null && Integer.parseInt(newValue) == 0)
+                mShowLockIcon = 
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                if (!mShowLockIcon)
                     LockTaskHelper.clearLockedTaskMap();
                 break;
             default:
@@ -406,8 +409,6 @@ public class TaskViewHeader extends FrameLayout
         boolean showTitle = true;
         boolean showMoveIcon = true;
         boolean showDismissIcon = true;
-        boolean showLockTaskIcon = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.RECENTS_LOCK_ICON, 0, UserHandle.USER_CURRENT) == 1;
         int rightInset = width - getMeasuredWidth();
 
         if (mTask != null && mTask.isFreeformTask()) {
@@ -432,7 +433,7 @@ public class TaskViewHeader extends FrameLayout
         mDismissButton.setVisibility(showDismissIcon ? View.VISIBLE : View.INVISIBLE);
         mDismissButton.setTranslationX(rightInset);
         if (mLockTaskButton != null) {
-            mLockTaskButton.setVisibility(showLockTaskIcon ? View.VISIBLE : View.INVISIBLE);
+            mLockTaskButton.setVisibility(mShowLockIcon ? View.VISIBLE : View.INVISIBLE);
             mLockTaskButton.setTranslationX(rightInset);
         }
 
@@ -665,6 +666,19 @@ public class TaskViewHeader extends FrameLayout
                 mMoveTaskButton.setAlpha(1f);
             }
         }
+        if (mLockTaskButton != null && mShowLockIcon) {
+            if (mLockTaskButton.getVisibility() == VISIBLE) {
+                mLockTaskButton.setVisibility(View.VISIBLE);
+                mLockTaskButton.setClickable(true);
+                mLockTaskButton.animate()
+                        .alpha(1f)
+                        .setInterpolator(Interpolators.FAST_OUT_LINEAR_IN)
+                        .setDuration(duration)
+                        .start();
+            } else {
+                mLockTaskButton.setAlpha(1f);
+            }
+        }
     }
 
     /**
@@ -687,6 +701,12 @@ public class TaskViewHeader extends FrameLayout
             mPinButton.setVisibility(View.GONE);
             mPinButton.setClickable(false);
         }
+        if (mLockTaskButton != null && mShowLockIcon) {
+            mLockTaskButton.setVisibility(View.VISIBLE);
+            mLockTaskButton.animate().cancel();
+            mLockTaskButton.setAlpha(1f);
+            mLockTaskButton.setClickable(true);
+        }
         if (mMoveTaskButton != null) {
             mMoveTaskButton.setVisibility(View.VISIBLE);
             mMoveTaskButton.animate().cancel();
@@ -708,6 +728,11 @@ public class TaskViewHeader extends FrameLayout
         mPinButton.setVisibility(View.INVISIBLE);
         mPinButton.setAlpha(0f);
         mPinButton.setClickable(false);
+        if (mLockTaskButton != null && mShowLockIcon) {
+            mLockTaskButton.setVisibility(View.INVISIBLE);
+            mLockTaskButton.setAlpha(0f);
+            mLockTaskButton.setClickable(false);
+        }
         if (mMoveTaskButton != null) {
             mMoveTaskButton.setVisibility(View.INVISIBLE);
             mMoveTaskButton.setAlpha(0f);
