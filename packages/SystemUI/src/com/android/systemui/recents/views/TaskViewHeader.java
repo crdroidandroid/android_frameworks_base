@@ -59,6 +59,7 @@ import com.android.systemui.recents.events.ui.ShowApplicationInfoEvent;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.recents.misc.Utilities;
 import com.android.systemui.recents.model.Task;
+import com.android.systemui.tuner.TunerService;
 
 import com.android.systemui.crdroid.LockTaskHelper;
 
@@ -68,7 +69,7 @@ import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
 
 /* The task bar view */
 public class TaskViewHeader extends FrameLayout
-        implements View.OnClickListener, View.OnLongClickListener {
+        implements View.OnClickListener, View.OnLongClickListener, TunerService.Tunable {
 
     private static final float HIGHLIGHT_LIGHTNESS_INCREMENT = 0.075f;
     private static final float OVERLAY_LIGHTNESS_INCREMENT = -0.0625f;
@@ -201,6 +202,13 @@ public class TaskViewHeader extends FrameLayout
     private CountDownTimer mFocusTimerCountDown;
     private Context mContext;
 
+    private static final String RECENTS_USE_OMNISWITCH =
+            "system:" + Settings.System.RECENTS_USE_OMNISWITCH;
+    private static final String USE_SLIM_RECENTS =
+            "system:" + Settings.System.USE_SLIM_RECENTS;
+    private static final String RECENTS_LOCK_ICON =
+            "system:" + Settings.System.RECENTS_LOCK_ICON;
+
     public TaskViewHeader(Context context) {
         this(context, null);
     }
@@ -254,6 +262,41 @@ public class TaskViewHeader extends FrameLayout
      */
     public void reset() {
         hideAppOverlay(true /* immediate */);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        TunerService.get(mContext).addTunable(this,
+                RECENTS_USE_OMNISWITCH,
+                USE_SLIM_RECENTS,
+                RECENTS_LOCK_ICON);
+        super.onAttachedToWindow();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        TunerService.get(mContext).removeTunable(this);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+       switch (key) {
+            case RECENTS_USE_OMNISWITCH:
+                if (newValue != null && Integer.parseInt(newValue) == 1)
+                    LockTaskHelper.clearLockedTaskMap();
+                break;
+            case USE_SLIM_RECENTS:
+                if (newValue != null && Integer.parseInt(newValue) == 1)
+                    LockTaskHelper.clearLockedTaskMap();
+                break;
+            case RECENTS_LOCK_ICON:
+                if (newValue != null && Integer.parseInt(newValue) == 0)
+                    LockTaskHelper.clearLockedTaskMap();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

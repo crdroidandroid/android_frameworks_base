@@ -88,8 +88,6 @@ import com.android.systemui.stackdivider.WindowManagerProxy;
 import com.android.systemui.statusbar.FlingAnimationUtils;
 import com.android.systemui.tuner.TunerService;
 
-import com.android.systemui.crdroid.LockTaskHelper;
-
 import android.provider.Settings;
 
 import java.io.FileDescriptor;
@@ -153,12 +151,6 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
             "system:" + Settings.System.SYSTEMUI_RECENTS_MEM_BARCOLOR;
     private static final String SYSTEMUI_RECENTS_MEM_TEXTCOLOR =
             "system:" + Settings.System.SYSTEMUI_RECENTS_MEM_TEXTCOLOR;
-    private static final String RECENTS_USE_OMNISWITCH =
-            "system:" + Settings.System.RECENTS_USE_OMNISWITCH;
-    private static final String USE_SLIM_RECENTS =
-            "system:" + Settings.System.USE_SLIM_RECENTS;
-    private static final String RECENTS_LOCK_ICON =
-            "system:" + Settings.System.RECENTS_LOCK_ICON;
 
     public RecentsView(Context context) {
         this(context, null);
@@ -411,10 +403,7 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
                 RECENTS_CLEAR_ALL_LOCATION,
                 SYSTEMUI_RECENTS_MEM_DISPLAY,
                 SYSTEMUI_RECENTS_MEM_BARCOLOR,
-                SYSTEMUI_RECENTS_MEM_TEXTCOLOR,
-                RECENTS_USE_OMNISWITCH,
-                USE_SLIM_RECENTS,
-                RECENTS_LOCK_ICON);
+                SYSTEMUI_RECENTS_MEM_TEXTCOLOR);
         super.onAttachedToWindow();
     }
 
@@ -454,18 +443,6 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
                 mMemtextcolor =
                         newValue != null ? Integer.parseInt(newValue) : 0x00ffffff;
                 showMemDisplay();
-                break;
-            case RECENTS_USE_OMNISWITCH:
-                if (newValue != null && Integer.parseInt(newValue) == 1)
-                    LockTaskHelper.clearLockedTaskMap();
-                break;
-            case USE_SLIM_RECENTS:
-                if (newValue != null && Integer.parseInt(newValue) == 1)
-                    LockTaskHelper.clearLockedTaskMap();
-                break;
-            case RECENTS_LOCK_ICON:
-                if (newValue != null && Integer.parseInt(newValue) == 0)
-                    LockTaskHelper.clearLockedTaskMap();
                 break;
             default:
                 break;
