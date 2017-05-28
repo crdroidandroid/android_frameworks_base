@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015-2016 The MoKee Open Source Project
+ *           (C) 2017 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +34,7 @@ public class LockTaskHelper {
 
     private LockTaskHelper(Context context) {
         mContext = context;
-        if (context != null) {
+        if (mContext != null) {
             refreshLockedTaskMap();
         }
     }
@@ -45,7 +46,7 @@ public class LockTaskHelper {
         return mLockTaskHelper;
     }
 
-    private void refreshLockedTaskMap() {
+    private static void refreshLockedTaskMap() {
         String taskMap = Settings.Secure.getString(mContext.getContentResolver(),
                 Settings.Secure.LOCKED_RECENT_TASK_LIST);
 
@@ -62,9 +63,31 @@ public class LockTaskHelper {
             TaskInfo taskInfo = TaskInfo.fromString(item);
             lockedTaskMap.put(taskInfo.name, taskInfo);
         }
+        saveLockedTaskMap();
     }
 
-    public void saveLockedTaskMap() {
+    public static void clearLockedTaskMap() {
+        String taskMap = Settings.Secure.getString(mContext.getContentResolver(),
+                Settings.Secure.LOCKED_RECENT_TASK_LIST);
+
+        lockedTaskMap.clear();
+
+        if (TextUtils.isEmpty(taskMap))
+            return;
+
+        String[] array = TextUtils.split(taskMap, "\\|");
+        for (String item : array) {
+            if (TextUtils.isEmpty(item)) {
+                continue;
+            }
+            TaskInfo taskInfo = TaskInfo.fromString(item);
+            if (lockedTaskMap.remove(taskInfo.name) != null) {
+                saveLockedTaskMap();
+            }
+        }
+    }
+
+    public static void saveLockedTaskMap() {
         List<String> settings = new ArrayList<String>();
         for (TaskInfo taskInfo : lockedTaskMap.values()) {
             settings.add(taskInfo.toString());
@@ -74,13 +97,13 @@ public class LockTaskHelper {
                 Settings.Secure.LOCKED_RECENT_TASK_LIST, value);
     }
 
-    public void removeTask(String packageName) {
+    public static void removeTask(String packageName) {
         if (lockedTaskMap.remove(packageName) != null) {
             saveLockedTaskMap();
         }
     }
 
-    public void addTask(String packageName) {
+    public static void addTask(String packageName) {
         TaskInfo taskInfo = lockedTaskMap.get(packageName);
         if (taskInfo == null) {
             taskInfo = new TaskInfo(packageName);
@@ -89,7 +112,7 @@ public class LockTaskHelper {
         }
     }
 
-    public boolean isLockedTask(String packageName) {
+    public static boolean isLockedTask(String packageName) {
         if (lockedTaskMap.get(packageName) != null) {
             return true;
         } else {

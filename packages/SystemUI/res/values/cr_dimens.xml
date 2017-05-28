@@ -62,5 +62,5 @@
     <dimen name="qs_detail_item_height_twoline">72dp</dimen>
 
     <!-- Recents lock icon margin -->
-    <dimen name="recents_lock_margin_end">35dp</dimen>
+    <dimen name="recents_lock_margin_end">32dp</dimen>
 </resources>

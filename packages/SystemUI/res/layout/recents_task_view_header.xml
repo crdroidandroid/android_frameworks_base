@@ -73,7 +73,8 @@
         android:layout_marginEnd="@dimen/recents_lock_margin_end"
         android:padding="@dimen/recents_task_view_header_button_padding"
         android:src="@drawable/task_open_dark"
-        android:background="?android:selectableItemBackground" />
+        android:background="?android:selectableItemBackground"
+        android:visibility="gone" />
     <com.android.systemui.recents.views.FixedSizeImageView
         android:id="@+id/lock_to_app_fab"
         android:layout_width="48.0dip"
