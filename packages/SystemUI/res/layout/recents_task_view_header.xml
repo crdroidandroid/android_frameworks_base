@@ -78,14 +78,15 @@
         android:visibility="gone" />
     <com.android.systemui.recents.views.FixedSizeImageView
         android:id="@+id/lock_to_app_fab"
-        android:layout_width="48.0dip"
-        android:layout_height="48.0dip"
-        android:layout_marginEnd="40.0dip"
-        android:layout_gravity="end|center"
-        android:padding="12.0dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/recents_lock_margin_end"
+        android:layout_gravity="center_vertical|end"
+        android:padding="@dimen/recents_task_view_header_button_padding"
+        android:src="@drawable/ic_pin"
         android:background="?android:selectableItemBackground"
-        android:visibility="gone"
-        android:src="@drawable/ic_pin" />
+        android:alpha="0"
+        android:visibility="gone" />
 
     <!-- The progress indicator shows if auto-paging is enabled -->
     <ViewStub android:id="@+id/focus_timer_indicator_stub"

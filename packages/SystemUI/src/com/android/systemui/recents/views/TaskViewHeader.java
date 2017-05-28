@@ -202,6 +202,7 @@ public class TaskViewHeader extends FrameLayout
     private CountDownTimer mFocusTimerCountDown;
     private Context mContext;
     private boolean mShowLockIcon;
+    private boolean mShowPinIcon;
 
     private static final String RECENTS_USE_OMNISWITCH =
             "system:" + Settings.System.RECENTS_USE_OMNISWITCH;
@@ -209,6 +210,8 @@ public class TaskViewHeader extends FrameLayout
             "system:" + Settings.System.USE_SLIM_RECENTS;
     private static final String RECENTS_LOCK_ICON =
             "system:" + Settings.System.RECENTS_LOCK_ICON;
+    private static final String LOCK_TO_APP_ENABLED =
+            "system:" + Settings.System.LOCK_TO_APP_ENABLED;
 
     public TaskViewHeader(Context context) {
         this(context, null);
@@ -270,7 +273,8 @@ public class TaskViewHeader extends FrameLayout
         TunerService.get(mContext).addTunable(this,
                 RECENTS_USE_OMNISWITCH,
                 USE_SLIM_RECENTS,
-                RECENTS_LOCK_ICON);
+                RECENTS_LOCK_ICON,
+                LOCK_TO_APP_ENABLED);
         super.onAttachedToWindow();
     }
 
@@ -297,6 +301,9 @@ public class TaskViewHeader extends FrameLayout
                 if (!mShowLockIcon)
                     LockTaskHelper.clearLockedTaskMap();
                 break;
+            case LOCK_TO_APP_ENABLED:
+                mShowPinIcon = 
+                        newValue != null && Integer.parseInt(newValue) != 0;
             default:
                 break;
         }
@@ -636,8 +643,7 @@ public class TaskViewHeader extends FrameLayout
         } else {
             mDismissButton.setAlpha(1f);
         }
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.LOCK_TO_APP_ENABLED, 0) != 0) {
+        if (mPinButton != null && mShowPinIcon) {
             mPinButton.setVisibility(View.VISIBLE);
             mPinButton.setClickable(true);
             if (mPinButton.getVisibility() == VISIBLE) {
@@ -691,8 +697,7 @@ public class TaskViewHeader extends FrameLayout
         mDismissButton.setAlpha(1f);
         mDismissButton.setClickable(true);
         //Pin button
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.LOCK_TO_APP_ENABLED, 0) != 0) {
+        if (mPinButton != null && mShowPinIcon) {
             mPinButton.setVisibility(View.VISIBLE);
             mPinButton.animate().cancel();
             mPinButton.setAlpha(1f);
@@ -725,9 +730,11 @@ public class TaskViewHeader extends FrameLayout
         mDismissButton.setAlpha(0f);
         mDismissButton.setClickable(false);
         //Pin button
-        mPinButton.setVisibility(View.INVISIBLE);
-        mPinButton.setAlpha(0f);
-        mPinButton.setClickable(false);
+        if (mPinButton != null && mShowPinIcon) {
+            mPinButton.setVisibility(View.INVISIBLE);
+            mPinButton.setAlpha(0f);
+            mPinButton.setClickable(false);
+        }
         if (mLockTaskButton != null && mShowLockIcon) {
             mLockTaskButton.setVisibility(View.INVISIBLE);
             mLockTaskButton.setAlpha(0f);
