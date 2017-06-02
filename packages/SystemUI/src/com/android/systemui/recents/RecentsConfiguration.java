@@ -19,16 +19,18 @@ package com.android.systemui.recents;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
-
 import android.os.SystemProperties;
+import android.provider.Settings;
+
 import com.android.systemui.R;
 import com.android.systemui.recents.misc.SystemServicesProxy;
+import com.android.systemui.tuner.TunerService;
 
 /**
  * Application resources that can be retrieved from the application context and are not specifically
  * tied to the current activity.
  */
-public class RecentsConfiguration {
+public class RecentsConfiguration implements TunerService.Tunable {
 
     private static final int LARGE_SCREEN_MIN_DP = 600;
     private static final int XLARGE_SCREEN_MIN_DP = 720;
@@ -67,15 +69,21 @@ public class RecentsConfiguration {
     public int fabEnterAnimDelay;
     public int fabExitAnimDuration;
 
+    private Context mContext;
+    private boolean isGridEnabledDefault;
+
+    private static final String RECENTS_USE_GRID =
+            "system:" + Settings.System.RECENTS_USE_GRID;
+
     public RecentsConfiguration(Context context) {
         // Load only resources that can not change after the first load either through developer
         // settings or via multi window
         SystemServicesProxy ssp = Recents.getSystemServices();
-        Context appContext = context.getApplicationContext();
-        Resources res = appContext.getResources();
+        mContext = context.getApplicationContext();
+        Resources res = mContext.getResources();
         fakeShadows = res.getBoolean(R.bool.config_recents_fake_shadows);
         svelteLevel = res.getInteger(R.integer.recents_svelte_level);
-        isGridEnabled = SystemProperties.getBoolean("ro.recents.grid", false);
+        isGridEnabledDefault = SystemProperties.getBoolean("ro.recents.grid", false);
 
         float screenDensity = context.getResources().getDisplayMetrics().density;
         smallestWidth = ssp.getDeviceSmallestWidth();
@@ -88,6 +96,24 @@ public class RecentsConfiguration {
                 res.getInteger(R.integer.recents_animate_fab_enter_delay);
         fabExitAnimDuration =
                 res.getInteger(R.integer.recents_animate_fab_exit_duration);
+
+        TunerService.get(mContext).addTunable(this,
+                RECENTS_USE_GRID);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+       switch (key) {
+            case RECENTS_USE_GRID:
+                if (newValue == null) {
+                    isGridEnabled = isGridEnabledDefault;
+                } else {
+                    isGridEnabled = Integer.parseInt(newValue) == 1;
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     /**

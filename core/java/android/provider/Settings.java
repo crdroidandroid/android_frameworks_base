@@ -5028,6 +5028,12 @@ public final class Settings {
         public static final String RECENTS_LOCK_ICON = "recents_lock_icon";
 
         /**
+         * Use AOSP grid style recents
+         * @hide
+         */
+        public static final String RECENTS_USE_GRID = "recents_use_grid";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
