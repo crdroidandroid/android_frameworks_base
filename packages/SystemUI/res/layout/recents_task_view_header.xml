@@ -72,7 +72,7 @@
         android:layout_gravity="center_vertical|end"
         android:layout_marginEnd="@dimen/recents_lock_margin_end"
         android:padding="@dimen/recents_task_view_header_button_padding"
-        android:src="@drawable/task_open_dark"
+        android:src="@drawable/recents_unlocked_light"
         android:background="?android:selectableItemBackground"
         android:alpha="0"
         android:visibility="gone" />

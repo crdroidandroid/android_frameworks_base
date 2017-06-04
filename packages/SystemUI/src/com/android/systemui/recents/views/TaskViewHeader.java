@@ -182,6 +182,10 @@ public class TaskViewHeader extends FrameLayout
     Drawable mDarkFullscreenIcon;
     Drawable mLightInfoIcon;
     Drawable mDarkInfoIcon;
+    Drawable mLightLockedDrawable;
+    Drawable mLightUnlockedDrawable;
+    Drawable mDarkLockedDrawable;
+    Drawable mDarkUnlockedDrawable;
     int mTaskBarViewLightTextColor;
     int mTaskBarViewDarkTextColor;
     int mDisabledTaskBarBackgroundColor;
@@ -250,6 +254,10 @@ public class TaskViewHeader extends FrameLayout
         mDarkInfoIcon = context.getDrawable(R.drawable.recents_info_dark);
         mDisabledTaskBarBackgroundColor =
                 context.getColor(R.color.recents_task_bar_disabled_background_color);
+        mLightLockedDrawable = context.getDrawable(R.drawable.recents_locked_light);
+        mLightUnlockedDrawable = context.getDrawable(R.drawable.recents_unlocked_light);
+        mDarkLockedDrawable = context.getDrawable(R.drawable.recents_locked_dark);
+        mDarkUnlockedDrawable = context.getDrawable(R.drawable.recents_unlocked_dark);
 
         // Configure the background and dim
         mBackground = new HighlightColorDrawable();
@@ -325,12 +333,6 @@ public class TaskViewHeader extends FrameLayout
         }
 
         onConfigurationChanged();
-    }
-
-    public void updateLockTaskButtonBackground(boolean useLightOnPrimaryColor, boolean isLocked) {
-        int lockResId = useLightOnPrimaryColor ? R.drawable.task_lock_light : R.drawable.task_lock_dark;
-        int openResId = useLightOnPrimaryColor ? R.drawable.task_open_light : R.drawable.task_open_dark;
-        mLockTaskButton.setImageDrawable(getContext().getDrawable((isLocked ? lockResId : openResId)));
     }
 
     /**
@@ -538,6 +540,12 @@ public class TaskViewHeader extends FrameLayout
         mShouldDarkenBackgroundColor = flag;
     }
 
+    private void updateLockTaskDrawable() {
+        mLockTaskButton.setImageDrawable(mTask.useLightOnPrimaryColor ?
+                (mTask.isLockedTask ? mLightLockedDrawable : mLightUnlockedDrawable) :
+                (mTask.isLockedTask ? mDarkLockedDrawable : mDarkUnlockedDrawable));
+    }
+
     /**
      * Binds the bar view to the task.
      */
@@ -562,7 +570,7 @@ public class TaskViewHeader extends FrameLayout
         mDismissButton.setOnClickListener(this);
         mDismissButton.setClickable(false);
         ((RippleDrawable) mDismissButton.getBackground()).setForceSoftware(true);
-        updateLockTaskButtonBackground(t.useLightOnPrimaryColor, mTask.isLockedTask);
+        updateLockTaskDrawable();
         mLockTaskButton.setOnClickListener(this);
         ((RippleDrawable) mLockTaskButton.getBackground()).setForceSoftware(true);
 
@@ -785,7 +793,7 @@ public class TaskViewHeader extends FrameLayout
                 mLockTaskHelper.addTask(mTask.packageName);
             }
             mTask.isLockedTask = !mTask.isLockedTask;
-            updateLockTaskButtonBackground(mTask.useLightOnPrimaryColor, mTask.isLockedTask);
+            updateLockTaskDrawable();
             EventBus.getDefault().send(new LockTaskStateChangedEvent(true));
          }
     }
