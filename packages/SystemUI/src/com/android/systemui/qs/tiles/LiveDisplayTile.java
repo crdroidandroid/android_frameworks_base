@@ -19,6 +19,7 @@ import com.android.internal.logging.MetricsProto.MetricsEvent;
 
 import cyanogenmod.hardware.LiveDisplayManager;
 import cyanogenmod.providers.CMSettings;
+import cyanogenmod.app.CMContextConstants;
 
 /** Quick settings tile: LiveDisplay mode switcher **/
 public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
@@ -26,26 +27,33 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
     private static final Intent LIVEDISPLAY_SETTINGS =
             new Intent(CMSettings.ACTION_LIVEDISPLAY_SETTINGS);
 
-    private final LiveDisplayObserver mObserver;
+    private  LiveDisplayObserver mObserver;
     private String[] mEntries;
     private String[] mDescriptionEntries;
     private String[] mAnnouncementEntries;
     private String[] mValues;
-    private final int[] mEntryIconRes;
+    private  int[] mEntryIconRes;
 
     private boolean mListening;
 
     private int mDayTemperature;
 
-    private final boolean mOutdoorModeAvailable;
+    private  boolean mOutdoorModeAvailable;
 
-    private final LiveDisplayManager mLiveDisplay;
+    private  LiveDisplayManager mLiveDisplay;
 
     private static final int OFF_TEMPERATURE = 6500;
 
     public LiveDisplayTile(Host host) {
         super(host);
+        populateList();
+   }
 
+   private void populateList() {
+       if (!mContext.getPackageManager().hasSystemFeature(
+                CMContextConstants.Features.LIVEDISPLAY)) {
+                  return;
+        }
         Resources res = mContext.getResources();
         TypedArray typedArray = res.obtainTypedArray(R.array.live_display_drawables);
         mEntryIconRes = new int[typedArray.length()];
@@ -119,6 +127,17 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
         state.label = mEntries[state.mode];
         state.icon = ResourceIcon.get(mEntryIconRes[state.mode]);
         state.contentDescription = mDescriptionEntries[state.mode];
+    }
+
+    private boolean isLiveDisplaySupported(){
+        boolean isSupported = false;
+        isSupported = mLiveDisplay.getConfig().hasFeature(MODE_DAY);
+        return isSupported;
+    }
+
+    @Override
+    public boolean isAvailable(){
+        return isLiveDisplaySupported();
     }
 
     @Override
