@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2017 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Kill app toast -->
+    <string name="app_killed_message">앱 종료됨</string>
+
+    <!-- Heads up snooze toast -->
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - 알림 엿보기를 1분 동안 사용합니다.</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - 알림 엿보기를 <xliff:g id="number">%d</xliff:g>분 동안 사용합니다.</string>
+
+    <!-- statusbar items tuner -->
+    <string name="statusbar_icons_blacklist">상태 표시줄 아이콘</string>
+
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">온-더-고 활성화됨</string>
+    <string name="onthego_notif_title">온-더-고 사용 중</string>
+    <string name="onthego_notif_stop">중지</string>
+    <string name="onthego_notif_options">옵션</string>
+    <string name="onthego_notif_error">온-더-고를 시작할 수 없습니다.</string>
+    <string name="onthego_notif_restart">온-더-고 다시 시작</string>
+    <string name="onthego_notif_camera_changed">카메라 모드가 변경되었습니다.</string>
+    <string name="onthego_transparency">투명도</string>
+    <string name="onthego_front_camera">전면 카메라 사용</string>
+    <string name="onthego_service_toggle">서비스 자동 다시 시작</string>
+
+    <!-- OmniJaws -->
+    <string name="omnijaws_service_error">오류</string>
+    <string name="omnijaws_service_unkown">날씨 데이터 없음</string>
+    <string name="omnijaws_detail_header">날씨</string>
+    <string name="omnijaws_label_default">날씨</string>
+    <string name="omnijaws_current_text">현재</string>
+    <string name="omnijaws_service_error_long">날씨 데이터를 불러오는 중 오류</string>
+    <string name="omnijaws_service_disabled">서비스 비활성화됨</string>
+
+    <!-- Navigation bar tile -->
+    <string name="quick_settings_navigation_bar">내비게이션 바</string>
+    <string name="quick_settings_smartbar">SmartBar</string>
+    <string name="quick_settings_smartbar_off">SmartBar 꺼짐</string>
+    <string name="quick_settings_fling">Fling</string>
+    <string name="quick_settings_fling_off">Fling 꺼짐</string>
+
+    <!-- Expanded desktop tile -->
+    <string name="quick_settings_expanded_desktop_label">확장 데스크톱</string>
+    <string name="quick_settings_expanded_desktop">확장됨</string>
+    <string name="quick_settings_expanded_desktop_off">일반</string>
+    <string name="quick_settings_expanded_navigation_off">내비 바 숨기기</string>
+    <string name="quick_settings_expanded_statusbar_off">상태 표시줄 숨기기</string>
+
+    <!-- Screenshot tile -->
+    <string name="quick_settings_screenshot_label">스크린샷</string>
+    <string name="quick_settings_region_screenshot_label">부분 스크린샷</string>
+
+    <!-- Reboot tile -->
+    <string name="quick_settings_reboot_label">다시 시작</string>
+    <string name="quick_settings_reboot_recovery_label">복구 모드</string>
+
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">음악</string>
+    <string name="quick_settings_music_play">재생</string>
+    <string name="quick_settings_music_pause">일시정지</string>
+
+    <!-- Ime tile -->
+    <string name="quick_settings_ime_tile_label">입력기</string>
+
+    <!-- LTE tile -->
+    <string name="qs_lte_label">LTE</string>
+    <string name="lte_on">LTE 켜짐 </string>
+    <string name="lte_off">LTE 꺼짐</string>
+
+    <!-- PULSE tile -->
+    <string name="quick_settings_pulse_enabled">Pulse 활성화됨</string>
+    <string name="quick_settings_pulse_disabled">시각화 없음</string>
+    <string name="quick_settings_pulse_label">내비 바 시각화</string>
+    <string name="quick_settings_pulse_label">Pulse</string>
+    <string name="quick_settings_pulse_off">Pulse 꺼짐</string>
+    <string name="quick_settings_pulse_on">Pulse 켜짐</string>
+    <string name="quick_settings_pulse_changed_off">Pulse가 꺼졌습니다.</string>
+    <string name="quick_settings_pulse_changed_on">Pulse가 켜졌습니다.</string>
+
+    <!-- Live display tile -->
+    <string name="quick_settings_live_display_off">LiveDisplay를 끕니다.</string>
+    <string name="quick_settings_live_display_auto">LiveDisplay: 자동 모드로 설정합니다.</string>
+    <string name="quick_settings_live_display_day">LiveDisplay: 주간 모드로 설정합니다.</string>
+    <string name="quick_settings_live_display_night">LiveDisplay: 야간 모드로 설정합니다.</string>
+    <string name="quick_settings_live_display_outdoor">LiveDisplay:야외 모드로 설정합니다.</string>
+    <string name="quick_settings_live_display_changed_off">LiveDisplay가 꺼졌습니다.</string>
+    <string name="quick_settings_live_display_changed_auto">LiveDisplay가 자동 모드로 변경되었습니다.</string>
+    <string name="quick_settings_live_display_changed_day">LiveDisplay가 주간 모드로 변경되었습니다.</string>
+    <string name="quick_settings_live_display_changed_night">LiveDisplay가 야간 모드로 변경되었습니다.</string>
+    <string name="quick_settings_live_display_changed_outdoor">LiveDisplay가 야외 모드로 변경되었습니다.</string>
+
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">나침반</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">준비 중\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">나침반을 끕니다.</string>
+    <string name="accessibility_quick_settings_compass_on">나침반을 켭니다.</string>
+    <string name="accessibility_quick_settings_compass_changed_off">나침반이 꺼졌습니다.</string>
+    <string name="accessibility_quick_settings_compass_changed_on">나침반이 켜졌습니다.</string>
+    <string name="quick_settings_compass_N">북</string>
+    <string name="quick_settings_compass_NE">북동</string>
+    <string name="quick_settings_compass_E">동</string>
+    <string name="quick_settings_compass_SE">남동</string>
+    <string name="quick_settings_compass_S">남</string>
+    <string name="quick_settings_compass_SW">남서</string>
+    <string name="quick_settings_compass_W">서</string>
+    <string name="quick_settings_compass_NW">북서</string>
+</resources>
