@@ -84,8 +84,6 @@ import cyanogenmod.weather.util.WeatherUtils;
 
 import java.util.List;
 
-import cyanogenmod.providers.CMSettings;
-
 public class NotificationPanelView extends PanelView implements
         ExpandableView.OnHeightChangedListener,
         View.OnClickListener, NotificationStackScrollLayout.OnOverscrollTopChangedListener,
@@ -112,7 +110,7 @@ public class NotificationPanelView extends PanelView implements
     private static final String LOCK_SCREEN_WEATHER_ENABLED =
             "cmsecure:" + CMSettings.Secure.LOCK_SCREEN_WEATHER_ENABLED;
     private static final String DOUBLE_TAP_SLEEP_ANYWHERE =
-            "system:" + Settings.System.DOUBLE_TAP_SLEEP_ANYWHERE;
+            "cmsecure:" + CMSettings.Secure.DOUBLE_TAP_SLEEP_ANYWHERE;
     private static final String QS_TRANSPARENT_SHADE =
             "system:" + Settings.System.QS_TRANSPARENT_SHADE;
     private static final String QS_STROKE =

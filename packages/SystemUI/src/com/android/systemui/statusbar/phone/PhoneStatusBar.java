@@ -385,6 +385,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             "system:" + Settings.System.NAVBAR_DYNAMIC;
     private static final String STATUS_BAR_SHOW_CARRIER =
             "system:" + Settings.System.STATUS_BAR_SHOW_CARRIER;
+    private static final String LOCKSCREEN_MEDIA_METADATA =
+            "cmsecure:" + CMSettings.Secure.LOCKSCREEN_MEDIA_METADATA;
 
     static {
         boolean onlyCoreApps;
@@ -700,6 +702,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private VisualizerView mVisualizerView;
     private boolean mScreenOn;
     private boolean mKeyguardShowingMedia;
+    private boolean mShowMediaMetadata;
 
     private MediaSessionManager mMediaSessionManager;
     private MediaController mMediaController;
@@ -960,7 +963,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 BLUR_LIGHT_COLOR_PREFERENCE_KEY,
                 BLUR_MIXED_COLOR_PREFERENCE_KEY,
                 NAVBAR_DYNAMIC,
-                STATUS_BAR_SHOW_CARRIER);
+                STATUS_BAR_SHOW_CARRIER,
+                LOCKSCREEN_MEDIA_METADATA);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -2616,7 +2620,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         Drawable artworkDrawable = null;
-        if (mMediaMetadata != null) {
+        if (mMediaMetadata != null && mShowMediaMetadata) {
             Bitmap artworkBitmap = null;
             artworkBitmap = mMediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
             if (artworkBitmap == null) {
@@ -6159,6 +6163,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mShowCarrierLabel = 
                         newValue == null ? 1 : Integer.parseInt(newValue);
                 updateCarrier();
+                break;
+            case LOCKSCREEN_MEDIA_METADATA:
+                mShowMediaMetadata = newValue == null || Integer.parseInt(newValue) == 1;
                 break;
             default:
                 break;
