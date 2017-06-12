@@ -139,7 +139,7 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
     private static final int INITIAL_STATE_UPDATE_LAYOUT_ONLY = 2;
 
     private LayoutInflater mInflater;
-    private TaskStack mStack = new TaskStack();
+    public static TaskStack mStack = new TaskStack();
     @ViewDebug.ExportedProperty(deepExport=true, prefix="layout_")
     TaskStackLayoutAlgorithm mLayoutAlgorithm;
     // The stable layout algorithm is only used to calculate the task rect with the stable bounds
@@ -1830,7 +1830,7 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
                 mStack.removeAllTasks();
                 for (int i = tasks.size() - 1; i >= 0; i--) {
                     Task t = tasks.get(i);
-                    if (Recents.sLockedTasks.contains(t)) continue;
+                    if (Recents.mAllowLockTask && Recents.sLockedTasks.contains(t)) continue;
                     EventBus.getDefault().send(new DeleteTaskDataEvent(t));
                 }
 

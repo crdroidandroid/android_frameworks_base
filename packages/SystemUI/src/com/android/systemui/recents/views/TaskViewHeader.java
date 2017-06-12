@@ -34,6 +34,7 @@ import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -58,6 +59,7 @@ import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.recents.misc.Utilities;
 import com.android.systemui.recents.model.Task;
 import com.android.systemui.recents.model.TaskStack;
+import com.android.systemui.tuner.TunerService;
 
 import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
 import static android.app.ActivityManager.StackId.FULLSCREEN_WORKSPACE_STACK_ID;
@@ -65,7 +67,7 @@ import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
 
 /* The task bar view */
 public class TaskViewHeader extends FrameLayout
-        implements View.OnClickListener, View.OnLongClickListener {
+        implements View.OnClickListener, View.OnLongClickListener, TunerService.Tunable {
 
     private static final float HIGHLIGHT_LIGHTNESS_INCREMENT = 0.075f;
     private static final float OVERLAY_LIGHTNESS_INCREMENT = -0.0625f;
@@ -195,6 +197,13 @@ public class TaskViewHeader extends FrameLayout
 
     private CountDownTimer mFocusTimerCountDown;
 
+    private static final String RECENTS_LOCK_ICON =
+            "system:" + Settings.System.RECENTS_LOCK_ICON;
+    private static final String RECENTS_DISMISS_ICON =
+            "system:" + Settings.System.RECENTS_DISMISS_ICON;
+
+    private static boolean mShowLockIcon, mShowDismissIcon;
+
     public TaskViewHeader(Context context) {
         this(context, null);
     }
@@ -248,6 +257,39 @@ public class TaskViewHeader extends FrameLayout
      */
     public void reset() {
         hideAppOverlay(true /* immediate */);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        TunerService.get(mContext).addTunable(this,
+                RECENTS_LOCK_ICON,
+                RECENTS_DISMISS_ICON);
+        super.onAttachedToWindow();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        TunerService.get(mContext).removeTunable(this);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+       switch (key) {
+            case RECENTS_LOCK_ICON:
+                mShowLockIcon =
+                    newValue != null && Integer.parseInt(newValue) == 1;
+                break;
+            case RECENTS_DISMISS_ICON:
+                mShowDismissIcon =
+                    newValue == null || Integer.parseInt(newValue) != 0;
+                break;
+            default:
+                break;
+        }
+        Recents.mAllowLockTask = mShowLockIcon;
+        if (!Recents.mAllowLockTask)
+            TaskStackView.mStack.removeAllLockedTasks();
     }
 
     @Override
@@ -350,6 +392,7 @@ public class TaskViewHeader extends FrameLayout
         boolean showTitle = true;
         boolean showMoveIcon = true;
         boolean showDismissIcon = true;
+        boolean showLockIcon = true;
         int rightInset = width - getMeasuredWidth();
 
         if (mTask != null && mTask.isFreeformTask()) {
@@ -357,13 +400,15 @@ public class TaskViewHeader extends FrameLayout
             // icon, and the dismiss icon if there is room
             int appIconWidth = mIconView.getMeasuredWidth();
             int titleWidth = (int) mTitleView.getPaint().measureText(mTask.title);
-            int dismissWidth = mDismissButton.getMeasuredWidth();
+            int dismissWidth = mShowDismissIcon ? mDismissButton.getMeasuredWidth() : 0;
+            int lockWidth = Recents.mAllowLockTask ? mLockTaskButton.getMeasuredWidth() : 0;
             int moveTaskWidth = mMoveTaskButton != null
                     ? mMoveTaskButton.getMeasuredWidth()
                     : 0;
-            showTitle = width >= (appIconWidth + dismissWidth + moveTaskWidth + titleWidth);
-            showMoveIcon = width >= (appIconWidth + dismissWidth + moveTaskWidth);
+            showTitle = width >= (appIconWidth + dismissWidth + lockWidth + moveTaskWidth + titleWidth);
+            showMoveIcon = width >= (appIconWidth + dismissWidth + lockWidth + moveTaskWidth);
             showDismissIcon = width >= (appIconWidth + dismissWidth);
+            showLockIcon = width >= (appIconWidth + dismissWidth + lockWidth);
         }
 
         mTitleView.setVisibility(showTitle ? View.VISIBLE : View.INVISIBLE);
@@ -371,9 +416,10 @@ public class TaskViewHeader extends FrameLayout
             mMoveTaskButton.setVisibility(showMoveIcon ? View.VISIBLE : View.INVISIBLE);
             mMoveTaskButton.setTranslationX(rightInset);
         }
-        mDismissButton.setVisibility(showDismissIcon ? View.VISIBLE : View.INVISIBLE);
+        mDismissButton.setVisibility(showDismissIcon && mShowDismissIcon ? View.VISIBLE : View.INVISIBLE);
         mDismissButton.setTranslationX(rightInset);
-        mLockTaskButton.setVisibility(showDismissIcon ? View.VISIBLE : View.INVISIBLE);
+        mLockTaskButton.setVisibility(showLockIcon && Recents.mAllowLockTask ? View.VISIBLE : View.INVISIBLE);
+        mLockTaskButton.setTranslationX(rightInset);
 
         setLeftTopRightBottom(0, 0, width, getMeasuredHeight());
     }
@@ -565,26 +611,30 @@ public class TaskViewHeader extends FrameLayout
     /** Animates this task bar if the user does not interact with the stack after a certain time. */
     void startNoUserInteractionAnimation() {
         int duration = getResources().getInteger(R.integer.recents_task_enter_from_app_duration);
-        mDismissButton.setVisibility(View.VISIBLE);
-        mDismissButton.setClickable(true);
-        if (mDismissButton.getVisibility() == VISIBLE) {
+        if (mShowDismissIcon) {
+            mDismissButton.setVisibility(View.VISIBLE);
+            mDismissButton.setClickable(true);
             mDismissButton.animate()
                     .alpha(1f)
                     .setInterpolator(Interpolators.FAST_OUT_LINEAR_IN)
                     .setDuration(duration)
                     .start();
         } else {
+            mDismissButton.setVisibility(View.INVISIBLE);
+            mDismissButton.setClickable(false);
             mDismissButton.setAlpha(1f);
         }
-        mLockTaskButton.setVisibility(View.VISIBLE);
-        mLockTaskButton.setClickable(true);
-        if (mLockTaskButton.getVisibility() == VISIBLE) {
+        if (Recents.mAllowLockTask) {
+            mLockTaskButton.setVisibility(View.VISIBLE);
+            mLockTaskButton.setClickable(true);
             mLockTaskButton.animate()
                     .alpha(1f)
                     .setInterpolator(Interpolators.FAST_OUT_LINEAR_IN)
                     .setDuration(duration)
                     .start();
         } else {
+            mLockTaskButton.setVisibility(View.INVISIBLE);
+            mLockTaskButton.setClickable(false);
             mLockTaskButton.setAlpha(1f);
         }
         if (mMoveTaskButton != null) {
@@ -607,14 +657,18 @@ public class TaskViewHeader extends FrameLayout
      * time.
      */
     public void setNoUserInteractionState() {
-        mDismissButton.setVisibility(View.VISIBLE);
-        mDismissButton.animate().cancel();
-        mDismissButton.setAlpha(1f);
-        mDismissButton.setClickable(true);
-        mLockTaskButton.setVisibility(View.VISIBLE);
-        mLockTaskButton.animate().cancel();
-        mLockTaskButton.setAlpha(1f);
-        mLockTaskButton.setClickable(true);
+        if (mShowDismissIcon) {
+            mDismissButton.setVisibility(View.VISIBLE);
+            mDismissButton.animate().cancel();
+            mDismissButton.setAlpha(1f);
+            mDismissButton.setClickable(true);
+        }
+        if (Recents.mAllowLockTask) {
+            mLockTaskButton.setVisibility(View.VISIBLE);
+            mLockTaskButton.animate().cancel();
+            mLockTaskButton.setAlpha(1f);
+            mLockTaskButton.setClickable(true);
+        }
         if (mMoveTaskButton != null) {
             mMoveTaskButton.setVisibility(View.VISIBLE);
             mMoveTaskButton.animate().cancel();
@@ -656,7 +710,7 @@ public class TaskViewHeader extends FrameLayout
             EventBus.getDefault().send(new ShowApplicationInfoEvent(mTask));
         } else if (v == mDismissButton) {
             TaskView tv = Utilities.findParent(this, TaskView.class);
-            if (!Recents.sLockedTasks.contains(tv.getTask())) {
+            if (!Recents.mAllowLockTask || !Recents.sLockedTasks.contains(tv.getTask())) {
                 tv.dismissTask();
 
                 // Keep track of deletions by the dismiss button

@@ -653,7 +653,7 @@ public class TaskStack {
         ArrayList<Task> tasks = mStackTaskList.getTasks();
         for (int i = tasks.size() - 1; i >= 0; i--) {
             Task t = tasks.get(i);
-            if (Recents.sLockedTasks.contains(t)) {
+            if (Recents.mAllowLockTask && Recents.sLockedTasks.contains(t)) {
                 continue;
             }
             removeTaskImpl(mStackTaskList, t);
@@ -662,6 +662,19 @@ public class TaskStack {
         if (mCb != null) {
             // Notify that all tasks have been removed
             mCb.onStackTasksRemoved(this);
+        }
+    }
+
+    /**
+     * Removes all locked tasks.
+     */
+    public void removeAllLockedTasks() {
+        ArrayList<Task> tasks = mStackTaskList.getTasks();
+        for (int i = tasks.size() - 1; i >= 0; i--) {
+            Task t = tasks.get(i);
+            if (Recents.sLockedTasks.contains(t)) {
+                Recents.sLockedTasks.remove(t);
+            }
         }
     }
 

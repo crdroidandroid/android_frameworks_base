@@ -87,6 +87,7 @@ public class Recents extends SystemUI
     }
 
     public final static Set<Task> sLockedTasks = new HashSet<>();
+    public static boolean mAllowLockTask = false;
 
     // Purely for experimentation
     private final static String RECENTS_OVERRIDE_SYSPROP_KEY = "persist.recents_override_pkg";
