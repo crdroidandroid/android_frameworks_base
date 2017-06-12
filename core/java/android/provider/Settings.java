@@ -4154,6 +4154,18 @@ public final class Settings {
         public static final String  RECENTS_CLEAR_ALL_LOCATION = "recents_clear_all_location";
 
         /**
+         * Recents lock icon
+         * @hide
+         */
+        public static final String RECENTS_LOCK_ICON = "recents_lock_icon";
+
+        /**
+         * Recents dismiss icon
+         * @hide
+         */
+        public static final String RECENTS_DISMISS_ICON = "recents_dismiss_icon";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
