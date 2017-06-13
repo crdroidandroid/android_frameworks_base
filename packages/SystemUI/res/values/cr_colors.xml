@@ -51,13 +51,6 @@
     <!-- Custom Carrier Label -->
     <color name="status_bar_carrier_color">@android:color/white</color>
 
-    <!-- Custom Navbar Color -->
-    <color name="icon_color_back">@android:color/white</color>
-    <color name="icon_color_ime_switcher">@android:color/white</color>
-    <color name="icon_color_split_screen">@android:color/white</color>
-    <color name="icon_color_home">@android:color/white</color>
-    <color name="icon_color_overview">@android:color/white</color>
-
     <!-- Battery colors -->
     <color name="battery_charge_level_low_level">@*android:color/battery_saver_mode_color</color>
     <color name="battery_charge_level_on_light_statusbar">@color/dark_mode_icon_color_dual_tone_fill</color>
