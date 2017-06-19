@@ -310,8 +310,6 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     private Set<String> mNonBlockablePkgs;
 
-    protected boolean mScreenPinningEnabled;
-
     protected boolean mOmniSwitchRecents;
 
     @Override  // NotificationData.Environment
@@ -1532,9 +1530,6 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     @Override
     public void screenPinningStateChanged(boolean enabled) {
-        if (mScreenPinningEnabled != enabled) {
-            mScreenPinningEnabled = enabled;
-        }
         if (DEBUG)
             Log.d(TAG, "StatusBar API screenPinningStateChanged = " + enabled);
     }
@@ -1612,10 +1607,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (mSlimRecents != null) {
             sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
             mSlimRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
-        } else if (mOmniSwitchRecents) {
-            if (!mScreenPinningEnabled) {
-                OmniSwitchConstants.toggleOmniSwitchRecents(mContext, UserHandle.CURRENT);
-            }
+        } else if (mOmniSwitchRecents && mRecents != null) {
+            OmniSwitchConstants.toggleOmniSwitchRecents(mContext, UserHandle.CURRENT);
         } else if (mRecents != null) {
             mRecents.toggleRecents(mDisplay);
         }
