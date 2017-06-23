@@ -769,7 +769,7 @@ public class FingerprintManager implements BiometricAuthenticator, BiometricFing
                 throw e.rethrowFromSystemServer();
             }
         } else {
-            Slog.w(TAG, "isFingerprintHardwareDetected(): Service not connected!");
+            if (DEBUG) Slog.w(TAG, "isFingerprintHardwareDetected(): Service not connected!");
         }
         return false;
     }
