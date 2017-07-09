@@ -46,4 +46,7 @@
 
     <!-- Default line spacing multiplier between hours and minutes of the keyguard clock-->
     <java-symbol type="dimen" format="float" name="keyguard_clock_line_spacing_scale" />
+
+    <!-- Sensor block -->
+    <java-symbol type="array" name="config_blockPackagesSensorDrain" />
 </resources>
