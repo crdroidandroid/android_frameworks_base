@@ -139,4 +139,6 @@
 
     <!-- Intent chooser -->
     <java-symbol type="id" name="filtered_item_container" />
+
+  <java-symbol type="array" name="config_blockPackagesSensorDrain" />
 </resources>
