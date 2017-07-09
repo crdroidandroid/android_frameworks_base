@@ -23,4 +23,6 @@
 
   <!-- High Brightness Mode -->
   <java-symbol type="bool" name="config_supportHighBrightness" />
+
+  <java-symbol type="array" name="config_blockPackagesSensorDrain" />
 </resources>
