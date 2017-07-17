@@ -236,7 +236,7 @@ final class AccessibilityInteractionController {
             } else {
                 root = mViewRootImpl.mView;
             }
-            if (root != null) {
+            if (root != null && viewId != null) {
                 final int resolvedViewId = root.getContext().getResources()
                         .getIdentifier(viewId, null, null);
                 if (resolvedViewId <= 0) {
