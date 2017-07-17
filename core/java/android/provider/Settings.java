@@ -6599,6 +6599,11 @@ public final class Settings {
         public static final String SMARTBAR_LONGPRESS_DELAY = "smartbar_longpress_delay";
 
         /**
+         * Scaling value for smartbar custom button icon
+         */
+        public static final String SMARTBAR_CUSTOM_ICON_SIZE = "smartbar_custom_icon_size";
+
+        /**
          * A flag containing settings used for biometric weak
          * @hide
          */
