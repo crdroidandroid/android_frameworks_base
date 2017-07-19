@@ -17,11 +17,14 @@
 package com.android.systemui.statusbar.pipeline.mobile.domain.interactor
 
 import android.content.Context
+import android.provider.Settings
+import com.android.systemui.Dependency
 import com.android.settingslib.SignalIcon.MobileIconGroup
 import com.android.settingslib.graph.SignalDrawable
 import com.android.settingslib.mobile.MobileIconCarrierIdOverrides
 import com.android.settingslib.mobile.MobileIconCarrierIdOverridesImpl
 import com.android.systemui.KairosBuilder
+import com.android.systemui.tuner.TunerService
 import com.android.systemui.kairos.ExperimentalKairosApi
 import com.android.systemui.kairos.State
 import com.android.systemui.kairos.combine
@@ -42,6 +45,8 @@ import com.android.systemui.statusbar.pipeline.mobile.domain.model.NetworkTypeIc
 import com.android.systemui.statusbar.pipeline.mobile.domain.model.SignalIconModel
 import com.android.systemui.statusbar.pipeline.satellite.ui.model.SatelliteIconModel
 import com.android.systemui.statusbar.pipeline.shared.data.model.DataActivityModel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 
 @ExperimentalKairosApi
 interface MobileIconInteractorKairos {
@@ -144,6 +149,9 @@ interface MobileIconInteractorKairos {
 
     /** True when in carrier network change mode */
     val carrierNetworkChangeActive: State<Boolean>
+
+    /** Whether to show the 4G icon instead of LTE. */
+    val shouldShowFourgIcon: State<Boolean>
 }
 
 /** Interactor for a single mobile connection. This connection _should_ have one subscription ID */
@@ -407,4 +415,25 @@ class MobileIconInteractorKairosImpl(
     override val isVoWifi: State<Boolean> =
         connectionRepository.imsState
             .map { it.isVoWifiAvailable() }
+
+    private val SHOW_FOURG_ICON: String =
+            "system:" + Settings.System.SHOW_FOURG_ICON
+
+    override val shouldShowFourgIcon: State<Boolean> = buildState {
+        callbackFlow {
+                val callback =
+                    object : TunerService.Tunable {
+                        override fun onTuningChanged(key: String, newValue: String?) {
+                            when (key) {
+                                SHOW_FOURG_ICON ->
+                                    trySend(TunerService.parseIntegerSwitch(newValue, false))
+                            }
+                        }
+                    }
+                Dependency.get(TunerService::class.java).addTunable(callback, SHOW_FOURG_ICON)
+
+                awaitClose { Dependency.get(TunerService::class.java).removeTunable(callback) }
+            }
+            .toState(initialValue = false)
+    }
 }
