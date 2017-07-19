@@ -107,6 +107,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
     // additional diagnostics, but not logspew
     static final boolean CHATTY =  Log.isLoggable(TAG + "Chat", Log.DEBUG);
 
+    private static final String IMS_STATUS_CHANGED = "android.intent.action.IMS_REGISTRATION_CHANGED";
+
     private static final int EMERGENCY_NO_CONTROLLERS = 0;
     private static final int EMERGENCY_FIRST_CONTROLLER = 100;
     private static final int EMERGENCY_VOICE_CONTROLLER = 200;
@@ -497,6 +499,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
         filter.addAction(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+        filter.addAction(IMS_STATUS_CHANGED);
         mBroadcastDispatcher.registerReceiverWithHandler(this, filter, mReceiverHandler);
         mListening = true;
 
@@ -739,7 +742,88 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 mobileSignalController.refreshCallIndicator(cb);
             }
         }
+        if (mMobileSignalControllers.size() == 2) {
+            boolean volte1 = mMobileSignalControllers.valueAt(0).isVolteAvailable();
+            boolean volte2 = mMobileSignalControllers.valueAt(1).isVolteAvailable();
+            boolean vowifi1 = mMobileSignalControllers.valueAt(0).isVowifiAvailable();
+            boolean vowifi2 = mMobileSignalControllers.valueAt(1).isVowifiAvailable();
+            cb.setImsIcon(new ImsIconState((volte1 || volte2),
+                    (vowifi1 || vowifi2),
+                    getVolteResId(volte1, volte2),
+                    getVowifiResId(vowifi1, vowifi2),
+                    mContext.getString(com.android.internal.R.string.status_bar_ims)
+            ));
+        } else if (mMobileSignalControllers.size() == 1) {
+            boolean volte = mMobileSignalControllers.valueAt(0).isVolteAvailable();
+            boolean vowifi = mMobileSignalControllers.valueAt(0).isVowifiAvailable();
+            cb.setImsIcon(new ImsIconState(volte,
+                    vowifi,
+                    volte ? R.drawable.stat_sys_volte : 0,
+                    vowifi ? R.drawable.stat_sys_vowifi : 0,
+                    mContext.getString(com.android.internal.R.string.status_bar_ims)
+            ));
+        } else {
+            cb.setImsIcon(new ImsIconState(false,
+                    false,
+                    0,
+                    0,
+                    mContext.getString(com.android.internal.R.string.status_bar_ims)
+            ));
+        }
         mCallbackHandler.setListening(cb, true);
+    }
+
+    public void updateImsIcon() {
+        if (mMobileSignalControllers.size() == 2) {
+            boolean volte1 = mMobileSignalControllers.valueAt(0).isVolteAvailable();
+            boolean volte2 = mMobileSignalControllers.valueAt(1).isVolteAvailable();
+            boolean vowifi1 = mMobileSignalControllers.valueAt(0).isVowifiAvailable();
+            boolean vowifi2 = mMobileSignalControllers.valueAt(1).isVowifiAvailable();
+            mCallbackHandler.setImsIcon(new ImsIconState((volte1 || volte2),
+                    (vowifi1 || vowifi2),
+                    getVolteResId(volte1, volte2),
+                    getVowifiResId(vowifi1, vowifi2),
+                    mContext.getString(com.android.internal.R.string.status_bar_ims)
+            ));
+        } else if (mMobileSignalControllers.size() == 1) {
+            boolean volte = mMobileSignalControllers.valueAt(0).isVolteAvailable();
+            boolean vowifi = mMobileSignalControllers.valueAt(0).isVowifiAvailable();
+            mCallbackHandler.setImsIcon(new ImsIconState(volte,
+                    vowifi,
+                    volte ? R.drawable.stat_sys_volte : 0,
+                    vowifi ? R.drawable.stat_sys_vowifi : 0,
+                    mContext.getString(com.android.internal.R.string.status_bar_ims)
+            ));
+        } else {
+            mCallbackHandler.setImsIcon(new ImsIconState(false,
+                    false,
+                    0,
+                    0,
+                    mContext.getString(com.android.internal.R.string.status_bar_ims)
+            ));
+        }
+    }
+
+    private int getVolteResId(boolean volte1, boolean volte2) {
+        if (volte1 && volte2) {
+            return R.drawable.stat_sys_volte_slot12;
+        } else if (volte1) {
+            return R.drawable.stat_sys_volte_slot1;
+        } else if (volte2) {
+            return R.drawable.stat_sys_volte_slot2;
+        }
+        return 0;
+    }
+
+    private int getVowifiResId(boolean vowifi1, boolean vowifi2) {
+        if (vowifi1 && vowifi2) {
+            return R.drawable.stat_sys_vowifi_slot12;
+        } else if (vowifi1) {
+            return R.drawable.stat_sys_vowifi_slot1;
+        } else if (vowifi2) {
+            return R.drawable.stat_sys_vowifi_slot2;
+        }
+        return 0;
     }
 
     @Override
@@ -773,6 +857,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         switch (action) {
             case ConnectivityManager.CONNECTIVITY_ACTION:
                 updateConnectivity();
+                updateImsIcon();
                 break;
             case Intent.ACTION_AIRPLANE_MODE_CHANGED:
                 refreshLocale();
@@ -817,6 +902,9 @@ public class NetworkControllerImpl extends BroadcastReceiver
                         mAccessPoints.canConfigMobileData(), mAccessPoints.canConfigWifi(),
                         null /* view */));
                 break;
+            case IMS_STATUS_CHANGED:
+                updateImsIcon();
+                break;
             default:
                 int subId = intent.getIntExtra(SubscriptionManager.EXTRA_SUBSCRIPTION_INDEX,
                         SubscriptionManager.INVALID_SUBSCRIPTION_ID);
@@ -853,6 +941,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
             return;
         }
         doUpdateMobileControllers();
+        updateImsIcon();
     }
 
     private void filterMobileSubscriptionInSameGroup(List<SubscriptionInfo> subscriptions) {
@@ -1056,6 +1145,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         }
         mWifiSignalController.notifyListeners();
         mEthernetSignalController.notifyListeners();
+        updateImsIcon();
     }
 
     /**
