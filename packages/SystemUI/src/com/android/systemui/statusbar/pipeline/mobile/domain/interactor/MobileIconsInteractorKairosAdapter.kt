@@ -67,7 +67,7 @@ constructor(
     private val repo: MobileConnectionsRepository,
     repoK: MobileConnectionsRepositoryKairos,
     kairosNetwork: KairosNetwork,
-    @Application scope: CoroutineScope,
+    @Application private val scope: CoroutineScope,
     context: Context,
     mobileMappingsProxy: MobileMappingsProxy,
     private val userSetupRepo: UserSetupRepository,
@@ -259,6 +259,9 @@ constructor(
             override val carrierNetworkChangeActive: Flow<Boolean> = latest {
                 carrierNetworkChangeActive
             }
+
+            override val shouldShowFourgIcon: StateFlow<Boolean> = latest { shouldShowFourgIcon }
+                .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
             private fun <T> latest(block: MobileIconInteractor.() -> Flow<T>): Flow<T> =
                 interactorsBySubId.flatMapLatestConflated { it[subId]?.block() ?: emptyFlow() }
