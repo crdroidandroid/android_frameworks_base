@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.pipeline.mobile.ui.viewmodel
 
 import com.android.settingslib.AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH
+import com.android.settingslib.mobile.TelephonyIcons
 import com.android.systemui.common.shared.model.ContentDescription
 import com.android.systemui.common.shared.model.Icon
 import com.android.systemui.log.table.logDiffsForTable
@@ -135,22 +136,54 @@ constructor(
         combine(
                 iconInteractor.networkTypeIconGroup,
                 showNetworkTypeIcon,
-            ) { networkTypeIconGroup, shouldShow ->
+                iconInteractor.shouldShowFourgIcon,
+            ) { networkTypeIconGroup, shouldShow, shouldShowFourgIcon ->
                 val desc =
-                    if (networkTypeIconGroup.contentDescription != 0)
-                        ContentDescription.Resource(networkTypeIconGroup.contentDescription)
+                    if (networkTypeIconGroup.contentDescription != 0) {
+                        var contDesc: Int = networkTypeIconGroup.contentDescription
+                        if (shouldShowFourgIcon) contDesc = convertLteToFourg(contDesc)
+                        ContentDescription.Resource(contDesc)
+                    }
                     else null
                 val icon =
-                    if (networkTypeIconGroup.iconId != 0)
-                        Icon.Resource(networkTypeIconGroup.iconId, desc)
+                    if (networkTypeIconGroup.iconId != 0) {
+                        var contIcon: Int = networkTypeIconGroup.iconId
+                        if (shouldShowFourgIcon) contIcon = convertLteToFourg(contIcon)
+                        Icon.Resource(contIcon, desc)
+                    }
                     else null
                 return@combine when {
                     !shouldShow -> null
+                    shouldShowFourgIcon ||
+                    !shouldShowFourgIcon -> icon
                     else -> icon
                 }
             }
             .distinctUntilChanged()
             .stateIn(scope, SharingStarted.WhileSubscribed(), null)
+
+    private fun convertLteToFourg(res: Int): Int {
+        when (res) {
+            com.android.settingslib.R.string.data_connection_lte,
+            com.android.settingslib.R.string.data_connection_4g_lte -> {
+                return com.android.settingslib.R.string.data_connection_4g as Int
+            }
+            com.android.settingslib.R.string.data_connection_lte_plus,
+            com.android.settingslib.R.string.data_connection_4g_lte_plus -> {
+                return com.android.settingslib.R.string.data_connection_4g_plus as Int
+            }
+            TelephonyIcons.ICON_LTE,
+            TelephonyIcons.ICON_4G_LTE -> {
+                return TelephonyIcons.ICON_4G as Int
+            }
+            TelephonyIcons.ICON_LTE_PLUS,
+            TelephonyIcons.ICON_4G_LTE_PLUS -> {
+                return TelephonyIcons.ICON_4G_PLUS as Int
+            }
+            else -> {}
+        }
+        return res
+    }
 
     override val roaming: StateFlow<Boolean> =
         iconInteractor.isRoaming
