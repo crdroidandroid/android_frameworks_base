@@ -91,6 +91,9 @@ interface SignalCallback {
     @JvmDefault
     fun setMobileDataEnabled(enabled: Boolean) {}
 
+    @JvmDefault
+    fun setImsIcon(icon: ImsIconState) {}
+
     /**
      * Callback for listeners to be able to update the connectivity status
      * @param noDefaultNetwork whether there is any default network.
@@ -187,5 +190,39 @@ data class IconState(
                 .append("icon=").append(icon).append(',')
                 .append("contentDescription=").append(contentDescription).append(']')
                 .toString()
+    }
+}
+
+data class ImsIconState(
+    @JvmField var visible: Boolean,
+    @JvmField val volteVisible: Boolean,
+    @JvmField val vowifiVisible: Boolean,
+    @JvmField val volteIcon: Int,
+    @JvmField val vowifiIcon: Int,
+    @JvmField val contentDescription: String
+) {
+    constructor(
+        volteVisible: Boolean,
+        vowifiVisible: Boolean,
+        volteIcon: Int,
+        vowifiIcon: Int,
+        contentDescription: String
+    ): this(
+        volteVisible || vowifiVisible,
+        volteVisible,
+        vowifiVisible,
+        volteIcon,
+        vowifiIcon,
+        contentDescription) {}
+
+    override fun toString(): String {
+        return java.lang.StringBuilder("ImsIconState[")
+                .append("visible=").append(visible)
+                .append(",volteVisible=").append(volteVisible)
+                .append(",vowifiVisible=").append(vowifiVisible)
+                .append(",volteIcon=").append(volteIcon)
+                .append(",vowifiIcon=").append(vowifiIcon)
+                .append(",contentDescription=").append(contentDescription)
+                .append(']').toString()
     }
 }
