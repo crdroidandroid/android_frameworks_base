@@ -174,6 +174,7 @@ constructor(
             override val isMobileHdForceHidden: State<Boolean> = latest(false) { isMobileHdForceHidden }
             override val isVoWifi: State<Boolean> = latest(false) { isVoWifi }
             override val isVoWifiForceHidden: State<Boolean> = latest(false) { isVoWifiForceHidden }
+            override val shouldShowFourgIcon: State<Boolean> = latest(false) { shouldShowFourgIcon }
         }
 
     private fun trackedCommonViewModel(subId: Int) =
