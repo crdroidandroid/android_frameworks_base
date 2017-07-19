@@ -3137,6 +3137,7 @@
   <java-symbol type="string" name="status_bar_sensors_off" />
   <java-symbol type="string" name="status_bar_screen_record" />
   <java-symbol type="string" name="status_bar_firewall" />
+  <java-symbol type="string" name="status_bar_ims" />
 
   <!-- Locale picker -->
   <java-symbol type="id" name="locale_search_menu" />
