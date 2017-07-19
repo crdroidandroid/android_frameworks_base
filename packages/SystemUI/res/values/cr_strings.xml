@@ -20,6 +20,7 @@
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_data_saver">Data saver</string>
     <string name="status_bar_call_strength">Call strength</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
 
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
