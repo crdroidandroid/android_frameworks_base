@@ -172,6 +172,12 @@ fun BuildScope.MobileIconInteractorKairosAdapter(
                         "MobileIconInteractorKairosAdapter(subId=$subscriptionId).carrierNetworkChangeActive"
                     }
                 ),
+            shouldShowFourgIcon =
+                shouldShowFourgIcon.toStateFlow(
+                    nameTag {
+                        "MobileIconInteractorKairosAdapter(subId=$subscriptionId).shouldShowFourgIcon"
+                    }
+                ),
         )
     }
 
@@ -201,4 +207,5 @@ private class MobileIconInteractorKairosAdapter(
     override val isVoWifiForceHidden: Flow<Boolean>,
     override val isAllowedDuringAirplaneMode: StateFlow<Boolean>,
     override val carrierNetworkChangeActive: StateFlow<Boolean>,
+    override val shouldShowFourgIcon: StateFlow<Boolean>,
 ) : MobileIconInteractor
