@@ -202,6 +202,10 @@ android_library {
     manifest: "AndroidManifest.xml",
     additional_manifests: ["LineageManifest.xml"],
 
+    libs: [
+        "ims-common",
+    ],
+
     javacflags: ["-Adagger.fastInit=enabled"],
     kotlincflags: ["-Xjvm-default=enable"],
 
@@ -395,6 +399,7 @@ android_library {
         "android.test.runner",
         "android.test.base",
         "android.test.mock",
+        "ims-common",
     ],
     kotlincflags: ["-Xjvm-default=enable"],
     aaptflags: [
@@ -517,6 +522,10 @@ android_app {
     system_ext_specific: true,
     certificate: "platform",
     privileged: true,
+
+    libs: [
+        "ims-common",
+    ],
 
     kotlincflags: ["-Xjvm-default=enable"],
 
