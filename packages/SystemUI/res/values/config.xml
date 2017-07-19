@@ -514,6 +514,7 @@
     <string-array name="config_statusBarIconsToExclude" translatable="false">
         <item>@*android:string/status_bar_rotate</item>
         <item>@*android:string/status_bar_headset</item>
+        <item>@*android:string/status_bar_ims</item>
     </string-array>
 
 
