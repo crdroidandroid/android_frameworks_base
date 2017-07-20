@@ -525,9 +525,12 @@
     <protected-broadcast
             android:name="com.android.server.policy.PhoneWindowManager.ACTION_TORCH_OFF" />
 
+    <!-- Custom protected broadcasts -->
     <protected-broadcast android:name="org.omnirom.omniswitch.ACTION_TOGGLE_OVERLAY2" />
     <protected-broadcast android:name="org.omnirom.omniswitch.ACTION_RESTORE_HOME_STACK" />
     <protected-broadcast android:name="org.omnirom.omniswitch.ACTION_PRELOAD_TASKS" />
+    <protected-broadcast android:name="projekt.substratum.APP_CRASHED" />
+    <protected-broadcast android:name="intent_navbar_edit" />
 
     <!-- ====================================================================== -->
     <!--                          RUNTIME PERMISSIONS                           -->
