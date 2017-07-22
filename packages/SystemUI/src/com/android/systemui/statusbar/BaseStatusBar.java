@@ -1620,7 +1620,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                     preloadRecents();
                 }
             } else if (action == MotionEvent.ACTION_CANCEL) {
-                if (mOmniSwitchRecents) {
+                if (!mOmniSwitchRecents) {
                     cancelPreloadingRecents();
                 }
             } else if (action == MotionEvent.ACTION_UP) {
@@ -1663,7 +1663,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (mSlimRecents != null) {
             sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
             mSlimRecents.toggleRecents(mDisplay, mLayoutDirection, getStatusBarView());
-        } else if (mOmniSwitchRecents && mRecents != null) {
+        } else if (mOmniSwitchRecents) {
             OmniSwitchConstants.toggleOmniSwitchRecents(mContext, UserHandle.CURRENT);
         } else if (mRecents != null) {
             mRecents.toggleRecents(mDisplay);
@@ -1673,7 +1673,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected void preloadRecents() {
         if (mSlimRecents != null) {
             mSlimRecents.preloadRecentTasksList();
-        } else if (mOmniSwitchRecents && mRecents != null) {
+        } else if (mOmniSwitchRecents) {
             OmniSwitchConstants.preloadOmniSwitchRecents(mContext, UserHandle.CURRENT);
         } else if (mRecents != null) {
             mRecents.preloadRecents();
