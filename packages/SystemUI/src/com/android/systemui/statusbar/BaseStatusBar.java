@@ -335,50 +335,29 @@ public abstract class BaseStatusBar extends SystemUI implements
         return mNotificationData.getActiveNotifications().size();
     }
 
-    private final ContentObserver mPieSettingsObserver = new ContentObserver(mHandler) {
-        @Override
-        public void onChange(boolean selfChange) {
-            update();
-        }
-
-        private void update() {
-            ContentResolver resolver = mContext.getContentResolver();
-            boolean pieEnabled = Settings.System.getIntForUser(resolver,
-                    Settings.System.PA_PIE_STATE, 0, UserHandle.USER_CURRENT) == 1;
-
-            updatePieControls(!pieEnabled);
-        }
-    };
-
     protected final ContentObserver mSettingsObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
-            final boolean provisioned = 0 != Settings.Global.getInt(
-                    mContext.getContentResolver(), Settings.Global.DEVICE_PROVISIONED, 0);
+            ContentResolver resolver = mContext.getContentResolver();
+
+            boolean provisioned = 0 != Settings.Global.getInt(
+                    resolver, Settings.Global.DEVICE_PROVISIONED, 0);
+            int mode = Settings.Global.getInt(resolver,
+                    Settings.Global.ZEN_MODE, Settings.Global.ZEN_MODE_OFF);
+            boolean pieEnabled = Settings.System.getIntForUser(resolver,
+                    Settings.System.PA_PIE_STATE, 0, UserHandle.USER_CURRENT) == 1;
+
             if (provisioned != mDeviceProvisioned) {
                 mDeviceProvisioned = provisioned;
                 updateNotifications();
             }
-            final int mode = Settings.Global.getInt(mContext.getContentResolver(),
-                    Settings.Global.ZEN_MODE, Settings.Global.ZEN_MODE_OFF);
+
             setZenMode(mode);
 
             updateLockscreenNotificationSetting();
-        }
 
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            super.onChange(selfChange, uri);
-
-            if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.USE_SLIM_RECENTS))) {
-                        updateRecents();
-            } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.RECENTS_USE_OMNISWITCH))) {
-                mOmniSwitchRecents = Settings.System.getIntForUser(mContext.getContentResolver(),
-                       Settings.System.RECENTS_USE_OMNISWITCH, 0,
-                       UserHandle.USER_CURRENT) == 1;
-            }
+            updatePieControls(!pieEnabled);
+            updateRecents();
         }
     };
 
@@ -389,8 +368,13 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected void updateRecents() {
-        boolean slimRecents = Settings.System.getIntForUser(mContext.getContentResolver(),
+        ContentResolver resolver = mContext.getContentResolver();
+
+        boolean slimRecents = Settings.System.getIntForUser(resolver,
                 Settings.System.USE_SLIM_RECENTS, 0, UserHandle.USER_CURRENT) == 1;
+
+        mOmniSwitchRecents = Settings.System.getIntForUser(resolver,
+                Settings.System.RECENTS_USE_OMNISWITCH, 0, UserHandle.USER_CURRENT) == 1;
 
         if (slimRecents) {
             mSlimRecents = new RecentController(mContext, mLayoutDirection);
@@ -842,6 +826,14 @@ public abstract class BaseStatusBar extends SystemUI implements
                 Settings.System.getUriFor(Settings.System.RECENTS_USE_OMNISWITCH), false,
                         mSettingsObserver, UserHandle.USER_ALL);
 
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.PA_PIE_STATE), false,
+                        mSettingsObserver, UserHandle.USER_ALL);
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.PA_PIE_GRAVITY), false,
+                        mSettingsObserver, UserHandle.USER_ALL);
+
         final Configuration currentConfig = mContext.getResources().getConfiguration();
         mLocale = currentConfig.locale;
         mLayoutDirection = TextUtils.getLayoutDirectionFromLocale(mLocale);
@@ -940,13 +932,6 @@ public abstract class BaseStatusBar extends SystemUI implements
         mNonBlockablePkgs = new ArraySet<String>();
         Collections.addAll(mNonBlockablePkgs, mContext.getResources().getStringArray(
                 com.android.internal.R.array.config_nonBlockableNotificationPackages));
-
-        mPieSettingsObserver.onChange(false);
-        mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                Settings.System.PA_PIE_STATE), false, mPieSettingsObserver);
-        mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                Settings.System.PA_PIE_GRAVITY), false, mPieSettingsObserver);
-
     }
 
     public void updatePieControls(boolean reset) {
