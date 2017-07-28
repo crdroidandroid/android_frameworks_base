@@ -605,6 +605,9 @@
     <!-- For IdleController -->
     <protected-broadcast android:name="android.intent.action.DOCK_IDLE" />
     <protected-broadcast android:name="android.intent.action.DOCK_ACTIVE" />
+    <protected-broadcast android:name="projekt.substratum.APP_CRASHED" />
+    <protected-broadcast android:name="com.android.systemui.action.RESTART_THEME" />
+    <protected-broadcast android:name="com.android.systemui.action.REFRESH_SOUND" />
 
     <protected-broadcast android:name="com.android.server.wm.onehand.intent.action.ONEHAND_TRIGGER_EVENT" />
 
