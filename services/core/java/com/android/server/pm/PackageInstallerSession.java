@@ -765,6 +765,12 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
         }
 
         if (removeSplitList.size() > 0) {
+            // Partial installs must be consistent with existing install
+            if (pkgInfo == null) {
+                throw new PackageManagerException(INSTALL_FAILED_INVALID_APK,
+                        "Missing existing base package for " + mPackageName);
+            }
+
             // validate split names marked for removal
             for (String splitName : removeSplitList) {
                 if (!ArrayUtils.contains(pkgInfo.splitNames, splitName)) {
