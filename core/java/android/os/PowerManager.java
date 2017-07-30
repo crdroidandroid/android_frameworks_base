@@ -1056,17 +1056,6 @@ public final class PowerManager {
         }
     }
 
-    public String getSeenWakeLocks()
-    {
-	try {
-	    if (mService != null) {
-		return mService.getSeenWakeLocks();
-	    }
-	} catch (RemoteException e) {
-	}
-	return null;
-    }
-
     /**
      * This function checks if the device has implemented Sustained Performance
      * Mode. This needs to be checked only once and is constant for a particular
