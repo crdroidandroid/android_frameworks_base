@@ -46,6 +46,7 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.settingslib.RestrictedLockUtilsInternal;
 import com.android.systemui.Dependency;
+import com.android.systemui.SystemUIFactory;
 
 import java.util.ArrayList;
 
@@ -268,6 +269,7 @@ public class BrightnessController implements ToggleSlider.Listener {
         mIcon = icon;
         mControl = control;
         mControl.setMax(GAMMA_SPACE_MAX);
+        Dependency.initDependencies(SystemUIFactory.getInstance().getRootComponent());
         mBackgroundHandler = new Handler((Looper) Dependency.get(Dependency.BG_LOOPER));
         mUserTracker = new CurrentUserTracker(mContext) {
             @Override
