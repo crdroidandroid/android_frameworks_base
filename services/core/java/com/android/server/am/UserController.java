@@ -1401,10 +1401,10 @@ final class UserController {
         return mStartedUserArray;
     }
 
-    boolean isUserStoppingOrShuttingDownLocked(int userId) {
+    boolean isUserStoppingOrShuttingDownLockedOrUserNotExist(int userId) {
         UserState state = getStartedUserStateLocked(userId);
         if (state == null) {
-            return false;
+            return true;
         }
         return state.state == UserState.STATE_STOPPING
                 || state.state == UserState.STATE_SHUTDOWN;
