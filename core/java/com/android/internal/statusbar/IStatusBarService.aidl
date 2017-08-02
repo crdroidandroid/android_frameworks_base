@@ -67,8 +67,6 @@ interface IStatusBarService
     void remTile(in ComponentName tile);
     void clickTile(in ComponentName tile);
     void handleSystemNavigationKey(in int key);
-
-    // Start DU methods
     void toggleRecentApps();
     void toggleSplitScreen();
     void preloadRecentApps();
@@ -78,4 +76,5 @@ interface IStatusBarService
     // SystemUI Restart API for masquerade
     void restartUI();
     void toggleOrientationListener(boolean enable);
+    void leftInLandscapeChanged(boolean isLeft);
 }

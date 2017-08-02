@@ -1862,6 +1862,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     @Override
+    public void leftInLandscapeChanged(boolean isLeft) {
+        super.leftInLandscapeChanged(isLeft);
+        mNavigationController.leftInLandscapeChanged(isLeft);
+    }
+
+    @Override
     public void setIcon(String slot, StatusBarIcon icon) {
         mIconController.setIcon(slot, icon);
     }

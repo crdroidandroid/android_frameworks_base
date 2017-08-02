@@ -79,6 +79,7 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_HANDLE_SYSNAV_KEY             = 33 << MSG_SHIFT;
     private static final int MSG_SCREEN_PINNING_STATE_CHANGED  = 34 << MSG_SHIFT;
     private static final int MSG_RESTART_UI                    = 35 << MSG_SHIFT;
+    private static final int MSG_LEFT_IN_LANDSCAPE_STATE_CHANGED  = 36 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -138,10 +139,19 @@ public class CommandQueue extends IStatusBar.Stub {
         void handleSystemNavigationKey(int arg1);
         void screenPinningStateChanged(boolean enabled);
         void restartUI();
+        void leftInLandscapeChanged(boolean isLeft);
     }
 
     public CommandQueue(Callbacks callbacks) {
         mCallbacks = callbacks;
+    }
+
+    public void leftInLandscapeChanged(boolean isLeft) {
+        synchronized (mLock) {
+            mHandler.removeMessages(MSG_LEFT_IN_LANDSCAPE_STATE_CHANGED);
+            mHandler.obtainMessage(MSG_LEFT_IN_LANDSCAPE_STATE_CHANGED,
+                    isLeft ? 1 : 0, 0, null).sendToTarget();
+        }
     }
 
     public void screenPinningStateChanged(boolean enabled) {
@@ -546,6 +556,9 @@ public class CommandQueue extends IStatusBar.Stub {
                     break;
                 case MSG_RESTART_UI:
                     mCallbacks.restartUI();
+                    break;
+                case MSG_LEFT_IN_LANDSCAPE_STATE_CHANGED:
+                    mCallbacks.leftInLandscapeChanged(msg.arg1 != 0);
                     break;
             }
         }
