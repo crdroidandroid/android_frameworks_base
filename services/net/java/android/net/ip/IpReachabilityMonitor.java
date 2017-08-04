@@ -590,6 +590,11 @@ public class IpReachabilityMonitor {
                 Log.w(TAG, "ALERT: " + eventMsg);
                 handleNeighborLost(eventMsg);
             }
+
+            if (mWakeLock.isHeld() && (nudState == StructNdMsg.NUD_FAILED ||
+                nudState == StructNdMsg.NUD_REACHABLE)) {
+                mWakeLock.release();
+            }
         }
     }
 }
