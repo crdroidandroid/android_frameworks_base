@@ -5295,6 +5295,15 @@ public final class Settings {
         public static final String PULSE_AMBIENT_LIGHT_LAYOUT = "pulse_ambient_light_layout";
 
         /**
+         * Sensor block per-package
+         * @hide
+         */
+        public static final String SENSOR_BLOCK = "sensor_block";
+
+        private static final Validator SENSOR_BLOCK_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -5358,6 +5367,7 @@ public final class Settings {
             DISPLAY_COLOR_MODE,
             ALARM_ALERT,
             NOTIFICATION_LIGHT_PULSE,
+            SENSOR_BLOCK,
         };
 
         /**
@@ -5476,6 +5486,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LOCK_TO_APP_ENABLED);
             PRIVATE_SETTINGS.add(EGG_MODE);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
+            PRIVATE_SETTINGS.add(SENSOR_BLOCK);
         }
 
         /**
@@ -5570,6 +5581,7 @@ public final class Settings {
             VALIDATORS.put(NOTIFICATION_LIGHT_PULSE, BOOLEAN_VALIDATOR);
             VALIDATORS.put(ACCELEROMETER_ROTATION_ANGLES,
                     ACCELEROMETER_ROTATION_ANGLES_VALIDATOR);
+            VALIDATORS.put(SENSOR_BLOCK, SENSOR_BLOCK_VALIDATOR);
         }
 
         /**
