@@ -189,4 +189,6 @@
 
   <!-- Wired/BT headset focus mode -->
   <java-symbol type="bool" name="config_deviceRingtoneFocusMode" />
+
+  <java-symbol type="array" name="config_blockPackagesSensorDrain" />
 </resources>
