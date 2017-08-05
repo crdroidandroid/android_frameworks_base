@@ -80,16 +80,16 @@ public class PieMenu extends FrameLayout {
     private static int ANIMATOR_SNAP_GROW = ANIMATOR_ACC_INC_15 + 2;
     private static int ANIMATOR_END = ANIMATOR_SNAP_GROW;
 
-    private static final int COLOR_OPAQUE_MASK = 0xff000000;
-    private static final int COLOR_SNAP_BACKGROUND = 0xaaffffff;
-    private static final int COLOR_PIE_BACKGROUND = 0x65000000;
-    private static final int COLOR_PIE_BUTTON = 0xb2ffffff;
-    private static final int COLOR_PIE_SELECT = 0xaaffffff;
-    private static final int COLOR_PIE_OUTLINES = 0x55ffffff;
-    private static final int COLOR_CHEVRON = 0xaaffffff;
-    private static final int COLOR_BATTERY_JUICE = 0xaaffffff;
-    private static final int COLOR_BATTERY_BACKGROUND = 0xaaffffff;
-    private static final int COLOR_STATUS = 0xaaffffff;
+    private static int COLOR_OPAQUE_MASK;
+    private static int COLOR_SNAP_BACKGROUND;
+    private static int COLOR_PIE_BACKGROUND;
+    private static int COLOR_PIE_BUTTON;
+    private static int COLOR_PIE_SELECT;
+    private static int COLOR_PIE_OUTLINES;
+    private static int COLOR_CHEVRON;
+    private static int COLOR_BATTERY_JUICE;
+    private static int COLOR_BATTERY_BACKGROUND;
+    private static int COLOR_STATUS;
 
     private static final int BASE_SPEED = 500;
     private static final int GAP_BASE = 1;
@@ -339,11 +339,11 @@ public class PieMenu extends FrameLayout {
         mBatteryLevel = mPieHelper.getBatteryLevel();
         if (mBatteryLevel <= PieHelper.LOW_BATTERY_LEVEL
                 && mBatteryLevel > PieHelper.CRITICAL_BATTERY_LEVEL) {
-            mBatteryJuice.setColor(getResources().getColor(R.color.battery_juice_low));
+            mBatteryJuice.setColor(getResources().getColor(R.color.pie_battery_med));
         } else if (mBatteryLevel <= mPieHelper.CRITICAL_BATTERY_LEVEL) {
-            mBatteryJuice.setColor(getResources().getColor(R.color.battery_juice_critical));
+            mBatteryJuice.setColor(getResources().getColor(R.color.pie_battery_low));
         } else {
-            mBatteryJuice.setColor(getResources().getColor(R.color.battery_juice));
+            mBatteryJuice.setColor(getResources().getColor(R.color.pie_battery));
         }
 
         mStartBattery = mPanel.getDegree() + mAngle + mPieGap;
@@ -358,6 +358,13 @@ public class PieMenu extends FrameLayout {
                 Settings.System.PA_PIE_ENABLE_COLOR, 0) == 1);
 
         mSnapBackground.setColor(getResources().getColor(R.color.snap_background));
+
+        COLOR_PIE_BACKGROUND = getResources().getColor(R.color.pie_background);
+        COLOR_PIE_SELECT = getResources().getColor(R.color.pie_select);
+        COLOR_PIE_OUTLINES = getResources().getColor(R.color.pie_outlines);
+        COLOR_STATUS = getResources().getColor(R.color.status);
+        COLOR_CHEVRON = getResources().getColor(R.color.chevron);
+        COLOR_PIE_BUTTON = getResources().getColor(R.color.pie_button);
 
         if (mEnableColor) {
             mPieBackground.setColor(Settings.System.getInt(mContext.getContentResolver(),
@@ -383,13 +390,13 @@ public class PieMenu extends FrameLayout {
                         Settings.System.PA_PIE_BUTTON_COLOR, COLOR_PIE_BUTTON));
             }
         } else {
-            mPieBackground.setColor(getResources().getColor(R.color.pie_background));
-            mPieSelected.setColor(getResources().getColor(R.color.pie_select));
-            mPieOutlines.setColor(getResources().getColor(R.color.pie_outlines));
-            mClockPaint.setColor(getResources().getColor(R.color.status));
-            mAmPmPaint.setColor(getResources().getColor(R.color.status));
-            mStatusPaint.setColor(getResources().getColor(R.color.status));
-            mChevronBackground.setColor(getResources().getColor(R.color.chevron));
+            mPieBackground.setColor(COLOR_PIE_BACKGROUND);
+            mPieSelected.setColor(COLOR_PIE_SELECT);
+            mPieOutlines.setColor(COLOR_PIE_OUTLINES);
+            mClockPaint.setColor(COLOR_STATUS);
+            mAmPmPaint.setColor(COLOR_STATUS);
+            mStatusPaint.setColor(COLOR_STATUS);
+            mChevronBackground.setColor(COLOR_CHEVRON);
             mBatteryJuice.setColorFilter(null);
             for (PieItem item : mItems) {
                 item.setColor(COLOR_PIE_BUTTON);
