@@ -73,10 +73,6 @@ interface IStatusBarService
     void toggleSplitScreen();
     void preloadRecentApps();
     void cancelPreloadRecentApps();
-    void toggleLastApp();
-    void toggleKillApp();
-    void toggleScreenshot();
-    void toggleOrientationListener(boolean enable);
     void startAssist(in Bundle args);
     void screenPinningStateChanged(boolean enabled);
 }
