@@ -17689,7 +17689,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         IPackageManager pm = AppGlobals.getPackageManager();
         ApplicationInfo app = null;
         try {
-            app = pm.getApplicationInfo(packageName, 0, userId);
+            app = pm.getApplicationInfo(packageName, STOCK_PM_FLAGS, userId);
         } catch (RemoteException e) {
             // can't happen; package manager is process-local
         }
