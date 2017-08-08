@@ -7994,32 +7994,6 @@ public final class Settings {
         public static final String PIE_STATUS_INDICATOR = "pie_status_indicator";
 
         /**
-         * Used to store the last used system ui flags to make qs settings stick after reboot
-         * @hide
-         */
-        public static final String LAST_SYSTEM_DESIGN_FLAGS = "last_system_design_flags";
-
-        /**
-         * Setting to record how the look and feel of the system should be tweaked. This
-         * should be used in combination with magic.
-         *
-         * @see android.view.View#SYSTEM_DESIGN_FLAG_IMMERSIVE_NAV
-         * @see android.view.View#SYSTEM_DESIGN_FLAG_IMMERSIVE_STATUS
-         * @hide
-         */
-        public static final String SYSTEM_DESIGN_FLAGS = "system_design_flags";
-
-        /**
-         * Settings to reset on user request. They will fall back to their default value (0).
-         *
-         * @hide
-         */
-        public static final String[] SETTINGS_TO_RESET = {
-            PIE_STATE,
-            PIE_GRAVITY
-        };
-
-        /**
          * Whether or not the automatic storage manager is enabled and should run on the device.
          *
          * @hide
