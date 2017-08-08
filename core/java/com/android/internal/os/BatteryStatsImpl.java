@@ -4010,19 +4010,6 @@ public class BatteryStatsImpl extends BatteryStats {
         }
     }
 
-    private int fixPhoneServiceState(int state, int signalBin) {
-        if (mPhoneSimStateRaw == TelephonyManager.SIM_STATE_ABSENT) {
-            // In this case we will always be STATE_OUT_OF_SERVICE, so need
-            // to infer that we are scanning from other data.
-            if (state == ServiceState.STATE_OUT_OF_SERVICE
-                    && signalBin > SignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
-                state = ServiceState.STATE_IN_SERVICE;
-            }
-        }
-
-        return state;
-    }
-
     private void updateAllPhoneStateLocked(int state, int simState, int strengthBin) {
         boolean scanning = false;
         boolean newHistory = false;
@@ -4034,22 +4021,24 @@ public class BatteryStatsImpl extends BatteryStats {
         final long elapsedRealtime = mClocks.elapsedRealtime();
         final long uptime = mClocks.uptimeMillis();
 
-        if (simState == TelephonyManager.SIM_STATE_ABSENT) {
-            // In this case we will always be STATE_OUT_OF_SERVICE, so need
-            // to infer that we are scanning from other data.
-            if (state == ServiceState.STATE_OUT_OF_SERVICE
-                    && strengthBin > SignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
-                state = ServiceState.STATE_IN_SERVICE;
-            }
+        // Unless the SIM is in STATE_READY, the device will not register, so it's
+        // approximately equivalent to having no SIM at all: we should either be
+        // OUT_OF_SERVICE or in EMERGENGY_ONLY, but if we have a signal, then we
+        // are camped.
+        if (simState != TelephonyManager.SIM_STATE_READY
+                && strengthBin > SignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN) {
+            state = ServiceState.STATE_IN_SERVICE;
         }
 
         // If the phone is powered off, stop all timers.
         if (state == ServiceState.STATE_POWER_OFF) {
             strengthBin = -1;
 
-        // If we are in service, make sure the correct signal string timer is running.
-        } else if (state == ServiceState.STATE_IN_SERVICE) {
-            // Bin will be changed below.
+        // If we are in emergency service, then we are camped on a cell. Scans will
+        // happen more frequently than in other modes, but the power profile should
+        // be much closer to IN_SERVICE than OUT_OF_SERVICE.
+        } else if (state == ServiceState.STATE_EMERGENCY_ONLY) {
+            state = ServiceState.STATE_IN_SERVICE;
 
         // If we're out of service, we are in the lowest signal strength
         // bin and have the scanning bit set.
@@ -4063,6 +4052,10 @@ public class BatteryStatsImpl extends BatteryStats {
                         + Integer.toHexString(mHistoryCur.states));
                 mPhoneSignalScanningTimer.startRunningLocked(elapsedRealtime);
             }
+        } else if (state == ServiceState.STATE_IN_SERVICE) {
+            // Bin will be changed below.
+        } else {
+            Slog.d(TAG, "Unexpected ServiceState: " + state);
         }
 
         if (!scanning) {
@@ -11274,7 +11267,7 @@ public class BatteryStatsImpl extends BatteryStats {
         mMobileRadioPowerState = DataConnectionRealTimeInfo.DC_POWER_STATE_LOW;
         mMobileRadioActiveTimer = new StopwatchTimer(mClocks, null, -400, null,
                 mOnBatteryTimeBase, in);
-        mMobileRadioActivePerAppTimer = new StopwatchTimer(mClocks, null, -401, null, 
+        mMobileRadioActivePerAppTimer = new StopwatchTimer(mClocks, null, -401, null,
                 mOnBatteryTimeBase, in);
         mMobileRadioActiveAdjustedTime = new LongSamplingCounter(mOnBatteryTimeBase, in);
         mMobileRadioActiveUnknownTime = new LongSamplingCounter(mOnBatteryTimeBase, in);
