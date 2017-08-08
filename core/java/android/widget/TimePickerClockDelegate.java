@@ -447,12 +447,17 @@ class TimePickerClockDelegate extends TimePicker.AbstractTimePickerDelegate {
                     (RelativeLayout.LayoutParams) mAmPmLayout.getLayoutParams();
             if (params.getRule(RelativeLayout.RIGHT_OF) != 0 ||
                     params.getRule(RelativeLayout.LEFT_OF) != 0) {
+                final int margin = (int) (mContext.getResources().getDisplayMetrics().density * 8);
                 if (isAmPmAtStart) {
                     params.removeRule(RelativeLayout.RIGHT_OF);
                     params.addRule(RelativeLayout.LEFT_OF, mHourView.getId());
+                    params.setMarginStart(0);
+                    params.setMarginEnd(margin);
                 } else {
                     params.removeRule(RelativeLayout.LEFT_OF);
                     params.addRule(RelativeLayout.RIGHT_OF, mMinuteView.getId());
+                    params.setMarginStart(margin);
+                    params.setMarginEnd(0);
                 }
             }
 
