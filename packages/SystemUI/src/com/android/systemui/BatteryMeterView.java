@@ -81,7 +81,15 @@ public class BatteryMeterView extends ImageView implements
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (STATUS_BAR_BATTERY_STYLE.equals(key)) {
+        if (StatusBarIconController.ICON_BLACKLIST.equals(key)) {
+            ArraySet<String> icons = StatusBarIconController.getIconBlacklist(newValue);
+            int batteryStyle = CMSettings.System.getInt(mContext.getContentResolver(),
+                    CMSettings.System.STATUS_BAR_BATTERY_STYLE, 0);
+            setVisibility(icons.contains(mSlotBattery) ||
+                    batteryStyle == BatteryMeterDrawable.BATTERY_STYLE_TEXT ||
+                    batteryStyle == BatteryMeterDrawable.BATTERY_STYLE_HIDDEN
+                    ? View.GONE : View.VISIBLE);
+        } else if (STATUS_BAR_BATTERY_STYLE.equals(key)) {
             updateBatteryStyle(newValue);
         }
     }
