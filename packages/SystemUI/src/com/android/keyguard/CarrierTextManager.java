@@ -345,6 +345,22 @@ public class CarrierTextManager {
                 }
             }
         }
+
+        /*
+         * In the case where there is only one sim inserted in a multisim device, if
+         * the service state for the phone with the absent sim is reported as 12 for
+         * voice registration concatenate the sim state with Emergency calls only"
+         */
+        int presentSubId = mKeyguardUpdateMonitor.getPresentSubId();
+        if (numSubs < TelephonyManager.getDefault().getPhoneCount()
+                && mKeyguardUpdateMonitor.isEmergencyOnly() && presentSubId != -1) {
+            if (DEBUG) Log.d(TAG, " Present sim - sub id: " + presentSubId);
+            CharSequence emergencyOnlyText =
+                    getContext().getText(com.android.internal.R.string.emergency_calls_only);
+            displayText = getCarrierTextForSimState(
+                    mKeyguardUpdateMonitor.getSimState(presentSubId), emergencyOnlyText);
+        }
+
         // Only create "No SIM card" if no cards with CarrierName && no wifi when some sim is READY
         // This condition will also be true always when numSubs == 0
         if (allSimsMissing && !anySimReadyAndInService) {
