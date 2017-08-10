@@ -64,6 +64,7 @@ public final class Ranker extends NotificationRankerService {
                 // Not grouped by the app, add to the list of notifications for the app;
                 // send bundling update if app exceeds the autobundling limit.
                 synchronized (mUnbundledNotifications) {
+                    if ("android".equals(sbn.getPackageName())) return;
                     Map<String, LinkedHashSet<String>> unbundledNotificationsByUser
                             = mUnbundledNotifications.get(sbn.getUserId());
                     if (unbundledNotificationsByUser == null) {
