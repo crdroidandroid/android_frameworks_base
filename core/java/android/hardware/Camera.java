@@ -15,6 +15,18 @@
  */
 
 package android.hardware;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.impl.CameraMetadataNative;
+import android.hardware.camera2.CaptureResult;
+import android.hardware.camera2.CaptureRequest.Builder;
+import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.impl.CaptureResultExtras;
+import android.hardware.camera2.CameraManager;
+import android.content.Context;
+import java.lang.System;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+import android.hardware.ICameraService;
 
 import static android.system.OsConstants.*;
 
@@ -209,6 +221,94 @@ public class Camera {
     private CameraDataCallback mCameraDataCallback;
     private CameraMetaDataCallback mCameraMetaDataCallback;
     /* ### QC ADD-ONS: END */
+
+    private static final int CAMERA_MSG_AEC = 0x10000;
+    private static final int CAMERA_MSG_DNG_IMAGE= 0x20000;
+    private static final int CAMERA_MSG_DNG_META_DATA = 0x40000;
+    private static final int CAMERA_MSG_IN_PROCESSING = 0x80000;
+    private static final int CAMERA_MSG_STATE_CALLBACK = 0x100000;
+    private static final int CAMERA_MSG_RAW_IMAGE_DUMMY = 0x120000;
+
+    private static CameraMetadataNative mMetadata;
+    private long mMetadataPtr; 
+    private CameraCharacteristics mCharacteristics;
+    private android.hardware.Camera.AECallback mAECallback;
+    private android.hardware.Camera.OneplusCallback mOneplusCallback;
+    private android.hardware.Camera.ProcessCallback mProcessCallback;
+    private boolean mIsOPService = false;
+    private android.hardware.Camera.PictureCallback mOPServiceJpegCallback = null;
+    private android.hardware.Camera.CameraStateCallback mCameraStateCallback;
+
+    public interface AECallback {
+
+        public abstract void onAEChanged(int[] p1, Camera p2);
+
+    }
+
+    public interface OneplusCallback {
+
+        public abstract void onDngImage(byte[] p1, Camera p2);
+
+        public abstract void onDngMetadata(CameraCharacteristics p1, CaptureResult p2, Camera p3);
+
+    }
+
+    public interface ProcessCallback {
+
+        public abstract void onProcess();
+
+    }
+
+    public interface CameraStateCallback {
+
+        public abstract void onCameraStateChanged(byte[] p1, Camera p2);
+
+    }
+
+    public void setAECallback(AECallback cb) {
+        mAECallback = cb;
+    }
+    
+    public final void setOneplusCallback(OneplusCallback cb) {
+        mOneplusCallback = cb;
+    }
+    
+    public final void setProcessCallback(ProcessCallback cb) {
+        mProcessCallback = cb;
+    }
+    
+    public void setOPJpegCallback(PictureCallback cb) {
+        mOPServiceJpegCallback = cb;
+    }
+    
+    public final void addDngImageCallbackBuffer(byte[] cb) {
+        addRawImageCallbackBuffer(cb);
+    }
+
+    public final void setCameraStateCallback(CameraStateCallback cb) {
+        mCameraStateCallback = cb;
+    }
+    
+    public static Camera openOPService() {
+        return new Camera(0, -0x64);
+    }
+
+    private void getNativeCameraMetadata(int camID){
+    try{
+        ActivityThread am = ActivityThread.currentActivityThread();
+    
+        CameraManager manager = (CameraManager) am.
+        getApplication()
+        .getSystemService(Context.CAMERA_SERVICE);
+        String [] a=manager.getCameraIdList();
+        mCharacteristics = manager.getCameraCharacteristics(a[camID]);
+
+        }catch(Exception exc){
+            Log.e(TAG,"getNativeCameraMetadata error");
+            mCharacteristics = null;
+        }                
+
+    }
 
     /**
      * Broadcast Action:  A new picture is taken by the camera, and the entry of
@@ -580,6 +680,8 @@ public class Camera {
         mCameraDataCallback = null;
         mCameraMetaDataCallback = null;
         /* ### QC ADD-ONS: END */
+        mOneplusCallback = null;
+        mProcessCallback = null;
 
         Looper looper;
         if ((looper = Looper.myLooper()) != null) {
@@ -603,7 +705,7 @@ public class Camera {
                     break;
                 }
             }
-        }
+	}
         return native_setup(new WeakReference<Camera>(this), cameraId, halVersion, packageName);
     }
 
@@ -919,6 +1021,7 @@ public class Camera {
         mRawImageCallback = null;
         mPostviewCallback = null;
         mJpegCallback = null;
+        mProcessCallback = null;
         synchronized (mAutoFocusCallbackLock) {
             mAutoFocusCallback = null;
         }
@@ -1265,7 +1368,13 @@ public class Camera {
 
         @Override
         public void handleMessage(Message msg) {
-            switch(msg.what) {
+            int msgID=msg.what;
+
+            if(msgID==CAMERA_MSG_RAW_IMAGE){
+                msgID=CAMERA_MSG_DNG_IMAGE;
+            }
+
+            switch(msgID) {
             case CAMERA_MSG_SHUTTER:
                 if (mShutterCallback != null) {
                     mShutterCallback.onShutter();
@@ -1281,6 +1390,10 @@ public class Camera {
             case CAMERA_MSG_COMPRESSED_IMAGE:
                 if (mJpegCallback != null) {
                     mJpegCallback.onPictureTaken((byte[])msg.obj, mCamera);
+                }
+                else if(mIsOPService&&mOPServiceJpegCallback != null){
+                    Log.d(TAG,"op jpeg callback");
+                    mOPServiceJpegCallback.onPictureTaken((byte[])msg.obj, mCamera);
                 }
                 return;
 
@@ -1366,6 +1479,51 @@ public class Camera {
                 }
                 return;
             /* ### QC ADD-ONS: END */
+            case CAMERA_MSG_RAW_IMAGE_DUMMY:
+//                Log.d(TAG,"CAMERA_MSG_RAW_IMAGE_DUMMY");
+                return;
+
+            case CAMERA_MSG_AEC:
+//                Log.d(TAG,"CAMERA_MSG_AEC");
+                if (mAECallback != null) {
+                    int [] states=new int[2];
+                    states[0]=msg.arg1;
+                    states[1]=msg.arg2;
+                    mAECallback.onAEChanged(states,mCamera);
+                }
+                return;
+                
+            case CAMERA_MSG_DNG_IMAGE:
+//                Log.d(TAG,"CAMERA_MSG_DNG_IMAGE");
+                if (mOneplusCallback != null) {
+                    mOneplusCallback.onDngImage((byte[])msg.obj, mCamera);
+                }
+                return;
+                
+            case CAMERA_MSG_DNG_META_DATA:
+//                Log.d(TAG,"CAMERA_MSG_DNG_META_DATA");
+                if (mOneplusCallback != null
+                    &&mMetadata!=null) {
+                    mCharacteristics = new CameraCharacteristics(new CameraMetadataNative(mMetadata));
+                    CaptureResult result=new CaptureResult(new CameraMetadataNative(mMetadata),-1);
+                    mOneplusCallback.onDngMetadata(mCharacteristics, result, mCamera);
+                }    
+            return;
+            
+            case CAMERA_MSG_IN_PROCESSING:
+//                Log.d(TAG,"CAMERA_MSG_IN_PROCESSING");
+                if (mProcessCallback != null) {
+                    mProcessCallback.onProcess();
+                }
+                return;
+
+            case CAMERA_MSG_STATE_CALLBACK:
+//                Log.d(TAG,"CAMERA_MSG_STATE_CALLBACK");
+                if (mCameraStateCallback != null) {
+		    mCameraStateCallback.onCameraStateChanged((byte[])msg.obj, mCamera);
+		}
+                return;
+
             default:
                 Log.e(TAG, "Unknown message type " + msg.what);
                 return;
@@ -1646,14 +1804,32 @@ public class Camera {
         if (mShutterCallback != null) {
             msgType |= CAMERA_MSG_SHUTTER;
         }
-        if (mRawImageCallback != null) {
-            msgType |= CAMERA_MSG_RAW_IMAGE;
-        }
         if (mPostviewCallback != null) {
             msgType |= CAMERA_MSG_POSTVIEW_FRAME;
         }
         if (mJpegCallback != null) {
             msgType |= CAMERA_MSG_COMPRESSED_IMAGE;
+        }
+        //oneplus camera mod
+        if (mOneplusCallback != null) {
+            msgType |= CAMERA_MSG_DNG_META_DATA;
+            msgType |= CAMERA_MSG_DNG_IMAGE;
+            mMetadata = new CameraMetadataNative();
+
+            try{
+                java.lang.reflect.Field ptrField = CameraMetadataNative.class.  
+                getDeclaredField("mMetadataPtr");  
+                ptrField.setAccessible(true);
+                mMetadataPtr = (long) ptrField.get(mMetadata);
+                }
+                catch(Exception x){
+                    
+                };
+
+        }
+  
+        if (mProcessCallback != null) {
+            msgType |= CAMERA_MSG_IN_PROCESSING;
         }
 
         native_takePicture(msgType);
@@ -2078,6 +2254,12 @@ public class Camera {
          * are.
          */
         public int id = -1;
+
+//        public int isSmile = 0;
+
+//        public int getIsSmile() {
+//            return isSmile;
+//        }
 
         /**
          * The coordinates of the center of the left eye. The coordinates are in
@@ -2674,6 +2856,8 @@ public class Camera {
 
         private static final String TRUE = "true";
         private static final String FALSE = "false";
+
+//        private static final String KEY_QC_SMILE_DETECTION = "smile-detection";
 
         // Values for white balance settings.
         public static final String WHITE_BALANCE_AUTO = "auto";
@@ -3984,6 +4168,17 @@ public class Camera {
          * @see #getFlashMode()
          */
         public List<String> getSupportedFlashModes() {
+
+            String packageName = ActivityThread.currentOpPackageName();
+
+	    if (packageName != null) {
+		String focusMode = getFocusMode();
+
+		if ((focusMode != null) && (focusMode.equals("fixed")) && (!packageName.equals("com.oneplus.camera"))) {
+		    return null;
+		}
+	    }
+
             String str = get(KEY_FLASH_MODE + SUPPORTED_VALUES_SUFFIX);
             return split(str);
         }
@@ -4331,6 +4526,11 @@ public class Camera {
             String str = get(KEY_SMOOTH_ZOOM_SUPPORTED);
             return TRUE.equals(str);
         }
+
+//        public boolean isSupportedSmileDetection() {
+//            String str = get(KEY_QC_SMILE_DETECTION);
+//            return TRUE.equals(str);
+//        }
 
         /**
          * <p>Gets the distances from the camera to where an object appears to be
