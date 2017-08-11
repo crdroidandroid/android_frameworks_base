@@ -166,6 +166,17 @@ public class PackageDexOptimizer {
                 + (splitCodePaths == null ? "null" : Arrays.toString(splitCodePaths)));
         }
 
+        // Sanity check that we do not call dexopt with inconsistent data.
+        if (paths.size() != classLoaderContexts.length) {
+            String[] splitCodePaths = pkg.applicationInfo.getSplitCodePaths();
+            throw new IllegalStateException("Inconsistent information "
+                + "between PackageParser.Package and its ApplicationInfo. "
+                + "pkg.getAllCodePaths=" + paths
+                + " pkg.applicationInfo.getBaseCodePath=" + pkg.applicationInfo.getBaseCodePath()
+                + " pkg.applicationInfo.getSplitCodePaths="
+                + (splitCodePaths == null ? "null" : Arrays.toString(splitCodePaths)));
+        }
+
         int result = DEX_OPT_SKIPPED;
         for (int i = 0; i < paths.size(); i++) {
             // Skip paths that have no code.
