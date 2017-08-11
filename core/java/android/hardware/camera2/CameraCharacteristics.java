@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import android.app.ActivityThread;
 
 /**
  * <p>The properties describing a
@@ -220,6 +221,12 @@ public final class CameraCharacteristics extends CameraMetadata<CameraCharacteri
      */
     @Nullable
     public <T> T get(Key<T> key) {
+        if(key == INFO_SUPPORTED_HARDWARE_LEVEL){
+            String packageName = ActivityThread.currentOpPackageName();
+            if(packageName.equals("com.oneplus.camera")){
+                return (T)new Integer(0x2);
+            }
+        }
         return mProperties.get(key);
     }
 
