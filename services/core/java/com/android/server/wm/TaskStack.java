@@ -113,6 +113,8 @@ public class TaskStack implements DimLayer.DimLayerUser,
     /** Detach this stack from its display when animation completes. */
     boolean mDeferDetach;
 
+    boolean mRemoved = false;
+
     // Whether the stack and all its tasks is currently being drag-resized
     private boolean mDragResizing;
 
