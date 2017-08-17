@@ -704,7 +704,7 @@ public class DecorView extends FrameLayout implements RootViewSurfaceTaker, Wind
                 if (tv.type == TypedValue.TYPE_DIMENSION) {
                     min = (int)tv.getDimension(metrics);
                 } else if (tv.type == TypedValue.TYPE_FRACTION) {
-                    min = (int)tv.getFraction(mAvailableWidth, mAvailableWidth);
+                    min = (int)tv.getFraction(metrics.widthPixels, metrics.widthPixels);
                 } else {
                     min = 0;
                 }
