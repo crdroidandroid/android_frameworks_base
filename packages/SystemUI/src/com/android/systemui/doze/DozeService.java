@@ -75,7 +75,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
 
     private DozeHost mHost;
     private SensorManager mSensorManager;
-    private TiltSensor mTiltSensor;
     private TriggerSensor[] mSensors;
     private TriggerSensor mPickupSensor;
     private PowerManager mPowerManager;
@@ -143,10 +142,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
 
         mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
         mConfig = new AmbientDisplayConfiguration(mContext);
-        Sensor pickUpSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PICK_UP_GESTURE);
-        boolean useTiltSensor = pickUpSensor == null;
-        mTiltSensor = new TiltSensor(useTiltSensor,
-                mSensorManager.getDefaultSensor(Sensor.TYPE_TILT_DETECTOR));
         mSensors = new TriggerSensor[] {
                 new TriggerSensor(
                         mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION),
@@ -154,7 +149,9 @@ public class DozeService extends DreamService implements TunerService.Tunable {
                         mDozeParameters.getPulseOnSigMotion(),
                         mDozeParameters.getVibrateOnSigMotion(),
                         DozeLog.PULSE_REASON_SENSOR_SIGMOTION),
-                mPickupSensor = new TriggerSensor(pickUpSensor, null,
+                mPickupSensor = new TriggerSensor(
+                        mSensorManager.getDefaultSensor(Sensor.TYPE_PICK_UP_GESTURE),
+                        Settings.Secure.DOZE_PULSE_ON_PICK_UP,
                         mConfig.pulseOnPickupAvailable(),
                         mDozeParameters.getVibrateOnPickup(),
                         DozeLog.PULSE_REASON_SENSOR_PICKUP),
@@ -383,7 +380,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
         for (TriggerSensor s : mSensors) {
             s.setListening(listen);
         }
-        mTiltSensor.setListening(listen);
         listenForBroadcasts(listen);
         listenForNotifications(listen);
     }
@@ -395,8 +391,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
         for (TriggerSensor s : mSensors) {
             s.setListening(true);
         }
-        mTiltSensor.setListening(false);
-        mTiltSensor.setListening(true);
     }
 
     private void listenForBroadcasts(boolean listen) {
@@ -413,9 +407,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
                             mSettingsObserver, UserHandle.USER_ALL);
                 }
             }
-            mContext.getContentResolver().registerContentObserver(
-                    Settings.Secure.getUriFor(Settings.Secure.DOZE_PULSE_ON_PICK_UP), false,
-                    mSettingsObserver, UserHandle.USER_ALL);
             mBroadcastReceiverRegistered = true;
         } else {
             if (mBroadcastReceiverRegistered) {
@@ -471,7 +462,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
                 for (TriggerSensor s : mSensors) {
                     s.updateListener();
                 }
-                mTiltSensor.updateListener();
             }
         }
     };
@@ -485,7 +475,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
             for (TriggerSensor s : mSensors) {
                 s.updateListener();
             }
-            mTiltSensor.updateListener();
         }
     };
 
@@ -528,55 +517,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
             }
         }
         return null;
-    }
-
-    private class TiltSensor implements SensorEventListener {
-        Sensor mSensor;
-        boolean mEnabled;
-        boolean mListening;
-        boolean mRegistered;
-
-        public TiltSensor(boolean enabled, Sensor sensor) {
-            mEnabled = enabled;
-            mSensor = sensor;
-
-            if (mEnabled) {
-                Log.i(mTag, "TYPE_PICK_UP_GESTURE sensor is not available, falling back to TYPE_TILT_DETECTOR sensor.");
-            }
-        }
-
-        void setListening(boolean listen) {
-            if (mListening == listen) return;
-            mListening = listen;
-            updateListener();
-        }
-
-        void updateListener() {
-            if (!mEnabled || mSensor == null) return;
-            if (mListening && !mRegistered && enabledBySetting()) {
-                mRegistered = mSensorManager.registerListener(this, mSensor,
-                        SensorManager.SENSOR_DELAY_NORMAL, 0);
-            } else if (mRegistered) {
-                mSensorManager.unregisterListener(this);
-                mRegistered = false;
-            }
-        }
-
-        boolean enabledBySetting() {
-            return Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                    Settings.Secure.DOZE_PULSE_ON_PICK_UP, 1, UserHandle.USER_CURRENT) != 0;
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        }
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (event.values[0] == 1) {
-                requestPulse(DozeLog.PULSE_REASON_SENSOR_PICKUP, false);
-            }
-        }
     }
 
     private class TriggerSensor extends TriggerEventListener {
@@ -707,7 +647,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
             }
             // the pickup sensor interferes with the prox event, disable it until we have a result
             mPickupSensor.setDisabled(true);
-            mTiltSensor.setListening(false);
 
             mMaxRange = sensor.getMaximumRange();
             mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL, 0,
@@ -741,7 +680,6 @@ public class DozeService extends DreamService implements TunerService.Tunable {
                 mSensorManager.unregisterListener(this);
                 // we're done - reenable the pickup sensor
                 mPickupSensor.setDisabled(false);
-                mTiltSensor.setListening(true);
                 mRegistered = false;
             }
             onProximityResult(result);

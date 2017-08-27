@@ -1873,7 +1873,7 @@
          turned off and the screen off animation has been performed. -->
     <bool name="config_dozeAfterScreenOff">false</bool>
 
-    <!-- Doze: should the TYPE_PICK_UP_GESTURE or TYPE_TILT_DETECTOR sensor be used as a pulse signal. -->
+    <!-- Doze: should the TYPE_PICK_UP_GESTURE sensor be used as a pulse signal. -->
     <bool name="config_dozePulsePickup">false</bool>
 
     <!-- Type of the double tap sensor. Empty if double tap is not supported. -->
