@@ -252,7 +252,7 @@
                 android:exported="true" />
 
         <activity android:name=".tuner.TunerActivity"
-                  android:enabled="false"
+                  android:enabled="true"
                   android:icon="@drawable/tuner"
                   android:theme="@style/TunerSettings"
                   android:label="@string/system_ui_tuner"
@@ -268,7 +268,7 @@
 
         <activity-alias android:name=".tuner.TunerSettingLink"
                         android:targetActivity=".tuner.TunerActivity"
-                        android:enabled="false"
+                        android:enabled="true"
                         android:process=":tuner">
             <intent-filter android:priority="1">
                 <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
