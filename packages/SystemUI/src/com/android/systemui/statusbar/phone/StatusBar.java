@@ -193,6 +193,7 @@ import com.android.systemui.assist.AssistManager;
 import com.android.systemui.classifier.FalsingLog;
 import com.android.systemui.classifier.FalsingManager;
 import com.android.systemui.colorextraction.SysuiColorExtractor;
+import com.android.systemui.crdroid.omnistyle.StatusBarHeaderMachine;
 import com.android.systemui.doze.DozeHost;
 import com.android.systemui.doze.DozeLog;
 import com.android.systemui.doze.DozeReceiver;
@@ -965,6 +966,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private ForegroundServiceController mForegroundServiceController;
     private ScreenLifecycle mScreenLifecycle;
     @VisibleForTesting WakefulnessLifecycle mWakefulnessLifecycle;
+    private StatusBarHeaderMachine mStatusBarHeaderMachine;
 
     private void recycleAllVisibilityObjects(ArraySet<NotificationVisibility> array) {
         final int N = array.size();
@@ -1423,6 +1425,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             createUserSwitcher();
         }
 
+        mStatusBarHeaderMachine = new StatusBarHeaderMachine(mContext);
+
         // Set up the quick settings tile panel
         View container = mStatusBarWindow.findViewById(R.id.qs_frame);
         if (container != null) {
@@ -1446,6 +1450,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                     mQSPanel.setBrightnessMirror(mBrightnessMirrorController);
                     mKeyguardStatusBar.setQSPanel(mQSPanel);
                     mQuickStatusBarHeader = ((QSFragment) qs).getQuickStatusBarHeader();
+                    mStatusBarHeaderMachine.addObserver(mQuickStatusBarHeader);
+                    mStatusBarHeaderMachine.updateEnablement();
                 }
             });
         }
