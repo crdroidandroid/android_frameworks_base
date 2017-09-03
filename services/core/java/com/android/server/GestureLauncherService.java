@@ -315,7 +315,7 @@ public class GestureLauncherService extends SystemService {
     public static boolean isCameraDoubleTapPowerSettingEnabled(Context context, int userId) {
         return isCameraDoubleTapPowerEnabled(context.getResources())
                 && (Settings.Secure.getIntForUser(context.getContentResolver(),
-                        Settings.Secure.CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED, 0, userId) == 0);
+                        Settings.Secure.CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED, 1, userId) == 0);
     }
 
     public static boolean isCameraLiftTriggerSettingEnabled(Context context, int userId) {
