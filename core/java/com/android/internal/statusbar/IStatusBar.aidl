@@ -153,4 +153,6 @@ oneway interface IStatusBar
     // Used to show or hide in display fingerprint view
     void showInDisplayFingerprintView();
     void hideInDisplayFingerprintView();
+
+    void toggleCameraFlash();
 }
