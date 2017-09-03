@@ -64,6 +64,7 @@ import com.android.systemui.statusbar.VibratorHelper;
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayoutController;
 import com.android.systemui.statusbar.phone.dagger.StatusBarComponent;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
+import com.android.systemui.statusbar.policy.FlashlightController;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
@@ -80,6 +81,7 @@ public class StatusBarCommandQueueCallbacks implements CommandQueue.Callbacks {
     private final Context mContext;
     private final ShadeController mShadeController;
     private final CommandQueue mCommandQueue;
+    private final FlashlightController mFlashlightController;
     private final NotificationPanelViewController mNotificationPanelViewController;
     private final Optional<LegacySplitScreen> mSplitScreenOptional;
     private final RemoteInputQuickSettingsDisabler mRemoteInputQuickSettingsDisabler;
@@ -118,6 +120,7 @@ public class StatusBarCommandQueueCallbacks implements CommandQueue.Callbacks {
             @Main Resources resources,
             ShadeController shadeController,
             CommandQueue commandQueue,
+            FlashlightController flashlightController,
             NotificationPanelViewController notificationPanelViewController,
             Optional<LegacySplitScreen> splitScreenOptional,
             RemoteInputQuickSettingsDisabler remoteInputQuickSettingsDisabler,
@@ -145,6 +148,7 @@ public class StatusBarCommandQueueCallbacks implements CommandQueue.Callbacks {
         mContext = context;
         mShadeController = shadeController;
         mCommandQueue = commandQueue;
+        mFlashlightController = flashlightController;   
         mNotificationPanelViewController = notificationPanelViewController;
         mSplitScreenOptional = splitScreenOptional;
         mRemoteInputQuickSettingsDisabler = remoteInputQuickSettingsDisabler;
@@ -639,5 +643,15 @@ public class StatusBarCommandQueueCallbacks implements CommandQueue.Callbacks {
             timings[i] = pattern[i];
         }
         return VibrationEffect.createWaveform(timings, /* repeat= */ -1);
+    }
+
+    @Override
+    public void toggleCameraFlash() {
+        if (mFlashlightController != null) {
+            mFlashlightController.initFlashLight();
+            if (mFlashlightController.hasFlashlight() && mFlashlightController.isAvailable()) {
+                mFlashlightController.setFlashlight(!mFlashlightController.isEnabled());
+            }
+        }
     }
 }
