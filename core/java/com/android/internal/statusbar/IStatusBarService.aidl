@@ -117,4 +117,6 @@ interface IStatusBarService
     void setBlockedGesturalNavigation(boolean blocked);
 
     void setAutoRotate(boolean enabled);
+
+    void toggleCameraFlash();
 }
