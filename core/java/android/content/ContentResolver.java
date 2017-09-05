@@ -69,6 +69,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This class provides applications access to the content model.
@@ -1920,9 +1921,15 @@ public abstract class ContentResolver {
     /** @hide - designated user version */
     public final void registerContentObserver(Uri uri, boolean notifyForDescendents,
             ContentObserver observer, @UserIdInt int userHandle) {
+        if (observerCount.get() >= MAX_OBSERVER_COUNT) {
+            throw new IllegalStateException("registerContentObserver failed, " +
+                    "the number of observers has exceeded the maximum " + MAX_OBSERVER_COUNT);
+        }
+
         try {
             getContentService().registerContentObserver(uri, notifyForDescendents,
                     observer.getContentObserver(), userHandle, mTargetSdkVersion);
+            observerCount.incrementAndGet();
         } catch (RemoteException e) {
         }
     }
@@ -1940,6 +1947,7 @@ public abstract class ContentResolver {
             if (contentObserver != null) {
                 getContentService().unregisterContentObserver(
                         contentObserver);
+                observerCount.decrementAndGet();
             }
         } catch (RemoteException e) {
         }
@@ -2990,6 +2998,10 @@ public abstract class ContentResolver {
     final int mTargetSdkVersion;
 
     private static final String TAG = "ContentResolver";
+
+    private static final int MAX_OBSERVER_COUNT = 1024;
+
+    private final AtomicInteger observerCount = new AtomicInteger(0);
 
     /** @hide */
     public int resolveUserId(Uri uri) {
