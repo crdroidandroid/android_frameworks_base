@@ -5198,6 +5198,12 @@ public final class Settings {
         public static final String BERRY_DARK_STYLE = "berry_dark_style";
 
         /**
+         * Whether to vibrate on call state change
+         * @hide
+         */
+        public static final String INCALL_FEEDBACK_VIBRATE = "incall_feeedback_vibrate";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
