@@ -47,8 +47,14 @@ import com.android.systemui.R;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.SecurityController;
+import com.android.systemui.tuner.TunerService;
 
-public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClickListener {
+public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClickListener,
+        TunerService.Tunable {
+
+    private static final String QS_FOOTER_WARNINGS =
+            "system:" + Settings.System.QS_FOOTER_WARNINGS;
+
     protected static final String TAG = "QSSecurityFooter";
     protected static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
     private static final boolean DEBUG_FORCE_VISIBLE = false;
@@ -73,6 +79,8 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
     private int mFooterTextId;
     private int mFooterIconId;
 
+    private boolean mShowWarnings;
+
     public QSSecurityFooter(QSPanel qsPanel, Context context) {
         mRootView = LayoutInflater.from(context)
                 .inflate(R.layout.quick_settings_footer, qsPanel, false);
@@ -86,6 +94,22 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
         mSecurityController = Dependency.get(SecurityController.class);
         mHandler = new H(Dependency.get(Dependency.BG_LOOPER));
         mUm = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
+
+        Dependency.get(TunerService.class).addTunable(this,
+                QS_FOOTER_WARNINGS);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QS_FOOTER_WARNINGS:
+                mShowWarnings =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                refreshState();
+                break;
+            default:
+                break;
+        }
     }
 
     public void setHostEnvironment(QSTileHost host) {
@@ -153,9 +177,9 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
         final boolean isProfileOwnerOfOrganizationOwnedDevice =
                 mSecurityController.isProfileOwnerOfOrganizationOwnedDevice();
         // Update visibility of footer
-        mIsVisible = (isDeviceManaged && !isDemoDevice) || hasCACerts || hasCACertsInWorkProfile
+        mIsVisible = mShowWarnings && ((isDeviceManaged && !isDemoDevice) || hasCACerts || hasCACertsInWorkProfile
                 || vpnName != null || vpnNameWorkProfile != null
-                || isProfileOwnerOfOrganizationOwnedDevice;
+                || isProfileOwnerOfOrganizationOwnedDevice);
         // Update the string
         mFooterTextContent = getFooterText(isDeviceManaged, hasWorkProfile,
                 hasCACerts, hasCACertsInWorkProfile, isNetworkLoggingEnabled, vpnName,
