@@ -47,6 +47,7 @@ import com.android.systemui.qs.dagger.QSScope;
 import com.android.systemui.qs.footer.domain.model.SecurityButtonConfig;
 import com.android.systemui.security.data.model.SecurityModel;
 import com.android.systemui.statusbar.policy.SecurityController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.ViewController;
 
 import javax.inject.Inject;
@@ -56,8 +57,11 @@ import javax.inject.Named;
 // TODO(b/242040009): Remove this class.
 @QSScope
 public class QSSecurityFooter extends ViewController<View>
-        implements OnClickListener, VisibilityChangedDispatcher {
+        implements OnClickListener, VisibilityChangedDispatcher, TunerService.Tunable {
     protected static final String TAG = "QSSecurityFooter";
+
+    private static final String QS_FOOTER_WARNINGS =
+            "system:" + Settings.System.QS_FOOTER_WARNINGS;
 
     private final TextView mFooterText;
     private final ImageView mPrimaryFooterIcon;
@@ -79,6 +83,8 @@ public class QSSecurityFooter extends ViewController<View>
     @Nullable
     private VisibilityChangedDispatcher.OnVisibilityChangedListener mVisibilityChangedListener;
 
+    private boolean mShowWarnings;
+
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -93,7 +99,7 @@ public class QSSecurityFooter extends ViewController<View>
     QSSecurityFooter(@Named(QS_SECURITY_FOOTER_VIEW) View rootView,
             @Main Handler mainHandler, SecurityController securityController,
             @Background Looper bgLooper, BroadcastDispatcher broadcastDispatcher,
-            QSSecurityFooterUtils qSSecurityFooterUtils) {
+            QSSecurityFooterUtils qSSecurityFooterUtils, TunerService tunerService) {
         super(rootView);
         mFooterText = mView.findViewById(R.id.footer_text);
         mPrimaryFooterIcon = mView.findViewById(R.id.primary_footer_icon);
@@ -105,6 +111,7 @@ public class QSSecurityFooter extends ViewController<View>
         mHandler = new H(bgLooper);
         mBroadcastDispatcher = broadcastDispatcher;
         mQSSecurityFooterUtils = qSSecurityFooterUtils;
+        tunerService.addTunable(this, QS_FOOTER_WARNINGS);
     }
 
     @Override
@@ -135,6 +142,19 @@ public class QSSecurityFooter extends ViewController<View>
     public void setOnVisibilityChangedListener(
             @Nullable OnVisibilityChangedListener onVisibilityChangedListener) {
         mVisibilityChangedListener = onVisibilityChangedListener;
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QS_FOOTER_WARNINGS:
+                mShowWarnings =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                refreshState();
+                break;
+            default:
+                break;
+        }
     }
 
     public void onConfigurationChanged() {
@@ -183,7 +203,7 @@ public class QSSecurityFooter extends ViewController<View>
         if (buttonConfig == null) {
             mIsVisible = false;
         } else {
-            mIsVisible = true;
+            mIsVisible = mShowWarnings;
             mIsClickable = buttonConfig.isClickable();
             mFooterTextContent = buttonConfig.getText();
             mFooterIcon = buttonConfig.getIcon();
