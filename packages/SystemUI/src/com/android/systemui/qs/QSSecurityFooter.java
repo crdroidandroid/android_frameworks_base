@@ -92,6 +92,7 @@ import com.android.systemui.qs.dagger.QSScope;
 import com.android.systemui.settings.UserTracker;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.SecurityController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.ViewController;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -103,10 +104,13 @@ import javax.inject.Named;
 @QSScope
 class QSSecurityFooter extends ViewController<View>
         implements OnClickListener, DialogInterface.OnClickListener,
-        VisibilityChangedDispatcher {
+        VisibilityChangedDispatcher, TunerService.Tunable {
     protected static final String TAG = "QSSecurityFooter";
     protected static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
     private static final boolean DEBUG_FORCE_VISIBLE = false;
+
+    private static final String QS_FOOTER_WARNINGS =
+            "system:" + Settings.System.QS_FOOTER_WARNINGS;
 
     private final TextView mFooterText;
     private final ImageView mPrimaryFooterIcon;
@@ -126,6 +130,9 @@ class QSSecurityFooter extends ViewController<View>
     protected H mHandler;
 
     private boolean mIsVisible;
+
+    private boolean mShowWarnings;
+
     @Nullable
     private CharSequence mFooterTextContent = null;
     private int mFooterIconId;
@@ -207,7 +214,7 @@ class QSSecurityFooter extends ViewController<View>
             UserTracker userTracker, @Main Handler mainHandler,
             ActivityStarter activityStarter, SecurityController securityController,
             DialogLaunchAnimator dialogLaunchAnimator, @Background Looper bgLooper,
-            BroadcastDispatcher broadcastDispatcher) {
+            BroadcastDispatcher broadcastDispatcher, TunerService tunerService) {
         super(rootView);
         mFooterText = mView.findViewById(R.id.footer_text);
         mPrimaryFooterIcon = mView.findViewById(R.id.primary_footer_icon);
@@ -221,6 +228,21 @@ class QSSecurityFooter extends ViewController<View>
         mUserTracker = userTracker;
         mDialogLaunchAnimator = dialogLaunchAnimator;
         mBroadcastDispatcher = broadcastDispatcher;
+        tunerService.addTunable(this,
+                QS_FOOTER_WARNINGS);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QS_FOOTER_WARNINGS:
+                mShowWarnings =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                refreshState();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -312,12 +334,12 @@ class QSSecurityFooter extends ViewController<View>
         final boolean hasDisclosableWorkProfilePolicy = hasCACertsInWorkProfile
                 || vpnNameWorkProfile != null || (hasWorkProfile && isNetworkLoggingEnabled);
         // Update visibility of footer
-        mIsVisible = (isDeviceManaged && !isDemoDevice)
+        mIsVisible = mShowWarnings && ((isDeviceManaged && !isDemoDevice)
                 || hasCACerts
                 || vpnName != null
                 || isProfileOwnerOfOrganizationOwnedDevice
                 || isParentalControlsEnabled
-                || (hasDisclosableWorkProfilePolicy && isWorkProfileOn);
+                || (hasDisclosableWorkProfilePolicy && isWorkProfileOn));
         // Update the view to be untappable if the device is an organization-owned device with a
         // managed profile and there is either:
         // a) no policy set which requires a privacy disclosure.
