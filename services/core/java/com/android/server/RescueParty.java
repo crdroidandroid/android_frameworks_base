@@ -170,6 +170,7 @@ public class RescueParty {
      * TODO(gavincorkery): Rename method since its scope has expanded.
      */
     public static boolean isAttemptingFactoryReset() {
+        if (isDisabled()) return false;
         return isFactoryResetPropertySet() || isRebootPropertySet();
     }
 
@@ -186,6 +187,7 @@ public class RescueParty {
      * opportunity to reset any settings depending on our rescue level.
      */
     public static void onSettingsProviderPublished(Context context) {
+        if (isDisabled()) return;
         handleNativeRescuePartyResets();
         ContentResolver contentResolver = context.getContentResolver();
         Settings.Config.registerMonitorCallback(contentResolver, new RemoteCallback(result -> {
