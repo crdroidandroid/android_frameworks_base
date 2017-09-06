@@ -25,6 +25,7 @@ import com.android.systemui.qs.tiles.BatterySaverTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.CastTile;
 import com.android.systemui.qs.tiles.CellularTile;
+import com.android.systemui.qs.tiles.CaffeineTile;
 import com.android.systemui.qs.tiles.ColorInversionTile;
 import com.android.systemui.qs.tiles.DataSaverTile;
 import com.android.systemui.qs.tiles.DndTile;
@@ -53,6 +54,7 @@ public class QSFactoryImpl implements QSFactory {
         if (tileSpec.equals("wifi")) return new WifiTile(mHost);
         else if (tileSpec.equals("bt")) return new BluetoothTile(mHost);
         else if (tileSpec.equals("cell")) return new CellularTile(mHost);
+        else if (tileSpec.equals("caffeine")) return new CaffeineTile(mHost);
         else if (tileSpec.equals("dnd")) return new DndTile(mHost);
         else if (tileSpec.equals("inversion")) return new ColorInversionTile(mHost);
         else if (tileSpec.equals("airplane")) return new AirplaneModeTile(mHost);
