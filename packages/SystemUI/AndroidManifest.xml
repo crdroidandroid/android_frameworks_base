@@ -190,6 +190,8 @@
     <!-- to access instant apps -->
     <uses-permission android:name="android.permission.ACCESS_INSTANT_APPS" />
 
+    <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
