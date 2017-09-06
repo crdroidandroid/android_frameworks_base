@@ -5851,6 +5851,12 @@ public final class Settings {
         public static final String STATUSBAR_BATTERY_BAR_BLEND_COLOR_REVERSE =
                 "statusbar_battery_bar_blend_color_reverse";
 
+       /**
+        * Whether to show QS panel footer warnings like for active VPN
+        * @hide
+        */
+        public static final String QS_FOOTER_WARNINGS = "qs_footer_warnings";
+
         /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.

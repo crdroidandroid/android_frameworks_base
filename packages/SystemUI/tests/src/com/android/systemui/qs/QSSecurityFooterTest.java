@@ -61,6 +61,7 @@ import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.settings.UserTracker;
 import com.android.systemui.statusbar.policy.SecurityController;
+import com.android.systemui.tuner.TunerService;
 
 import org.junit.After;
 import org.junit.Before;
@@ -111,6 +112,8 @@ public class QSSecurityFooterTest extends SysuiTestCase {
     private DialogLaunchAnimator mDialogLaunchAnimator;
     @Mock
     private BroadcastDispatcher mBroadcastDispatcher;
+    @Mock
+    private TunerService mTunerService;
 
     private TestableLooper mTestableLooper;
 
@@ -128,7 +131,7 @@ public class QSSecurityFooterTest extends SysuiTestCase {
                 getContext().getSystemService(DevicePolicyManager.class), mUserTracker,
                 mainHandler, mActivityStarter, mSecurityController, looper, mDialogLaunchAnimator);
         mFooter = new QSSecurityFooter(mRootView, mainHandler, mSecurityController, looper,
-                mBroadcastDispatcher, mFooterUtils);
+                mBroadcastDispatcher, mFooterUtils, mTunerService);
         mFooterText = mRootView.findViewById(R.id.footer_text);
         mPrimaryFooterIcon = mRootView.findViewById(R.id.primary_footer_icon);
 
