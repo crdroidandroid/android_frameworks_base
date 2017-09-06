@@ -7834,4 +7834,9 @@ public class WindowManagerService extends IWindowManager.Stub
                     0 /* configChanges */, !PRESERVE_WINDOWS, true /* notifyClients */);
         }
     }
+
+    @Override
+    public void sendCustomAction(Intent intent) {
+        mPolicy.sendCustomAction(intent);
+    }
 }
