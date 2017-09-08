@@ -373,6 +373,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             "system:" + Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE;
     private static final String STATUS_BAR_TICKER_TICK_DURATION =
             "system:" + Settings.System.STATUS_BAR_TICKER_TICK_DURATION;
+    private static final String LESS_BORING_HEADS_UP =
+            "system:" + Settings.System.LESS_BORING_HEADS_UP;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -572,6 +574,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private boolean mSysuiRoundedFwvals;
 
     private boolean mHeadsUpDisabled, mGamingModeActivated;
+    private boolean mlessBoringHeadsUp;
 
     /**
      * Helper that is responsible for showing the right toast when a disallowed activity operation
@@ -896,6 +899,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, GAMING_MODE_HEADSUP_TOGGLE);
         tunerService.addTunable(this, STATUS_BAR_TICKER_ANIMATION_MODE);
         tunerService.addTunable(this, STATUS_BAR_TICKER_TICK_DURATION);
+        tunerService.addTunable(this, LESS_BORING_HEADS_UP);
 
         mPackageMonitor = new PackageMonitor();
         mPackageMonitor.register(mContext, mHandler);
@@ -6800,6 +6804,11 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 if (mTicker != null) {
                     mTicker.updateTickDuration(mTickerTickDuration);
                 }
+                break;
+            case LESS_BORING_HEADS_UP:
+                mlessBoringHeadsUp = 
+                        TunerService.parseIntegerSwitch(newValue, false);
+                mEntryManager.setUseLessBoringHeadsUp(mlessBoringHeadsUp);
                 break;
             default:
                 break;
