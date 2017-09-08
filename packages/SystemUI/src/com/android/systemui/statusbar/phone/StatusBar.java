@@ -295,6 +295,14 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             "lineagesystem:" + LineageSettings.System.BERRY_GLOBAL_STYLE;
     private static final String QS_TILE_TITLE_VISIBILITY =
             "system:" + Settings.System.QS_TILE_TITLE_VISIBILITY;
+    private static final String QS_ROWS_PORTRAIT =
+            "system:" + Settings.System.QS_ROWS_PORTRAIT;
+    private static final String QS_ROWS_LANDSCAPE =
+            "system:" + Settings.System.QS_ROWS_LANDSCAPE;
+    private static final String QS_COLUMNS_PORTRAIT =
+            "system:" + Settings.System.QS_COLUMNS_PORTRAIT;
+    private static final String QS_COLUMNS_LANDSCAPE =
+            "system:" + Settings.System.QS_COLUMNS_LANDSCAPE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -727,6 +735,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, FORCE_SHOW_NAVBAR);
         tunerService.addTunable(this, BERRY_GLOBAL_STYLE);
         tunerService.addTunable(this, QS_TILE_TITLE_VISIBILITY);
+        tunerService.addTunable(this, QS_ROWS_PORTRAIT);
+        tunerService.addTunable(this, QS_ROWS_LANDSCAPE);
+        tunerService.addTunable(this, QS_COLUMNS_PORTRAIT);
+        tunerService.addTunable(this, QS_COLUMNS_LANDSCAPE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -5978,6 +5990,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 updateTheme();
                 break;
             case QS_TILE_TITLE_VISIBILITY:
+            case QS_ROWS_PORTRAIT:
+            case QS_ROWS_LANDSCAPE:
+            case QS_COLUMNS_PORTRAIT:
+            case QS_COLUMNS_LANDSCAPE:
                 if (mQSPanel != null) {
                     mQSPanel.updateResources();
                 }
