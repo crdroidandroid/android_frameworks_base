@@ -397,7 +397,7 @@
           0 = Not available.
           1 = Available.
      -->
-    <integer translatable="false" name="config_wifi_wakeup_available">0</integer>
+    <integer translatable="false" name="config_wifi_wakeup_available">1</integer>
 
     <!-- Array of ConnectivityManager.TYPE_xxxx values allowable for tethering -->
     <!-- Common options are [1, 4] for TYPE_WIFI and TYPE_MOBILE_DUN or
