@@ -39,4 +39,9 @@
 
     <!-- Ambient display and lift gesture Tile -->
     <string name="quick_settings_doze_notifications_label">Ambient notifications</string>
+
+    <!-- Advance location quick setting tile -->
+    <string name="accessibility_quick_settings_location_battery_saving">Location reporting: battery saving mode.</string>
+    <string name="accessibility_quick_settings_location_gps_only">Location reporting: sensors only mode.</string>
+    <string name="accessibility_quick_settings_location_high_accuracy">Location reporting: high accuracy mode.</string>
 </resources>
