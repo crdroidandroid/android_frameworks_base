@@ -69,6 +69,12 @@ public class WifiConfiguration implements Parcelable {
     public static final int INVALID_NETWORK_ID = -1;
     /** {@hide} */
     public static final int LOCAL_ONLY_NETWORK_ID = -2;
+    /** {@hide} */
+    public static final int AUTOCONNECT_INVALID = -1;
+    /** {@hide} */
+    public static final int AUTOCONNECT_DISABLED = 0;
+    /** {@hide} */
+    public static final int AUTOCONNECT_ENABLED = 1;
 
     /** {@hide} */
     private String mPasspointManagementObjectTree;
@@ -292,6 +298,16 @@ public class WifiConfiguration implements Parcelable {
      * string otherwise.
      */
     public String preSharedKey;
+
+    /**
+     * -1 needs to be used as default value because an application may not set this field
+     * when it wants to change another field of WifiConfiguration.
+     * And then, framework cannot understand if the application wants to update
+     * this field with default value.
+     * see {@link com.android.settings.wifi.WifiConfigController#getConfig()}
+     * {@hide}
+     */
+    public int autoConnect = AUTOCONNECT_INVALID;
 
     /**
      * Up to four WEP keys. Either an ASCII string enclosed in double
@@ -1662,6 +1678,8 @@ public class WifiConfiguration implements Parcelable {
                 sbuf.append('\n');
             }
         }
+        sbuf.append("autoConnect: " + autoConnect);
+        sbuf.append("\n");
 
         return sbuf.toString();
     }
@@ -2010,6 +2028,7 @@ public class WifiConfiguration implements Parcelable {
             creationTime = source.creationTime;
             updateTime = source.updateTime;
             shared = source.shared;
+            autoConnect = source.autoConnect;
         }
     }
 
@@ -2076,6 +2095,7 @@ public class WifiConfiguration implements Parcelable {
         dest.writeInt(noInternetAccessExpected ? 1 : 0);
         dest.writeInt(shared ? 1 : 0);
         dest.writeString(mPasspointManagementObjectTree);
+        dest.writeInt(autoConnect);
     }
 
     /** Implement the Parcelable interface {@hide} */
@@ -2143,6 +2163,7 @@ public class WifiConfiguration implements Parcelable {
                 config.noInternetAccessExpected = in.readInt() != 0;
                 config.shared = in.readInt() != 0;
                 config.mPasspointManagementObjectTree = in.readString();
+                config.autoConnect = in.readInt();
                 return config;
             }
 
