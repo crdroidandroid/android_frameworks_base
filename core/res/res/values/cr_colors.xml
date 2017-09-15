@@ -17,4 +17,7 @@
 <resources>
 
     <color name="qs_icon_active_color">#ffffffff</color>
+
+    <color name="toast_bg">@color/white</color>
+    <color name="toast_text">@color/black</color>
 </resources>
