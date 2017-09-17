@@ -111,12 +111,11 @@ void android_view_InputChannel_setDisposeCallback(JNIEnv* env, jobject inputChan
 }
 
 static jobject android_view_InputChannel_createInputChannel(JNIEnv* env,
-        std::unique_ptr<NativeInputChannel> nativeInputChannel) {
+        NativeInputChannel* nativeInputChannel) {
     jobject inputChannelObj = env->NewObject(gInputChannelClassInfo.clazz,
             gInputChannelClassInfo.ctor);
     if (inputChannelObj) {
-        android_view_InputChannel_setNativeInputChannel(env, inputChannelObj,
-                                                        nativeInputChannel.release());
+        android_view_InputChannel_setNativeInputChannel(env, inputChannelObj, nativeInputChannel);
     }
     return inputChannelObj;
 }
@@ -144,13 +143,13 @@ static jobjectArray android_view_InputChannel_nativeOpenInputChannelPair(JNIEnv*
     }
 
     jobject serverChannelObj = android_view_InputChannel_createInputChannel(env,
-            std::make_unique<NativeInputChannel>(serverChannel));
+            new NativeInputChannel(serverChannel));
     if (env->ExceptionCheck()) {
         return NULL;
     }
 
     jobject clientChannelObj = android_view_InputChannel_createInputChannel(env,
-            std::make_unique<NativeInputChannel>(clientChannel));
+            new NativeInputChannel(clientChannel));
     if (env->ExceptionCheck()) {
         return NULL;
     }
