@@ -224,6 +224,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ringtones/material/ogg/Titania.ogg:system/media/audio/ringtones/Titania.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Triton.ogg:system/media/audio/ringtones/Triton.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Umbriel.ogg:system/media/audio/ringtones/Umbriel.ogg \
+    $(LOCAL_PATH)/notifications/Chime.ogg:system/media/audio/notifications/Chime.ogg \
     $(LOCAL_PATH)/notifications/material/ogg/Ariel.ogg:system/media/audio/notifications/Ariel.ogg \
     $(LOCAL_PATH)/notifications/material/ogg/Carme.ogg:system/media/audio/notifications/Carme.ogg \
     $(LOCAL_PATH)/notifications/material/ogg/Ceres.ogg:system/media/audio/notifications/Ceres.ogg \
