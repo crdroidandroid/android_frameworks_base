@@ -854,6 +854,7 @@ public abstract class NotificationListenerService extends Service {
 
     private StatusBarNotification[] cleanUpNotificationList(
             ParceledListSlice<StatusBarNotification> parceledList) {
+        if (parceledList == null) return null;
         List<StatusBarNotification> list = parceledList.getList();
         ArrayList<StatusBarNotification> corruptNotifications = null;
         int N = list.size();
