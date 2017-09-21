@@ -176,7 +176,7 @@ public final class NotificationChannel implements Parcelable {
      */
     public static final int ALLOW_BUBBLE_OFF = 0;
 
-    private static final int DEFAULT_LIGHT_COLOR = 0;
+    private static final int DEFAULT_LIGHT_COLOR = 0x00FFFFFF;
     private static final int DEFAULT_ON_TIME = 0;
     private static final int DEFAULT_OFF_TIME = 0;
     private static final int DEFAULT_VISIBILITY =

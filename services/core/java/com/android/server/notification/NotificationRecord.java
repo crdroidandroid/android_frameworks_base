@@ -266,7 +266,7 @@ public final class NotificationRecord {
         int userSetLightColor = getChannel().getLightColor();
         int userSetLightOnTime = getChannel().getLightOnTime();
         int userSetLightOffTime = getChannel().getLightOffTime();
-        int channelLightColor = userSetLightColor != 0x00ffffff ? userSetLightColor
+        int channelLightColor = userSetLightColor != 0x00FFFFFF ? userSetLightColor
                 : defaultLightColor;
         int channelLightOnTime = userSetLightOnTime != 0 ? userSetLightOnTime
                 : defaultLightOn;
@@ -280,11 +280,11 @@ public final class NotificationRecord {
                 & NotificationChannel.USER_LOCKED_LIGHTS) == 0) {
             final Notification notification = getSbn().getNotification();
             if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
-                light = new Light(userSetLightColor != 0x00ffffff ? userSetLightColor : notification.ledARGB,
+                light = new Light(userSetLightColor != 0x00FFFFFF ? userSetLightColor : notification.ledARGB,
                         userSetLightOnTime != 0 ? userSetLightOnTime : notification.ledOnMS,
                         userSetLightOffTime != 0 ? userSetLightOffTime : notification.ledOffMS);
                 if ((notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
-                    light = new Light(userSetLightColor != 0x00ffffff ? userSetLightColor : defaultLightColor,
+                    light = new Light(userSetLightColor != 0x00FFFFFF ? userSetLightColor : defaultLightColor,
                         userSetLightOnTime != 0 ? userSetLightOnTime : defaultLightOn,
                         userSetLightOffTime != 0 ? userSetLightOffTime : defaultLightOff);
                 }
