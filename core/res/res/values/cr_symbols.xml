@@ -18,4 +18,7 @@
 
   <!-- High Brightness Mode -->
   <java-symbol type="bool" name="config_supportHighBrightness" />
+
+  <java-symbol type="anim" name="du_app_in" />
+  <java-symbol type="anim" name="du_app_out" />
 </resources>
