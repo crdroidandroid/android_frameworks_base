@@ -8328,9 +8328,14 @@ public class StatusBar extends SystemUI implements DemoMode,
             case QS_ROWS_LANDSCAPE:
             case QS_COLUMNS_PORTRAIT:
             case QS_COLUMNS_LANDSCAPE:
+                if (mQSPanel != null) {
+                    mQSPanel.updateResources();
+                }
+                break;
             case QS_TILE_TITLE_VISIBILITY:
                 if (mQSPanel != null) {
                     mQSPanel.updateResources();
+                    mQSPanel.updateSettings();
                 }
                 break;
             default:
