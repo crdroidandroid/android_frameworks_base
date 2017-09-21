@@ -73,4 +73,8 @@
     <!-- Screenshot tile -->
     <string name="quick_settings_screenshot_label">Screenshot</string>
     <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+
+    <string name="navMediaArrowsExcludeList" translatable="false">
+        chrome,youtube,netflix,firefox,dolphin,opera
+    </string>
 </resources>
