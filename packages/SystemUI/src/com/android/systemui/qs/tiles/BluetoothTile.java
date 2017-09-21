@@ -93,6 +93,11 @@ public class BluetoothTile extends QSTileImpl<BooleanState> implements TunerServ
     }
 
     @Override
+    public boolean isDualTarget() {
+        return true;
+    }
+
+    @Override
     public BooleanState newTileState() {
         return new BooleanState();
     }
