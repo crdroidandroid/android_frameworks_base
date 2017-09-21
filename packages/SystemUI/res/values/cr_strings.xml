@@ -73,4 +73,8 @@
     <!-- Reboot/Recovery QS Tile -->
     <string name="quick_settings_reboot_label">Reboot</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
+
+    <string name="navMediaArrowsExcludeList" translatable="false">
+        chrome,youtube,netflix,firefox,dolphin,opera
+    </string>
 </resources>
