@@ -359,7 +359,11 @@ public class SuggestionParser {
         if (isSmartSuggestionEnabled) {
             return mSmartDismissControl;
         } else {
-            return suggestion.metaData.getString(META_DATA_DISMISS_CONTROL);
+            Object o = suggestion.metaData.get(META_DATA_DISMISS_CONTROL);
+            if (o instanceof String) {
+                return (String) o;
+            }
+            return null;
         }
     }
 
