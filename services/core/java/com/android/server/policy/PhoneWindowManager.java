@@ -576,6 +576,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // User defined hw key config
     boolean mHardwareKeysDisable = false;
     boolean mSwapCapacitiveKeys = false;
+    ANBIHandler mANBIHandler;
+    private boolean mANBIEnabled;
 
     // Tracks user-customisable behavior for certain key events
     private Action mBackLongPressAction;
@@ -951,6 +953,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SWAP_CAPACITIVE_KEYS), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ANBI_ENABLED), false, this,
                     UserHandle.USER_ALL);
 
             updateSettings();
@@ -2640,6 +2645,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mLineageHardware.set(LineageHardwareManager.FEATURE_KEY_SWAP, mSwapCapacitiveKeys);
             }
 
+            final boolean ANBIEnabled = Settings.System.getIntForUser(resolver,
+                    Settings.System.ANBI_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+            if (mANBIHandler != null) {
+                if (mANBIEnabled != ANBIEnabled) {
+                    mANBIEnabled = ANBIEnabled;
+                    if (mANBIEnabled) {
+                        mWindowManagerFuncs.registerPointerEventListener(mANBIHandler, DEFAULT_DISPLAY);
+                    } else {
+                        mWindowManagerFuncs.unregisterPointerEventListener(mANBIHandler, DEFAULT_DISPLAY);
+                    }
+                }
+            }
+
             updateKeyAssignments();
 
             // use screen off timeout setting as the timeout for the lockscreen
@@ -4063,6 +4081,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean canceled = event.isCanceled();
         final int displayId = event.getDisplayId();
         final boolean isInjected = (policyFlags & WindowManagerPolicy.FLAG_INJECTED) != 0;
+
+        if (mANBIEnabled && mANBIHandler != null && mANBIHandler.isScreenTouched()) {
+            final int source = event.getSource();
+            final boolean appSwitchKey = keyCode == KeyEvent.KEYCODE_APP_SWITCH;
+            final boolean homeKey = keyCode == KeyEvent.KEYCODE_HOME;
+            final boolean menuKey = keyCode == KeyEvent.KEYCODE_MENU;
+            final boolean backKey = keyCode == KeyEvent.KEYCODE_BACK;
+            final boolean assistKey = keyCode == KeyEvent.KEYCODE_ASSIST;
+            final boolean navBarKey = source == InputDevice.SOURCE_NAVIGATION_BAR;
+
+            if (!navBarKey && (appSwitchKey || homeKey || menuKey || backKey || assistKey)) {
+                return 0;
+            }
+        }
 
         // If screen is off then we treat the case where the keyguard is open but hidden
         // the same as if it were open and in front.
@@ -5622,6 +5654,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         mLineageHardware = LineageHardwareManager.getInstance(mContext);
+
+        mANBIHandler = new ANBIHandler(mContext);
+
         // Ensure observe happens in systemReady() since we need
         // LineageHardwareService to be up and running
         mSettingsObserver.observe();
