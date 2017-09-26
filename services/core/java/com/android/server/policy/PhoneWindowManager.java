@@ -633,6 +633,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // User defined hw key config
     boolean mHardwareKeysDisable = false;
     boolean mSwapCapacitiveKeys = false;
+    ANBIHandler mANBIHandler;
+    private boolean mANBIEnabled;
 
     private SwipeToScreenshotListener mSwipeToScreenshot;
     private boolean haveEnableGesture = false;
@@ -1016,6 +1018,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SWAP_CAPACITIVE_KEYS), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ANBI_ENABLED), false, this,
                     UserHandle.USER_ALL);
 
             updateSettings();
@@ -3124,6 +3129,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mLineageHardware.set(LineageHardwareManager.FEATURE_KEY_SWAP, mSwapCapacitiveKeys);
             }
 
+            boolean ANBIEnabled = Settings.System.getIntForUser(resolver,
+                    Settings.System.ANBI_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+            if (mANBIHandler != null && mANBIEnabled != ANBIEnabled) {
+                mANBIEnabled = ANBIEnabled;
+                if (mANBIEnabled) {
+                    mWindowManagerFuncs.registerPointerEventListener(mANBIHandler, DEFAULT_DISPLAY);
+                } else {
+                    mWindowManagerFuncs.unregisterPointerEventListener(mANBIHandler, DEFAULT_DISPLAY);
+                }
+            }
+
             boolean threeFingerGesture = Settings.System.getIntForUser(resolver,
                     Settings.System.THREE_FINGER_GESTURE, 0, UserHandle.USER_CURRENT) == 1;
             if (mSwipeToScreenshot != null) {
@@ -4800,6 +4816,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final int displayId = event.getDisplayId();
         final boolean isInjected = (policyFlags & WindowManagerPolicy.FLAG_INJECTED) != 0;
 
+        if (mANBIEnabled && mANBIHandler != null && mANBIHandler.isScreenTouched()) {
+            final boolean navBarKey = event.getSource() == InputDevice.SOURCE_NAVIGATION_BAR;
+            final boolean appSwitchKey = keyCode == KeyEvent.KEYCODE_APP_SWITCH;
+            final boolean homeKey = keyCode == KeyEvent.KEYCODE_HOME;
+            final boolean menuKey = keyCode == KeyEvent.KEYCODE_MENU;
+            final boolean backKey = keyCode == KeyEvent.KEYCODE_BACK;
+            final boolean assistKey = keyCode == KeyEvent.KEYCODE_ASSIST;
+
+            if (!navBarKey && (appSwitchKey || homeKey || menuKey || backKey || assistKey)) {
+                return 0;
+            }
+        }
+
         // If screen is off then we treat the case where the keyguard is open but hidden
         // the same as if it were open and in front.
         // This will prevent any keys other than the power button from waking the screen
@@ -6326,6 +6355,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         });
 
         mLineageHardware = LineageHardwareManager.getInstance(mContext);
+
+        mANBIHandler = new ANBIHandler(mContext);
+
         // Ensure observe happens in systemReady() since we need
         // LineageHardwareService to be up and running
         mSettingsObserver.observe();
