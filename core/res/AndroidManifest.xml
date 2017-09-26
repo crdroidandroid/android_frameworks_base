@@ -551,6 +551,10 @@
     <protected-broadcast android:name="android.media.tv.action.CHANNEL_BROWSABLE_REQUESTED" />
     <protected-broadcast android:name="com.android.server.InputMethodManagerService.SHOW_INPUT_METHOD_PICKER" />
 
+    <!-- Added in O : DPM  -->
+    <protected-broadcast android:name="com.qti.dpmframework.DPM_INTERNET_CONNECTED" />
+    <protected-broadcast android:name="com.qti.dpmframework.DPM_PREFERENCE_CHANGED" />
+
     <!-- ====================================================================== -->
     <!--                          RUNTIME PERMISSIONS                           -->
     <!-- ====================================================================== -->
