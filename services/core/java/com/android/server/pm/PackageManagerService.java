@@ -54,6 +54,7 @@ import static android.content.pm.PackageManager.INSTALL_FAILED_TEST_ONLY;
 import static android.content.pm.PackageManager.INSTALL_FAILED_UPDATE_INCOMPATIBLE;
 import static android.content.pm.PackageManager.INSTALL_FAILED_USER_RESTRICTED;
 import static android.content.pm.PackageManager.INSTALL_FAILED_VERSION_DOWNGRADE;
+import static android.content.pm.PackageManager.INSTALL_FAILED_PERSISTENT_APP_NOT_UPDATEABLE;
 import static android.content.pm.PackageManager.INSTALL_FORWARD_LOCK;
 import static android.content.pm.PackageManager.INSTALL_INTERNAL;
 import static android.content.pm.PackageManager.INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES;
@@ -17970,6 +17971,13 @@ public class PackageManagerService extends IPackageManager.Stub
                                 "Package " + pkg.packageName + " new target SDK " + newTargetSdk
                                         + " doesn't support runtime permissions but the old"
                                         + " target SDK " + oldTargetSdk + " does.");
+                        return;
+                    }
+                    // Prevent persistent apps from being updated
+                    if ((oldPackage.applicationInfo.flags & ApplicationInfo.FLAG_PERSISTENT) != 0) {
+                        res.setError(PackageManager.INSTALL_FAILED_PERSISTENT_APP_NOT_UPDATEABLE,
+                                "Package " + oldPackage.packageName + " is a persistent app. "
+                                        + "Persistent apps are not updateable.");
                         return;
                     }
                     // Prevent apps from downgrading their targetSandbox.
