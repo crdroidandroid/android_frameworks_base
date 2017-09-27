@@ -1307,6 +1307,15 @@ public abstract class PackageManager {
      */
     public static final int INSTALL_FAILED_INSTANT_APP_INVALID = -116;
 
+    /**
+     * Installation failed return code: this is passed to the
+     * {@link IPackageInstallObserver} if the package being updated is a
+     * persistent app, which are by definition not updateable.
+     *
+     * @hide
+     */
+    public static final int INSTALL_FAILED_PERSISTENT_APP_NOT_UPDATEABLE = -117;
+
     /** @hide */
     @IntDef(flag = true, prefix = { "DELETE_" }, value = {
             DELETE_KEEP_DATA,
@@ -5515,6 +5524,7 @@ public abstract class PackageManager {
             case INSTALL_FAILED_PACKAGE_CHANGED: return "INSTALL_FAILED_PACKAGE_CHANGED";
             case INSTALL_FAILED_UID_CHANGED: return "INSTALL_FAILED_UID_CHANGED";
             case INSTALL_FAILED_VERSION_DOWNGRADE: return "INSTALL_FAILED_VERSION_DOWNGRADE";
+            case INSTALL_FAILED_PERSISTENT_APP_NOT_UPDATEABLE: return "INSTALL_FAILED_PERSISTENT_APP_NOT_UPDATEABLE";
             case INSTALL_PARSE_FAILED_NOT_APK: return "INSTALL_PARSE_FAILED_NOT_APK";
             case INSTALL_PARSE_FAILED_BAD_MANIFEST: return "INSTALL_PARSE_FAILED_BAD_MANIFEST";
             case INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION: return "INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION";
@@ -5564,6 +5574,7 @@ public abstract class PackageManager {
             case INSTALL_FAILED_UID_CHANGED: return PackageInstaller.STATUS_FAILURE_INVALID;
             case INSTALL_FAILED_VERSION_DOWNGRADE: return PackageInstaller.STATUS_FAILURE_INVALID;
             case INSTALL_FAILED_PERMISSION_MODEL_DOWNGRADE: return PackageInstaller.STATUS_FAILURE_INVALID;
+            case INSTALL_FAILED_PERSISTENT_APP_NOT_UPDATEABLE: return PackageInstaller.STATUS_FAILURE_INVALID;
             case INSTALL_PARSE_FAILED_NOT_APK: return PackageInstaller.STATUS_FAILURE_INVALID;
             case INSTALL_PARSE_FAILED_BAD_MANIFEST: return PackageInstaller.STATUS_FAILURE_INVALID;
             case INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION: return PackageInstaller.STATUS_FAILURE_INVALID;
