@@ -37,6 +37,7 @@ import com.android.systemui.qs.tiles.CameraToggleTile;
 import com.android.systemui.qs.tiles.CastTile;
 import com.android.systemui.qs.tiles.CellularTile;
 import com.android.systemui.qs.tiles.ColorInversionTile;
+import com.android.systemui.qs.tiles.CompassTile;
 import com.android.systemui.qs.tiles.CPUInfoTile;
 import com.android.systemui.qs.tiles.DataSaverTile;
 import com.android.systemui.qs.tiles.DeviceControlsTile;
@@ -119,6 +120,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<OnTheGoTile> mOnTheGoTileProvider;
     private final Provider<CPUInfoTile> mCPUInfoTileProvider;
     private final Provider<FPSInfoTile> mFPSInfoTileProvider;
+    private final Provider<CompassTile> mCompassTileProvider;
 
     private final Lazy<QSHost> mQsHostLazy;
     private final Provider<CustomTile.Builder> mCustomTileBuilderProvider;
@@ -167,7 +169,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<SoundTile> soundTileProvider,
             Provider<OnTheGoTile> onTheGoTileProvider,
             Provider<CPUInfoTile> cpuInfoTileProvider,
-            Provider<FPSInfoTile> fpsInfoTileProvider) {
+            Provider<FPSInfoTile> fpsInfoTileProvider,
+            Provider<CompassTile> compassTileProvider) {
         mQsHostLazy = qsHostLazy;
         mCustomTileBuilderProvider = customTileBuilderProvider;
 
@@ -212,6 +215,7 @@ public class QSFactoryImpl implements QSFactory {
         mOnTheGoTileProvider = onTheGoTileProvider;
         mCPUInfoTileProvider = cpuInfoTileProvider;
         mFPSInfoTileProvider = fpsInfoTileProvider;
+        mCompassTileProvider = compassTileProvider;
     }
 
     public QSTile createTile(String tileSpec) {
@@ -307,6 +311,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mCPUInfoTileProvider.get();
             case "fpsinfo":
                 return mFPSInfoTileProvider.get();
+            case "compass":
+                return mCompassTileProvider.get();
         }
 
         // Custom tiles
