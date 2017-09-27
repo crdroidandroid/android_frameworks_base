@@ -2287,6 +2287,7 @@ android.util.IntProperty
 android.util.Log
 android.util.Log$1
 android.util.Log$ImmediateLogWriter
+android.util.Log$PreloadHolder
 android.util.Log$TerribleFailure
 android.util.Log$TerribleFailureHandler
 android.util.LogPrinter
