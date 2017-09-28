@@ -209,6 +209,7 @@ import com.android.systemui.qs.QSFragment;
 import com.android.systemui.qs.QSPanel;
 import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.qs.car.CarQSFragment;
+import com.android.systemui.qs.QuickStatusBarHeader;
 import com.android.systemui.recents.Recents;
 import com.android.systemui.recents.ScreenPinningRequest;
 import com.android.systemui.recents.events.EventBus;
@@ -456,6 +457,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_COLUMNS_LANDSCAPE;
     private static final String QS_TILE_TITLE_VISIBILITY =
             "system:" + Settings.System.QS_TILE_TITLE_VISIBILITY;
+    private static final String QS_QUICKBAR_SCROLL_ENABLED =
+            "system:" + Settings.System.QS_QUICKBAR_SCROLL_ENABLED;
 
     static {
         boolean onlyCoreApps;
@@ -525,6 +528,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     // settings
     private QSPanel mQSPanel;
+    private QuickStatusBarHeader mQuickStatusBarHeader;
 
     // top bar
     protected KeyguardStatusBarView mKeyguardStatusBar;
@@ -1156,7 +1160,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 QS_ROWS_LANDSCAPE,
                 QS_COLUMNS_PORTRAIT,
                 QS_COLUMNS_LANDSCAPE,
-                QS_TILE_TITLE_VISIBILITY);
+                QS_TILE_TITLE_VISIBILITY,
+                QS_QUICKBAR_SCROLL_ENABLED);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController);
@@ -1391,6 +1396,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                     mQSPanel = ((QSFragment) qs).getQsPanel();
                     mQSPanel.setBrightnessMirror(mBrightnessMirrorController);
                     mKeyguardStatusBar.setQSPanel(mQSPanel);
+                    mQuickStatusBarHeader = ((QSFragment) qs).getQuickStatusBarHeader();
                 }
             });
         }
@@ -5554,6 +5560,9 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     public void onClosingFinished() {
         runPostCollapseRunnables();
+        if (mQuickStatusBarHeader != null) {
+            mQuickStatusBarHeader.onClosingFinished();
+        }
         if (!isPanelFullyCollapsed()) {
             // if we set it not to be focusable when collapsing, we have to undo it when we aborted
             // the closing
@@ -8336,6 +8345,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mQSPanel != null) {
                     mQSPanel.updateResources();
                     mQSPanel.updateSettings();
+                }
+                break;
+            case QS_QUICKBAR_SCROLL_ENABLED:
+                if (mQuickStatusBarHeader != null) {
+                    mQuickStatusBarHeader.updateSettings();
                 }
                 break;
             default:
