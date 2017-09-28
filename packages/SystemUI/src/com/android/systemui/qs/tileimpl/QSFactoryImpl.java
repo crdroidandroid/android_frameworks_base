@@ -45,6 +45,7 @@ import com.android.systemui.qs.tiles.HWKeysTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.LiveDisplayTile;
 import com.android.systemui.qs.tiles.LocationTile;
+import com.android.systemui.qs.tiles.MusicTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
 import com.android.systemui.qs.tiles.ReadingModeTile;
@@ -150,6 +151,38 @@ public class QSFactoryImpl implements QSFactory {
                 return new SmartPixelsTile(mHost);
         }
 
+        if (tileSpec.equals("wifi")) return new WifiTile(mHost);
+        else if (tileSpec.equals("bt")) return new BluetoothTile(mHost);
+        else if (tileSpec.equals("cell")) return new CellularTile(mHost);
+        else if (tileSpec.equals("dnd")) return new DndTile(mHost);
+        else if (tileSpec.equals("inversion")) return new ColorInversionTile(mHost);
+        else if (tileSpec.equals("airplane")) return new AirplaneModeTile(mHost);
+        else if (tileSpec.equals("work")) return new WorkModeTile(mHost);
+        else if (tileSpec.equals("rotation")) return new RotationLockTile(mHost);
+        else if (tileSpec.equals("flashlight")) return new FlashlightTile(mHost);
+        else if (tileSpec.equals("location")) return new LocationTile(mHost);
+        else if (tileSpec.equals("profiles")) return new ProfilesTile(mHost);
+        else if (tileSpec.equals("cast")) return new CastTile(mHost);
+        else if (tileSpec.equals("hotspot")) return new HotspotTile(mHost);
+        else if (tileSpec.equals("user")) return new UserTile(mHost);
+        else if (tileSpec.equals("battery")) return new BatterySaverTile(mHost);
+        else if (tileSpec.equals("saver")) return new DataSaverTile(mHost);
+        else if (tileSpec.equals("night")) return new NightDisplayTile(mHost);
+        else if (tileSpec.equals("nfc")) return new NfcTile(mHost);
+        // Custom tiles.
+        else if (tileSpec.equals("adb_network")) return new AdbOverNetworkTile(mHost);
+        else if (tileSpec.equals("ambient_display")) return new AmbientDisplayTile(mHost);
+        else if (tileSpec.equals("caffeine")) return new CaffeineTile(mHost);
+        else if (tileSpec.equals("heads_up")) return new HeadsUpTile(mHost);
+        else if (tileSpec.equals("livedisplay")) return new LiveDisplayTile(mHost);
+        else if (tileSpec.equals("reading_mode")) return new ReadingModeTile(mHost);
+        else if (tileSpec.equals("sync")) return new SyncTile(mHost);
+        else if (tileSpec.equals("usb_tether")) return new UsbTetherTile(mHost);
+        else if (tileSpec.equals("volume_panel")) return new VolumeTile(mHost);
+        else if (tileSpec.equals("high_brightness")) return new HighBrightnessTile(mHost);
+        else if (tileSpec.equals("sound")) return new SoundTile(mHost);
+        else if (tileSpec.equals("compass")) return new CompassTile(mHost);
+        else if (tileSpec.equals("music")) return new MusicTile(mHost);
         // Intent tiles.
         if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(mHost, tileSpec);
         if (tileSpec.startsWith(CustomTile.PREFIX)) return CustomTile.create(mHost, tileSpec);
