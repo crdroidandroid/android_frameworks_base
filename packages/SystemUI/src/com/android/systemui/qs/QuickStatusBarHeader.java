@@ -22,6 +22,7 @@ import android.graphics.Rect;
 import android.support.annotation.VisibleForTesting;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 
@@ -51,6 +52,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements TunerService
 
     protected QuickQSPanel mHeaderQsPanel;
     protected QSTileHost mHost;
+
+    private HorizontalScrollView mQuickQsPanelScroller;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -82,6 +85,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements TunerService
         battery.setForceShowPercent(true);
 
         mActivityStarter = Dependency.get(ActivityStarter.class);
+
+        mQuickQsPanelScroller = (HorizontalScrollView) findViewById(R.id.quick_qs_panel_scroll);
+        mQuickQsPanelScroller.setHorizontalScrollBarEnabled(false);
 
         Dependency.get(TunerService.class).addTunable(this,
                 StatusBarIconController.ICON_BLACKLIST);
@@ -166,5 +172,13 @@ public class QuickStatusBarHeader extends RelativeLayout implements TunerService
     public void onTuningChanged(String key, String newValue) {
         mClock.setClockVisibleByUser(!StatusBarIconController.getIconBlacklist(newValue)
                 .contains("clock"));
+    }
+
+    public void onClosingFinished() {
+        mQuickQsPanelScroller.scrollTo(0, 0);
+    }
+
+    public void updateSettings() {
+        mHeaderQsPanel.updateSettings();
     }
 }
