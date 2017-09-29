@@ -105,4 +105,10 @@ public class HighBrightnessTile extends QSTileImpl<BooleanState> {
                 Settings.Secure.HIGH_BRIGHTNESS_MODE, highBrightness ? 0 : 1,
                 UserHandle.USER_CURRENT);
     }
+
+    @Override
+    public boolean isAvailable() {
+        return mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_supportHighBrightness);
+    }
 }
