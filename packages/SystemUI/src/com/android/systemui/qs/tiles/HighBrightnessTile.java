@@ -24,6 +24,7 @@ import android.provider.Settings;
 import android.service.quicksettings.Tile;
 
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.internal.util.crdroid.Utils;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
@@ -33,6 +34,11 @@ public class HighBrightnessTile extends QSTileImpl<BooleanState> {
 
     public HighBrightnessTile(QSHost host) {
         super(host);
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return Utils.hbmAvailable(mContext);
     }
 
     @Override
