@@ -41,6 +41,8 @@ import android.view.KeyEvent;
 import android.view.IWindowManager;
 import android.view.WindowManagerGlobal;
 
+import com.android.internal.R;
+
 import java.util.List;
 
 import java.util.Locale;
@@ -325,5 +327,9 @@ public class Utils {
                         InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
             }
         }, 20);
+    }
+
+    public static boolean hbmAvailable(Context context) {
+        return context.getResources().getBoolean(R.bool.config_supportHighBrightness);
     }
 }
