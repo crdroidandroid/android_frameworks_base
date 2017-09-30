@@ -891,7 +891,7 @@ public class WifiManager {
     /* Number of currently active WifiLocks and MulticastLocks */
     private int mActiveLockCount;
 
-    private Context mContext;
+    private WeakReference<Context> mContextWeakRef;
     IWifiManager mService;
     private final int mTargetSdkVersion;
 
@@ -931,7 +931,7 @@ public class WifiManager {
      * is a system private class.
      */
     public WifiManager(Context context, IWifiManager service, Looper looper) {
-        mContext = context;
+        mContextWeakRef = new WeakReference<Context>(context);
         mService = service;
         mLooper = looper;
         mTargetSdkVersion = context.getApplicationInfo().targetSdkVersion;
@@ -1238,7 +1238,7 @@ public class WifiManager {
                     .clearCapabilities()
                     .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                     .build();
-            NetworkPinner.pin(mContext, request);
+            NetworkPinner.pin(mContextWeakRef.get(), request);
         }
 
         boolean success;
@@ -1533,7 +1533,7 @@ public class WifiManager {
     @RequiresPermission(android.Manifest.permission.UPDATE_DEVICE_STATS)
     public boolean startScan(WorkSource workSource) {
         try {
-            String packageName = mContext.getOpPackageName();
+            String packageName = mContextWeakRef.get().getOpPackageName();
             mService.startScan(null, workSource, packageName);
             return true;
         } catch (RemoteException e) {
@@ -1623,7 +1623,7 @@ public class WifiManager {
      */
     public List<ScanResult> getScanResults() {
         try {
-            return mService.getScanResults(mContext.getOpPackageName());
+            return mService.getScanResults(mContextWeakRef.get().getOpPackageName());
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
@@ -1730,7 +1730,7 @@ public class WifiManager {
      */
     public boolean setWifiEnabled(boolean enabled) {
         try {
-            return mService.setWifiEnabled(mContext.getOpPackageName(), enabled);
+            return mService.setWifiEnabled(mContextWeakRef.get().getOpPackageName(), enabled);
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
@@ -1822,7 +1822,7 @@ public class WifiManager {
     @SystemApi
     @RequiresPermission(android.Manifest.permission.TETHER_PRIVILEGED)
     public boolean setWifiApEnabled(WifiConfiguration wifiConfig, boolean enabled) {
-        String packageName = mContext.getOpPackageName();
+        String packageName = mContextWeakRef.get().getOpPackageName();
 
         Log.w(TAG, packageName + " attempted call to setWifiApEnabled: enabled = " + enabled);
         return false;
@@ -1939,11 +1939,11 @@ public class WifiManager {
     public void startLocalOnlyHotspot(LocalOnlyHotspotCallback callback,
             @Nullable Handler handler) {
         synchronized (mLock) {
-            Looper looper = (handler == null) ? mContext.getMainLooper() : handler.getLooper();
+            Looper looper = (handler == null) ? mContextWeakRef.get().getMainLooper() : handler.getLooper();
             LocalOnlyHotspotCallbackProxy proxy =
                     new LocalOnlyHotspotCallbackProxy(this, looper, callback);
             try {
-                String packageName = mContext.getOpPackageName();
+                String packageName = mContextWeakRef.get().getOpPackageName();
                 int returnCode = mService.startLocalOnlyHotspot(
                         proxy.getMessenger(), new Binder(), packageName);
                 if (returnCode != LocalOnlyHotspotCallback.REQUEST_REGISTERED) {
@@ -2022,7 +2022,7 @@ public class WifiManager {
     public void watchLocalOnlyHotspot(LocalOnlyHotspotObserver observer,
             @Nullable Handler handler) {
         synchronized (mLock) {
-            Looper looper = (handler == null) ? mContext.getMainLooper() : handler.getLooper();
+            Looper looper = (handler == null) ? mContextWeakRef.get().getMainLooper() : handler.getLooper();
             mLOHSObserverProxy = new LocalOnlyHotspotObserverProxy(this, looper, observer);
             try {
                 mService.startWatchLocalOnlyHotspot(
@@ -2760,7 +2760,7 @@ public class WifiManager {
             mConnected = new CountDownLatch(1);
 
             Handler handler = new ServiceHandler(mLooper);
-            mAsyncChannel.connect(mContext, handler, messenger);
+            mAsyncChannel.connect(mContextWeakRef.get(), handler, messenger);
             try {
                 mConnected.await();
             } catch (InterruptedException e) {
