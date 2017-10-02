@@ -2895,7 +2895,7 @@ public class SettingsProvider extends ContentProvider {
         }
 
         private final class UpgradeController {
-            private static final int SETTINGS_VERSION = 146;
+            private static final int SETTINGS_VERSION = 147;
 
             private final int mUserId;
 
@@ -3517,6 +3517,34 @@ public class SettingsProvider extends ContentProvider {
                     systemSettings.persistSyncLocked();
 
                     currentVersion = 146;
+                }
+
+                if (currentVersion == 146) {
+                    // Version 147
+                    /* Pixel Launcher checks this Setting to show Adaptive Icons options
+                        and anyway we need to enable dev settings for our stuff so we set
+                        this to enabled once forever */
+                    if (userId == UserHandle.USER_SYSTEM) {
+                        final SettingsState globalSettings = getGlobalSettingsLocked();
+                        Setting currentSetting = globalSettings.getSettingLocked(
+                                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED);
+                        if (currentSetting.isNull()) {
+                            globalSettings.insertSettingLocked(
+                                    Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,
+                                    "1", null, true, SettingsState.SYSTEM_PACKAGE_NAME);
+                        }
+                        /* Play services check this Setting internally to notify about
+                            new OTA so we force it to disabled once forever */
+                        currentSetting = globalSettings.getSettingLocked(
+                                Settings.Global.OTA_DISABLE_AUTOMATIC_UPDATE);
+                        if (currentSetting.isNull()) {
+                            globalSettings.insertSettingLocked(
+                                    Settings.Global.OTA_DISABLE_AUTOMATIC_UPDATE,
+                                    "1", null, true, SettingsState.SYSTEM_PACKAGE_NAME);
+                        }
+                    }
+
+                    currentVersion = 147;
                 }
 
                 // vXXX: Add new settings above this point.
