@@ -178,4 +178,9 @@
         />
     </com.android.keyguard.AlphaOptimizedLinearLayout>
 
+    <com.android.systemui.crdroid.batterybar.BatteryBarController
+        android:id="@+id/battery_bar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
 </com.android.systemui.statusbar.phone.PhoneStatusBarView>
