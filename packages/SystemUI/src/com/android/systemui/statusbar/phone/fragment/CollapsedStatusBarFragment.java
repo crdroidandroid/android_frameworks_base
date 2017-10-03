@@ -173,6 +173,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     private boolean mShowVibrateIcon;
 
+    private View mBatteryBar;
+
     private final OngoingCallListener mOngoingCallListener = new OngoingCallListener() {
         @Override
         public void onOngoingCallStateChanged(boolean animate) {
@@ -366,6 +368,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                 .getPhoneStatusBarViewController();
         mClockController = mStatusBarViewController.getClockController();
         mStatusBar = (PhoneStatusBarView) view;
+        mBatteryBar = mStatusBar.findViewById(R.id.battery_bar);
         View contents = mStatusBar.findViewById(R.id.status_bar_contents);
         contents.addOnLayoutChangeListener(mStatusBarLayoutListener);
         updateStatusBarLocation(contents.getLeft(), contents.getRight());
@@ -820,6 +823,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     private void hideEndSideContent(boolean animate) {
         StatusBarSimpleFragment.assertInLegacyMode();
+        animateHide(mBatteryBar, animate);
         if (!animate || !mAnimationsEnabled) {
             mEndSideAlphaController.setAlpha(/*alpha*/ 0f, SOURCE_OTHER);
         } else {
@@ -830,6 +834,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     private void showEndSideContent(boolean animate) {
         StatusBarSimpleFragment.assertInLegacyMode();
+        animateShow(mBatteryBar, animate);
         if (!animate || !mAnimationsEnabled) {
             mEndSideAlphaController.setAlpha(1f, SOURCE_OTHER);
             return;
