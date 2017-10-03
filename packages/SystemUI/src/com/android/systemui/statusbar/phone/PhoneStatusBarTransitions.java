@@ -35,6 +35,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
     private View mLeftSide, mStatusIcons, mBattery, mClock, mNetworkTraffic;
     private View mCrDroidLogo, mCrDroidLogoRight;
     private Animator mCurrentAnimation;
+    private View mBatteryBar;
 
     public PhoneStatusBarTransitions(PhoneStatusBarView view) {
         super(view, R.drawable.status_background);
@@ -50,6 +51,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         mNetworkTraffic = mView.findViewById(R.id.network_traffic);
         mCrDroidLogo = mView.findViewById(R.id.crdroid_logo);
         mCrDroidLogoRight = mView.findViewById(R.id.crdroid_logo_right);
+        mBatteryBar = mView.findViewById(R.id.battery_bar);
         applyModeBackground(-1, getMode(), false /*animate*/);
         applyMode(getMode(), false /*animate*/);
     }
@@ -92,6 +94,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             anims.playTogether(
                     animateTransitionTo(mLeftSide, newAlpha),
                     animateTransitionTo(mStatusIcons, newAlpha),
+                    animateTransitionTo(mBatteryBar, newAlphaBC),
                     animateTransitionTo(mBattery, newAlphaBC),
                     animateTransitionTo(mNetworkTraffic, newAlpha),
                     animateTransitionTo(mCrDroidLogo, newAlpha),
@@ -106,6 +109,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             mLeftSide.setAlpha(newAlpha);
             mStatusIcons.setAlpha(newAlpha);
             mNetworkTraffic.setAlpha(newAlpha);
+            mBatteryBar.setAlpha(newAlphaBC);
             mBattery.setAlpha(newAlphaBC);
             mCrDroidLogo.setAlpha(newAlpha);
             mCrDroidLogoRight.setAlpha(newAlpha);
