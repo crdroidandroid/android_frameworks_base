@@ -122,6 +122,7 @@ import com.android.systemui.statusbar.notification.stack.NotificationStackScroll
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayoutController;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.concurrency.FakeExecutor;
 import com.android.systemui.util.settings.SecureSettings;
 import com.android.systemui.util.time.FakeSystemClock;
@@ -309,6 +310,8 @@ public class NotificationPanelViewControllerTest extends SysuiTestCase {
     private List<View.OnAttachStateChangeListener> mOnAttachStateChangeListeners;
     private FalsingManagerFake mFalsingManager = new FalsingManagerFake();
 
+    private TunerService mTunerService;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -445,7 +448,8 @@ public class NotificationPanelViewControllerTest extends SysuiTestCase {
                 mSecureSettings,
                 mUnlockedScreenOffAnimationController,
                 mNotificationRemoteInputManager,
-                mControlsComponent);
+                mControlsComponent,
+                mTunerService);
         mNotificationPanelViewController.initDependencies(
                 mStatusBar,
                 mNotificationShelfController);
