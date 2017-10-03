@@ -176,6 +176,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     private boolean mShowVibrateIcon;
 
+    private View mBatteryBar;
+
     private final OngoingCallListener mOngoingCallListener = new OngoingCallListener() {
         @Override
         public void onOngoingCallStateChanged(boolean animate) {
@@ -382,6 +384,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mStatusBarIconController.addIconGroup(mDarkIconManager);
         mEndSideContent = mStatusBar.findViewById(R.id.status_bar_end_side_content);
         mEndSideAlphaController = new MultiSourceMinAlphaController(mEndSideContent);
+        mBatteryBar = mStatusBar.findViewById(R.id.battery_bar);
         mClockController = mStatusBar.getClockController();
         mSignalClusterEndPadding = getResources().getDimensionPixelSize(R.dimen.signal_cluster_battery_padding);
         mStatusIcons = mStatusBar.findViewById(R.id.statusIcons);
@@ -749,6 +752,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     private void hideEndSideContent(boolean animate) {
+        animateHide(mBatteryBar, animate);
         if (!animate) {
             mEndSideAlphaController.setAlpha(/*alpha*/ 0f, SOURCE_OTHER);
         } else {
@@ -758,6 +762,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     private void showEndSideContent(boolean animate) {
+        animateShow(mBatteryBar, animate);
         if (!animate) {
             mEndSideAlphaController.setAlpha(1f, SOURCE_OTHER);
             return;
