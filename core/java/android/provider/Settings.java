@@ -4566,6 +4566,11 @@ public final class Settings {
         public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
 
         /**
+         * @hide
+         */
+        public static final String SHOW_BATTERY_IMAGE = "status_bar_show_battery_image";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
