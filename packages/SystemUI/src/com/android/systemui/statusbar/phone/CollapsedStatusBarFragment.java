@@ -69,6 +69,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private ClockController mClockController;
     private boolean mIsClockBlacklisted;
 
+    private View mBatteryBar;
+
     private SignalCallback mSignalCallback = new SignalCallback() {
         @Override
         public void setIsAirplaneMode(NetworkController.IconState icon) {
@@ -105,6 +107,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mCustomIconArea = mStatusBar.findViewById(R.id.left_icon_area);
         mCenterClockLayout = (LinearLayout) mStatusBar.findViewById(R.id.center_clock_layout);
         mCrDroidLogoRight = mStatusBar.findViewById(R.id.crdroid_logo_right);
+        mBatteryBar = mStatusBar.findViewById(R.id.battery_bar);
         mClockController = new ClockController(mStatusBar);
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
@@ -224,11 +227,13 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void hideSystemIconArea(boolean animate) {
+        animateHide(mBatteryBar, animate);
         animateHide(mSystemIconArea, animate);
         animateHide(mCrDroidLogoRight, animate);
     }
 
     public void showSystemIconArea(boolean animate) {
+        animateShow(mBatteryBar, animate);
         animateShow(mSystemIconArea, animate);
         animateShow(mCrDroidLogoRight, animate);
     }
