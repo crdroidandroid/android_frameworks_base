@@ -282,6 +282,11 @@ public final class LocalBluetoothProfileManager {
         }
 
         public void onReceive(Context context, Intent intent, BluetoothDevice device) {
+            if (device == null) {
+                if(DEBUG) Log.d(TAG, "StateChangedHandler receives state-change for invalid device");
+                return;
+            }
+
             CachedBluetoothDevice cachedDevice = mDeviceManager.findDevice(device);
             if (cachedDevice == null) {
                 Log.w(TAG, "StateChangedHandler found new device: " + device);
