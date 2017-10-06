@@ -104,4 +104,7 @@
     <string name="quick_settings_music_label">Music</string>
     <string name="quick_settings_music_play">Play</string>
     <string name="quick_settings_music_pause">Pause</string>
+
+    <!-- volte icon switch -->
+    <string name="status_bar_volte">VOLTE</string>
 </resources>
