@@ -212,6 +212,7 @@ import com.android.systemui.recents.ScreenPinningRequest;
 import com.android.systemui.recents.events.EventBus;
 import com.android.systemui.recents.events.activity.AppTransitionFinishedEvent;
 import com.android.systemui.recents.events.activity.UndockingTaskEvent;
+import com.android.systemui.recents.misc.IconPackHelper;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.settings.CurrentUserTracker;
 import com.android.systemui.stackdivider.Divider;
@@ -435,6 +436,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.LOCKSCREEN_MAX_NOTIF_CONFIG;
     private static final String NAVIGATION_BAR_VISIBLE =
             Settings.Secure.NAVIGATION_BAR_VISIBLE;
+    private static final String RECENTS_ICON_PACK =
+            "system:" + Settings.System.RECENTS_ICON_PACK;
 
     static {
         boolean onlyCoreApps;
@@ -1127,7 +1130,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 LOCKSCREEN_MEDIA_METADATA,
                 LOCK_SCREEN_CUSTOM_NOTIF,
                 LOCKSCREEN_MAX_NOTIF_CONFIG,
-                NAVIGATION_BAR_VISIBLE);
+                NAVIGATION_BAR_VISIBLE,
+                RECENTS_ICON_PACK);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController);
@@ -8251,6 +8255,13 @@ public class StatusBar extends SystemUI implements DemoMode,
                         newValue == null ? DUActionUtils.hasNavbarByDefault(mContext) :
                                     Integer.parseInt(newValue) != 0;
                 updateNavbarvisibility();
+                break;
+            case RECENTS_ICON_PACK:
+                if (newValue != null) {
+                    String currentIconPack = (String) newValue;
+                    IconPackHelper.getInstance(mContext).updatePrefs(currentIconPack);
+                }
+                mRecents.resetIconCache();
                 break;
             default:
                 break;
