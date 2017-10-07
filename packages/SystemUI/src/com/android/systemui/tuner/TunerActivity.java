@@ -33,6 +33,8 @@ public class TunerActivity extends SettingsDrawerActivity implements
 
     private static final String TAG_TUNER = "tuner";
 
+    private String mInitialTitle;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -51,6 +53,13 @@ public class TunerActivity extends SettingsDrawerActivity implements
 
             getFragmentManager().beginTransaction().replace(R.id.content_frame,
                     fragment, TAG_TUNER).commit();
+
+            mInitialTitle = String.valueOf(getActionBar().getTitle());
+
+            String extra = getIntent().getStringExtra(TAG_TUNER);
+            if (extra != null) {
+                startPreferenceScreen((PreferenceFragment)fragment, extra, false);
+            }
         }
     }
 
@@ -58,6 +67,8 @@ public class TunerActivity extends SettingsDrawerActivity implements
     public void onBackPressed() {
         if (!getFragmentManager().popBackStackImmediate()) {
             super.onBackPressed();
+        } else {
+            getActionBar().setTitle(mInitialTitle);
         }
     }
 
@@ -76,7 +87,7 @@ public class TunerActivity extends SettingsDrawerActivity implements
             Class<?> cls = Class.forName(pref.getFragment());
             Fragment fragment = (Fragment) cls.newInstance();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            setTitle(pref.getTitle());
+            getActionBar().setTitle(pref.getTitle());
             transaction.replace(R.id.content_frame, fragment);
             transaction.addToBackStack("PreferenceFragment");
             transaction.commit();
@@ -114,6 +125,7 @@ public class TunerActivity extends SettingsDrawerActivity implements
             PreferenceScreen p = (PreferenceScreen) ((PreferenceFragment) getTargetFragment())
                     .getPreferenceScreen().findPreference(rootKey);
             setPreferenceScreen(p);
+            getActivity().getActionBar().setTitle(p.getTitle());
         }
     }
 }
