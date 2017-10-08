@@ -10843,6 +10843,14 @@ public final class Settings {
         private static final Validator CHARGING_SOUNDS_ENABLED_VALIDATOR = BOOLEAN_VALIDATOR;
 
         /**
+         * Whether to play a battery fully charged sound.
+         * @hide
+         */
+        public static final String BATTERY_FULLY_CHARGED_SOUND_ENABLED = "battery_fully_charged_sound_enabled";
+
+        private static final Validator BATTERY_FULLY_CHARGED_SOUND_ENABLED_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * Whether to vibrate for wireless charging events.
          * @deprecated Use {@link android.provider.Settings.Secure#CHARGING_VIBRATION_ENABLED}
          * @hide
@@ -15222,6 +15230,7 @@ public final class Settings {
             POWER_SOUNDS_ENABLED,
             DOCK_SOUNDS_ENABLED,
             CHARGING_SOUNDS_ENABLED,
+            BATTERY_FULLY_CHARGED_SOUND_ENABLED,
             USB_MASS_STORAGE_ENABLED,
             NETWORK_RECOMMENDATIONS_ENABLED,
             WIFI_WAKEUP_ENABLED,
@@ -15264,6 +15273,7 @@ public final class Settings {
             VALIDATORS.put(POWER_SOUNDS_ENABLED, POWER_SOUNDS_ENABLED_VALIDATOR);
             VALIDATORS.put(DOCK_SOUNDS_ENABLED, DOCK_SOUNDS_ENABLED_VALIDATOR);
             VALIDATORS.put(CHARGING_SOUNDS_ENABLED, CHARGING_SOUNDS_ENABLED_VALIDATOR);
+            VALIDATORS.put(BATTERY_FULLY_CHARGED_SOUND_ENABLED, BATTERY_FULLY_CHARGED_SOUND_ENABLED_VALIDATOR);
             VALIDATORS.put(USB_MASS_STORAGE_ENABLED, USB_MASS_STORAGE_ENABLED_VALIDATOR);
             VALIDATORS.put(NETWORK_RECOMMENDATIONS_ENABLED,
                     NETWORK_RECOMMENDATIONS_ENABLED_VALIDATOR);
