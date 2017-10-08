@@ -24,6 +24,7 @@ import android.app.ActivityManagerInternal;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.hardware.health.V1_0.HealthInfo;
 import android.hardware.health.V2_0.IHealth;
@@ -33,7 +34,11 @@ import android.hardware.health.V2_1.Constants;
 import android.hardware.health.V2_1.IHealthInfoCallback;
 import android.hidl.manager.V1_0.IServiceManager;
 import android.hidl.manager.V1_0.IServiceNotification;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.metrics.LogMaker;
+import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.BatteryManagerInternal;
 import android.os.BatteryProperty;
@@ -75,6 +80,8 @@ import com.android.server.lights.LogicalLight;
 
 import org.lineageos.internal.notification.LedValues;
 import org.lineageos.internal.notification.LineageBatteryLights;
+
+import lineageos.providers.LineageSettings;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -230,6 +237,13 @@ public final class BatteryService extends SystemService {
     private int mLastModStatus;
     private int mLastModType;
 
+    private boolean mPlayBatteryFullyChargedSound;
+    private boolean mIsPlayingBatteryFullyChargedSound;
+    private Ringtone mPowerRingtone;
+    private boolean mSmartChargingEnabled;
+    private int mSmartChargingLevel;
+    private int mSmartChargingLevelDefaultConfig;
+
     public BatteryService(Context context) {
         super(context);
 
@@ -257,6 +271,8 @@ public final class BatteryService extends SystemService {
 
         mBatteryLevelsEventQueue = new ArrayDeque<>();
         mMetricsLogger = new MetricsLogger();
+
+        mPowerRingtone = null;
 
         // watch for invalid charger messages if the invalid_charger switch exists
         if (new File("/sys/devices/virtual/switch/invalid_charger/state").exists()) {
@@ -330,6 +346,12 @@ public final class BatteryService extends SystemService {
 
             // Update light state now that mLineageBatteryLights has been initialized.
             updateLedPulse();
+
+            mSmartChargingLevelDefaultConfig = mContext.getResources().getInteger(
+                    com.android.internal.R.integer.config_smartChargingBatteryLevel);
+
+            SettingsObserver observer = new SettingsObserver(new Handler());
+            observer.observe();
         }
     }
 
@@ -757,6 +779,12 @@ public final class BatteryService extends SystemService {
 
             // Update the battery LED
             mLed.updateLightsLocked();
+
+            if (shouldPlayBatteryFullyChargedSoundLocked()) {
+                playBatteryFullyChargedSoundLocked();
+            } else if (shouldStopBatteryFullyChargedSoundLocked()) {
+                stopBatteryFullyChargedSoundLocked();
+            }
 
             // This needs to be done after sendIntent() so that we get the lastest battery stats.
             if (logOutlier && dischargeDuration != 0) {
@@ -1259,6 +1287,45 @@ public final class BatteryService extends SystemService {
         mLed.updateLightsLocked();
     }
 
+    private boolean shouldPlayBatteryFullyChargedSoundLocked() {
+        return mPlayBatteryFullyChargedSound && mPlugType != 0
+                && mHealthInfo.batteryLevel == (mSmartChargingEnabled ? mSmartChargingLevel : BATTERY_SCALE)
+                && !mIsPlayingBatteryFullyChargedSound;
+    }
+
+    private void playBatteryFullyChargedSoundLocked() {
+        PlayChargedSound playChargedSound = new PlayChargedSound();
+        playChargedSound.start();
+        mIsPlayingBatteryFullyChargedSound = true;
+    }
+
+    private class PlayChargedSound extends Thread {
+        public void run() {
+            final String soundPath = LineageSettings.Global.getString(mContext.getContentResolver(),
+                    LineageSettings.Global.BATTERY_FULLY_CHARGED_RINGTONE);
+
+            if (soundPath != null && !soundPath.equals("silent")) {
+                mPowerRingtone = RingtoneManager.getRingtone(mContext, Uri.parse(soundPath));
+                if (mPowerRingtone != null) {
+                    mPowerRingtone.setStreamType(AudioManager.STREAM_SYSTEM);
+                    mPowerRingtone.play();
+                }
+            }
+        }
+    }
+
+    private boolean shouldStopBatteryFullyChargedSoundLocked() {
+        return mIsPlayingBatteryFullyChargedSound &&
+                (mPlugType == 0 || mHealthInfo.batteryLevel < BATTERY_SCALE);
+    }
+
+    private void stopBatteryFullyChargedSoundLocked() {
+        if (mPowerRingtone != null) {
+            mPowerRingtone.stop();
+        }
+        mIsPlayingBatteryFullyChargedSound = false;
+    }
+
     private final class Led {
         private final LogicalLight mBatteryLight;
 
@@ -1712,6 +1779,47 @@ public final class BatteryService extends SystemService {
                     }
                 });
             }
+        }
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+
+            // Battery fully charged sound enabled
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_FULLY_CHARGED_SOUND_ENABLED),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SMART_CHARGING),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SMART_CHARGING_LEVEL),
+                    false, this, UserHandle.USER_ALL);
+
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+
+            // Battery fully charged sound enabled
+            mPlayBatteryFullyChargedSound = Settings.System.getIntForUser(
+                    resolver, Settings.System.BATTERY_FULLY_CHARGED_SOUND_ENABLED, 1, UserHandle.USER_CURRENT) != 0;
+            mSmartChargingEnabled = Settings.System.getIntForUser(resolver,
+                    Settings.System.SMART_CHARGING, 0, UserHandle.USER_CURRENT) == 1;
+            mSmartChargingLevel = Settings.System.getIntForUser(resolver,
+                    Settings.System.SMART_CHARGING_LEVEL,
+                    mSmartChargingLevelDefaultConfig, UserHandle.USER_CURRENT);
         }
     }
 }
