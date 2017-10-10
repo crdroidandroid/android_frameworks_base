@@ -32,6 +32,12 @@
     <string name="wifi_security_short_psk_generic">@string/wifi_security_short_wpa_wpa2</string>
     <!-- Do not translate.  Concise terminology for wifi with 802.1x EAP security -->
     <string name="wifi_security_short_eap">802.1x</string>
+    <!-- Do not translate.  Concise terminology for wifi with DPP security -->
+    <string name="wifi_security_short_dpp">DPP</string>
+    <!-- Do not translate.  Concise terminology for wifi with SAE security -->
+    <string name="wifi_security_short_sae">SAE</string>
+    <!-- Do not translate.  Concise terminology for wifi with OWE security -->
+    <string name="wifi_security_short_owe">OWE</string>
 
     <!-- Used in Wi-Fi settings dialogs when Wi-Fi does not have any security. -->
     <string name="wifi_security_none">None</string>
@@ -50,6 +56,12 @@
     <string name="wifi_security_eap">802.1x EAP</string>
     <!-- Do not translate.  Concise terminology for Passpoint network -->
     <string name="wifi_security_passpoint">Passpoint</string>
+    <!-- Do not translate.  Concise terminology for DPP network -->
+    <string name="wifi_security_dpp">DPP</string>
+    <!-- Do not translate.  Concise terminology for SAE network -->
+    <string name="wifi_security_sae">SAE</string>
+    <!-- Do not translate.  Concise terminology for OWE network -->
+    <string name="wifi_security_owe">OWE</string>
 
     <!-- Summary for the remembered network. -->
     <string name="wifi_remembered">Saved</string>
