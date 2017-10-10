@@ -33,6 +33,12 @@
         <attr name="restrictedSwitchSummary" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="WifiEncryptionStateOwe">
+        <attr name="state_encrypted_owe" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="WifiEncryptionStateSae">
+        <attr name="state_encrypted_sae" format="boolean" />
+    </declare-styleable>
     <declare-styleable name="WifiEncryptionState">
         <attr name="state_encrypted" format="boolean" />
     </declare-styleable>
