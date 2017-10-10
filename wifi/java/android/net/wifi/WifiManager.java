@@ -800,6 +800,26 @@ public class WifiManager {
     public static final String NETWORK_IDS_CHANGED_ACTION = "android.net.wifi.NETWORK_IDS_CHANGED";
 
     /**
+     * Broadcast intent action indicating DPP Event arrival notificaiton.
+     * @see #EXTRA_DPP_DATA.
+     * @hide
+     */
+    public static final String DPP_EVENT_ACTION = "android.net.wifi.DPP_EVENT";
+
+    /**
+     * This shall point to DppResult Type.
+     * @hide
+     */
+    public static final String EXTRA_DPP_EVENT_TYPE = "dppEventType";
+
+    /**
+     * This shall point to WifiDppConfig object. Retrieve with
+     * {@link android.content.Intent#getParcelableExtra(String)}.
+     * @hide
+     */
+    public static final String EXTRA_DPP_EVENT_DATA = "dppEventData";
+
+    /**
      * Activity Action: Show a system activity that allows the user to enable
      * scans to be available even with Wi-Fi turned off.
      *
@@ -3701,7 +3721,6 @@ public class WifiManager {
             mHandler = new Handler(looper);
             mCallback = callback;
         }
-
         @Override
         public void onProvisioningStatus(int status) {
             mHandler.post(() -> {
@@ -3727,6 +3746,176 @@ public class WifiManager {
     public String getCapabilities(String capaType) {
         try {
             return mService.getCapabilities(capaType);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+
+    /**
+     * Add the DPP bootstrap info obtained from QR code.
+     *
+     * @param uri:The URI obtained from the QR code reader.
+     *
+     * @return: Handle to strored info else -1 on failure
+     * @hide
+     */
+    public int dppAddBootstrapQrCode(String uri) {
+        try {
+            return mService.dppAddBootstrapQrCode(uri);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+
+    /**
+     * Generate bootstrap URI based on the passed arguments
+     *
+     * @param config – bootstrap generate config, mandatory parameters
+     *                 are: type, frequency, mac_addr, curve, key.
+     *
+     * @return: Handle to strored URI info else -1 on failure
+     * @hide
+     */
+    public int dppBootstrapGenerate(WifiDppConfig config) {
+        try {
+            return mService.dppBootstrapGenerate(config);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Get bootstrap URI based on bootstrap ID
+     *
+     * @param bootstrap_id: Stored bootstrap ID
+     *
+     * @return: URI string else -1 on failure
+     * @hide
+     */
+    public String dppGetUri(int bootstrap_id) {
+        try {
+            return mService.dppGetUri(bootstrap_id);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Remove bootstrap URI based on bootstrap ID.
+     *
+     * @param bootstrap_id: Stored bootstrap ID. 0 to remove all.
+     *
+     * @return: 0 – Success or -1 on failure
+     * @hide
+     */
+    public int dppBootstrapRemove(int bootstrap_id) {
+        try {
+            return mService.dppBootstrapRemove(bootstrap_id);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * start listen on the channel specified waiting to receive
+     * the DPP Authentication request.
+     *
+     * @param frequency: DPP listen frequency
+     * @param dpp_role: Configurator/Enrollee role
+     * @param qr_mutual: Mutual authentication required
+     * @param netrole_ap: network role
+     *
+     * @return: Returns 0 if a DPP-listen work is successfully
+     *  queued and -1 on failure.
+     * @hide
+     */
+    public int dppListen(String frequency, int dpp_role, boolean qr_mutual,
+                         boolean netrole_ap) {
+        try {
+            return mService.dppListen(frequency, dpp_role, qr_mutual, netrole_ap);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * stop ongoing dpp listen.
+     *
+     * @hide
+     */
+    public void dppStopListen() {
+        try {
+            mService.dppStopListen();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Adds the DPP configurator
+     *
+     * @param curve curve used for dpp encryption
+     * @param key private key
+     * @param expiry timeout in seconds
+     *
+     * @return: Identifier of the added configurator or -1 on failure
+     * @hide
+     */
+    public int dppConfiguratorAdd(String curve, String key, int expiry) {
+        try {
+            return mService.dppConfiguratorAdd(curve, key, expiry);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Remove the added configurator through dppConfiguratorAdd.
+     *
+     * @param config_id: DPP Configurator ID. 0 to remove all.
+     *
+     * @return: Handle to strored info else -1 on failure
+     * @hide
+     */
+    public int dppConfiguratorRemove(int config_id) {
+        try {
+            return mService.dppConfiguratorRemove(config_id);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Start DPP authentication and provisioning with the specified peer
+     *
+     * @param config – dpp auth init config mandatory parameters
+     *                 are: peer_bootstrap_id,  own_bootstrap_id,  dpp_role,
+     *                 ssid, passphrase, isDpp, conf_id, expiry.
+     *
+     * @return: 0 if DPP auth request was transmitted and -1 on failure
+     * @hide
+     */
+    public int  dppStartAuth(WifiDppConfig config) {
+        try {
+            return mService.dppStartAuth(config);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Retrieve Private key to be used for configurator
+     *
+     * @param id: id of configurator
+     *
+     * @return: KEY string else -1 on failure
+     * @hide
+     */
+    public String dppConfiguratorGetKey(int id) {
+        try {
+            return mService.dppConfiguratorGetKey(id);
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
