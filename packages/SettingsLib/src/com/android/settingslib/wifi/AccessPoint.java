@@ -163,6 +163,9 @@ public class AccessPoint implements Comparable<AccessPoint> {
     public static final int SECURITY_WEP = 1;
     public static final int SECURITY_PSK = 2;
     public static final int SECURITY_EAP = 3;
+    public static final int SECURITY_DPP = 4;
+    public static final int SECURITY_SAE = 5;
+    public static final int SECURITY_OWE = 6;
 
     private static final int PSK_UNKNOWN = 0;
     private static final int PSK_WPA = 1;
@@ -662,6 +665,28 @@ public class AccessPoint implements Comparable<AccessPoint> {
         return false;
     }
 
+    public boolean isSuiteBSupported() {
+            IWifiManager wifiManager = IWifiManager.Stub.asInterface(
+                    ServiceManager.getService(Context.WIFI_SERVICE));
+            String capability = "";
+
+            try {
+                   capability = wifiManager.getCapabilities("key_mgmt");
+            } catch (RemoteException e) {
+               Log.w(TAG, "Remote Exception", e);
+	    }
+
+            if (!capability.contains("WPA-EAP-SUITE-B-192")) {
+                  return false;
+            }
+
+            for (ScanResult result : mScanResults) {
+                if (result.capabilities.contains("EAP_SUITE_B_192")) {
+                    return true;
+                }
+            }
+        return false;
+    }
     public boolean isFils384Supported() {
             IWifiManager wifiManager = IWifiManager.Stub.asInterface(
                     ServiceManager.getService(Context.WIFI_SERVICE));
@@ -787,6 +812,15 @@ public class AccessPoint implements Comparable<AccessPoint> {
             case SECURITY_WEP:
                 return concise ? context.getString(R.string.wifi_security_short_wep) :
                     context.getString(R.string.wifi_security_wep);
+            case SECURITY_DPP:
+                return concise ? context.getString(R.string.wifi_security_short_dpp) :
+                    context.getString(R.string.wifi_security_dpp);
+            case SECURITY_SAE:
+                return concise ? context.getString(R.string.wifi_security_short_sae) :
+                    context.getString(R.string.wifi_security_sae);
+            case SECURITY_OWE:
+                return concise ? context.getString(R.string.wifi_security_short_owe) :
+                    context.getString(R.string.wifi_security_owe);
             case SECURITY_NONE:
             default:
                 return concise ? "" : context.getString(R.string.wifi_security_none);
@@ -1343,6 +1377,12 @@ public class AccessPoint implements Comparable<AccessPoint> {
             return SECURITY_PSK;
         } else if (result.capabilities.contains("EAP")) {
             return SECURITY_EAP;
+        } else if (result.capabilities.contains("DPP")) {
+            return SECURITY_DPP;
+        } else if (result.capabilities.contains("SAE")) {
+            return SECURITY_SAE;
+        } else if (result.capabilities.contains("OWE")) {
+            return SECURITY_OWE;
         }
         return SECURITY_NONE;
     }
@@ -1354,6 +1394,15 @@ public class AccessPoint implements Comparable<AccessPoint> {
         if (config.allowedKeyManagement.get(KeyMgmt.WPA_EAP) ||
                 config.allowedKeyManagement.get(KeyMgmt.IEEE8021X)) {
             return SECURITY_EAP;
+        }
+        if (config.allowedKeyManagement.get(KeyMgmt.DPP)) {
+            return SECURITY_DPP;
+        }
+        if (config.allowedKeyManagement.get(KeyMgmt.SAE)) {
+            return SECURITY_SAE;
+        }
+        if (config.allowedKeyManagement.get(KeyMgmt.OWE)) {
+            return SECURITY_OWE;
         }
         return (config.wepKeys[0] != null) ? SECURITY_WEP : SECURITY_NONE;
     }
@@ -1372,6 +1421,12 @@ public class AccessPoint implements Comparable<AccessPoint> {
             return "PSK";
         } else if (security == SECURITY_EAP) {
             return "EAP";
+        } else if (security == SECURITY_DPP) {
+            return "DPP";
+        } else if (security == SECURITY_SAE) {
+            return "SAE";
+        } else if (security == SECURITY_OWE) {
+            return "OWE";
         }
         return "NONE";
     }
