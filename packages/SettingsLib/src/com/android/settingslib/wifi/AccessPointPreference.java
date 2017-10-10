@@ -43,6 +43,14 @@ import com.android.settingslib.wifi.AccessPoint.Speed;
 
 public class AccessPointPreference extends Preference {
 
+    private static final int[] STATE_SECURED_OWE = {
+            R.attr.state_encrypted_owe
+    };
+
+    private static final int[] STATE_SECURED_SAE = {
+            R.attr.state_encrypted_sae
+    };
+
     private static final int[] STATE_SECURED = {
             R.attr.state_encrypted
     };
@@ -200,7 +208,11 @@ public class AccessPointPreference extends Preference {
         if (frictionImageView == null || mFrictionSld == null) {
             return;
         }
-        if (mAccessPoint.getSecurity() != AccessPoint.SECURITY_NONE) {
+        if (mAccessPoint.getSecurity() == AccessPoint.SECURITY_SAE) {
+            mFrictionSld.setState(STATE_SECURED_SAE);
+        } else if (mAccessPoint.getSecurity() == AccessPoint.SECURITY_OWE) {
+            mFrictionSld.setState(STATE_SECURED_OWE);
+        } else if (mAccessPoint.getSecurity() != AccessPoint.SECURITY_NONE) {
             mFrictionSld.setState(STATE_SECURED);
         } else if (mAccessPoint.isMetered()) {
             mFrictionSld.setState(STATE_METERED);

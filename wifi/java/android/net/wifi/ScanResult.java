@@ -147,6 +147,28 @@ public class ScanResult implements Parcelable {
 
     /**
      * @hide
+     * Security key management scheme: DPP.
+     */
+    public static final int KEY_MGMT_DPP = 10;
+
+     /**
+     * @hide
+     * Security key management scheme: SAE.
+     */
+    public static final int KEY_MGMT_SAE = 11;
+
+    /**
+     * @hide
+     * Security key management scheme: OWE.
+     */
+    public static final int KEY_MGMT_OWE = 12;
+    /**
+     * @hide
+     * Security key management scheme: SUITE_B_192.
+     */
+    public static final int KEY_MGMT_EAP_SUITE_B_192 = 13;
+    /**
+     * @hide
      * No cipher suite.
      */
     public static final int CIPHER_NONE = 0;
@@ -165,6 +187,11 @@ public class ScanResult implements Parcelable {
      * Cipher suite: CCMP
      */
     public static final int CIPHER_CCMP = 3;
+    /**
+     * @hide
+     * Cipher suite: GCMP
+     */
+    public static final int CIPHER_GCMP = 4;
 
     /**
      * The detected signal level in dBm, also known as the RSSI.
