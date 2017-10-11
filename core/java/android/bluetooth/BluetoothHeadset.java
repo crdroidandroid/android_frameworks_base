@@ -28,8 +28,11 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.android.internal.annotations.GuardedBy;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Public API for controlling the Bluetooth Headset Service. This includes both
@@ -298,7 +301,8 @@ public final class BluetoothHeadset implements BluetoothProfile {
 
     private Context mContext;
     private ServiceListener mServiceListener;
-    private volatile IBluetoothHeadset mService;
+    private final ReentrantReadWriteLock mServiceLock = new ReentrantReadWriteLock();
+    @GuardedBy("mServiceLock") private volatile IBluetoothHeadset mService;
     private BluetoothAdapter mAdapter;
 
     final private IBluetoothStateChangeCallback mBluetoothStateChangeCallback =
@@ -470,17 +474,22 @@ public final class BluetoothHeadset implements BluetoothProfile {
      */
     public List<BluetoothDevice> getConnectedDevices() {
         if (VDBG) log("getConnectedDevices()");
-        final IBluetoothHeadset service = mService;
-        if (service != null && isEnabled()) {
-            try {
-                return service.getConnectedDevices();
-            } catch (RemoteException e) {
-                Log.e(TAG, Log.getStackTraceString(new Throwable()));
-                return new ArrayList<BluetoothDevice>();
+        try {
+            mServiceLock.readLock().lock();
+            final IBluetoothHeadset service = mService;
+            if (service != null && isEnabled()) {
+                try {
+                    return service.getConnectedDevices();
+                } catch (RemoteException e) {
+                    Log.e(TAG, Log.getStackTraceString(new Throwable()));
+                    return new ArrayList<BluetoothDevice>();
+                }
             }
+            if (service == null) Log.w(TAG, "Proxy not attached to service");
+            return new ArrayList<BluetoothDevice>();
+        } finally {
+            mServiceLock.readLock().unlock();
         }
-        if (service == null) Log.w(TAG, "Proxy not attached to service");
-        return new ArrayList<BluetoothDevice>();
     }
 
     /**
@@ -1130,16 +1139,26 @@ public final class BluetoothHeadset implements BluetoothProfile {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
             if (DBG) Log.d(TAG, "Proxy object connected");
-            mService = IBluetoothHeadset.Stub.asInterface(Binder.allowBlocking(service));
-            mHandler.sendMessage(mHandler.obtainMessage(
-                    MESSAGE_HEADSET_SERVICE_CONNECTED));
+            try {
+                mServiceLock.writeLock().lock();
+                mService = IBluetoothHeadset.Stub.asInterface(Binder.allowBlocking(service));
+                mHandler.sendMessage(mHandler.obtainMessage(
+                          MESSAGE_HEADSET_SERVICE_CONNECTED));
+            } finally {
+                mServiceLock.writeLock().unlock();
+            }
         }
         @Override
         public void onServiceDisconnected(ComponentName className) {
             if (DBG) Log.d(TAG, "Proxy object disconnected");
-            mService = null;
-            mHandler.sendMessage(mHandler.obtainMessage(
-                    MESSAGE_HEADSET_SERVICE_DISCONNECTED));
+            try {
+                mServiceLock.writeLock().lock();
+                mService = null;
+                mHandler.sendMessage(mHandler.obtainMessage(
+                        MESSAGE_HEADSET_SERVICE_DISCONNECTED));
+            } finally {
+                mServiceLock.writeLock().unlock();
+            }
         }
     };
 
