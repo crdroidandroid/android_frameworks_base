@@ -4046,12 +4046,12 @@ public final class Settings {
         /**
          * @hide
          */
-        public static final String STATUSBAR_BATTERY_BAR_BLEND_COLORS = "statusbar_battery_bar_blend_color";
+        public static final String STATUSBAR_BATTERY_BAR_BLEND_COLOR = "statusbar_battery_bar_blend_color";
 
         /**
          * @hide
          */
-        public static final String STATUSBAR_BATTERY_BAR_BLEND_COLORS_REVERSE =
+        public static final String STATUSBAR_BATTERY_BAR_BLEND_COLOR_REVERSE =
                 "statusbar_battery_bar_blend_color_reverse";
 
         /**
