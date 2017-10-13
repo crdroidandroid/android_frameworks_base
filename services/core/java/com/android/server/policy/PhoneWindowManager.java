@@ -852,9 +852,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int MSG_REQUEST_TRANSIENT_BARS_ARG_STATUS = 0;
     private static final int MSG_REQUEST_TRANSIENT_BARS_ARG_NAVIGATION = 1;
 
-    private boolean mClearedBecauseOfForceShow;
-    private boolean mTopWindowIsKeyguard;
-
     private class PolicyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -7889,34 +7886,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         int tmpVisibility = WindowManagerPolicyControl.getSystemUiVisibility(win, null)
                 & ~mResettingSystemUiFlags
                 & ~mForceClearedSystemUiFlags;
-        boolean wasCleared = mClearedBecauseOfForceShow;
         if (mForcingShowNavBar && win.getSurfaceLayer() < mForcingShowNavBarLayer) {
             tmpVisibility &=
                     ~WindowManagerPolicyControl.adjustClearableFlags(win,
                             View.SYSTEM_UI_CLEARABLE_FLAGS);
-            mClearedBecauseOfForceShow = true;
-        } else {
-            mClearedBecauseOfForceShow = false;
-        }
-
-        // The window who requested navbar force showing disappeared and next window wants
-        // to hide navbar. Instead of hiding we will make it transient. SystemUI will take care
-        // about hiding after timeout. This should not happen if next window is keyguard because
-        // transient state have more priority than translucent (why?) and cause bad UX
-        if (wasCleared && !mClearedBecauseOfForceShow
-                && (tmpVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0) {
-            mNavigationBarController.showTransient();
-            tmpVisibility |= View.NAVIGATION_BAR_TRANSIENT;
-            mWindowManagerFuncs.addSystemUIVisibilityFlag(View.NAVIGATION_BAR_TRANSIENT);
-        }
-
-        boolean topWindowWasKeyguard = mTopWindowIsKeyguard;
-        mTopWindowIsKeyguard = (win.getAttrs().privateFlags & PRIVATE_FLAG_KEYGUARD) != 0;
-        if (topWindowWasKeyguard && !mTopWindowIsKeyguard
-                && (tmpVisibility & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0) {
-            mStatusBarController.showTransient();
-            tmpVisibility |= View.STATUS_BAR_TRANSIENT;
-            mWindowManagerFuncs.addSystemUIVisibilityFlag(View.STATUS_BAR_TRANSIENT);
         }
 
         final int fullscreenVisibility = updateLightStatusBarLw(0 /* vis */,
