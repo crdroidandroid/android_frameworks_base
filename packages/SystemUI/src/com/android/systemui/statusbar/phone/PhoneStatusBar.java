@@ -137,6 +137,7 @@ import com.android.internal.logging.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.NotificationVisibility;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.utils.du.ActionHandler;
+import com.android.internal.utils.du.DUActionUtils;
 import com.android.internal.utils.du.DUPackageMonitor;
 import com.android.internal.utils.du.DUSystemReceiver;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
@@ -390,6 +391,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             "cmsecure:" + CMSettings.Secure.LOCKSCREEN_MEDIA_METADATA;
     private static final String SYSTEMUI_BURNIN_PROTECTION =
             "cmsecure:" + CMSettings.System.SYSTEMUI_BURNIN_PROTECTION;
+    private static final String NAVIGATION_BAR_VISIBLE =
+            Settings.Secure.NAVIGATION_BAR_VISIBLE;
 
     static {
         boolean onlyCoreApps;
@@ -609,9 +612,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mFlashlightController.setFlashlight(!mFlashlightController.isEnabled());
                 }
             }
-            if (mBurnInProtectionController != null) {
-                mBurnInProtectionController.setNavigationBarView(
-                        visible ? mNavigationBarView : null);
+            if (mNavigationController != null && mBurnInProtectionController != null) {
+                mNavigationController.setBarView(mBurnInProtectionController, mNavbarVisible);
             }
         }
     };
@@ -713,6 +715,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private boolean mKeyguardShowingMedia;
     private boolean mShowMediaMetadata;
     private boolean mBurnInProtectionEnabled;
+    private boolean mNavbarVisible;
 
     private MediaSessionManager mMediaSessionManager;
     private MediaController mMediaController;
@@ -974,7 +977,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 BLUR_MIXED_COLOR_PREFERENCE_KEY,
                 NAVBAR_DYNAMIC,
                 STATUS_BAR_SHOW_CARRIER,
-                LOCKSCREEN_MEDIA_METADATA);
+                LOCKSCREEN_MEDIA_METADATA,
+                SYSTEMUI_BURNIN_PROTECTION,
+                NAVIGATION_BAR_VISIBLE);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -6208,6 +6213,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         mBurnInProtectionController.stopShiftTimer(true);
                     }
                 }
+                break;
+            case NAVIGATION_BAR_VISIBLE:
+                if (newValue == null) {
+                    mNavbarVisible = DUActionUtils.hasNavbarByDefault(mContext);
+                    break;
+                }
+                mNavbarVisible = Integer.parseInt(newValue) == 1;
                 break;
             default:
                 break;

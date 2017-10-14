@@ -25,6 +25,7 @@ import android.util.Log;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.NavigationBarView;
+import com.android.systemui.navigation.Navigator;
 import com.android.systemui.statusbar.phone.PhoneStatusBarView;
 
 public class BurnInProtectionController {
@@ -48,7 +49,7 @@ public class BurnInProtectionController {
             mHandler.postDelayed(this.mRunnable, INTERVAL);
     };
 
-    private NavigationBarView mNavigationBarView;
+    private Navigator mNavigationBarView;
     private PhoneStatusBarView mPhoneStatusBarView;
 
     private Context mContext;
@@ -65,7 +66,7 @@ public class BurnInProtectionController {
                 .getDimensionPixelSize(R.dimen.burnin_protection_vertical_shift) - 1;
     }
 
-    public void setNavigationBarView(NavigationBarView navigationBarView) {
+    public void setNavigationBarView(Navigator navigationBarView) {
         mNavigationBarView = navigationBarView;
     }
 
