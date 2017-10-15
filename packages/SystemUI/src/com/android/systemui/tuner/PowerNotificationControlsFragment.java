@@ -71,6 +71,7 @@ public class PowerNotificationControlsFragment extends Fragment {
             }
         });
 
+        setHasOptionsMenu(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
