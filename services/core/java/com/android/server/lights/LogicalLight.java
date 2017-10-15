@@ -75,6 +75,11 @@ public abstract class LogicalLight {
     public abstract void setFlashing(int color, int mode, int onMS, int offMS);
 
     /**
+     * Set the modes of light.
+     */
+    public abstract void setModes(int brightnessLevel);
+
+    /**
      * Pulses the light.
      */
     public abstract void pulse();

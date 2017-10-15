@@ -315,6 +315,14 @@ public class LightsService extends SystemService {
         }
 
         @Override
+        public void setModes(int brightnessLevel) {
+            synchronized (this) {
+                mBrightnessLevel = brightnessLevel;
+                mModesUpdate = true;
+            }
+        }
+
+        @Override
         public void pulse() {
             pulse(0x00ffffff, 7);
         }
@@ -372,7 +380,7 @@ public class LightsService extends SystemService {
             }
 
             if (!mInitialized || color != mColor || mode != mMode || onMS != mOnMS ||
-                    offMS != mOffMS || mBrightnessMode != brightnessMode) {
+                    offMS != mOffMS || mBrightnessMode != brightnessMode || mModesUpdate) {
                 if (DEBUG) {
                     Slog.v(TAG, "setLight #" + mHwLight.id + ": color=#"
                             + Integer.toHexString(color) + ": brightnessMode=" + brightnessMode);
@@ -384,6 +392,7 @@ public class LightsService extends SystemService {
                 mOnMS = onMS;
                 mOffMS = offMS;
                 mBrightnessMode = brightnessMode;
+                mModesUpdate = false;
                 setLightUnchecked(color, mode, onMS, offMS, brightnessMode);
             }
         }
@@ -402,7 +411,8 @@ public class LightsService extends SystemService {
                     lightState.brightnessMode = (byte) brightnessMode;
                     mVintfLights.get().setLightState(mHwLight.id, lightState);
                 } else {
-                    setLight_native(mHwLight.id, color, mode, onMS, offMS, brightnessMode);
+                    setLight_native(mHwLight.id, color, mode, onMS, offMS,
+                            brightnessMode, mBrightnessLevel);
                 }
             } catch (RemoteException | UnsupportedOperationException ex) {
                 Slog.e(TAG, "Failed issuing setLightState", ex);
@@ -434,6 +444,7 @@ public class LightsService extends SystemService {
         private int mMode;
         private int mOnMS;
         private int mOffMS;
+        private int mBrightnessLevel;
         private boolean mFlashing;
         private int mBrightnessMode;
         private int mLastBrightnessMode;
@@ -441,6 +452,8 @@ public class LightsService extends SystemService {
         private boolean mVrModeEnabled;
         private boolean mUseLowPersistenceForVR;
         private boolean mInitialized;
+        private boolean mLocked;
+        private boolean mModesUpdate;
     }
 
     public LightsService(Context context) {
@@ -549,5 +562,5 @@ public class LightsService extends SystemService {
     }
 
     static native void setLight_native(int light, int color, int mode,
-            int onMS, int offMS, int brightnessMode);
+            int onMS, int offMS, int brightnessMode, int brightnessLevel);
 }
