@@ -85,6 +85,7 @@ open class ShadeViewControllerEmptyImpl @Inject constructor() :
     override fun handleExternalInterceptTouch(event: MotionEvent): Boolean {
         return false
     }
+    override fun fling(vel: Float, expand: Boolean, expandBecauseOfFalsing: Boolean) {}
 
     override fun startInputFocusTransfer() {}
     override fun cancelInputFocusTransfer() {}
