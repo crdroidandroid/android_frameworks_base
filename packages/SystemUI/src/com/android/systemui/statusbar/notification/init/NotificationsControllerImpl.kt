@@ -119,6 +119,8 @@ class NotificationsControllerImpl @Inject constructor(
             groupAlertTransferHelper.setHeadsUpManager(headsUpManager)
 
             entryManager.attach(notificationListener)
+            entryManager.setStatusBar(statusBar)
+            headsUpController.setStatusBar(statusBar)
         }
     }
 
