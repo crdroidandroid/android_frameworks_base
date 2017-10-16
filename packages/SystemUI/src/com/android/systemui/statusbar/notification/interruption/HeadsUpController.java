@@ -31,6 +31,7 @@ import com.android.systemui.statusbar.notification.NotificationEntryManager;
 import com.android.systemui.statusbar.notification.VisualStabilityManager;
 import com.android.systemui.statusbar.notification.collection.NotificationEntry;
 import com.android.systemui.statusbar.notification.collection.notifcollection.NotifCollectionListener;
+import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.OnHeadsUpChangedListener;
 
@@ -51,6 +52,9 @@ public class HeadsUpController {
     private final StatusBarStateController mStatusBarStateController;
     private final NotificationListener mNotificationListener;
     private final HeadsUpManager mHeadsUpManager;
+
+    // We need reference to status bar for notification ticker
+    private StatusBar mStatusBar;
 
     @Inject
     HeadsUpController(
@@ -86,6 +90,10 @@ public class HeadsUpController {
             if (mInterruptStateProvider.shouldHeadsUp(entry)) {
                 mHeadsUpViewBinder.bindHeadsUpView(
                         entry, HeadsUpController.this::showAlertingView);
+            } else {
+                if (mStatusBar != null) {
+                    mStatusBar.tick(entry.getSbn(), true, false, null, null);
+                }
             }
         }
 
@@ -180,6 +188,10 @@ public class HeadsUpController {
             }
         }
     };
+
+    public void setStatusBar(StatusBar statusBar) {
+        mStatusBar = statusBar;
+    }
 
     private static final String TAG = "HeadsUpBindController";
 }
