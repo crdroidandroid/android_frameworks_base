@@ -336,4 +336,8 @@ public interface CentralSurfaces extends Dumpable, LifecycleOwner {
      */
     ActivityTransitionAnimator.Controller getAnimatorControllerFromNotification(
             ExpandableNotificationRow associatedView);
+
+    void brightnessControl(MotionEvent event);
+
+    void onBrightnessChanged(boolean upOrCancel);
 }
