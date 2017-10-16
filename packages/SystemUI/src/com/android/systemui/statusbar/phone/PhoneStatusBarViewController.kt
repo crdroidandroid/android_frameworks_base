@@ -129,6 +129,10 @@ private constructor(
         mView.importantForAccessibility = mode
     }
 
+    fun setBrightnessControlEnabled(enabled: Boolean) {
+        mView.brightnessControlEnabled = enabled
+    }
+
     /**
      * Sends a touch event to the status bar view.
      *
@@ -150,14 +154,22 @@ private constructor(
 
     /** Called when a touch event occurred on {@link PhoneStatusBarView}. */
     fun onTouch(event: MotionEvent) {
+        if (mView.brightnessControlEnabled) {
+            centralSurfaces.brightnessControl(event)
+            if (!centralSurfaces.commandQueuePanelsEnabled) return
+        }
+
+        val upOrCancel =
+            event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL
+
         if (statusBarWindowStateController.windowIsShowing()) {
-            val upOrCancel =
-                event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL
             centralSurfaces.setInteracting(
                 WINDOW_STATUS_BAR,
                 !upOrCancel || shadeController.isExpandedVisible
             )
         }
+
+        centralSurfaces.onBrightnessChanged(upOrCancel)
     }
 
     inner class PhoneStatusBarViewTouchHandler : Gefingerpoken {
