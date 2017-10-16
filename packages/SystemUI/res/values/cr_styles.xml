@@ -29,4 +29,11 @@
         <item name="android:textSize">@dimen/customtextclock_fontsize</item>
         <item name="android:paddingBottom">@dimen/bottom_text_spacing_digital</item>
     </style>
+
+    <!-- Status bar notification ticker -->
+    <style name="TextAppearance.StatusBar.PhoneTicker"
+        parent="@*android:style/TextAppearance.StatusBar">
+        <!-- Note: must be dp to fit in status bar -->
+        <item name="android:textSize">14dp</item>
+    </style>
 </resources>
