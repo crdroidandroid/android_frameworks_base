@@ -38,8 +38,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.ActivityManager;
+import android.app.ActivityManagerNative;
 import android.app.ActivityManager.StackId;
 import android.app.ActivityOptions;
+import android.app.IActivityManager;
 import android.app.INotificationManager;
 import android.app.KeyguardManager;
 import android.app.Notification;
@@ -215,6 +217,7 @@ import com.android.systemui.recents.events.activity.UndockingTaskEvent;
 import com.android.systemui.recents.misc.IconPackHelper;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.settings.CurrentUserTracker;
+import com.android.systemui.slimrecent.RecentController;
 import com.android.systemui.stackdivider.Divider;
 import com.android.systemui.stackdivider.WindowManagerProxy;
 import com.android.systemui.statusbar.ActivatableNotificationView;
@@ -423,6 +426,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private boolean mCustomMaxKeyguard;
     private int mMaxKeyguardNotifConfig;
     private boolean mNavbarVisible;
+    private boolean mUseSlimRecents;
 
     private static final String SCREEN_BRIGHTNESS_MODE =
             "system:" + Settings.System.SCREEN_BRIGHTNESS_MODE;
@@ -438,6 +442,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             Settings.Secure.NAVIGATION_BAR_VISIBLE;
     private static final String RECENTS_ICON_PACK =
             "system:" + Settings.System.RECENTS_ICON_PACK;
+    private static final String USE_SLIM_RECENTS =
+            "system:" + Settings.System.USE_SLIM_RECENTS;
 
     static {
         boolean onlyCoreApps;
@@ -1131,7 +1137,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 LOCK_SCREEN_CUSTOM_NOTIF,
                 LOCKSCREEN_MAX_NOTIF_CONFIG,
                 NAVIGATION_BAR_VISIBLE,
-                RECENTS_ICON_PACK);
+                RECENTS_ICON_PACK,
+                USE_SLIM_RECENTS);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController);
@@ -1831,8 +1838,19 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
         int dockSide = WindowManagerProxy.getInstance().getDockSide();
         if (dockSide == WindowManager.DOCKED_INVALID) {
-            return mRecents.dockTopTask(NavigationBarGestureHelper.DRAG_MODE_NONE,
-                    ActivityManager.DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT, null, metricsDockAction);
+            boolean isInLockTaskMode = false;
+            try {
+                IActivityManager activityManager = ActivityManagerNative.getDefault();
+                if (activityManager.isInLockTaskMode()) {
+                    isInLockTaskMode = true;
+                }
+            } catch (RemoteException e) {}
+            if (mSlimRecents != null && !isInLockTaskMode) {
+                mSlimRecents.startMultiWindow();
+            } else {
+                return mRecents.dockTopTask(NavigationBarGestureHelper.DRAG_MODE_NONE,
+                        ActivityManager.DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT, null, metricsDockAction);
+            }
         } else {
             Divider divider = getComponent(Divider.class);
             if (divider != null && divider.isMinimized() && !divider.isHomeStackResizable()) {
@@ -4441,6 +4459,10 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         updateRowStates();
         mScreenPinningRequest.onConfigurationChanged();
+
+        if (mSlimRecents != null) {
+            mSlimRecents.onConfigurationChanged(newConfig);
+        }
     }
 
     public void userSwitched(int newUserId) {
@@ -6398,6 +6420,8 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     protected RecentsComponent mRecents;
 
+    protected RecentController mSlimRecents;
+
     protected int mZenMode;
 
     // which notification is currently being longpress-examined by the user
@@ -8228,6 +8252,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             mAssistManager.startAssist(args);
         }
     }
+    // End Extra BaseStatusBarMethods.
 
     @Override
     public void onTuningChanged(String key, String newValue) {
@@ -8263,11 +8288,34 @@ public class StatusBar extends SystemUI implements DemoMode,
                 }
                 mRecents.resetIconCache();
                 break;
+            case USE_SLIM_RECENTS:
+                mUseSlimRecents =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                updateRecentsMode();
+                break;
             default:
                 break;
         }
     }
-    // End Extra BaseStatusBarMethods.
+
+    private void updateRecentsMode() {
+        if (mUseSlimRecents) {
+            mRecents.evictAllCaches();
+            mRecents.removeSbCallbacks();
+            mSlimRecents = new RecentController(mContext);
+            if (mSlimRecents != null) {
+                mSlimRecents.rebuildRecentsScreen();
+                mSlimRecents.addSbCallbacks();
+            }
+        } else {
+            mRecents.addSbCallbacks();
+            if (mSlimRecents != null) {
+                mSlimRecents.evictAllCaches();
+                mSlimRecents.removeSbCallbacks();
+                mSlimRecents = null;
+            }
+        }
+    }
 
     private void updateNavbarvisibility() {
         if (!mNavbarVisible) {
