@@ -31,9 +31,12 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src) $(call all-Iaidl-files-unde
 
 LOCAL_SRC_FILES += $(call all-java-files-under, ../../../../packages/apps/DUI/src)
 
+LOCAL_SRC_FILES += $(call all-java-files-under, ../../../../packages/apps/SlimRecents/src)
+
 LOCAL_STATIC_ANDROID_LIBRARIES := \
     SystemUIPluginLib \
     android-support-v4 \
+    android-support-v7-cardview \
     android-support-v7-recyclerview \
     android-support-v7-preference \
     android-support-v7-appcompat \
@@ -58,7 +61,7 @@ LOCAL_PRIVILEGED_MODULE := true
 
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
-LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res-keyguard $(LOCAL_PATH)/res packages/apps/DUI/res
+LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res-keyguard $(LOCAL_PATH)/res packages/apps/DUI/res packages/apps/SlimRecents/res
 
 ifneq ($(INCREMENTAL_BUILDS),)
     LOCAL_PROGUARD_ENABLED := disabled
