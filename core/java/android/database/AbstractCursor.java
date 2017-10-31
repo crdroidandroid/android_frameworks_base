@@ -215,76 +215,32 @@ public abstract class AbstractCursor implements CrossProcessCursor {
 
     @Override
     public final boolean moveToPosition(int position) {
-        final int moved = onMoveWithBoundsCheck(position);
-        switch (moved) {
-            case MOVE_OK:
-                mPos = position;
-                return true;
-            case MOVE_AFTER_LAST:
-                mPos = getCount();
-                return false;
-            case MOVE_BEFORE_FIRST:
-                mPos = -1;
-                return false;
-            case MOVE_NOP:
-                return true;
-            case MOVE_FAILED:
-                mPos = -1;
-                return false;
-            default:
-                throw new IllegalStateException("Illegal onMoveWithBoundsCheck return: " + moved);
-        }
-    }
-
-    /** @hide */
-    protected static final int MOVE_OK           = 0;
-    /** @hide */
-    protected static final int MOVE_AFTER_LAST   = 1;
-    /** @hide */
-    protected static final int MOVE_BEFORE_FIRST = 2;
-    /** @hide */
-    protected static final int MOVE_NOP          = 3;
-    /** @hide */
-    protected static final int MOVE_FAILED       = 4;
-
-    /**
-     * Subclasses may override this instead of onMove() to do their own bounds checking. This could
-     * be useful in the case where checking bounds can be more efficiently done another way. This is
-     * the method that calls onMove(), so overriding implementations should also do that, for the
-     * sake of potential subclasses.
-     *
-     * @param position the position we're trying to move to
-     * @return In order of precedence (highest first):
-     *         MOVE_AFTER_LAST if the new position is equal to count,
-     *         MOVE_BEFORE_FIRST if the new position is -1,
-     *         MOVE_NOP if the new position was equal to the old position,
-     *         MOVE_FAILED if the move failed (equivalent to onMove() returning false)
-     *         MOVE_OK if the move suceeded
-     *
-     * @hide
-     */
-    protected int onMoveWithBoundsCheck(int position) {
         // Make sure position isn't past the end of the cursor
-        if (isAfterLast(position)) {
-            return MOVE_AFTER_LAST;
+        final int count = getCount();
+        if (position >= count) {
+            mPos = count;
+            return false;
         }
 
         // Make sure position isn't before the beginning of the cursor
         if (position < 0) {
-            return MOVE_BEFORE_FIRST;
+            mPos = -1;
+            return false;
         }
 
         // Check for no-op moves, and skip the rest of the work for them
         if (position == mPos) {
-            return MOVE_NOP;
+            return true;
         }
 
         boolean result = onMove(mPos, position);
         if (result == false) {
-            return MOVE_FAILED;
+            mPos = -1;
+        } else {
+            mPos = position;
         }
 
-        return MOVE_OK;
+        return result;
     }
 
     @Override
@@ -319,17 +275,18 @@ public abstract class AbstractCursor implements CrossProcessCursor {
 
     @Override
     public final boolean isFirst() {
-        return mPos == 0 && !isAfterLast(0);
+        return mPos == 0 && getCount() != 0;
     }
 
     @Override
     public final boolean isLast() {
-        return !isAfterLast(mPos) && isAfterLast(mPos+1);
+        int cnt = getCount();
+        return mPos == (cnt - 1) && cnt != 0;
     }
 
     @Override
     public final boolean isBeforeFirst() {
-        if (isAfterLast(0)) {
+        if (getCount() == 0) {
             return true;
         }
         return mPos == -1;
@@ -337,17 +294,10 @@ public abstract class AbstractCursor implements CrossProcessCursor {
 
     @Override
     public final boolean isAfterLast() {
-        return isAfterLast(Math.max(0, mPos));
-    }
-
-    /**
-     * The default implementation uses getCount(). If subclasses would prefer deferring the full
-     * counting of their result set for performance reasons, they should override this method.
-     * This would eliminate <i>most</i> of AbstractCursor's getCount() calls.
-     * @hide
-     */
-    protected boolean isAfterLast(int position) {
-        return position >= getCount();
+        if (getCount() == 0) {
+            return true;
+        }
+        return mPos == getCount();
     }
 
     @Override
@@ -506,7 +456,7 @@ public abstract class AbstractCursor implements CrossProcessCursor {
      * @throws CursorIndexOutOfBoundsException
      */
     protected void checkPosition() {
-        if (-1 == mPos || isAfterLast(mPos)) {
+        if (-1 == mPos || getCount() == mPos) {
             throw new CursorIndexOutOfBoundsException(mPos, getCount());
         }
     }
