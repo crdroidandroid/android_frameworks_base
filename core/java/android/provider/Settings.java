@@ -8223,6 +8223,12 @@ public final class Settings {
         public static final String THEME_SETTINGS_MODE = "theme_settings_mode";
 
         /**
+         * Disable hw buttons
+         * @hide
+         */
+        public static final String HARDWARE_KEYS_DISABLE = "hardware_keys_disable";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
