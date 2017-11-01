@@ -6165,6 +6165,12 @@ public final class Settings {
         public static final String SMARTBAR_BUTTON_ANIMATION_STYLE = "smartbar_button_animation_style";
 
         /**
+         * Disable hw buttons
+         * @hide
+         */
+        public static final String HARDWARE_KEYS_DISABLE = "hardware_keys_disable";
+
+        /**
          * A flag containing settings used for biometric weak
          * @hide
          */
