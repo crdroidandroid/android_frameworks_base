@@ -274,6 +274,7 @@ import com.android.server.wm.WindowManagerInternal.AppTransitionListener;
 
 import dalvik.system.PathClassLoader;
 
+import lineageos.hardware.LineageHardwareManager;
 import lineageos.providers.LineageSettings;
 
 import org.lineageos.internal.buttons.LineageButtons;
@@ -690,6 +691,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     Intent mDeskDockIntent;
     Intent mVrHeadsetHomeIntent;
 
+    // User defined hw key config
+    boolean mHardwareKeysDisable = false;
+
     // Tracks user-customisable behavior for certain key events
     private Action mBackLongPressAction;
     private Action mHomeLongPressAction;
@@ -826,6 +830,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mTorchEnabled;
     private int mTorchTimeout;
     private PendingIntent mTorchOffPendingIntent;
+
+    private LineageHardwareManager mLineageHardware;
 
     private boolean mLongSwipeDown;
     private CameraAvailbilityListener mCameraAvailabilityListener;
@@ -1077,6 +1083,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_ENABLE_POWER_MENU), true, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HARDWARE_KEYS_DISABLE), false, this,
                     UserHandle.USER_ALL);
             updateSettings();
         }
@@ -2609,6 +2618,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mGlobalActionsFactory = injector.getGlobalActionsFactory();
         mLockPatternUtils = injector.getLockPatternUtils();
         mLogger = new MetricsLogger();
+        mLineageHardware = LineageHardwareManager.getInstance(mContext);
 
         Resources res = mContext.getResources();
         mWakeOnDpadKeyPress =
@@ -2653,7 +2663,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mScreenshotHelper = new ScreenshotHelper(mContext);
         mWakeGestureListener = new MyWakeGestureListener(mContext, mHandler);
         mSettingsObserver = new SettingsObserver(mHandler);
-        mSettingsObserver.observe();
 
         // Lineage additions
         mAlarmManager = mContext.getSystemService(AlarmManager.class);
@@ -3303,6 +3312,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void updateKeyAssignments() {
         int activeHardwareKeys = mDeviceHardwareKeys;
 
+        if (mHardwareKeysDisable) {
+            activeHardwareKeys = 0;
+        }
+
         final boolean hasMenu = (activeHardwareKeys & KEY_MASK_MENU) != 0;
         final boolean hasAssist = (activeHardwareKeys & KEY_MASK_ASSIST) != 0;
         final boolean hasAppSwitch = (activeHardwareKeys & KEY_MASK_APP_SWITCH) != 0;
@@ -3471,6 +3484,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mWakeGestureEnabledSetting != wakeGestureEnabledSetting) {
                 mWakeGestureEnabledSetting = wakeGestureEnabledSetting;
                 updateWakeGestureListenerLp();
+            }
+
+            if (mLineageHardware.isSupported(LineageHardwareManager.FEATURE_KEY_DISABLE)) {
+                mHardwareKeysDisable = Settings.System.getIntForUser(resolver,
+                        Settings.System.HARDWARE_KEYS_DISABLE, 0,
+                        UserHandle.USER_CURRENT) == 1;
+                mLineageHardware.set(LineageHardwareManager.FEATURE_KEY_DISABLE, mHardwareKeysDisable);
             }
 
             updateKeyAssignments();
@@ -6768,6 +6788,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             int dockMode = mDockObserverInternal.getActualDockState();
             mDefaultDisplayPolicy.setDockMode(dockMode);
         }
+
+        // Ensure observe happens in systemReady() since we need
+        // LineageHardwareService to be up and running
+        mSettingsObserver.observe();
 
         readCameraLensCoverState();
         updateUiMode();
