@@ -8061,6 +8061,12 @@ public final class Settings {
         public static final String QUICK_SETTINGS_VIBRATE = "quick_settings_vibrate";
 
         /**
+         * Disable hw buttons
+         * @hide
+         */
+        public static final String HARDWARE_KEYS_DISABLE = "hardware_keys_disable";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
