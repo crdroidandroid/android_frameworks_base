@@ -973,7 +973,8 @@ public final class PowerManagerService extends SystemService
     private static native boolean nativeSetPowerMode(int mode, boolean enabled);
     private static native boolean nativeForceSuspend();
 
-    private boolean mForceNavbar;
+    // overrule and disable brightness for buttons
+    private boolean mHardwareKeysDisable = false;
 
     // Whether proximity check on wake is enabled by default
     private boolean mProximityWakeEnabledByDefaultConfig;
@@ -1298,8 +1299,8 @@ public final class PowerManagerService extends SystemService
         resolver.registerContentObserver(LineageSettings.Global.getUriFor(
                 LineageSettings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED),
                 false, mSettingsObserver, UserHandle.USER_ALL);
-        resolver.registerContentObserver(LineageSettings.System.getUriFor(
-                LineageSettings.System.FORCE_SHOW_NAVBAR),
+        resolver.registerContentObserver(Settings.System.getUriFor(
+                Settings.System.HARDWARE_KEYS_DISABLE),
                 false, mSettingsObserver, UserHandle.USER_ALL);
         resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
                 LineageSettings.Secure.BUTTON_BRIGHTNESS),
@@ -1456,9 +1457,9 @@ public final class PowerManagerService extends SystemService
         mProximityWakeEnabled = LineageSettings.System.getInt(resolver,
                 LineageSettings.System.PROXIMITY_ON_WAKE,
                 mProximityWakeEnabledByDefaultConfig ? 1 : 0) == 1;
-        mForceNavbar = LineageSettings.System.getIntForUser(resolver,
-                LineageSettings.System.FORCE_SHOW_NAVBAR,
-                0, UserHandle.USER_CURRENT) == 1;
+        mHardwareKeysDisable = Settings.System.getIntForUser(resolver,
+                Settings.System.HARDWARE_KEYS_DISABLE, 0,
+                UserHandle.USER_CURRENT) != 0;
 
         mButtonTimeout = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.BUTTON_BACKLIGHT_TIMEOUT,
@@ -2688,7 +2689,7 @@ public final class PowerManagerService extends SystemService
                         if (getWakefulnessLocked() == WAKEFULNESS_AWAKE) {
                             if (mButtonsLight != null) {
                                 float buttonBrightness = BRIGHTNESS_OFF_FLOAT;
-                                if (!mForceNavbar) {
+                                if (!mHardwareKeysDisable) {
                                     if (isValidBrightness(
                                             mButtonBrightnessOverrideFromWindowManager)) {
                                         if (mButtonBrightnessOverrideFromWindowManager >
