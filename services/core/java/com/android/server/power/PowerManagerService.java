@@ -87,6 +87,7 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.DumpUtils;
+import com.android.internal.utils.du.DUActionUtils;
 import com.android.server.EventLogTags;
 import com.android.server.LockGuard;
 import com.android.server.RescueParty;
@@ -598,6 +599,9 @@ public final class PowerManagerService extends SystemService
     // True if we are currently in VR Mode.
     private boolean mIsVrModeEnabled;
 
+    // overrule and disable brightness for buttons
+    private boolean mHardwareKeysDisable = false;
+
     /**
      * All times are in milliseconds. These constants are kept synchronized with the system
      * global Settings. Any access to this class or its fields should be done while
@@ -881,6 +885,9 @@ public final class PowerManagerService extends SystemService
         resolver.registerContentObserver(Settings.Secure.getUriFor(
                 Settings.Secure.HIGH_BRIGHTNESS_MODE),
                 false, mSettingsObserver, UserHandle.USER_ALL);
+        resolver.registerContentObserver(Settings.Secure.getUriFor(
+                Settings.Secure.HARDWARE_KEYS_DISABLE),
+                false, mSettingsObserver, UserHandle.USER_ALL);
         IVrManager vrManager = (IVrManager) getBinderService(Context.VR_SERVICE);
         if (vrManager != null) {
             try {
@@ -1062,6 +1069,11 @@ public final class PowerManagerService extends SystemService
         mButtonBrightness = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.BUTTON_BRIGHTNESS, mButtonBrightnessSettingDefault,
                 UserHandle.USER_CURRENT);
+
+        mHardwareKeysDisable = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.HARDWARE_KEYS_DISABLE,
+                DUActionUtils.hasNavbarByDefault(mContext) ? 1 : 0,
+                UserHandle.USER_CURRENT) != 0;
 
         mDirty |= DIRTY_SETTINGS;
     }
@@ -2052,7 +2064,9 @@ public final class PowerManagerService extends SystemService
                         mUserActivitySummary = USER_ACTIVITY_SCREEN_BRIGHT;
                         if (mWakefulness == WAKEFULNESS_AWAKE) {
                             int buttonBrightness;
-                            if (mButtonBrightnessOverrideFromWindowManager >= 0) {
+                            if (mHardwareKeysDisable) {
+                                buttonBrightness = 0;
+                            } else if (mButtonBrightnessOverrideFromWindowManager >= 0) {
                                 buttonBrightness = mButtonBrightnessOverrideFromWindowManager;
                             } else {
                                 buttonBrightness = mButtonBrightness;
