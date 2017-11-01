@@ -495,6 +495,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int[] mNavigationBarHeightForRotationInCarMode = new int[4];
     int[] mNavigationBarWidthForRotationInCarMode = new int[4];
 
+    // User defined hw key config
+    boolean mHardwareKeysDisable = false;
+
     private LongSparseArray<IShortcutService> mShortcutKeyServices = new LongSparseArray<>();
 
     // Whether to allow dock apps with METADATA_DOCK_HOME to temporarily take over the Home key.
@@ -1170,6 +1173,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.NAVIGATION_BAR_WIDTH), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.HARDWARE_KEYS_DISABLE), false, this,
                     UserHandle.USER_ALL);
             updateSettings();
         }
@@ -2492,6 +2498,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void updateKeyAssignments() {
         int activeHardwareKeys = mDeviceHardwareKeys;
 
+        if (mHardwareKeysDisable) {
+            activeHardwareKeys = 0;
+        }
+
         final boolean hasMenu = (activeHardwareKeys & KEY_MASK_MENU) != 0;
         final boolean hasAssist = (activeHardwareKeys & KEY_MASK_ASSIST) != 0;
         final boolean hasAppSwitch = (activeHardwareKeys & KEY_MASK_APP_SWITCH) != 0;
@@ -2742,6 +2752,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 updateWakeGestureListenerLp();
             }
 
+            if (mLineageHardware.isSupported(LineageHardwareManager.FEATURE_KEY_DISABLE)) {
+                mHardwareKeysDisable = Settings.Secure.getIntForUser(resolver,
+                        Settings.Secure.HARDWARE_KEYS_DISABLE, 0,
+                        UserHandle.USER_CURRENT) == 1;
+                mLineageHardware.set(LineageHardwareManager.FEATURE_KEY_DISABLE, mHardwareKeysDisable);
+            }
+
             updateKeyAssignments();
 
             // Configure rotation lock.
@@ -2792,6 +2809,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Secure.NAVIGATION_BAR_VISIBLE,
                     DUActionUtils.hasNavbarByDefault(mContext) ? 1 : 0,
                     UserHandle.USER_CURRENT) == 1;
+
             updateNavigationBarSize();
         }
 
