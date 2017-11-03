@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2017 crDroid Android Project
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="global_action_restart_advanced">Riavvio avanzato</string>
+    <string name="global_action_restart_recovery">Riavvio in recovery</string>
+    <string name="global_action_restart_bootloader">Riavvio in bootloader</string>
+
+    <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_data_connection_hspap">HSPA+</string>
+
+    <!-- Caffeine QS Tile -->
+    <string name="quick_settings_caffeine_label">Caffeine</string>
+    <string name="accessibility_quick_settings_caffeine_off">Caffeine spenta</string>
+    <string name="accessibility_quick_settings_caffeine_on">Caffeine accesa</string>
+
+    <!-- Screenshot QS tile -->
+    <string name="quick_settings_screenshot_label">Screenshot</string>
+    <string name="quick_settings_region_screenshot_label">Screenshot parziale</string>
+
+    <!-- Ambient display and lift gesture Tile -->
+    <string name="quick_settings_doze_notifications_label">Notifiche ambientali</string>
+
+    <!-- Advance location quick setting tile -->
+    <string name="accessibility_quick_settings_location_battery_saving">Geolocalizzazione: modalità risparmio batteria.</string>
+    <string name="accessibility_quick_settings_location_gps_only">Geolocalizzazione: modalità solo dispositivo.</string>
+    <string name="accessibility_quick_settings_location_high_accuracy">Geolocalizzazione: modalità alta precisione.</string>
+
+    <!-- PiP Tile -->
+    <string name="quick_settings_pip_label">PiP</string>
+
+    <!-- High Brightness Mode Tile -->
+    <string name="quick_settings_high_brightness">Alta luminosità</string>
+
+     <!-- Sound QS Tile -->
+     <string name="quick_settings_sound_label">Suono</string>
+     <string name="quick_settings_sound_ring">Suoneria</string>
+     <string name="quick_settings_sound_vibrate">Vibrazione</string>
+     <string name="quick_settings_sound_dnd">Non disturbare</string>
+
+     <!-- Volume QS Tile -->
+     <string name="accessibility_quick_settings_volume_panel">Volume</string>
+     <string name="quick_settings_volume_panel_label">Volume</string>
+
+     <!-- Sync QS Tile -->
+    <string name="quick_settings_sync_label">Sincronizzazione</string>
+    <string name="accessibility_quick_settings_sync_off">Sincronizzazione spenta</string>
+    <string name="accessibility_quick_settings_sync_on">Sincronizzazione accesa</string>
+    <string name="accessibility_quick_settings_sync_changed_off">Sincronizzazione disattivata</string>
+    <string name="accessibility_quick_settings_sync_changed_on">Sincronizzazione attivata</string>
+
+    <!-- Reboot/Recovery QS Tile -->
+    <string name="quick_settings_reboot_label">Riavvio</string>
+    <string name="quick_settings_reboot_recovery_label">Recovery</string>
+
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Bussola</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Inizializzazione\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Bussola spenta.</string>
+    <string name="accessibility_quick_settings_compass_on">Bussola On.</string>
+    <string name="accessibility_quick_settings_compass_changed_off">Bussola disattivata.</string>
+    <string name="accessibility_quick_settings_compass_changed_on">Bussola attivata.</string>
+    <string name="quick_settings_compass_N">N</string>
+    <string name="quick_settings_compass_NE">NE</string>
+    <string name="quick_settings_compass_E">E</string>
+    <string name="quick_settings_compass_SE">SE</string>
+    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_SW">SW</string>
+    <string name="quick_settings_compass_W">W</string>
+    <string name="quick_settings_compass_NW">NW</string>
+
+    <!-- USB Tethering tile -->
+    <string name="accessibility_quick_settings_usb_tether_off">USB tethering spento</string>
+    <string name="accessibility_quick_settings_usb_tether_on">USB tethering acceso</string>
+    <string name="accessibility_quick_settings_usb_tether_changed_off">USB tethering disattivato</string>
+    <string name="accessibility_quick_settings_usb_tether_changed_on">USB tethering attivato</string>
+    <string name="quick_settings_usb_tether_label">USB tethering</string>
+
+    <!-- IME selector tile -->
+    <string name="quick_settings_ime_label">IME</string>
+
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Lingua</string>
+    <string name="quick_settings_locale_more_locales_toast">Configura più lingue per abilitare la funzionalità del toggle</string>
+
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">Musica</string>
+    <string name="quick_settings_music_play">Riproduci</string>
+    <string name="quick_settings_music_pause">Pausa</string>
+
+    <!-- Expanded Desktop QS Tile -->
+    <string name="quick_settings_expanded_desktop_label">Desktop esteso</string>
+    <string name="quick_settings_expanded_desktop">Estensione</string>
+    <string name="quick_settings_expanded_desktop_off">Normale</string>
+    <string name="quick_settings_expanded_navigation_off">Nascondi barra di navigazione</string>
+    <string name="quick_settings_expanded_statusbar_off">Nascondi barra di stato</string>
+</resources>
