@@ -5168,6 +5168,20 @@ public final class Settings {
          * @hide
          */
         public static final String QS_BACKGROUND_BLUR = "qs_background_blur";
+        
+        /**
+         * Screen stabilization parameters
+         * @hide
+         */
+        public static final String STABILIZATION_ENABLE = "stabilization_enable";
+
+        public static final String STABILIZATION_VELOCITY_FRICTION = "stabilization_velocity_friction";
+
+        public static final String STABILIZATION_POSITION_FRICTION = "stabilization_position_friction";
+
+        public static final String STABILIZATION_LOWPASS_ALPHA = "stabilization_lowpass_alpha";
+
+        public static final String STABILIZATION_VELOCITY_AMPLITUDE = "stabilization_velocity_amplitude";
 
         /**
          * Switch between different dark styles
