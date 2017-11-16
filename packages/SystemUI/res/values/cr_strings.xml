@@ -43,4 +43,7 @@
     <string name="quick_settings_screenrecord_hq_label">High Quality</string>
     <string name="screenrecord_hide_hint">Hide hint</string>
     <string name="screenrecord_show_hint">Show hint</string>
+
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Screenshot</string>
 </resources>
