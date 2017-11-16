@@ -55,6 +55,7 @@ import com.android.systemui.qs.tiles.OneHandTile;
 import com.android.systemui.qs.tiles.PieTile;
 import com.android.systemui.qs.tiles.ProfilesTile;
 import com.android.systemui.qs.tiles.ReadingModeTile;
+import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
 import com.android.systemui.qs.tiles.SmartPixelsTile;
@@ -172,6 +173,8 @@ public class QSFactoryImpl implements QSFactory {
                 return new LteTile(mHost);
             case "onehand":
                 return new OneHandTile(mHost);
+            case "reboot":
+                return new RebootTile(mHost);
         }
 
         // Intent tiles.
