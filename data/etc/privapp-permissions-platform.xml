@@ -379,6 +379,8 @@ applications that come with the platform
         <permission name="android.permission.NAVIGATION_EDITOR"/>
         <permission name="android.permission.OVERRIDE_WIFI_CONFIG"/>
         <permission name="android.permission.PACKAGE_USAGE_STATS"/>
+        <permission name="android.permission.REBOOT"/>
+        <permission name="android.permission.RECOVERY"/>
         <permission name="android.permission.READ_DREAM_STATE"/>
         <permission name="android.permission.READ_FRAME_BUFFER"/>
         <permission name="android.permission.READ_NETWORK_USAGE_HISTORY"/>
