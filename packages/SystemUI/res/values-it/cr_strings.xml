@@ -94,18 +94,6 @@
     <string name="quick_settings_pulse_changed_off">Lampeggio disattivato</string>
     <string name="quick_settings_pulse_changed_on">Lampeggio attivato</string>
 
-    <!-- Live display tile -->
-    <string name="quick_settings_live_display_off">LiveDisplay spento.</string>
-    <string name="quick_settings_live_display_auto">LiveDisplay: modalità auto.</string>
-    <string name="quick_settings_live_display_day">LiveDisplay: modalità giorno.</string>
-    <string name="quick_settings_live_display_night">LiveDisplay: modalità notte.</string>
-    <string name="quick_settings_live_display_outdoor">LiveDisplay: modalità all\'aperto.</string>
-    <string name="quick_settings_live_display_changed_off">LiveDisplay disattivato.</string>
-    <string name="quick_settings_live_display_changed_auto">LiveDisplay cambiato in modalità automatica.</string>
-    <string name="quick_settings_live_display_changed_day">LiveDisplay cambiato in modalità giorno.</string>
-    <string name="quick_settings_live_display_changed_night">LiveDisplay cambiato in modalità notturna.</string>
-    <string name="quick_settings_live_display_changed_outdoor">LiveDisplay cambiato in modalità all\'aperto.</string>
-
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Bussola</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
