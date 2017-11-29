@@ -405,18 +405,18 @@ class TaskSnapshotPersister {
             final ArraySet<Integer> newPersistedTaskIds;
             synchronized (mLock) {
                 newPersistedTaskIds = new ArraySet<>(mPersistedTaskIdsSinceLastRemoveObsolete);
-            }
-            for (int userId : mRunningUserIds) {
-                final File dir = getDirectory(userId);
-                final String[] files = dir.list();
-                if (files == null) {
-                    continue;
-                }
-                for (String file : files) {
-                    final int taskId = getTaskId(file);
-                    if (!mPersistentTaskIds.contains(taskId)
-                            && !newPersistedTaskIds.contains(taskId)) {
-                        new File(dir, file).delete();
+                for (int userId : mRunningUserIds) {
+                    final File dir = getDirectory(userId);
+                    final String[] files = dir.list();
+                    if (files == null) {
+                        continue;
+                    }
+                    for (String file : files) {
+                        final int taskId = getTaskId(file);
+                        if (!mPersistentTaskIds.contains(taskId)
+                                && !newPersistedTaskIds.contains(taskId)) {
+                            new File(dir, file).delete();
+                        }
                     }
                 }
             }
