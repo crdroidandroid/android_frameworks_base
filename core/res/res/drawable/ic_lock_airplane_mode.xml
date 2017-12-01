@@ -16,4 +16,4 @@
 
 <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
     android:src="@drawable/ic_lock_airplane_mode_alpha"
-    android:tint="?attr/colorControlActivated" />
+    android:tint="@*android:color/accent_device_default_light" />
