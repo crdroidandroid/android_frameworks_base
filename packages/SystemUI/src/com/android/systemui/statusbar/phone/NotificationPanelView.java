@@ -377,7 +377,7 @@ public class NotificationPanelView extends PanelView implements
         switch (key) {
             case STATUS_BAR_QUICK_QS_PULLDOWN:
                 mOneFingerQuickSettingsIntercept =
-                        newValue == null ? 1 : Integer.parseInt(newValue);
+                        newValue == null ? 0 : Integer.parseInt(newValue);
                 break;
             case DOUBLE_TAP_SLEEP_GESTURE:
                 mDoubleTapToSleepEnabled = newValue == null || Integer.parseInt(newValue) == 1;
@@ -1031,6 +1031,9 @@ public class NotificationPanelView extends PanelView implements
                 break;
             case 2: // Left side pulldown
                 showQsOverride = isLayoutRtl() ? w - region < x : x < region;
+                break;
+            case 3: // pull down anywhere
+                showQsOverride = true;
                 break;
         }
         showQsOverride &= mStatusBarState == StatusBarState.SHADE;
