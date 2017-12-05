@@ -377,7 +377,7 @@ public class NotificationPanelView extends PanelView implements
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
             case STATUS_BAR_QUICK_QS_PULLDOWN:
-                mOneFingerQuickSettingsIntercept = 1;
+                mOneFingerQuickSettingsIntercept = 0;
                 try {
                     mOneFingerQuickSettingsIntercept = Integer.parseInt(newValue);
                 } catch (NumberFormatException ex) {}
@@ -1034,6 +1034,9 @@ public class NotificationPanelView extends PanelView implements
                 break;
             case 2: // Left side pulldown
                 showQsOverride = isLayoutRtl() ? w - region < x : x < region;
+                break;
+            case 3: // pull down anywhere
+                showQsOverride = true;
                 break;
         }
         showQsOverride &= mStatusBarState == StatusBarState.SHADE;
