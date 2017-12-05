@@ -1358,6 +1358,9 @@ public class NotificationPanelViewController extends PanelViewController {
             case 2: // Left side pulldown
                 showQsOverride = mView.isLayoutRtl() ? w - region < x : x < region;
                 break;
+            case 3: // pull down anywhere
+                showQsOverride = true;
+                break;
         }
         showQsOverride &= mBarState == StatusBarState.SHADE;
 
@@ -3683,10 +3686,17 @@ public class NotificationPanelViewController extends PanelViewController {
 
         @Override
         public void onTuningChanged(String key, String newValue) {
-            if (STATUS_BAR_QUICK_QS_PULLDOWN.equals(key)) {
-                mOneFingerQuickSettingsIntercept = TunerService.parseInteger(newValue, 1);
-            } else if (DOUBLE_TAP_SLEEP_GESTURE.equals(key)) {
-                mDoubleTapToSleepEnabled = TunerService.parseIntegerSwitch(newValue, true);
+            switch (key) {
+                case STATUS_BAR_QUICK_QS_PULLDOWN:
+                    mOneFingerQuickSettingsIntercept =
+                            TunerService.parseInteger(newValue, 0);
+                    break;
+                case DOUBLE_TAP_SLEEP_GESTURE:
+                    mDoubleTapToSleepEnabled =
+                            TunerService.parseIntegerSwitch(newValue, true);
+                    break;
+                default:
+                    break;
             }
         }
     }
