@@ -620,6 +620,9 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
             case 2: // Left side pulldown
                 showQsOverride = mQs.getView().isLayoutRtl() ? w - region < x : x < region;
                 break;
+            case 3: // pull down anywhere
+                showQsOverride = true;
+                break;
         }
         showQsOverride &= mBarState == StatusBarState.SHADE;
 
