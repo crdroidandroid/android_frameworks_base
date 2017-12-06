@@ -2277,11 +2277,12 @@ final class ActivityRecord extends ConfigurationContainer implements AppWindowCo
     }
 
     // TODO(b/36505427): Consider moving this method and similar ones to ConfigurationContainer.
-    private void updateOverrideConfiguration() {
+    /** Returns true if the bounds has changed. */
+    private boolean updateOverrideConfiguration() {
         mTmpConfig.unset();
         computeBounds(mTmpBounds);
         if (mTmpBounds.equals(mBounds)) {
-            return;
+            return false;
         }
 
         mBounds.set(mTmpBounds);
@@ -2291,6 +2292,7 @@ final class ActivityRecord extends ConfigurationContainer implements AppWindowCo
                     false /* overrideWidth */, false /* overrideHeight */);
         }
         onOverrideConfigurationChanged(mTmpConfig);
+        return true;
     }
 
     /** Returns true if the configuration is compatible with this activity. */
@@ -2420,14 +2422,14 @@ final class ActivityRecord extends ConfigurationContainer implements AppWindowCo
             mLastReportedDisplayId = newDisplayId;
         }
         // TODO(b/36505427): Is there a better place to do this?
-        updateOverrideConfiguration();
+        final boolean boundsChanged = updateOverrideConfiguration();
 
         // Short circuit: if the two full configurations are equal (the common case), then there is
         // nothing to do.  We test the full configuration instead of the global and merged override
         // configurations because there are cases (like moving a task to the pinned stack) where
         // the combine configurations are equal, but would otherwise differ in the override config
         mTmpConfig.setTo(mLastReportedConfiguration.getMergedConfiguration());
-        if (getConfiguration().equals(mTmpConfig) && !forceNewConfig && !displayChanged) {
+        if (getConfiguration().equals(mTmpConfig) && !forceNewConfig && !displayChanged && !boundsChanged) {
             if (DEBUG_SWITCH || DEBUG_CONFIGURATION) Slog.v(TAG_CONFIGURATION,
                     "Configuration & display unchanged in " + this);
             return true;
