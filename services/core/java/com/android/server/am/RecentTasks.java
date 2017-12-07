@@ -504,6 +504,9 @@ class RecentTasks extends ArrayList<TaskRecord> {
     }
 
     final void addLocked(TaskRecord task) {
+        if (task == null)
+              return;
+
         final boolean isAffiliated = task.mAffiliatedTaskId != task.taskId
                 || task.mNextAffiliateTaskId != INVALID_TASK_ID
                 || task.mPrevAffiliateTaskId != INVALID_TASK_ID;
