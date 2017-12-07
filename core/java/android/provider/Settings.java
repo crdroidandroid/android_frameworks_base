@@ -8368,6 +8368,12 @@ public final class Settings {
                 "wireless_charging_started_sound";
 
         /**
+         * URI for the battery plugged sound file.
+         * @hide
+         */
+        public static final String BATTERY_PLUGGED_SOUND = "battery_plugged_sound";
+
+        /**
          * Whether to play a sound for charging events.
          * @hide
          */

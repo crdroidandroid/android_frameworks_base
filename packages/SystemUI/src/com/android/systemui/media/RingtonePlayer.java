@@ -163,8 +163,10 @@ public class RingtonePlayer extends SystemUI {
         @Override
         public void playAsync(Uri uri, UserHandle user, boolean looping, AudioAttributes aa) {
             if (LOGD) Log.d(TAG, "playAsync(uri=" + uri + ", user=" + user + ")");
-            if (Binder.getCallingUid() != Process.SYSTEM_UID) {
-                throw new SecurityException("Async playback only available from system UID.");
+            int uid = Binder.getCallingUid();
+            if (uid != Process.SYSTEM_UID && uid != Process.myUid()) {
+                throw new SecurityException("Async playback only available from system "
+                        + "and systemui UID.");
             }
             if (UserHandle.ALL.equals(user)) {
                 user = UserHandle.SYSTEM;
@@ -175,8 +177,10 @@ public class RingtonePlayer extends SystemUI {
         @Override
         public void stopAsync() {
             if (LOGD) Log.d(TAG, "stopAsync()");
-            if (Binder.getCallingUid() != Process.SYSTEM_UID) {
-                throw new SecurityException("Async playback only available from system UID.");
+            int uid = Binder.getCallingUid();
+            if (uid != Process.SYSTEM_UID && uid != Process.myUid()) {
+                throw new SecurityException("Async playback only available from system "
+                        + "and systemui UID.");
             }
             mAsyncPlayer.stop();
         }
