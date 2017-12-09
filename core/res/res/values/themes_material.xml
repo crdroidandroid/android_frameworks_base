@@ -406,7 +406,7 @@ please see themes_device_defaults.xml.
         <item name="colorProgressBackgroundNormal">?attr/colorControlNormal</item>
 
         <!-- Tooltip popup properties -->
-        <item name="tooltipForegroundColor">@color/foreground_material_light</item>
+        <item name="tooltipForegroundColor">@color/tooltip_text_light</item>
         <item name="tooltipBackgroundColor">@color/tooltip_background_light</item>
     </style>
 
@@ -781,7 +781,7 @@ please see themes_device_defaults.xml.
         <item name="colorProgressBackgroundNormal">?attr/colorControlNormal</item>
 
         <!-- Tooltip popup properties -->
-        <item name="tooltipForegroundColor">@color/foreground_material_dark</item>
+        <item name="tooltipForegroundColor">@color/tooltip_text_dark</item>
         <item name="tooltipBackgroundColor">@color/tooltip_background_dark</item>
     </style>
 
