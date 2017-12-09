@@ -36,7 +36,7 @@
         android:layout_toEndOf="@android:id/icon"
         android:layout_below="@android:id/icon"
         android:textAppearance="@style/TextAppearance.Toast"
-        android:textColor="@color/primary_text_default_material_light"
+        android:textColor="@color/toast_text_color"
         android:background="?android:attr/toastFrameBackground"
         />
 
