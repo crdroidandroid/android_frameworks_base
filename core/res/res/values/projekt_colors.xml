@@ -40,4 +40,9 @@
 
     <!-- Settings icon tint color -->
     <color name="settings_icon_tint_color">#737373</color>
+
+    <!-- tooltip light text color -->
+    <color name="tooltip_text_light">@color/foreground_material_light</color>
+    <!-- tooltip dark text color -->
+    <color name="tooltip_text_dark">@color/foreground_material_dark</color>
 </resources>
