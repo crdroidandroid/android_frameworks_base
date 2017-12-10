@@ -50,6 +50,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/notifications/ogg/Capella.ogg:system/media/audio/notifications/Capella.ogg \
     $(LOCAL_PATH)/notifications/Castor.ogg:system/media/audio/notifications/Castor.ogg \
     $(LOCAL_PATH)/notifications/ogg/CetiAlpha.ogg:system/media/audio/notifications/CetiAlpha.ogg \
+    $(LOCAL_PATH)/notifications/Chime.ogg:system/media/audio/notifications/Chime.ogg \
     $(LOCAL_PATH)/notifications/ogg/Cobalt.ogg:system/media/audio/notifications/Cobalt.ogg \
     $(LOCAL_PATH)/notifications/Cricket.ogg:system/media/audio/notifications/Cricket.ogg \
     $(LOCAL_PATH)/newwavelabs/DearDeer.ogg:system/media/audio/notifications/DearDeer.ogg \
@@ -219,8 +220,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ringtones/material/ogg/Luna.ogg:system/media/audio/ringtones/Luna.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Oberon.ogg:system/media/audio/ringtones/Oberon.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Phobos.ogg:system/media/audio/ringtones/Phobos.ogg \
-    $(LOCAL_PATH)/ringtones/material/ogg/Pyxis.ogg:system/media/audio/ringtones/PyxisMaterial.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Sedna.ogg:system/media/audio/ringtones/Sedna.ogg \
+    $(LOCAL_PATH)/ringtones/material/ogg/The_big_adventure.ogg:system/media/audio/ringtones/The_big_adventure.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Titania.ogg:system/media/audio/ringtones/Titania.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Triton.ogg:system/media/audio/ringtones/Triton.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Umbriel.ogg:system/media/audio/ringtones/Umbriel.ogg \
