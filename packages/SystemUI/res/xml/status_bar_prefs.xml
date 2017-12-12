@@ -103,6 +103,11 @@
         android:title="@string/quick_settings_cellular_detail_title" />
 
     <com.android.systemui.tuner.StatusBarSwitch
+        android:icon="@drawable/ic_statusbar_vpn"
+        android:key="vpn"
+        android:title="@string/status_bar_vpn" />
+
+    <com.android.systemui.tuner.StatusBarSwitch
         android:icon="@drawable/ic_statusbar_airplanemode"
         android:key="airplane"
         android:title="@string/status_bar_airplane" />
