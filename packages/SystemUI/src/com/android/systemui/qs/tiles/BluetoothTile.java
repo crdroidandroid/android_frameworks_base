@@ -45,23 +45,46 @@ import com.android.systemui.qs.QSDetailItems.Item;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.statusbar.policy.BluetoothController;
+import com.android.systemui.tuner.TunerService;
+import com.android.systemui.tuner.TunerServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 /** Quick settings tile: Bluetooth **/
-public class BluetoothTile extends QSTileImpl<BooleanState> {
+public class BluetoothTile extends QSTileImpl<BooleanState> implements TunerService.Tunable {
     private static final Intent BLUETOOTH_SETTINGS = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
 
     private final BluetoothController mController;
     private final BluetoothDetailAdapter mDetailAdapter;
     private final ActivityStarter mActivityStarter;
 
+    private boolean mShowBluetoothBattery;
+
+    private static final String BLUETOOTH_QS_SHOW_BATTERY =
+            "system:" + Settings.System.BLUETOOTH_QS_SHOW_BATTERY;
+
     public BluetoothTile(QSHost host) {
         super(host);
         mController = Dependency.get(BluetoothController.class);
         mActivityStarter = Dependency.get(ActivityStarter.class);
         mDetailAdapter = (BluetoothDetailAdapter) createDetailAdapter();
+
+        Dependency.get(TunerService.class).addTunable(this,
+                BLUETOOTH_QS_SHOW_BATTERY);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case BLUETOOTH_QS_SHOW_BATTERY:
+                mShowBluetoothBattery =
+                        newValue != null && Integer.parseInt(newValue) == 1;
+                refreshState();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -132,7 +155,7 @@ public class BluetoothTile extends QSTileImpl<BooleanState> {
                 state.icon = ResourceIcon.get(R.drawable.ic_qs_bluetooth_connected);
                 state.label = mController.getLastDeviceName();
                 CachedBluetoothDevice lastDevice = mController.getLastDevice();
-                if (lastDevice != null) {
+                if (lastDevice != null && mShowBluetoothBattery) {
                     int batteryLevel = lastDevice.getBatteryLevel();
                     if (batteryLevel != BluetoothDevice.BATTERY_LEVEL_UNKNOWN) {
                         state.icon = new BluetoothBatteryDrawable(batteryLevel,
