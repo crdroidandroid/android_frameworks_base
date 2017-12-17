@@ -16,6 +16,6 @@
 */
 -->
 <resources>
-    <dimen name="nav_content_padding">8dp</dimen>
-    <dimen name="rounded_corner_content_padding">8dp</dimen>
+    <dimen name="nav_content_padding">0dp</dimen>
+    <dimen name="rounded_corner_content_padding">0dp</dimen>
 </resources>
