@@ -2788,14 +2788,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         int navbarHeightDef = res
                 .getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height);
         int navbarHeightScale = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                Settings.Secure.NAVIGATION_BAR_HEIGHT, 100, UserHandle.USER_CURRENT);
+                Settings.Secure.NAVIGATION_BAR_HEIGHT, 80, UserHandle.USER_CURRENT);
         int navbarHeightVal = getScaledNavbarSize(navbarHeightScale, navbarHeightDef);
         mNavigationBarHeightForRotationDefault[mPortraitRotation] = mNavigationBarHeightForRotationDefault[mUpsideDownRotation] = navbarHeightVal;
 
         int navbarHeightLandDef = res.getDimensionPixelSize(
                 com.android.internal.R.dimen.navigation_bar_height_landscape);
         int navbarHeightLandScale = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                Settings.Secure.NAVIGATION_BAR_HEIGHT_LANDSCAPE, 100, UserHandle.USER_CURRENT);
+                Settings.Secure.NAVIGATION_BAR_HEIGHT_LANDSCAPE, 80, UserHandle.USER_CURRENT);
         int navbarHeightLandVal = getScaledNavbarSize(navbarHeightLandScale, navbarHeightLandDef);
         mNavigationBarHeightForRotationDefault[mLandscapeRotation] = mNavigationBarHeightForRotationDefault[mSeascapeRotation] = navbarHeightLandVal;
 
@@ -2804,7 +2804,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         int navbarWidthDef = res
                 .getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_width);
         int navbarWidthScale = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                Settings.Secure.NAVIGATION_BAR_WIDTH, 100, UserHandle.USER_CURRENT);
+                Settings.Secure.NAVIGATION_BAR_WIDTH, 80, UserHandle.USER_CURRENT);
         int navbarWidthVal = getScaledNavbarSize(navbarWidthScale, navbarWidthDef);
         mNavigationBarWidthForRotationDefault[mPortraitRotation] = mNavigationBarWidthForRotationDefault[mUpsideDownRotation] = mNavigationBarWidthForRotationDefault[mLandscapeRotation] = mNavigationBarWidthForRotationDefault[mSeascapeRotation] = navbarWidthVal;
     }
