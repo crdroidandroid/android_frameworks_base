@@ -25,6 +25,7 @@ import android.database.ContentObserver;
 import android.graphics.drawable.Animatable;
 import android.os.BatteryManager;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -224,22 +225,24 @@ public class BatteryBar extends RelativeLayout implements Animatable {
     private void updateSettings() {
         ContentResolver resolver = getContext().getContentResolver();
 
-        mColor = Settings.System.getInt(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_COLOR, 0xFFFFFFFF);
-        mChargingColor = Settings.System.getInt(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_CHARGING_COLOR, 0xFFFFFF00);
-        mBatteryLowColor = Settings.System.getInt(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_BATTERY_LOW_COLOR, 0xFFFFFFFF);
+        mColor = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUSBAR_BATTERY_BAR_COLOR, 0xFFFFFFFF,
+                UserHandle.USER_CURRENT);
+        mChargingColor = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUSBAR_BATTERY_BAR_CHARGING_COLOR, 0xFFFFFF00,
+                UserHandle.USER_CURRENT);
+        mBatteryLowColor = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUSBAR_BATTERY_BAR_BATTERY_LOW_COLOR, 0xFFFFFFFF,
+                UserHandle.USER_CURRENT);
+        shouldAnimateCharging = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUSBAR_BATTERY_BAR_ANIMATE, 0, UserHandle.USER_CURRENT) == 1;
 
-        shouldAnimateCharging = Settings.System.getInt(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_ANIMATE, 0) == 1;
-
-        mUseChargingColor = Settings.System.getInt(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_ENABLE_CHARGING_COLOR, 1) == 1;
-        mBlendColor = Settings.System.getInt(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_BLEND_COLOR, 0) == 1;
-        mBlendColorReversed = Settings.System.getInt(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_BLEND_COLOR_REVERSE, 0) == 1;
+        mUseChargingColor = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUSBAR_BATTERY_BAR_ENABLE_CHARGING_COLOR, 1, UserHandle.USER_CURRENT) == 1;
+        mBlendColor = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUSBAR_BATTERY_BAR_BLEND_COLOR, 0, UserHandle.USER_CURRENT) == 1;
+        mBlendColorReversed = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUSBAR_BATTERY_BAR_BLEND_COLOR_REVERSE, 0, UserHandle.USER_CURRENT) == 1;
 
         if (mBatteryCharging && mBatteryLevel < 100 && shouldAnimateCharging) {
             start();
