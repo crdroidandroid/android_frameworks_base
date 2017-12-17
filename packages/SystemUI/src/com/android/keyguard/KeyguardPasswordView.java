@@ -18,6 +18,7 @@ package com.android.keyguard;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
@@ -63,8 +64,8 @@ public class KeyguardPasswordView extends KeyguardAbsKeyInputView
     private Interpolator mLinearOutSlowInInterpolator;
     private Interpolator mFastOutLinearInInterpolator;
 
-    private final boolean quickUnlock = (Settings.System.getInt(getContext().getContentResolver(),
-            Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
+    private final boolean quickUnlock = (Settings.System.getIntForUser(getContext().getContentResolver(),
+            Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0, UserHandle.USER_CURRENT) == 1);
     private final int userId = KeyguardUpdateMonitor.getCurrentUser();
 
     public KeyguardPasswordView(Context context) {
