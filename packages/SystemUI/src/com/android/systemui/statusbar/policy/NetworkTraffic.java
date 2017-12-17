@@ -272,7 +272,9 @@ public class NetworkTraffic extends TextView implements DarkReceiver {
     private void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
 
-        mState = Settings.System.getInt(resolver, Settings.System.NETWORK_TRAFFIC_STATE, 0);
+        mState = Settings.System.getIntForUser(resolver,
+                Settings.System.NETWORK_TRAFFIC_STATE, 0,
+                UserHandle.USER_CURRENT);
 
         mAutoHide = Settings.System.getIntForUser(resolver,
                 Settings.System.NETWORK_TRAFFIC_AUTOHIDE, 0,
