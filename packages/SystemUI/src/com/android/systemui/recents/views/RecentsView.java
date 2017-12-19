@@ -501,29 +501,19 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
             case SHOW_CLEAR_ALL_RECENTS:
                 mShowClearAllRecents =
                         newValue == null || Integer.parseInt(newValue) != 0;
-                showClearAllRecents();
+                setClearRecents();
                 break;
             case RECENTS_CLEAR_ALL_LOCATION:
                 mClearRecentsLocation =
                         newValue == null ? 3 : Integer.parseInt(newValue);
-                setClearRecentsLocation();
+                setClearRecents();
                 break;
             default:
                 break;
         }
     }
 
-    private void showClearAllRecents() {
-        if (mShowClearAllRecents) {
-            mStackActionButton.setVisibility(View.GONE);
-            mFloatingButton.setVisibility(View.VISIBLE);
-        } else {
-            mFloatingButton.setVisibility(View.GONE);
-            mStackActionButton.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void setClearRecentsLocation() {
+    private void setClearRecents() {
         if (mFloatingButton == null)
             return;
 
@@ -554,6 +544,12 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
                 break;
         }
         mFloatingButton.setLayoutParams(params);
+
+        if (mShowClearAllRecents) {
+            mStackActionButton.setVisibility(View.INVISIBLE);
+        } else {
+            mFloatingButton.setVisibility(View.GONE);
+        }
     }
 
     /**
