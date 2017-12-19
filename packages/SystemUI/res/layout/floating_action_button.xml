@@ -24,7 +24,8 @@
         android:layout_marginLeft="@dimen/floating_action_button_margin_side"
         android:layout_marginBottom="@dimen/floating_action_button_margin_bottom"
         android:background="@drawable/fab"
-        android:elevation="@dimen/floating_action_button_translation_z">
+        android:elevation="@dimen/floating_action_button_translation_z"
+        android:visibility="gone">
     <ImageButton
             android:layout_width="@dimen/floating_action_button_width"
             android:layout_height="@dimen/floating_action_button_height"
