@@ -646,7 +646,7 @@ public class LegacyScreenshotController implements InteractiveScreenshotHandler 
             Consumer<Uri> finisher, Consumer<ImageExporter.Result> onResult) {
         ListenableFuture<ImageExporter.Result> future = mImageExporter.export(mBgExecutor,
                 requestId, screenshot.getBitmap(), screenshot.getUserHandle(),
-                mDisplay.getDisplayId());
+                mDisplay.getDisplayId(), null);
         future.addListener(() -> {
             try {
                 ImageExporter.Result result = future.get();

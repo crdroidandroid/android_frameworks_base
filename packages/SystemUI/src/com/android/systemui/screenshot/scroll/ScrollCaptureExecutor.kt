@@ -35,7 +35,7 @@ constructor(
     activityManager: ActivityManager,
     private val scrollCaptureClient: ScrollCaptureClient,
     private val scrollCaptureController: ScrollCaptureController,
-    private val longScreenshotHolder: LongScreenshotData,
+    val longScreenshotHolder: LongScreenshotData,
     @Main private val mainExecutor: Executor
 ) {
     private val isLowRamDevice = activityManager.isLowRamDevice
