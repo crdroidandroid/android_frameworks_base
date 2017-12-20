@@ -27,21 +27,32 @@
     android:elevation="@dimen/floating_action_button_translation_z">
 
     <ProgressBar android:id="@+id/recents_memory_bar"
-        style="?android:attr/progressBarStyleHorizontal"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_gravity="top|left"
-        android:layout_marginTop="7dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginLeft="25dp"
-        />
+        android:layout_gravity="top|center"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="0dp"
+        style="?android:attr/progressBarStyleHorizontal" />
 
     <TextView android:id="@+id/recents_memory_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|left"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="25dp"
-        />
+        android:layout_marginTop="1dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        android:text="@string/recents_stack_action_button_label"
+        android:textSize="14sp"
+        android:textColor="?attr/wallpaperTextColor"
+        android:textAllCaps="true"
+        android:shadowColor="#99000000"
+        android:shadowDx="0"
+        android:shadowDy="2"
+        android:shadowRadius="5"
+        android:fontFamily="sans-serif-medium"
+        android:background="@drawable/recents_stack_action_background"
+        android:forceHasOverlappingRendering="false" />
 </LinearLayout>
