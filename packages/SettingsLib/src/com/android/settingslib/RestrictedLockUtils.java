@@ -27,6 +27,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.IPackageManager;
 import android.content.pm.UserInfo;
 import android.graphics.drawable.Drawable;
@@ -77,7 +78,8 @@ public class RestrictedLockUtils {
             String userRestriction, int userId) {
         final DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(
                 Context.DEVICE_POLICY_SERVICE);
-        if (dpm == null) {
+        PackageManager pm = context.getPackageManager();
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_DEVICE_ADMIN) || dpm == null) {
             return null;
         }
 
