@@ -3166,6 +3166,8 @@ public class ExifInterface {
                 (ExifAttribute) thumbnailData.get(TAG_JPEG_INTERCHANGE_FORMAT_LENGTH);
         if (jpegInterchangeFormatAttribute != null
                 && jpegInterchangeFormatLengthAttribute != null) {
+            in.rewind();
+
             int thumbnailOffset = jpegInterchangeFormatAttribute.getIntValue(mExifByteOrder);
             int thumbnailLength = jpegInterchangeFormatLengthAttribute.getIntValue(mExifByteOrder);
 
@@ -3697,6 +3699,12 @@ public class ExifInterface {
             if (skipBytes((int) byteCount) != (int) byteCount) {
                 throw new IOException("Couldn't seek up to the byteCount");
             }
+        }
+
+        public void rewind() throws IOException {
+            mPosition = 0;
+            mDataInputStream.reset();
+            mDataInputStream.mark(mLength);
         }
 
         public int peek() {
