@@ -114,7 +114,7 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
     /** Allow some time inbetween the long press for back and recents. */
     private static final int LOCK_TO_APP_GESTURE_TOLERENCE = 200;
 
-    public static final int NAVIGATION_MODE_DEFAULT = 0;
+    public static final int NAVIGATION_MODE_STOCK = 0;
     public static final int NAVIGATION_MODE_SMARTBAR = 1;
     public static final int NAVIGATION_MODE_FLING = 2;
 
@@ -196,7 +196,7 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
         mPulseController = new PulseController(getContext(), new Handler());
         mResourceMap = new NavbarOverlayResources(getContext(), getContext().getResources());
         mBarMode = Settings.Secure.getIntForUser(mContentResolver,
-                Settings.Secure.NAVIGATION_BAR_MODE, NAVIGATION_MODE_DEFAULT,
+                Settings.Secure.NAVIGATION_BAR_MODE, NAVIGATION_MODE_SMARTBAR,
                 UserHandle.USER_CURRENT);
         mNavbarObserver = new NavbarObserver(new Handler());
         mNavbarObserver.observe();
@@ -796,7 +796,7 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
     };
 
     public boolean isUsingStockNav() {
-        return mBarMode == NAVIGATION_MODE_DEFAULT || mScreenPinningEnabled;
+        return mBarMode == NAVIGATION_MODE_STOCK || mScreenPinningEnabled;
     }
 
     @Override
@@ -888,7 +888,7 @@ public class NavigationBarFragment extends Fragment implements Callbacks, Naviga
         @Override
         protected void update() {
             mBarMode = Settings.Secure.getIntForUser(mContentResolver,
-                    Settings.Secure.NAVIGATION_BAR_MODE, NAVIGATION_MODE_DEFAULT,
+                    Settings.Secure.NAVIGATION_BAR_MODE, NAVIGATION_MODE_SMARTBAR,
                     UserHandle.USER_CURRENT);
             changeNavigator();
         }
