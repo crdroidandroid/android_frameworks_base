@@ -19,6 +19,11 @@
     android:title="@string/status_bar">
 
     <com.android.systemui.tuner.StatusBarSwitch
+        android:key="nfc"
+        android:persistent="false"
+        android:title="@string/status_bar_nfc" />
+
+    <com.android.systemui.tuner.StatusBarSwitch
         android:key="rotate"
         android:title="@string/status_bar_settings_auto_rotation" />
 
