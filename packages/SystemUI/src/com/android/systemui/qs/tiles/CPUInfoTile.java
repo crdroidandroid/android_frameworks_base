@@ -111,7 +111,7 @@ public class CPUInfoTile extends QSTileImpl<BooleanState> {
 
     private boolean CPUInfoEnabled() {
         return Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.SHOW_CPU_OVERLAY, 1) == 1;
+                Settings.Global.SHOW_CPU_OVERLAY, 0) == 1;
     }
 
     @Override
