@@ -8286,7 +8286,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                     String currentIconPack = (String) newValue;
                     IconPackHelper.getInstance(mContext).updatePrefs(currentIconPack);
                 }
-                mRecents.resetIconCache();
+                if (!mUseSlimRecents) {
+                    mRecents.resetIconCache();
+                }
                 break;
             case USE_SLIM_RECENTS:
                 mUseSlimRecents =
@@ -8299,7 +8301,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     private void updateRecentsMode() {
-        if (mUseSlimRecents) {
+        Recents.mUseSlimRecents = mUseSlimRecents;
+        if (Recents.mUseSlimRecents) {
             mRecents.evictAllCaches();
             mRecents.removeSbCallbacks();
             mSlimRecents = new RecentController(mContext);
@@ -8309,6 +8312,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             }
         } else {
             mRecents.addSbCallbacks();
+            mRecents.resetIconCache();
             if (mSlimRecents != null) {
                 mSlimRecents.evictAllCaches();
                 mSlimRecents.removeSbCallbacks();
