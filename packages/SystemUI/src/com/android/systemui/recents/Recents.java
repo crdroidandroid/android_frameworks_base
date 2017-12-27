@@ -92,6 +92,7 @@ public class Recents extends SystemUI
 
     public final static Set<Task> sLockedTasks = new HashSet<>();
     public static boolean mAllowLockTask = true;
+    public static boolean mUseSlimRecents = false;
 
     // Purely for experimentation
     private final static String RECENTS_OVERRIDE_SYSPROP_KEY = "persist.recents_override_pkg";
@@ -848,13 +849,9 @@ public class Recents extends SystemUI
 
     public void removeSbCallbacks() {
         getComponent(CommandQueue.class).removeCallbacks(this);
-        // there are other callbacks registered (like with RecentsImplProxy binder for non sys users)
-        // to be removed but for now let's use the easiest way and just block main calls in RecentsImpl
-        mImpl.mUseSlimRecents = true;
     }
 
     public void addSbCallbacks() {
         getComponent(CommandQueue.class).addCallbacks(this);
-        mImpl.mUseSlimRecents = false;
     }
 }

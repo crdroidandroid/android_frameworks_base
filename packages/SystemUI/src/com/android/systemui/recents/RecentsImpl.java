@@ -52,6 +52,7 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.internal.policy.DockedDividerUtils;
 import com.android.systemui.R;
 import com.android.systemui.SystemUIApplication;
+import com.android.systemui.recents.Recents;
 import com.android.systemui.recents.events.EventBus;
 import com.android.systemui.recents.events.activity.DockedTopTaskEvent;
 import com.android.systemui.recents.events.activity.EnterRecentsWindowLastAnimationFrameEvent;
@@ -260,8 +261,6 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
         }
     });
 
-    protected boolean mUseSlimRecents;
-
     public RecentsImpl(Context context) {
         mContext = context;
         mHandler = new Handler();
@@ -294,7 +293,7 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
     }
 
     public void onConfigurationChanged() {
-        if (mUseSlimRecents) {
+        if (Recents.mUseSlimRecents) {
             return;
         }
         reloadResources();
@@ -319,7 +318,7 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
      * {@link Recents#onBusEvent(ScreenPinningRequestEvent)}.
      */
     public void onStartScreenPinning(Context context, int taskId) {
-        if (mUseSlimRecents) {
+        if (Recents.mUseSlimRecents) {
             return;
         }
         SystemUIApplication app = (SystemUIApplication) context;
@@ -332,7 +331,7 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
     public void showRecents(boolean triggeredFromAltTab, boolean draggingInRecents,
             boolean animate, boolean launchedWhileDockingTask, boolean fromHome,
             int growTarget) {
-        if (mUseSlimRecents) {
+        if (Recents.mUseSlimRecents) {
             return;
         }
         mTriggeredFromAltTab = triggeredFromAltTab;
@@ -374,7 +373,7 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
     }
 
     public void hideRecents(boolean triggeredFromAltTab, boolean triggeredFromHomeKey) {
-        if (mUseSlimRecents) {
+        if (Recents.mUseSlimRecents) {
             return;
         }
         if (triggeredFromAltTab && mFastAltTabTrigger.isDozing()) {
@@ -404,7 +403,7 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
         if (mFastAltTabTrigger.isDozing()) {
             return;
         }
-        if (mUseSlimRecents) {
+        if (Recents.mUseSlimRecents) {
             return;
         }
 
@@ -480,7 +479,7 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
     }
 
     public void preloadRecents() {
-        if (mUseSlimRecents) {
+        if (Recents.mUseSlimRecents) {
             return;
         }
         // Skip preloading if the task is locked
