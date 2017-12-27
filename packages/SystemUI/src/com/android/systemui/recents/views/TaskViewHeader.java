@@ -211,9 +211,12 @@ public class TaskViewHeader extends FrameLayout
             "system:" + Settings.System.RECENTS_DISMISS_ICON;
     private static final String RECENTS_DEEP_CLEAR =
             "system:" + Settings.System.RECENTS_DEEP_CLEAR;
+    private static final String USE_SLIM_RECENTS =
+            "system:" + Settings.System.USE_SLIM_RECENTS;
 
     private static boolean mShowLockIcon, mShowDismissIcon;
     private static boolean mDeepClear;
+    private static boolean mUseSlimRecents;
 
     public TaskViewHeader(Context context) {
         this(context, null);
@@ -268,7 +271,8 @@ public class TaskViewHeader extends FrameLayout
         Dependency.get(TunerService.class).addTunable(this,
                 RECENTS_LOCK_ICON,
                 RECENTS_DISMISS_ICON,
-                RECENTS_DEEP_CLEAR);
+                RECENTS_DEEP_CLEAR,
+                USE_SLIM_RECENTS);
         super.onAttachedToWindow();
     }
 
@@ -284,19 +288,29 @@ public class TaskViewHeader extends FrameLayout
             case RECENTS_LOCK_ICON:
                 mShowLockIcon =
                     newValue == null || Integer.parseInt(newValue) != 0;
+                resetLockedTasks();
                 break;
             case RECENTS_DISMISS_ICON:
                 mShowDismissIcon =
                     newValue == null || Integer.parseInt(newValue) != 0;
+                resetLockedTasks();
                 break;
             case RECENTS_DEEP_CLEAR:
                 mDeepClear =
                     newValue != null && Integer.parseInt(newValue) != 0;
                 break;
+            case USE_SLIM_RECENTS:
+                mUseSlimRecents =
+                    newValue != null && Integer.parseInt(newValue) != 0;
+                resetLockedTasks();
+                break;
             default:
                 break;
         }
-        Recents.mAllowLockTask = mShowLockIcon;
+    }
+
+    public void resetLockedTasks() {
+        Recents.mAllowLockTask = mShowLockIcon && !mUseSlimRecents;
         if (!Recents.mAllowLockTask)
             TaskStackView.mStack.removeAllLockedTasks();
     }
