@@ -412,7 +412,7 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, TunerS
             case Tile.STATE_INACTIVE:
                 return Utils.getColorAttr(context, android.R.attr.textColorHint);
             case Tile.STATE_ACTIVE:
-                return Utils.getColorAttr(context, android.R.attr.textColorPrimary);
+                return Utils.getColorAttr(context, android.R.attr.colorControlNormal);
             default:
                 Log.e("QSTile", "Invalid state " + state);
                 return 0;
