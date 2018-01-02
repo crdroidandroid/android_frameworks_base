@@ -74,6 +74,7 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -343,6 +344,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE;
     private static final String STATUS_BAR_TICKER_TICK_DURATION =
             "system:" + Settings.System.STATUS_BAR_TICKER_TICK_DURATION;
+    private static final String SYSUI_ROUNDED_FWVALS =
+            Settings.Secure.SYSUI_ROUNDED_FWVALS;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -565,6 +568,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     private ImageButton mDismissAllButton;
     private boolean mClearableNotifications = true;
     private boolean mShowDimissButton;
+
+    private boolean mSysuiRoundedFwvals;
 
     private final Runnable mLongPressBrightnessChange = new Runnable() {
         @Override
@@ -1041,6 +1046,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, STATUS_BAR_SHOW_TICKER);
         mTunerService.addTunable(this, STATUS_BAR_TICKER_ANIMATION_MODE);
         mTunerService.addTunable(this, STATUS_BAR_TICKER_TICK_DURATION);
+        mTunerService.addTunable(this, SYSUI_ROUNDED_FWVALS);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -4022,6 +4028,30 @@ public class StatusBar extends SystemUI implements DemoMode,
         mScrimController.setExpansionAffectsAlpha(true);
     }
 
+    public boolean isCurrentRoundedSameAsFw() {
+        float density = Resources.getSystem().getDisplayMetrics().density;
+        // Resource IDs for framework properties
+        int resourceIdRadius = (int) mContext.getResources().getDimension(com.android.internal.R.dimen.rounded_corner_radius);
+
+        // Values on framework resources
+        int cornerRadiusRes = (int) (resourceIdRadius / density);
+
+        // Values in Settings DBs
+        int cornerRadius = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.SYSUI_ROUNDED_SIZE, cornerRadiusRes, UserHandle.USER_CURRENT);
+
+        return (cornerRadiusRes == cornerRadius);
+    }
+
+    private void updateCorners() {
+        if (mSysuiRoundedFwvals && !isCurrentRoundedSameAsFw()) {
+            float density = Resources.getSystem().getDisplayMetrics().density;
+            int resourceIdRadius = (int) mContext.getResources().getDimension(com.android.internal.R.dimen.rounded_corner_radius);
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                Settings.Secure.SYSUI_ROUNDED_SIZE, (int) (resourceIdRadius / density), UserHandle.USER_CURRENT);
+        }
+    }
+
     /**
      * Switches theme from light to dark and vice-versa.
      */
@@ -4053,6 +4083,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             mContext.setTheme(themeResId);
             mConfigurationController.notifyThemeChanged();
         }
+
+        updateCorners();
     }
 
     private void updateNavbarStyle() {
@@ -5192,6 +5224,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mTicker != null) {
                     mTicker.updateTickDuration(mTickerTickDuration);
                 }
+                break;
+            case SYSUI_ROUNDED_FWVALS:
+                mSysuiRoundedFwvals =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                updateCorners();
                 break;
             default:
                 break;
