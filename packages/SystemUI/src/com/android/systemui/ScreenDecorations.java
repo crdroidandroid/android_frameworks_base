@@ -246,6 +246,9 @@ public class ScreenDecorations extends SystemUI implements Tunable,
         mIsRoundedCornerMultipleRadius = mContext.getResources().getBoolean(
                 R.bool.config_roundedCornerMultipleRadius);
         updateRoundedCornerRadii();
+
+        mMainHandler.post(() -> mTunerService.addTunable(this, SIZE));
+
         setupDecorations();
         setupCameraListener();
 
@@ -317,8 +320,6 @@ public class ScreenDecorations extends SystemUI implements Tunable,
             DisplayMetrics metrics = new DisplayMetrics();
             mDisplayManager.getDisplay(DEFAULT_DISPLAY).getMetrics(metrics);
             mDensity = metrics.density;
-
-            mMainHandler.post(() -> mTunerService.addTunable(this, SIZE));
 
             // Watch color inversion and invert the overlay as needed.
             if (mColorInversionSetting == null) {
@@ -819,13 +820,18 @@ public class ScreenDecorations extends SystemUI implements Tunable,
         if (mOverlays == null) {
             return;
         }
-        if (!mTopEnabled && mRotation == RotationUtils.ROTATION_NONE) {
-            sizeTop = mZeroPoint;
-        } else if (sizeTop.x == 0) {
+        if (sizeDefault.x > 0) {
             sizeTop = sizeDefault;
-        }
-        if (sizeBottom.x == 0) {
             sizeBottom = sizeDefault;
+        } else {
+            if (!mTopEnabled && mRotation == RotationUtils.ROTATION_NONE) {
+                sizeTop = mZeroPoint;
+            } else if (sizeTop.x == 0) {
+                sizeTop = sizeDefault;
+            }
+            if (sizeBottom.x == 0) {
+                sizeBottom = sizeDefault;
+            }
         }
 
         for (int i = 0; i < BOUNDS_POSITION_LENGTH; i++) {
