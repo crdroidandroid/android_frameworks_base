@@ -123,6 +123,7 @@ import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.DumpUtils;
 import com.android.server.AppWidgetBackupBridge;
 import com.android.server.EventLogTags;
+import com.android.server.FgThread;
 import com.android.server.SystemConfig;
 import com.android.server.SystemService;
 import com.android.server.backup.PackageManagerBackupAgent.Metadata;
@@ -398,7 +399,12 @@ public class BackupManagerService implements BackupManagerServiceInterface {
 
         @Override
         public void onUnlockUser(int userId) {
+            FgThread.getHandler().post(() -> onUserUnlocked(userId));
+        }
+
+        private void onUserUnlocked(int userId) {
             if (userId == UserHandle.USER_SYSTEM) {
+                final long start = SystemClock.elapsedRealtime();
                 Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, "backup init");
                 sInstance.initialize(userId);
                 Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
@@ -434,6 +440,8 @@ public class BackupManagerService implements BackupManagerServiceInterface {
                     // can't happen; it's a local object
                 }
                 Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
+                Slog.i(TAG, "Async processing of onUserUnlocked u" + userId
+                        + " tooks " + (SystemClock.elapsedRealtime() - start) + " ms");
             }
         }
     }
