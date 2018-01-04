@@ -116,4 +116,7 @@
 
     <!-- Whether doze feature is enabled by default in settings -->
     <bool name="config_doze_enabled_by_default">false</bool>
+
+    <!-- Whether the device supports Smart Pixels -->
+    <bool name="config_supportSmartPixels">false</bool>
 </resources>
