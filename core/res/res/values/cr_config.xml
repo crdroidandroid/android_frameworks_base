@@ -88,4 +88,7 @@
 
     <!-- Screen off UDFPS -->
     <bool name="config_supportScreenOffUdfps">false</bool>
+
+    <!-- Whether the device supports Smart Pixels -->
+    <bool name="config_supportSmartPixels">false</bool>
 </resources>
