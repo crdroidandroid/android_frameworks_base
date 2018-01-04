@@ -22,4 +22,8 @@
 
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
+
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Smart pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
 </resources>
