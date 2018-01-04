@@ -512,6 +512,11 @@
             </intent-filter>
         </receiver>
 
+        <!-- Smart Pixels -->
+        <service android:name=".smartpixels.SmartPixelsService"
+                android:enabled="true"
+                android:exported="true" />
+
         <service android:name=".wallpapers.ImageWallpaper"
                 android:singleUser="true"
                 android:permission="android.permission.BIND_WALLPAPER"
