@@ -83,4 +83,7 @@
 
     <!-- Whether doze feature is enabled by default in settings -->
     <java-symbol type="bool" name="config_doze_enabled_by_default" />
+
+    <!-- Whether the device supports Smart Pixels -->
+    <java-symbol type="bool" name="config_supportSmartPixels" />
 </resources>
