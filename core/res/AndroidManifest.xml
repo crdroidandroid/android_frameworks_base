@@ -5554,6 +5554,8 @@
             android:exported="true">
         </provider>
 
+        <service android:name="com.android.server.smartpixels.SmartPixelsService"
+                 android:exported="true" />
     </application>
 
 </manifest>
