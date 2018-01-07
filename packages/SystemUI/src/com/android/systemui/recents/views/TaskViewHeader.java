@@ -19,9 +19,12 @@ package com.android.systemui.recents.views;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.Nullable;
+import android.app.ActivityManagerNative;
+import android.app.IActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -34,6 +37,8 @@ import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.CountDownTimer;
+import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
@@ -46,6 +51,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.Dependency;
@@ -203,8 +209,11 @@ public class TaskViewHeader extends FrameLayout
             "system:" + Settings.System.RECENTS_LOCK_ICON;
     private static final String RECENTS_DISMISS_ICON =
             "system:" + Settings.System.RECENTS_DISMISS_ICON;
+    private static final String RECENTS_DEEP_CLEAR =
+            "system:" + Settings.System.RECENTS_DEEP_CLEAR;
 
     private static boolean mShowLockIcon, mShowDismissIcon;
+    private static boolean mDeepClear;
 
     public TaskViewHeader(Context context) {
         this(context, null);
@@ -258,7 +267,8 @@ public class TaskViewHeader extends FrameLayout
     protected void onAttachedToWindow() {
         Dependency.get(TunerService.class).addTunable(this,
                 RECENTS_LOCK_ICON,
-                RECENTS_DISMISS_ICON);
+                RECENTS_DISMISS_ICON,
+                RECENTS_DEEP_CLEAR);
         super.onAttachedToWindow();
     }
 
@@ -278,6 +288,10 @@ public class TaskViewHeader extends FrameLayout
             case RECENTS_DISMISS_ICON:
                 mShowDismissIcon =
                     newValue == null || Integer.parseInt(newValue) != 0;
+                break;
+            case RECENTS_DEEP_CLEAR:
+                mDeepClear =
+                    newValue != null && Integer.parseInt(newValue) != 0;
                 break;
             default:
                 break;
@@ -744,6 +758,8 @@ public class TaskViewHeader extends FrameLayout
         } else if (v == mDismissButton) {
             TaskView tv = Utilities.findParent(this, TaskView.class);
             if (!Recents.mAllowLockTask || !Recents.sLockedTasks.contains(tv.getTask())) {
+
+                killTask();
                 tv.dismissTask();
 
                 // Keep track of deletions by the dismiss button
@@ -766,6 +782,25 @@ public class TaskViewHeader extends FrameLayout
             }
             updateLockTaskDrawable();
         }
+    }
+
+    private void killTask() {
+        if (mDeepClear && getContext().checkCallingOrSelfPermission(android.Manifest.permission.FORCE_STOP_PACKAGES)
+                == PackageManager.PERMISSION_GRANTED) {
+            String packageName = mTask.key.getComponent().getPackageName();
+            if (packageName != null) {
+                IActivityManager iam = ActivityManagerNative.getDefault();
+                try {
+                    iam.forceStopPackage(packageName, UserHandle.USER_CURRENT);
+                    Toast appKilled = Toast.makeText(getContext(), R.string.recents_app_killed,
+                            Toast.LENGTH_SHORT);
+                    appKilled.show();
+                } catch (RemoteException e) {
+                    return;
+                }
+            }
+        }
+        return;
     }
 
     @Override
