@@ -73,4 +73,6 @@
     <string name="navMediaArrowsExcludeList" translatable="false">
         chrome,youtube,netflix,firefox,dolphin,opera
     </string>
+
+    <string name="recents_app_killed">App killed</string>
 </resources>
