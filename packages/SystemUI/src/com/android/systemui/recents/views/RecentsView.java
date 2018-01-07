@@ -570,6 +570,9 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
 
         if (mShowClearAllRecents) {
             mStackActionButton.setVisibility(View.INVISIBLE);
+            if (mEmptyView.getVisibility() == View.INVISIBLE) {
+                mFloatingButton.setVisibility(View.VISIBLE);
+            }
         } else {
             mFloatingButton.setVisibility(View.GONE);
         }
@@ -914,6 +917,10 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
     }
 
     public final void onBusEvent(ShowStackActionButtonEvent event) {
+        if (mFloatingButton != null && mShowClearAllRecents) {
+            return;
+        }
+
         if (!RecentsDebugFlags.Static.EnableStackActionButton) {
             return;
         }
@@ -942,9 +949,6 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
      */
     private void showStackActionButton(final int duration, final boolean translate) {
         if (!RecentsDebugFlags.Static.EnableStackActionButton) {
-            return;
-        }
-        if (mFloatingButton != null && mShowClearAllRecents) {
             return;
         }
 
