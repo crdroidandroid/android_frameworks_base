@@ -304,11 +304,10 @@ EGLSurface EglManager::createSurface(EGLNativeWindowType window, bool wideColorG
 
     EGLSurface surface = eglCreateWindowSurface(mEglDisplay,
             wideColorGamut ? mEglConfigWideGamut : mEglConfig, window, attribs);
-    LOG_ALWAYS_FATAL_IF(surface == EGL_NO_SURFACE,
-            "Failed to create EGLSurface for window %p, eglErr = %s",
-            (void*) window, eglErrorString());
-
-    if (mSwapBehavior != SwapBehavior::Preserved) {
+    if (surface == EGL_NO_SURFACE) {
+        ALOGW("Failed to create EGLSurface for window %p, eglErr = %s",
+                (void*) window, eglErrorString());
+    } else if (mSwapBehavior != SwapBehavior::Preserved) {
         LOG_ALWAYS_FATAL_IF(eglSurfaceAttrib(mEglDisplay, surface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_DESTROYED) == EGL_FALSE,
                             "Failed to set swap behavior to destroyed for window %p, eglErr = %s",
                             (void*) window, eglErrorString());
