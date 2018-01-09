@@ -23,6 +23,8 @@
     <color name="screen_pinning_button_text">@android:color/white</color>
     <color name="screen_pinning_bg_circ_color">#40FFFFFF</color>
     <color name="screen_pinning_nav_icon_hightlight_outer_color">@android:color/white</color>
+    <color name="screen_pinning_positive_text_color">@*android:color/text_color_primary</color>
+    <color name="screen_pinning_negative_text_color">@*android:color/text_color_primary</color>
 
     <!-- Quicksettings main QS background-->
     <color name="quick_settings_status_bar_background_color">#ff000000</color>
