@@ -513,6 +513,7 @@ public final class NotificationChannel implements Parcelable {
      *
      * Only modifiable before the channel is submitted to
      * {@link NotificationManager#notify(String, int, Notification)}.
+     * @hide
      */
     public void setLightOnTime(int time) {
         this.mLightOnTime = time;
@@ -524,6 +525,7 @@ public final class NotificationChannel implements Parcelable {
      *
      * Only modifiable before the channel is submitted to
      * {@link NotificationManager#notify(String, int, Notification)}.
+     * @hide
      */
     public void setLightOffTime(int time) {
         this.mLightOffTime = time;
@@ -706,6 +708,7 @@ public final class NotificationChannel implements Parcelable {
     /**
      * Returns the notification light ON time for notifications posted to this channel. Irrelevant
      * unless {@link #shouldShowLights()}.
+     * @hide
      */
     public int getLightOnTime() {
         return mLightOnTime;
@@ -714,6 +717,7 @@ public final class NotificationChannel implements Parcelable {
     /**
      * Returns the notification light OFF time for notifications posted to this channel. Irrelevant
      * unless {@link #shouldShowLights()}.
+     * @hide
      */
     public int getLightOffTime() {
         return mLightOffTime;
