@@ -49,6 +49,4 @@ public interface RecentsComponent {
     void resetIconCache();
 
     void evictAllCaches();
-    void removeSbCallbacks();
-    void addSbCallbacks();
 }
