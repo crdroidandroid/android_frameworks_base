@@ -2073,8 +2073,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
                     break;
                 }
                 case NetworkAgent.EVENT_NETWORK_SCORE_CHANGED: {
-                    Integer score = (Integer) msg.obj;
-                    if (score != null) updateNetworkScore(nai, score.intValue());
+                    updateNetworkScore(nai, msg.arg1);
                     break;
                 }
                 case NetworkAgent.EVENT_UID_RANGES_ADDED: {
