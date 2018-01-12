@@ -8304,14 +8304,12 @@ public class StatusBar extends SystemUI implements DemoMode,
         Recents.mUseSlimRecents = mUseSlimRecents;
         if (Recents.mUseSlimRecents) {
             mRecents.evictAllCaches();
-            mRecents.removeSbCallbacks();
             mSlimRecents = new RecentController(mContext);
             if (mSlimRecents != null) {
                 mSlimRecents.rebuildRecentsScreen();
                 mSlimRecents.addSbCallbacks();
             }
         } else {
-            mRecents.addSbCallbacks();
             mRecents.resetIconCache();
             if (mSlimRecents != null) {
                 mSlimRecents.evictAllCaches();
