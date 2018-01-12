@@ -43,4 +43,6 @@
     <dimen name="qs_panel_margin_top_header">85dp</dimen>
     <dimen name="qs_scroller_top_margin">40dp</dimen>
     <dimen name="qs_panel_footer_height">48dp</dimen>
+
+    <dimen name="screenrecord_hint_size">48dp</dimen>
 </resources>
