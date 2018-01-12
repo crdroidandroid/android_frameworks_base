@@ -23,14 +23,17 @@ import com.android.server.lights.LightsManager;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.hardware.display.DisplayManagerInternal.DisplayPowerCallbacks;
 import android.hardware.display.DisplayManagerInternal.DisplayPowerRequest;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -38,6 +41,8 @@ import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.Trace;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.MathUtils;
 import android.util.Slog;
 import android.util.Spline;
@@ -290,6 +295,14 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
     private ObjectAnimator mColorFadeOffAnimator;
     private RampAnimator<DisplayPowerState> mScreenBrightnessRampAnimator;
 
+    // Screen-off animation
+    private int mScreenOffAnimation;
+    private boolean mScreenOnAnimation;
+    static final int SCREEN_OFF_SIMPLE_FADE = 0;
+    static final int SCREEN_OFF_COLOR_FADE = 1;
+    static final int SCREEN_OFF_CRT = 2;
+    static final int SCREEN_OFF_SCALE = 3;
+
     /**
      * Creates the display power controller.
      */
@@ -516,11 +529,65 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         }
     }
 
+    private int getScreenAnimationModeForDisplayState(int displayState) {
+        switch (mScreenOffAnimation) {
+            case SCREEN_OFF_SIMPLE_FADE:
+                if (displayState == Display.STATE_OFF) {
+                    return ScreenStateAnimator.MODE_FADE;
+                } else {
+                    return ScreenStateAnimator.MODE_FADE;
+                }
+            case SCREEN_OFF_COLOR_FADE:
+                if (displayState == Display.STATE_OFF) {
+                    return ScreenStateAnimator.MODE_COOL_DOWN;
+                } else {
+                    return ScreenStateAnimator.MODE_WARM_UP;
+                }
+            case SCREEN_OFF_CRT:
+                if (displayState == Display.STATE_OFF) {
+                    return ScreenStateAnimator.MODE_COOL_DOWN;
+                } else {
+                    return ScreenStateAnimator.MODE_WARM_UP;
+                }
+            case SCREEN_OFF_SCALE:
+                if (displayState == Display.STATE_OFF) {
+                    return ScreenStateAnimator.MODE_SCALE_DOWN;
+                } else {
+                    return ScreenStateAnimator.MODE_FADE;
+                }
+            default:
+                return ScreenStateAnimator.MODE_FADE;
+        }
+    }
+
     private void initialize() {
         // Initialize the power state object for the default display.
         // In the future, we might manage multiple displays independently.
-        mPowerState = new DisplayPowerState(mBlanker,
-                new ColorFade(Display.DEFAULT_DISPLAY));
+        final ContentResolver cr = mContext.getContentResolver();
+        final ContentObserver observer = new ContentObserver(mHandler) {
+            @Override
+            public void onChange(boolean selfChange, Uri uri) {
+                mScreenOffAnimation = Settings.Global.getInt(cr,
+                        Settings.Global.SCREEN_OFF_ANIMATION, SCREEN_OFF_SIMPLE_FADE);
+                mScreenOnAnimation = Settings.Global.getInt(cr,
+                        Settings.Global.SCREEN_ON_ANIMATION, 0) != 0;
+                if (mPowerState != null) {
+                    mPowerState.setScreenStateAnimator(mScreenOffAnimation);
+                }
+            }
+        };
+        cr.registerContentObserver(Settings.Global.getUriFor(
+                Settings.Global.SCREEN_OFF_ANIMATION),
+                false, observer, UserHandle.USER_ALL);
+        cr.registerContentObserver(Settings.Global.getUriFor(
+                Settings.Global.SCREEN_ON_ANIMATION),
+                false, observer, UserHandle.USER_ALL);
+        mScreenOffAnimation = Settings.Global.getInt(cr,
+                Settings.Global.SCREEN_OFF_ANIMATION, SCREEN_OFF_SIMPLE_FADE);
+        mScreenOnAnimation = Settings.Global.getInt(cr,
+                Settings.Global.SCREEN_ON_ANIMATION, 0) != 0;
+
+        mPowerState = new DisplayPowerState(mBlanker, mScreenOffAnimation);
 
         mColorFadeOnAnimator = ObjectAnimator.ofFloat(
                 mPowerState, DisplayPowerState.COLOR_FADE_LEVEL, 0.0f, 1.0f);
@@ -1016,7 +1083,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             // Skip the screen off animation and add a black surface to hide the
             // contents of the screen.
             mPowerState.prepareColorFade(mContext,
-                    mColorFadeFadesConfig ? ColorFade.MODE_FADE : ColorFade.MODE_WARM_UP);
+                    getScreenAnimationModeForDisplayState(Display.STATE_ON));
             if (mColorFadeOffAnimator != null) {
                 mColorFadeOffAnimator.end();
             }
@@ -1044,14 +1111,12 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             if (!setScreenState(Display.STATE_ON)) {
                 return; // screen on blocked
             }
-            if (USE_COLOR_FADE_ON_ANIMATION && mPowerRequest.isBrightOrDim()) {
+            if (mScreenOnAnimation && mPowerRequest.isBrightOrDim()) {
                 // Perform screen on animation.
                 if (mPowerState.getColorFadeLevel() == 1.0f) {
                     mPowerState.dismissColorFade();
                 } else if (mPowerState.prepareColorFade(mContext,
-                        mColorFadeFadesConfig ?
-                                ColorFade.MODE_FADE :
-                                        ColorFade.MODE_WARM_UP)) {
+                        getScreenAnimationModeForDisplayState(Display.STATE_ON))) {
                     mColorFadeOnAnimator.start();
                 } else {
                     mColorFadeOnAnimator.end();
@@ -1128,8 +1193,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 mPowerState.dismissColorFadeResources();
             } else if (performScreenOffTransition
                     && mPowerState.prepareColorFade(mContext,
-                            mColorFadeFadesConfig ?
-                                    ColorFade.MODE_FADE : ColorFade.MODE_COOL_DOWN)
+                            getScreenAnimationModeForDisplayState(Display.STATE_OFF))
                     && mPowerState.getScreenState() != Display.STATE_OFF) {
                 // Perform the screen off animation.
                 mColorFadeOffAnimator.start();
