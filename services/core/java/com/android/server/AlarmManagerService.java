@@ -1196,7 +1196,10 @@ class AlarmManagerService extends SystemService {
 
             if (type == AlarmManager.RTC_WAKEUP || type == AlarmManager.ELAPSED_REALTIME_WAKEUP){
 
-                Slog.e(TAG, "RTC Alarm: " + type + " " + listenerTag + " " + callingPackage + " " + tag);
+                if (tag.startsWith("CONTEXT_MANAGER_ALARM_WAKEUP")){
+                    tag = tag.substring(0,28);
+                }
+                //Slog.e(TAG, "RTC Alarm: " + type + " " + listenerTag + " " + callingPackage + " " + tag);
 
                 if (!mSeenAlarms.contains(tag)) {
                     mSeenAlarms.add(tag);
