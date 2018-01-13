@@ -685,8 +685,6 @@ public final class PowerManagerService extends SystemService
     private SensorEventListener mProximityListener;
     private android.os.PowerManager.WakeLock mProximityWakeLock;
 
-    private boolean mDevForceNavbar;
-
     public PowerManagerService(Context context) {
         super(context);
         mContext = context;
@@ -874,9 +872,6 @@ public final class PowerManagerService extends SystemService
         resolver.registerContentObserver(LineageSettings.System.getUriFor(
                 LineageSettings.System.PROXIMITY_ON_WAKE),
                 false, mSettingsObserver, UserHandle.USER_ALL);
-        resolver.registerContentObserver(LineageSettings.Global.getUriFor(
-                LineageSettings.Global.DEV_FORCE_SHOW_NAVBAR),
-                false, mSettingsObserver, UserHandle.USER_ALL);
         resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
                 LineageSettings.Secure.BUTTON_BRIGHTNESS),
                 false, mSettingsObserver, UserHandle.USER_ALL);
@@ -1061,8 +1056,6 @@ public final class PowerManagerService extends SystemService
         mProximityWakeEnabled = LineageSettings.System.getInt(resolver,
                 LineageSettings.System.PROXIMITY_ON_WAKE,
                 mProximityWakeEnabledByDefaultConfig ? 1 : 0) == 1;
-        mDevForceNavbar = LineageSettings.Global.getIntForUser(resolver,
-                LineageSettings.Global.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
         mButtonTimeout = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.BUTTON_BACKLIGHT_TIMEOUT,
                 DEFAULT_BUTTON_ON_DURATION, UserHandle.USER_CURRENT);
@@ -2062,11 +2055,7 @@ public final class PowerManagerService extends SystemService
                             if (mButtonBrightnessOverrideFromWindowManager >= 0) {
                                 buttonBrightness = mButtonBrightnessOverrideFromWindowManager;
                             } else {
-                                if (!mDevForceNavbar) {
-                                    buttonBrightness = mButtonBrightness;
-                                } else {
-                                    buttonBrightness = 0;
-                                }
+                                buttonBrightness = mButtonBrightness;
                             }
 
                             if (mButtonTimeout != 0 && now > mLastUserActivityTime + mButtonTimeout) {
