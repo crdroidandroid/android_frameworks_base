@@ -5832,12 +5832,9 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             // Only system user can set storage encryption
             if (userHandle != UserHandle.USER_SYSTEM) {
                 Slog.w(LOG_TAG, "Only owner/system user is allowed to set storage encryption. User "
-                        + UserHandle.getCallingUserId() + " is not permitted.");
-                return 0;
+                        + userHandle + " is not permitted.");
+                return DevicePolicyManager.ENCRYPTION_STATUS_UNSUPPORTED;
             }
-
-            ActiveAdmin ap = getActiveAdminForCallerLocked(who,
-                    DeviceAdminInfo.USES_ENCRYPTED_STORAGE);
 
             // Quick exit:  If the filesystem does not support encryption, we can exit early.
             if (!isEncryptionSupported()) {
@@ -5845,6 +5842,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             }
 
             // (1) Record the value for the admin so it's sticky
+            ActiveAdmin ap = getActiveAdminForCallerLocked(who,
+                    DeviceAdminInfo.USES_ENCRYPTED_STORAGE);
             if (ap.encryptionRequested != encrypt) {
                 ap.encryptionRequested = encrypt;
                 saveSettingsLocked(userHandle);
