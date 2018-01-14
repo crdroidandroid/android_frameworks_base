@@ -147,7 +147,7 @@ public abstract class InputFilter extends IInputFilter.Stub {
      * @param event The input event to enqueue.
      */
     final public void filterInputEvent(InputEvent event, int policyFlags) {
-        mH.obtainMessage(MSG_INPUT_EVENT, policyFlags, 0, event).sendToTarget();
+        mH.sendMessageAtFrontOfQueue(mH.obtainMessage(MSG_INPUT_EVENT, policyFlags, 0, event));
     }
 
     /**
