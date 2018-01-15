@@ -4340,12 +4340,6 @@ public final class Settings {
          */
         public static final String FP_SUCCESS_VIBRATE = "fp_success_vibrate";
 
-        /**
-         * Unlock keystore with fingerprint after reboot
-         * @hide
-         */
-        public static final String FP_UNLOCK_KEYSTORE = "fp_unlock_keystore";
-
         /**  
          * AOKP Custom System Animations
          * @hide
