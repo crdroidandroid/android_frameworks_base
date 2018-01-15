@@ -637,9 +637,17 @@ static jlong getFreeMemoryImpl(const char* const sums[], const size_t sumsLen[],
                     p++;
                     if (*p == 0) p--;
                 }
-                mem += atoll(num) * 1024;
-                numFound++;
-                break;
+                //Return it if  MemAvailable KEY exist in /proc/meminfo
+                //kernel version > 3.14 always have this key
+                //else use original way, ie: Free + Cached
+                if (strncmp("MemAvailable:", sums[i], 12) == 0) {
+                    mem = atoll(num) * 1024;
+                    return mem;
+                }else{
+                    mem += atoll(num) * 1024;
+                    numFound++;
+                    break;
+                }
             }
             i++;
         }
@@ -651,8 +659,8 @@ static jlong getFreeMemoryImpl(const char* const sums[], const size_t sumsLen[],
 
 static jlong android_os_Process_getFreeMemory(JNIEnv* env, jobject clazz)
 {
-    static const char* const sums[] = { "MemFree:", "Cached:", NULL };
-    static const size_t sumsLen[] = { strlen("MemFree:"), strlen("Cached:"), 0 };
+    static const char* const sums[] = {"MemAvailable:", "MemFree:", "Cached:", NULL };
+    static const size_t sumsLen[] = { strlen("MemAvailable:"), strlen("MemFree:"), strlen("Cached:"), 0 };
     return getFreeMemoryImpl(sums, sumsLen, 2);
 }
 
