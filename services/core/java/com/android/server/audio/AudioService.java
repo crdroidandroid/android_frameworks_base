@@ -1355,28 +1355,30 @@ public class AudioService extends IAudioService.Stub
 
     private void adjustSuggestedStreamVolume(int direction, int suggestedStreamType, int flags,
             String callingPackage, String caller, int uid) {
-        if (DEBUG_VOL) Log.d(TAG, "adjustSuggestedStreamVolume() stream=" + suggestedStreamType
-                + ", flags=" + flags + ", caller=" + caller
-                + ", volControlStream=" + mVolumeControlStream
-                + ", userSelect=" + mUserSelectedVolumeControlStream);
         mVolumeLogger.log(new VolumeEvent(VolumeEvent.VOL_ADJUST_SUGG_VOL, suggestedStreamType,
                 direction/*val1*/, flags/*val2*/, new StringBuilder(callingPackage)
                         .append("/").append(caller).append(" uid:").append(uid).toString()));
         final int streamType;
-        if (mUserSelectedVolumeControlStream) { // implies mVolumeControlStream != -1
-            streamType = mVolumeControlStream;
-        } else {
-            final int maybeActiveStreamType = getActiveStreamType(suggestedStreamType);
-            final boolean activeForReal;
-            if (maybeActiveStreamType == AudioSystem.STREAM_MUSIC) {
-                activeForReal = isAfMusicActiveRecently(0);
-            } else {
-                activeForReal = AudioSystem.isStreamActive(maybeActiveStreamType, 0);
-            }
-            if (activeForReal || mVolumeControlStream == -1) {
-                streamType = maybeActiveStreamType;
-            } else {
+        synchronized (mForceControlStreamLock) {
+            if (DEBUG_VOL) Log.d(TAG, "adjustSuggestedStreamVolume() stream=" + suggestedStreamType
+                    + ", flags=" + flags + ", caller=" + caller
+                    + ", volControlStream=" + mVolumeControlStream
+                    + ", userSelect=" + mUserSelectedVolumeControlStream);
+            if (mUserSelectedVolumeControlStream) { // implies mVolumeControlStream != -1
                 streamType = mVolumeControlStream;
+            } else {
+                final int maybeActiveStreamType = getActiveStreamType(suggestedStreamType);
+                final boolean activeForReal;
+                if (maybeActiveStreamType == AudioSystem.STREAM_MUSIC) {
+                    activeForReal = isAfMusicActiveRecently(0);
+                } else {
+                    activeForReal = AudioSystem.isStreamActive(maybeActiveStreamType, 0);
+                }
+                if (activeForReal || mVolumeControlStream == -1) {
+                    streamType = maybeActiveStreamType;
+                } else {
+                    streamType = mVolumeControlStream;
+                }
             }
         }
 
