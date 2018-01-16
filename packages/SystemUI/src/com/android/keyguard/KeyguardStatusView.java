@@ -65,9 +65,6 @@ public class KeyguardStatusView extends GridLayout {
         mStatusViewContainer = findViewById(R.id.status_view_container);
 
         mClockView = findViewById(R.id.keyguard_clock_container);
-        if (KeyguardClockAccessibilityDelegate.isNeeded(mContext)) {
-            mClockView.setAccessibilityDelegate(new KeyguardClockAccessibilityDelegate(mContext));
-        }
 
         mKeyguardSlice = findViewById(R.id.keyguard_slice_view);
 
