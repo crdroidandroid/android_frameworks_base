@@ -76,9 +76,11 @@ public final class BluetoothUuid {
             ParcelUuid.fromString("00001133-0000-1000-8000-00805F9B34FB");
     public static final ParcelUuid MAS =
             ParcelUuid.fromString("00001132-0000-1000-8000-00805F9B34FB");
-  public static final ParcelUuid SAP =
+    public static final ParcelUuid SAP =
             ParcelUuid.fromString("0000112D-0000-1000-8000-00805F9B34FB");
-			
+    public static final ParcelUuid DIP =
+              ParcelUuid.fromString("00001200-0000-1000-8000-00805F9B34FB");
+
     public static final ParcelUuid BASE_UUID =
             ParcelUuid.fromString("00000000-0000-1000-8000-00805F9B34FB");
 
