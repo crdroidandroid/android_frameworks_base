@@ -74,6 +74,7 @@ import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.SwipeHelper;
 import com.android.systemui.classifier.FalsingManager;
+import com.android.systemui.doze.DozeLog;
 import com.android.systemui.plugins.statusbar.NotificationMenuRowPlugin;
 import com.android.systemui.plugins.statusbar.NotificationMenuRowPlugin.MenuItem;
 import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper;
@@ -176,6 +177,7 @@ public class NotificationStackScrollLayout extends ViewGroup
     private int mBottomMargin;
     private int mBottomInset = 0;
     private float mQsExpansionFraction;
+    private boolean mForcedMediaDoze;
 
     /**
      * The algorithm which calculates the properties for our children
@@ -530,6 +532,11 @@ public class NotificationStackScrollLayout extends ViewGroup
         }
     }
 
+    public void setCleanLayout(int reason) {
+        mForcedMediaDoze =
+                reason == DozeLog.PULSE_REASON_FORCED_MEDIA_NOTIFICATION;
+    }
+
     private void drawBackground(Canvas canvas) {
         final int lockScreenLeft = mSidePaddings;
         final int lockScreenRight = getWidth() - mSidePaddings;
@@ -546,7 +553,7 @@ public class NotificationStackScrollLayout extends ViewGroup
         final int darkTop = (int) (mRegularTopPadding + separatorThickness / 2f);
         final int darkBottom = darkTop + separatorThickness;
 
-        if (mAmbientState.hasPulsingNotifications()) {
+        if (mAmbientState.hasPulsingNotifications() || mForcedMediaDoze) {
             // No divider, we have a notification icon instead
         } else if (mAmbientState.isFullyDark()) {
             // Only draw divider on AOD if we actually have notifications
