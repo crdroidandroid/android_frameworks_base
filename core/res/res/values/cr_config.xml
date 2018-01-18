@@ -33,4 +33,6 @@
 
     <!-- Component name for the activity that will be presenting the Oreo's Recents UI -->
     <string name="config_recentsComponentNameOreo" translatable="false">com.android.systemui/.recents.RecentsActivity</string>
+
+    <bool name="config_canForceDozeNotifications">true</bool>
 </resources>
