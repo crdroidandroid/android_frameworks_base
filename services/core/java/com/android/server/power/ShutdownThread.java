@@ -338,6 +338,9 @@ public final class ShutdownThread extends Thread {
                         com.android.internal.R.string.reboot_to_bootloader_message));
             pd.setIndeterminate(true);
         } else if (mReboot) {
+             if (showSysuiReboot()) {
+                  return null;
+             }
             pd.setTitle(context.getText(com.android.internal.R.string.reboot_title));
             pd.setMessage(context.getText(com.android.internal.R.string.reboot_message));
             pd.setIndeterminate(true);
