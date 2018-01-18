@@ -316,6 +316,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             Settings.Secure.FP_SWIPE_TO_DISMISS_NOTIFICATIONS;
     private static final String PULSE_APPS_BLACKLIST =
             Settings.Secure.PULSE_APPS_BLACKLIST;
+    private static final String FORCE_AMBIENT_FOR_MEDIA =
+            "system:" + Settings.System.FORCE_AMBIENT_FOR_MEDIA;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -494,6 +496,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private boolean mBrightnessControl;
     private boolean mBrightnessChanged;
     private boolean mJustPeeked;
+
+    private boolean mAmbientMediaPlaying;
 
     /**
      * Helper that is responsible for showing the right toast when a disallowed activity operation
@@ -763,6 +767,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, QS_COLUMNS_LANDSCAPE);
         tunerService.addTunable(this, FP_SWIPE_TO_DISMISS_NOTIFICATIONS);
         tunerService.addTunable(this, PULSE_APPS_BLACKLIST);
+        tunerService.addTunable(this, FORCE_AMBIENT_FOR_MEDIA);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -1059,7 +1064,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         mAmbientIndicationContainer = mStatusBarWindow.findViewById(
                 R.id.ambient_indication_container);
         if (mAmbientIndicationContainer != null) {
-            ((AmbientIndicationContainer) mAmbientIndicationContainer).initializeView(this);
+            ((AmbientIndicationContainer) mAmbientIndicationContainer).initializeView(this, mHandler);
         }
 
         // set the initial view visibility
@@ -1791,6 +1796,12 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         }
     };
 
+    public void triggerAmbientForMedia() {
+        if (mAmbientMediaPlaying) {
+            mDozeServiceHost.fireNotificationMedia();
+        }
+    }
+
     // TODO: Move this to NotificationMediaManager.
     /**
      * Refresh or remove lockscreen artwork from media metadata or the lockscreen wallpaper.
@@ -2277,6 +2288,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
     public boolean isPulsing() {
         return mDozeScrimController != null && mDozeScrimController.isPulsing();
+    }
+
+    public DozeScrimController getDozeScrimController() {
+        return mDozeScrimController;
     }
 
     public boolean isLaunchTransitionFadingAway() {
@@ -4253,9 +4268,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 mKeyguardUserSwitcher.setKeyguard(true, fromShadeLocked);
             }
             if (mStatusBarView != null) mStatusBarView.removePendingHideExpandedRunnables();
-            if (mAmbientIndicationContainer != null) {
+            /*if (mAmbientIndicationContainer != null) {
                 mAmbientIndicationContainer.setVisibility(View.VISIBLE);
-            }
+            }*/
         } else {
             mKeyguardIndicationController.setVisible(false);
             if (mKeyguardUserSwitcher != null) {
@@ -4264,9 +4279,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                         mState == StatusBarState.SHADE_LOCKED ||
                         fromShadeLocked);
             }
-            if (mAmbientIndicationContainer != null) {
+            /*if (mAmbientIndicationContainer != null) {
                 mAmbientIndicationContainer.setVisibility(View.INVISIBLE);
-            }
+            }*/
         }
         mNotificationPanel.setBarState(mState, mKeyguardFadingAway, goingToFullShade);
         updateTheme();
@@ -5175,7 +5190,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             mKeyguardViewMediator.setAodShowing(mDozing);
             mStatusBarWindowManager.setDozing(mDozing);
             mStatusBarKeyguardViewManager.setDozing(mDozing);
-            if (mAmbientIndicationContainer instanceof DozeReceiver) {
+            if (mAmbientMediaPlaying && mAmbientIndicationContainer instanceof DozeReceiver) {
                 ((DozeReceiver) mAmbientIndicationContainer).setDozing(mDozing);
             }
             mEntryManager.updateNotifications();
@@ -5262,6 +5277,12 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             }
         }
 
+        public void fireNotificationMedia() {
+            for (Callback callback : mCallbacks) {
+                callback.onNotificationMedia();
+            }
+        }
+
         @Override
         public void addCallback(@NonNull Callback callback) {
             mCallbacks.add(callback);
@@ -5279,6 +5300,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 DozeLog.traceDozing(mContext, mDozing);
                 updateDozing();
                 updateIsKeyguard();
+
+                if (isAmbientContainerAvailable()) {
+                    ((AmbientIndicationContainer)mAmbientIndicationContainer).setDozing(true);
+                }
             }
         }
 
@@ -5294,17 +5319,20 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 @Override
                 public void onPulseStarted() {
                     callback.onPulseStarted();
-                    if (mHeadsUpManager.hasHeadsUpNotifications()) {
+                    if (mHeadsUpManager.hasHeadsUpNotifications() && reason !=
+                            DozeLog.PULSE_REASON_FORCED_MEDIA_NOTIFICATION) {
                         // Only pulse the stack scroller if there's actually something to show.
                         // Otherwise just show the always-on screen.
                         setPulsing(true);
                     }
+                    setOnPulseEvent(reason, true);
                 }
 
                 @Override
                 public void onPulseFinished() {
                     callback.onPulseFinished();
                     setPulsing(false);
+                    setOnPulseEvent(-1, false);
                 }
 
                 private void setPulsing(boolean pulsing) {
@@ -5312,6 +5340,15 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                     mNotificationPanel.setPulsing(pulsing);
                     mVisualStabilityManager.setPulsing(pulsing);
                     mIgnoreTouchWhilePulsing = false;
+                }
+
+                private void setOnPulseEvent(int reason, boolean pulsing) {
+                    mNotificationPanel.setCleanLayout(reason);
+                    mNotificationShelf.setCleanLayout(reason);
+                    if (isAmbientContainerAvailable()) {
+                        ((AmbientIndicationContainer)mAmbientIndicationContainer).setOnPulseEvent(
+                                reason, pulsing);
+                    }
                 }
             }, reason);
         }
@@ -5323,6 +5360,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 DozeLog.traceDozing(mContext, mDozing);
                 mWakefulnessLifecycle.dispatchStartedWakingUp();
                 updateDozing();
+
+                if (isAmbientContainerAvailable()) {
+                    ((AmbientIndicationContainer)mAmbientIndicationContainer).setDozing(false);
+                }
             }
         }
 
@@ -5395,14 +5436,11 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
         @Override
         public void onDoubleTap(float screenX, float screenY) {
-            if (screenX > 0 && screenY > 0 && mAmbientIndicationContainer != null
-                && mAmbientIndicationContainer.getVisibility() == View.VISIBLE) {
-                mAmbientIndicationContainer.getLocationOnScreen(mTmpInt2);
-                float viewX = screenX - mTmpInt2[0];
-                float viewY = screenY - mTmpInt2[1];
-                if (0 <= viewX && viewX <= mAmbientIndicationContainer.getWidth()
-                        && 0 <= viewY && viewY <= mAmbientIndicationContainer.getHeight()) {
-                    dispatchDoubleTap(viewX, viewY);
+            if (isDoubleTapOnMusicTicker(screenX, screenY)) {
+                handleSystemKey(KeyEvent.KEYCODE_MEDIA_NEXT);
+            } else {
+                for (Callback callback : mCallbacks) {
+                    callback.wakeUpFromDoubleTapAod();
                 }
             }
         }
@@ -5445,6 +5483,22 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
     public boolean shouldIgnoreTouch() {
         return isDozing() && mDozeServiceHost.mIgnoreTouchWhilePulsing;
+    }
+
+    public boolean isDoubleTapOnMusicTicker(float eventX, float eventY) {
+        if (eventX <= 0 || eventY <= 0 || mAmbientIndicationContainer == null
+                || mAmbientIndicationContainer.getVisibility() != View.VISIBLE) {
+            return false;
+        }
+        final View indication = ((AmbientIndicationContainer)mAmbientIndicationContainer).getIndication();
+        indication.getLocationOnScreen(mTmpInt2);
+        float viewX = eventX - mTmpInt2[0];
+        float viewY = eventY - mTmpInt2[1];
+        if (0 <= viewX && viewX <= indication.getWidth()
+                && 0 <= viewY && viewY <= indication.getHeight()) {
+            return true;
+        }
+        return false;
     }
 
     // Begin Extra BaseStatusBar methods.
@@ -5525,6 +5579,17 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         String blacklist = Settings.Secure.getStringForUser(mContext.getContentResolver(),
                 Settings.Secure.PULSE_APPS_BLACKLIST, UserHandle.USER_CURRENT);
         getMediaManager().setPulseBlacklist(blacklist);
+    }
+
+    public void setAmbientMusicInfo(MediaMetadata mediaMetadata, String notificationText) {
+        if (isAmbientContainerAvailable()) {
+            ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(
+                    mediaMetadata, notificationText);
+        }
+    }
+
+    private boolean isAmbientContainerAvailable() {
+        return mAmbientMediaPlaying && mAmbientIndicationContainer != null;
     }
 
     private final BroadcastReceiver mBannerActionBroadcastReceiver = new BroadcastReceiver() {
@@ -6109,6 +6174,14 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 break;
             case PULSE_APPS_BLACKLIST:
                 setPulseBlacklist();
+                break;
+            case FORCE_AMBIENT_FOR_MEDIA:
+                mAmbientMediaPlaying =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                if (isAmbientContainerAvailable()) {
+                    ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(
+                    mMediaManager.getMediaMetadata(), null);
+                }
                 break;
             default:
                 break;
