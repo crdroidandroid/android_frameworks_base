@@ -134,6 +134,13 @@ public class DozeScrimController {
         mHandler.removeCallbacks(mPulseOut);
     }
 
+    public void extendPulseForMusicTicker() {
+        mHandler.removeCallbacks(mPulseOut);
+        mHandler.removeCallbacks(mPulseOutExtended);
+        mHandler.postDelayed(mPulseOutExtended,
+                mDozeParameters.getPulseVisibleDurationExtended());
+    }
+
     private void cancelPulsing() {
         if (mPulseCallback != null) {
             if (DEBUG) Log.d(TAG, "Cancel pulsing");
