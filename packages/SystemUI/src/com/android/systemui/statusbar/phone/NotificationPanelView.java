@@ -1881,10 +1881,10 @@ public class NotificationPanelView extends PanelView implements
         mKeyguardBottomArea.setImportantForAccessibility(alpha == 0f
                 ? IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
                 : IMPORTANT_FOR_ACCESSIBILITY_AUTO);
-        View ambientIndicationContainer = mStatusBar.getAmbientIndicationContainer();
+        /*View ambientIndicationContainer = mStatusBar.getAmbientIndicationContainer();
         if (ambientIndicationContainer != null) {
             ambientIndicationContainer.setAlpha(alpha);
-        }
+        }*/
     }
 
     private float getNotificationsTopY() {
@@ -2901,6 +2901,11 @@ public class NotificationPanelView extends PanelView implements
         }
         mNotificationStackScroller.setPulsing(pulsing, animatePulse);
         mKeyguardStatusView.setPulsing(pulsing, animatePulse);
+    }
+
+    public void setCleanLayout(int reason) {
+        mKeyguardStatusView.setCleanLayout(reason);
+        mNotificationStackScroller.setCleanLayout(reason);
     }
 
     public void setAmbientIndicationBottomPadding(int ambientIndicationBottomPadding) {
