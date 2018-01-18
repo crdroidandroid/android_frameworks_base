@@ -97,6 +97,14 @@ public class DozeTriggers implements DozeMachine.Part {
         DozeLog.traceNotificationPulse(mContext);
     }
 
+    private void onNotificationForced() {
+        if (DozeMachine.DEBUG) Log.d(TAG, "requestNotificationPulse");
+        mNotificationPulseTime = SystemClock.elapsedRealtime();
+        if (!mConfig.pulseOnNotificationAvailable() && !mConfig.canForceDozeNotifications()) return;
+        requestPulse(DozeLog.PULSE_REASON_FORCED_MEDIA_NOTIFICATION, false /* performedProxCheck */);
+        DozeLog.traceNotificationPulse(mContext);
+    }
+
     private void onWhisper() {
         requestPulse(DozeLog.PULSE_REASON_NOTIFICATION, false /* performedProxCheck */);
     }
@@ -137,7 +145,7 @@ public class DozeTriggers implements DozeMachine.Part {
                 }
                 if (isDoubleTap) {
                     mDozeHost.onDoubleTap(screenX, screenY);
-                    mMachine.wakeUp();
+                    //mMachine.wakeUp();
                 } else {
                     mDozeHost.extendPulse();
                 }
@@ -387,10 +395,20 @@ public class DozeTriggers implements DozeMachine.Part {
         }
 
         @Override
+        public void onNotificationMedia() {
+            onNotificationForced();
+        }
+
+        @Override
         public void onPowerSaveChanged(boolean active) {
             if (active) {
                 mMachine.requestState(DozeMachine.State.FINISH);
             }
+        }
+
+        @Override
+        public void wakeUpFromDoubleTapAod() {
+            mMachine.wakeUp();
         }
     };
 }
