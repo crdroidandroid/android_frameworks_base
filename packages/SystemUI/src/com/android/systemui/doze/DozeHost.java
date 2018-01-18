@@ -49,7 +49,9 @@ public interface DozeHost {
 
     interface Callback {
         default void onNotificationHeadsUp() {}
+        default void onNotificationMedia() {}
         default void onPowerSaveChanged(boolean active) {}
+        default void wakeUpFromDoubleTapAod() {}
     }
 
     interface PulseCallback {
