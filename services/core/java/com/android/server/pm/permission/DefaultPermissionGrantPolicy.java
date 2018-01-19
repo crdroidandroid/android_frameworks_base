@@ -803,6 +803,10 @@ public final class DefaultPermissionGrantPolicy {
         // Chromium Sign-in
         grantSystemFixedPermissionsToSystemPackage("org.chromium.chrome", userId, CONTACTS_PERMISSIONS,
                 STORAGE_PERMISSIONS);
+
+        // Google dialer
+        grantSystemFixedPermissionsToSystemPackage("com.google.android.dialer", userId, PHONE_PERMISSIONS,
+                CONTACTS_PERMISSIONS, SMS_PERMISSIONS);
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(String category, int userId) {
