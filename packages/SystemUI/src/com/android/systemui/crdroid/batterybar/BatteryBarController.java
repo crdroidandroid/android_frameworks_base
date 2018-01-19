@@ -22,10 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.database.ContentObserver;
 import android.os.BatteryManager;
-import android.os.Handler;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -34,7 +31,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-public class BatteryBarController extends LinearLayout {
+import com.android.systemui.Dependency;
+import com.android.systemui.tuner.TunerService;
+
+public class BatteryBarController extends LinearLayout implements TunerService.Tunable {
 
     private static final String TAG = "BatteryBarController";
 
@@ -45,41 +45,25 @@ public class BatteryBarController extends LinearLayout {
     public static final int STYLE_SYMMETRIC = 1;
     public static final int STYLE_REVERSE = 2;
 
-    int mStyle = STYLE_REGULAR;
-    int mLocation = 0;
+    int mStyle;
+    int mLocation;
+    int mThickness;
 
     protected final static int CURRENT_LOC = 1;
     int mLocationToLookFor = 0;
 
+    private boolean mAttached = false;
     private int mBatteryLevel = 0;
     private boolean mBatteryCharging = false;
 
-    boolean isAttached = false;
     boolean isVertical = false;
 
-    class SettingsObserver extends ContentObserver {
-
-        public SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observer() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_BATTERY_BAR), false, this);
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_BATTERY_BAR_STYLE), false,
-                    this);
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_BATTERY_BAR_THICKNESS),
-                    false, this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
-        }
-    }
+    private static final String STATUSBAR_BATTERY_BAR =
+            "system:" + Settings.System.STATUSBAR_BATTERY_BAR;
+    private static final String STATUSBAR_BATTERY_BAR_STYLE =
+            "system:" + Settings.System.STATUSBAR_BATTERY_BAR_STYLE;
+    private static final String STATUSBAR_BATTERY_BAR_THICKNESS =
+            "system:" + Settings.System.STATUSBAR_BATTERY_BAR_THICKNESS;
 
     public BatteryBarController(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -93,18 +77,22 @@ public class BatteryBarController extends LinearLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (!isAttached) {
-            isVertical = (getLayoutParams().height == LayoutParams.MATCH_PARENT);
 
-            isAttached = true;
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-            getContext().registerReceiver(mIntentReceiver, filter);
+        if (mAttached)
+            return;
 
-            SettingsObserver observer = new SettingsObserver(new Handler());
-            observer.observer();
-            updateSettings();
-        }
+        mAttached = true;
+
+        isVertical = (getLayoutParams().height == LayoutParams.MATCH_PARENT);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        getContext().registerReceiver(mIntentReceiver, filter);
+
+        Dependency.get(TunerService.class).addTunable(this,
+                STATUSBAR_BATTERY_BAR,
+                STATUSBAR_BATTERY_BAR_STYLE,
+                STATUSBAR_BATTERY_BAR_THICKNESS);
     }
 
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
@@ -122,33 +110,33 @@ public class BatteryBarController extends LinearLayout {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (isAttached) {
-            isAttached = false;
-            removeBars();
-        }
         super.onDetachedFromWindow();
+
+        if (!mAttached)
+            return;
+
+        mAttached = false;
+
+        Dependency.get(TunerService.class).removeTunable(this);
+        getContext().unregisterReceiver(mIntentReceiver);
     }
 
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (isAttached) {
+        if (mAttached) {
             getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    updateSettings();
+                    addBars();
                 }
             }, 500);
-
         }
     }
 
-    public void addBars() {
-        // set heights
+    public void configThickness() {
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        float dp = (float) Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.STATUSBAR_BATTERY_BAR_THICKNESS, 2, UserHandle.USER_CURRENT);
-        int pixels = (int) ((metrics.density * dp) + 0.5);
+        int pixels = (int) ((metrics.density * mThickness) + 0.5);
 
         ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) getLayoutParams();
 
@@ -162,7 +150,18 @@ public class BatteryBarController extends LinearLayout {
             params.width = pixels;
         else
             params.height = pixels;
+
         setLayoutParams(params);
+    }
+
+    public void addBars() {
+        removeAllViews();
+
+        if (mLocation == 0 || !isLocationValid(mLocation))
+            return;
+
+        configThickness();
+
         mBatteryLevel = Prefs.getLastBatteryLevel(getContext());
         if (mStyle == STYLE_REGULAR) {
             addView(new BatteryBar(mContext, mBatteryCharging, mBatteryLevel, isVertical),
@@ -193,21 +192,26 @@ public class BatteryBarController extends LinearLayout {
         }
     }
 
-    public void removeBars() {
-        removeAllViews();
-    }
-
-    public void updateSettings() {
-        mStyle = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.STATUSBAR_BATTERY_BAR_STYLE, 0, UserHandle.USER_CURRENT);
-        mLocation = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.STATUSBAR_BATTERY_BAR, 0, UserHandle.USER_CURRENT);
-
-        if (mLocation > 0 && isLocationValid(mLocation)) {
-            removeBars();
-            addBars();
-        } else {
-            removeBars();
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case STATUSBAR_BATTERY_BAR:
+                mLocation =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                addBars();
+                break;
+            case STATUSBAR_BATTERY_BAR_STYLE:
+                mStyle =
+                        newValue == null ? STYLE_REGULAR : Integer.parseInt(newValue);
+                addBars();
+                break;
+            case STATUSBAR_BATTERY_BAR_THICKNESS:
+                mThickness =
+                        newValue == null ? 2 : Integer.parseInt(newValue);
+                configThickness();
+                break;
+            default:
+                break;
         }
     }
 
