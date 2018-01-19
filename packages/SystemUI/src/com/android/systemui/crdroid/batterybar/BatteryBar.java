@@ -21,11 +21,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.ContentObserver;
 import android.graphics.drawable.Animatable;
 import android.os.BatteryManager;
-import android.os.Handler;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -38,8 +35,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.android.internal.util.crdroid.Utils;
+import com.android.systemui.Dependency;
+import com.android.systemui.tuner.TunerService;
 
-public class BatteryBar extends RelativeLayout implements Animatable {
+public class BatteryBar extends RelativeLayout implements Animatable, TunerService.Tunable {
 
     private static final String TAG = BatteryBar.class.getSimpleName();
 
@@ -47,7 +46,7 @@ public class BatteryBar extends RelativeLayout implements Animatable {
     private static final int ANIM_DURATION = 1000; // 5 seconds
 
     // When to use the low battery color
-    private static final int BATTERY_LOW_VALUE = 15;
+    private static final int BATTERY_LOW_VALUE = 20;
 
     private boolean mAttached = false;
     private int mBatteryLevel = 0;
@@ -56,14 +55,13 @@ public class BatteryBar extends RelativeLayout implements Animatable {
     private boolean shouldAnimateCharging = true;
     private boolean isAnimating = false;
 
-    private int mColor = 0xFFFFFFFF;
-    private int mChargingColor = 0xFFFFFFFF;
-    private int mBatteryLowColor = 0xFFFFFFFF;
-    private boolean mUseChargingColor = true;
-    private boolean mBlendColor = false;
-    private boolean mBlendColorReversed = false;
-
-    private Handler mHandler = new Handler();
+    int mLocation;
+    private int mColor;
+    private int mChargingColor;
+    private int mBatteryLowColor;
+    private boolean mUseChargingColor;
+    private boolean mBlendColor;
+    private boolean mBlendColorReversed;
 
     LinearLayout mBatteryBarLayout;
     View mBatteryBar;
@@ -76,46 +74,22 @@ public class BatteryBar extends RelativeLayout implements Animatable {
 
     boolean vertical = false;
 
-    class SettingsObserver extends ContentObserver {
-
-        public SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observer() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_BATTERY_BAR), false, this);
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_BATTERY_BAR_COLOR), false,
-                    this);
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_BATTERY_BAR_CHARGING_COLOR),
-                    false, this);
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(
-                            Settings.System.STATUSBAR_BATTERY_BAR_BATTERY_LOW_COLOR), false, this);
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_BATTERY_BAR_ANIMATE),
-                    false, this);
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(
-                            Settings.System.STATUSBAR_BATTERY_BAR_ENABLE_CHARGING_COLOR), false,
-                    this);
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.STATUSBAR_BATTERY_BAR_BLEND_COLOR),
-                    false, this);
-            resolver.registerContentObserver(
-                    Settings.System.getUriFor(
-                            Settings.System.STATUSBAR_BATTERY_BAR_BLEND_COLOR_REVERSE), false,
-                    this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
-        }
-    }
+    private static final String STATUSBAR_BATTERY_BAR =
+            "system:" + Settings.System.STATUSBAR_BATTERY_BAR;
+    private static final String STATUSBAR_BATTERY_BAR_COLOR =
+            "system:" + Settings.System.STATUSBAR_BATTERY_BAR_COLOR;
+    private static final String STATUSBAR_BATTERY_BAR_CHARGING_COLOR =
+            "system:" + Settings.System.STATUSBAR_BATTERY_BAR_CHARGING_COLOR;
+    private static final String STATUSBAR_BATTERY_BAR_BATTERY_LOW_COLOR =
+            "system:" + Settings.System.STATUSBAR_BATTERY_BAR_BATTERY_LOW_COLOR;
+    private static final String STATUSBAR_BATTERY_BAR_ANIMATE =
+            "system:" + Settings.System.STATUSBAR_BATTERY_BAR_ANIMATE;
+    private static final String STATUSBAR_BATTERY_BAR_ENABLE_CHARGING_COLOR =
+            "system:" + Settings.System.STATUSBAR_BATTERY_BAR_ENABLE_CHARGING_COLOR;
+    private static final String STATUSBAR_BATTERY_BAR_BLEND_COLOR =
+            "system:" + Settings.System.STATUSBAR_BATTERY_BAR_BLEND_COLOR;
+    private static final String STATUSBAR_BATTERY_BAR_BLEND_COLOR_REVERSE =
+            "system:" + Settings.System.STATUSBAR_BATTERY_BAR_BLEND_COLOR_REVERSE;
 
     public BatteryBar(Context context) {
         this(context, null);
@@ -147,55 +121,67 @@ public class BatteryBar extends RelativeLayout implements Animatable {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (!mAttached) {
-            mAttached = true;
 
-            mBatteryBarLayout = new LinearLayout(mContext);
-            addView(mBatteryBarLayout, new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+        if (mAttached)
+            return;
+
+        mAttached = true;
+
+        mBatteryBarLayout = new LinearLayout(mContext);
+        addView(mBatteryBarLayout, new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT));
+
+        mBatteryBar = new View(mContext);
+        mBatteryBarLayout.addView(mBatteryBar, new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+
+        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+        float dp = 4f;
+        int pixels = (int) (metrics.density * dp + 0.5f);
+
+        // charger
+        mChargerLayout = new LinearLayout(mContext);
+
+        if (vertical)
+            addView(mChargerLayout, new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                    pixels));
+        else
+            addView(mChargerLayout, new RelativeLayout.LayoutParams(pixels,
                     LayoutParams.MATCH_PARENT));
 
-            mBatteryBar = new View(mContext);
-            mBatteryBarLayout.addView(mBatteryBar, new LinearLayout.LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        mCharger = new View(mContext);
+        mChargerLayout.setVisibility(View.GONE);
+        mChargerLayout.addView(mCharger, new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-            DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-            float dp = 4f;
-            int pixels = (int) (metrics.density * dp + 0.5f);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
 
-            // charger
-            mChargerLayout = new LinearLayout(mContext);
-
-            if (vertical)
-                addView(mChargerLayout, new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                        pixels));
-            else
-                addView(mChargerLayout, new RelativeLayout.LayoutParams(pixels,
-                        LayoutParams.MATCH_PARENT));
-
-            mCharger = new View(mContext);
-            mChargerLayout.setVisibility(View.GONE);
-            mChargerLayout.addView(mCharger, new LinearLayout.LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-            filter.addAction(Intent.ACTION_SCREEN_OFF);
-            filter.addAction(Intent.ACTION_SCREEN_ON);
-            getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
-
-            SettingsObserver observer = new SettingsObserver(mHandler);
-            observer.observer();
-            updateSettings();
-        }
+        Dependency.get(TunerService.class).addTunable(this,
+                STATUSBAR_BATTERY_BAR,
+                STATUSBAR_BATTERY_BAR_COLOR,
+                STATUSBAR_BATTERY_BAR_CHARGING_COLOR,
+                STATUSBAR_BATTERY_BAR_BATTERY_LOW_COLOR,
+                STATUSBAR_BATTERY_BAR_ANIMATE,
+                STATUSBAR_BATTERY_BAR_ENABLE_CHARGING_COLOR,
+                STATUSBAR_BATTERY_BAR_BLEND_COLOR,
+                STATUSBAR_BATTERY_BAR_BLEND_COLOR_REVERSE);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (mAttached) {
-            mAttached = false;
-            getContext().unregisterReceiver(mIntentReceiver);
-        }
+
+        if (!mAttached)
+            return;
+
+        mAttached = false;
+
+        Dependency.get(TunerService.class).removeTunable(this);
+        getContext().unregisterReceiver(mIntentReceiver);
     }
 
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
@@ -222,29 +208,45 @@ public class BatteryBar extends RelativeLayout implements Animatable {
         }
     };
 
-    private void updateSettings() {
-        ContentResolver resolver = getContext().getContentResolver();
-
-        mColor = Settings.System.getIntForUser(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_COLOR, 0xff76c124,
-                UserHandle.USER_CURRENT);
-        mChargingColor = Settings.System.getIntForUser(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_CHARGING_COLOR, 0xffffc90f,
-                UserHandle.USER_CURRENT);
-        mBatteryLowColor = Settings.System.getIntForUser(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_BATTERY_LOW_COLOR, 0xfff90028,
-                UserHandle.USER_CURRENT);
-        shouldAnimateCharging = Settings.System.getIntForUser(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_ANIMATE, 1, UserHandle.USER_CURRENT) == 1;
-
-        mUseChargingColor = Settings.System.getIntForUser(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_ENABLE_CHARGING_COLOR, 1, UserHandle.USER_CURRENT) == 1;
-        mBlendColor = Settings.System.getIntForUser(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_BLEND_COLOR, 1, UserHandle.USER_CURRENT) == 1;
-        mBlendColorReversed = Settings.System.getIntForUser(resolver,
-                Settings.System.STATUSBAR_BATTERY_BAR_BLEND_COLOR_REVERSE, 0, UserHandle.USER_CURRENT) == 1;
-
-        if (mBatteryCharging && mBatteryLevel < 100 && shouldAnimateCharging) {
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case STATUSBAR_BATTERY_BAR:
+                mLocation =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                break;
+            case STATUSBAR_BATTERY_BAR_COLOR:
+                mColor =
+                        newValue == null ? 0xff76c124 : Integer.parseInt(newValue);
+                break;
+            case STATUSBAR_BATTERY_BAR_CHARGING_COLOR:
+                mChargingColor =
+                        newValue == null ? 0xffffc90f : Integer.parseInt(newValue);
+                break;
+            case STATUSBAR_BATTERY_BAR_BATTERY_LOW_COLOR:
+                mBatteryLowColor =
+                        newValue == null ? 0xfff90028 : Integer.parseInt(newValue);
+                break;
+            case STATUSBAR_BATTERY_BAR_ANIMATE:
+                shouldAnimateCharging =
+                        newValue == null || Integer.parseInt(newValue) != 0;
+                break;
+            case STATUSBAR_BATTERY_BAR_ENABLE_CHARGING_COLOR:
+                mUseChargingColor =
+                        newValue == null || Integer.parseInt(newValue) != 0;
+                break;
+            case STATUSBAR_BATTERY_BAR_BLEND_COLOR:
+                mBlendColor =
+                        newValue == null || Integer.parseInt(newValue) != 0;
+                break;
+            case STATUSBAR_BATTERY_BAR_BLEND_COLOR_REVERSE:
+                mBlendColorReversed =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                break;
+            default:
+                break;
+        }
+        if (mLocation > 0 && shouldAnimateCharging && mBatteryCharging && mBatteryLevel < 100) {
             start();
         } else {
             stop();
