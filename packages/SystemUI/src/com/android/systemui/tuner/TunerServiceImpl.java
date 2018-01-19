@@ -321,7 +321,9 @@ public class TunerServiceImpl extends TunerService {
         }
         String value = getValue(key);
         for (Tunable tunable : tunables) {
-            tunable.onTuningChanged(key, value);
+            if (tunable != null) {
+                tunable.onTuningChanged(key, value);
+            }
         }
     }
 
@@ -329,7 +331,9 @@ public class TunerServiceImpl extends TunerService {
         for (String key : mTunableLookup.keySet()) {
             String value = getValue(key);
             for (Tunable tunable : mTunableLookup.get(key)) {
-                tunable.onTuningChanged(key, value);
+                if (tunable != null) {
+                    tunable.onTuningChanged(key, value);
+                }
             }
         }
     }
