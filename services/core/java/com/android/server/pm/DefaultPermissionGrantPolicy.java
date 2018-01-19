@@ -849,6 +849,15 @@ final class DefaultPermissionGrantPolicy {
                 grantRuntimePermissionsLPw(googlecalendarPackage, PHONE_PERMISSIONS, userId);
             }
 
+            // Google dialer
+            PackageParser.Package googledialerPackage = getSystemPackageLPr(
+                    "com.google.android.dialer");
+            if (googledialerPackage != null && doesPackageSupportRuntimePermissions(googledialerPackage)) {
+                grantRuntimePermissionsLPw(googledialerPackage, PHONE_PERMISSIONS, true, userId);
+                grantRuntimePermissionsLPw(googledialerPackage, CONTACTS_PERMISSIONS, true, userId);
+                grantRuntimePermissionsLPw(googledialerPackage, SMS_PERMISSIONS, userId);
+            }
+
             // Google Play Store
             PackageParser.Package vendingPackage = getSystemPackageLPr(
                     "com.android.vending");
