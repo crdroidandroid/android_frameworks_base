@@ -325,7 +325,7 @@ constructor(
         // TODO(b/377493351) : start using proper logout API once it is available.
         // Using reboot is a temporary solution.
         if (isLogoutToSystemUserEnabled.value) {
-            withContext(backgroundDispatcher) { statusBarService.reboot(false) }
+            withContext(backgroundDispatcher) { statusBarService.reboot(false, null) }
         }
     }
 
