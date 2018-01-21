@@ -451,6 +451,7 @@ class GlobalScreenshot {
 
     private Bitmap mScreenBitmap;
     private View mScreenshotLayout;
+    private View mScreenshotSelectorLayout;
     private ScreenshotSelectorView mScreenshotSelectorView;
     private ImageView mBackgroundView;
     private ImageView mScreenshotView;
@@ -485,15 +486,17 @@ class GlobalScreenshot {
         // Inflate the screenshot layout
         mDisplayMatrix = new Matrix();
         mScreenshotLayout = layoutInflater.inflate(R.layout.global_screenshot, null);
+        mScreenshotSelectorLayout = layoutInflater.inflate(R.layout.global_screenshot, null);
         mBackgroundView = (ImageView) mScreenshotLayout.findViewById(R.id.global_screenshot_background);
         mScreenshotView = (ImageView) mScreenshotLayout.findViewById(R.id.global_screenshot);
         mScreenshotFlash = (ImageView) mScreenshotLayout.findViewById(R.id.global_screenshot_flash);
-        mScreenshotSelectorView = (ScreenshotSelectorView) mScreenshotLayout.findViewById(
+        mScreenshotSelectorView = (ScreenshotSelectorView) mScreenshotSelectorLayout.findViewById(
                 R.id.global_screenshot_selector);
         mScreenshotLayout.setFocusable(true);
+        mScreenshotSelectorLayout.setFocusable(true);
         mScreenshotSelectorView.setFocusable(true);
         mScreenshotSelectorView.setFocusableInTouchMode(true);
-        mScreenshotLayout.setOnTouchListener(new View.OnTouchListener() {
+        mScreenshotSelectorLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // Intercept and ignore all touch events
@@ -655,7 +658,7 @@ class GlobalScreenshot {
      */
     void takeScreenshotPartial(final Runnable finisher, final boolean statusBarVisible,
             final boolean navBarVisible) {
-        mWindowManager.addView(mScreenshotLayout, mWindowLayoutParams);
+        mWindowManager.addView(mScreenshotSelectorLayout, mWindowLayoutParams);
         mPartialShotStarted = false;
         mPartialShot = true;
         ViewConfiguration vc = ViewConfiguration.get(mContext);
@@ -678,13 +681,13 @@ class GlobalScreenshot {
                         float x = event.getRawX();
                         float y = event.getRawY();
                         view.setVisibility(View.GONE);
-                        mWindowManager.removeView(mScreenshotLayout);
+                        mWindowManager.removeView(mScreenshotSelectorLayout);
                         if (Math.abs(mTouchDownX - x) > touchSlop ||
                             Math.abs(mTouchDownY - y) > touchSlop) {
                             final Rect rect = view.getSelectionRect();
                             if (rect != null && !rect.isEmpty()) {
-                                // Need mScreenshotLayout to handle it after the view disappears
-                                mScreenshotLayout.post(new Runnable() {
+                                // Need mScreenshotSelectorLayout to handle it after the view disappears
+                                mScreenshotSelectorLayout.post(new Runnable() {
                                     public void run() {
                                         takeScreenshot(finisher, statusBarVisible, navBarVisible,
                                                 Math.max(0, rect.left), Math.max(0, rect.top),
@@ -706,7 +709,7 @@ class GlobalScreenshot {
                 return false;
             }
         });
-        mScreenshotLayout.post(new Runnable() {
+        mScreenshotSelectorLayout.post(new Runnable() {
             @Override
             public void run() {
                 mScreenshotSelectorView.setVisibility(View.VISIBLE);
@@ -722,6 +725,7 @@ class GlobalScreenshot {
         // If the selector layer still presents on screen, we remove it and resets its state.
         if (mScreenshotSelectorView.getSelectionRect() != null) {
             mWindowManager.removeView(mScreenshotLayout);
+            mWindowManager.removeView(mScreenshotSelectorLayout);
             mScreenshotSelectorView.stopSelection();
         }
     }
