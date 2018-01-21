@@ -320,30 +320,12 @@ public final class ShutdownThread extends Thread {
                 pd.setMessage(context.getText(com.android.internal.R.string.shutdown_progress));
                 pd.setIndeterminate(true);
             } else {
-                if (showSysuiReboot()) {
-                    return null;
-                }
                 // Factory reset path. Set the dialog message accordingly.
-                pd.setTitle(context.getText(com.android.internal.R.string.reboot_to_recovery_title));
+                pd.setTitle(context.getText(com.android.internal.R.string.reboot_to_reset_title));
                 pd.setMessage(context.getText(
-                            com.android.internal.R.string.reboot_to_recovery_message));
+                            com.android.internal.R.string.reboot_to_reset_message));
                 pd.setIndeterminate(true);
             }
-        } else if (mReason != null && mReason.equals(PowerManager.REBOOT_BOOTLOADER)) {
-            if (showSysuiReboot()) {
-                return null;
-            }
-            pd.setTitle(context.getText(com.android.internal.R.string.reboot_to_bootloader_title));
-            pd.setMessage(context.getText(
-                        com.android.internal.R.string.reboot_to_bootloader_message));
-            pd.setIndeterminate(true);
-        } else if (mReboot) {
-             if (showSysuiReboot()) {
-                  return null;
-             }
-            pd.setTitle(context.getText(com.android.internal.R.string.reboot_title));
-            pd.setMessage(context.getText(com.android.internal.R.string.reboot_message));
-            pd.setIndeterminate(true);
         } else {
             if (showSysuiReboot()) {
                 return null;

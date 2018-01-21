@@ -3,28 +3,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/global_actions_top_padding"
+    android:layout_marginBottom="0dp"
     android:paddingTop="@dimen/global_actions_top_padding"
     android:clipToPadding="false"
     android:theme="@style/qs_theme"
-    android:clipChildren="true">
+    android:clipChildren="false">
 
-    <ScrollView
+    <!-- Global actions is right-aligned to be physically near power button -->
+    <LinearLayout
+        android:id="@android:id/list"
         android:layout_width="@dimen/global_actions_panel_width"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:layout_gravity="top|right">
-
-        <!-- Global actions is right-aligned to be physically near power button -->
-        <LinearLayout
-            android:id="@android:id/list"
-            android:layout_width="@dimen/global_actions_panel_width"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="12dp"
-            android:translationZ="8dp" />
-
-    </ScrollView>
+        android:layout_gravity="top|right"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:translationZ="8dp" />
 
 </com.android.systemui.HardwareUiLayout>
