@@ -93,4 +93,7 @@
   <java-symbol type="style" name="Animation.Toast.Translucent" />
   <java-symbol type="style" name="Animation.Toast.SlideRightLeft" />
   <java-symbol type="style" name="Animation.Toast.SlideLeftRight" />
+
+  <!-- Ambient Music Ticker -->
+  <java-symbol type="bool" name="config_canForceDozeNotifications" />
 </resources>
