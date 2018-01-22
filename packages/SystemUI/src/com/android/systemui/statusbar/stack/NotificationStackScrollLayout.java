@@ -1494,9 +1494,9 @@ public class NotificationStackScrollLayout extends ViewGroup
         initView(getContext());
     }
 
-    public void dismissViewAnimated(View child, Runnable endRunnable, int delay, long duration) {
+    public void dismissViewAnimated(View child, Runnable endRunnable, int delay, long duration, boolean forceToLeft) {
         mSwipeHelper.dismissChild(child, 0, endRunnable, delay, true, duration,
-                true /* isDismissAll */);
+                true /* isDismissAll */, forceToLeft);
     }
 
     @Override
