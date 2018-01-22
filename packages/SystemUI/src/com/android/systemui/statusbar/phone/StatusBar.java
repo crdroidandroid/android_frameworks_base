@@ -303,6 +303,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             "system:" + Settings.System.QS_COLUMNS_PORTRAIT;
     private static final String QS_COLUMNS_LANDSCAPE =
             "system:" + Settings.System.QS_COLUMNS_LANDSCAPE;
+    private static final String FP_SWIPE_TO_DISMISS_NOTIFICATIONS =
+            Settings.Secure.FP_SWIPE_TO_DISMISS_NOTIFICATIONS;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -451,6 +453,11 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private View mReportRejectedTouch;
 
     private int mMaxAllowedKeyguardNotifications;
+
+    private boolean mFpDismissNotifications;
+
+    // the tracker view
+    int mTrackingPosition; // the position of the top of the tracking view.
 
     private boolean mExpandedVisible;
 
@@ -739,6 +746,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, QS_ROWS_LANDSCAPE);
         tunerService.addTunable(this, QS_COLUMNS_PORTRAIT);
         tunerService.addTunable(this, QS_COLUMNS_LANDSCAPE);
+        tunerService.addTunable(this, FP_SWIPE_TO_DISMISS_NOTIFICATIONS);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -1357,6 +1365,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     }
 
     public void clearAllNotifications() {
+        clearAllNotifications(false);
+    }
+
+    private void clearAllNotifications(boolean forceToLeft) {
         // animate-swipe all dismissable notifications, then animate the shade closed
         int numChildren = mStackScroller.getChildCount();
 
@@ -1415,13 +1427,15 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             }
         });
 
-        performDismissAllAnimations(viewsToHide);
-
+        performDismissAllAnimations(viewsToHide, forceToLeft);
     }
 
-    private void performDismissAllAnimations(ArrayList<View> hideAnimatedList) {
-        Runnable animationFinishAction = () -> {
-            animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+    private void performDismissAllAnimations(ArrayList<View> hideAnimatedList, boolean forceToLeft) {
+        Runnable animationFinishAction = new Runnable() {
+            @Override
+            public void run() {
+                animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+            }
         };
 
         if (hideAnimatedList.isEmpty()) {
@@ -1444,7 +1458,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             if (i == 0) {
                 endRunnable = animationFinishAction;
             }
-            mStackScroller.dismissViewAnimated(view, endRunnable, totalDelay, 260);
+            mStackScroller.dismissViewAnimated(view, endRunnable, totalDelay, 260, forceToLeft);
             currentDelay = Math.max(50, currentDelay - rowDelayDecrement);
             totalDelay += currentDelay;
         }
@@ -2423,6 +2437,12 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             } else if (!mNotificationPanel.isInSettings() && !mNotificationPanel.isExpanding()){
                 mNotificationPanel.flingSettings(0 /* velocity */, true /* expand */);
                 mMetricsLogger.count(NotificationPanelView.COUNTER_PANEL_OPEN_QS, 1);
+            }
+        } else if (mFpDismissNotifications && (KeyEvent.KEYCODE_SYSTEM_NAVIGATION_LEFT == key
+                || KeyEvent.KEYCODE_SYSTEM_NAVIGATION_RIGHT == key)) {
+            if (!mNotificationPanel.isFullyCollapsed() && !mNotificationPanel.isExpanding()){
+                mMetricsLogger.action(MetricsEvent.ACTION_DISMISS_ALL_NOTES);
+                clearAllNotifications(KeyEvent.KEYCODE_SYSTEM_NAVIGATION_LEFT == key ? true : false);
             }
         }
 
@@ -5997,6 +6017,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 if (mQSPanel != null) {
                     mQSPanel.updateResources();
                 }
+                break;
+            case FP_SWIPE_TO_DISMISS_NOTIFICATIONS:
+                mFpDismissNotifications =
+                        TunerService.parseIntegerSwitch(newValue, false);
                 break;
             default:
                 break;
