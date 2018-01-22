@@ -465,6 +465,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.FORCE_AMBIENT_FOR_MEDIA;
     private static final String STATUS_BAR_TICKER_ANIMATION_MODE =
             "system:" + Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE;
+    private static final String FP_SWIPE_TO_DISMISS_NOTIFICATIONS =
+            Settings.Secure.FP_SWIPE_TO_DISMISS_NOTIFICATIONS;
 
     static {
         boolean onlyCoreApps;
@@ -561,6 +563,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     boolean mExpandedVisible;
 
     private int mStatusBarHeaderHeight;
+
+    private boolean mFpDismissNotifications;
 
     // the tracker view
     int mTrackingPosition; // the position of the top of the tracking view.
@@ -1209,7 +1213,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 QS_TILE_TITLE_VISIBILITY,
                 QS_QUICKBAR_SCROLL_ENABLED,
                 FORCE_AMBIENT_FOR_MEDIA,
-                STATUS_BAR_TICKER_ANIMATION_MODE);
+                STATUS_BAR_TICKER_ANIMATION_MODE,
+                FP_SWIPE_TO_DISMISS_NOTIFICATIONS);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController);
@@ -1734,6 +1739,10 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     public void clearAllNotifications() {
+        clearAllNotifications(false);
+    }
+
+    private void clearAllNotifications(boolean forceToLeft) {
 
         // animate-swipe all dismissable notifications, then animate the shade closed
         int numChildren = mStackScroller.getChildCount();
@@ -1795,11 +1804,11 @@ public class StatusBar extends SystemUI implements DemoMode,
             }
         });
 
-        performDismissAllAnimations(viewsToHide);
+        performDismissAllAnimations(viewsToHide, forceToLeft);
 
     }
 
-    private void performDismissAllAnimations(ArrayList<View> hideAnimatedList) {
+    private void performDismissAllAnimations(ArrayList<View> hideAnimatedList, boolean forceToLeft) {
         Runnable animationFinishAction = new Runnable() {
             @Override
             public void run() {
@@ -1827,7 +1836,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             if (i == 0) {
                 endRunnable = animationFinishAction;
             }
-            mStackScroller.dismissViewAnimated(view, endRunnable, totalDelay, 260);
+            mStackScroller.dismissViewAnimated(view, endRunnable, totalDelay, 260, forceToLeft);
             currentDelay = Math.max(50, currentDelay - rowDelayDecrement);
             totalDelay += currentDelay;
         }
@@ -3410,6 +3419,12 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (!mNotificationPanel.isInSettings() && !mNotificationPanel.isExpanding()){
                 mNotificationPanel.flingSettings(0 /* velocity */, true /* expand */);
                 mMetricsLogger.count(NotificationPanelView.COUNTER_PANEL_OPEN_QS, 1);
+            }
+        } else if (mFpDismissNotifications && (KeyEvent.KEYCODE_SYSTEM_NAVIGATION_LEFT == key
+                || KeyEvent.KEYCODE_SYSTEM_NAVIGATION_RIGHT == key)) {
+            if (!mNotificationPanel.isFullyCollapsed() && !mNotificationPanel.isExpanding()){
+                mMetricsLogger.action(MetricsEvent.ACTION_DISMISS_ALL_NOTES);
+                clearAllNotifications(KeyEvent.KEYCODE_SYSTEM_NAVIGATION_LEFT == key ? true : false);
             }
         }
 
@@ -8481,6 +8496,10 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mTicker != null) {
                     mTicker.updateAnimation(mTickerAnimationMode);
                 }
+                break;
+            case FP_SWIPE_TO_DISMISS_NOTIFICATIONS:
+                mFpDismissNotifications =
+                        newValue != null && Integer.parseInt(newValue) != 0;
                 break;
             default:
                 break;
