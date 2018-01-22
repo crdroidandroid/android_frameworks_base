@@ -8300,6 +8300,12 @@ public final class Settings {
                 "system_navigation_keys_enabled";
 
         /**
+         * Whether to dismiss notifications on fingerprint left and right swipe action
+         * @hide
+         */
+        public static final String FP_SWIPE_TO_DISMISS_NOTIFICATIONS = "fp_swipe_to_dismiss_notifications";
+
+        /**
          * Holds comma separated list of ordering of QS tiles.
          * @hide
          */
