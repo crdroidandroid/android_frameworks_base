@@ -127,7 +127,7 @@
                 android:singleLine="true"
                 android:paddingStart="@dimen/status_bar_clock_starting_padding"
                 android:paddingEnd="@dimen/status_bar_clock_end_padding"
-                android:gravity="right|center_vertical"
+                android:gravity="center_vertical|start"
                 />
 
             <com.android.systemui.crdroid.logo.LogoImageViewRight
