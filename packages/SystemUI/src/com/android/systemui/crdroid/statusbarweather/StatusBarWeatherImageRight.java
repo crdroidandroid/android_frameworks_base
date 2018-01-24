@@ -125,7 +125,7 @@ public class StatusBarWeatherImageRight extends ImageView implements
             case STATUS_BAR_WEATHER_TEMP_STYLE:
                 mWeatherTempStyle =
                         newValue == null ? 0 : Integer.parseInt(newValue);
-                queryAndUpdateWeather();
+                updateWeather();
                 break;
             case STATUS_BAR_WEATHER_IMAGE_COLOR:
                 mWeatherImageColor =
@@ -133,7 +133,7 @@ public class StatusBarWeatherImageRight extends ImageView implements
                 updateattributes();
                 break;
             case OMNIJAWS_WEATHER_ICON_PACK:
-                queryAndUpdateWeather();
+                updateWeather();
                 break;
             default:
                 break;
@@ -167,29 +167,46 @@ public class StatusBarWeatherImageRight extends ImageView implements
     }
 
     private void queryAndUpdateWeather() {
-        if (!allowVisibility()) {
-            return;
-        }
-
         try {
             mWeatherClient.queryWeather();
             mWeatherData = mWeatherClient.getWeatherInfo();
+            // Weather data not available. Try later.
             if (mWeatherData == null) {
                 return;
             }
             mWeatherImage = mWeatherClient.getWeatherConditionImage(mWeatherData.conditionCode);
             setImageDrawable(mWeatherImage);
             updateattributes();
-            setVisibility(View.VISIBLE);
+            if (allowVisibility()) {
+                setVisibility(View.VISIBLE);
+            }
+        } catch(Exception e) {
+            // Do nothing
+        }
+    }
+
+    private void updateWeather() {
+        try {
+            // Check for latest cached info
+            if (mWeatherClient.getWeatherInfo() != null)
+                mWeatherData = mWeatherClient.getWeatherInfo();
+            if (mWeatherData == null) {
+                // No weather data available. Try querying.
+                queryAndUpdateWeather();
+                return;
+            }
+            mWeatherImage = mWeatherClient.getWeatherConditionImage(mWeatherData.conditionCode);
+            setImageDrawable(mWeatherImage);
+            updateattributes();
+            if (allowVisibility()) {
+                setVisibility(View.VISIBLE);
+            }
         } catch(Exception e) {
             // Do nothing
         }
     }
 
     private void updateattributes() {
-        if (!allowVisibility()) {
-            return;
-        }
         try {
             if (mWeatherImage != null && mWeatherImage instanceof VectorDrawable) {
                 clearColorFilter();

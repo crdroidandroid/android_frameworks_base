@@ -154,22 +154,22 @@ public class StatusBarWeatherRight extends TextView implements
             case STATUS_BAR_WEATHER_TEMP_STYLE:
                 mWeatherTempStyle =
                         newValue == null ? 0 : Integer.parseInt(newValue);
-                queryAndUpdateWeather();
+                updateWeather();
                 break;
             case STATUS_BAR_WEATHER_SIZE:
                 mWeatherTempSize =
                         newValue == null ? 14 : Integer.parseInt(newValue);
-                updateattributes();
+                updateWeather();
                 break;
             case STATUS_BAR_WEATHER_FONT_STYLE:
                 mWeatherTempFontStyle =
                         newValue == null ? FONT_NORMAL : Integer.parseInt(newValue);
-                updateattributes();
+                updateWeather();
                 break;
             case STATUS_BAR_WEATHER_COLOR:
                 mWeatherTempColor =
                         newValue == null ? 0xFFFFFFFF : Integer.parseInt(newValue);
-                updateattributes();
+                updateWeather();
                 break;
             default:
                 break;
@@ -202,15 +202,12 @@ public class StatusBarWeatherRight extends TextView implements
     }
 
     private void queryAndUpdateWeather() {
-        if (!allowVisibility()) {
-            return;
-        }
-
-        updateattributes();
         try {
             mWeatherClient.queryWeather();
             mWeatherData = mWeatherClient.getWeatherInfo();
+            // Weather data not available. Try later.
             if (mWeatherData == null) {
+                updateattributes();
                 return;
             }
             if (mStatusBarWeatherEnabled == 2 || mStatusBarWeatherEnabled == 4) {
@@ -218,16 +215,40 @@ public class StatusBarWeatherRight extends TextView implements
             } else {
                 setText(mWeatherData.temp + mWeatherData.tempUnits);
             }
-            setVisibility(View.VISIBLE);
+            updateattributes();
+            if (allowVisibility()) {
+                setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            // Do nothing
+        }
+    }
+
+    private void updateWeather() {
+        try {
+            // Check for latest cached info
+            if (mWeatherClient.getWeatherInfo() != null)
+                mWeatherData = mWeatherClient.getWeatherInfo();
+            if (mWeatherData == null) {
+                // No weather data available. Try querying.
+                queryAndUpdateWeather();
+                return;
+            }
+            if (mStatusBarWeatherEnabled == 2 || mStatusBarWeatherEnabled == 4) {
+                setText(mWeatherData.temp);
+            } else {
+                setText(mWeatherData.temp + mWeatherData.tempUnits);
+            }
+            updateattributes();
+            if (allowVisibility()) {
+                setVisibility(View.VISIBLE);
+            }
         } catch (Exception e) {
             // Do nothing
         }
     }
 
     private void updateattributes() {
-        if (!allowVisibility()) {
-            return;
-        }
         try {
             if (mWeatherTempColor == 0xFFFFFFFF) {
                 setTextColor(mTintColor);
