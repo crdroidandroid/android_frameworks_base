@@ -6082,6 +6082,12 @@ public final class Settings {
         public static final String FLING_PULSE_ENABLED = "fling_pulse_enabled";
 
         /**
+         * Whether to use automatic color for Pulse
+         * @hide
+         */
+        public static final String PULSE_AUTO_COLOR = "pulse_auto_color";
+
+        /**
          * Fling pulse music visualizer color
          *
          * @hide
