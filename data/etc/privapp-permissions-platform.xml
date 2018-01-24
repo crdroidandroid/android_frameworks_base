@@ -239,6 +239,7 @@ applications that come with the platform
         <permission name="android.permission.PACKAGE_USAGE_STATS"/>
         <permission name="android.permission.READ_SEARCH_INDEXABLES"/>
         <permission name="android.permission.REBOOT"/>
+        <permission name="android.permission.RESET_BATTERY_STATS"/>
         <permission name="android.permission.SET_TIME"/>
         <permission name="android.permission.STATUS_BAR"/>
         <permission name="android.permission.TETHER_PRIVILEGED"/>
@@ -336,7 +337,9 @@ applications that come with the platform
         <permission name="android.permission.READ_NETWORK_USAGE_HISTORY"/>
         <permission name="android.permission.READ_PRIVILEGED_PHONE_STATE"/>
         <permission name="android.permission.REAL_GET_TASKS"/>
+        <permission name="android.permission.REBOOT"/>
         <permission name="android.permission.RECEIVE_MEDIA_RESOURCE_USAGE"/>
+        <permission name="android.permission.RECOVERY"/>
         <permission name="android.permission.START_TASKS_FROM_RECENTS"/>
         <permission name="android.permission.STATUS_BAR"/>
         <permission name="android.permission.STOP_APP_SWITCHES"/>
@@ -364,8 +367,34 @@ applications that come with the platform
         <permission name="android.permission.CONTROL_VPN"/>
     </privapp-permissions>
 
+    <privapp-permissions package="com.android.ext.services">
+        <permission name="android.permission.PROVIDE_RESOLVER_RANKER_SERVICE" />
+    </privapp-permissions>
+
     <privapp-permissions package="com.google.android.ext.services">
         <permission name="android.permission.PROVIDE_RESOLVER_RANKER_SERVICE" />
+    </privapp-permissions>
+
+    <privapp-permissions package="com.android.providers.media.MediaProvider">
+        <permission name="android.permission.RECEIVE_BOOT_COMPLETED" />
+        <permission name="android.permission.WRITE_SETTINGS" />
+        <permission name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <permission name="android.permission.WRITE_MEDIA_STORAGE" />
+        <permission name="android.permission.READ_EXTERNAL_STORAGE" />
+        <permission name="android.permission.ACCESS_MTP" />
+        <permission name="android.permission.MANAGE_USERS" />
+        <permission name="android.permission.INTERACT_ACROSS_USERS" />
+    </privapp-permissions>
+
+    <privapp-permissions package="com.android.providers.media">
+        <permission name="android.permission.RECEIVE_BOOT_COMPLETED" />
+        <permission name="android.permission.WRITE_SETTINGS" />
+        <permission name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <permission name="android.permission.WRITE_MEDIA_STORAGE" />
+        <permission name="android.permission.READ_EXTERNAL_STORAGE" />
+        <permission name="android.permission.ACCESS_MTP" />
+        <permission name="android.permission.MANAGE_USERS" />
+        <permission name="android.permission.INTERACT_ACROSS_USERS" />
     </privapp-permissions>
 
 </permissions>
