@@ -4809,6 +4809,11 @@ public final class Settings {
         public static final String BERRY_DARK_SHADE = "berry_dark_shade";
 
         /**
+         * @hide
+         */
+        public static final String SCREENRECORD_QUALITY_MODE = "screenrecord_quality_mode";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
