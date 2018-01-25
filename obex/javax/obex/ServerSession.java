@@ -63,6 +63,12 @@ public final class ServerSession extends ObexSession implements Runnable {
 
     private boolean mClosed;
 
+    private boolean setMTU = false;
+
+    private boolean updateMtu = false;
+
+    private int updatedMtuSize = 0;
+
     /**
      * Creates new ServerSession.
      * @param trans the connection to the client
@@ -84,6 +90,25 @@ public final class ServerSession extends ObexSession implements Runnable {
         mProcessThread = new Thread(this);
         mProcessThread.start();
     }
+
+    public void setMaxPacketSize(int size) {
+        if (V)  Log.v(TAG, "setMaxPacketSize" + size);
+        mMaxPacketLength = size;
+    }
+
+    public int getMaxPacketSize() {
+       return mMaxPacketLength;
+    }
+
+    public void reduceMTU(boolean enable) {
+        setMTU = enable;
+   }
+
+   public void updateMTU(int mtuSize) {
+        updateMtu = true;
+        updatedMtuSize = mtuSize;
+        Log.i(TAG,"updateMTU: " + mtuSize);
+   }
 
     /**
      * Processes requests made to the server and forwards them to the
@@ -565,9 +590,16 @@ public final class ServerSession extends ObexSession implements Runnable {
                 + " MaxLength: " + mMaxPacketLength + " flags: " + flags);
 
         // should we check it?
-        if (mMaxPacketLength > ObexHelper.MAX_PACKET_SIZE_INT) {
+        if (setMTU) {
+            mMaxPacketLength = ObexHelper.A2DP_SCO_OBEX_MAX_CLIENT_PACKET_SIZE;
+            setMTU = false;
+        } else if (updateMtu) {
+            mMaxPacketLength = updatedMtuSize;
+            updateMtu = false;
+        } else if (mMaxPacketLength > ObexHelper.MAX_PACKET_SIZE_INT) {
             mMaxPacketLength = ObexHelper.MAX_PACKET_SIZE_INT;
         }
+        Log.d(TAG,"handleConnectRequest() - Updated MaxPacketLengh: " + mMaxPacketLength);
 
         if(mMaxPacketLength > ObexHelper.getMaxTxPacketSize(mTransport)) {
             Log.w(TAG, "Requested MaxObexPacketSize " + mMaxPacketLength
