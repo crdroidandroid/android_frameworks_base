@@ -59,8 +59,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private KeyguardMonitor mKeyguardMonitor;
     private NetworkController mNetworkController;
     private LinearLayout mSystemIconArea;
-    private View mCrDroidLogo, mCrDroidLogoRight;
-    private View mWeather, mWeatherImage, mWeatherRight, mWeatherImageRight;
+    private LinearLayout mCustomIconArea;
+    private View mCrDroidLogoRight;
+    private View mWeatherRight, mWeatherImageRight;
     private View mNotificationIconAreaInner;
     private int mDisabled1;
     private StatusBar mStatusBarComponent;
@@ -119,10 +120,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mDarkIconManager = new DarkIconManager(view.findViewById(R.id.statusIcons));
         Dependency.get(StatusBarIconController.class).addIconGroup(mDarkIconManager);
         mSystemIconArea = mStatusBar.findViewById(R.id.system_icon_area);
-        mCrDroidLogo = mStatusBar.findViewById(R.id.crdroid_logo);
+        mCustomIconArea = mStatusBar.findViewById(R.id.left_icon_area);
         mCrDroidLogoRight = mStatusBar.findViewById(R.id.crdroid_logo_right);
-        mWeather = mStatusBar.findViewById(R.id.weather_temp);
-        mWeatherImage = mStatusBar.findViewById(R.id.weather_image);
         mWeatherRight = mStatusBar.findViewById(R.id.weather_temp_right);
         mWeatherImageRight = mStatusBar.findViewById(R.id.weather_image_right);
         mBatteryBar = mStatusBar.findViewById(R.id.battery_bar);
@@ -231,10 +230,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     public void hideSystemIconArea(boolean animate) {
         animateHide(mBatteryBar, animate);
-        animateHide(mCrDroidLogo, animate);
+        animateHide(mCustomIconArea, animate);
         animateHide(mCrDroidLogoRight, animate);
-        animateHide(mWeather, animate);
-        animateHide(mWeatherImage, animate);
         animateHide(mWeatherRight, animate);
         animateHide(mWeatherImageRight, animate);
         animateHide(mSystemIconArea, animate);
@@ -244,10 +241,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         animateShow(mSystemIconArea, animate);
         animateShow(mWeatherImageRight, animate);
         animateShow(mWeatherRight, animate);
-        animateShow(mWeatherImage, animate);
-        animateShow(mWeather, animate);
         animateShow(mCrDroidLogoRight, animate);
-        animateShow(mCrDroidLogo, animate);
+        animateShow(mCustomIconArea, animate);
         animateShow(mBatteryBar, animate);
     }
 
