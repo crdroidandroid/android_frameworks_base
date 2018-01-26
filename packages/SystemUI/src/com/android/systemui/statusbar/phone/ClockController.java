@@ -36,7 +36,6 @@ public class ClockController implements TunerService.Tunable {
     private static final String CLOCK_POSITION = "lineagesystem:status_bar_clock";
 
     private Clock mActiveClock, mCenterClock, mLeftClock, mRightClock;
-    private View mCenterClockLayout, mLeftClockLayout;
 
     private int mClockPosition = CLOCK_POSITION_RIGHT;
     private boolean mBlackListed = false;
@@ -45,9 +44,6 @@ public class ClockController implements TunerService.Tunable {
         mCenterClock = statusBar.findViewById(R.id.clock_center);
         mLeftClock = statusBar.findViewById(R.id.clock_left);
         mRightClock = statusBar.findViewById(R.id.clock);
-
-        mCenterClockLayout = statusBar.findViewById(R.id.center_clock_layout);
-        mLeftClockLayout = statusBar.findViewById(R.id.left_clock_layout);
 
         mActiveClock = mRightClock;
 
@@ -91,10 +87,5 @@ public class ClockController implements TunerService.Tunable {
             mBlackListed = StatusBarIconController.getIconBlacklist(newValue).contains("clock");
         }
         updateActiveClock();
-    }
-
-    public View getClock() {
-        // We default to center, but it has no effect as long the clock itself is invisible
-        return mClockPosition == CLOCK_POSITION_LEFT ? mLeftClockLayout : mCenterClockLayout;
     }
 }
