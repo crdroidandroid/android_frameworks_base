@@ -30,11 +30,11 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
@@ -51,7 +51,7 @@ public class OmniJawsClient {
             = Uri.parse("content://org.omnirom.omnijaws.provider/settings");
 
     private static final String ICON_PACKAGE_DEFAULT = "org.omnirom.omnijaws";
-    private static final String ICON_PREFIX_DEFAULT = "weather";
+    private static final String ICON_PREFIX_DEFAULT = "outline";
     private static final String EXTRA_ERROR = "error";
     public static final int EXTRA_ERROR_DISABLED = 2;
 
@@ -142,32 +142,6 @@ public class OmniJawsClient {
         }
     }
 
-    private class OmniJawsSettingsObserver extends ContentObserver {
-        OmniJawsSettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.OMNIJAWS_WEATHER_ICON_PACK),
-                    false, this, UserHandle.USER_ALL);
-            update();
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            update();
-        }
-
-        public void update() {
-            updateSettings();
-        }
-
-        public void unregister() {
-            mContext.getContentResolver().unregisterContentObserver(this);
-        }
-    }
-
     private Context mContext;
     private WeatherInfo mCachedInfo;
     private Resources mRes;
@@ -177,18 +151,14 @@ public class OmniJawsClient {
     private boolean mMetric;
     private List<OmniJawsObserver> mObserver;
     private WeatherUpdateReceiver mReceiver;
-    private OmniJawsSettingsObserver mSettingsObserver;
-    private Handler mHandler = new Handler();
 
     public OmniJawsClient(Context context) {
         mContext = context;
         mObserver = new ArrayList<OmniJawsObserver>();
-        mSettingsObserver = new OmniJawsSettingsObserver(mHandler);
-        mSettingsObserver.observe();
+        updateIconPack();
     }
 
     public void cleanupObserver() {
-        mSettingsObserver.unregister();
         if (mReceiver != null) {
             try {
                 mContext.unregisterReceiver(mReceiver);
@@ -210,7 +180,7 @@ public class OmniJawsClient {
     public Intent getSettingsIntent() {
         if (isOmniJawsServiceInstalled()) {
             Intent settings = new Intent(Intent.ACTION_MAIN)
-                    .setClassName("org.omnirom.omnijaws", "org.omnirom.omnijaws.SettingsActivity");
+                    .setClassName("org.omnirom.omnijaws", "org.omnirom.omnijaws.SettingsActivityService");
             return settings;
         }
         return null;
@@ -276,6 +246,7 @@ public class OmniJawsClient {
             }
         }
         updateUnits();
+        updateIconPack();
         if (DEBUG) Log.d(TAG, "queryWeather " + mCachedInfo);
     }
 
@@ -296,9 +267,17 @@ public class OmniJawsClient {
     }
 
     private void loadCustomIconPackage() {
+        if (mSettingIconPackage == null) {
+            loadDefaultIconsPackage();
+            return;
+        }
         int idx = mSettingIconPackage.lastIndexOf(".");
         mPackageName = mSettingIconPackage.substring(0, idx);
         mIconPrefix = mSettingIconPackage.substring(idx + 1);
+        if (!isAvailableApp(mPackageName)) {
+            loadDefaultIconsPackage();
+            return;
+        }
         if (DEBUG) Log.d(TAG, "Load custom icon pack " + mSettingIconPackage + " " + mPackageName + " " + mIconPrefix);
         try {
             PackageManager packageManager = mContext.getPackageManager();
@@ -312,26 +291,53 @@ public class OmniJawsClient {
         }
     }
 
+    private Drawable getDefaultConditionImage() {
+        String packageName = ICON_PACKAGE_DEFAULT;
+        String iconPrefix = ICON_PREFIX_DEFAULT;
+
+        try {
+            PackageManager packageManager = mContext.getPackageManager();
+            Resources res = packageManager.getResourcesForApplication(packageName);
+            if (res != null) {
+                int resId = res.getIdentifier(iconPrefix + "_na", "drawable", packageName);
+                Drawable d = res.getDrawable(resId);
+                if (d != null) {
+                    return d;
+                }
+            }
+        } catch (Exception e) {
+        }
+        // absolute absolute fallback
+        Log.w(TAG, "No default package found");
+        return new ColorDrawable(Color.RED);
+    }
+
     public Drawable getWeatherConditionImage(int conditionCode) {
         if (!isOmniJawsEnabled()) {
             Log.w(TAG, "Requesting condition image while disabled");
             return null;
         }
-        if (!isAvailableApp(mPackageName)) {
-            Log.w(TAG, "Icon pack no longer available - loading default " + mPackageName);
-            loadDefaultIconsPackage();
-        }
+        updateIconPack();
         if (mRes == null) {
             Log.w(TAG, "Requesting condition image while disabled");
             return null;
         }
         try {
             int resId = mRes.getIdentifier(mIconPrefix + "_" + conditionCode, "drawable", mPackageName);
-            return mRes.getDrawable(resId);
+            Drawable d = mRes.getDrawable(resId);
+            if (d != null) {
+                return d;
+            }
+            Log.w(TAG, "Failed to get condition image for " + conditionCode + " use default");
+            resId = mRes.getIdentifier(mIconPrefix + "_na", "drawable", mPackageName);
+            d = mRes.getDrawable(resId);
+            if (d != null) {
+                return d;
+            }
         } catch(Exception e) {
-            Log.w(TAG, "Failed to get condition image for " + conditionCode);
-            return null;
         }
+        Log.w(TAG, "Failed to get condition image for " + conditionCode);
+        return getDefaultConditionImage();
     }
 
     public boolean isOmniJawsServiceInstalled() {
@@ -412,17 +418,10 @@ public class OmniJawsClient {
         return mMetric ? "km/h":"mph";
     }
 
-    private void updateSettings() {
-        if (isOmniJawsServiceInstalled()) {
-            final String iconPack = Settings.System.getStringForUser(mContext.getContentResolver(),
+    public void updateIconPack() {
+        mSettingIconPackage = Settings.System.getStringForUser(mContext.getContentResolver(),
                     Settings.System.OMNIJAWS_WEATHER_ICON_PACK, UserHandle.USER_CURRENT);
-            if (iconPack == null) {
-                loadDefaultIconsPackage();
-            } else if (mSettingIconPackage == null || !iconPack.equals(mSettingIconPackage)) {
-                mSettingIconPackage = iconPack;
-                loadCustomIconPackage();
-            }
-        }
+        loadCustomIconPackage();
     }
 
     private boolean isAvailableApp(String packageName) {
