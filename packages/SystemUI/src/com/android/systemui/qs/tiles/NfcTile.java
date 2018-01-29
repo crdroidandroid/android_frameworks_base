@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.nfc.NfcAdapter;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
@@ -37,6 +36,8 @@ import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 /** Quick settings tile: Enable/Disable NFC **/
 public class NfcTile extends QSTileImpl<BooleanState> {
+
+    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_nfc_enabled);
 
     private NfcAdapter mAdapter;
 
@@ -97,15 +98,17 @@ public class NfcTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        final Drawable mEnable = mContext.getDrawable(R.drawable.ic_qs_nfc_enabled);
-        final Drawable mDisable = mContext.getDrawable(R.drawable.ic_qs_nfc_disabled);
+        if (state.slash == null) {
+            state.slash = new SlashState();
+        }
+        state.icon = mIcon;
         state.value = getAdapter().isEnabled();
         state.label = mContext.getString(R.string.quick_settings_nfc_label);
         if (state.value) {
-            state.icon = new DrawableIcon(mEnable);
+            state.slash.isSlashed = false;
             state.state = Tile.STATE_ACTIVE;
         } else {
-            state.icon = new DrawableIcon(mDisable);
+            state.slash.isSlashed = true;
             state.state = Tile.STATE_INACTIVE;
         }
         state.expandedAccessibilityClassName = Switch.class.getName();
