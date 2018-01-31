@@ -86,7 +86,6 @@ public class AirplaneModeTile extends QSTileImpl<BooleanState> {
         }
         if (mKeyguardMonitor.isSecure() && !mUnlockMethodCache.canSkipBouncer()) {
             mActivityStarter.postQSRunnableDismissingKeyguard(() -> {
-                mHost.openPanels();
                 setEnabled(!mState.value);
             });
             return;
