@@ -31,6 +31,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -3932,7 +3933,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         }
     }
 
-    private final Handler mInverse = new Handler() {
+    private final Handler mInverse = new Handler(mContext.getMainLooper()) {
         public void handleMessage(Message msg) {
             mIsTap = !mIsTap;
         }
