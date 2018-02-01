@@ -27,4 +27,10 @@
 
   <!-- Doze mode -->
   <java-symbol type="bool" name="config_doze_enabled_by_default" />
+
+  <!-- Pocket Lock -->
+  <java-symbol type="layout" name="pocket_lock_view_layout" />
+  <java-symbol type="id" name="pocket_hint_container" />
+  <java-symbol type="id" name="pocket_hint_image" />
+  <java-symbol type="id" name="pocket_hint_message" />
 </resources>
