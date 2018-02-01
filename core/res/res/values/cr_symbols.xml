@@ -190,4 +190,10 @@
   <java-symbol type="dimen" name="edge_gesture_trigger_distance" /> 
   <java-symbol type="dimen" name="edge_gesture_perpendicular_distance" /> 
   <java-symbol type="dimen" name="edge_gesture_trigger_thickness" /> 
+
+  <!-- Pocket Lock -->
+  <java-symbol type="layout" name="pocket_lock_view_layout" />
+  <java-symbol type="id" name="pocket_hint_container" />
+  <java-symbol type="id" name="pocket_hint_image" />
+  <java-symbol type="id" name="pocket_hint_message" />
 </resources>
