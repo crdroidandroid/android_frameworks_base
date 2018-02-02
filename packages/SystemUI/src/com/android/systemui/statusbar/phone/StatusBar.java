@@ -566,6 +566,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private boolean mTicking;
 
     private int mAmbientMediaPlaying;
+    private boolean isMediaPlaying;
 
     // Tracking finger for opening/closing.
     boolean mTracking;
@@ -738,6 +739,14 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     };
 
+    private void setCleanLayout(boolean force) {
+        mNotificationPanel.setCleanLayout(force);
+        mNotificationShelf.setCleanLayout(force);
+        if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
+            ((AmbientIndicationContainer)mAmbientIndicationContainer).setCleanLayout(force);
+        }
+    }
+
     public void setMediaPlaying() {
         if (PlaybackState.STATE_PLAYING ==
                 getMediaControllerPlaybackState(mMediaController)
@@ -756,9 +765,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mNavigationBar.setMediaPlaying(true);
             }
         } else {
+            isMediaPlaying = false;
             if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
                 ((AmbientIndicationContainer)mAmbientIndicationContainer).hideIndication();
             }
+            setCleanLayout(false);
             mNoMan.setMediaPlaying(false);
             if (mNavigationBar != null) {
                 mNavigationBar.setMediaPlaying(false);
@@ -776,9 +787,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mTickerEnabled == 2) {
                     tick(entry.notification, true, true, mMediaMetadata);
                 }
+                setCleanLayout(mAmbientMediaPlaying == 3 ? true : false);
                 if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
                     ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(mMediaMetadata);
                 }
+                isMediaPlaying = true;
                 // NotificationInflater calls async MediaNotificationProcessoron to create notification
                 // colors and when finished will trigger AsyncInflationFinished for all registered callbacks
                 // like StatusBar. From there we'll send updated colors to Pulse
@@ -6273,28 +6286,28 @@ public class StatusBar extends SystemUI implements DemoMode,
                         // Otherwise just show the always-on screen.
                         setPulsing(pulsingEntries);
                     }
-                    setCleanLayout(mAmbientMediaPlaying == 3 ? reason : -1);
                 }
 
                 @Override
                 public void onPulseFinished() {
                     callback.onPulseFinished();
                     setPulsing(null);
-                    setCleanLayout(-1);
                 }
 
                 private void setPulsing(Collection<HeadsUpManager.HeadsUpEntry> pulsing) {
+                    if (pulsing != null && isMediaPlaying && mAmbientMediaPlaying == 3 &&
+                            mAmbientIndicationContainer != null) {
+                        ((AmbientIndicationContainer)mAmbientIndicationContainer).hideIndication();
+                        setCleanLayout(false);
+                    }
                     mStackScroller.setPulsing(pulsing);
                     mNotificationPanel.setPulsing(pulsing != null);
                     mVisualStabilityManager.setPulsing(pulsing != null);
                     mIgnoreTouchWhilePulsing = false;
-                }
-
-                private void setCleanLayout(int reason) {
-                    mNotificationPanel.setCleanLayout(reason);
-                    mNotificationShelf.setCleanLayout(reason);
-                    if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
-                        ((AmbientIndicationContainer)mAmbientIndicationContainer).setCleanLayout(reason);
+                    if (pulsing == null && isMediaPlaying && mAmbientMediaPlaying == 3 &&
+                            mAmbientIndicationContainer != null) {
+                        setCleanLayout(true);
+                        ((AmbientIndicationContainer)mAmbientIndicationContainer).showIndication(mMediaMetadata);
                     }
                 }
             }, reason);
@@ -8412,9 +8425,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             case FORCE_AMBIENT_FOR_MEDIA:
                 mAmbientMediaPlaying =
                         newValue == null ? 0 : Integer.parseInt(newValue);
-                if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
-                    ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(mMediaMetadata);
-                }
+                setMediaPlaying();
                 break;
             default:
                 break;
