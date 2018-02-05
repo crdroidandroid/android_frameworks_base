@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Environment;
+import android.os.Process;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.os.storage.StorageManager;
@@ -178,6 +179,7 @@ public class BackgroundDexOptService extends JobService {
         new Thread("BackgroundDexOptService_PostBootUpdate") {
             @Override
             public void run() {
+                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
                 postBootUpdate(jobParams, pm, pkgs);
             }
 
@@ -246,6 +248,7 @@ public class BackgroundDexOptService extends JobService {
         new Thread("BackgroundDexOptService_IdleOptimization") {
             @Override
             public void run() {
+                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
                 int result = idleOptimization(pm, pkgs, BackgroundDexOptService.this);
                 if (result != OPTIMIZE_ABORT_BY_JOB_SCHEDULER) {
                     Log.w(TAG, "Idle optimizations aborted because of space constraints.");
