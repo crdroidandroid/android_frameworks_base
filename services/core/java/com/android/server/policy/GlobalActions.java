@@ -94,8 +94,10 @@ class GlobalActions implements GlobalActionsProvider.GlobalActionsListener {
         if (mShowing && !mGlobalActionsAvailable) {
             // Global actions provider died but we need to be showing global actions still, show the
             // legacy global acrions provider.
-            ensureLegacyCreated();
-            mLegacyGlobalActions.showDialog(mKeyguardShowing, mDeviceProvisioned);
+            mHandler.post(() -> {
+                ensureLegacyCreated();
+                mLegacyGlobalActions.showDialog(mKeyguardShowing, mDeviceProvisioned);
+            });
         }
     }
 
