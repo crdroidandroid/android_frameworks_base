@@ -90,8 +90,10 @@ class GlobalActions implements GlobalActionsListener {
         mStatusBarConnected = connected;
         if (mShowing && !mStatusBarConnected) {
             // Status bar died but we need to be showing global actions still, show the legacy.
-            ensureLegacyCreated();
-            mLegacyGlobalActions.showDialog(mKeyguardShowing, mDeviceProvisioned);
+            mHandler.post(() -> {
+                ensureLegacyCreated();
+                mLegacyGlobalActions.showDialog(mKeyguardShowing, mDeviceProvisioned);
+            });
         }
     }
 
