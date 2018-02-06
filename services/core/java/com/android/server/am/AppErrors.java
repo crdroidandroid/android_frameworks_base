@@ -754,10 +754,12 @@ class AppErrors {
             }
         }
         // If we've created a crash dialog, show it without the lock held
-        if(data.proc.crashDialog != null) {
+        try {
             Slog.i(TAG, "Showing crash dialog for package " + data.proc.info.packageName
                     + " u" + data.proc.userId);
             data.proc.crashDialog.show();
+        } catch (NullPointerException ne) {
+            Slog.w(TAG, "Tried to show crash dialog for dead app.");
         }
     }
 
