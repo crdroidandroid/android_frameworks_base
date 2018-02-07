@@ -738,10 +738,14 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     };
 
+    private boolean isAmbientContainerAvailable() {
+        return mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null;
+    }
+
     private void setCleanLayout(boolean force) {
         mNotificationPanel.setCleanLayout(force);
         mNotificationShelf.setCleanLayout(force);
-        if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
+        if (isAmbientContainerAvailable()) {
             ((AmbientIndicationContainer)mAmbientIndicationContainer).setCleanLayout(force);
         }
     }
@@ -765,7 +769,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             }
         } else {
             isMediaPlaying = false;
-            if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
+            if (isAmbientContainerAvailable()) {
+                ((AmbientIndicationContainer)mAmbientIndicationContainer).setTickerMarquee(false);
                 ((AmbientIndicationContainer)mAmbientIndicationContainer).hideIndication();
             }
             setCleanLayout(false);
@@ -787,8 +792,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                     tick(entry.notification, true, true, mMediaMetadata);
                 }
                 setCleanLayout(mAmbientMediaPlaying == 3 ? true : false);
-                if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
+                if (isAmbientContainerAvailable()) {
                     ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(mMediaMetadata);
+                    ((AmbientIndicationContainer)mAmbientIndicationContainer).setTickerMarquee(true);
                 }
                 isMediaPlaying = true;
                 // NotificationInflater calls async MediaNotificationProcessoron to create notification
@@ -1349,7 +1355,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mAmbientIndicationContainer = mStatusBarWindow.findViewById(
                 R.id.ambient_indication_container);
         if (mAmbientIndicationContainer != null) {
-            ((AmbientIndicationContainer) mAmbientIndicationContainer).initializeView(this);
+            ((AmbientIndicationContainer) mAmbientIndicationContainer).initializeView(this, mHandler);
         }
 
         // set the initial view visibility
