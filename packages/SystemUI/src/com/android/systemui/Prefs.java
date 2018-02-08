@@ -42,6 +42,7 @@ public final class Prefs {
         Key.DND_NONE_SELECTED,
         Key.DND_FAVORITE_ZEN,
         Key.QS_HOTSPOT_ADDED,
+        Key.QS_CAFFEINE_DIALOG_SHOWN,
         Key.QS_DATA_SAVER_ADDED,
         Key.QS_DATA_SAVER_DIALOG_SHOWN,
         Key.QS_INVERT_COLORS_ADDED,
@@ -63,6 +64,7 @@ public final class Prefs {
         String DND_FAVORITE_BUCKET_INDEX = "DndCountdownMinuteIndex";
         String DND_NONE_SELECTED = "DndNoneSelected";
         String DND_FAVORITE_ZEN = "DndFavoriteZen";
+        String QS_CAFFEINE_DIALOG_SHOWN = "QsCaffeineDialogShown";
         String QS_DATA_SAVER_DIALOG_SHOWN = "QsDataSaverDialogShown";
         @Deprecated
         String QS_HOTSPOT_ADDED = "QsHotspotAdded";
