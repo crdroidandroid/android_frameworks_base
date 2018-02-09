@@ -56,6 +56,7 @@ import com.android.systemui.qs.tiles.ReadingModeTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
 import com.android.systemui.qs.tiles.SmartPixelsTile;
+import com.android.systemui.qs.tiles.SoundSearchTile;
 import com.android.systemui.qs.tiles.SyncTile;
 import com.android.systemui.qs.tiles.UiModeNightTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
@@ -112,6 +113,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<CompassTile> mCompassTileProvider;
     private final Provider<MusicTile> mMusicTileProvider;
     private final Provider<AlwaysOnDisplayTile> mAlwaysOnDisplayTileProvider;
+    private final Provider<SoundSearchTile> mSoundSearchTileProvider;
 
     private QSTileHost mHost;
 
@@ -152,7 +154,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<HWKeysTile> HWKeysTileProvider,
             Provider<CompassTile> compassTileProvider,
             Provider<MusicTile> musicTileProvider,
-            Provider<AlwaysOnDisplayTile> alwaysOnDisplayTileProvider) {
+            Provider<AlwaysOnDisplayTile> alwaysOnDisplayTileProvider,
+            Provider<SoundSearchTile> soundSearchTileProvider) {
         mWifiTileProvider = wifiTileProvider;
         mBluetoothTileProvider = bluetoothTileProvider;
         mCellularTileProvider = cellularTileProvider;
@@ -190,6 +193,7 @@ public class QSFactoryImpl implements QSFactory {
         mCompassTileProvider = compassTileProvider;
         mMusicTileProvider = musicTileProvider;
         mAlwaysOnDisplayTileProvider = alwaysOnDisplayTileProvider;
+        mSoundSearchTileProvider = soundSearchTileProvider;
     }
 
     public void setHost(QSTileHost host) {
@@ -280,6 +284,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mMusicTileProvider.get();
             case "always_on_display":
                 return mAlwaysOnDisplayTileProvider.get();
+            case "soundsearch":
+                return mSoundSearchTileProvider.get();
         }
 
         // Intent tiles.
