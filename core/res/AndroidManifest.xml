@@ -555,6 +555,9 @@
     <protected-broadcast android:name="com.qti.dpmframework.DPM_INTERNET_CONNECTED" />
     <protected-broadcast android:name="com.qti.dpmframework.DPM_PREFERENCE_CHANGED" />
 
+    <!-- Superuser  -->
+    <protected-broadcast android:name="android.intent.action.SU_SESSION_CHANGED" />
+
     <!-- ====================================================================== -->
     <!--                          RUNTIME PERMISSIONS                           -->
     <!-- ====================================================================== -->
