@@ -57,6 +57,7 @@ import com.android.systemui.qs.tiles.ReadingModeTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
 import com.android.systemui.qs.tiles.SmartPixelsTile;
+import com.android.systemui.qs.tiles.SoundSearchTile;
 import com.android.systemui.qs.tiles.SyncTile;
 import com.android.systemui.qs.tiles.UiModeNightTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
@@ -114,6 +115,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<HWKeysTile> mHWKeysTileProvider;
     private final Provider<CompassTile> mCompassTileProvider;
     private final Provider<MusicTile> mMusicTileProvider;
+    private final Provider<SoundSearchTile> mSoundSearchTileProvider;
 
     private QSTileHost mHost;
 
@@ -155,7 +157,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<CPUInfoTile> CPUInfoTileProvider,
             Provider<HWKeysTile> HWKeysTileProvider,
             Provider<CompassTile> compassTileProvider,
-            Provider<MusicTile> musicTileProvider) {
+            Provider<MusicTile> musicTileProvider,
+            Provider<SoundSearchTile> soundSearchTileProvider) {
         mWifiTileProvider = wifiTileProvider;
         mBluetoothTileProvider = bluetoothTileProvider;
         mCellularTileProvider = cellularTileProvider;
@@ -194,6 +197,7 @@ public class QSFactoryImpl implements QSFactory {
         mHWKeysTileProvider = HWKeysTileProvider;
         mCompassTileProvider = compassTileProvider;
         mMusicTileProvider = musicTileProvider;
+        mSoundSearchTileProvider = soundSearchTileProvider;
     }
 
     public void setHost(QSTileHost host) {
@@ -286,6 +290,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mCompassTileProvider.get();
             case "music":
                 return mMusicTileProvider.get();
+            case "soundsearch":
+                return mSoundSearchTileProvider.get();
         }
 
         // Intent tiles.
