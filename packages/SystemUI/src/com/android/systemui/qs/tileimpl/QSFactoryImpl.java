@@ -55,6 +55,7 @@ import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenrecordTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
 import com.android.systemui.qs.tiles.SmartPixelsTile;
+import com.android.systemui.qs.tiles.SoundSearchTile;
 import com.android.systemui.qs.tiles.SyncTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
 import com.android.systemui.qs.tiles.UserTile;
@@ -157,6 +158,8 @@ public class QSFactoryImpl implements QSFactory {
                 return new AlwaysOnDisplayTile(mHost);
             case "onthego":
                 return new OnTheGoTile(mHost);
+            case "soundsearch":
+                return new SoundSearchTile(mHost);
         }
 
         // Intent tiles.
