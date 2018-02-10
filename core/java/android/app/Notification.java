@@ -5481,8 +5481,10 @@ public class Notification implements Parcelable
                 ensureColors();
                 color = NotificationColorUtil.resolveDefaultColor(mContext, background);
             } else {
+                boolean isDark = mInNightMode || mContext.getResources()
+                        .getBoolean(R.bool.config_useDarkBgNotificationIconTinting);
                 color = NotificationColorUtil.resolveContrastColor(mContext, mN.color,
-                        background, mInNightMode);
+                        background, isDark);
             }
             if (Color.alpha(color) < 255) {
                 // alpha doesn't go well for color filters, so let's blend it manually
