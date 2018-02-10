@@ -878,6 +878,14 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
     @Override
     public void onDensityOrFontScaleChanged() {
         super.onDensityOrFontScaleChanged();
+        onDensityFontScaleOrOverlayChanged();
+    }
+
+    public void onOverlayChanged() {
+        onDensityFontScaleOrOverlayChanged();
+    }
+
+    public void onDensityFontScaleOrOverlayChanged() {
         initDimens();
         initBackground();
         // Let's update our childrencontainer. This is intentionally not guarded with
