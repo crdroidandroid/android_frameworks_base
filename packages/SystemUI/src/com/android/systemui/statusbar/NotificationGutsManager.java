@@ -45,10 +45,14 @@ import com.android.internal.logging.nano.MetricsProto;
 import com.android.systemui.Dependency;
 import com.android.systemui.Dumpable;
 import com.android.systemui.plugins.statusbar.NotificationMenuRowPlugin;
+import com.android.systemui.statusbar.NotificationData;
+import com.android.systemui.statusbar.NotificationData.Entry;
+import com.android.systemui.statusbar.NotificationEntryManager;
 import com.android.systemui.statusbar.phone.StatusBar;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -411,5 +415,19 @@ public class NotificationGutsManager implements Dumpable {
 
     public interface OnSettingsClickListener {
         void onClick(String key);
+    }
+
+    public void onOverlayChanged() {
+        ArrayList<Entry> activeNotifications = mEntryManager.getNotificationData().getActiveNotifications();
+        for (int i = 0; i < activeNotifications.size(); i++) {
+            Entry entry = activeNotifications.get(i);
+            boolean exposedGuts = mNotificationGutsExposed != null
+                    && entry.row.getGuts() == mNotificationGutsExposed;
+            entry.row.onOverlayChanged();
+            if (exposedGuts) {
+                mNotificationGutsExposed = entry.row.getGuts();
+                bindGuts(entry.row, mGutsMenuItem);
+            }
+        }
     }
 }
