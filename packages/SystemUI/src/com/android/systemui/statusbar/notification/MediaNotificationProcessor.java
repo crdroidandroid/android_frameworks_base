@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.support.annotation.VisibleForTesting;
@@ -151,14 +152,21 @@ public class MediaNotificationProcessor {
                         : R.color.notification_material_background_color;
                 backgroundColor = mContext.getColor(id);
             }
-            Bitmap colorized = mColorizer.colorize(drawable, backgroundColor,
-                    mContext.getResources().getConfiguration().getLayoutDirection() ==
-                            LayoutDirection.RTL, false);
-            builder.setLargeIcon(Icon.createWithBitmap(colorized));
+            Bitmap colorized;
+            // prevent the artwork to be recolored on reinflation
+            if (!builder.getArtworkColorizedExtras()) {
+                colorized = mColorizer.colorize(drawable, backgroundColor,
+                        mContext.getResources().getConfiguration().getLayoutDirection() ==
+                                LayoutDirection.RTL, false);
+                builder.setArtworkColorizedExtras(true);
 
-            // apply inverted and less strong gradient for the slim recents artwork
-            Bitmap alternative = mColorizer.colorize(drawable, backgroundColor, true, true);
-            builder.setOriginalLargeIcon(Icon.createWithBitmap(alternative));
+                // apply inverted and less strong gradient for the slim recents artwork
+                Bitmap alternative = mColorizer.colorize(drawable, backgroundColor, true, true);
+                builder.setOriginalLargeIcon(Icon.createWithBitmap(alternative));
+            } else {
+                colorized = ((BitmapDrawable) drawable).getBitmap();
+            }
+            builder.setLargeIcon(Icon.createWithBitmap(colorized));
         }
     }
 
