@@ -15,15 +15,16 @@
      limitations under the License.
 -->
 <resources>
- 
+
   <!-- Notification icon/text dynamic tint -->
   <java-symbol type="bool" name="config_allowNotificationIconTextTinting" />
+  <java-symbol type="bool" name="config_useDarkBgNotificationIconTextTinting" />
   <java-symbol type="color" name="notification_text_default_color" />
   <java-symbol type="color" name="notification_ambient_default_color" />
 
   <!-- Notification sender text color -->
-  <java-symbol type="color" name="sender_text_color" /> 
- 
+  <java-symbol type="color" name="sender_text_color" />
+
   <!-- Toast text and bg colors -->
   <java-symbol type="color" name="toast_bg_color" />
   <java-symbol type="color" name="toast_text_color" />
