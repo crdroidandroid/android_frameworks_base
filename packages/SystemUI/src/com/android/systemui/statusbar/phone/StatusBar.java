@@ -1352,6 +1352,12 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         if (mBrightnessMirrorController != null) {
             mBrightnessMirrorController.onOverlayChanged();
         }
+        mGutsManager.onOverlayChanged();
+        mStackScroller.onOverlayChanged();
+        mNotificationShelf.onOverlayChanged();
+        mNotificationPanel.onOverlayChanged();
+        Dependency.get(DarkIconDispatcher.class).onOverlayChanged(mContext);
+        reevaluateStyles();
     }
 
     private void inflateEmptyShadeView() {

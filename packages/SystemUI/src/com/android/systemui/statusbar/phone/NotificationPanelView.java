@@ -343,6 +343,10 @@ public class NotificationPanelView extends PanelView implements
         mKeyguardBottomArea.setStatusBar(mStatusBar);
     }
 
+    public void onOverlayChanged() {
+        mQsNavbarScrim.setBackground(getResources().getDrawable(R.drawable.qs_navbar_scrim));
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
