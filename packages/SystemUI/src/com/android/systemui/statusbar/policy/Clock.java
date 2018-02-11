@@ -96,6 +96,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     protected int mClockDateDisplay = CLOCK_DATE_DISPLAY_GONE;
     protected int mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
     protected int mClockStyle = STYLE_CLOCK_RIGHT;
+    protected String mClockDateFormat = null;
     protected boolean mShowClock;
 
     private int mAmPmStyle;
@@ -295,6 +296,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                         newValue == null ? CLOCK_DATE_STYLE_REGULAR : Integer.parseInt(newValue);
                 break;
             case STATUSBAR_CLOCK_DATE_FORMAT:
+                mClockDateFormat = newValue;
                 break;
             default:
                 break;
@@ -408,14 +410,11 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
         if (mClockDateDisplay != CLOCK_DATE_DISPLAY_GONE) {
             Date now = new Date();
 
-            String clockDateFormat = Settings.System.getString(getContext().getContentResolver(),
-                    Settings.System.STATUSBAR_CLOCK_DATE_FORMAT);
-
-            if (clockDateFormat == null || clockDateFormat.isEmpty()) {
+            if (mClockDateFormat == null || mClockDateFormat.isEmpty()) {
                 // Set dateString to short uppercase Weekday (Default for AOKP) if empty
                 dateString = DateFormat.format("EEE", now) + " ";
             } else {
-                dateString = DateFormat.format(clockDateFormat, now) + " ";
+                dateString = DateFormat.format(mClockDateFormat, now) + " ";
             }
             if (mClockDateStyle == CLOCK_DATE_STYLE_LOWERCASE) {
                 // When Date style is small, convert date to uppercase
