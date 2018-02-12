@@ -99,6 +99,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textAppearance="@style/TextAppearance.StatusBar.CarrierLabel"
+                android:paddingStart="2dip"
+                android:paddingEnd="1dip"
                 android:visibility="gone"
                 android:singleLine="true"/>
         </com.android.keyguard.AlphaOptimizedLinearLayout>
