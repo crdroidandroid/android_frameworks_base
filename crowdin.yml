@@ -1,0 +1,3 @@
+files:
+  - source: /core/res/res/values/strings.xml
+    translation: /core/res/res/values-%two_letters_code%/%original_file_name%
