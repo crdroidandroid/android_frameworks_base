@@ -417,7 +417,12 @@ public class BatteryMeterView extends LinearLayout implements
                         mLevel, estimate));
             });
         } else {
-            mBatteryPercentView.setText(text);
+            // Use the high voltage symbol ⚡ (u26A1 unicode) but prevent the system
+            // to load its emoji colored variant with the uFE0E flag
+            String bolt = "\u26A1\uFE0E";
+            CharSequence mChargeIndicator = mCharging && (mBatteryStyle == BATTERY_STYLE_HIDDEN)
+                    ? (bolt + " ") : "";
+            mBatteryPercentView.setText(mChargeIndicator + text);
             setContentDescription(
                     getContext().getString(mCharging ? R.string.accessibility_battery_level_charging
                     : R.string.accessibility_battery_level, mLevel));
