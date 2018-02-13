@@ -29,7 +29,7 @@
         android:layout_marginTop="32dp"
         android:paddingTop="16dp"
         android:elevation="32dp"
-        android:background="?android:attr/colorBackground"
+        android:background="@android:color/chooser_service_row_background_color"
         android:orientation="vertical">
 
         <LinearLayout
@@ -68,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:textColor="?android:attr/textColorSecondary"
                 android:visibility="gone"/>
 
         </LinearLayout>
