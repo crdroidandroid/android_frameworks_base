@@ -90,6 +90,9 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     public static final int CLOCK_DATE_STYLE_LOWERCASE = 1;
     public static final int CLOCK_DATE_STYLE_UPPERCASE = 2;
 
+    public static final int STYLE_DATE_LEFT = 0;
+    public static final int STYLE_DATE_RIGHT = 1;
+
     public static final int STYLE_CLOCK_RIGHT   = 0;
     public static final int STYLE_CLOCK_CENTER  = 1;
     public static final int STYLE_CLOCK_LEFT   = 2;
@@ -98,6 +101,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     protected int mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
     protected int mClockStyle = STYLE_CLOCK_RIGHT;
     protected String mClockDateFormat = null;
+    protected int mClockDatePosition;
     protected boolean mShowClock;
 
     private int mAmPmStyle;
@@ -119,6 +123,8 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             "system:" + Settings.System.STATUSBAR_CLOCK_DATE_STYLE;
     private static final String STATUSBAR_CLOCK_DATE_FORMAT =
             "system:" + Settings.System.STATUSBAR_CLOCK_DATE_FORMAT;
+    private static final String STATUSBAR_CLOCK_DATE_POSITION =
+            "system:" + Settings.System.STATUSBAR_CLOCK_DATE_POSITION;
 
     public Clock(Context context) {
         this(context, null);
@@ -186,7 +192,8 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                 STATUSBAR_CLOCK_AM_PM_STYLE,
                 STATUSBAR_CLOCK_DATE_DISPLAY,
                 STATUSBAR_CLOCK_DATE_STYLE,
-                STATUSBAR_CLOCK_DATE_FORMAT);
+                STATUSBAR_CLOCK_DATE_FORMAT,
+                STATUSBAR_CLOCK_DATE_POSITION);
     }
 
     @Override
@@ -299,6 +306,10 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             case STATUSBAR_CLOCK_DATE_FORMAT:
                 mClockDateFormat = newValue;
                 break;
+            case STATUSBAR_CLOCK_DATE_POSITION:
+                mClockDatePosition =
+                        newValue == null ? STYLE_DATE_LEFT : Integer.parseInt(newValue);
+                break;
             default:
                 break;
         }
@@ -406,25 +417,32 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
 
         CharSequence dateString = null;
 
-        String result = sdf.format(mCalendar.getTime());
+        String result = "";
+        String timeResult = sdf.format(mCalendar.getTime());
+        String dateResult = "";
 
         if (mClockDateDisplay != CLOCK_DATE_DISPLAY_GONE) {
             Date now = new Date();
 
             if (mClockDateFormat == null || mClockDateFormat.isEmpty()) {
-                // Set dateString to short uppercase Weekday (Default for AOKP) if empty
-                dateString = DateFormat.format("EEE", now) + " ";
+                // Set dateString to short uppercase Weekday if empty
+                dateString = DateFormat.format("EEE", now);
             } else {
-                dateString = DateFormat.format(mClockDateFormat, now) + " ";
+                dateString = DateFormat.format(mClockDateFormat, now);
             }
             if (mClockDateStyle == CLOCK_DATE_STYLE_LOWERCASE) {
                 // When Date style is small, convert date to uppercase
-                result = dateString.toString().toLowerCase() + result;
-           } else if (mClockDateStyle == CLOCK_DATE_STYLE_UPPERCASE) {
-                result = dateString.toString().toUpperCase() + result;
+                dateResult = dateString.toString().toLowerCase();
+            } else if (mClockDateStyle == CLOCK_DATE_STYLE_UPPERCASE) {
+                dateResult = dateString.toString().toUpperCase();
             } else {
-                result = dateString.toString() + result;
+                dateResult = dateString.toString();
             }
+            result = (mClockDatePosition == STYLE_DATE_LEFT) ? dateResult + " " + timeResult
+                    : timeResult + " " + dateResult;
+        } else {
+            // No date, just show time
+            result = timeResult;
         }
 
         SpannableStringBuilder formatted = new SpannableStringBuilder(result);
@@ -449,13 +467,16 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
         if (mClockDateDisplay != CLOCK_DATE_DISPLAY_NORMAL) {
             if (dateString != null) {
                 int dateStringLen = dateString.length();
+                int timeStringOffset = (mClockDatePosition == STYLE_DATE_RIGHT)
+                        ? timeResult.length() + 1 : 0;
                 if (mClockDateDisplay == CLOCK_DATE_DISPLAY_GONE) {
                    formatted.delete(0, dateStringLen);
                 } else {
                     if (mClockDateDisplay == CLOCK_DATE_DISPLAY_SMALL) {
                         CharacterStyle style = new RelativeSizeSpan(0.7f);
-                        formatted.setSpan(style, 0, dateStringLen,
-                                          Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                        formatted.setSpan(style, timeStringOffset,
+                                timeStringOffset + dateStringLen,
+                                Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                     }
                 }
             }
