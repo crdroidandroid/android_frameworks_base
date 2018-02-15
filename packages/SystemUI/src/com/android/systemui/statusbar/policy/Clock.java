@@ -447,6 +447,24 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
 
         SpannableStringBuilder formatted = new SpannableStringBuilder(result);
 
+        if (mClockDateDisplay != CLOCK_DATE_DISPLAY_NORMAL) {
+            if (dateString != null) {
+                int dateStringLen = dateString.length();
+                int timeStringOffset = (mClockDatePosition == STYLE_DATE_RIGHT)
+                        ? timeResult.length() + 1 : 0;
+                if (mClockDateDisplay == CLOCK_DATE_DISPLAY_GONE) {
+                    formatted.delete(0, dateStringLen);
+                } else {
+                    if (mClockDateDisplay == CLOCK_DATE_DISPLAY_SMALL) {
+                        CharacterStyle style = new RelativeSizeSpan(0.7f);
+                        formatted.setSpan(style, timeStringOffset,
+                                timeStringOffset + dateStringLen,
+                                Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    }
+                }
+            }
+        }
+
         if (mAmPmStyle != AM_PM_STYLE_NORMAL) {
             int magic1 = result.indexOf(MAGIC1);
             int magic2 = result.indexOf(MAGIC2);
@@ -461,23 +479,6 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                     }
                     formatted.delete(magic2, magic2 + 1);
                     formatted.delete(magic1, magic1 + 1);
-                }
-            }
-        }
-        if (mClockDateDisplay != CLOCK_DATE_DISPLAY_NORMAL) {
-            if (dateString != null) {
-                int dateStringLen = dateString.length();
-                int timeStringOffset = (mClockDatePosition == STYLE_DATE_RIGHT)
-                        ? timeResult.length() + 1 : 0;
-                if (mClockDateDisplay == CLOCK_DATE_DISPLAY_GONE) {
-                   formatted.delete(0, dateStringLen);
-                } else {
-                    if (mClockDateDisplay == CLOCK_DATE_DISPLAY_SMALL) {
-                        CharacterStyle style = new RelativeSizeSpan(0.7f);
-                        formatted.setSpan(style, timeStringOffset,
-                                timeStringOffset + dateStringLen,
-                                Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    }
                 }
             }
         }
