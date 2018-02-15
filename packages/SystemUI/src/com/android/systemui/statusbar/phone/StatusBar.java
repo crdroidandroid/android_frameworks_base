@@ -3262,13 +3262,27 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     public boolean isUsingDarkTheme() {
         OverlayInfo systemuiThemeInfo = null;
+        OverlayInfo systemuiThemeInfo2 = null;
+        OverlayInfo systemuiThemeInfo3 = null;
+        OverlayInfo systemuiThemeInfo4 = null;
         try {
             systemuiThemeInfo = mOverlayManager.getOverlayInfo("org.lineageos.overlay.dark",
+                    mCurrentUserId);
+            systemuiThemeInfo2 = mOverlayManager.getOverlayInfo("com.android.systemui.theme.dark",
+                    mCurrentUserId);
+            systemuiThemeInfo3 = mOverlayManager.getOverlayInfo("com.android.settings.theme.dark",
+                    mCurrentUserId);
+            systemuiThemeInfo4 = mOverlayManager.getOverlayInfo("com.android.dui.theme.dark",
                     mCurrentUserId);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        return systemuiThemeInfo != null && systemuiThemeInfo.isEnabled();
+        if (systemuiThemeInfo == null || systemuiThemeInfo2 == null || systemuiThemeInfo3 == null
+            || systemuiThemeInfo4 == null)
+            return false;
+
+        return systemuiThemeInfo.isEnabled() && systemuiThemeInfo2.isEnabled() &&
+                systemuiThemeInfo3.isEnabled() && systemuiThemeInfo4.isEnabled();
     }
 
     private boolean isLiveDisplayNightModeOn() {
