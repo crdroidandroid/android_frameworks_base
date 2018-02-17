@@ -17,28 +17,28 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Spoof package signature</string>
+  <string name="permlab_fakePackageSignature">패키지 서명 흉내</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Grant this permission with caution only!</string>
+  <string name="permdesc_fakePackageSignature">앱이 다른 앱인 것처럼 흉내내는 것을 허용합니다. 악성 앱들이 이 권한을 사용하여 사적인 앱 정보에 접근할 수 있으니 주의하세요.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_toggleNavigationEditor">control navigation editor</string>
+  <string name="permlab_toggleNavigationEditor">네비게이션 바 편집</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+  <string name="permdesc_toggleNavigationEditor">응용 프로그램이 네비게이션 바 편집기를 제어 할 수있게합니다.</string>
   <!-- AOKP custom system animations -->
-  <string name="animation_fade">Fade</string>
-  <string name="animation_slide_right">Slide in right</string>
-  <string name="animation_slide_left">Slide in left</string>
-  <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-  <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-  <string name="animation_slide_up">Slide in bottom</string>
-  <string name="animation_slide_down">Slide in top</string>
-  <string name="animation_default">Default</string>
-  <string name="animation_translucent">Translucent</string>
-  <string name="animation_grow_shrink">Grow in (Top)</string>
-  <string name="animation_grow_shrink_center">Grow in (Center)</string>
-  <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-  <string name="animation_grow_shrink_left">Grow in (Left)</string>
-  <string name="animation_grow_shrink_right">Grow in (Right)</string>
-  <string name="animation_random">Random</string>
-  <string name="action_null">Blank</string>
+  <string name="animation_fade">페이드</string>
+  <string name="animation_slide_right">오른쪽에서 슬라이드</string>
+  <string name="animation_slide_left">왼쪽에서 슬라이드</string>
+  <string name="animation_slide_right_no_fade">오른쪽에서 슬라이드 (페이드 없음)</string>
+  <string name="animation_slide_left_no_fade">왼쪽에서 슬라이드(페이드 없음)</string>
+  <string name="animation_slide_up">아래에서 슬라이드</string>
+  <string name="animation_slide_down">위쪽에서 슬라이드</string>
+  <string name="animation_default">기본값</string>
+  <string name="animation_translucent">투명 애니메이션</string>
+  <string name="animation_grow_shrink">커지기(위)</string>
+  <string name="animation_grow_shrink_center">커지기(중앙)</string>
+  <string name="animation_grow_shrink_bottom">커지기 (아래)</string>
+  <string name="animation_grow_shrink_left">커지기 (왼쪽)</string>
+  <string name="animation_grow_shrink_right">커지기 (오른쪽)</string>
+  <string name="animation_random">랜덤</string>
+  <string name="action_null">없음</string>
 </resources>

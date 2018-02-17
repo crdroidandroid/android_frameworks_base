@@ -17,20 +17,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- High Brightness Mode Tile -->
-  <string name="quick_settings_high_brightness">High brightness</string>
+  <string name="quick_settings_high_brightness">높은 밝기</string>
   <!-- Sound QS Tile -->
-  <string name="quick_settings_sound_label">Sound</string>
-  <string name="quick_settings_sound_ring">Ring</string>
-  <string name="quick_settings_sound_vibrate">Vibrate</string>
-  <string name="quick_settings_sound_dnd">Do not disturb</string>
+  <string name="quick_settings_sound_label">소리</string>
+  <string name="quick_settings_sound_ring">벨소리</string>
+  <string name="quick_settings_sound_vibrate">진동</string>
+  <string name="quick_settings_sound_dnd">알림 일시중지</string>
   <!-- Compass QS Tile -->
-  <string name="quick_settings_compass_label">Compass</string>
+  <string name="quick_settings_compass_label">나침반</string>
   <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-  <string name="quick_settings_compass_init">Initializing\u2026</string>
-  <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-  <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-  <string name="accessibility_quick_settings_compass_changed_off">Compass turned off.</string>
-  <string name="accessibility_quick_settings_compass_changed_on">Compass turned on.</string>
+  <string name="quick_settings_compass_init">초기화 중\u2026</string>
+  <string name="accessibility_quick_settings_compass_off">나침반 끄기</string>
+  <string name="accessibility_quick_settings_compass_on">나침반 켜기</string>
+  <string name="accessibility_quick_settings_compass_changed_off">나침반 꺼짐</string>
+  <string name="accessibility_quick_settings_compass_changed_on">나침판 켜짐</string>
   <string name="quick_settings_compass_N">N</string>
   <string name="quick_settings_compass_NE">NE</string>
   <string name="quick_settings_compass_E">E</string>
@@ -40,47 +40,43 @@
   <string name="quick_settings_compass_W">W</string>
   <string name="quick_settings_compass_NW">NW</string>
   <!-- Music tile -->
-  <string name="quick_settings_music_label">Music</string>
-  <string name="quick_settings_music_play">Play</string>
-  <string name="quick_settings_music_pause">Pause</string>
+  <string name="quick_settings_music_label">음악</string>
+  <string name="quick_settings_music_play">재생</string>
+  <string name="quick_settings_music_pause">일시중지</string>
   <!-- Expanded Desktop QS Tile -->
-  <string name="quick_settings_expanded_desktop_label">Expanded desktop</string>
-  <string name="quick_settings_expanded_desktop">Expanded</string>
-  <string name="quick_settings_expanded_desktop_off">Normal</string>
-  <string name="quick_settings_expanded_navigation_off">Hide navbar</string>
-  <string name="quick_settings_expanded_statusbar_off">Hide statusbar</string>
-  <!-- Advance location quick setting tile -->
-  <string name="accessibility_quick_settings_location_battery_saving">Location reporting: battery saving mode.</string>
-  <string name="accessibility_quick_settings_location_gps_only">Location reporting: sensors only mode.</string>
-  <string name="accessibility_quick_settings_location_high_accuracy">Location reporting: high accuracy mode.</string>
+  <string name="quick_settings_expanded_desktop_label">데스크탑 확장</string>
+  <string name="quick_settings_expanded_desktop">확장</string>
+  <string name="quick_settings_expanded_desktop_off">기본</string>
+  <string name="quick_settings_expanded_navigation_off">네비게이션 바 숨기기</string>
+  <string name="quick_settings_expanded_statusbar_off">상태 표시줄 숨기기</string>
   <!-- PiP Tile -->
   <string name="quick_settings_pip_label">PiP</string>
-  <string name="quick_settings_pip_tile_app_na">App does not support PiP</string>
+  <string name="quick_settings_pip_tile_app_na">앱 이 PiP를 지원하지 않습니다</string>
   <!-- CPUInfo tile -->
-  <string name="quick_settings_cpuinfo_label">CPU Info</string>
+  <string name="quick_settings_cpuinfo_label">CPU 정보</string>
   <!-- Screenshot tile -->
-  <string name="quick_settings_screenshot_label">Screenshot</string>
-  <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+  <string name="quick_settings_screenshot_label">스크린 샷</string>
+  <string name="quick_settings_region_screenshot_label">부분 스크린 샷</string>
   <!-- Reboot/Recovery QS Tile -->
-  <string name="quick_settings_reboot_label">Reboot</string>
-  <string name="quick_settings_reboot_recovery_label">Recovery</string>
-  <string name="recents_app_killed">App killed</string>
+  <string name="quick_settings_reboot_label">다시 시작</string>
+  <string name="quick_settings_reboot_recovery_label">복구 모드</string>
+  <string name="recents_app_killed">애플리케이션 종료됨</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_running_services">Open Running Services screen.</string>
+  <string name="accessibility_quick_settings_running_services">실행중인 서비스 보기</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_dash_charging_time">Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_dash_charging">Dash Charging</string>
+  <string name="keyguard_indication_dash_charging_time">고속 충전중 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> 후 충전 완료)</string>
+  <string name="keyguard_plugged_in_dash_charging">Dash 충전 중</string>
   <!-- OmniJaws -->
-  <string name="omnijaws_service_error">Error</string>
-  <string name="omnijaws_service_unkown">No weather data</string>
-  <string name="omnijaws_service_error_long">Error loading weather data</string>
-  <string name="omnijaws_service_disabled">Service is disabled</string>
-  <string name="omnijaws_detail_header">Weather</string>
-  <string name="omnijaws_label_default">Weather</string>
-  <string name="omnijaws_current_text">Now</string>
-  <string name="omnijaws_package_not_available">OmniJaws not available</string>
-  <string name="omnijaws_service_last_update">Last update:</string>
+  <string name="omnijaws_service_error">오류</string>
+  <string name="omnijaws_service_unkown">날씨 정보 없음</string>
+  <string name="omnijaws_service_error_long">날씨 정보 불러오기 오류</string>
+  <string name="omnijaws_service_disabled">서비스 사용 중지됨</string>
+  <string name="omnijaws_detail_header">날씨</string>
+  <string name="omnijaws_label_default">날씨</string>
+  <string name="omnijaws_current_text">현재</string>
+  <string name="omnijaws_package_not_available">OmniJaws를 사용할 수 없음</string>
+  <string name="omnijaws_service_last_update">마지막 업데이트:</string>
   <!-- Caffeine tile -->
-  <string name="caffeine_info_title">What is this?</string>
-  <string name="caffeine_info_message">Caffeine tile is a simple tile that you could switch on to keep your screen on.\n\nPlease note that the tile\'s state will reset itself after turning the screen off.</string>
+  <string name="caffeine_info_title">이것은 무엇입니까?</string>
+  <string name="caffeine_info_message">카페인 타일은 화면을 켜기 위해 전환 할 수있는 간단한 타일입니다.\n\n 화면을 끈 후에는 타일 상태가 자체적으로 재설정됩니다.</string>
 </resources>

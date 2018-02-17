@@ -49,10 +49,6 @@
   <string name="quick_settings_expanded_desktop_off">Normal</string>
   <string name="quick_settings_expanded_navigation_off">Ascunde bara de navigatie</string>
   <string name="quick_settings_expanded_statusbar_off">Ascunde bara de stare</string>
-  <!-- Advance location quick setting tile -->
-  <string name="accessibility_quick_settings_location_battery_saving">Raportare locatie: mod economisire baterie.</string>
-  <string name="accessibility_quick_settings_location_gps_only">Raportare locatie: mod doar senzori.</string>
-  <string name="accessibility_quick_settings_location_high_accuracy">Raportare locatie: acuratete ridicata.</string>
   <!-- PiP Tile -->
   <string name="quick_settings_pip_label">PiP</string>
   <string name="quick_settings_pip_tile_app_na">Aplicatia nu suporta mod PiP (picture in picture)</string>

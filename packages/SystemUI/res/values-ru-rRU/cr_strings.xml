@@ -49,10 +49,6 @@
   <string name="quick_settings_expanded_desktop_off">Нормальный</string>
   <string name="quick_settings_expanded_navigation_off">Скрыть панель навигации</string>
   <string name="quick_settings_expanded_statusbar_off">Скрыть строку состояния</string>
-  <!-- Advance location quick setting tile -->
-  <string name="accessibility_quick_settings_location_battery_saving">Определение местоположения: по координатам сети.</string>
-  <string name="accessibility_quick_settings_location_gps_only">Определение местоположения: по спутникам GPS.</string>
-  <string name="accessibility_quick_settings_location_high_accuracy">Определение местоположения: по всем источникам.</string>
   <!-- PiP Tile -->
   <string name="quick_settings_pip_label">PiP</string>
   <string name="quick_settings_pip_tile_app_na">Приложение не поддерживает PiP</string>
