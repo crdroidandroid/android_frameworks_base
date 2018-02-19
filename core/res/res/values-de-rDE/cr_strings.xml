@@ -34,11 +34,11 @@
   <string name="animation_slide_down">Von oben schieben</string>
   <string name="animation_default">Standard</string>
   <string name="animation_translucent">Transparent</string>
-  <string name="animation_grow_shrink">Grow in (Top)</string>
-  <string name="animation_grow_shrink_center">Grow in (Center)</string>
-  <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-  <string name="animation_grow_shrink_left">Grow in (Left)</string>
-  <string name="animation_grow_shrink_right">Grow in (Right)</string>
+  <string name="animation_grow_shrink">Von oben einblenden</string>
+  <string name="animation_grow_shrink_center">Aus der Mitte einblenden</string>
+  <string name="animation_grow_shrink_bottom">Von unten einblenden</string>
+  <string name="animation_grow_shrink_left">Von links einblenden</string>
+  <string name="animation_grow_shrink_right">Von rechts einblenden</string>
   <string name="animation_random">Zufällig</string>
   <string name="action_null">Leer</string>
 </resources>
