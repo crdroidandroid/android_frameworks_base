@@ -26,6 +26,9 @@
     <!-- Whether device has dash charging support -->
     <bool name="config_hasDashCharger">false</bool>
 
+    <!-- Whether device has turbo power charging support -->
+    <bool name="config_hasTurboPowerCharger">false</bool>
+
     <!-- Ambient Music Ticker -->
     <bool name="config_canForceDozeNotifications">true</bool>
 
