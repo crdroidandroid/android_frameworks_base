@@ -34,6 +34,9 @@
   <!-- Whether device has dash charging support -->
   <java-symbol type="bool" name="config_hasDashCharger" />
 
+  <!-- Whether device has turbo power charging support -->
+  <java-symbol type="bool" name="config_hasTurboPowerCharger" />
+
   <!-- AOKP custom system animations -->
   <java-symbol type="string" name="action_null"/>
   <java-symbol type="string" name="animation_fade"/>
