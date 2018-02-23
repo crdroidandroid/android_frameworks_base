@@ -273,6 +273,7 @@ import com.android.systemui.statusbar.policy.RemoteInputView;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserInfoControllerImpl;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
+import com.android.systemui.statusbar.screen_gestures.ScreenGesturesController;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout
         .OnChildLocationsChangedListener;
@@ -483,6 +484,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.BERRY_DARK_SHADE;
     private static final String FP_SWIPE_TO_DISMISS_NOTIFICATIONS =
             Settings.Secure.FP_SWIPE_TO_DISMISS_NOTIFICATIONS;
+    private static final String EDGE_GESTURES_ENABLED =
+            Settings.Secure.EDGE_GESTURES_ENABLED;
 
     static {
         boolean onlyCoreApps;
@@ -593,6 +596,10 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private int mAmbientMediaPlaying;
     private boolean isMediaPlaying;
+
+    // Full Screen Gestures
+    protected ScreenGesturesController gesturesController;
+    private boolean mEdgeGesturesEnabled;
 
     // Tracking finger for opening/closing.
     boolean mTracking;
@@ -1242,7 +1249,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 FORCE_AMBIENT_FOR_MEDIA,
                 STATUS_BAR_TICKER_ANIMATION_MODE,
                 BERRY_DARK_SHADE,
-                FP_SWIPE_TO_DISMISS_NOTIFICATIONS);
+                FP_SWIPE_TO_DISMISS_NOTIFICATIONS,
+                EDGE_GESTURES_ENABLED);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController);
@@ -8609,8 +8617,26 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mFpDismissNotifications =
                         newValue != null && Integer.parseInt(newValue) != 0;
                 break;
+            case EDGE_GESTURES_ENABLED:
+                mEdgeGesturesEnabled =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                updateEdgeGestures(mEdgeGesturesEnabled);
+                break;
             default:
                 break;
+        }
+    }
+
+    public void updateEdgeGestures(boolean enabled) {
+        Log.d(TAG, "updateEdgeGestures: Updating edge gestures");
+        if (enabled) {
+            if (gesturesController == null) {
+                gesturesController = new ScreenGesturesController(mContext, mWindowManager, this);
+            }
+            gesturesController.reorient();
+        } else if (!enabled && gesturesController != null) {
+            gesturesController.stop();
+            gesturesController = null;
         }
     }
 

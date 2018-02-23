@@ -51,4 +51,9 @@
            1. Lenient threshold
     -->
     <integer name="config_LTE_RSRP_threshold_type">0</integer>
+
+    <!-- EdgeGesture service --> 
+    <java-symbol type="dimen" name="edge_gesture_trigger_distance" /> 
+    <java-symbol type="dimen" name="edge_gesture_perpendicular_distance" /> 
+    <java-symbol type="dimen" name="edge_gesture_trigger_thickness" /> 
 </resources>
