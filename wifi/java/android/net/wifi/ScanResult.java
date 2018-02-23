@@ -134,6 +134,16 @@ public class ScanResult implements Parcelable {
      * Used for Hotspot 2.0.
      */
     public static final int KEY_MGMT_OSEN = 7;
+    /**
+     * @hide
+     * Security key management scheme: FILS_SHA256.
+     */
+    public static final int KEY_MGMT_FILS_SHA256 = 8;
+    /**
+     * @hide
+     * Security key management scheme: FILS_SHA384.
+     */
+    public static final int KEY_MGMT_FILS_SHA384 = 9;
 
     /**
      * @hide
