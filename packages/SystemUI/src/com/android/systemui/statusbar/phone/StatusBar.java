@@ -463,6 +463,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_QUICKBAR_SCROLL_ENABLED;
     private static final String FORCE_AMBIENT_FOR_MEDIA =
             "system:" + Settings.System.FORCE_AMBIENT_FOR_MEDIA;
+    private static final String STATUS_BAR_TICKER_ANIMATION_MODE =
+            "system:" + Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE;
 
     static {
         boolean onlyCoreApps;
@@ -567,6 +569,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private int mTickerEnabled;
     private Ticker mTicker;
     private boolean mTicking;
+    private int mTickerAnimationMode;
 
     private int mAmbientMediaPlaying;
     private boolean isMediaPlaying;
@@ -1205,7 +1208,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 QS_COLUMNS_LANDSCAPE,
                 QS_TILE_TITLE_VISIBILITY,
                 QS_QUICKBAR_SCROLL_ENABLED,
-                FORCE_AMBIENT_FOR_MEDIA);
+                FORCE_AMBIENT_FOR_MEDIA,
+                STATUS_BAR_TICKER_ANIMATION_MODE);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController);
@@ -4070,7 +4074,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         public View mTickerView;
 
         MyTicker(Context context, View sb) {
-            super(context, sb);
+            super(context, sb, mTickerAnimationMode);
             if (mTickerEnabled == 0) {
                 Log.w(TAG, "MyTicker instantiated with mTickerEnabled=0", new Throwable());
             }
@@ -4084,25 +4088,41 @@ public class StatusBar extends SystemUI implements DemoMode,
         public void tickerStarting() {
             if (mTicker == null || mTickerEnabled == 0) return;
             mTicking = true;
+            Animation outAnim, inAnim;
+            if (mTickerAnimationMode == 1) {
+                outAnim = loadAnim(com.android.internal.R.anim.push_up_out, null);
+                inAnim = loadAnim(com.android.internal.R.anim.push_up_in, null);
+            } else {
+                outAnim = loadAnim(true, null);
+                inAnim = loadAnim(false, null);
+            }
             mStatusBarContent.setVisibility(View.GONE);
-            mStatusBarContent.startAnimation(loadAnim(true, null));
+            mStatusBarContent.startAnimation(outAnim);
             mCenterClockLayout.setVisibility(View.GONE);
             mCenterClockLayout.startAnimation(loadAnim(true, null));
             if (mTickerView != null) {
                 mTickerView.setVisibility(View.VISIBLE);
-                mTickerView.startAnimation(loadAnim(false, null));
+                mTickerView.startAnimation(inAnim);
             }
         }
 
         @Override
         public void tickerDone() {
+            Animation outAnim, inAnim;
+            if (mTickerAnimationMode == 1) {
+                outAnim = loadAnim(com.android.internal.R.anim.push_up_out, mTickingDoneListener);
+                inAnim = loadAnim(com.android.internal.R.anim.push_up_in, null);
+            } else {
+                outAnim = loadAnim(true, mTickingDoneListener);
+                inAnim = loadAnim(false, null);
+            }
             mStatusBarContent.setVisibility(View.VISIBLE);
-            mStatusBarContent.startAnimation(loadAnim(false, null));
+            mStatusBarContent.startAnimation(inAnim);
             mCenterClockLayout.setVisibility(View.VISIBLE);
             mCenterClockLayout.startAnimation(loadAnim(false, null));
             if (mTickerView != null) {
                 mTickerView.setVisibility(View.GONE);
-                mTickerView.startAnimation(loadAnim(true, mTickingDoneListener));
+                mTickerView.startAnimation(outAnim);
             }
         }
 
@@ -4148,6 +4168,14 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
 
         return animation;
+    }
+
+    private Animation loadAnim(int id, Animation.AnimationListener listener) {
+        Animation anim = AnimationUtils.loadAnimation(mContext, id);
+        if (listener != null) {
+            anim.setAnimationListener(listener);
+        }
+        return anim;
     }
 
     private void haltTicker() {
@@ -8452,6 +8480,13 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mAmbientMediaPlaying =
                         newValue == null ? 0 : Integer.parseInt(newValue);
                 setMediaPlaying();
+                break;
+            case STATUS_BAR_TICKER_ANIMATION_MODE:
+                mTickerAnimationMode =
+                        newValue == null ? 1 : Integer.parseInt(newValue);
+                if (mTicker != null) {
+                    mTicker.updateAnimation(mTickerAnimationMode);
+                }
                 break;
             default:
                 break;
