@@ -122,11 +122,21 @@ public class WifiConfiguration implements Parcelable {
          * @hide
          */
         public static final int FT_EAP = 7;
+        /**
+        * IEEE 802.11ai FILS SK with SHA256
+         * @hide
+        */
+        public static final int FILS_SHA256 = 8;
+        /**
+         * IEEE 802.11ai FILS SK with SHA384:
+         * @hide
+         */
+        public static final int FILS_SHA384 = 9;
 
         public static final String varName = "key_mgmt";
 
         public static final String[] strings = { "NONE", "WPA_PSK", "WPA_EAP",
-                "IEEE8021X", "WPA2_PSK", "OSEN", "FT_PSK", "FT_EAP" };
+                "IEEE8021X", "WPA2_PSK", "OSEN", "FT_PSK", "FT_EAP", "FILS_SHA256", "FILS_SHA384" };
     }
 
     /**
@@ -404,6 +414,8 @@ public class WifiConfiguration implements Parcelable {
      * Defaults to CCMP TKIP WEP104 WEP40.
      */
     public BitSet allowedGroupCiphers;
+     /** {@hide} */
+    public static final String erpVarName = "erp";
     /**
      * The enterprise configuration details specifying the EAP method,
      * certificates and other settings associated with the EAP.
