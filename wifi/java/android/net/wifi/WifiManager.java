@@ -3716,4 +3716,20 @@ public class WifiManager {
             });
         }
     }
+
+    /**
+     * Get driver Capabilities.
+     *
+     * @param capaType ASCII string, capability type ex: key_mgmt.
+     * @return String of capabilities from driver for type capaParameter.
+     * {@hide}
+     */
+    public String getCapabilities(String capaType) {
+        try {
+            return mService.getCapabilities(capaType);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
 }

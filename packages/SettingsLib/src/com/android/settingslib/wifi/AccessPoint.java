@@ -639,6 +639,52 @@ public class AccessPoint implements Comparable<AccessPoint> {
         networkId = WifiConfiguration.INVALID_NETWORK_ID;
     }
 
+    public boolean isFils256Supported() {
+            IWifiManager wifiManager = IWifiManager.Stub.asInterface(
+                    ServiceManager.getService(Context.WIFI_SERVICE));
+            String capability = "";
+
+            try {
+                   capability = wifiManager.getCapabilities("key_mgmt");
+            } catch (RemoteException e) {
+               Log.w(TAG, "Remote Exception", e);
+	    }
+
+            if (!capability.contains("FILS-SHA256")) {
+                  return false;
+            }
+
+            for (ScanResult result : mScanResults) {
+                if (result.capabilities.contains("FILS-SHA256")) {
+                    return true;
+                }
+            }
+        return false;
+    }
+
+    public boolean isFils384Supported() {
+            IWifiManager wifiManager = IWifiManager.Stub.asInterface(
+                    ServiceManager.getService(Context.WIFI_SERVICE));
+            String capability = "";
+
+            try {
+                   capability = wifiManager.getCapabilities("key_mgmt");
+            } catch (RemoteException e) {
+               Log.w(TAG, "Remote Exception", e);
+	    }
+
+            if (!capability.contains("FILS-SHA384")) {
+                  return false;
+            }
+
+            for (ScanResult result : mScanResults) {
+                if (result.capabilities.contains("FILS-SHA384")) {
+                    return true;
+                }
+            }
+        return false;
+    }
+
     public WifiInfo getInfo() {
         return mInfo;
     }
