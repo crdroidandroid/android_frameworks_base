@@ -32,6 +32,7 @@ import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.util.Log;
 import android.util.Slog;
@@ -53,6 +54,7 @@ public class ServiceWatcher implements ServiceConnection {
     private static final boolean D = false;
     public static final String EXTRA_SERVICE_VERSION = "serviceVersion";
     public static final String EXTRA_SERVICE_IS_MULTIUSER = "serviceIsMultiuser";
+    private static final String WHITELIST_PACKAGELIST_PROPERTY = "ro.services.whitelist.packagelist";
 
     private final String mTag;
     private final Context mContext;
@@ -89,12 +91,23 @@ public class ServiceWatcher implements ServiceConnection {
             List<String> initialPackageNames) {
         PackageManager pm = context.getPackageManager();
         ArrayList<HashSet<Signature>> sigSets = new ArrayList<HashSet<Signature>>();
+
+        String whitelistPackagesValue = SystemProperties.get(WHITELIST_PACKAGELIST_PROPERTY,"");
+        String[] whitelistPackagesArray = whitelistPackagesValue.split(",");
+        HashSet<String> whitelistPackagesSet = new HashSet<String>(Arrays.asList(whitelistPackagesArray));
+
         for (int i = 0, size = initialPackageNames.size(); i < size; i++) {
             String pkg = initialPackageNames.get(i);
             try {
                 HashSet<Signature> set = new HashSet<Signature>();
-                Signature[] sigs = pm.getPackageInfo(pkg, PackageManager.MATCH_SYSTEM_ONLY
-                        | PackageManager.GET_SIGNATURES).signatures;
+                Signature[] sigs = null;
+                if(whitelistPackagesSet != null && whitelistPackagesSet.contains(pkg)) {
+                    sigs = pm.getPackageInfo(pkg, PackageManager.GET_SIGNATURES).signatures;
+                    Log.i("ServiceWatcher", pkg + " is whitelisted, ignored PackageManager.MATCH_SYSTEM_ONLY");
+                } else {
+                    sigs = pm.getPackageInfo(pkg, PackageManager.MATCH_SYSTEM_ONLY
+                            | PackageManager.GET_SIGNATURES).signatures;
+                }
                 set.addAll(Arrays.asList(sigs));
                 sigSets.add(set);
             } catch (NameNotFoundException e) {
