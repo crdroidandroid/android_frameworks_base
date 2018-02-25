@@ -430,6 +430,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             "com.android.system.theme.dark",
             "com.android.settings.theme.dark",
             "com.android.dui.theme.dark",
+            "com.crdroid.home.theme.dark",
     };
 
     private boolean mCustomMaxKeyguard;
