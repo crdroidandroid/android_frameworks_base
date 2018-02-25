@@ -29,4 +29,6 @@
   <java-symbol type="color" name="toast_bg_color" />
   <java-symbol type="color" name="toast_text_color" />
 
+  <!-- Notification info -->
+  <java-symbol type="color" name="notification_info_button_text" />
 </resources>
