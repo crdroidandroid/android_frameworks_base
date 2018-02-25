@@ -57,4 +57,7 @@
     <!-- chooser_service_row_background_color for devices with exposures.
         See also Theme.DeviceDefault.Resolver.Exposed. -->
     <color name="chooser_service_row_background_color_exposed">@color/chooser_service_row_background_color</color>
+
+    <!-- Notification info -->
+    <color name="notification_info_button_text">@color/accent_device_default_light</color>
 </resources>
