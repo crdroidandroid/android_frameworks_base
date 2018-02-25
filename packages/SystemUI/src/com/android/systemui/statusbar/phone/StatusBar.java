@@ -424,6 +424,13 @@ public class StatusBar extends SystemUI implements DemoMode,
      */
     private static final float SRC_MIN_ALPHA = 0.002f;
 
+    private static final String[] DARK_OVERLAYS = {
+            "org.lineageos.overlay.dark",
+            "com.android.system.theme.dark",
+            "com.android.settings.theme.dark",
+            "com.android.dui.theme.dark",
+    };
+
     private boolean mCustomMaxKeyguard;
     private int mMaxKeyguardNotifConfig;
     private boolean mNavbarVisible;
@@ -3245,28 +3252,21 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     public boolean isUsingDarkTheme() {
-        OverlayInfo systemuiThemeInfo = null;
-        OverlayInfo systemuiThemeInfo2 = null;
-        OverlayInfo systemuiThemeInfo3 = null;
-        OverlayInfo systemuiThemeInfo4 = null;
-        try {
-            systemuiThemeInfo = mOverlayManager.getOverlayInfo("org.lineageos.overlay.dark",
-                    mCurrentUserId);
-            systemuiThemeInfo2 = mOverlayManager.getOverlayInfo("com.android.system.theme.dark",
-                    mCurrentUserId);
-            systemuiThemeInfo3 = mOverlayManager.getOverlayInfo("com.android.settings.theme.dark",
-                    mCurrentUserId);
-            systemuiThemeInfo4 = mOverlayManager.getOverlayInfo("com.android.dui.theme.dark",
-                    mCurrentUserId);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        if (systemuiThemeInfo == null || systemuiThemeInfo2 == null || systemuiThemeInfo3 == null
-            || systemuiThemeInfo4 == null)
-            return false;
+        boolean isDark = true;
 
-        return systemuiThemeInfo.isEnabled() && systemuiThemeInfo2.isEnabled() &&
-                systemuiThemeInfo3.isEnabled() && systemuiThemeInfo4.isEnabled();
+        for (String overlay: DARK_OVERLAYS) {
+            OverlayInfo themeInfo = null;
+            try {
+                themeInfo = mOverlayManager.getOverlayInfo(overlay,
+                       mCurrentUserId);
+                if (themeInfo == null || !themeInfo.isEnabled())
+                    isDark = false;
+            } catch (RemoteException e) {
+                Log.w(TAG, "Can't find theme for " + overlay, e);
+            }
+        }
+
+        return isDark;
     }
 
     private boolean isLiveDisplayNightModeOn() {
@@ -5396,18 +5396,17 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         if (isUsingDarkTheme() != useDarkTheme) {
             try {
-                mOverlayManager.setEnabled("org.lineageos.overlay.dark",
-                        useDarkTheme, mCurrentUserId);
                 mOverlayManager.setEnabled("com.android.systemui.theme.dark",
                         false, mCurrentUserId);
-                mOverlayManager.setEnabled("com.android.system.theme.dark",
-                        useDarkTheme, mCurrentUserId);
-                mOverlayManager.setEnabled("com.android.settings.theme.dark",
-                        useDarkTheme, mCurrentUserId);
-                mOverlayManager.setEnabled("com.android.dui.theme.dark",
-                        useDarkTheme, mCurrentUserId);
             } catch (RemoteException e) {
                 Log.w(TAG, "Can't change theme", e);
+            }
+            for (String overlay: DARK_OVERLAYS) {
+                try {
+                    mOverlayManager.setEnabled(overlay, useDarkTheme, mCurrentUserId);
+                } catch (RemoteException e) {
+                    Log.w(TAG, "Can't change theme for " + overlay, e);
+                }
             }
         }
 
