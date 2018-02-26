@@ -26,14 +26,14 @@
   <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
   <!-- AOKP custom system animations -->
   <string name="animation_fade">Fade</string>
-  <string name="animation_slide_right">Slide in right</string>
-  <string name="animation_slide_left">Slide in left</string>
+  <string name="animation_slide_right">Sağa kaydırın</string>
+  <string name="animation_slide_left">Sola kaydırın</string>
   <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
   <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
   <string name="animation_slide_up">Slide in bottom</string>
-  <string name="animation_slide_down">Slide in top</string>
-  <string name="animation_default">Default</string>
-  <string name="animation_translucent">Translucent</string>
+  <string name="animation_slide_down">Yukarıya doğru kaydırın</string>
+  <string name="animation_default">Varsayılan</string>
+  <string name="animation_translucent">Yarı saydam</string>
   <string name="animation_grow_shrink">Grow in (Top)</string>
   <string name="animation_grow_shrink_center">Grow in (Center)</string>
   <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
