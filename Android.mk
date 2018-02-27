@@ -149,6 +149,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/bluetooth/le/IScannerCallback.aidl \
 	core/java/android/content/IClipboard.aidl \
 	core/java/android/content/IContentService.aidl \
+	core/java/android/content/IFontService.aidl \
 	core/java/android/content/IIntentReceiver.aidl \
 	core/java/android/content/IIntentSender.aidl \
 	core/java/android/content/IOnPrimaryClipChangedListener.aidl \
