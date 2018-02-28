@@ -4566,14 +4566,6 @@ public final class Settings {
 
         /**
          * Setting to determine whether or not to show the battery percentage in the status bar.
-         * 0 - Never show battery image
-         * 1 - Always show battery image
-         * @hide
-         */
-        public static final String SHOW_BATTERY_IMAGE = "show_battery_image";
-
-        /**
-         * Setting to determine whether or not to show the battery percentage in the status bar.
          * 0 - Stock behavior - show when forced e.g charging
          * 1 - Always show percentage
          * 2 - Never show percentage
@@ -4587,6 +4579,8 @@ public final class Settings {
          * 1: Display the battery as a circle
          * 2: Display the battery as a dotted circle
          * 3: Display the battery as a square
+         * 4: Display the battery as a text
+         * 5: Hide the battery completely
          * default: 0
          * @hide
          */
