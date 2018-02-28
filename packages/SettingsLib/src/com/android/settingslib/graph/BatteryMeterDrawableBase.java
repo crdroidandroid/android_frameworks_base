@@ -50,6 +50,8 @@ public class BatteryMeterDrawableBase extends Drawable {
     public static final int BATTERY_STYLE_CIRCLE = 1;
     public static final int BATTERY_STYLE_DOTTED_CIRCLE = 2;
     public static final int BATTERY_STYLE_SQUARE = 3;
+    public static final int BATTERY_STYLE_TEXT = 4;
+    public static final int BATTERY_STYLE_HIDDEN = 5;
 
     protected final Context mContext;
     protected final Paint mFramePaint;
@@ -102,8 +104,6 @@ public class BatteryMeterDrawableBase extends Drawable {
     private final Path mTextPath = new Path();
 
     private DashPathEffect mPathEffect;
-
-    private boolean mCircleShowPercentInside;
 
     public BatteryMeterDrawableBase(Context context, int frameColor) {
         mContext = context;
@@ -466,6 +466,27 @@ public class BatteryMeterDrawableBase extends Drawable {
             }
         }
 
+        // compute percentage text
+        boolean pctOpaque = false;
+        float pctX = 0, pctY = 0;
+        String pctText = null;
+        if (!mCharging && !mPowerSaveEnabled && level > mCriticalLevel && mShowPercent) {
+            mTextPaint.setColor(getColorForLevel(level));
+            mTextPaint.setTextSize(height *
+                    (mLevel == 100 ? 0.38f : 0.5f));
+            mTextHeight = -mTextPaint.getFontMetrics().ascent;
+            pctText = String.valueOf(level);
+            pctX = mWidth * 0.5f;
+            pctY = (mHeight + mTextHeight) * 0.47f;
+            pctOpaque = levelTop > pctY;
+            if (!pctOpaque) {
+                mTextPath.reset();
+                mTextPaint.getTextPath(pctText, 0, pctText.length(), pctX, pctY, mTextPath);
+                // cut the percentage text out of the overall shape
+                mShapePath.op(mTextPath, Path.Op.DIFFERENCE);
+            }
+        }
+
         // draw the battery shape background
         c.drawPath(mShapePath, mFramePaint);
 
@@ -698,7 +719,7 @@ public class BatteryMeterDrawableBase extends Drawable {
             mTextPaint.setTextSize(height *
                     (mLevel == 100 ? full : nofull));
             mTextHeight = -mTextPaint.getFontMetrics().ascent;
-            pctText = level > mCriticalLevel ? (String.valueOf(level != 100 && mCircleShowPercentInside ? level : ""))
+            pctText = level > mCriticalLevel ? (String.valueOf(level != 100 && mShowPercent ? level : ""))
                     : mWarningString;
             pctX = mWidth * 0.5f;
             pctY = (mHeight + mTextHeight) * 0.47f;
@@ -710,10 +731,6 @@ public class BatteryMeterDrawableBase extends Drawable {
     // Some stuff required by Drawable.
     @Override
     public void setAlpha(int alpha) {
-    }
-
-    public void showPercentInsideCircle(boolean show) {
-        mCircleShowPercentInside = show;
     }
 
     @Override
