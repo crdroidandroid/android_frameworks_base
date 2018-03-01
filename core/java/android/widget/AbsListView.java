@@ -120,6 +120,10 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
     @SuppressWarnings("UnusedDeclaration")
     private static final String TAG = "AbsListView";
+    private static final boolean OPTS_INPUT = true;
+    private static final double MOVE_TOUCH_SLOP = 0.6;
+    private static final double TOUCH_SLOP_MIN = 0.6;
+    private static final double TOUCH_SLOP_MAX = 1.0;
 
     /**
      * Disables the transcript mode.
@@ -757,6 +761,10 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
      */
     private boolean mIsDetaching;
 
+    private boolean mIsFirstTouchMoveEvent = false;
+    private int mMoveAcceleration;
+    private int mNumTouchMoveEvent = 0;
+
     /**
      * for ListView Animations
      */
@@ -927,6 +935,20 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
         mOverscrollDistance = configuration.getScaledOverscrollDistance();
         mOverflingDistance = configuration.getScaledOverflingDistance();
+        if (OPTS_INPUT) {
+            double touchslopprop = MOVE_TOUCH_SLOP;
+            if (touchslopprop > 0) {
+                if (touchslopprop < TOUCH_SLOP_MIN) {
+                    mMoveAcceleration = (int)(mTouchSlop * TOUCH_SLOP_MIN);
+                } else if ((touchslopprop >= TOUCH_SLOP_MIN) && (touchslopprop < TOUCH_SLOP_MAX)){
+                    mMoveAcceleration = (int)(mTouchSlop * touchslopprop);
+                } else {
+                    mMoveAcceleration = mTouchSlop;
+                }
+            } else {
+                mMoveAcceleration = mTouchSlop;
+            }
+        }
 
         mDensityScale = getContext().getResources().getDisplayMetrics().density;
 
@@ -3651,7 +3673,18 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         final int deltaY = y - mMotionY;
         final int distance = Math.abs(deltaY);
         final boolean overscroll = mScrollY != 0;
-        if ((overscroll || distance > mTouchSlop) &&
+        boolean isFarEnough = false;
+        if (OPTS_INPUT) {
+            if (mIsFirstTouchMoveEvent) {
+                isFarEnough = distance > mMoveAcceleration;
+            } else {
+                isFarEnough = distance > mTouchSlop;
+            }
+        } else {
+            isFarEnough = distance > mTouchSlop;
+        }
+
+        if ((overscroll || isFarEnough) &&
                 (getNestedScrollAxes() & SCROLL_AXIS_VERTICAL) == 0) {
             createScrollingCache();
             if (overscroll) {
@@ -3659,7 +3692,11 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 mMotionCorrection = 0;
             } else {
                 mTouchMode = TOUCH_MODE_SCROLL;
-                mMotionCorrection = deltaY > 0 ? mTouchSlop : -mTouchSlop;
+                if (mIsFirstTouchMoveEvent) {
+                    mMotionCorrection = deltaY > 0 ? mMoveAcceleration : -mMoveAcceleration;
+                } else {
+                    mMotionCorrection = deltaY > 0 ? mTouchSlop : -mTouchSlop;
+                }
             }
             removeCallbacks(mPendingCheckForLongPress);
             setPressed(false);
@@ -3983,21 +4020,38 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         switch (actionMasked) {
             case MotionEvent.ACTION_DOWN: {
                 onTouchDown(ev);
+                if (OPTS_INPUT) {
+                    mNumTouchMoveEvent = 0;
+                }
                 break;
             }
 
             case MotionEvent.ACTION_MOVE: {
+                if (OPTS_INPUT) {
+                    mNumTouchMoveEvent++;
+                    if (mNumTouchMoveEvent == 1) {
+                        mIsFirstTouchMoveEvent = true;
+                    } else {
+                        mIsFirstTouchMoveEvent = false;
+                    }
+                }
                 onTouchMove(ev, vtev);
                 break;
             }
 
             case MotionEvent.ACTION_UP: {
                 onTouchUp(ev);
+                if (OPTS_INPUT) {
+                    mNumTouchMoveEvent = 0;
+                }
                 break;
             }
 
             case MotionEvent.ACTION_CANCEL: {
                 onTouchCancel();
+                if (OPTS_INPUT) {
+                    mNumTouchMoveEvent = 0;
+                }
                 break;
             }
 
@@ -4013,6 +4067,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                     mMotionPosition = motionPosition;
                 }
                 mLastY = y;
+                if (OPTS_INPUT) {
+                    mNumTouchMoveEvent = 0;
+                }
                 break;
             }
 
@@ -4034,6 +4091,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                     mMotionPosition = motionPosition;
                 }
                 mLastY = y;
+                if (OPTS_INPUT) {
+                    mNumTouchMoveEvent = 0;
+                }
                 break;
             }
         }
@@ -4616,6 +4676,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
         switch (actionMasked) {
         case MotionEvent.ACTION_DOWN: {
+            if (OPTS_INPUT) {
+                mNumTouchMoveEvent = 0;
+            }
             int touchMode = mTouchMode;
             if (touchMode == TOUCH_MODE_OVERFLING || touchMode == TOUCH_MODE_OVERSCROLL) {
                 mMotionCorrection = 0;
@@ -4650,6 +4713,14 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         }
 
         case MotionEvent.ACTION_MOVE: {
+            if (OPTS_INPUT) {
+                mNumTouchMoveEvent++;
+                if (mNumTouchMoveEvent == 1) {
+                    mIsFirstTouchMoveEvent = true;
+                } else {
+                    mIsFirstTouchMoveEvent = false;
+                }
+            }
             switch (mTouchMode) {
             case TOUCH_MODE_DOWN:
                 int pointerIndex = ev.findPointerIndex(mActivePointerId);
@@ -4670,6 +4741,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
         case MotionEvent.ACTION_CANCEL:
         case MotionEvent.ACTION_UP: {
+            if (OPTS_INPUT) {
+                mNumTouchMoveEvent = 0;
+            }
             mTouchMode = TOUCH_MODE_REST;
             mActivePointerId = INVALID_POINTER;
             recycleVelocityTracker();
@@ -4679,6 +4753,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         }
 
         case MotionEvent.ACTION_POINTER_UP: {
+            if (OPTS_INPUT) {
+                mNumTouchMoveEvent = 0;
+            }
             onSecondaryPointerUp(ev);
             break;
         }
