@@ -112,8 +112,11 @@ class WindowToken extends WindowContainer<WindowState> {
     }
 
     void removeAllWindowsIfPossible() {
-        for (int i = mChildren.size() - 1; i >= 0; --i) {
-            final WindowState win = mChildren.get(i);
+        WindowList<WindowState> dupChildren = new WindowList<WindowState>();
+        dupChildren.addAll(mChildren);
+
+        for (int i = dupChildren.size() - 1; i >= 0; --i) {
+            final WindowState win = dupChildren.get(i);
             if (DEBUG_WINDOW_MOVEMENT) Slog.w(TAG_WM,
                     "removeAllWindowsIfPossible: removing win=" + win);
             win.removeIfPossible();
