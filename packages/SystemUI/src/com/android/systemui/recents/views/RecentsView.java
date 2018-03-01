@@ -33,6 +33,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -571,6 +572,7 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
         int available = (int)(memInfo.availMem / 1048576L);
         int max = (int)(memInfo.totalMem / 1048576L);
         mMemText.setText(String.format(getResources().getString(R.string.recents_free_ram),available));
+        mMemBar.getProgressDrawable().setColorFilter(mContext.getResources().getColor(R.color.accent_membar_color), Mode.MULTIPLY);
         mMemBar.setMax(max);
         mMemBar.setProgress(available);
     }
