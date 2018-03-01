@@ -202,4 +202,6 @@
 
   <java-symbol type="bool" name="config_useDarkBgNotificationTinting_override" />
   <java-symbol type="bool" name="config_notificationTinting_override" />
+
+  <java-symbol type="color" name="updater_snackbar_text_color" />
 </resources>
