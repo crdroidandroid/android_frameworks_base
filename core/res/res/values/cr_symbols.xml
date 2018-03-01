@@ -112,4 +112,6 @@
 
   <!-- System fonts -->
   <java-symbol type="array" name="config_fontPackages" />
+
+  <java-symbol type="color" name="updater_snackbar_text_color" />
 </resources>
