@@ -151,13 +151,16 @@ public class AppWindowContainerController
             synchronized(mWindowMap) {
                 // If the window was successfully added, then
                 // we need to remove it.
-                if (container.removed || container.startingData == null) {
+                if (container.removed || container.startingData == null ||
+                        container.startingShouldRemoved) {
                     if (DEBUG_STARTING_WINDOW) Slog.v(TAG_WM,
                             "Aborted starting " + container
                                     + ": removed=" + container.removed
-                                    + " startingData=" + container.startingData);
+                                    + " startingData=" + container.startingData
+                                    + " startingShouldRemoved=" + container.startingShouldRemoved);
                     container.startingWindow = null;
                     container.startingData = null;
+                    container.startingShouldRemoved = false;
                     abort = true;
                 } else {
                     container.startingSurface = surface;
@@ -631,6 +634,7 @@ public class AppWindowContainerController
                 mContainer.startingSurface = null;
                 mContainer.startingWindow = null;
                 mContainer.startingDisplayed = false;
+                mContainer.startingShouldRemoved = false;
                 if (surface == null) {
                     if (DEBUG_STARTING_WINDOW) {
                         Slog.v(TAG_WM, "startingWindow was set but startingSurface==null, couldn't "
