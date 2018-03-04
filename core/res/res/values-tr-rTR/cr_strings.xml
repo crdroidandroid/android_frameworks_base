@@ -17,28 +17,28 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Spoof package signature</string>
+  <string name="permlab_fakePackageSignature">Sahte paket imzası</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Grant this permission with caution only!</string>
+  <string name="permdesc_fakePackageSignature">Uygulamanın farklı bir uygulama gibi davranmasına izin verir. Zararlı uygulamalar bu özelliği kullanarak özel içerikli bilgilere ulaşabilir. Bu izni verirken dikkatli olun!</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_toggleNavigationEditor">control navigation editor</string>
+  <string name="permlab_toggleNavigationEditor">gezinti çubuğu düzenleyicisini kontrol et</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+  <string name="permdesc_toggleNavigationEditor">Bir uygulamanın gezinti çubuğunu değiştirmesine izin ver.</string>
   <!-- AOKP custom system animations -->
-  <string name="animation_fade">Fade</string>
+  <string name="animation_fade">Karart</string>
   <string name="animation_slide_right">Sağa kaydırın</string>
   <string name="animation_slide_left">Sola kaydırın</string>
-  <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-  <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-  <string name="animation_slide_up">Slide in bottom</string>
+  <string name="animation_slide_right_no_fade">Sağa kaydır (Karartma yok)</string>
+  <string name="animation_slide_left_no_fade">Sola kaydır (Karartma yok)</string>
+  <string name="animation_slide_up">Aşağıya kaydır</string>
   <string name="animation_slide_down">Yukarıya doğru kaydırın</string>
   <string name="animation_default">Varsayılan</string>
   <string name="animation_translucent">Yarı saydam</string>
-  <string name="animation_grow_shrink">Grow in (Top)</string>
-  <string name="animation_grow_shrink_center">Grow in (Center)</string>
-  <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-  <string name="animation_grow_shrink_left">Grow in (Left)</string>
-  <string name="animation_grow_shrink_right">Grow in (Right)</string>
+  <string name="animation_grow_shrink">Büyüt (Üst)</string>
+  <string name="animation_grow_shrink_center">Büyüt (Orta)</string>
+  <string name="animation_grow_shrink_bottom">Büyüt (Alt)</string>
+  <string name="animation_grow_shrink_left">Büyüt (Sol)</string>
+  <string name="animation_grow_shrink_right">Büyüt (Sağ)</string>
   <string name="animation_random">Rastgele</string>
   <string name="action_null">Boş</string>
 </resources>
