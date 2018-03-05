@@ -78,5 +78,5 @@
   <string name="omnijaws_service_last_update">Última atualização:</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">O que é isso?</string>
-  <string name="caffeine_info_message">Caffeine tile is a simple tile that you could switch on to keep your screen on.\n\nPlease note that the tile\'s state will reset itself after turning the screen off.</string>
+  <string name="caffeine_info_message">O bloco de cafeína é uma bloco simples que você poderia ligar para manter sua tela ativada.\n\nSelecione que o estado do bloco será reiniciado após desligar a tela.</string>
 </resources>

@@ -17,28 +17,28 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Spoof package signature</string>
+  <string name="permlab_fakePackageSignature">Fałszowanie podpisu pakietu</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Grant this permission with caution only!</string>
+  <string name="permdesc_fakePackageSignature">Pozwala aplikacji na udawanie innej aplikacji. Złośliwe aplikacje mogą wykorzystać to w celu uzyskania dostępu do prywatnych danych. Zachowaj ostrożność udzielając to uprawnienie!</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_toggleNavigationEditor">control navigation editor</string>
+  <string name="permlab_toggleNavigationEditor">edytor paska nawigacji</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+  <string name="permdesc_toggleNavigationEditor">Pozwala aplikacji na kontrolowanie edycji paska nawigacji.</string>
   <!-- AOKP custom system animations -->
-  <string name="animation_fade">Fade</string>
-  <string name="animation_slide_right">Slide in right</string>
-  <string name="animation_slide_left">Slide in left</string>
-  <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-  <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-  <string name="animation_slide_up">Slide in bottom</string>
-  <string name="animation_slide_down">Slide in top</string>
-  <string name="animation_default">Default</string>
-  <string name="animation_translucent">Translucent</string>
-  <string name="animation_grow_shrink">Grow in (Top)</string>
-  <string name="animation_grow_shrink_center">Grow in (Center)</string>
-  <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-  <string name="animation_grow_shrink_left">Grow in (Left)</string>
-  <string name="animation_grow_shrink_right">Grow in (Right)</string>
-  <string name="animation_random">Random</string>
-  <string name="action_null">Blank</string>
+  <string name="animation_fade">Zanikanie</string>
+  <string name="animation_slide_right">Przesuń w prawo</string>
+  <string name="animation_slide_left">Przesuń w lewo</string>
+  <string name="animation_slide_right_no_fade">Przesuń w prawo (Bez zanikania)</string>
+  <string name="animation_slide_left_no_fade">Przesuń w lewo (Bez zanikania)</string>
+  <string name="animation_slide_up">Przesuń w dół</string>
+  <string name="animation_slide_down">Przesuń w górę</string>
+  <string name="animation_default">Domyślne</string>
+  <string name="animation_translucent">Przeźroczysty</string>
+  <string name="animation_grow_shrink">Powiększenie (od góry)</string>
+  <string name="animation_grow_shrink_center">Powiększenie (ze środka)</string>
+  <string name="animation_grow_shrink_bottom">Powiększenie (z dołu)</string>
+  <string name="animation_grow_shrink_left">Powiększenie (z lewej)</string>
+  <string name="animation_grow_shrink_right">Powiększenie (z prawej)</string>
+  <string name="animation_random">Losowo</string>
+  <string name="action_null">Pusto</string>
 </resources>
