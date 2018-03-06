@@ -280,12 +280,12 @@ class BatteryExternalStatsWorker implements BatteryStatsImpl.ExternalStatsSync {
         // WiFi and Modem state are updated without the mStats lock held, because they
         // do some network stats retrieval before internally grabbing the mStats lock.
 
-        if (wifiInfo != null) {
-            if (wifiInfo.isValid()) {
-                mStats.updateWifiState(extractDeltaLocked(wifiInfo));
-            } else {
-                Slog.e(TAG, "wifi info is invalid: " + wifiInfo);
-            }
+        if (wifiInfo != null && wifiInfo.isValid()) {
+            mStats.updateWifiState(extractDeltaLocked(wifiInfo));
+        } else {
+            // wifiInfo can be null if link layer statistics feature(optional) is not supported.
+            // In this case, updateWifiState is called to update the tx and rx packets statistics.
+            mStats.updateWifiState(null);
         }
 
         if (modemInfo != null) {
