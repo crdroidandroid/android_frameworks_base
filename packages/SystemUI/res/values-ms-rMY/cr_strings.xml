@@ -17,9 +17,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- High Brightness Mode Tile -->
-  <string name="quick_settings_high_brightness">High brightness</string>
+  <string name="quick_settings_high_brightness">Kecerahan tinggi</string>
   <!-- Sound QS Tile -->
-  <string name="quick_settings_sound_label">Sound</string>
+  <string name="quick_settings_sound_label">Bunyi</string>
   <string name="quick_settings_sound_ring">Ring</string>
   <string name="quick_settings_sound_vibrate">Vibrate</string>
   <string name="quick_settings_sound_dnd">Do not disturb</string>

@@ -17,20 +17,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- High Brightness Mode Tile -->
-  <string name="quick_settings_high_brightness">High brightness</string>
+  <string name="quick_settings_high_brightness">Vysoký jas</string>
   <!-- Sound QS Tile -->
-  <string name="quick_settings_sound_label">Sound</string>
-  <string name="quick_settings_sound_ring">Ring</string>
-  <string name="quick_settings_sound_vibrate">Vibrate</string>
-  <string name="quick_settings_sound_dnd">Do not disturb</string>
+  <string name="quick_settings_sound_label">Zvuk</string>
+  <string name="quick_settings_sound_ring">Zvonenie</string>
+  <string name="quick_settings_sound_vibrate">Vibrácie</string>
+  <string name="quick_settings_sound_dnd">Nevyrušovať</string>
   <!-- Compass QS Tile -->
-  <string name="quick_settings_compass_label">Compass</string>
+  <string name="quick_settings_compass_label">Kompas</string>
   <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-  <string name="quick_settings_compass_init">Initializing\u2026</string>
-  <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-  <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-  <string name="accessibility_quick_settings_compass_changed_off">Compass turned off.</string>
-  <string name="accessibility_quick_settings_compass_changed_on">Compass turned on.</string>
+  <string name="quick_settings_compass_init">Prebieha inicializácia\u2026</string>
+  <string name="accessibility_quick_settings_compass_off">Kompas vyp.</string>
+  <string name="accessibility_quick_settings_compass_on">Kompas zap.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">Kompas bol vypnutý.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">Kompas bol zapnutý.</string>
   <string name="quick_settings_compass_N">N</string>
   <string name="quick_settings_compass_NE">NE</string>
   <string name="quick_settings_compass_E">E</string>
@@ -40,43 +40,43 @@
   <string name="quick_settings_compass_W">W</string>
   <string name="quick_settings_compass_NW">NW</string>
   <!-- Music tile -->
-  <string name="quick_settings_music_label">Music</string>
-  <string name="quick_settings_music_play">Play</string>
-  <string name="quick_settings_music_pause">Pause</string>
+  <string name="quick_settings_music_label">Hudba</string>
+  <string name="quick_settings_music_play">Prehrať</string>
+  <string name="quick_settings_music_pause">Pozastaviť</string>
   <!-- Expanded Desktop QS Tile -->
-  <string name="quick_settings_expanded_desktop_label">Expanded desktop</string>
-  <string name="quick_settings_expanded_desktop">Expanded</string>
-  <string name="quick_settings_expanded_desktop_off">Normal</string>
-  <string name="quick_settings_expanded_navigation_off">Hide navbar</string>
-  <string name="quick_settings_expanded_statusbar_off">Hide statusbar</string>
+  <string name="quick_settings_expanded_desktop_label">Rozšírená plocha</string>
+  <string name="quick_settings_expanded_desktop">Rozšírená</string>
+  <string name="quick_settings_expanded_desktop_off">Normálna</string>
+  <string name="quick_settings_expanded_navigation_off">Skryť navigačnú lištu</string>
+  <string name="quick_settings_expanded_statusbar_off">Skryť stavový riadok</string>
   <!-- PiP Tile -->
   <string name="quick_settings_pip_label">PiP</string>
-  <string name="quick_settings_pip_tile_app_na">App does not support PiP</string>
+  <string name="quick_settings_pip_tile_app_na">Aplikácia nepodporuje PiP</string>
   <!-- CPUInfo tile -->
-  <string name="quick_settings_cpuinfo_label">CPU Info</string>
+  <string name="quick_settings_cpuinfo_label">Informácie o CPU</string>
   <!-- Screenshot tile -->
-  <string name="quick_settings_screenshot_label">Screenshot</string>
-  <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+  <string name="quick_settings_screenshot_label">Snímka obrazovky</string>
+  <string name="quick_settings_region_screenshot_label">Čiastočná snímka obrazovky</string>
   <!-- Reboot/Recovery QS Tile -->
-  <string name="quick_settings_reboot_label">Reboot</string>
+  <string name="quick_settings_reboot_label">Reštartovať</string>
   <string name="quick_settings_reboot_recovery_label">Recovery</string>
-  <string name="recents_app_killed">App killed</string>
+  <string name="recents_app_killed">Aplikácia bola ukončená</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_running_services">Open Running Services screen.</string>
+  <string name="accessibility_quick_settings_running_services">Otvoriť obrazovku spustených služieb.</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_dash_charging_time">Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_dash_charging">Dash Charging</string>
+  <string name="keyguard_indication_dash_charging_time">Rýchle nabíjanie (úplne nabité za <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g>)</string>
+  <string name="keyguard_plugged_in_dash_charging">Rýchle nabíjanie</string>
   <!-- OmniJaws -->
-  <string name="omnijaws_service_error">Error</string>
-  <string name="omnijaws_service_unkown">No weather data</string>
-  <string name="omnijaws_service_error_long">Error loading weather data</string>
-  <string name="omnijaws_service_disabled">Service is disabled</string>
-  <string name="omnijaws_detail_header">Weather</string>
-  <string name="omnijaws_label_default">Weather</string>
-  <string name="omnijaws_current_text">Now</string>
-  <string name="omnijaws_package_not_available">OmniJaws not available</string>
-  <string name="omnijaws_service_last_update">Last update:</string>
+  <string name="omnijaws_service_error">Chyba</string>
+  <string name="omnijaws_service_unkown">Žiadne údaje o počasí</string>
+  <string name="omnijaws_service_error_long">Chyba pri načítavaní údajov o počasí</string>
+  <string name="omnijaws_service_disabled">Služba je vypnutá</string>
+  <string name="omnijaws_detail_header">Počasie</string>
+  <string name="omnijaws_label_default">Počasie</string>
+  <string name="omnijaws_current_text">Teraz</string>
+  <string name="omnijaws_package_not_available">OmniJaws nie je k dispozícii</string>
+  <string name="omnijaws_service_last_update">Posledná aktualizácia:</string>
   <!-- Caffeine tile -->
-  <string name="caffeine_info_title">What is this?</string>
-  <string name="caffeine_info_message">Caffeine tile is a simple tile that you could switch on to keep your screen on.\n\nPlease note that the tile\'s state will reset itself after turning the screen off.</string>
+  <string name="caffeine_info_title">Čo je to?</string>
+  <string name="caffeine_info_message">Dlaždica Kofeín je jednoduchá dlaždica, ktorú môžete zapnúť, aby vaša obrazovka zostala stále zapnutá.\n\nZoberte na vedomie, že stav dlaždice sa po vypnutí obrazovky obnoví.</string>
 </resources>
