@@ -4308,7 +4308,7 @@ public class NotificationManagerService extends SystemService {
         }
 
         ToastRecord lastToast = mToastQueue.remove(index);
-        mWindowManagerInternal.removeWindowToken(lastToast.token, true, DEFAULT_DISPLAY);
+        mWindowManagerInternal.removeWindowToken(lastToast.token, false, DEFAULT_DISPLAY);
 
         keepProcessAliveIfNeededLocked(record.pid);
         if (mToastQueue.size() > 0) {
