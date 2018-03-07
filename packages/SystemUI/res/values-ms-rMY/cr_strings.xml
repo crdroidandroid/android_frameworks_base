@@ -24,13 +24,13 @@
   <string name="quick_settings_sound_vibrate">Vibrate</string>
   <string name="quick_settings_sound_dnd">Do not disturb</string>
   <!-- Compass QS Tile -->
-  <string name="quick_settings_compass_label">Compass</string>
+  <string name="quick_settings_compass_label">Kompas</string>
   <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-  <string name="quick_settings_compass_init">Initializing\u2026</string>
+  <string name="quick_settings_compass_init">Memulakan\u2026</string>
   <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-  <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-  <string name="accessibility_quick_settings_compass_changed_off">Compass turned off.</string>
-  <string name="accessibility_quick_settings_compass_changed_on">Compass turned on.</string>
+  <string name="accessibility_quick_settings_compass_on">Kompas hidup.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">Kompas dimatikan.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">Kompas dihidupkan.</string>
   <string name="quick_settings_compass_N">N</string>
   <string name="quick_settings_compass_NE">NE</string>
   <string name="quick_settings_compass_E">E</string>
@@ -40,13 +40,13 @@
   <string name="quick_settings_compass_W">W</string>
   <string name="quick_settings_compass_NW">NW</string>
   <!-- Music tile -->
-  <string name="quick_settings_music_label">Music</string>
-  <string name="quick_settings_music_play">Play</string>
+  <string name="quick_settings_music_label">Muzik</string>
+  <string name="quick_settings_music_play">Main</string>
   <string name="quick_settings_music_pause">Pause</string>
   <!-- Expanded Desktop QS Tile -->
   <string name="quick_settings_expanded_desktop_label">Expanded desktop</string>
   <string name="quick_settings_expanded_desktop">Expanded</string>
-  <string name="quick_settings_expanded_desktop_off">Normal</string>
+  <string name="quick_settings_expanded_desktop_off">Biasa</string>
   <string name="quick_settings_expanded_navigation_off">Hide navbar</string>
   <string name="quick_settings_expanded_statusbar_off">Hide statusbar</string>
   <!-- PiP Tile -->
@@ -56,27 +56,27 @@
   <string name="quick_settings_cpuinfo_label">CPU Info</string>
   <!-- Screenshot tile -->
   <string name="quick_settings_screenshot_label">Screenshot</string>
-  <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+  <string name="quick_settings_region_screenshot_label">Screenshot separa</string>
   <!-- Reboot/Recovery QS Tile -->
-  <string name="quick_settings_reboot_label">Reboot</string>
+  <string name="quick_settings_reboot_label">Boot semula</string>
   <string name="quick_settings_reboot_recovery_label">Recovery</string>
-  <string name="recents_app_killed">App killed</string>
+  <string name="recents_app_killed">Aplikasi dimatikan</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_running_services">Open Running Services screen.</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_dash_charging_time">Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_dash_charging">Dash Charging</string>
+  <string name="keyguard_plugged_in_dash_charging">Dash mengecas</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Error</string>
-  <string name="omnijaws_service_unkown">No weather data</string>
+  <string name="omnijaws_service_unkown">Tiada maklumat cuaca</string>
   <string name="omnijaws_service_error_long">Error loading weather data</string>
   <string name="omnijaws_service_disabled">Service is disabled</string>
-  <string name="omnijaws_detail_header">Weather</string>
-  <string name="omnijaws_label_default">Weather</string>
-  <string name="omnijaws_current_text">Now</string>
-  <string name="omnijaws_package_not_available">OmniJaws not available</string>
+  <string name="omnijaws_detail_header">Cuaca</string>
+  <string name="omnijaws_label_default">Cuaca</string>
+  <string name="omnijaws_current_text">Sekarang</string>
+  <string name="omnijaws_package_not_available">OmniJaws tidak disediakan</string>
   <string name="omnijaws_service_last_update">Last update:</string>
   <!-- Caffeine tile -->
-  <string name="caffeine_info_title">What is this?</string>
+  <string name="caffeine_info_title">Apakah ini?</string>
   <string name="caffeine_info_message">Caffeine tile is a simple tile that you could switch on to keep your screen on.\n\nPlease note that the tile\'s state will reset itself after turning the screen off.</string>
 </resources>
