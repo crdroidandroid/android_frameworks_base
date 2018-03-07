@@ -112,4 +112,25 @@ public class DynamicLayoutTest {
         assertFalse(layout.getBlocksAlwaysNeedToBeRedrawn().contains(0));
         assertTrue(layout.getBlocksAlwaysNeedToBeRedrawn().isEmpty());
     }
+
+    @Test
+    public void testReflow_afterSpannableEdit() {
+        final String text = "a\nb:\uD83C\uDF1A c \n\uD83C\uDF1A";
+        final int length = text.length();
+        final SpannableStringBuilder spannable = new SpannableStringBuilder(text);
+        spannable.setSpan(new MockReplacementSpan(), 4, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new MockReplacementSpan(), 10, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        final DynamicLayout layout = new DynamicLayout(spannable, new TextPaint(), WIDTH,
+                ALIGN_NORMAL, 1.0f /*spacingMultiplier*/, 0f /*spacingAdd*/, false /*includepad*/);
+
+        spannable.delete(8, 9);
+        spannable.replace(7, 8, "ch");
+
+        layout.reflow(spannable, 0, length, length);
+        final ArraySet<Integer> blocks = layout.getBlocksAlwaysNeedToBeRedrawn();
+        for (Integer value : blocks) {
+            assertTrue("Block index should not be negative", value >= 0);
+        }
+    }
 }
