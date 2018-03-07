@@ -86,6 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginBottom="6dp"
+                android:textColor="@*android:color/notification_snooze_text"
                 style="@style/TextAppearance.NotificationInfo.Primary" />
             <!-- Ban Channel Switch -->
             <Switch

@@ -459,10 +459,8 @@ public class NotificationColorUtil {
      */
     public static int resolveContrastColor(Context context, int notificationColor,
             int backgroundColor) {
-        boolean isDark = context.getResources()
-                .getBoolean(R.bool.config_useDarkBgNotificationIconTextTinting);
         return NotificationColorUtil.resolveContrastColor(context, notificationColor,
-                backgroundColor, isDark);
+                backgroundColor, false /* isDark */);
     }
 
     /**
@@ -483,6 +481,7 @@ public class NotificationColorUtil {
                 com.android.internal.R.color.notification_action_list);
 
         int color = resolvedColor;
+        isDark = isDark || context.getResources().getBoolean(R.bool.config_useDarkBgNotificationIconTextTinting);
         color = NotificationColorUtil.ensureLargeTextContrast(color, actionBg, isDark);
         color = NotificationColorUtil.ensureTextContrast(color, backgroundColor, isDark);
 
