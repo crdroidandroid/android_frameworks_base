@@ -1629,8 +1629,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             return true;
         }
 
-        // change in battery level while plugged in
-        if (nowPluggedIn && old.level != current.level) {
+        // change in battery level
+        if (old.level != current.level) {
             return true;
         }
 
