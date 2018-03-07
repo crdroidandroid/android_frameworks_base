@@ -21,4 +21,6 @@
     <!-- Floating action button -->
     <color name="fab_color">@*android:color/accent_device_default_light</color>
     <color name="floating_action_button_icon_color">@android:color/white</color>
+
+    <color name="legacy_icon_background">#FFFFFF</color>
 </resources>
