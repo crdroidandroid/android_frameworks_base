@@ -214,7 +214,7 @@ import com.android.systemui.recents.ScreenPinningRequest;
 import com.android.systemui.recents.events.EventBus;
 import com.android.systemui.recents.events.activity.AppTransitionFinishedEvent;
 import com.android.systemui.recents.events.activity.UndockingTaskEvent;
-import com.android.systemui.recents.misc.IconPackHelper;
+import com.android.systemui.slimrecent.icons.IconsHandler;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.settings.CurrentUserTracker;
 import com.android.systemui.slimrecent.RecentController;
@@ -8284,7 +8284,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             case RECENTS_ICON_PACK:
                 if (newValue != null) {
                     String currentIconPack = (String) newValue;
-                    IconPackHelper.getInstance(mContext).updatePrefs(currentIconPack);
+                    IconsHandler.getInstance(mContext).resetIconNormalizer();
+                    IconsHandler.getInstance(mContext).updatePrefs(currentIconPack);
                 }
                 if (!mUseSlimRecents) {
                     mRecents.resetIconCache();
