@@ -79,6 +79,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -423,6 +424,8 @@ public class IpClient extends StateMachine {
         /* package */ ApfCapabilities mApfCapabilities;
         /* package */ int mProvisioningTimeoutMs = DEFAULT_TIMEOUT_MS;
         /* package */ int mIPv6AddrGenMode = INetd.IPV6_ADDR_GEN_MODE_STABLE_PRIVACY;
+        /* package */ public boolean mRapidCommit;
+        /* package */ public boolean mDiscoverSent;
         /* package */ Network mNetwork = null;
         /* package */ String mDisplayName = null;
 
@@ -437,6 +440,8 @@ public class IpClient extends StateMachine {
             mStaticIpConfig = other.mStaticIpConfig;
             mApfCapabilities = other.mApfCapabilities;
             mProvisioningTimeoutMs = other.mProvisioningTimeoutMs;
+            mRapidCommit = other.mRapidCommit;
+            mDiscoverSent = other.mDiscoverSent;
             mIPv6AddrGenMode = other.mIPv6AddrGenMode;
             mNetwork = other.mNetwork;
             mDisplayName = other.mDisplayName;
@@ -1354,7 +1359,12 @@ public class IpClient extends StateMachine {
             // Start DHCPv4.
             mDhcpClient = DhcpClient.makeDhcpClient(mContext, IpClient.this, mInterfaceParams);
             mDhcpClient.registerForPreDhcpNotification();
-            mDhcpClient.sendMessage(DhcpClient.CMD_START_DHCP);
+            if (mConfiguration.mRapidCommit || mConfiguration.mDiscoverSent)
+                mDhcpClient.sendMessage(DhcpClient.CMD_START_DHCP_RAPID_COMMIT,
+                    (mConfiguration.mRapidCommit ? 1: 0),
+                    (mConfiguration.mDiscoverSent ? 1: 0));
+            else
+                mDhcpClient.sendMessage(DhcpClient.CMD_START_DHCP);
         }
 
         return true;
@@ -1399,6 +1409,11 @@ public class IpClient extends StateMachine {
         }
 
         return (mIpReachabilityMonitor != null);
+    }
+
+
+    public ByteBuffer buildDiscoverWithRapidCommitPacket() {
+        return mDhcpClient.buildDiscoverWithRapidCommitPacket();
     }
 
     private void stopAllIP() {
