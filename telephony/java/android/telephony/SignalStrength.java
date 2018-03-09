@@ -872,8 +872,8 @@ public class SignalStrength implements Parcelable {
 
         if (rsrpIconLevel != -1) return rsrpIconLevel;
 
-        /* Valid values are (0-63, 99) as defined in TS 36.331 */
-        if (mLteSignalStrength > 63) rssiIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        /* Valid values are (0-31, 99) as defined in TS 27.001 8.5 */
+        if (mLteSignalStrength > 31) rssiIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
         else if (mLteSignalStrength >= 12) rssiIconLevel = SIGNAL_STRENGTH_GREAT;
         else if (mLteSignalStrength >= 8) rssiIconLevel = SIGNAL_STRENGTH_GOOD;
         else if (mLteSignalStrength >= 5) rssiIconLevel = SIGNAL_STRENGTH_MODERATE;
