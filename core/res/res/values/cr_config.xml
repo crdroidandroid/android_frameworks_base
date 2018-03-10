@@ -37,4 +37,7 @@
 
     <!-- Whether the device supports Smart Pixels -->
     <bool name="config_supportSmartPixels">false</bool>
+
+    <bool name="config_useDarkBgNotificationTinting_override">false</bool>
+    <bool name="config_notificationTinting_override">false</bool>
 </resources>
