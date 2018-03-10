@@ -102,4 +102,7 @@
 
   <java-symbol type="color" name="autofill_save_title_color" />
   <java-symbol type="color" name="autofill_autofill_save_custom_subtitle_color" />
+
+  <java-symbol type="bool" name="config_useDarkBgNotificationTinting_override" />
+  <java-symbol type="bool" name="config_notificationTinting_override" />
 </resources>
