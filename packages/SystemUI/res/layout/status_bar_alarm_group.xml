@@ -20,7 +20,6 @@
     android:id="@+id/date_time_alarm_group"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="4dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:background="?android:attr/selectableItemBackground">
@@ -33,7 +32,8 @@
         android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
         android:textSize="@dimen/qs_time_collapsed_size"
         android:gravity="center_vertical"
-        systemui:datePattern="@string/abbrev_wday_month_day_no_year_alarm" />
+        systemui:datePattern="@string/abbrev_wday_month_day_no_year_alarm"
+        android:paddingEnd="6dp" />
 
     <com.android.systemui.statusbar.AlphaOptimizedImageView
         android:id="@+id/alarm_status_collapsed"
@@ -41,7 +41,6 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_access_alarms_small"
         android:tint="?android:attr/textColorPrimary"
-        android:paddingStart="6dp"
         android:paddingEnd="6dp"
         android:gravity="center"
         android:visibility="gone" />
