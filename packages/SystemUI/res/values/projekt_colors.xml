@@ -22,7 +22,7 @@
     <color name="navbutton_ripple_color_dark">#ff000000</color>
 
     <!-- Screenshot action colors -->
-    <color name="screenshot_flash_color">@android:color/white</color>
+    <color name="screenshot_flash_color">#b3adadad</color> <!-- light grey with some transparency -->
     <color name="screenshot_background_color">@android:color/black</color>
 
     <!-- Keyguard affordance circle background -->
