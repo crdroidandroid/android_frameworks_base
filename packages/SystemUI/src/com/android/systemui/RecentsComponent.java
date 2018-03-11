@@ -20,6 +20,8 @@ import android.graphics.Rect;
 import android.view.Display;
 import android.view.View;
 
+import com.android.systemui.slimrecent.icons.IconsHandler;
+
 public interface RecentsComponent {
     void showRecentApps(boolean triggeredFromAltTab, boolean fromHome);
     void showNextAffiliatedTask();
@@ -49,4 +51,6 @@ public interface RecentsComponent {
     void resetIconCache();
 
     void evictAllCaches();
+
+    IconsHandler getIconsHandler();
 }
