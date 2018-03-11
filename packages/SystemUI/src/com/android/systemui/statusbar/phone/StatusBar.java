@@ -8284,8 +8284,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             case RECENTS_ICON_PACK:
                 if (newValue != null) {
                     String currentIconPack = (String) newValue;
-                    IconsHandler.getInstance(mContext).resetIconNormalizer();
-                    IconsHandler.getInstance(mContext).updatePrefs(currentIconPack);
+                    mRecents.getIconsHandler().updatePrefs(currentIconPack);
                 }
                 if (!mUseSlimRecents) {
                     mRecents.resetIconCache();
