@@ -19,6 +19,7 @@ package com.android.server.notification;
 import static android.content.Context.BIND_ALLOW_WHITELIST_MANAGEMENT;
 import static android.content.Context.BIND_AUTO_CREATE;
 import static android.content.Context.BIND_FOREGROUND_SERVICE;
+import static android.content.Context.BIND_ALLOW_OOM_MANAGEMENT;
 import static android.content.Context.DEVICE_POLICY_SERVICE;
 
 import android.annotation.NonNull;
@@ -924,7 +925,7 @@ abstract public class ManagedServices {
             };
             if (!mContext.bindServiceAsUser(intent,
                 serviceConnection,
-                BIND_AUTO_CREATE | BIND_FOREGROUND_SERVICE | BIND_ALLOW_WHITELIST_MANAGEMENT,
+                BIND_AUTO_CREATE | BIND_FOREGROUND_SERVICE | BIND_ALLOW_WHITELIST_MANAGEMENT | BIND_ALLOW_OOM_MANAGEMENT,
                 new UserHandle(userid))) {
                 mServicesBinding.remove(servicesBindingTag);
                 Slog.w(TAG, "Unable to bind " + getCaption() + " service: " + intent);
