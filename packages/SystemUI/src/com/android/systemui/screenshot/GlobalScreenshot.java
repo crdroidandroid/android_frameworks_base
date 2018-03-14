@@ -1039,12 +1039,16 @@ class GlobalScreenshot {
                 return;
             }
 
+            // Collapse the notification panel
+            try {
+                ActivityManager.getService().closeSystemDialogs(SYSTEM_DIALOG_REASON_SCREENSHOT);
+            } catch (RemoteException e) {
+            }
             // Clear the notification
             final NotificationManager nm =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             final Uri uri = Uri.parse(intent.getStringExtra(SCREENSHOT_URI_ID));
             nm.cancel(SystemMessage.NOTE_GLOBAL_SCREENSHOT);
-
             // Launch markup activity
             Intent editingIntent = new Intent(Intent.ACTION_EDIT);
             editingIntent.setType("image/png");
@@ -1052,7 +1056,9 @@ class GlobalScreenshot {
                     "com.google.android.markup",
                     "com.google.android.markup.AnnotateActivity"));
             editingIntent.putExtra(Intent.EXTRA_STREAM, uri);
-            context.startActivity(editingIntent);
+            ActivityOptions opts = ActivityOptions.makeBasic();
+            opts.setDisallowEnterPictureInPictureWhileLaunching(true);
+            context.startActivityAsUser(editingIntent, opts.toBundle(), UserHandle.CURRENT);
         }
     }
 
