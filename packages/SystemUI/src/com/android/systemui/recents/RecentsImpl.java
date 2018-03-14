@@ -90,7 +90,6 @@ import com.android.systemui.recents.views.TaskStackViewScroller;
 import com.android.systemui.recents.views.TaskViewHeader;
 import com.android.systemui.recents.views.TaskViewTransform;
 import com.android.systemui.recents.views.grid.TaskGridLayoutAlgorithm;
-import com.android.systemui.slimrecent.icons.IconsHandler;
 import com.android.systemui.stackdivider.DividerView;
 import com.android.systemui.statusbar.phone.NavigationBarGestureHelper;
 import com.android.systemui.statusbar.phone.StatusBar;
@@ -262,12 +261,9 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
         }
     });
 
-    private IconsHandler mIconsHandler;
-
-    public RecentsImpl(Context context, IconsHandler ih) {
+    public RecentsImpl(Context context) {
         mContext = context;
         mHandler = new Handler();
-        mIconsHandler = ih;
         mBackgroundLayoutAlgorithm = new TaskStackLayoutAlgorithm(context, null);
 
         // Initialize the static foreground thread
@@ -750,7 +746,6 @@ public class RecentsImpl implements ActivityOptions.OnAnimationFinishedListener 
         mHeaderBar = (TaskViewHeader) inflater.inflate(R.layout.recents_task_view_header,
                 null, false);
         mHeaderBar.setLayoutDirection(res.getConfiguration().getLayoutDirection());
-        mHeaderBar.setIconsHandler(mIconsHandler);
     }
 
     private void updateDummyStackViewLayout(TaskStackLayoutAlgorithm stackLayout,
