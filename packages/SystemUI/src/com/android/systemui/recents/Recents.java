@@ -228,7 +228,7 @@ public class Recents extends SystemUI
                 mContext, R.dimen.recents_task_view_header_height_tablet_land, 1.0f);
         sTaskLoader = new RecentsTaskLoader(mContext, mIconsHandler);
         mHandler = new Handler();
-        mImpl = new RecentsImpl(mContext, mIconsHandler);
+        mImpl = new RecentsImpl(mContext);
 
         // Check if there is a recents override package
         if (Build.IS_USERDEBUG || Build.IS_ENG) {
