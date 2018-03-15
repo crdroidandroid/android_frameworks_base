@@ -95,6 +95,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
@@ -4152,6 +4153,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                     mUiModeManager.setNightMode(useDarkTheme ?
                             UiModeManager.MODE_NIGHT_YES : UiModeManager.MODE_NIGHT_NO);
                 }
+
+                Process.killProcess(Process.myPid());
             });
         }
 
