@@ -1099,7 +1099,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mUpdateCallback);
         putComponent(DozeHost.class, mDozeServiceHost);
 
-        notifyUserAboutHiddenNotifications();
+        //notifyUserAboutHiddenNotifications();
 
         mScreenPinningRequest = new ScreenPinningRequest(mContext);
         mFalsingManager = FalsingManager.getInstance(mContext);
