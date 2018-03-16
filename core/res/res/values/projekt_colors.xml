@@ -34,4 +34,7 @@
     <!-- Two target preference vertical divider color -->
     <color name="list_divider_dark">#64000000</color>
 
+    <!-- Auto fill -->
+    <color name="autofill_save_title_color">@color/primary_text_default_material_light</color>
+    <color name="autofill_autofill_save_custom_subtitle_color">@color/primary_text_default_material_light</color>
 </resources>
