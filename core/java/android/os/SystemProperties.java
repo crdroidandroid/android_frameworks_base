@@ -189,7 +189,17 @@ public class SystemProperties {
             }
             ArrayList<Runnable> callbacks = new ArrayList<Runnable>(sChangeCallbacks);
             for (int i=0; i<callbacks.size(); i++) {
-                callbacks.get(i).run();
+                try {
+                    callbacks.get(i).run();
+                } catch (Exception e) {
+                    // Ignore.
+                } catch (Throwable t) {
+                    // We could continue after Throwable, but it isn't clear that we
+                    // should, these are usually really bad. But at least try to log
+                    // something.
+                    Log.e(TAG, "Error during callChangeCallbacks", t);
+                    return;
+                }
             }
         }
     }
