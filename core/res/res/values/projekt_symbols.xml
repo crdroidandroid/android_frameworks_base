@@ -22,4 +22,7 @@
   <!-- Fastscroller -->
   <java-symbol type="color" name="fastscroller_text_color" />
 
+  <!-- Auto fill -->
+  <java-symbol type="color" name="autofill_save_title_color" />
+  <java-symbol type="color" name="autofill_autofill_save_custom_subtitle_color" />
 </resources>
