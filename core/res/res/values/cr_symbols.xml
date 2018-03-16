@@ -99,4 +99,7 @@
 
   <!-- Doze mode -->
   <java-symbol type="bool" name="config_doze_enabled_by_default" />
+
+  <java-symbol type="color" name="autofill_save_title_color" />
+  <java-symbol type="color" name="autofill_autofill_save_custom_subtitle_color" />
 </resources>
