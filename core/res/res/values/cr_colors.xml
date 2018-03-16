@@ -18,4 +18,7 @@
 
     <!-- Dynamic Navbar -->
     <color name="input_method_navigation_guard_dynamic">@android:color/transparent</color>
+
+    <color name="autofill_save_title_color">@color/primary_text_default_material_light</color>
+    <color name="autofill_autofill_save_custom_subtitle_color">@color/primary_text_default_material_light</color>
 </resources>
