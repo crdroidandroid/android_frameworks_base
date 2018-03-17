@@ -93,4 +93,9 @@
     <string name="omnijaws_current_text">Now</string>
     <string name="omnijaws_package_not_available">OmniJaws not available</string>
     <string name="omnijaws_service_last_update">Last update:</string>
+
+    <!-- Assist/Google Tiles -->
+    <string name="quick_settings_google_assist_label">Assistant</string>
+    <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+    <string name="quick_settings_google_now_label">Google</string>
 </resources>
