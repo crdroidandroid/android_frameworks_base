@@ -4622,43 +4622,7 @@ public class PackageParser {
     }
 
     private void setActivityResizeMode(ActivityInfo aInfo, TypedArray sa, Package owner) {
-        final boolean appExplicitDefault = (owner.applicationInfo.privateFlags
-                & (PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE
-                | PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_UNRESIZEABLE)) != 0;
-
-        if (sa.hasValue(R.styleable.AndroidManifestActivity_resizeableActivity)
-                || appExplicitDefault) {
-            // Activity or app explicitly set if it is resizeable or not;
-            final boolean appResizeable = (owner.applicationInfo.privateFlags
-                    & PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE) != 0;
-            if (sa.getBoolean(R.styleable.AndroidManifestActivity_resizeableActivity,
-                    appResizeable)) {
-                aInfo.resizeMode = RESIZE_MODE_RESIZEABLE;
-            } else {
-                aInfo.resizeMode = RESIZE_MODE_UNRESIZEABLE;
-            }
-            return;
-        }
-
-        if ((owner.applicationInfo.privateFlags
-                & PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION) != 0) {
-            // The activity or app didn't explicitly set the resizing option, however we want to
-            // make it resize due to the sdk version it is targeting.
-            aInfo.resizeMode = RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION;
-            return;
-        }
-
-        // resize preference isn't set and target sdk version doesn't support resizing apps by
-        // default. For the app to be resizeable if it isn't fixed orientation or immersive.
-        if (aInfo.isFixedOrientationPortrait()) {
-            aInfo.resizeMode = RESIZE_MODE_FORCE_RESIZABLE_PORTRAIT_ONLY;
-        } else if (aInfo.isFixedOrientationLandscape()) {
-            aInfo.resizeMode = RESIZE_MODE_FORCE_RESIZABLE_LANDSCAPE_ONLY;
-        } else if (aInfo.isFixedOrientation()) {
-            aInfo.resizeMode = RESIZE_MODE_FORCE_RESIZABLE_PRESERVE_ORIENTATION;
-        } else {
-            aInfo.resizeMode = RESIZE_MODE_FORCE_RESIZEABLE;
-        }
+        aInfo.resizeMode = RESIZE_MODE_RESIZEABLE;
     }
 
     /**
