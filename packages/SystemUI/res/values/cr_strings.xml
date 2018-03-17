@@ -54,10 +54,13 @@
     <string name="quick_settings_expanded_navigation_off">Hide navbar</string>
     <string name="quick_settings_expanded_statusbar_off">Hide statusbar</string>
 
+<<<<<<< HEAD
     <!-- PiP Tile -->
     <string name="quick_settings_pip_label">PiP</string>
     <string name="quick_settings_pip_tile_app_na">App does not support PiP</string>
 
+=======
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU Info</string>
 
@@ -69,6 +72,13 @@
     <string name="quick_settings_reboot_label">Reboot</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
 
+<<<<<<< HEAD
+=======
+    <!-- Caffeine tile -->
+    <string name="caffeine_info_title">What is this?</string>
+    <string name="caffeine_info_message">Caffeine tile is a simple tile that you could switch on to keep your screen on.\n\nPlease note that the tile\'s state will reset itself after turning the screen off.</string>
+
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
     <string name="navMediaArrowsExcludeList" translatable="false">
         chrome,youtube,netflix,firefox,dolphin,opera
     </string>
@@ -92,8 +102,11 @@
     <string name="omnijaws_current_text">Now</string>
     <string name="omnijaws_package_not_available">OmniJaws not available</string>
     <string name="omnijaws_service_last_update">Last update:</string>
+<<<<<<< HEAD
 
     <!-- Caffeine tile -->
     <string name="caffeine_info_title">What is this?</string>
     <string name="caffeine_info_message">Caffeine tile is a simple tile that you could switch on to keep your screen on.\n\nPlease note that the tile\'s state will reset itself after turning the screen off.</string>
+=======
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
 </resources>

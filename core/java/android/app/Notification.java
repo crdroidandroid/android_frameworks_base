@@ -4832,7 +4832,8 @@ public class Notification implements Parcelable
 
         private CharSequence processLegacyText(CharSequence charSequence, boolean ambient) {
             boolean isAlreadyLightText = isLegacy() || textColorsNeedInversion();
-            boolean wantLightText = ambient;
+            boolean wantLightText = ambient || mContext.getResources().getBoolean(
+                    R.bool.config_useDarkBgNotificationIconTextTinting);
             if (isAlreadyLightText != wantLightText) {
                 return getColorUtil().invertCharSequenceColors(charSequence);
             } else {
@@ -4882,7 +4883,13 @@ public class Notification implements Parcelable
         }
 
         int getSenderTextColor() {
+<<<<<<< HEAD
             return mContext.getColor(R.color.sender_text_color);
+=======
+            boolean isDarkTheme = mContext.getResources().getBoolean(
+                    R.bool.config_useDarkBgNotificationIconTextTinting);
+            return isDarkTheme ? resolveContrastColor() : mContext.getColor(R.color.sender_text_color);
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
         }
 
         int resolveIconContrastColor() {

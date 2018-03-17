@@ -862,8 +862,12 @@ public class TaskViewHeader extends FrameLayout
                 mTaskBarViewLightTextColor : mTaskBarViewDarkTextColor);
         Drawable icon = null;
         if (activityInfo != null) {
+<<<<<<< HEAD
             icon = IconsHandler.getInstance(mContext).getIconFromHandler(mContext, activityInfo,
                     /*scaleFactor*/1.0f, R.dimen.recents_task_view_header_height_tablet_land);
+=======
+            icon = Recents.getTaskLoader().getIconsHandler().getIconFromHandler(mContext, activityInfo);
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
         }
         if (icon == null) {
             icon = ssp.getBadgedApplicationIcon(activityInfo.applicationInfo, userId);

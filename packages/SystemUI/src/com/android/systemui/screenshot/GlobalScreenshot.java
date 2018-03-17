@@ -35,8 +35,10 @@ import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -330,6 +332,23 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
                     r.getString(com.android.internal.R.string.share), shareAction);
             mNotificationBuilder.addAction(shareActionBuilder.build());
 
+            // Create an edit intent (if Google's Markup App is available)
+            PackageManager pm = context.getPackageManager();
+            try {
+                PackageInfo info = pm.getPackageInfo("com.google.android.markup",
+                        PackageManager.GET_META_DATA);
+
+                // Create a edit action for the notification
+                PendingIntent editAction = PendingIntent.getBroadcast(context,  0,
+                        new Intent(context, GlobalScreenshot.EditScreenshotReceiver.class)
+                                .putExtra(GlobalScreenshot.SCREENSHOT_URI_ID, uri.toString()),
+                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                Notification.Action.Builder editActionBuilder = new Notification.Action.Builder(
+                        R.drawable.ic_screenshot_edit,
+                        r.getString(com.android.internal.R.string.whichEditApplicationLabel), editAction);
+                mNotificationBuilder.addAction(editActionBuilder.build());
+            } catch (PackageManager.NameNotFoundException e) {}
+
             // Create a delete action for the notification
             PendingIntent deleteAction = PendingIntent.getBroadcast(context, 0,
                     new Intent(context, GlobalScreenshot.DeleteScreenshotReceiver.class)
@@ -485,6 +504,10 @@ class GlobalScreenshot {
 
     private Ringtone  mScreenshotSound;
 
+    public static boolean mPartialShotStarted;
+    public static boolean mPartialShot;
+    private float mTouchDownX;
+    private float mTouchDownY;
 
     public static boolean mPartialShotStarted;
     public static boolean mPartialShot;
@@ -1006,6 +1029,39 @@ class GlobalScreenshot {
             final NotificationManager nm =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             nm.cancel(SystemMessage.NOTE_GLOBAL_SCREENSHOT);
+        }
+    }
+
+    /**
+     * Removes the notification for a screenshot after Edit action is chosen and launch markup.
+     */
+    public static class EditScreenshotReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!intent.hasExtra(SCREENSHOT_URI_ID)) {
+                return;
+            }
+
+            // Collapse the notification panel
+            try {
+                ActivityManager.getService().closeSystemDialogs(SYSTEM_DIALOG_REASON_SCREENSHOT);
+            } catch (RemoteException e) {
+            }
+            // Clear the notification
+            final NotificationManager nm =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            final Uri uri = Uri.parse(intent.getStringExtra(SCREENSHOT_URI_ID));
+            nm.cancel(SystemMessage.NOTE_GLOBAL_SCREENSHOT);
+            // Launch markup activity
+            Intent editingIntent = new Intent(Intent.ACTION_EDIT);
+            editingIntent.setType("image/png");
+            editingIntent.setComponent(new ComponentName(
+                    "com.google.android.markup",
+                    "com.google.android.markup.AnnotateActivity"));
+            editingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            ActivityOptions opts = ActivityOptions.makeBasic();
+            opts.setDisallowEnterPictureInPictureWhileLaunching(true);
+            context.startActivityAsUser(editingIntent, opts.toBundle(), UserHandle.CURRENT);
         }
     }
 

@@ -22,7 +22,11 @@
     <color name="navbutton_ripple_color_dark">#ff000000</color>
 
     <!-- Screenshot action colors -->
+<<<<<<< HEAD
     <color name="screenshot_flash_color">@android:color/white</color>
+=======
+    <color name="screenshot_flash_color">#b3adadad</color> <!-- light grey with some transparency -->
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
     <color name="screenshot_background_color">@android:color/black</color>
 
     <!-- Keyguard affordance circle background -->
@@ -34,9 +38,27 @@
     <!-- Power save warning color -->
     <color name="powersave_warning_color">#ff8e0101</color> <!-- red -->
 
+<<<<<<< HEAD
     <!-- Screen pinning colors -->
     <color name="screen_pinning_background_color">@*android:color/accent_device_default_light</color>
     <color name="screen_pinning_positive_text_color">@android:color/white</color>
     <color name="screen_pinning_negative_text_color">@android:color/white</color>
 
+=======
+    <!-- Screen pinning layout -->
+    <color name="screen_pinning_background_color">@*android:color/accent_device_default_light</color>
+    <color name="screen_pinning_title_text">@android:color/white</color>
+    <color name="screen_pinning_description_text">@android:color/white</color>
+    <color name="screen_pinning_button_text">@android:color/white</color>
+    <color name="screen_pinning_bg_circ_color">#40FFFFFF</color>
+    <color name="screen_pinning_nav_icon_hightlight_outer_color">@android:color/white</color>
+
+    <!-- Zen QS panel -->
+    <color name="zen_qs_panel_close_button_color">@android:color/white</color>
+
+    <!-- Notification text -->
+    <color name="notification_primary_text">@android:color/black</color>
+    <color name="notification_secondary_text">@android:color/black</color>
+    <color name="notification_snooze_text">#dd000000</color>
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
 </resources>

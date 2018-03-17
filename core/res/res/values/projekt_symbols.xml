@@ -29,4 +29,9 @@
   <java-symbol type="color" name="toast_bg_color" />
   <java-symbol type="color" name="toast_text_color" />
 
+<<<<<<< HEAD
+=======
+  <!-- Notification info -->
+  <java-symbol type="color" name="notification_info_button_text" />
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
 </resources>

@@ -40,4 +40,9 @@
     <!-- App permission tint -->
     <color name="app_permission_icon_tint">@android:color/black</color>
 
+<<<<<<< HEAD
+=======
+    <!-- Notification info -->
+    <color name="notification_info_button_text">@color/accent_device_default_light</color>
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
 </resources>

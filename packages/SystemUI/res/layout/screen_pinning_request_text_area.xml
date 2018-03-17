@@ -31,7 +31,7 @@
         android:paddingStart="48dp"
         android:paddingTop="43dp"
         android:text="@string/screen_pinning_title"
-        android:textColor="@color/screen_pinning_primary_text"
+        android:textColor="@color/screen_pinning_title_text"
         android:textSize="24sp" />
 
     <TextView
@@ -43,7 +43,7 @@
         android:paddingStart="48dp"
         android:paddingTop="12.6dp"
         android:text="@string/screen_pinning_description"
-        android:textColor="@color/screen_pinning_primary_text"
+        android:textColor="@color/screen_pinning_description_text"
         android:textSize="16sp" />
 
     <Button
@@ -59,7 +59,11 @@
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:text="@string/screen_pinning_positive"
+<<<<<<< HEAD
         android:textColor="@color/screen_pinning_positive_text_color"
+=======
+        android:textColor="@color/screen_pinning_button_text"
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
         android:textSize="14sp" />
 
     <Button
@@ -74,7 +78,11 @@
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:text="@string/screen_pinning_negative"
+<<<<<<< HEAD
         android:textColor="@color/screen_pinning_negative_text_color"
+=======
+        android:textColor="@color/screen_pinning_button_text"
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
         android:textSize="14sp" />
 
 </RelativeLayout>

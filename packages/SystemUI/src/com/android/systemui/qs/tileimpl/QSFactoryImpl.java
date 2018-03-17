@@ -47,7 +47,10 @@ import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.MusicTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
+<<<<<<< HEAD
 import com.android.systemui.qs.tiles.PictureInPictureTile;
+=======
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
 import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
@@ -102,7 +105,10 @@ public class QSFactoryImpl implements QSFactory {
         else if (tileSpec.equals("compass")) return new CompassTile(mHost);
         else if (tileSpec.equals("music")) return new MusicTile(mHost);
         else if (tileSpec.equals("expanded_desktop")) return new ExpandedDesktopTile(mHost);
+<<<<<<< HEAD
         else if (tileSpec.equals("pip")) return new PictureInPictureTile(mHost);
+=======
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
         else if (tileSpec.equals("cpuinfo")) return new CPUInfoTile(mHost);
         else if (tileSpec.equals("screenshot")) return new ScreenshotTile(mHost);
         else if (tileSpec.equals("reboot")) return new RebootTile(mHost);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2018 crDroid Android Project
+     Copyright (C) 2018 The LineageOS Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,20 +15,11 @@
      limitations under the License.
 -->
 <resources>
-
-    <!-- Floating action button -->
-    <color name="fab_color">@*android:color/accent_device_default_light</color>
-    <color name="floating_action_button_icon_color">@android:color/white</color>
-
-<<<<<<< HEAD
-    <!-- Custom Carrier Label -->
-    <color name="status_bar_carrier_color">#FFFFFFFF</color>
-
-    <color name="legacy_icon_background">#FFFFFF</color>
-=======
-    <color name="legacy_icon_background">#FFFFFF</color>
-
-    <!-- Custom Carrier Label -->
-    <color name="status_bar_carrier_color">#FFFFFFFF</color>
->>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
+    <!-- Hardware ui (power menu) alignement:
+         Use one of the following values basing on the power button position:
+         * Top | Back -> 49 (Gravity.TOP | Gravity.CENTER_HORIZONTAL)
+         * Left -> 51 (Gravity.TOP | Gravity.LEFT)
+         * Right -> 53 (Gravity.TOP | Gravity.RIGHT)
+    -->
+    <integer name="hardware_ui_align">53</integer>
 </resources>

@@ -371,7 +371,11 @@ public abstract class WindowOrientationListener {
         // the low-pass filter already suppresses most of the noise so we're really just
         // looking for quick confirmation that the last few samples are in agreement as to
         // the desired orientation.
+<<<<<<< HEAD
         private static final long PROPOSAL_SETTLE_TIME_NANOS = 20 * NANOS_PER_MS;
+=======
+        private static final long PROPOSAL_SETTLE_TIME_NANOS = 25 * NANOS_PER_MS;
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
 
         // The minimum amount of time that must have elapsed since the device last exited
         // the flat state (time since it was picked up) before the proposed rotation

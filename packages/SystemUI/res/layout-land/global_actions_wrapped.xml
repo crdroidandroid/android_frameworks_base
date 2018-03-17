@@ -13,7 +13,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollbars="none"
+<<<<<<< HEAD
         android:layout_gravity="top|right">
+=======
+        android:layout_gravity="@integer/hardware_ui_align">
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
 
         <!-- Global actions is right-aligned to be physically near power button -->
         <LinearLayout

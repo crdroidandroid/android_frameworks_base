@@ -51,6 +51,7 @@ import android.app.PendingIntent;
 import android.app.RemoteInput;
 import android.app.StatusBarManager;
 import android.app.TaskStackBuilder;
+import android.app.UiModeManager;
 import android.app.WallpaperColors;
 import android.app.WallpaperManager;
 import android.app.admin.DevicePolicyManager;
@@ -616,6 +617,8 @@ public class StatusBar extends SystemUI implements DemoMode,
         : null;
 
     private ScreenPinningRequest mScreenPinningRequest;
+
+    private UiModeManager mUiModeManager;
 
     private final MetricsLogger mMetricsLogger = Dependency.get(MetricsLogger.class);
 
@@ -1231,10 +1234,12 @@ public class StatusBar extends SystemUI implements DemoMode,
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mUpdateCallback);
         putComponent(DozeHost.class, mDozeServiceHost);
 
-        notifyUserAboutHiddenNotifications();
+        //notifyUserAboutHiddenNotifications();
 
         mScreenPinningRequest = new ScreenPinningRequest(mContext);
         mFalsingManager = FalsingManager.getInstance(mContext);
+
+        mUiModeManager = mContext.getSystemService(UiModeManager.class);
 
         Dependency.get(ActivityStarterDelegate.class).setActivityStarterImpl(this);
 
@@ -5420,6 +5425,16 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Log.w(TAG, "Can't change theme for " + overlay, e);
                 }
             }
+<<<<<<< HEAD
+=======
+
+            if (mUiModeManager != null) {
+                mUiModeManager.setNightMode(useDarkTheme ?
+                        UiModeManager.MODE_NIGHT_YES : UiModeManager.MODE_NIGHT_NO);
+            }
+
+            Process.killProcess(Process.myPid());
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
         }
 
         // Lock wallpaper defines the color of the majority of the views, hence we'll use it
@@ -8407,8 +8422,12 @@ public class StatusBar extends SystemUI implements DemoMode,
             case RECENTS_ICON_PACK:
                 if (newValue != null) {
                     String currentIconPack = (String) newValue;
+<<<<<<< HEAD
                     IconsHandler.getInstance(mContext).resetIconNormalizer();
                     IconsHandler.getInstance(mContext).updatePrefs(currentIconPack);
+=======
+                    mRecents.getIconsHandler().updatePrefs(currentIconPack);
+>>>>>>> 083d0546123cd634409c96cdfeddfabfbce10234
                 }
                 if (!mUseSlimRecents) {
                     mRecents.resetIconCache();
