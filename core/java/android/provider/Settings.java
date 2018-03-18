@@ -4776,6 +4776,15 @@ public final class Settings {
 
 
         /**
+         * Whether to change the transparency of the qs panel
+         * @hide
+         */
+        public static final String QS_PANEL_BG_ALPHA = "qs_panel_bg_alpha";
+
+        /** @hide */
+        private static final Validator QS_PANEL_BG_ALPHA_VALIDATOR = ANY_INTEGER_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4833,7 +4842,8 @@ public final class Settings {
             ACCELEROMETER_ROTATION,
             NOTIFICATION_VIBRATION_INTENSITY,
             HAPTIC_FEEDBACK_INTENSITY,
-            DISPLAY_COLOR_MODE
+            DISPLAY_COLOR_MODE,
+            QS_PANEL_BG_ALPHA,
         };
 
         /**
@@ -4948,6 +4958,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LOCK_TO_APP_ENABLED);
             PRIVATE_SETTINGS.add(EGG_MODE);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
+            PRIVATE_SETTINGS.add(QS_PANEL_BG_ALPHA);
         }
 
         /**
@@ -5039,6 +5050,7 @@ public final class Settings {
             VALIDATORS.put(STATUS_BAR_CLOCK_SECONDS, STATUS_BAR_CLOCK_SECONDS_VALIDATOR);
             VALIDATORS.put(STATUS_BAR_CLOCK_DATE_DISPLAY, STATUS_BAR_CLOCK_DATE_DISPLAY_VALIDATOR);
             VALIDATORS.put(STATUS_BAR_CLOCK_DATE_STYLE, STATUS_BAR_CLOCK_DATE_STYLE_VALIDATOR);
+            VALIDATORS.put(QS_PANEL_BG_ALPHA, QS_PANEL_BG_ALPHA_VALIDATOR);
         }
 
         /**
