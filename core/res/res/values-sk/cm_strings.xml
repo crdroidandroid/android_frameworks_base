@@ -64,7 +64,7 @@
   <!-- App ops requests -->
   <string name="app_ops_access_camera">prístup k fotoparátu</string>
   <string name="app_ops_access_location">prístup k polohe</string>
-  <string name="app_ops_access_notifications">čítať oznámenia</string>
+  <string name="app_ops_access_notifications">čítať upozornenia</string>
   <string name="app_ops_activate_vpn">aktivovať VPN</string>
   <string name="app_ops_auto_start">spustiť pri štarte</string>
   <string name="app_ops_delete_call_log">vymazať denník hovorov</string>
@@ -143,4 +143,7 @@
   <string name="tethered_notification_no_device_message">Žiadne pripojené zariadenie</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> pripojené zariadenie</string>
   <string name="tethered_notification_multi_device_message">Pripojené zariadenia: <xliff:g id="count">%1$s</xliff:g></string>
+  <!-- Zen mode buttons -->
+  <string name="silent_mode_priority">Priorita</string>
+  <string name="silent_mode_none">Žiadna</string>
 </resources>
