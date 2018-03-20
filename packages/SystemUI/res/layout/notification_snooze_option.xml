@@ -22,4 +22,4 @@
         android:layout_marginEnd="@*android:dimen/notification_content_margin_end"
         android:gravity="center_vertical"
         android:textSize="14sp"
-        android:textColor="@color/notification_snooze_text"/>
+        android:textColor="#DD000000"/>

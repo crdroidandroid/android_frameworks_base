@@ -44,9 +44,4 @@
 
     <!-- Zen QS panel -->
     <color name="zen_qs_panel_close_button_color">@android:color/white</color>
-
-    <!-- Notification text -->
-    <color name="notification_primary_text">@android:color/black</color>
-    <color name="notification_secondary_text">@android:color/black</color>
-    <color name="notification_snooze_text">#dd000000</color>
 </resources>
