@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
@@ -59,6 +60,8 @@ public class KeyguardStatusView extends GridLayout implements
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
     private static final String TAG = "KeyguardStatusView";
     private static final int MARQUEE_DELAY_MS = 2000;
+    private static final String FONT_FAMILY_LIGHT = "sans-serif-light";
+    private static final String FONT_FAMILY_MEDIUM = "sans-serif-medium";
 
     private final LockPatternUtils mLockPatternUtils;
     private final IActivityManager mIActivityManager;
@@ -290,15 +293,19 @@ public class KeyguardStatusView extends GridLayout implements
     @Override
     public void onDensityOrFontScaleChanged() {
         mWidgetPadding = getResources().getDimension(R.dimen.widget_vertical_padding);
+        Typeface tfLight = Typeface.create(FONT_FAMILY_LIGHT, Typeface.NORMAL);
+        Typeface tfMedium = Typeface.create(FONT_FAMILY_MEDIUM, Typeface.NORMAL);
         if (mClockView != null) {
             mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimensionPixelSize(R.dimen.widget_big_font_size));
+            mClockView.setTypeface(tfLight);
             mClockView.getPaint().setStrokeWidth(
                     getResources().getDimensionPixelSize(R.dimen.widget_small_font_stroke));
         }
         if (mOwnerInfo != null) {
             mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
+            mOwnerInfo.setTypeface(tfMedium);
         }
     }
 
