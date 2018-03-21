@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
@@ -78,6 +79,7 @@ public class BatteryMeterView extends LinearLayout implements
     private final String mSlotBattery;
     private ImageView mBatteryIconView;
     private TextView mBatteryPercentView;
+    private static final String FONT_FAMILY = "sans-serif-medium";
 
     private boolean mCharging;
     private boolean mBatteryHidden;
@@ -281,6 +283,7 @@ public class BatteryMeterView extends LinearLayout implements
             return;
 
         String pct = NumberFormat.getPercentInstance().format(mLevel / 100f);
+        Typeface tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
  
         if (mCharging && mBatteryStyle == BATTERY_STYLE_TEXT
                 && mTextChargingSymbol > 0) {
@@ -298,6 +301,7 @@ public class BatteryMeterView extends LinearLayout implements
         if (mBatteryIconView != null) pct = pct + " ";
 
         mBatteryPercentView.setText(pct);
+        mBatteryPercentView.setTypeface(tf);
     }
 
     private void updateShowPercent() {
