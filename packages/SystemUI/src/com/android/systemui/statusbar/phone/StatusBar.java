@@ -426,10 +426,9 @@ public class StatusBar extends SystemUI implements DemoMode,
     private static final float SRC_MIN_ALPHA = 0.002f;
 
     private static final String[] DARK_OVERLAYS = {
-            "org.lineageos.overlay.dark",
             "com.android.system.theme.dark",
+            "com.android.systemuix.theme.dark",
             "com.android.settings.theme.dark",
-            "com.android.dui.theme.dark",
             "com.crdroid.home.theme.dark",
     };
 
