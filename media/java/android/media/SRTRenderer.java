@@ -109,9 +109,8 @@ class SRTTrack extends WebVttTrack {
     @Override
     public void onData(byte[] data, boolean eos, long runID) {
         // TODO make reentrant
-        try {
-            Reader r = new InputStreamReader(new ByteArrayInputStream(data), "UTF-8");
-            BufferedReader br = new BufferedReader(r);
+        try (Reader rd = new InputStreamReader(new ByteArrayInputStream(data), "UTF-8");
+                BufferedReader br = new BufferedReader(rd)) {
 
             String header;
             while ((header = br.readLine()) != null) {
