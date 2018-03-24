@@ -49,9 +49,6 @@
   <string name="quick_settings_expanded_desktop_off">Normale</string>
   <string name="quick_settings_expanded_navigation_off">Nascondi barra di navigazione</string>
   <string name="quick_settings_expanded_statusbar_off">Nascondi barra di stato</string>
-  <!-- PiP Tile -->
-  <string name="quick_settings_pip_label">PiP</string>
-  <string name="quick_settings_pip_tile_app_na">L\'app non supporta PiP</string>
   <!-- CPUInfo tile -->
   <string name="quick_settings_cpuinfo_label">Info CPU</string>
   <!-- Screenshot tile -->
@@ -60,6 +57,9 @@
   <!-- Reboot/Recovery QS Tile -->
   <string name="quick_settings_reboot_label">Riavvia</string>
   <string name="quick_settings_reboot_recovery_label">Recovery</string>
+  <!-- Caffeine tile -->
+  <string name="caffeine_info_title">Cos\'è questo?</string>
+  <string name="caffeine_info_message">Il tile Caffeina ti permette di tenere acceso lo schermo.\n\nTieni nota che lo stato del tile si resetterà da solo quando lo schermo si spegnerà.</string>
   <string name="recents_app_killed">Applicazione terminata</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_running_services">Apri la schermata dei servizi in esecuzione.</string>
@@ -76,7 +76,8 @@
   <string name="omnijaws_current_text">Ora</string>
   <string name="omnijaws_package_not_available">OmniJaws non disponibile</string>
   <string name="omnijaws_service_last_update">Ultimo aggiornamento:</string>
-  <!-- Caffeine tile -->
-  <string name="caffeine_info_title">Cos\'è questo?</string>
-  <string name="caffeine_info_message">Il tile Caffeina ti permette di tenere acceso lo schermo.\n\nTieni nota che lo stato del tile si resetterà da solo quando lo schermo si spegnerà.</string>
+  <!-- Assist/Google Tiles -->
+  <string name="quick_settings_google_assist_label">Assistant</string>
+  <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+  <string name="quick_settings_google_now_label">Google</string>
 </resources>

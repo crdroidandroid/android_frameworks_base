@@ -49,9 +49,6 @@
   <string name="quick_settings_expanded_desktop_off">Звичайний</string>
   <string name="quick_settings_expanded_navigation_off">Приховати навігаціну стрічку</string>
   <string name="quick_settings_expanded_statusbar_off">Приховувати рядок стану</string>
-  <!-- PiP Tile -->
-  <string name="quick_settings_pip_label">Картинка в картинці (PiP)</string>
-  <string name="quick_settings_pip_tile_app_na">Застосунок не підтримує режим \"Картинка в картинці\"</string>
   <!-- CPUInfo tile -->
   <string name="quick_settings_cpuinfo_label">Інформація про процесор</string>
   <!-- Screenshot tile -->
@@ -60,6 +57,9 @@
   <!-- Reboot/Recovery QS Tile -->
   <string name="quick_settings_reboot_label">Перезавантаження</string>
   <string name="quick_settings_reboot_recovery_label">Режим відновлення</string>
+  <!-- Caffeine tile -->
+  <string name="caffeine_info_title">Що це?</string>
+  <string name="caffeine_info_message">Кофеїн то плитка, яка лишає екран включенним.\n\nБудь ласка зверніть увагу, таймер буде скинуто після вимкнення екрана.</string>
   <string name="recents_app_killed">Програма закрита</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_running_services">Відкрити список запущених програм.</string>
@@ -76,7 +76,8 @@
   <string name="omnijaws_current_text">Зараз</string>
   <string name="omnijaws_package_not_available">OmniJaws недоступний</string>
   <string name="omnijaws_service_last_update">Останнє оновлення:</string>
-  <!-- Caffeine tile -->
-  <string name="caffeine_info_title">Що це?</string>
-  <string name="caffeine_info_message">Кофеїн то плитка, яка лишає екран включенним.\n\nБудь ласка зверніть увагу, таймер буде скинуто після вимкнення екрана.</string>
+  <!-- Assist/Google Tiles -->
+  <string name="quick_settings_google_assist_label">Assistant</string>
+  <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+  <string name="quick_settings_google_now_label">Google</string>
 </resources>

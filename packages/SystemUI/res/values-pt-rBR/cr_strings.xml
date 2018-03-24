@@ -49,9 +49,6 @@
   <string name="quick_settings_expanded_desktop_off">Normal</string>
   <string name="quick_settings_expanded_navigation_off">Ocultar barra de navegação</string>
   <string name="quick_settings_expanded_statusbar_off">Ocultar barra de status</string>
-  <!-- PiP Tile -->
-  <string name="quick_settings_pip_label">Imagem na imagem</string>
-  <string name="quick_settings_pip_tile_app_na">O aplicativo não suporta Imagem na imagem</string>
   <!-- CPUInfo tile -->
   <string name="quick_settings_cpuinfo_label">Informação da CPU</string>
   <!-- Screenshot tile -->
@@ -60,6 +57,9 @@
   <!-- Reboot/Recovery QS Tile -->
   <string name="quick_settings_reboot_label">Reiniciar</string>
   <string name="quick_settings_reboot_recovery_label">Recuperação</string>
+  <!-- Caffeine tile -->
+  <string name="caffeine_info_title">O que é isso?</string>
+  <string name="caffeine_info_message">O bloco de cafeína é uma bloco simples que você poderia ligar para manter sua tela ativada.\n\nSelecione que o estado do bloco será reiniciado após desligar a tela.</string>
   <string name="recents_app_killed">Aplicativo encerrado</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_running_services">Abrir tela de serviços em execução.</string>
@@ -76,7 +76,8 @@
   <string name="omnijaws_current_text">Agora</string>
   <string name="omnijaws_package_not_available">OmniJaws não disponível</string>
   <string name="omnijaws_service_last_update">Última atualização:</string>
-  <!-- Caffeine tile -->
-  <string name="caffeine_info_title">O que é isso?</string>
-  <string name="caffeine_info_message">O bloco de cafeína é uma bloco simples que você poderia ligar para manter sua tela ativada.\n\nSelecione que o estado do bloco será reiniciado após desligar a tela.</string>
+  <!-- Assist/Google Tiles -->
+  <string name="quick_settings_google_assist_label">Assistant</string>
+  <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+  <string name="quick_settings_google_now_label">Google</string>
 </resources>

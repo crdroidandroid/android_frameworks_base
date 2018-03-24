@@ -49,9 +49,6 @@
   <string name="quick_settings_expanded_desktop_off">Normal</string>
   <string name="quick_settings_expanded_navigation_off">Ascunde bara de navigatie</string>
   <string name="quick_settings_expanded_statusbar_off">Ascunde bara de stare</string>
-  <!-- PiP Tile -->
-  <string name="quick_settings_pip_label">PiP</string>
-  <string name="quick_settings_pip_tile_app_na">Aplicatia nu suporta mod PiP (picture in picture)</string>
   <!-- CPUInfo tile -->
   <string name="quick_settings_cpuinfo_label">Info procesor</string>
   <!-- Screenshot tile -->
@@ -60,6 +57,9 @@
   <!-- Reboot/Recovery QS Tile -->
   <string name="quick_settings_reboot_label">Repornire</string>
   <string name="quick_settings_reboot_recovery_label">Recuperare</string>
+  <!-- Caffeine tile -->
+  <string name="caffeine_info_title">Ce este acesta?</string>
+  <string name="caffeine_info_message">Mod caffeine previne stingerea ecranului\n\nLa inchiderea ecranului, actiunea se resetează.</string>
   <string name="recents_app_killed">Aplicatie oprita</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_running_services">Deschide ecran cu serviciile ce ruleaza.</string>
@@ -76,7 +76,8 @@
   <string name="omnijaws_current_text">Acum</string>
   <string name="omnijaws_package_not_available">OmniJaws nu este disponibil</string>
   <string name="omnijaws_service_last_update">Ultima actualizare:</string>
-  <!-- Caffeine tile -->
-  <string name="caffeine_info_title">Ce este acesta?</string>
-  <string name="caffeine_info_message">Mod caffeine previne stingerea ecranului\n\nLa inchiderea ecranului, actiunea se resetează.</string>
+  <!-- Assist/Google Tiles -->
+  <string name="quick_settings_google_assist_label">Asistent</string>
+  <string name="quick_settings_google_voice_assist_label">Asistent vocal</string>
+  <string name="quick_settings_google_now_label">Google</string>
 </resources>

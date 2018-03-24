@@ -49,9 +49,6 @@
   <string name="quick_settings_expanded_desktop_off">Normálna</string>
   <string name="quick_settings_expanded_navigation_off">Skryť navigačnú lištu</string>
   <string name="quick_settings_expanded_statusbar_off">Skryť stavový riadok</string>
-  <!-- PiP Tile -->
-  <string name="quick_settings_pip_label">PiP</string>
-  <string name="quick_settings_pip_tile_app_na">Aplikácia nepodporuje PiP</string>
   <!-- CPUInfo tile -->
   <string name="quick_settings_cpuinfo_label">Informácie o CPU</string>
   <!-- Screenshot tile -->
@@ -60,6 +57,9 @@
   <!-- Reboot/Recovery QS Tile -->
   <string name="quick_settings_reboot_label">Reštartovať</string>
   <string name="quick_settings_reboot_recovery_label">Recovery</string>
+  <!-- Caffeine tile -->
+  <string name="caffeine_info_title">Čo je to?</string>
+  <string name="caffeine_info_message">Dlaždica Kofeín je jednoduchá dlaždica, ktorú môžete zapnúť, aby vaša obrazovka zostala stále zapnutá.\n\nZoberte na vedomie, že stav dlaždice sa po vypnutí obrazovky obnoví.</string>
   <string name="recents_app_killed">Aplikácia bola ukončená</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_running_services">Otvoriť obrazovku spustených služieb.</string>
@@ -76,7 +76,8 @@
   <string name="omnijaws_current_text">Teraz</string>
   <string name="omnijaws_package_not_available">OmniJaws nie je k dispozícii</string>
   <string name="omnijaws_service_last_update">Posledná aktualizácia:</string>
-  <!-- Caffeine tile -->
-  <string name="caffeine_info_title">Čo je to?</string>
-  <string name="caffeine_info_message">Dlaždica Kofeín je jednoduchá dlaždica, ktorú môžete zapnúť, aby vaša obrazovka zostala stále zapnutá.\n\nZoberte na vedomie, že stav dlaždice sa po vypnutí obrazovky obnoví.</string>
+  <!-- Assist/Google Tiles -->
+  <string name="quick_settings_google_assist_label">Assistant</string>
+  <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+  <string name="quick_settings_google_now_label">Google</string>
 </resources>

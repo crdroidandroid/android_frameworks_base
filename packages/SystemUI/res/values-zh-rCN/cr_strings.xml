@@ -49,9 +49,6 @@
   <string name="quick_settings_expanded_desktop_off">正常</string>
   <string name="quick_settings_expanded_navigation_off">隐藏导航栏</string>
   <string name="quick_settings_expanded_statusbar_off">隐藏状态栏</string>
-  <!-- PiP Tile -->
-  <string name="quick_settings_pip_label">画中画</string>
-  <string name="quick_settings_pip_tile_app_na">此应用程序不支持画中画模式</string>
   <!-- CPUInfo tile -->
   <string name="quick_settings_cpuinfo_label">CPU信息</string>
   <!-- Screenshot tile -->
@@ -60,6 +57,9 @@
   <!-- Reboot/Recovery QS Tile -->
   <string name="quick_settings_reboot_label">重新启动</string>
   <string name="quick_settings_reboot_recovery_label">恢复模式</string>
+  <!-- Caffeine tile -->
+  <string name="caffeine_info_title">这是什么?</string>
+  <string name="caffeine_info_message">咖啡因瓷砖是一个简单的瓷砖, 你可以打开, 以保持你的屏幕上. 请注意, 平铺的状态将在关闭屏幕后重新设置。</string>
   <string name="recents_app_killed">应用程序已被终止</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_running_services">显示正在运行的服务。</string>
@@ -76,7 +76,8 @@
   <string name="omnijaws_current_text">现在</string>
   <string name="omnijaws_package_not_available">OmniJaws 不可用</string>
   <string name="omnijaws_service_last_update">最后更新：</string>
-  <!-- Caffeine tile -->
-  <string name="caffeine_info_title">这是什么?</string>
-  <string name="caffeine_info_message">咖啡因瓷砖是一个简单的瓷砖, 你可以打开, 以保持你的屏幕上. 请注意, 平铺的状态将在关闭屏幕后重新设置。</string>
+  <!-- Assist/Google Tiles -->
+  <string name="quick_settings_google_assist_label">助理</string>
+  <string name="quick_settings_google_voice_assist_label">语音助理</string>
+  <string name="quick_settings_google_now_label">谷歌</string>
 </resources>
