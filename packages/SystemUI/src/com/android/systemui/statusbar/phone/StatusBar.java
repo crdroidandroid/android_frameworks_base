@@ -8531,13 +8531,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (newValue == null || mBerryDarkShade == Integer.parseInt(newValue))
                     return;
                 mBerryDarkShade = Integer.parseInt(newValue);
-                if (isUsingDarkTheme()) {
-                    for (String overlay: mDarkOverlays) {
-                        try {
-                            mOverlayManager.setEnabled(overlay, false, mCurrentUserId);
-                        } catch (RemoteException e) {
-                            Log.w(TAG, "Can't disable theme for " + overlay, e);
-                        }
+                for (String overlay: mDarkOverlays) {
+                    try {
+                        mOverlayManager.setEnabled(overlay, false, mCurrentUserId);
+                    } catch (RemoteException e) {
+                        Log.w(TAG, "Can't disable theme for " + overlay, e);
                     }
                 }
                 if (mBerryDarkShade == 1) {
