@@ -425,10 +425,26 @@ public class StatusBar extends SystemUI implements DemoMode,
      */
     private static final float SRC_MIN_ALPHA = 0.002f;
 
+    private static final String[] DARK_OVERLAYS = {
+            "com.android.system.theme.dark",
+            "com.android.systemuix.theme.dark",
+            "com.android.settings.theme.dark",
+            "com.crdroid.home.theme.dark",
+    };
+
+    private static final String[] BLACK_OVERLAYS = {
+            "com.android.system.theme.black",
+            "com.android.systemuix.theme.black",
+            "com.android.settings.theme.black",
+            "com.crdroid.home.theme.black",
+    };
+
     private boolean mCustomMaxKeyguard;
     private int mMaxKeyguardNotifConfig;
     private boolean mNavbarVisible;
     private boolean mUseSlimRecents;
+    private String[] mDarkOverlays = DARK_OVERLAYS;
+    private int mBerryDarkShade;
 
     private static final String SCREEN_BRIGHTNESS_MODE =
             "system:" + Settings.System.SCREEN_BRIGHTNESS_MODE;
@@ -464,6 +480,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.FORCE_AMBIENT_FOR_MEDIA;
     private static final String STATUS_BAR_TICKER_ANIMATION_MODE =
             "system:" + Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE;
+    private static final String BERRY_DARK_SHADE =
+            "system:" + Settings.System.BERRY_DARK_SHADE;
 
     static {
         boolean onlyCoreApps;
@@ -1208,7 +1226,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 QS_TILE_TITLE_VISIBILITY,
                 QS_QUICKBAR_SCROLL_ENABLED,
                 FORCE_AMBIENT_FOR_MEDIA,
-                STATUS_BAR_TICKER_ANIMATION_MODE);
+                STATUS_BAR_TICKER_ANIMATION_MODE,
+                BERRY_DARK_SHADE);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController);
@@ -3265,14 +3284,21 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     public boolean isUsingDarkTheme() {
-        OverlayInfo systemuiThemeInfo = null;
-        try {
-            systemuiThemeInfo = mOverlayManager.getOverlayInfo("org.lineageos.overlay.dark",
-                    mCurrentUserId);
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        boolean isDark = true;
+
+        for (String overlay: mDarkOverlays) {
+            OverlayInfo themeInfo = null;
+            try {
+                themeInfo = mOverlayManager.getOverlayInfo(overlay,
+                       mCurrentUserId);
+                if (themeInfo == null || !themeInfo.isEnabled())
+                    isDark = false;
+            } catch (RemoteException e) {
+                Log.w(TAG, "Can't find theme for " + overlay, e);
+            }
         }
-        return systemuiThemeInfo != null && systemuiThemeInfo.isEnabled();
+
+        return isDark;
     }
 
     private boolean isLiveDisplayNightModeOn() {
@@ -5431,10 +5457,17 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         if (isUsingDarkTheme() != useDarkTheme) {
             try {
-                mOverlayManager.setEnabled("org.lineageos.overlay.dark",
-                        useDarkTheme, mCurrentUserId);
+                mOverlayManager.setEnabled("com.android.systemui.theme.dark",
+                        false, mCurrentUserId);
             } catch (RemoteException e) {
                 Log.w(TAG, "Can't change theme", e);
+            }
+            for (String overlay: mDarkOverlays) {
+                try {
+                    mOverlayManager.setEnabled(overlay, useDarkTheme, mCurrentUserId);
+                } catch (RemoteException e) {
+                    Log.w(TAG, "Can't change theme for " + overlay, e);
+                }
             }
 
             if (mUiModeManager != null) {
@@ -8473,6 +8506,24 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mTicker != null) {
                     mTicker.updateAnimation(mTickerAnimationMode);
                 }
+                break;
+            case BERRY_DARK_SHADE:
+                if (newValue == null || mBerryDarkShade == Integer.parseInt(newValue))
+                    return;
+                mBerryDarkShade = Integer.parseInt(newValue);
+                for (String overlay: mDarkOverlays) {
+                    try {
+                        mOverlayManager.setEnabled(overlay, false, mCurrentUserId);
+                    } catch (RemoteException e) {
+                        Log.w(TAG, "Can't disable theme for " + overlay, e);
+                    }
+                }
+                if (mBerryDarkShade == 1) {
+                    mDarkOverlays = BLACK_OVERLAYS;
+                } else {
+                    mDarkOverlays = DARK_OVERLAYS;
+                }
+                updateTheme();
                 break;
             default:
                 break;
