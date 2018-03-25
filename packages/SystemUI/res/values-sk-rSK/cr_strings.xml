@@ -77,7 +77,7 @@
   <string name="omnijaws_package_not_available">OmniJaws nie je k dispozícii</string>
   <string name="omnijaws_service_last_update">Posledná aktualizácia:</string>
   <!-- Assist/Google Tiles -->
-  <string name="quick_settings_google_assist_label">Assistant</string>
-  <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+  <string name="quick_settings_google_assist_label">Asistent</string>
+  <string name="quick_settings_google_voice_assist_label">Hlasový asistent</string>
   <string name="quick_settings_google_now_label">Google</string>
 </resources>
