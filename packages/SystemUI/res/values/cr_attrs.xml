@@ -19,4 +19,9 @@
     <declare-styleable name="BatteryBarController">
         <attr name="viewLocation" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="BackArrowView">
+        <attr name="black_arrow" format="boolean" />
+        <attr name="reversed" format="boolean" />
+    </declare-styleable>
 </resources>
