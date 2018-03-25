@@ -432,10 +432,19 @@ public class StatusBar extends SystemUI implements DemoMode,
             "com.crdroid.home.theme.dark",
     };
 
+    private static final String[] BLACK_OVERLAYS = {
+            "com.android.system.theme.black",
+            "com.android.systemuix.theme.black",
+            "com.android.settings.theme.black",
+            "com.crdroid.home.theme.black",
+    };
+
     private boolean mCustomMaxKeyguard;
     private int mMaxKeyguardNotifConfig;
     private boolean mNavbarVisible;
     private boolean mUseSlimRecents;
+    private String[] mDarkOverlays = DARK_OVERLAYS;
+    private int mBerryDarkShade;
 
     private static final String SCREEN_BRIGHTNESS_MODE =
             "system:" + Settings.System.SCREEN_BRIGHTNESS_MODE;
@@ -471,6 +480,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.FORCE_AMBIENT_FOR_MEDIA;
     private static final String STATUS_BAR_TICKER_ANIMATION_MODE =
             "system:" + Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE;
+    private static final String BERRY_DARK_SHADE =
+            "system:" + Settings.System.BERRY_DARK_SHADE;
 
     static {
         boolean onlyCoreApps;
@@ -1215,7 +1226,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 QS_TILE_TITLE_VISIBILITY,
                 QS_QUICKBAR_SCROLL_ENABLED,
                 FORCE_AMBIENT_FOR_MEDIA,
-                STATUS_BAR_TICKER_ANIMATION_MODE);
+                STATUS_BAR_TICKER_ANIMATION_MODE,
+                BERRY_DARK_SHADE);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController);
@@ -3298,7 +3310,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     public boolean isUsingDarkTheme() {
         boolean isDark = true;
 
-        for (String overlay: DARK_OVERLAYS) {
+        for (String overlay: mDarkOverlays) {
             OverlayInfo themeInfo = null;
             try {
                 themeInfo = mOverlayManager.getOverlayInfo(overlay,
@@ -5469,7 +5481,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             } catch (RemoteException e) {
                 Log.w(TAG, "Can't change theme", e);
             }
-            for (String overlay: DARK_OVERLAYS) {
+            for (String overlay: mDarkOverlays) {
                 try {
                     mOverlayManager.setEnabled(overlay, useDarkTheme, mCurrentUserId);
                 } catch (RemoteException e) {
@@ -8514,6 +8526,26 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mTicker != null) {
                     mTicker.updateAnimation(mTickerAnimationMode);
                 }
+                break;
+            case BERRY_DARK_SHADE:
+                if (newValue == null || mBerryDarkShade == Integer.parseInt(newValue))
+                    return;
+                mBerryDarkShade = Integer.parseInt(newValue);
+                if (isUsingDarkTheme()) {
+                    for (String overlay: mDarkOverlays) {
+                        try {
+                            mOverlayManager.setEnabled(overlay, false, mCurrentUserId);
+                        } catch (RemoteException e) {
+                            Log.w(TAG, "Can't disable theme for " + overlay, e);
+                        }
+                    }
+                }
+                if (mBerryDarkShade == 1) {
+                    mDarkOverlays = BLACK_OVERLAYS;
+                } else {
+                    mDarkOverlays = DARK_OVERLAYS;
+                }
+                updateTheme();
                 break;
             default:
                 break;

@@ -4803,6 +4803,12 @@ public final class Settings {
                 "status_bar_ticker_animation_mode";
 
         /**
+         * Shade of dark
+         * @hide
+         */
+        public static final String BERRY_DARK_SHADE = "berry_dark_shade";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
