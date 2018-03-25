@@ -5481,8 +5481,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mUiModeManager.setNightMode(useDarkTheme ?
                         UiModeManager.MODE_NIGHT_YES : UiModeManager.MODE_NIGHT_NO);
             }
-
-            Process.killProcess(Process.myPid());
         }
 
         // Lock wallpaper defines the color of the majority of the views, hence we'll use it
