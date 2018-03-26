@@ -77,7 +77,7 @@
   <string name="omnijaws_package_not_available">OmniJaws недоступен</string>
   <string name="omnijaws_service_last_update">Последнее обновление:</string>
   <!-- Assist/Google Tiles -->
-  <string name="quick_settings_google_assist_label">Assistant</string>
-  <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+  <string name="quick_settings_google_assist_label">Помощник</string>
+  <string name="quick_settings_google_voice_assist_label">Голосовой помощник</string>
   <string name="quick_settings_google_now_label">Google</string>
 </resources>
