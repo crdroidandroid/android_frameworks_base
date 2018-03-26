@@ -7874,8 +7874,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             // startKeyguard() hasn't been called yet, so we don't know.
             // Make sure anything that needs to know isKeyguardSecure() checks and re-checks this
             // value onVisibilityChanged().
-            Slog.w(TAG, "isKeyguardSecure() called before startKeyguard(), returning false",
-                    new Throwable());
+            Slog.w(TAG, "isKeyguardSecure() called before startKeyguard(), returning false");
             return false;
         }
         return mStatusBarKeyguardViewManager.isSecure();
