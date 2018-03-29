@@ -7769,6 +7769,13 @@ public class StatusBar extends SystemUI implements DemoMode,
             return false;
         }
 
+        if ((mDisabled1 & StatusBarManager.DISABLE_EXPAND) != 0) {
+            if (DEBUG) {
+                Log.d(TAG, "No peeking: disable expand : " + sbn.getKey());
+            }
+            return false;
+        }
+
         boolean inUse = mPowerManager.isScreenOn() && !mSystemServicesProxy.isDreaming();
 
         if (!inUse && !isDozing()) {
