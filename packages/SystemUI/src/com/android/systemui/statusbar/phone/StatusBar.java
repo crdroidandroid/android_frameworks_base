@@ -4816,6 +4816,11 @@ public class StatusBar extends SystemUI implements DemoMode,
             });
             thread.setPriority(Process.THREAD_PRIORITY_BACKGROUND);
             thread.start();
+
+            // ask SlimRecents controller to refresh the cache
+            if (mSlimRecents != null) {
+                mSlimRecents.refreshCachedPackage(pkg, state == PackageState.PACKAGE_REMOVED);
+            }
         }
     }
 
