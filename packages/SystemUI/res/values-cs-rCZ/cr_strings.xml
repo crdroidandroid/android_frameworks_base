@@ -49,9 +49,6 @@
   <string name="quick_settings_expanded_desktop_off">Normální</string>
   <string name="quick_settings_expanded_navigation_off">Skrýt navigační panel</string>
   <string name="quick_settings_expanded_statusbar_off">Skrýt stavovou lištu</string>
-  <!-- PiP Tile -->
-  <string name="quick_settings_pip_label">PiP</string>
-  <string name="quick_settings_pip_tile_app_na">Aplikace nepodporuje PiP</string>
   <!-- CPUInfo tile -->
   <string name="quick_settings_cpuinfo_label">Informace o CPU</string>
   <!-- Screenshot tile -->
@@ -60,6 +57,9 @@
   <!-- Reboot/Recovery QS Tile -->
   <string name="quick_settings_reboot_label">Restartovat</string>
   <string name="quick_settings_reboot_recovery_label">Recovery</string>
+  <!-- Caffeine tile -->
+  <string name="caffeine_info_title">Co je to?</string>
+  <string name="caffeine_info_message">Dlaždice Kofein je jednoduchá dlaždice, kterou můžete zapnout, aby vaše obrazovka zůstala zapnutá.\n\nVezměte na vědomí, že stav dlaždice se po vypnutí obrazovky obnoví.</string>
   <string name="recents_app_killed">Aplikace ukončena</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_running_services">Otevřít obrazovku spuštěných služeb.</string>
@@ -76,7 +76,29 @@
   <string name="omnijaws_current_text">Nyní</string>
   <string name="omnijaws_package_not_available">OmniJaws není k dispozici</string>
   <string name="omnijaws_service_last_update">Poslední aktualizace:</string>
-  <!-- Caffeine tile -->
-  <string name="caffeine_info_title">Co je to?</string>
-  <string name="caffeine_info_message">Dlaždice Kofein je jednoduchá dlaždice, kterou můžete zapnout, aby vaše obrazovka zůstala zapnutá.\n\nVezměte na vědomí, že stav dlaždice se po vypnutí obrazovky obnoví.</string>
+  <!-- Assist/Google Tiles -->
+  <string name="quick_settings_google_assist_label">Asistent</string>
+  <string name="quick_settings_google_voice_assist_label">Hlasová asistence</string>
+  <string name="quick_settings_google_now_label">Google</string>
+  <!-- Screenrecord Notification Ticker -->
+  <string name="screenrecord_notif_ticker">Obrazovka je zaznamenávána</string>
+  <string name="screenrecord_notif_final_ticker">Obrazovka byla úspěšně zaznamenána</string>
+  <!-- Screenrecord notification title -->
+  <string name="screenrecord_notif_title">Záznam obrazovky</string>
+  <!-- Screenrecord notification action: Stop -->
+  <string name="screenrecord_notif_stop">Zastavit</string>
+  <string name="screenrecord_notif_completed">Obrazovka byla úspěšně zaznamenána</string>
+  <!-- Screenrecord notification action: show/hide pointer -->
+  <string name="screenrecord_notif_pointer_on">Zobrazit ukazatel</string>
+  <string name="screenrecord_notif_pointer_off">Skrýt ukazatel</string>
+  <!-- Screen record notification error title -->
+  <string name="screenrecord_notif_error">Záznam obrazovky není možný</string>
+  <string name="notification_channel_screenrecord">Záznamy obrazovky</string>
+  <string name="screenrecord_hide_hint">Skrýt nápovědu</string>
+  <string name="screenrecord_show_hint">Zobrazit nápovědu</string>
+  <!-- Screenshot QS tile -->
+  <string name="quick_settings_screenrecord_label">Záznam obrazovky</string>
+  <string name="quick_settings_screenrecord_lq_label">Záznam obrazovky 480p</string>
+  <string name="quick_settings_screenrecord_mq_label">Záznam obrazovky 720p</string>
+  <string name="quick_settings_screenrecord_hq_label">Záznam obrazovky 720p+</string>
 </resources>
