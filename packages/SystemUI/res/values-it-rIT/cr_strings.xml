@@ -81,24 +81,24 @@
   <string name="quick_settings_google_voice_assist_label">Assistente Vocale</string>
   <string name="quick_settings_google_now_label">Google</string>
   <!-- Screenrecord Notification Ticker -->
-  <string name="screenrecord_notif_ticker">Screen is being recorded</string>
-  <string name="screenrecord_notif_final_ticker">Screen recorded successfully</string>
+  <string name="screenrecord_notif_ticker">Registrazione schermo in corso</string>
+  <string name="screenrecord_notif_final_ticker">Registrazione schermo completata con successo</string>
   <!-- Screenrecord notification title -->
-  <string name="screenrecord_notif_title">Recording screen</string>
+  <string name="screenrecord_notif_title">Registra schermo</string>
   <!-- Screenrecord notification action: Stop -->
-  <string name="screenrecord_notif_stop">Stop</string>
-  <string name="screenrecord_notif_completed">Screen recorded successfully</string>
+  <string name="screenrecord_notif_stop">Ferma</string>
+  <string name="screenrecord_notif_completed">Registrazione schermo completata con successo</string>
   <!-- Screenrecord notification action: show/hide pointer -->
-  <string name="screenrecord_notif_pointer_on">Show pointer</string>
-  <string name="screenrecord_notif_pointer_off">Hide pointer</string>
+  <string name="screenrecord_notif_pointer_on">Mostra puntatore</string>
+  <string name="screenrecord_notif_pointer_off">Nascondi puntatore</string>
   <!-- Screen record notification error title -->
-  <string name="screenrecord_notif_error">Unable to record screen</string>
-  <string name="notification_channel_screenrecord">Screenrecords</string>
-  <string name="screenrecord_hide_hint">Hide hint</string>
-  <string name="screenrecord_show_hint">Show hint</string>
+  <string name="screenrecord_notif_error">Impossibile registrare lo schermo</string>
+  <string name="notification_channel_screenrecord">Registrazioni schermo</string>
+  <string name="screenrecord_hide_hint">Nascondi suggerimento</string>
+  <string name="screenrecord_show_hint">Mostra suggerimento</string>
   <!-- Screenshot QS tile -->
-  <string name="quick_settings_screenrecord_label">Screenrecord</string>
-  <string name="quick_settings_screenrecord_lq_label">Screenrecord 480p</string>
-  <string name="quick_settings_screenrecord_mq_label">Screenrecord 720p</string>
-  <string name="quick_settings_screenrecord_hq_label">Screenrecord 720p+</string>
+  <string name="quick_settings_screenrecord_label">Registra schermo</string>
+  <string name="quick_settings_screenrecord_lq_label">Registra schermo a 480p</string>
+  <string name="quick_settings_screenrecord_mq_label">Registra schermo a 720p</string>
+  <string name="quick_settings_screenrecord_hq_label">Registra schermo a 720p+</string>
 </resources>
