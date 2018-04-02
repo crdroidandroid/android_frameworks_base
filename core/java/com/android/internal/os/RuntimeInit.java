@@ -67,8 +67,12 @@ public class RuntimeInit {
      * but apps can override that behavior.
      */
     private static class LoggingHandler implements Thread.UncaughtExceptionHandler {
+        public volatile boolean mTriggered = false;
+
         @Override
         public void uncaughtException(Thread t, Throwable e) {
+            mTriggered = true;
+
             // Don't re-enter if KillApplicationHandler has already run
             if (mCrashing) return;
             if (mApplicationObject == null) {
@@ -99,7 +103,22 @@ public class RuntimeInit {
      * {@link LoggingHandler} will already have logged details.
      */
     private static class KillApplicationHandler implements Thread.UncaughtExceptionHandler {
+        private final LoggingHandler loggingHandler;
+
+        public KillApplicationHandler(LoggingHandler loggingHandler) {
+            this.loggingHandler = loggingHandler;
+        }
+
+        @Override
         public void uncaughtException(Thread t, Throwable e) {
+            if (loggingHandler != null && !loggingHandler.mTriggered) {
+                try {
+                    loggingHandler.uncaughtException(t, e);
+                } catch (Throwable loggingThrowable) {
+                    // Ignored.
+                }
+            }
+
             try {
                 // Don't re-enter -- avoid infinite loops if crash-reporting crashes.
                 if (mCrashing) return;
@@ -140,8 +159,9 @@ public class RuntimeInit {
          * set handlers; these apply to all threads in the VM. Apps can replace
          * the default handler, but not the pre handler.
          */
-        Thread.setUncaughtExceptionPreHandler(new LoggingHandler());
-        Thread.setDefaultUncaughtExceptionHandler(new KillApplicationHandler());
+        LoggingHandler loggingHandler = new LoggingHandler();
+        Thread.setUncaughtExceptionPreHandler(loggingHandler);
+        Thread.setDefaultUncaughtExceptionHandler(new KillApplicationHandler(loggingHandler));
 
         Build.adjustBuildTypeIfNeeded();
 
