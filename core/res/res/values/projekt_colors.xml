@@ -42,4 +42,10 @@
 
     <!-- Notification info -->
     <color name="notification_info_button_text">@color/accent_device_default_light</color>
+
+    <!-- tooltip light text color -->
+    <color name="tooltip_text_light">@color/foreground_material_light</color>
+
+    <!-- tooltip dark text color -->
+    <color name="tooltip_text_dark">@color/foreground_material_dark</color>
 </resources>
