@@ -46,6 +46,7 @@
     <protected-broadcast android:name="android.intent.action.PACKAGE_DATA_CLEARED" />
     <protected-broadcast android:name="android.intent.action.PACKAGE_FIRST_LAUNCH" />
     <protected-broadcast android:name="android.intent.action.PACKAGE_NEEDS_VERIFICATION" />
+    <protected-broadcast android:name="com.qualcomm.qti.intent.action.PACKAGE_NEEDS_OPTIONAL_VERIFICATION" />
     <protected-broadcast android:name="android.intent.action.PACKAGE_VERIFIED" />
     <protected-broadcast android:name="android.intent.action.PACKAGES_SUSPENDED" />
     <protected-broadcast android:name="android.intent.action.PACKAGES_UNSUSPENDED" />
@@ -1274,6 +1275,11 @@
          <p>Not for use by third-party applications. -->
     <permission android:name="android.permission.MODIFY_CELL_BROADCASTS"
                 android:protectionLevel="signature|privileged" />
+
+    <!-- Allows an application to authorize outgoing SMS messages.
+         @hide -->
+    <permission android:name="com.qti.permission.AUTHORIZE_OUTGOING_SMS"
+                android:protectionLevel="signature" />
 
     <!-- =============================================================== -->
     <!-- Permissions for setting the device alarm                        -->
