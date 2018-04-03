@@ -31,4 +31,7 @@
     <dimen name="status_bar_mobile_signal_width">16dp</dimen>
     <dimen name="status_bar_mobile_type_height">9dp</dimen>
     <dimen name="status_bar_mobile_type_width">12dp</dimen>
+
+    <!-- QQS Brightness slider -->
+    <dimen name="quick_qs_brightness_margin_top">24dp</dimen>
 </resources>
