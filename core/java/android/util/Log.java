@@ -22,6 +22,8 @@ import com.android.internal.os.RuntimeInit;
 import com.android.internal.util.FastPrintWriter;
 import com.android.internal.util.LineBreakBufferedWriter;
 
+import dalvik.annotation.optimization.CriticalNative;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -377,6 +379,7 @@ public final class Log {
      * Return the maximum payload the log daemon accepts without truncation.
      * @return LOGGER_ENTRY_MAX_PAYLOAD.
      */
+    @CriticalNative
     private static native int logger_entry_max_payload_native();
 
     /**
