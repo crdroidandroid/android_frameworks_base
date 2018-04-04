@@ -34,7 +34,7 @@ import android.graphics.drawable.Drawable;
  * A utility class to colorize bitmaps with a color gradient and a special blending mode
  */
 public class ImageGradientColorizer {
-    public Bitmap colorize(Drawable drawable, int backgroundColor, boolean isRtl) {
+    public Bitmap colorize(Drawable drawable, int backgroundColor, boolean isRtl, boolean alternative) {
         int width = drawable.getIntrinsicWidth();
         int height = drawable.getIntrinsicHeight();
         int size = Math.min(width, height);
@@ -72,7 +72,7 @@ public class ImageGradientColorizer {
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         LinearGradient linearGradient =  new LinearGradient(0, 0, size, 0,
-                new int[] {0, Color.argb(0.5f, 1, 1, 1), Color.BLACK},
+                new int[] {0, Color.argb(alternative ? 0.8f : 0.5f, 1, 1, 1), Color.BLACK},
                 new float[] {0.0f, 0.4f, 1.0f}, Shader.TileMode.CLAMP);
         paint.setShader(linearGradient);
         Bitmap fadeIn = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
@@ -90,11 +90,11 @@ public class ImageGradientColorizer {
 
         Paint coloredPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         coloredPaint.setColorFilter(new ColorMatrixColorFilter(m));
-        coloredPaint.setAlpha((int) (0.5f * 255));
+        coloredPaint.setAlpha((int) ((alternative ? 0.8f : 0.5f )* 255));
         canvas.drawBitmap(fadeIn, 0, 0, coloredPaint);
 
         linearGradient =  new LinearGradient(0, 0, size, 0,
-                new int[] {0, Color.argb(0.5f, 1, 1, 1), Color.BLACK},
+                new int[] {0, Color.argb(alternative ? 0.8f : 0.5f, 1, 1, 1), Color.BLACK},
                 new float[] {0.0f, 0.6f, 1.0f}, Shader.TileMode.CLAMP);
         paint.setShader(linearGradient);
         fadeInCanvas.drawPaint(paint);
