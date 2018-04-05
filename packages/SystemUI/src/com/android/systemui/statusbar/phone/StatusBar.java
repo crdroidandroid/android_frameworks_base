@@ -85,6 +85,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.media.AudioAttributes;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
@@ -2119,8 +2120,12 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mNavigationBar.setPulseColors(n.isColorizedMedia(), colors);
             }
             if (mSlimRecents != null) {
-                mSlimRecents.setMediaColors(n.isColorizedMedia(), colors,
-                        n.getOriginalLargeIcon().loadDrawable(mContext));
+                Icon icon = n.getOriginalLargeIcon();
+                Drawable drawable = null;
+                if (icon != null) {
+                    drawable = icon.loadDrawable(mContext);
+                }
+                mSlimRecents.setMediaColors(n.isColorizedMedia(), colors, drawable);
             }
         }
     }
