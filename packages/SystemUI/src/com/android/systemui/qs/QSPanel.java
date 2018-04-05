@@ -708,6 +708,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
                     setAnimationTile(v);
             });
             if (t.isDualTarget()) {
+/*
                 if (!mTileLayout.isShowTitles()) {
                     v.setOnLongClickListener(view -> {
                         t.secondaryClick();
@@ -715,11 +716,14 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
                         return true;
                     });
                 } else {
+*/
                     v.setOnLongClickListener(view -> {
                         t.longClick();
                         return true;
                     });
+/*
                 }
+*/
             }
         }
     }
