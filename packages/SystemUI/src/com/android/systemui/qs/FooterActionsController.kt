@@ -85,6 +85,15 @@ class FooterActionsController @Inject constructor(
         mView.onUserInfoChanged(picture, isGuestUser)
     }
 
+    private val QS_FOOTER_SHOW_SETTINGS =
+            "system:" + Settings.System.QS_FOOTER_SHOW_SETTINGS
+    private val QS_FOOTER_SHOW_SERVICES =
+            "system:" + Settings.System.QS_FOOTER_SHOW_SERVICES
+    private val QS_FOOTER_SHOW_EDIT =
+            "system:" + Settings.System.QS_FOOTER_SHOW_EDIT
+    private val  QS_FOOTER_SHOW_USER =
+            "system:" + Settings.System.QS_FOOTER_SHOW_USER
+
     private val onClickListener = View.OnClickListener { v ->
         // Don't do anything until views are unhidden. Don't do anything if the tap looks
         // suspicious.
@@ -186,6 +195,30 @@ class FooterActionsController @Inject constructor(
             activityStarter.postQSRunnableDismissingKeyguard { qsPanelController.showEdit(view) }
         })
 
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mView.updateSettingsIconVisibility(tunerService.getValue(key, 1) != 0)
+            }
+        }, QS_FOOTER_SHOW_SETTINGS)
+
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mView.updateServicesIconVisibility(tunerService.getValue(key, 0) != 0)
+            }
+        }, QS_FOOTER_SHOW_SERVICES)
+
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mView.updateEditIconVisibility(tunerService.getValue(key, 1) != 0)
+            }
+        }, QS_FOOTER_SHOW_EDIT)
+
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mView.updateUserIconVisibility(tunerService.getValue(key, 1) != 0)
+            }
+        }, QS_FOOTER_SHOW_USER)
+
         updateView()
     }
 
@@ -234,5 +267,5 @@ class FooterActionsController @Inject constructor(
         }
     }
 
-    private fun isTunerEnabled() = tunerService.isTunerEnabled
+    private fun isTunerEnabled() = false
 }
