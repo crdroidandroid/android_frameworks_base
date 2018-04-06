@@ -71,6 +71,7 @@ class FooterActionsController @Inject constructor(
     enum class ExpansionState { COLLAPSED, EXPANDED }
 
     private var listening: Boolean = false
+    private var mShowPMLiteButton: Boolean = true
 
     var expanded = false
 
@@ -84,6 +85,17 @@ class FooterActionsController @Inject constructor(
         val isGuestUser: Boolean = userManager.isGuestUser(KeyguardUpdateMonitor.getCurrentUser())
         mView.onUserInfoChanged(picture, isGuestUser)
     }
+
+    private val QS_FOOTER_SHOW_SETTINGS =
+            "system:" + Settings.System.QS_FOOTER_SHOW_SETTINGS
+    private val QS_FOOTER_SHOW_SERVICES =
+            "system:" + Settings.System.QS_FOOTER_SHOW_SERVICES
+    private val QS_FOOTER_SHOW_EDIT =
+            "system:" + Settings.System.QS_FOOTER_SHOW_EDIT
+    private val  QS_FOOTER_SHOW_USER =
+            "system:" + Settings.System.QS_FOOTER_SHOW_USER
+    private val  QS_FOOTER_SHOW_POWER_MENU =
+            "system:" + Settings.System.QS_FOOTER_SHOW_POWER_MENU
 
     private val onClickListener = View.OnClickListener { v ->
         // Don't do anything until views are unhidden. Don't do anything if the tap looks
@@ -171,12 +183,6 @@ class FooterActionsController @Inject constructor(
 
     @VisibleForTesting
     public override fun onViewAttached() {
-        if (showPMLiteButton) {
-            powerMenuLite.visibility = View.VISIBLE
-            powerMenuLite.setOnClickListener(onClickListener)
-        } else {
-            powerMenuLite.visibility = View.GONE
-        }
         settingsButton.setOnClickListener(onClickListener)
         runningServicesButton.setOnClickListener(onClickListener)
         editButton.setOnClickListener(View.OnClickListener { view: View? ->
@@ -186,11 +192,53 @@ class FooterActionsController @Inject constructor(
             activityStarter.postQSRunnableDismissingKeyguard { qsPanelController.showEdit(view) }
         })
 
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mView.updateSettingsIconVisibility(tunerService.getValue(key, 1) != 0)
+            }
+        }, QS_FOOTER_SHOW_SETTINGS)
+
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mView.updateServicesIconVisibility(tunerService.getValue(key, 0) != 0)
+            }
+        }, QS_FOOTER_SHOW_SERVICES)
+
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mView.updateEditIconVisibility(tunerService.getValue(key, 1) != 0)
+            }
+        }, QS_FOOTER_SHOW_EDIT)
+
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mView.updateUserIconVisibility(tunerService.getValue(key, 1) != 0)
+            }
+        }, QS_FOOTER_SHOW_USER)
+
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mShowPMLiteButton = tunerService.getValue(key, 1) != 0
+                updatePMLiteIconVisibility()
+            }
+        }, QS_FOOTER_SHOW_POWER_MENU)
+
         updateView()
+    }
+
+    private fun updatePMLiteIconVisibility() {
+        if (mShowPMLiteButton) {
+            powerMenuLite.visibility = View.VISIBLE
+            powerMenuLite.setOnClickListener(onClickListener)
+        } else {
+            powerMenuLite.visibility = View.GONE
+            powerMenuLite.setOnClickListener(null)
+        }
     }
 
     private fun updateView() {
         mView.updateEverything(isTunerEnabled(), multiUserSwitchController.isMultiUserEnabled)
+        updatePMLiteIconVisibility()
     }
 
     override fun onViewDetached() {
@@ -234,5 +282,5 @@ class FooterActionsController @Inject constructor(
         }
     }
 
-    private fun isTunerEnabled() = tunerService.isTunerEnabled
+    private fun isTunerEnabled() = false
 }
