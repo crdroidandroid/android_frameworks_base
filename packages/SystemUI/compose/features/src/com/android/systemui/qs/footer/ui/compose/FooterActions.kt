@@ -16,6 +16,11 @@
 
 package com.android.systemui.qs.footer.ui.compose
 
+import android.database.ContentObserver
+import android.os.Handler
+import android.os.Looper
+import android.os.UserHandle
+import android.provider.Settings
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -53,9 +58,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -96,6 +103,7 @@ import com.android.systemui.compose.modifiers.sysuiResTag
 import com.android.systemui.qs.footer.ui.compose.FooterActionsDefaults.FOOTER_TEXT_FADE_DURATION_MILLIS
 import com.android.systemui.qs.footer.ui.compose.FooterActionsDefaults.FOOTER_TEXT_MINIMUM_SCALE_Y
 import com.android.systemui.qs.footer.ui.compose.FooterActionsDefaults.FooterButtonHeight
+import com.android.systemui.qs.footer.ui.compose.rememberSystemSettingEnabled
 import com.android.systemui.qs.footer.ui.viewmodel.FooterActionsButtonViewModel
 import com.android.systemui.qs.footer.ui.viewmodel.FooterActionsForegroundServicesButtonViewModel
 import com.android.systemui.qs.footer.ui.viewmodel.FooterActionsSecurityButtonViewModel
@@ -137,6 +145,31 @@ fun ContentScope.FooterActionsWithAnimatedVisibility(
                 FooterActions(viewModel = viewModel)
             }
         }
+    }
+}
+
+@Composable
+fun rememberSystemSettingEnabled(
+    key: String,
+    defaultValue: Int = 1,
+    userId: Int = UserHandle.USER_CURRENT,
+): State<Boolean> {
+    val context = LocalContext.current
+    val resolver = context.contentResolver
+    val uri = remember(key) { Settings.System.getUriFor(key) }
+
+    return produceState(
+        initialValue = Settings.System.getIntForUser(resolver, key, defaultValue, userId) == 1,
+        key1 = uri,
+        key2 = userId,
+    ) {
+        val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
+            override fun onChange(selfChange: Boolean) {
+                value = Settings.System.getIntForUser(resolver, key, defaultValue, userId) == 1
+            }
+        }
+        resolver.registerContentObserver(uri, false, observer, userId)
+        awaitDispose { resolver.unregisterContentObserver(observer) }
     }
 }
 
@@ -253,16 +286,25 @@ fun FooterActions(viewModel: FooterActionsViewModel, modifier: Modifier = Modifi
                 useModifierBasedExpandable,
                 Modifier.sysuiResTag("multi_user_switch"),
             )
-            IconButton(
-                { settings },
-                useModifierBasedExpandable,
-                Modifier.sysuiResTag("settings_button_container"),
-            )
-            IconButton(
-                { viewModel.power },
-                useModifierBasedExpandable,
-                Modifier.sysuiResTag("pm_lite"),
-            )
+
+            val showSettings by rememberSystemSettingEnabled(Settings.System.QS_FOOTER_SHOW_SETTINGS)
+            val showPowerMenu by rememberSystemSettingEnabled(Settings.System.QS_FOOTER_SHOW_POWER_MENU)
+
+            if (showSettings) {
+                IconButton(
+                    { settings },
+                    useModifierBasedExpandable,
+                    Modifier.sysuiResTag("settings_button_container"),
+                )
+            }
+
+            if (showPowerMenu) {
+                IconButton(
+                    { viewModel.power },
+                    useModifierBasedExpandable,
+                    Modifier.sysuiResTag("pm_lite"),
+                )
+            }
         }
     }
 }
