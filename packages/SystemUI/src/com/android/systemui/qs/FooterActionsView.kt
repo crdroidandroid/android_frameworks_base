@@ -47,6 +47,10 @@ class FooterActionsView(context: Context?, attrs: AttributeSet?) : LinearLayout(
     private var qsDisabled = false
     private var expansionAmount = 0f
 
+    private var mMultiUserEnabled = true
+    private var mShowSettingsIcon = true
+    private var mShowUserIcon = true
+
     /**
      * Sets the alpha of the background of this view.
      *
@@ -81,14 +85,16 @@ class FooterActionsView(context: Context?, attrs: AttributeSet?) : LinearLayout(
         val disabled = state2 and StatusBarManager.DISABLE2_QUICK_SETTINGS != 0
         if (disabled == qsDisabled) return
         qsDisabled = disabled
-        updateEverything(multiUserEnabled)
+        mMultiUserEnabled = multiUserEnabled
+        updateEverything(mMultiUserEnabled)
     }
 
     fun updateEverything(
         multiUserEnabled: Boolean
     ) {
         post {
-            updateVisibilities(multiUserEnabled)
+            mMultiUserEnabled = multiUserEnabled
+            updateVisibilities(mMultiUserEnabled)
             updateClickabilities()
             isClickable = false
         }
@@ -102,10 +108,9 @@ class FooterActionsView(context: Context?, attrs: AttributeSet?) : LinearLayout(
     private fun updateVisibilities(
         multiUserEnabled: Boolean
     ) {
-        settingsContainer.visibility = if (qsDisabled) GONE else VISIBLE
-        multiUserSwitch.visibility = if (multiUserEnabled) VISIBLE else GONE
+        multiUserSwitch.visibility = if (mShowUserIcon && multiUserEnabled) VISIBLE else GONE
         val isDemo = UserManager.isDeviceInDemoMode(context)
-        settingsContainer.visibility = if (isDemo) INVISIBLE else VISIBLE
+        settingsContainer.visibility = if (isDemo || qsDisabled || !mShowSettingsIcon) GONE else VISIBLE
     }
 
     fun onUserInfoChanged(picture: Drawable?, isGuestUser: Boolean) {
@@ -127,6 +132,20 @@ class FooterActionsView(context: Context?, attrs: AttributeSet?) : LinearLayout(
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (VERBOSE) Log.d(TAG, "FooterActionsView onTouchEvent ${event?.string}")
         return super.onTouchEvent(event)
+    }
+
+    public fun updateSettingsIconVisibility(
+        visible: Boolean
+    ) {
+        mShowSettingsIcon = visible
+        updateEverything(mMultiUserEnabled)
+    }
+
+    public fun updateUserIconVisibility(
+        visible: Boolean
+    ) {
+        mShowUserIcon = visible
+        updateEverything(mMultiUserEnabled)
     }
 }
 private const val TAG = "FooterActionsView"
