@@ -28,6 +28,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
@@ -62,7 +63,7 @@ import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserInfoController.OnUserInfoChangedListener;
 import com.android.systemui.tuner.TunerService;
 
-public class QSFooterImpl extends FrameLayout implements QSFooter,
+public class QSFooterImpl extends FrameLayout implements QSFooter, TunerService.Tunable,
         OnClickListener, OnUserInfoChangedListener, EmergencyListener, SignalCallback {
 
     private ActivityStarter mActivityStarter;
@@ -99,6 +100,20 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     private final int mColorForeground;
     private final CellSignalState mInfo = new CellSignalState();
     private OnClickListener mExpandClickListener;
+
+    private boolean mShowUserIcon;
+    private boolean mShowEditIcon;
+    private boolean mShowServicesIcon;
+    private boolean mShowSettingsIcon;
+
+    public static final String QSFOOTER_SHOW_USER =
+            Settings.Secure.QSFOOTER_SHOW_USER;
+    public static final String QSFOOTER_SHOW_EDIT =
+            Settings.Secure.QSFOOTER_SHOW_EDIT;
+    public static final String QSFOOTER_SHOW_SERVICES =
+            Settings.Secure.QSFOOTER_SHOW_SERVICES;
+    public static final String QSFOOTER_SHOW_SETTINGS =
+            Settings.Secure.QSFOOTER_SHOW_SETTINGS;
 
     public QSFooterImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -237,6 +252,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     @VisibleForTesting
     public void onDetachedFromWindow() {
         setListening(false);
+        Dependency.get(TunerService.class).removeTunable(this);
         super.onDetachedFromWindow();
     }
 
@@ -274,6 +290,43 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         updateEverything();
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, QSFOOTER_SHOW_USER);
+        tunerService.addTunable(this, QSFOOTER_SHOW_EDIT);
+        tunerService.addTunable(this, QSFOOTER_SHOW_SERVICES);
+        tunerService.addTunable(this, QSFOOTER_SHOW_SETTINGS);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QSFOOTER_SHOW_USER:
+                mShowUserIcon =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                break;
+            case QSFOOTER_SHOW_EDIT:
+                mShowEditIcon =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                break;
+            case QSFOOTER_SHOW_SERVICES:
+                mShowServicesIcon =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                break;
+            case QSFOOTER_SHOW_SETTINGS:
+                mShowSettingsIcon =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                break;
+            default:
+                break;
+        }
+        post(() -> {
+            updateVisibilities();
+        });
+    }
+
     public void updateEverything() {
         post(() -> {
             updateVisibilities();
@@ -282,18 +335,25 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     }
 
     private void updateVisibilities() {
-        mSettingsContainer.setVisibility(mQsDisabled ? View.GONE : View.VISIBLE);
+        mSettingsContainer.setVisibility(!mShowSettingsIcon || mQsDisabled ? View.GONE : View.VISIBLE);
         mSettingsContainer.findViewById(R.id.tuner_icon).setVisibility(
-                TunerService.isTunerEnabled(mContext) ? View.VISIBLE : View.INVISIBLE);
+                TunerService.isTunerEnabled(mContext) ? View.VISIBLE : View.GONE);
         final boolean isDemo = UserManager.isDeviceInDemoMode(mContext);
-        mMultiUserSwitch.setVisibility(showUserSwitcher(isDemo) ? View.VISIBLE : View.INVISIBLE);
-        mEdit.setVisibility(isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE);
-        mSettingsButton.setVisibility(isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE);
-        mRunningServicesButton.setVisibility(!isDemo && mExpanded ? View.VISIBLE : View.INVISIBLE);
+        if (isDemo || !mExpanded) {
+            mMultiUserSwitch.setVisibility(View.GONE);
+            mEdit.setVisibility(View.GONE);
+            mRunningServicesButton.setVisibility(View.GONE);
+            mSettingsButton.setVisibility(View.GONE);
+        } else {
+            mMultiUserSwitch.setVisibility(showUserSwitcher() ? View.VISIBLE : View.GONE);
+            mEdit.setVisibility(mShowEditIcon ? View.VISIBLE : View.GONE);
+            mRunningServicesButton.setVisibility(mShowServicesIcon ? View.VISIBLE : View.GONE);
+            mSettingsButton.setVisibility(mShowSettingsIcon ? View.VISIBLE : View.GONE);
+        }
     }
 
-    private boolean showUserSwitcher(boolean isDemo) {
-        if (!mExpanded || isDemo || !UserManager.supportsMultipleUsers()) {
+    private boolean showUserSwitcher() {
+        if (!UserManager.supportsMultipleUsers() || !mShowUserIcon) {
             return false;
         }
         UserManager userManager = UserManager.get(mContext);

@@ -9114,6 +9114,30 @@ public final class Settings {
         public static final String QS_SHOW_SECURITY_FOOTER = "qs_show_security_footer";
 
         /**
+         * Whether to show user icon in QS Footer
+         * @hide
+         */
+        public static final String QSFOOTER_SHOW_USER = "qsfooter_show_user";
+
+        /**
+         * Whether to show edit icon in QS Footer
+         * @hide
+         */
+        public static final String QSFOOTER_SHOW_EDIT = "qsfooter_show_edit";
+
+        /**
+         * Whether to show services icon in QS Footer
+         * @hide
+         */
+        public static final String QSFOOTER_SHOW_SERVICES = "qsfooter_show_services";
+
+        /**
+         * Whether to show settings icon in QS Footer
+         * @hide
+         */
+        public static final String QSFOOTER_SHOW_SETTINGS = "qsfooter_show_settings";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
