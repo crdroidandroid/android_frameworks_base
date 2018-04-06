@@ -16,6 +16,7 @@
 
 package com.android.systemui.qs.panels.ui.compose.toolbar
 
+import android.provider.Settings
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
@@ -70,6 +71,7 @@ import com.android.systemui.common.ui.compose.load
 import com.android.systemui.compose.modifiers.sysuiResTag
 import com.android.systemui.lifecycle.rememberViewModel
 import com.android.systemui.qs.footer.ui.viewmodel.FooterActionsButtonViewModel
+import com.android.systemui.qs.footer.ui.compose.rememberSystemSettingEnabled
 import com.android.systemui.qs.panels.ui.compose.toolbar.Toolbar.TransitionKeys.SecurityInfoKey
 import com.android.systemui.qs.panels.ui.viewmodel.TextFeedbackContentViewModel
 import com.android.systemui.qs.panels.ui.viewmodel.TextFeedbackViewModel
@@ -114,7 +116,9 @@ fun Toolbar(
             }
         }
 
-        if (viewModel.useInlinePowerMenu) {
+        val showPowerMenu by rememberSystemSettingEnabled(Settings.System.QS_FOOTER_SHOW_POWER_MENU)
+
+        if (showPowerMenu && viewModel.useInlinePowerMenu) {
             Box {
                 PowerMenuToggleButton(
                     viewModel = viewModel.powerMenuToggleButtonUiState,
@@ -127,7 +131,7 @@ fun Toolbar(
                     )
                 }
             }
-        } else {
+        } else if (showPowerMenu) {
             IconButton(
                 model = viewModel.powerButtonViewModel,
                 modifier = Modifier.sysuiResTag("pm_lite"),
@@ -144,6 +148,9 @@ private fun SharedTransitionScope.StandardToolbarLayout(
     isFullyVisible: () -> Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val showEdit by rememberSystemSettingEnabled(Settings.System.QS_FOOTER_SHOW_EDIT)
+    val showSettings by rememberSystemSettingEnabled(Settings.System.QS_FOOTER_SHOW_SETTINGS)
+
     Row(modifier) {
         // User switcher button
         IconButton(
@@ -156,13 +163,17 @@ private fun SharedTransitionScope.StandardToolbarLayout(
         // Edit mode button
         val editModeButtonViewModel =
             rememberViewModel("Toolbar") { viewModel.editModeButtonViewModelFactory.create() }
-        EditModeButton(editModeButtonViewModel, isVisible = isFullyVisible())
+        if (showEdit) {
+            EditModeButton(editModeButtonViewModel, isVisible = isFullyVisible())
+        }
 
         // Settings button
-        IconButton(
-            model = viewModel.settingsButtonViewModel,
-            modifier = Modifier.sysuiResTag("settings_button_container"),
-        )
+        if (showSettings) {
+            IconButton(
+                model = viewModel.settingsButtonViewModel,
+                modifier = Modifier.sysuiResTag("settings_button_container"),
+            )
+        }
 
         // Security info button
         SecurityInfo(

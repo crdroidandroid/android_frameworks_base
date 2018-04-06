@@ -7459,6 +7459,24 @@ public final class Settings {
         public static final String QS_SHOW_DATA_USAGE_WINDOW = "qs_show_data_usage_window";
 
         /**
+         * Show Settings icon in QS Footer
+         * @hide
+         */
+        public static final String QS_FOOTER_SHOW_SETTINGS = "qs_footer_show_settings";
+
+        /**
+         * Show Edit icon in QS Footer.
+         * @hide
+         */
+        public static final String QS_FOOTER_SHOW_EDIT = "qs_footer_show_edit";
+
+        /**
+         * Show power menu icon in QS Footer.
+         * @hide
+         */
+        public static final String QS_FOOTER_SHOW_POWER_MENU = "qs_footer_show_power_menu";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
