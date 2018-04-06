@@ -16,6 +16,7 @@
 
 package com.android.systemui.qs.panels.ui.compose.toolbar
 
+import android.provider.Settings
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
@@ -35,6 +36,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,6 +52,7 @@ import com.android.systemui.common.ui.compose.load
 import com.android.systemui.compose.modifiers.sysuiResTag
 import com.android.systemui.lifecycle.rememberViewModel
 import com.android.systemui.qs.footer.ui.viewmodel.FooterActionsButtonViewModel
+import com.android.systemui.qs.footer.ui.compose.rememberSystemSettingEnabled
 import com.android.systemui.qs.panels.ui.compose.toolbar.Toolbar.TransitionKeys.SecurityInfoKey
 import com.android.systemui.qs.panels.ui.viewmodel.TextFeedbackContentViewModel
 import com.android.systemui.qs.panels.ui.viewmodel.TextFeedbackViewModel
@@ -92,10 +95,14 @@ fun Toolbar(
             }
         }
 
-        IconButton(
-            viewModel.powerButtonViewModel,
-            Modifier.sysuiResTag("pm_lite").minimumInteractiveComponentSize(),
-        )
+        val showPowerMenu by rememberSystemSettingEnabled(Settings.System.QS_FOOTER_SHOW_POWER_MENU)
+
+        if (showPowerMenu) {
+            IconButton(
+                viewModel.powerButtonViewModel,
+                Modifier.sysuiResTag("pm_lite").minimumInteractiveComponentSize(),
+            )
+        }
     }
 }
 
@@ -107,6 +114,9 @@ private fun SharedTransitionScope.StandardToolbarLayout(
     isFullyVisible: () -> Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val showEdit by rememberSystemSettingEnabled(Settings.System.QS_FOOTER_SHOW_EDIT)
+    val showSettings by rememberSystemSettingEnabled(Settings.System.QS_FOOTER_SHOW_SETTINGS)
+
     Row(modifier) {
         // User switcher button
         IconButton(
@@ -119,13 +129,17 @@ private fun SharedTransitionScope.StandardToolbarLayout(
         // Edit mode button
         val editModeButtonViewModel =
             rememberViewModel("Toolbar") { viewModel.editModeButtonViewModelFactory.create() }
-        EditModeButton(editModeButtonViewModel, isVisible = isFullyVisible())
+        if (showEdit) {
+            EditModeButton(editModeButtonViewModel, isVisible = isFullyVisible())
+        }
 
         // Settings button
-        IconButton(
-            model = viewModel.settingsButtonViewModel,
-            Modifier.sysuiResTag("settings_button_container").minimumInteractiveComponentSize(),
-        )
+        if (showSettings) {
+            IconButton(
+                model = viewModel.settingsButtonViewModel,
+                Modifier.sysuiResTag("settings_button_container").minimumInteractiveComponentSize(),
+            )
+        }
 
         // Security info button
         SecurityInfo(
