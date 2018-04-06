@@ -68,7 +68,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 public class QSFooterImpl extends FrameLayout implements QSFooter,
-        OnClickListener, OnUserInfoChangedListener {
+        OnClickListener, OnUserInfoChangedListener, TunerService.Tunable {
 
     private static final String TAG = "QSFooterImpl";
 
@@ -103,6 +103,20 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     private View mActionsContainer;
 
     private OnClickListener mExpandClickListener;
+
+    private boolean mShowSettingsIcon;
+    private boolean mShowServicesIcon;
+    private boolean mShowEditIcon;
+    private boolean mShowUserIcon;
+
+    public static final String QS_FOOTER_SHOW_SETTINGS =
+            "system:" + Settings.System.QS_FOOTER_SHOW_SETTINGS;
+    public static final String QS_FOOTER_SHOW_SERVICES =
+            "system:" + Settings.System.QS_FOOTER_SHOW_SERVICES;
+    public static final String QS_FOOTER_SHOW_EDIT =
+            "system:" + Settings.System.QS_FOOTER_SHOW_EDIT;
+    public static final String QS_FOOTER_SHOW_USER =
+            "system:" + Settings.System.QS_FOOTER_SHOW_USER;
 
     @Inject
     public QSFooterImpl(@Named(VIEW_CONTEXT) Context context, AttributeSet attrs,
@@ -246,7 +260,45 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     @VisibleForTesting
     public void onDetachedFromWindow() {
         setListening(false);
+        Dependency.get(TunerService.class).removeTunable(this);
         super.onDetachedFromWindow();
+    }
+
+    @Override
+    @VisibleForTesting
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, QS_FOOTER_SHOW_SETTINGS);
+        tunerService.addTunable(this, QS_FOOTER_SHOW_SERVICES);
+        tunerService.addTunable(this, QS_FOOTER_SHOW_EDIT);
+        tunerService.addTunable(this, QS_FOOTER_SHOW_USER);
+    }
+
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QS_FOOTER_SHOW_SETTINGS:
+                mShowSettingsIcon =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                break;
+            case QS_FOOTER_SHOW_SERVICES:
+                mShowServicesIcon =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                break;
+            case QS_FOOTER_SHOW_EDIT:
+                mShowEditIcon =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                break;
+            case QS_FOOTER_SHOW_USER:
+                mShowUserIcon =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                break;
+            default:
+                break;
+        }
+        updateEverything();
     }
 
     @Override
@@ -298,17 +350,17 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     }
 
     private void updateVisibilities() {
-        mSettingsContainer.setVisibility(mQsDisabled ? View.GONE : View.VISIBLE);
+        mSettingsContainer.setVisibility(!mShowSettingsIcon || mQsDisabled ? View.GONE : View.VISIBLE);
         final boolean isDemo = UserManager.isDeviceInDemoMode(mContext);
-        mMultiUserSwitch.setVisibility(showUserSwitcher() ? View.VISIBLE : View.INVISIBLE);
-        mEditContainer.setVisibility(isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE);
-        mSettingsButton.setVisibility(isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE);
-        mRunningServicesButton.setVisibility(!isDemo && mExpanded ? View.VISIBLE : View.INVISIBLE);
+        mMultiUserSwitch.setVisibility(showUserSwitcher() ? View.VISIBLE : View.GONE);
+        mEditContainer.setVisibility(!mShowEditIcon || isDemo || !mExpanded ? View.GONE : View.VISIBLE);
+        mSettingsButton.setVisibility(!mShowSettingsIcon || isDemo || !mExpanded ? View.GONE : View.VISIBLE);
+        mRunningServicesButton.setVisibility(!mShowServicesIcon || isDemo || !mExpanded ? View.GONE : View.VISIBLE);
         mBuildText.setVisibility(mExpanded && mShouldShowBuildText ? View.VISIBLE : View.GONE);
     }
 
     private boolean showUserSwitcher() {
-        return mExpanded && mMultiUserSwitch.isMultiUserEnabled();
+        return mShowUserIcon && mExpanded && mMultiUserSwitch.isMultiUserEnabled();
     }
 
     private void updateListeners() {
