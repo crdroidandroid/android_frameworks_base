@@ -43,6 +43,7 @@ import com.android.systemui.statusbar.policy.ConfigurationController
 import com.android.systemui.statusbar.policy.DeviceProvisionedController
 import com.android.systemui.statusbar.policy.UserInfoController
 import com.android.systemui.statusbar.policy.UserInfoController.OnUserInfoChangedListener
+import com.android.systemui.tuner.TunerService
 import com.android.systemui.util.LargeScreenUtils
 import com.android.systemui.util.ViewController
 import com.android.systemui.util.settings.GlobalSettings
@@ -69,6 +70,7 @@ internal class FooterActionsController @Inject constructor(
     private val fgsManagerFooterController: QSFgsManagerFooter,
     private val falsingManager: FalsingManager,
     private val metricsLogger: MetricsLogger,
+    private val tunerService: TunerService,
     private val globalActionsDialogProvider: Provider<GlobalActionsDialogLite>,
     private val uiEventLogger: UiEventLogger,
     @Named(PM_LITE_ENABLED) private val showPMLiteButton: Boolean,
@@ -82,6 +84,7 @@ internal class FooterActionsController @Inject constructor(
     private var lastExpansion = -1f
     private var listening: Boolean = false
     private var inSplitShade = false
+    private var mShowPMLiteButton: Boolean = true
 
     private val singleShadeAnimator by lazy {
         // In single shade, the actions footer should only appear at the end of the expansion,
@@ -122,6 +125,13 @@ internal class FooterActionsController @Inject constructor(
         view.findViewById(R.id.security_footers_container)
     private val powerMenuLite: View = view.findViewById(R.id.pm_lite)
     private val multiUserSwitchController = multiUserSwitchControllerFactory.create(view)
+
+    private val QS_FOOTER_SHOW_SETTINGS =
+            "system:" + Settings.System.QS_FOOTER_SHOW_SETTINGS
+    private val  QS_FOOTER_SHOW_USER =
+            "system:" + Settings.System.QS_FOOTER_SHOW_USER
+    private val  QS_FOOTER_SHOW_POWER_MENU =
+            "system:" + Settings.System.QS_FOOTER_SHOW_POWER_MENU
 
     @VisibleForTesting
     internal val securityFootersSeparator = View(context).apply { visibility = View.GONE }
@@ -226,12 +236,6 @@ internal class FooterActionsController @Inject constructor(
     @VisibleForTesting
     public override fun onViewAttached() {
         globalActionsDialog = globalActionsDialogProvider.get()
-        if (showPMLiteButton) {
-            powerMenuLite.visibility = View.VISIBLE
-            powerMenuLite.setOnClickListener(onClickListener)
-        } else {
-            powerMenuLite.visibility = View.GONE
-        }
         settingsButtonContainer.setOnClickListener(onClickListener)
         settingsButtonContainer.setOnLongClickListener(onLongClickListener)
         multiUserSetting.isListening = true
@@ -260,12 +264,42 @@ internal class FooterActionsController @Inject constructor(
 
         configurationController.addCallback(configurationListener)
 
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mView.updateSettingsIconVisibility(tunerService.getValue(key, 1) != 0)
+            }
+        }, QS_FOOTER_SHOW_SETTINGS)
+
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mView.updateUserIconVisibility(tunerService.getValue(key, 1) != 0)
+            }
+        }, QS_FOOTER_SHOW_USER)
+
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, newValue: String?) {
+                mShowPMLiteButton = tunerService.getValue(key, 1) != 0
+                updatePMLiteIconVisibility()
+            }
+        }, QS_FOOTER_SHOW_POWER_MENU)
+
         updateResources()
         updateView()
     }
 
+    private fun updatePMLiteIconVisibility() {
+        if (mShowPMLiteButton) {
+            powerMenuLite.visibility = View.VISIBLE
+            powerMenuLite.setOnClickListener(onClickListener)
+        } else {
+            powerMenuLite.visibility = View.GONE
+            powerMenuLite.setOnClickListener(null)
+        }
+    }
+
     private fun updateView() {
         mView.updateEverything(multiUserSwitchController.isMultiUserEnabled)
+        updatePMLiteIconVisibility()
     }
 
     override fun onViewDetached() {
