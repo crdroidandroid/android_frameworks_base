@@ -16,6 +16,7 @@
 
 package com.android.systemui.qs.panels.ui.compose
 
+import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,6 +31,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -46,6 +48,7 @@ import com.android.systemui.compose.modifiers.sysuiResTag
 import com.android.systemui.development.ui.compose.BuildNumber
 import com.android.systemui.development.ui.viewmodel.BuildNumberViewModel
 import com.android.systemui.lifecycle.rememberViewModel
+import com.android.systemui.qs.footer.ui.compose.rememberSystemSettingEnabled
 import com.android.systemui.qs.panels.dagger.PaginatedBaseLayoutType
 import com.android.systemui.qs.panels.ui.compose.Dimensions.FooterHeight
 import com.android.systemui.qs.panels.ui.compose.Dimensions.InterPageSpacing
@@ -172,6 +175,8 @@ private fun FooterBar(
     editButtonViewModelFactory: EditModeButtonViewModel.Factory,
     isVisible: () -> Boolean = { true },
 ) {
+    val showEdit by rememberSystemSettingEnabled(Settings.System.QS_FOOTER_SHOW_EDIT)
+
     val editButtonViewModel =
         rememberViewModel(traceName = "PaginatedGridLayout-editButtonViewModel") {
             editButtonViewModelFactory.create()
@@ -203,7 +208,9 @@ private fun FooterBar(
         )
         Row(Modifier.weight(1f)) {
             Spacer(modifier = Modifier.weight(1f))
-            EditModeButton(viewModel = editButtonViewModel, isVisible = isVisible())
+            if (showEdit) {
+                EditModeButton(viewModel = editButtonViewModel, isVisible = isVisible())
+            }
         }
     }
 }
