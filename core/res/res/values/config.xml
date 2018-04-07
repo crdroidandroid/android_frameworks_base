@@ -56,9 +56,6 @@
         <item><xliff:g id="id">@string/status_bar_battery</xliff:g></item>
         <item><xliff:g id="id">@string/status_bar_alarm_clock</xliff:g></item>
         <item><xliff:g id="id">@string/status_bar_secure</xliff:g></item>
-        <item><xliff:g id="id">@string/status_bar_clock</xliff:g></item>
-        <item><xliff:g id="id">@string/status_bar_center_clock</xliff:g></item>
-        <item><xliff:g id="id">@string/status_bar_left_clock</xliff:g></item>
         <item><xliff:g id="id">@string/status_bar_su</xliff:g></item>
     </string-array>
 
@@ -87,9 +84,6 @@
     <string translatable="false" name="status_bar_battery">battery</string>
     <string translatable="false" name="status_bar_alarm_clock">alarm_clock</string>
     <string translatable="false" name="status_bar_secure">secure</string>
-    <string translatable="false" name="status_bar_clock">clock</string>
-    <string translatable="false" name="status_bar_center_clock">center_clock</string>
-    <string translatable="false" name="status_bar_left_clock">left_clock</string>
     <string translatable="false" name="status_bar_mobile">mobile</string>
     <string translatable="false" name="status_bar_vpn">vpn</string>
     <string translatable="false" name="status_bar_ethernet">ethernet</string>

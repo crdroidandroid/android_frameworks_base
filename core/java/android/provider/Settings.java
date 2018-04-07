@@ -4526,30 +4526,19 @@ public final class Settings {
          */
         public static final String SHOW_SU_INDICATOR = "show_su_indicator";
 
-         /**
-         * Show or hide clock
-         * 0 - hide
-         * 1 - show (default)
-         * @hide
-         */
-        public static final String STATUS_BAR_CLOCK = "status_bar_clock";
-
-        /** @hide */
-        public static final Validator STATUS_BAR_CLOCK_VALIDATOR =
-                sBooleanValidator;
-
         /**
          * Style of clock
          * 0 - Right Clock  (default)
          * 1 - Center Clock
          * 2 - Left Clock
+         * 3 - Hide Clock
          * @hide
          */
         public static final String STATUSBAR_CLOCK_STYLE = "statusbar_clock_style";
 
         /** @hide */
         public static final Validator STATUSBAR_CLOCK_STYLE_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 2);
+                new InclusiveIntegerRangeValidator(0, 3);
 
         /**
          * Whether to show seconds next to clock in status bar
@@ -4557,10 +4546,10 @@ public final class Settings {
          * 1 - show
          * @hide
          */
-        public static final String STATUS_BAR_CLOCK_SECONDS = "status_bar_clock_seconds";
+        public static final String STATUSBAR_CLOCK_SECONDS = "statusbar_clock_seconds";
 
         /** @hide */
-        public static final Validator STATUS_BAR_CLOCK_SECONDS_VALIDATOR =
+        public static final Validator STATUSBAR_CLOCK_SECONDS_VALIDATOR =
                 sBooleanValidator;
 
         /**
@@ -4865,9 +4854,8 @@ public final class Settings {
             LOCK_TO_APP_ENABLED,
             NOTIFICATION_SOUND,
             ACCELEROMETER_ROTATION,
-            STATUS_BAR_CLOCK,
             STATUSBAR_CLOCK_STYLE,
-            STATUS_BAR_CLOCK_SECONDS,
+            STATUSBAR_CLOCK_SECONDS,
             STATUSBAR_CLOCK_AM_PM_STYLE,
             STATUSBAR_CLOCK_DATE_DISPLAY,
             STATUSBAR_CLOCK_DATE_STYLE,
@@ -4980,9 +4968,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(POINTER_SPEED);
             PRIVATE_SETTINGS.add(LOCK_TO_APP_ENABLED);
             PRIVATE_SETTINGS.add(EGG_MODE);
-            PRIVATE_SETTINGS.add(STATUS_BAR_CLOCK);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_STYLE);
-            PRIVATE_SETTINGS.add(STATUS_BAR_CLOCK_SECONDS);
+            PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_SECONDS);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_AM_PM_STYLE);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_DISPLAY);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_STYLE);
@@ -5064,9 +5051,8 @@ public final class Settings {
             VALIDATORS.put(WIFI_STATIC_NETMASK, WIFI_STATIC_NETMASK_VALIDATOR);
             VALIDATORS.put(WIFI_STATIC_DNS1, WIFI_STATIC_DNS1_VALIDATOR);
             VALIDATORS.put(WIFI_STATIC_DNS2, WIFI_STATIC_DNS2_VALIDATOR);
-            VALIDATORS.put(STATUS_BAR_CLOCK, STATUS_BAR_CLOCK_VALIDATOR);
             VALIDATORS.put(STATUSBAR_CLOCK_STYLE, STATUSBAR_CLOCK_STYLE_VALIDATOR);
-            VALIDATORS.put(STATUS_BAR_CLOCK_SECONDS, STATUS_BAR_CLOCK_SECONDS_VALIDATOR);
+            VALIDATORS.put(STATUSBAR_CLOCK_SECONDS, STATUSBAR_CLOCK_SECONDS_VALIDATOR);
             VALIDATORS.put(STATUSBAR_CLOCK_AM_PM_STYLE, STATUSBAR_CLOCK_AM_PM_STYLE_VALIDATOR);
             VALIDATORS.put(STATUSBAR_CLOCK_DATE_DISPLAY, STATUSBAR_CLOCK_DATE_DISPLAY_VALIDATOR);
             VALIDATORS.put(STATUSBAR_CLOCK_DATE_STYLE, STATUSBAR_CLOCK_DATE_STYLE_VALIDATOR);
