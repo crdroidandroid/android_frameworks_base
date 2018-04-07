@@ -101,6 +101,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     protected int mClockDateDisplay = CLOCK_DATE_DISPLAY_GONE;
     protected int mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
     protected int mClockStyle = STYLE_CLOCK_RIGHT;
+    protected int mQSClockStyle = STYLE_CLOCK_RIGHT;
     protected String mClockDateFormat = null;
     protected int mClockDatePosition;
 
@@ -123,6 +124,8 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             "system:" + Settings.System.STATUSBAR_CLOCK_DATE_FORMAT;
     private static final String STATUSBAR_CLOCK_DATE_POSITION =
             "system:" + Settings.System.STATUSBAR_CLOCK_DATE_POSITION;
+    private static final String QS_CLOCK_STYLE =
+            "system:" + Settings.System.QS_CLOCK_STYLE;
 
     public Clock(Context context) {
         this(context, null);
@@ -190,7 +193,8 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                 STATUSBAR_CLOCK_DATE_DISPLAY,
                 STATUSBAR_CLOCK_DATE_STYLE,
                 STATUSBAR_CLOCK_DATE_FORMAT,
-                STATUSBAR_CLOCK_DATE_POSITION);
+                STATUSBAR_CLOCK_DATE_POSITION,
+                QS_CLOCK_STYLE);
     }
 
     @Override
@@ -302,6 +306,10 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             case STATUSBAR_CLOCK_DATE_POSITION:
                 mClockDatePosition =
                         newValue == null ? STYLE_DATE_LEFT : Integer.parseInt(newValue);
+                break;
+            case QS_CLOCK_STYLE:
+                mQSClockStyle =
+                        newValue == null ? STYLE_CLOCK_RIGHT : Integer.parseInt(newValue);
                 break;
             default:
                 break;

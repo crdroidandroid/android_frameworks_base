@@ -4527,6 +4527,15 @@ public final class Settings {
         public static final String SHOW_SU_INDICATOR = "show_su_indicator";
 
         /**
+         * Style of clock in quick settings
+         * 0 - Right Clock  (default)
+         * 2 - Left Clock
+         * 3 - Hide Clock
+         * @hide
+         */
+        public static final String QS_CLOCK_STYLE = "qs_clock_style";
+
+        /**
          * Style of clock
          * 0 - Right Clock  (default)
          * 1 - Center Clock
@@ -4537,7 +4546,7 @@ public final class Settings {
         public static final String STATUSBAR_CLOCK_STYLE = "statusbar_clock_style";
 
         /** @hide */
-        public static final Validator STATUSBAR_CLOCK_STYLE_VALIDATOR =
+        public static final Validator CLOCK_STYLE_VALIDATOR =
                 new InclusiveIntegerRangeValidator(0, 3);
 
         /**
@@ -4854,6 +4863,7 @@ public final class Settings {
             LOCK_TO_APP_ENABLED,
             NOTIFICATION_SOUND,
             ACCELEROMETER_ROTATION,
+            QS_CLOCK_STYLE,
             STATUSBAR_CLOCK_STYLE,
             STATUSBAR_CLOCK_SECONDS,
             STATUSBAR_CLOCK_AM_PM_STYLE,
@@ -4968,6 +4978,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(POINTER_SPEED);
             PRIVATE_SETTINGS.add(LOCK_TO_APP_ENABLED);
             PRIVATE_SETTINGS.add(EGG_MODE);
+            PRIVATE_SETTINGS.add(QS_CLOCK_STYLE);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_STYLE);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_SECONDS);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_AM_PM_STYLE);
@@ -5051,7 +5062,8 @@ public final class Settings {
             VALIDATORS.put(WIFI_STATIC_NETMASK, WIFI_STATIC_NETMASK_VALIDATOR);
             VALIDATORS.put(WIFI_STATIC_DNS1, WIFI_STATIC_DNS1_VALIDATOR);
             VALIDATORS.put(WIFI_STATIC_DNS2, WIFI_STATIC_DNS2_VALIDATOR);
-            VALIDATORS.put(STATUSBAR_CLOCK_STYLE, STATUSBAR_CLOCK_STYLE_VALIDATOR);
+            VALIDATORS.put(QS_CLOCK_STYLE, CLOCK_STYLE_VALIDATOR);
+            VALIDATORS.put(STATUSBAR_CLOCK_STYLE, CLOCK_STYLE_VALIDATOR);
             VALIDATORS.put(STATUSBAR_CLOCK_SECONDS, STATUSBAR_CLOCK_SECONDS_VALIDATOR);
             VALIDATORS.put(STATUSBAR_CLOCK_AM_PM_STYLE, STATUSBAR_CLOCK_AM_PM_STYLE_VALIDATOR);
             VALIDATORS.put(STATUSBAR_CLOCK_DATE_DISPLAY, STATUSBAR_CLOCK_DATE_DISPLAY_VALIDATOR);
