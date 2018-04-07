@@ -47,6 +47,10 @@ public class CarStatusBarHeader extends RelativeLayout {
         applyDarkness(R.id.signal_cluster, tintArea, intensity, colorForeground);
         applyDarkness(R.id.battery, tintArea, intensity, colorForeground);
         applyDarkness(R.id.clock, tintArea, intensity, colorForeground);
+        applyDarkness(R.id.center_clock, tintArea, intensity, colorForeground);
+        applyDarkness(R.id.left_clock, tintArea, intensity, colorForeground);
+        applyDarkness(R.id.qs_clock, tintArea, intensity, colorForeground);
+        applyDarkness(R.id.qs_left_clock, tintArea, intensity, colorForeground);
 
         ((BatteryMeterView) findViewById(R.id.battery)).setForceShowPercent(true);
     }

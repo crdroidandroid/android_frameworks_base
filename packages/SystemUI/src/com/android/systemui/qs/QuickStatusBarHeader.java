@@ -88,6 +88,10 @@ public class QuickStatusBarHeader extends FrameLayout implements StatusBarHeader
 
         applyDarkness(R.id.battery, tintArea, intensity, colorForeground);
         applyDarkness(R.id.clock, tintArea, intensity, colorForeground);
+        applyDarkness(R.id.center_clock, tintArea, intensity, colorForeground);
+        applyDarkness(R.id.left_clock, tintArea, intensity, colorForeground);
+        applyDarkness(R.id.qs_clock, tintArea, intensity, colorForeground);
+        applyDarkness(R.id.qs_left_clock, tintArea, intensity, colorForeground);
 
         BatteryMeterView battery = findViewById(R.id.battery);
         battery.setForceShowPercent(true);

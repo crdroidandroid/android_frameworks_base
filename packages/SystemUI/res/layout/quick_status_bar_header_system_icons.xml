@@ -28,6 +28,18 @@
     android:orientation="horizontal">
 
 
+    <com.android.systemui.statusbar.policy.QSClockLeft
+        android:id="@+id/qs_left_clock"
+        android:textAppearance="@style/TextAppearance.StatusBar.Clock"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:singleLine="true"
+        android:paddingStart="@dimen/status_bar_clock_end_padding"
+        android:paddingEnd="@dimen/status_bar_clock_starting_padding"
+        android:gravity="center_vertical|start"
+        systemui:showDark="false"
+        />
+
     <com.android.systemui.crdroid.carrierlabel.CarrierLabelQS
         android:id="@+id/qs_carrier_text"
         android:layout_width="0dp"
@@ -45,8 +57,8 @@
         android:layout_width="wrap_content"
         />
 
-    <com.android.systemui.statusbar.policy.Clock
-        android:id="@+id/clock"
+    <com.android.systemui.statusbar.policy.QSClock
+        android:id="@+id/qs_clock"
         android:textAppearance="@style/TextAppearance.StatusBar.Clock"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
