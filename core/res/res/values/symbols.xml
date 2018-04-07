@@ -2605,7 +2605,6 @@
   <java-symbol type="string" name="status_bar_battery" />
   <java-symbol type="string" name="status_bar_alarm_clock" />
   <java-symbol type="string" name="status_bar_secure" />
-  <java-symbol type="string" name="status_bar_clock" />
 
   <!-- Locale picker -->
   <java-symbol type="id" name="locale_search_menu" />

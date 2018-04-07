@@ -22,8 +22,6 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.android.systemui.Dependency;
-
 public class ClockLeft extends Clock {
 
     private boolean mClockVisibleByPolicy = true;
@@ -52,9 +50,8 @@ public class ClockLeft extends Clock {
     }
 
     protected void updateClockVisibility() {
-        boolean visible = mClockStyle == STYLE_CLOCK_LEFT && mShowClock
+        boolean visible = mClockStyle == STYLE_CLOCK_LEFT
                 && mClockVisibleByPolicy && mClockVisibleByUser;
-        Dependency.get(IconLogger.class).onIconVisibility("left_clock", visible);
         int visibility = visible ? View.VISIBLE : View.GONE;
         setVisibility(visibility);
     }

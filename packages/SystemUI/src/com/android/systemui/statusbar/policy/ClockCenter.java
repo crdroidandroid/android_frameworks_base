@@ -22,8 +22,6 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.android.systemui.Dependency;
-
 public class ClockCenter extends Clock {
 
     private boolean mClockVisibleByPolicy = true;
@@ -52,9 +50,8 @@ public class ClockCenter extends Clock {
     }
 
     protected void updateClockVisibility() {
-        boolean visible = mClockStyle == STYLE_CLOCK_CENTER && mShowClock
+        boolean visible = mClockStyle == STYLE_CLOCK_CENTER
                 && mClockVisibleByPolicy && mClockVisibleByUser;
-        Dependency.get(IconLogger.class).onIconVisibility("center_clock", visible);
         int visibility = visible ? View.VISIBLE : View.GONE;
         setVisibility(visibility);
     }

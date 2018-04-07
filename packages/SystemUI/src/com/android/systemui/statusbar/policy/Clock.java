@@ -96,25 +96,23 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     public static final int STYLE_CLOCK_RIGHT   = 0;
     public static final int STYLE_CLOCK_CENTER  = 1;
     public static final int STYLE_CLOCK_LEFT   = 2;
+    public static final int STYLE_CLOCK_GONE   = 3;
 
     protected int mClockDateDisplay = CLOCK_DATE_DISPLAY_GONE;
     protected int mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
     protected int mClockStyle = STYLE_CLOCK_RIGHT;
     protected String mClockDateFormat = null;
     protected int mClockDatePosition;
-    protected boolean mShowClock;
 
     private int mAmPmStyle;
     private final boolean mShowDark;
     private boolean mShowSeconds;
     private Handler mSecondsHandler;
 
-    private static final String STATUS_BAR_CLOCK =
-            "system:" + Settings.System.STATUS_BAR_CLOCK;
     private static final String STATUSBAR_CLOCK_STYLE =
             "system:" + Settings.System.STATUSBAR_CLOCK_STYLE;
-    private static final String STATUS_BAR_CLOCK_SECONDS =
-            "system:" + Settings.System.STATUS_BAR_CLOCK_SECONDS;
+    private static final String STATUSBAR_CLOCK_SECONDS =
+            "system:" + Settings.System.STATUSBAR_CLOCK_SECONDS;
     private static final String STATUSBAR_CLOCK_AM_PM_STYLE =
             "system:" + Settings.System.STATUSBAR_CLOCK_AM_PM_STYLE;
     private static final String STATUSBAR_CLOCK_DATE_DISPLAY =
@@ -186,9 +184,8 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
         updateClockVisibility();
 
         Dependency.get(TunerService.class).addTunable(this,
-                STATUS_BAR_CLOCK,
                 STATUSBAR_CLOCK_STYLE,
-                STATUS_BAR_CLOCK_SECONDS,
+                STATUSBAR_CLOCK_SECONDS,
                 STATUSBAR_CLOCK_AM_PM_STYLE,
                 STATUSBAR_CLOCK_DATE_DISPLAY,
                 STATUSBAR_CLOCK_DATE_STYLE,
@@ -261,7 +258,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     }
 
     protected void updateClockVisibility() {
-        boolean visible = mClockStyle == STYLE_CLOCK_RIGHT && mShowClock
+        boolean visible = mClockStyle == STYLE_CLOCK_RIGHT
                 && mClockVisibleByPolicy && mClockVisibleByUser;
         int visibility = visible ? View.VISIBLE : View.GONE;
         setVisibility(visibility);
@@ -277,15 +274,11 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
-            case STATUS_BAR_CLOCK:
-                mShowClock =
-                        newValue == null || Integer.parseInt(newValue) != 0;
-                break;
             case STATUSBAR_CLOCK_STYLE:
                 mClockStyle =
                         newValue == null ? STYLE_CLOCK_RIGHT : Integer.parseInt(newValue);
                 break;
-            case STATUS_BAR_CLOCK_SECONDS:
+            case STATUSBAR_CLOCK_SECONDS:
                 mShowSeconds =
                         newValue != null && Integer.parseInt(newValue) != 0;
                 updateShowSeconds();
