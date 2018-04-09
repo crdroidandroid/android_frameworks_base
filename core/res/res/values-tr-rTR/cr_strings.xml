@@ -34,11 +34,11 @@
   <string name="animation_slide_down">Yukarı kaydır</string>
   <string name="animation_default">Varsayılan</string>
   <string name="animation_translucent">Yarı şeffaf</string>
-  <string name="animation_grow_shrink">Büyüt (Üst)</string>
-  <string name="animation_grow_shrink_center">Büyüt (Orta)</string>
-  <string name="animation_grow_shrink_bottom">Büyüt (Alt)</string>
-  <string name="animation_grow_shrink_left">Büyüt (Sol)</string>
-  <string name="animation_grow_shrink_right">Büyüt (Sağ)</string>
+  <string name="animation_grow_shrink">Büyüt (Yukarıdan)</string>
+  <string name="animation_grow_shrink_center">Büyüt (Ortadan)</string>
+  <string name="animation_grow_shrink_bottom">Büyüt (Aşağıdan)</string>
+  <string name="animation_grow_shrink_left">Büyüt (Soldan)</string>
+  <string name="animation_grow_shrink_right">Büyüt (Sağdan)</string>
   <string name="animation_random">Rastgele</string>
   <string name="action_null">Boş</string>
 </resources>

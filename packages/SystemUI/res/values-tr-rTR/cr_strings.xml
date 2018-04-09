@@ -84,7 +84,7 @@
   <string name="screenrecord_notif_ticker">Ekran kaydediliyor</string>
   <string name="screenrecord_notif_final_ticker">Ekran başarıyla kaydedildi</string>
   <!-- Screenrecord notification title -->
-  <string name="screenrecord_notif_title">Ekran kayıt ediliyor</string>
+  <string name="screenrecord_notif_title">Ekran kaydediliyor</string>
   <!-- Screenrecord notification action: Stop -->
   <string name="screenrecord_notif_stop">Durdur</string>
   <string name="screenrecord_notif_completed">Ekran başarıyla kaydedildi</string>
