@@ -224,7 +224,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     private LockPatternUtils mLockPatternUtils;
     private final IDreamManager mDreamManager;
     private boolean mIsDreaming;
-    private final boolean mFingerprintWakeAndUnlock;
 
     /**
      * Short delay before restarting fingerprint authentication after a successful try
@@ -1127,8 +1126,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         mSubscriptionManager = SubscriptionManager.from(context);
         mDeviceProvisioned = isDeviceProvisionedInSettingsDb();
         mStrongAuthTracker = new StrongAuthTracker(context);
-        mFingerprintWakeAndUnlock = mContext.getResources().getBoolean(
-                com.android.keyguard.R.bool.config_fingerprintWakeAndUnlock);
 
         // Since device can't be un-provisioned, we only need to register a content observer
         // to update mDeviceProvisioned when we are...
@@ -1229,7 +1226,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     private boolean shouldListenForFingerprint() {
-        if (!mFingerprintWakeAndUnlock) {
+        if (!isWakeAndUnlockEnabled()) {
             return (mKeyguardIsVisible || mBouncer || shouldListenForFingerprintAssistant() ||
                     (mKeyguardOccluded && mIsDreaming)) && mDeviceInteractive && !mGoingToSleep
                     && !mSwitchingUser && !isFingerprintDisabled(getCurrentUser())
@@ -1282,6 +1279,13 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     private boolean isDeviceProvisionedInSettingsDb() {
         return Settings.Global.getInt(mContext.getContentResolver(),
                 Settings.Global.DEVICE_PROVISIONED, 0) != 0;
+    }
+
+    private boolean isWakeAndUnlockEnabled() {
+        return (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.FP_WAKE_AND_UNLOCK, 1) != 0 &&
+                mContext.getResources().getBoolean(
+                    com.android.keyguard.R.bool.config_fingerprintWakeAndUnlock));
     }
 
     private void watchForDeviceProvisioning() {
