@@ -4782,6 +4782,12 @@ public final class Settings {
         public static final String AMBIENT_BATTERY_PERCENT = "ambient_battery_percent";
 
         /**
+         * Fingerprint Wake-and-Unlock
+         * @hide
+         */
+        public static final String FP_WAKE_AND_UNLOCK = "fp_wake_and_unlock";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
