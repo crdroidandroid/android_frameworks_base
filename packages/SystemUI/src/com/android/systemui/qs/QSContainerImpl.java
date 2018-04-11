@@ -68,10 +68,13 @@ public class QSContainerImpl extends FrameLayout implements
     private StatusBarHeaderMachine mStatusBarHeaderMachine;
     private Drawable mCurrentBackground;
     private boolean mLandscape;
+    private int mQsBackgroundAlpha = 255;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
         Handler mHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
         mStatusBarHeaderMachine = new StatusBarHeaderMachine(context);
     }
 
@@ -115,6 +118,38 @@ public class QSContainerImpl extends FrameLayout implements
 
         updateResources();
         mSizePoint.set(0, 0); // Will be retrieved on next measure pass.
+    }
+
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            getContext().getContentResolver().registerContentObserver(Settings.System
+                            .getUriFor(Settings.System.QS_PANEL_BG_ALPHA), false,
+                    this, UserHandle.USER_ALL);
+            getContext().getContentResolver().registerContentObserver(Settings.System
+                            .getUriFor(Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW), false,
+                    this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateAlpha();
+        }
+    }
+
+    private void updateAlpha() {
+        mQsBackgroundAlpha = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.QS_PANEL_BG_ALPHA, 255,
+                UserHandle.USER_CURRENT);
+
+        mBackground.getBackground().setAlpha(mQsBackgroundAlpha);
+        mStatusBarBackground.getBackground().setAlpha(mQsBackgroundAlpha);
+        mBackgroundGradient.getBackground().setAlpha(mQsBackgroundAlpha);
+
+        applyHeaderBackgroundShadow();
     }
 
     @Override
@@ -178,7 +213,6 @@ public class QSContainerImpl extends FrameLayout implements
         if (disabled == mQsDisabled) return;
         mQsDisabled = disabled;
         mBackground.setVisibility(mQsDisabled ? View.GONE : View.VISIBLE);
-        updateStatusbarVisibility();
     }
 
     private void updateResources() {
@@ -327,11 +361,13 @@ public class QSContainerImpl extends FrameLayout implements
     }
 
     private void updateStatusbarVisibility() {
-        boolean hideGradient = mLandscape || mHeaderImageEnabled || mQsDisabled;
+        boolean hideGradient = mLandscape || mHeaderImageEnabled;
         boolean hideStatusbar = mLandscape && !mHeaderImageEnabled;
 
         mBackgroundGradient.setVisibility(hideGradient ? View.INVISIBLE : View.VISIBLE);
         mStatusBarBackground.setBackgroundColor(hideGradient ? Color.TRANSPARENT : Color.BLACK);
         mStatusBarBackground.setVisibility(hideStatusbar ? View.INVISIBLE : View.VISIBLE);
+
+        updateAlpha();
     }
 }
