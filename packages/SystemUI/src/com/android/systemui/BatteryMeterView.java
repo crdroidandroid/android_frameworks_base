@@ -206,25 +206,22 @@ public class BatteryMeterView extends LinearLayout implements
         if (mBatteryPercentView == null)
             return;
 
-        CharSequence mSpace =
-                mStyle != BatteryMeterDrawableBase.BATTERY_STYLE_TEXT ? " " : "";
-
         if (!mCharging || mStyle != BatteryMeterDrawableBase.BATTERY_STYLE_TEXT) {
             mBatteryPercentView.setText(
-                   NumberFormat.getPercentInstance().format(mLevel / 100f) + mSpace);
+                   NumberFormat.getPercentInstance().format(mLevel / 100f));
         } else {
             switch (mTextChargingSymbol) {
                 case 1:
                     mBatteryPercentView.setText("⚡️" +
-                           NumberFormat.getPercentInstance().format(mLevel / 100f) + mSpace);
+                           NumberFormat.getPercentInstance().format(mLevel / 100f));
                    break;
                 case 2:
                     mBatteryPercentView.setText("~" +
-                           NumberFormat.getPercentInstance().format(mLevel / 100f) + mSpace);
+                           NumberFormat.getPercentInstance().format(mLevel / 100f));
                     break;
                 default:
                     mBatteryPercentView.setText(
-                           NumberFormat.getPercentInstance().format(mLevel / 100f) + mSpace);
+                           NumberFormat.getPercentInstance().format(mLevel / 100f));
                     break;
             }
         }
