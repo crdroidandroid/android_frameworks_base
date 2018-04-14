@@ -837,9 +837,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (isAmbientContainerAvailable()) {
                     ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(mMediaMetadata);
                 }
-                if (mSlimRecents != null) {
-                    mSlimRecents.setMediaInfo(mMediaMetadata);
-                }
                 isMediaPlaying = true;
                 // NotificationInflater calls async MediaNotificationProcessoron to create notification
                 // colors and when finished will trigger AsyncInflationFinished for all registered callbacks
@@ -2125,7 +2122,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (icon != null) {
                     drawable = icon.loadDrawable(mContext);
                 }
-                mSlimRecents.setMediaColors(n.isColorizedMedia(), colors, drawable);
+                mSlimRecents.setMediaColors(n.isColorizedMedia(), colors, drawable, mMediaMetadata);
             }
         }
     }
