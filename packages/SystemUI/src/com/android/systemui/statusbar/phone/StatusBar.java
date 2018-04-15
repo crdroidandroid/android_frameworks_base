@@ -3307,6 +3307,16 @@ public class StatusBar extends SystemUI implements DemoMode,
         updateTheme();
     }
 
+    public void loadOverlays(String[] overlays, boolean useOverlay) {
+        for (String overlay: overlays) {
+            try {
+                mOverlayManager.setEnabled(overlay, useOverlay, mCurrentUserId);
+            } catch (Exception e) {
+                Log.w(TAG, "Can't disable theme for " + overlay, e);
+            }
+        }
+    }
+
     public boolean isUsingDarkTheme() {
         boolean isDark = true;
 
@@ -5486,13 +5496,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             } catch (RemoteException e) {
                 Log.w(TAG, "Can't change theme", e);
             }
-            for (String overlay: mDarkOverlays) {
-                try {
-                    mOverlayManager.setEnabled(overlay, useDarkTheme, mCurrentUserId);
-                } catch (RemoteException e) {
-                    Log.w(TAG, "Can't change theme for " + overlay, e);
-                }
-            }
+            loadOverlays(mDarkOverlays, useDarkTheme);
 
             if (mUiModeManager != null) {
                 mUiModeManager.setNightMode(useDarkTheme ?
@@ -8539,19 +8543,12 @@ public class StatusBar extends SystemUI implements DemoMode,
                 }
                 break;
             case BERRY_DARK_SHADE:
-                if (newValue == null || mBerryDarkShade == Integer.parseInt(newValue))
-                    return;
-                mBerryDarkShade = Integer.parseInt(newValue);
-                for (String overlay: mDarkOverlays) {
-                    try {
-                        mOverlayManager.setEnabled(overlay, false, mCurrentUserId);
-                    } catch (RemoteException e) {
-                        Log.w(TAG, "Can't disable theme for " + overlay, e);
-                    }
-                }
+                mBerryDarkShade = newValue == null ? 0 : Integer.parseInt(newValue);
                 if (mBerryDarkShade == 1) {
+                    loadOverlays(DARK_OVERLAYS, false);
                     mDarkOverlays = BLACK_OVERLAYS;
                 } else {
+                    loadOverlays(BLACK_OVERLAYS, false);
                     mDarkOverlays = DARK_OVERLAYS;
                 }
                 updateTheme();
