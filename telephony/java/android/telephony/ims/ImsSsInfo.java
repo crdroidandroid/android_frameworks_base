@@ -34,6 +34,14 @@ public final class ImsSsInfo implements Parcelable {
     public static final int DISABLED = 0;
     public static final int ENABLED = 1;
 
+    /**
+     * Provision status of service
+     */
+    /** @hide */
+    public static final int SERVICE_NOT_PROVISIONED = 0;
+    /** @hide */
+    public static final int SERVICE_PROVISIONED = 1;
+
     // 0: disabled, 1: enabled
     /** @hide */
     // TODO: Make private, do not modify this field directly, use getter!
@@ -41,6 +49,8 @@ public final class ImsSsInfo implements Parcelable {
     /** @hide */
     // TODO: Make private, do not modify this field directly, use getter!
     public String mIcbNum;
+    /** @hide */
+    public int mProvisionStatus;
 
     /**@hide*/
     // TODO: Remove! Do not use this constructor, instead use public version.
@@ -74,16 +84,30 @@ public final class ImsSsInfo implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(mStatus);
         out.writeString(mIcbNum);
+        out.writeInt(mProvisionStatus);
     }
 
     @Override
     public String toString() {
-        return super.toString() + ", Status: " + ((mStatus == 0) ? "disabled" : "enabled");
+        return super.toString() + ", Status: " + ((mStatus == 0) ? "disabled" : "enabled")
+                + ", ProvisionStatus: " + provisionStatusToString(mProvisionStatus);
+    }
+
+    private static String provisionStatusToString(int pStatus) {
+        switch (pStatus) {
+            case SERVICE_NOT_PROVISIONED:
+                return "Service not provisioned";
+             case SERVICE_PROVISIONED:
+                return "Service provisioned";
+             default:
+                return "Service provisioning unknown";
+        }
     }
 
     private void readFromParcel(Parcel in) {
         mStatus = in.readInt();
         mIcbNum = in.readString();
+        mProvisionStatus = in.readInt();
     }
 
     public static final Creator<ImsSsInfo> CREATOR =
@@ -111,5 +135,10 @@ public final class ImsSsInfo implements Parcelable {
 
     public String getIcbNum() {
         return mIcbNum;
+    }
+
+    /** @hide */
+    public int getProvisionStatus() {
+        return mProvisionStatus;
     }
 }
