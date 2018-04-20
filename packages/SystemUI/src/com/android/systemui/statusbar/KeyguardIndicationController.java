@@ -307,6 +307,7 @@ public class KeyguardIndicationController {
                         String bolt = "\u26A1\uFE0E";
                         CharSequence chargeIndicator = (mPowerPluggedIn ? (bolt + " ") : "") +
                                 NumberFormat.getPercentInstance().format(mLevel / 100f);
+                        mTextView.setTextColor(Color.WHITE);
                         mTextView.switchIndication(chargeIndicator);
                     } else {
                         mTextView.switchIndication(null);
