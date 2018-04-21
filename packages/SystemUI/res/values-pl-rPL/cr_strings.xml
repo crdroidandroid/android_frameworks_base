@@ -77,28 +77,28 @@
   <string name="omnijaws_package_not_available">OmniJaws nie jest dostępny</string>
   <string name="omnijaws_service_last_update">Ostatnia aktualizacja:</string>
   <!-- Assist/Google Tiles -->
-  <string name="quick_settings_google_assist_label">Assistant</string>
-  <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+  <string name="quick_settings_google_assist_label">Asystent</string>
+  <string name="quick_settings_google_voice_assist_label">Asystent głosowy</string>
   <string name="quick_settings_google_now_label">Google</string>
   <!-- Screenrecord Notification Ticker -->
-  <string name="screenrecord_notif_ticker">Screen is being recorded</string>
-  <string name="screenrecord_notif_final_ticker">Screen recorded successfully</string>
+  <string name="screenrecord_notif_ticker">Ekran jest nagrywany</string>
+  <string name="screenrecord_notif_final_ticker">Nagrywanie ekranu zakończone powodzeniem</string>
   <!-- Screenrecord notification title -->
-  <string name="screenrecord_notif_title">Recording screen</string>
+  <string name="screenrecord_notif_title">Nagrywanie ekranu</string>
   <!-- Screenrecord notification action: Stop -->
   <string name="screenrecord_notif_stop">Stop</string>
-  <string name="screenrecord_notif_completed">Screen recorded successfully</string>
+  <string name="screenrecord_notif_completed">Nagrywanie ekranu zakończone powodzeniem</string>
   <!-- Screenrecord notification action: show/hide pointer -->
-  <string name="screenrecord_notif_pointer_on">Show pointer</string>
-  <string name="screenrecord_notif_pointer_off">Hide pointer</string>
+  <string name="screenrecord_notif_pointer_on">Pokaż wskaźnik</string>
+  <string name="screenrecord_notif_pointer_off">Ukryj wskaźnik</string>
   <!-- Screen record notification error title -->
-  <string name="screenrecord_notif_error">Unable to record screen</string>
-  <string name="notification_channel_screenrecord">Screenrecords</string>
-  <string name="screenrecord_hide_hint">Hide hint</string>
-  <string name="screenrecord_show_hint">Show hint</string>
+  <string name="screenrecord_notif_error">Nie można nagrać ekranu</string>
+  <string name="notification_channel_screenrecord">Nagrania ekranu</string>
+  <string name="screenrecord_hide_hint">Ukryj wskazówkę</string>
+  <string name="screenrecord_show_hint">Pokaż wskazówkę</string>
   <!-- Screenshot QS tile -->
-  <string name="quick_settings_screenrecord_label">Screenrecord</string>
-  <string name="quick_settings_screenrecord_lq_label">Screenrecord 480p</string>
-  <string name="quick_settings_screenrecord_mq_label">Screenrecord 720p</string>
-  <string name="quick_settings_screenrecord_hq_label">Screenrecord 720p+</string>
+  <string name="quick_settings_screenrecord_label">Nagrywanie ekranu</string>
+  <string name="quick_settings_screenrecord_lq_label">Nagrywanie ekranu 480p</string>
+  <string name="quick_settings_screenrecord_mq_label">Nagrywanie ekranu 720p</string>
+  <string name="quick_settings_screenrecord_hq_label">Nagrywanie ekranu 720p+</string>
 </resources>
