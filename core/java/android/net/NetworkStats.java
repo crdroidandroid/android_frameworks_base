@@ -201,6 +201,22 @@ public class NetworkStats implements Parcelable {
             this.txBytes += another.txBytes;
             this.txPackets += another.txPackets;
             this.operations += another.operations;
+
+            if (this.rxBytes < 0) {
+                this.rxBytes = Math.max(this.rxBytes, Long.MAX_VALUE);
+            }
+            if (this.rxPackets < 0) {
+                this.rxPackets = Math.max(this.rxPackets, Long.MAX_VALUE);
+            }
+            if (this.txBytes < 0) {
+                this.txBytes = Math.max(this.txBytes, Long.MAX_VALUE);
+            }
+            if (this.txPackets < 0 ) {
+                this.txPackets = Math.max(this.txPackets, Long.MAX_VALUE);
+            }
+            if (this.operations < 0) {
+                this.operations = Math.max(this.operations, Long.MAX_VALUE);
+            }
         }
 
         @Override
@@ -472,6 +488,22 @@ public class NetworkStats implements Parcelable {
             txBytes[i] += entry.txBytes;
             txPackets[i] += entry.txPackets;
             operations[i] += entry.operations;
+
+            if (rxBytes[i] < 0) {
+                rxBytes[i] = Math.max(rxBytes[i], Long.MAX_VALUE);
+            }
+            if (rxPackets[i] < 0) {
+                rxPackets[i] = Math.max(rxPackets[i], Long.MAX_VALUE);
+            }
+            if (txBytes[i] < 0) {
+                txBytes[i] = Math.max(txBytes[i], Long.MAX_VALUE);
+            }
+            if (txPackets[i] < 0 ) {
+                txPackets[i] = Math.max(txPackets[i], Long.MAX_VALUE);
+            }
+            if (operations[i] < 0) {
+                operations[i] = Math.max(operations[i], Long.MAX_VALUE);
+            }
         }
         return this;
     }
@@ -584,7 +616,11 @@ public class NetworkStats implements Parcelable {
      */
     public long getTotalBytes() {
         final Entry entry = getTotal(null);
-        return entry.rxBytes + entry.txBytes;
+        long total = entry.rxBytes + entry.txBytes;
+        if (total < 0) {
+            total = Math.max(total, Long.MAX_VALUE);
+        }
+        return total;
     }
 
     /**
@@ -651,6 +687,22 @@ public class NetworkStats implements Parcelable {
                 entry.txBytes += txBytes[i];
                 entry.txPackets += txPackets[i];
                 entry.operations += operations[i];
+
+                if (entry.rxBytes < 0) {
+                    entry.rxBytes = Math.max(entry.rxBytes, Long.MAX_VALUE);
+                }
+                if (entry.rxPackets < 0) {
+                    entry.rxPackets = Math.max(entry.rxPackets, Long.MAX_VALUE);
+                }
+                if (entry.txBytes < 0) {
+                    entry.txBytes = Math.max(entry.txBytes, Long.MAX_VALUE);
+                }
+                if (entry.txPackets < 0 ) {
+                    entry.txPackets = Math.max(entry.txPackets, Long.MAX_VALUE);
+                }
+                if (entry.operations < 0) {
+                    entry.operations = Math.max(entry.operations, Long.MAX_VALUE);
+                }
             }
         }
         return entry;
@@ -663,6 +715,9 @@ public class NetworkStats implements Parcelable {
         long total = 0;
         for (int i = size-1; i >= 0; i--) {
             total += rxPackets[i] + txPackets[i];
+        }
+        if (total < 0) {
+            total = Math.max(total, Long.MAX_VALUE);
         }
         return total;
     }
@@ -1200,6 +1255,33 @@ public class NetworkStats implements Parcelable {
         return pool;
     }
 
+    /**
+     * Safely multiple a value by a rational.
+     * <p>
+     * Internally it uses integer-based math whenever possible, but switches
+     * over to double-based math if values would overflow.
+     */
+    @VisibleForTesting
+    public static long multiplySafe(long value, long num, long den) {
+        long x = value;
+        long y = num;
+
+        long r = x * y;
+        long ax = Math.abs(x);
+        long ay = Math.abs(y);
+        if (((ax | ay) >>> 31 != 0)) {
+            // Some bits greater than 2^31 that might cause overflow
+            // Check the result using the divide operator
+            // and check for the special case of Long.MIN_VALUE * -1
+            if (((y != 0) && (r / y != x)) ||
+                    (x == Long.MIN_VALUE && y == -1)) {
+                // Use double math to avoid overflowing
+                return (long) (((double) num / den) * value);
+            }
+        }
+        return r / den;
+    }
+
     private Entry addTrafficToApplications(int tunUid, String tunIface, String underlyingIface,
             Entry tunIfaceTotal, Entry pool) {
         Entry moved = new Entry();
@@ -1210,28 +1292,32 @@ public class NetworkStats implements Parcelable {
             // deducted from the vpn app (see deductTrafficFromVpnApp below).
             if (Objects.equals(iface[i], tunIface) && uid[i] != tunUid) {
                 if (tunIfaceTotal.rxBytes > 0) {
-                    tmpEntry.rxBytes = pool.rxBytes * rxBytes[i] / tunIfaceTotal.rxBytes;
+                    tmpEntry.rxBytes =
+                        multiplySafe(rxBytes[i] , pool.rxBytes, tunIfaceTotal.rxBytes);
                 } else {
                     tmpEntry.rxBytes = 0;
                 }
                 if (tunIfaceTotal.rxPackets > 0) {
-                    tmpEntry.rxPackets = pool.rxPackets * rxPackets[i] / tunIfaceTotal.rxPackets;
+                    tmpEntry.rxPackets =
+                        multiplySafe(rxPackets[i], pool.rxPackets, tunIfaceTotal.rxPackets);
                 } else {
                     tmpEntry.rxPackets = 0;
                 }
                 if (tunIfaceTotal.txBytes > 0) {
-                    tmpEntry.txBytes = pool.txBytes * txBytes[i] / tunIfaceTotal.txBytes;
+                    tmpEntry.txBytes =
+                        multiplySafe(txBytes[i], pool.txBytes, tunIfaceTotal.txBytes);
                 } else {
                     tmpEntry.txBytes = 0;
                 }
                 if (tunIfaceTotal.txPackets > 0) {
-                    tmpEntry.txPackets = pool.txPackets * txPackets[i] / tunIfaceTotal.txPackets;
+                    tmpEntry.txPackets =
+                        multiplySafe(txPackets[i], pool.txPackets, tunIfaceTotal.txPackets);
                 } else {
                     tmpEntry.txPackets = 0;
                 }
                 if (tunIfaceTotal.operations > 0) {
                     tmpEntry.operations =
-                            pool.operations * operations[i] / tunIfaceTotal.operations;
+                        multiplySafe(operations[i], pool.operations, tunIfaceTotal.operations);
                 } else {
                     tmpEntry.operations = 0;
                 }
