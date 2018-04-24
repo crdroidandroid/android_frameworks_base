@@ -429,12 +429,14 @@ public class StatusBar extends SystemUI implements DemoMode,
             "com.android.system.theme.dark",
             "com.android.systemuix.theme.dark",
             "com.android.settings.theme.dark",
+            "com.crdroid.home.theme.dark",
     };
 
     private static final String[] BLACK_OVERLAYS = {
             "com.android.system.theme.black",
             "com.android.systemuix.theme.black",
             "com.android.settings.theme.black",
+            "com.crdroid.home.theme.black",
     };
 
     private boolean mCustomMaxKeyguard;
