@@ -31,6 +31,7 @@ import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.UserHandle;
@@ -68,6 +69,8 @@ public class KeyguardStatusView extends GridLayout implements
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
     private static final String TAG = "KeyguardStatusView";
     private static final int MARQUEE_DELAY_MS = 2000;
+    private static final String FONT_FAMILY_LIGHT = "sans-serif-light";
+    private static final String FONT_FAMILY_MEDIUM = "sans-serif-medium";
 
     private final LockPatternUtils mLockPatternUtils;
     private final AlarmManager mAlarmManager;
@@ -104,6 +107,7 @@ public class KeyguardStatusView extends GridLayout implements
     private boolean mShowWeather;
     private boolean mShowConditionIcon;
     private boolean mShowLocation;
+    private boolean mShowAmbientBattery;
 
     private SettingsObserver mSettingsObserver;
 
@@ -215,8 +219,11 @@ public class KeyguardStatusView extends GridLayout implements
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        Typeface tfLight = Typeface.create(FONT_FAMILY_LIGHT, Typeface.NORMAL);
+        Typeface tfMedium = Typeface.create(FONT_FAMILY_MEDIUM, Typeface.NORMAL);
         mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                 getResources().getDimensionPixelSize(R.dimen.widget_big_font_size));
+        mClockView.setTypeface(tfLight);
         // Some layouts like burmese have a different margin for the clock
         MarginLayoutParams layoutParams = (MarginLayoutParams) mClockView.getLayoutParams();
         layoutParams.bottomMargin = getResources().getDimensionPixelSize(
@@ -224,10 +231,13 @@ public class KeyguardStatusView extends GridLayout implements
         mClockView.setLayoutParams(layoutParams);
         mDateView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                 getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
+        mDateView.setTypeface(tfMedium);
         if (mOwnerInfo != null) {
             mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
+           mOwnerInfo.setTypeface(tfMedium);
         }
+        mAlarmStatusView.setTypeface(tfMedium);
     }
 
     public void refreshTime() {
@@ -540,7 +550,12 @@ public class KeyguardStatusView extends GridLayout implements
         }
 
         updateDozeVisibleViews();
-        mBatteryDoze.setDark(dark);
+
+        if (mShowAmbientBattery) {
+            mBatteryDoze.setAlpha(dark ? 0 : 1);
+        } else {
+            mBatteryDoze.setDark(dark);
+        }
         mClockView.setTextColor(ColorUtils.blendARGB(mTextColor, Color.WHITE, darkAmount));
         mDateView.setTextColor(ColorUtils.blendARGB(mDateTextColor, Color.WHITE, darkAmount));
         int blendedAlarmColor = ColorUtils.blendARGB(mAlarmTextColor, Color.WHITE, darkAmount);
@@ -582,6 +597,8 @@ public class KeyguardStatusView extends GridLayout implements
                   Settings.System.LOCK_SCREEN_SHOW_WEATHER_LOCATION), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                   Settings.System.OMNIJAWS_WEATHER_ICON_PACK), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                  Settings.System.AMBIENT_BATTERY_PERCENT), false, this, UserHandle.USER_ALL);
 
             mShowWeather = Settings.System.getIntForUser(resolver,
                   Settings.System.LOCK_SCREEN_SHOW_WEATHER, 0, UserHandle.USER_CURRENT) == 1;
@@ -589,6 +606,8 @@ public class KeyguardStatusView extends GridLayout implements
                   Settings.System.LOCK_SCREEN_WEATHER_CONDITION_ICON, 1, UserHandle.USER_CURRENT) == 1;
             mShowLocation = Settings.System.getIntForUser(resolver,
                   Settings.System.LOCK_SCREEN_SHOW_WEATHER_LOCATION, 1, UserHandle.USER_CURRENT) == 1;
+            mShowAmbientBattery = Settings.System.getIntForUser(resolver,
+                  Settings.System.AMBIENT_BATTERY_PERCENT, 0, UserHandle.USER_CURRENT) == 1;
             queryAndUpdateWeather();
         }
 
@@ -619,6 +638,10 @@ public class KeyguardStatusView extends GridLayout implements
             } else if (uri.equals(Settings.System.getUriFor(
                    Settings.System.OMNIJAWS_WEATHER_ICON_PACK))) {
                 updateWeather();
+            } else if (uri.equals(Settings.System.getUriFor(
+                   Settings.System.AMBIENT_BATTERY_PERCENT))) {
+                mShowAmbientBattery = Settings.System.getIntForUser(resolver,
+                    Settings.System.AMBIENT_BATTERY_PERCENT, 0, UserHandle.USER_CURRENT) == 1;
             }
         }
     }

@@ -86,6 +86,7 @@
             android:clickable="true"
             android:focusable="true"
             android:background="@drawable/ripple_drawable"
+            android:padding="15dp"
             android:src="@drawable/ic_settings_memory"
             android:tint="?android:attr/colorForeground"
             android:contentDescription="@string/accessibility_quick_settings_running_services" />

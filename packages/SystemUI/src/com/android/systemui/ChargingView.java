@@ -20,12 +20,14 @@ import android.annotation.Nullable;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import com.android.internal.hardware.AmbientDisplayConfiguration;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.ConfigurationController;
+import com.android.systemui.tuner.TunerService;
 
 /**
  * A view that only shows its drawable while the phone is charging.
@@ -34,7 +36,8 @@ import com.android.systemui.statusbar.policy.ConfigurationController;
  */
 public class ChargingView extends ImageView implements
         BatteryController.BatteryStateChangeCallback,
-        ConfigurationController.ConfigurationListener {
+        ConfigurationController.ConfigurationListener,
+        TunerService.Tunable {
 
     private static final long CHARGING_INDICATION_DELAY_MS = 1000;
 
@@ -45,7 +48,10 @@ public class ChargingView extends ImageView implements
     private boolean mCharging;
     private boolean mDark;
     private boolean mSuppressCharging;
+    private boolean mShowAmbientBattery;
 
+    private static final String AMBIENT_BATTERY_PERCENT =
+            "system:" + Settings.System.AMBIENT_BATTERY_PERCENT;
 
     private void clearSuppressCharging() {
         mSuppressCharging = false;
@@ -76,14 +82,30 @@ public class ChargingView extends ImageView implements
         mBatteryController = Dependency.get(BatteryController.class);
         mBatteryController.addCallback(this);
         Dependency.get(ConfigurationController.class).addCallback(this);
+        Dependency.get(TunerService.class).addTunable(this,
+                AMBIENT_BATTERY_PERCENT);
     }
 
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        Dependency.get(TunerService.class).removeTunable(this);
         mBatteryController.removeCallback(this);
         Dependency.get(ConfigurationController.class).removeCallback(this);
         removeCallbacks(mClearSuppressCharging);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case AMBIENT_BATTERY_PERCENT:
+                mShowAmbientBattery =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                updateVisibility();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -121,6 +143,6 @@ public class ChargingView extends ImageView implements
     }
 
     private void updateVisibility() {
-        setVisibility(mCharging && !mSuppressCharging && mDark ? VISIBLE : INVISIBLE);
+        setVisibility(!mShowAmbientBattery && mCharging && !mSuppressCharging && mDark ? VISIBLE : INVISIBLE);
     }
 }
