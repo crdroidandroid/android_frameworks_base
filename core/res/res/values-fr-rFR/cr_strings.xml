@@ -41,4 +41,8 @@
   <string name="animation_grow_shrink_right">Croître (Droite)</string>
   <string name="animation_random">Aléatoire</string>
   <string name="action_null">Vide</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessFontManager">accéder au gestionnaire de polices</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessFontManager">Permettre à une application d\'accéder au gestionnaire de polices.</string>
 </resources>

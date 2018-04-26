@@ -41,4 +41,8 @@
   <string name="animation_grow_shrink_right">Crește în (Dreapta)</string>
   <string name="animation_random">Aleatoriu</string>
   <string name="action_null">Gol</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessFontManager">accesare manager fonturi</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessFontManager">Permite accesul unei aplicatii la managementul de fonturi.</string>
 </resources>
