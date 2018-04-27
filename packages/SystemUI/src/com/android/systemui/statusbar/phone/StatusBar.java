@@ -4281,6 +4281,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 && (config.uiMode & Configuration.UI_MODE_NIGHT_MASK)
                     == Configuration.UI_MODE_NIGHT_YES;
         final boolean useDarkTheme = nightModeWantsDarkTheme;
+
+        Settings.System.putIntForUser(mContext.getContentResolver(),
+                Settings.System.BERRY_DARK_CHECK, useDarkTheme ? 1 : 0, UserHandle.USER_CURRENT);
+
         if (isUsingDarkTheme() != useDarkTheme) {
             mUiOffloadThread.submit(() -> {
                 unfuckBlackWhiteAccent();

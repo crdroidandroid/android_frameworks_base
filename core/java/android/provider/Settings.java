@@ -4709,6 +4709,12 @@ public final class Settings {
         public static final String BERRY_ACCENT_PICKER = "berry_accent_picker";
 
         /**
+         * Check if using dark theme
+         * @hide
+         */
+        public static final String BERRY_DARK_CHECK = "berry_dark_check";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
