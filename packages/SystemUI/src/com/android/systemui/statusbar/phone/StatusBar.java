@@ -4153,6 +4153,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 break;
         }
 
+        Settings.System.putIntForUser(mContext.getContentResolver(),
+                Settings.System.BERRY_DARK_CHECK, useDarkTheme ? 1 : 0, UserHandle.USER_CURRENT);
+
         if (isUsingDarkTheme() != useDarkTheme) {
             mUiOffloadThread.submit(() -> {
                 try {

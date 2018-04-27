@@ -4178,6 +4178,12 @@ public final class Settings {
         public static final String SCREENSHOT_DEFAULT_MODE = "screenshot_default_mode";
 
         /**
+         * Check if using dark theme
+         * @hide
+         */
+        public static final String BERRY_DARK_CHECK = "berry_dark_check";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
