@@ -5489,6 +5489,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                 break;
         }
 
+        Settings.System.putIntForUser(mContext.getContentResolver(),
+                Settings.System.BERRY_DARK_CHECK, useDarkTheme ? 1 : 0, UserHandle.USER_CURRENT);
+
         if (isUsingDarkTheme() != useDarkTheme) {
             try {
                 mOverlayManager.setEnabled("com.android.systemui.theme.dark",

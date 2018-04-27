@@ -4812,6 +4812,12 @@ public final class Settings {
         public static final String BERRY_DARK_SHADE = "berry_dark_shade";
 
         /**
+         * Check if using dark theme
+         * @hide
+         */
+        public static final String BERRY_DARK_CHECK = "berry_dark_check";
+
+        /**
          * Hold current font name and name of the originating package Uses "|" as a delimiter
          * @hide
          */
