@@ -77,23 +77,23 @@
   <string name="omnijaws_package_not_available">OmniJaws tidak tersedia</string>
   <string name="omnijaws_service_last_update">Pembaharuan Terakhir:</string>
   <!-- Assist/Google Tiles -->
-  <string name="quick_settings_google_assist_label">Assistant</string>
-  <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+  <string name="quick_settings_google_assist_label">Asisten</string>
+  <string name="quick_settings_google_voice_assist_label">Asisten Suara</string>
   <string name="quick_settings_google_now_label">Google</string>
   <!-- Screenrecord Notification Ticker -->
-  <string name="screenrecord_notif_ticker">Screen is being recorded</string>
-  <string name="screenrecord_notif_final_ticker">Screen recorded successfully</string>
+  <string name="screenrecord_notif_ticker">Layar sedang direkam</string>
+  <string name="screenrecord_notif_final_ticker">Layar telah berhasil direkam</string>
   <!-- Screenrecord notification title -->
-  <string name="screenrecord_notif_title">Recording screen</string>
+  <string name="screenrecord_notif_title">Merekam Layar</string>
   <!-- Screenrecord notification action: Stop -->
-  <string name="screenrecord_notif_stop">Stop</string>
-  <string name="screenrecord_notif_completed">Screen recorded successfully</string>
+  <string name="screenrecord_notif_stop">Berhenti</string>
+  <string name="screenrecord_notif_completed">Layar telah berhasil direkam</string>
   <!-- Screenrecord notification action: show/hide pointer -->
-  <string name="screenrecord_notif_pointer_on">Show pointer</string>
-  <string name="screenrecord_notif_pointer_off">Hide pointer</string>
+  <string name="screenrecord_notif_pointer_on">Tampilkan penunjuk</string>
+  <string name="screenrecord_notif_pointer_off">Sembunyikan penunjuk</string>
   <!-- Screen record notification error title -->
-  <string name="screenrecord_notif_error">Unable to record screen</string>
-  <string name="notification_channel_screenrecord">Screenrecords</string>
+  <string name="screenrecord_notif_error">Tidak dapat merekam layar</string>
+  <string name="notification_channel_screenrecord">Perekam layar</string>
   <string name="screenrecord_hide_hint">Hide hint</string>
   <string name="screenrecord_show_hint">Show hint</string>
   <!-- Screenshot QS tile -->

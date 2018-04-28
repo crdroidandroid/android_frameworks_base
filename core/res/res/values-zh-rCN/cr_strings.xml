@@ -42,7 +42,7 @@
   <string name="animation_random">随机</string>
   <string name="action_null">空白</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFontManager">access font manager</string>
+  <string name="permlab_accessFontManager">列出应用程序权限的说明，以便用户可以选择是否允许应用程序执行此操作</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+  <string name="permdesc_accessFontManager">列出应用程序权限的说明，以便用户可以选择是否允许应用程序执行此操作。</string>
 </resources>

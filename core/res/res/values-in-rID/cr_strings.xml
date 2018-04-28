@@ -42,7 +42,7 @@
   <string name="animation_random">Acak</string>
   <string name="action_null">Kosong</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFontManager">access font manager</string>
+  <string name="permlab_accessFontManager">akses Manajer Font</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+  <string name="permdesc_accessFontManager">Mengizinkan aplikasi untuk mengakses manajer font.</string>
 </resources>
