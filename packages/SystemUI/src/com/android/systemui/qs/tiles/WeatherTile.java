@@ -71,6 +71,7 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
     private boolean mEnabled;
     private final ActivityStarter mActivityStarter;
     private WeatherDetailAdapter mDetailAdapter;
+    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_weather_default_on);
 
     private static final String[] ALTERNATIVE_WEATHER_APPS = {
             "cz.martykan.forecastie",
@@ -204,12 +205,16 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         if (DEBUG) Log.d(TAG, "handleUpdateState " + mEnabled);
+        if (state.slash == null) {
+            state.slash = new SlashState();
+        }
         state.dualTarget = true;
         state.value = mEnabled;
         state.state = state.value ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
+        state.icon = mIcon;
+        state.slash.isSlashed = !state.value;
         if (mEnabled) {
             if (mWeatherImage == null) {
-                state.icon = ResourceIcon.get(R.drawable.ic_qs_weather_default_on);
                 state.label = mContext.getResources().getString(R.string.omnijaws_label_default);
             } else {
                 state.icon = new DrawableIcon(mWeatherImage);
@@ -217,7 +222,6 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
             }
         } else {
             mWeatherImage = null;
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_weather_default_off);
             state.label = mContext.getResources().getString(R.string.omnijaws_label_default);
         }
     }
