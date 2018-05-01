@@ -7749,6 +7749,13 @@ public final class Settings {
                 "managed_profile_contact_remote_search";
 
         /**
+         * Enable face auto unlock on secure lock screens
+         *
+         * @hide
+         */
+        public static final String FACE_AUTO_UNLOCK = "face_auto_unlock";
+
+        /**
          * Whether or not the automatic storage manager is enabled and should run on the device.
          *
          * @hide
