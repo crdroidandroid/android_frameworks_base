@@ -101,4 +101,14 @@
   <string name="quick_settings_screenrecord_lq_label">Záznam obrazovky 480p</string>
   <string name="quick_settings_screenrecord_mq_label">Záznam obrazovky 720p</string>
   <string name="quick_settings_screenrecord_hq_label">Záznam obrazovky 720p+</string>
+  <!-- Always on Display Tile -->
+  <string name="quick_settings_always_on_display_label">Vždy na obrazovke</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_always_on_display_off">Vždy na obrazovke vyp.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_always_on_display_on">Vždy na obrazovke zap.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_always_on_display_changed_off">Vždy na obrazovke bolo vypnuté.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_always_on_display_changed_on">Vždy na obrazovke bolo zapnuté.</string>
 </resources>
