@@ -18,6 +18,7 @@ package com.android.systemui.qs;
 
 import static android.app.StatusBarManager.DISABLE2_QUICK_SETTINGS;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.UserInfo;
@@ -28,12 +29,14 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
 import android.os.UserManager;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -62,8 +65,10 @@ import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserInfoController.OnUserInfoChangedListener;
 import com.android.systemui.tuner.TunerService;
 
+import static android.content.Context.VIBRATOR_SERVICE;
+
 public class QSFooterImpl extends FrameLayout implements QSFooter,
-        OnClickListener, OnUserInfoChangedListener, EmergencyListener, SignalCallback {
+        OnClickListener, OnLongClickListener, OnUserInfoChangedListener, EmergencyListener, SignalCallback {
 
     private ActivityStarter mActivityStarter;
     private UserInfoController mUserInfoController;
@@ -99,9 +104,12 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     private final CellSignalState mInfo = new CellSignalState();
     private OnClickListener mExpandClickListener;
 
+    private Vibrator mVibrator;
+
     public QSFooterImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
         mColorForeground = Utils.getColorAttr(context, android.R.attr.colorForeground);
+        mVibrator = (Vibrator) getContext().getSystemService(VIBRATOR_SERVICE);
     }
 
     @Override
@@ -118,6 +126,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         mSettingsButton = findViewById(R.id.settings_button);
         mSettingsContainer = findViewById(R.id.settings_button_container);
         mSettingsButton.setOnClickListener(this);
+        mSettingsButton.setOnLongClickListener(this);
 
         mMobileGroup = findViewById(R.id.mobile_combo);
         mMobileSignal = findViewById(R.id.mobile_signal);
@@ -365,6 +374,23 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
                 startSettingsActivity();
             }
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        if (v == mSettingsButton) {
+            startcrDroidSettingsLayoutActivity();
+            mVibrator.vibrate(50);
+        }
+        return false;
+    }
+
+    private ComponentName CRDROIDSETTINGSLAYOUT_SETTING_COMPONENT = new ComponentName(
+            "com.android.settings", "com.android.settings.Settings$crDroidSettingsLayoutActivity");
+
+    private void startcrDroidSettingsLayoutActivity() {
+        mActivityStarter.startActivity(new Intent().setComponent(CRDROIDSETTINGSLAYOUT_SETTING_COMPONENT),
+                true /* dismissShade */);
     }
 
     private void startSettingsActivity() {
