@@ -5433,7 +5433,6 @@ public class StatusBar extends SystemUI implements DemoMode,
     protected void updateKeyguardState(boolean goingToFullShade, boolean fromShadeLocked) {
         Trace.beginSection("StatusBar#updateKeyguardState");
         if (mState == StatusBarState.KEYGUARD) {
-            mKeyguardIndicationController.setVisible(true);
             mNotificationPanel.resetViews();
             if (mKeyguardUserSwitcher != null) {
                 mKeyguardUserSwitcher.setKeyguard(true, fromShadeLocked);
@@ -5443,7 +5442,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mAmbientIndicationContainer.setVisibility(View.VISIBLE);
             }*/
         } else {
-            mKeyguardIndicationController.setVisible(false);
             if (mKeyguardUserSwitcher != null) {
                 mKeyguardUserSwitcher.setKeyguard(false,
                         goingToFullShade ||
@@ -5455,8 +5453,10 @@ public class StatusBar extends SystemUI implements DemoMode,
             }*/
         }
         if (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED) {
+            mKeyguardIndicationController.setVisible(true);
             mScrimController.setKeyguardShowing(true);
         } else {
+            mKeyguardIndicationController.setVisible(false);
             mScrimController.setKeyguardShowing(false);
         }
         mNotificationPanel.setBarState(mState, mKeyguardFadingAway, goingToFullShade);
