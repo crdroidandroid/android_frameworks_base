@@ -4747,6 +4747,7 @@ android.view.animation.AnimationUtils$1
 android.view.animation.AnimationUtils$AnimationState
 android.view.animation.BaseInterpolator
 android.view.animation.ClipRectAnimation
+android.view.animation.ClipRectAnimationF
 android.view.animation.CycleInterpolator
 android.view.animation.DecelerateInterpolator
 android.view.animation.GridLayoutAnimationController$AnimationParameters
