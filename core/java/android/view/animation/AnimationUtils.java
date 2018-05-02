@@ -131,10 +131,10 @@ public class AnimationUtils {
         translateAnimation.setInterpolator(fastOutSlowIn());
         translateAnimation.setDuration(425L);
         animationSet.addAnimation(translateAnimation);
-        ClipRectAnimation clipRectAnimation = new ClipRectAnimation(0.0f, 0.959f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
-        clipRectAnimation.setDuration(425L);
-        clipRectAnimation.setInterpolator(fastOutExtraSlowIn());
-        animationSet.addAnimation(clipRectAnimation);
+        ClipRectAnimationF clipRectAnimationF = new ClipRectAnimationF(0.0f, 0.959f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+        clipRectAnimationF.setDuration(425L);
+        clipRectAnimationF.setInterpolator(fastOutExtraSlowIn());
+        animationSet.addAnimation(clipRectAnimationF);
         return animationSet;
     }
 
@@ -171,10 +171,10 @@ public class AnimationUtils {
         translateAnimation.setDuration(425L);
         translateAnimation.setInterpolator(fastOutSlowIn());
         animationSet.addAnimation(translateAnimation);
-        ClipRectAnimation clipRectAnimation = new ClipRectAnimation(0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.959f, 1.0f, 1.0f);
-        clipRectAnimation.setDuration(425L);
-        clipRectAnimation.setInterpolator(fastOutExtraSlowIn());
-        animationSet.addAnimation(clipRectAnimation);
+        ClipRectAnimationF clipRectAnimationF = new ClipRectAnimationF(0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.959f, 1.0f, 1.0f);
+        clipRectAnimationF.setDuration(425L);
+        clipRectAnimationF.setInterpolator(fastOutExtraSlowIn());
+        animationSet.addAnimation(clipRectAnimationF);
         return animationSet;
     }
 
