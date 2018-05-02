@@ -313,7 +313,9 @@ final class OverlayManagerServiceImpl {
         }
 
         // check for enabled framework overlays
-        modified = modified || !getEnabledOverlayPackageNames("android", userId).isEmpty();
+        if (!"android".equals(targetPackageName)) {
+            modified = modified || !getEnabledOverlayPackageNames("android", userId).isEmpty();
+        }
 
         return modified;
     }
