@@ -54,9 +54,10 @@
   <!-- Screenshot tile -->
   <string name="quick_settings_screenshot_label">Snímek obrazovky</string>
   <string name="quick_settings_region_screenshot_label">Částečný snímek obrazovky</string>
-  <!-- Reboot/Recovery QS Tile -->
+  <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Restartovat</string>
   <string name="quick_settings_reboot_recovery_label">Recovery</string>
+  <string name="quick_settings_poweroff_label">Vypnout</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">Co je to?</string>
   <string name="caffeine_info_message">Dlaždice Kofein je jednoduchá dlaždice, kterou můžete zapnout, aby vaše obrazovka zůstala zapnutá.\n\nVezměte na vědomí, že stav dlaždice se po vypnutí obrazovky obnoví.</string>
@@ -66,6 +67,9 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_dash_charging_time">DASH nabíjení (plně nabito za <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g>)</string>
   <string name="keyguard_plugged_in_dash_charging">DASH nabíjení</string>
+  <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
+  <string name="keyguard_indication_turbo_power_time">TurboPower je připojen (zbývá <xliff:g id="charging_time_left">%s</xliff:g> do plna)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower je připojen</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Chyba</string>
   <string name="omnijaws_service_unkown">Žádné údaje o počasí</string>

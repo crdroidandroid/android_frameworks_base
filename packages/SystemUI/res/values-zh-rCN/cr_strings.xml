@@ -54,9 +54,10 @@
   <!-- Screenshot tile -->
   <string name="quick_settings_screenshot_label">屏幕截图</string>
   <string name="quick_settings_region_screenshot_label">部分截图</string>
-  <!-- Reboot/Recovery QS Tile -->
+  <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">重新启动</string>
   <string name="quick_settings_reboot_recovery_label">恢复模式</string>
+  <string name="quick_settings_poweroff_label">关机</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">这是什么?</string>
   <string name="caffeine_info_message">咖啡因瓷砖是一个简单的瓷砖, 你可以打开, 以保持你的屏幕上. 请注意, 平铺的状态将在关闭屏幕后重新设置。</string>
@@ -66,6 +67,9 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_dash_charging_time">Dash 闪充 (还需 <xliff:g id="charging_time_left" example="4小时2分钟">%s</xliff:g> 充满)</string>
   <string name="keyguard_plugged_in_dash_charging">Dash 闪充</string>
+  <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
+  <string name="keyguard_indication_turbo_power_time">TurboPower 已连接 (还需 <xliff:g id="charging_time_left">%s</xliff:g> 充满)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower 已连接</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">出错</string>
   <string name="omnijaws_service_unkown">没有天气数据</string>
@@ -102,17 +106,17 @@
   <string name="quick_settings_screenrecord_mq_label">清晰度 720p</string>
   <string name="quick_settings_screenrecord_hq_label">清晰度 720p+</string>
   <!-- Always on Display Tile -->
-  <string name="quick_settings_always_on_display_label">Always on display</string>
+  <string name="quick_settings_always_on_display_label">总是显示</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_off">Always on display off.</string>
+  <string name="accessibility_quick_settings_always_on_display_off">关闭总是显示</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_on">Always on display on.</string>
+  <string name="accessibility_quick_settings_always_on_display_on">开启总是显示</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_off">Always on display turned off.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_off">总是显示已关闭</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_on">Always on display turned on.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_on">总是显示已开启</string>
   <!-- Name of the nfc status bar icon. -->
-  <string name="status_bar_nfc">NFC</string>
+  <string name="status_bar_nfc">NFC 近场通讯</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
-  <string name="accessibility_status_bar_nfc">Nfc</string>
+  <string name="accessibility_status_bar_nfc">近场通讯</string>
 </resources>

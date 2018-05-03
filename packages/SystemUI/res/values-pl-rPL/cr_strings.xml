@@ -54,9 +54,10 @@
   <!-- Screenshot tile -->
   <string name="quick_settings_screenshot_label">Zrzut ekranu</string>
   <string name="quick_settings_region_screenshot_label">Częściowy zrzut ekranu</string>
-  <!-- Reboot/Recovery QS Tile -->
+  <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Uruchom ponownie</string>
   <string name="quick_settings_reboot_recovery_label">Tryb Recovery</string>
+  <string name="quick_settings_poweroff_label">Power off</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">Co to jest?</string>
   <string name="caffeine_info_message">Kofeina to kafelek szybkich ustawień, który pozwala pozostawić ekran włączony.\n\nPamiętaj, że stan kafelka zostanie zresetowany, gdy ekran zostanie zablokowany.</string>
@@ -66,6 +67,9 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_dash_charging_time">Szybkie ładowanie (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> do pełnego naładowania)</string>
   <string name="keyguard_plugged_in_dash_charging">Szybkie ładowanie</string>
+  <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
+  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Błąd</string>
   <string name="omnijaws_service_unkown">Brak danych o pogodzie</string>

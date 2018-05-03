@@ -54,9 +54,10 @@
   <!-- Screenshot tile -->
   <string name="quick_settings_screenshot_label">Скриншот</string>
   <string name="quick_settings_region_screenshot_label">Скриншот части экрана</string>
-  <!-- Reboot/Recovery QS Tile -->
+  <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Перезагрузка</string>
   <string name="quick_settings_reboot_recovery_label">Режим восстановления</string>
+  <string name="quick_settings_poweroff_label">Выключить</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">Что это такое?</string>
   <string name="caffeine_info_message">Кофеин - это плитка быстрых настроек, которая позволяет держать ваш экран включенным.\n\nПожалуйста, учтите, что состояние плитки сбрасывается при отключении экрана.</string>
@@ -66,6 +67,9 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_dash_charging_time">Быстрая зарядка (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> до полной)</string>
   <string name="keyguard_plugged_in_dash_charging">Быстрая зарядка</string>
+  <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
+  <string name="keyguard_indication_turbo_power_time">Быстрая зарядка подключена (<xliff:g id="charging_time_left">%s</xliff:g> до полной зарядки)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">Быстрая зарядка подключена</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Ошибка</string>
   <string name="omnijaws_service_unkown">Нет данных о погоде</string>

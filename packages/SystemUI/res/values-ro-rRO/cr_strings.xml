@@ -54,9 +54,10 @@
   <!-- Screenshot tile -->
   <string name="quick_settings_screenshot_label">Captură ecran</string>
   <string name="quick_settings_region_screenshot_label">Captură parțială de ecran</string>
-  <!-- Reboot/Recovery QS Tile -->
+  <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Repornire</string>
   <string name="quick_settings_reboot_recovery_label">Recuperare</string>
+  <string name="quick_settings_poweroff_label">Power off</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">Ce este acesta?</string>
   <string name="caffeine_info_message">Mod caffeine previne stingerea ecranului\n\nLa inchiderea ecranului, actiunea se resetează.</string>
@@ -66,6 +67,9 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_dash_charging_time">Incarcare Dash (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> până este plină bateria)</string>
   <string name="keyguard_plugged_in_dash_charging">Incarcare Dash</string>
+  <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
+  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Eroare</string>
   <string name="omnijaws_service_unkown">Fară informatii vreme</string>

@@ -54,9 +54,10 @@
   <!-- Screenshot tile -->
   <string name="quick_settings_screenshot_label">Screenshot</string>
   <string name="quick_settings_region_screenshot_label">Teilbild-Screenshot</string>
-  <!-- Reboot/Recovery QS Tile -->
+  <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Neustart</string>
   <string name="quick_settings_reboot_recovery_label">Recovery</string>
+  <string name="quick_settings_poweroff_label">Power off</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">Was ist das?</string>
   <string name="caffeine_info_message">Die Koffein-Kachel kann genutzt werden, um den Bildschirm anzulassen.\n\nBitte beachten, dass die Funktion automatisch zurückgesetzt wird, wenn der Bildschirm ausgeschaltet wird.</string>
@@ -66,6 +67,9 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_dash_charging_time">Dash Charging (<xliff:g id="verbleibende Ladezeit" example="4 Stunden und 2 Minuten">%s</xliff:g> bis Aufgeladen)</string>
   <string name="keyguard_plugged_in_dash_charging">Dash Charging</string>
+  <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
+  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Fehler</string>
   <string name="omnijaws_service_unkown">Keine Wetterdaten</string>

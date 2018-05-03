@@ -54,9 +54,10 @@
   <!-- Screenshot tile -->
   <string name="quick_settings_screenshot_label">Знімок екрана</string>
   <string name="quick_settings_region_screenshot_label">Знімок частини екрану</string>
-  <!-- Reboot/Recovery QS Tile -->
+  <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Перезавантаження</string>
   <string name="quick_settings_reboot_recovery_label">Режим відновлення</string>
+  <string name="quick_settings_poweroff_label">Power off</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">Що це?</string>
   <string name="caffeine_info_message">Кофеїн то плитка, яка лишає екран включенним.\n\nБудь ласка зверніть увагу, таймер буде скинуто після вимкнення екрана.</string>
@@ -66,6 +67,9 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_dash_charging_time">Швидке заряджання (<xliff:g id="charging_time_left" example="4 год. 2 хв.">%s</xliff:g> до повної зарядки)</string>
   <string name="keyguard_plugged_in_dash_charging">Швидке заряджання</string>
+  <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
+  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Помилка</string>
   <string name="omnijaws_service_unkown">Немає даних про погоду</string>
