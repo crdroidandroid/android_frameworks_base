@@ -520,7 +520,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mHandleVolumeKeysInWM;
 
     boolean mKillAppLongpressBack;
-    int mBackKillTimeout;
+    int mKillTimeout;
 
     int mDeviceHardwareKeys;
 
@@ -1647,7 +1647,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private final ScreenshotRunnable mScreenshotRunnable = new ScreenshotRunnable();
 
-    private final Runnable mBackLongPress = new Runnable() {
+    private final Runnable mCloseApp = new Runnable() {
         @Override
         public void run() {
             if (ActionUtils.killForegroundApp(mContext, mCurrentUserId)) {
@@ -1838,6 +1838,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             case SPLIT_SCREEN:
                 toggleSplitScreen();
+                break;
+            case CLOSE_APP:
+                closeApp();
                 break;
             default:
                 break;
@@ -2145,7 +2148,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mPerDisplayFocusEnabled = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_perDisplayFocusEnabled);
 
-        mBackKillTimeout = mContext.getResources().getInteger(
+        mKillTimeout = mContext.getResources().getInteger(
                 org.lineageos.platform.internal.R.integer.config_backKillTimeout);
 
         mDeviceHardwareKeys = mContext.getResources().getInteger(
@@ -3131,7 +3134,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         if (keyCode == KeyEvent.KEYCODE_BACK && !down) {
-            mHandler.removeCallbacks(mBackLongPress);
+            mHandler.removeCallbacks(mCloseApp);
         }
 
         // First we always handle the home key here, so applications
@@ -3387,7 +3390,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (mKillAppLongpressBack) {
                 if (down && repeatCount == 0) {
-                    mHandler.postDelayed(mBackLongPress, mBackKillTimeout);
+                    closeApp();
                 }
             }
         }
@@ -3914,6 +3917,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (statusbar != null) {
             statusbar.toggleSplitScreen();
         }
+    }
+
+   private void closeApp() {
+        mHandler.postDelayed(mCloseApp, mKillTimeout);
     }
 
     @Override
