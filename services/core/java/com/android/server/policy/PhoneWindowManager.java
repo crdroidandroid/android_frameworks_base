@@ -195,6 +195,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.autofill.AutofillManagerInternal;
+import android.widget.Toast;
 
 import com.android.internal.R;
 import com.android.internal.accessibility.AccessibilityShortcutController;
@@ -209,6 +210,7 @@ import com.android.internal.policy.KeyInterceptionInfo;
 import com.android.internal.policy.PhoneWindow;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.util.ArrayUtils;
+import com.android.internal.util.crdroid.Utils;
 import com.android.server.ExtconStateObserver;
 import com.android.server.ExtconUEventObserver;
 import com.android.server.GestureLauncherService;
@@ -1651,6 +1653,41 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private final ScreenshotRunnable mScreenshotRunnable = new ScreenshotRunnable();
 
+    private final Runnable mCloseApp = new Runnable() {
+        @Override
+        public void run() {
+            if (unpinActivity(false)) {
+                return;
+            }
+
+            if (Utils.killForegroundApp(mContext, mCurrentUserId)) {
+                Toast.makeText(mContext,
+                        com.android.internal.R.string.app_killed_message,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    private void closeApp() {
+        mHandler.postDelayed(mCloseApp, 200);
+    }
+
+    private boolean unpinActivity(boolean checkOnly) {
+        if (!hasNavigationBar()) {
+            try {
+                if (ActivityTaskManager.getService().isInLockTaskMode()) {
+                    if (!checkOnly) {
+                        ActivityTaskManager.getService().stopSystemLockTaskMode();
+                    }
+                    return true;
+                }
+            } catch (RemoteException e) {
+                // ignore
+            }
+        }
+        return false;
+    }
+
     @Override
     public void showGlobalActions() {
         mHandler.removeMessages(MSG_DISPATCH_SHOW_GLOBAL_ACTIONS);
@@ -1836,6 +1873,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             case SPLIT_SCREEN:
                 toggleSplitScreen();
+                break;
+            case CLOSE_APP:
+                closeApp();
                 break;
             default:
                 break;
