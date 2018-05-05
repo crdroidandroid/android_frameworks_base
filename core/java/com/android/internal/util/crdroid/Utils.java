@@ -17,11 +17,15 @@
 package com.android.internal.util.crdroid;
 
 import android.app.ActivityManager;
+import android.app.ActivityManager.StackInfo;
+import android.app.ActivityManagerNative;
+import android.app.IActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.hardware.camera2.CameraAccessException;
@@ -34,9 +38,9 @@ import android.os.Looper;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.os.UserHandle;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.KeyCharacterMap;
@@ -54,6 +58,7 @@ public class Utils {
 
     public static final String INTENT_SCREENSHOT = "action_take_screenshot";
     public static final String INTENT_REGION_SCREENSHOT = "action_take_region_screenshot";
+    private static final String SYSTEMUI_PACKAGE = "com.android.systemui";
 
     public static boolean isChineseLanguage() {
        return Resources.getSystem().getConfiguration().locale.getLanguage().startsWith(
@@ -232,5 +237,68 @@ public class Utils {
             needsNav = true;
         }
         return needsNav;
+    }
+
+    /**
+     * Kills the top most / most recent user application, but leaves out the launcher.
+     *
+     * @param context the current context, used to retrieve the package manager.
+     * @param userId the ID of the currently active user
+     * @return {@code true} when a user application was found and closed.
+     */
+    public static boolean killForegroundApp(Context context, int userId) {
+        try {
+            return killForegroundAppInternal(context, userId);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Could not kill foreground app");
+        }
+        return false;
+    }
+
+    private static boolean killForegroundAppInternal(Context context, int userId)
+            throws RemoteException {
+        final String packageName = getForegroundTaskPackageName(context, userId);
+
+        if (packageName == null) {
+            return false;
+        }
+
+        final IActivityManager am = ActivityManagerNative.getDefault();
+        am.forceStopPackage(packageName, UserHandle.USER_CURRENT);
+
+        return true;
+    }
+
+    private static String getForegroundTaskPackageName(Context context, int userId)
+            throws RemoteException {
+        final String defaultHomePackage = resolveCurrentLauncherPackage(context, userId);
+        final IActivityManager am = ActivityManager.getService();
+        final StackInfo focusedStack = am.getFocusedStackInfo();
+
+        if (focusedStack == null || focusedStack.topActivity == null) {
+            return null;
+        }
+
+        final String packageName = focusedStack.topActivity.getPackageName();
+        if (!packageName.equals(defaultHomePackage)
+                && !packageName.equals(SYSTEMUI_PACKAGE)) {
+            return packageName;
+        }
+
+        return null;
+    }
+
+    private static String resolveCurrentLauncherPackage(Context context, int userId) {
+        final Intent launcherIntent = new Intent(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_HOME);
+        final PackageManager pm = context.getPackageManager();
+        final ResolveInfo launcherInfo = pm.resolveActivityAsUser(launcherIntent, 0, userId);
+
+        if (launcherInfo.activityInfo != null &&
+                !launcherInfo.activityInfo.packageName.equals("android")) {
+            return launcherInfo.activityInfo.packageName;
+        }
+
+        return null;
     }
 }
