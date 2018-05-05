@@ -47,6 +47,7 @@ public class UsbTetherTile extends QSTileImpl<BooleanState> {
 
     private boolean mUsbConnected = false;
     private boolean mUsbTetherEnabled = false;
+    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_usb_tether_on);
 
     public UsbTetherTile(QSHost host) {
         super(host);
@@ -101,10 +102,13 @@ public class UsbTetherTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
+        if (state.slash == null) {
+            state.slash = new SlashState();
+        }
         state.value = mUsbTetherEnabled;
         state.label = mContext.getString(R.string.quick_settings_usb_tether_label);
-        state.icon = mUsbTetherEnabled ? ResourceIcon.get(R.drawable.ic_qs_usb_tether_on)
-                : ResourceIcon.get(R.drawable.ic_qs_usb_tether_off);
+        state.icon = mIcon;
+        state.slash.isSlashed = !state.value;
         state.state = mUsbTetherEnabled ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
     }
 
