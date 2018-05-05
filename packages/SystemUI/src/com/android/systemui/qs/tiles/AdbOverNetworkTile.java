@@ -45,6 +45,7 @@ public class AdbOverNetworkTile extends QSTileImpl<BooleanState> {
 
     private static final Intent SETTINGS_DEVELOPMENT =
             new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_network_adb_on);
 
     public AdbOverNetworkTile(QSHost host) {
         super(host);
@@ -69,7 +70,12 @@ public class AdbOverNetworkTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
+        if (state.slash == null) {
+            state.slash = new SlashState();
+        }
         state.value = isAdbNetworkEnabled();
+        state.icon = mIcon;
+        state.slash.isSlashed = !state.value;
         if (state.value) {
             WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -82,12 +88,10 @@ public class AdbOverNetworkTile extends QSTileImpl<BooleanState> {
                 //if wifiInfo is null, set the label without host address
                 state.label = mContext.getString(R.string.quick_settings_network_adb_label);
             }
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_network_adb_on);
             state.state = Tile.STATE_ACTIVE;
         } else {
             // Otherwise set the disabled label and icon
             state.label = mContext.getString(R.string.quick_settings_network_adb_label);
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_network_adb_off);
             state.state = Tile.STATE_INACTIVE;
         }
     }
