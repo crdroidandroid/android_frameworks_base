@@ -54,4 +54,11 @@
     <string name="accessibility_quick_settings_cpuinfo_on">CPU Info on</string>
     <string name="accessibility_quick_settings_cpuinfo_changed_off">CPU Info turned off</string>
     <string name="accessibility_quick_settings_cpuinfo_changed_on">CPU Info turned on</string>
+
+    <!-- HW Keys Tile -->
+    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_hw_keys_disabled">HW Keys disabled.</string>
+    <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
 </resources>
