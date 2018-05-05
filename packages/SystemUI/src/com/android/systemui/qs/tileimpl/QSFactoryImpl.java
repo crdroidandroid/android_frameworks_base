@@ -45,6 +45,7 @@ import com.android.systemui.qs.tiles.GoogleVoiceAssistTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HighBrightnessTile;
 import com.android.systemui.qs.tiles.HotspotTile;
+import com.android.systemui.qs.tiles.HWKeysTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.LiveDisplayTile;
 import com.android.systemui.qs.tiles.LocationTile;
@@ -115,6 +116,7 @@ public class QSFactoryImpl implements QSFactory {
         else if (tileSpec.equals("google")) return new GoogleNowTile(mHost);
         else if (tileSpec.equals("screenrecord")) return new ScreenrecordTile(mHost);
         else if (tileSpec.equals("always_on_display")) return new AlwaysOnDisplayTile(mHost);
+        else if (tileSpec.equals("hw_keys")) return new HWKeysTile(mHost);
         // Intent tiles.
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(mHost, tileSpec);
         else if (tileSpec.startsWith(CustomTile.PREFIX)) return CustomTile.create(mHost, tileSpec);
