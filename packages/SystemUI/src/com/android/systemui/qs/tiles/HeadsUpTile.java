@@ -37,6 +37,7 @@ public class HeadsUpTile extends QSTileImpl<BooleanState> {
             new Intent("android.settings.NOTIFICATION_SETTINGS");
 
     private final GlobalSetting mSetting;
+    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_heads_up_on);
 
     public HeadsUpTile(QSHost host) {
         super(host);
@@ -56,7 +57,7 @@ public class HeadsUpTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleClick() {
-        setEnabled(!mState.value);
+        mSetting.setValue(mState.value ? 0 : 1);
         refreshState();
     }
 
@@ -65,26 +66,23 @@ public class HeadsUpTile extends QSTileImpl<BooleanState> {
         return NOTIFICATION_SETTINGS;
     }
 
-    private void setEnabled(boolean enabled) {
-        Settings.Global.putInt(mContext.getContentResolver(),
-                Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED,
-                enabled ? 1 : 0);
-    }
-
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         if (mSetting == null) return;
         final int value = arg instanceof Integer ? (Integer)arg : mSetting.getValue();
         final boolean headsUp = value != 0;
+        if (state.slash == null) {
+            state.slash = new SlashState();
+        }
         state.value = headsUp;
         state.label = mContext.getString(R.string.quick_settings_heads_up_label);
+        state.icon = mIcon;
+        state.slash.isSlashed = !state.value;
         if (headsUp) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_heads_up_on);
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_heads_up_on);
             state.state = Tile.STATE_ACTIVE;
         } else {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_heads_up_off);
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_heads_up_off);
             state.state = Tile.STATE_INACTIVE;
