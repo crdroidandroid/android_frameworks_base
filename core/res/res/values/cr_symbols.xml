@@ -16,4 +16,6 @@
 -->
 <resources>
 
+  <!-- Long-press kill application -->
+  <java-symbol name="app_killed_message" type="string" />
 </resources>
