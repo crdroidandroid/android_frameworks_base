@@ -23,8 +23,7 @@ import android.content.Intent;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
-
-import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import android.service.quicksettings.Tile;
 
 import com.android.systemui.R;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
@@ -32,9 +31,12 @@ import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.SecureSetting;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
+import org.lineageos.internal.logging.LineageMetricsLogger;
+
 public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
 
     private final SecureSetting mSetting;
+    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_alwaysondisplay_on);
 
     public AlwaysOnDisplayTile(QSHost host) {
         super(host);
@@ -59,7 +61,7 @@ public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
     }
 
     @Override
-    public void handleClick() {
+    protected void handleClick() {
         mSetting.setValue(mState.value ? 0 : 1);
         refreshState();
     }
@@ -79,16 +81,21 @@ public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
     protected void handleUpdateState(BooleanState state, Object arg) {
         final int value = arg instanceof Integer ? (Integer)arg : mSetting.getValue();
         final boolean enable = value != 0;
+        if (state.slash == null) {
+            state.slash = new SlashState();
+        }
         state.value = enable;
         state.label = mContext.getString(R.string.quick_settings_always_on_display_label);
+        state.icon = mIcon;
+        state.slash.isSlashed = !state.value;
         if (enable) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_alwaysondisplay_on);
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_always_on_display_on);
+            state.state = Tile.STATE_ACTIVE;
         } else {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_alwaysondisplay_off);
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_always_on_display_off);
+            state.state = Tile.STATE_INACTIVE;
         }
     }
 
@@ -105,7 +112,7 @@ public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsEvent.CRDROID_SETTINGS;
+        return LineageMetricsLogger.TILE_AMBIENT_DISPLAY;
     }
 
     @Override
