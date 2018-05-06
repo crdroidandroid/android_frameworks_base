@@ -522,7 +522,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private boolean mHandleVolumeKeysInWM;
 
-    boolean mKillAppLongpressBack;
     int mKillTimeout;
 
     int mDeviceHardwareKeys;
@@ -560,6 +559,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     volatile boolean mKeyguardOccluded;
     boolean mMenuPressed;
     boolean mAppSwitchLongPressed;
+    boolean mBackConsumed;
     Intent mHomeIntent;
     Intent mCarDockIntent;
     Intent mDeskDockIntent;
@@ -583,6 +583,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private Action mAppSwitchPressAction;
     private Action mAppSwitchLongPressAction;
     private Action mEdgeLongSwipeAction;
+    private Action mBackLongPressAction;
 
     // support for activating the lock screen while the screen is on
     private HashSet<Integer> mAllowLockscreenWhenOnDisplays = new HashSet<>();
@@ -901,9 +902,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.POWER_BUTTON_SUPPRESSION_DELAY_AFTER_GESTURE_WAKE), false, this,
                     UserHandle.USER_ALL);
-            resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
-                    LineageSettings.Secure.KILL_APP_LONGPRESS_BACK), false, this,
-                    UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.FORCE_SHOW_NAVBAR), false, this,
                     UserHandle.USER_ALL);
@@ -918,6 +916,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.KEY_HOME_DOUBLE_TAP_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(LineageSettings.System.getUriFor(
+                    LineageSettings.System.KEY_BACK_LONG_PRESS_ACTION), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.KEY_MENU_ACTION), false, this,
@@ -2346,6 +2347,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 LineageSettings.System.KEY_HOME_DOUBLE_TAP_ACTION,
                 mHomeDoubleTapAction);
 
+        mBackLongPressAction = Action.fromIntSafe(res.getInteger(
+                org.lineageos.platform.internal.R.integer.config_longPressOnBackBehavior));
+        if (mBackLongPressAction.ordinal() > Action.SLEEP.ordinal()) {
+            mBackLongPressAction = Action.NOTHING;
+        }
+
+        mBackLongPressAction = Action.fromSettings(resolver,
+                LineageSettings.System.KEY_BACK_LONG_PRESS_ACTION,
+                mBackLongPressAction);
+
         if (hasMenu) {
             mMenuPressAction = Action.fromSettings(resolver,
                     LineageSettings.System.KEY_MENU_ACTION,
@@ -2497,8 +2508,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mContext.getResources().getInteger(
                             com.android.internal.R.integer.config_veryLongPressOnPowerBehavior));
 
-            mKillAppLongpressBack = LineageSettings.Secure.getInt(resolver,
-                    LineageSettings.Secure.KILL_APP_LONGPRESS_BACK, 0) == 1;
         }
         if (updateRotation) {
             updateRotation(true);
@@ -3422,9 +3431,30 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mKillAppLongpressBack || unpinActivity(true)) {
-                if (down && repeatCount == 0) {
-                    closeApp();
+            if (down) {
+                if (repeatCount == 0 && unpinActivity(true)) {
+                     closeApp();
+                } else if (repeatCount == 0 && mBackLongPressAction == Action.APP_SWITCH) {
+                     preloadRecentApps();
+                } else if (longPress) {
+                     if (!keyguardOn && mBackLongPressAction != Action.NOTHING
+                             && !mBackConsumed) {
+                        if (mBackLongPressAction != Action.APP_SWITCH) {
+                            cancelPreloadRecentApps();
+                        }
+                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, false,
+                                "Menu - Long Press");
+                        performKeyAction(mBackLongPressAction, event);
+                        if (mBackLongPressAction != Action.SLEEP) {
+                            mBackConsumed = true;
+                        }
+                        return -1;
+                    }
+                }
+            } else {
+                if (mBackConsumed) {
+                    mBackConsumed = false;
+                    return -1;
                 }
             }
         }
