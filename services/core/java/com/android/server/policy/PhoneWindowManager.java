@@ -304,20 +304,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static final int MULTI_PRESS_POWER_THEATER_MODE = 1;
     static final int MULTI_PRESS_POWER_BRIGHTNESS_BOOST = 2;
 
-    // must match: config_longPressOnBackBehavior in config.xml
-    static final int LONG_PRESS_BACK_NOTHING = 0;
-    static final int LONG_PRESS_BACK_GO_TO_VOICE_ASSIST = 1;
-
-    // must match: config_longPressOnHomeBehavior in config.xml
-    static final int LONG_PRESS_HOME_NOTHING = 0;
-    static final int LONG_PRESS_HOME_ALL_APPS = 1;
-    static final int LONG_PRESS_HOME_ASSIST = 2;
-    static final int LAST_LONG_PRESS_HOME_BEHAVIOR = LONG_PRESS_HOME_ASSIST;
-
-    // must match: config_doubleTapOnHomeBehavior in config.xml
-    static final int DOUBLE_TAP_HOME_NOTHING = 0;
-    static final int DOUBLE_TAP_HOME_RECENT_SYSTEM_UI = 1;
-
     static final int SHORT_PRESS_WINDOW_NOTHING = 0;
     static final int SHORT_PRESS_WINDOW_PICTURE_IN_PICTURE = 1;
 
@@ -510,7 +496,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mVeryLongPressOnPowerBehavior;
     int mDoublePressOnPowerBehavior;
     int mTriplePressOnPowerBehavior;
-    int mLongPressOnBackBehavior;
     int mShortPressOnSleepBehavior;
     int mShortPressOnWindowBehavior;
     boolean mHasSoftInput = false;
@@ -522,7 +507,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private boolean mHandleVolumeKeysInWM;
 
-    boolean mKillAppLongpressBack;
     int mKillTimeout;
 
     int mDeviceHardwareKeys;
@@ -586,6 +570,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private Action mAppSwitchPressAction;
     private Action mAppSwitchLongPressAction;
     private Action mEdgeLongSwipeAction;
+    private Action mBackLongPressAction;
 
     // support for activating the lock screen while the screen is on
     private HashSet<Integer> mAllowLockscreenWhenOnDisplays = new HashSet<>();
@@ -800,7 +785,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     showPictureInPictureMenuInternal();
                     break;
                 case MSG_BACK_LONG_PRESS:
-                    backLongPress();
+                    KeyEvent event = (KeyEvent) msg.obj;
+                    backLongPress(event);
                     break;
                 case MSG_ACCESSIBILITY_SHORTCUT:
                     accessibilityShortcutActivated();
@@ -905,9 +891,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.POWER_BUTTON_SUPPRESSION_DELAY_AFTER_GESTURE_WAKE), false, this,
                     UserHandle.USER_ALL);
-            resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
-                    LineageSettings.Secure.KILL_APP_LONGPRESS_BACK), false, this,
-                    UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.FORCE_SHOW_NAVBAR), false, this,
                     UserHandle.USER_ALL);
@@ -922,6 +905,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.KEY_HOME_DOUBLE_TAP_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(LineageSettings.System.getUriFor(
+                    LineageSettings.System.KEY_BACK_LONG_PRESS_ACTION), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.KEY_MENU_ACTION), false, this,
@@ -1050,13 +1036,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    private void interceptBackKeyDown() {
+    private void interceptBackKeyDown(KeyEvent event) {
         mLogger.count("key_back_down", 1);
         // Reset back key state for long press
         mBackKeyHandled = false;
 
-        if (hasLongPressOnBackBehavior()) {
-            Message msg = mHandler.obtainMessage(MSG_BACK_LONG_PRESS);
+        if (!keyguardOn() && mBackLongPressAction != Action.NOTHING) {
+            if (mBackLongPressAction == Action.APP_SWITCH) {
+                preloadRecentApps();
+            }
+            Message msg = mHandler.obtainMessage(MSG_BACK_LONG_PRESS, event);
             msg.setAsynchronous(true);
             mHandler.sendMessageDelayed(msg,
                     ViewConfiguration.get(mContext).getDeviceGlobalActionKeyTimeout());
@@ -1279,6 +1268,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void cancelPendingBackKeyAction() {
         if (!mBackKeyHandled) {
             mBackKeyHandled = true;
+            if (mBackLongPressAction == Action.APP_SWITCH) {
+                cancelPreloadRecentApps();
+            }
             mHandler.removeMessages(MSG_BACK_LONG_PRESS);
         }
     }
@@ -1490,16 +1482,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    private void backLongPress() {
+    private void backLongPress(KeyEvent event) {
+        if (mBackKeyHandled) return;
         mBackKeyHandled = true;
-
-        switch (mLongPressOnBackBehavior) {
-            case LONG_PRESS_BACK_NOTHING:
-                break;
-            case LONG_PRESS_BACK_GO_TO_VOICE_ASSIST:
-                launchVoiceAssist(false /* allowDuringSetup */);
-                break;
+        if (mBackLongPressAction != Action.APP_SWITCH) {
+            cancelPreloadRecentApps();
         }
+        performKeyAction(mBackLongPressAction, event);
     }
 
     private void accessibilityShortcutActivated() {
@@ -1552,10 +1541,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private boolean hasVeryLongPressOnPowerBehavior() {
         return mVeryLongPressOnPowerBehavior != VERY_LONG_PRESS_POWER_NOTHING;
-    }
-
-    private boolean hasLongPressOnBackBehavior() {
-        return mLongPressOnBackBehavior != LONG_PRESS_BACK_NOTHING;
     }
 
     private void interceptScreenshotChord() {
@@ -1673,8 +1658,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             if (ActionUtils.killForegroundApp(mContext, mCurrentUserId)) {
-                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, false,
-                        "Back - Long Press");
                 Toast.makeText(mContext,
                         org.lineageos.platform.internal.R.string.app_killed_message,
                         Toast.LENGTH_SHORT).show();
@@ -2140,9 +2123,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mSupportLongPressPowerWhenNonInteractive = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_supportLongPressPowerWhenNonInteractive);
 
-        mLongPressOnBackBehavior = mContext.getResources().getInteger(
-                com.android.internal.R.integer.config_longPressOnBackBehavior);
-
         mShortPressOnPowerBehavior = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_shortPressOnPowerBehavior);
         mLongPressOnPowerBehavior = mContext.getResources().getInteger(
@@ -2353,6 +2333,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 LineageSettings.System.KEY_HOME_DOUBLE_TAP_ACTION,
                 mHomeDoubleTapAction);
 
+        mBackLongPressAction = Action.fromIntSafe(res.getInteger(
+                org.lineageos.platform.internal.R.integer.config_longPressOnBackBehavior));
+        if (mBackLongPressAction.ordinal() > Action.SLEEP.ordinal()) {
+            mBackLongPressAction = Action.NOTHING;
+        }
+
+        mBackLongPressAction = Action.fromSettings(resolver,
+                LineageSettings.System.KEY_BACK_LONG_PRESS_ACTION,
+                mBackLongPressAction);
+
         if (hasMenu) {
             mMenuPressAction = Action.fromSettings(resolver,
                     LineageSettings.System.KEY_MENU_ACTION,
@@ -2507,8 +2497,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mContext.getResources().getInteger(
                             com.android.internal.R.integer.config_veryLongPressOnPowerBehavior));
 
-            mKillAppLongpressBack = LineageSettings.Secure.getInt(resolver,
-                    LineageSettings.Secure.KILL_APP_LONGPRESS_BACK, 0) == 1;
         }
         if (updateRotation) {
             updateRotation(true);
@@ -3181,10 +3169,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mPendingCapsLockToggle = false;
         }
 
-        if (keyCode == KeyEvent.KEYCODE_BACK && !down) {
-            mHandler.removeCallbacks(mCloseApp);
-        }
-
         // First we always handle the home key here, so applications
         // can never break it, although if keyguard is on, we do let
         // it handle it, because that gives us the correct 5 second
@@ -3436,9 +3420,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mKillAppLongpressBack || unpinActivity(true)) {
-                if (down && repeatCount == 0) {
-                    closeApp();
+            if (down) {
+                if (repeatCount == 0) {
+                    if (unpinActivity(true)) {
+                        closeApp();
+                    }
+                } else if (longPress) {
+                    if (!keyguardOn && mBackLongPressAction != Action.NOTHING) {
+                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, false,
+                                "Back - Long Press");
+                    }
                 }
             }
         }
@@ -4384,7 +4375,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
 
                 if (down) {
-                    interceptBackKeyDown();
+                    interceptBackKeyDown(event);
                 } else {
                     boolean handled = interceptBackKeyUp(event);
 
@@ -6245,9 +6236,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 pw.print(" mLidNavigationAccessibility="); pw.print(mLidNavigationAccessibility);
                 pw.print(" getLidBehavior="); pw.println(lidBehaviorToString(getLidBehavior()));
         pw.print(prefix);
-                pw.print("mLongPressOnBackBehavior=");
-                pw.println(longPressOnBackBehaviorToString(mLongPressOnBackBehavior));
-        pw.print(prefix);
                 pw.print("mShortPressOnPowerBehavior=");
                 pw.println(shortPressOnPowerBehaviorToString(mShortPressOnPowerBehavior));
         pw.print(prefix);
@@ -6415,41 +6403,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return "hangup";
         } else {
             return "<nothing>";
-        }
-    }
-
-    private static String longPressOnBackBehaviorToString(int behavior) {
-        switch (behavior) {
-            case LONG_PRESS_BACK_NOTHING:
-                return "LONG_PRESS_BACK_NOTHING";
-            case LONG_PRESS_BACK_GO_TO_VOICE_ASSIST:
-                return "LONG_PRESS_BACK_GO_TO_VOICE_ASSIST";
-            default:
-                return Integer.toString(behavior);
-        }
-    }
-
-    private static String longPressOnHomeBehaviorToString(int behavior) {
-        switch (behavior) {
-            case LONG_PRESS_HOME_NOTHING:
-                return "LONG_PRESS_HOME_NOTHING";
-            case LONG_PRESS_HOME_ALL_APPS:
-                return "LONG_PRESS_HOME_ALL_APPS";
-            case LONG_PRESS_HOME_ASSIST:
-                return "LONG_PRESS_HOME_ASSIST";
-            default:
-                return Integer.toString(behavior);
-        }
-    }
-
-    private static String doubleTapOnHomeBehaviorToString(int behavior) {
-        switch (behavior) {
-            case DOUBLE_TAP_HOME_NOTHING:
-                return "DOUBLE_TAP_HOME_NOTHING";
-            case DOUBLE_TAP_HOME_RECENT_SYSTEM_UI:
-                return "DOUBLE_TAP_HOME_RECENT_SYSTEM_UI";
-            default:
-                return Integer.toString(behavior);
         }
     }
 
