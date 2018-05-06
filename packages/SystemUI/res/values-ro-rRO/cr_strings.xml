@@ -57,7 +57,7 @@
   <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Repornire</string>
   <string name="quick_settings_reboot_recovery_label">Recuperare</string>
-  <string name="quick_settings_poweroff_label">Power off</string>
+  <string name="quick_settings_poweroff_label">Opriți alimentarea</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">Ce este acesta?</string>
   <string name="caffeine_info_message">Mod caffeine previne stingerea ecranului\n\nLa inchiderea ecranului, actiunea se resetează.</string>
@@ -68,8 +68,8 @@
   <string name="keyguard_indication_dash_charging_time">Incarcare Dash (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> până este plină bateria)</string>
   <string name="keyguard_plugged_in_dash_charging">Incarcare Dash</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
+  <string name="keyguard_indication_turbo_power_time">Conectat TurboPower (<xliff:g id="incarcare timp ramas">%s</xliff:g> pana la maxim)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">Conectat TurboPower</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Eroare</string>
   <string name="omnijaws_service_unkown">Fară informatii vreme</string>
@@ -119,4 +119,10 @@
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">Nfc</string>
+  <!-- HW Keys Tile -->
+  <string name="quick_settings_hw_keys_label">Taste fizice</string>
+  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_disabled">Taste dezactivate.</string>
+  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_enabled">Taste activate.</string>
 </resources>
