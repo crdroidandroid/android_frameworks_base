@@ -3483,9 +3483,17 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         if (KeyEvent.KEYCODE_SYSTEM_NAVIGATION_UP == key) {
             mMetricsLogger.action(MetricsEvent.ACTION_SYSTEM_NAVIGATION_KEY_UP);
+            if (mSlimRecents != null && mSlimRecents.isShowing()) {
+                mSlimRecents.scrollPanel(false);
+                return;
+            }
             mNotificationPanel.collapse(false /* delayed */, 1.0f /* speedUpFactor */);
         } else if (KeyEvent.KEYCODE_SYSTEM_NAVIGATION_DOWN == key) {
             mMetricsLogger.action(MetricsEvent.ACTION_SYSTEM_NAVIGATION_KEY_DOWN);
+            if (mSlimRecents != null && mSlimRecents.isShowing()) {
+                mSlimRecents.scrollPanel(true);
+                return;
+            }
             if (mNotificationPanel.isFullyCollapsed()) {
                 mNotificationPanel.expand(true /* animate */);
                 mMetricsLogger.count(NotificationPanelView.COUNTER_PANEL_OPEN, 1);
@@ -3495,6 +3503,10 @@ public class StatusBar extends SystemUI implements DemoMode,
             }
         } else if (mFpDismissNotifications && (KeyEvent.KEYCODE_SYSTEM_NAVIGATION_LEFT == key
                 || KeyEvent.KEYCODE_SYSTEM_NAVIGATION_RIGHT == key)) {
+            if (mSlimRecents != null && mSlimRecents.isShowing()) {
+                mSlimRecents.clearAllAppsFromSwipe();
+                return;
+            }
             if (!mNotificationPanel.isFullyCollapsed() && !mNotificationPanel.isExpanding()){
                 mMetricsLogger.action(MetricsEvent.ACTION_DISMISS_ALL_NOTES);
                 clearAllNotifications(KeyEvent.KEYCODE_SYSTEM_NAVIGATION_LEFT == key ? true : false);
