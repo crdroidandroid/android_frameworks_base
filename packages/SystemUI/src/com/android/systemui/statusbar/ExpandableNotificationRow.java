@@ -362,6 +362,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         updateNotificationColor();
         if (mMenuRow != null) {
             mMenuRow.onNotificationUpdated(mStatusBarNotification);
+            mMenuRow.setAppName(mAppName);
         }
         if (mIsSummaryWithChildren) {
             mChildrenContainer.recreateNotificationHeader(mExpandClickListener);
