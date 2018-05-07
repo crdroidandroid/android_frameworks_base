@@ -1153,6 +1153,7 @@ public final class BatteryService extends SystemService {
         private final int mBatteryLowARGB;
         private final int mBatteryMediumARGB;
         private final int mBatteryFullARGB;
+        private final int mBatteryReallyFullARGB;
         private final int mBatteryLedOn;
         private final int mBatteryLedOff;
 
@@ -1165,6 +1166,8 @@ public final class BatteryService extends SystemService {
                     com.android.internal.R.integer.config_notificationsBatteryMediumARGB);
             mBatteryFullARGB = context.getResources().getInteger(
                     com.android.internal.R.integer.config_notificationsBatteryFullARGB);
+            mBatteryReallyFullARGB = context.getResources().getInteger(
+                    com.android.internal.R.integer.config_notificationsBatteryReallyFullARGB);
             mBatteryLedOn = context.getResources().getInteger(
                     com.android.internal.R.integer.config_notificationsBatteryLedOn);
             mBatteryLedOff = context.getResources().getInteger(
