@@ -628,16 +628,19 @@ public class BatteryMeterDrawableBase extends Drawable {
             c.drawPath(mPlusPath, mPlusPaint);
         } else {
             // draw the percentage text
-            if (!mCharging && !mPowerSaveEnabled && level > mCriticalLevel
+            if (!mCharging && !mPowerSaveEnabled
                     && (mShowPercent && mLevel != 100)) {
                 mTextPaint.setColor(mBatteryPaint.getColor());
                 pctText = String.valueOf(level);
-                c.drawText(pctText, x, y, mTextPaint);
-            } else if (!mCharging && !mPowerSaveEnabled) {
-                if (level <= mCriticalLevel) {
-                    // draw the warning text
-                    c.drawText(mWarningString, x, y, mWarningTextPaint);
+                if (level > mCriticalLevel) {
+                    c.drawText(pctText, x, y, mTextPaint);
+                } else {
+                    c.drawText(pctText, x, y, mWarningTextPaint);
                 }
+            } else if (!mCharging && !mPowerSaveEnabled
+                    && level <= mCriticalLevel) {
+                // draw the warning text
+                c.drawText(mWarningString, x, y, mWarningTextPaint);
             }
         }
     }
@@ -719,8 +722,14 @@ public class BatteryMeterDrawableBase extends Drawable {
             mTextPaint.setTextSize(height *
                     (mLevel == 100 ? full : nofull));
             mTextHeight = -mTextPaint.getFontMetrics().ascent;
-            pctText = level > mCriticalLevel ? (String.valueOf(level != 100 && mShowPercent ? level : ""))
-                    : mWarningString;
+            if (level != 100 && mShowPercent) {
+                pctText = String.valueOf(level);
+            } else if (level <= mCriticalLevel {
+                pctText = mWarningString;
+            } else {
+                pctText = String.valueOf("");
+            }
+
             pctX = mWidth * 0.5f;
             pctY = (mHeight + mTextHeight) * 0.47f;
 
