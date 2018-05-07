@@ -53,4 +53,5 @@ public interface RecentsComponent {
     void evictAllCaches();
 
     IconsHandler getIconsHandler();
+    void setCurrentIconPack(String currentIconPack);
 }
