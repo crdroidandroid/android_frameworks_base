@@ -724,7 +724,7 @@ public class BatteryMeterDrawableBase extends Drawable {
             mTextHeight = -mTextPaint.getFontMetrics().ascent;
             if (level != 100 && mShowPercent) {
                 pctText = String.valueOf(level);
-            } else if (level <= mCriticalLevel {
+            } else if (level <= mCriticalLevel) {
                 pctText = mWarningString;
             } else {
                 pctText = String.valueOf("");
