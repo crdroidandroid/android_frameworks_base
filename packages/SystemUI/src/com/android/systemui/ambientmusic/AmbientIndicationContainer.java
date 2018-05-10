@@ -2,6 +2,7 @@ package com.android.systemui.ambientmusic;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.MediaMetadata;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -41,6 +42,8 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
     private String mLengthInfo;
     private boolean mDozing;
     private String mLastInfo;
+
+    private static final String FONT_FAMILY = "sans-serif-light";
 
     public AmbientIndicationContainer(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -126,6 +129,8 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
         CharSequence charSequence = null;
         mLengthInfo = null;
         mInfoToSet = null;
+        Typeface tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
+
         if (mediaMetaData != null) {
             CharSequence artist = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ARTIST);
             CharSequence album = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ALBUM);
@@ -170,7 +175,9 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
             }
         }
         mText.setText(mInfoToSet);
+        mText.setTypeface(tf);
         mTrackLenght.setText(mLengthInfo);
+        mTrackLenght.setTypeface(tf);
         mAmbientIndication.setVisibility(mDozing && mInfoAvailable ? View.VISIBLE : View.INVISIBLE);
     }
 
