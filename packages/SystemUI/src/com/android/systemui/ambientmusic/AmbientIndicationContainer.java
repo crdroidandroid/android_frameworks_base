@@ -2,6 +2,7 @@ package com.android.systemui.ambientmusic;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.MediaMetadata;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -36,6 +37,7 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
     private boolean mForcedMediaDoze;
     private Handler mHandler;
     private boolean mScrollingInfo;
+    private static final String FONT_FAMILY = "sans-serif-light";
 
     public AmbientIndicationContainer(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -100,6 +102,8 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
     public void showIndication(MediaMetadata mediaMetaData) {
         CharSequence charSequence = null;
         CharSequence lenghtInfo = null;
+        Typeface tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
+
         if (mediaMetaData != null) {
             CharSequence artist = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ARTIST);
             CharSequence album = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ALBUM);
@@ -122,7 +126,9 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
             setTickerMarquee(true);
         }
         mText.setText(charSequence);
+        mText.setTypeface(tf);
         mTrackLenght.setText(lenghtInfo);
+        mTrackLenght.setTypeface(tf);
         mMediaMetaData = mediaMetaData;
         boolean infoAvaillable = TextUtils.isEmpty(charSequence);
         if (infoAvaillable) {
