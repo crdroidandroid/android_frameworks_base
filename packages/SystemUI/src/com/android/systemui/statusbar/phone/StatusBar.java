@@ -757,10 +757,17 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     private void setCleanLayout(boolean force) {
-        mNotificationPanel.setCleanLayout(force);
-        mNotificationShelf.setCleanLayout(force);
         if (isAmbientContainerAvailable()) {
             ((AmbientIndicationContainer)mAmbientIndicationContainer).setCleanLayout(force);
+        }
+        if (force && isAmbientContainerAvailable() && 
+            ((AmbientIndicationContainer)mAmbientIndicationContainer)
+            .mAmbientIndication.getVisibility() == View.VISIBLE) {
+            mNotificationPanel.setCleanLayout(true);
+            mNotificationShelf.setCleanLayout(true);
+        } else {
+            mNotificationPanel.setCleanLayout(false);
+            mNotificationShelf.setCleanLayout(false);
         }
     }
 
@@ -784,7 +791,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         } else {
             isMediaPlaying = false;
             if (isAmbientContainerAvailable()) {
-                ((AmbientIndicationContainer)mAmbientIndicationContainer).setTickerMarquee(false);
                 ((AmbientIndicationContainer)mAmbientIndicationContainer).hideIndication();
             }
             setCleanLayout(false);
@@ -808,7 +814,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 setCleanLayout(mAmbientMediaPlaying == 3 ? true : false);
                 if (isAmbientContainerAvailable()) {
                     ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(mMediaMetadata);
-                    ((AmbientIndicationContainer)mAmbientIndicationContainer).setTickerMarquee(true);
                 }
                 isMediaPlaying = true;
                 // NotificationInflater calls async MediaNotificationProcessoron to create notification
