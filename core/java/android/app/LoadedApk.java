@@ -60,10 +60,9 @@ import dalvik.system.VMRuntime;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1036,24 +1035,26 @@ public final class LoadedApk {
             return;
         }
 
-        final MethodHandle callback;
+        final Method callback;
         try {
-            MethodType callbackType = MethodType.methodType(void.class, int.class);
-            callback = MethodHandles.publicLookup().findStatic(rClazz, "onResourcesLoaded",
-                                                               callbackType);
-        } catch (IllegalAccessException | NoSuchMethodException e) {
+            callback = rClazz.getMethod("onResourcesLoaded", int.class);
+        } catch (NoSuchMethodException e) {
             // No rewriting to be done.
             return;
         }
 
+        Throwable cause;
         try {
-            callback.invokeExact(id);
+            callback.invoke(null, id);
             return;
-        } catch (Throwable e) {
-            throw new RuntimeException("Failed to rewrite resource references for " + packageName,
-                                       e);
+        } catch (IllegalAccessException e) {
+            cause = e;
+        } catch (InvocationTargetException e) {
+            cause = e.getCause();
         }
 
+        throw new RuntimeException("Failed to rewrite resource references for " + packageName,
+                cause);
     }
 
     public void removeContextRegistrations(Context context,
