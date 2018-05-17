@@ -49,6 +49,7 @@ public class CarrierIdentifier implements Parcelable {
     private @Nullable String mImsi;
     private @Nullable String mGid1;
     private @Nullable String mGid2;
+    private @Nullable String mIccid;
 
     public CarrierIdentifier(String mcc, String mnc, @Nullable String spn, @Nullable String imsi,
             @Nullable String gid1, @Nullable String gid2) {
@@ -58,6 +59,14 @@ public class CarrierIdentifier implements Parcelable {
         mImsi = imsi;
         mGid1 = gid1;
         mGid2 = gid2;
+        mIccid = null;
+    }
+
+    /** @hide */
+    public CarrierIdentifier(String mcc, String mnc, @Nullable String spn, @Nullable String imsi,
+            @Nullable String gid1, @Nullable String gid2I, @Nullable String iccid) {
+        this(mcc, mnc, spn, imsi, gid1, gid2I);
+        mIccid = iccid;
     }
 
     /**
@@ -84,6 +93,7 @@ public class CarrierIdentifier implements Parcelable {
         mGid2 = gid2;
         mSpn = null;
         mImsi = null;
+        mIccid = null;
     }
 
     /** @hide */
@@ -125,6 +135,13 @@ public class CarrierIdentifier implements Parcelable {
         return mGid2;
     }
 
+    /** Get the ICCID.
+      * @hide */
+    @Nullable
+    public String getIccid() {
+        return mIccid;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -140,7 +157,8 @@ public class CarrierIdentifier implements Parcelable {
                 && Objects.equals(mSpn, that.mSpn)
                 && Objects.equals(mImsi, that.mImsi)
                 && Objects.equals(mGid1, that.mGid1)
-                && Objects.equals(mGid2, that.mGid2);
+                && Objects.equals(mGid2, that.mGid2)
+                && Objects.equals(mIccid, that.mIccid);
     }
 
     @Override
@@ -152,6 +170,7 @@ public class CarrierIdentifier implements Parcelable {
         result = 31 * result + Objects.hashCode(mImsi);
         result = 31 * result + Objects.hashCode(mGid1);
         result = 31 * result + Objects.hashCode(mGid2);
+        result = 31 * result + Objects.hashCode(mIccid);
         return result;
     }
 
@@ -168,6 +187,7 @@ public class CarrierIdentifier implements Parcelable {
         out.writeString(mImsi);
         out.writeString(mGid1);
         out.writeString(mGid2);
+        out.writeString(mIccid);
     }
 
     @Override
@@ -179,6 +199,7 @@ public class CarrierIdentifier implements Parcelable {
           + ",imsi=" + mImsi
           + ",gid1=" + mGid1
           + ",gid2=" + mGid2
+          + ",iccid=" + mIccid
           + "}";
     }
 
@@ -190,6 +211,7 @@ public class CarrierIdentifier implements Parcelable {
         mImsi = in.readString();
         mGid1 = in.readString();
         mGid2 = in.readString();
+        mIccid = in.readString();
     }
 
     /** @hide */
@@ -199,5 +221,6 @@ public class CarrierIdentifier implements Parcelable {
         int IMSI_PREFIX = 2;
         int GID1 = 3;
         int GID2 = 4;
+        int ICCID = 5;
     }
 }
