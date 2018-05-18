@@ -45,10 +45,34 @@
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
                 android:textColor="?attr/wallpaperTextColor"
-                android:singleLine="true"
                 style="@style/widget_big_thin"
-                android:format12Hour="@string/keyguard_widget_12_hours_format"
-                android:format24Hour="@string/keyguard_widget_24_hours_format"
+                android:layout_marginBottom="@dimen/bottom_text_spacing_digital" />
+            <CustomAnalogClock
+                android:id="@+id/analog_clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                style="@style/widget_big_thin"
+                android:layout_marginBottom="@dimen/bottom_text_spacing_digital" />
+            <DeadPoolAnalogClock
+                android:id="@+id/deadpool_clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                style="@style/widget_big_thin"
+                android:layout_marginBottom="@dimen/bottom_text_spacing_digital" />
+            <SpideyAnalogClock
+                android:id="@+id/spidey_clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                style="@style/widget_big_thin"
                 android:layout_marginBottom="@dimen/bottom_text_spacing_digital" />
             <com.android.systemui.ChargingView
                 android:id="@+id/battery_doze"
@@ -66,7 +90,7 @@
                 android:id="@+id/keyguard_status_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/clock_view" />
+                android:layout_marginTop="15dp" />
 
             <include layout="@layout/keyguard_weather_view"
                 android:id="@+id/keyguard_weather_view"
