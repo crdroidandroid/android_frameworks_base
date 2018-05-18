@@ -340,8 +340,15 @@ public abstract class Connection extends Conferenceable {
     public static final int CAPABILITY_ADD_PARTICIPANT = 0x04000000;
 
 
+    /**
+     * Remote device supports RTT.
+     * @hide
+     */
+
+    public static final int CAPABILITY_SUPPORTS_RTT_REMOTE = 0x08000000;
+
     //**********************************************************************************************
-    // Next CAPABILITY value: 0x04000000
+    // Next CAPABILITY value: 0x10000000
     //**********************************************************************************************
 
     /**
@@ -766,7 +773,9 @@ public abstract class Connection extends Conferenceable {
         if (can(capabilities, CAPABILITY_SUPPORT_DEFLECT)) {
             builder.append(isLong ? " CAPABILITY_SUPPORT_DEFLECT" : " sup_def");
         }
-
+        if (can(capabilities, CAPABILITY_SUPPORTS_RTT_REMOTE)) {
+            builder.append(isLong ? " CAPABILITY_SUPPORTS_RTT_REMOTE" : " sup_rtt");
+        }
         builder.append("]");
         return builder.toString();
     }
