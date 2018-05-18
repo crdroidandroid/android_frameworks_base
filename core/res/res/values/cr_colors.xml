@@ -41,4 +41,10 @@
     <color name="notification_snooze_text">#dd000000</color>
 
     <color name="updater_snackbar_text_color">@android:color/white</color>
+
+    <!-- Custom Analog clock -->
+    <color name="analog_clock_border_color">#212121</color>
+    <color name="analog_clock_face_color">#FFFFFF</color>
+    <color name="analog_clock_hand_hour_color">@*android:color/accent_device_default_light</color>
+    <color name="analog_clock_hand_minute_color">#212121</color>
 </resources>

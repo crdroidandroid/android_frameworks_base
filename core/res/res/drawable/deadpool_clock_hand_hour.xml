@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200.000000dp"
+    android:height="200.000000dp"
+    android:viewportWidth="1024.000000"
+    android:viewportHeight="1024.000000">
+
+    <group
+            android:translateY="1024.000000"
+            android:scaleX="0.100000"
+            android:scaleY="-0.100000">
+        <path
+            android:fillColor="@*android:color/accent_device_default_light"
+            android:strokeWidth="1"
+            android:pathData="M5060 6510 l0 -1300 105 0 105 0 0 1300 0 1300 -105 0 -105 0 0 -1300z" />
+        <path
+            android:fillColor="@*android:color/accent_device_default_light"
+            android:strokeWidth="1"
+            android:pathData="M5060 5070 l0 -50 -110 0 -110 0 0 -40 0 -40 320 0 320 0 0 40 0 40 -105 0 -105 0 0 50 0 50 -105 0 -105 0 0 -50z" />
+        <path
+            android:fillColor="@*android:color/accent_device_default_light"
+            android:strokeWidth="1"
+            android:pathData="M5010 4625 l0 -265 155 0 155 0 0 265 0 265 -155 0 -155 0 0 -265z" />
+        <path
+            android:fillColor="@*android:color/accent_device_default_light"
+            android:strokeWidth="1"
+            android:pathData="M5010 4205 l0 -65 155 0 155 0 0 65 0 65 -155 0 -155 0 0 -65z" />
+        <path
+            android:fillColor="@*android:color/accent_device_default_light"
+            android:strokeWidth="1"
+            android:pathData="M5010 3970 l0 -80 155 0 155 0 0 80 0 80 -155 0 -155 0 0 -80z" />
+    </group>
+</vector>
