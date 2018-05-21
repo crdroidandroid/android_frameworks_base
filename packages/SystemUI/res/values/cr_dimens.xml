@@ -45,4 +45,7 @@
     <dimen name="qs_panel_footer_height">48dp</dimen>
 
     <dimen name="screenrecord_hint_size">48dp</dimen>
+
+    <!-- Big clock dozing -->
+    <dimen name="dozing_big_clock_padding" format="float">0.38</dimen>
 </resources>
