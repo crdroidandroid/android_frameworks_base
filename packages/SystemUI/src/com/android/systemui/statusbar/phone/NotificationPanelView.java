@@ -112,6 +112,8 @@ public class NotificationPanelView extends PanelView implements
             "system:" + Settings.System.QS_SMART_PULLDOWN;
     private static final String LOCKSCREEN_ENABLE_QS =
             "global:" + Settings.Global.LOCKSCREEN_ENABLE_QS;
+    private static final String LOCKSCREEN_CLOCK_SELECTION =
+            "system:" + Settings.System.LOCKSCREEN_CLOCK_SELECTION;
 
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
 
@@ -325,7 +327,8 @@ public class NotificationPanelView extends PanelView implements
                 DOUBLE_TAP_SLEEP_GESTURE,
                 DOUBLE_TAP_SLEEP_LOCKSCREEN,
                 QS_SMART_PULLDOWN,
-                LOCKSCREEN_ENABLE_QS);
+                LOCKSCREEN_ENABLE_QS,
+                LOCKSCREEN_CLOCK_SELECTION);
     }
 
     @Override
@@ -2776,6 +2779,9 @@ public class NotificationPanelView extends PanelView implements
             case LOCKSCREEN_ENABLE_QS:
                 mStatusBarAllowedOnSecureKeyguard =
                         newValue == null || Integer.parseInt(newValue) != 0;
+                break;
+            case LOCKSCREEN_CLOCK_SELECTION:
+                mClockPositionAlgorithm.setClockSelection(newValue == null ? 0 : Integer.parseInt(newValue));
                 break;
             default:
                 break;
