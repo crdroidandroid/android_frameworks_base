@@ -71,7 +71,7 @@ class WindowContainer<E extends WindowContainer> implements Comparable<WindowCon
     private Configuration mMergedOverrideConfiguration = new Configuration();
 
     // The specified orientation for this window container.
-    protected int mOrientation = SCREEN_ORIENTATION_UNSPECIFIED;
+    protected int mOrientation = SCREEN_ORIENTATION_UNSET;
 
     private final Pools.SynchronizedPool<ForAllWindowsConsumerWrapper> mConsumerWrapperPool =
             new Pools.SynchronizedPool<>(3);
