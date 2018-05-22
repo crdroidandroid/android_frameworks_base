@@ -57,7 +57,7 @@
   <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Opnieuw opstarten</string>
   <string name="quick_settings_reboot_recovery_label">Recovery</string>
-  <string name="quick_settings_poweroff_label">Power off</string>
+  <string name="quick_settings_poweroff_label">Uitschakelen</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">Wat is dit?</string>
   <string name="caffeine_info_message">Cafeïne tegel is een tegel die er voor zorgt dat uw scherm aan blijft.\n\nMerk op dat de staat van de tegel gereset zal worden na het uitschakelen van het scherm.</string>
@@ -68,8 +68,8 @@
   <string name="keyguard_indication_dash_charging_time">Dash opladen (<xliff:g id="charging_time_left" example="4 uur en 2 minuten">%s</xliff:g> tot vol)</string>
   <string name="keyguard_plugged_in_dash_charging">Dash Opladen</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
+  <string name="keyguard_indication_turbo_power_time">TurboPower aangesloten (<xliff:g id="charging_time_left">%s</xliff:g> tot volledig opgeladen)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower verbonden</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Fout</string>
   <string name="omnijaws_service_unkown">Geen weergegevens</string>
@@ -120,9 +120,9 @@
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">Nfc</string>
   <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">HW Keys</string>
+  <string name="quick_settings_hw_keys_label">Fysieke knoppen</string>
   <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">HW Keys disabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_disabled">Fysieke knoppen uitgeschakeld.</string>
   <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_enabled">Fysieke knoppen ingeschakeld.</string>
 </resources>
