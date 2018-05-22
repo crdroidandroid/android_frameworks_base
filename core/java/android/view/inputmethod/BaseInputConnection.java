@@ -244,14 +244,14 @@ public class BaseInputConnection implements InputConnection {
 
         int deleted = 0;
 
-        if (beforeLength > 0) {
+        if (beforeLength > 0 && a > 0) {
             int start = a - beforeLength;
             if (start < 0) start = 0;
             content.delete(start, a);
             deleted = a - start;
         }
 
-        if (afterLength > 0) {
+        if (afterLength > 0 && b > 0) {
             b = b - deleted;
 
             int end = b + afterLength;
