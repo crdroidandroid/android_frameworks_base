@@ -106,6 +106,8 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
     private BrightnessMirrorController mBrightnessMirrorController;
     private View mDivider;
 
+    private int mBrightnessSlider = 1;
+
     public QSPanel(Context context) {
         this(context, null);
     }
@@ -118,29 +120,56 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
         mBrightnessView = LayoutInflater.from(context).inflate(
                 R.layout.quick_settings_brightness_dialog, this, false);
-        addView(mBrightnessView);
-
-        setupTileLayout();
 
         mPageIndicator = LayoutInflater.from(context).inflate(
                 R.layout.qs_page_indicator, this, false);
-        addView(mPageIndicator);
-        if (mTileLayout instanceof PagedTileLayout) {
-            ((PagedTileLayout) mTileLayout).setPageIndicator((PageIndicator) mPageIndicator);
-        }
-
-        addDivider();
 
         mFooter = new QSSecurityFooter(this, context);
-        addView(mFooter.getView());
 
-        updateResources();
+        mTileLayout = (QSTileLayout) LayoutInflater.from(mContext).inflate(
+                R.layout.qs_paged_tile_layout, this, false);
+        mTileLayout.setListening(mListening);
+
+        mIsAutomaticBrightnessAvailable = getResources().getBoolean(
+                com.android.internal.R.bool.config_automatic_brightness_available);
+
+        addQSPanel();
 
         mBrightnessController = new BrightnessController(getContext(),
                 findViewById(R.id.brightness_icon),
                 findViewById(R.id.brightness_slider));
 
         mAutoBrightnessView = (ImageView) findViewById(R.id.brightness_icon);
+    }
+
+    private void addQSPanel() {
+        if (mBrightnessSlider == 1) {
+            addView(mBrightnessView);
+            addView((View) mTileLayout);
+        } else {
+            addView((View) mTileLayout);
+            addView(mBrightnessView);
+        }
+
+        addView(mPageIndicator);
+        if (mTileLayout instanceof PagedTileLayout) {
+            ((PagedTileLayout) mTileLayout).setPageIndicator((PageIndicator) mPageIndicator);
+        }
+
+        addDivider();
+        addView(mFooter.getView());
+
+        updateResources();
+    }
+
+    private void restartQSPanel() {
+        if (mFooter.getView() != null) removeView(mFooter.getView());
+        if (mDivider != null) removeView(mDivider);
+        if (mPageIndicator != null) removeView(mPageIndicator);
+        if ((View) mTileLayout != null) removeView((View) mTileLayout);
+        if (mBrightnessView != null) removeView(mBrightnessView);
+
+        addQSPanel();
     }
 
     protected void addDivider() {
@@ -156,16 +185,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
     public View getPageIndicator() {
         return mPageIndicator;
-    }
-
-    protected void setupTileLayout() {
-        mTileLayout = (QSTileLayout) LayoutInflater.from(mContext).inflate(
-                R.layout.qs_paged_tile_layout, this, false);
-        mTileLayout.setListening(mListening);
-        addView((View) mTileLayout);
-
-        mIsAutomaticBrightnessAvailable = getResources().getBoolean(
-                com.android.internal.R.bool.config_automatic_brightness_available);
     }
 
     public boolean isShowingCustomize() {
@@ -209,8 +228,9 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
     @Override
     public void onTuningChanged(String key, String newValue) {
         if (QS_SHOW_BRIGHTNESS_SLIDER.equals(key)) {
-            mBrightnessView.setVisibility(newValue == null || Integer.parseInt(newValue) != 0
-                    ? VISIBLE : GONE);
+            mBrightnessSlider = newValue == null ? 1 : Integer.parseInt(newValue);
+            mBrightnessView.setVisibility(mBrightnessSlider != 0 ? VISIBLE : GONE);
+            restartQSPanel();
         } else if (QS_SHOW_AUTO_BRIGHTNESS.equals(key) && mIsAutomaticBrightnessAvailable) {
             mAutoBrightnessView.setVisibility(newValue == null || Integer.parseInt(newValue) != 0
                     ? VISIBLE : GONE);
