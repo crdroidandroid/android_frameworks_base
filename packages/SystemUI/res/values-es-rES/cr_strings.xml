@@ -57,7 +57,7 @@
   <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Reiniciar</string>
   <string name="quick_settings_reboot_recovery_label">Recuperar</string>
-  <string name="quick_settings_poweroff_label">Power off</string>
+  <string name="quick_settings_poweroff_label">Apagar</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">¿Que es esto?</string>
   <string name="caffeine_info_message">Cafeína es una simple ficha que usted podría encender para mantener la pantalla encendida.\n\n Por favor note que el estado se reiniciara por si mismo luego de apagar la pantalla.</string>
@@ -68,8 +68,8 @@
   <string name="keyguard_indication_dash_charging_time">Carga Dash (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> hasta llenar)</string>
   <string name="keyguard_plugged_in_dash_charging">Carga Dash</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
+  <string name="keyguard_indication_turbo_power_time">Carga rápida conectada (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">Carga rápida conectada</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Error</string>
   <string name="omnijaws_service_unkown">No hay datos del clima</string>
@@ -81,48 +81,48 @@
   <string name="omnijaws_package_not_available">OmniJaws no disponibles</string>
   <string name="omnijaws_service_last_update">Última actualización:</string>
   <!-- Assist/Google Tiles -->
-  <string name="quick_settings_google_assist_label">Assistant</string>
-  <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+  <string name="quick_settings_google_assist_label">Asistente</string>
+  <string name="quick_settings_google_voice_assist_label">Asistente de voz</string>
   <string name="quick_settings_google_now_label">Google</string>
   <!-- Screenrecord Notification Ticker -->
-  <string name="screenrecord_notif_ticker">Screen is being recorded</string>
-  <string name="screenrecord_notif_final_ticker">Screen recorded successfully</string>
+  <string name="screenrecord_notif_ticker">Se está grabando la pantalla</string>
+  <string name="screenrecord_notif_final_ticker">Grabación de pantalla guardada con éxito</string>
   <!-- Screenrecord notification title -->
-  <string name="screenrecord_notif_title">Recording screen</string>
+  <string name="screenrecord_notif_title">Grabando pantalla</string>
   <!-- Screenrecord notification action: Stop -->
-  <string name="screenrecord_notif_stop">Stop</string>
-  <string name="screenrecord_notif_completed">Screen recorded successfully</string>
+  <string name="screenrecord_notif_stop">Parar</string>
+  <string name="screenrecord_notif_completed">Grabación de pantalla guardada con éxito</string>
   <!-- Screenrecord notification action: show/hide pointer -->
-  <string name="screenrecord_notif_pointer_on">Show pointer</string>
-  <string name="screenrecord_notif_pointer_off">Hide pointer</string>
+  <string name="screenrecord_notif_pointer_on">Mostrar puntero</string>
+  <string name="screenrecord_notif_pointer_off">Esconder puntero</string>
   <!-- Screen record notification error title -->
-  <string name="screenrecord_notif_error">Unable to record screen</string>
-  <string name="notification_channel_screenrecord">Screenrecords</string>
-  <string name="screenrecord_hide_hint">Hide hint</string>
-  <string name="screenrecord_show_hint">Show hint</string>
+  <string name="screenrecord_notif_error">Imposible grabar pantalla</string>
+  <string name="notification_channel_screenrecord">Grabaciones de pantalla</string>
+  <string name="screenrecord_hide_hint">Ocultar pista</string>
+  <string name="screenrecord_show_hint">Mostrar pista</string>
   <!-- Screenshot QS tile -->
-  <string name="quick_settings_screenrecord_label">Screenrecord</string>
-  <string name="quick_settings_screenrecord_lq_label">Screenrecord 480p</string>
-  <string name="quick_settings_screenrecord_mq_label">Screenrecord 720p</string>
-  <string name="quick_settings_screenrecord_hq_label">Screenrecord 720p+</string>
+  <string name="quick_settings_screenrecord_label">Grabar pantalla</string>
+  <string name="quick_settings_screenrecord_lq_label">Grabar pantalla 480p</string>
+  <string name="quick_settings_screenrecord_mq_label">Grabar pantalla 720p</string>
+  <string name="quick_settings_screenrecord_hq_label">Grabar pantalla 720p+</string>
   <!-- Always on Display Tile -->
-  <string name="quick_settings_always_on_display_label">Always on display</string>
+  <string name="quick_settings_always_on_display_label">Pantalla ambiente siempre encendida</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_off">Always on display off.</string>
+  <string name="accessibility_quick_settings_always_on_display_off">Apagar pantalla ambiente.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_on">Always on display on.</string>
+  <string name="accessibility_quick_settings_always_on_display_on">Encender pantalla ambiente.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_off">Always on display turned off.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_off">Pantalla ambiente apagada.</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_on">Always on display turned on.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_on">Pantalla ambiente encendida.</string>
   <!-- Name of the nfc status bar icon. -->
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">Nfc</string>
   <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">HW Keys</string>
+  <string name="quick_settings_hw_keys_label">Botones físicos</string>
   <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">HW Keys disabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_disabled">Botones físicos desactivados.</string>
   <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_enabled">Botones físicos activados.</string>
 </resources>
