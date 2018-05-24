@@ -56,6 +56,7 @@ public class BatterySaverTile extends QSTileImpl<BooleanState> implements
 
     @Override
     public void handleSetListening(boolean listening) {
+        if (mBatteryController == null) return;
         if (listening) {
             mBatteryController.addCallback(this);
         } else {
