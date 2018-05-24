@@ -144,6 +144,7 @@ public class BluetoothTile extends QSTileImpl<BooleanState> implements TunerServ
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
+        if (mController == null) return;
         final boolean enabled = mController.isBluetoothEnabled();
         final boolean connected = mController.isBluetoothConnected();
         state.isTransient = mController.isBluetoothConnecting()
