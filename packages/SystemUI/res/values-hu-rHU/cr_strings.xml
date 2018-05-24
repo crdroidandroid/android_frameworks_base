@@ -50,7 +50,7 @@
   <string name="quick_settings_expanded_navigation_off">Navigációs sáv elrejtése</string>
   <string name="quick_settings_expanded_statusbar_off">Állapotsor elrejtése</string>
   <!-- CPUInfo tile -->
-  <string name="quick_settings_cpuinfo_label">CPU Infó</string>
+  <string name="quick_settings_cpuinfo_label">CPU-adatok</string>
   <!-- Screenshot tile -->
   <string name="quick_settings_screenshot_label">Képernyőmentés</string>
   <string name="quick_settings_region_screenshot_label">Részleges képernyőmentés</string>
@@ -63,7 +63,7 @@
   <string name="caffeine_info_message">A Caffeine egy egyszerű csempe, melyet bekapcsolva ébren tarthatja a képernyőt.\n\nVegye figyelembe, hogy a csempe helyzete a képernyő kikapcsolása után visszaáll.</string>
   <string name="recents_app_killed">Alkalmazás kilőve</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_running_services">Futó szolgálatások képernyő megnyitása.</string>
+  <string name="accessibility_quick_settings_running_services">Futó szolgáltatások-képernyő megnyitása.</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_dash_charging_time">Gyorstöltés (<xliff:g id="charging_time_left" example="4 óra és 2 perc">%s</xliff:g> a teljes töltöttségig)</string>
   <string name="keyguard_plugged_in_dash_charging">Gyorstöltés</string>
