@@ -1478,12 +1478,18 @@ public class PackageInstallerSession extends IPackageInstallerSession.Stub {
             packageName = mPackageName;
         }
 
-        if (observer != null) {
-            try {
-                observer.onPackageInstalled(packageName, returnCode, msg, extras);
-            } catch (RemoteException ignored) {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (observer != null) {
+                    try {
+                        observer.onPackageInstalled(packageName, returnCode, msg, extras);
+                    } catch (RemoteException ignored) {
+                    }
+                }
             }
-        }
+        }).start();
 
         final boolean success = (returnCode == PackageManager.INSTALL_SUCCEEDED);
 
