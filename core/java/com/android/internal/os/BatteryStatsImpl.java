@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2007, 2018 The Android Open Source Project
+ * Copyright (C) 2006-2007 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10633,21 +10633,18 @@ public class BatteryStatsImpl extends BatteryStats {
             }
         }
 
-        long[] totalCpuClustersTimeMs = new long[mKernelCpuSpeedReaders.length];
+        long totalCpuClustersTimeMs = 0;
         // Read the time spent for each cluster at various cpu frequencies.
         final long[][] clusterSpeedTimesMs = new long[mKernelCpuSpeedReaders.length][];
         for (int cluster = 0; cluster < mKernelCpuSpeedReaders.length; cluster++) {
-            if (true == mKernelCpuSpeedReaders[cluster].getAvailability()) {
-                clusterSpeedTimesMs[cluster] = mKernelCpuSpeedReaders[cluster].readDelta();
-                if (clusterSpeedTimesMs[cluster] != null) {
-                    for (int speed = clusterSpeedTimesMs[cluster].length - 1; speed >= 0; --speed) {
-                        totalCpuClustersTimeMs[cluster] += clusterSpeedTimesMs[cluster][speed];
-                    }
+            clusterSpeedTimesMs[cluster] = mKernelCpuSpeedReaders[cluster].readDelta();
+            if (clusterSpeedTimesMs[cluster] != null) {
+                for (int speed = clusterSpeedTimesMs[cluster].length - 1; speed >= 0; --speed) {
+                    totalCpuClustersTimeMs += clusterSpeedTimesMs[cluster][speed];
                 }
             }
         }
-        for (int cluster = 0; cluster < mKernelCpuSpeedReaders.length; cluster++) {
-            if (totalCpuClustersTimeMs[cluster] == 0) continue;
+        if (totalCpuClustersTimeMs != 0) {
             // We have cpu times per freq aggregated over all uids but we need the times per uid.
             // So, we distribute total time spent by an uid to different cpu freqs based on the
             // amount of time cpu was running at that freq.
@@ -10662,7 +10659,7 @@ public class BatteryStatsImpl extends BatteryStats {
                     u.mCpuClusterSpeedTimesUs = new LongSamplingCounter[numClusters][];
                 }
 
-                for (cluster = 0; cluster < clusterSpeedTimesMs.length; cluster++) {
+                for (int cluster = 0; cluster < clusterSpeedTimesMs.length; cluster++) {
                     final int speedsInCluster = clusterSpeedTimesMs[cluster].length;
                     if (u.mCpuClusterSpeedTimesUs[cluster] == null || speedsInCluster !=
                             u.mCpuClusterSpeedTimesUs[cluster].length) {
@@ -10677,7 +10674,7 @@ public class BatteryStatsImpl extends BatteryStats {
                         }
                         cpuSpeeds[speed].addCountLocked(appCpuTimeUs
                                 * clusterSpeedTimesMs[cluster][speed]
-                                / totalCpuClustersTimeMs[cluster]);
+                                / totalCpuClustersTimeMs);
                     }
                 }
             }
