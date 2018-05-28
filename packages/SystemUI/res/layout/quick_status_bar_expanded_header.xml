@@ -26,7 +26,6 @@
     android:clickable="false"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:elevation="4dp"
     android:paddingEnd="0dp"
     android:paddingStart="0dp"
     android:paddingTop="0dp">
