@@ -3444,9 +3444,9 @@ public class NotificationManagerService extends SystemService {
                 public void run() {
                     synchronized (mNotificationLock) {
                         removeForegroundServiceFlagByListLocked(
-                                mEnqueuedNotifications, pkg, notificationId, userId);
+                                mEnqueuedNotifications, pkg, notificationId, userId, false);
                         removeForegroundServiceFlagByListLocked(
-                                mNotificationList, pkg, notificationId, userId);
+                                mNotificationList, pkg, notificationId, userId, true);
                     }
                 }
             });
@@ -3455,7 +3455,7 @@ public class NotificationManagerService extends SystemService {
         @GuardedBy("mNotificationLock")
         private void removeForegroundServiceFlagByListLocked(
                 ArrayList<NotificationRecord> notificationList, String pkg, int notificationId,
-                int userId) {
+                int userId, boolean needPosted) {
             NotificationRecord r = findNotificationByListLocked(
                     notificationList, pkg, null, notificationId, userId);
             if (r == null) {
@@ -3468,8 +3468,10 @@ public class NotificationManagerService extends SystemService {
             // initially *and* force remove FLAG_FOREGROUND_SERVICE.
             sbn.getNotification().flags =
                     (r.mOriginalFlags & ~Notification.FLAG_FOREGROUND_SERVICE);
-            mRankingHelper.sort(mNotificationList);
-            mListeners.notifyPostedLocked(sbn, sbn /* oldSbn */);
+            if (needPosted) {
+                mRankingHelper.sort(mNotificationList);
+                mListeners.notifyPostedLocked(sbn, sbn /* oldSbn */);
+            }
         }
     };
 
