@@ -35,22 +35,19 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical" />
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_gravity="center_vertical"
         android:gravity="end">
 
         <com.android.systemui.statusbar.phone.MultiUserSwitch
             android:id="@+id/multi_user_switch"
             android:layout_width="46dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
+            android:layout_height="@dimen/qs_panel_footer_height"
             android:layout_alignParentEnd="true"
             android:background="@drawable/ripple_drawable"
             android:focusable="true">
@@ -66,8 +63,7 @@
         <com.android.systemui.statusbar.AlphaOptimizedImageView
             android:id="@android:id/edit"
             android:layout_width="46dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
+            android:layout_height="@dimen/qs_panel_footer_height"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:clipToPadding="false"
@@ -81,8 +77,7 @@
             android:id="@+id/running_services_button"
             style="@android:style/Widget.Material.Button.Borderless"
             android:layout_width="46dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
+            android:layout_height="@dimen/qs_panel_footer_height"
             android:clickable="true"
             android:focusable="true"
             android:background="@drawable/ripple_drawable"
@@ -94,8 +89,7 @@
         <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
             android:id="@+id/settings_button_container"
             android:layout_width="46dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
+            android:layout_height="@dimen/qs_panel_footer_height"
             android:clipChildren="false"
             android:clipToPadding="false">
 
@@ -124,14 +118,13 @@
         <com.android.systemui.statusbar.phone.ExpandableIndicator
             android:id="@+id/expand_indicator"
             android:layout_width="46dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
+            android:layout_height="@dimen/qs_panel_footer_height"
             android:clipToPadding="false"
             android:clickable="true"
             android:focusable="true"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/accessibility_quick_settings_expand"
-            android:padding="10dp" />
+            android:padding="13dp" />
     </LinearLayout>
 
 </com.android.systemui.qs.QSFooterImpl>

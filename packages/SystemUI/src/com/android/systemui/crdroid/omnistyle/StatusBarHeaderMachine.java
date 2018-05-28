@@ -76,7 +76,7 @@ public class StatusBarHeaderMachine {
     private String mCurrentProviderName;
 
     // broadcast providers sent when they update the header image
-    public static final String STATUS_BAR_HEADER_UPDATE_ACTION = "com.android.systemui.crdoir.omnistyle.STATUS_BAR_HEADER_UPDATE";
+    public static final String STATUS_BAR_HEADER_UPDATE_ACTION = "com.android.systemui.crdroid.omnistyle.STATUS_BAR_HEADER_UPDATE";
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
