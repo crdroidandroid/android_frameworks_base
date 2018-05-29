@@ -151,6 +151,11 @@ public class RemoteViews implements Parcelable, Filter {
     private BitmapCache mBitmapCache;
 
     /**
+     * Lists to store the viewIds which intend to set image bitmap.
+     */
+    private ArrayList<Integer> mSetImageBitmapViewIds;
+
+    /**
      * Indicates whether or not this RemoteViews object is contained as a child of any other
      * RemoteViews.
      */
@@ -3354,6 +3359,82 @@ public class RemoteViews implements Parcelable, Filter {
         addAction(new ReflectionAction(viewId, methodName, ReflectionAction.URI, value));
     }
 
+    private boolean isSetImageBitmapMethod(String methodName) {
+        if (methodName != null && methodName.equals("setImageBitmap")) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isSetImageBitmapAction(Action action) {
+        if (action != null && action instanceof BitmapReflectionAction) {
+            if (isSetImageBitmapMethod(((BitmapReflectionAction) action).methodName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+    * Pre-handle the bitmap set. if same view to set bitmap, update the
+    * old bitmap value if necessay.
+    *
+    * @param viewId The id of the view on which to call the method.
+    * @param methodName The name of the method to call.
+    * @param value The value to pass to the method.
+    * @return True if pre-handled, otherwise false.
+    */
+    private boolean preHandleBitmapSet(int viewId, String methodName, Bitmap value) {
+        if (!isSetImageBitmapMethod(methodName)) {
+            return false;
+        }
+
+        if (mSetImageBitmapViewIds == null) {
+            mSetImageBitmapViewIds = new ArrayList<>();
+        }
+
+        // If viewId hasn't been contained, just add viewId and return false.
+        if (mSetImageBitmapViewIds.size() == 0 || !mSetImageBitmapViewIds.contains(viewId)) {
+            mSetImageBitmapViewIds.add(viewId);
+            return false;
+        }
+
+        if (mActions == null) {
+            return false;
+        }
+
+        // Find a action which has recorded the same view do the same thing: setImageBitmap.
+        BitmapReflectionAction currentAction = null;
+        for (Action action : mActions) {
+            if (action.viewId == viewId && isSetImageBitmapAction(action)) {
+                currentAction = ((BitmapReflectionAction) action);
+                break;
+            }
+        }
+
+        if (currentAction == null) {
+            return false;
+        }
+        // Check other bitmap actions, if there a action uses the same bitmap value
+        // as the current view. don't update bitmap value, add this new bitmap value then
+        // update current action.
+        for (Action action : mActions) {
+            if (action.viewId == viewId || !isSetImageBitmapAction(action)) {
+                continue;
+            }
+            Bitmap bitmap = ((BitmapReflectionAction) action).bitmap;
+            if (bitmap != null && bitmap.equals(currentAction.bitmap)) {
+                currentAction.bitmapId = mBitmapCache.getBitmapId(value);
+                currentAction.bitmap = value;
+                return true;
+            }
+        }
+        // if there is no other actions use current action's bitmap
+        // in this case, old bitmap value can be updated directly.
+        mBitmapCache.mBitmaps.set(currentAction.bitmapId, value);
+        return true;
+    }
+
     /**
      * Call a method taking one Bitmap on a view in the layout for this RemoteViews.
      * @more
@@ -3365,7 +3446,10 @@ public class RemoteViews implements Parcelable, Filter {
      * @param value The value to pass to the method.
      */
     public void setBitmap(int viewId, String methodName, Bitmap value) {
-        addAction(new BitmapReflectionAction(viewId, methodName, value));
+
+        if (!preHandleBitmapSet(viewId, methodName, value)) {
+            addAction(new BitmapReflectionAction(viewId, methodName, value));
+        }
     }
 
     /**
