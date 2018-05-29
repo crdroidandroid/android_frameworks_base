@@ -473,6 +473,7 @@ public class TransportManager {
                     TransportConnection conn = mValidTransports.get(transportComponent);
                     if (conn != null) {
                         mContext.unbindService(conn);
+                        mValidTransports.remove(transportComponent);
                         Slog.d(TAG, "Unbinding the existing (broken) connection to transport: "
                                 + componentShortString);
                     }
