@@ -765,6 +765,9 @@ final class UserController {
         for (UserInfo user : profiles) {
             if ((user.flags & UserInfo.FLAG_INITIALIZED) == UserInfo.FLAG_INITIALIZED
                     && user.id != mCurrentUserId && !user.isQuietModeEnabled()) {
+                if (user.partial) {
+                    continue;
+                }
                 profilesToStart.add(user);
             }
         }
