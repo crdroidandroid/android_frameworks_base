@@ -132,6 +132,18 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
                 Settings.System.HEADS_UP_NOTIFICATION_SNOOZE,
                 context.getResources().getInteger(R.integer.heads_up_default_snooze_length_ms),
                 UserHandle.USER_CURRENT);
+        mSettingsObserver = new ContentObserver(mHandler) {
+            @Override
+            public void onChange(boolean selfChange) {
+                // release all currently snoozed - so that a new value
+                // can be applied next time
+                if (DEBUG) Log.v(TAG, "clear snoozed package list");
+                mSnoozedPackages.clear();
+            }
+        };
+        context.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.HEADS_UP_NOTIFICATION_SNOOZE), false,
+                mSettingsObserver, UserHandle.USER_ALL);
         mClock = new Clock();
 
         mStatusBarWindowView = statusBarWindowView;
@@ -704,9 +716,9 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
                     mContext.getResources().getInteger(R.integer.heads_up_notification_decay),
                     UserHandle.USER_CURRENT);
             mSnoozeLengthMs = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.HEADS_UP_NOTIFICATION_SNOOZE,
-                mContext.getResources().getInteger(R.integer.heads_up_default_snooze_length_ms),
-                UserHandle.USER_CURRENT);
+                    Settings.System.HEADS_UP_NOTIFICATION_SNOOZE,
+                    mContext.getResources().getInteger(R.integer.heads_up_default_snooze_length_ms),
+                    UserHandle.USER_CURRENT);
             long currentTime = mClock.currentTimeMillis();
             earliestRemovaltime = currentTime + mMinimumDisplayTime;
             if (updatePostTime) {
