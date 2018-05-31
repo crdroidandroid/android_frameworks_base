@@ -45,4 +45,8 @@
   <string name="permlab_accessFontManager">přístup ke správci písem</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFontManager">Umožňuje aplikaci přístup ke správci písem.</string>
+  <!-- Pocket Lock -->
+  <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+  <!-- Defines the sysfs attribute path used by pocket bridge
+        to communicate pocket state to the pocket judge kernel driver. -->
 </resources>
