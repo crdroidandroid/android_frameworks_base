@@ -5487,6 +5487,7 @@ package android.telephony.ims {
     method public void callSessionResumeFailed(android.telephony.ims.ImsReasonInfo);
     method public void callSessionResumeReceived(android.telephony.ims.ImsCallProfile);
     method public void callSessionResumed(android.telephony.ims.ImsCallProfile);
+    method public void callSessionPropertyChanged(int);
     method public void callSessionRttMessageReceived(java.lang.String);
     method public void callSessionRttModifyRequestReceived(android.telephony.ims.ImsCallProfile);
     method public void callSessionRttModifyResponseReceived(int);
