@@ -181,6 +181,20 @@ public class LogoImageViewRight extends ImageView implements
             drawable = mContext.getResources().getDrawable(R.drawable.ic_gender_male_female);
         } else if (mCrDroidLogoStyle == 32) {
             drawable = mContext.getResources().getDrawable(R.drawable.ic_guitar_electric);
+        } else if (mCrDroidLogoStyle == 33) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_batman);
+        } else if (mCrDroidLogoStyle == 34) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_deadpool);
+        } else if (mCrDroidLogoStyle == 35) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_decepticons);
+        } else if (mCrDroidLogoStyle == 36) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_ironman);
+        } else if (mCrDroidLogoStyle == 37) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_minions);
+        } else if (mCrDroidLogoStyle == 38) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_spiderman);
+        } else if (mCrDroidLogoStyle == 39) {
+            drawable = mContext.getResources().getDrawable(R.drawable.ic_superman);
         }
 
         setImageDrawable(null);
