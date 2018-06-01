@@ -57,7 +57,7 @@
   <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">다시 시작</string>
   <string name="quick_settings_reboot_recovery_label">복구 모드</string>
-  <string name="quick_settings_poweroff_label">Power off</string>
+  <string name="quick_settings_poweroff_label">전원 끄기</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">이것은 무엇입니까?</string>
   <string name="caffeine_info_message">카페인 타일은 화면을 켜기 위해 전환 할 수있는 간단한 타일입니다.\n\n 화면을 끈 후에는 타일 상태가 자체적으로 재설정됩니다.</string>
@@ -120,9 +120,9 @@
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">Nfc</string>
   <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">HW Keys</string>
+  <string name="quick_settings_hw_keys_label">하드웨어 버튼</string>
   <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">HW Keys disabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_disabled">하드웨어 버튼 비활성화됨</string>
   <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_enabled">하드웨어 버튼 활성화됨</string>
 </resources>
