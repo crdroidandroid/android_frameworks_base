@@ -11,4 +11,9 @@
 
     <!-- Build properties from a GMS certified device against current platform SPL level -->
     <java-symbol type="array" name="config_certifiedBuildProperties" />
+
+    <!-- App error dialog -->
+    <java-symbol type="id" name="aerr_copy" />
+    <java-symbol type="string" name="url_copy_success" />
+    <java-symbol type="string" name="url_copy_failed" />
 </resources>
