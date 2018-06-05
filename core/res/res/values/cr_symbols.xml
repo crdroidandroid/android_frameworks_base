@@ -104,4 +104,9 @@
   <java-symbol type="style" name="Animation.Toast.Translucent" />
   <java-symbol type="style" name="Animation.Toast.SlideRightLeft" />
   <java-symbol type="style" name="Animation.Toast.SlideLeftRight" />
+
+  <!-- App error dialog -->
+  <java-symbol type="id" name="aerr_copy" />
+  <java-symbol type="string" name="url_copy_success" />
+  <java-symbol type="string" name="url_copy_failed" />
 </resources>
