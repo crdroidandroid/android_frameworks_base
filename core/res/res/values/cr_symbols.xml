@@ -19,4 +19,9 @@
     <!-- Light / Regular style fonts -->
     <java-symbol type="string" name="config_lightFontFamily" />
     <java-symbol type="string" name="config_regularFontFamily" />
+
+    <!-- App error dialog -->
+    <java-symbol type="id" name="aerr_copy" />
+    <java-symbol type="string" name="url_copy_success" />
+    <java-symbol type="string" name="url_copy_failed" />
 </resources>
