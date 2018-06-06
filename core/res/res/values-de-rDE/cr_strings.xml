@@ -42,11 +42,11 @@
   <string name="animation_random">Zufällig</string>
   <string name="action_null">Leer</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFontManager">access font manager</string>
+  <string name="permlab_accessFontManager">auf Schriftverwaltung zugreifen</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+  <string name="permdesc_accessFontManager">Erlaubt der Anwendung, auf die Schriftverwaltung zuzugreifen.</string>
   <!-- Pocket Lock -->
-  <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+  <string name="pocket_lock_message_long_press">Ein-/Aus-Taste gedrückt halten, um mit dem Gerät zu interagieren</string>
   <!-- Defines the sysfs attribute path used by pocket bridge
         to communicate pocket state to the pocket judge kernel driver. -->
 </resources>

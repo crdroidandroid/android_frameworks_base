@@ -106,15 +106,15 @@
   <string name="quick_settings_screenrecord_mq_label">화면 녹화 720p</string>
   <string name="quick_settings_screenrecord_hq_label">화면 녹화 720p+</string>
   <!-- Always on Display Tile -->
-  <string name="quick_settings_always_on_display_label">Always on display</string>
+  <string name="quick_settings_always_on_display_label">올웨이즈 온 디스플레이</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_off">Always on display off.</string>
+  <string name="accessibility_quick_settings_always_on_display_off">올웨이즈 온 디스플레이 끄기.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_on">Always on display on.</string>
+  <string name="accessibility_quick_settings_always_on_display_on">올웨이즈 온 디스플레이 끄기.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_off">Always on display turned off.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_off">올웨이즈 온 디스플레이 꺼짐</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_on">Always on display turned on.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_on">올웨이즈 온 디스플레이 켜짐</string>
   <!-- Name of the nfc status bar icon. -->
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
