@@ -182,6 +182,12 @@ public final class ImsReasonInfo implements Parcelable {
     public static final int CODE_EMERGENCY_PERM_FAILURE = 364;
 
     /**
+     * @hide
+     * User marked the call as unwanted.
+     */
+    public static final int CODE_SIP_USER_MARKED_UNWANTED = 365;
+
+    /**
      * MEDIA (IMS -> Telephony)
      */
     // Media resource initialization failed
