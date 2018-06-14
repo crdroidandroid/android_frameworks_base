@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -26,6 +27,8 @@ import android.widget.TextView;
  * A view to show hints on Keyguard ("Swipe up to unlock", "Tap again to open").
  */
 public class KeyguardIndicationTextView extends TextView {
+
+    private static final String FONT_FAMILY = "sans-serif-light";
 
     public KeyguardIndicationTextView(Context context) {
         super(context);
@@ -51,11 +54,14 @@ public class KeyguardIndicationTextView extends TextView {
      */
     public void switchIndication(CharSequence text) {
 
+        Typeface tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
+
         // TODO: Animation, make sure that we will show one indication long enough.
         if (TextUtils.isEmpty(text)) {
             setVisibility(View.INVISIBLE);
         } else {
             setVisibility(View.VISIBLE);
+            setTypeface(tf);
             setText(text);
         }
     }
