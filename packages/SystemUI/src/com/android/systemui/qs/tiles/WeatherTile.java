@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
  * Copyright (C) 2017 The OmniROM project
+ * Copyright (C) 2018 AICP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -217,7 +218,11 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
             if (mWeatherImage == null) {
                 state.label = mContext.getResources().getString(R.string.omnijaws_label_default);
             } else {
-                state.icon = new DrawableIcon(mWeatherImage);
+                Drawable weatherImage = mWeatherImage.mutate().getConstantState().newDrawable();
+                if (weatherImage instanceof VectorDrawable) {
+                    weatherImage = applyTint(weatherImage);
+                }
+                state.icon = new DrawableIcon(weatherImage);
                 state.label = mWeatherLabel;
             }
         } else {
@@ -241,7 +246,6 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
                 mWeatherData = mWeatherClient.getWeatherInfo();
                 if (mWeatherData != null) {
                     mWeatherImage = mWeatherClient.getWeatherConditionImage(mWeatherData.conditionCode);
-                    mWeatherImage = mWeatherImage.mutate();
                     mWeatherLabel = mWeatherData.temp + mWeatherData.tempUnits;
                 } else {
                     mWeatherLabel = mContext.getResources().getString(R.string.omnijaws_service_unkown);
@@ -256,6 +260,14 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
         if (isShowingDetail()) {
             mDetailedView.updateWeatherData(mWeatherData);
         }
+    }
+
+    private Drawable applyTint(Drawable icon) {
+        TypedArray array =
+                mContext.obtainStyledAttributes(new int[]{android.R.attr.colorControlNormal});
+        icon.setTint(array.getColor(0, 0));
+        array.recycle();
+        return icon;
     }
 
     @Override
