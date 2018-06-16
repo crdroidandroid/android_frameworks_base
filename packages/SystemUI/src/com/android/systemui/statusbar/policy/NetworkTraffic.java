@@ -312,13 +312,14 @@ public class NetworkTraffic extends TextView {
                     lastUpdateTime = SystemClock.elapsedRealtime();
                     mTrafficHandler.sendEmptyMessage(1);
                 }
+                setVisibility(View.VISIBLE);
                 updateTrafficDrawable(mNetworkTrafficColor);
                 return;
             }
         } else {
             clearHandlerCallbacks();
         }
-        setVisibility(View.GONE); //this is needed when the icon is shown then we disable it
+        setVisibility(View.GONE);
     }
 
     private static boolean isSet(int intState, int intMask) {
