@@ -55,6 +55,8 @@ import com.android.systemui.tuner.TunerService.Tunable;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import org.cyanogenmod.internal.statusbar.NetworkTraffic;
+
 /**
  * Controls everything regarding the icons in the status bar and on Keyguard, including, but not
  * limited to: notification icons, signal cluster, additional status icons, and clock in the status
@@ -83,6 +85,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     private BatteryMeterView mBatteryMeterViewKeyguard;
     private ClockController mClockController;
     private View mCenterClockLayout;
+    private NetworkTraffic mNetworkTraffic;
 
     private ImageView mCrDroidLogoRight;
     private ImageView mCrDroidLogoLeft;
@@ -152,6 +155,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mBatteryMeterView = (BatteryMeterView) statusBar.findViewById(R.id.battery);
         mBatteryMeterViewKeyguard = (BatteryMeterView) keyguardStatusBar.findViewById(R.id.battery);
         scaleBatteryMeterViews(context);
+
+        mNetworkTraffic = (NetworkTraffic) statusBar.findViewById(R.id.network_traffic);
 
         mCrDroidLogoRight = (ImageView) statusBar.findViewById(R.id.crdroid_logo);
         mCrDroidLogoLeft = (ImageView) statusBar.findViewById(R.id.left_crdroid_logo);
@@ -573,6 +578,10 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                 isInArea(mTintArea, mBatteryMeterView) ? mDarkIntensity : 0);
         mClockController.setTextColor(mTintArea, mIconTint);
         mBatteryLevelView.setTextColor(getTint(mTintArea, mBatteryLevelView, mIconTint));
+
+        mNetworkTraffic.setDarkIntensity(mDarkIntensity,
+                mLightModeIconColorSingleTone, mDarkModeIconColorSingleTone);
+
         if (Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_CRDROID_LOGO_COLOR, 0xFFFFFFFF,
                 UserHandle.USER_CURRENT) == 0xFFFFFFFF) {
