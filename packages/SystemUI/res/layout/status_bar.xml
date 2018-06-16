@@ -113,14 +113,6 @@
             android:orientation="horizontal"
             >
 
-            <com.android.systemui.statusbar.policy.NetworkTraffic
-                android:id="@+id/networkTraffic"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:singleLine="false"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="right|center_vertical"/>
-
             <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherImage
                 android:id="@+id/weather_image"
                 android:layout_width="24dp"

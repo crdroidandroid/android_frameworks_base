@@ -49,7 +49,6 @@ import com.android.systemui.SystemUIFactory;
 import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.StatusBarIconView;
-import com.android.systemui.statusbar.policy.NetworkTraffic;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
 
@@ -84,7 +83,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     private BatteryMeterView mBatteryMeterViewKeyguard;
     private ClockController mClockController;
     private View mCenterClockLayout;
-    private NetworkTraffic mNetworkTraffic;
+
     private ImageView mCrDroidLogoRight;
     private ImageView mCrDroidLogoLeft;
 
@@ -153,7 +152,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mBatteryMeterView = (BatteryMeterView) statusBar.findViewById(R.id.battery);
         mBatteryMeterViewKeyguard = (BatteryMeterView) keyguardStatusBar.findViewById(R.id.battery);
         scaleBatteryMeterViews(context);
-        mNetworkTraffic = (NetworkTraffic) statusBar.findViewById(R.id.networkTraffic);
+
         mCrDroidLogoRight = (ImageView) statusBar.findViewById(R.id.crdroid_logo);
         mCrDroidLogoLeft = (ImageView) statusBar.findViewById(R.id.left_crdroid_logo);
         mWeather = (TextView) statusBar.findViewById(R.id.weather_temp);
@@ -161,6 +160,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mWeatherImageView = (ImageView) statusBar.findViewById(R.id.weather_image);
         mLeftWeatherImageView = (ImageView) statusBar.findViewById(R.id.left_weather_image);
         mCarrierLabel = (TextView) statusBar.findViewById(R.id.statusbar_carrier_text);
+
         mDarkModeIconColorSingleTone = context.getColor(R.color.dark_mode_icon_color_single_tone);
         mLightModeIconColorSingleTone = context.getColor(R.color.light_mode_icon_color_single_tone);
         mHandler = new Handler();
@@ -573,7 +573,6 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                 isInArea(mTintArea, mBatteryMeterView) ? mDarkIntensity : 0);
         mClockController.setTextColor(mTintArea, mIconTint);
         mBatteryLevelView.setTextColor(getTint(mTintArea, mBatteryLevelView, mIconTint));
-        mNetworkTraffic.setDarkIntensity(mDarkIntensity);
         if (Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_CRDROID_LOGO_COLOR, 0xFFFFFFFF,
                 UserHandle.USER_CURRENT) == 0xFFFFFFFF) {
