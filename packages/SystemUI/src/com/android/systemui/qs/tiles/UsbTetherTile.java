@@ -77,7 +77,9 @@ public class UsbTetherTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleClick() {
-        mConnectivityManager.setUsbTethering(!mUsbTetherEnabled);
+        if (mUsbConnected) {
+            mConnectivityManager.setUsbTethering(!mUsbTetherEnabled);
+        }
     }
 
     @Override
