@@ -111,7 +111,6 @@ import com.android.server.NativeDaemonConnector.SensitiveArg;
 import com.android.server.pm.PackageManagerException;
 import com.android.server.pm.PackageManagerService;
 import com.android.server.storage.AppFuseBridge;
-import com.android.internal.widget.ILockSettings;
 
 import libcore.io.IoUtils;
 import libcore.util.EmptyArray;
@@ -2705,23 +2704,9 @@ class StorageManagerService extends IStorageManager.Stub
             Slog.i(TAG, "changing encryption password...");
         }
 
-        ILockSettings lockSettings = ILockSettings.Stub.asInterface(
-                        ServiceManager.getService("lock_settings"));
-        String currentPassword="default_password";
-        try {
-            currentPassword = lockSettings.getPassword();
-        } catch (RemoteException e) {
-            Slog.e(TAG, "Couldn't get password" + e);
-        }
-
         try {
             NativeDaemonEvent event = mCryptConnector.execute("cryptfs", "changepw", CRYPTO_TYPES[type],
-                        new SensitiveArg(currentPassword), new SensitiveArg(password));
-            try {
-                lockSettings.sanitizePassword();
-            } catch (RemoteException e) {
-                Slog.e(TAG, "Couldn't sanitize password" + e);
-            }
+                        new SensitiveArg(password));
             return Integer.parseInt(event.getMessage());
         } catch (NativeDaemonConnectorException e) {
             // Encryption failed
