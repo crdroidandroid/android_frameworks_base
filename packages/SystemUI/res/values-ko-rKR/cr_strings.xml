@@ -68,8 +68,8 @@
   <string name="keyguard_indication_dash_charging_time">고속 충전중 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> 후 충전 완료)</string>
   <string name="keyguard_plugged_in_dash_charging">Dash 충전 중</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
+  <string name="keyguard_indication_turbo_power_time">TurboPower 연결됨 (풀 충전까지 <xliff:g id="charging_time_left">%s</xliff:g> 남음)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower 연결됨</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">오류</string>
   <string name="omnijaws_service_unkown">날씨 정보 없음</string>

@@ -46,7 +46,7 @@
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFontManager">앱에 글꼴 관리자 접속을 허용합니다.</string>
   <!-- Pocket Lock -->
-  <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+  <string name="pocket_lock_message_long_press">기기를 사용하려면 전원 버튼을 길게 누르세요.</string>
   <!-- Defines the sysfs attribute path used by pocket bridge
         to communicate pocket state to the pocket judge kernel driver. -->
 </resources>

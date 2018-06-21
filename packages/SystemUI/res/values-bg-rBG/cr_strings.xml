@@ -17,20 +17,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- High Brightness Mode Tile -->
-  <string name="quick_settings_high_brightness">High brightness</string>
+  <string name="quick_settings_high_brightness">Висока яркост</string>
   <!-- Sound QS Tile -->
-  <string name="quick_settings_sound_label">Sound</string>
-  <string name="quick_settings_sound_ring">Ring</string>
-  <string name="quick_settings_sound_vibrate">Vibrate</string>
-  <string name="quick_settings_sound_dnd">Do not disturb</string>
+  <string name="quick_settings_sound_label">Звук</string>
+  <string name="quick_settings_sound_ring">Звънене</string>
+  <string name="quick_settings_sound_vibrate">Вибрация</string>
+  <string name="quick_settings_sound_dnd">Не безпокойте</string>
   <!-- Compass QS Tile -->
-  <string name="quick_settings_compass_label">Compass</string>
+  <string name="quick_settings_compass_label">Компас</string>
   <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-  <string name="quick_settings_compass_init">Initializing\u2026</string>
-  <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-  <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-  <string name="accessibility_quick_settings_compass_changed_off">Compass turned off.</string>
-  <string name="accessibility_quick_settings_compass_changed_on">Compass turned on.</string>
+  <string name="quick_settings_compass_init">Подготвяне\u2026</string>
+  <string name="accessibility_quick_settings_compass_off">Компас изкл.</string>
+  <string name="accessibility_quick_settings_compass_on">Компас вкл.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">Компасът е изключен.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">Компасът е включен.</string>
   <string name="quick_settings_compass_N">N</string>
   <string name="quick_settings_compass_NE">NE</string>
   <string name="quick_settings_compass_E">E</string>
@@ -40,89 +40,89 @@
   <string name="quick_settings_compass_W">W</string>
   <string name="quick_settings_compass_NW">NW</string>
   <!-- Music tile -->
-  <string name="quick_settings_music_label">Music</string>
-  <string name="quick_settings_music_play">Play</string>
-  <string name="quick_settings_music_pause">Pause</string>
+  <string name="quick_settings_music_label">Музика</string>
+  <string name="quick_settings_music_play">Възпроизв.</string>
+  <string name="quick_settings_music_pause">Пауза</string>
   <!-- Expanded Desktop QS Tile -->
-  <string name="quick_settings_expanded_desktop_label">Expanded desktop</string>
-  <string name="quick_settings_expanded_desktop">Expanded</string>
-  <string name="quick_settings_expanded_desktop_off">Normal</string>
-  <string name="quick_settings_expanded_navigation_off">Hide navbar</string>
-  <string name="quick_settings_expanded_statusbar_off">Hide statusbar</string>
+  <string name="quick_settings_expanded_desktop_label">Разширен екран</string>
+  <string name="quick_settings_expanded_desktop">Разширен</string>
+  <string name="quick_settings_expanded_desktop_off">Нормален</string>
+  <string name="quick_settings_expanded_navigation_off">Скрив. навигац. лента</string>
+  <string name="quick_settings_expanded_statusbar_off">Скрив. лентата на съст.</string>
   <!-- CPUInfo tile -->
-  <string name="quick_settings_cpuinfo_label">CPU Info</string>
+  <string name="quick_settings_cpuinfo_label">Инф. за процесора</string>
   <!-- Screenshot tile -->
-  <string name="quick_settings_screenshot_label">Screenshot</string>
-  <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+  <string name="quick_settings_screenshot_label">Екранна снимка</string>
+  <string name="quick_settings_region_screenshot_label">Частична екранна снимка</string>
   <!-- Reboot/Recovery/PowerOff QS Tile -->
-  <string name="quick_settings_reboot_label">Reboot</string>
-  <string name="quick_settings_reboot_recovery_label">Recovery</string>
-  <string name="quick_settings_poweroff_label">Power off</string>
+  <string name="quick_settings_reboot_label">Рестартиране</string>
+  <string name="quick_settings_reboot_recovery_label">Възстановяване</string>
+  <string name="quick_settings_poweroff_label">Изключване</string>
   <!-- Caffeine tile -->
-  <string name="caffeine_info_title">What is this?</string>
-  <string name="caffeine_info_message">Caffeine tile is a simple tile that you could switch on to keep your screen on.\n\nPlease note that the tile\'s state will reset itself after turning the screen off.</string>
-  <string name="recents_app_killed">App killed</string>
+  <string name="caffeine_info_title">Какво е това?</string>
+  <string name="caffeine_info_message">Кофеин е проста плочка, която можете да включите, за да запазите вашия екран включен.\n\nМоля, отбележете, че състоянието на плочката ще се нулира след изключване на екрана.</string>
+  <string name="recents_app_killed">Приложението е убито</string>
   <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_running_services">Open Running Services screen.</string>
+  <string name="accessibility_quick_settings_running_services">Отваряне на екрана с изпълняваните услуги.</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_dash_charging_time">Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_dash_charging">Dash Charging</string>
+  <string name="keyguard_indication_dash_charging_time">Зареждане Dash (<xliff:g id="charging_time_left" example="4 часа и 2 минути">%s</xliff:g> до пълен заряд)</string>
+  <string name="keyguard_plugged_in_dash_charging">Зареждане Dash</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
+  <string name="keyguard_indication_turbo_power_time">TurboPower е свързан (<xliff:g id="charging_time_left">%s</xliff:g> до пълен заряд)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower е свързан</string>
   <!-- OmniJaws -->
-  <string name="omnijaws_service_error">Error</string>
-  <string name="omnijaws_service_unkown">No weather data</string>
-  <string name="omnijaws_service_error_long">Error loading weather data</string>
-  <string name="omnijaws_service_disabled">Service is disabled</string>
-  <string name="omnijaws_detail_header">Weather</string>
-  <string name="omnijaws_label_default">Weather</string>
-  <string name="omnijaws_current_text">Now</string>
-  <string name="omnijaws_package_not_available">OmniJaws not available</string>
-  <string name="omnijaws_service_last_update">Last update:</string>
+  <string name="omnijaws_service_error">Грешка</string>
+  <string name="omnijaws_service_unkown">Няма данни за времето</string>
+  <string name="omnijaws_service_error_long">Грешка при зареждане на данни за времето</string>
+  <string name="omnijaws_service_disabled">Услугата е забранена</string>
+  <string name="omnijaws_detail_header">Времето</string>
+  <string name="omnijaws_label_default">Времето</string>
+  <string name="omnijaws_current_text">Сега</string>
+  <string name="omnijaws_package_not_available">OmniJaws не е наличен</string>
+  <string name="omnijaws_service_last_update">Последно обновяване:</string>
   <!-- Assist/Google Tiles -->
-  <string name="quick_settings_google_assist_label">Assistant</string>
-  <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+  <string name="quick_settings_google_assist_label">Асистент</string>
+  <string name="quick_settings_google_voice_assist_label">Гласова помощ</string>
   <string name="quick_settings_google_now_label">Google</string>
   <!-- Screenrecord Notification Ticker -->
-  <string name="screenrecord_notif_ticker">Screen is being recorded</string>
-  <string name="screenrecord_notif_final_ticker">Screen recorded successfully</string>
+  <string name="screenrecord_notif_ticker">Екранът се записва</string>
+  <string name="screenrecord_notif_final_ticker">Екранът е записан успешно</string>
   <!-- Screenrecord notification title -->
-  <string name="screenrecord_notif_title">Recording screen</string>
+  <string name="screenrecord_notif_title">Записване на екрана</string>
   <!-- Screenrecord notification action: Stop -->
-  <string name="screenrecord_notif_stop">Stop</string>
-  <string name="screenrecord_notif_completed">Screen recorded successfully</string>
+  <string name="screenrecord_notif_stop">Спиране</string>
+  <string name="screenrecord_notif_completed">Екранът е записан успешно</string>
   <!-- Screenrecord notification action: show/hide pointer -->
-  <string name="screenrecord_notif_pointer_on">Show pointer</string>
-  <string name="screenrecord_notif_pointer_off">Hide pointer</string>
+  <string name="screenrecord_notif_pointer_on">Показване на показалеца</string>
+  <string name="screenrecord_notif_pointer_off">Скриване на показалеца</string>
   <!-- Screen record notification error title -->
-  <string name="screenrecord_notif_error">Unable to record screen</string>
-  <string name="notification_channel_screenrecord">Screenrecords</string>
-  <string name="screenrecord_hide_hint">Hide hint</string>
-  <string name="screenrecord_show_hint">Show hint</string>
+  <string name="screenrecord_notif_error">Екранът не може да бъде записан</string>
+  <string name="notification_channel_screenrecord">Записи на екрана</string>
+  <string name="screenrecord_hide_hint">Скриване на съветите</string>
+  <string name="screenrecord_show_hint">Показване на съвети</string>
   <!-- Screenshot QS tile -->
-  <string name="quick_settings_screenrecord_label">Screenrecord</string>
-  <string name="quick_settings_screenrecord_lq_label">Screenrecord 480p</string>
-  <string name="quick_settings_screenrecord_mq_label">Screenrecord 720p</string>
-  <string name="quick_settings_screenrecord_hq_label">Screenrecord 720p+</string>
+  <string name="quick_settings_screenrecord_label">Запис на екрана</string>
+  <string name="quick_settings_screenrecord_lq_label">Запис на екрана 480p</string>
+  <string name="quick_settings_screenrecord_mq_label">Запис на екрана 720p</string>
+  <string name="quick_settings_screenrecord_hq_label">Запис на екрана 720p+</string>
   <!-- Always on Display Tile -->
-  <string name="quick_settings_always_on_display_label">Always on display</string>
+  <string name="quick_settings_always_on_display_label">Винаги вкл. екран</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_off">Always on display off.</string>
+  <string name="accessibility_quick_settings_always_on_display_off">Винаги вкл. екран: изкл.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_on">Always on display on.</string>
+  <string name="accessibility_quick_settings_always_on_display_on">Винаги вкл. екран: вкл.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_off">Always on display turned off.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_off">Винаги включен екран: изключено</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_on">Always on display turned on.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_on">Винаги включен екран: включено</string>
   <!-- Name of the nfc status bar icon. -->
-  <string name="status_bar_nfc">NFC</string>
+  <string name="status_bar_nfc">КБП</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
-  <string name="accessibility_status_bar_nfc">Nfc</string>
+  <string name="accessibility_status_bar_nfc">Кбп</string>
   <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">HW Keys</string>
+  <string name="quick_settings_hw_keys_label">Хардуерни бутони</string>
   <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">HW Keys disabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_disabled">Хардуерни бутони: забранени</string>
   <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_enabled">Хардуерни бутони: разрешени</string>
 </resources>
