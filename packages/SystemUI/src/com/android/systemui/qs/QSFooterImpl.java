@@ -139,6 +139,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         mAlarmStatusCollapsed = findViewById(R.id.alarm_status_collapsed);
         mAlarmStatus = findViewById(R.id.alarm_status);
         mAlarmStatus.setOnClickListener(this);
+        mAlarmStatusCollapsed.setOnClickListener(this);
 
         mMultiUserSwitch = findViewById(R.id.multi_user_switch);
         mMultiUserAvatar = mMultiUserSwitch.findViewById(R.id.multi_user_avatar);
@@ -367,7 +368,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
                     mExpanded ? MetricsProto.MetricsEvent.ACTION_QS_EXPANDED_SETTINGS_LAUNCH
                             : MetricsProto.MetricsEvent.ACTION_QS_COLLAPSED_SETTINGS_LAUNCH);
                 startSettingsActivity();
-        } else if (v == mAlarmStatus) {
+        } else if (v == mAlarmStatus || v == mAlarmStatusCollapsed) {
             Dependency.get(MetricsLogger.class).action(ACTION_QS_DATE,
                     mNextAlarm != null);
             if (mNextAlarm != null && mNextAlarm.getShowIntent() != null) {
