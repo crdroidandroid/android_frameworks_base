@@ -21,8 +21,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:background="?android:attr/selectableItemBackground">
+    android:orientation="horizontal" >
 
     <com.android.systemui.statusbar.policy.DateView
         android:id="@+id/date"
@@ -33,7 +32,8 @@
         android:textSize="@dimen/qs_time_collapsed_size"
         android:gravity="center_vertical"
         systemui:datePattern="@string/abbrev_wday_month_day_no_year_alarm"
-        android:paddingEnd="6dp" />
+        android:paddingEnd="6dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless" />
 
     <com.android.systemui.statusbar.AlphaOptimizedImageView
         android:id="@+id/alarm_status_collapsed"
@@ -43,7 +43,8 @@
         android:tint="?android:attr/textColorPrimary"
         android:paddingEnd="6dp"
         android:gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:background="?android:attr/selectableItemBackgroundBorderless" />
 
     <com.android.systemui.statusbar.AlphaOptimizedButton
         android:id="@+id/alarm_status"
@@ -51,8 +52,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
         android:gravity="center_vertical"
-        android:background="@null"
         android:clickable="false"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:background="?android:attr/selectableItemBackgroundBorderless" />
 
 </LinearLayout>
