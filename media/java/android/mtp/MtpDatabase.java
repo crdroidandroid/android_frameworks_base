@@ -253,6 +253,23 @@ public class MtpDatabase implements AutoCloseable {
         mStorageMap.remove(storage.getPath());
     }
 
+    private String MtpToMediaPath(String path) {
+        if (path.startsWith("/mnt/media_rw")) {
+            Log.d(TAG, "start with /mnt/media_rw");
+            path = "/storage" + path.substring(13);
+        }
+        return path;
+    }
+
+    private String MediatoMtpPath(String path) {
+        if (path.startsWith("/storage/emulated/0")) {
+            Log.d(TAG, "start with /storage/emulated/0");
+            return path;
+        }
+        path = "/mnt/media_rw" + path.substring(8);
+        return path;
+    }
+
     private void initDeviceProperties(Context context) {
         final String devicePropertiesName = "device-properties";
         mDeviceProperties = context.getSharedPreferences(devicePropertiesName, Context.MODE_PRIVATE);
