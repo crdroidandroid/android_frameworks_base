@@ -1345,6 +1345,7 @@ public final class ViewRootImpl implements ViewParent,
                 renderer.setStopped(mStopped);
             }
             if (!mStopped) {
+                mNewSurfaceNeeded = true;
                 scheduleTraversals();
             } else {
                 if (renderer != null) {
