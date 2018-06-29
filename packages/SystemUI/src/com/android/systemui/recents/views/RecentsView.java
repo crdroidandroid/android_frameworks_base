@@ -570,7 +570,7 @@ public class RecentsView extends FrameLayout implements TunerService.Tunable {
         mAm.getMemoryInfo(memInfo);
         int available = (int)(memInfo.availMem / 1048576L);
         int max = (int)(memInfo.totalMem / 1048576L);
-        mMemText.setText("Free RAM: " + String.valueOf(available) + "MB");
+        mMemText.setText(String.format(getResources().getString(R.string.recents_free_ram),available));
         mMemBar.setMax(max);
         mMemBar.setProgress(available);
     }
