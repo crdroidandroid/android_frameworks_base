@@ -128,4 +128,6 @@
   <!-- Heads up snooze toast -->
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s </xliff:g> - Atenționarea este oprită timp de 1 minut.</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Atenționările sunt blocate timp de <xliff:g id="number">%d </xliff:g> minute.</string>
+  <!-- Free ram -->
+  <string name="recents_free_ram">Memorie liberă: %1$d MB</string>
 </resources>
