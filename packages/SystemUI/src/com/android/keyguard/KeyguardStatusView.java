@@ -308,6 +308,7 @@ public class KeyguardStatusView extends GridLayout implements
                 mClockView.setVisibility(View.VISIBLE);
                 mAnalogClockView.setVisibility(View.GONE);
                 mDeadPoolClockView.setVisibility(View.GONE);
+                mSpideyClockView.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, R.id.clock_view);
                 mClockView.setSingleLine(true);
                 mAnalogClockView.unregisterReceiver();
@@ -339,7 +340,6 @@ public class KeyguardStatusView extends GridLayout implements
             case 3: // analog (deadpool)
                 mAnalogClockView.setVisibility(View.GONE);
                 mClockView.setVisibility(View.GONE);
-                mSpideyClockView.setVisibility(View.GONE);
                 mSpideyClockView.setVisibility(View.GONE);
                 mDeadPoolClockView.setVisibility(View.VISIBLE);
                 params.addRule(RelativeLayout.BELOW, R.id.deadpool_clock_view);
