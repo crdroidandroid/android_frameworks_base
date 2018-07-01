@@ -55,7 +55,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
                 style="@style/widget_big_thin"
-                android:layout_marginBottom="@dimen/bottom_text_spacing_digital" />
+                android:layout_marginBottom="@dimen/bottom_text_spacing_analog" />
             <DeadPoolAnalogClock
                 android:id="@+id/deadpool_clock_view"
                 android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
                 style="@style/widget_big_thin"
-                android:layout_marginBottom="@dimen/bottom_text_spacing_digital" />
+                android:layout_marginBottom="@dimen/bottom_text_spacing_analog" />
             <SpideyAnalogClock
                 android:id="@+id/spidey_clock_view"
                 android:layout_width="wrap_content"
@@ -73,7 +73,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
                 style="@style/widget_big_thin"
-                android:layout_marginBottom="@dimen/bottom_text_spacing_digital" />
+                android:layout_marginBottom="@dimen/bottom_text_spacing_analog" />
             <com.android.systemui.ChargingView
                 android:id="@+id/battery_doze"
                 android:layout_width="wrap_content"
@@ -89,8 +89,7 @@
             <include layout="@layout/keyguard_status_area"
                 android:id="@+id/keyguard_status_area"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp" />
+                android:layout_height="wrap_content" />
 
             <include layout="@layout/keyguard_weather_view"
                 android:id="@+id/keyguard_weather_view"
