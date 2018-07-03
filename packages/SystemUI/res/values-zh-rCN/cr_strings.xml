@@ -129,5 +129,18 @@
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - 浮动通知暂停1分钟。</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - 浮动通知暂停<xliff:g id="number">%d</xliff:g>分钟。</string>
   <!-- Free ram -->
-  <string name="recents_free_ram">Free RAM: %1$d MB</string>
+  <string name="recents_free_ram">可用运存: %1$d MB</string>
+  <!-- On The Go -->
+  <string name="global_action_onthego">行走模式</string>
+  <string name="onthego_notif_ticker">行走模式已启动</string>
+  <string name="onthego_notif_title">正在使用行走模式</string>
+  <string name="onthego_notif_stop">停止</string>
+  <string name="onthego_notif_options">选项</string>
+  <string name="onthego_notif_error">无法启用行走模式</string>
+  <string name="onthego_notif_restart">重新启用行走模式</string>
+  <string name="onthego_notif_camera_changed">相机模式已更改</string>
+  <string name="onthego_transparency">透明度</string>
+  <string name="onthego_front_camera">使用前置摄像头</string>
+  <string name="onthego_service_toggle">自动重启服务</string>
+  <string name="onthego_channel_name">主要</string>
 </resources>

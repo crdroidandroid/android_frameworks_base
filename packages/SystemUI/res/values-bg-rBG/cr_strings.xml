@@ -129,5 +129,18 @@
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Изскачащите известия са отложени за 1 минута.</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Изскачащите известия са отложени за <xliff:g id="number">%d</xliff:g> минути.</string>
   <!-- Free ram -->
-  <string name="recents_free_ram">Free RAM: %1$d MB</string>
+  <string name="recents_free_ram">Своб. RAM: %1$d MB</string>
+  <!-- On The Go -->
+  <string name="global_action_onthego">Режим On-The-Go</string>
+  <string name="onthego_notif_ticker">On-The-Go активиран</string>
+  <string name="onthego_notif_title">On-The-Go е активен</string>
+  <string name="onthego_notif_stop">Спиране</string>
+  <string name="onthego_notif_options">Опции</string>
+  <string name="onthego_notif_error">Невъзможно стартиране на On-The-Go</string>
+  <string name="onthego_notif_restart">Рестартиране на On-The-Go</string>
+  <string name="onthego_notif_camera_changed">Променен режим на камерата</string>
+  <string name="onthego_transparency">Прозрачност</string>
+  <string name="onthego_front_camera">Използване на предната камера</string>
+  <string name="onthego_service_toggle">Автомат. рестартиране на услугата</string>
+  <string name="onthego_channel_name">Основен</string>
 </resources>

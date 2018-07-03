@@ -130,4 +130,17 @@
   <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Atenționările sunt blocate timp de <xliff:g id="number">%d </xliff:g> minute.</string>
   <!-- Free ram -->
   <string name="recents_free_ram">Memorie liberă: %1$d MB</string>
+  <!-- On The Go -->
+  <string name="global_action_onthego">Mod On-The-Go</string>
+  <string name="onthego_notif_ticker">On-The-Go activat</string>
+  <string name="onthego_notif_title">Modul \"On-The-Go\" este activ</string>
+  <string name="onthego_notif_stop">Oprește</string>
+  <string name="onthego_notif_options">Opţiuni</string>
+  <string name="onthego_notif_error">Pornirea \"On-The-Go\" a eșuat</string>
+  <string name="onthego_notif_restart">Se repornește \"On-The-Go\"</string>
+  <string name="onthego_notif_camera_changed">Mod cameră schimbat</string>
+  <string name="onthego_transparency">Transparență</string>
+  <string name="onthego_front_camera">Utilizare cameră frontală</string>
+  <string name="onthego_service_toggle">Repornire automată a serviciului</string>
+  <string name="onthego_channel_name">Principal</string>
 </resources>

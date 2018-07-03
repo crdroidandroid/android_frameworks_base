@@ -130,4 +130,17 @@
   <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Bildirim pencereleri <xliff:g id="number">%d</xliff:g> dakika erteleniyor.</string>
   <!-- Free ram -->
   <string name="recents_free_ram">Boş RAM: %1$d MB</string>
+  <!-- On The Go -->
+  <string name="global_action_onthego">Yürüme modu</string>
+  <string name="onthego_notif_ticker">Yürüme modu etkin</string>
+  <string name="onthego_notif_title">Yürüme modu etkin</string>
+  <string name="onthego_notif_stop">Durdur</string>
+  <string name="onthego_notif_options">Seçenekler</string>
+  <string name="onthego_notif_error">Yürüme modu başlatılamıyor</string>
+  <string name="onthego_notif_restart">Yürüme modunu yeniden başlat</string>
+  <string name="onthego_notif_camera_changed">Kamera modu değiştirildi</string>
+  <string name="onthego_transparency">Şeffaflık</string>
+  <string name="onthego_front_camera">Ön kamerayı kullan</string>
+  <string name="onthego_service_toggle">Servisi otomatik yeniden başlat</string>
+  <string name="onthego_channel_name">Ana menü</string>
 </resources>

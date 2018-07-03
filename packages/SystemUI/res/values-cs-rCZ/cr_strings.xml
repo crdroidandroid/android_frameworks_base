@@ -130,4 +130,17 @@
   <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Plovoucí oznámení jsou odložena na dobu <xliff:g id="number">%d </xliff:g> minut.</string>
   <!-- Free ram -->
   <string name="recents_free_ram">Volná paměť RAM: %1$d MB</string>
+  <!-- On The Go -->
+  <string name="global_action_onthego">Režim On-The-Go</string>
+  <string name="onthego_notif_ticker">On-The-Go aktivováno</string>
+  <string name="onthego_notif_title">On-The-Go je aktivní</string>
+  <string name="onthego_notif_stop">Zastavit</string>
+  <string name="onthego_notif_options">Možnosti</string>
+  <string name="onthego_notif_error">Nelze spustit On-The-Go</string>
+  <string name="onthego_notif_restart">Restartovat On-The-Go</string>
+  <string name="onthego_notif_camera_changed">Režim fotoaparátu byl změněn</string>
+  <string name="onthego_transparency">Průhlednost</string>
+  <string name="onthego_front_camera">Použít přední fotoaparát</string>
+  <string name="onthego_service_toggle">Automaticky restartovat službu</string>
+  <string name="onthego_channel_name">Hlavní</string>
 </resources>

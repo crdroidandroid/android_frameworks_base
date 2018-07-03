@@ -130,4 +130,17 @@
   <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - lebegő értesítései <xliff:g id="number">%d</xliff:g> percig elhalasztásra kerülnek.</string>
   <!-- Free ram -->
   <string name="recents_free_ram">Szabad RAM: %1$d MB</string>
+  <!-- On The Go -->
+  <string name="global_action_onthego">Menet közben mód</string>
+  <string name="onthego_notif_ticker">Menet közben mód aktiválva</string>
+  <string name="onthego_notif_title">A Menet közben mód aktív</string>
+  <string name="onthego_notif_stop">Megállítás</string>
+  <string name="onthego_notif_options">Beállítások</string>
+  <string name="onthego_notif_error">Nem lehet elindítani a Menet közben módot</string>
+  <string name="onthego_notif_restart">Menet közben mód újraindítása</string>
+  <string name="onthego_notif_camera_changed">Kameramód megváltoztatva</string>
+  <string name="onthego_transparency">Átlátszóság</string>
+  <string name="onthego_front_camera">Előlapi kamera használata</string>
+  <string name="onthego_service_toggle">Szolgáltatás automatikus újraindítása</string>
+  <string name="onthego_channel_name">Fő</string>
 </resources>
