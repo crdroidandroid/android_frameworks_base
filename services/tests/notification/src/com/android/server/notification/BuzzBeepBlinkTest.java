@@ -486,8 +486,14 @@ public class BuzzBeepBlinkTest extends NotificationTestCase {
         verifyNeverStopAudio();
     }
 
+    /**
+     * Tests the case where the user re-posts a {@link Notification} where
+     * {@link Notification.Builder#setOnlyAlertOnce(true)} has been called.  This should silence
+     * the sound assocaited with the notification.
+     * @throws Exception
+     */
     @Test
-    public void testNoisyOnceUpdateDoesNotCancelAudio() throws Exception {
+    public void testNoisyOnceUpdateDoesCancelAudio() throws Exception {
         NotificationRecord r = getBeepyNotification();
         NotificationRecord s = getBeepyOnceNotification();
         s.isUpdate = true;
@@ -495,7 +501,7 @@ public class BuzzBeepBlinkTest extends NotificationTestCase {
         mService.buzzBeepBlinkLocked(r);
         mService.buzzBeepBlinkLocked(s);
 
-        verifyNeverStopAudio();
+        verifyStopAudio();
     }
 
     @Test
