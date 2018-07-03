@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Environment;
-import android.os.Process;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.os.storage.StorageManager;
@@ -41,8 +40,10 @@ import com.android.server.PinnerService;
 import com.android.server.pm.dex.DexoptOptions;
 
 import java.io.File;
+import java.lang.Runnable;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -179,7 +180,6 @@ public class BackgroundDexOptService extends JobService {
         new Thread("BackgroundDexOptService_PostBootUpdate") {
             @Override
             public void run() {
-                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
                 postBootUpdate(jobParams, pm, pkgs);
             }
 
@@ -248,7 +248,6 @@ public class BackgroundDexOptService extends JobService {
         new Thread("BackgroundDexOptService_IdleOptimization") {
             @Override
             public void run() {
-                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
                 int result = idleOptimization(pm, pkgs, BackgroundDexOptService.this);
                 if (result != OPTIMIZE_ABORT_BY_JOB_SCHEDULER) {
                     Log.w(TAG, "Idle optimizations aborted because of space constraints.");
@@ -290,6 +289,14 @@ public class BackgroundDexOptService extends JobService {
         return result;
     }
 
+    private Semaphore mHandlerFlushCount = new Semaphore(0, true);
+    private Runnable mHandlerFlusher = new Runnable() {
+        @Override
+        public void run() {
+            mHandlerFlushCount.release();
+        }
+    };
+
     private int optimizePackages(PackageManagerService pm, ArraySet<String> pkgs,
             long lowStorageThreshold, boolean is_for_primary_dex,
             ArraySet<String> failedPackageNames) {
@@ -302,6 +309,20 @@ public class BackgroundDexOptService extends JobService {
                 lowStorageThreshold;
         boolean shouldDowngrade = shouldDowngrade(lowStorageThresholdForDowngrade);
         for (String pkg : pkgs) {
+            // Wait for the PackageManager handler to process all queued up
+            // items so that we don't constantly interrupt it and grab the
+            // install lock
+            pm.mHandler.post(mHandlerFlusher);
+            boolean interrupted;
+            do {
+                try {
+                    mHandlerFlushCount.acquire();
+                    interrupted = false;
+                } catch (InterruptedException e) {
+                    interrupted = true;
+                }
+            } while (interrupted);
+
             int abort_code = abortIdleOptimizations(lowStorageThreshold);
             if (abort_code == OPTIMIZE_ABORT_BY_JOB_SCHEDULER) {
                 return abort_code;
