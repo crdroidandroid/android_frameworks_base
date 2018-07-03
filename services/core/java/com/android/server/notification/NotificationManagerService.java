@@ -4101,6 +4101,8 @@ public class NotificationManagerService extends SystemService {
 
                         buzz = playVibration(record, vibration, hasValidSound);
                     }
+                } else {
+                    hasValidSound = false;
                 }
             }
         }
