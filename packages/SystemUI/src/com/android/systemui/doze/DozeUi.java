@@ -139,7 +139,7 @@ public class DozeUi implements DozeMachine.Part {
     }
 
     private long roundToNextMinute(long timeInMillis) {
-        Calendar calendar = GregorianCalendar.getInstance();
+        Calendar calendar = new GregorianCalendar();
         calendar.setTimeInMillis(timeInMillis);
         calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.SECOND, 0);
