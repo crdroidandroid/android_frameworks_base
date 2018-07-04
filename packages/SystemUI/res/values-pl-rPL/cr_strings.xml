@@ -131,16 +131,16 @@
   <!-- Free ram -->
   <string name="recents_free_ram">Wolna pamięć RAM: %1$d MB</string>
   <!-- On The Go -->
-  <string name="global_action_onthego">On-The-Go Mode</string>
-  <string name="onthego_notif_ticker">On-The-Go activated</string>
-  <string name="onthego_notif_title">On-The-Go is active</string>
+  <string name="global_action_onthego">Tryb \"W ruchu\"</string>
+  <string name="onthego_notif_ticker">Tryb On-The-Go aktywowany</string>
+  <string name="onthego_notif_title">Tryb \"W ruchu\" jest aktywny</string>
   <string name="onthego_notif_stop">Stop</string>
-  <string name="onthego_notif_options">Options</string>
-  <string name="onthego_notif_error">Unable to start On-The-Go</string>
-  <string name="onthego_notif_restart">Restart On-The-Go</string>
-  <string name="onthego_notif_camera_changed">Camera mode changed</string>
-  <string name="onthego_transparency">Transparency</string>
-  <string name="onthego_front_camera">Use front camera</string>
-  <string name="onthego_service_toggle">Automatically restart service</string>
-  <string name="onthego_channel_name">Main</string>
+  <string name="onthego_notif_options">Opcje</string>
+  <string name="onthego_notif_error">Nie można uruchomić trybu \"W ruchu\"</string>
+  <string name="onthego_notif_restart">Uruchom ponownie tryb \"W ruchu\"</string>
+  <string name="onthego_notif_camera_changed">Zmieniono tryb pracy kamery</string>
+  <string name="onthego_transparency">Przezroczystość</string>
+  <string name="onthego_front_camera">Użyj przedniej kamery</string>
+  <string name="onthego_service_toggle">Automatycznie uruchom ponownie usługę</string>
+  <string name="onthego_channel_name">Główny</string>
 </resources>

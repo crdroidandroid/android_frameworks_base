@@ -129,18 +129,18 @@
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> • Plávajúce upozornenia sú odložené na 1 minútu.</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> • Plávajúce upozornenia sú odložené na <xliff:g id="number">%d </xliff:g> minút.</string>
   <!-- Free ram -->
-  <string name="recents_free_ram">Free RAM: %1$d MB</string>
+  <string name="recents_free_ram">Voľná pamäť RAM: %1$d MB</string>
   <!-- On The Go -->
-  <string name="global_action_onthego">On-The-Go Mode</string>
-  <string name="onthego_notif_ticker">On-The-Go activated</string>
-  <string name="onthego_notif_title">On-The-Go is active</string>
-  <string name="onthego_notif_stop">Stop</string>
-  <string name="onthego_notif_options">Options</string>
-  <string name="onthego_notif_error">Unable to start On-The-Go</string>
-  <string name="onthego_notif_restart">Restart On-The-Go</string>
-  <string name="onthego_notif_camera_changed">Camera mode changed</string>
-  <string name="onthego_transparency">Transparency</string>
-  <string name="onthego_front_camera">Use front camera</string>
-  <string name="onthego_service_toggle">Automatically restart service</string>
-  <string name="onthego_channel_name">Main</string>
+  <string name="global_action_onthego">Režim na cestách</string>
+  <string name="onthego_notif_ticker">Režim na cestách aktivovaný</string>
+  <string name="onthego_notif_title">Režim na cestách je aktívny</string>
+  <string name="onthego_notif_stop">Zastaviť</string>
+  <string name="onthego_notif_options">Možnosti</string>
+  <string name="onthego_notif_error">Nepodarilo sa spustiť Režim na cestách</string>
+  <string name="onthego_notif_restart">Reštartovať Režim na cestách</string>
+  <string name="onthego_notif_camera_changed">Režim fotoaparátu bol zmenený</string>
+  <string name="onthego_transparency">Priehľadnosť</string>
+  <string name="onthego_front_camera">Použiť prednú kameru</string>
+  <string name="onthego_service_toggle">Automaticky reštartovať službu</string>
+  <string name="onthego_channel_name">Hlavný</string>
 </resources>
