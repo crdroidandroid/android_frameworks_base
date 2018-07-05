@@ -63,6 +63,8 @@ public class MtpDatabase implements AutoCloseable {
     private final AtomicBoolean mClosed = new AtomicBoolean();
     private final CloseGuard mCloseGuard = CloseGuard.get();
 
+    private final Object mLock = new Object();
+
     // path to primary storage
     private final String mMediaStoragePath;
     // if not null, restrict all queries to these subdirectories
@@ -150,10 +152,12 @@ public class MtpDatabase implements AutoCloseable {
                 int newLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
                 if (newLevel != mBatteryLevel) {
                     mBatteryLevel = newLevel;
-                    if (mServer != null) {
-                        // send device property changed event
-                        mServer.sendDevicePropertyChanged(
-                                MtpConstants.DEVICE_PROPERTY_BATTERY_LEVEL);
+                    synchronized(mLock){
+                        if (mServer != null) {
+                            // send device property changed event
+                            mServer.sendDevicePropertyChanged(
+                                    MtpConstants.DEVICE_PROPERTY_BATTERY_LEVEL);
+                        }
                     }
                 }
             }
@@ -206,19 +210,21 @@ public class MtpDatabase implements AutoCloseable {
     }
 
     public void setServer(MtpServer server) {
-        mServer = server;
+        synchronized(mLock){
+            mServer = server;
 
-        // always unregister before registering
-        try {
-            mContext.unregisterReceiver(mBatteryReceiver);
-        } catch (IllegalArgumentException e) {
+            // always unregister before registering
+            try {
+                mContext.unregisterReceiver(mBatteryReceiver);
+            } catch (IllegalArgumentException e) {
             // wasn't previously registered, ignore
-        }
+            }
 
-        // register for battery notifications when we are connected
-        if (server != null) {
-            mContext.registerReceiver(mBatteryReceiver,
+            // register for battery notifications when we are connected
+            if (server != null) {
+                mContext.registerReceiver(mBatteryReceiver,
                     new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            }
         }
     }
 
