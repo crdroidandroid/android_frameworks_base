@@ -212,11 +212,11 @@ public class CPUInfoService extends Service {
         private boolean mInterrupt = false;
         private Handler mHandler;
 
-        private static final String CURRENT_CPU = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
-        private static final String CPU_ROOT = "/sys/devices/system/cpu/cpu";
-        private static final String CPU_CUR_TAIL = "/cpufreq/scaling_cur_freq";
-        private static final String CPU_GOV_TAIL = "/cpufreq/scaling_governor";
-        private static final String CPU_TEMP = "/sys/class/thermal/thermal_zone0/temp";
+        private final String CURRENT_CPU = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
+        private final String CPU_ROOT = "/sys/devices/system/cpu/cpu";
+        private final String CPU_CUR_TAIL = "/cpufreq/scaling_cur_freq";
+        private final String CPU_GOV_TAIL = "/cpufreq/scaling_governor";
+        private final String CPU_TEMP = getResources().getString(R.string.config_cpuinfoSysTemp);
 
         public CurCPUThread(Handler handler, int numCpus){
             mHandler=handler;
