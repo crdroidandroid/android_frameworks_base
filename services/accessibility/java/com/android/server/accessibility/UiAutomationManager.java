@@ -176,16 +176,19 @@ class UiAutomationManager {
     }
 
     private void destroyUiAutomationService() {
-        mUiAutomationService.mServiceInterface.asBinder().unlinkToDeath(mUiAutomationService, 0);
-        mUiAutomationService.onRemoved();
-        mUiAutomationService.resetLocked();
-        mUiAutomationService = null;
-        mUiAutomationFlags = 0;
-        if (mUiAutomationServiceOwner != null) {
-            mUiAutomationServiceOwner.unlinkToDeath(mUiAutomationServiceOwnerDeathRecipient, 0);
-            mUiAutomationServiceOwner = null;
+        synchronized (mUiAutomationService.mLock) {
+            mUiAutomationService.mServiceInterface.asBinder().unlinkToDeath(mUiAutomationService,
+                    0);
+            mUiAutomationService.onRemoved();
+            mUiAutomationService.resetLocked();
+            mUiAutomationService = null;
+            mUiAutomationFlags = 0;
+            if (mUiAutomationServiceOwner != null) {
+                mUiAutomationServiceOwner.unlinkToDeath(mUiAutomationServiceOwnerDeathRecipient, 0);
+                mUiAutomationServiceOwner = null;
+            }
+            mSystemSupport.onClientChange(false);
         }
-        mSystemSupport.onClientChange(false);
     }
 
     private class UiAutomationService extends AbstractAccessibilityServiceConnection {
