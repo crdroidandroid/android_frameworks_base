@@ -652,6 +652,12 @@ public class StorageNotification extends SystemUI {
     private PendingIntent buildBrowsePendingIntent(VolumeInfo vol) {
         final Intent intent = vol.buildBrowseIntent();
 
+        // If the mounting User Id is not equal to the current User id,
+        // the vol.buildBrowseIntent() will return null.
+        if (intent == null) {
+            return null;
+        }
+
         final int requestKey = vol.getId().hashCode();
         return PendingIntent.getActivityAsUser(mContext, requestKey, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT, null, UserHandle.CURRENT);
