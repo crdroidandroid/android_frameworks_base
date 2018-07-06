@@ -77,6 +77,7 @@
     <item msgid="5254942598247222737">"<xliff:g id="QUALCOMM">Qualcomm®</xliff:g> <xliff:g id="APTX">aptX™</xliff:g> audio"</item>
     <item msgid="2091430979086738145">"<xliff:g id="QUALCOMM">Qualcomm®</xliff:g> <xliff:g id="APTX_HD">aptX™ HD</xliff:g> audio"</item>
     <item msgid="6751080638867012696">"LDAC"</item>
+    <item msgid="8711430979086781450">"<xliff:g id="QUALCOMM">Qualcomm®</xliff:g> <xliff:g id="APTX_ADAPTIVE">aptX™ Adaptive</xliff:g> audio"</item>
     <item msgid="723675059572222462">"Enable Optional Codecs"</item>
     <item msgid="3304843301758635896">"Disable Optional Codecs"</item>
   </string-array>
@@ -87,6 +88,7 @@
     <item msgid="7848030269621918608">"<xliff:g id="QUALCOMM">Qualcomm®</xliff:g> <xliff:g id="APTX">aptX™</xliff:g> audio"</item>
     <item msgid="298198075927343893">"<xliff:g id="QUALCOMM">Qualcomm®</xliff:g> <xliff:g id="APTX_HD">aptX™ HD</xliff:g> audio"</item>
     <item msgid="7950781694447359344">"LDAC"</item>
+    <item msgid="102988075927343894">"<xliff:g id="QUALCOMM">Qualcomm®</xliff:g> <xliff:g id="APTX_ADAPTIVE">aptX™ Adaptive</xliff:g> audio"</item>
     <item msgid="2209680154067241740">"Enable Optional Codecs"</item>
     <item msgid="741805482892725657">"Disable Optional Codecs"</item>
   </string-array>
