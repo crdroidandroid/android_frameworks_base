@@ -57,7 +57,7 @@
   <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Neustart</string>
   <string name="quick_settings_reboot_recovery_label">Recovery</string>
-  <string name="quick_settings_poweroff_label">Power off</string>
+  <string name="quick_settings_poweroff_label">Ausschalten</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">Was ist das?</string>
   <string name="caffeine_info_message">Die Koffein-Kachel kann genutzt werden, um den Bildschirm anzulassen.\n\nBitte beachten, dass die Funktion automatisch zurückgesetzt wird, wenn der Bildschirm ausgeschaltet wird.</string>
@@ -68,8 +68,8 @@
   <string name="keyguard_indication_dash_charging_time">Dash Charging (<xliff:g id="verbleibende Ladezeit" example="4 Stunden und 2 Minuten">%s</xliff:g> bis Aufgeladen)</string>
   <string name="keyguard_plugged_in_dash_charging">Dash Charging</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
+  <string name="keyguard_indication_turbo_power_time">Schnellladen (<xliff:g id="charging_time_left">%s</xliff:g> bis vollgeladen)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">Schnellladegerät verbunden</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Fehler</string>
   <string name="omnijaws_service_unkown">Keine Wetterdaten</string>
@@ -106,28 +106,28 @@
   <string name="quick_settings_screenrecord_mq_label">Bildschirmaufnahme 720p</string>
   <string name="quick_settings_screenrecord_hq_label">Bildschirmaufnahme 720p+</string>
   <!-- Always on Display Tile -->
-  <string name="quick_settings_always_on_display_label">Always on display</string>
+  <string name="quick_settings_always_on_display_label">Always-on-Display</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_off">Always on display off.</string>
+  <string name="accessibility_quick_settings_always_on_display_off">Always-on-Display aus.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_on">Always on display on.</string>
+  <string name="accessibility_quick_settings_always_on_display_on">Always-on-Display an.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_off">Always on display turned off.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_off">Always-on-Display deaktiviert.</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_on">Always on display turned on.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_on">Always-on-Display aktiviert.</string>
   <!-- Name of the nfc status bar icon. -->
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">Nfc</string>
   <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">HW Keys</string>
+  <string name="quick_settings_hw_keys_label">Hardwaretasten</string>
   <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">HW Keys disabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_disabled">Hardwaretasten deaktiviert.</string>
   <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_enabled">Hardwaretasten aktiviert.</string>
   <!-- Heads up snooze toast -->
-  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
-  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s </xliff:g> - Heads-Up Benachrichtigungen sind 1 Minute lang deaktiviert.</string>
+  <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Heads-Up Benachrichtigungen sind für <xliff:g id="number">%d </xliff:g> Minuten deaktiviert.</string>
   <!-- Free ram -->
   <string name="recents_free_ram">Freier RAM: %1$d MB</string>
   <!-- On The Go -->
@@ -142,5 +142,5 @@
   <string name="onthego_transparency">Transparenz</string>
   <string name="onthego_front_camera">Frontkamera verwenden</string>
   <string name="onthego_service_toggle">Dienst automatisch neu starten</string>
-  <string name="onthego_channel_name">Main</string>
+  <string name="onthego_channel_name">Haupt</string>
 </resources>
