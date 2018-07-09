@@ -126,21 +126,21 @@
   <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_hw_keys_enabled">Fysieke knoppen ingeschakeld.</string>
   <!-- Heads up snooze toast -->
-  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
-  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s </xliff:g> - Peeking notificaties 1 minuut gedempt.</string>
+  <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Peeking notificaties zijn gedempt voor <xliff:g id="number">%d </xliff:g> minuten.</string>
   <!-- Free ram -->
-  <string name="recents_free_ram">Free RAM: %1$d MB</string>
+  <string name="recents_free_ram">Vrij RAM-geheugen: %1$d MB</string>
   <!-- On The Go -->
-  <string name="global_action_onthego">On-The-Go Mode</string>
-  <string name="onthego_notif_ticker">On-The-Go activated</string>
-  <string name="onthego_notif_title">On-The-Go is active</string>
+  <string name="global_action_onthego">On-The-Go modus</string>
+  <string name="onthego_notif_ticker">On-The-Go geactiveerd</string>
+  <string name="onthego_notif_title">On-The-Go is actief</string>
   <string name="onthego_notif_stop">Stop</string>
-  <string name="onthego_notif_options">Options</string>
-  <string name="onthego_notif_error">Unable to start On-The-Go</string>
-  <string name="onthego_notif_restart">Restart On-The-Go</string>
-  <string name="onthego_notif_camera_changed">Camera mode changed</string>
-  <string name="onthego_transparency">Transparency</string>
-  <string name="onthego_front_camera">Use front camera</string>
-  <string name="onthego_service_toggle">Automatically restart service</string>
-  <string name="onthego_channel_name">Main</string>
+  <string name="onthego_notif_options">Opties</string>
+  <string name="onthego_notif_error">Niet in staat om On-The-Go te starten</string>
+  <string name="onthego_notif_restart">Herstart On-The-Go</string>
+  <string name="onthego_notif_camera_changed">Cameramodus gewijzigd</string>
+  <string name="onthego_transparency">Transparantie</string>
+  <string name="onthego_front_camera">Gebruik camera aan de voorzijde</string>
+  <string name="onthego_service_toggle">Service automatisch opnieuw starten</string>
+  <string name="onthego_channel_name">Hoofd</string>
 </resources>
