@@ -2183,7 +2183,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private String getDarkOverlay() {
         return LineageSettings.System.getString(mContext.getContentResolver(),
                 LineageSettings.System.BERRY_DARK_OVERLAY,
-                StyleInterface.OVERLAY_DARK_DEFAULT);
+                StyleInterface.OVERLAY_DARK_DEFAULT[0]);
     }
 
     @Nullable
@@ -4092,8 +4092,17 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             mUiOffloadThread.submit(() -> {
                 try {
                     String darkOverlay = getDarkOverlay();
-                    mOverlayManager.setEnabled(darkOverlay,
-                            useDarkTheme, mLockscreenUserManager.getCurrentUserId());
+                    boolean isDefault = StyleInterface.OVERLAY_DARK_DEFAULT[0].equals(darkOverlay);
+                    boolean isBlack = StyleInterface.OVERLAY_DARK_BLACK[0].equals(darkOverlay);
+
+                    for (String overlay: StyleInterface.OVERLAY_DARK_DEFAULT) {
+                        mOverlayManager.setEnabled(overlay,
+                                useDarkTheme && isDefault, mLockscreenUserManager.getCurrentUserId());
+                    }
+                    for (String overlay: StyleInterface.OVERLAY_DARK_BLACK) {
+                        mOverlayManager.setEnabled(overlay,
+                                useDarkTheme && isBlack, mLockscreenUserManager.getCurrentUserId());
+                    }
                 } catch (RemoteException e) {
                     Log.w(TAG, "Can't change theme", e);
                 }
