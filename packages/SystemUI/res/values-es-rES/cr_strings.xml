@@ -134,13 +134,13 @@
   <string name="global_action_onthego">On-The-Go Mode</string>
   <string name="onthego_notif_ticker">On-The-Go activated</string>
   <string name="onthego_notif_title">On-The-Go is active</string>
-  <string name="onthego_notif_stop">Stop</string>
-  <string name="onthego_notif_options">Options</string>
-  <string name="onthego_notif_error">Unable to start On-The-Go</string>
-  <string name="onthego_notif_restart">Restart On-The-Go</string>
-  <string name="onthego_notif_camera_changed">Camera mode changed</string>
-  <string name="onthego_transparency">Transparency</string>
-  <string name="onthego_front_camera">Use front camera</string>
+  <string name="onthego_notif_stop">Detener</string>
+  <string name="onthego_notif_options">Opciones</string>
+  <string name="onthego_notif_error">No ha sido posible iniciar On-The-Go</string>
+  <string name="onthego_notif_restart">Reiniciar On-The-Go</string>
+  <string name="onthego_notif_camera_changed">Modo de cámara cambiado</string>
+  <string name="onthego_transparency">Transparencia</string>
+  <string name="onthego_front_camera">Utilizar la cámara frontal</string>
   <string name="onthego_service_toggle">Automatically restart service</string>
   <string name="onthego_channel_name">Main</string>
 </resources>
