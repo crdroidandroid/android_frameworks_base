@@ -57,7 +57,7 @@
   <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Nyalakan ulang</string>
   <string name="quick_settings_reboot_recovery_label">Pemulihan</string>
-  <string name="quick_settings_poweroff_label">Power off</string>
+  <string name="quick_settings_poweroff_label">Matikan Daya</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">Apa ini?</string>
   <string name="caffeine_info_message">Ubin kafein adalah ubin sederhana yang bisa anda gunakan untuk menghidupkan layar.\n\nPerlu diketahui bahwa keadaan ubin akan mereset sendiri setelah mematikan layar.</string>
@@ -68,8 +68,8 @@
   <string name="keyguard_indication_dash_charging_time">Pengisian Cepat (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> sampai penuh)</string>
   <string name="keyguard_plugged_in_dash_charging">Pengisian Cepat</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
+  <string name="keyguard_indication_turbo_power_time">TurboPower Terhubung<xliff:g id="charging_time_left"> Hingga penuh</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower terhubung</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Kesalahan</string>
   <string name="omnijaws_service_unkown">Data cuaca tidak ada</string>
@@ -98,49 +98,49 @@
   <!-- Screen record notification error title -->
   <string name="screenrecord_notif_error">Tidak dapat merekam layar</string>
   <string name="notification_channel_screenrecord">Perekam layar</string>
-  <string name="screenrecord_hide_hint">Hide hint</string>
-  <string name="screenrecord_show_hint">Show hint</string>
+  <string name="screenrecord_hide_hint">Sembunyikan petunjuk</string>
+  <string name="screenrecord_show_hint">Tampilkan petunjuk</string>
   <!-- Screenshot QS tile -->
-  <string name="quick_settings_screenrecord_label">Screenrecord</string>
-  <string name="quick_settings_screenrecord_lq_label">Screenrecord 480p</string>
-  <string name="quick_settings_screenrecord_mq_label">Screenrecord 720p</string>
-  <string name="quick_settings_screenrecord_hq_label">Screenrecord 720p+</string>
+  <string name="quick_settings_screenrecord_label">Rekam Layar</string>
+  <string name="quick_settings_screenrecord_lq_label">Rekam layar 480p</string>
+  <string name="quick_settings_screenrecord_mq_label">Rekam layar 720p</string>
+  <string name="quick_settings_screenrecord_hq_label">Rekam layar 720p+</string>
   <!-- Always on Display Tile -->
-  <string name="quick_settings_always_on_display_label">Always on display</string>
+  <string name="quick_settings_always_on_display_label">Tampilan selalu aktif</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_off">Always on display off.</string>
+  <string name="accessibility_quick_settings_always_on_display_off">Tampilan selalu aktif mati.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_on">Always on display on.</string>
+  <string name="accessibility_quick_settings_always_on_display_on">Tampilan selalu aktif hidup.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_off">Always on display turned off.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_off">Tampilan selalu aktif dimatikan.</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_on">Always on display turned on.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_on">Layar selalu aktif dihidupkan.</string>
   <!-- Name of the nfc status bar icon. -->
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
-  <string name="accessibility_status_bar_nfc">Nfc</string>
+  <string name="accessibility_status_bar_nfc">NFC</string>
   <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">HW Keys</string>
+  <string name="quick_settings_hw_keys_label">Tombol Fisik</string>
   <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">HW Keys disabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_disabled">Tombol Fisik dimatikan.</string>
   <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_enabled">Tombol Fisik dihidupkan.</string>
   <!-- Heads up snooze toast -->
-  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
-  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+  <string name="heads_up_snooze_message_one_minute"><xliff: g id = "string">% s </ xliff: g> - Mengintip pemberitahuan tertunda selama 1 menit.</string>
+  <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - mengintip pemberitahuan tertidur selama <xliff:g id="number">%d </xliff:g> menit.</string>
   <!-- Free ram -->
-  <string name="recents_free_ram">Free RAM: %1$d MB</string>
+  <string name="recents_free_ram">RAM TERSEDIA: %1$d MB</string>
   <!-- On The Go -->
-  <string name="global_action_onthego">On-The-Go Mode</string>
-  <string name="onthego_notif_ticker">On-The-Go activated</string>
-  <string name="onthego_notif_title">On-The-Go is active</string>
-  <string name="onthego_notif_stop">Stop</string>
-  <string name="onthego_notif_options">Options</string>
-  <string name="onthego_notif_error">Unable to start On-The-Go</string>
-  <string name="onthego_notif_restart">Restart On-The-Go</string>
-  <string name="onthego_notif_camera_changed">Camera mode changed</string>
-  <string name="onthego_transparency">Transparency</string>
-  <string name="onthego_front_camera">Use front camera</string>
-  <string name="onthego_service_toggle">Automatically restart service</string>
-  <string name="onthego_channel_name">Main</string>
+  <string name="global_action_onthego">Mode On-The-Go</string>
+  <string name="onthego_notif_ticker">On-The-Go diaktifkan</string>
+  <string name="onthego_notif_title">On-The-Go sudah aktif</string>
+  <string name="onthego_notif_stop">Hentikan</string>
+  <string name="onthego_notif_options">Pilihan</string>
+  <string name="onthego_notif_error">Tidak dapat memulai On-The-Go</string>
+  <string name="onthego_notif_restart">Restart OTG</string>
+  <string name="onthego_notif_camera_changed">Mode kamera berubah</string>
+  <string name="onthego_transparency">Transparansi</string>
+  <string name="onthego_front_camera">Gnakan kamera depan</string>
+  <string name="onthego_service_toggle">Otomatis memulai ulang layanan</string>
+  <string name="onthego_channel_name">Utama</string>
 </resources>
