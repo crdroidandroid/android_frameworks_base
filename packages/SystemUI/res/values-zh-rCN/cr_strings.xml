@@ -143,4 +143,7 @@
   <string name="onthego_front_camera">使用前置摄像头</string>
   <string name="onthego_service_toggle">自动重启服务</string>
   <string name="onthego_channel_name">主要</string>
+  <!-- Smart pixels QS tile -->
+  <string name="quick_settings_smart_pixels">智能像素</string>
+  <string name="quick_settings_smart_pixels_on_power_save">自动启用智能像素</string>
 </resources>

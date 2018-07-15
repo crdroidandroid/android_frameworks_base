@@ -143,4 +143,7 @@
   <string name="onthego_front_camera">Ön kamerayı kullan</string>
   <string name="onthego_service_toggle">Servisi otomatik yeniden başlat</string>
   <string name="onthego_channel_name">Ana menü</string>
+  <!-- Smart pixels QS tile -->
+  <string name="quick_settings_smart_pixels">Akıllı pikseller</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Otomatik olarak akıllı pikselleri etkinleştir</string>
 </resources>

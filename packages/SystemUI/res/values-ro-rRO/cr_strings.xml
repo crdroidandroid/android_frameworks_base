@@ -143,4 +143,7 @@
   <string name="onthego_front_camera">Utilizare cameră frontală</string>
   <string name="onthego_service_toggle">Repornire automată a serviciului</string>
   <string name="onthego_channel_name">Principal</string>
+  <!-- Smart pixels QS tile -->
+  <string name="quick_settings_smart_pixels">Pixeli inteligenți</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Auto-activare pixeli inteligenți</string>
 </resources>

@@ -143,4 +143,7 @@
   <string name="onthego_front_camera">Frontkamera verwenden</string>
   <string name="onthego_service_toggle">Dienst automatisch neu starten</string>
   <string name="onthego_channel_name">Haupt</string>
+  <!-- Smart pixels QS tile -->
+  <string name="quick_settings_smart_pixels">Smart pixels</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
 </resources>

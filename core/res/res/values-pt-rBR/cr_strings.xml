@@ -45,8 +45,4 @@
   <string name="permlab_accessFontManager">acessar gerenciador de fontes</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFontManager">Permite que um aplicativo acesse o gerenciador de fontes.</string>
-  <!-- Pocket Lock -->
-  <string name="pocket_lock_message_long_press">Pressione e segure o botão power para interagir</string>
-  <!-- Defines the sysfs attribute path used by pocket bridge
-        to communicate pocket state to the pocket judge kernel driver. -->
 </resources>
