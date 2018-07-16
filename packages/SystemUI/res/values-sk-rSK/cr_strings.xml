@@ -144,6 +144,6 @@
   <string name="onthego_service_toggle">Automaticky reštartovať službu</string>
   <string name="onthego_channel_name">Hlavný</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">Smart Pixels</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Zapnúť Smart Pixels automaticky</string>
 </resources>

@@ -144,6 +144,6 @@
   <string name="onthego_service_toggle">Автоматически перезапускать службу</string>
   <string name="onthego_channel_name">Основной</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">Умные пиксели</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Автоматическое включение умных пикселей</string>
 </resources>

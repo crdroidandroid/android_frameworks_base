@@ -144,6 +144,6 @@
   <string name="onthego_service_toggle">Szolgáltatás automatikus újraindítása</string>
   <string name="onthego_channel_name">Fő</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">Intelligens pixelek</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Intelligens pixelek automatikus engedélyezése</string>
 </resources>
