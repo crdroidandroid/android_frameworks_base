@@ -195,7 +195,9 @@ public final class CellSignalStrengthLte extends CellSignalStrength implements P
             while (rsrpIconLevel > 0 && rsrp < thresholds[rsrpIconLevel - 1]) rsrpIconLevel--;
         }
 
-        if (rsrpOnly) {
+        boolean rssnrIgnored = Resources.getSystem().getBoolean(
+                com.android.internal.R.bool.config_ignoreRssnrSignalLevel);
+        if (rsrpOnly || rssnrIgnored) {
             if (DBG) log("updateLevel() - rsrp = " + rsrpIconLevel);
             if (rsrpIconLevel != -1) {
                 mLevel = rsrpIconLevel;
@@ -220,16 +222,6 @@ public final class CellSignalStrengthLte extends CellSignalStrength implements P
         if (DBG) log("updateLevel() - rsrp:" + mRsrp + " snr:" + mRssnr + " rsrpIconLevel:"
                 + rsrpIconLevel + " snrIconLevel:" + snrIconLevel
                 + " lteRsrpBoost:" + sRsrpBoost);
-
-        boolean rssnrIgnored = Resources.getSystem().getBoolean(
-                com.android.internal.R.bool.config_ignoreRssnrSignalLevel);
-        if (rssnrIgnored) {
-            // Ignore RSSNR
-            if (rsrpIconLevel != -1) {
-                mLevel = rsrpIconLevel;
-                return;
-            }
-        }
 
         /* Choose a measurement type to use for notification */
         if (snrIconLevel != -1 && rsrpIconLevel != -1) {
