@@ -127,7 +127,7 @@
   <string name="accessibility_quick_settings_hw_keys_enabled">Botones físicos activados.</string>
   <!-- Heads up snooze toast -->
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Las notificaciones flotantes fueron pospuestas por 1 minuto.</string>
-  <string name="heads_up_snooze_message"><xliff:g id="string¨>%s<xliff:g> - Las notificaciones flotantes están aplazadas durante <xliff:g id="number">%d<xliff:g> minutos.</string>
+  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Las notificaciones flotantes están aplazadas durante <xliff:g id="number">%d</xliff:g> minutos.</string>
   <!-- Free ram -->
   <string name="recents_free_ram">RAM libre: %1$d MB</string>
   <!-- On The Go -->
