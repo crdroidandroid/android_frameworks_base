@@ -144,6 +144,6 @@
   <string name="onthego_service_toggle">자동으로 서비스 다시 시작</string>
   <string name="onthego_channel_name">기본</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">스마트 픽셀</string>
+  <string name="quick_settings_smart_pixels_on_power_save">스마트 픽셀 자동으로 켜기</string>
 </resources>
