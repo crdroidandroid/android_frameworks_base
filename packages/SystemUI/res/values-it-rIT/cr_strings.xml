@@ -129,21 +129,21 @@
   <string name="heads_up_snooze_message_one_minute">Notifica peeking posticipata di 1 minuto.</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
   <!-- Free ram -->
-  <string name="recents_free_ram">Free RAM: %1$d MB</string>
+  <string name="recents_free_ram">RAM libera: %1$d MB</string>
   <!-- On The Go -->
-  <string name="global_action_onthego">On-The-Go Mode</string>
-  <string name="onthego_notif_ticker">On-The-Go activated</string>
-  <string name="onthego_notif_title">On-The-Go is active</string>
-  <string name="onthego_notif_stop">Stop</string>
-  <string name="onthego_notif_options">Options</string>
-  <string name="onthego_notif_error">Unable to start On-The-Go</string>
-  <string name="onthego_notif_restart">Restart On-The-Go</string>
-  <string name="onthego_notif_camera_changed">Camera mode changed</string>
-  <string name="onthego_transparency">Transparency</string>
-  <string name="onthego_front_camera">Use front camera</string>
-  <string name="onthego_service_toggle">Automatically restart service</string>
-  <string name="onthego_channel_name">Main</string>
+  <string name="global_action_onthego">Modalità On-The-Go</string>
+  <string name="onthego_notif_ticker">On-The-Go attivato</string>
+  <string name="onthego_notif_title">On-The-Go è attivo</string>
+  <string name="onthego_notif_stop">Interrompi</string>
+  <string name="onthego_notif_options">Opzioni</string>
+  <string name="onthego_notif_error">Impossibile avviare On-The-Go</string>
+  <string name="onthego_notif_restart">Riavvia On-The-Go</string>
+  <string name="onthego_notif_camera_changed">Modalità fotocamera cambiata</string>
+  <string name="onthego_transparency">Transparenza</string>
+  <string name="onthego_front_camera">Usa fotocamera anteriore</string>
+  <string name="onthego_service_toggle">Riavviare automaticamente il servizio</string>
+  <string name="onthego_channel_name">Principale</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">Smart pixel</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Smart pixel auto-attivati</string>
 </resources>
