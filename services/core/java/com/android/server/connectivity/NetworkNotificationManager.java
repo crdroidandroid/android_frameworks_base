@@ -26,6 +26,7 @@ import android.net.NetworkCapabilities;
 import android.net.wifi.WifiInfo;
 import android.os.UserHandle;
 import android.telephony.TelephonyManager;
+import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
 import android.util.Slog;
 import android.util.SparseArray;
@@ -185,7 +186,8 @@ public class NetworkNotificationManager {
                     title = r.getString(R.string.network_available_sign_in, 0);
                     // TODO: Change this to pull from NetworkInfo once a printable
                     // name has been added to it
-                    details = mTelephonyManager.getNetworkOperatorName();
+                    details = mTelephonyManager.getNetworkOperatorName(
+                            SubscriptionManager.getDefaultDataSubscriptionId());
                     break;
                 default:
                     title = r.getString(R.string.network_available_sign_in, 0);
