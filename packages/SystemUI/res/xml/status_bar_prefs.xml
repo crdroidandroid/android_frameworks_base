@@ -94,9 +94,9 @@
 
     <!-- secure -->
 
-    <com.android.systemui.tuner.StatusBarSwitch
+    <!--<com.android.systemui.tuner.StatusBarSwitch
         android:key="clock"
-        android:title="@string/clock" />
+        android:title="@string/clock" />-->
 
     <com.android.systemui.tuner.TunerSwitch
         android:key="low_priority"
