@@ -14,5 +14,5 @@
      limitations under the License.
 -->
 <resources>
-    <item name="qs_background_opacity" format="float" type="integer">0.87</item>
+    <item name="qs_background_opacity" format="float" type="integer">1.0</item>
 </resources>
