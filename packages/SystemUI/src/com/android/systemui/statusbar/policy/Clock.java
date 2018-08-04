@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
@@ -57,14 +58,13 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import lineageos.providers.LineageSettings;
+
 /**
  * Digital clock for the status bar.
  */
 public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.Callbacks,
         DarkReceiver, ConfigurationListener {
-
-    public static final String CLOCK_SECONDS = "clock_seconds";
-    public static final String CLOCK_STYLE = "lineagesystem:status_bar_am_pm";
 
     private final CurrentUserTracker mCurrentUserTracker;
     private int mCurrentUserId;
@@ -87,6 +87,11 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     private final boolean mShowDark;
     private boolean mShowSeconds;
     private Handler mSecondsHandler;
+
+    private static final String STATUS_BAR_CLOCK_SECONDS =
+            "system:" + Settings.System.STATUS_BAR_CLOCK_SECONDS;
+    private static final String STATUS_BAR_AM_PM =
+            "lineagesystem:" + LineageSettings.System.STATUS_BAR_AM_PM;
 
     /**
      * Whether we should use colors that adapt based on wallpaper/the scrim behind quick settings
@@ -144,7 +149,9 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
 
             getContext().registerReceiverAsUser(mIntentReceiver, UserHandle.ALL, filter,
                     null, Dependency.get(Dependency.TIME_TICK_HANDLER));
-            Dependency.get(TunerService.class).addTunable(this, CLOCK_SECONDS, CLOCK_STYLE);
+            Dependency.get(TunerService.class).addTunable(this,
+                    STATUS_BAR_CLOCK_SECONDS,
+                    STATUS_BAR_AM_PM);
             SysUiServiceProvider.getComponent(getContext(), CommandQueue.class).addCallbacks(this);
             if (mShowDark) {
                 Dependency.get(DarkIconDispatcher.class).addDarkReceiver(this);
@@ -217,7 +224,6 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
 
     private void updateClockVisibility() {
         boolean visible = mClockVisibleByPolicy && mClockVisibleByUser;
-        Dependency.get(IconLogger.class).onIconVisibility("clock", visible);
         int visibility = visible ? View.VISIBLE : View.GONE;
         setVisibility(visibility);
     }
@@ -231,13 +237,20 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (CLOCK_SECONDS.equals(key)) {
-            mShowSeconds = newValue != null && Integer.parseInt(newValue) != 0;
-            updateShowSeconds();
-        } else if (CLOCK_STYLE.equals(key)) {
-            mAmPmStyle = newValue == null ? AM_PM_STYLE_GONE : Integer.valueOf(newValue);
-            mClockFormatString = ""; // force refresh
-            updateClock();
+        switch (key) {
+            case STATUS_BAR_CLOCK_SECONDS:
+                mShowSeconds =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                updateShowSeconds();
+                break;
+            case STATUS_BAR_AM_PM:
+                mAmPmStyle =
+                        newValue == null ? AM_PM_STYLE_GONE : Integer.valueOf(newValue);
+                mClockFormatString = ""; // force refresh
+                updateClock();
+                break;
+            default:
+                break;
         }
     }
 
