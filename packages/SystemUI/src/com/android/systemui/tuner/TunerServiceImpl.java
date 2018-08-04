@@ -71,6 +71,7 @@ public class TunerServiceImpl extends TunerService {
     // shouldn't be reset with tuner settings.
     // Do not add Lineage specific keys here as they are blacklisted automatically
     private static final String[] RESET_BLACKLIST = new String[] {
+            Clock.STATUS_BAR_CLOCK_SECONDS,
             QSTileHost.TILES_SETTING,
             Settings.Secure.DOZE_ALWAYS_ON,
             StatusBar.SCREEN_BRIGHTNESS_MODE,
