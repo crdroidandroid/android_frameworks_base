@@ -39,7 +39,6 @@ import com.android.systemui.DemoMode;
 import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.settings.CurrentUserTracker;
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout;
-import com.android.systemui.statusbar.phone.ClockController;
 import com.android.systemui.statusbar.phone.EdgeBackGestureHandler;
 import com.android.systemui.statusbar.phone.NavigationBarView;
 import com.android.systemui.statusbar.phone.NotificationPanelView;
