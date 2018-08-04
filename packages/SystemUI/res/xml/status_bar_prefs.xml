@@ -136,11 +136,6 @@
 
     <!-- secure -->
 
-    <com.android.systemui.tuner.StatusBarSwitch
-        android:icon="@drawable/ic_statusbar_clock"
-        android:key="clock"
-        android:title="@string/clock" />
-
     <com.android.systemui.tuner.TunerSwitch
         android:icon="@drawable/ic_statusbar_priority"
         android:key="low_priority"
