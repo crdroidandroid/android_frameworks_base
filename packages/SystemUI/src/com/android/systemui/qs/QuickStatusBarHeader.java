@@ -34,10 +34,11 @@ import com.android.systemui.R.id;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.qs.QSDetail.Callback;
 import com.android.systemui.statusbar.SignalClusterView;
-import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.policy.Clock;
 import com.android.systemui.statusbar.policy.DarkIconDispatcher.DarkReceiver;
 import com.android.systemui.tuner.TunerService;
+
+import lineageos.providers.LineageSettings;
 
 public class QuickStatusBarHeader extends RelativeLayout implements TunerService.Tunable {
 
@@ -54,6 +55,11 @@ public class QuickStatusBarHeader extends RelativeLayout implements TunerService
     protected QSTileHost mHost;
 
     private HorizontalScrollView mQuickQsPanelScroller;
+
+    private static final int CLOCK_POSITION_HIDE = 3;
+
+    private static final String STATUS_BAR_CLOCK =
+            "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -90,7 +96,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements TunerService
         mQuickQsPanelScroller.setHorizontalScrollBarEnabled(false);
 
         Dependency.get(TunerService.class).addTunable(this,
-                StatusBarIconController.ICON_BLACKLIST);
+                STATUS_BAR_CLOCK);
     }
 
     private void applyDarkness(int id, Rect tintArea, float intensity, int color) {
@@ -170,8 +176,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements TunerService
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        mClock.setClockVisibleByUser(!StatusBarIconController.getIconBlacklist(newValue)
-                .contains("clock"));
+        mClock.setClockVisibleByUser(newValue == null ? true :
+                Integer.valueOf(newValue) != CLOCK_POSITION_HIDE);
     }
 
     public void onClosingFinished() {
