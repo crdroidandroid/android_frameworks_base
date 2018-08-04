@@ -96,7 +96,6 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
     private final CommandQueue mCommandQueue;
     private final NotificationWakeUpCoordinator mWakeUpCoordinator;
 
-    private final View mClockView;
     private final Optional<View> mOperatorNameViewOptional;
 
     @VisibleForTesting
@@ -131,7 +130,6 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
             ShadeViewController shadeViewController,
             NotificationRoundnessManager notificationRoundnessManager,
             HeadsUpStatusBarView headsUpStatusBarView,
-            Clock clockView,
             HeadsUpNotificationIconInteractor headsUpNotificationIconInteractor,
             @Named(OPERATOR_NAME_FRAME_VIEW) Optional<View> operatorNameViewOptional,
             @RootView PhoneStatusBarView statusBarView,
@@ -153,7 +151,6 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
         mShadeViewController = shadeViewController;
         mHeadsUpNotificationIconInteractor = headsUpNotificationIconInteractor;
         mStackScrollerController.setHeadsUpAppearanceController(this);
-        mClockView = clockView;
         mOperatorNameViewOptional = operatorNameViewOptional;
         mDarkIconDispatcher = darkIconDispatcher;
         mClockController = statusBarViewController.getClockController();
@@ -282,7 +279,8 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
         }
         if (mPinnedStatus != pinnedStatus) {
             View clockView = mClockController.getClock();
-            boolean notLeftClock = clockView.getId() != R.id.clock;
+            boolean isClock = clockView != null &&
+                (clockView.getId() == R.id.clock_right || clockView.getId() == R.id.clock_center);
             mPinnedStatus = pinnedStatus;
 
             boolean shouldShowHunStatusBar = StatusBarNotifChips.isEnabled()
@@ -293,13 +291,13 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
                 updateParentClipping(false /* shouldClip */);
                 mView.setVisibility(View.VISIBLE);
                 show(mView);
-                if (!StatusBarRootModernization.isEnabled() && !notLeftClock) {
-                    hide(mClockView, View.INVISIBLE);
+                if (!StatusBarRootModernization.isEnabled() && isClock) {
+                    hide(clockView, View.INVISIBLE);
                 }
                 mOperatorNameViewOptional.ifPresent(view -> hide(view, View.INVISIBLE));
             } else {
-                if (!StatusBarRootModernization.isEnabled() && !notLeftClock) {
-                    show(mClockView);
+                if (!StatusBarRootModernization.isEnabled() && isClock) {
+                    show(clockView);
                 }
                 mOperatorNameViewOptional.ifPresent(this::show);
                 hide(mView, View.GONE, () -> {
