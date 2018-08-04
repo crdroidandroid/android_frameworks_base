@@ -88,8 +88,4 @@
 
     <!-- secure -->
 
-    <com.android.systemui.tuner.StatusBarSwitch
-        android:key="clock"
-        android:title="@string/clock" />
-
 </PreferenceScreen>
