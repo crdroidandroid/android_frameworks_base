@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
+import android.os.UserHandle;
 import android.util.Log;
 import android.view.View;
 
@@ -33,18 +34,18 @@ public class ClockController implements TunerService.Tunable {
 
     private static final String TAG = "ClockController";
 
-    private static final String CLOCK_POSITION =
+    private static final String STATUS_BAR_CLOCK =
             "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK;
 
     private static final int CLOCK_POSITION_RIGHT = 0;
     private static final int CLOCK_POSITION_CENTER = 1;
     private static final int CLOCK_POSITION_LEFT = 2;
+    private static final int CLOCK_POSITION_HIDE = 3;
 
     private Context mContext;
     private Clock mActiveClock, mCenterClock, mLeftClock, mRightClock;
 
     private int mClockPosition = CLOCK_POSITION_LEFT;
-    private boolean mBlackListed = false;
 
     public ClockController(Context context, View statusBar) {
         mContext = context;
@@ -53,46 +54,58 @@ public class ClockController implements TunerService.Tunable {
         mLeftClock = statusBar.findViewById(R.id.clock);
         mRightClock = statusBar.findViewById(R.id.clock_right);
 
-        mActiveClock = mLeftClock;
+        mClockPosition = LineageSettings.System.getIntForUser(mContext.getContentResolver(),
+                    STATUS_BAR_CLOCK, CLOCK_POSITION_LEFT, UserHandle.USER_CURRENT);
+        updateActiveClock();
 
         Dependency.get(TunerService.class).addTunable(this,
-                StatusBarIconController.ICON_HIDE_LIST, CLOCK_POSITION);
+                STATUS_BAR_CLOCK);
     }
 
     public Clock getClock() {
-        switch (mClockPosition) {
-            case CLOCK_POSITION_RIGHT:
-                return mRightClock;
-            case CLOCK_POSITION_CENTER:
-                return mCenterClock;
-            case CLOCK_POSITION_LEFT:
-            default:
-                return mLeftClock;
-        }
+        return mActiveClock;
     }
 
     private void updateActiveClock() {
-        mActiveClock.setClockVisibleByUser(false);
-        removeDarkReceiver();
-        mActiveClock = getClock();
-        mActiveClock.setClockVisibleByUser(true);
-        addDarkReceiver();
-
-        // Override any previous setting
-        mActiveClock.setClockVisibleByUser(!mBlackListed);
+        switch (mClockPosition) {
+            case CLOCK_POSITION_RIGHT:
+                mActiveClock = mRightClock;
+                mLeftClock.setClockVisibleByUser(false);
+                mCenterClock.setClockVisibleByUser(false);
+                mRightClock.setClockVisibleByUser(true);
+                break;
+            case CLOCK_POSITION_CENTER:
+                mActiveClock = mCenterClock;
+                mLeftClock.setClockVisibleByUser(false);
+                mRightClock.setClockVisibleByUser(false);
+                mCenterClock.setClockVisibleByUser(true);
+                break;
+            case CLOCK_POSITION_LEFT:
+            default:
+                mActiveClock = mLeftClock;
+                mCenterClock.setClockVisibleByUser(false);
+                mRightClock.setClockVisibleByUser(false);
+                mLeftClock.setClockVisibleByUser(true);
+                break;
+            case CLOCK_POSITION_HIDE:
+                mActiveClock = null;
+                mLeftClock.setClockVisibleByUser(false);
+                mCenterClock.setClockVisibleByUser(false);
+                mRightClock.setClockVisibleByUser(false);
+                break;
+        }
     }
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        Log.d(TAG, "onTuningChanged key=" + key + " value=" + newValue);
-
-        if (CLOCK_POSITION.equals(key)) {
-            mClockPosition = TunerService.parseInteger(newValue, CLOCK_POSITION_LEFT);
-        } else {
-            mBlackListed = StatusBarIconController.getIconHideList(
-                    mContext, newValue).contains("clock");
+        switch (key) {
+            case STATUS_BAR_CLOCK:
+                mClockPosition = TunerService.parseInteger(newValue, CLOCK_POSITION_LEFT);
+                updateActiveClock();
+                break;
+            default:
+                break;
         }
-        updateActiveClock();
     }
 
     public void addDarkReceiver() {
