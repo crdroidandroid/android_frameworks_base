@@ -70,7 +70,7 @@ public class TunerServiceImpl extends TunerService {
     // shouldn't be reset with tuner settings.
     private static final String[] RESET_BLACKLIST = new String[] {
             Clock.CLOCK_STYLE,
-            ClockController.CLOCK_POSITION,
+            ClockController.STATUS_BAR_CLOCK,
             NotificationPanelView.DOUBLE_TAP_SLEEP_GESTURE,
             NotificationPanelView.STATUS_BAR_QUICK_QS_PULLDOWN,
             QSTileHost.TILES_SETTING,
