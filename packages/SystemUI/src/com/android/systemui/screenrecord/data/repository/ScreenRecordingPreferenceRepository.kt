@@ -22,7 +22,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.provider.Settings
 import androidx.core.content.edit
-import com.android.systemui.statusbar.policy.Clock
 
 // This repository might be used in a separate process where we don't have access to the System UI
 // dagger graph.
@@ -105,11 +104,11 @@ class ScreenRecordingPreferenceRepository(
     }
 
     private fun setShowSeconds(isOn: Boolean) {
-        secureSettingsPutInt(Clock.CLOCK_SECONDS, if (isOn) 1 else 0)
+        systemSettingsPutInt(CLOCK_SECONDS, if (isOn) 1 else 0)
     }
 
     private fun getShowSeconds(): Boolean {
-        return secureSettingsGetInt(Clock.CLOCK_SECONDS) != 0
+        return systemSettingsGetInt(CLOCK_SECONDS) != 0
     }
 
     private companion object {
@@ -118,5 +117,6 @@ class ScreenRecordingPreferenceRepository(
         const val UPDATE_SHOW_TAPS = "update_show_taps"
         const val STORED_SHOW_SECONDS_VALUE = "stored_show_seconds_value"
         const val UPDATE_SHOW_SECONDS = "update_show_seconds"
+        const val CLOCK_SECONDS = "status_bar_clock_seconds"
     }
 }
