@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.phone;
 
 import android.util.Log;
+import android.provider.Settings;
 import android.view.View;
 
 import com.android.systemui.Dependency;
@@ -25,6 +26,8 @@ import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.policy.Clock;
 import com.android.systemui.tuner.TunerService;
 
+import lineageos.providers.LineageSettings;
+
 public class ClockController implements TunerService.Tunable {
 
     private static final String TAG = "ClockController";
@@ -32,13 +35,14 @@ public class ClockController implements TunerService.Tunable {
     private static final int CLOCK_POSITION_RIGHT = 0;
     private static final int CLOCK_POSITION_CENTER = 1;
     private static final int CLOCK_POSITION_LEFT = 2;
+    private static final int CLOCK_POSITION_HIDE = 3;
 
-    private static final String CLOCK_POSITION = "lineagesystem:status_bar_clock";
+    private static final String STATUS_BAR_CLOCK =
+            "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK;
 
     private Clock mActiveClock, mCenterClock, mLeftClock, mRightClock;
 
     private int mClockPosition = CLOCK_POSITION_RIGHT;
-    private boolean mBlackListed = false;
 
     public ClockController(View statusBar) {
         mCenterClock = statusBar.findViewById(R.id.clock_center);
@@ -48,44 +52,41 @@ public class ClockController implements TunerService.Tunable {
         mActiveClock = mRightClock;
 
         Dependency.get(TunerService.class).addTunable(this,
-                StatusBarIconController.ICON_BLACKLIST, CLOCK_POSITION);
-    }
-
-    private Clock getClockForCurrentLocation() {
-        Clock clockForAlignment;
-        switch (mClockPosition) {
-            case CLOCK_POSITION_CENTER:
-                clockForAlignment = mCenterClock;
-                break;
-            case CLOCK_POSITION_LEFT:
-                clockForAlignment = mLeftClock;
-                break;
-            case CLOCK_POSITION_RIGHT:
-            default:
-                clockForAlignment = mRightClock;
-                break;
-        }
-        return clockForAlignment;
+                STATUS_BAR_CLOCK);
     }
 
     private void updateActiveClock() {
         mActiveClock.setClockVisibleByUser(false);
-        mActiveClock = getClockForCurrentLocation();
-        mActiveClock.setClockVisibleByUser(true);
 
-        // Override any previous setting
-        mActiveClock.setClockVisibleByUser(!mBlackListed);
+        switch (mClockPosition) {
+            case CLOCK_POSITION_CENTER:
+                mActiveClock = mCenterClock;
+                mActiveClock.setClockVisibleByUser(true);
+                break;
+            case CLOCK_POSITION_LEFT:
+                mActiveClock = mLeftClock;
+                mActiveClock.setClockVisibleByUser(true);
+                break;
+            case CLOCK_POSITION_RIGHT:
+            default:
+                mActiveClock = mRightClock;
+                mActiveClock.setClockVisibleByUser(true);
+                break;
+            case CLOCK_POSITION_HIDE:
+                break;
+        }
     }
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        Log.d(TAG, "onTuningChanged key=" + key + " value=" + newValue);
-
-        if (CLOCK_POSITION.equals(key)) {
-            mClockPosition = newValue == null ? CLOCK_POSITION_RIGHT : Integer.valueOf(newValue);
-        } else {
-            mBlackListed = StatusBarIconController.getIconBlacklist(newValue).contains("clock");
+        switch (key) {
+            case STATUS_BAR_CLOCK:
+                mClockPosition =
+                        newValue == null ? CLOCK_POSITION_RIGHT : Integer.valueOf(newValue);
+                updateActiveClock();
+                break;
+            default:
+                break;
         }
-        updateActiveClock();
     }
 }
