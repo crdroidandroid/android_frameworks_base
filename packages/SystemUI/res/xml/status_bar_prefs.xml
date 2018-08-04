@@ -93,10 +93,6 @@
 
     <!-- secure -->
 
-    <com.android.systemui.tuner.StatusBarSwitch
-        android:key="clock"
-        android:title="@string/clock" />
-
     <com.android.systemui.tuner.TunerSwitch
         android:key="low_priority"
         android:title="@string/tuner_low_priority"
