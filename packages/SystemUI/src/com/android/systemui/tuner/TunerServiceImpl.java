@@ -69,7 +69,8 @@ public class TunerServiceImpl extends TunerService {
     // Things that use the tunable infrastructure but are now real user settings and
     // shouldn't be reset with tuner settings.
     private static final String[] RESET_BLACKLIST = new String[] {
-            Clock.CLOCK_STYLE,
+            Clock.STATUS_BAR_AM_PM,
+            Clock.STATUS_BAR_CLOCK_SECONDS,
             ClockController.STATUS_BAR_CLOCK,
             NotificationPanelView.DOUBLE_TAP_SLEEP_GESTURE,
             NotificationPanelView.STATUS_BAR_QUICK_QS_PULLDOWN,
