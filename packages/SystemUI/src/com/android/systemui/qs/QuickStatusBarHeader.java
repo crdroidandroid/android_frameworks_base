@@ -107,11 +107,15 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private static final int FADE_ANIMATION_DURATION_MS = 300;
     private static final int TOOLTIP_NOT_YET_SHOWN_COUNT = 0;
     public static final int MAX_TOOLTIP_SHOWN_COUNT = 2;
+    private static final int CLOCK_POSITION_LEFT = 2;
+    private static final int CLOCK_POSITION_HIDE = 3;
 
     private static final String QS_SHOW_AUTO_BRIGHTNESS =
             "lineagesecure:" + LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS;
     private static final String QS_SHOW_BRIGHTNESS_SLIDER =
             "lineagesecure:" + LineageSettings.Secure.QS_SHOW_BRIGHTNESS_SLIDER;
+    private static final String STATUS_BAR_CLOCK =
+            "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK;
 
     private final Handler mHandler = new Handler();
     private final NextAlarmController mAlarmController;
@@ -281,8 +285,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 mContext.getMainExecutor(), mPropertyListener);
 
         Dependency.get(TunerService.class).addTunable(this,
-                StatusBarIconController.ICON_BLACKLIST,
-                QS_SHOW_AUTO_BRIGHTNESS, QS_SHOW_BRIGHTNESS_SLIDER);
+                QS_SHOW_AUTO_BRIGHTNESS,
+                QS_SHOW_BRIGHTNESS_SLIDER,
+                STATUS_BAR_CLOCK);
     }
 
     private List<String> getIgnoredIconSlots() {
@@ -724,20 +729,25 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (QS_SHOW_BRIGHTNESS_SLIDER.equals(key)) {
-            try {
-                mIsQuickQsBrightnessEnabled = Integer.parseInt(newValue) > 1;
-            } catch (NumberFormatException e) {
-                // Catches exception as newValue may be null or malformed.
-                mIsQuickQsBrightnessEnabled = false;
-            }
-            updateResources();
-        } else if (QS_SHOW_AUTO_BRIGHTNESS.equals(key)) {
-            mIsQsAutoBrightnessEnabled = TunerService.parseIntegerSwitch(newValue, true);
-            updateResources();
-        } else if (StatusBarIconController.ICON_BLACKLIST.equals(key)) {
-            mClockView.setClockVisibleByUser(!StatusBarIconController.getIconBlacklist(newValue)
-                    .contains("clock"));
+        switch (key) {
+            case QS_SHOW_BRIGHTNESS_SLIDER:
+                int val =
+                        TunerService.parseInteger(newValue, 1);
+                mIsQuickQsBrightnessEnabled = val > 1;
+                updateResources();
+                break;
+            case QS_SHOW_AUTO_BRIGHTNESS:
+                mIsQsAutoBrightnessEnabled =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                updateResources();
+                break;
+            case STATUS_BAR_CLOCK:
+                int showClock =
+                        TunerService.parseInteger(newValue, CLOCK_POSITION_LEFT);
+                mClockView.setClockVisibleByUser(showClock != CLOCK_POSITION_HIDE);
+                break;
+            default:
+                break;
         }
     }
 }
