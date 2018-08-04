@@ -41,7 +41,6 @@ import com.android.systemui.statusbar.notification.row.shared.AsyncGroupHeaderVi
 import com.android.systemui.statusbar.notification.stack.NotificationRoundnessManager
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayoutController
 import com.android.systemui.statusbar.phone.PhoneStatusBarView
-import com.android.systemui.statusbar.policy.Clock
 import com.android.systemui.statusbar.policy.keyguardStateController
 import com.android.systemui.testKosmos
 import com.google.common.truth.Truth.assertThat
@@ -107,7 +106,6 @@ class HeadsUpAppearanceControllerTest : SysuiTestCase() {
                 shadeViewController,
                 notificationRoundnessManager,
                 headsUpStatusBarView,
-                Clock(mContext, null),
                 kosmos.headsUpNotificationIconInteractor,
                 Optional.of(operatorNameView),
                 mock<PhoneStatusBarView>(),
@@ -196,7 +194,6 @@ class HeadsUpAppearanceControllerTest : SysuiTestCase() {
                 shadeViewController,
                 notificationRoundnessManager,
                 headsUpStatusBarView,
-                Clock(mContext, null),
                 mock<HeadsUpNotificationIconInteractor>(),
                 Optional.empty(),
                 mock<PhoneStatusBarView>(),
