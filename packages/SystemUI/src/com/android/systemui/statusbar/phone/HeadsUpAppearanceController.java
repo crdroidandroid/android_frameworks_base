@@ -87,7 +87,6 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
     private final CommandQueue mCommandQueue;
     private final NotificationWakeUpCoordinator mWakeUpCoordinator;
 
-    private final View mClockView;
     private final Optional<View> mOperatorNameViewOptional;
 
     @VisibleForTesting
@@ -122,7 +121,6 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
             ShadeViewController shadeViewController,
             NotificationRoundnessManager notificationRoundnessManager,
             HeadsUpStatusBarView headsUpStatusBarView,
-            Clock clockView,
             @Named(OPERATOR_NAME_FRAME_VIEW) Optional<View> operatorNameViewOptional,
             @RootView PhoneStatusBarView statusBarView) {
         super(headsUpStatusBarView);
@@ -142,10 +140,9 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
         mStackScrollerController = stackScrollerController;
         mShadeViewController = shadeViewController;
         mStackScrollerController.setHeadsUpAppearanceController(this);
-        mClockView = clockView;
         mOperatorNameViewOptional = operatorNameViewOptional;
         mDarkIconDispatcher = darkIconDispatcher;
-        mClockController = statusBarView.getClockController();
+        mClockController = new ClockController(statusBarView.getContext(), statusBarView);
 
         mView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -242,19 +239,20 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
     private void setShown(boolean isShown) {
         if (mShown != isShown) {
             View clockView = mClockController.getClock();
-            boolean isRightClock = clockView.getId() == R.id.clock_right;
+            boolean isClock = clockView != null &&
+                (clockView.getId() == R.id.clock || clockView.getId() == R.id.clock_center);
             mShown = isShown;
             if (isShown) {
                 updateParentClipping(false /* shouldClip */);
                 mView.setVisibility(View.VISIBLE);
                 show(mView);
-                if (!isRightClock) {
-                    hide(mClockView, View.INVISIBLE);
+                if (isClock) {
+                    hide(clockView, View.INVISIBLE);
                 }
                 mOperatorNameViewOptional.ifPresent(view -> hide(view, View.INVISIBLE));
             } else {
-                if (!isRightClock) {
-                    show(mClockView);
+                if (isClock) {
+                    show(clockView);
                 }
                 mOperatorNameViewOptional.ifPresent(this::show);
                 hide(mView, View.GONE, () -> {
