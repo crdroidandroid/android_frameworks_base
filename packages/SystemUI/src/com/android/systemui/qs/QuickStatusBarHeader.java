@@ -80,6 +80,8 @@ import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.tuner.TunerService;
 
+import lineageos.providers.LineageSettings;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -149,6 +151,10 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private boolean mPermissionsHubEnabled;
 
     private PrivacyItemController mPrivacyItemController;
+
+    private static final int CLOCK_POSITION_HIDE = 3;
+    private static final String STATUS_BAR_CLOCK =
+            "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK;
 
     private final BroadcastReceiver mRingerReceiver = new BroadcastReceiver() {
         @Override
@@ -263,7 +269,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 mContext.getMainExecutor(), mPropertyListener);
 
         Dependency.get(TunerService.class).addTunable(this,
-                StatusBarIconController.ICON_BLACKLIST);
+                STATUS_BAR_CLOCK);
     }
 
     private List<String> getIgnoredIconSlots() {
@@ -664,7 +670,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        mClockView.setClockVisibleByUser(!StatusBarIconController.getIconBlacklist(newValue)
-                .contains("clock"));
+        mClockView.setClockVisibleByUser(newValue == null ? true :
+                Integer.valueOf(newValue) != CLOCK_POSITION_HIDE);
     }
 }
