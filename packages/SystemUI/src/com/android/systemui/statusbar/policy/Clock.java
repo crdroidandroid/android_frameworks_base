@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
@@ -74,17 +75,19 @@ public class Clock extends TextView implements
         CommandQueue.Callbacks,
         DarkReceiver, ConfigurationListener {
 
-    public static final String CLOCK_SECONDS = "clock_seconds";
-    private static final String CLOCK_STYLE =
-            "lineagesystem:" + LineageSettings.System.STATUS_BAR_AM_PM;
-    private static final String CLOCK_AUTO_HIDE =
-            "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK_AUTO_HIDE;
     private static final String CLOCK_SUPER_PARCELABLE = "clock_super_parcelable";
     private static final String CURRENT_USER_ID = "current_user_id";
     private static final String VISIBLE_BY_POLICY = "visible_by_policy";
     private static final String VISIBLE_BY_USER = "visible_by_user";
     private static final String SHOW_SECONDS = "show_seconds";
     private static final String VISIBILITY = "visibility";
+
+    public static final String STATUS_BAR_CLOCK_SECONDS =
+            "system:" + Settings.System.STATUS_BAR_CLOCK_SECONDS;
+    private static final String STATUS_BAR_AM_PM =
+            "lineagesystem:" + LineageSettings.System.STATUS_BAR_AM_PM;
+    private static final String STATUS_BAR_CLOCK_AUTO_HIDE =
+            "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK_AUTO_HIDE;
 
     private final CurrentUserTracker mCurrentUserTracker;
     private final CommandQueue mCommandQueue;
@@ -198,7 +201,9 @@ public class Clock extends TextView implements
             mBroadcastDispatcher.registerReceiverWithHandler(mIntentReceiver, filter,
                     Dependency.get(Dependency.TIME_TICK_HANDLER), UserHandle.ALL);
             Dependency.get(TunerService.class).addTunable(this,
-                    CLOCK_SECONDS, CLOCK_STYLE, CLOCK_AUTO_HIDE);
+                    STATUS_BAR_CLOCK_SECONDS,
+                    STATUS_BAR_AM_PM,
+                    STATUS_BAR_CLOCK_AUTO_HIDE);
             mCommandQueue.addCallback(this);
             mCurrentUserTracker.startTracking();
             mCurrentUserId = mCurrentUserTracker.getCurrentUserId();
@@ -314,15 +319,23 @@ public class Clock extends TextView implements
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (CLOCK_SECONDS.equals(key)) {
-            mShowSeconds = TunerService.parseIntegerSwitch(newValue, false);
-            updateShowSeconds();
-        } else if (CLOCK_STYLE.equals(key)) {
-            mAmPmStyle = TunerService.parseInteger(newValue, AM_PM_STYLE_GONE);
-            mClockFormatString = ""; // force refresh
-            updateClock();
-        } else if (CLOCK_AUTO_HIDE.equals(key)) {
-            handleTaskStackListener(TunerService.parseIntegerSwitch(newValue, false));
+        switch (key) {
+            case STATUS_BAR_CLOCK_SECONDS:
+                mShowSeconds =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                updateShowSeconds();
+                break;
+            case STATUS_BAR_AM_PM:
+                mAmPmStyle =
+                        TunerService.parseInteger(newValue, AM_PM_STYLE_GONE);
+                mClockFormatString = ""; // force refresh
+                updateClock();
+                break;
+            case STATUS_BAR_CLOCK_AUTO_HIDE:
+                handleTaskStackListener(TunerService.parseIntegerSwitch(newValue, false));
+                break;
+            default:
+                break;
         }
     }
 
