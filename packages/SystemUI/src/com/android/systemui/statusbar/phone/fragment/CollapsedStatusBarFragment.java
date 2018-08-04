@@ -486,9 +486,13 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             state |= DISABLE_NOTIFICATION_ICONS;
             state |= DISABLE_SYSTEM_INFO;
             View clockView = mClockController.getClock();
-            boolean isRightClock = clockView.getId() == R.id.clock_right;
-            if (!isRightClock) {
+            if (clockView == null) {
                 state |= DISABLE_CLOCK;
+            } else {
+                boolean isRightClock = clockView.getId() == R.id.clock_right;
+                if (!isRightClock) {
+                    state |= DISABLE_CLOCK;
+                }
             }
         }
 
