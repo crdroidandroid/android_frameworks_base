@@ -4903,6 +4903,10 @@ public final class Settings {
 
         public static final String BLUR_QUICKSETTINGS_PERCENTAGE = "blur_quicksettings_percentage";
 
+        public static final String BLUR_VOLUMEDIALOG_ENABLED = "blur_volumedialog_enabled";
+
+        public static final String BLUR_VOLUMEDIALOG_PERCENTAGE = "blur_volumedialog_percentage";
+
         public static final String BLUR_RECENT_ENABLED = "blur_recent_enabled";
 
         public static final String BLUR_RECENT_SCALE = "blur_recent_scale";
