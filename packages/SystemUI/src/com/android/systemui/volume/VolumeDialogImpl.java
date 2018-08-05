@@ -43,6 +43,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.transition.AutoTransition;
 import android.transition.Transition;
@@ -151,6 +152,14 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     private boolean mShowFullZen;
     private TunerZenModePanel mZenPanel;
 
+    private static boolean mTranslucentVolumeDialog;
+    private static int mVDTranslucencyPercentage;
+
+    private static final String BLUR_VOLUMEDIALOG_ENABLED =
+            "system:" + Settings.System.BLUR_VOLUMEDIALOG_ENABLED;
+    private static final String BLUR_VOLUMEDIALOG_PERCENTAGE =
+            "system:" + Settings.System.BLUR_VOLUMEDIALOG_PERCENTAGE;
+
     public VolumeDialogImpl(Context context) {
         mContext = new ContextThemeWrapper(context, com.android.systemui.R.style.qs_theme);
         mZenModeController = Dependency.get(ZenModeController.class);
@@ -173,7 +182,10 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
 
         mController.addCallback(mControllerCallbackH, mHandler);
         mController.getState();
-        Dependency.get(TunerService.class).addTunable(this, SHOW_FULL_ZEN);
+        Dependency.get(TunerService.class).addTunable(this,
+                SHOW_FULL_ZEN,
+                BLUR_VOLUMEDIALOG_ENABLED,
+                BLUR_VOLUMEDIALOG_PERCENTAGE);
 
         final Configuration currentConfig = mContext.getResources().getConfiguration();
         mDensity = currentConfig.densityDpi;
@@ -294,8 +306,30 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (SHOW_FULL_ZEN.equals(key)) {
-            mShowFullZen = newValue != null && Integer.parseInt(newValue) != 0;
+        switch (key) {
+            case SHOW_FULL_ZEN:
+                mShowFullZen =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                break;
+            case BLUR_VOLUMEDIALOG_ENABLED:
+                mTranslucentVolumeDialog =
+                        newValue != null && Integer.parseInt(newValue) == 1;
+                handleVolumeDialogBackround();
+                break;
+            case BLUR_VOLUMEDIALOG_PERCENTAGE:
+                int value =
+                        newValue == null ? 60 : Integer.parseInt(newValue);
+                mVDTranslucencyPercentage = 255 - ((value * 255) / 100);
+                handleVolumeDialogBackround();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void handleVolumeDialogBackround() {
+        if (mDialogView != null) {
+            mDialogView.getBackground().setAlpha(mTranslucentVolumeDialog ? mVDTranslucencyPercentage : 255);
         }
     }
 
@@ -658,6 +692,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
 
     private void updateRowsH(final VolumeRow activeRow) {
         if (D.BUG) Log.d(TAG, "updateRowsH");
+        handleVolumeDialogBackround();
         if (!mShowing) {
             trimObsoleteH();
         }
