@@ -135,4 +135,7 @@
   <java-symbol type="dimen" name="edge_gesture_trigger_distance" /> 
   <java-symbol type="dimen" name="edge_gesture_perpendicular_distance" /> 
   <java-symbol type="dimen" name="edge_gesture_trigger_thickness" /> 
+
+  <!-- Whether the device supports Smart Pixels -->
+  <java-symbol type="bool" name="config_supportSmartPixels" />
 </resources>
