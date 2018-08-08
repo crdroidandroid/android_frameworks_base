@@ -44,13 +44,23 @@ import com.android.systemui.crdroid.omnistyle.StatusBarHeaderMachine;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.qs.QSDetail.Callback;
 import com.android.systemui.statusbar.SignalClusterView;
+import com.android.systemui.statusbar.policy.Clock;
 import com.android.systemui.statusbar.policy.DarkIconDispatcher.DarkReceiver;
+import com.android.systemui.tuner.TunerService;
 
+import lineageos.providers.LineageSettings;
 
+<<<<<<< HEAD
 public class QuickStatusBarHeader extends FrameLayout implements StatusBarHeaderMachine.IStatusBarHeaderMachineObserver {
+=======
+public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tunable,
+            StatusBarHeaderMachine.IStatusBarHeaderMachineObserver {
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
     private static final String TAG = "QuickStatusBarHeader";
 
     private ActivityStarter mActivityStarter;
+
+    private Clock mClock;
 
     private QSPanel mQsPanel;
 
@@ -65,6 +75,14 @@ public class QuickStatusBarHeader extends FrameLayout implements StatusBarHeader
     private ImageView mBackgroundImage;
     private Drawable mCurrentBackground;
 
+<<<<<<< HEAD
+=======
+    private static final int CLOCK_POSITION_HIDE = 3;
+
+    private static final String STATUS_BAR_CLOCK =
+            "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK;
+
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -73,6 +91,8 @@ public class QuickStatusBarHeader extends FrameLayout implements StatusBarHeader
     protected void onFinishInflate() {
         super.onFinishInflate();
         Resources res = getResources();
+
+        mClock = findViewById(R.id.clock);
 
         mHeaderQsPanel = findViewById(R.id.quick_qs_panel);
 
@@ -102,6 +122,12 @@ public class QuickStatusBarHeader extends FrameLayout implements StatusBarHeader
         mQuickQsPanelScroller.setHorizontalScrollBarEnabled(false);
 
         mBackgroundImage = (ImageView) findViewById(R.id.qs_header_image);
+<<<<<<< HEAD
+=======
+
+        Dependency.get(TunerService.class).addTunable(this,
+                STATUS_BAR_CLOCK);
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
     }
 
     private void applyDarkness(int id, Rect tintArea, float intensity, int color) {
@@ -181,6 +207,15 @@ public class QuickStatusBarHeader extends FrameLayout implements StatusBarHeader
         mHeaderQsPanel.setCallback(qsPanelCallback);
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        mClock.setClockVisibleByUser(newValue == null ? true :
+                Integer.valueOf(newValue) != CLOCK_POSITION_HIDE);
+    }
+
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
     public void onClosingFinished() {
         mQuickQsPanelScroller.scrollTo(0, 0);
     }

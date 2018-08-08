@@ -60,6 +60,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private NetworkController mNetworkController;
     private LinearLayout mSystemIconArea;
     private LinearLayout mCustomIconArea;
+<<<<<<< HEAD
+=======
+    private LinearLayout mCenterClockLayout;
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
     private View mCrDroidLogoRight;
     private View mWeatherRight, mWeatherImageRight;
     private View mNotificationIconAreaInner;
@@ -67,6 +71,15 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private StatusBar mStatusBarComponent;
     private DarkIconManager mDarkIconManager;
     private SignalClusterView mSignalClusterView;
+    private ClockController mClockController;
+
+    private View mBatteryBar;
+
+    private int mTickerEnabled;
+    private View mTickerViewFromStub;
+
+    private static final String STATUS_BAR_SHOW_TICKER =
+            "system:" + Settings.System.STATUS_BAR_SHOW_TICKER;
 
     private View mBatteryBar;
 
@@ -122,12 +135,20 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         Dependency.get(StatusBarIconController.class).addIconGroup(mDarkIconManager);
         mSystemIconArea = mStatusBar.findViewById(R.id.system_icon_area);
         mCustomIconArea = mStatusBar.findViewById(R.id.left_icon_area);
+<<<<<<< HEAD
+=======
+        mCenterClockLayout = (LinearLayout) mStatusBar.findViewById(R.id.center_clock_layout);
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
         mCrDroidLogoRight = mStatusBar.findViewById(R.id.crdroid_logo_right);
         mWeatherRight = mStatusBar.findViewById(R.id.weather_temp_right);
         mWeatherImageRight = mStatusBar.findViewById(R.id.weather_image_right);
         mBatteryBar = mStatusBar.findViewById(R.id.battery_bar);
+<<<<<<< HEAD
         mCenterClockLayout = (LinearLayout) mStatusBar.findViewById(R.id.center_clock_layout);
+=======
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
         mSignalClusterView = mStatusBar.findViewById(R.id.signal_cluster);
+        mClockController = new ClockController(mStatusBar);
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mSignalClusterView);
         // Default to showing until we know otherwise.
         showSystemIconArea(false);
@@ -231,9 +252,15 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void hideSystemIconArea(boolean animate) {
+<<<<<<< HEAD
         animateHide(mCenterClockLayout, animate);
         animateHide(mBatteryBar, animate);
         animateHide(mCustomIconArea, animate);
+=======
+        animateHide(mBatteryBar, animate);
+        animateHide(mCustomIconArea, animate);
+        animateHide(mCenterClockLayout, animate);
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
         animateHide(mCrDroidLogoRight, animate);
         animateHide(mWeatherRight, animate);
         animateHide(mWeatherImageRight, animate);
@@ -241,6 +268,12 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void showSystemIconArea(boolean animate) {
+        animateShow(mBatteryBar, animate);
+        animateShow(mCustomIconArea, animate);
+        animateShow(mCenterClockLayout, animate);
+        animateShow(mCrDroidLogoRight, animate);
+        animateShow(mWeatherRight, animate);
+        animateShow(mWeatherImageRight, animate);
         animateShow(mSystemIconArea, animate);
         animateShow(mWeatherImageRight, animate);
         animateShow(mWeatherRight, animate);
@@ -252,10 +285,14 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     public void hideNotificationIconArea(boolean animate) {
         animateHide(mNotificationIconAreaInner, animate);
+        animateHide(mCustomIconArea, animate);
+        animateHide(mCenterClockLayout, animate);
     }
 
     public void showNotificationIconArea(boolean animate) {
         animateShow(mNotificationIconAreaInner, animate);
+        animateShow(mCustomIconArea, animate);
+        animateShow(mCenterClockLayout, animate);
     }
 
     /**

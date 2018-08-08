@@ -95,7 +95,11 @@ public class UsbDebuggingActivity extends AlertActivity
         setupAlert();
 
         mSmartPixels = Settings.System.getIntForUser(ap.mContext.getContentResolver(),
+<<<<<<< HEAD
                 Settings.System.SMART_PIXELS_ENABLE, 1, UserHandle.USER_CURRENT) == 1;
+=======
+                Settings.System.SMART_PIXELS_ENABLE, 0, UserHandle.USER_CURRENT) == 1;
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
 
         // adding touch listener on affirmative button - checks if window is obscured
         // if obscured, do not let user give permissions (could be tapjacking involved)

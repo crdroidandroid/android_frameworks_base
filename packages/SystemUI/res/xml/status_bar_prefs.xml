@@ -86,5 +86,8 @@
     <com.android.systemui.tuner.StatusBarSwitch
         android:key="alarm_clock"
         android:title="@string/status_bar_alarm" />
+<<<<<<< HEAD
 
+=======
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
 </PreferenceScreen>

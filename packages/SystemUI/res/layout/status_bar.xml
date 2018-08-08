@@ -63,6 +63,7 @@
                 android:scaleType="center"
                 android:visibility="gone" />
 
+<<<<<<< HEAD
             <com.android.systemui.statusbar.policy.ClockLeft
                 android:id="@+id/left_clock"
                 android:textAppearance="@style/TextAppearance.StatusBar.Clock"
@@ -72,6 +73,17 @@
                 android:paddingStart="@dimen/status_bar_clock_starting_padding"
                 android:paddingEnd="@dimen/status_bar_clock_end_padding"
                 android:gravity="center_vertical|start"
+=======
+            <com.android.systemui.statusbar.policy.Clock
+                android:id="@+id/clock_left"
+                android:textAppearance="@style/TextAppearance.StatusBar.Clock"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:singleLine="true"
+                android:paddingEnd="6dip"
+                android:gravity="center"
+                android:visibility="gone"
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
                 />
 
             <com.android.systemui.crdroid.statusbarweather.StatusBarWeatherImage
@@ -185,6 +197,7 @@
         android:layout_height="match_parent"
         >
 
+<<<<<<< HEAD
         <com.android.systemui.statusbar.policy.ClockCenter
             android:id="@+id/center_clock"
             android:textAppearance="@style/TextAppearance.StatusBar.Clock"
@@ -193,6 +206,16 @@
             android:layout_height="match_parent"
             android:visibility="gone"
             android:singleLine="true"
+=======
+        <com.android.systemui.statusbar.policy.Clock
+            android:id="@+id/clock_center"
+            android:textAppearance="@style/TextAppearance.StatusBar.Clock"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:singleLine="true"
+            android:gravity="center"
+            android:visibility="gone"
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
             />
     </com.android.keyguard.AlphaOptimizedLinearLayout>
 

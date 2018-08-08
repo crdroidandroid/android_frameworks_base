@@ -4009,6 +4009,7 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_BATTERY_INFO = "lockscreen_battery_info";
+<<<<<<< HEAD
 
         /**
          * crDroid OTA support
@@ -4023,6 +4024,22 @@ public final class Settings {
          * enable custom lockscreen max notifications config
          * @hide
          */
+=======
+
+        /**
+         * crDroid OTA support
+         * @hide
+         */
+        public static final String OTA_LAST_CHECK = "ota_last_check";
+        public static final String OTA_LATEST_VERSION = "ota_latest_version";
+        public static final String OTA_MAINTAINER = "ota_maintainer";
+        public static final String OTA_UPDATE_INTERVAL = "ota_update_interval";
+
+        /**
+         * enable custom lockscreen max notifications config
+         * @hide
+         */
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
         public static final String LOCK_SCREEN_CUSTOM_NOTIF = "lock_screen_custom_notif";
 
         /**
@@ -4282,6 +4299,7 @@ public final class Settings {
          * @hide
          */
         public static final String QS_COLUMNS_LANDSCAPE = "qs_columns_landscape";
+<<<<<<< HEAD
 
        /**
          * Whether to vibrate on power connection or disconnection
@@ -5611,6 +5629,1288 @@ public final class Settings {
                 CALL_METHOD_GET_SECURE,
                 CALL_METHOD_PUT_SECURE,
                 sProviderHolder);
+=======
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
+
+       /**
+         * Whether to vibrate on power connection or disconnection
+         * @hide
+         */
+        public static final String VIBRATION_ON_CHARGE_STATE_CHANGED = "vibration_on_charge_state_changed";
+
+        /**
+         * Force expanded notifications on all apps that support it.
+         * @hide
+         */
+        public static final String FORCE_EXPANDED_NOTIFICATIONS = "force_expanded_notifications";
+
+        /**
+         * Whether to use partial screenshot when using volume keys
+         * @hide
+         */
+        public static final String SCREENSHOT_TYPE = "screenshot_type";
+
+        /**
+         * Whether to display qs tile titles in the qs panel
+         * @hide
+         */
+        public static final String QS_TILE_TITLE_VISIBILITY = "qs_tile_title_visibility";
+
+        /**
+         * Whether to enable or disable vibration on succesful fingerprint auth
+         * @hide
+         */
+        public static final String FP_SUCCESS_VIBRATE = "fp_success_vibrate";
+
+        /**  
+         * AOKP Custom System Animations
+         * @hide
+         */  
+        public static final String[] ACTIVITY_ANIMATION_CONTROLS = new String[] {  
+                "activity_open",
+                "activity_close",
+                "task_open",
+                "task_close",
+                "task_to_front",
+                "task_to_back",
+                "wallpaper_open",
+                "wallpaper_close",
+                "wallpaper_intra_open",
+                "wallpaper_intra_close",
+                "task_open_behind",
+        };  
+        public static final String ANIMATION_CONTROLS_DURATION = "animation_controls_duration";
+
+        /**
+         * Toast animations
+         *
+         * @hide
+         */
+        public static final String TOAST_ANIMATION = "toast_animation";
+
+        /**
+         * ListView Animations
+         * 0 == None
+         * 1 == Wave (Left)
+         * 2 == Wave (Right)
+         * 3 == Scale
+         * 4 == Alpha
+         * 5 == Stack (Top)
+         * 6 == Stack (Bottom)
+         * 7 == Translate (Left)
+         * 8 == Translate (Right)
+         * @hide
+         */
+        public static final String LISTVIEW_ANIMATION = "listview_animation";
+
+        /**
+         * ListView Interpolators
+         * 0 == None
+         * 1 == accelerate_interpolator
+         * 2 == decelerate_interpolator
+         * 3 == accelerate_decelerate_interpolator
+         * 4 == anticipate_interpolator
+         * 5 == overshoot_interpolator
+         * 6 == anticipate_overshoot_interpolator
+         * 7 == bounce_interpolator
+         * @hide
+         */
+        public static final String LISTVIEW_INTERPOLATOR = "listview_interpolator";
+
+        /**
+         * Change quick settings tiles animation style
+         *
+         * @hide
+         */
+        public static final String ANIM_TILE_STYLE = "anim_tile_style";
+
+        /**
+         * Change quick settings tiles animation duration
+         *
+         * @hide
+         */
+        public static final String ANIM_TILE_DURATION = "anim_tile_duration";
+
+        /**
+         * Change quick settings tiles interpolator
+         *
+         * @hide
+         */
+        public static final String ANIM_TILE_INTERPOLATOR = "anim_tile_interpolator";
+
+        /**
+         * Indicates whether ANBI (Accidental navigation button interaction) is enabled.
+         *
+         * @hide
+         */
+        public static final String ANBI_ENABLED = "anbi_enabled";
+
+        /**
+         * Whether to enable scrolling in the small quick settings
+         * @hide
+         */
+        public static final String QS_QUICKBAR_SCROLL_ENABLED = "qs_quickbar_scroll_enabled";
+
+        /**
+         * Statusbar crDroid logo
+         * @hide
+         */
+        public static final String STATUS_BAR_CRDROID_LOGO = "status_bar_crdroid_logo";
+
+        /**
+         * Statusbar crDroid logo color setting
+         * @hide
+         */
+        public static final String STATUS_BAR_CRDROID_LOGO_COLOR = "status_bar_crdroid_logo_color";
+
+        /**
+         * Position of Status bar logo
+         * 0 - Left (default)
+         * 1 - Right
+         * @hide
+         */
+        public static final String STATUS_BAR_CRDROID_LOGO_POSITION = "status_bar_crdroid_logo_position";
+
+        /**
+         * Statusbar crDroid logo custom style
+         * @hide
+         */
+        public static final String STATUS_BAR_CRDROID_LOGO_STYLE = "status_bar_crdroid_logo_style";
+
+        /**
+         * @hide
+         */
+        public static final String OMNIJAWS_WEATHER_ICON_PACK = "omnijaws_weather_icon_pack";
+
+        /**
+         * Status bar weather temperature
+         * 0: Hide the temperature
+         * 1: Display the temperature with scale and image
+         * 2: Display the temperature without scale and with image
+         * 3: Display the temparature with scale and without image
+         * 4: Display the temperature without scale and without image
+         * 5: Display the temperature image
+         * @hide
+         */
+        public static final String STATUS_BAR_SHOW_WEATHER_TEMP = "status_bar_show_weather_temp";
+
+        /**
+         * Style of Weather Temp
+         * 0 - Right (default)
+         * 1 - Left
+         * @hide
+         */
+        public static final String STATUS_BAR_WEATHER_TEMP_STYLE = "status_bar_weather_temp_style";
+
+        /**
+         * Statusbar weather font size setting
+         * @hide
+         */
+        public static final String STATUS_BAR_WEATHER_SIZE = "status_bar_weather_size";
+
+        /**
+         * Statusbar weather font style setting
+         * @hide
+         */
+        public static final String STATUS_BAR_WEATHER_FONT_STYLE = "status_bar_weather_font_style";
+
+        /**
+         * Statusbar weather color setting
+         * @hide
+         */
+        public static final String STATUS_BAR_WEATHER_COLOR = "status_bar_weather_color";
+
+        /**
+         * Statusbar weather color setting
+         * @hide
+         */
+        public static final String STATUS_BAR_WEATHER_IMAGE_COLOR = "status_bar_weather_image_color";
+
+        /**
+         * Whether to show the weather info on the lock screen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_SHOW_WEATHER = "lock_screen_show_weather";
+
+        /**
+         * Whether to show the weather location on lock screen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_SHOW_WEATHER_LOCATION = "lock_screen_show_weather_location";
+
+        /**
+         * Whether to show the weather condition icon on lock screen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_WEATHER_CONDITION_ICON = "lock_screen_weather_condition_icon";
+
+        /**
+         * Wheter to play notification sound and vibration if screen is ON
+         * 0 - never
+         * 1 - always
+         * 2 - if media playing
+         * @hide
+         */
+        public static final String NOTIFICATION_SOUND_VIB_SCREEN_ON = "notification_sound_vib_screen_on";
+
+        /**
+         * Force an Ambient notification when a new media track is being played
+         * 0 - disabled
+         * 1 - show track info within normal Ambient Display notifications
+         * 2 - show track info within normal Ambient Display and also force new notifications when skipping tracks
+         * 3 - like 2, but for forced notifications use a clean layout with hidden clock
+         * @hide
+         */
+        public static final String FORCE_AMBIENT_FOR_MEDIA = "force_ambient_for_media";
+
+        /**
+         * Whether to display SU icon in statusbar
+         * @hide
+         */
+        public static final String SHOW_SU_INDICATOR = "show_su_indicator";
+
+        /**
+         * Whether to show seconds next to clock in status bar
+         * 0 - hide (default)
+         * 1 - show
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK_SECONDS = "status_bar_clock_seconds";
+
+        /** @hide */
+        public static final Validator STATUS_BAR_CLOCK_SECONDS_VALIDATOR =
+                sBooleanValidator;
+
+        /**
+         * Shows custom date before clock time
+         * 0 - No Date
+         * 1 - Small Date
+         * 2 - Normal Date
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK_DATE_DISPLAY = "status_bar_clock_date_display";
+
+        /** @hide */
+        public static final Validator STATUS_BAR_CLOCK_DATE_DISPLAY_VALIDATOR =
+                new InclusiveIntegerRangeValidator(0, 2);
+
+        /**
+         * Sets the date string style
+         * 0 - Regular style
+         * 1 - Lowercase
+         * 2 - Uppercase
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK_DATE_STYLE = "status_bar_clock_date_style";
+
+        /** @hide */
+        public static final Validator STATUS_BAR_CLOCK_DATE_STYLE_VALIDATOR =
+                new InclusiveIntegerRangeValidator(0, 2);
+
+        /**
+         * Position of date
+         * 0 - Left of clock
+         * 1 - Right of clock
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK_DATE_POSITION = "status_bar_clock_date_position";
+
+        /**
+         * Stores the java DateFormat string for the date
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK_DATE_FORMAT = "status_bar_clock_date_format";
+
+        /**
+         * Setting to determine whether or not to show the battery percentage in the status bar.
+         * 0 - Stock behavior - show when forced e.g charging
+         * 1 - Always show percentage
+         * 2 - Never show percentage
+         * @hide
+         */
+        public static final String SHOW_BATTERY_PERCENT = "show_battery_percent";
+
+        /**
+         * Display style of the status bar battery information
+         * 0: Display the battery an icon in portrait mode
+         * 1: Display the battery as a circle
+         * 2: Display the battery as a dotted circle
+         * 3: Display the battery as a square
+         * 4: Display the battery as a text
+         * 5: Hide the battery completely
+         * default: 0
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
+
+        /**
+         * Charging symbol near battery text percentage
+         * @hide
+         */
+        public static final String TEXT_CHARGING_SYMBOL = "text_charging_symbol";
+
+        /**
+         * Status bar carrier label
+         * 0: Hide
+         * 1: Display on status bar
+         * @hide
+         */
+        public static final String STATUS_BAR_SHOW_CARRIER = "status_bar_show_carrier";
+
+        /**
+         * Lock screen carrier label
+         * 0: Hide
+         * 1: Display on status bar
+         * @hide
+         */
+        public static final String LOCK_SCREEN_SHOW_CARRIER = "lock_screen_show_carrier";
+
+        /**
+         * Quick settings carrier label
+         * 0: Hide
+         * 1: Display on status bar
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_SHOW_CARRIER = "quick_settings_show_carrier";
+
+        /**
+         * custom carrier label. The value is
+         * String.
+         * @hide
+         */
+        public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
+
+        /**
+         * Enable/Disable screenshot sound
+         * @hide
+         */
+        public static final String SCREENSHOT_SOUND = "screenshot_sound";
+
+        /**
+         * Whether to use the custom status bar header or not
+         * @hide
+         */
+        public static final String STATUS_BAR_CUSTOM_HEADER = "status_bar_custom_header";
+
+        /**
+         * Whether to apply a shadow on top of the header image
+         * value is the alpha value of the shadow image is 0 -> no shadow -> 255 black
+         * @hide
+         */
+        public static final String STATUS_BAR_CUSTOM_HEADER_SHADOW = "status_bar_custom_header_shadow";
+
+        /**
+         * header image package to use for daylight header - package name - null if default
+         * @hide
+         */
+        public static final String STATUS_BAR_DAYLIGHT_HEADER_PACK = "status_bar_daylight_header_pack";
+
+        /**
+         * Current active provider - available currently "static" "daylight"
+         * @hide
+         */
+        public static final String STATUS_BAR_CUSTOM_HEADER_PROVIDER = "status_bar_custom_header_provider";
+
+        /**
+         * Manual override picture to use
+         * @hide
+         */
+        public static final String STATUS_BAR_CUSTOM_HEADER_IMAGE = "status_bar_custom_header_image";
+
+        /**
+         * @hide
+         */
+        public static final String STATUS_BAR_FILE_HEADER_IMAGE = "status_bar_file_header_image";
+
+        /**
+         * @hide
+         */
+        public static final String START_SCREEN_STATE_SERVICE = "start_screen_state_service";
+
+        /**
+         * @hide
+         */
+        public static final String SCREEN_STATE_TWOG = "screen_state_twog";
+
+        /**
+         * @hide
+         */
+        public static final String SCREEN_STATE_GPS = "screen_state_gps";
+
+        /**
+         * @hide
+         */
+        public static final String SCREEN_STATE_MOBILE_DATA = "screen_state_mobile_data";
+
+        /**
+         * @hide
+         */
+        public static final String SCREEN_STATE_OFF_DELAY = "screen_state_off_delay";
+
+        /**
+         * @hide
+         */
+        public static final String SCREEN_STATE_ON_DELAY = "screen_state_on_delay";
+
+        /**
+         * Pulse notifications on tilt
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_TILT = "doze_trigger_tilt";
+
+        /**
+         * Pulse notifications on pick up
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_PICKUP = "doze_trigger_pickup";
+
+        /**
+         * Pulse notifications on hand wave
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_HANDWAVE = "doze_trigger_handwave";
+
+        /**
+         * Pulse notifications on removal from pocket
+         * @hide
+         */
+        public static final String DOZE_TRIGGER_POCKET = "doze_trigger_pocket";
+
+        /**
+         * Vibrate when pulsing notifications on tilt
+         * @hide
+         */
+        public static final String DOZE_VIBRATE_TILT = "doze_vibrate_tilt";
+
+        /**
+         * Vibrate when pulsing notifications on pick up
+         * @hide
+         */
+        public static final String DOZE_VIBRATE_PICKUP = "doze_vibrate_pickup";
+
+        /**
+         * Vibrate when pulsing notifications using proximity sensor
+         * @hide
+         */
+        public static final String DOZE_VIBRATE_PROX = "doze_vibrate_prox";
+
+        /**
+         * Stores the app to be launched if the user taps on the screenshot notification edit button
+         * @hide
+         */
+        public static final String SCREENSHOT_EDIT_USER_APP = "screenshot_edit_user_app";
+
+        /**
+         * Ticker animation
+         * 0: Fade animation
+         * 1: Scrolling ticker
+         * @hide
+         */
+        public static final String STATUS_BAR_TICKER_ANIMATION_MODE =
+                "status_bar_ticker_animation_mode";
+
+        /**
+         * @hide
+         */
+        public static final String SCREENRECORD_QUALITY_MODE = "screenrecord_quality_mode";
+
+        /**
+         * Hold current font name and name of the originating package Uses "|" as a delimiter
+         * @hide
+         */
+        public static final String FONT_INFO = "font_info";
+
+        /**
+         * Hold list of installed font provider packages. Uses "|" as a delimiter
+         * @hide
+         */
+        public static final String FONT_PACKAGES = "font_packages";
+
+        /**
+         * Whether to show battery percent on ambient bottom
+         * @hide
+         */
+        public static final String AMBIENT_BATTERY_PERCENT = "ambient_battery_percent";
+
+        /**
+         * Fingerprint Wake-and-Unlock
+         * @hide
+         */
+        public static final String FP_WAKE_AND_UNLOCK = "fp_wake_and_unlock";
+
+        /**
+         * Enable blocking wakelock
+         * @hide
+         */
+        public static final String WAKELOCK_BLOCKING_ENABLED = "wakelock_blocking_enabled";
+
+        /**
+         * List of wakelock blocks selected
+         * @hide
+         */
+        public static final String WAKELOCK_BLOCKING_LIST = "wakelock_blocking_list";
+
+        /**
+         * List of alarms blocks selected
+         * @hide
+         */
+        public static final String ALARM_BLOCKING_LIST = "alarm_blocking_list";
+
+        /**
+         * Enable blocking alarm
+         * @hide
+         */
+        public static final String ALARM_BLOCKING_ENABLED = "alarm_blocking_enabled";
+
+        /**
+         * Defines the global heads up notification snooze
+         * @hide
+         */
+        public static final String HEADS_UP_NOTIFICATION_SNOOZE = "heads_up_notification_snooze";
+
+        /**
+         * Heads up timeout configuration
+         * @hide
+         */
+        public static final String HEADS_UP_TIMEOUT = "heads_up_timeout";
+
+        /**
+         * Select which lockscreen date style to display
+         * @hide
+         */
+        public static final String LOCKSCREEN_DATE_SELECTION = "lockscreen_date_selection";
+
+        /**
+         * Select which lockscreen clock style to display
+         * @hide
+         */
+        public static final String LOCKSCREEN_CLOCK_SELECTION = "lockscreen_clock_selection";
+
+        /**
+         * The alpha value of the On-The-Go overlay.
+         * @hide
+         */
+        public static final String ON_THE_GO_ALPHA = "on_the_go_alpha";
+
+        /**
+         * Whether the service should restart itself or not.
+         * @hide
+         */
+        public static final String ON_THE_GO_SERVICE_RESTART = "on_the_go_service_restart";
+
+        /**
+         * The camera instance to use.
+         * 0 = Rear Camera
+         * 1 = Front Camera
+         * @hide
+         */
+        public static final String ON_THE_GO_CAMERA = "on_the_go_camera";
+
+        /**
+         * Use EdgeGesture Service for system gestures in PhoneWindowManager
+         * @hide
+         */
+        public static final String USE_EDGE_SERVICE_FOR_GESTURES = "edge_service_for_gestures";
+
+        /**
+         * Check if using dark theme
+         * @hide
+         */
+        public static final String BERRY_DARK_CHECK = "berry_dark_check";
+
+        /**
+         * Whether to enable Smart Pixels
+         * @hide
+         */
+        public static final String SMART_PIXELS_ENABLE = "smart_pixels_enable";
+
+        /**
+         * Smart Pixels pattern
+         * @hide
+         */
+        public static final String SMART_PIXELS_PATTERN = "smart_pixels_pattern";
+
+        /**
+         * Smart Pixels Shift Timeout
+         * @hide
+         */
+        public static final String SMART_PIXELS_SHIFT_TIMEOUT = "smart_pixels_shift_timeout";
+
+        /**
+         * Whether Smart Pixels should enable on power saver mode
+         * @hide
+         */
+        public static final String SMART_PIXELS_ON_POWER_SAVE = "smart_pixels_on_power_save";
+
+        /**
+         * Blur personalization settings
+         * @hide
+         */
+        public static final String BLUR_STATUSBAR_ENABLED = "blur_statusbar_enabled";
+
+        public static final String BLUR_STATUSBAR_SCALE = "blur_statusbar_scale";
+
+        public static final String BLUR_STATUSBAR_RADIUS = "blur_statusbar_radius";
+
+        public static final String BLUR_NOTIFICATIONS_ENABLED = "blur_notifications_enabled";
+
+        public static final String BLUR_NOTIFICATIONS_PERCENTAGE = "blur_notifications_percentage";
+
+        public static final String BLUR_QUICKSETTINGS_ENABLED = "blur_quicksettings_enabled";
+
+        public static final String BLUR_QUICKSETTINGS_PERCENTAGE = "blur_quicksettings_percentage";
+
+        public static final String BLUR_VOLUMEDIALOG_ENABLED = "blur_volumedialog_enabled";
+
+        public static final String BLUR_VOLUMEDIALOG_PERCENTAGE = "blur_volumedialog_percentage";
+
+        public static final String BLUR_RECENT_ENABLED = "blur_recent_enabled";
+
+        public static final String BLUR_RECENT_SCALE = "blur_recent_scale";
+
+        public static final String BLUR_RECENT_RADIUS = "blur_recent_radius";
+
+        public static final String BLUR_DARK_COLOR = "blur_dark_color";
+
+        public static final String BLUR_LIGHT_COLOR = "blur_light_color";
+
+        public static final String BLUR_MIXED_COLOR = "blur_mixed_color";
+
+        /**
+         * Finger amount for CarbonGestures
+         * @hide
+         */
+        public static final String CARBON_CUSTOM_GESTURE_FINGERS = "carbon_custom_gesture_fingers";
+
+        /**
+         * right gesture for CarbonGestures
+         * @hide
+         */
+        public static final String CARBON_CUSTOM_GESTURE_RIGHT = "carbon_custom_gesture_right";
+
+        /**
+         * left gesture for CarbonGestures
+         * @hide
+         */
+        public static final String CARBON_CUSTOM_GESTURE_LEFT = "carbon_custom_gesture_left";
+
+        /**
+         * up gesture for CarbonGestures
+         * @hide
+         */
+        public static final String CARBON_CUSTOM_GESTURE_UP = "carbon_custom_gesture_up";
+
+        /**
+         * down gesture for CarbonGestures
+         * @hide
+         */
+        public static final String CARBON_CUSTOM_GESTURE_DOWN = "carbon_custom_gesture_down";
+
+        /**
+         * right gesture for CarbonGestures
+         * @hide
+         */
+        public static final String CARBON_CUSTOM_GESTURE_PACKAGE_RIGHT = "carbon_custom_gesture_package_right";
+
+        /**
+         * left gesture for CarbonGestures
+         * @hide
+         */
+        public static final String CARBON_CUSTOM_GESTURE_PACKAGE_LEFT = "carbon_custom_gesture_package_left";
+
+        /**
+         * up gesture for CarbonGestures
+         * @hide
+         */
+        public static final String CARBON_CUSTOM_GESTURE_PACKAGE_UP = "carbon_custom_gesture_package_up";
+
+        /**
+         * down gesture for CarbonGestures
+         * @hide
+         */
+        public static final String CARBON_CUSTOM_GESTURE_PACKAGE_DOWN = "carbon_custom_gesture_package_down";
+
+        /**
+         * Settings to backup. This is here so that it's in the same place as the settings
+         * keys and easy to update.
+         *
+         * NOTE: Settings are backed up and restored in the order they appear
+         *       in this array. If you have one setting depending on another,
+         *       make sure that they are ordered appropriately.
+         *
+         * @hide
+         */
+        public static final String[] SETTINGS_TO_BACKUP = {
+            STAY_ON_WHILE_PLUGGED_IN,   // moved to global
+            WIFI_USE_STATIC_IP,
+            WIFI_STATIC_IP,
+            WIFI_STATIC_GATEWAY,
+            WIFI_STATIC_NETMASK,
+            WIFI_STATIC_DNS1,
+            WIFI_STATIC_DNS2,
+            BLUETOOTH_DISCOVERABILITY,
+            BLUETOOTH_DISCOVERABILITY_TIMEOUT,
+            FONT_SCALE,
+            DIM_SCREEN,
+            SCREEN_OFF_TIMEOUT,
+            SCREEN_BRIGHTNESS,
+            SCREEN_BRIGHTNESS_MODE,
+            SCREEN_AUTO_BRIGHTNESS_ADJ,
+            SCREEN_BRIGHTNESS_FOR_VR,
+            VIBRATE_INPUT_DEVICES,
+            MODE_RINGER_STREAMS_AFFECTED,
+            TEXT_AUTO_REPLACE,
+            TEXT_AUTO_CAPS,
+            TEXT_AUTO_PUNCTUATE,
+            TEXT_SHOW_PASSWORD,
+            AUTO_TIME,                  // moved to global
+            AUTO_TIME_ZONE,             // moved to global
+            TIME_12_24,
+            DATE_FORMAT,
+            DTMF_TONE_WHEN_DIALING,
+            DTMF_TONE_TYPE_WHEN_DIALING,
+            HEARING_AID,
+            TTY_MODE,
+            MASTER_MONO,
+            SOUND_EFFECTS_ENABLED,
+            HAPTIC_FEEDBACK_ENABLED,
+            POWER_SOUNDS_ENABLED,       // moved to global
+            DOCK_SOUNDS_ENABLED,        // moved to global
+            LOCKSCREEN_SOUNDS_ENABLED,
+            SHOW_WEB_SUGGESTIONS,
+            SIP_CALL_OPTIONS,
+            SIP_RECEIVE_CALLS,
+            POINTER_SPEED,
+            VIBRATE_WHEN_RINGING,
+            RINGTONE,
+            LOCK_TO_APP_ENABLED,
+            NOTIFICATION_SOUND,
+            ACCELEROMETER_ROTATION
+        };
+
+        /**
+         * Keys we no longer back up under the current schema, but want to continue to
+         * process when restoring historical backup datasets.
+         *
+         * @hide
+         */
+        public static final String[] LEGACY_RESTORE_SETTINGS = {
+        };
+
+        /**
+         * These are all public system settings
+         *
+         * @hide
+         */
+        public static final Set<String> PUBLIC_SETTINGS = new ArraySet<>();
+        static {
+            PUBLIC_SETTINGS.add(END_BUTTON_BEHAVIOR);
+            PUBLIC_SETTINGS.add(WIFI_USE_STATIC_IP);
+            PUBLIC_SETTINGS.add(WIFI_STATIC_IP);
+            PUBLIC_SETTINGS.add(WIFI_STATIC_GATEWAY);
+            PUBLIC_SETTINGS.add(WIFI_STATIC_NETMASK);
+            PUBLIC_SETTINGS.add(WIFI_STATIC_DNS1);
+            PUBLIC_SETTINGS.add(WIFI_STATIC_DNS2);
+            PUBLIC_SETTINGS.add(BLUETOOTH_DISCOVERABILITY);
+            PUBLIC_SETTINGS.add(BLUETOOTH_DISCOVERABILITY_TIMEOUT);
+            PUBLIC_SETTINGS.add(NEXT_ALARM_FORMATTED);
+            PUBLIC_SETTINGS.add(FONT_SCALE);
+            PUBLIC_SETTINGS.add(DIM_SCREEN);
+            PUBLIC_SETTINGS.add(SCREEN_OFF_TIMEOUT);
+            PUBLIC_SETTINGS.add(SCREEN_BRIGHTNESS);
+            PUBLIC_SETTINGS.add(SCREEN_BRIGHTNESS_MODE);
+            PUBLIC_SETTINGS.add(MODE_RINGER_STREAMS_AFFECTED);
+            PUBLIC_SETTINGS.add(MUTE_STREAMS_AFFECTED);
+            PUBLIC_SETTINGS.add(VIBRATE_ON);
+            PUBLIC_SETTINGS.add(VOLUME_RING);
+            PUBLIC_SETTINGS.add(VOLUME_SYSTEM);
+            PUBLIC_SETTINGS.add(VOLUME_VOICE);
+            PUBLIC_SETTINGS.add(VOLUME_MUSIC);
+            PUBLIC_SETTINGS.add(VOLUME_ALARM);
+            PUBLIC_SETTINGS.add(VOLUME_NOTIFICATION);
+            PUBLIC_SETTINGS.add(VOLUME_BLUETOOTH_SCO);
+            PUBLIC_SETTINGS.add(RINGTONE);
+            PUBLIC_SETTINGS.add(NOTIFICATION_SOUND);
+            PUBLIC_SETTINGS.add(ALARM_ALERT);
+            PUBLIC_SETTINGS.add(TEXT_AUTO_REPLACE);
+            PUBLIC_SETTINGS.add(TEXT_AUTO_CAPS);
+            PUBLIC_SETTINGS.add(TEXT_AUTO_PUNCTUATE);
+            PUBLIC_SETTINGS.add(TEXT_SHOW_PASSWORD);
+            PUBLIC_SETTINGS.add(SHOW_GTALK_SERVICE_STATUS);
+            PUBLIC_SETTINGS.add(WALLPAPER_ACTIVITY);
+            PUBLIC_SETTINGS.add(TIME_12_24);
+            PUBLIC_SETTINGS.add(DATE_FORMAT);
+            PUBLIC_SETTINGS.add(SETUP_WIZARD_HAS_RUN);
+            PUBLIC_SETTINGS.add(ACCELEROMETER_ROTATION);
+            PUBLIC_SETTINGS.add(USER_ROTATION);
+            PUBLIC_SETTINGS.add(DTMF_TONE_WHEN_DIALING);
+            PUBLIC_SETTINGS.add(SOUND_EFFECTS_ENABLED);
+            PUBLIC_SETTINGS.add(HAPTIC_FEEDBACK_ENABLED);
+            PUBLIC_SETTINGS.add(SHOW_WEB_SUGGESTIONS);
+            PUBLIC_SETTINGS.add(VIBRATE_WHEN_RINGING);
+        }
+
+        /**
+         * These are all hidden system settings.
+         *
+         * @hide
+         */
+        public static final Set<String> PRIVATE_SETTINGS = new ArraySet<>();
+        static {
+            PRIVATE_SETTINGS.add(WIFI_USE_STATIC_IP);
+            PRIVATE_SETTINGS.add(END_BUTTON_BEHAVIOR);
+            PRIVATE_SETTINGS.add(ADVANCED_SETTINGS);
+            PRIVATE_SETTINGS.add(SCREEN_AUTO_BRIGHTNESS_ADJ);
+            PRIVATE_SETTINGS.add(VIBRATE_INPUT_DEVICES);
+            PRIVATE_SETTINGS.add(VOLUME_MASTER);
+            PRIVATE_SETTINGS.add(MASTER_MONO);
+            PRIVATE_SETTINGS.add(NOTIFICATIONS_USE_RING_VOLUME);
+            PRIVATE_SETTINGS.add(VIBRATE_IN_SILENT);
+            PRIVATE_SETTINGS.add(MEDIA_BUTTON_RECEIVER);
+            PRIVATE_SETTINGS.add(HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY);
+            PRIVATE_SETTINGS.add(DTMF_TONE_TYPE_WHEN_DIALING);
+            PRIVATE_SETTINGS.add(HEARING_AID);
+            PRIVATE_SETTINGS.add(TTY_MODE);
+            PRIVATE_SETTINGS.add(NOTIFICATION_LIGHT_PULSE);
+            PRIVATE_SETTINGS.add(POINTER_LOCATION);
+            PRIVATE_SETTINGS.add(SHOW_TOUCHES);
+            PRIVATE_SETTINGS.add(WINDOW_ORIENTATION_LISTENER_LOG);
+            PRIVATE_SETTINGS.add(POWER_SOUNDS_ENABLED);
+            PRIVATE_SETTINGS.add(DOCK_SOUNDS_ENABLED);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_SOUNDS_ENABLED);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_DISABLED);
+            PRIVATE_SETTINGS.add(LOW_BATTERY_SOUND);
+            PRIVATE_SETTINGS.add(DESK_DOCK_SOUND);
+            PRIVATE_SETTINGS.add(DESK_UNDOCK_SOUND);
+            PRIVATE_SETTINGS.add(CAR_DOCK_SOUND);
+            PRIVATE_SETTINGS.add(CAR_UNDOCK_SOUND);
+            PRIVATE_SETTINGS.add(LOCK_SOUND);
+            PRIVATE_SETTINGS.add(UNLOCK_SOUND);
+            PRIVATE_SETTINGS.add(SIP_RECEIVE_CALLS);
+            PRIVATE_SETTINGS.add(SIP_CALL_OPTIONS);
+            PRIVATE_SETTINGS.add(SIP_ALWAYS);
+            PRIVATE_SETTINGS.add(SIP_ADDRESS_ONLY);
+            PRIVATE_SETTINGS.add(SIP_ASK_ME_EACH_TIME);
+            PRIVATE_SETTINGS.add(POINTER_SPEED);
+            PRIVATE_SETTINGS.add(LOCK_TO_APP_ENABLED);
+            PRIVATE_SETTINGS.add(EGG_MODE);
+        }
+
+        /**
+         * These are all public system settings
+         *
+         * @hide
+         */
+        public static final Map<String, Validator> VALIDATORS = new ArrayMap<>();
+        static {
+            VALIDATORS.put(END_BUTTON_BEHAVIOR,END_BUTTON_BEHAVIOR_VALIDATOR);
+            VALIDATORS.put(WIFI_USE_STATIC_IP, WIFI_USE_STATIC_IP_VALIDATOR);
+            VALIDATORS.put(BLUETOOTH_DISCOVERABILITY, BLUETOOTH_DISCOVERABILITY_VALIDATOR);
+            VALIDATORS.put(BLUETOOTH_DISCOVERABILITY_TIMEOUT,
+                    BLUETOOTH_DISCOVERABILITY_TIMEOUT_VALIDATOR);
+            VALIDATORS.put(NEXT_ALARM_FORMATTED, NEXT_ALARM_FORMATTED_VALIDATOR);
+            VALIDATORS.put(FONT_SCALE, FONT_SCALE_VALIDATOR);
+            VALIDATORS.put(DIM_SCREEN, DIM_SCREEN_VALIDATOR);
+            VALIDATORS.put(SCREEN_OFF_TIMEOUT, SCREEN_OFF_TIMEOUT_VALIDATOR);
+            VALIDATORS.put(SCREEN_BRIGHTNESS, SCREEN_BRIGHTNESS_VALIDATOR);
+            VALIDATORS.put(SCREEN_BRIGHTNESS_FOR_VR, SCREEN_BRIGHTNESS_FOR_VR_VALIDATOR);
+            VALIDATORS.put(SCREEN_BRIGHTNESS_MODE, SCREEN_BRIGHTNESS_MODE_VALIDATOR);
+            VALIDATORS.put(MODE_RINGER_STREAMS_AFFECTED, MODE_RINGER_STREAMS_AFFECTED_VALIDATOR);
+            VALIDATORS.put(MUTE_STREAMS_AFFECTED, MUTE_STREAMS_AFFECTED_VALIDATOR);
+            VALIDATORS.put(VIBRATE_ON, VIBRATE_ON_VALIDATOR);
+            VALIDATORS.put(RINGTONE, RINGTONE_VALIDATOR);
+            VALIDATORS.put(NOTIFICATION_SOUND, NOTIFICATION_SOUND_VALIDATOR);
+            VALIDATORS.put(ALARM_ALERT, ALARM_ALERT_VALIDATOR);
+            VALIDATORS.put(TEXT_AUTO_REPLACE, TEXT_AUTO_REPLACE_VALIDATOR);
+            VALIDATORS.put(TEXT_AUTO_CAPS, TEXT_AUTO_CAPS_VALIDATOR);
+            VALIDATORS.put(TEXT_AUTO_PUNCTUATE, TEXT_AUTO_PUNCTUATE_VALIDATOR);
+            VALIDATORS.put(TEXT_SHOW_PASSWORD, TEXT_SHOW_PASSWORD_VALIDATOR);
+            VALIDATORS.put(SHOW_GTALK_SERVICE_STATUS, SHOW_GTALK_SERVICE_STATUS_VALIDATOR);
+            VALIDATORS.put(WALLPAPER_ACTIVITY, WALLPAPER_ACTIVITY_VALIDATOR);
+            VALIDATORS.put(TIME_12_24, TIME_12_24_VALIDATOR);
+            VALIDATORS.put(DATE_FORMAT, DATE_FORMAT_VALIDATOR);
+            VALIDATORS.put(SETUP_WIZARD_HAS_RUN, SETUP_WIZARD_HAS_RUN_VALIDATOR);
+            VALIDATORS.put(ACCELEROMETER_ROTATION, ACCELEROMETER_ROTATION_VALIDATOR);
+            VALIDATORS.put(USER_ROTATION, USER_ROTATION_VALIDATOR);
+            VALIDATORS.put(DTMF_TONE_WHEN_DIALING, DTMF_TONE_WHEN_DIALING_VALIDATOR);
+            VALIDATORS.put(SOUND_EFFECTS_ENABLED, SOUND_EFFECTS_ENABLED_VALIDATOR);
+            VALIDATORS.put(HAPTIC_FEEDBACK_ENABLED, HAPTIC_FEEDBACK_ENABLED_VALIDATOR);
+            VALIDATORS.put(SHOW_WEB_SUGGESTIONS, SHOW_WEB_SUGGESTIONS_VALIDATOR);
+            VALIDATORS.put(WIFI_USE_STATIC_IP, WIFI_USE_STATIC_IP_VALIDATOR);
+            VALIDATORS.put(END_BUTTON_BEHAVIOR, END_BUTTON_BEHAVIOR_VALIDATOR);
+            VALIDATORS.put(ADVANCED_SETTINGS, ADVANCED_SETTINGS_VALIDATOR);
+            VALIDATORS.put(SCREEN_AUTO_BRIGHTNESS_ADJ, SCREEN_AUTO_BRIGHTNESS_ADJ_VALIDATOR);
+            VALIDATORS.put(VIBRATE_INPUT_DEVICES, VIBRATE_INPUT_DEVICES_VALIDATOR);
+            VALIDATORS.put(MASTER_MONO, MASTER_MONO_VALIDATOR);
+            VALIDATORS.put(NOTIFICATIONS_USE_RING_VOLUME, NOTIFICATIONS_USE_RING_VOLUME_VALIDATOR);
+            VALIDATORS.put(VIBRATE_IN_SILENT, VIBRATE_IN_SILENT_VALIDATOR);
+            VALIDATORS.put(MEDIA_BUTTON_RECEIVER, MEDIA_BUTTON_RECEIVER_VALIDATOR);
+            VALIDATORS.put(HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY,
+                    HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY_VALIDATOR);
+            VALIDATORS.put(VIBRATE_WHEN_RINGING, VIBRATE_WHEN_RINGING_VALIDATOR);
+            VALIDATORS.put(DTMF_TONE_TYPE_WHEN_DIALING, DTMF_TONE_TYPE_WHEN_DIALING_VALIDATOR);
+            VALIDATORS.put(HEARING_AID, HEARING_AID_VALIDATOR);
+            VALIDATORS.put(TTY_MODE, TTY_MODE_VALIDATOR);
+            VALIDATORS.put(NOTIFICATION_LIGHT_PULSE, NOTIFICATION_LIGHT_PULSE_VALIDATOR);
+            VALIDATORS.put(POINTER_LOCATION, POINTER_LOCATION_VALIDATOR);
+            VALIDATORS.put(SHOW_TOUCHES, SHOW_TOUCHES_VALIDATOR);
+            VALIDATORS.put(WINDOW_ORIENTATION_LISTENER_LOG,
+                    WINDOW_ORIENTATION_LISTENER_LOG_VALIDATOR);
+            VALIDATORS.put(LOCKSCREEN_SOUNDS_ENABLED, LOCKSCREEN_SOUNDS_ENABLED_VALIDATOR);
+            VALIDATORS.put(LOCKSCREEN_DISABLED, LOCKSCREEN_DISABLED_VALIDATOR);
+            VALIDATORS.put(SIP_RECEIVE_CALLS, SIP_RECEIVE_CALLS_VALIDATOR);
+            VALIDATORS.put(SIP_CALL_OPTIONS, SIP_CALL_OPTIONS_VALIDATOR);
+            VALIDATORS.put(SIP_ALWAYS, SIP_ALWAYS_VALIDATOR);
+            VALIDATORS.put(SIP_ADDRESS_ONLY, SIP_ADDRESS_ONLY_VALIDATOR);
+            VALIDATORS.put(SIP_ASK_ME_EACH_TIME, SIP_ASK_ME_EACH_TIME_VALIDATOR);
+            VALIDATORS.put(POINTER_SPEED, POINTER_SPEED_VALIDATOR);
+            VALIDATORS.put(LOCK_TO_APP_ENABLED, LOCK_TO_APP_ENABLED_VALIDATOR);
+            VALIDATORS.put(EGG_MODE, EGG_MODE_VALIDATOR);
+            VALIDATORS.put(WIFI_STATIC_IP, WIFI_STATIC_IP_VALIDATOR);
+            VALIDATORS.put(WIFI_STATIC_GATEWAY, WIFI_STATIC_GATEWAY_VALIDATOR);
+            VALIDATORS.put(WIFI_STATIC_NETMASK, WIFI_STATIC_NETMASK_VALIDATOR);
+            VALIDATORS.put(WIFI_STATIC_DNS1, WIFI_STATIC_DNS1_VALIDATOR);
+            VALIDATORS.put(WIFI_STATIC_DNS2, WIFI_STATIC_DNS2_VALIDATOR);
+            VALIDATORS.put(STATUS_BAR_CLOCK_SECONDS, STATUS_BAR_CLOCK_SECONDS_VALIDATOR);
+            VALIDATORS.put(STATUS_BAR_CLOCK_DATE_DISPLAY, STATUS_BAR_CLOCK_DATE_DISPLAY_VALIDATOR);
+            VALIDATORS.put(STATUS_BAR_CLOCK_DATE_STYLE, STATUS_BAR_CLOCK_DATE_STYLE_VALIDATOR);
+        }
+
+        /**
+         * These entries are considered common between the personal and the managed profile,
+         * since the managed profile doesn't get to change them.
+         */
+        private static final Set<String> CLONE_TO_MANAGED_PROFILE = new ArraySet<>();
+        static {
+            CLONE_TO_MANAGED_PROFILE.add(DATE_FORMAT);
+            CLONE_TO_MANAGED_PROFILE.add(HAPTIC_FEEDBACK_ENABLED);
+            CLONE_TO_MANAGED_PROFILE.add(SOUND_EFFECTS_ENABLED);
+            CLONE_TO_MANAGED_PROFILE.add(TEXT_SHOW_PASSWORD);
+            CLONE_TO_MANAGED_PROFILE.add(TIME_12_24);
+        }
+
+        /** @hide */
+        public static void getCloneToManagedProfileSettings(Set<String> outKeySet) {
+            outKeySet.addAll(CLONE_TO_MANAGED_PROFILE);
+        }
+
+        /**
+         * These entries should be cloned from this profile's parent only if the dependency's
+         * value is true ("1")
+         *
+         * Note: the dependencies must be Secure settings
+         *
+         * @hide
+         */
+        public static final Map<String, String> CLONE_FROM_PARENT_ON_VALUE = new ArrayMap<>();
+        static {
+            CLONE_FROM_PARENT_ON_VALUE.put(RINGTONE, Secure.SYNC_PARENT_SOUNDS);
+            CLONE_FROM_PARENT_ON_VALUE.put(NOTIFICATION_SOUND, Secure.SYNC_PARENT_SOUNDS);
+            CLONE_FROM_PARENT_ON_VALUE.put(ALARM_ALERT, Secure.SYNC_PARENT_SOUNDS);
+        }
+
+        /** @hide */
+        public static void getCloneFromParentOnValueSettings(Map<String, String> outMap) {
+            outMap.putAll(CLONE_FROM_PARENT_ON_VALUE);
+        }
+
+        /**
+         * System settings which can be accessed by instant apps.
+         * @hide
+         */
+        public static final Set<String> INSTANT_APP_SETTINGS = new ArraySet<>();
+        static {
+            INSTANT_APP_SETTINGS.add(TEXT_AUTO_REPLACE);
+            INSTANT_APP_SETTINGS.add(TEXT_AUTO_CAPS);
+            INSTANT_APP_SETTINGS.add(TEXT_AUTO_PUNCTUATE);
+            INSTANT_APP_SETTINGS.add(TEXT_SHOW_PASSWORD);
+            INSTANT_APP_SETTINGS.add(DATE_FORMAT);
+            INSTANT_APP_SETTINGS.add(FONT_SCALE);
+            INSTANT_APP_SETTINGS.add(HAPTIC_FEEDBACK_ENABLED);
+            INSTANT_APP_SETTINGS.add(TIME_12_24);
+            INSTANT_APP_SETTINGS.add(SOUND_EFFECTS_ENABLED);
+            INSTANT_APP_SETTINGS.add(ACCELEROMETER_ROTATION);
+        }
+
+        /**
+         * When to use Wi-Fi calling
+         *
+         * @see android.telephony.TelephonyManager.WifiCallingChoices
+         * @hide
+         */
+        public static final String WHEN_TO_MAKE_WIFI_CALLS = "when_to_make_wifi_calls";
+
+        // Settings moved to Settings.Secure
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Global#ADB_ENABLED}
+         * instead
+         */
+        @Deprecated
+        public static final String ADB_ENABLED = Global.ADB_ENABLED;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#ANDROID_ID} instead
+         */
+        @Deprecated
+        public static final String ANDROID_ID = Secure.ANDROID_ID;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Global#BLUETOOTH_ON} instead
+         */
+        @Deprecated
+        public static final String BLUETOOTH_ON = Global.BLUETOOTH_ON;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Global#DATA_ROAMING} instead
+         */
+        @Deprecated
+        public static final String DATA_ROAMING = Global.DATA_ROAMING;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Global#DEVICE_PROVISIONED} instead
+         */
+        @Deprecated
+        public static final String DEVICE_PROVISIONED = Global.DEVICE_PROVISIONED;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Global#HTTP_PROXY} instead
+         */
+        @Deprecated
+        public static final String HTTP_PROXY = Global.HTTP_PROXY;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#INSTALL_NON_MARKET_APPS} instead
+         */
+        @Deprecated
+        public static final String INSTALL_NON_MARKET_APPS = Secure.INSTALL_NON_MARKET_APPS;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#LOCATION_PROVIDERS_ALLOWED}
+         * instead
+         */
+        @Deprecated
+        public static final String LOCATION_PROVIDERS_ALLOWED = Secure.LOCATION_PROVIDERS_ALLOWED;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#LOGGING_ID} instead
+         */
+        @Deprecated
+        public static final String LOGGING_ID = Secure.LOGGING_ID;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Global#NETWORK_PREFERENCE} instead
+         */
+        @Deprecated
+        public static final String NETWORK_PREFERENCE = Global.NETWORK_PREFERENCE;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#PARENTAL_CONTROL_ENABLED}
+         * instead
+         */
+        @Deprecated
+        public static final String PARENTAL_CONTROL_ENABLED = Secure.PARENTAL_CONTROL_ENABLED;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#PARENTAL_CONTROL_LAST_UPDATE}
+         * instead
+         */
+        @Deprecated
+        public static final String PARENTAL_CONTROL_LAST_UPDATE = Secure.PARENTAL_CONTROL_LAST_UPDATE;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#PARENTAL_CONTROL_REDIRECT_URL}
+         * instead
+         */
+        @Deprecated
+        public static final String PARENTAL_CONTROL_REDIRECT_URL =
+            Secure.PARENTAL_CONTROL_REDIRECT_URL;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#SETTINGS_CLASSNAME} instead
+         */
+        @Deprecated
+        public static final String SETTINGS_CLASSNAME = Secure.SETTINGS_CLASSNAME;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Global#USB_MASS_STORAGE_ENABLED} instead
+         */
+        @Deprecated
+        public static final String USB_MASS_STORAGE_ENABLED = Global.USB_MASS_STORAGE_ENABLED;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Global#USE_GOOGLE_MAIL} instead
+         */
+        @Deprecated
+        public static final String USE_GOOGLE_MAIL = Global.USE_GOOGLE_MAIL;
+
+       /**
+         * @deprecated Use
+         * {@link android.provider.Settings.Global#WIFI_MAX_DHCP_RETRY_COUNT} instead
+         */
+        @Deprecated
+        public static final String WIFI_MAX_DHCP_RETRY_COUNT = Global.WIFI_MAX_DHCP_RETRY_COUNT;
+
+        /**
+         * @deprecated Use
+         * {@link android.provider.Settings.Global#WIFI_MOBILE_DATA_TRANSITION_WAKELOCK_TIMEOUT_MS} instead
+         */
+        @Deprecated
+        public static final String WIFI_MOBILE_DATA_TRANSITION_WAKELOCK_TIMEOUT_MS =
+                Global.WIFI_MOBILE_DATA_TRANSITION_WAKELOCK_TIMEOUT_MS;
+
+        /**
+         * @deprecated Use
+         * {@link android.provider.Settings.Global#WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON} instead
+         */
+        @Deprecated
+        public static final String WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON =
+                Global.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON;
+
+        /**
+         * @deprecated Use
+         * {@link android.provider.Settings.Global#WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY} instead
+         */
+        @Deprecated
+        public static final String WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY =
+                Global.WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Global#WIFI_NUM_OPEN_NETWORKS_KEPT}
+         * instead
+         */
+        @Deprecated
+        public static final String WIFI_NUM_OPEN_NETWORKS_KEPT = Global.WIFI_NUM_OPEN_NETWORKS_KEPT;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Global#WIFI_ON} instead
+         */
+        @Deprecated
+        public static final String WIFI_ON = Global.WIFI_ON;
+
+        /**
+         * @deprecated Use
+         * {@link android.provider.Settings.Secure#WIFI_WATCHDOG_ACCEPTABLE_PACKET_LOSS_PERCENTAGE}
+         * instead
+         */
+        @Deprecated
+        public static final String WIFI_WATCHDOG_ACCEPTABLE_PACKET_LOSS_PERCENTAGE =
+                Secure.WIFI_WATCHDOG_ACCEPTABLE_PACKET_LOSS_PERCENTAGE;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#WIFI_WATCHDOG_AP_COUNT} instead
+         */
+        @Deprecated
+        public static final String WIFI_WATCHDOG_AP_COUNT = Secure.WIFI_WATCHDOG_AP_COUNT;
+
+        /**
+         * @deprecated Use
+         * {@link android.provider.Settings.Secure#WIFI_WATCHDOG_BACKGROUND_CHECK_DELAY_MS} instead
+         */
+        @Deprecated
+        public static final String WIFI_WATCHDOG_BACKGROUND_CHECK_DELAY_MS =
+                Secure.WIFI_WATCHDOG_BACKGROUND_CHECK_DELAY_MS;
+
+        /**
+         * @deprecated Use
+         * {@link android.provider.Settings.Secure#WIFI_WATCHDOG_BACKGROUND_CHECK_ENABLED} instead
+         */
+        @Deprecated
+        public static final String WIFI_WATCHDOG_BACKGROUND_CHECK_ENABLED =
+                Secure.WIFI_WATCHDOG_BACKGROUND_CHECK_ENABLED;
+
+        /**
+         * @deprecated Use
+         * {@link android.provider.Settings.Secure#WIFI_WATCHDOG_BACKGROUND_CHECK_TIMEOUT_MS}
+         * instead
+         */
+        @Deprecated
+        public static final String WIFI_WATCHDOG_BACKGROUND_CHECK_TIMEOUT_MS =
+                Secure.WIFI_WATCHDOG_BACKGROUND_CHECK_TIMEOUT_MS;
+
+        /**
+         * @deprecated Use
+         * {@link android.provider.Settings.Secure#WIFI_WATCHDOG_INITIAL_IGNORED_PING_COUNT} instead
+         */
+        @Deprecated
+        public static final String WIFI_WATCHDOG_INITIAL_IGNORED_PING_COUNT =
+            Secure.WIFI_WATCHDOG_INITIAL_IGNORED_PING_COUNT;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#WIFI_WATCHDOG_MAX_AP_CHECKS}
+         * instead
+         */
+        @Deprecated
+        public static final String WIFI_WATCHDOG_MAX_AP_CHECKS = Secure.WIFI_WATCHDOG_MAX_AP_CHECKS;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Global#WIFI_WATCHDOG_ON} instead
+         */
+        @Deprecated
+        public static final String WIFI_WATCHDOG_ON = Global.WIFI_WATCHDOG_ON;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#WIFI_WATCHDOG_PING_COUNT} instead
+         */
+        @Deprecated
+        public static final String WIFI_WATCHDOG_PING_COUNT = Secure.WIFI_WATCHDOG_PING_COUNT;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#WIFI_WATCHDOG_PING_DELAY_MS}
+         * instead
+         */
+        @Deprecated
+        public static final String WIFI_WATCHDOG_PING_DELAY_MS = Secure.WIFI_WATCHDOG_PING_DELAY_MS;
+
+        /**
+         * @deprecated Use {@link android.provider.Settings.Secure#WIFI_WATCHDOG_PING_TIMEOUT_MS}
+         * instead
+         */
+        @Deprecated
+        public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
+            Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+
+        /**
+         * Checks if the specified app can modify system settings. As of API
+         * level 23, an app cannot modify system settings unless it declares the
+         * {@link android.Manifest.permission#WRITE_SETTINGS}
+         * permission in its manifest, <em>and</em> the user specifically grants
+         * the app this capability. To prompt the user to grant this approval,
+         * the app must send an intent with the action {@link
+         * android.provider.Settings#ACTION_MANAGE_WRITE_SETTINGS}, which causes
+         * the system to display a permission management screen.
+         *
+         * @param context App context.
+         * @return true if the calling app can write to system settings, false otherwise
+         */
+        public static boolean canWrite(Context context) {
+            return isCallingPackageAllowedToWriteSettings(context, Process.myUid(),
+                    context.getOpPackageName(), false);
+        }
+    }
+
+    /**
+     * Secure system settings, containing system preferences that applications
+     * can read but are not allowed to write.  These are for preferences that
+     * the user must explicitly modify through the system UI or specialized
+     * APIs for those values, not modified directly by applications.
+     */
+    public static final class Secure extends NameValueTable {
+        /**
+         * The content:// style URL for this table
+         */
+        public static final Uri CONTENT_URI =
+            Uri.parse("content://" + AUTHORITY + "/secure");
+
+        private static final ContentProviderHolder sProviderHolder =
+                new ContentProviderHolder(CONTENT_URI);
+
+        // Populated lazily, guarded by class object:
+        private static final NameValueCache sNameValueCache = new NameValueCache(
+                CONTENT_URI,
+                CALL_METHOD_GET_SECURE,
+                CALL_METHOD_PUT_SECURE,
+                sProviderHolder);
 
         private static ILockSettings sLockSettings = null;
 
@@ -6014,6 +7314,409 @@ public final class Settings {
             return getIntForUser(cr, name, UserHandle.myUserId());
         }
 
+<<<<<<< HEAD
+        private static boolean sIsSystemProcess;
+        private static final HashSet<String> MOVED_TO_LOCK_SETTINGS;
+        private static final HashSet<String> MOVED_TO_GLOBAL;
+        static {
+            MOVED_TO_LOCK_SETTINGS = new HashSet<>(3);
+            MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_PATTERN_ENABLED);
+            MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_PATTERN_VISIBLE);
+            MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED);
+            MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_PATTERN_SIZE);
+            MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_DOTS_VISIBLE);
+            MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_SHOW_ERROR_PATH);
+
+            MOVED_TO_GLOBAL = new HashSet<>();
+            MOVED_TO_GLOBAL.add(Settings.Global.ADB_ENABLED);
+            MOVED_TO_GLOBAL.add(Settings.Global.ASSISTED_GPS_ENABLED);
+            MOVED_TO_GLOBAL.add(Settings.Global.BLUETOOTH_ON);
+            MOVED_TO_GLOBAL.add(Settings.Global.BUGREPORT_IN_POWER_MENU);
+            MOVED_TO_GLOBAL.add(Settings.Global.CDMA_CELL_BROADCAST_SMS);
+            MOVED_TO_GLOBAL.add(Settings.Global.CDMA_ROAMING_MODE);
+            MOVED_TO_GLOBAL.add(Settings.Global.CDMA_SUBSCRIPTION_MODE);
+            MOVED_TO_GLOBAL.add(Settings.Global.DATA_ACTIVITY_TIMEOUT_MOBILE);
+            MOVED_TO_GLOBAL.add(Settings.Global.DATA_ACTIVITY_TIMEOUT_WIFI);
+            MOVED_TO_GLOBAL.add(Settings.Global.DATA_ROAMING);
+            MOVED_TO_GLOBAL.add(Settings.Global.DEVELOPMENT_SETTINGS_ENABLED);
+            MOVED_TO_GLOBAL.add(Settings.Global.DEVICE_PROVISIONED);
+            MOVED_TO_GLOBAL.add(Settings.Global.DISPLAY_SIZE_FORCED);
+            MOVED_TO_GLOBAL.add(Settings.Global.DOWNLOAD_MAX_BYTES_OVER_MOBILE);
+            MOVED_TO_GLOBAL.add(Settings.Global.DOWNLOAD_RECOMMENDED_MAX_BYTES_OVER_MOBILE);
+            MOVED_TO_GLOBAL.add(Settings.Global.MOBILE_DATA);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_DEV_BUCKET_DURATION);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_DEV_DELETE_AGE);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_DEV_PERSIST_BYTES);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_DEV_ROTATE_AGE);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_ENABLED);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_GLOBAL_ALERT_BYTES);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_POLL_INTERVAL);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_SAMPLE_ENABLED);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_TIME_CACHE_MAX_AGE);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_UID_BUCKET_DURATION);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_UID_DELETE_AGE);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_UID_PERSIST_BYTES);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_UID_ROTATE_AGE);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_UID_TAG_BUCKET_DURATION);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_UID_TAG_DELETE_AGE);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_UID_TAG_PERSIST_BYTES);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETSTATS_UID_TAG_ROTATE_AGE);
+            MOVED_TO_GLOBAL.add(Settings.Global.NETWORK_PREFERENCE);
+            MOVED_TO_GLOBAL.add(Settings.Global.NITZ_UPDATE_DIFF);
+            MOVED_TO_GLOBAL.add(Settings.Global.NITZ_UPDATE_SPACING);
+            MOVED_TO_GLOBAL.add(Settings.Global.NTP_SERVER);
+            MOVED_TO_GLOBAL.add(Settings.Global.NTP_TIMEOUT);
+            MOVED_TO_GLOBAL.add(Settings.Global.PDP_WATCHDOG_ERROR_POLL_COUNT);
+            MOVED_TO_GLOBAL.add(Settings.Global.PDP_WATCHDOG_LONG_POLL_INTERVAL_MS);
+            MOVED_TO_GLOBAL.add(Settings.Global.PDP_WATCHDOG_MAX_PDP_RESET_FAIL_COUNT);
+            MOVED_TO_GLOBAL.add(Settings.Global.PDP_WATCHDOG_POLL_INTERVAL_MS);
+            MOVED_TO_GLOBAL.add(Settings.Global.PDP_WATCHDOG_TRIGGER_PACKET_COUNT);
+            MOVED_TO_GLOBAL.add(Settings.Global.SAMPLING_PROFILER_MS);
+            MOVED_TO_GLOBAL.add(Settings.Global.SETUP_PREPAID_DATA_SERVICE_URL);
+            MOVED_TO_GLOBAL.add(Settings.Global.SETUP_PREPAID_DETECTION_REDIR_HOST);
+            MOVED_TO_GLOBAL.add(Settings.Global.SETUP_PREPAID_DETECTION_TARGET_URL);
+            MOVED_TO_GLOBAL.add(Settings.Global.TETHER_DUN_APN);
+            MOVED_TO_GLOBAL.add(Settings.Global.TETHER_DUN_REQUIRED);
+            MOVED_TO_GLOBAL.add(Settings.Global.TETHER_SUPPORTED);
+            MOVED_TO_GLOBAL.add(Settings.Global.USB_MASS_STORAGE_ENABLED);
+            MOVED_TO_GLOBAL.add(Settings.Global.USE_GOOGLE_MAIL);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_COUNTRY_CODE);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_FRAMEWORK_SCAN_INTERVAL_MS);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_FREQUENCY_BAND);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_IDLE_MS);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_MAX_DHCP_RETRY_COUNT);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_MOBILE_DATA_TRANSITION_WAKELOCK_TIMEOUT_MS);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_NUM_OPEN_NETWORKS_KEPT);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_ON);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_P2P_DEVICE_NAME);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_SAVED_STATE);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_SUPPLICANT_SCAN_INTERVAL_MS);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_SUSPEND_OPTIMIZATIONS_ENABLED);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_VERBOSE_LOGGING_ENABLED);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_ENHANCED_AUTO_JOIN);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_NETWORK_SHOW_RSSI);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_WATCHDOG_ON);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_WATCHDOG_POOR_NETWORK_TEST_ENABLED);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIMAX_NETWORKS_AVAILABLE_NOTIFICATION_ON);
+            MOVED_TO_GLOBAL.add(Settings.Global.PACKAGE_VERIFIER_ENABLE);
+            MOVED_TO_GLOBAL.add(Settings.Global.PACKAGE_VERIFIER_TIMEOUT);
+            MOVED_TO_GLOBAL.add(Settings.Global.PACKAGE_VERIFIER_DEFAULT_RESPONSE);
+            MOVED_TO_GLOBAL.add(Settings.Global.DATA_STALL_ALARM_NON_AGGRESSIVE_DELAY_IN_MS);
+            MOVED_TO_GLOBAL.add(Settings.Global.DATA_STALL_ALARM_AGGRESSIVE_DELAY_IN_MS);
+            MOVED_TO_GLOBAL.add(Settings.Global.GPRS_REGISTER_CHECK_PERIOD_MS);
+            MOVED_TO_GLOBAL.add(Settings.Global.WTF_IS_FATAL);
+            MOVED_TO_GLOBAL.add(Settings.Global.BATTERY_DISCHARGE_DURATION_THRESHOLD);
+            MOVED_TO_GLOBAL.add(Settings.Global.BATTERY_DISCHARGE_THRESHOLD);
+            MOVED_TO_GLOBAL.add(Settings.Global.SEND_ACTION_APP_ERROR);
+            MOVED_TO_GLOBAL.add(Settings.Global.DROPBOX_AGE_SECONDS);
+            MOVED_TO_GLOBAL.add(Settings.Global.DROPBOX_MAX_FILES);
+            MOVED_TO_GLOBAL.add(Settings.Global.DROPBOX_QUOTA_KB);
+            MOVED_TO_GLOBAL.add(Settings.Global.DROPBOX_QUOTA_PERCENT);
+            MOVED_TO_GLOBAL.add(Settings.Global.DROPBOX_RESERVE_PERCENT);
+            MOVED_TO_GLOBAL.add(Settings.Global.DROPBOX_TAG_PREFIX);
+            MOVED_TO_GLOBAL.add(Settings.Global.ERROR_LOGCAT_PREFIX);
+            MOVED_TO_GLOBAL.add(Settings.Global.SYS_FREE_STORAGE_LOG_INTERVAL);
+            MOVED_TO_GLOBAL.add(Settings.Global.DISK_FREE_CHANGE_REPORTING_THRESHOLD);
+            MOVED_TO_GLOBAL.add(Settings.Global.SYS_STORAGE_THRESHOLD_PERCENTAGE);
+            MOVED_TO_GLOBAL.add(Settings.Global.SYS_STORAGE_THRESHOLD_MAX_BYTES);
+            MOVED_TO_GLOBAL.add(Settings.Global.SYS_STORAGE_FULL_THRESHOLD_BYTES);
+            MOVED_TO_GLOBAL.add(Settings.Global.SYNC_MAX_RETRY_DELAY_IN_SECONDS);
+            MOVED_TO_GLOBAL.add(Settings.Global.CONNECTIVITY_CHANGE_DELAY);
+            MOVED_TO_GLOBAL.add(Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED);
+            MOVED_TO_GLOBAL.add(Settings.Global.CAPTIVE_PORTAL_SERVER);
+            MOVED_TO_GLOBAL.add(Settings.Global.NSD_ON);
+            MOVED_TO_GLOBAL.add(Settings.Global.SET_INSTALL_LOCATION);
+            MOVED_TO_GLOBAL.add(Settings.Global.DEFAULT_INSTALL_LOCATION);
+            MOVED_TO_GLOBAL.add(Settings.Global.INET_CONDITION_DEBOUNCE_UP_DELAY);
+            MOVED_TO_GLOBAL.add(Settings.Global.INET_CONDITION_DEBOUNCE_DOWN_DELAY);
+            MOVED_TO_GLOBAL.add(Settings.Global.READ_EXTERNAL_STORAGE_ENFORCED_DEFAULT);
+            MOVED_TO_GLOBAL.add(Settings.Global.HTTP_PROXY);
+            MOVED_TO_GLOBAL.add(Settings.Global.GLOBAL_HTTP_PROXY_HOST);
+            MOVED_TO_GLOBAL.add(Settings.Global.GLOBAL_HTTP_PROXY_PORT);
+            MOVED_TO_GLOBAL.add(Settings.Global.GLOBAL_HTTP_PROXY_EXCLUSION_LIST);
+            MOVED_TO_GLOBAL.add(Settings.Global.SET_GLOBAL_HTTP_PROXY);
+            MOVED_TO_GLOBAL.add(Settings.Global.DEFAULT_DNS_SERVER);
+            MOVED_TO_GLOBAL.add(Settings.Global.PREFERRED_NETWORK_MODE);
+            MOVED_TO_GLOBAL.add(Settings.Global.WEBVIEW_DATA_REDUCTION_PROXY_KEY);
+        }
+
+        /** @hide */
+        public static void getMovedToGlobalSettings(Set<String> outKeySet) {
+            outKeySet.addAll(MOVED_TO_GLOBAL);
+        }
+
+        /** @hide */
+        public static void clearProviderForTest() {
+            sProviderHolder.clearProviderForTest();
+            sNameValueCache.clearGenerationTrackerForTest();
+        }
+
+        /**
+         * Look up a name in the database.
+         * @param resolver to access the database with
+         * @param name to look up in the table
+         * @return the corresponding value, or null if not present
+         */
+        public static String getString(ContentResolver resolver, String name) {
+            return getStringForUser(resolver, name, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static String getStringForUser(ContentResolver resolver, String name,
+                int userHandle) {
+            if (MOVED_TO_GLOBAL.contains(name)) {
+                Log.w(TAG, "Setting " + name + " has moved from android.provider.Settings.Secure"
+                        + " to android.provider.Settings.Global.");
+                return Global.getStringForUser(resolver, name, userHandle);
+            }
+
+            if (MOVED_TO_LOCK_SETTINGS.contains(name)) {
+                synchronized (Secure.class) {
+                    if (sLockSettings == null) {
+                        sLockSettings = ILockSettings.Stub.asInterface(
+                                (IBinder) ServiceManager.getService("lock_settings"));
+                        sIsSystemProcess = Process.myUid() == Process.SYSTEM_UID;
+                    }
+                }
+                if (sLockSettings != null && !sIsSystemProcess) {
+                    // No context; use the ActivityThread's context as an approximation for
+                    // determining the target API level.
+                    Application application = ActivityThread.currentApplication();
+
+                    boolean isPreMnc = application != null
+                            && application.getApplicationInfo() != null
+                            && application.getApplicationInfo().targetSdkVersion
+                            <= VERSION_CODES.LOLLIPOP_MR1;
+                    if (isPreMnc) {
+                        try {
+                            return sLockSettings.getString(name, "0", userHandle);
+                        } catch (RemoteException re) {
+                            // Fall through
+                        }
+                    } else {
+                        throw new SecurityException("Settings.Secure." + name
+                                + " is deprecated and no longer accessible."
+                                + " See API documentation for potential replacements.");
+                    }
+                }
+            }
+
+            return sNameValueCache.getStringForUser(resolver, name, userHandle);
+        }
+
+        /**
+         * Store a name/value pair into the database.
+         * @param resolver to access the database with
+         * @param name to store
+         * @param value to associate with the name
+         * @return true if the value was set, false on database errors
+         */
+        public static boolean putString(ContentResolver resolver, String name, String value) {
+            return putStringForUser(resolver, name, value, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static boolean putStringForUser(ContentResolver resolver, String name, String value,
+                int userHandle) {
+            return putStringForUser(resolver, name, value, null, false, userHandle);
+        }
+
+        /** @hide */
+        public static boolean putStringForUser(@NonNull ContentResolver resolver,
+                @NonNull String name, @Nullable String value, @Nullable String tag,
+                boolean makeDefault, @UserIdInt int userHandle) {
+            if (LOCATION_MODE.equals(name)) {
+                // Map LOCATION_MODE to underlying location provider storage API
+                return setLocationModeForUser(resolver, Integer.parseInt(value), userHandle);
+            }
+            if (MOVED_TO_GLOBAL.contains(name)) {
+                Log.w(TAG, "Setting " + name + " has moved from android.provider.Settings.Secure"
+                        + " to android.provider.Settings.Global");
+                return Global.putStringForUser(resolver, name, value,
+                        tag, makeDefault, userHandle);
+            }
+            return sNameValueCache.putStringForUser(resolver, name, value, tag,
+                    makeDefault, userHandle);
+        }
+
+        /**
+         * Store a name/value pair into the database.
+         * <p>
+         * The method takes an optional tag to associate with the setting
+         * which can be used to clear only settings made by your package and
+         * associated with this tag by passing the tag to {@link
+         * #resetToDefaults(ContentResolver, String)}. Anyone can override
+         * the current tag. Also if another package changes the setting
+         * then the tag will be set to the one specified in the set call
+         * which can be null. Also any of the settings setters that do not
+         * take a tag as an argument effectively clears the tag.
+         * </p><p>
+         * For example, if you set settings A and B with tags T1 and T2 and
+         * another app changes setting A (potentially to the same value), it
+         * can assign to it a tag T3 (note that now the package that changed
+         * the setting is not yours). Now if you reset your changes for T1 and
+         * T2 only setting B will be reset and A not (as it was changed by
+         * another package) but since A did not change you are in the desired
+         * initial state. Now if the other app changes the value of A (assuming
+         * you registered an observer in the beginning) you would detect that
+         * the setting was changed by another app and handle this appropriately
+         * (ignore, set back to some value, etc).
+         * </p><p>
+         * Also the method takes an argument whether to make the value the
+         * default for this setting. If the system already specified a default
+         * value, then the one passed in here will <strong>not</strong>
+         * be set as the default.
+         * </p>
+         *
+         * @param resolver to access the database with.
+         * @param name to store.
+         * @param value to associate with the name.
+         * @param tag to associate with the setting.
+         * @param makeDefault whether to make the value the default one.
+         * @return true if the value was set, false on database errors.
+         *
+         * @see #resetToDefaults(ContentResolver, String)
+         *
+         * @hide
+         */
+        @SystemApi
+        @RequiresPermission(Manifest.permission.WRITE_SECURE_SETTINGS)
+        public static boolean putString(@NonNull ContentResolver resolver,
+                @NonNull String name, @Nullable String value, @Nullable String tag,
+                boolean makeDefault) {
+            return putStringForUser(resolver, name, value, tag, makeDefault,
+                    UserHandle.myUserId());
+        }
+
+        /**
+         * Reset the settings to their defaults. This would reset <strong>only</strong>
+         * settings set by the caller's package. Think of it of a way to undo your own
+         * changes to the global settings. Passing in the optional tag will reset only
+         * settings changed by your package and associated with this tag.
+         *
+         * @param resolver Handle to the content resolver.
+         * @param tag Optional tag which should be associated with the settings to reset.
+         *
+         * @see #putString(ContentResolver, String, String, String, boolean)
+         *
+         * @hide
+         */
+        @SystemApi
+        @RequiresPermission(Manifest.permission.WRITE_SECURE_SETTINGS)
+        public static void resetToDefaults(@NonNull ContentResolver resolver,
+                @Nullable String tag) {
+            resetToDefaultsAsUser(resolver, tag, RESET_MODE_PACKAGE_DEFAULTS,
+                    UserHandle.myUserId());
+        }
+
+        /**
+         *
+         * Reset the settings to their defaults for a given user with a specific mode. The
+         * optional tag argument is valid only for {@link #RESET_MODE_PACKAGE_DEFAULTS}
+         * allowing resetting the settings made by a package and associated with the tag.
+         *
+         * @param resolver Handle to the content resolver.
+         * @param tag Optional tag which should be associated with the settings to reset.
+         * @param mode The reset mode.
+         * @param userHandle The user for which to reset to defaults.
+         *
+         * @see #RESET_MODE_PACKAGE_DEFAULTS
+         * @see #RESET_MODE_UNTRUSTED_DEFAULTS
+         * @see #RESET_MODE_UNTRUSTED_CHANGES
+         * @see #RESET_MODE_TRUSTED_DEFAULTS
+         *
+         * @hide
+         */
+        public static void resetToDefaultsAsUser(@NonNull ContentResolver resolver,
+                @Nullable String tag, @ResetMode int mode, @IntRange(from = 0) int userHandle) {
+            try {
+                Bundle arg = new Bundle();
+                arg.putInt(CALL_METHOD_USER_KEY, userHandle);
+                if (tag != null) {
+                    arg.putString(CALL_METHOD_TAG_KEY, tag);
+                }
+                arg.putInt(CALL_METHOD_RESET_MODE_KEY, mode);
+                IContentProvider cp = sProviderHolder.getProvider(resolver);
+                cp.call(resolver.getPackageName(), CALL_METHOD_RESET_SECURE, null, arg);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Can't reset do defaults for " + CONTENT_URI, e);
+            }
+        }
+
+        /**
+         * Construct the content URI for a particular name/value pair,
+         * useful for monitoring changes with a ContentObserver.
+         * @param name to look up in the table
+         * @return the corresponding content URI, or null if not present
+         */
+        public static Uri getUriFor(String name) {
+            if (MOVED_TO_GLOBAL.contains(name)) {
+                Log.w(TAG, "Setting " + name + " has moved from android.provider.Settings.Secure"
+                        + " to android.provider.Settings.Global, returning global URI.");
+                return Global.getUriFor(Global.CONTENT_URI, name);
+            }
+            return getUriFor(CONTENT_URI, name);
+        }
+
+        /**
+         * Convenience function for retrieving a single secure settings value
+         * as an integer.  Note that internally setting values are always
+         * stored as strings; this function converts the string to an integer
+         * for you.  The default value will be returned if the setting is
+         * not defined or not an integer.
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to retrieve.
+         * @param def Value to return if the setting is not defined.
+         *
+         * @return The setting's current value, or 'def' if it is not defined
+         * or not a valid integer.
+         */
+        public static int getInt(ContentResolver cr, String name, int def) {
+            return getIntForUser(cr, name, def, UserHandle.myUserId());
+        }
+
+        /** @hide */
+        public static int getIntForUser(ContentResolver cr, String name, int def, int userHandle) {
+            if (LOCATION_MODE.equals(name)) {
+                // Map from to underlying location provider storage API to location mode
+                return getLocationModeForUser(cr, userHandle);
+            }
+            String v = getStringForUser(cr, name, userHandle);
+            try {
+                return v != null ? Integer.parseInt(v) : def;
+            } catch (NumberFormatException e) {
+                return def;
+            }
+        }
+
+        /**
+         * Convenience function for retrieving a single secure settings value
+         * as an integer.  Note that internally setting values are always
+         * stored as strings; this function converts the string to an integer
+         * for you.
+         * <p>
+         * This version does not take a default value.  If the setting has not
+         * been set, or the string value is not a number,
+         * it throws {@link SettingNotFoundException}.
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to retrieve.
+         *
+         * @throws SettingNotFoundException Thrown if a setting by the given
+         * name can't be found or the setting value is not an integer.
+         *
+         * @return The setting's current value.
+         */
+        public static int getInt(ContentResolver cr, String name)
+                throws SettingNotFoundException {
+            return getIntForUser(cr, name, UserHandle.myUserId());
+        }
+
+=======
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
         /** @hide */
         public static int getIntForUser(ContentResolver cr, String name, int userHandle)
                 throws SettingNotFoundException {

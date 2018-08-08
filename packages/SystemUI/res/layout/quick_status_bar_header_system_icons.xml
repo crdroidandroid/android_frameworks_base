@@ -28,6 +28,7 @@
     android:orientation="horizontal">
 
 
+<<<<<<< HEAD
     <com.android.systemui.statusbar.policy.QSClockLeft
         android:id="@+id/qs_left_clock"
         android:textAppearance="@style/TextAppearance.StatusBar.Clock"
@@ -40,6 +41,8 @@
         systemui:showDark="false"
         />
 
+=======
+>>>>>>> debedb639b9614d4321d944f363b9a5ed31a0cdd
     <com.android.systemui.crdroid.carrierlabel.CarrierLabelQS
         android:id="@+id/qs_carrier_text"
         android:layout_width="0dp"
