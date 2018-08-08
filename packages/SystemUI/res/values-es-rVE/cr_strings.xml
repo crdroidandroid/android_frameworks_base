@@ -126,14 +126,14 @@
   <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_hw_keys_enabled">Botones físicos activados.</string>
   <!-- Heads up snooze toast -->
-  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
-  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Las notificaciones flotantes fueron pospuestas por 1 minuto.</string>
+  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Las notificaciones flotantes están aplazadas durante <xliff:g id="number">%d</xliff:g> minutos.</string>
   <!-- Free ram -->
-  <string name="recents_free_ram">Free RAM: %1$d MB</string>
+  <string name="recents_free_ram">RAM libre: %1$d MB</string>
   <!-- On The Go -->
-  <string name="global_action_onthego">On-The-Go Mode</string>
-  <string name="onthego_notif_ticker">On-The-Go activated</string>
-  <string name="onthego_notif_title">On-The-Go is active</string>
+  <string name="global_action_onthego">Modo On-The-Go</string>
+  <string name="onthego_notif_ticker">On-The-Go activado</string>
+  <string name="onthego_notif_title">On-The-Go está activo</string>
   <string name="onthego_notif_stop">Detener</string>
   <string name="onthego_notif_options">Opciones</string>
   <string name="onthego_notif_error">No ha sido posible iniciar On-The-Go</string>
@@ -141,9 +141,9 @@
   <string name="onthego_notif_camera_changed">Modo de cámara cambiado</string>
   <string name="onthego_transparency">Transparencia</string>
   <string name="onthego_front_camera">Utilizar la cámara frontal</string>
-  <string name="onthego_service_toggle">Automatically restart service</string>
-  <string name="onthego_channel_name">Main</string>
+  <string name="onthego_service_toggle">Reiniciar automáticamente el servicio</string>
+  <string name="onthego_channel_name">Principal</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">Píxeles inteligentes</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Pixeles inteligentes activados automáticamente</string>
 </resources>
