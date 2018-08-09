@@ -21,7 +21,6 @@
     </declare-styleable>
 
     <declare-styleable name="BackArrowView">
-        <attr name="black_arrow" format="boolean" />
         <attr name="reversed" format="boolean" />
     </declare-styleable>
 </resources>

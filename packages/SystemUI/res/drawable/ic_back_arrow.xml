@@ -6,14 +6,11 @@
     android:viewportHeight="24">
     <path
         android:pathData="M0.9375,12a11.0625,11.0625 89.6622,1 0,22.1249 0a11.0625,11.0625 89.6622,1 0,-22.1249 0z"
-        android:fillColor="#EEE"
-        android:strokeColor="#000"
-        android:strokeWidth="1"/>
+        android:fillColor="@color/qs_edit_item_decoration_bg"/>
     <path
         android:pathData="M9.8075,13.4593L9.8075,16.1696L5.6377,11.9999L9.8075,7.8303L9.8075,10.5406L18.3623,10.5406L18.3623,13.4593L9.8075,13.4593Z"
         android:strokeWidth="1.5"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"
-        android:fillColor="#434343"
-        android:strokeColor="#434343"/>
+        android:fillColor="@color/fab_color"/>
 </vector>
