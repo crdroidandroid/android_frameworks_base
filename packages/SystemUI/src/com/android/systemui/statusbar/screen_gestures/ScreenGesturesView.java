@@ -2,11 +2,9 @@ package com.android.systemui.statusbar.screen_gestures;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.UserHandle;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -18,8 +16,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.android.internal.util.gesture.EdgeGesturePosition;
+import com.android.systemui.Dependency;
+import com.android.systemui.tuner.TunerService;
 
-public class ScreenGesturesView extends FrameLayout {
+public class ScreenGesturesView extends FrameLayout implements TunerService.Tunable {
 
     public static final boolean DEBUG = false;
 
@@ -50,6 +50,20 @@ public class ScreenGesturesView extends FrameLayout {
 
     private BackArrowView leftArrowView;
     private BackArrowView rightArrowView;
+
+    private int mFeedbackDuration, mLongPressDuration, mBackEdges, mBackEdgesLandscape;
+    private boolean mShowUIFeedback;
+
+    private static final String EDGE_GESTURES_FEEDBACK_DURATION =
+            Settings.Secure.EDGE_GESTURES_FEEDBACK_DURATION;
+    private static final String EDGE_GESTURES_LONG_PRESS_DURATION =
+            Settings.Secure.EDGE_GESTURES_LONG_PRESS_DURATION;
+    private static final String EDGE_GESTURES_BACK_SHOW_UI_FEEDBACK =
+            Settings.Secure.EDGE_GESTURES_BACK_SHOW_UI_FEEDBACK;
+    private static final String EDGE_GESTURES_BACK_EDGES =
+            Settings.Secure.EDGE_GESTURES_BACK_EDGES;
+    private static final String EDGE_GESTURES_LANDSCAPE_BACK_EDGES =
+            Settings.Secure.EDGE_GESTURES_LANDSCAPE_BACK_EDGES;
 
     public ScreenGesturesView(Context context) {
         this(context, null);
@@ -90,7 +104,42 @@ public class ScreenGesturesView extends FrameLayout {
         super.onAttachedToWindow();
         setVisibility(View.GONE);
 
+        Dependency.get(TunerService.class).addTunable(this,
+                EDGE_GESTURES_FEEDBACK_DURATION,
+                EDGE_GESTURES_LONG_PRESS_DURATION,
+                EDGE_GESTURES_BACK_SHOW_UI_FEEDBACK,
+                EDGE_GESTURES_BACK_EDGES,
+                EDGE_GESTURES_LANDSCAPE_BACK_EDGES);
+
         vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case EDGE_GESTURES_FEEDBACK_DURATION:
+                mFeedbackDuration =
+                        newValue == null ? 100 : Integer.parseInt(newValue);
+                break;
+            case EDGE_GESTURES_LONG_PRESS_DURATION:
+                mLongPressDuration =
+                        newValue == null ? 500 : Integer.parseInt(newValue);
+                break;
+            case EDGE_GESTURES_BACK_SHOW_UI_FEEDBACK:
+                mShowUIFeedback =
+                        newValue != null && Integer.parseInt(newValue) != 0;
+                break;
+            case EDGE_GESTURES_BACK_EDGES:
+                mBackEdges =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                break;
+            case EDGE_GESTURES_LANDSCAPE_BACK_EDGES:
+                mBackEdgesLandscape =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                break;
+            default:
+                break;
+        }
     }
 
     public void startGesture(int initialX, int initialY, EdgeGesturePosition position) {
@@ -102,20 +151,15 @@ public class ScreenGesturesView extends FrameLayout {
         this.lastX = initialX;
         this.lastY = initialY;
 
-        String backSettingsId = getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ?
-                Settings.Secure.EDGE_GESTURES_BACK_EDGES :
-                Settings.Secure.EDGE_GESTURES_LANDSCAPE_BACK_EDGES;
-        int backGestureEdgesFlag = Settings.Secure.getIntForUser(getContext().getContentResolver(),
-                backSettingsId,
-                0,
-                UserHandle.USER_CURRENT);
+        int backGestureEdgesFlag = getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ?
+                mBackEdges : mBackEdgesLandscape;
 
         setVisibility(View.VISIBLE);
 
         if ((position.FLAG & backGestureEdgesFlag) != 0) {
             possibleGestures = GestureType.BACK;
 
-            if (shouldShowUIFeedback()) {
+            if (mShowUIFeedback) {
                 if (initialX < getWidth() / 2) {
                     leftArrowView.onTouchStarted(initialX - leftArrowView.getLeft(), initialY - leftArrowView.getTop());
                 } else {
@@ -129,33 +173,6 @@ public class ScreenGesturesView extends FrameLayout {
                 onGestureCompletedListener.onGestureCompleted(GestureType.NONE);
             }
             return;
-        }
-    }
-
-    private int getFeedbackStrength() {
-        try {
-            return Settings.Secure.getIntForUser(getContext().getContentResolver(),
-                    Settings.Secure.EDGE_GESTURES_FEEDBACK_DURATION, UserHandle.USER_CURRENT);
-        } catch (Settings.SettingNotFoundException exception) {
-            return 100;
-        }
-    }
-
-    private int getLongpressDuration() {
-        try {
-            return Settings.Secure.getIntForUser(getContext().getContentResolver(),
-                    Settings.Secure.EDGE_GESTURES_LONG_PRESS_DURATION, UserHandle.USER_CURRENT);
-        } catch (Settings.SettingNotFoundException exception) {
-            return 500;
-        }
-    }
-
-    private boolean shouldShowUIFeedback() {
-        try {
-            return Settings.Secure.getIntForUser(getContext().getContentResolver(),
-                    Settings.Secure.EDGE_GESTURES_BACK_SHOW_UI_FEEDBACK, UserHandle.USER_CURRENT) == 1;
-        } catch (Settings.SettingNotFoundException exception) {
-            return true;
         }
     }
 
@@ -173,7 +190,7 @@ public class ScreenGesturesView extends FrameLayout {
         boolean canSendHome = (possibleGestures & GestureType.HOME) != 0;
         if (canSendHome && (posY - initialY < -threshold)) {
             if (DEBUG) Log.d(TAG, "stopGesture: Home");
-            vibrator.vibrate(getFeedbackStrength());
+            vibrator.vibrate(mFeedbackDuration);
             onGestureCompletedListener.onGestureCompleted(GestureType.HOME);
             return;
         }
@@ -181,7 +198,7 @@ public class ScreenGesturesView extends FrameLayout {
         boolean canSendBack = (possibleGestures & GestureType.BACK) != 0;
         if (canSendBack && (Math.abs(posX - initialX) > threshold)) {
             if (DEBUG) Log.d(TAG, "stopGesture: Back");
-            vibrator.vibrate(getFeedbackStrength());
+            vibrator.vibrate(mFeedbackDuration);
             onGestureCompletedListener.onGestureCompleted(GestureType.BACK);
             return;
         }
@@ -217,7 +234,7 @@ public class ScreenGesturesView extends FrameLayout {
             case MotionEvent.ACTION_UP:
                 if (DEBUG) Log.d(TAG, "onTouchEvent: UP");
 
-                if (shouldShowUIFeedback()) {
+                if (mShowUIFeedback) {
                     leftArrowView.onTouchEnded();
                     rightArrowView.onTouchEnded();
                 }
@@ -230,7 +247,7 @@ public class ScreenGesturesView extends FrameLayout {
             case MotionEvent.ACTION_CANCEL:
                 if (DEBUG) Log.d(TAG, "onTouchEvent: CANCEL");
 
-                if (shouldShowUIFeedback()) {
+                if (mShowUIFeedback) {
                     leftArrowView.onTouchEnded();
                     rightArrowView.onTouchEnded();
                 }
@@ -245,7 +262,7 @@ public class ScreenGesturesView extends FrameLayout {
 
     private void startLongPress() {
         if (DEBUG) Log.d(TAG, "startLongPress: scheduling long press");
-        handler.postDelayed(longPressRunnable, getLongpressDuration());
+        handler.postDelayed(longPressRunnable, mLongPressDuration);
     }
 
     private void stopLongPress() {
@@ -267,7 +284,7 @@ public class ScreenGesturesView extends FrameLayout {
                 if (onGestureCompletedListener != null) {
                     onGestureCompletedListener.onGestureCompleted(GestureType.RECENTS);
                 }
-                vibrator.vibrate(getFeedbackStrength());
+                vibrator.vibrate(mFeedbackDuration);
             }
         }
     };
