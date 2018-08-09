@@ -57,7 +57,7 @@
   <!-- Reboot/Recovery/PowerOff QS Tile -->
   <string name="quick_settings_reboot_label">Перезавантаження</string>
   <string name="quick_settings_reboot_recovery_label">Режим відновлення</string>
-  <string name="quick_settings_poweroff_label">Power off</string>
+  <string name="quick_settings_poweroff_label">Вимкнути</string>
   <!-- Caffeine tile -->
   <string name="caffeine_info_title">Що це?</string>
   <string name="caffeine_info_message">Кофеїн то плитка, яка лишає екран включенним.\n\nБудь ласка зверніть увагу, таймер буде скинуто після вимкнення екрана.</string>
@@ -68,8 +68,8 @@
   <string name="keyguard_indication_dash_charging_time">Швидке заряджання (<xliff:g id="charging_time_left" example="4 год. 2 хв.">%s</xliff:g> до повної зарядки)</string>
   <string name="keyguard_plugged_in_dash_charging">Швидке заряджання</string>
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_turbo_power_time">TurboPower connected (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
-  <string name="keyguard_plugged_in_turbo_power_charging">TurboPower connected</string>
+  <string name="keyguard_indication_turbo_power_time">Швидку зарядку під\'єднано (<xliff:g id="charging_time_left">%s</xliff:g> до повного заряджання)</string>
+  <string name="keyguard_plugged_in_turbo_power_charging">Швидку зарядку під\'єднано</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Помилка</string>
   <string name="omnijaws_service_unkown">Немає даних про погоду</string>
@@ -81,8 +81,8 @@
   <string name="omnijaws_package_not_available">OmniJaws недоступний</string>
   <string name="omnijaws_service_last_update">Останнє оновлення:</string>
   <!-- Assist/Google Tiles -->
-  <string name="quick_settings_google_assist_label">Assistant</string>
-  <string name="quick_settings_google_voice_assist_label">Voice assist</string>
+  <string name="quick_settings_google_assist_label">Помічник</string>
+  <string name="quick_settings_google_voice_assist_label">Голосовий помічник</string>
   <string name="quick_settings_google_now_label">Google</string>
   <!-- Screenrecord Notification Ticker -->
   <string name="screenrecord_notif_ticker">Екран записується</string>
@@ -106,44 +106,44 @@
   <string name="quick_settings_screenrecord_mq_label">Запис з екрану 720р</string>
   <string name="quick_settings_screenrecord_hq_label">Запис з екрану 720р+</string>
   <!-- Always on Display Tile -->
-  <string name="quick_settings_always_on_display_label">Always on display</string>
+  <string name="quick_settings_always_on_display_label">Постійно активний дисплей</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_off">Always on display off.</string>
+  <string name="accessibility_quick_settings_always_on_display_off">Постійно активний дисплей вимк.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_on">Always on display on.</string>
+  <string name="accessibility_quick_settings_always_on_display_on">Постійно активний дисплей увімк.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_off">Always on display turned off.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_off">Постійно активний дисплей вимкнено.</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_on">Always on display turned on.</string>
+  <string name="accessibility_quick_settings_always_on_display_changed_on">Постійно активний дисплей увімкнено.</string>
   <!-- Name of the nfc status bar icon. -->
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">Nfc</string>
   <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">HW Keys</string>
+  <string name="quick_settings_hw_keys_label">Апаратні кнопки</string>
   <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">HW Keys disabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_disabled">Апаратні кнопки вимкнено.</string>
   <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
+  <string name="accessibility_quick_settings_hw_keys_enabled">Апаратні кнопки увімкнено.</string>
   <!-- Heads up snooze toast -->
-  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
-  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Спливаючі сповіщення вимкнено на 1 хвилину.</string>
+  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Спливаючі сповіщення вимкнено на <xliff:g id="number">%d</xliff:g> хвилин.</string>
   <!-- Free ram -->
-  <string name="recents_free_ram">Free RAM: %1$d MB</string>
+  <string name="recents_free_ram">Вільно пам\'яті: %1$d МБ</string>
   <!-- On The Go -->
-  <string name="global_action_onthego">On-The-Go Mode</string>
-  <string name="onthego_notif_ticker">On-The-Go activated</string>
-  <string name="onthego_notif_title">On-The-Go is active</string>
-  <string name="onthego_notif_stop">Stop</string>
-  <string name="onthego_notif_options">Options</string>
-  <string name="onthego_notif_error">Unable to start On-The-Go</string>
-  <string name="onthego_notif_restart">Restart On-The-Go</string>
-  <string name="onthego_notif_camera_changed">Camera mode changed</string>
-  <string name="onthego_transparency">Transparency</string>
-  <string name="onthego_front_camera">Use front camera</string>
-  <string name="onthego_service_toggle">Automatically restart service</string>
-  <string name="onthego_channel_name">Main</string>
+  <string name="global_action_onthego">Режим «На ходу»</string>
+  <string name="onthego_notif_ticker">Режим «На ходу» увімкнено</string>
+  <string name="onthego_notif_title">Режим «На ходу» активний</string>
+  <string name="onthego_notif_stop">Зупинити</string>
+  <string name="onthego_notif_options">Опції</string>
+  <string name="onthego_notif_error">Не вдається запустити режим «На ходу»</string>
+  <string name="onthego_notif_restart">Перезавантажити режим «На ходу»</string>
+  <string name="onthego_notif_camera_changed">Режим камери змінено</string>
+  <string name="onthego_transparency">Прозорість</string>
+  <string name="onthego_front_camera">Використовувати передню камеру</string>
+  <string name="onthego_service_toggle">Автоматично перезавантажувати сервіс</string>
+  <string name="onthego_channel_name">Основний</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">Розумні пікселі</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Автоматичне увімкнення розумних пікселів</string>
 </resources>
