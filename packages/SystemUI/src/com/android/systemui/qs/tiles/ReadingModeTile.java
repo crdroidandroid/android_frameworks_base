@@ -34,6 +34,7 @@ public class ReadingModeTile extends QSTileImpl<BooleanState> {
             new Intent("org.lineageos.lineageparts.LIVEDISPLAY_SETTINGS");
 
     private LineageHardwareManager mHardware;
+    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_reader_on);
 
     public ReadingModeTile(QSHost host) {
         super(host);
@@ -65,13 +66,16 @@ public class ReadingModeTile extends QSTileImpl<BooleanState> {
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         state.value = isReadingModeEnabled();
+        if (state.slash == null) {
+            state.slash = new SlashState();
+        }
+        state.icon = mIcon;
+        state.slash.isSlashed = !state.value;
         if (state.value) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_reader_on);
             state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_reading_mode_on);
             state.state = Tile.STATE_ACTIVE;
         } else {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_reader_off);
             state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_reading_mode_off);
             state.state = Tile.STATE_INACTIVE;
