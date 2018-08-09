@@ -39,7 +39,6 @@ public class BackArrowView extends View {
     private Drawable arrowDrawable;
 
     private boolean isReversed = false;
-    private boolean useBlackArrow = false;
 
     private boolean animating = false;
 
@@ -62,13 +61,15 @@ public class BackArrowView extends View {
 
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.BackArrowView, defStyleAttr, defStyleRes);
         isReversed = typedArray.getBoolean(R.styleable.BackArrowView_reversed, false);
-        useBlackArrow = typedArray.getBoolean(R.styleable.BackArrowView_black_arrow, false);
         typedArray.recycle();
 
         init();
     }
 
     private void init() {
+        float density = Resources.getSystem().getDisplayMetrics().density;
+        int iconId = R.drawable.ic_back_arrow;
+
         setBackgroundColor(Color.TRANSPARENT);
         setLayerType(LAYER_TYPE_HARDWARE, null);
 
@@ -78,11 +79,13 @@ public class BackArrowView extends View {
         eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 
         painter = new Paint();
-        painter.setColor(Color.BLACK);
+        painter.setColor(getResources().getColor(R.color.qs_edit_item_decoration_bg));
         painter.setAntiAlias(true);
         painter.setStyle(Paint.Style.FILL);
 
-        setUseBlackArrow(useBlackArrow);
+        vectorSize = (int) (32f * density);
+        arrowDrawable = VectorDrawableCompat.create(getResources(), iconId, getContext().getTheme());
+        arrowDrawable.setBounds(0, 0, vectorSize, vectorSize);
 
         contentsPaddingLeft = vectorSize;
         contentsPaddingTop = vectorSize / 2;
@@ -90,6 +93,22 @@ public class BackArrowView extends View {
         topArch = new Path();
         bottomArch = new Path();
         backgroundRect = new Rect();
+    }
+
+    private void reset() {
+        this.posX = -1;
+        this.posY = -1;
+
+        painter.setColor(getResources().getColor(R.color.qs_edit_item_decoration_bg));
+
+        topArch = new Path();
+        bottomArch = new Path();
+        backgroundRect = new Rect();
+
+        arrowDrawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_back_arrow, getContext().getTheme());
+        arrowDrawable.setBounds(0, 0, 0, 0);
+
+        invalidate();
     }
 
     @Override
@@ -175,37 +194,11 @@ public class BackArrowView extends View {
         reset();
     }
 
-    private void reset() {
-        this.posX = -1;
-        this.posY = -1;
-
-        topArch = new Path();
-        bottomArch = new Path();
-        backgroundRect = new Rect();
-        arrowDrawable.setBounds(0, 0, 0, 0);
-
-        invalidate();
-    }
-
     public boolean isReversed() {
         return isReversed;
     }
 
     public void setReversed(boolean reversed) {
         isReversed = reversed;
-    }
-
-    public boolean usesBlackArrow() {
-        return useBlackArrow;
-    }
-
-    public void setUseBlackArrow(boolean useBlackArrow) {
-        this.useBlackArrow = useBlackArrow;
-
-        float density = Resources.getSystem().getDisplayMetrics().density;
-        int iconId = useBlackArrow ? R.drawable.ic_back_arrow_black : R.drawable.ic_back_arrow;
-        arrowDrawable = VectorDrawableCompat.create(getResources(), iconId, getContext().getTheme());
-        vectorSize = (int) (32f * density);
-        arrowDrawable.setBounds(0, 0, vectorSize, vectorSize);
     }
 }
