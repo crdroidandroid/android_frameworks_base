@@ -126,24 +126,24 @@
   <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_hw_keys_enabled">Btn. physiques activés.</string>
   <!-- Heads up snooze toast -->
-  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
-  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - La notification furtive est en attente pendant 1 minute.</string>
+  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - La notification furtive est en attente pendant <xliff:g id="number">%d</xliff:g> minutes.</string>
   <!-- Free ram -->
-  <string name="recents_free_ram">Free RAM: %1$d MB</string>
+  <string name="recents_free_ram">RAM disponible: %1$d MB</string>
   <!-- On The Go -->
-  <string name="global_action_onthego">On-The-Go Mode</string>
-  <string name="onthego_notif_ticker">On-The-Go activated</string>
-  <string name="onthego_notif_title">On-The-Go is active</string>
-  <string name="onthego_notif_stop">Stop</string>
-  <string name="onthego_notif_options">Options</string>
-  <string name="onthego_notif_error">Unable to start On-The-Go</string>
-  <string name="onthego_notif_restart">Restart On-The-Go</string>
-  <string name="onthego_notif_camera_changed">Camera mode changed</string>
-  <string name="onthego_transparency">Transparency</string>
-  <string name="onthego_front_camera">Use front camera</string>
-  <string name="onthego_service_toggle">Automatically restart service</string>
-  <string name="onthego_channel_name">Main</string>
+  <string name="global_action_onthego">Mode On-The-Go</string>
+  <string name="onthego_notif_ticker">On-The-Go activé</string>
+  <string name="onthego_notif_title">On-The-Go est actif</string>
+  <string name="onthego_notif_stop">Arrêter</string>
+  <string name="onthego_notif_options">Paramètres</string>
+  <string name="onthego_notif_error">Impossible de démarrer On-The-Go</string>
+  <string name="onthego_notif_restart">Redémarrer On-The-Go</string>
+  <string name="onthego_notif_camera_changed">Mode de caméra modifié</string>
+  <string name="onthego_transparency">Transparence</string>
+  <string name="onthego_front_camera">Utiliser la caméra frontale</string>
+  <string name="onthego_service_toggle">Redémarrer automatiquement le service</string>
+  <string name="onthego_channel_name">Principal</string>
   <!-- Smart pixels QS tile -->
   <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Activation automatique de Smart pixels</string>
 </resources>
