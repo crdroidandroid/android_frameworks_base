@@ -1067,6 +1067,7 @@ public class ActivityManagerService extends IActivityManager.Stub
 
     CoreSettingsObserver mCoreSettingsObserver;
 
+/*
     DevelopmentSettingsObserver mDevelopmentSettingsObserver;
 
     private final class DevelopmentSettingsObserver extends ContentObserver {
@@ -1099,7 +1100,7 @@ public class ActivityManagerService extends IActivityManager.Stub
                             : PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
                     0);
         }
-    }
+    }*/
 
     /**
      * Thread-local storage used to carry caller permissions over through
@@ -7549,7 +7550,7 @@ public class ActivityManagerService extends IActivityManager.Stub
         mConstants.start(mContext.getContentResolver());
         mCoreSettingsObserver = new CoreSettingsObserver(this);
         mActivityTaskManager.installSystemProviders();
-        mDevelopmentSettingsObserver = new DevelopmentSettingsObserver();
+        //mDevelopmentSettingsObserver = new DevelopmentSettingsObserver();
         SettingsToPropertiesMapper.start(mContext.getContentResolver());
         mOomAdjuster.initSettings();
 
