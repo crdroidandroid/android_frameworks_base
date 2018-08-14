@@ -146,4 +146,35 @@
   <!-- Smart pixels QS tile -->
   <string name="quick_settings_smart_pixels">Smart Pixels</string>
   <string name="quick_settings_smart_pixels_on_power_save">Automaticky povolit Smart Pixels</string>
+  <!-- Off/On/Toggle -->
+  <string name="off">Vyp.</string>
+  <string name="on">Zap.</string>
+  <string name="toggle">Přepnout</string>
+  <!-- Dialog Cancel/OK -->
+  <string name="cancel">Zrušit</string>
+  <string name="dlg_ok">Ok</string>
+  <string name="yes">Ano</string>
+  <string name="no">Ne</string>
+  <!-- Slim Shortcut Actions -->
+  <string name="shortcut_picker">Zkratky crDroid</string>
+  <string name="shortcut_rotation">Přepínač zámku rotace obrazovky</string>
+  <string name="shortcut_torch">Svítilna</string>
+  <string name="shortcut_chamber">Tajemná komnata</string>
+  <string name="shortcut_reboot">Restartovat</string>
+  <string name="shortcut_recovery">Recovery</string>
+  <string name="shortcut_screensleep">Obrazovka režimu spánku</string>
+  <string name="shortcut_toggle_title">Provést akci</string>
+  <string name="chamber_disabled">Tajemná komnata je zavřena</string>
+  <string name="chamber_title">Vložte název nastavení</string>
+  <string name="chamber_message">Zadejte název nastavení, které je buď přepinatelné pomocí zatržítka nebo se jedná o seznam předvoleb. Například doze_enabled a podobně. Seznam nastavení lze nalézt v souboru Settings.java. VAROVÁNÍ: Tento proces je nebezpečný!</string>
+  <string name="chamber_invalid">Jedná se o neplatný vstup. Buďte opatrní.</string>
+  <string name="chamber_invalid_setting">Zkuste přepnout nastavení ručně, aby bylo zajištěno, že existuje databáze nastavení pro tuto akci.</string>
+  <string name="chamber_checkbox">Zaškrtávací pole</string>
+  <string name="chamber_chk_message">Je to nastavení zaškrtávacího pole?</string>
+  <string name="chamber_int">Vstupní hodnoty</string>
+  <string name="chamber_int_message">Zadejte hodnoty, mezi kterými byste chtěli v nastavení přepínat. Oddělte jednotlivé hodnoty čárkou. Nastavujte barvy jen v Hex-hodnotách, jako je #FF00aacc nebo základních barevných hodnot, jako je červená, zelená a žlutá.</string>
+  <string name="chamber_name_title">Název zástupce</string>
+  <string name="chamber_name_message">Název zástupce se zobrazí pod jeho ikonou.</string>
+  <string name="chamber_name_toast">Použití výchozí název</string>
+  <string name="shortcut_clear_notifications">Vymazat oznámení</string>
 </resources>

@@ -146,4 +146,35 @@
   <!-- Smart pixels QS tile -->
   <string name="quick_settings_smart_pixels">Умные пиксели</string>
   <string name="quick_settings_smart_pixels_on_power_save">Автоматическое включение умных пикселей</string>
+  <!-- Off/On/Toggle -->
+  <string name="off">Выкл.</string>
+  <string name="on">Вкл.</string>
+  <string name="toggle">Переключить</string>
+  <!-- Dialog Cancel/OK -->
+  <string name="cancel">Отмена</string>
+  <string name="dlg_ok">Ok</string>
+  <string name="yes">Да</string>
+  <string name="no">Нет</string>
+  <!-- Slim Shortcut Actions -->
+  <string name="shortcut_picker">Ярлыки crDroid</string>
+  <string name="shortcut_rotation">Автоповорот</string>
+  <string name="shortcut_torch">Фонарик</string>
+  <string name="shortcut_chamber">Тайная комната</string>
+  <string name="shortcut_reboot">Перезагрузка</string>
+  <string name="shortcut_recovery">Восстановление</string>
+  <string name="shortcut_screensleep">Выключить экран</string>
+  <string name="shortcut_toggle_title">Действие для выполнения</string>
+  <string name="chamber_disabled">Тайная комната закрыта</string>
+  <string name="chamber_title">Введите строку настроек</string>
+  <string name="chamber_message">Введите строку настроек, которая является либо функцией флажка (вкл/выкл), либо настройкой списка. Например, doze_enabled и тому подобное. Настройки можно найти в файле исходного кода Settings.java. ВНИМАНИЕ: Эта функция опасна!</string>
+  <string name="chamber_invalid">Введено неверное значение. Будьте внимательны.</string>
+  <string name="chamber_invalid_setting">Попробуйте вручную переключить параметры, чтобы убедиться, что необходимые настройки существуют в базе данных.</string>
+  <string name="chamber_checkbox">Переключить</string>
+  <string name="chamber_chk_message">Эта настройка - установка переключателя?</string>
+  <string name="chamber_int">Вводимые значения</string>
+  <string name="chamber_int_message">Введите значения, между которыми вы бы хотели переключаться, через запятую. Цветовые настройки задаются шестнадцатеричными значениями, например, #FF00aacc или базовыми значениями, как red, green, или yellow.</string>
+  <string name="chamber_name_title">Имя ярлыка</string>
+  <string name="chamber_name_message">Установить имя для отображения на ярлыке рядом со значком.</string>
+  <string name="chamber_name_toast">Используется имя по умолчанию</string>
+  <string name="shortcut_clear_notifications">Очистить уведомления</string>
 </resources>

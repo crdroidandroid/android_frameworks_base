@@ -144,6 +144,37 @@
   <string name="onthego_service_toggle">Dienst automatisch neu starten</string>
   <string name="onthego_channel_name">Haupt</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">Smart Pixels</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Smart Pixels automatisch einschalten</string>
+  <!-- Off/On/Toggle -->
+  <string name="off">Aus</string>
+  <string name="on">An</string>
+  <string name="toggle">Umschalten</string>
+  <!-- Dialog Cancel/OK -->
+  <string name="cancel">Abbrechen</string>
+  <string name="dlg_ok">OK</string>
+  <string name="yes">Ja</string>
+  <string name="no">Nein</string>
+  <!-- Slim Shortcut Actions -->
+  <string name="shortcut_picker">crDroid Verknüpfungen</string>
+  <string name="shortcut_rotation">Rotation lock toggle</string>
+  <string name="shortcut_torch">Taschenlampe</string>
+  <string name="shortcut_chamber">Chamber of Secrets</string>
+  <string name="shortcut_reboot">Neustart</string>
+  <string name="shortcut_recovery">Recovery</string>
+  <string name="shortcut_screensleep">Schlafbildschirm</string>
+  <string name="shortcut_toggle_title">Auszuführende Aktion</string>
+  <string name="chamber_disabled">Kammer der Geheimnisse ist geschlossen</string>
+  <string name="chamber_title">Eingabeeinstellungenzeichenfolge</string>
+  <string name="chamber_message">Input a Settings string that is either an on and off (checkbox) function or possibly a list-preference. For example, doze_enabled or similar. Settings can be found in the Settings.java file. WARNING: This process is dangerous!</string>
+  <string name="chamber_invalid">Dies ist eine ungültige Eingabe. Sei vorsichtig.</string>
+  <string name="chamber_invalid_setting">Versuchen Sie die Einstellung manuell vorzunehmen, um sicherzustellen, dass die Einstellungs-Datenbank für diese Aktion existiert.</string>
+  <string name="chamber_checkbox">Checkbox</string>
+  <string name="chamber_chk_message">Ist diese Einstellung eine Checkbox-Einstellung?</string>
+  <string name="chamber_int">Eingabewerte</string>
+  <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
+  <string name="chamber_name_title">Name der Verknüpfung</string>
+  <string name="chamber_name_message">Geben Sie der Verknüpfung einen Namen, der mit dem Symbol angezeigt wird.</string>
+  <string name="chamber_name_toast">Standardname wird verwendet</string>
+  <string name="shortcut_clear_notifications">Benachrichtigungen löschen</string>
 </resources>

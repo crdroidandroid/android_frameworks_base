@@ -146,4 +146,35 @@
   <!-- Smart pixels QS tile -->
   <string name="quick_settings_smart_pixels">Akıllı pikseller</string>
   <string name="quick_settings_smart_pixels_on_power_save">Otomatik olarak akıllı pikselleri etkinleştir</string>
+  <!-- Off/On/Toggle -->
+  <string name="off">Kapalı</string>
+  <string name="on">Açık</string>
+  <string name="toggle">Değiştir</string>
+  <!-- Dialog Cancel/OK -->
+  <string name="cancel">İptal</string>
+  <string name="dlg_ok">Tamam</string>
+  <string name="yes">Evet</string>
+  <string name="no">Hayır</string>
+  <!-- Slim Shortcut Actions -->
+  <string name="shortcut_picker">crDroid kısayolları</string>
+  <string name="shortcut_rotation">Döndürme kilidi geçiş</string>
+  <string name="shortcut_torch">El feneri</string>
+  <string name="shortcut_chamber">Sırlar odası</string>
+  <string name="shortcut_reboot">Yeniden başlat</string>
+  <string name="shortcut_recovery">Kurtarma modu (Recovery)</string>
+  <string name="shortcut_screensleep">Ekranı kapat</string>
+  <string name="shortcut_toggle_title">Yapılacak eylem</string>
+  <string name="chamber_disabled">Sırlar odası kapalı</string>
+  <string name="chamber_title">Giriş ayarları gir</string>
+  <string name="chamber_message">Açık ve kapalı (onay) işlevi veya muhtemelen bir liste tercihi olan bir Ayarlar dizesi girin. Örneğin, doze_enabled veya benzer. Ayarlar, Settings.java dosyasında bulunabilir. UYARI: Bu işlem tehlikelidir!</string>
+  <string name="chamber_invalid">Bu geçersiz bir giriştir. Dikkatli ol.</string>
+  <string name="chamber_invalid_setting">Bu işlem için ayar veritabanı olduğundan emin olmak için ayarı el ile değiştirmeyi deneyin.</string>
+  <string name="chamber_checkbox">Onay kutusu</string>
+  <string name="chamber_chk_message">Bu ayar onay kutusu ayarı mı?</string>
+  <string name="chamber_int">Giriş değerleri</string>
+  <string name="chamber_int_message">Ayarın değiştirilmesini istediğiniz değerleri girin. Her değeri virgülle ayırın. Renk ayarları #FF00aacc veya kırmızı, yeşil ve sarı gibi temel renk değerleri gibi altı altı değerleri kabul eder.</string>
+  <string name="chamber_name_title">Kısayol adı</string>
+  <string name="chamber_name_message">Simgeyle birlikte görüntülenmesi için kısayola bir isim verin.</string>
+  <string name="chamber_name_toast">Varsayılan adı kullan</string>
+  <string name="shortcut_clear_notifications">Bildirimleri temizle</string>
 </resources>

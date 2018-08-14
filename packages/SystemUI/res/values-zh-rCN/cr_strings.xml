@@ -146,4 +146,35 @@
   <!-- Smart pixels QS tile -->
   <string name="quick_settings_smart_pixels">智能像素</string>
   <string name="quick_settings_smart_pixels_on_power_save">自动启用智能像素</string>
+  <!-- Off/On/Toggle -->
+  <string name="off">关闭</string>
+  <string name="on">开启</string>
+  <string name="toggle">切换</string>
+  <!-- Dialog Cancel/OK -->
+  <string name="cancel">取消</string>
+  <string name="dlg_ok">确定</string>
+  <string name="yes">是</string>
+  <string name="no">否</string>
+  <!-- Slim Shortcut Actions -->
+  <string name="shortcut_picker">crDroid 快捷键</string>
+  <string name="shortcut_rotation">旋转锁定切换</string>
+  <string name="shortcut_torch">手电筒</string>
+  <string name="shortcut_chamber">密室</string>
+  <string name="shortcut_reboot">重新启动</string>
+  <string name="shortcut_recovery">恢复模式</string>
+  <string name="shortcut_screensleep">屏幕睡眠</string>
+  <string name="shortcut_toggle_title">要执行的操作</string>
+  <string name="chamber_disabled">密室已关闭</string>
+  <string name="chamber_title">输入的设置字符串</string>
+  <string name="chamber_message">输入一个设置字符串, 它是 \"开\" 和 \"关闭\" (复选框) 函数, 或者可能是列表首选项。例如, doze_enabled 或类似。可以在设置. java 文件中找到设置。警告: 这个过程是危险的!</string>
+  <string name="chamber_invalid">这是一个无效的输入。请小心！</string>
+  <string name="chamber_invalid_setting">请尝试切换手动要确保这一行动的设置数据库存在的设置。</string>
+  <string name="chamber_checkbox">复选框</string>
+  <string name="chamber_chk_message">这是一个复选框设置吗？</string>
+  <string name="chamber_int">输入值</string>
+  <string name="chamber_int_message">输入您想要切换的设置的值。每个值用逗号分隔。颜色设置接受十六进制值，例如 #FF00aacc 或基本颜色值，比如红色、 绿色和黄色。</string>
+  <string name="chamber_name_title">快捷方式名称</string>
+  <string name="chamber_name_message">给该快捷方式一个名称来显示。</string>
+  <string name="chamber_name_toast">使用默认的名称</string>
+  <string name="shortcut_clear_notifications">清除通知</string>
 </resources>

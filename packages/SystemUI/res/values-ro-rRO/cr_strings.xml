@@ -146,4 +146,35 @@
   <!-- Smart pixels QS tile -->
   <string name="quick_settings_smart_pixels">Pixeli inteligenți</string>
   <string name="quick_settings_smart_pixels_on_power_save">Auto-activare pixeli inteligenți</string>
+  <!-- Off/On/Toggle -->
+  <string name="off">Oprit</string>
+  <string name="on">Pornit</string>
+  <string name="toggle">Comutare</string>
+  <!-- Dialog Cancel/OK -->
+  <string name="cancel">Anulare</string>
+  <string name="dlg_ok">Ok</string>
+  <string name="yes">Da</string>
+  <string name="no">Nu</string>
+  <!-- Slim Shortcut Actions -->
+  <string name="shortcut_picker">Comenzi rapide crDroid</string>
+  <string name="shortcut_rotation">Comutare blocare rotaţie</string>
+  <string name="shortcut_torch">Lanternă</string>
+  <string name="shortcut_chamber">Camera Secretelor</string>
+  <string name="shortcut_reboot">Repornire</string>
+  <string name="shortcut_recovery">Recuperare</string>
+  <string name="shortcut_screensleep">Ecran de somn</string>
+  <string name="shortcut_toggle_title">Acţiune de efectuat</string>
+  <string name="chamber_disabled">Camera secretelor este închisă</string>
+  <string name="chamber_title">Şir de setările de intrare</string>
+  <string name="chamber_message">Șirul setărilor de intrare, care fie este o funcţie deschis şi inchis (caseta), sau, eventual, o listă de preferinţă. De exemplu, quiet_hours_ringer sau similare. Setările pot fi găsite în fişierul Settings.java. Avertisment: Acest proces este periculos!</string>
+  <string name="chamber_invalid">Aceasta este o intrare validă. Atentie.</string>
+  <string name="chamber_invalid_setting">Încercaţi basculând setarea manual pentru a se asigura ca există setări de date pentru această acţiune.</string>
+  <string name="chamber_checkbox">Caseta de verificare</string>
+  <string name="chamber_chk_message">Aceasta stabileşte un cadru de setare?</string>
+  <string name="chamber_int">Valori de intrare</string>
+  <string name="chamber_int_message">Setarea pentru a comuta între valorile de intrare. Separaţi fiecare valoare cu o virgulă. Setările de culoare acceptă hex-valori precum #FF00AACC sau valorile de bază culori ca roşu, verde şi galben.</string>
+  <string name="chamber_name_title">Numele comenzii rapide</string>
+  <string name="chamber_name_message">Da un nume la o scurtatura pentru afisare cu o pictograma.</string>
+  <string name="chamber_name_toast">Folosind numele implicit</string>
+  <string name="shortcut_clear_notifications">Ștergeți notificări</string>
 </resources>

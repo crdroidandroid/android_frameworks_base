@@ -146,4 +146,35 @@
   <!-- Smart pixels QS tile -->
   <string name="quick_settings_smart_pixels">Smart pixels</string>
   <string name="quick_settings_smart_pixels_on_power_save">Activation automatique de Smart pixels</string>
+  <!-- Off/On/Toggle -->
+  <string name="off">Arrêt</string>
+  <string name="on">Allumer</string>
+  <string name="toggle">Basculer</string>
+  <!-- Dialog Cancel/OK -->
+  <string name="cancel">Annuler</string>
+  <string name="dlg_ok">Ok</string>
+  <string name="yes">Oui</string>
+  <string name="no">Non</string>
+  <!-- Slim Shortcut Actions -->
+  <string name="shortcut_picker">Raccourcis crDroid</string>
+  <string name="shortcut_rotation">Verrouiller/déverrouiller la rotation</string>
+  <string name="shortcut_torch">Lampe-torche</string>
+  <string name="shortcut_chamber">Chambre des Secrets</string>
+  <string name="shortcut_reboot">Redémarrer</string>
+  <string name="shortcut_recovery">Recovery</string>
+  <string name="shortcut_screensleep">Écran de veille</string>
+  <string name="shortcut_toggle_title">Action à réaliser</string>
+  <string name="chamber_disabled">La chambre des secrets est fermée</string>
+  <string name="chamber_title">Entrer une chaine de paramètres</string>
+  <string name="chamber_message">Entrez une chaîne de caractères qui est une fonction on/off (checkbox) ou éventuellement une liste de preferences. Par exemple, doze_enabled ou équivalent. Les paramètres se trouvent dans le fichier Settings.java. AVERTISSEMENT : Ce processus est dangereux !</string>
+  <string name="chamber_invalid">Entrée non valide. Soyez prudent.</string>
+  <string name="chamber_invalid_setting">Essayez de basculer le paramètre manuellement pour s\'assurer que les paramètres pour cette action existent dans la base de données .</string>
+  <string name="chamber_checkbox">Case à cocher</string>
+  <string name="chamber_chk_message">Ce paramètre utilise-t-il une case à cocher ?</string>
+  <string name="chamber_int">Valeurs d\'entrée</string>
+  <string name="chamber_int_message">Entrez les valeurs entre lesquelles vous voudriez voir le paramètre basculer. Séparez chaque valeur par une virgule. Les paramètres de couleur acceptent des valeurs hexadécimales comme #FF00aacc ou des valeurs de couleur basiques comme rouge, vert, et jaune.</string>
+  <string name="chamber_name_title">Nom du raccourci</string>
+  <string name="chamber_name_message">Donner au raccourci un nom à afficher avec l\'icône.</string>
+  <string name="chamber_name_toast">Utilisation du nom par défaut</string>
+  <string name="shortcut_clear_notifications">Effacer les notifications</string>
 </resources>

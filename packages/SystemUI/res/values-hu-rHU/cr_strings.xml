@@ -146,4 +146,35 @@
   <!-- Smart pixels QS tile -->
   <string name="quick_settings_smart_pixels">Intelligens pixelek</string>
   <string name="quick_settings_smart_pixels_on_power_save">Intelligens pixelek automatikus engedélyezése</string>
+  <!-- Off/On/Toggle -->
+  <string name="off">Ki</string>
+  <string name="on">Be</string>
+  <string name="toggle">Váltás</string>
+  <!-- Dialog Cancel/OK -->
+  <string name="cancel">Mégse</string>
+  <string name="dlg_ok">Ok</string>
+  <string name="yes">Igen</string>
+  <string name="no">Nem</string>
+  <!-- Slim Shortcut Actions -->
+  <string name="shortcut_picker">crDroid hivatkozások</string>
+  <string name="shortcut_rotation">Forgatás zárolás váltása</string>
+  <string name="shortcut_torch">Zseblámpa (vaku)</string>
+  <string name="shortcut_chamber">Titkok kamrája</string>
+  <string name="shortcut_reboot">Újraindítás</string>
+  <string name="shortcut_recovery">Recovery</string>
+  <string name="shortcut_screensleep">Képernyő kikapcsolása</string>
+  <string name="shortcut_toggle_title">Művelet végrehajtása</string>
+  <string name="chamber_disabled">A Titkok kamrája zárva</string>
+  <string name="chamber_title">Input Settings string</string>
+  <string name="chamber_message">Input a Settings string that is either an on and off (checkbox) function or possibly a list-preference. For example, doze_enabled or similar. Settings can be found in the Settings.java file. WARNING: This process is dangerous!</string>
+  <string name="chamber_invalid">Érvénytelen bevitel. Legyen óvatos.</string>
+  <string name="chamber_invalid_setting">Try toggling the setting manually to ensure the settings database for this action exists.</string>
+  <string name="chamber_checkbox">Jelölőnégyzet</string>
+  <string name="chamber_chk_message">Is this setting a checkbox setting?</string>
+  <string name="chamber_int">Input values</string>
+  <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
+  <string name="chamber_name_title">Hivatkozás neve</string>
+  <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
+  <string name="chamber_name_toast">Alapértelmezett név használata</string>
+  <string name="shortcut_clear_notifications">Értesítések törlése</string>
 </resources>
