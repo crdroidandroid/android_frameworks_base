@@ -90,12 +90,32 @@
                 android:id="@+id/keyguard_status_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+<<<<<<< HEAD
 
             <include layout="@layout/keyguard_weather_view"
                 android:id="@+id/keyguard_weather_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/keyguard_status_area" />
+=======
+
+            <include layout="@layout/keyguard_weather_view"
+                android:id="@+id/keyguard_weather_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/keyguard_status_area" />
+
+            <include layout="@layout/keyguard_shortcuts"
+                android:id="@+id/keyguard_shortcuts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@id/keyguard_weather_view"
+                android:layout_alignBottom="@id/keyguard_weather_view"
+                android:layout_toEndOf="@id/keyguard_weather_view"
+                android:layout_below="@id/keyguard_weather_view"/>
+>>>>>>> 206489aac49ea6f30744d07f37aee129d5216a22
 
             <TextView
                 android:id="@+id/owner_info"
@@ -106,7 +126,11 @@
                 android:layout_marginTop="@dimen/date_owner_info_margin"
                 android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
+<<<<<<< HEAD
                 android:layout_below="@id/keyguard_weather_view"
+=======
+                android:layout_below="@id/keyguard_shortcuts"
+>>>>>>> 206489aac49ea6f30744d07f37aee129d5216a22
                 android:textColor="?attr/wallpaperTextColorSecondary"
                 android:textSize="@dimen/widget_label_font_size"
                 android:letterSpacing="0.05"

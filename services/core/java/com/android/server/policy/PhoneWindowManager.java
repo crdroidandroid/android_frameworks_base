@@ -2630,6 +2630,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     public void onTrustedChanged() {
                         mWindowManagerFuncs.notifyKeyguardTrustedChanged();
                     }
+
+                    @Override
+                    public void onShowingChanged() {
+                        mWindowManagerFuncs.onKeyguardShowingAndNotOccludedChanged();
+                    }
                 });
 
         final Resources res = mContext.getResources();

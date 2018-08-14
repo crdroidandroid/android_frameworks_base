@@ -18,4 +18,13 @@
 
     <!-- Default clock parameters -->
     <dimen name="bottom_text_spacing_analog">14dp</dimen>
+<<<<<<< HEAD
+=======
+
+    <!-- The seperater between the shorcuts. -->
+    <dimen name="shortcut_seperater_width">8dp</dimen>
+
+    <!-- Top margin for shortcuts. -->
+    <dimen name="shortcut_margin_top">25dp</dimen>
+>>>>>>> 206489aac49ea6f30744d07f37aee129d5216a22
 </resources>

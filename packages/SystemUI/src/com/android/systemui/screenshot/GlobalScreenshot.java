@@ -597,6 +597,7 @@ class GlobalScreenshot {
         mPreviewWidth = panelWidth;
         mPreviewHeight = r.getDimensionPixelSize(R.dimen.notification_max_height);
 
+<<<<<<< HEAD
         int physicalWidth = (mDisplay.getRotation() % 2 == 0) ?
                           mDisplayMetrics.widthPixels : mDisplayMetrics.heightPixels;
         int maxPhysicalWidth = physicalWidth;
@@ -608,6 +609,8 @@ class GlobalScreenshot {
         }
         mScale = (float) physicalWidth / (float) maxPhysicalWidth;
 
+=======
+>>>>>>> 206489aac49ea6f30744d07f37aee129d5216a22
         // Setup the Screenshot sound
         mScreenshotSound= RingtoneManager.getRingtone(mContext,
                     Uri.parse("file://" + "/system/media/audio/ui/camera_click.ogg"));
