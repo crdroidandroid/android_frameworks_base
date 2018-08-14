@@ -103,9 +103,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
-                android:layout_alignTop="@id/keyguard_weather_view"
-                android:layout_alignBottom="@id/keyguard_weather_view"
-                android:layout_toEndOf="@id/keyguard_weather_view"
                 android:layout_below="@id/keyguard_weather_view"/>
 
             <TextView
