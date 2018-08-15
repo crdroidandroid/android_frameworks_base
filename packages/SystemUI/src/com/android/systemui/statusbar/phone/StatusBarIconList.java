@@ -18,10 +18,13 @@ package com.android.systemui.statusbar.phone;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.telephony.SubscriptionManager;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.statusbar.StatusBarIcon;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.android.systemui.statusbar.phone.StatusBarIconController.TAG_PRIMARY;
@@ -183,6 +186,18 @@ public class StatusBarIconList {
 
             // These holders get added to the end. Confused yet?
             mSubSlots.add(holder);
+
+            if (holder.getType() == StatusBarIconHolder.TYPE_MOBILE) {
+                Collections.sort(mSubSlots, new Comparator<StatusBarIconHolder>() {
+                    @Override
+                    public int compare(StatusBarIconHolder lhs, StatusBarIconHolder rhs) {
+                        int indexLhs = SubscriptionManager.getSlotIndex(lhs.getTag());
+                        int indexRhs = SubscriptionManager.getSlotIndex(rhs.getTag());
+                        return  indexRhs - indexLhs;
+                    }
+                });
+            }
+
         }
 
         private int getIndexForTag(int tag) {

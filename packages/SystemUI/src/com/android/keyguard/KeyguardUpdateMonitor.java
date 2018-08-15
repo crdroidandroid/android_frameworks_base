@@ -98,6 +98,8 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -489,6 +491,14 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener,
         List<SubscriptionInfo> sil = mSubscriptionInfo;
         if (sil == null || forceReload) {
             sil = mSubscriptionManager.getActiveSubscriptionInfoList();
+            Collections.sort(sil, new Comparator<SubscriptionInfo>() {
+                @Override
+                public int compare(SubscriptionInfo lhs, SubscriptionInfo rhs) {
+                    return lhs.getSimSlotIndex() == rhs.getSimSlotIndex()
+                            ? lhs.getSubscriptionId() - rhs.getSubscriptionId()
+                            : lhs.getSimSlotIndex() - rhs.getSimSlotIndex();
+                }
+            });
         }
         if (sil == null) {
             // getActiveSubscriptionInfoList was null callers expect an empty list.
