@@ -259,6 +259,9 @@ public class PieMenu extends RelativeLayout {
     private int mWifiIconResId;
     private int mNetworkIconResId;
 
+    private static final String FONT_FAMILY = "sans-serif-light";
+    private static Typeface tf;
+
     /**
      * Creates a new pie outline view
      *
@@ -279,6 +282,8 @@ public class PieMenu extends RelativeLayout {
         setWillNotDraw(false);
         setDrawingCacheEnabled(false);
         setElevation(mResources.getDimensionPixelSize(R.dimen.pie_elevation));
+
+        tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
 
         // create system services
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
@@ -491,6 +496,7 @@ public class PieMenu extends RelativeLayout {
         mClockPaint.setTextSize(mResources
                 .getDimensionPixelSize(R.dimen.pie_clock_size));
         mClockPaint.setLetterSpacing(mResources.getFloat(R.integer.pie_clock_letter_spacing));
+        mClockPaint.setTypeface(tf);
         measureClock(getSimpleTime());
         mClockOffsetY = mResources.getDimensionPixelSize(R.dimen.pie_clock_offset);
 
@@ -498,6 +504,7 @@ public class PieMenu extends RelativeLayout {
         mStatusPaint.setTextSize(mResources
                 .getDimensionPixelSize(R.dimen.pie_status_size));
         mStatusPaint.setLetterSpacing(mResources.getFloat(R.integer.pie_status_letter_spacing));
+        mStatusPaint.setTypeface(tf);
 
         // landscape ofset
         mLandOffsetX = mResources.getDimensionPixelSize(R.dimen.pie_land_offset);
