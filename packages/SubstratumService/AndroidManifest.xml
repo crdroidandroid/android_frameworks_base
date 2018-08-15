@@ -21,11 +21,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="android.substratum.service"
     android:sharedUserId="android.uid.system"
-    android:versionCode="1"
-    android:versionName="one" >
+    android:versionCode="2"
+    android:versionName="two" >
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CHANGE_OVERLAY_PACKAGES"/>
 
     <application
         android:allowBackup="false"
