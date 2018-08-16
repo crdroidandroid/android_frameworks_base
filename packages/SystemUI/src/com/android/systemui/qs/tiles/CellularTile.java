@@ -106,15 +106,7 @@ public class CellularTile extends QSTileImpl<SignalState> {
         if (getState().state == Tile.STATE_UNAVAILABLE) {
             return;
         }
-        if (mDataController.isMobileDataEnabled()) {
-            if (mKeyguardMonitor.isSecure() && !mKeyguardMonitor.canSkipBouncer()) {
-                mActivityStarter.postQSRunnableDismissingKeyguard(this::maybeShowDisableDialog);
-            } else {
-                mUiHandler.post(this::maybeShowDisableDialog);
-            }
-        } else {
-            mDataController.setMobileDataEnabled(true);
-        }
+        mDataController.setMobileDataEnabled(!mDataController.isMobileDataEnabled());
     }
 
     private void maybeShowDisableDialog() {
