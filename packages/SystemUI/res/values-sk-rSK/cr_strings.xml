@@ -147,34 +147,38 @@
   <string name="quick_settings_smart_pixels">Smart Pixels</string>
   <string name="quick_settings_smart_pixels_on_power_save">Zapnúť Smart Pixels automaticky</string>
   <!-- Off/On/Toggle -->
-  <string name="off">Off</string>
-  <string name="on">On</string>
-  <string name="toggle">Toggle</string>
+  <string name="off">Vyp.</string>
+  <string name="on">Zap.</string>
+  <string name="toggle">Prepnúť</string>
   <!-- Dialog Cancel/OK -->
-  <string name="cancel">Cancel</string>
+  <string name="cancel">Zrušiť</string>
   <string name="dlg_ok">Ok</string>
-  <string name="yes">Yes</string>
-  <string name="no">No</string>
+  <string name="yes">Áno</string>
+  <string name="no">Nie</string>
   <!-- Slim Shortcut Actions -->
-  <string name="shortcut_picker">crDroid Shortcuts</string>
-  <string name="shortcut_rotation">Rotation lock toggle</string>
-  <string name="shortcut_torch">Flashlight</string>
-  <string name="shortcut_chamber">Chamber of Secrets</string>
-  <string name="shortcut_reboot">Reboot</string>
+  <string name="shortcut_picker">crDroid odkazy</string>
+  <string name="shortcut_rotation">Prepínač zámku rotácie obrazovky</string>
+  <string name="shortcut_torch">Baterka</string>
+  <string name="shortcut_chamber">Tajomná komnata</string>
+  <string name="shortcut_reboot">Reštartovať</string>
   <string name="shortcut_recovery">Recovery</string>
-  <string name="shortcut_screensleep">Sleep Screen</string>
-  <string name="shortcut_toggle_title">Action to perform</string>
-  <string name="chamber_disabled">Chamber of secrets is closed</string>
-  <string name="chamber_title">Input Settings string</string>
-  <string name="chamber_message">Input a Settings string that is either an on and off (checkbox) function or possibly a list-preference. For example, doze_enabled or similar. Settings can be found in the Settings.java file. WARNING: This process is dangerous!</string>
-  <string name="chamber_invalid">This is an invalid input. Be careful.</string>
-  <string name="chamber_invalid_setting">Try toggling the setting manually to ensure the settings database for this action exists.</string>
-  <string name="chamber_checkbox">Checkbox</string>
-  <string name="chamber_chk_message">Is this setting a checkbox setting?</string>
-  <string name="chamber_int">Input values</string>
-  <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
-  <string name="chamber_name_title">Shortcut name</string>
-  <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
-  <string name="chamber_name_toast">Using default name</string>
-  <string name="shortcut_clear_notifications">Clear notifications</string>
+  <string name="shortcut_screensleep">Obrazovka režimu spánku</string>
+  <string name="shortcut_toggle_title">Akcia na vykonanie</string>
+  <string name="chamber_disabled">Tajomná komnata je zatvorená</string>
+  <string name="chamber_title">Vložte názov nastavení</string>
+  <string name="chamber_message">Zadajte názov nastavenia, ktoré je buď prepínateľné pomocou zaškrtávatka alebo ide o zoznam predvolieb. Napríklad doze_enabled a podobne. Zoznam nastavení sa nachádza v súbore Settings.java. VAROVANIE: Tento proces je nebezpečný!</string>
+  <string name="chamber_invalid">Toto je neplatný vstup. Buďte opatrní.</string>
+  <string name="chamber_invalid_setting">Skúste prepnúť nastavenie ručne, aby ste sa uistili, že toto nastavenie skutočne v databáze existuje.</string>
+  <string name="chamber_checkbox">Zaškrtávacie políčko</string>
+  <string name="chamber_chk_message">Je toto nastavenie zaškrtávacieho poľa?</string>
+  <string name="chamber_int">Vstupné hodnoty</string>
+  <string name="chamber_int_message">Zadajte hodnoty, medzi ktorými by ste chceli v nastavení prepínať. Oddeľte jednotlivé hodnoty čiarkou. Farby nastavujte len v Hex-hodnotách, ako je #FF00aacc alebo v základných farebných hodnotách, ako je červená, zelená a žltá.</string>
+  <string name="chamber_name_title">Názov odkazu</string>
+  <string name="chamber_name_message">Vytvorte odkaz s menom a ikonou na obrazovke.</string>
+  <string name="chamber_name_toast">Použiť predvolený názov</string>
+  <string name="shortcut_clear_notifications">Vymazať upozornenia</string>
+  <!-- Pie controls -->
+  <string name="pie_state_summary">Použiť kruhové ovládacie prvky v pohlcujúcom režime</string>
+  <string name="pie_battery_level">"ÚROVEŇ NABITIA BATÉRIE "</string>
+  <string name="quick_settings_pie">Kruhový ovládač</string>
 </resources>

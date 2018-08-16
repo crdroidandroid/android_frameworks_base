@@ -147,34 +147,38 @@
   <string name="quick_settings_smart_pixels">Điểm ảnh thông minh</string>
   <string name="quick_settings_smart_pixels_on_power_save">Tự động bật Điểm ảnh thông minh</string>
   <!-- Off/On/Toggle -->
-  <string name="off">Off</string>
-  <string name="on">On</string>
-  <string name="toggle">Toggle</string>
+  <string name="off">Tắt</string>
+  <string name="on">Bật</string>
+  <string name="toggle">Bật/tắt</string>
   <!-- Dialog Cancel/OK -->
-  <string name="cancel">Cancel</string>
+  <string name="cancel">Hủy</string>
   <string name="dlg_ok">Ok</string>
-  <string name="yes">Yes</string>
-  <string name="no">No</string>
+  <string name="yes">Có</string>
+  <string name="no">Không</string>
   <!-- Slim Shortcut Actions -->
-  <string name="shortcut_picker">crDroid Shortcuts</string>
-  <string name="shortcut_rotation">Rotation lock toggle</string>
-  <string name="shortcut_torch">Flashlight</string>
-  <string name="shortcut_chamber">Chamber of Secrets</string>
-  <string name="shortcut_reboot">Reboot</string>
-  <string name="shortcut_recovery">Recovery</string>
-  <string name="shortcut_screensleep">Sleep Screen</string>
-  <string name="shortcut_toggle_title">Action to perform</string>
-  <string name="chamber_disabled">Chamber of secrets is closed</string>
-  <string name="chamber_title">Input Settings string</string>
-  <string name="chamber_message">Input a Settings string that is either an on and off (checkbox) function or possibly a list-preference. For example, doze_enabled or similar. Settings can be found in the Settings.java file. WARNING: This process is dangerous!</string>
-  <string name="chamber_invalid">This is an invalid input. Be careful.</string>
-  <string name="chamber_invalid_setting">Try toggling the setting manually to ensure the settings database for this action exists.</string>
-  <string name="chamber_checkbox">Checkbox</string>
-  <string name="chamber_chk_message">Is this setting a checkbox setting?</string>
-  <string name="chamber_int">Input values</string>
-  <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
-  <string name="chamber_name_title">Shortcut name</string>
-  <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
-  <string name="chamber_name_toast">Using default name</string>
-  <string name="shortcut_clear_notifications">Clear notifications</string>
+  <string name="shortcut_picker">Phím tắt crDroid</string>
+  <string name="shortcut_rotation">Bật/tắt Khoá xoay màn hình</string>
+  <string name="shortcut_torch">Đèn pin</string>
+  <string name="shortcut_chamber">Phòng chứa Bí mật</string>
+  <string name="shortcut_reboot">Khởi động lại</string>
+  <string name="shortcut_recovery">Chế độ phục hồi</string>
+  <string name="shortcut_screensleep">Tắt màn hình</string>
+  <string name="shortcut_toggle_title">Hành động sẽ được thực hiện</string>
+  <string name="chamber_disabled">Phòng chứa Bí mật đã bị đóng</string>
+  <string name="chamber_title">Nhập chuỗi thiết lập</string>
+  <string name="chamber_message">Nhập một chuỗi thiết lập theo dạng chức năng bật/tắt (hộp chọn) hoặc theo dạng danh sách. Ví dụ, doze_enabled hoặc tương tự. Các chuỗi thiết lập có thể được tìm thấy trong tập tin Settings.java. CHÚ Ý: quá trình này nguy hiểm!</string>
+  <string name="chamber_invalid">Đây là một chuỗi nhập không hợp lệ. Hãy cẩn thận.</string>
+  <string name="chamber_invalid_setting">Thử bật/tắt cài đặt một cách thủ công để chắc chắn rằng dữ liệu cài đặt cho hành động này tồn tại.</string>
+  <string name="chamber_checkbox">Hộp chọn</string>
+  <string name="chamber_chk_message">Đây có phải là một cài đặt dạng hộp chọn không?</string>
+  <string name="chamber_int">Nhập giá trị</string>
+  <string name="chamber_int_message">Nhập các giá trị để cài đặt tự động chuyển đổi chúng. GIữa các giá trị khác nhau có dấu phẩy. Thiết lập màu chấp nhận các giá trị hex như #FF00aacc hoặc các màu cơ bản như đỏ, xanh và vàng.</string>
+  <string name="chamber_name_title">Tên phím tắt</string>
+  <string name="chamber_name_message">Đặt tên cho phím tắt để hiển thị nó ở dưới biểu tượng.</string>
+  <string name="chamber_name_toast">Sử dụng tên mặc định</string>
+  <string name="shortcut_clear_notifications">Xoá thông báo</string>
+  <!-- Pie controls -->
+  <string name="pie_state_summary">Sử dụng điều khiển pie trong chế độ toàn màn hình</string>
+  <string name="pie_battery_level">"MỨC PIN "</string>
+  <string name="quick_settings_pie">Pie</string>
 </resources>

@@ -165,16 +165,20 @@
   <string name="shortcut_screensleep">Képernyő kikapcsolása</string>
   <string name="shortcut_toggle_title">Művelet végrehajtása</string>
   <string name="chamber_disabled">A Titkok kamrája zárva</string>
-  <string name="chamber_title">Input Settings string</string>
-  <string name="chamber_message">Input a Settings string that is either an on and off (checkbox) function or possibly a list-preference. For example, doze_enabled or similar. Settings can be found in the Settings.java file. WARNING: This process is dangerous!</string>
+  <string name="chamber_title">Beállítások karakterlánc megadása</string>
+  <string name="chamber_message">Adja meg a Beállítások karakterláncot, amely vagy be és kikapcsol egy funkciót (jelölőnégyzettel), vagy esetleg egy választható lista. Például doze_enabled vagy hasonló. A Beállítások megtalálhatók a Settings.java fájlban. FIGYELEM: Ez a folyamat veszélyes!</string>
   <string name="chamber_invalid">Érvénytelen bevitel. Legyen óvatos.</string>
-  <string name="chamber_invalid_setting">Try toggling the setting manually to ensure the settings database for this action exists.</string>
+  <string name="chamber_invalid_setting">Tesztelje a beállítás manuális kapcsolását annak érdekében, hogy biztos lehessen benne, hogy a beállítási adatbázis létezik ehhez a művelethez.</string>
   <string name="chamber_checkbox">Jelölőnégyzet</string>
-  <string name="chamber_chk_message">Is this setting a checkbox setting?</string>
-  <string name="chamber_int">Input values</string>
-  <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
+  <string name="chamber_chk_message">Ez a beállítás jelölőnégyzet beállítás?</string>
+  <string name="chamber_int">Értékek megadása</string>
+  <string name="chamber_int_message">Add meg az értékeket amik között változtatod a beállításokat. Értékeket vesszővel válaszd el. Színeket hex-értékben add meg, pl. #FF00aacc vagy alapszínként vörös, zöld és sárga.</string>
   <string name="chamber_name_title">Hivatkozás neve</string>
-  <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
+  <string name="chamber_name_message">Adjon egy nevet a parancsikonnak, ami az ikonnal együtt megjelenik.</string>
   <string name="chamber_name_toast">Alapértelmezett név használata</string>
   <string name="shortcut_clear_notifications">Értesítések törlése</string>
+  <!-- Pie controls -->
+  <string name="pie_state_summary">Körcikk vezérlő használata teljes képernyős üzemmódban</string>
+  <string name="pie_battery_level">"AKKUMULÁTORSZINT "</string>
+  <string name="quick_settings_pie">Körcikk indító</string>
 </resources>

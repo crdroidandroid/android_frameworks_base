@@ -177,4 +177,8 @@
   <string name="chamber_name_message">Da un nume la o scurtatura pentru afisare cu o pictograma.</string>
   <string name="chamber_name_toast">Folosind numele implicit</string>
   <string name="shortcut_clear_notifications">Ștergeți notificări</string>
+  <!-- Pie controls -->
+  <string name="pie_state_summary">Utilizaţi controale Pie în modul imersiv</string>
+  <string name="pie_battery_level">"NIVELUL BATERIEI "</string>
+  <string name="quick_settings_pie">Pie</string>
 </resources>

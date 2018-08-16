@@ -177,4 +177,8 @@
   <string name="chamber_name_message">Simgeyle birlikte görüntülenmesi için kısayola bir isim verin.</string>
   <string name="chamber_name_toast">Varsayılan adı kullan</string>
   <string name="shortcut_clear_notifications">Bildirimleri temizle</string>
+  <!-- Pie controls -->
+  <string name="pie_state_summary">Tam ekran modundayken pie kontrollerini kullanın</string>
+  <string name="pie_battery_level">"PİL SEVİYESİ "</string>
+  <string name="quick_settings_pie">Pie</string>
 </resources>

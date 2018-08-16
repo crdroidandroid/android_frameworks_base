@@ -177,4 +177,8 @@
   <string name="chamber_name_message">Donner au raccourci un nom à afficher avec l\'icône.</string>
   <string name="chamber_name_toast">Utilisation du nom par défaut</string>
   <string name="shortcut_clear_notifications">Effacer les notifications</string>
+  <!-- Pie controls -->
+  <string name="pie_state_summary">Use pie controls while in immersive mode</string>
+  <string name="pie_battery_level">"BATTERY LEVEL "</string>
+  <string name="quick_settings_pie">Pie</string>
 </resources>

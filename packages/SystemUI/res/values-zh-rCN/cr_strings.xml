@@ -177,4 +177,8 @@
   <string name="chamber_name_message">给该快捷方式一个名称来显示。</string>
   <string name="chamber_name_toast">使用默认的名称</string>
   <string name="shortcut_clear_notifications">清除通知</string>
+  <!-- Pie controls -->
+  <string name="pie_state_summary">在沉浸模式使用Pie悬浮窗</string>
+  <string name="pie_battery_level">"电量等级"</string>
+  <string name="quick_settings_pie">Pie</string>
 </resources>
