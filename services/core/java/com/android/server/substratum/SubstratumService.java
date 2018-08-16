@@ -70,6 +70,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import static android.os.Binder.getCallingUid;
 
 public final class SubstratumService extends SystemService {
 
@@ -633,7 +634,25 @@ public final class SubstratumService extends SystemService {
                 return null;
             }
         }
-    };
+
+        @Override
+        public boolean setEnabled(final String packageName, final boolean enable,
+                int userId) throws RemoteException {
+            userId = Binder.getCallingUid();
+            if (packageName == null) {
+                return false;
+            }
+            log("setEnabled - File name = \'" + packageName + "\'");
+            final long ident = Binder.clearCallingIdentity();
+            try {
+                synchronized (mLock) {
+                    return mOm.setEnabled(packageName, enable, UserHandle.USER_SYSTEM);
+                }
+            } finally {
+                Binder.restoreCallingIdentity(ident);
+            }
+        }
+   };
 
     private Context getAppContext(String packageName) {
         Context ctx = null;
