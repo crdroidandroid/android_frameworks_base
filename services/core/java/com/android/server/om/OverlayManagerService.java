@@ -539,7 +539,6 @@ public final class OverlayManagerService extends SystemService {
         @Override
         public boolean setEnabled(@Nullable final String packageName, final boolean enable,
                 int userId) throws RemoteException {
-            enforceChangeOverlayPackagesPermission("setEnabled");
             userId = handleIncomingUser(userId, "setEnabled");
             if (packageName == null) {
                 return false;
@@ -558,7 +557,6 @@ public final class OverlayManagerService extends SystemService {
         @Override
         public boolean setEnabledExclusive(@Nullable final String packageName, final boolean enable,
                 int userId) throws RemoteException {
-            enforceChangeOverlayPackagesPermission("setEnabled");
             userId = handleIncomingUser(userId, "setEnabled");
             if (packageName == null || !enable) {
                 return false;
