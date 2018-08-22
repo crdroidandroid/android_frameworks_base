@@ -604,6 +604,14 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
      */
     int mImeWindowVis;
 
+    @Override
+    public boolean isImeWindowVisible() {
+        if ((mImeWindowVis & InputMethodService.IME_VISIBLE) != 0) {
+            return true;
+        }
+        return false;
+    }
+
     private AlertDialog.Builder mDialogBuilder;
     private AlertDialog mSwitchingDialog;
     private IBinder mSwitchingDialogToken = new Binder();
