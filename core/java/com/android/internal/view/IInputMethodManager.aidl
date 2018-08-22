@@ -93,4 +93,6 @@ interface IInputMethodManager {
     void reportFullscreenMode(in IBinder token, boolean fullscreen);
 
     oneway void notifyUserAction(int sequenceNumber);
+
+    boolean isImeWindowVisible();
 }
