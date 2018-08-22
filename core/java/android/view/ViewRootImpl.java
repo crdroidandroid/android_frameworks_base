@@ -61,11 +61,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
 import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Trace;
@@ -107,6 +109,7 @@ import com.android.internal.os.SomeArgs;
 import com.android.internal.policy.PhoneFallbackEventHandler;
 import com.android.internal.util.Preconditions;
 import com.android.internal.view.BaseSurfaceHolder;
+import com.android.internal.view.IInputMethodManager;
 import com.android.internal.view.RootViewSurfaceTaker;
 import com.android.internal.view.SurfaceCallbackHelper;
 
@@ -4391,6 +4394,11 @@ public final class ViewRootImpl implements ViewParent,
         return false;
     }
 
+    private static IInputMethodManager getIInputMethodManager() {
+        IBinder b = ServiceManager.getService(Context.INPUT_METHOD_SERVICE);
+        return IInputMethodManager.Stub.asInterface(b);
+    }
+
     /**
      * Base class for implementing a stage in the chain of responsibility
      * for processing input events.
@@ -4750,6 +4758,9 @@ public final class ViewRootImpl implements ViewParent,
 
         @Override
         protected int onProcess(QueuedInputEvent q) {
+            if(!isImeVis()) {
+                return FORWARD;
+            }
             if (mLastWasImTarget && !isInLocalFocusMode()) {
                 InputMethodManager imm = InputMethodManager.peekInstance();
                 if (imm != null) {
@@ -4777,6 +4788,17 @@ public final class ViewRootImpl implements ViewParent,
                 return;
             }
             forward(q);
+        }
+
+        private boolean isImeVis() {
+            IInputMethodManager iimm = getIInputMethodManager();
+            boolean imeVis = true;
+            try {
+                imeVis = iimm.isImeWindowVisible();
+            } catch (RemoteException e) {
+                Log.e(TAG, "Could not communicate with IInputMethodManager", e);
+            }
+            return imeVis;
         }
     }
 
