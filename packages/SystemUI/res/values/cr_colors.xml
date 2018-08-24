@@ -18,4 +18,6 @@
 
     <!-- Navbar icon Colors -->
     <color name="dark_nav_bar">#ff585858</color>
+
+    <color name="qs_icon_active_color">@*android:color/qs_icon_active_color</color>
 </resources>
