@@ -16,4 +16,5 @@
 -->
 <resources>
 
+    <color name="qs_icon_active_color">@*android:color/qs_icon_active_color</color>
 </resources>
