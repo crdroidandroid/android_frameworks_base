@@ -16,4 +16,5 @@
 -->
 <resources>
 
+    <color name="qs_icon_active_color">#ffffffff</color>
 </resources>
