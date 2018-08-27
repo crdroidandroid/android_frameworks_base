@@ -178,7 +178,7 @@
   <string name="chamber_name_toast">Використовується ім\'я за замовчуванням</string>
   <string name="shortcut_clear_notifications">Очистити сповіщення</string>
   <!-- Pie controls -->
-  <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-  <string name="pie_battery_level">"BATTERY LEVEL "</string>
+  <string name="pie_state_summary">Використовувати керування PIE в повноекранному режимі</string>
+  <string name="pie_battery_level">"Заряд батареї "</string>
   <string name="quick_settings_pie">Pie</string>
 </resources>

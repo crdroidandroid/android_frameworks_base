@@ -127,7 +127,7 @@
   <string name="accessibility_quick_settings_hw_keys_enabled">Tasti fisici abilitati.</string>
   <!-- Heads up snooze toast -->
   <string name="heads_up_snooze_message_one_minute">Notifica peeking posticipata di 1 minuto.</string>
-  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Le notifiche saranno posticipate per <xliff:g id="number">%d</xliff:g> minuti.</string>
   <!-- Free ram -->
   <string name="recents_free_ram">RAM libera: %1$d MB</string>
   <!-- On The Go -->
@@ -147,38 +147,38 @@
   <string name="quick_settings_smart_pixels">Smart pixel</string>
   <string name="quick_settings_smart_pixels_on_power_save">Smart pixel auto-attivati</string>
   <!-- Off/On/Toggle -->
-  <string name="off">Off</string>
-  <string name="on">On</string>
-  <string name="toggle">Toggle</string>
+  <string name="off">Spento</string>
+  <string name="on">Acceso</string>
+  <string name="toggle">Attiva/disattiva</string>
   <!-- Dialog Cancel/OK -->
-  <string name="cancel">Cancel</string>
+  <string name="cancel">Annulla</string>
   <string name="dlg_ok">Ok</string>
-  <string name="yes">Yes</string>
+  <string name="yes">Sì</string>
   <string name="no">No</string>
   <!-- Slim Shortcut Actions -->
-  <string name="shortcut_picker">crDroid Shortcuts</string>
-  <string name="shortcut_rotation">Rotation lock toggle</string>
-  <string name="shortcut_torch">Flashlight</string>
-  <string name="shortcut_chamber">Chamber of Secrets</string>
-  <string name="shortcut_reboot">Reboot</string>
+  <string name="shortcut_picker">Scorciatoie crDroid</string>
+  <string name="shortcut_rotation">Attiva/disattiva blocco rotazione</string>
+  <string name="shortcut_torch">Torcia</string>
+  <string name="shortcut_chamber">Camera dei segreti</string>
+  <string name="shortcut_reboot">Riavvia</string>
   <string name="shortcut_recovery">Recovery</string>
-  <string name="shortcut_screensleep">Sleep Screen</string>
-  <string name="shortcut_toggle_title">Action to perform</string>
-  <string name="chamber_disabled">Chamber of secrets is closed</string>
-  <string name="chamber_title">Input Settings string</string>
-  <string name="chamber_message">Input a Settings string that is either an on and off (checkbox) function or possibly a list-preference. For example, doze_enabled or similar. Settings can be found in the Settings.java file. WARNING: This process is dangerous!</string>
-  <string name="chamber_invalid">This is an invalid input. Be careful.</string>
-  <string name="chamber_invalid_setting">Try toggling the setting manually to ensure the settings database for this action exists.</string>
+  <string name="shortcut_screensleep">Schermo spento</string>
+  <string name="shortcut_toggle_title">Azione da eseguire</string>
+  <string name="chamber_disabled">La camera dei segreti è chiusa</string>
+  <string name="chamber_title">Impostazioni di immissione</string>
+  <string name="chamber_message">Inserisci una stringa di impostazione, sia essa una checkbox on off o una lista di preferenze. Per esempio, doze_enabled o simili. Le impostazioni possono essere trovate nel file Settings.java. Attenzione: è una procedura pericolosa!</string>
+  <string name="chamber_invalid">Attenzione, input non valido.</string>
+  <string name="chamber_invalid_setting">Cercare di attivare e disattivare l\'impostazione manualmente per verificare che il database delle impostazioni per questa azione esista.</string>
   <string name="chamber_checkbox">Checkbox</string>
-  <string name="chamber_chk_message">Is this setting a checkbox setting?</string>
-  <string name="chamber_int">Input values</string>
-  <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
-  <string name="chamber_name_title">Shortcut name</string>
-  <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
-  <string name="chamber_name_toast">Using default name</string>
-  <string name="shortcut_clear_notifications">Clear notifications</string>
+  <string name="chamber_chk_message">Questa impostazione è un checkbox?</string>
+  <string name="chamber_int">Inserisci valori</string>
+  <string name="chamber_int_message">Inserisci i valori che vorresti impostare. Separa ognuno di essi con una virgola. Le impostazioni colore accettano valori hex come #FF00aacc o nomi base come red, green, e yellow.</string>
+  <string name="chamber_name_title">Nome del collegamento</string>
+  <string name="chamber_name_message">Dai un nome al collegamento da visualizzare con l\'icona.</string>
+  <string name="chamber_name_toast">Utilizza il nome predefinito</string>
+  <string name="shortcut_clear_notifications">Cancella le notifiche</string>
   <!-- Pie controls -->
-  <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-  <string name="pie_battery_level">"BATTERY LEVEL "</string>
+  <string name="pie_state_summary">Utilizza i controlli a torta mentre sei in modalità immersiva</string>
+  <string name="pie_battery_level">"LIVELLO BATTERIA"</string>
   <string name="quick_settings_pie">Pie</string>
 </resources>
