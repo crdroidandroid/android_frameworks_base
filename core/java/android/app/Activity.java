@@ -1132,6 +1132,7 @@ public class Activity extends ContextThemeWrapper
         if (mWindow != null) {
             Bundle windowState = savedInstanceState.getBundle(WINDOW_HIERARCHY_TAG);
             if (windowState != null) {
+                windowState.setClassLoader(savedInstanceState.getClassLoader());
                 mWindow.restoreHierarchyState(windowState);
             }
         }
