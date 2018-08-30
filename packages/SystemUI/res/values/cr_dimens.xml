@@ -107,4 +107,7 @@
 
     <!-- Screen recorder -->
     <dimen name="screenrecord_dot_size">48dp</dimen>
+
+    <!-- OmniWeather image size -->
+    <dimen name="current_weather_image_size">42dp</dimen>
 </resources>
