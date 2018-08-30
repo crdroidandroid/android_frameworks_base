@@ -3521,4 +3521,6 @@
     <!-- Component name for default assistant on this device -->
     <string name="config_defaultAssistantComponentName"></string>
 
+    <!-- Minimal height of bottom stack when IME is displayed -->
+    <dimen name="config_bottom_stack_minimal_height">0dp</dimen>
   </resources>

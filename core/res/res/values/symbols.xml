@@ -3417,4 +3417,7 @@
   <java-symbol type="string" name="config_misprovisionedBrandValue" />
  
   <java-symbol type="string" name="config_defaultAssistantComponentName" />
+
+  <!-- Minimal height of bottom stack when IME is displayed -->
+  <java-symbol type="dimen" name="config_bottom_stack_minimal_height" />
 </resources>
