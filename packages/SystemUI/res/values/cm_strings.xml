@@ -112,4 +112,7 @@
 
     <!-- Status bar - icons -->
     <string name="status_bar_icons_title">Status bar icons</string>
+
+    <!-- Label for area where tiles can be added to the qs panel -->
+    <string name="drag_or_tap_to_add_tiles">Hold &amp; drag or tap to add tiles</string>
 </resources>
