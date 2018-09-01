@@ -21,7 +21,10 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
 LOCAL_PROGUARD_ENABLED := disabled
-LOCAL_REQUIRED_MODULES := projekt.substratum.theme.xml
+LOCAL_REQUIRED_MODULES := \
+      projekt.substratum.theme.xml \
+      substratum_theme.xml
+
 LOCAL_PACKAGE_NAME := SubstratumService
 LOCAL_PRIVATE_PLATFORM_APIS := true
 LOCAL_CERTIFICATE := platform
