@@ -5244,8 +5244,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
         }
 
         if (child.getParent() != null) {
-            throw new IllegalStateException("The specified child already has a parent. " +
-                    "You must call removeView() on the child's parent first.");
+           ((ViewGroup) child.getParent()).removeView(child);
         }
 
         if (mTransition != null) {
