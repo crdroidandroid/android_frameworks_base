@@ -19,26 +19,26 @@
 
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="android.substratum.service"
+    package="projekt.substratum.helper"
     android:sharedUserId="android.uid.system"
     android:versionCode="2"
     android:versionName="two" >
 
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
-    <uses-permission android:name="android.permission.CHANGE_OVERLAY_PACKAGES"/>
+    
     <uses-feature name="projekt.substratum.theme" required="true"/>
 
     <application
         android:allowBackup="false"
-        android:label="Substratum Service">
+        android:label="Substratum Helper Service">
 
-        <service android:name="android.substratum.service.SubstratumHelperService"
+        <service android:name="projekt.substratum.helper.SubstratumHelperService"
                  android:enabled="true"
                  android:exported="true">
             <intent-filter>
-                <action android:name="android.substratum.service.SubstratumHelperService" />
+                <action android:name="projekt.substratum.helper.SubstratumHelperService" />
             </intent-filter>
         </service>
 
