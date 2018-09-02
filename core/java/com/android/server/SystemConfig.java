@@ -146,6 +146,9 @@ public class SystemConfig {
     // Package names that are exempted from private API blacklisting
     final ArraySet<String> mHiddenApiPackageWhitelist = new ArraySet<>();
 
+    // These are the packages that are whitelisted to be the signature check for a theme system
+    final ArraySet<String> mThemeSystemSignatureWhitelistedApps = new ArraySet<>();
+
     // The list of carrier applications which should be disabled until used.
     // This function suppresses update notifications for these pre-installed apps.
     // In SubscriptionInfoUpdater, the listed applications are disabled until used when all of the
@@ -246,6 +249,10 @@ public class SystemConfig {
 
     public ArraySet<ComponentName> getBackupTransportWhitelist() {
         return mBackupTransportWhitelist;
+    }
+
+    public ArraySet<String> getThemeSystemSignatureWhitelistedApps() {
+        return mThemeSystemSignatureWhitelistedApps;
     }
 
     public ArraySet<String> getDisabledUntilUsedPreinstalledCarrierApps() {
@@ -641,6 +648,15 @@ public class SystemConfig {
                         } else {
                             mBackupTransportWhitelist.add(cn);
                         }
+                    }
+                    XmlUtils.skipCurrentTag(parser);
+                } else if ("theme-system-signature-whitelisted-app".equals(name) && allowAppConfigs) {
+                    String pkgname = parser.getAttributeValue(null, "package");
+                    if (pkgname == null) {
+                        Slog.w(TAG, "<theme-system-signature-whitelisted-app> without package in " + permFile
+                                + " at " + parser.getPositionDescription());
+                    } else {
+                        mThemeSystemSignatureWhitelistedApps.add(pkgname);
                     }
                     XmlUtils.skipCurrentTag(parser);
                 } else if ("disabled-until-used-preinstalled-carrier-associated-app".equals(name)
