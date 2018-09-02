@@ -15,11 +15,11 @@
     limitations under the License.
 -->
 
-<permissions>
+<config>
     <!-- Limitation permission to block out themes from being visible on stock
          AOSP, or non-OMS devices. -->
 
     <!-- This is an alias for projekt.substratum.theme -->
     <feature name="projekt.substratum.theme" />
 
-</permissions>
+</config>

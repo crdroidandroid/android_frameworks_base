@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package android.substratum.service;
+package projekt.substratum.helper;
 
 import android.app.Service;
 import android.content.Intent;
@@ -30,7 +30,7 @@ import com.android.internal.substratum.ISubstratumHelperService;
 import java.io.File;
 
 public class SubstratumHelperService extends Service {
-    private static final String TAG = "SubstratumService";
+    private static final String TAG = "SubstratumHelperService";
 
     private final File EXTERNAL_CACHE_DIR =
             new File(Environment.getExternalStorageDirectory(), ".substratum");
