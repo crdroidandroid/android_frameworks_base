@@ -211,8 +211,8 @@ public final class SubstratumService extends SystemService {
 
     private void waitForHelperConnection() {
         if (mHelperService == null) {
-            Intent intent = new Intent("android.substratum.service.SubstratumHelperService");
-            intent.setPackage("android.substratum.service");
+            Intent intent = new Intent("projekt.substratum.helper.SubstratumHelperService");
+            intent.setPackage("projekt.substratum.helper");
             mContext.bindServiceAsUser(intent, mHelperConnection,
                     Context.BIND_AUTO_CREATE, UserHandle.SYSTEM);
         }
