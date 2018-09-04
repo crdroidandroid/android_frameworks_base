@@ -1549,8 +1549,8 @@ public class AppStandbyController {
             final boolean buildFlag = mContext.getResources().getBoolean(
                     com.android.internal.R.bool.config_enableAutoPowerModes);
             final boolean runtimeFlag = Global.getInt(mContext.getContentResolver(),
-                    Global.APP_STANDBY_ENABLED, 1) == 1
-                    && Global.getInt(mContext.getContentResolver(),
+                    /*Global.APP_STANDBY_ENABLED, 1) == 1
+                    && Global.getInt(mContext.getContentResolver(),*/
                     Global.ADAPTIVE_BATTERY_MANAGEMENT_ENABLED, 1) == 1;
             return buildFlag && runtimeFlag;
         }
@@ -1792,7 +1792,7 @@ public class AppStandbyController {
         void registerObserver() {
             final ContentResolver cr = mContext.getContentResolver();
             cr.registerContentObserver(Global.getUriFor(Global.APP_IDLE_CONSTANTS), false, this);
-            cr.registerContentObserver(Global.getUriFor(Global.APP_STANDBY_ENABLED), false, this);
+            /*cr.registerContentObserver(Global.getUriFor(Global.APP_STANDBY_ENABLED), false, this);*/
             cr.registerContentObserver(Global.getUriFor(Global.ADAPTIVE_BATTERY_MANAGEMENT_ENABLED),
                     false, this);
         }
@@ -1805,9 +1805,9 @@ public class AppStandbyController {
 
         void updateSettings() {
             if (DEBUG) {
-                Slog.d(TAG,
+                /*Slog.d(TAG,
                         "appidle=" + Global.getString(mContext.getContentResolver(),
-                                Global.APP_STANDBY_ENABLED));
+                                Global.APP_STANDBY_ENABLED));*/
                 Slog.d(TAG,
                         "adaptivebat=" + Global.getString(mContext.getContentResolver(),
                                 Global.ADAPTIVE_BATTERY_MANAGEMENT_ENABLED));
