@@ -144,41 +144,41 @@
   <string name="onthego_service_toggle">Automatycznie uruchom ponownie usługę</string>
   <string name="onthego_channel_name">Główny</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">Inteligentne Piksele</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Automatyczne włączanie inteligentnych pikseli</string>
   <!-- Off/On/Toggle -->
-  <string name="off">Off</string>
-  <string name="on">On</string>
-  <string name="toggle">Toggle</string>
+  <string name="off">Wył.</string>
+  <string name="on">Wł.</string>
+  <string name="toggle">Przełącz</string>
   <!-- Dialog Cancel/OK -->
-  <string name="cancel">Cancel</string>
+  <string name="cancel">Anuluj</string>
   <string name="dlg_ok">Ok</string>
-  <string name="yes">Yes</string>
-  <string name="no">No</string>
+  <string name="yes">Tak</string>
+  <string name="no">Nie</string>
   <!-- Slim Shortcut Actions -->
-  <string name="shortcut_picker">crDroid Shortcuts</string>
-  <string name="shortcut_rotation">Rotation lock toggle</string>
-  <string name="shortcut_torch">Flashlight</string>
-  <string name="shortcut_chamber">Chamber of Secrets</string>
-  <string name="shortcut_reboot">Reboot</string>
-  <string name="shortcut_recovery">Recovery</string>
-  <string name="shortcut_screensleep">Sleep Screen</string>
-  <string name="shortcut_toggle_title">Action to perform</string>
-  <string name="chamber_disabled">Chamber of secrets is closed</string>
-  <string name="chamber_title">Input Settings string</string>
-  <string name="chamber_message">Input a Settings string that is either an on and off (checkbox) function or possibly a list-preference. For example, doze_enabled or similar. Settings can be found in the Settings.java file. WARNING: This process is dangerous!</string>
-  <string name="chamber_invalid">This is an invalid input. Be careful.</string>
-  <string name="chamber_invalid_setting">Try toggling the setting manually to ensure the settings database for this action exists.</string>
-  <string name="chamber_checkbox">Checkbox</string>
-  <string name="chamber_chk_message">Is this setting a checkbox setting?</string>
-  <string name="chamber_int">Input values</string>
-  <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
-  <string name="chamber_name_title">Shortcut name</string>
-  <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
-  <string name="chamber_name_toast">Using default name</string>
-  <string name="shortcut_clear_notifications">Clear notifications</string>
+  <string name="shortcut_picker">Skróty crDroid</string>
+  <string name="shortcut_rotation">Blokada obrotu ekranu przełączona</string>
+  <string name="shortcut_torch">Latarka</string>
+  <string name="shortcut_chamber">Komnata Tajemnic</string>
+  <string name="shortcut_reboot">Uruchom ponownie</string>
+  <string name="shortcut_recovery">Uruchom w trybie Recovery</string>
+  <string name="shortcut_screensleep">Wyłącz ekran</string>
+  <string name="shortcut_toggle_title">Akcja do wykonania</string>
+  <string name="chamber_disabled">Komnata Tajemnic jest zamknięta</string>
+  <string name="chamber_title">Wpisz ciąg z ustawień</string>
+  <string name="chamber_message">Wpisz ciąg znaków ustawienia, który jest przełącznikiem włącz/wyłącz lub listą wyboru. Na przykład, quiet_hours_ringer lub podobne. Ustawienia znajdziesz w pliku Settings.java. UWAGA: Ten proces jest niebezpieczny!</string>
+  <string name="chamber_invalid">Wprowadzono niepoprawne dane. Bądź ostrożny.</string>
+  <string name="chamber_invalid_setting">Spróbuj przełączyć ustawienia ręcznie aby się upewnić że baza danych dla tej akcji istnieje.</string>
+  <string name="chamber_checkbox">Pole wyboru</string>
+  <string name="chamber_chk_message">Czy to ustawienie jest ustawieniem z polem wyboru?</string>
+  <string name="chamber_int">Wprowadź wartości</string>
+  <string name="chamber_int_message">Wprowadź dane pomiędzy którymi chcesz się przełączać. Oddziel każdy wpis przecinkiem. Ustawienia koloru podaj jako wartości hex np. #FF00aacc lub podaj nazwę koloru podstawowego w języku angielskim np. red, green, yellow.</string>
+  <string name="chamber_name_title">Nazwa skrótu</string>
+  <string name="chamber_name_message">Nadaj skrótowi nazwę, która będzie wyświetlona wraz z ikoną.</string>
+  <string name="chamber_name_toast">Użyj domyślnej nazwy</string>
+  <string name="shortcut_clear_notifications">Wyczyść powiadomienia</string>
   <!-- Pie controls -->
-  <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-  <string name="pie_battery_level">"BATTERY LEVEL "</string>
+  <string name="pie_state_summary">Używaj interfejsu Pie w trybie pełnoekranowym</string>
+  <string name="pie_battery_level">"POZIOM NAŁADOWANIA BATERII "</string>
   <string name="quick_settings_pie">Pie</string>
 </resources>
