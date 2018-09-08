@@ -113,6 +113,8 @@ public class NotificationPanelView extends PanelView implements
             "lineagesystem:" + LineageSettings.System.DOUBLE_TAP_SLEEP_GESTURE;
     private static final String QS_SMART_PULLDOWN =
             "system:" + Settings.System.QS_SMART_PULLDOWN;
+    private static final String DOUBLE_TAP_SLEEP_LOCKSCREEN =
+            "system:" + Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN;
 
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
 
@@ -311,6 +313,8 @@ public class NotificationPanelView extends PanelView implements
     private int mOneFingerQuickSettingsIntercept;
     private int mQsSmartPullDown;
     private boolean mDoubleTapToSleepEnabled;
+    private boolean mIsLockscreenDoubleTapEnabled;
+    private int mStatusBarHeaderHeight;
     private GestureDetector mDoubleTapGesture;
 
     public NotificationPanelView(Context context, AttributeSet attrs) {
@@ -368,6 +372,7 @@ public class NotificationPanelView extends PanelView implements
         tunerService.addTunable(this, STATUS_BAR_QUICK_QS_PULLDOWN);
         tunerService.addTunable(this, DOUBLE_TAP_SLEEP_GESTURE);
         tunerService.addTunable(this, QS_SMART_PULLDOWN);
+        tunerService.addTunable(this, DOUBLE_TAP_SLEEP_LOCKSCREEN);
     }
 
     @Override
@@ -390,6 +395,9 @@ public class NotificationPanelView extends PanelView implements
             case QS_SMART_PULLDOWN:
                 mQsSmartPullDown =
                         newValue == null ? 0 : Integer.parseInt(newValue);
+                break;
+            case DOUBLE_TAP_SLEEP_LOCKSCREEN:
+                mIsLockscreenDoubleTapEnabled = newValue == null || Integer.parseInt(newValue) == 1;
                 break;
             default:
                 break;
@@ -417,6 +425,8 @@ public class NotificationPanelView extends PanelView implements
                 R.dimen.keyguard_indication_bottom_padding);
         mQsNotificationTopPadding = getResources().getDimensionPixelSize(
                 R.dimen.qs_notification_padding);
+        mStatusBarHeaderHeight = getResources().getDimensionPixelSize(
+                R.dimen.status_bar_header_height_keyguard);
     }
 
     public void updateResources() {
@@ -929,8 +939,10 @@ public class NotificationPanelView extends PanelView implements
         if (mBlockTouches || (mQs != null && mQs.isCustomizing())) {
             return false;
         }
-        if (mDoubleTapToSleepEnabled
-                && mStatusBarState == StatusBarState.KEYGUARD) {
+        if ((mIsLockscreenDoubleTapEnabled
+                && mStatusBarState == StatusBarState.KEYGUARD) ||
+                (!mQsExpanded && mDoubleTapToSleepEnabled
+                && event.getY() < mStatusBarHeaderHeight)) {
             mDoubleTapGesture.onTouchEvent(event);
         }
         initDownStates(event);
