@@ -19,6 +19,7 @@ package com.android.systemui.shade
 import android.content.Context
 import android.database.ContentObserver
 import android.os.PowerManager
+import android.provider.Settings
 import android.view.GestureDetector
 import android.view.MotionEvent
 import com.android.systemui.dagger.SysUISingleton
@@ -39,6 +40,7 @@ class QQSGestureListener @Inject constructor(
 ) : GestureDetector.SimpleOnGestureListener() {
 
     private var doubleTapToSleepEnabled = false
+    private var lockscreenDT2SEnabled = false
     private val quickQsOffsetHeight: Int
 
     init {
@@ -48,10 +50,17 @@ class QQSGestureListener @Inject constructor(
                         context.contentResolver, LineageSettings.System.DOUBLE_TAP_SLEEP_GESTURE,
                         if (context.resources.getBoolean(org.lineageos.platform.internal.
                                 R.bool.config_dt2sGestureEnabledByDefault)) 1 else 0) != 0
+                lockscreenDT2SEnabled = Settings.System.getInt(
+                        context.contentResolver, Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN,
+                        if (context.resources.getBoolean(org.lineageos.platform.internal.
+                                R.bool.config_dt2sGestureEnabledByDefault)) 1 else 0) != 0
             }
         }
         context.contentResolver.registerContentObserver(
                 LineageSettings.System.getUriFor(LineageSettings.System.DOUBLE_TAP_SLEEP_GESTURE),
+                false, contentObserver)
+        context.contentResolver.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN),
                 false, contentObserver)
         contentObserver.onChange(true)
 
@@ -60,16 +69,19 @@ class QQSGestureListener @Inject constructor(
     }
 
     override fun onDoubleTapEvent(e: MotionEvent): Boolean {
-        // Go to sleep when double tapping the QQS status bar
-        // or lockscreen (keyguard showing, but not bouncer)
-        if (
-            e.actionMasked == MotionEvent.ACTION_UP &&
+        // Go to sleep on double tap the QQS status bar
+        if (e.actionMasked == MotionEvent.ACTION_UP &&
                 !statusBarStateController.isDozing &&
                 doubleTapToSleepEnabled &&
-                (e.getY() < quickQsOffsetHeight ||
-                    statusBarStateController.getState() == StatusBarState.KEYGUARD &&
-                        !centralSurfaces.isBouncerShowing()) &&
+                e.getY() < quickQsOffsetHeight &&
                 !falsingManager.isFalseDoubleTap
+        ) {
+            powerManager.goToSleep(e.getEventTime())
+            return true
+        } else if (!statusBarStateController.isDozing &&
+            lockscreenDT2SEnabled &&
+            statusBarStateController.getState() == StatusBarState.KEYGUARD &&
+            !centralSurfaces.isBouncerShowing()            
         ) {
             powerManager.goToSleep(e.getEventTime())
             return true
