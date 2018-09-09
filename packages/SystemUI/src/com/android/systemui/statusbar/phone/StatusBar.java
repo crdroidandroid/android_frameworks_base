@@ -5894,25 +5894,30 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (SCREEN_BRIGHTNESS_MODE.equals(key)) {
-            mAutomaticBrightness = newValue != null && Integer.parseInt(newValue)
-                    == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
-        } else if (STATUS_BAR_BRIGHTNESS_CONTROL.equals(key)) {
-            mBrightnessControl = newValue != null && Integer.parseInt(newValue) == 1;
-        } else if (LOCKSCREEN_MEDIA_METADATA.equals(key)) {
-            mShowMediaMetadata = newValue == null || Integer.parseInt(newValue) != 0;
-        } else if (mWindowManagerService != null && FORCE_SHOW_NAVBAR.equals(key)) {
-            boolean mNavbarVisible =
-                    newValue == null ? Utils.hasNavbarByDefault(mContext) :
-                                Integer.parseInt(newValue) != 0;
-
-            if (mNavbarVisible && mNavigationBarView == null) {
-                createNavigationBar();
-            } else if (!mNavbarVisible && mNavigationBarView != null) {
-                removeNavigationBar();
-            }
-        } else if (BERRY_GLOBAL_STYLE.equals(key)) {
-            updateTheme();
+        switch (key) {
+            case SCREEN_BRIGHTNESS_MODE:
+                mAutomaticBrightness = newValue != null && Integer.parseInt(newValue)
+                        == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+                break;
+            case LOCKSCREEN_MEDIA_METADATA:
+                mShowMediaMetadata = newValue == null || Integer.parseInt(newValue) != 0;
+                break;
+            case FORCE_SHOW_NAVBAR:
+                if (mWindowManagerService == null) break;
+                boolean mNavbarVisible =
+                        newValue == null ? Utils.hasNavbarByDefault(mContext) :
+                                    Integer.parseInt(newValue) != 0;
+                if (mNavbarVisible && mNavigationBarView == null) {
+                    createNavigationBar();
+                } else if (!mNavbarVisible && mNavigationBarView != null) {
+                    removeNavigationBar();
+                }
+                break;
+            case BERRY_GLOBAL_STYLE:
+                updateTheme();
+                break;
+            default:
+                break;
         }
     }
     // End Extra BaseStatusBarMethods.
