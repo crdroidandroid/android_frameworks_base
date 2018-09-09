@@ -5812,23 +5812,27 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (SCREEN_BRIGHTNESS_MODE.equals(key)) {
-            mAutomaticBrightness = newValue != null && Integer.parseInt(newValue)
-                    == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
-        } else if (STATUS_BAR_BRIGHTNESS_CONTROL.equals(key)) {
-            mBrightnessControl = newValue != null && Integer.parseInt(newValue) == 1;
-        } else if (LOCKSCREEN_MEDIA_METADATA.equals(key)) {
-            mShowMediaMetadata = newValue != null && Integer.parseInt(newValue) == 1;
-        } else if (mWindowManagerService != null && FORCE_SHOW_NAVBAR.equals(key)) {
-            boolean mNavbarVisible =
-                    newValue == null ? Utils.hasNavbarByDefault(mContext) :
-                                Integer.parseInt(newValue) != 0;
-
-            if (mNavbarVisible && mNavigationBarView == null) {
-                createNavigationBar();
-            } else if (mNavigationBarView != null) {
-                removeNavigationBar();
-            }
+        switch (key) {
+            case SCREEN_BRIGHTNESS_MODE:
+                mAutomaticBrightness = newValue != null && Integer.parseInt(newValue)
+                        == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+                break;
+            case LOCKSCREEN_MEDIA_METADATA:
+                mShowMediaMetadata = newValue != null && Integer.parseInt(newValue) == 1;
+                break;
+            case FORCE_SHOW_NAVBAR:
+                if (mWindowManagerService == null) break;
+                boolean mNavbarVisible =
+                        newValue == null ? Utils.hasNavbarByDefault(mContext) :
+                                    Integer.parseInt(newValue) != 0;
+                if (mNavbarVisible && mNavigationBarView == null) {
+                    createNavigationBar();
+                } else if (mNavigationBarView != null) {
+                    removeNavigationBar();
+                }
+                break;
+            default:
+                break;
         }
     }
     // End Extra BaseStatusBarMethods.
