@@ -60,12 +60,14 @@ public class LocationTile extends QSTileImpl<BooleanState> {
     private final KeyguardMonitor mKeyguard;
     private final Callback mCallback = new Callback();
     private int mLastState;
+    private MetricsLogger mMetricsLogger;
 
     public LocationTile(QSHost host) {
         super(host);
         mController = Dependency.get(LocationController.class);
         mKeyguard = Dependency.get(KeyguardMonitor.class);
         mDetailAdapter = (LocationDetailAdapter) createDetailAdapter();
+        mMetricsLogger = new MetricsLogger();
     }
 
     @Override
@@ -104,7 +106,7 @@ public class LocationTile extends QSTileImpl<BooleanState> {
     @Override
     protected void handleClick() {
         final boolean wasEnabled = mState.value;
-        MetricsLogger.action(mContext, getMetricsCategory(), !wasEnabled);
+        mMetricsLogger.action(getMetricsCategory(), !wasEnabled);
         mController.setLocationEnabled(!wasEnabled);
     }
 
@@ -254,7 +256,7 @@ public class LocationTile extends QSTileImpl<BooleanState> {
 
         @Override
         public void setToggleState(boolean state) {
-            MetricsLogger.action(mContext, MetricsEvent.QS_DND_TOGGLE, state);
+            mMetricsLogger.action(MetricsEvent.QS_DND_TOGGLE, state);
             if (!state) {
                 mController.setLocationEnabled(state);
                 showDetail(false);
@@ -320,7 +322,7 @@ public class LocationTile extends QSTileImpl<BooleanState> {
                 if (value != null && mButtons.isShown()) {
                     mLastState = (Integer) value;
                     if (fromClick) {
-                        MetricsLogger.action(mContext, MetricsEvent.QS_LOCATION, mLastState);
+                        mMetricsLogger.action(MetricsEvent.QS_LOCATION, mLastState);
                         mController.setLocationMode(mLastState);
                         refresh(mLastState);
                     }
