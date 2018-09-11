@@ -76,7 +76,7 @@ public final class SubstratumService extends SystemService {
 
     private static final String TAG = "SubstratumService";
     private static final String SUBSTRATUM_PACKAGE = "projekt.substratum";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private static final Signature SUBSTRATUM_SIGNATURE = new Signature(""
             + "308202eb308201d3a003020102020411c02f2f300d06092a864886f70d01010b050030263124302206"
@@ -214,7 +214,15 @@ public final class SubstratumService extends SystemService {
             Intent intent = new Intent("projekt.substratum.helper.SubstratumHelperService");
             intent.setPackage("projekt.substratum.helper");
             mContext.bindServiceAsUser(intent, mHelperConnection,
-                    Context.BIND_AUTO_CREATE, UserHandle.SYSTEM);
+                    Context.BIND_AUTO_CREATE | Context.BIND_IMPORTANT_BACKGROUND, UserHandle.SYSTEM);
+            int retryCount = 1;
+            while (mHelperService == null && retryCount <= 30) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {
+                }
+                retryCount++;
+            }
         }
     }
 
@@ -266,72 +274,14 @@ public final class SubstratumService extends SystemService {
         public void installOverlay(List<String> paths) {
             checkCallerAuthorization(Binder.getCallingUid());
             final long ident = Binder.clearCallingIdentity();
-            final int packageVerifierEnable = Settings.Global.getInt(
-                    mContext.getContentResolver(),
-                    Settings.Global.PACKAGE_VERIFIER_ENABLE, 1);
             try {
                 synchronized (mLock) {
-                    PackageInstallObserver installObserver = new PackageInstallObserver();
-                    PackageDeleteObserver deleteObserver = new PackageDeleteObserver();
-                    for (String path : paths) {
-                        mInstalledPackageName = null;
-                        log("Installer - installing package from path \'" + path + "\'");
-                        mIsWaiting = true;
-                        Settings.Global.putInt(mContext.getContentResolver(),
-                                Settings.Global.PACKAGE_VERIFIER_ENABLE, 0);
-                        try {
-                            mPm.installExistingPackageAsUser(
-                                    mInstalledPackageName,
-                                    UserHandle.USER_SYSTEM,
-                                    PackageManager.INSTALL_REPLACE_EXISTING,
-                                    PackageManager.INSTALL_REASON_UNKNOWN);
-
-                            while (mIsWaiting) {
-                                try {
-                                    Thread.sleep(1);
-                                } catch (InterruptedException e) {
-                                    // Someone interrupted my sleep, ugh!
-                                }
-                            }
-                        } catch (RemoteException e) {
-                            logE("There is an exception when trying to install " + path, e);
-                            continue;
-                        }
-
-                        if (mInstalledPackageName != null) {
-                            try {
-                                PackageInfo pi = mPm.getPackageInfo(mInstalledPackageName,
-                                        0, UserHandle.USER_SYSTEM);
-                                if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_HAS_CODE) != 0 ||
-                                        pi.overlayTarget == null) {
-                                    mIsWaiting = true;
-                                    int versionCode = mPm.getPackageInfo(
-                                            mInstalledPackageName, 0, UserHandle.USER_SYSTEM)
-                                            .versionCode;
-                                    mPm.deletePackageAsUser(
-                                            mInstalledPackageName,
-                                            versionCode,
-                                            deleteObserver,
-                                            0,
-                                            UserHandle.USER_SYSTEM);
-
-                                    while (mIsWaiting) {
-                                        try {
-                                            Thread.sleep(1);
-                                        } catch (InterruptedException e) {
-                                            // Someone interrupted my sleep, ugh!
-                                        }
-                                    }
-                                }
-                            } catch (RemoteException e) {
-                                // Probably won't happen but we need to keep quiet here
-                            }
-                        }
-                    }
+                    waitForHelperConnection();
+                    mHelperService.installOverlay(paths);
                 }
+            } catch (RemoteException ignored) {
+                // ¯\_(ツ)_/¯
             } finally {
-                Settings.Global.putInt(mContext.getContentResolver(),
-                        Settings.Global.PACKAGE_VERIFIER_ENABLE, packageVerifierEnable);
                 Binder.restoreCallingIdentity(ident);
             }
         }
@@ -1085,7 +1035,7 @@ public final class SubstratumService extends SystemService {
     private void updateSettings() {
         synchronized (mLock) {
             mSigOverride = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                    Settings.Secure.FORCE_AUTHORIZE_SUBSTRATUM_PACKAGES, 0,
+                    Settings.Secure.FORCE_AUTHORIZE_SUBSTRATUM_PACKAGES, 1,
                     UserHandle.USER_CURRENT) == 1;
         }
     }
