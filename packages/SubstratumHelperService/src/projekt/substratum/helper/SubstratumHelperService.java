@@ -17,7 +17,14 @@ package projekt.substratum.helper;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.IIntentReceiver;
+import android.content.IIntentSender;
+import android.content.IntentSender;
+import android.content.pm.PackageInstaller;
+import android.content.pm.PackageInstaller.Session;
+import android.content.pm.PackageInstaller.SessionParams;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.FileUtils;
 import android.os.IBinder;
@@ -28,6 +35,14 @@ import android.util.Log;
 import com.android.internal.substratum.ISubstratumHelperService;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.TimeUnit;
 
 public class SubstratumHelperService extends Service {
     private static final String TAG = "SubstratumHelperService";
@@ -108,6 +123,51 @@ public class SubstratumHelperService extends Service {
             }
         }
 
+        @Override
+        public void installOverlay(List<String> paths) {
+            if (!isAuthorized(Binder.getCallingUid())) return;
+            LocalIntentReceiver receiver = new LocalIntentReceiver();
+            for (String path : paths) {
+                //Settings.Global.putInt(mContext.getContentResolver(),
+                //        Settings.Global.PACKAGE_VERIFIER_ENABLE, 0);
+                File apkFile = new File(path);
+                try {
+                    //PackageParser.PackageLite pkg = PackageParser.parsePackageLite(apkFile, 0);
+                    PackageInstaller installer = getPackageManager().getPackageInstaller();
+                    SessionParams params = new SessionParams(SessionParams.MODE_FULL_INSTALL);
+                    int sessionId = installer.createSession(params);
+                    try (PackageInstaller.Session session = installer.openSession(sessionId)) {
+                        try (InputStream in = new FileInputStream(apkFile);
+                            OutputStream apkStream = session.openWrite(
+                                    "base.apk", 0, apkFile.length())) {
+                            byte[] buffer = new byte[32 * 1024];
+                            long size = apkFile.length();
+                            while (size > 0) {
+                                long toRead = (buffer.length < size) ? buffer.length : size;
+                                int didRead = in.read(buffer, 0, (int) toRead);
+                                apkStream.write(buffer, 0, didRead);
+                                size -= didRead;
+                            }
+                        }
+                        session.commit(receiver.getIntentSender());
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "Install failed", e);
+                    continue;
+                }
+
+                Intent result = receiver.getResult();
+                int status = result.getIntExtra(PackageInstaller.EXTRA_STATUS,
+                        PackageInstaller.STATUS_FAILURE);
+                if (status == PackageInstaller.STATUS_SUCCESS) {
+                String installedPackageName = result.getStringExtra(
+                        PackageInstaller.EXTRA_PACKAGE_NAME);
+                } else {
+                    // ¯\_(ツ)_/¯
+                }
+            }
+        }
+
         private boolean isAuthorized(int uid) {
             return Process.SYSTEM_UID == uid;
         }
@@ -136,5 +196,33 @@ public class SubstratumHelperService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return mISubstratumHelperService.asBinder();
+    }
+
+    private static class LocalIntentReceiver {
+        private final SynchronousQueue<Intent> mResult = new SynchronousQueue<>();
+
+        private IIntentSender.Stub mLocalSender = new IIntentSender.Stub() {
+            @Override
+            public void send(int code, Intent intent, String resolvedType, IBinder whitelistToken,
+                    IIntentReceiver finishedReceiver, String requiredPermission, Bundle options) {
+                try {
+                    mResult.offer(intent, 5, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+        public IntentSender getIntentSender() {
+            return new IntentSender((IIntentSender) mLocalSender);
+        }
+
+        public Intent getResult() {
+            try {
+                return mResult.take();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
