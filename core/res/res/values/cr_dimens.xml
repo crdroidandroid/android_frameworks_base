@@ -26,4 +26,8 @@
     <dimen name="edge_gesture_perpendicular_distance">22dp</dimen>
     <!-- EdgeGesture service: Thickness of the active trigger fields around the screen border -->
     <dimen name="edge_gesture_trigger_thickness">15dp</dimen>
+
+    <!-- System-wide recents task view roundness to apply to all the recents view.
+  	 this value will apply on Launcher3 quickstep view and also the normal recents -->
+    <dimen name="recents_task_view_rounded_corners_radius">2.0dip</dimen>
 </resources>
