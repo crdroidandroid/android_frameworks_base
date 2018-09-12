@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.support.v4.graphics.ColorUtils;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -50,18 +51,44 @@ import com.android.systemui.Interpolators;
 import com.android.systemui.doze.DozeLog;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.util.wakelock.KeepAwakeAnimationListener;
+import com.android.systemui.tuner.TunerService;
 
 import com.google.android.collect.Sets;
 
 import java.util.Locale;
 
 public class KeyguardStatusView extends GridLayout implements
-        ConfigurationController.ConfigurationListener, View.OnLayoutChangeListener {
+        ConfigurationController.ConfigurationListener, View.OnLayoutChangeListener,
+        TunerService.Tunable {
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
     private static final String TAG = "KeyguardStatusView";
     private static final int MARQUEE_DELAY_MS = 2000;
-    private static final String FONT_FAMILY_LIGHT = "sans-serif-light";
-    private static final String FONT_FAMILY_MEDIUM = "sans-serif-medium";
+
+    private static final int FONT_NORMAL = 0;
+    private static final int FONT_ITALIC = 1;
+    private static final int FONT_BOLD = 2;
+    private static final int FONT_BOLD_ITALIC = 3;
+    private static final int FONT_LIGHT = 4;
+    private static final int FONT_LIGHT_ITALIC = 5;
+    private static final int FONT_THIN = 6;
+    private static final int FONT_THIN_ITALIC = 7;
+    private static final int FONT_CONDENSED = 8;
+    private static final int FONT_CONDENSED_ITALIC = 9;
+    private static final int FONT_CONDENSED_LIGHT = 10;
+    private static final int FONT_CONDENSED_LIGHT_ITALIC = 11;
+    private static final int FONT_CONDENSED_BOLD = 12;
+    private static final int FONT_CONDENSED_BOLD_ITALIC = 13;
+    private static final int FONT_MEDIUM = 14;
+    private static final int FONT_MEDIUM_ITALIC = 15;
+    private static final int FONT_BLACK = 16;
+    private static final int FONT_BLACK_ITALIC = 17;
+    private static final int FONT_DANCINGSCRIPT = 18;
+    private static final int FONT_DANCINGSCRIPT_BOLD = 19;
+    private static final int FONT_COMINGSOON = 20;
+    private static final int FONT_NOTOSERIF = 21;
+    private static final int FONT_NOTOSERIF_ITALIC = 22;
+    private static final int FONT_NOTOSERIF_BOLD = 23;
+    private static final int FONT_NOTOSERIF_BOLD_ITALIC = 24;
 
     private final LockPatternUtils mLockPatternUtils;
     private final IActivityManager mIActivityManager;
@@ -84,6 +111,11 @@ public class KeyguardStatusView extends GridLayout implements
     private int mLastLayoutHeight;
 
     private boolean mForcedMediaDoze;
+
+    private int mLockClockFontStyle;
+
+    private static final String LOCK_CLOCK_FONT_STYLE =
+            "system:" + Settings.System.LOCK_CLOCK_FONT_STYLE;
 
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -293,12 +325,11 @@ public class KeyguardStatusView extends GridLayout implements
     @Override
     public void onDensityOrFontScaleChanged() {
         mWidgetPadding = getResources().getDimension(R.dimen.widget_vertical_padding);
-        Typeface tfLight = Typeface.create(FONT_FAMILY_LIGHT, Typeface.NORMAL);
-        Typeface tfMedium = Typeface.create(FONT_FAMILY_MEDIUM, Typeface.NORMAL);
+        Typeface tfMedium = Typeface.create("sans-serif-medium", Typeface.NORMAL);
         if (mClockView != null) {
             mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimensionPixelSize(R.dimen.widget_big_font_size));
-            mClockView.setTypeface(tfLight);
+            setFontStyle(mClockView, mLockClockFontStyle);
             mClockView.getPaint().setStrokeWidth(
                     getResources().getDimensionPixelSize(R.dimen.widget_small_font_stroke));
         }
@@ -370,11 +401,14 @@ public class KeyguardStatusView extends GridLayout implements
         super.onAttachedToWindow();
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mInfoCallback);
         Dependency.get(ConfigurationController.class).addCallback(this);
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, LOCK_CLOCK_FONT_STYLE);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        Dependency.get(TunerService.class).removeTunable(this);
         KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mInfoCallback);
         Dependency.get(ConfigurationController.class).removeCallback(this);
     }
@@ -387,6 +421,101 @@ public class KeyguardStatusView extends GridLayout implements
     @Override
     public boolean hasOverlappingRendering() {
         return false;
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case LOCK_CLOCK_FONT_STYLE:
+                mLockClockFontStyle =
+                        newValue == null ? 4 : Integer.parseInt(newValue);
+                onDensityOrFontScaleChanged();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setFontStyle(TextView view, int fontstyle) {
+        switch (fontstyle) {
+            case FONT_NORMAL:
+                view.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+                break;
+            case FONT_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif", Typeface.ITALIC));
+                break;
+            case FONT_BOLD:
+                view.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+                break;
+            case FONT_BOLD_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif", Typeface.BOLD_ITALIC));
+                break;
+            case FONT_LIGHT:
+                view.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                break;
+            case FONT_LIGHT_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-light", Typeface.ITALIC));
+                break;
+            case FONT_THIN:
+                view.setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
+                break;
+            case FONT_THIN_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-thin", Typeface.ITALIC));
+                break;
+            case FONT_CONDENSED:
+                view.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
+                break;
+            case FONT_CONDENSED_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC));
+                break;
+            case FONT_CONDENSED_LIGHT:
+                view.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.NORMAL));
+                break;
+            case FONT_CONDENSED_LIGHT_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.ITALIC));
+                break;
+            case FONT_CONDENSED_BOLD:
+                view.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
+                break;
+            case FONT_CONDENSED_BOLD_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD_ITALIC));
+                break;
+            case FONT_MEDIUM:
+                view.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                break;
+            case FONT_MEDIUM_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-medium", Typeface.ITALIC));
+                break;
+            case FONT_BLACK:
+                view.setTypeface(Typeface.create("sans-serif-black", Typeface.NORMAL));
+                break;
+            case FONT_BLACK_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-black", Typeface.ITALIC));
+                break;
+            case FONT_DANCINGSCRIPT:
+                view.setTypeface(Typeface.create("cursive", Typeface.NORMAL));
+                break;
+            case FONT_DANCINGSCRIPT_BOLD:
+                view.setTypeface(Typeface.create("cursive", Typeface.BOLD));
+                break;
+            case FONT_COMINGSOON:
+                view.setTypeface(Typeface.create("casual", Typeface.NORMAL));
+                break;
+            case FONT_NOTOSERIF:
+                view.setTypeface(Typeface.create("serif", Typeface.NORMAL));
+                break;
+            case FONT_NOTOSERIF_ITALIC:
+                view.setTypeface(Typeface.create("serif", Typeface.ITALIC));
+                break;
+            case FONT_NOTOSERIF_BOLD:
+                view.setTypeface(Typeface.create("serif", Typeface.BOLD));
+                break;
+            case FONT_NOTOSERIF_BOLD_ITALIC:
+                view.setTypeface(Typeface.create("serif", Typeface.BOLD_ITALIC));
+                break;
+            default:
+                break;
+        }
     }
 
     // DateFormat.getBestDateTimePattern is extremely expensive, and refresh is called often.
