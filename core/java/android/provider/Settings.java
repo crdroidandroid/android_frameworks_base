@@ -4136,6 +4136,15 @@ public final class Settings {
         public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
 
         /**
+         * crDroid OTA support
+         * @hide
+         */
+        public static final String OTA_LAST_CHECK = "ota_last_check";
+        public static final String OTA_LATEST_VERSION = "ota_latest_version";
+        public static final String OTA_MAINTAINER = "ota_maintainer";
+        public static final String OTA_UPDATE_INTERVAL = "ota_update_interval";
+
+        /**
          * Whether to show the battery info on the lockscreen while charging
          * @hide
          */
