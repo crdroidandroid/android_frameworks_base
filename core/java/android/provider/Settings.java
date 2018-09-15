@@ -4796,6 +4796,13 @@ public final class Settings {
 
         /** @hide */
         private static final Validator QS_PANEL_BG_ALPHA_VALIDATOR = ANY_INTEGER_VALIDATOR;
+        
+        /**
+         * Whether to enable gaming mode or not
+         *
+         * @hide
+         */
+        public static final String ENABLE_GAMING_MODE = "enable_gaming_mode";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
