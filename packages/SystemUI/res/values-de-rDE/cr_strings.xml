@@ -157,9 +157,9 @@
   <string name="no">Nein</string>
   <!-- Slim Shortcut Actions -->
   <string name="shortcut_picker">crDroid Verknüpfungen</string>
-  <string name="shortcut_rotation">Rotation lock toggle</string>
+  <string name="shortcut_rotation">Verknüpfung Drehen</string>
   <string name="shortcut_torch">Taschenlampe</string>
-  <string name="shortcut_chamber">Chamber of Secrets</string>
+  <string name="shortcut_chamber">Verknüpfung Kanal</string>
   <string name="shortcut_reboot">Neustart</string>
   <string name="shortcut_recovery">Recovery</string>
   <string name="shortcut_screensleep">Schlafbildschirm</string>
@@ -179,6 +179,6 @@
   <string name="shortcut_clear_notifications">Benachrichtigungen löschen</string>
   <!-- Pie controls -->
   <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-  <string name="pie_battery_level">"BATTERY LEVEL "</string>
-  <string name="quick_settings_pie">Pie</string>
+  <string name="pie_battery_level">"Pie Akkustand"</string>
+  <string name="quick_settings_pie">Schnelleinstellungen Pie</string>
 </resources>
