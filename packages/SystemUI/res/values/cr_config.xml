@@ -20,5 +20,5 @@
     <bool name="config_allowOpaLayout">true</bool>
 
     <!-- CPUInfoService temperature sysfs path -->
-    <string name="config_cpuinfoSysTemp" translatable="false"></string>
+    <string name="config_cpuinfoSysTemp" translatable="false">/sys/class/thermal/thermal_zone0/temp</string>
 </resources>
