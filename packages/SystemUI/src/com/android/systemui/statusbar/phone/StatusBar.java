@@ -85,6 +85,7 @@ import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.media.AudioAttributes;
 import android.media.MediaMetadata;
+import android.media.session.MediaController;
 import android.media.session.PlaybackState;
 import android.metrics.LogMaker;
 import android.net.Uri;
@@ -143,6 +144,11 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.NotificationVisibility;
 import com.android.internal.statusbar.StatusBarIcon;
+import com.android.internal.utils.ActionConstants;
+import com.android.internal.utils.ActionUtils;
+import com.android.internal.utils.SmartPackageMonitor;
+import com.android.internal.utils.SmartPackageMonitor.PackageChangedListener;
+import com.android.internal.utils.SmartPackageMonitor.PackageState;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.MessagingGroup;
 import com.android.internal.widget.MessagingMessage;
@@ -176,6 +182,7 @@ import com.android.systemui.fragments.FragmentHostManager;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.keyguard.ScreenLifecycle;
 import com.android.systemui.keyguard.WakefulnessLifecycle;
+import com.android.systemui.navigation.Navigator;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.qs.QS;
 import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper.SnoozeOption;
@@ -267,7 +274,7 @@ import java.util.Map;
 public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunable,
         DragDownHelper.DragDownCallback, ActivityStarter, OnUnlockMethodChangedListener,
         OnHeadsUpChangedListener, CommandQueue.Callbacks, ZenModeController.Callback,
-        ColorExtractor.OnColorsChangedListener, ConfigurationListener, NotificationPresenter {
+        ColorExtractor.OnColorsChangedListener, ConfigurationListener, NotificationPresenter, PackageChangedListener {
     public static final boolean MULTIUSER_DEBUG = false;
 
     public static final boolean ENABLE_CHILD_NOTIFICATIONS
@@ -356,9 +363,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private static final float BRIGHTNESS_CONTROL_PADDING = 0.15f;
     private static final int BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT = 750; // ms
     private static final int BRIGHTNESS_CONTROL_LINGER_THRESHOLD = 20;
-
-    public static final int FADE_KEYGUARD_START_DELAY = 100;
-    public static final int FADE_KEYGUARD_DURATION = 300;
+    public static final int FADE_KEYGUARD_START_DELAY = 50;
+    public static final int FADE_KEYGUARD_DURATION = 150;
     public static final int FADE_KEYGUARD_DURATION_PULSING = 96;
 
     /** If true, the system is in the half-boot-to-decryption-screen state.
@@ -507,6 +513,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
     private final DisplayMetrics mDisplayMetrics = new DisplayMetrics();
 
+    private SmartPackageMonitor mPackageMonitor;
+    private FlashlightController mFlashlightController;
+
     // XXX: gesture research
     private final GestureRecorder mGestureRec = DEBUG_GESTURES
         ? new GestureRecorder("/sdcard/statusbar_gestures.dat")
@@ -553,6 +562,20 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     };
 
     protected final H mHandler = createHandler();
+
+    protected final ContentObserver mNavbarObserver = new ContentObserver(mHandler) {
+        @Override
+        public void onChange(boolean selfChange) {
+            boolean showing = Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Secure.NAVIGATION_BAR_VISIBLE,
+                    ActionUtils.hasNavbarByDefault(mContext) ? 1 : 0) != 0;
+            if (!showing && mNavigationBar != null && mNavigationBarView != null) {
+                removeNavigationBar();
+            } else if (showing && mNavigationBar == null && mNavigationBarView == null) {
+                createNavigationBar();
+            }
+        }
+    };
 
     private int mInteractingWindows;
     private boolean mAutohideSuspended;
@@ -651,7 +674,6 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         }
     };
 
-    private FlashlightController mFlashlightController;
     private KeyguardUserSwitcher mKeyguardUserSwitcher;
     protected UserSwitcherController mUserSwitcherController;
     private NetworkController mNetworkController;
@@ -753,6 +775,11 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 
         mDisplay = mWindowManager.getDefaultDisplay();
+
+        mPackageMonitor = new SmartPackageMonitor();
+        mPackageMonitor.register(mContext, mHandler);
+        mPackageMonitor.addListener(this);
+
         updateDisplaySize();
 
         Resources res = mContext.getResources();
@@ -776,6 +803,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 
         mDeviceProvisionedController = Dependency.get(DeviceProvisionedController.class);
+
+        mContext.getContentResolver().registerContentObserver(Settings.Secure.getUriFor(
+                Settings.Secure.NAVIGATION_BAR_VISIBLE), false, mNavbarObserver, UserHandle.USER_ALL);
 
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
@@ -884,6 +914,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         Dependency.get(ActivityStarterDelegate.class).setActivityStarterImpl(this);
 
         Dependency.get(ConfigurationController.class).addCallback(this);
+        mFlashlightController = Dependency.get(FlashlightController.class);
     }
 
     // ================================================================================
@@ -992,6 +1023,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         if (showNav) {
             createNavigationBar();
         }
+
         mScreenPinningNotify = new ScreenPinningNotify(mContext);
         mStackScroller.setLongPressListener(mEntryManager.getNotificationLongClicker());
         mStackScroller.setStatusBar(this);
@@ -1192,6 +1224,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             if (mLightBarController != null) {
                 mNavigationBar.setLightBarController(mLightBarController);
             }
+            if (!mNavigationBar.isUsingStockNav()) {
+                ((NavigationBarFrame)mNavigationBarView).disableDeadZone();
+            }
             mNavigationBar.setCurrentSysuiVisibility(mSystemUiVisibility);
         });
     }
@@ -1208,6 +1243,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             }
             mNavigationBarView = null;
         }
+    }
+
+    public NotificationMediaManager getMediaManager() {
+        return mMediaManager;
     }
 
     /**
@@ -1881,7 +1920,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                                 + mBackdropBack.getDrawable());
                     }
                     mBackdropFront.animate()
-                            .setDuration(250)
+                            .setDuration(150)
                             .alpha(0f).withEndAction(mHideBackdropFront);
                 }
             }
@@ -1893,9 +1932,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                     Log.v(TAG, "DEBUG_MEDIA: Fading out album artwork");
                 }
                 boolean cannotAnimateDoze = mDozing && !ScrimState.AOD.getAnimateChange();
-                if (mFingerprintUnlockController.getMode()
-                        == FingerprintUnlockController.MODE_WAKE_AND_UNLOCK_PULSING
-                        || hideBecauseOccluded || cannotAnimateDoze) {
+                int fpMode = mFingerprintUnlockController.getMode();
+                if (fpMode == FingerprintUnlockController.MODE_WAKE_AND_UNLOCK_PULSING ||
+                        fpMode == FingerprintUnlockController.MODE_WAKE_AND_UNLOCK ||
+                        hideBecauseOccluded || cannotAnimateDoze) {
 
                     // We are unlocking directly - no animation!
                     mBackdrop.setVisibility(View.GONE);
@@ -2214,6 +2254,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
         if (!isExpanded) {
             mRemoteInputManager.removeRemoteInputEntriesKeptUntilCollapsed();
+        }
+        if (mNavigationBar != null) {
+            mNavigationBar.setPanelExpanded(isExpanded);
         }
     }
 
@@ -2845,6 +2888,40 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             // workspace
             WirelessChargingAnimation.makeWirelessChargingAnimation(mContext, null,
                     batteryLevel, null, false).show();
+        }
+    }
+
+    @Override
+    public void toggleFlashlight() {
+        if (mFlashlightController != null
+                && mFlashlightController.hasFlashlight()
+                && mFlashlightController.isAvailable()) {
+            mFlashlightController.setFlashlight(!mFlashlightController.isEnabled());
+        }
+    }
+
+    @Override
+    public void onPackageChanged(String pkg, PackageState state) {
+        if (state == PackageState.PACKAGE_REMOVED
+                || state == PackageState.PACKAGE_CHANGED) {
+            final Context ctx = mContext;
+            final Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!ActionUtils.hasNavbarByDefault(ctx)) {
+                        ActionUtils.resolveAndUpdateButtonActions(ctx,
+                                ActionConstants
+                                        .getDefaults(ActionConstants.HWKEYS));
+                    }
+                    ActionUtils
+                            .resolveAndUpdateButtonActions(ctx, ActionConstants
+                                    .getDefaults(ActionConstants.SMARTBAR));
+                    ActionUtils.resolveAndUpdateButtonActions(ctx,
+                            ActionConstants.getDefaults(ActionConstants.FLING));
+                }
+            });
+            thread.setPriority(Process.THREAD_PRIORITY_BACKGROUND);
+            thread.start();
         }
     }
 
@@ -3719,6 +3796,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         Dependency.get(ConfigurationController.class).removeCallback(this);
         mZenController.removeCallback(this);
         mAppOpsListener.destroy();
+
+        mPackageMonitor.removeListener(this);
+        mPackageMonitor.unregister();
     }
 
     private boolean mDemoModeAllowed;
@@ -4505,9 +4585,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         return getMaxNotificationsWhileLocked(false /* recompute */);
     }
 
-    // TODO: Figure out way to remove these.
-    public NavigationBarView getNavigationBarView() {
-        return (mNavigationBar != null ? (NavigationBarView) mNavigationBar.getView() : null);
+    // TODO: Figure out way to remove this.
+    public Navigator getNavigationBarView() {
+        return mNavigationBar != null ? mNavigationBar.getNavigator() : null;
     }
 
     public View getNavigationBarWindow() {
@@ -5610,7 +5690,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         if (!mNotificationPanel.isFullyCollapsed()) {
             // close the shade if it was open
             animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_RECENTS_PANEL, true /* force */,
-                    true /* delayed */);
+                    true /* delayed */, NotificationPanelView.SPEED_UP_FACTOR_CLICKED);
             visibilityChanged(false);
 
             return true;
