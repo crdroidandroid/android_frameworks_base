@@ -118,9 +118,10 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
     }
 
     private void updateMobileTypeView(boolean useOldStyle) {
+        int visOld = mMobileType.getVisibility();
+        mMobileType.setVisibility(View.GONE);
         mMobileType = findViewById(useOldStyle ? R.id.mobile_type_old : R.id.mobile_type);
-        findViewById(R.id.mobile_type).setVisibility(useOldStyle ? View.GONE : View.VISIBLE);
-        findViewById(R.id.mobile_type_old).setVisibility(useOldStyle ? View.VISIBLE : View.GONE);
+        mMobileType.setVisibility(visOld);
     }
 
     private void initDotView() {
@@ -134,7 +135,6 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
     }
 
     public void applyMobileState(MobileIconState state) {
-        updateMobileTypeView(StatusBar.mUseOldMobileType);
         if (state == null) {
             setVisibility(View.GONE);
             mState = null;
@@ -146,6 +146,8 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
             initViewState();
             return;
         }
+
+        updateMobileTypeView(StatusBar.mUseOldMobileType);
 
         if (!mState.equals(state)) {
             updateState(state.copy());
