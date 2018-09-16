@@ -109,4 +109,8 @@
   <java-symbol type="string" name="systemui_restart_message" />
 
   <java-symbol type="drawable" name="adaptive_icon_drawable_wrapper" />
+
+  <!-- Smartnav anims -->
+  <java-symbol type="anim" name="inv_app_in" />
+  <java-symbol type="anim" name="inv_app_out" />
 </resources>
