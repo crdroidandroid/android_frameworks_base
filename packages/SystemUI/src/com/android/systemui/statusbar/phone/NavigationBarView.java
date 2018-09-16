@@ -65,6 +65,7 @@ import com.android.systemui.OverviewProxyService;
 import com.android.systemui.R;
 import com.android.systemui.RecentsComponent;
 import com.android.systemui.SysUiServiceProvider;
+import com.android.systemui.navigation.Navigator;
 import com.android.systemui.plugins.PluginListener;
 import com.android.systemui.plugins.PluginManager;
 import com.android.systemui.plugins.statusbar.phone.NavGesture;
@@ -79,9 +80,6 @@ import com.android.systemui.stackdivider.Divider;
 import com.android.systemui.statusbar.policy.DeadZone;
 import com.android.systemui.statusbar.policy.KeyButtonDrawable;
 import com.android.systemui.statusbar.policy.TintedKeyButtonDrawable;
-import com.android.systemui.tuner.TunerService;
-
-import lineageos.providers.LineageSettings;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -92,13 +90,9 @@ import static com.android.systemui.shared.system.NavigationBarCompat.FLAG_SHOW_O
 import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_OVERVIEW;
 import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_ROTATION;
 
-public class NavigationBarView extends FrameLayout implements PluginListener<NavGesture>,
-        TunerService.Tunable {
+public class NavigationBarView extends FrameLayout implements Navigator {
     final static boolean DEBUG = false;
     final static String TAG = "StatusBar/NavBarView";
-
-    private static final String NAVIGATION_BAR_MENU_ARROW_KEYS =
-            "lineagesystem:" + LineageSettings.System.NAVIGATION_BAR_MENU_ARROW_KEYS;
 
     // slippery nav bar when everything is disabled, e.g. during setup
     final static boolean SLIPPERY_WHEN_DISABLED = true;
@@ -169,7 +163,12 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
 
     private int mRotateBtnStyle = R.style.RotateButtonCCWStart90;
 
-    private boolean mShowDpadArrowKeys;
+    private int mBasePaddingBottom;
+    private int mBasePaddingLeft;
+    private int mBasePaddingRight;
+    private int mBasePaddingTop;
+
+    private ViewGroup mNavigationBarContents;
 
     private class NavTransitionListener implements TransitionListener {
         private boolean mBackTransitioning;
@@ -462,10 +461,6 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
                 && ((mOverviewProxyService.getInteractionFlags() & FLAG_DISABLE_QUICK_SCRUB) == 0);
     }
 
-    public ViewGroup getDpadView() {
-        return (ViewGroup) getCurrentView().findViewById(R.id.dpad_group);
-    }
-
     // TODO(b/80003212): change car mode icons to vector icons.
     private void updateCarModeIcons(Context ctx) {
         mBackCarModeIcon = getDrawable(ctx,
@@ -522,12 +517,15 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
 
     public KeyButtonDrawable getHomeDrawable(Context lightContext, Context darkContext) {
         final boolean quickStepEnabled = mOverviewProxyService.shouldShowSwipeUpUI();
-        KeyButtonDrawable drawable = quickStepEnabled
-                ? getDrawable(lightContext, darkContext, R.drawable.ic_sysbar_home_quick_step)
-                : getDrawable(lightContext, darkContext, R.drawable.ic_sysbar_home,
-                        false /* hasShadow */);
+        KeyButtonDrawable drawable = getDrawable(lightContext, darkContext, quickStepEnabled ? 
+                                                    R.drawable.ic_sysbar_home_quick_step : 
+                                                    R.drawable.ic_sysbar_home);
         orientHomeButton(drawable);
         return drawable;
+    }
+
+    public KeyButtonDrawable getRecentsDrawable(Context lightContext, Context darkContext) {
+        return getDrawable(lightContext, darkContext, R.drawable.ic_sysbar_recent);
     }
 
     private void orientBackButton(KeyButtonDrawable drawable) {
@@ -645,7 +643,6 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         final boolean showImeButton =
                 !mShowAccessibilityButton &&
                         !mShowRotateButton &&
-                        !mShowDpadArrowKeys &&
                         ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_IME_SHOWN) != 0);
         getImeSwitchButton().setVisibility(showImeButton ? View.VISIBLE : View.INVISIBLE);
         getImeSwitchButton().setImageDrawable(mImeIcon);
@@ -662,7 +659,6 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         getAccessibilityButton().setImageDrawable(mAccessibilityIcon);
 
         mBarTransitions.reapplyDarkIntensity();
-        updateDpadKeys();
 
         boolean disableHome = ((mDisabledFlags & View.STATUS_BAR_DISABLE_HOME) != 0);
 
@@ -712,7 +708,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     }
 
     public void setWakeAndUnlocking(boolean wakeAndUnlocking) {
-        setUseFadingAnimations(wakeAndUnlocking);
+        setUseFadingAnimations(!wakeAndUnlocking);
         mWakeAndUnlocking = wakeAndUnlocking;
         updateLayoutTransitionsEnabled();
     }
@@ -779,13 +775,20 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     }
 
     public void updateSlippery() {
-        setSlippery(!isQuickStepSwipeUpEnabled() ||
-                (mPanelView != null && mPanelView.isFullyExpanded()));
+        // temp hax for null mPanelView
+        if (mPanelView == null) {
+            mPanelView = SysUiServiceProvider.getComponent(getContext(), StatusBar.class).getPanel();
+        }
+        final boolean isExpanded = mPanelView != null ? mPanelView.isFullyExpanded() : false;
+        setSlippery(!isQuickStepSwipeUpEnabled() || isExpanded);
     }
 
     private void setSlippery(boolean slippery) {
         boolean changed = false;
         final ViewGroup navbarView = ((ViewGroup) getParent());
+        if (navbarView == null) {
+            return;
+        }
         final WindowManager.LayoutParams lp = (WindowManager.LayoutParams) navbarView
                 .getLayoutParams();
         if (lp == null) {
@@ -912,12 +915,31 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         return null;
     }
 
+    public void swiftNavigationBarItems(int horizontalShift, int verticalShift) {
+        if (mNavigationBarContents == null) {
+            return;
+        }
+
+        mNavigationBarContents.setPaddingRelative(mBasePaddingLeft + horizontalShift,
+                                              mBasePaddingTop + verticalShift,
+                                              mBasePaddingRight + horizontalShift,
+                                              mBasePaddingBottom - verticalShift);
+        invalidate();
+    }
+
     @Override
     public void onFinishInflate() {
         mNavigationInflaterView = findViewById(R.id.navigation_inflater);
         mNavigationInflaterView.setButtonDispatchers(mButtonDispatchers);
 
         getImeSwitchButton().setOnClickListener(mImeSwitcherClickListener);
+
+        mNavigationBarContents = (ViewGroup) findViewById(R.id.nav_buttons);
+
+        mBasePaddingLeft = mNavigationBarContents.getPaddingStart();
+        mBasePaddingTop = mNavigationBarContents.getPaddingTop();
+        mBasePaddingRight = mNavigationBarContents.getPaddingEnd();
+        mBasePaddingBottom = mNavigationBarContents.getPaddingBottom();
 
         DockedStackExistsListener.register(mDockedListener);
         updateRotatedViews();
@@ -1153,8 +1175,6 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         onPluginDisconnected(null); // Create default gesture helper
         Dependency.get(PluginManager.class).addPluginListener(this,
                 NavGesture.class, false /* Only one */);
-        final TunerService tunerService = Dependency.get(TunerService.class);
-        tunerService.addTunable(this, NAVIGATION_BAR_MENU_ARROW_KEYS);
         setUpSwipeUpOnboarding(isQuickStepSwipeUpEnabled());
     }
 
@@ -1166,14 +1186,6 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
             mGestureHelper.destroy();
         }
         setUpSwipeUpOnboarding(false);
-    }
-
-    @Override
-    public void onTuningChanged(String key, String newValue) {
-        if (NAVIGATION_BAR_MENU_ARROW_KEYS.equals(key)) {
-            mShowDpadArrowKeys = newValue != null && Integer.parseInt(newValue) != 0;
-            setNavigationIconHints(mNavigationIconHints);
-        }
     }
 
     private void setUpSwipeUpOnboarding(boolean connectedToOverviewProxy) {
@@ -1262,16 +1274,18 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         void onVerticalChanged(boolean isVertical);
     }
 
-    public void updateDpadKeys() {
-        final int visibility = mShowDpadArrowKeys && (mNavigationIconHints
-                & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0 ? View.VISIBLE : View.GONE;
-
-        getDpadView().findViewById(R.id.dpad_left).setVisibility(visibility);
-        getDpadView().findViewById(R.id.dpad_right).setVisibility(visibility);
-    }
-
     private final Consumer<Boolean> mDockedListener = exists -> mHandler.post(() -> {
         mDockedStackExists = exists;
         updateRecentsIcon();
     });
+
+    @Override
+    public View getBaseView() {
+        return this;
+    }
+
+    @Override
+    public void dispose() {
+        removeAllViews();
+    }
 }
