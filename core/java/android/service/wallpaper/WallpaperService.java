@@ -2499,7 +2499,7 @@ public abstract class WallpaperService extends Service {
                     return;
                 }
                 case MSG_UPDATE_SURFACE:
-                    mEngine.updateSurface(true, false, false);
+                    mEngine.updateSurface(true, false, true/*false*/);
                     break;
                 case MSG_ZOOM:
                     mEngine.setZoom(Float.intBitsToFloat(message.arg1));
