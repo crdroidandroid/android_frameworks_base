@@ -256,6 +256,8 @@ import com.android.wm.shell.legacysplitscreen.LegacySplitScreen;
 import com.android.wm.shell.startingsurface.SplashscreenContentDrawer;
 import com.android.wm.shell.startingsurface.StartingSurface;
 
+import lineageos.providers.LineageSettings;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -295,6 +297,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     private static final String BANNER_ACTION_SETUP =
             "com.android.systemui.statusbar.banner_action_setup";
 
+    private static final String FORCE_SHOW_NAVBAR =
+            "lineagesystem:" + LineageSettings.System.FORCE_SHOW_NAVBAR;
     private static final String PULSE_ON_NEW_TRACKS =
             Settings.Secure.PULSE_ON_NEW_TRACKS;
 
@@ -948,7 +952,20 @@ public class StatusBar extends SystemUI implements DemoMode,
         mStatusBarStateController.addCallback(this,
                 SysuiStatusBarStateController.RANK_STATUS_BAR);
 
-        mTunerService.addTunable(this, PULSE_ON_NEW_TRACKS);
+        mNeedsNavigationBar = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_showNavigationBar);
+        // Allow a system property to override this. Used by the emulator.
+        // See also hasNavigationBar().
+        String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
+        if ("1".equals(navBarOverride)) {
+            mNeedsNavigationBar = false;
+        } else if ("0".equals(navBarOverride)) {
+            mNeedsNavigationBar = true;
+        }
+
+        mTunerService.addTunable(this,
+                FORCE_SHOW_NAVBAR,
+                PULSE_ON_NEW_TRACKS);
 
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         mDreamManager = IDreamManager.Stub.asInterface(
@@ -4588,6 +4605,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private final DeviceProvisionedController mDeviceProvisionedController;
 
     private final NavigationBarController mNavigationBarController;
+    private boolean mNeedsNavigationBar;
 
     // UI-specific methods
 
@@ -4974,6 +4992,23 @@ public class StatusBar extends SystemUI implements DemoMode,
                 KeyguardSliceProvider sliceProvider = KeyguardSliceProvider.getAttachedInstance();
                 if (sliceProvider != null)
                     sliceProvider.setPulseOnNewTracks(showPulseOnNewTracks);
+                break;
+            case FORCE_SHOW_NAVBAR:
+                if (mDisplayId != Display.DEFAULT_DISPLAY ||
+                        mWindowManagerService == null)
+                    return;
+                boolean forcedVisibility = mNeedsNavigationBar ||
+                        TunerService.parseIntegerSwitch(newValue, false);
+                boolean hasNavbar = getNavigationBarView() != null;
+                if (forcedVisibility) {
+                    if (!hasNavbar) {
+                        mNavigationBarController.onDisplayReady(mDisplayId);
+                    }
+                } else {
+                    if (hasNavbar) {
+                        mNavigationBarController.onDisplayRemoved(mDisplayId);
+                    }
+                }
                 break;
             default:
                 break;
