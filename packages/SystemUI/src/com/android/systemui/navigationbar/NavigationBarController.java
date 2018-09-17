@@ -66,6 +66,8 @@ import com.android.systemui.util.settings.SecureSettings;
 import com.android.wm.shell.back.BackAnimation;
 import com.android.wm.shell.pip.Pip;
 
+import lineageos.providers.LineageSettings;
+
 import java.io.PrintWriter;
 import java.util.Optional;
 
@@ -236,6 +238,19 @@ public class NavigationBarController implements
     }
 
     private boolean shouldCreateNavBarAndTaskBar(int displayId) {
+        Display display = mDisplayManager.getDisplay(displayId);
+        final boolean isOnDefaultDisplay = displayId == mDisplayTracker.getDefaultDisplayId();
+        final Context context = isOnDefaultDisplay
+                ? mContext
+                : mContext.createDisplayContext(display);
+
+        if (isOnDefaultDisplay &&
+                LineageSettings.System.getIntForUser(context.getContentResolver(),
+                        LineageSettings.System.FORCE_SHOW_NAVBAR, 0,
+                        UserHandle.USER_CURRENT) == 1) {
+            return true;
+        }
+
         final IWindowManager wms = WindowManagerGlobal.getWindowManagerService();
 
         try {
@@ -385,6 +400,14 @@ public class NavigationBarController implements
                 v.removeOnAttachStateChangeListener(this);
             }
         });
+    
+        final IWindowManager wms = WindowManagerGlobal.getWindowManagerService();
+
+        try {
+            wms.onOverlayChanged();
+        } catch (RemoteException e) {
+            // Do nothing.
+        }
     }
 
     void removeNavigationBar(int displayId) {
