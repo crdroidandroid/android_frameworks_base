@@ -273,7 +273,7 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
                 }
             case STATE_DOT:
                 if (mState == null || (mState.visible && mState.provisioned)) {
-                    mMobileGroup.setVisibility(View.INVISIBLE);
+                    mMobileGroup.setVisibility(View.GONE);
                     mDotView.setVisibility(View.VISIBLE);
                     break;
                 }
