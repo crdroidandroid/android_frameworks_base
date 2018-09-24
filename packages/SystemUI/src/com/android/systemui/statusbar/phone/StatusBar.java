@@ -52,6 +52,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.app.TaskStackBuilder;
+import android.app.UiModeManager;
 import android.app.WallpaperColors;
 import android.app.WallpaperInfo;
 import android.app.WallpaperManager;
@@ -95,6 +96,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
@@ -142,6 +144,7 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.NotificationVisibility;
 import com.android.internal.statusbar.StatusBarIcon;
+import com.android.internal.statusbar.ThemeAccentUtils;
 import com.android.internal.utils.ActionConstants;
 import com.android.internal.utils.ActionUtils;
 import com.android.internal.utils.PackageMonitor;
@@ -312,6 +315,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             Settings.Secure.PULSE_APPS_BLACKLIST;
     private static final String FORCE_AMBIENT_FOR_MEDIA =
             "system:" + Settings.System.FORCE_AMBIENT_FOR_MEDIA;
+    private static final String BERRY_ACCENT_PICKER =
+            "system:" + Settings.System.BERRY_ACCENT_PICKER;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -757,6 +762,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, FP_SWIPE_TO_DISMISS_NOTIFICATIONS);
         tunerService.addTunable(this, PULSE_APPS_BLACKLIST);
         tunerService.addTunable(this, FORCE_AMBIENT_FOR_MEDIA);
+        tunerService.addTunable(this, BERRY_ACCENT_PICKER);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -2278,15 +2284,19 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         updateTheme();
     }
 
+    // Check for the dark system theme
     public boolean isUsingDarkTheme() {
-        OverlayInfo themeInfo = null;
-        try {
-            themeInfo = mOverlayManager.getOverlayInfo("com.android.systemui.theme.dark",
-                    mLockscreenUserManager.getCurrentUserId());
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        return themeInfo != null && themeInfo.isEnabled();
+        return ThemeAccentUtils.isUsingDarkTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
+    }
+
+    // Unloads the stock dark theme
+    public void unloadStockDarkTheme() {
+        ThemeAccentUtils.unloadStockDarkTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
+    }
+
+    // Check for black and white accent overlays
+    public void unfuckBlackWhiteAccent() {
+        ThemeAccentUtils.unfuckBlackWhiteAccent(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
     }
 
     @Nullable
@@ -4229,16 +4239,17 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         // The system wallpaper defines if QS should be light or dark.
         WallpaperColors systemColors = mColorExtractor
                 .getWallpaperColors(WallpaperManager.FLAG_SYSTEM);
-        final boolean useDarkTheme = systemColors != null
+        final boolean wallpaperWantsDarkTheme = systemColors != null
                 && (systemColors.getColorHints() & WallpaperColors.HINT_SUPPORTS_DARK_THEME) != 0;
+        final Configuration config = mContext.getResources().getConfiguration();
+        final boolean nightModeWantsDarkTheme = DARK_THEME_IN_NIGHT_MODE
+                && (config.uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                    == Configuration.UI_MODE_NIGHT_YES;
+        final boolean useDarkTheme = nightModeWantsDarkTheme;
         if (isUsingDarkTheme() != useDarkTheme) {
             mUiOffloadThread.submit(() -> {
-                try {
-                    mOverlayManager.setEnabled("com.android.systemui.theme.dark",
-                            useDarkTheme, mLockscreenUserManager.getCurrentUserId());
-                } catch (RemoteException e) {
-                    Log.w(TAG, "Can't change theme", e);
-                }
+                unfuckBlackWhiteAccent();
+                ThemeAccentUtils.setLightDarkTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), useDarkTheme);
             });
         }
 
@@ -6069,6 +6080,12 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                     ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(
                     mMediaManager.getMediaMetadata(), null);
                 }
+                break;
+            case BERRY_ACCENT_PICKER:
+                int accentSetting =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                ThemeAccentUtils.unloadAccents(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
+                ThemeAccentUtils.updateAccents(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), accentSetting);
                 break;
             default:
                 break;
