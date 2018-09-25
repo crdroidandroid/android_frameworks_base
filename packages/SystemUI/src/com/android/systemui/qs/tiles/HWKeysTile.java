@@ -32,12 +32,13 @@ import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
-import static org.lineageos.internal.util.DeviceKeysConstants.*;
+import lineageos.hardware.LineageHardwareManager;
 
 public class HWKeysTile extends QSTileImpl<BooleanState> {
 
     private final SecureSetting mSetting;
     private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_hw_keys);
+    private LineageHardwareManager mLineageHardware;
 
     public HWKeysTile(QSHost host) {
         super(host);
@@ -48,19 +49,13 @@ public class HWKeysTile extends QSTileImpl<BooleanState> {
                 handleRefreshState(value);
             }
         };
+
+        mLineageHardware = LineageHardwareManager.getInstance(mContext);
     }
 
     @Override
     public boolean isAvailable() {
-        final int deviceKeys = mContext.getResources().getInteger(
-                org.lineageos.platform.internal.R.integer.config_deviceHardwareKeys);
-        final boolean hasHomeKey = (deviceKeys & KEY_MASK_HOME) != 0;
-        final boolean hasBackKey = (deviceKeys & KEY_MASK_BACK) != 0;
-        final boolean hasMenuKey = (deviceKeys & KEY_MASK_MENU) != 0;
-        final boolean hasAssistKey = (deviceKeys & KEY_MASK_ASSIST) != 0;
-        final boolean hasAppSwitchKey = (deviceKeys & KEY_MASK_APP_SWITCH) != 0;
-
-        return (hasHomeKey || hasBackKey || hasMenuKey || hasAssistKey || hasAppSwitchKey);
+        return mLineageHardware.isSupported(LineageHardwareManager.FEATURE_KEY_DISABLE);
     }
 
     @Override

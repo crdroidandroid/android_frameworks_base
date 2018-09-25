@@ -87,7 +87,6 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.DumpUtils;
-import com.android.internal.utils.du.DUActionUtils;
 import com.android.server.EventLogTags;
 import com.android.server.LockGuard;
 import com.android.server.RescueParty;
@@ -1113,8 +1112,7 @@ public final class PowerManagerService extends SystemService
                 0, UserHandle.USER_CURRENT) == 1;
 
         mHardwareKeysDisable = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.HARDWARE_KEYS_DISABLE,
-                DUActionUtils.hasNavbarByDefault(mContext) ? 1 : 0,
+                Settings.Secure.HARDWARE_KEYS_DISABLE, 0,
                 UserHandle.USER_CURRENT) != 0;
 
         mDirty |= DIRTY_SETTINGS;
