@@ -118,10 +118,10 @@ public class CompassTile extends QSTileImpl<BooleanState> implements SensorEvent
         Float degrees = arg == null ? 0 :(float) arg;
 
         state.value = mActive;
+        state.icon = ResourceIcon.get(R.drawable.ic_qs_compass);
 
         if (state.value) {
             state.state = Tile.STATE_ACTIVE;
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_compass_on);
             if (arg != null) {
                 state.label = formatValueWithCardinalDirection(degrees);
 
@@ -138,7 +138,6 @@ public class CompassTile extends QSTileImpl<BooleanState> implements SensorEvent
             state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_compass_on);
         } else {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_compass_off);
             state.label = mContext.getString(R.string.quick_settings_compass_label);
             state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_compass_off);
