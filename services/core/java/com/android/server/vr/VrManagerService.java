@@ -1310,6 +1310,9 @@ public class VrManagerService extends SystemService
                 mPendingState = null;
             }
 
+            if (targetListener == null) {
+                return;
+            }
             updateCurrentVrServiceLocked(targetEnabledState, running2dInVr, targetListener,
                     userId, processId, callingPackage);
         }
