@@ -576,11 +576,12 @@ public class NotificationStackScrollLayout extends ViewGroup
         // We need to manually blend in the background color.
         int scrimColor = mScrimController.getBackgroundColor();
         int awakeColor = ColorUtils.blendARGB(scrimColor, mBgColor, alpha);
+        int themeColor = getResources().getColor(R.color.notification_material_background_color);
 
         // Interpolate between semi-transparent notification panel background color
         // and white AOD separator.
         float colorInterpolation = Interpolators.DECELERATE_QUINT.getInterpolation(mDarkAmount);
-        int color = ColorUtils.blendARGB(awakeColor, Color.WHITE, colorInterpolation);
+        int color = ColorUtils.blendARGB(awakeColor, themeColor, colorInterpolation);
 
         if (mCachedBackgroundColor != color) {
             mCachedBackgroundColor = color;
