@@ -54,6 +54,7 @@ import androidx.annotation.VisibleForTesting;
 
 import com.android.internal.R;
 import com.android.internal.policy.SystemBarUtils;
+import com.android.internal.util.crdroid.Utils;
 
 import lineageos.providers.LineageSettings;
 
@@ -493,19 +494,9 @@ public class DisplayLayout {
 
     static boolean hasNavigationBar(DisplayInfo info, Context context, int displayId) {
         if (displayId == Display.DEFAULT_DISPLAY) {
-            if (LineageSettings.System.getIntForUser(context.getContentResolver(),
-                    LineageSettings.System.FORCE_SHOW_NAVBAR, 0,
-                    UserHandle.USER_CURRENT) == 1) {
-                return true;
-            }
-            // Allow a system property to override this. Used by the emulator.
-            final String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
-            if ("1".equals(navBarOverride)) {
-                return false;
-            } else if ("0".equals(navBarOverride)) {
-                return true;
-            }
-            return context.getResources().getBoolean(R.bool.config_showNavigationBar);
+            return LineageSettings.System.getIntForUser(context.getContentResolver(),
+                        LineageSettings.System.FORCE_SHOW_NAVBAR,  Utils.hasNavbarByDefault(context) ? 1 : 0,
+                        UserHandle.USER_CURRENT) == 1;
         } else {
             boolean isUntrustedVirtualDisplay = info.type == Display.TYPE_VIRTUAL
                     && info.ownerUid != SYSTEM_UID;
