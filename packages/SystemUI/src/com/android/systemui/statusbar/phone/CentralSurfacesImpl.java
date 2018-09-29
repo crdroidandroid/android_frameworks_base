@@ -120,6 +120,7 @@ import com.android.internal.logging.UiEventLoggerImpl;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.RegisterStatusBarResult;
+import com.android.internal.util.crdroid.Utils;
 import com.android.keyguard.AuthKeyguardMessageArea;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
@@ -962,17 +963,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         mKeyguardIndicationController.init();
 
         mColorExtractor.addOnColorsChangedListener(mOnColorsChangedListener);
-
-        mNeedsNavigationBar = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_showNavigationBar);
-        // Allow a system property to override this. Used by the emulator.
-        // See also hasNavigationBar().
-        String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
-        if ("1".equals(navBarOverride)) {
-            mNeedsNavigationBar = false;
-        } else if ("0".equals(navBarOverride)) {
-            mNeedsNavigationBar = true;
-        }
 
         mTunerService.addTunable(this, FORCE_SHOW_NAVBAR);
 
@@ -3282,7 +3272,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     protected KeyguardManager mKeyguardManager;
     private final DeviceProvisionedController mDeviceProvisionedController;
 
-    private boolean mNeedsNavigationBar;
     private final NavigationBarController mNavigationBarController;
     private final AccessibilityFloatingMenuController mAccessibilityFloatingMenuController;
 
@@ -3460,11 +3449,11 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             case FORCE_SHOW_NAVBAR:
                 if (mDisplayId != Display.DEFAULT_DISPLAY || mWindowManagerService == null)
                     return;
-                boolean forcedVisibility = mNeedsNavigationBar ||
-                    TunerService.parseIntegerSwitch(newValue, false);
+                boolean mNavbarVisible =
+                        TunerService.parseIntegerSwitch(newValue, Utils.hasNavbarByDefault(mContext));
                 boolean hasNavbar = getNavigationBarView() != null;
                 mContext.getMainExecutor().execute(() -> {
-                    if (forcedVisibility) {
+                    if (mNavbarVisible) {
                         if (!hasNavbar) {
                             mNavigationBarController.onDisplayReady(mDisplayId);
                         }
