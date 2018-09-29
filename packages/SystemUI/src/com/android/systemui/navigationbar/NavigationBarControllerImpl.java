@@ -45,6 +45,7 @@ import androidx.annotation.Nullable;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.statusbar.RegisterStatusBarResult;
+import com.android.internal.util.crdroid.Utils;
 import com.android.settingslib.applications.InterestingConfigChanges;
 import com.android.systemui.Dumpable;
 import com.android.systemui.dagger.SysUISingleton;
@@ -236,11 +237,10 @@ public class NavigationBarControllerImpl implements
     }
 
     private boolean shouldCreateNavBarAndTaskBar(Context context, int displayId) {
-        if (displayId == mDisplayTracker.getDefaultDisplayId() &&
-                LineageSettings.System.getIntForUser(context.getContentResolver(),
-                        LineageSettings.System.FORCE_SHOW_NAVBAR, 0,
-                        UserHandle.USER_CURRENT) == 1) {
-            return true;
+        if (displayId == mDisplayTracker.getDefaultDisplayId()) {
+            return LineageSettings.System.getIntForUser(context.getContentResolver(),
+                        LineageSettings.System.FORCE_SHOW_NAVBAR, Utils.hasNavbarByDefault(mContext) ? 1 : 0,
+                        UserHandle.USER_CURRENT) == 1;
         }
 
         if (mHasNavBar.indexOfKey(displayId) > -1) {
