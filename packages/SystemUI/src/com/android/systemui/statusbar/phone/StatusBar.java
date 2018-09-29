@@ -130,6 +130,7 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.RegisterStatusBarResult;
 import com.android.internal.widget.LockPatternUtils;
+import com.android.internal.util.crdroid.Utils;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.keyguard.ViewMediatorCallback;
@@ -700,18 +701,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         mColorExtractor.addOnColorsChangedListener(this);
         mStatusBarStateController.addCallback(this,
                 SysuiStatusBarStateController.RANK_STATUS_BAR);
-
-        mNeedsNavigationBar = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_showNavigationBar);
-
-        // Allow a system property to override this. Used by the emulator.
-        // See also hasNavigationBar().
-        String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
-        if ("1".equals(navBarOverride)) {
-            mNeedsNavigationBar = false;
-        } else if ("0".equals(navBarOverride)) {
-            mNeedsNavigationBar = true;
-        }
 
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, SCREEN_BRIGHTNESS_MODE);
@@ -4333,7 +4322,6 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     protected NavigationBarController mNavigationBarController;
     private NavigationBarController.SystemUiVisibility mNavigationBarSystemUiVisibility;
-    private boolean mNeedsNavigationBar;
 
     // UI-specific methods
 
@@ -4689,10 +4677,10 @@ public class StatusBar extends SystemUI implements DemoMode,
             mBrightnessControl = newValue != null && Integer.parseInt(newValue) == 1;
         } else if (FORCE_SHOW_NAVBAR.equals(key) && mDisplayId == Display.DEFAULT_DISPLAY &&
                 mWindowManagerService != null) {
-            boolean forcedVisibility = mNeedsNavigationBar ||
-                    (newValue != null && Integer.parseInt(newValue) == 1);
+            boolean mNavbarVisible =
+                    TunerService.parseIntegerSwitch(newValue, Utils.hasNavbarByDefault(mContext));;
             boolean hasNavbar = getNavigationBarView() != null;
-            if (forcedVisibility) {
+            if (mNavbarVisible) {
                 if (!hasNavbar) {
                     mNavigationBarController.onDisplayReady(mDisplayId,
                             mNavigationBarSystemUiVisibility);
