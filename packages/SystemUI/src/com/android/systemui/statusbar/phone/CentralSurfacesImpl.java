@@ -107,6 +107,7 @@ import com.android.internal.logging.UiEventLoggerImpl;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.RegisterStatusBarResult;
+import com.android.internal.util.crdroid.Utils;
 import com.android.keyguard.AuthKeyguardMessageArea;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
@@ -876,18 +877,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
         mColorExtractor.addOnColorsChangedListener(mOnColorsChangedListener);
 
-        mNeedsNavigationBar = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_showNavigationBar);
-        // Allow a system property to override this. Used by the emulator.
-        // See also hasNavigationBar().
-        String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
-        if ("1".equals(navBarOverride)) {
-            mNeedsNavigationBar = false;
-        } else if ("0".equals(navBarOverride)) {
-            mNeedsNavigationBar = true;
-        }
-
-
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 
         mDisplay = mContext.getDisplay();
@@ -915,6 +904,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         RegisterStatusBarResult result = null;
         try {
             result = mBarService.registerStatusBar(mCommandQueue);
+            mResult = result;
         } catch (RemoteException ex) {
             ex.rethrowFromSystemServer();
         }
@@ -1216,8 +1206,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         mStatusBarInitializer.initializeStatusBar();
 
         mStatusBarTouchableRegionManager.setup(getNotificationShadeWindowView());
-
-        createNavigationBar(result);
 
         mAmbientIndicationContainer = getNotificationShadeWindowView().findViewById(
                 R.id.ambient_indication_container);
@@ -2901,17 +2889,17 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             case FORCE_SHOW_NAVBAR:
                 if (mDisplayId != Display.DEFAULT_DISPLAY || mWindowManagerService == null)
                     return;
-                boolean forcedVisibility = mNeedsNavigationBar ||
-                    TunerService.parseIntegerSwitch(newValue, false);
+                boolean mNavbarVisible =
+                        TunerService.parseIntegerSwitch(newValue, Utils.hasNavbarByDefault(mContext));
                 boolean hasNavbar = getNavigationBarView() != null;
                 mContext.getMainExecutor().execute(() -> {
-                    if (forcedVisibility) {
-                        if (!hasNavbar) {
-                            mNavigationBarController.onDisplayReady(mDisplayId);
+                    if (mNavbarVisible) {
+                        if (!hasNavbar && mResult != null) {
+                            createNavigationBar(mResult);
                         }
                     } else {
                         if (hasNavbar) {
-                            mNavigationBarController.onDisplayRemoved(mDisplayId);
+                            mNavigationBarController.removeNavigationBar(mDisplayId);
                         }
                     }
                 });
@@ -2925,6 +2913,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
     protected final CommandQueue mCommandQueue;
     protected IStatusBarService mBarService;
+    protected RegisterStatusBarResult mResult = null;
 
     // all notifications
     private final NotificationStackScrollLayout mStackScroller;
@@ -2940,7 +2929,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     protected KeyguardManager mKeyguardManager;
     private final DeviceProvisionedController mDeviceProvisionedController;
 
-    private boolean mNeedsNavigationBar;
     private final NavigationBarController mNavigationBarController;
     private final AccessibilityFloatingMenuController mAccessibilityFloatingMenuController;
 
