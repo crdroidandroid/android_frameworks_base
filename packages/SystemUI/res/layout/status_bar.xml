@@ -71,16 +71,23 @@
                     android:layout_height="match_parent"
                     android:layout="@layout/operator_name" />
 
-                <com.android.systemui.statusbar.policy.Clock
-                    android:id="@+id/clock"
+                <com.android.keyguard.AlphaOptimizedLinearLayout
+                    android:id="@+id/left_icon_area"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textAppearance="@style/TextAppearance.StatusBar.Clock"
-                    android:singleLine="true"
-                    android:paddingStart="@dimen/status_bar_left_clock_starting_padding"
-                    android:paddingEnd="@dimen/status_bar_left_clock_end_padding"
-                    android:gravity="center_vertical|start"
-                />
+                    android:orientation="horizontal" >
+
+                    <com.android.systemui.statusbar.policy.Clock
+                        android:id="@+id/clock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="@style/TextAppearance.StatusBar.Clock"
+                        android:singleLine="true"
+                        android:paddingStart="@dimen/status_bar_left_clock_starting_padding"
+                        android:paddingEnd="@dimen/status_bar_left_clock_end_padding"
+                        android:gravity="center_vertical|start"
+                    />
+                </com.android.keyguard.AlphaOptimizedLinearLayout>
 
                 <include layout="@layout/ongoing_call_chip" />
 
