@@ -21,6 +21,7 @@ import android.graphics.Rect;
 import android.view.DisplayCutout;
 import android.view.View;
 import android.view.WindowInsets;
+import android.widget.LinearLayout;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.widget.ViewClippingUtil;
@@ -49,7 +50,8 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
     private final NotificationStackScrollLayout mStackScroller;
     private final HeadsUpStatusBarView mHeadsUpStatusBarView;
     private final View mCenteredIconView;
-    private final ClockController mClockController;
+    private final LinearLayout mCenterClock;
+    private final LinearLayout mCustomIconArea;
     private final View mOperatorNameView;
     private final DarkIconDispatcher mDarkIconDispatcher;
     private final NotificationPanelView mPanelView;
@@ -87,7 +89,8 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
                 statusbarView.findViewById(R.id.heads_up_status_bar_view),
                 statusbarView.findViewById(R.id.notification_stack_scroller),
                 statusbarView.findViewById(R.id.notification_panel),
-                new ClockController(statusbarView),
+                statusbarView.findViewById(R.id.center_clock_layout),
+                statusbarView.findViewById(R.id.left_icon_area),
                 statusbarView.findViewById(R.id.operator_name_frame),
                 statusbarView.findViewById(R.id.centered_icon_area));
     }
@@ -99,7 +102,8 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
             HeadsUpStatusBarView headsUpStatusBarView,
             NotificationStackScrollLayout stackScroller,
             NotificationPanelView panelView,
-            ClockController clockController,
+            LinearLayout CenterClock,
+            LinearLayout CustomIconArea,
             View operatorNameView,
             View centeredIconView) {
         mNotificationIconAreaController = notificationIconAreaController;
@@ -117,7 +121,8 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
         mStackScroller.addOnExpandedHeightListener(mSetExpandedHeight);
         mStackScroller.addOnLayoutChangeListener(mStackScrollLayoutChangeListener);
         mStackScroller.setHeadsUpAppearanceController(this);
-        mClockController = clockController;
+        mCenterClock = CenterClock;
+        mCustomIconArea = CustomIconArea;
         mOperatorNameView = operatorNameView;
         mDarkIconDispatcher = Dependency.get(DarkIconDispatcher.class);
         mDarkIconDispatcher.addDarkReceiver(this);
@@ -245,16 +250,13 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
 
     private void setShown(boolean isShown) {
         if (mShown != isShown) {
-            View clockView = mClockController.getClock();
-            boolean isRightClock = clockView.getId() == R.id.clock_right;
             mShown = isShown;
             if (isShown) {
                 updateParentClipping(false /* shouldClip */);
                 mHeadsUpStatusBarView.setVisibility(View.VISIBLE);
                 show(mHeadsUpStatusBarView);
-                if (!isRightClock) {
-                    hide(clockView, View.INVISIBLE);
-                }
+                hide(mCustomIconArea, View.INVISIBLE);
+                hide(mCenterClock, View.INVISIBLE);
                 if (mCenteredIconView.getVisibility() != View.GONE) {
                     hide(mCenteredIconView, View.INVISIBLE);
                 }
@@ -262,9 +264,8 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
                     hide(mOperatorNameView, View.INVISIBLE);
                 }
             } else {
-                if (!isRightClock) {
-                    show(clockView);
-                }
+                show(mCenterClock);
+                show(mCustomIconArea);
                 if (mCenteredIconView.getVisibility() != View.GONE) {
                     show(mCenteredIconView);
                 }
