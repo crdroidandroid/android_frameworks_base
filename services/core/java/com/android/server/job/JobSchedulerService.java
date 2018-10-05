@@ -1140,7 +1140,6 @@ public class JobSchedulerService extends com.android.server.SystemService
         // Set up the app standby bucketing tracker
         mStandbyTracker = new StandbyTracker();
         mUsageStats = LocalServices.getService(UsageStatsManagerInternal.class);
-        mUsageStats.addAppIdleStateChangeListener(mStandbyTracker);
 
         // The job store needs to call back
         publishLocalService(JobSchedulerInternal.class, new LocalService());
@@ -1220,6 +1219,7 @@ public class JobSchedulerService extends com.android.server.SystemService
     @Override
     public void onBootPhase(int phase) {
         if (PHASE_SYSTEM_SERVICES_READY == phase) {
+            mUsageStats.addAppIdleStateChangeListener(mStandbyTracker);
             mConstantsObserver.start(getContext().getContentResolver());
 
             mAppStateTracker = Preconditions.checkNotNull(
