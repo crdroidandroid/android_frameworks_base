@@ -15,18 +15,6 @@
  */
 
 package android.hardware;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.impl.CameraMetadataNative;
-import android.hardware.camera2.CaptureResult;
-import android.hardware.camera2.CaptureRequest.Builder;
-import android.hardware.camera2.CaptureRequest;
-import android.hardware.camera2.impl.CaptureResultExtras;
-import android.hardware.camera2.CameraManager;
-import android.content.Context;
-import java.lang.System;
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import android.hardware.ICameraService;
 
 import static android.system.OsConstants.*;
 
@@ -40,6 +28,9 @@ import android.graphics.ImageFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.impl.CameraMetadataNative;
+import android.hardware.camera2.CaptureResult;
 import android.media.AudioAttributes;
 import android.media.IAudioService;
 import android.os.Handler;
@@ -240,29 +231,20 @@ public class Camera {
     private android.hardware.Camera.CameraStateCallback mCameraStateCallback;
 
     public interface AECallback {
-
-        public abstract void onAEChanged(int[] p1, Camera p2);
-
+        public abstract void onAeStateChanged(int[] p1);
     }
 
     public interface OneplusCallback {
-
-        public abstract void onDngImage(byte[] p1, Camera p2);
-
-        public abstract void onDngMetadata(CameraCharacteristics p1, CaptureResult p2, Camera p3);
-
+        public abstract void onDngImageReceived(byte[] p1, Camera p2);
+        public abstract void onDngMetadataReceived(CameraCharacteristics p1, CaptureResult p2, Camera p3);
     }
 
     public interface ProcessCallback {
-
-        public abstract void onProcess();
-
+        public abstract void onProcessReceived();
     }
 
     public interface CameraStateCallback {
-
-        public abstract void onCameraStateChanged(byte[] p1, Camera p2);
-
+        public abstract void onCameraStateChanged(byte[] p1);
     }
 
     public void setAECallback(AECallback cb) {
@@ -291,23 +273,6 @@ public class Camera {
     
     public static Camera openOPService() {
         return new Camera(0, -0x64);
-    }
-
-    private void getNativeCameraMetadata(int camID){
-    try{
-        ActivityThread am = ActivityThread.currentActivityThread();
-    
-        CameraManager manager = (CameraManager) am.
-        getApplication()
-        .getSystemService(Context.CAMERA_SERVICE);
-        String [] a=manager.getCameraIdList();
-        mCharacteristics = manager.getCameraCharacteristics(a[camID]);
-
-        }catch(Exception exc){
-            Log.e(TAG,"getNativeCameraMetadata error");
-            mCharacteristics = null;
-        }                
-
     }
 
     /**
@@ -1368,10 +1333,10 @@ public class Camera {
 
         @Override
         public void handleMessage(Message msg) {
-            int msgID=msg.what;
+            int msgID = msg.what;
 
-            if(msgID==CAMERA_MSG_RAW_IMAGE){
-                msgID=CAMERA_MSG_DNG_IMAGE;
+            if (mOneplusCallback != null && msgID == CAMERA_MSG_RAW_IMAGE) {
+                msgID = CAMERA_MSG_DNG_IMAGE;
             }
 
             switch(msgID) {
@@ -1390,8 +1355,7 @@ public class Camera {
             case CAMERA_MSG_COMPRESSED_IMAGE:
                 if (mJpegCallback != null) {
                     mJpegCallback.onPictureTaken((byte[])msg.obj, mCamera);
-                }
-                else if(mIsOPService&&mOPServiceJpegCallback != null){
+                } else if (mIsOPService && mOPServiceJpegCallback != null) {
                     Log.d(TAG,"op jpeg callback");
                     mOPServiceJpegCallback.onPictureTaken((byte[])msg.obj, mCamera);
                 }
@@ -1479,48 +1443,48 @@ public class Camera {
                 }
                 return;
             /* ### QC ADD-ONS: END */
+
             case CAMERA_MSG_RAW_IMAGE_DUMMY:
-//                Log.d(TAG,"CAMERA_MSG_RAW_IMAGE_DUMMY");
+                Log.d(TAG,"CAMERA_MSG_RAW_IMAGE_DUMMY");
                 return;
 
             case CAMERA_MSG_AEC:
-//                Log.d(TAG,"CAMERA_MSG_AEC");
+                Log.d(TAG,"CAMERA_MSG_AEC");
                 if (mAECallback != null) {
                     int [] states=new int[2];
                     states[0]=msg.arg1;
                     states[1]=msg.arg2;
-                    mAECallback.onAEChanged(states,mCamera);
+                    mAECallback.onAeStateChanged(states);
                 }
                 return;
                 
             case CAMERA_MSG_DNG_IMAGE:
-//                Log.d(TAG,"CAMERA_MSG_DNG_IMAGE");
+                Log.d(TAG,"CAMERA_MSG_DNG_IMAGE");
                 if (mOneplusCallback != null) {
-                    mOneplusCallback.onDngImage((byte[])msg.obj, mCamera);
+                    mOneplusCallback.onDngImageReceived((byte[])msg.obj, mCamera);
                 }
                 return;
                 
             case CAMERA_MSG_DNG_META_DATA:
-//                Log.d(TAG,"CAMERA_MSG_DNG_META_DATA");
-                if (mOneplusCallback != null
-                    &&mMetadata!=null) {
+                Log.d(TAG,"CAMERA_MSG_DNG_META_DATA");
+                if (mOneplusCallback != null && mMetadata!=null) {
                     mCharacteristics = new CameraCharacteristics(new CameraMetadataNative(mMetadata));
                     CaptureResult result=new CaptureResult(new CameraMetadataNative(mMetadata),-1);
-                    mOneplusCallback.onDngMetadata(mCharacteristics, result, mCamera);
+                    mOneplusCallback.onDngMetadataReceived(mCharacteristics, result, mCamera);
                 }    
             return;
             
             case CAMERA_MSG_IN_PROCESSING:
-//                Log.d(TAG,"CAMERA_MSG_IN_PROCESSING");
+                Log.d(TAG,"CAMERA_MSG_IN_PROCESSING");
                 if (mProcessCallback != null) {
-                    mProcessCallback.onProcess();
+                    mProcessCallback.onProcessReceived();
                 }
                 return;
 
             case CAMERA_MSG_STATE_CALLBACK:
-//                Log.d(TAG,"CAMERA_MSG_STATE_CALLBACK");
+                Log.d(TAG,"CAMERA_MSG_STATE_CALLBACK");
                 if (mCameraStateCallback != null) {
-		    mCameraStateCallback.onCameraStateChanged((byte[])msg.obj, mCamera);
+		    mCameraStateCallback.onCameraStateChanged((byte[])msg.obj);
 		}
                 return;
 
@@ -1816,18 +1780,18 @@ public class Camera {
             msgType |= CAMERA_MSG_DNG_IMAGE;
             mMetadata = new CameraMetadataNative();
 
-            try{
+            try {
                 java.lang.reflect.Field ptrField = CameraMetadataNative.class.  
                 getDeclaredField("mMetadataPtr");  
                 ptrField.setAccessible(true);
                 mMetadataPtr = (long) ptrField.get(mMetadata);
-                }
-                catch(Exception x){
-                    
-                };
-
+            } catch (Exception e) {
+                    Log.e(TAG, "Error oneplus callback in takePicture ", e);
+            };
+        } else if (mRawImageCallback != null) {
+            msgType |= CAMERA_MSG_RAW_IMAGE;
         }
-  
+
         if (mProcessCallback != null) {
             msgType |= CAMERA_MSG_IN_PROCESSING;
         }
@@ -2254,12 +2218,6 @@ public class Camera {
          * are.
          */
         public int id = -1;
-
-//        public int isSmile = 0;
-
-//        public int getIsSmile() {
-//            return isSmile;
-//        }
 
         /**
          * The coordinates of the center of the left eye. The coordinates are in
@@ -2856,8 +2814,6 @@ public class Camera {
 
         private static final String TRUE = "true";
         private static final String FALSE = "false";
-
-//        private static final String KEY_QC_SMILE_DETECTION = "smile-detection";
 
         // Values for white balance settings.
         public static final String WHITE_BALANCE_AUTO = "auto";
@@ -4168,17 +4124,6 @@ public class Camera {
          * @see #getFlashMode()
          */
         public List<String> getSupportedFlashModes() {
-
-            String packageName = ActivityThread.currentOpPackageName();
-
-	    if (packageName != null) {
-		String focusMode = getFocusMode();
-
-		if ((focusMode != null) && (focusMode.equals("fixed")) && (!packageName.equals("com.oneplus.camera"))) {
-		    return null;
-		}
-	    }
-
             String str = get(KEY_FLASH_MODE + SUPPORTED_VALUES_SUFFIX);
             return split(str);
         }
@@ -4526,11 +4471,6 @@ public class Camera {
             String str = get(KEY_SMOOTH_ZOOM_SUPPORTED);
             return TRUE.equals(str);
         }
-
-//        public boolean isSupportedSmileDetection() {
-//            String str = get(KEY_QC_SMILE_DETECTION);
-//            return TRUE.equals(str);
-//        }
 
         /**
          * <p>Gets the distances from the camera to where an object appears to be
