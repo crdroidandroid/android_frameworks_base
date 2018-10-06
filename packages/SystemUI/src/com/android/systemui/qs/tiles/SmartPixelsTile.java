@@ -68,8 +68,11 @@ public class SmartPixelsTile extends QSTileImpl<BooleanState> {
 
     @Override
     public boolean isAvailable() {
-        return mContext.getResources().getBoolean(
+        boolean isSmartPixelEnabled = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_supportSmartPixels);
+        boolean isBurnInEnabled = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_enableBurnInProtection);
+        return isSmartPixelEnabled && isBurnInEnabled;
     }
 
     @Override
