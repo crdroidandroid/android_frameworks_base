@@ -9108,6 +9108,12 @@ public final class Settings {
         public static final String ONE_HANDED_MODE_UI_GRAVITY = "one_handed_mode_ui_gravity";
 
         /**
+         * Whether to show QS security footer
+         * @hide
+         */
+        public static final String QS_SHOW_SECURITY_FOOTER = "qs_show_security_footer";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
