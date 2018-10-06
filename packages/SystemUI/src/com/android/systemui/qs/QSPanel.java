@@ -77,13 +77,14 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
             "lineagesecure:" + LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS;
     public static final String QS_SHOW_BRIGHTNESS_SLIDER =
             "lineagesecure:" + LineageSettings.Secure.QS_SHOW_BRIGHTNESS_SLIDER;
-    public static final String QS_SHOW_HEADER = "qs_show_header";
     public static final String ANIM_TILE_STYLE =
             "system:" + Settings.System.ANIM_TILE_STYLE;
     public static final String ANIM_TILE_DURATION =
             "system:" + Settings.System.ANIM_TILE_DURATION;
     public static final String ANIM_TILE_INTERPOLATOR =
             "system:" + Settings.System.ANIM_TILE_INTERPOLATOR;
+    public static final String QS_SHOW_SECURITY_FOOTER =
+            Settings.Secure.QS_SHOW_SECURITY_FOOTER;
 
     protected final Context mContext;
     protected final ArrayList<TileRecord> mRecords = new ArrayList<>();
@@ -214,6 +215,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         tunerService.addTunable(this, ANIM_TILE_STYLE);
         tunerService.addTunable(this, ANIM_TILE_DURATION);
         tunerService.addTunable(this, ANIM_TILE_INTERPOLATOR);
+        tunerService.addTunable(this, QS_SHOW_SECURITY_FOOTER);
 
         if (mHost != null) {
             setTiles(mHost.getTiles());
@@ -266,6 +268,8 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
             if (mHost != null) {
                 setTiles(mHost.getTiles());
             }
+        } else if (QS_SHOW_SECURITY_FOOTER.equals(key)) {
+            mFooter.setShowFooter(TunerService.parseIntegerSwitch(newValue, true));
         }
     }
 
