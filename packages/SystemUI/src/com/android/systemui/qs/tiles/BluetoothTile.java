@@ -79,7 +79,7 @@ public class BluetoothTile extends QSTileImpl<BooleanState> implements TunerServ
         switch (key) {
             case BLUETOOTH_QS_SHOW_BATTERY:
                 mShowBluetoothBattery =
-                        newValue != null && Integer.parseInt(newValue) == 1;
+                        newValue == null || Integer.parseInt(newValue) != 0;
                 refreshState();
                 break;
             default:

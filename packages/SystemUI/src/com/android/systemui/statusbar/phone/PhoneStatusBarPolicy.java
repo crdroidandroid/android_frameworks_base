@@ -301,7 +301,7 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
         switch (key) {
             case BLUETOOTH_SHOW_BATTERY:
                 mShowBluetoothBattery =
-                        newValue != null && Integer.parseInt(newValue) == 1;
+                        newValue == null || Integer.parseInt(newValue) != 0;
                 updateBluetooth();
                 break;
             case SHOW_SU_INDICATOR:
