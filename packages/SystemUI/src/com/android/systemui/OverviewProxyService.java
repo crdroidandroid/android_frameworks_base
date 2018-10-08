@@ -30,6 +30,7 @@ import android.os.Looper;
 import android.os.PatternMatcher;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceControl;
@@ -285,8 +286,11 @@ public class OverviewProxyService implements CallbackController<OverviewProxyLis
         mContext = context;
         mHandler = new Handler();
         mConnectionBackoffAttempts = 0;
+        boolean mQuickStepEnabled = Settings.System.getIntForUser(context.getContentResolver(),
+                      Settings.System.RECENTS_COMPONENT, 0, UserHandle.USER_CURRENT) == 0;
         mRecentsComponentName = ComponentName.unflattenFromString(context.getString(
-                com.android.internal.R.string.config_recentsComponentName));
+                mQuickStepEnabled ? com.android.internal.R.string.config_recentsComponentName :
+                com.android.internal.R.string.config_recentsComponentNameOreo));
         mQuickStepIntent = new Intent(ACTION_QUICKSTEP)
                 .setPackage(mRecentsComponentName.getPackageName());
         mInteractionFlags = Prefs.getInt(mContext, Prefs.Key.QUICK_STEP_INTERACTION_FLAGS, 0);
