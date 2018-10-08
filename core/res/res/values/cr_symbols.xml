@@ -106,4 +106,8 @@
 
   <!-- Oreo's recents component activity -->
   <java-symbol type="string" name="config_recentsComponentNameOreo" />
+
+  <!-- SystemUI Restart -->
+  <java-symbol type="string" name="systemui_restart_title" />
+  <java-symbol type="string" name="systemui_restart_message" />
 </resources>
