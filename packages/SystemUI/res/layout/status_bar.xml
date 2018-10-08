@@ -61,7 +61,8 @@
                 android:layout_height="match_parent"
                 android:paddingEnd="1dip"
                 android:scaleType="center"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:gravity="center_vertical" />
 
             <com.android.systemui.statusbar.policy.Clock
                 android:id="@+id/clock_left"
@@ -173,7 +174,8 @@
                 android:layout_height="match_parent"
                 android:paddingStart="2dip"
                 android:scaleType="center"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:gravity="center_vertical" />
         </com.android.keyguard.AlphaOptimizedLinearLayout>
     </LinearLayout>
 
