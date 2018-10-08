@@ -59,6 +59,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.Slog;
@@ -245,8 +246,11 @@ class RecentTasks {
      * any dependent services (like SystemUI) is started.
      */
     void loadRecentsComponent(Resources res) {
+        boolean mQuickStepEnabled = Settings.System.getIntForUser(mService.mContext.getContentResolver(),
+                      Settings.System.RECENTS_COMPONENT, 0, UserHandle.USER_CURRENT) == 0;
         final String rawRecentsComponent = res.getString(
-                com.android.internal.R.string.config_recentsComponentName);
+                mQuickStepEnabled ? com.android.internal.R.string.config_recentsComponentName :
+                com.android.internal.R.string.config_recentsComponentNameOreo);
         if (TextUtils.isEmpty(rawRecentsComponent)) {
             return;
         }
