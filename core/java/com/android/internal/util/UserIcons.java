@@ -73,7 +73,7 @@ public class UserIcons {
             colorResId = USER_ICON_COLORS[userId % USER_ICON_COLORS.length];
         }
         Drawable icon = resources.getDrawable(R.drawable.ic_account_circle, null).mutate();
-        icon.setColorFilter(resources.getColor(colorResId, null), Mode.SRC_IN);
+        icon.setColorFilter(resources.getColor(colorResId, null), Mode.SRC_ATOP);
         icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
         return icon;
     }
