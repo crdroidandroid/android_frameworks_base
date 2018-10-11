@@ -38,7 +38,6 @@ import android.widget.TextView;
 
 import com.android.settingslib.Utils;
 import com.android.settingslib.graph.BatteryMeterDrawableBase;
-import com.android.systemui.settings.CurrentUserTracker;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.BatteryController.BatteryStateChangeCallback;
@@ -72,7 +71,6 @@ public class BatteryMeterView extends LinearLayout implements
     private int mLightModeBackgroundColor;
     private int mLightModeFillColor;
     private float mDarkIntensity;
-    private int mUser;
 
     private int mShowBatteryPercent;
     private int mStyle = BatteryMeterDrawableBase.BATTERY_STYLE_PORTRAIT;
@@ -161,7 +159,6 @@ public class BatteryMeterView extends LinearLayout implements
         super.onAttachedToWindow();
         mBatteryController = Dependency.get(BatteryController.class);
         mBatteryController.addCallback(this);
-        mUser = ActivityManager.getCurrentUser();
         Dependency.get(TunerService.class).addTunable(this,
                 SHOW_BATTERY_PERCENT,
                 STATUS_BAR_BATTERY_STYLE,
