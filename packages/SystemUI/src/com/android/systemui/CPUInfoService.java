@@ -17,16 +17,23 @@
 package com.android.systemui;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.service.dreams.DreamService;
+import android.service.dreams.IDreamManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -37,18 +44,32 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.lang.StringBuffer;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CPUInfoService extends Service {
     private View mView;
     private Thread mCurCPUThread;
     private final String TAG = "CPUInfoService";
-    private int mNumCpus = 1;
+    private int mNumCpus = 2;
+    private static int mNumOfPolicies = 1;
+    private static String[] mPolicies=null;
     private String[] mCurrFreq=null;
     private String[] mCurrGov=null;
 
-    private static final String NUM_OF_CPUS_PATH = "/sys/devices/system/cpu/present";
+    private int CPU_TEMP_DIVIDER = 1;
+    private String CPU_TEMP_SENSOR = "";
+    private boolean mCpuTempAvail;
+
+    private static final String CURRENT_CPU = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
+    private static final String CPU_ROOT_POLICY = "/sys/devices/system/cpu/cpufreq/";
+    private static final String CPU_CUR_POLICY_TAIL = "/scaling_cur_freq";
+    private static final String CPU_GOV_POLICY_TAIL = "/scaling_governor";
+
+    private IDreamManager mDreamManager;
 
     private class CPUView extends View {
         private Paint mOnlinePaint;
@@ -59,10 +80,10 @@ public class CPUInfoService extends Service {
 
         private int mNeededWidth;
         private int mNeededHeight;
+        private String mCpuTemp;
 
         private boolean mDataAvail;
-        private String mCPUTemp;
-	
+
         private Handler mCurCPUHandler = new Handler() {
             public void handleMessage(Message msg) {
                 if(msg.obj==null){
@@ -72,7 +93,7 @@ public class CPUInfoService extends Service {
                     String msgData = (String) msg.obj;
                     try {
                         String[] parts=msgData.split(";");
-                        mCPUTemp=parts[0];
+                        mCpuTemp=parts[0];
 
                         String[] cpuParts=parts[1].split("\\|");
                         for(int i=0; i<cpuParts.length; i++){
@@ -104,13 +125,17 @@ public class CPUInfoService extends Service {
 
             final int textSize = Math.round(12 * density);
 
+            Typeface typeface = Typeface.create("monospace", Typeface.NORMAL);
+
             mOnlinePaint = new Paint();
+            mOnlinePaint.setTypeface(typeface);
             mOnlinePaint.setAntiAlias(true);
             mOnlinePaint.setTextSize(textSize);
             mOnlinePaint.setColor(Color.WHITE);
             mOnlinePaint.setShadowLayer(5.0f, 0.0f, 0.0f, Color.BLACK);
 
             mOfflinePaint = new Paint();
+            mOfflinePaint.setTypeface(typeface);
             mOfflinePaint.setAntiAlias(true);
             mOfflinePaint.setTextSize(textSize);
             mOfflinePaint.setColor(Color.RED);
@@ -145,7 +170,16 @@ public class CPUInfoService extends Service {
         private String getCPUInfoString(int i) {
             String freq=mCurrFreq[i];
             String gov=mCurrGov[i];
-            return "cpu"+i+": "+gov+": "+freq;
+            return "cl" + i + ": " + gov + " " + String.format("%8s", toMHz(freq));
+        }
+
+        private String getCpuTemp(String cpuTemp) {
+            if (CPU_TEMP_DIVIDER > 1) {
+                return String.format("%s",
+                        Integer.parseInt(cpuTemp) / CPU_TEMP_DIVIDER);
+            } else {
+                return cpuTemp;
+            }
         }
 
         @Override
@@ -164,9 +198,11 @@ public class CPUInfoService extends Service {
 
             int y = mPaddingTop - (int)mAscent;
 
-            canvas.drawText("temp: "+mCPUTemp, RIGHT-mPaddingRight-mMaxWidth,
-                y-1, mOnlinePaint);
-            y += mFH;
+            if(!mCpuTemp.equals("0")) {
+                canvas.drawText("Temp " + getCpuTemp(mCpuTemp) + "°C",
+                        RIGHT-mPaddingRight-mMaxWidth, y-1, mOnlinePaint);
+                y += mFH;
+            }
 
             for(int i=0; i<mCurrFreq.length; i++){
                 String s=getCPUInfoString(i);
@@ -174,9 +210,6 @@ public class CPUInfoService extends Service {
                 if(!freq.equals("0")){
                     canvas.drawText(s, RIGHT-mPaddingRight-mMaxWidth,
                         y-1, mOnlinePaint);
-                } else {
-                    canvas.drawText(s, RIGHT-mPaddingRight-mMaxWidth,
-                        y-1, mOfflinePaint);
                 }
                 y += mFH;
             }
@@ -186,10 +219,10 @@ public class CPUInfoService extends Service {
             if (!mDataAvail) {
                 return;
             }
-            final int NW = mNumCpus + 1;
+            final int NW = mNumCpus;
 
             int neededWidth = mPaddingLeft + mPaddingRight + mMaxWidth;
-            int neededHeight = mPaddingTop + mPaddingBottom + mFH * NW;
+            int neededHeight = mPaddingTop + mPaddingBottom + (mFH*((mCpuTempAvail?1:0)+NW));
             if (neededWidth != mNeededWidth || neededHeight != mNeededHeight) {
                 mNeededWidth = neededWidth;
                 mNeededHeight = neededHeight;
@@ -212,12 +245,6 @@ public class CPUInfoService extends Service {
         private boolean mInterrupt = false;
         private Handler mHandler;
 
-        private final String CURRENT_CPU = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
-        private final String CPU_ROOT = "/sys/devices/system/cpu/cpu";
-        private final String CPU_CUR_TAIL = "/cpufreq/scaling_cur_freq";
-        private final String CPU_GOV_TAIL = "/cpufreq/scaling_governor";
-        private final String CPU_TEMP = getResources().getString(R.string.config_cpuinfoSysTemp);
-
         public CurCPUThread(Handler handler, int numCpus){
             mHandler=handler;
             mNumCpus = numCpus;
@@ -233,15 +260,14 @@ public class CPUInfoService extends Service {
                 while (!mInterrupt) {
                     sleep(500);
                     StringBuffer sb=new StringBuffer();
-
-                    String cpuTemp = CPUInfoService.readOneLine(CPU_TEMP);
+                    String cpuTemp = CPUInfoService.readOneLine(CPU_TEMP_SENSOR);
                     sb.append(cpuTemp == null ? "0" : cpuTemp);
                     sb.append(";");
 
-                    for(int i=0; i<mNumCpus; i++){
-                        final String freqFile=CPU_ROOT+i+CPU_CUR_TAIL;
+                    for(int i=0; i<mNumOfPolicies; i++){
+                        final String freqFile=CPU_ROOT_POLICY+mPolicies[i]+CPU_CUR_POLICY_TAIL;
                         String currFreq = CPUInfoService.readOneLine(freqFile);
-                        final String govFile=CPU_ROOT+i+CPU_GOV_TAIL;
+                        final String govFile=CPU_ROOT_POLICY+mPolicies[i]+CPU_GOV_POLICY_TAIL;
                         String currGov = CPUInfoService.readOneLine(govFile);
 
                         if(currFreq==null){
@@ -263,9 +289,15 @@ public class CPUInfoService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mNumCpus = getNumOfCpus();
+        mNumCpus = 2;
+        getPolicies();
         mCurrFreq = new String[mNumCpus];
         mCurrGov = new String[mNumCpus];
+
+        CPU_TEMP_DIVIDER = getResources().getInteger(R.integer.config_cpuTempDivider);
+        CPU_TEMP_SENSOR = getResources().getString(R.string.config_cpuTempSensor);
+
+        mCpuTempAvail = readOneLine(CPU_TEMP_SENSOR) != null;
 
         mView = new CPUView(this);
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
@@ -278,10 +310,13 @@ public class CPUInfoService extends Service {
         params.gravity = Gravity.RIGHT | Gravity.TOP;
         params.setTitle("CPU Info");
 
-        mCurCPUThread = new CurCPUThread(mView.getHandler(), mNumCpus);
-        mCurCPUThread.start();
+        startThread();
 
-        Log.d(TAG, "started CurCPUThread");
+        mDreamManager = IDreamManager.Stub.asInterface(
+                ServiceManager.checkService(DreamService.DREAM_SERVICE));
+        IntentFilter screenStateFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mScreenStateReceiver, screenStateFilter);
 
         WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
         wm.addView(mView, params);
@@ -290,16 +325,10 @@ public class CPUInfoService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mCurCPUThread.isAlive()) {
-            mCurCPUThread.interrupt();
-            try {
-                mCurCPUThread.join();
-            } catch (InterruptedException e) {
-            }
-        }
-        Log.d(TAG, "stopped CurCPUThread");
+        stopThread();
         ((WindowManager)getSystemService(WINDOW_SERVICE)).removeView(mView);
         mView = null;
+        unregisterReceiver(mScreenStateReceiver);
     }
 
     @Override
@@ -323,23 +352,65 @@ public class CPUInfoService extends Service {
         return line;
     }
 
-    private static int getNumOfCpus() {
-        int numOfCpu = 1;
-        String numOfCpus = readOneLine(NUM_OF_CPUS_PATH);
-        String[] cpuCount = numOfCpus.split("-");
-        if (cpuCount.length > 1) {
-            try {
-                int cpuStart = Integer.parseInt(cpuCount[0]);
-                int cpuEnd = Integer.parseInt(cpuCount[1]);
-
-                numOfCpu = cpuEnd - cpuStart + 1;
-
-                if (numOfCpu < 0)
-                    numOfCpu = 1;
-            } catch (NumberFormatException ex) {
-                numOfCpu = 1;
+    private BroadcastReceiver mScreenStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                Log.d(TAG, "ACTION_SCREEN_ON " + isDozeMode());
+                if (!isDozeMode()) {
+                    startThread();
+                    mView.setVisibility(View.VISIBLE);
+                }
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                Log.d(TAG, "ACTION_SCREEN_OFF");
+                mView.setVisibility(View.GONE);
+                stopThread();
             }
         }
-        return numOfCpu;
+    };
+
+    private static void getPolicies() {
+        File folder = new File(CPU_ROOT_POLICY);
+        List<File> listOfFiles = new ArrayList(Arrays.asList(folder.listFiles()));
+        Collections.sort(listOfFiles);
+        mNumOfPolicies = listOfFiles.size();
+        mPolicies = new String[mNumOfPolicies];
+
+        int i = 0;
+        for (File f : listOfFiles) {
+            if (f.isDirectory()) {
+              mPolicies[i] = f.getName();
+              i++;
+            }
+        }
+    }
+
+    private boolean isDozeMode() {
+        try {
+            if (mDreamManager != null && mDreamManager.isDozing()) {
+                return true;
+            }
+        } catch (RemoteException e) {
+            return false;
+        }
+        return false;
+    }
+
+    private void startThread() {
+        Log.d(TAG, "started CurCPUThread");
+        mCurCPUThread = new CurCPUThread(mView.getHandler(), mNumCpus);
+        mCurCPUThread.start();
+    }
+
+    private void stopThread() {
+        if (mCurCPUThread != null && mCurCPUThread.isAlive()) {
+            Log.d(TAG, "stopping CurCPUThread");
+            mCurCPUThread.interrupt();
+            try {
+                mCurCPUThread.join();
+            } catch (InterruptedException e) {
+            }
+        }
+        mCurCPUThread = null;
     }
 }
