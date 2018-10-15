@@ -162,4 +162,6 @@ oneway interface IStatusBar
     void leftInLandscapeChanged(boolean isLeft);
     void toggleNavigationEditor();
     void dispatchNavigationEditorResults(in Intent intent);
+
+    void toggleOrientationListener(boolean enable);
 }
