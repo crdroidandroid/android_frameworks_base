@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.PowerManager;
 import android.os.RemoteException;
@@ -186,5 +188,11 @@ public class Utils {
                 am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 break;
         }
+    }
+
+    public static boolean deviceHasCompass(Context context) {
+        SensorManager sm = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        return sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
+                && sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null;
     }
 }
