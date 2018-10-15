@@ -20,6 +20,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager.ActionListener;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
@@ -42,6 +43,8 @@ public class AccessPointControllerImpl
     // This string extra specifies a network to open the connect dialog on, so the user can enter
     // network credentials.  This is used by quick settings for secured networks.
     private static final String EXTRA_START_CONNECT_SSID = "wifi_start_connect_ssid";
+    private static final String ENCRYPTING_STATE = "trigger_restart_min_framework";
+    private static final String ENCRYPTED_STATE = "1";
 
     private static final int[] ICONS = {
         R.drawable.ic_qs_wifi_full_0,
@@ -53,15 +56,16 @@ public class AccessPointControllerImpl
 
     private final Context mContext;
     private final ArrayList<AccessPointCallback> mCallbacks = new ArrayList<AccessPointCallback>();
-    private final WifiTracker mWifiTracker;
+    private WifiTracker mWifiTracker;
     private final UserManager mUserManager;
 
     private int mCurrentUser;
 
     public AccessPointControllerImpl(Context context) {
+        Log.d(TAG, "new AccessPointControllerImpl");
         mContext = context;
         mUserManager = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
-        mWifiTracker = new WifiTracker(context, this, false, true);
+        mWifiTracker = getWifiTracker();
         mCurrentUser = ActivityManager.getCurrentUser();
     }
 
@@ -173,4 +177,29 @@ public class AccessPointControllerImpl
             if (DEBUG) Log.d(TAG, "connect failure reason=" + reason);
         }
     };
+   private WifiTracker getWifiTracker() {
+        if (mWifiTracker != null) {
+            return mWifiTracker;
+        }
+        if (isOnlyCoreState()) {
+            mWifiTracker = null;
+        } else {
+            mWifiTracker = new WifiTracker(mContext, this, false, true);
+        }
+        return mWifiTracker;
+    }
+
+    private boolean isOnlyCoreState() {
+        // Only run "core" apps if we're encrypting the device.
+        String cryptState = SystemProperties.get("vold.decrypt");
+        if (ENCRYPTING_STATE.equals(cryptState)) {
+            Log.w(TAG, "Detected encryption in progress - only parsing core apps");
+            return true;
+        } else if (ENCRYPTED_STATE.equals(cryptState)) {
+            Log.w(TAG, "Device encrypted - only parsing core apps");
+            return true;
+        }
+        Log.w(TAG, "Device not encrypted");
+        return false;
+    }
 }
