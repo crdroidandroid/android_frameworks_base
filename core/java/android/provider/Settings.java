@@ -8447,6 +8447,52 @@ public final class Settings {
          */
         public static final String FACE_AUTO_UNLOCK = "face_auto_unlock";
 
+        /*
+         * Whether to show PIE controls on the screen.
+         * 0 = OFF
+         * 1 = ON
+         * Changes aspect depends on status bar visibility.
+         * @hide
+         */
+        public static final String PIE_STATE = "pie_state";
+
+        /**
+         * PIE controls current location.
+         * Gravity.BOTTOM (default)
+         * Gravity.LEFT
+         * Gravity.RIGHT
+         * @hide
+         */
+        public static final String PIE_GRAVITY = "pie_gravity";
+
+        /**
+         * Whether to show battery circle in PIE controls.
+         * 0 = Text only
+         * 1 = Circle only
+         * 2 = Text and circle
+         * @hide
+         */
+        public static final String PIE_BATTERY_MODE = "pie_battery_mode";
+
+        /**
+         * PIE controls theme mode.
+         * 0 = AUTO
+         * 1 = WHITE
+         * 2 = DARK
+         * @hide
+         */
+        public static final String PIE_THEME_MODE = "pie_theme_mode";
+
+        /**
+         * PIE controls status indicator mode.
+         * 0 = BOTH
+         * 1 = WIFI ONLY
+         * 2 = MOBILE NETWORK ONLY
+         * 3 = NONE
+         * @hide
+         */
+        public static final String PIE_STATUS_INDICATOR = "pie_status_indicator";
+
         /**
          * Whether or not the automatic storage manager is enabled and should run on the device.
          *
