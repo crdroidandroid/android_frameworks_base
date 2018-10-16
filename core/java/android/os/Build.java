@@ -58,7 +58,6 @@ public class Build {
 
     /**
      * The build date
-     * @hide
      */
     public static final String DATE = getString("ro.build.date");
 
