@@ -306,6 +306,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_PANEL_BG_USE_NEW_TINT;
     private static final String PULSE_ON_NEW_TRACKS =
             Settings.Secure.PULSE_ON_NEW_TRACKS;
+    private static final String BERRY_QS_TILE_STYLE =
+            "system:" + Settings.System.BERRY_QS_TILE_STYLE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -730,6 +732,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private int mDarkStyle;
     private int mNavbarStyle;
+    private int mQSTileStyle;
     private boolean mUseDarkTheme;
     private OverlayManager mOverlayManager;
     private final UiOffloadThread mUiOffloadThread = Dependency.get(UiOffloadThread.class);
@@ -938,6 +941,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, NAVBAR_STYLE);
         mTunerService.addTunable(this, QS_PANEL_BG_USE_NEW_TINT);
         mTunerService.addTunable(this, PULSE_ON_NEW_TRACKS);
+        mTunerService.addTunable(this, BERRY_QS_TILE_STYLE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -3717,6 +3721,15 @@ public class StatusBar extends SystemUI implements DemoMode,
         });
     }
 
+    private void updateQSTileStyle() {
+        mUiOffloadThread.execute(() -> {
+            ThemeAccentUtils.setQSTileStyle(mOverlayManager, mQSTileStyle);
+            if (mQSPanel != null) {
+                mQSPanel.getHost().reloadAllTiles();
+            }
+        });
+    }
+
     private void updateDozingState() {
         Trace.traceCounter(Trace.TRACE_TAG_APP, "dozing", mDozing ? 1 : 0);
         Trace.beginSection("StatusBar#updateDozingState");
@@ -4763,6 +4776,14 @@ public class StatusBar extends SystemUI implements DemoMode,
                 KeyguardSliceProvider sliceProvider = KeyguardSliceProvider.getAttachedInstance();
                 if (sliceProvider != null)
                     sliceProvider.setPulseOnNewTracks(showPulseOnNewTracks);
+                break;
+            case BERRY_QS_TILE_STYLE:
+                int qsTileStyle =
+                        TunerService.parseInteger(newValue, 0);
+                if (mQSTileStyle != qsTileStyle) {
+                    mQSTileStyle = qsTileStyle;
+                    updateQSTileStyle();
+                }
                 break;
             default:
                 break;
