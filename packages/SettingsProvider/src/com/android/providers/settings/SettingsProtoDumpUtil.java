@@ -2890,7 +2890,13 @@ class SettingsProtoDumpUtil {
                 Settings.System.RINGTONE,
                 SystemSettingsProto.Ringtone.DEFAULT_URI);
         dumpSetting(s, p,
+                Settings.System.RINGTONE2,
+                SystemSettingsProto.Ringtone.DEFAULT_URI);
+        dumpSetting(s, p,
                 Settings.System.RINGTONE_CACHE,
+                SystemSettingsProto.Ringtone.CACHE);
+        dumpSetting(s, p,
+                Settings.System.RINGTONE2_CACHE,
                 SystemSettingsProto.Ringtone.CACHE);
         p.end(ringtoneToken);
 
