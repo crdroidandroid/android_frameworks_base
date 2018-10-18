@@ -4815,6 +4815,12 @@ public final class Settings {
         public static final String BERRY_DARK_STYLE = "berry_dark_style";
 
         /**
+         * Switch between different qs tile styles
+         * @hide
+         */
+        public static final String BERRY_QS_TILE_STYLE = "berry_qs_tile_style";
+
+        /**
          * Whether to show seconds next to clock in status bar
          * 0 - hide (default)
          * 1 - show
