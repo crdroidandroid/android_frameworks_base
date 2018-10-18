@@ -849,6 +849,8 @@ public class SettingsProvider extends ContentProvider {
         final String cacheRingtoneSetting;
         if (Settings.System.RINGTONE_CACHE_URI.equals(uri)) {
             cacheRingtoneSetting = Settings.System.RINGTONE;
+        } else if (Settings.System.RINGTONE2_CACHE_URI.equals(uri)) {
+            cacheRingtoneSetting = Settings.System.RINGTONE2;
         } else if (Settings.System.NOTIFICATION_SOUND_CACHE_URI.equals(uri)) {
             cacheRingtoneSetting = Settings.System.NOTIFICATION_SOUND;
         } else if (Settings.System.ALARM_ALERT_CACHE_URI.equals(uri)) {
@@ -866,6 +868,8 @@ public class SettingsProvider extends ContentProvider {
     private String getCacheName(String setting) {
         if (Settings.System.RINGTONE.equals(setting)) {
             return Settings.System.RINGTONE_CACHE;
+        } else if (Settings.System.RINGTONE2.equals(setting)) {
+            return Settings.System.RINGTONE2_CACHE;
         } else if (Settings.System.NOTIFICATION_SOUND.equals(setting)) {
             return Settings.System.NOTIFICATION_SOUND_CACHE;
         } else if (Settings.System.ALARM_ALERT.equals(setting)) {
