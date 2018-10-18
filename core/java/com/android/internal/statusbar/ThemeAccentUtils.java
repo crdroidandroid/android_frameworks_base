@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020 crDroid Android Project
+ * Copyright (C) 2018-2021 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,36 @@ public class ThemeAccentUtils {
         "com.android.system.navbar.oneplus", //2
         "com.android.system.navbar.oneui", //3
         "com.android.system.navbar.tecno", //4
+    };
+
+    // QS Tile Styles
+    private static final String[] QS_TILE_STYLES = {
+        "com.android.systemui.qstile.default", // 0
+        "com.android.systemui.qstile.circlegradient", // 1
+        "com.android.systemui.qstile.circletrim", // 2
+        "com.android.systemui.qstile.dottedcircle", // 3
+        "com.android.systemui.qstile.dualtonecircle", // 4
+        "com.android.systemui.qstile.dualtonecircletrim", // 5
+        "com.android.systemui.qstile.ink", // 6
+        "com.android.systemui.qstile.inkdrop", // 7
+        "com.android.systemui.qstile.mountain", // 8
+        "com.android.systemui.qstile.ninja", // 9
+        "com.android.systemui.qstile.oreo", // 10
+        "com.android.systemui.qstile.oreocircletrim", // 11
+        "com.android.systemui.qstile.oreosquircletrim", // 12
+        "com.android.systemui.qstile.pokesign", // 13
+        "com.android.systemui.qstile.squaremedo", // 14
+        "com.android.systemui.qstile.squircle", // 15
+        "com.android.systemui.qstile.squircletrim", // 16
+        "com.android.systemui.qstile.teardrop", // 17
+        "com.android.systemui.qstile.wavey", // 18
+        "com.android.systemui.qstile.cookie", //19
+        "com.android.systemui.qstile.cosmos", //20
+        "com.android.systemui.qstile.dividedcircle", //21
+        "com.android.systemui.qstile.justicons", //22
+        "com.android.systemui.qstile.neonlike", //23
+        "com.android.systemui.qstile.triangle", //24
+        "com.android.systemui.qstile.oos", //25
     };
 
     // Check for the dark system theme
@@ -104,6 +134,31 @@ public class ThemeAccentUtils {
 
         try {
             om.setEnabled(NAVBAR_STYLES[navbarStyle], true, userId);
+        } catch (Exception e) {
+        }
+    }
+
+    // Unloads the QS tile styles
+    private static void unloadQSTileStyle(OverlayManager om, UserHandle userId) {
+        for (String theme : QS_TILE_STYLES) {
+            try {
+                om.setEnabled(theme, false, userId);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    // Set QS tile style
+    public static void setQSTileStyle(OverlayManager om, int qsTileStyle) {
+        UserHandle userId = UserHandle.of(ActivityManager.getCurrentUser());
+
+        // Always unload QS tile styles
+        unloadQSTileStyle(om, userId);
+
+        if (qsTileStyle == 0) return;
+
+        try {
+            om.setEnabled(QS_TILE_STYLES[qsTileStyle], true, userId);
         } catch (Exception e) {
         }
     }
