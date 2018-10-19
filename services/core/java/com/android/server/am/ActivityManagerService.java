@@ -8888,6 +8888,7 @@ public class ActivityManagerService extends IActivityManager.Stub
                 }
 
                 final Runnable enterPipRunnable = () -> {
+                    if (r.finishing || r.getTask() == null) return;
                     // Only update the saved args from the args that are set
                     r.pictureInPictureArgs.copyOnlySet(params);
                     final float aspectRatio = r.pictureInPictureArgs.getAspectRatio();
