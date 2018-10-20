@@ -5896,7 +5896,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                                     Integer.parseInt(newValue) != 0;
                 if (mNavbarVisible && mNavigationBarView == null) {
                     createNavigationBar();
-                } else if (mNavigationBarView != null) {
+                } else if (!mNavbarVisible && mNavigationBarView != null) {
                     removeNavigationBar();
                 }
                 break;
