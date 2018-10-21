@@ -34,7 +34,10 @@
     <dimen name="status_bar_icon_size">@*android:dimen/status_bar_icon_size</dimen>
 
     <!-- Height of the battery icon in the status bar. -->
-    <dimen name="status_bar_battery_icon_height">15.5dp</dimen>
+    <dimen name="status_bar_battery_icon_height">13.5dp</dimen>
+
+    <!-- Height of the symmetry battery icon in the status bar. -->
+    <dimen name="status_bar_circle_battery_icon_height">15.5dp</dimen>
 
     <!-- Width of the battery icon in the status bar. -->
     <dimen name="status_bar_battery_icon_width">14.5dp</dimen>

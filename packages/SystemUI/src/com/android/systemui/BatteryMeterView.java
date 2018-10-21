@@ -73,7 +73,7 @@ public class BatteryMeterView extends LinearLayout implements
     private float mDarkIntensity;
 
     private int mShowBatteryPercent;
-    private int mStyle = BatteryMeterDrawableBase.BATTERY_STYLE_PORTRAIT;
+    private int mStyle = BatteryMeterDrawableBase.BATTERY_STYLE_CIRCLE;
     private boolean mCharging;
     private int mTextChargingSymbol;
 
@@ -136,7 +136,7 @@ public class BatteryMeterView extends LinearLayout implements
         switch (key) {
             case STATUS_BAR_BATTERY_STYLE:
                 mStyle =
-                        newValue == null ? BatteryMeterDrawableBase.BATTERY_STYLE_PORTRAIT : Integer.parseInt(newValue);
+                        newValue == null ? BatteryMeterDrawableBase.BATTERY_STYLE_CIRCLE : Integer.parseInt(newValue);
                 mDrawable.setMeterStyle(mStyle);
                 reloadImage();
                 break;
@@ -207,27 +207,25 @@ public class BatteryMeterView extends LinearLayout implements
         if (mBatteryPercentView == null)
             return;
 
-        Typeface tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
-        if (!mCharging || mStyle != BatteryMeterDrawableBase.BATTERY_STYLE_TEXT) {
-            mBatteryPercentView.setText(
-                   NumberFormat.getPercentInstance().format(mLevel / 100f));
-        } else {
+        String pct = NumberFormat.getPercentInstance().format(mLevel / 100f);
+
+        if (mCharging && mStyle == BatteryMeterDrawableBase.BATTERY_STYLE_TEXT
+                && mTextChargingSymbol > 0) {
             switch (mTextChargingSymbol) {
                 case 1:
-                    mBatteryPercentView.setText("⚡️" +
-                           NumberFormat.getPercentInstance().format(mLevel / 100f));
+                default:
+                    pct = "⚡️ " + pct;
                    break;
                 case 2:
-                    mBatteryPercentView.setText("~" +
-                           NumberFormat.getPercentInstance().format(mLevel / 100f));
-                    break;
-                default:
-                    mBatteryPercentView.setText(
-                           NumberFormat.getPercentInstance().format(mLevel / 100f));
+                    pct = "~ " + pct;
                     break;
             }
         }
-        mBatteryPercentView.setTypeface(tf);
+
+        if (mBatteryIconView != null) pct = pct + " ";
+
+        mBatteryPercentView.setText(pct);
+        mBatteryPercentView.setTypeface(Typeface.create(FONT_FAMILY, Typeface.NORMAL));
     }
 
     private void updateShowPercent() {
@@ -248,6 +246,7 @@ public class BatteryMeterView extends LinearLayout implements
                         new ViewGroup.LayoutParams(
                                 LayoutParams.WRAP_CONTENT,
                                 LayoutParams.MATCH_PARENT));
+                reloadImage();
             }
             if (mTextColor != 0) mBatteryPercentView.setTextColor(mTextColor);
             updatePercentText();
@@ -266,11 +265,18 @@ public class BatteryMeterView extends LinearLayout implements
         mBatteryIconView = new ImageView(mContext);
         mBatteryIconView.setImageDrawable(mDrawable);
         MarginLayoutParams mlp;
-        int batteryWidth = res.getDimensionPixelSize(
-                isSymmetryBattery() ? R.dimen.status_bar_battery_icon_height :R.dimen.status_bar_battery_icon_width);
-        mlp = new MarginLayoutParams(batteryWidth,
-                res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height));
-        mlp.setMargins(0, 0, 0, res.getDimensionPixelOffset(R.dimen.battery_margin_bottom));
+
+        int batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height);
+        int batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width);
+        int marginBottom = res.getDimensionPixelSize(R.dimen.battery_margin_bottom);
+
+        if (isSymmetryBattery()) {
+            batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_circle_battery_icon_height);
+            batteryWidth = batteryHeight;
+        }
+
+        mlp = new MarginLayoutParams(batteryWidth, batteryHeight);
+        mlp.setMargins(0, 0, 0, marginBottom);
         addView(mBatteryIconView, mlp);
         scaleBatteryMeterViews();
     }
@@ -324,9 +330,13 @@ public class BatteryMeterView extends LinearLayout implements
         float iconScaleFactor = typedValue.getFloat();
 
         int batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height);
-        int batteryWidth = res.getDimensionPixelSize(
-                isSymmetryBattery() ? R.dimen.status_bar_battery_icon_height : R.dimen.status_bar_battery_icon_width);
+        int batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width);
         int marginBottom = res.getDimensionPixelSize(R.dimen.battery_margin_bottom);
+
+        if (isSymmetryBattery()) {
+            batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_circle_battery_icon_height);
+            batteryWidth = batteryHeight;
+        }
 
         LinearLayout.LayoutParams scaledLayoutParams = new LinearLayout.LayoutParams(
                 (int) (batteryWidth * iconScaleFactor), (int) (batteryHeight * iconScaleFactor));

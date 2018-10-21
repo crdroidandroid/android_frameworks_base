@@ -116,6 +116,7 @@ public class BatterySaverTile extends QSTileImpl<BooleanState> implements
         @Override
         public Drawable getDrawable(Context context) {
             BatterySaverDrawable b = new BatterySaverDrawable(context, 0);
+            b.setMeterStyle(BatteryMeterDrawableBase.BATTERY_STYLE_PORTRAIT);
             b.mState = mState;
             final int pad = context.getResources()
                     .getDimensionPixelSize(R.dimen.qs_tile_divider_height);
