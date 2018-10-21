@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2018 Benzo Rom
+ *           (C) 2017-2018 crDroidAndroid Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +17,34 @@
 
 package com.android.systemui.qs.tiles;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.ContentObserver;
-import android.os.Handler;
 import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.service.quicksettings.Tile;
 
-import com.android.systemui.R;
-import com.android.systemui.Dependency;
-import com.android.systemui.qs.QSHost;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
+import com.android.systemui.qs.GlobalSetting;
+import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
+import com.android.systemui.R;
+
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
+/** Quick settings tile: CPUInfo overlay **/
 public class CPUInfoTile extends QSTileImpl<BooleanState> {
-    private boolean mListening;
-    private CPUInfoObserver mObserver;
+
+    private final GlobalSetting mSetting;
+    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_cpuinfo);
 
     public CPUInfoTile(QSHost host) {
         super(host);
-        mObserver = new CPUInfoObserver(mHandler);
+
+        mSetting = new GlobalSetting(mContext, mHandler, Global.SHOW_CPU_OVERLAY) {
+            @Override
+            protected void handleValueChanged(int value) {
+                handleRefreshState(value);
+            }
+        };
     }
 
     @Override
@@ -47,30 +54,18 @@ public class CPUInfoTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleClick() {
-        toggleState();
+        mSetting.setValue(mState.value ? 0 : 1);
         refreshState();
-    }
-
-    @Override
-    public int getMetricsCategory() {
-        return MetricsEvent.CRDROID_SETTINGS;
-    }
-
-    @Override
-    public void handleLongClick() {
+        toggleState();
     }
 
     protected void toggleState() {
         Intent service = (new Intent())
                 .setClassName("com.android.systemui",
                 "com.android.systemui.CPUInfoService");
-        if (CPUInfoEnabled()) {
-            Settings.Global.putInt(
-                mContext.getContentResolver(), Settings.Global.SHOW_CPU_OVERLAY, 0);
+        if (mSetting.getValue() == 0) {
             mContext.stopService(service);
         } else {
-            Settings.Global.putInt(
-                mContext.getContentResolver(), Settings.Global.SHOW_CPU_OVERLAY, 1);
             mContext.startService(service);
         }
     }
@@ -81,49 +76,39 @@ public class CPUInfoTile extends QSTileImpl<BooleanState> {
     }
 
     @Override
+    protected void handleUpdateState(BooleanState state, Object arg) {
+        if (mSetting == null) return;
+        final int value = arg instanceof Integer ? (Integer)arg : mSetting.getValue();
+        final boolean cpuInfoEnabled = value != 0;
+        state.value = cpuInfoEnabled;
+        state.label = mContext.getString(R.string.quick_settings_cpuinfo_label);
+        state.icon = mIcon;
+        state.contentDescription =  mContext.getString(
+                R.string.quick_settings_cpuinfo_label);
+        if (cpuInfoEnabled) {
+            state.state = Tile.STATE_ACTIVE;
+        } else {
+            state.state = Tile.STATE_INACTIVE;
+        }
+    }
+
+    @Override
     public CharSequence getTileLabel() {
         return mContext.getString(R.string.quick_settings_cpuinfo_label);
     }
 
     @Override
-    protected void handleUpdateState(BooleanState state, Object arg) {
-        state.label = mContext.getString(R.string.quick_settings_cpuinfo_label);
-        state.icon = ResourceIcon.get(R.drawable.ic_qs_cpuinfo);
-	if (CPUInfoEnabled()) {
-            state.contentDescription =  mContext.getString(
-                    R.string.accessibility_quick_settings_cpuinfo_on);
-            state.state = Tile.STATE_ACTIVE;
-	} else {
-            state.contentDescription =  mContext.getString(
-                    R.string.accessibility_quick_settings_cpuinfo_off);
-            state.state = Tile.STATE_INACTIVE;
-	}
+    protected String composeChangeAnnouncement() {
+        return mContext.getString(R.string.quick_settings_cpuinfo_label);
     }
 
     @Override
-    protected String composeChangeAnnouncement() {
-        if (mState.value) {
-            return mContext.getString(R.string.accessibility_quick_settings_cpuinfo_changed_on);
-        } else {
-            return mContext.getString(R.string.accessibility_quick_settings_cpuinfo_changed_off);
-        }
-    }
-
-    private boolean CPUInfoEnabled() {
-        return Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.SHOW_CPU_OVERLAY, 0) == 1;
+    public int getMetricsCategory() {
+        return MetricsEvent.CRDROID_SETTINGS;
     }
 
     @Override
     public void handleSetListening(boolean listening) {
-        if (mListening == listening) return;
-        mListening = listening;
-    }
-
-    private class CPUInfoObserver extends ContentObserver {
-        public CPUInfoObserver(Handler handler) {
-            super(handler);
-        }
+        // Do nothing
     }
 }
-
