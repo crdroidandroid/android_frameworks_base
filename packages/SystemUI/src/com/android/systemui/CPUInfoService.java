@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017 The OmniROM Project
+ *           (C) 2018 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,9 +55,7 @@ public class CPUInfoService extends Service {
     private View mView;
     private Thread mCurCPUThread;
     private final String TAG = "CPUInfoService";
-    private int mNumCpus = 2;
-    private static int mNumOfPolicies = 1;
-    private static String[] mPolicies=null;
+    private int mNumCpus = 1;
     private String[] mCurrFreq=null;
     private String[] mCurrGov=null;
 
@@ -65,9 +64,10 @@ public class CPUInfoService extends Service {
     private boolean mCpuTempAvail;
 
     private static final String CURRENT_CPU = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
-    private static final String CPU_ROOT_POLICY = "/sys/devices/system/cpu/cpufreq/";
-    private static final String CPU_CUR_POLICY_TAIL = "/scaling_cur_freq";
-    private static final String CPU_GOV_POLICY_TAIL = "/scaling_governor";
+    private static final String CPU_ROOT = "/sys/devices/system/cpu/cpu";
+    private static final String CPU_CUR_TAIL = "/cpufreq/scaling_cur_freq";
+    private static final String CPU_GOV_TAIL = "/cpufreq/scaling_governor";
+    private static final String NUM_OF_CPUS_PATH = "/sys/devices/system/cpu/present";
 
     private IDreamManager mDreamManager;
 
@@ -144,7 +144,7 @@ public class CPUInfoService extends Service {
             float descent = mOnlinePaint.descent();
             mFH = (int)(descent - mAscent + .5f);
 
-            final String maxWidthStr="cpuX interactive 0000000";
+            final String maxWidthStr="cpuX: interactive 0000 MHz";
             mMaxWidth = (int)mOnlinePaint.measureText(maxWidthStr);
 
             updateDisplay();
@@ -170,7 +170,7 @@ public class CPUInfoService extends Service {
         private String getCPUInfoString(int i) {
             String freq=mCurrFreq[i];
             String gov=mCurrGov[i];
-            return "cl" + i + ": " + gov + " " + String.format("%8s", toMHz(freq));
+            return "cpu" + i + ": " + gov + " " + String.format("%8s", toMHz(freq));
         }
 
         private String getCpuTemp(String cpuTemp) {
@@ -189,18 +189,12 @@ public class CPUInfoService extends Service {
                 return;
             }
 
-            final int W = mNeededWidth;
-            final int RIGHT = getWidth()-1;
-
-            int x = RIGHT - mPaddingRight;
-            int top = mPaddingTop + 2;
-            int bottom = mPaddingTop + mFH - 2;
-
+            int x = getWidth() - mPaddingRight;
             int y = mPaddingTop - (int)mAscent;
 
             if(!mCpuTemp.equals("0")) {
                 canvas.drawText("Temp " + getCpuTemp(mCpuTemp) + "°C",
-                        RIGHT-mPaddingRight-mMaxWidth, y-1, mOnlinePaint);
+                        x-mMaxWidth, y-1, mOnlinePaint);
                 y += mFH;
             }
 
@@ -208,8 +202,11 @@ public class CPUInfoService extends Service {
                 String s=getCPUInfoString(i);
                 String freq=mCurrFreq[i];
                 if(!freq.equals("0")){
-                    canvas.drawText(s, RIGHT-mPaddingRight-mMaxWidth,
+                    canvas.drawText(s, x-mMaxWidth,
                         y-1, mOnlinePaint);
+                } else {
+                    canvas.drawText(s, x-mMaxWidth,
+                        y-1, mOfflinePaint);
                 }
                 y += mFH;
             }
@@ -264,10 +261,10 @@ public class CPUInfoService extends Service {
                     sb.append(cpuTemp == null ? "0" : cpuTemp);
                     sb.append(";");
 
-                    for(int i=0; i<mNumOfPolicies; i++){
-                        final String freqFile=CPU_ROOT_POLICY+mPolicies[i]+CPU_CUR_POLICY_TAIL;
+                    for(int i = 0; i < mNumCpus; i++) {
+                        final String freqFile=CPU_ROOT+i+CPU_CUR_TAIL;
                         String currFreq = CPUInfoService.readOneLine(freqFile);
-                        final String govFile=CPU_ROOT_POLICY+mPolicies[i]+CPU_GOV_POLICY_TAIL;
+                        final String govFile=CPU_ROOT+i+CPU_GOV_TAIL;
                         String currGov = CPUInfoService.readOneLine(govFile);
 
                         if(currFreq==null){
@@ -289,8 +286,7 @@ public class CPUInfoService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mNumCpus = 2;
-        getPolicies();
+        mNumCpus = getNumOfCpus();
         mCurrFreq = new String[mNumCpus];
         mCurrGov = new String[mNumCpus];
 
@@ -352,6 +348,26 @@ public class CPUInfoService extends Service {
         return line;
     }
 
+    private static int getNumOfCpus() {
+        int numOfCpu = 1;
+        String numOfCpus = readOneLine(NUM_OF_CPUS_PATH);
+        String[] cpuCount = numOfCpus.split("-");
+        if (cpuCount.length > 1) {
+            try {
+                int cpuStart = Integer.parseInt(cpuCount[0]);
+                int cpuEnd = Integer.parseInt(cpuCount[1]);
+
+                numOfCpu = cpuEnd - cpuStart + 1;
+
+                if (numOfCpu < 0)
+                    numOfCpu = 1;
+            } catch (NumberFormatException ex) {
+                numOfCpu = 1;
+            }
+        }
+        return numOfCpu;
+    }
+
     private BroadcastReceiver mScreenStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -368,22 +384,6 @@ public class CPUInfoService extends Service {
             }
         }
     };
-
-    private static void getPolicies() {
-        File folder = new File(CPU_ROOT_POLICY);
-        List<File> listOfFiles = new ArrayList(Arrays.asList(folder.listFiles()));
-        Collections.sort(listOfFiles);
-        mNumOfPolicies = listOfFiles.size();
-        mPolicies = new String[mNumOfPolicies];
-
-        int i = 0;
-        for (File f : listOfFiles) {
-            if (f.isDirectory()) {
-              mPolicies[i] = f.getName();
-              i++;
-            }
-        }
-    }
 
     private boolean isDozeMode() {
         try {
