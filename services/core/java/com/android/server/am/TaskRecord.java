@@ -26,6 +26,7 @@ import static android.app.WindowConfiguration.WINDOWING_MODE_FULLSCREEN;
 import static android.app.WindowConfiguration.WINDOWING_MODE_PINNED;
 import static android.app.WindowConfiguration.WINDOWING_MODE_SPLIT_SCREEN_PRIMARY;
 import static android.app.WindowConfiguration.WINDOWING_MODE_SPLIT_SCREEN_SECONDARY;
+import static android.app.WindowConfiguration.WINDOWING_MODE_UNDEFINED;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS;
@@ -977,6 +978,9 @@ class TaskRecord extends ConfigurationContainer implements TaskWindowContainerLi
     protected void onParentChanged() {
         super.onParentChanged();
         mService.mStackSupervisor.updateUIDsPresentOnDisplay();
+        if (getParent() == null) {
+            getWindowConfiguration().setWindowingMode(WINDOWING_MODE_UNDEFINED);
+        }
     }
 
     // Close up recents linked list.
