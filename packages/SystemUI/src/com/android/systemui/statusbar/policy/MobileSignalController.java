@@ -103,10 +103,13 @@ public class MobileSignalController extends SignalController<
     private FeatureConnector<ImsManager> mFeatureConnector;
     private int mCallState = TelephonyManager.CALL_STATE_IDLE;
 
+    private boolean mVoLTEicon;
     private boolean mRoamingIconAllowed;
     private boolean mShow4gForLte;
     private boolean mDataDisabledIcon;
 
+    private static final String SHOW_VOLTE_ICON =
+            "system:" + Settings.System.SHOW_VOLTE_ICON;
     private static final String ROAMING_INDICATOR_ICON =
             "system:" + Settings.System.ROAMING_INDICATOR_ICON;
     private static final String SHOW_FOURG_ICON =
@@ -175,6 +178,7 @@ public class MobileSignalController extends SignalController<
             }
         };
 
+        Dependency.get(TunerService.class).addTunable(this, SHOW_VOLTE_ICON);
         Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
         Dependency.get(TunerService.class).addTunable(this, SHOW_FOURG_ICON);
         Dependency.get(TunerService.class).addTunable(this, DATA_DISABLED_ICON);
@@ -183,6 +187,11 @@ public class MobileSignalController extends SignalController<
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
+            case SHOW_VOLTE_ICON:
+                mVoLTEicon =
+                    TunerService.parseIntegerSwitch(newValue, false);
+                updateTelephony();
+                break;
             case ROAMING_INDICATOR_ICON:
                 mRoamingIconAllowed =
                     TunerService.parseIntegerSwitch(newValue, true);
@@ -449,7 +458,7 @@ public class MobileSignalController extends SignalController<
     private int getVolteResId() {
         int resId = 0;
         if ( (mCurrentState.voiceCapable || mCurrentState.videoCapable)
-                &&  mCurrentState.imsRegistered ) {
+                &&  mCurrentState.imsRegistered && mVoLTEicon) {
             resId = R.drawable.ic_volte;
         }
         return resId;
