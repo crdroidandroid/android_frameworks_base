@@ -16,10 +16,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Tiruan tanda tangan paket</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Memungkinkan aplikasi untuk menirunya sebagai aplikasi yang berbeda. Aplikasi berbahaya mungkin dapat menggunakan hak ini untuk mengakses data aplikasi pribadi. Berikan izin ini hanya dengan hati-hati!</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_toggleNavigationEditor">mengontrol navigasi editor</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -45,4 +41,10 @@
   <string name="permlab_accessFontManager">akses Manajer Font</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFontManager">Mengizinkan aplikasi untuk mengakses manajer font.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_fakePackageSignature">Tiruan tanda tangan paket</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_fakePackageSignature">Memungkinkan aplikasi untuk menirunya sebagai aplikasi yang berbeda. Aplikasi berbahaya mungkin dapat menggunakan hak ini untuk mengakses data aplikasi pribadi. Berikan izin ini hanya dengan hati-hati!</string>
+  <!-- Pocket Lock -->
+  <string name="pocket_lock_message_long_press">Tekan lama tombol daya untuk berinteraksi</string>
 </resources>
