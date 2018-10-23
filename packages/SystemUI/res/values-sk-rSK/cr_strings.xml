@@ -70,6 +70,12 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_turbo_power_time">Turbo-Power je pripojený (<xliff:g id="charging_time_left">%s</xliff:g> až do plna)</string>
   <string name="keyguard_plugged_in_turbo_power_charging">TurboPower je pripojený</string>
+  <!-- HW Keys Tile -->
+  <string name="quick_settings_hw_keys_label">Hardvérové tlačidlá</string>
+  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_disabled">Hardvérové tlačidlá vypnuté.</string>
+  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_enabled">Hardvérové tlačidlá zapnuté.</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Chyba</string>
   <string name="omnijaws_service_unkown">Žiadne údaje o počasí</string>
@@ -119,12 +125,6 @@
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">Nfc</string>
-  <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">Hardvérové tlačidlá</string>
-  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">Hardvérové tlačidlá vypnuté.</string>
-  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">Hardvérové tlačidlá zapnuté.</string>
   <!-- Heads up snooze toast -->
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> • Plávajúce upozornenia sú odložené na 1 minútu.</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> • Plávajúce upozornenia sú odložené na <xliff:g id="number">%d </xliff:g> minút.</string>
