@@ -70,6 +70,12 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_turbo_power_time">TurboPower aangesloten (<xliff:g id="charging_time_left">%s</xliff:g> tot volledig opgeladen)</string>
   <string name="keyguard_plugged_in_turbo_power_charging">TurboPower verbonden</string>
+  <!-- HW Keys Tile -->
+  <string name="quick_settings_hw_keys_label">Fysieke knoppen</string>
+  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_disabled">Fysieke knoppen uitgeschakeld.</string>
+  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_enabled">Fysieke knoppen ingeschakeld.</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Fout</string>
   <string name="omnijaws_service_unkown">Geen weergegevens</string>
@@ -119,12 +125,6 @@
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">Nfc</string>
-  <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">Fysieke knoppen</string>
-  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">Fysieke knoppen uitgeschakeld.</string>
-  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">Fysieke knoppen ingeschakeld.</string>
   <!-- Heads up snooze toast -->
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s </xliff:g> - Peeking notificaties 1 minuut gedempt.</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Peeking notificaties zijn gedempt voor <xliff:g id="number">%d </xliff:g> minuten.</string>
