@@ -16,10 +16,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Falsificação de assinatura</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Permite que o aplicativo pretenda ser um aplicativo diferente. Os aplicativos maliciosos podem ser capazes de usar isso para acessar dados de aplicativos privados. Conceda esta permissão apenas com cautela</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_toggleNavigationEditor">Editor de navegação de controle</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -45,4 +41,10 @@
   <string name="permlab_accessFontManager">acessar gerenciador de fontes</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFontManager">Permite que um aplicativo acesse o gerenciador de fontes.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_fakePackageSignature">Falsificação de assinatura</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_fakePackageSignature">Permite que o aplicativo pretenda ser um aplicativo diferente. Os aplicativos maliciosos podem ser capazes de usar isso para acessar dados de aplicativos privados. Conceda esta permissão apenas com cautela</string>
+  <!-- Pocket Lock -->
+  <string name="pocket_lock_message_long_press">Long press power button to interact</string>
 </resources>
