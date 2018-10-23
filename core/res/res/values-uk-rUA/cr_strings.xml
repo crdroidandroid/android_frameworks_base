@@ -16,10 +16,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Підробити підпис пакета</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Дозволяти додатку видавати себе за інший додаток. Небезпечні додатки можуть отримати доступ до приватних даних. Будьте обережні під час надання цього дозволу!</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_toggleNavigationEditor">керування редактором панелі навігації</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -45,4 +41,10 @@
   <string name="permlab_accessFontManager">доступ до менеджера шрифтів</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFontManager">Дозволяє програмі отримати доступ до менеджера шрифтів.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_fakePackageSignature">Підробити підпис пакета</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_fakePackageSignature">Дозволяти додатку видавати себе за інший додаток. Небезпечні додатки можуть отримати доступ до приватних даних. Будьте обережні під час надання цього дозволу!</string>
+  <!-- Pocket Lock -->
+  <string name="pocket_lock_message_long_press">Long press power button to interact</string>
 </resources>
