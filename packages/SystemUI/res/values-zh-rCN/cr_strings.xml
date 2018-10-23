@@ -70,6 +70,12 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_turbo_power_time">TurboPower 已连接 (还需 <xliff:g id="charging_time_left">%s</xliff:g> 充满)</string>
   <string name="keyguard_plugged_in_turbo_power_charging">TurboPower 已连接</string>
+  <!-- HW Keys Tile -->
+  <string name="quick_settings_hw_keys_label">实体按键</string>
+  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_disabled">实体按键已禁用</string>
+  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_enabled">实体按键已启用</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">出错</string>
   <string name="omnijaws_service_unkown">没有天气数据</string>
@@ -119,12 +125,6 @@
   <string name="status_bar_nfc">NFC 近场通讯</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">近场通讯</string>
-  <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">实体按键</string>
-  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">实体按键已禁用</string>
-  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">实体按键已启用</string>
   <!-- Heads up snooze toast -->
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - 浮动通知暂停1分钟。</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - 浮动通知暂停<xliff:g id="number">%d</xliff:g>分钟。</string>
