@@ -70,6 +70,12 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_turbo_power_time">Schnellladen (<xliff:g id="charging_time_left">%s</xliff:g> bis vollgeladen)</string>
   <string name="keyguard_plugged_in_turbo_power_charging">Schnellladegerät verbunden</string>
+  <!-- HW Keys Tile -->
+  <string name="quick_settings_hw_keys_label">Hardwaretasten</string>
+  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_disabled">Hardwaretasten deaktiviert.</string>
+  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_enabled">Hardwaretasten aktiviert.</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Fehler</string>
   <string name="omnijaws_service_unkown">Keine Wetterdaten</string>
@@ -119,12 +125,6 @@
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">Nfc</string>
-  <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">Hardwaretasten</string>
-  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">Hardwaretasten deaktiviert.</string>
-  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">Hardwaretasten aktiviert.</string>
   <!-- Heads up snooze toast -->
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s </xliff:g> - Heads-Up Benachrichtigungen sind 1 Minute lang deaktiviert.</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Heads-Up Benachrichtigungen sind für <xliff:g id="number">%d </xliff:g> Minuten deaktiviert.</string>
@@ -166,19 +166,19 @@
   <string name="shortcut_toggle_title">Auszuführende Aktion</string>
   <string name="chamber_disabled">Kammer der Geheimnisse ist geschlossen</string>
   <string name="chamber_title">Eingabeeinstellungenzeichenfolge</string>
-  <string name="chamber_message">Input a Settings string that is either an on and off (checkbox) function or possibly a list-preference. For example, doze_enabled or similar. Settings can be found in the Settings.java file. WARNING: This process is dangerous!</string>
+  <string name="chamber_message">Geben Sie einen String ein, der entweder auf eine Ein-/Aus-Funktion (Checkbox) oder aber auf eine vorgegebene Liste verweist (z. B. »doze_enabled« oder ähnliches). Die Strings finden Sie in der Settings.java-Datei. WARNUNG: Dieser Vorgang ist gefährlich!</string>
   <string name="chamber_invalid">Dies ist eine ungültige Eingabe. Sei vorsichtig.</string>
   <string name="chamber_invalid_setting">Versuchen Sie die Einstellung manuell vorzunehmen, um sicherzustellen, dass die Einstellungs-Datenbank für diese Aktion existiert.</string>
   <string name="chamber_checkbox">Checkbox</string>
   <string name="chamber_chk_message">Ist diese Einstellung eine Checkbox-Einstellung?</string>
   <string name="chamber_int">Eingabewerte</string>
-  <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
+  <string name="chamber_int_message">Geben Sie die Werte ein, zwischen denen die Einstellung umschalten soll. Trennen Sie die Einzelwerte durch Kommas. Bei Farbeinstellungen werden hexadezimale Werte wie #FF00aacc oder Grundfarbwerte wie rot, grün und gelb akzeptiert.</string>
   <string name="chamber_name_title">Name der Verknüpfung</string>
   <string name="chamber_name_message">Geben Sie der Verknüpfung einen Namen, der mit dem Symbol angezeigt wird.</string>
   <string name="chamber_name_toast">Standardname wird verwendet</string>
   <string name="shortcut_clear_notifications">Benachrichtigungen löschen</string>
   <!-- Pie controls -->
-  <string name="pie_state_summary">Use pie controls while in immersive mode</string>
+  <string name="pie_state_summary">Benutze die Pie-Steuerung im \"immersive mode\"</string>
   <string name="pie_battery_level">"Pie Akkustand"</string>
   <string name="quick_settings_pie">Schnelleinstellungen Pie</string>
 </resources>
