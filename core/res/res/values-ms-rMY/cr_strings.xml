@@ -16,10 +16,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Lelucon pakej tandatangan</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Membenarkan apl berpura-pura menjadi aplikasi yang berbeza. Aplikasi berniat jahat mungkin dapat menggunakannya untuk mengakses data aplikasi peribadi. Berikan kebenaran ini dengan berhati-hati sahaja!</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_toggleNavigationEditor">kawalan navigasi editor</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -45,4 +41,10 @@
   <string name="permlab_accessFontManager">access font manager</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_fakePackageSignature">Lelucon pakej tandatangan</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_fakePackageSignature">Membenarkan apl berpura-pura menjadi aplikasi yang berbeza. Aplikasi berniat jahat mungkin dapat menggunakannya untuk mengakses data aplikasi peribadi. Berikan kebenaran ini dengan berhati-hati sahaja!</string>
+  <!-- Pocket Lock -->
+  <string name="pocket_lock_message_long_press">Long press power button to interact</string>
 </resources>
