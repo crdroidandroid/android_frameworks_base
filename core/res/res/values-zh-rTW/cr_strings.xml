@@ -16,33 +16,35 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Spoof package signature</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Grant this permission with caution only!</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_toggleNavigationEditor">control navigation editor</string>
+  <string name="permlab_toggleNavigationEditor">控制導覽列編輯器</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+  <string name="permdesc_toggleNavigationEditor">允許應用程式控制導覽列編輯器。</string>
   <!-- AOKP custom system animations -->
-  <string name="animation_fade">Fade</string>
-  <string name="animation_slide_right">Slide in right</string>
-  <string name="animation_slide_left">Slide in left</string>
-  <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-  <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-  <string name="animation_slide_up">Slide in bottom</string>
-  <string name="animation_slide_down">Slide in top</string>
-  <string name="animation_default">Default</string>
-  <string name="animation_translucent">Translucent</string>
-  <string name="animation_grow_shrink">Grow in (Top)</string>
-  <string name="animation_grow_shrink_center">Grow in (Center)</string>
-  <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-  <string name="animation_grow_shrink_left">Grow in (Left)</string>
-  <string name="animation_grow_shrink_right">Grow in (Right)</string>
-  <string name="animation_random">Random</string>
-  <string name="action_null">Blank</string>
+  <string name="animation_fade">淡入淡出</string>
+  <string name="animation_slide_right">向右滑動</string>
+  <string name="animation_slide_left">向左滑動</string>
+  <string name="animation_slide_right_no_fade">從右滑入(無淡出)</string>
+  <string name="animation_slide_left_no_fade">從左滑入(無淡出)</string>
+  <string name="animation_slide_up">向下滑動</string>
+  <string name="animation_slide_down">向上滑動</string>
+  <string name="animation_default">預設</string>
+  <string name="animation_translucent">半透明</string>
+  <string name="animation_grow_shrink">縮放 (頂部)</string>
+  <string name="animation_grow_shrink_center">縮放 (中央)</string>
+  <string name="animation_grow_shrink_bottom">縮放(底部)</string>
+  <string name="animation_grow_shrink_left">縮放 (左測)</string>
+  <string name="animation_grow_shrink_right">縮放 (右側)</string>
+  <string name="animation_random">隨機</string>
+  <string name="action_null">空白</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFontManager">access font manager</string>
+  <string name="permlab_accessFontManager">存取字型管理員</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+  <string name="permdesc_accessFontManager">允許應用程式存取字型管理員</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_fakePackageSignature">模仿應用程式簽名。</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_fakePackageSignature">允許應用程式偽裝成不同的應用程式。惡意應用程式可能會使用這項功能存取私人的應用程式資料。請務必謹慎地授予此項權限！</string>
+  <!-- Pocket Lock -->
+  <string name="pocket_lock_message_long_press">Long press power button to interact</string>
 </resources>
