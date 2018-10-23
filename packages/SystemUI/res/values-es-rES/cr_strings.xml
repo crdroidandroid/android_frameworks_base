@@ -70,6 +70,12 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_turbo_power_time">Carga rápida conectada (<xliff:g id="charging_time_left">%s</xliff:g> until full)</string>
   <string name="keyguard_plugged_in_turbo_power_charging">TurboPower conectado</string>
+  <!-- HW Keys Tile -->
+  <string name="quick_settings_hw_keys_label">Botones físicos</string>
+  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_disabled">Botones físicos desactivados.</string>
+  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_enabled">Botones físicos activados.</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Error</string>
   <string name="omnijaws_service_unkown">No hay datos del clima</string>
@@ -119,12 +125,6 @@
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">Nfc</string>
-  <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">Botones físicos</string>
-  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">Botones físicos desactivados.</string>
-  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">Botones físicos activados.</string>
   <!-- Heads up snooze toast -->
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Las notificaciones flotantes fueron pospuestas por 1 minuto.</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Las notificaciones flotantes están aplazadas durante <xliff:g id="number">%d</xliff:g> minutos.</string>
