@@ -100,6 +100,8 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
     private static final int COLOR_FADE_ON_ANIMATION_DURATION_MILLIS = 250;
     private static final int COLOR_FADE_OFF_ANIMATION_DURATION_MILLIS = 400;
 
+    private static final int SCREEN_OFF_DELAY_MILLIS = 1000;
+
     private static final int MSG_UPDATE_POWER_STATE = 1;
     private static final int MSG_PROXIMITY_SENSOR_DEBOUNCED = 2;
     private static final int MSG_SCREEN_ON_UNBLOCKED = 3;
@@ -1179,6 +1181,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
 
     private boolean setScreenState(int state, boolean reportOnly) {
         final boolean isOff = (state == Display.STATE_OFF);
+        cancelDelayedScreenOff();
         if (mPowerState.getScreenState() != state) {
 
             // If we are trying to turn screen off, give policy a chance to do something before we
@@ -1239,6 +1242,26 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
 
         // Return true if the screen isn't blocked.
         return mPendingScreenOnUnblocker == null;
+    }
+
+    private final Runnable mScreenOffTask = new Runnable() {
+        @Override
+        public void run() {
+            final boolean updateNeeded = mPowerState.getScreenState() != Display.STATE_OFF;
+            setScreenState(Display.STATE_OFF);
+            if (updateNeeded) {
+                sendUpdatePowerState();
+            }
+        }
+    };
+
+    private void setScreenOffDelayed() {
+        cancelDelayedScreenOff();
+        mHandler.postDelayed(mScreenOffTask, SCREEN_OFF_DELAY_MILLIS);
+    }
+
+    private void cancelDelayedScreenOff() {
+        mHandler.removeCallbacks(mScreenOffTask);
     }
 
     private void setReportedScreenState(int state) {
@@ -1417,7 +1440,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             if (mPowerState.getColorFadeLevel() == 0.0f) {
                 // Turn the screen off.
                 // A black surface is already hiding the contents of the screen.
-                setScreenState(Display.STATE_OFF);
+                setScreenOffDelayed();
                 mPendingScreenOff = false;
                 mPowerState.dismissColorFadeResources();
             } else if (performScreenOffTransition
