@@ -70,6 +70,12 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_turbo_power_time">TurboPower Terhubung (<xliff:g id="charging_time_left">%s</xliff:g>) Hingga penuh</string>
   <string name="keyguard_plugged_in_turbo_power_charging">TurboPower terhubung</string>
+  <!-- HW Keys Tile -->
+  <string name="quick_settings_hw_keys_label">Tombol Fisik</string>
+  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_disabled">Tombol Fisik dimatikan.</string>
+  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_enabled">Tombol Fisik dihidupkan.</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Kesalahan</string>
   <string name="omnijaws_service_unkown">Data cuaca tidak ada</string>
@@ -119,12 +125,6 @@
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">NFC</string>
-  <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">Tombol Fisik</string>
-  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">Tombol Fisik dimatikan.</string>
-  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">Tombol Fisik dihidupkan.</string>
   <!-- Heads up snooze toast -->
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Mengintip pemberitahuan tertunda selama 1 menit.</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - mengintip pemberitahuan tertidur selama <xliff:g id="number">%d </xliff:g> menit.</string>
@@ -144,41 +144,41 @@
   <string name="onthego_service_toggle">Otomatis memulai ulang layanan</string>
   <string name="onthego_channel_name">Utama</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">Smart Pixels</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Hidupkan otomatis smart pixels</string>
   <!-- Off/On/Toggle -->
-  <string name="off">Off</string>
-  <string name="on">On</string>
+  <string name="off">Mati</string>
+  <string name="on">Hidup</string>
   <string name="toggle">Toggle</string>
   <!-- Dialog Cancel/OK -->
-  <string name="cancel">Cancel</string>
+  <string name="cancel">Batal</string>
   <string name="dlg_ok">Ok</string>
-  <string name="yes">Yes</string>
-  <string name="no">No</string>
+  <string name="yes">Ya</string>
+  <string name="no">Tidak</string>
   <!-- Slim Shortcut Actions -->
-  <string name="shortcut_picker">crDroid Shortcuts</string>
-  <string name="shortcut_rotation">Rotation lock toggle</string>
-  <string name="shortcut_torch">Flashlight</string>
-  <string name="shortcut_chamber">Chamber of Secrets</string>
-  <string name="shortcut_reboot">Reboot</string>
-  <string name="shortcut_recovery">Recovery</string>
-  <string name="shortcut_screensleep">Sleep Screen</string>
-  <string name="shortcut_toggle_title">Action to perform</string>
-  <string name="chamber_disabled">Chamber of secrets is closed</string>
-  <string name="chamber_title">Input Settings string</string>
-  <string name="chamber_message">Input a Settings string that is either an on and off (checkbox) function or possibly a list-preference. For example, doze_enabled or similar. Settings can be found in the Settings.java file. WARNING: This process is dangerous!</string>
-  <string name="chamber_invalid">This is an invalid input. Be careful.</string>
-  <string name="chamber_invalid_setting">Try toggling the setting manually to ensure the settings database for this action exists.</string>
-  <string name="chamber_checkbox">Checkbox</string>
-  <string name="chamber_chk_message">Is this setting a checkbox setting?</string>
-  <string name="chamber_int">Input values</string>
-  <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
-  <string name="chamber_name_title">Shortcut name</string>
-  <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
-  <string name="chamber_name_toast">Using default name</string>
-  <string name="shortcut_clear_notifications">Clear notifications</string>
+  <string name="shortcut_picker">Pintasan crDroid</string>
+  <string name="shortcut_rotation">Toggle mengunci rotasi</string>
+  <string name="shortcut_torch">Senter</string>
+  <string name="shortcut_chamber">Ruang rahasia</string>
+  <string name="shortcut_reboot">Mulai ulang</string>
+  <string name="shortcut_recovery">Pemulihan</string>
+  <string name="shortcut_screensleep">Matikan layar</string>
+  <string name="shortcut_toggle_title">Tindakan untuk menjalankan</string>
+  <string name="chamber_disabled">Ruang rahasia ditutup</string>
+  <string name="chamber_title">Masukan string pengaturan</string>
+  <string name="chamber_message">Masukkan string Pengaturan baik fungsi aktif dan tidak aktif (centang) atau mungkin daftar pengaturan. Contohnya, doze_enable atau yang lainnya. Pengaturan dapat ditemukan di file Setting.java. PERINGATAN: Proses ini berbahaya!</string>
+  <string name="chamber_invalid">Ini adalah masukan yang salah. Hati-hati.</string>
+  <string name="chamber_invalid_setting">Coba atur pengaturan secara manual untuk memastikan database pengaturan untuk aksi ini tersedia.</string>
+  <string name="chamber_checkbox">Kotak centang</string>
+  <string name="chamber_chk_message">Apakah pengaturan ini adalah pengaturan kotak centang?</string>
+  <string name="chamber_int">Nilai masukan</string>
+  <string name="chamber_int_message">Masukkan nilai yang anda inginkan untuk mengatur peralihan antara. Pisahkan setiap nilai dengan koma. Pengaturan warna memperbolehkan nilai-hex seperti #FF00aacc atau nilai warna dasar seperti red, green, dan yellow.</string>
+  <string name="chamber_name_title">Nama pintasan</string>
+  <string name="chamber_name_message">Berikan nama pintasan untuk ditampilkan dengan ikon.</string>
+  <string name="chamber_name_toast">Gunakan nama bawaan</string>
+  <string name="shortcut_clear_notifications">Bersihkan notifikasi</string>
   <!-- Pie controls -->
-  <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-  <string name="pie_battery_level">"BATTERY LEVEL "</string>
+  <string name="pie_state_summary">Gunakan kontrol pie ketika dalam mode immersive</string>
+  <string name="pie_battery_level">"TINGKAT BATERAI "</string>
   <string name="quick_settings_pie">Pie</string>
 </resources>
