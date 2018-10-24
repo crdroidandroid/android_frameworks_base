@@ -172,7 +172,7 @@
   <string name="chamber_checkbox">Kotak centang</string>
   <string name="chamber_chk_message">Apakah pengaturan ini adalah pengaturan kotak centang?</string>
   <string name="chamber_int">Nilai masukan</string>
-  <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
+  <string name="chamber_int_message">Masukkan nilai yang anda inginkan untuk mengatur peralihan antara. Pisahkan setiap nilai dengan koma. Pengaturan warna memperbolehkan nilai-hex seperti #FF00aacc atau nilai warna dasar seperti red, green, dan yellow.</string>
   <string name="chamber_name_title">Nama pintasan</string>
   <string name="chamber_name_message">Berikan nama pintasan untuk ditampilkan dengan ikon.</string>
   <string name="chamber_name_toast">Gunakan nama bawaan</string>
