@@ -46,5 +46,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_fakePackageSignature">允許應用程式偽裝成不同的應用程式。惡意應用程式可能會使用這項功能存取私人的應用程式資料。請務必謹慎地授予此項權限！</string>
   <!-- Pocket Lock -->
-  <string name="pocket_lock_message_long_press">長按電源鍵進行交互</string>
+  <string name="pocket_lock_message_long_press">長按電源鍵進行互動</string>
 </resources>
