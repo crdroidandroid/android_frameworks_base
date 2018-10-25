@@ -1219,16 +1219,23 @@ class UserController implements Handler.Callback {
             Slog.w(TAG, "Cannot switch to User #" + targetUserId + ": not a full user");
             return false;
         }
-        synchronized (mLock) {
-            mTargetUserId = targetUserId;
-        }
         if (mUserSwitchUiEnabled) {
             UserInfo currentUserInfo = getUserInfo(currentUserId);
+            if (currentUserInfo == null) {
+                Slog.w(TAG, "No user info for current user #" + currentUserId);
+                return false;
+            }
+            synchronized (mLock) {
+                mTargetUserId = targetUserId;
+            }
             Pair<UserInfo, UserInfo> userNames = new Pair<>(currentUserInfo, targetUserInfo);
             mUiHandler.removeMessages(START_USER_SWITCH_UI_MSG);
             mUiHandler.sendMessage(mHandler.obtainMessage(
                     START_USER_SWITCH_UI_MSG, userNames));
         } else {
+            synchronized (mLock) {
+                mTargetUserId = targetUserId;
+            }
             mHandler.removeMessages(START_USER_SWITCH_FG_MSG);
             mHandler.sendMessage(mHandler.obtainMessage(
                     START_USER_SWITCH_FG_MSG, targetUserId, 0));
