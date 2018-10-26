@@ -5150,7 +5150,7 @@ public final class ViewRootImpl implements ViewParent,
             boolean isKeyguardOn = false;
             try {
                 isGestureButtonEnabled = wm.isGestureButtonEnabled();
-                isKeyguardOn = wm.isKeyguardLocked();
+                isKeyguardOn = wm.isKeyguardShowingAndNotOccluded();
             } catch (RemoteException ex) {
                 isGestureButtonEnabled = false;
                 isKeyguardOn = false;
