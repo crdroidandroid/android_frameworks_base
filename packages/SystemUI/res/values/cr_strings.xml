@@ -60,4 +60,7 @@
     <string name="quick_settings_music_label">Music</string>
     <string name="quick_settings_music_play">Play</string>
     <string name="quick_settings_music_pause">Pause</string>
+
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Always on display</string>
 </resources>
