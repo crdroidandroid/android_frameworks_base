@@ -553,7 +553,7 @@ public class MobileSignalController extends SignalController<
             mCurrentState.networkName = mServiceState.getOperatorAlphaShort();
         }
 
-        mCurrentState.mobileIms = isMobileIms() && mRoamingIconAllowed;
+        mCurrentState.mobileIms = isMobileIms() && mVoLTEicon;
         notifyListenersIfNecessary();
     }
 
