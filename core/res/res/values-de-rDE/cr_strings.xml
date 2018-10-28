@@ -16,10 +16,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Paketsignatur imitieren</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Erlaubt einer App, eine andere zu imitieren. Böswillige Anwendungen erhalten möglicherweise ihre persönlichen Daten. Verteilen Sie diese Berechtigung vorsichtig!</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_toggleNavigationEditor">Kontrolliere Navigationseditor</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -45,4 +41,10 @@
   <string name="permlab_accessFontManager">auf Schriftverwaltung zugreifen</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFontManager">Erlaubt der Anwendung, auf die Schriftverwaltung zuzugreifen.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_fakePackageSignature">Paketsignatur imitieren</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_fakePackageSignature">Erlaubt einer App, eine andere zu imitieren. Böswillige Anwendungen erhalten möglicherweise ihre persönlichen Daten. Verteilen Sie diese Berechtigung vorsichtig!</string>
+  <!-- Pocket Lock -->
+  <string name="pocket_lock_message_long_press">Ein-/Aus-Taste gedrückt halten, um mit dem Gerät zu interagieren</string>
 </resources>
