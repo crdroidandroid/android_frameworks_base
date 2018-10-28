@@ -77,11 +77,14 @@ public class MobileSignalController extends SignalController<
 
     private boolean mRoamingIconAllowed;
     private boolean mShow4gForLte;
+    private boolean mVoLTEicon;
 
     private static final String ROAMING_INDICATOR_ICON =
             "system:" + Settings.System.ROAMING_INDICATOR_ICON;
     private static final String SHOW_FOURG_ICON =
             "system:" + Settings.System.SHOW_FOURG_ICON;
+    private static final String SHOW_VOLTE_ICON =
+            "system:" + Settings.System.SHOW_VOLTE_ICON;
 
     // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
     // need listener lists anymore.
@@ -122,6 +125,7 @@ public class MobileSignalController extends SignalController<
 
         Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
         Dependency.get(TunerService.class).addTunable(this, SHOW_FOURG_ICON);
+        Dependency.get(TunerService.class).addTunable(this, SHOW_VOLTE_ICON);
     }
 
     @Override
@@ -136,6 +140,11 @@ public class MobileSignalController extends SignalController<
                      mShow4gForLte =
                         TunerService.parseIntegerSwitch(newValue, false);
                      mapIconSets();
+                break;
+            case SHOW_VOLTE_ICON:
+                     mVoLTEicon =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                     updateTelephony();
                 break;
             default:
                 break;
@@ -343,7 +352,7 @@ public class MobileSignalController extends SignalController<
         int typeIcon = (showDataIcon || mConfig.alwaysShowDataRatIcon) ? icons.mDataType : 0;
         callback.setMobileDataIndicators(statusIcon, qsIcon, typeIcon, qsTypeIcon,
                 activityIn, activityOut, dataContentDescription, description, icons.mIsWide,
-                mSubscriptionInfo.getSubscriptionId(), mCurrentState.roaming);
+                mSubscriptionInfo.getSubscriptionId(), mCurrentState.roaming, mCurrentState.mobileIms);
     }
 
     @Override
@@ -513,6 +522,9 @@ public class MobileSignalController extends SignalController<
             mCurrentState.networkName = mServiceState.getOperatorAlphaShort();
         }
 
+        mCurrentState.mobileIms = mVoLTEicon &&
+                mPhone.isImsRegistered(mSubscriptionInfo.getSubscriptionId());
+
         notifyListenersIfNecessary();
     }
 
@@ -634,6 +646,7 @@ public class MobileSignalController extends SignalController<
         boolean isDefault;
         boolean userSetup;
         boolean roaming;
+        boolean mobileIms;
 
         @Override
         public void copyFrom(State s) {
@@ -649,6 +662,7 @@ public class MobileSignalController extends SignalController<
             carrierNetworkChangeMode = state.carrierNetworkChangeMode;
             userSetup = state.userSetup;
             roaming = state.roaming;
+            mobileIms = state.mobileIms;
         }
 
         @Override
@@ -660,6 +674,7 @@ public class MobileSignalController extends SignalController<
             builder.append("networkNameData=").append(networkNameData).append(',');
             builder.append("dataConnected=").append(dataConnected).append(',');
             builder.append("roaming=").append(roaming).append(',');
+            builder.append("mobileIms=").append(mobileIms).append(',');
             builder.append("isDefault=").append(isDefault).append(',');
             builder.append("isEmergency=").append(isEmergency).append(',');
             builder.append("airplaneMode=").append(airplaneMode).append(',');
@@ -680,7 +695,8 @@ public class MobileSignalController extends SignalController<
                     && ((MobileState) o).carrierNetworkChangeMode == carrierNetworkChangeMode
                     && ((MobileState) o).userSetup == userSetup
                     && ((MobileState) o).isDefault == isDefault
-                    && ((MobileState) o).roaming == roaming;
+                    && ((MobileState) o).roaming == roaming
+                    && ((MobileState) o).mobileIms == mobileIms;
         }
     }
 }
