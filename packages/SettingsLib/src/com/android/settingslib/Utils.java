@@ -30,6 +30,8 @@ import com.android.settingslib.drawable.UserIconDrawable;
 
 import java.text.NumberFormat;
 
+import com.android.internal.util.crdroid.weather.WeatherClient;
+
 public class Utils {
 
     private static final String CURRENT_MODE_KEY = "CURRENT_MODE";
@@ -285,6 +287,7 @@ public class Utils {
                 || pkg.packageName.equals(sServicesSystemSharedLibPackageName)
                 || pkg.packageName.equals(sSharedSystemSharedLibPackageName)
                 || pkg.packageName.equals(PrintManager.PRINT_SPOOLER_PACKAGE_NAME)
+                || pkg.packageName.equals(WeatherClient.SERVICE_PACKAGE)
                 || isDeviceProvisioningPackage(resources, pkg.packageName);
     }
 
