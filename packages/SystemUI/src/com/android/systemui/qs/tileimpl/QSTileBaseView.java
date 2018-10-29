@@ -201,6 +201,7 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
 
         setClickable(state.state != Tile.STATE_UNAVAILABLE);
         mIcon.setIcon(state);
+        setLongClickable(state.handlesLongClick);
         setContentDescription(state.contentDescription);
 
         mAccessibilityClass = state.expandedAccessibilityClassName;
@@ -284,10 +285,14 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
                 info.setText(label);
                 info.setChecked(b);
                 info.setCheckable(true);
-                info.addAction(
-                        new AccessibilityNodeInfo.AccessibilityAction(
-                                AccessibilityNodeInfo.AccessibilityAction.ACTION_LONG_CLICK.getId(),
-                                getResources().getString(R.string.accessibility_long_click_tile)));
+                if (isLongClickable()) {
+                    info.addAction(
+                            new AccessibilityNodeInfo.AccessibilityAction(
+                                    AccessibilityNodeInfo.AccessibilityAction
+                                            .ACTION_LONG_CLICK.getId(),
+                                    getResources().getString(
+                                            R.string.accessibility_long_click_tile)));
+                }
             }
         }
     }
