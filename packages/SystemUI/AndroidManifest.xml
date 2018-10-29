@@ -230,6 +230,9 @@
 
     <protected-broadcast android:name="android.intent.action.SCREEN_STATE_SERVICE_UPDATE" />
 
+    <!-- Weather on lockscreen -->
+    <uses-permission android:name="com.crdroid.weather.client.READ_WEATHER" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
