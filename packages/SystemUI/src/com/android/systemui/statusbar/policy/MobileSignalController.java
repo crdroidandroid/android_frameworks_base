@@ -358,23 +358,6 @@ public class MobileSignalController extends SignalController<
                 mSubscriptionInfo.getSubscriptionId(), mCurrentState.roaming, mCurrentState.mobileIms);
     }
 
-    private boolean isMobileIms() {
-        List<SubscriptionInfo> subInfos = SubscriptionManager.from(mContext)
-                        .getActiveSubscriptionInfoList();
-        if (subInfos != null) {
-            for (SubscriptionInfo subInfo: subInfos) {
-                int subId = subInfo.getSubscriptionId();
-                if (mPhone != null
-                        && mPhone.isImsRegistered(subId)) {
-                    return true;
-                }
-            }
-        } else {
-            Log.e(mTag, "Invalid SubscriptionInfo");
-        }
-        return false;
-    }
-
     @Override
     protected MobileState cleanState() {
         return new MobileState();
@@ -553,7 +536,9 @@ public class MobileSignalController extends SignalController<
             mCurrentState.networkName = mServiceState.getOperatorAlphaShort();
         }
 
-        mCurrentState.mobileIms = isMobileIms() && mVoLTEicon;
+        mCurrentState.mobileIms = mVoLTEicon &&
+                mPhone.isImsRegistered(mSubscriptionInfo.getSubscriptionId());
+
         notifyListenersIfNecessary();
     }
 
