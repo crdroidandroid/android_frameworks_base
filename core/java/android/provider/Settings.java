@@ -4784,6 +4784,12 @@ public final class Settings {
         public static final String AUDIO_PANEL_VIEW_TIMEOUT = "audio_panel_view_timeout";
 
         /**
+         * Weather lockscreen temperature scale
+         * @hide
+         */
+        public static final String WEATHER_LOCKSCREEN_UNIT = "weather_lockscreen_unit";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
