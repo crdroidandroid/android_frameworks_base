@@ -3855,7 +3855,7 @@ class ActivityStack<T extends StackWindowController> extends ConfigurationContai
             r.makeFinishingLocked();
             boolean activityRemoved = destroyActivityLocked(r, true, "finish-imm:" + reason);
 
-            if (finishingActivityInNonFocusedStack) {
+            if (finishingActivityInNonFocusedStack && mDisplayId != INVALID_DISPLAY) {
                 // Finishing activity that was in paused state and it was in not currently focused
                 // stack, need to make something visible in its place.
                 mStackSupervisor.ensureVisibilityAndConfig(next, mDisplayId,
