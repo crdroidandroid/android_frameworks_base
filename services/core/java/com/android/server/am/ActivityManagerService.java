@@ -7616,6 +7616,10 @@ public class ActivityManagerService extends IActivityManager.Stub
     @GuardedBy("this")
     private final void processContentProviderPublishTimedOutLocked(ProcessRecord app) {
         cleanupAppInLaunchingProvidersLocked(app, true);
+        if(MY_PID == app.pid) {
+            Slog.w(TAG, "do not remove system when provider publish timeout");
+            return;
+        }
         removeProcessLocked(app, false, true, "timeout publishing content providers");
     }
 
