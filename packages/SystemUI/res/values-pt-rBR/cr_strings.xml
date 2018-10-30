@@ -70,6 +70,12 @@
   <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
   <string name="keyguard_indication_turbo_power_time">Carregamento rápido (<xliff:g id="charging_time_left">%s</xliff:g> até concluir)</string>
   <string name="keyguard_plugged_in_turbo_power_charging">Carregamento rápido conectado</string>
+  <!-- HW Keys Tile -->
+  <string name="quick_settings_hw_keys_label">Teclas físicas</string>
+  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_disabled">Teclas físicas desabilitadas.</string>
+  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_hw_keys_enabled">Teclas físicas ativadas.</string>
   <!-- OmniJaws -->
   <string name="omnijaws_service_error">Erro</string>
   <string name="omnijaws_service_unkown">Sem dados meteorológicos</string>
@@ -119,66 +125,60 @@
   <string name="status_bar_nfc">NFC</string>
   <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <string name="accessibility_status_bar_nfc">NFC</string>
-  <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">Teclas físicas</string>
-  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">Teclas físicas desabilitadas.</string>
-  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">Teclas físicas ativadas.</string>
   <!-- Heads up snooze toast -->
   <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s </xliff:g> - As notificações estão cochilando durante 1 minuto.</string>
   <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - As notificações estão cochilando por <xliff:g id="number">%d</xliff:g> minutos.</string>
   <!-- Free ram -->
-  <string name="recents_free_ram">Free RAM: %1$d MB</string>
+  <string name="recents_free_ram">RAM Livre: %1$d MB</string>
   <!-- On The Go -->
-  <string name="global_action_onthego">On-The-Go Mode</string>
-  <string name="onthego_notif_ticker">On-The-Go activated</string>
-  <string name="onthego_notif_title">On-The-Go is active</string>
-  <string name="onthego_notif_stop">Stop</string>
-  <string name="onthego_notif_options">Options</string>
-  <string name="onthego_notif_error">Unable to start On-The-Go</string>
-  <string name="onthego_notif_restart">Restart On-The-Go</string>
-  <string name="onthego_notif_camera_changed">Camera mode changed</string>
-  <string name="onthego_transparency">Transparency</string>
-  <string name="onthego_front_camera">Use front camera</string>
-  <string name="onthego_service_toggle">Automatically restart service</string>
-  <string name="onthego_channel_name">Main</string>
+  <string name="global_action_onthego">Modo Otg</string>
+  <string name="onthego_notif_ticker">Otg ativado</string>
+  <string name="onthego_notif_title">On-The-Go está ativo</string>
+  <string name="onthego_notif_stop">Parar</string>
+  <string name="onthego_notif_options">Opções</string>
+  <string name="onthego_notif_error">Não é possível iniciar On-The-Go</string>
+  <string name="onthego_notif_restart">Reiniciar On-The-Go</string>
+  <string name="onthego_notif_camera_changed">Modo de câmera alterado</string>
+  <string name="onthego_transparency">Transparência</string>
+  <string name="onthego_front_camera">Usar câmera frontal</string>
+  <string name="onthego_service_toggle">Reiniciar automaticamente o serviço</string>
+  <string name="onthego_channel_name">Principal</string>
   <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Smart pixels</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+  <string name="quick_settings_smart_pixels">Píxeis Inteligentes</string>
+  <string name="quick_settings_smart_pixels_on_power_save">Auto-ativação dos Píxeis Inteligentes</string>
   <!-- Off/On/Toggle -->
-  <string name="off">Off</string>
-  <string name="on">On</string>
-  <string name="toggle">Toggle</string>
+  <string name="off">Desativado</string>
+  <string name="on">Ligado</string>
+  <string name="toggle">Alternar</string>
   <!-- Dialog Cancel/OK -->
-  <string name="cancel">Cancel</string>
+  <string name="cancel">Cancelar</string>
   <string name="dlg_ok">Ok</string>
-  <string name="yes">Yes</string>
-  <string name="no">No</string>
+  <string name="yes">Sim</string>
+  <string name="no">Não</string>
   <!-- Slim Shortcut Actions -->
-  <string name="shortcut_picker">crDroid Shortcuts</string>
-  <string name="shortcut_rotation">Rotation lock toggle</string>
-  <string name="shortcut_torch">Flashlight</string>
-  <string name="shortcut_chamber">Chamber of Secrets</string>
-  <string name="shortcut_reboot">Reboot</string>
-  <string name="shortcut_recovery">Recovery</string>
-  <string name="shortcut_screensleep">Sleep Screen</string>
-  <string name="shortcut_toggle_title">Action to perform</string>
-  <string name="chamber_disabled">Chamber of secrets is closed</string>
-  <string name="chamber_title">Input Settings string</string>
-  <string name="chamber_message">Input a Settings string that is either an on and off (checkbox) function or possibly a list-preference. For example, doze_enabled or similar. Settings can be found in the Settings.java file. WARNING: This process is dangerous!</string>
-  <string name="chamber_invalid">This is an invalid input. Be careful.</string>
-  <string name="chamber_invalid_setting">Try toggling the setting manually to ensure the settings database for this action exists.</string>
-  <string name="chamber_checkbox">Checkbox</string>
-  <string name="chamber_chk_message">Is this setting a checkbox setting?</string>
-  <string name="chamber_int">Input values</string>
-  <string name="chamber_int_message">Input the values you\'d like the setting to toggle between. Separate each value with a comma. Color settings accept hex-values such as #FF00aacc or basic color values like red, green, and yellow.</string>
-  <string name="chamber_name_title">Shortcut name</string>
-  <string name="chamber_name_message">Give the shortcut a name to display with the icon.</string>
-  <string name="chamber_name_toast">Using default name</string>
-  <string name="shortcut_clear_notifications">Clear notifications</string>
+  <string name="shortcut_picker">crDroid atalhos</string>
+  <string name="shortcut_rotation">Bloqueio de rotação alterado</string>
+  <string name="shortcut_torch">Lanterna</string>
+  <string name="shortcut_chamber">Câmara dos Segredos</string>
+  <string name="shortcut_reboot">Reiniciar</string>
+  <string name="shortcut_recovery">Recuperação</string>
+  <string name="shortcut_screensleep">Tela enquanto dorme</string>
+  <string name="shortcut_toggle_title">Ação a ser executada</string>
+  <string name="chamber_disabled">Câmara dos segredos é fechada</string>
+  <string name="chamber_title">Sequência de configurações de entrada</string>
+  <string name="chamber_message">Forneça uma sequência de configurações que seja ou uma função de ligar e desligar (caixa de seleção) ou, possivelmente, uma lista de preferências. Por exemplo, doze_enabled ou similar. As configurações podem ser encontradas no arquivo Settings.java. Aviso: Este processo é perigoso!</string>
+  <string name="chamber_invalid">Esta é uma entrada inválida. Tenha cuidado.</string>
+  <string name="chamber_invalid_setting">Tente alternar a configuração manualmente para garantir que o banco de dados de configurações para esta ação existe.</string>
+  <string name="chamber_checkbox">Caixa de seleção</string>
+  <string name="chamber_chk_message">É esta a definição de uma caixa de seleção?</string>
+  <string name="chamber_int">Valores de entrada</string>
+  <string name="chamber_int_message">Forneça os valores nos quais você gostaria que a configuração alternasse. Separe cada valor com uma vírgula. As configurações de cor aceitam valores hexadecimais como #FF00aacc ou valores de cor básica como o vermelho, verde e amarelo.</string>
+  <string name="chamber_name_title">Nome do atalho</string>
+  <string name="chamber_name_message">Nomeie o atalho a ser exibido com o ícone.</string>
+  <string name="chamber_name_toast">Utilizando o nome padrão</string>
+  <string name="shortcut_clear_notifications">Limpar notificações</string>
   <!-- Pie controls -->
-  <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-  <string name="pie_battery_level">"BATTERY LEVEL "</string>
-  <string name="quick_settings_pie">Pie</string>
+  <string name="pie_state_summary">Usar os controles Pie durante o modo imersivo</string>
+  <string name="pie_battery_level">"NÍVEL DE BATERIA "</string>
+  <string name="quick_settings_pie">Torta</string>
 </resources>
