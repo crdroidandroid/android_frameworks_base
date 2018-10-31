@@ -17,10 +17,15 @@
 package com.android.systemui.statusbar.phone;
 
 import static android.view.MotionEvent.ACTION_DOWN;
+import static com.android.systemui.shared.system.NavigationBarCompat.FLAG_DISABLE_QUICK_SCRUB;
+import static com.android.systemui.shared.system.NavigationBarCompat.FLAG_SHOW_OVERVIEW_BUTTON;
 import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_BACK;
 import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_DEAD_ZONE;
 import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_HOME;
+import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_IME_BUTTON;
+import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_OVERVIEW;
 import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_NONE;
+import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_ROTATION;
 
 import android.animation.LayoutTransition;
 import android.animation.LayoutTransition.TransitionListener;
@@ -94,11 +99,6 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.function.Consumer;
 
-import static com.android.systemui.shared.system.NavigationBarCompat.FLAG_DISABLE_QUICK_SCRUB;
-import static com.android.systemui.shared.system.NavigationBarCompat.FLAG_SHOW_OVERVIEW_BUTTON;
-import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_OVERVIEW;
-import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_ROTATION;
-
 public class NavigationBarView extends FrameLayout implements PluginListener<NavGesture>,
         TunerService.Tunable, Navigator, PulseObserver {
     final static boolean DEBUG = false;
@@ -133,6 +133,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     private Rect mBackButtonBounds = new Rect();
     private Rect mRecentsButtonBounds = new Rect();
     private Rect mRotationButtonBounds = new Rect();
+    private Rect mImeButtonBounds = new Rect();
     private int[] mTmpPosition = new int[2];
     private Rect mTmpRect = new Rect();
 
@@ -146,6 +147,9 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     private KeyButtonDrawable mMenuIcon;
     private KeyButtonDrawable mAccessibilityIcon;
     private TintedKeyButtonDrawable mRotateSuggestionIcon;
+
+    private boolean mFullGestureMode;
+    private boolean mDt2s;
 
     private GestureHelper mGestureHelper;
     private final DeadZone mDeadZone;
@@ -379,6 +383,9 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
                 } else if (getRotateSuggestionButton().isVisible()
                         && mRotationButtonBounds.contains(x, y)) {
                     mDownHitTarget = HIT_TARGET_ROTATION;
+                } else if (getImeSwitchButton().isVisible()
+                        && mImeButtonBounds.contains(x, y)) {
+                    mDownHitTarget = HIT_TARGET_IME_BUTTON;
                 }
                 break;
         }
@@ -622,6 +629,9 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     public void setNavigationIconHints(int hints) {
         if (hints == mNavigationIconHints) return;
         final boolean backAlt = (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0;
+        if (mGestureHelper != null && mGestureHelper instanceof NavigationBarGestureHelper) {
+            ((NavigationBarGestureHelper) mGestureHelper).setKeyboardShowing(backAlt);
+        }
         if ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0 && !backAlt) {
             mTransitionListener.onBackAltCleared();
         }
@@ -732,13 +742,29 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
             }
         }
 
-        getBackButton().setVisibility(disableBack      ? View.INVISIBLE : View.VISIBLE);
-        getHomeButton().setVisibility(disableHome      ? View.INVISIBLE : View.VISIBLE);
+        boolean forceShowBack = pinningActive || (disableHome && !disableBack);
+
+        getBackButton().setVisibility(disableBack || (!forceShowBack && mFullGestureMode)
+                ? View.INVISIBLE : View.VISIBLE);
+        getHomeButton().setVisibility(disableHome ? View.INVISIBLE : View.VISIBLE);
         getRecentsButton().setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE);
     }
 
     public boolean inScreenPinning() {
         return ActivityManagerWrapper.getInstance().isScreenPinningActive();
+    }
+
+    public void setFullGestureMode(boolean full, boolean dt2s) {
+        mFullGestureMode = full;
+        mDt2s = dt2s;
+    }
+
+    public boolean isFullGestureMode() {
+        return mFullGestureMode;
+    }
+
+     public boolean isDt2s() {
+        return mDt2s;
     }
 
     @Override
@@ -1009,6 +1035,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         updateButtonLocationOnScreen(getHomeButton(), mHomeButtonBounds);
         updateButtonLocationOnScreen(getRecentsButton(), mRecentsButtonBounds);
         updateButtonLocationOnScreen(getRotateSuggestionButton(), mRotationButtonBounds);
+        updateButtonLocationOnScreen(getImeSwitchButton(), mImeButtonBounds);
         mGestureHelper.onLayout(changed, left, top, right, bottom);
         mRecentsOnboarding.setNavBarHeight(getMeasuredHeight());
     }
