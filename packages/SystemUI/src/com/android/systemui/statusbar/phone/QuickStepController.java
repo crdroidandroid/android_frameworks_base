@@ -23,6 +23,9 @@ import static com.android.systemui.Interpolators.ALPHA_OUT;
 import static com.android.systemui.OverviewProxyService.DEBUG_OVERVIEW_PROXY;
 import static com.android.systemui.OverviewProxyService.TAG_OPS;
 import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_DEAD_ZONE;
+import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_HOME;
+import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_IME_BUTTON;
+import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_ROTATION;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -42,8 +45,11 @@ import android.os.RemoteException;
 import android.util.FloatProperty;
 import android.util.Log;
 import android.util.Slog;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.KeyEvent;
 import android.view.WindowManagerGlobal;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -55,6 +61,7 @@ import com.android.systemui.plugins.statusbar.phone.NavGesture.GestureHelper;
 import com.android.systemui.shared.recents.IOverviewProxy;
 import com.android.systemui.shared.recents.utilities.Utilities;
 import com.android.systemui.shared.system.NavigationBarCompat;
+import com.android.internal.util.crdroid.Utils;
 
 /**
  * Class to detect gestures on the navigation bar and implement quick scrub.
@@ -85,6 +92,19 @@ public class QuickStepController implements GestureHelper {
     private AnimatorSet mTrackAnimator;
     private ButtonDispatcher mHitTarget;
     private View mCurrentNavigationBarView;
+
+    private boolean mBackActionScheduled;
+    private boolean isDoubleTapPending;
+    private boolean wasConsumed;
+    private static final int sDoubleTapTimeout = ViewConfiguration.getDoubleTapTimeout() - 100;
+    private static final int DOUBLETAPSLOP = ViewConfiguration.getDoubleTapSlop();
+    private static final int sDoubleTapSquare = DOUBLETAPSLOP * DOUBLETAPSLOP;
+    private int mPreviousUpEventX = 0;
+    private int mPreviousUpEventY = 0;
+    private static final int sLongPressTimeout = ViewConfiguration.getLongPressTimeout();
+    private boolean mLongPressing;
+    private boolean mLongPressWasTriggered;
+    private boolean mIsKeyboardShowing;
 
     private final Handler mHandler = new Handler();
     private final Rect mTrackRect = new Rect();
@@ -218,7 +238,47 @@ public class QuickStepController implements GestureHelper {
                 mNavigationBarView.transformMatrixToGlobal(mTransformGlobalMatrix);
                 mNavigationBarView.transformMatrixToLocal(mTransformLocalMatrix);
                 mQuickStepStarted = false;
+                mBackActionScheduled = false;
                 mAllowGestureDetection = true;
+
+                // don't check double tap or navbar home action or keyboard cursors action
+                // if full gesture mode or dt2s are disabled  or if we tap on the home or rotation button
+                if (!mNavigationBarView.isFullGestureMode()
+                        || mNavigationBarView.getDownHitTarget() == HIT_TARGET_HOME
+                        || mNavigationBarView.getDownHitTarget() == HIT_TARGET_ROTATION
+                        || mNavigationBarView.getDownHitTarget() == HIT_TARGET_IME_BUTTON) {
+                        wasConsumed = true;
+                        break;
+                }
+
+                mLongPressWasTriggered = false;
+                if (mIsKeyboardShowing && !isDoubleTapPending) {
+                    boolean isRightAreaTouch = mIsVertical ? (mTouchDownY < mTrackRect.height() / 2)
+                            : (mTouchDownX > mTrackRect.width() / 2);
+                    mLongPressAction.setIsRight(isRightAreaTouch);
+                    mHandler.postDelayed(mLongPressAction, sLongPressTimeout);
+                    mLongPressing = true;
+                }
+
+                if (mNavigationBarView.isDt2s() && isDoubleTapPending) {
+                    // this is the 2nd tap, so let's trigger the double tap action
+                    isDoubleTapPending = false;
+                    mLongPressing = false;
+                    wasConsumed = true;
+                    mHandler.removeCallbacksAndMessages(null);
+                    int deltaX = (int) mPreviousUpEventX - (int) event.getX();
+                    int deltaY = (int) mPreviousUpEventY - (int) event.getY();
+                    boolean isDoubleTapReally = deltaX * deltaX + deltaY * deltaY < sDoubleTapSquare;
+                    if (isDoubleTapReally) {
+                        mNavigationBarView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                        Utils.switchScreenOff(mContext);
+                    }
+                } else {
+                    // this is the first tap, let's go further and schedule a
+                    // mDoubleTapCancelTimeout call in the action up event so after the set time
+                    // if we don't tap again the double tap check will be removed
+                    wasConsumed = false;
+                }
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
@@ -252,6 +312,17 @@ public class QuickStepController implements GestureHelper {
                     offset = pos - mTrackRect.left;
                     trackSize = mTrackRect.width();
                 }
+
+                if (exceededScrubTouchSlop || exceededSwipeUpTouchSlop) {
+                    // consider this a move, not a tap, no more need to check double tap later
+                    wasConsumed = true;
+                    isDoubleTapPending = false;
+                    mHandler.removeCallbacks(mDoubleTapCancelTimeout);
+                    mHandler.removeCallbacks(mLongPressAction);
+                    mLongPressing = false;
+                    mLongPressWasTriggered = false;
+                }
+
                 // Decide to start quickstep if dragging away from the navigation bar, otherwise in
                 // the parallel direction, decide to start quickscrub. Only one may run.
                 if (!mQuickScrubActive && exceededSwipeUpTouchSlop) {
@@ -261,15 +332,25 @@ public class QuickStepController implements GestureHelper {
                     break;
                 }
 
-                // Do not handle quick scrub if disabled
-                if (!mNavigationBarView.isQuickScrubEnabled()) {
-                    break;
-                }
-
                 if (!mDragPositive) {
                     offset -= mIsVertical ? mTrackRect.height() : mTrackRect.width();
                 }
 
+                final boolean allowBackAction = !mNavigationBarView.isFullGestureMode() ? false
+                        : (!mDragPositive ? offset < 0 && pos > touchDown
+                        : offset >= 0 && pos < touchDown);
+                // if quickscrub is active, don't trigger the back action but allow quickscrub drag
+                // action so the user can still switch apps
+                if (!mQuickScrubActive && exceededScrubTouchSlop && allowBackAction) {
+                    // schedule a back button action and skip quickscrub
+                     mBackActionScheduled = true;
+                    break;
+                }
+
+                // Do not handle quick scrub if disabled
+                if (!mNavigationBarView.isQuickScrubEnabled()) {
+                    break;
+                }
                 final boolean allowDrag = !mDragPositive
                         ? offset < 0 && pos < touchDown : offset >= 0 && pos > touchDown;
                 float scrubFraction = Utilities.clamp(Math.abs(offset) * 1f / trackSize, 0, 1);
@@ -296,18 +377,97 @@ public class QuickStepController implements GestureHelper {
                 break;
             }
             case MotionEvent.ACTION_CANCEL:
+                wasConsumed = true;
+                isDoubleTapPending = false;
+                mHandler.removeCallbacks(mDoubleTapCancelTimeout);
+                mHandler.removeCallbacks(mLongPressAction);
+                mLongPressWasTriggered = false;
+                mLongPressing = false;
+                endQuickScrub(true /* animate */);
+                break;
             case MotionEvent.ACTION_UP:
+               if (mNavigationBarView.isFullGestureMode()) {
+                    mHandler.removeCallbacks(mLongPressAction);
+                    mLongPressing = false;
+                    if (wasConsumed) {
+                        wasConsumed = false;
+                    } else if (!mLongPressWasTriggered) {
+                        isDoubleTapPending = true;
+                        mHandler.postDelayed(mDoubleTapCancelTimeout,
+                        /* if dt2s is disabled we don'need to wait a 2nd tap to call the home action */
+                        mNavigationBarView.isDt2s() ? sDoubleTapTimeout : 0);
+                        mPreviousUpEventX = (int)event.getX();
+                        mPreviousUpEventY = (int)event.getY();
+                    }
+                    if (mBackActionScheduled) {
+                        endQuickScrub(true /* animate */);
+                        mNavigationBarView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                        Utils.sendKeycode(KeyEvent.KEYCODE_BACK, mHandler);
+                    } else {
+                        endQuickScrub(true /* animate */);
+                    }
+                    break;
+               }
+
                 endQuickScrub(true /* animate */);
                 break;
         }
 
         // Proxy motion events to launcher if not handled by quick scrub
         // Proxy motion events up/cancel that would be sent after long press on any nav button
-        if (!mQuickScrubActive && (mAllowGestureDetection || action == MotionEvent.ACTION_CANCEL
-                || action == MotionEvent.ACTION_UP)) {
+        if (!mQuickScrubActive && (mAllowGestureDetection || mBackActionScheduled
+                || action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP)) {
             proxyMotionEvents(event);
         }
-        return mQuickScrubActive || mQuickStepStarted || deadZoneConsumed;
+        return mQuickScrubActive || mQuickStepStarted || deadZoneConsumed || mBackActionScheduled;
+    }
+
+    private Runnable mDoubleTapCancelTimeout = new Runnable() {
+        @Override
+        public void run() {
+            wasConsumed = false;
+            isDoubleTapPending = false;
+            // it was a single tap, let's trigger the home button action
+            mHandler.removeCallbacksAndMessages(null);
+            mNavigationBarView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            Utils.sendKeycode(KeyEvent.KEYCODE_HOME, mHandler);
+        }
+    };
+
+    private LongPressRunnable mLongPressAction = new LongPressRunnable();
+
+    private class LongPressRunnable implements Runnable {
+        private boolean isRight;
+
+        public void setIsRight(boolean right) {
+            isRight = right;
+        }
+
+        @Override
+        public void run() {
+            mNavigationBarView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            moveKbCursor(isRight, true);
+        }
+    }
+
+    private void moveKbCursor(boolean right, boolean firstTrigger) {
+        if (!mIsKeyboardShowing || !mLongPressing) return;
+
+        mHandler.removeCallbacksAndMessages(null);
+        mLongPressWasTriggered = true;
+        final Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                moveKbCursor(right, false);
+            }
+        };
+        Utils.moveKbCursor(KeyEvent.ACTION_UP, right);
+        Utils.moveKbCursor(KeyEvent.ACTION_DOWN, right);
+        mHandler.postDelayed(r, firstTrigger ? 500 : 250);
+    }
+
+    public void setKeyboardShowing(boolean showing) {
+        mIsKeyboardShowing = showing;
     }
 
     @Override
