@@ -55,6 +55,7 @@ public class NavigationBarCompat {
     public static final int HIT_TARGET_OVERVIEW = 3;
     public static final int HIT_TARGET_ROTATION = 4;
     public static final int HIT_TARGET_DEAD_ZONE = 5;
+    public static final int HIT_TARGET_IME_BUTTON = 6;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({FLAG_DISABLE_SWIPE_UP,
