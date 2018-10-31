@@ -68,8 +68,8 @@ public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
 
     @Override
     public Intent getLongClickIntent() {
-        handleClick();
-        return null;
+        return new Intent().setComponent(new ComponentName(
+            "com.custom.ambient.display", "com.custom.ambient.display.DozeService"));
     }
 
     @Override
