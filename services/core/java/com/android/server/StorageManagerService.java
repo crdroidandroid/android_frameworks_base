@@ -877,6 +877,7 @@ class StorageManagerService extends IStorageManager.Stub
                     mStoraged.onUserStarted(userId);
                 }
                 mVold.onSecureKeyguardStateChanged(mSecureKeyguardShowing);
+                mStorageManagerInternal.onReset(mVold);
             } catch (Exception e) {
                 Slog.wtf(TAG, e);
             }
@@ -3643,6 +3644,7 @@ class StorageManagerService extends IStorageManager.Stub
         // Not guarded by a lock.
         private final CopyOnWriteArrayList<ExternalStorageMountPolicy> mPolicies =
                 new CopyOnWriteArrayList<>();
+        private StorageManagerInternal.ResetListener mResetListener = null;
 
         @Override
         public void addExternalStoragePolicy(ExternalStorageMountPolicy policy) {
@@ -3671,6 +3673,18 @@ class StorageManagerService extends IStorageManager.Stub
                 return Zygote.MOUNT_EXTERNAL_NONE;
             }
             return mountMode;
+        }
+
+        @Override
+        public void setResetListener(StorageManagerInternal.ResetListener listener) {
+            mResetListener = listener;
+        }
+
+        @Override
+        public void onReset(IVold vold) {
+            if (mResetListener != null) {
+                mResetListener.onReset(vold);
+            }
         }
 
         public boolean hasExternalStorage(int uid, String packageName) {
