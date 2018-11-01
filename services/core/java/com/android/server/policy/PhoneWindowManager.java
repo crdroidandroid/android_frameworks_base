@@ -1718,6 +1718,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case TORCH:
                 Utils.toggleCameraFlash();
                 break;
+            case SCREENSHOT:
+                mHandler.removeCallbacks(mScreenshotRunnable);
+                mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_FULLSCREEN);
+                mScreenshotRunnable.setScreenshotSource(SCREENSHOT_KEY_OTHER);
+                mHandler.post(mScreenshotRunnable);
+                break;
             default:
                 break;
         }
