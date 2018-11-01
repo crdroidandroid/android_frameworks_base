@@ -2343,6 +2343,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case TORCH:
                 Utils.toggleCameraFlash();
                 break;
+            case SCREENSHOT:
+                takeScreenshot();
+                break;
             default:
                 break;
         }
@@ -2850,6 +2853,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 com.android.internal.R.integer.config_navBarOpacityMode);
     }
 
+    private void takeScreenshot() {
+        mHandler.removeCallbacks(mScreenshotRunnable);
+        mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_FULLSCREEN);
+        mHandler.post(mScreenshotRunnable);
+    }
+
     private CarbonGesturesListener initCarbonGesture(int fingers, int keycode, CarbonGesturesListener.Directions direction) {
         return new CarbonGesturesListener(mContext, fingers, direction, new CarbonGesturesListener.Callbacks() {
             @Override
@@ -2863,7 +2872,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return new CarbonGesturesListener(mContext, fingers, direction, new CarbonGesturesListener.Callbacks() {
             @Override
             public void onSwipeGesture() {
-                mHandler.post(mScreenshotRunnable);
+                takeScreenshot();
             }
         });
     }
