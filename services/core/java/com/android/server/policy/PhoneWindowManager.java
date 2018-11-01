@@ -1979,6 +1979,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case CLOSE_APP:
                 closeApp();
                 break;
+            case TORCH:
+                Utils.toggleCameraFlash();
+                break;
             default:
                 break;
         }
