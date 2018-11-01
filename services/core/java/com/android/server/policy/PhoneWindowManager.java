@@ -1941,6 +1941,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case TORCH:
                 Utils.toggleCameraFlash();
                 break;
+            case SCREENSHOT:
+                takeScreenshot(TAKE_SCREENSHOT_FULLSCREEN);
+                break;
             default:
                 break;
         }
