@@ -1652,6 +1652,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private final ScreenshotRunnable mScreenshotRunnable = new ScreenshotRunnable();
 
+    private void takeScreenshot(int screenshotType) {
+        takeScreenshotDelayed(screenshotType, 0);
+    }
+
+    private void takeScreenshotDelayed(int screenshotType, long delay) {
+        mHandler.removeCallbacks(mScreenshotRunnable);
+        mScreenshotRunnable.setScreenshotType(screenshotType);
+        mHandler.postDelayed(mScreenshotRunnable, delay);
+    }
+
     @Override
     public void showGlobalActions() {
         mHandler.removeMessages(MSG_DISPATCH_SHOW_GLOBAL_ACTIONS);
@@ -1850,6 +1860,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             case TORCH:
                 Utils.toggleCameraFlash();
+                break;
+            case SCREENSHOT:
+                takeScreenshot(TAKE_SCREENSHOT_FULLSCREEN);
                 break;
             default:
                 break;
