@@ -1977,6 +1977,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KILL_APP:
                 ActionUtils.killForegroundApp(mContext, mCurrentUserId);
                 break;
+            case TORCH:
+                toggleTorch();
+                break;
             default:
                 break;
         }
