@@ -4035,7 +4035,7 @@
                  android:defaultToDeviceProtectedStorage="true"
                  android:directBootAware="true">
         <activity android:name="com.android.internal.app.ChooserActivity"
-                android:theme="@style/Theme.DeviceDefault.Resolver"
+                android:theme="@style/Theme.DeviceDefault.Resolver.Exposed"
                 android:finishOnCloseSystemDialogs="true"
                 android:excludeFromRecents="true"
                 android:documentLaunchMode="never"
@@ -4051,7 +4051,7 @@
         </activity>
         <activity android:name="com.android.internal.app.AccessibilityButtonChooserActivity"
                   android:exported="false"
-                  android:theme="@style/Theme.DeviceDefault.Resolver"
+                  android:theme="@style/Theme.DeviceDefault.Resolver.Exposed"
                   android:finishOnCloseSystemDialogs="true"
                   android:excludeFromRecents="true"
                   android:documentLaunchMode="never"
