@@ -252,7 +252,7 @@ public class ResolverActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState, Intent intent,
             CharSequence title, int defaultTitleRes, Intent[] initialIntents,
             List<ResolveInfo> rList, boolean supportsAlwaysUseOption) {
-        setTheme(R.style.Theme_DeviceDefault_Resolver);
+        setTheme(R.style.Theme_DeviceDefault_Resolver_Exposed);
         super.onCreate(savedInstanceState);
 
         // Determine whether we should show that intent is forwarded
