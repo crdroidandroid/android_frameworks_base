@@ -53,4 +53,8 @@
     <color name="notification_icon_default_color">@android:color/notification_default_color</color>
     <!-- Ambient notification icon tint -->
     <color name="notification_ambient_icon_default_color">@color/notification_icon_default_color</color>
+
+    <!-- chooser_service_row_background_color for devices with exposures.
+        See also Theme.DeviceDefault.Resolver.Exposed. -->
+    <color name="chooser_service_row_background_color_exposed">@color/chooser_service_row_background_color</color>
 </resources>
