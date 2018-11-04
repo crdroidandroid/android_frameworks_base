@@ -32,7 +32,7 @@
     <dimen name="opa_rest_to_collapse">7.0dip</dimen>
 
     <!-- QS tile text visibility -->
-    <dimen name="qs_tile_height_wo_label">48dp</dimen>
+    <dimen name="qs_tile_height_wo_label">64dp</dimen>
 
     <!-- Screenrecord -->
     <dimen name="screenrecord_hint_size">48dp</dimen>
