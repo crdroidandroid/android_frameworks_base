@@ -2124,7 +2124,6 @@
   <java-symbol type="string" name="config_carrierAppInstallDialogComponent" />
   <java-symbol type="string" name="config_defaultNetworkScorerPackageName" />
   <java-symbol type="string" name="config_persistentDataPackageName" />
-  <java-symbol type="string" name="config_optionalPackageVerifierName" />
 
   <java-symbol type="layout" name="resolver_list" />
   <java-symbol type="id" name="resolver_list" />
@@ -3395,7 +3394,4 @@
 
   <!-- Minimal height of bottom stack when IME is displayed -->
   <java-symbol type="dimen" name="config_bottom_stack_minimal_height" />
-
-  <java-symbol type="integer" name="config_sms_authorization_timeout_ms" />
-  <java-symbol type="bool" name="config_sms_authorization_enabled" />
 </resources>

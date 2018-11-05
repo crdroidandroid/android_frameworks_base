@@ -1680,7 +1680,6 @@ public class WifiManager {
      * returned.
      */
     public List<ScanResult> getScanResults() {
-        android.util.SeempLog.record(55);
         try {
             return mService.getScanResults(mContext.getOpPackageName());
         } catch (RemoteException e) {

@@ -43,14 +43,6 @@ class PackageVerificationState {
 
     private boolean mRequiredVerificationPassed;
 
-    private int mOptionalVerifierUid;
-
-    private boolean mHasOptionalVerifier;
-
-    private boolean mOptionalVerificationComplete;
-
-    private boolean mOptionalVerificationPassed;
-
     private boolean mExtendedTimeout;
 
     /**
@@ -81,11 +73,6 @@ class PackageVerificationState {
         mSufficientVerifierUids.put(uid, true);
     }
 
-    public void addOptionalVerifier(int uid) {
-        mOptionalVerifierUid = uid;
-        mHasOptionalVerifier = true;
-    }
-
     /**
      * Should be called when a verification is received from an agent so the
      * state of the package verification can be tracked.
@@ -105,16 +92,6 @@ class PackageVerificationState {
                     break;
                 default:
                     mRequiredVerificationPassed = false;
-            }
-            return true;
-        } else if (mHasOptionalVerifier && uid == mOptionalVerifierUid) {
-            mOptionalVerificationComplete = true;
-            switch (code) {
-                case PackageManager.VERIFICATION_ALLOW:
-                    mOptionalVerificationPassed = true;
-                    break;
-                default:
-                    mOptionalVerificationPassed = false;
             }
             return true;
         } else {
@@ -144,11 +121,7 @@ class PackageVerificationState {
      * @return {@code true} when verification is considered complete
      */
     public boolean isVerificationComplete() {
-        if (mRequiredVerifierUid != -1 && !mRequiredVerificationComplete) {
-            return false;
-        }
-
-        if (mHasOptionalVerifier && !mOptionalVerificationComplete) {
+        if (!mRequiredVerificationComplete) {
             return false;
         }
 
@@ -166,11 +139,7 @@ class PackageVerificationState {
      * @return {@code true} if installation should be allowed
      */
     public boolean isInstallAllowed() {
-        if (mRequiredVerifierUid != -1 && !mRequiredVerificationPassed) {
-            return false;
-        }
-
-        if (mHasOptionalVerifier && !mOptionalVerificationPassed) {
+        if (!mRequiredVerificationPassed) {
             return false;
         }
 
