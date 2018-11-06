@@ -42,6 +42,7 @@ import java.util.List;
 
 public class A2dpProfile implements LocalBluetoothProfile {
     private static final String TAG = "A2dpProfile";
+    private static boolean V = true;
 
     private Context mContext;
 
@@ -224,6 +225,11 @@ public class A2dpProfile implements LocalBluetoothProfile {
     }
 
     public boolean supportsHighQualityAudio(BluetoothDevice device) {
+        if (V) Log.d(TAG, " execute supportsHighQualityAudio()");
+        if (mService == null) {
+            if (V) Log.d(TAG,"mService is null.");
+            return false;
+        }
         BluetoothDevice bluetoothDevice = (device != null) ? device : getActiveDevice();
         if (bluetoothDevice == null) {
             return false;
@@ -237,6 +243,11 @@ public class A2dpProfile implements LocalBluetoothProfile {
      */
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     public boolean isHighQualityAudioEnabled(BluetoothDevice device) {
+        if (V) Log.d(TAG, " execute isHighQualityAudioEnabled()");
+        if (mService == null) {
+            if (V) Log.d(TAG,"mService is null.");
+            return false;
+        }
         BluetoothDevice bluetoothDevice = (device != null) ? device : getActiveDevice();
         if (bluetoothDevice == null) {
             return false;
@@ -263,6 +274,11 @@ public class A2dpProfile implements LocalBluetoothProfile {
     }
 
     public void setHighQualityAudioEnabled(BluetoothDevice device, boolean enabled) {
+        if (V) Log.d(TAG, " execute setHighQualityAudioEnabled()");
+        if (mService == null) {
+            if (V) Log.d(TAG,"mService is null.");
+            return;
+        }
         BluetoothDevice bluetoothDevice = (device != null) ? device : getActiveDevice();
         if (bluetoothDevice == null) {
             return;
@@ -289,6 +305,7 @@ public class A2dpProfile implements LocalBluetoothProfile {
      */
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     public String getHighQualityAudioOptionLabel(BluetoothDevice device) {
+        if (V) Log.d(TAG, " execute getHighQualityAudioOptionLabel()");
         BluetoothDevice bluetoothDevice = (device != null) ? device : getActiveDevice();
         int unknownCodecId = R.string.bluetooth_profile_a2dp_high_quality_unknown_codec;
         if (bluetoothDevice == null || !supportsHighQualityAudio(device)
@@ -298,7 +315,7 @@ public class A2dpProfile implements LocalBluetoothProfile {
         // We want to get the highest priority codec, since that's the one that will be used with
         // this device, and see if it is high-quality (ie non-mandatory).
         List<BluetoothCodecConfig> selectable = null;
-        if (mService.getCodecStatus(device) != null) {
+        if (mService != null && mService.getCodecStatus(device) != null) {
             selectable = mService.getCodecStatus(device).getCodecsSelectableCapabilities();
             // To get the highest priority, we sort in reverse.
             Collections.sort(selectable,
