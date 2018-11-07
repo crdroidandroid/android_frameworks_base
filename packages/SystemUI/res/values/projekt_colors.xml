@@ -54,4 +54,10 @@
 
     <!-- QS edit page background color -->
     <color name="qs_edit_item_decoration_bg">@*android:color/secondary_device_default_settings_light</color>
+
+    <!-- QS tiles expand, underline and label colors -->
+    <color name="qs_tiles_expand_tint">@*android:color/text_color_primary</color>
+    <color name="qs_tiles_label_color">@*android:color/text_color_primary</color>
+    <color name="qs_tiles_secondary_label_color">@*android:color/text_color_secondary</color>
+    <color name="qs_tiles_underline_color">@*android:color/foreground_material_light</color>
 </resources>
