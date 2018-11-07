@@ -175,10 +175,10 @@
     <string name="chamber_int_message">Waarden invoeren voor tussen welke instellingen u zou willen schakelen. Scheid elke waarde met een komma. Kleurinstellingen accepteren hex-waarden zoals #FF00aacc of basisinstellingen voor kleurweergave waarden als rood, groen en geel.</string>
     <string name="chamber_name_title">Naam voor snelkoppeling</string>
     <string name="chamber_name_message">Geef de snelkoppeling een naam om weer te geven bij het icoon.</string>
-    <string name="chamber_name_toast">Using default name</string>
-    <string name="shortcut_clear_notifications">Clear notifications</string>
+    <string name="chamber_name_toast">Standaardnaam wordt gebruikt</string>
+    <string name="shortcut_clear_notifications">Meldingen wissen</string>
     <!-- Pie controls -->
-    <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-    <string name="pie_battery_level">"BATTERY LEVEL "</string>
+    <string name="pie_state_summary">Gebruik pie besturing in immersieve modus</string>
+    <string name="pie_battery_level">"BATTERIJNIVEAU"</string>
     <string name="quick_settings_pie">Pie</string>
 </resources>
