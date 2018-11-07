@@ -16,33 +16,35 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Falsificação de assinatura</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Permite que o aplicativo pretenda ser um aplicativo diferente. Os aplicativos maliciosos podem ser capazes de usar isso para acessar dados de aplicativos privados. Conceda esta permissão apenas com cautela</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_toggleNavigationEditor">Editor de navegação de controle</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_toggleNavigationEditor">Permite que um aplicativo controle o editor da barra de navegação.</string>
-  <!-- AOKP custom system animations -->
-  <string name="animation_fade">Desvanecer</string>
-  <string name="animation_slide_right">Deslize para a direita</string>
-  <string name="animation_slide_left">Deslize para a esquerda</string>
-  <string name="animation_slide_right_no_fade">Deslizar para a direita (sem desvanecer)</string>
-  <string name="animation_slide_left_no_fade">Deslizar para a esquerda (sem desvanecer)</string>
-  <string name="animation_slide_up">Deslize no fundo</string>
-  <string name="animation_slide_down">Deslizar para cima</string>
-  <string name="animation_default">Padrão</string>
-  <string name="animation_translucent">Translúcido</string>
-  <string name="animation_grow_shrink">Aumentar no (topo)</string>
-  <string name="animation_grow_shrink_center">Aumentar no (centro)</string>
-  <string name="animation_grow_shrink_bottom">Aumentar na (parte inferior)</string>
-  <string name="animation_grow_shrink_left">Aumentar na (esquerda)</string>
-  <string name="animation_grow_shrink_right">Aumentar na (direita)</string>
-  <string name="animation_random">Aleatória</string>
-  <string name="action_null">Em branco</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFontManager">acessar gerenciador de fontes</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessFontManager">Permite que um aplicativo acesse o gerenciador de fontes.</string>
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_toggleNavigationEditor">Editor de navegação de controle</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_toggleNavigationEditor">Permite que um aplicativo controle o editor da barra de navegação.</string>
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">Desvanecer</string>
+    <string name="animation_slide_right">Deslize para a direita</string>
+    <string name="animation_slide_left">Deslize para a esquerda</string>
+    <string name="animation_slide_right_no_fade">Deslizar para a direita (sem desvanecer)</string>
+    <string name="animation_slide_left_no_fade">Deslizar para a esquerda (sem desvanecer)</string>
+    <string name="animation_slide_up">Deslize no fundo</string>
+    <string name="animation_slide_down">Deslizar para cima</string>
+    <string name="animation_default">Padrão</string>
+    <string name="animation_translucent">Translúcido</string>
+    <string name="animation_grow_shrink">Aumentar no (topo)</string>
+    <string name="animation_grow_shrink_center">Aumentar no (centro)</string>
+    <string name="animation_grow_shrink_bottom">Aumentar na (parte inferior)</string>
+    <string name="animation_grow_shrink_left">Aumentar na (esquerda)</string>
+    <string name="animation_grow_shrink_right">Aumentar na (direita)</string>
+    <string name="animation_random">Aleatória</string>
+    <string name="action_null">Em branco</string>
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessFontManager">acessar gerenciador de fontes</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessFontManager">Permite que um aplicativo acesse o gerenciador de fontes.</string>
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Falsificação de assinatura</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Permite que o aplicativo pretenda ser um aplicativo diferente. Os aplicativos maliciosos podem ser capazes de usar isso para acessar dados de aplicativos privados. Conceda esta permissão apenas com cautela</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Pressione e segure o botão power para interagir</string>
 </resources>
