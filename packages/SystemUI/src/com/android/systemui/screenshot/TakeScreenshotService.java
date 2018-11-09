@@ -29,16 +29,26 @@ import android.view.WindowManager;
 
 public class TakeScreenshotService extends Service {
     private static final String TAG = "TakeScreenshotService";
+    private static final long WORKING_TIMEOUT = 10000;
 
     private static GlobalScreenshot mScreenshot;
+    private static boolean mWorking;
 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             final Messenger callback = msg.replyTo;
+            Runnable workingFinishRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    mWorking = false;
+                }
+            };
             Runnable finisher = new Runnable() {
                 @Override
                 public void run() {
+                    mHandler.removeCallbacks(workingFinishRunnable);
+                    workingFinishRunnable.run();
                     Message reply = Message.obtain(null, 1);
                     try {
                         callback.send(reply);
@@ -46,6 +56,12 @@ public class TakeScreenshotService extends Service {
                     }
                 }
             };
+
+            if (mWorking) {
+                return;
+            }
+            mWorking = true;
+            mHandler.postDelayed(workingFinishRunnable, WORKING_TIMEOUT);
 
             // If the storage for this user is locked, we have no place to store
             // the screenshot, so skip taking it instead of showing a misleading
