@@ -107,4 +107,6 @@
   <!-- SystemUI Restart -->
   <java-symbol type="string" name="systemui_restart_title" />
   <java-symbol type="string" name="systemui_restart_message" />
+
+  <java-symbol type="drawable" name="adaptive_icon_drawable_wrapper" />
 </resources>
