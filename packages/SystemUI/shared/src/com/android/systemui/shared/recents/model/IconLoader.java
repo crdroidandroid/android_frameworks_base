@@ -27,6 +27,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import com.android.internal.icons.IconsHandler;
 import android.os.UserHandle;
 import android.util.IconDrawableFactory;
 import android.util.Log;
@@ -41,12 +42,14 @@ public abstract class IconLoader {
     protected final Context mContext;
     protected final TaskKeyLruCache<Drawable> mIconCache;
     protected final LruCache<ComponentName, ActivityInfo> mActivityInfoCache;
+    private IconsHandler mIconsHandler;
 
     public IconLoader(Context context, TaskKeyLruCache<Drawable> iconCache, LruCache<ComponentName,
-            ActivityInfo> activityInfoCache) {
+            ActivityInfo> activityInfoCache, IconsHandler ih) {
         mContext = context;
         mIconCache = iconCache;
         mActivityInfoCache = activityInfoCache;
+        mIconsHandler = ih;
     }
 
     /**
@@ -104,6 +107,17 @@ public abstract class IconLoader {
 
     private Drawable createNewIconForTask(Task.TaskKey taskKey,
             ActivityManager.TaskDescription desc, boolean returnDefault) {
+
+        ActivityInfo activityInfo = getAndUpdateActivityInfo(taskKey);
+        Drawable icon = null;
+
+        if (activityInfo != null) {
+            icon = mIconsHandler.getIconFromHandler(mContext, activityInfo);
+            if (icon != null) {
+                return icon;
+            }
+        }
+
         int userId = taskKey.userId;
         Bitmap tdIcon = desc.getInMemoryIcon();
         if (tdIcon != null) {
@@ -129,9 +143,8 @@ public abstract class IconLoader {
         }
 
         // Load the icon from the activity info and cache it
-        ActivityInfo activityInfo = getAndUpdateActivityInfo(taskKey);
         if (activityInfo != null) {
-            Drawable icon = getBadgedActivityIcon(activityInfo, userId, desc);
+            icon = getBadgedActivityIcon(activityInfo, userId, desc);
             if (icon != null) {
                 return icon;
             }
@@ -164,8 +177,8 @@ public abstract class IconLoader {
         private final IconDrawableFactory mDrawableFactory;
 
         public DefaultIconLoader(Context context, TaskKeyLruCache<Drawable> iconCache,
-                LruCache<ComponentName, ActivityInfo> activityInfoCache) {
-            super(context, iconCache, activityInfoCache);
+                LruCache<ComponentName, ActivityInfo> activityInfoCache, IconsHandler ih) {
+            super(context, iconCache, activityInfoCache, ih);
 
             // Create the default assets
             Bitmap icon = Bitmap.createBitmap(1, 1, Bitmap.Config.ALPHA_8);
