@@ -84,6 +84,12 @@
 
     </FrameLayout>
 
+    <com.android.systemui.statusbar.policy.NetworkTraffic
+        android:id="@+id/network_traffic"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
     <com.android.systemui.battery.BatteryMeterView
         android:id="@+id/batteryIcon"
         android:layout_height="match_parent"
