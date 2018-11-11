@@ -20,6 +20,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.LauncherActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
@@ -170,18 +172,48 @@ public class IconsHandler {
 
     public Drawable getIconFromHandler(Context context, ActivityInfo info) {
         final String packageName = info.applicationInfo.packageName;
+        ComponentName defaultName = getDefaultName(packageName);
+        ComponentName name = null;
+        try{
+            name = new ComponentName(packageName, info.name);
+        } catch (Exception e) {}
+
+        return getBitmap(packageName, name, defaultName, context);
+    }
+
+    public Drawable getIconFromHandler(Context context, LauncherActivityInfo info) {
+        final String packageName = info.getApplicationInfo().packageName;
+        ComponentName defaultName = getDefaultName(packageName);
+        ComponentName name = info.getComponentName();
+
+        return getBitmap(packageName, name, defaultName, context);
+    }
+
+    public Drawable getIconFromHandler(Context context, ApplicationInfo info, String packageName) {
+        ComponentName defaultName = getDefaultName(packageName);
+        ComponentName name = null;
+        try{
+            name = new ComponentName(packageName, info.name);
+        } catch (Exception e) {}
+
+        return getBitmap(packageName, name, defaultName, context);
+    }
+
+    private BitmapDrawable getBitmap(String packageName, ComponentName name, ComponentName defaultName, Context context) {
+        Bitmap bm = getDrawableIconForPackage(packageName, name, defaultName);
+        if (bm == null) {
+            return null;
+        }
+        return new BitmapDrawable(context.getResources(), RecentPanelIcons.createIconBitmap(bm, context, mIconNormalizer, mShadowGenerator));
+    }
+
+    private ComponentName getDefaultName(String packageName) {
         Intent launchIntent = mPackageManager.getLaunchIntentForPackage(packageName);
         ComponentName defaultName = null;
         if (launchIntent != null) {
             defaultName = launchIntent.getComponent();
         }
-        ComponentName name = new ComponentName(packageName, info.name);
-
-        Bitmap bm = getDrawableIconForPackage(name, defaultName);
-        if (bm == null) {
-            return null;
-        }
-        return new BitmapDrawable(context.getResources(), RecentPanelIcons.createIconBitmap(bm, context, mIconNormalizer, mShadowGenerator));
+        return defaultName;
     }
 
     public boolean isDefaultIconPack() {
@@ -233,16 +265,24 @@ public class IconsHandler {
         return generateBitmap(componentName, RecentPanelIcons.createIconBitmap(drawable, mContext, mIconNormalizer, mShadowGenerator));
     }
 
-    public Bitmap getDrawableIconForPackage(ComponentName componentName, ComponentName defaultName) {
-        String drawableName = mAppFilterDrawables.get(componentName.toString());
+    public Bitmap getDrawableIconForPackage(String packageName, ComponentName componentName, ComponentName defaultName) {
+        String drawableName = null;
+        if (componentName != null) {
+            drawableName = mAppFilterDrawables.get(componentName.toString());
+        }
         if (drawableName == null && defaultName != null) {
             drawableName = mAppFilterDrawables.get(defaultName.toString());
+        }
+        if (drawableName == null && packageName != null) {
+            drawableName = mAppFilterDrawables.get(packageName.toString());
         }
         Drawable drawable = loadDrawable(null, drawableName, false);
         if (drawable != null && drawable instanceof BitmapDrawable) {
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             return bitmap;
         }
+
+        if (componentName == null) return null;
 
         return getDefaultAppDrawable(componentName);
     }
