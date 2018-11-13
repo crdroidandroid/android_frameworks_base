@@ -73,6 +73,7 @@ public class KeyguardStatusView extends GridLayout implements
 
     private ArraySet<View> mVisibleInDoze;
     private boolean mPulsing;
+    private boolean mWasPulsing;
     private float mDarkAmount = 0;
     private int mTextColor;
     private float mWidgetPadding;
@@ -192,6 +193,9 @@ public class KeyguardStatusView extends GridLayout implements
 
     }
 
+    /**
+     * Moves clock and separator, adjusting margins when slice content changes.
+     */
     private void onSliceContentChanged() {
         boolean smallClock = mKeyguardSlice.hasHeader() || mPulsing;
         float clockScale = smallClock ? mSmallClockScale : 1;
@@ -214,11 +218,12 @@ public class KeyguardStatusView extends GridLayout implements
     @Override
     public void onLayoutChange(View view, int left, int top, int right, int bottom,
             int oldLeft, int oldTop, int oldRight, int oldBottom) {
-        int heightOffset = mPulsing ? 0 : getHeight() - mLastLayoutHeight;
+        int heightOffset = mPulsing || mWasPulsing ? 0 : getHeight() - mLastLayoutHeight;
         boolean hasHeader = mKeyguardSlice.hasHeader();
         boolean smallClock = hasHeader || mPulsing;
         long duration = KeyguardSliceView.DEFAULT_ANIM_DURATION;
-        long delay = smallClock ? 0 : duration / 4;
+        long delay = smallClock || mWasPulsing ? 0 : duration / 4;
+        mWasPulsing = false;
 
         boolean shouldAnimate = mKeyguardSlice.getLayoutTransition() != null
                 && mKeyguardSlice.getLayoutTransition().isRunning();
@@ -438,7 +443,18 @@ public class KeyguardStatusView extends GridLayout implements
     }
 
     public void setPulsing(boolean pulsing, boolean animate) {
+        if (mPulsing == pulsing) {
+            return;
+        }
+        if (mPulsing) {
+            mWasPulsing = true;
+        }
         mPulsing = pulsing;
+        // Animation can look really weird when the slice has a header, let's hide the views
+        // immediately instead of fading them away.
+        if (mKeyguardSlice.hasHeader()) {
+            animate = false;
+        }
         mKeyguardSlice.setPulsing(pulsing, animate);
         updateDozeVisibleViews();
     }

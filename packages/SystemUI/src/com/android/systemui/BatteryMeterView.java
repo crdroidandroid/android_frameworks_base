@@ -53,6 +53,7 @@ import com.android.systemui.statusbar.policy.IconLogger;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
 import com.android.systemui.util.Utils.DisableStateTracker;
+import com.android.systemui.R;
 
 import java.text.NumberFormat;
 
@@ -68,6 +69,7 @@ public class BatteryMeterView extends LinearLayout implements
     private int mTextColor;
     private int mLevel;
     private boolean mForceShowPercent;
+    private boolean mShowPercentAvailable;
 
     private int mDarkModeBackgroundColor;
     private int mDarkModeFillColor;
@@ -116,6 +118,10 @@ public class BatteryMeterView extends LinearLayout implements
                 context.getColor(R.color.meter_background_color));
         mDrawable = new BatteryMeterDrawableBase(context, frameColor);
         atts.recycle();
+
+        mSettingObserver = new SettingObserver(new Handler(context.getMainLooper()));
+        mShowPercentAvailable = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_battery_percentage_setting_available);
 
         addOnAttachStateChangeListener(
                 new DisableStateTracker(DISABLE_NONE, DISABLE2_SYSTEM_ICONS));
@@ -330,6 +336,7 @@ public class BatteryMeterView extends LinearLayout implements
 
     private void updateShowPercent() {
         final boolean showing = mBatteryPercentView != null;
+
         boolean mShow = mForceShowPercent;
 
         if (mShowBatteryPercent == 1 || mStyle == BatteryMeterDrawableBase.BATTERY_STYLE_TEXT) {
@@ -339,6 +346,12 @@ public class BatteryMeterView extends LinearLayout implements
         }
 
         if (mShow) {
+
+        final boolean systemSetting = 0 != Settings.System
+                .getIntForUser(getContext().getContentResolver(),
+                SHOW_BATTERY_PERCENT, 0, mUser);
+
+        if ((mShowPercentAvailable && systemSetting) || mForceShowPercent) {
             if (!showing) {
                 mBatteryPercentView = loadPercentView();
                 addView(mBatteryPercentView,

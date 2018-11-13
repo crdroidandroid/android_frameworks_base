@@ -1723,7 +1723,20 @@ public interface WindowManager extends ViewManager {
         public static final int PRIVATE_FLAG_WAS_NOT_FULLSCREEN = 0x02000000;
 
         /**
+         * Flag to indicate that the status bar window is now in an explicit expanded state, meaning
+         * that status bar will not be hidden by any window with flag {@link #FLAG_FULLSCREEN} or
+         * {@link View#SYSTEM_UI_FLAG_FULLSCREEN} set.
+         * This can only be set by {@link LayoutParams#TYPE_STATUS_BAR}.
+         * @hide
+         */
+        public static final int PRIVATE_FLAG_STATUS_BAR_EXPANDED = 0x00800000;
+
+        /**
          * Window flag: Overrides default power key behavior
+         * @hide
+         */
+        public static final int PRIVATE_FLAG_PREVENT_POWER_KEY = 0x20000000;
+
         /**
          * Control flags that are private to the platform.
          * @hide
@@ -1812,7 +1825,11 @@ public interface WindowManager extends ViewManager {
                 @ViewDebug.FlagToString(
                         mask = PRIVATE_FLAG_IS_SCREEN_DECOR,
                         equals = PRIVATE_FLAG_IS_SCREEN_DECOR,
-                        name = "IS_SCREEN_DECOR")
+                        name = "IS_SCREEN_DECOR"),
+                @ViewDebug.FlagToString(
+                        mask = PRIVATE_FLAG_STATUS_BAR_EXPANDED,
+                        equals = PRIVATE_FLAG_STATUS_BAR_EXPANDED,
+                        name = "STATUS_BAR_EXPANDED")
         })
         @TestApi
         public int privateFlags;
