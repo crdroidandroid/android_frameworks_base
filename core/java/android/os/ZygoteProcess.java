@@ -378,6 +378,9 @@ public class ZygoteProcess {
         argsForZygote.add("--setuid=" + uid);
         argsForZygote.add("--setgid=" + gid);
         argsForZygote.add("--runtime-flags=" + runtimeFlags);
+	    if (refreshTheme) {
+            argsForZygote.add("--refresh_theme");
+        }
         if (mountExternal == Zygote.MOUNT_EXTERNAL_DEFAULT) {
             argsForZygote.add("--mount-external-default");
         } else if (mountExternal == Zygote.MOUNT_EXTERNAL_READ) {
@@ -426,10 +429,6 @@ public class ZygoteProcess {
 
         if (startChildZygote) {
             argsForZygote.add("--start-child-zygote");
-        }
-
-	    if (refreshTheme) {
-            argsForZygote.add("--refresh_theme");
         }
 
         argsForZygote.add(processClass);
