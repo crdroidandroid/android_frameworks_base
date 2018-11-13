@@ -4416,13 +4416,6 @@ public class ActivityManagerService extends IActivityManager.Stub
                 mNativeDebuggingApp = null;
             }
 
-	    // Check if zygote should refresh its fonts
-            boolean refreshTheme = false;
-            if (SystemProperties.getBoolean(PROP_REFRESH_THEME, false)) {
-                SystemProperties.set(PROP_REFRESH_THEME, "false");
-                refreshTheme = true;
-            }
-
             if (app.info.isPrivilegedApp() &&
                     DexManager.isPackageSelectedToRunOob(app.pkgList.keySet())) {
                 runtimeFlags |= Zygote.ONLY_USE_SYSTEM_OAT_FILES;
@@ -4439,6 +4432,13 @@ public class ActivityManagerService extends IActivityManager.Stub
                     throw new IllegalStateException("Invalid API policy: " + policy);
                 }
                 runtimeFlags |= policyBits;
+            }
+
+			// Check if zygote should refresh its fonts
+            boolean refreshTheme = false;
+            if (SystemProperties.getBoolean(PROP_REFRESH_THEME, false)) {
+                SystemProperties.set(PROP_REFRESH_THEME, "false");
+                refreshTheme = true;
             }
 
             String invokeWith = null;
