@@ -425,7 +425,24 @@ public class ThemeAccentUtils {
 
         try {
             om.setEnabled(SWITCH_STYLES[switchStyle], true, userId);
-            } catch (RemoteException e) {
-            }
+        } catch (RemoteException e) {
         }
     }
+
+    // Set Cutout style
+    public static void setCutoutOverlay(IOverlayManager om, int userId, boolean enable) {
+        try {
+            om.setEnabled("com.crdroid.overlay.hidecutout",
+                        enable, userId);
+        } catch (RemoteException e) {
+        }
+    }
+
+    public static void setStatusBarStockOverlay(IOverlayManager om, int userId, boolean enable) {
+        try {
+            om.setEnabled("com.crdroid.overlay.statusbarstock",
+                        enable, userId);
+        } catch (RemoteException e) {
+        }
+    }
+}

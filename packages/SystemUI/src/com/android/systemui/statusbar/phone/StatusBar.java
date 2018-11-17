@@ -74,6 +74,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
@@ -348,6 +349,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             Settings.Secure.PIE_GRAVITY;
     private static final String USE_OLD_MOBILETYPE =
             "system:" + Settings.System.USE_OLD_MOBILETYPE;
+    private static final String DISPLAY_CUTOUT_MODE =
+            "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
+    private static final String STOCK_STATUSBAR_IN_HIDE =
+            "system:" + Settings.System.STOCK_STATUSBAR_IN_HIDE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -770,6 +775,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private boolean mPieEnabled;
     private int mPieGravity;
 
+    private int mImmerseMode;
+    private boolean mStatusBarStock;
+
     @Override
     public void start() {
         mGroupManager = Dependency.get(NotificationGroupManager.class);
@@ -833,6 +841,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, PIE_STATE);
         tunerService.addTunable(this, PIE_GRAVITY);
         tunerService.addTunable(this, USE_OLD_MOBILETYPE);
+        tunerService.addTunable(this, DISPLAY_CUTOUT_MODE);
+        tunerService.addTunable(this, STOCK_STATUSBAR_IN_HIDE);
 
         mPackageMonitor = new PackageMonitor();
         mPackageMonitor.register(mContext, mHandler);
@@ -1030,6 +1040,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                     mStatusBarView.setBar(this);
                     mStatusBarView.setPanel(mNotificationPanel);
                     mStatusBarView.setScrimController(mScrimController);
+                    handleCutout(null);
 
                     // CollapsedStatusBarFragment re-inflated PhoneStatusBarView and both of
                     // mStatusBarView.mExpanded and mStatusBarView.mBouncerShowing are false.
@@ -3656,6 +3667,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
         mViewHierarchyManager.updateRowStates();
         mScreenPinningRequest.onConfigurationChanged();
+        handleCutout(newConfig);
 
        int rotation = mDisplay.getRotation();
         if (rotation != mOrientation) {
@@ -6426,6 +6438,18 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                         TunerService.parseIntegerSwitch(newValue, false);
                 TelephonyIcons.updateIcons(mUseOldMobileType);
                 break;
+            case DISPLAY_CUTOUT_MODE:
+                mImmerseMode = 0;
+                try {
+                    mImmerseMode = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
+                handleCutout(null);
+                break;
+            case STOCK_STATUSBAR_IN_HIDE:
+                mStatusBarStock =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                handleCutout(null);
+                break;
             default:
                 break;
         }
@@ -6492,5 +6516,35 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 }
             }
          };
+    }
+
+    private void updateStatusBarColors(boolean enable) {
+        if (enable) {
+            if (mStatusBarView != null)
+                mStatusBarView.setBackgroundColor(0xFF000000);
+            if (mKeyguardStatusBar != null)
+                mKeyguardStatusBar.setBackgroundColor(0xFF000000);
+        } else {
+            if (mStatusBarView != null)
+                mStatusBarView.setBackgroundColor(Color.TRANSPARENT);
+            if (mKeyguardStatusBar != null)
+                mKeyguardStatusBar.setBackgroundColor(Color.TRANSPARENT);
+        }
+    }
+
+    private void handleCutout(Configuration newConfig) {
+        boolean immerseMode;
+        if (newConfig == null || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            immerseMode = mImmerseMode == 1;
+        } else {
+            immerseMode = false;
+        }
+        updateStatusBarColors(immerseMode);
+
+        mUiOffloadThread.submit(() -> {
+            ThemeAccentUtils.setCutoutOverlay(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), mImmerseMode == 2);
+            ThemeAccentUtils.setStatusBarStockOverlay(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), 
+                  mImmerseMode == 2 && mStatusBarStock);
+        });
     }
 }
