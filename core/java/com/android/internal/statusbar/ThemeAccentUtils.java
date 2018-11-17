@@ -186,4 +186,19 @@ public class ThemeAccentUtils {
         } catch (RemoteException e) {
         }
     }
+
+    public static void setCutoutOverlay(IOverlayManager om, int userId, boolean enable) {
+        try {
+            om.setEnabled("com.android.overlay.hidecutout", enable, userId);
+        } catch (RemoteException e) {
+        }
+    }
+
+    public static void setStatusBarStockOverlay(IOverlayManager om, int userId, boolean enable) {
+        try {
+            om.setEnabled("com.android.overlay.statusbarstock", enable, userId);
+            om.setEnabled("com.android.overlay.statusbarstocksysui", enable, userId);
+        } catch (RemoteException e) {
+        }
+    }
 }
