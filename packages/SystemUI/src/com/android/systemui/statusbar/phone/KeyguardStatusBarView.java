@@ -25,6 +25,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.util.TypedValue;
@@ -54,6 +55,7 @@ import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserInfoController.OnUserInfoChangedListener;
 import com.android.systemui.statusbar.policy.UserInfoControllerImpl;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
+import com.android.systemui.tuner.TunerService;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -62,7 +64,7 @@ import java.io.PrintWriter;
  * The header group on Keyguard.
  */
 public class KeyguardStatusBarView extends RelativeLayout
-        implements OnUserInfoChangedListener, ConfigurationListener {
+        implements OnUserInfoChangedListener, ConfigurationListener, TunerService.Tunable {
 
     private static final int LAYOUT_NONE = 0;
     private static final int LAYOUT_CUTOUT = 1;
@@ -89,6 +91,10 @@ public class KeyguardStatusBarView extends RelativeLayout
     private View mCutoutSpace;
     private ViewGroup mStatusIconArea;
     private int mLayoutState = LAYOUT_NONE;
+    private boolean mImmerseMode;
+
+    private static final String DISPLAY_CUTOUT_MODE =
+            "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
 
     /**
      * Draw this many pixels into the left/right side of the cutout to optimally use the space
@@ -113,6 +119,20 @@ public class KeyguardStatusBarView extends RelativeLayout
 
         loadDimens();
         updateUserSwitcher();
+        updateStatusBarHeight();
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case DISPLAY_CUTOUT_MODE:
+                mImmerseMode =
+                        TunerService.parseInteger(newValue, 0) == 1;
+                updateStatusBarHeight();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -147,9 +167,18 @@ public class KeyguardStatusBarView extends RelativeLayout
                 getResources().getDimensionPixelSize(R.dimen.keyguard_carrier_text_margin));
         mCarrierLabel.setLayoutParams(lp);
 
-        lp = (MarginLayoutParams) getLayoutParams();
-        lp.height =  getResources().getDimensionPixelSize(
-                R.dimen.status_bar_header_height_keyguard);
+        updateStatusBarHeight();
+    }
+
+    private void updateStatusBarHeight() {
+        MarginLayoutParams lp = (MarginLayoutParams) getLayoutParams();
+        if (mImmerseMode) {
+            lp.height =  getResources().getDimensionPixelSize(
+                    R.dimen.status_bar_height);
+        } else {
+            lp.height =  getResources().getDimensionPixelSize(
+                    R.dimen.status_bar_header_height_keyguard);
+        }
         setLayoutParams(lp);
     }
 
@@ -309,12 +338,14 @@ public class KeyguardStatusBarView extends RelativeLayout
         Dependency.get(ConfigurationController.class).addCallback(this);
         mIconManager = new TintedIconManager(findViewById(R.id.statusIcons));
         Dependency.get(StatusBarIconController.class).addIconGroup(mIconManager);
+        Dependency.get(TunerService.class).addTunable(this, DISPLAY_CUTOUT_MODE);
         onThemeChanged();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        Dependency.get(TunerService.class).removeTunable(this);
         Dependency.get(UserInfoController.class).removeCallback(this);
         Dependency.get(StatusBarIconController.class).removeIconGroup(mIconManager);
         Dependency.get(ConfigurationController.class).removeCallback(this);
