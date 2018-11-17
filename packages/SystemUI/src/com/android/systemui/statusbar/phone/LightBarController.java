@@ -18,8 +18,10 @@ package com.android.systemui.statusbar.phone;
 
 import android.app.WallpaperColors;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.provider.Settings;
 import android.view.View;
 
 import com.android.internal.colorextraction.ColorExtractor.GradientColors;
@@ -27,7 +29,11 @@ import com.android.systemui.Dependency;
 import com.android.systemui.Dumpable;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.BatteryController;
+import com.android.systemui.statusbar.policy.ConfigurationController;
+import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
 import com.android.systemui.statusbar.policy.DarkIconDispatcher;
+import com.android.systemui.tuner.TunerService;
+import com.android.systemui.tuner.TunerService.Tunable;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -38,7 +44,8 @@ import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSPARE
 /**
  * Controls how light status bar flag applies to the icons.
  */
-public class LightBarController implements BatteryController.BatteryStateChangeCallback, Dumpable {
+public class LightBarController implements BatteryController.BatteryStateChangeCallback, Dumpable, 
+        ConfigurationListener, Tunable {
 
     private static final float NAV_BAR_INVERSION_SCRIM_ALPHA_THRESHOLD = 0.1f;
 
@@ -55,6 +62,12 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
     private int mLastStatusBarMode;
     private int mLastNavigationBarMode;
     private final Color mDarkModeColor;
+
+    private int mImmerseMode;
+    private boolean mForceDarkIcons;
+
+    private static final String DISPLAY_CUTOUT_MODE =
+            "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
 
     /**
      * Whether the navigation bar should be light factoring in already how much alpha the scrim has
@@ -82,6 +95,9 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
         mStatusBarIconController = Dependency.get(DarkIconDispatcher.class);
         mBatteryController = Dependency.get(BatteryController.class);
         mBatteryController.addCallback(this);
+        updateCutout(null);
+        Dependency.get(TunerService.class).addTunable(this, DISPLAY_CUTOUT_MODE);
+        Dependency.get(ConfigurationController.class).addCallback(this);
     }
 
     public void setNavigationBar(LightBarTransitionsController navigationBar) {
@@ -188,12 +204,13 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
 
     private void updateStatus(Rect fullscreenStackBounds, Rect dockedStackBounds) {
         boolean hasDockedStack = !dockedStackBounds.isEmpty();
+        boolean iconsDark = !mForceDarkIcons;
 
         // If both are light or fullscreen is light and there is no docked stack, all icons get
         // dark.
         if ((mFullscreenLight && mDockedLight) || (mFullscreenLight && !hasDockedStack)) {
             mStatusBarIconController.setIconsDarkArea(null);
-            mStatusBarIconController.getTransitionsController().setIconsDark(true, animateChange());
+            mStatusBarIconController.getTransitionsController().setIconsDark(iconsDark, animateChange());
 
         }
 
@@ -212,7 +229,7 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
             } else {
                 mStatusBarIconController.setIconsDarkArea(bounds);
             }
-            mStatusBarIconController.getTransitionsController().setIconsDark(true, animateChange());
+            mStatusBarIconController.getTransitionsController().setIconsDark(iconsDark, animateChange());
         }
     }
 
@@ -272,6 +289,43 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
             pw.println(" NavigationBarTransitionsController:");
             mNavigationBarController.dump(fd, pw, args);
             pw.println();
+        }
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case DISPLAY_CUTOUT_MODE:
+                mImmerseMode = 0;
+                try {
+                    mImmerseMode = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
+                updateCutout(null);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onConfigChanged(Configuration newConfig) {
+        updateCutout(newConfig);
+    }
+
+    @Override
+    public void onDensityOrFontScaleChanged() {}
+
+    @Override
+    public void onOverlayChanged() {}
+
+    @Override
+    public void onLocaleListChanged() {}
+
+    private void updateCutout(Configuration newConfig) {
+        if (newConfig == null || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mForceDarkIcons = mImmerseMode == 1;
+        } else {
+            mForceDarkIcons = false;
         }
     }
 }
