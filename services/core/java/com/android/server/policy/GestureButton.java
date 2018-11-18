@@ -277,7 +277,7 @@ public class GestureButton implements PointerEventListener {
     }
 
     private void triggerGestureVirtualKeypress(int keyCode) {
-        Utils.sendKeycode(keyCode);
+        Utils.sendKeycode(keyCode, mGestureButtonHandler);
     }
 
     void navigationBarPosition(DisplayFrames displayFrames) {
