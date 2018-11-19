@@ -1058,7 +1058,21 @@ public class MediaPlayer extends PlayerBase
         final String scheme = uri.getScheme();
         final String authority = ContentProvider.getAuthorityWithoutUserId(uri.getAuthority());
         if (ContentResolver.SCHEME_FILE.equals(scheme)) {
-            setDataSource(uri.getPath());
+            /**
+            * POSIX file path may contain some characters which are ambiguous for a URI,
+            * e.g. /mnt/obb/obb:0/VideoPlaybackWL/
+            * it will break further logics in setDataSource,
+            * so we have to handle the local file here.
+            */
+            final File file = new File(uri.getPath());
+            if (file.exists()) {
+                FileInputStream is = new FileInputStream(file);
+                FileDescriptor fd = is.getFD();
+                setDataSource(fd);
+                is.close();
+            } else {
+                throw new IOException("setDataSource failed.");
+            }
             return;
         } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)
                 && Settings.AUTHORITY.equals(authority)) {

@@ -48,6 +48,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.MediaController.MediaPlayerControl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -245,6 +246,19 @@ public class VideoView extends SurfaceView
      * @param path the path of the video.
      */
     public void setVideoPath(String path) {
+        /**
+         * Argument path is a valid POSIX path,
+         * but may not be a valid URI, e.g
+         * /mnt/obb/obb:0/VideoPlaybackWL/
+         * And setVideoURI requires its parameter
+         * to be a URI, thus convert local path to
+         * to URI here to avoid further uri parsing
+         * error.
+         */
+        File file = new File(path);
+        if (file.exists()) {
+            path = file.toURI().toString();
+        }
         setVideoURI(Uri.parse(path));
     }
 
