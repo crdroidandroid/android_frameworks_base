@@ -134,6 +134,8 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
             "system:" + Settings.System.AUDIO_PANEL_VIEW_BT_SCO;
     public static final String VOLUME_LINK_NOTIFICATION =
             Settings.Secure.VOLUME_LINK_NOTIFICATION;
+    public static final String AUDIO_PANEL_VIEW_TIMEOUT =
+            "system:" + Settings.System.AUDIO_PANEL_VIEW_TIMEOUT;
 
     private final Context mContext;
     private final H mHandler = new H();
@@ -185,6 +187,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     private boolean mVoiceShowing;
     private boolean mBTSCOShowing;
     private boolean mNotificationLinked;
+    private int mTimeOutDesired, mTimeOut;
 
     public VolumeDialogImpl(Context context) {
         mContext = new ContextThemeWrapper(context, com.android.systemui.R.style.qs_theme);
@@ -202,6 +205,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
         tunerService.addTunable(this, AUDIO_PANEL_VIEW_VOICE);
         tunerService.addTunable(this, AUDIO_PANEL_VIEW_BT_SCO);
         tunerService.addTunable(this, VOLUME_LINK_NOTIFICATION);
+        tunerService.addTunable(this, AUDIO_PANEL_VIEW_TIMEOUT);
     }
 
     public void init(int windowType, Callback callback) {
@@ -366,6 +370,13 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
                 break;
             case VOLUME_LINK_NOTIFICATION:
                 mNotificationLinked = TunerService.parseIntegerSwitch(newValue, true);
+                break;
+            case AUDIO_PANEL_VIEW_TIMEOUT:
+                mTimeOutDesired = 3;
+                try {
+                    mTimeOutDesired = Integer.parseInt(newValue);
+                } catch (NumberFormatException ex) {}
+                mTimeOut = mTimeOutDesired * 1000;
                 break;
             default:
                 break;
@@ -718,7 +729,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
         if (mAccessibility.mFeedbackEnabled) return 20000;
         if (mHovering) return 16000;
         if (mSafetyWarning != null) return 5000;
-        return 3000;
+        return mTimeOut;
     }
 
     protected void dismissH(int reason) {
