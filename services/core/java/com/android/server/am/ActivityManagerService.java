@@ -632,6 +632,8 @@ public class ActivityManagerService extends IActivityManager.Stub
     // as one line, but close enough for now.
     static final int RESERVED_BYTES_PER_LOGCAT_LINE = 100;
 
+    static final String PROP_REFRESH_THEME = "sys.refresh_theme";
+
     /** If a UID observer takes more than this long, send a WTF. */
     private static final int SLOW_UID_OBSERVER_THRESHOLD_MS = 20;
 
@@ -4423,6 +4425,13 @@ public class ActivityManagerService extends IActivityManager.Stub
                 mNativeDebuggingApp = null;
             }
 
+	    // Check if zygote should refresh its fonts
+            boolean refreshTheme = false;
+            if (SystemProperties.getBoolean(PROP_REFRESH_THEME, false)) {
+                SystemProperties.set(PROP_REFRESH_THEME, "false");
+                refreshTheme = true;
+            }
+
             if (app.info.isPrivilegedApp() &&
                     DexManager.isPackageSelectedToRunOob(app.pkgList.keySet())) {
                 runtimeFlags |= Zygote.ONLY_USE_SYSTEM_OAT_FILES;
@@ -4482,7 +4491,7 @@ public class ActivityManagerService extends IActivityManager.Stub
             final String entryPoint = "android.app.ActivityThread";
 
             return startProcessLocked(hostingType, hostingNameStr, entryPoint, app, uid, gids,
-                    runtimeFlags, mountExternal, seInfo, requiredAbi, instructionSet, invokeWith,
+                    runtimeFlags, mountExternal, seInfo, requiredAbi, instructionSet, invokeWith, refreshTheme,
                     startTime);
         } catch (RuntimeException e) {
             Slog.e(TAG, "Failure starting process " + app.processName, e);
@@ -4502,7 +4511,7 @@ public class ActivityManagerService extends IActivityManager.Stub
     @GuardedBy("this")
     private boolean startProcessLocked(String hostingType, String hostingNameStr, String entryPoint,
             ProcessRecord app, int uid, int[] gids, int runtimeFlags, int mountExternal,
-            String seInfo, String requiredAbi, String instructionSet, String invokeWith,
+            String seInfo, String requiredAbi, String instructionSet, String invokeWith, boolean refreshTheme,
             long startTime) {
         app.pendingStart = true;
         app.killedByAm = false;
@@ -4529,7 +4538,7 @@ public class ActivityManagerService extends IActivityManager.Stub
                     }
                     final ProcessStartResult startResult = startProcess(app.hostingType, entryPoint,
                             app, app.startUid, gids, runtimeFlags, mountExternal, app.seInfo,
-                            requiredAbi, instructionSet, invokeWith, app.startTime);
+                            requiredAbi, instructionSet, invokeWith, refreshTheme, app.startTime);
                     synchronized (ActivityManagerService.this) {
                         handleProcessStartedLocked(app, startResult, startSeq);
                     }
@@ -4549,7 +4558,7 @@ public class ActivityManagerService extends IActivityManager.Stub
             try {
                 final ProcessStartResult startResult = startProcess(hostingType, entryPoint, app,
                         uid, gids, runtimeFlags, mountExternal, seInfo, requiredAbi, instructionSet,
-                        invokeWith, startTime);
+                        invokeWith, refreshTheme, startTime);
                 handleProcessStartedLocked(app, startResult.pid, startResult.usingWrapper,
                         startSeq, false);
             } catch (RuntimeException e) {
@@ -4566,7 +4575,7 @@ public class ActivityManagerService extends IActivityManager.Stub
     private ProcessStartResult startProcess(String hostingType, String entryPoint,
             ProcessRecord app, int uid, int[] gids, int runtimeFlags, int mountExternal,
             String seInfo, String requiredAbi, String instructionSet, String invokeWith,
-            long startTime) {
+            boolean refreshTheme, long startTime) {
         try {
             Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, "Start proc: " +
                     app.processName);
@@ -4576,13 +4585,13 @@ public class ActivityManagerService extends IActivityManager.Stub
                 startResult = startWebView(entryPoint,
                         app.processName, uid, uid, gids, runtimeFlags, mountExternal,
                         app.info.targetSdkVersion, seInfo, requiredAbi, instructionSet,
-                        app.info.dataDir, null,
+                        app.info.dataDir, null, true,
                         new String[] {PROC_START_SEQ_IDENT + app.startSeq});
             } else {
                 startResult = Process.start(entryPoint,
                         app.processName, uid, uid, gids, runtimeFlags, mountExternal,
                         app.info.targetSdkVersion, seInfo, requiredAbi, instructionSet,
-                        app.info.dataDir, invokeWith,
+                        app.info.dataDir, invokeWith, true,
                         new String[] {PROC_START_SEQ_IDENT + app.startSeq});
             }
             checkTime(startTime, "startProcess: returned from zygote!");
