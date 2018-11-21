@@ -161,6 +161,7 @@ public class VolumeDialogImpl implements VolumeDialog {
     private boolean isVoiceShowing = false;
     private boolean isBTSCOShowing = false;
     private boolean isNotificationLinked = true;
+    private int mTimeOut = 3;
 
     private class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
@@ -175,6 +176,7 @@ public class VolumeDialogImpl implements VolumeDialog {
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.AUDIO_PANEL_VIEW_VOICE), false, this, UserHandle.USER_ALL);
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.AUDIO_PANEL_VIEW_BT_SCO), false, this, UserHandle.USER_ALL);
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.AUDIO_PANEL_VIEW_POSITION), false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.AUDIO_PANEL_VIEW_TIMEOUT), false, this, UserHandle.USER_ALL);
             mContext.getContentResolver().registerContentObserver(Settings.Secure.getUriFor(Settings.Secure.VOLUME_LINK_NOTIFICATION), false, this, UserHandle.USER_ALL);
             update();
         }
@@ -200,6 +202,8 @@ public class VolumeDialogImpl implements VolumeDialog {
             mCurrentPosition = mLeftVolumeRocker;
             mLeftVolumeRocker = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.AUDIO_PANEL_VIEW_POSITION, isAudioPanelOnLeftSide() ? 1 : 0, UserHandle.USER_CURRENT) == 1;
+            mTimeOut = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.AUDIO_PANEL_VIEW_TIMEOUT, 3, UserHandle.USER_CURRENT);
             isNotificationLinked = Settings.Secure.getIntForUser(mContext.getContentResolver(), Settings.Secure.VOLUME_LINK_NOTIFICATION, 1, UserHandle.USER_CURRENT) == 1;
         }
     }
@@ -634,7 +638,7 @@ public class VolumeDialogImpl implements VolumeDialog {
         if (mAccessibility.mFeedbackEnabled) return 20000;
         if (mHovering) return 16000;
         if (mSafetyWarning != null) return 5000;
-        return 3000;
+        return mTimeOut * 1000;
     }
 
     protected void dismissH(int reason) {
