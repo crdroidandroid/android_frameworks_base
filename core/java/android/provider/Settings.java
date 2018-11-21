@@ -4757,6 +4757,9 @@ public final class Settings {
         /** @hide */
         public static final String AUDIO_PANEL_VIEW_POSITION = "audio_panel_view_position";
 
+        /** @hide */
+        public static final String AUDIO_PANEL_VIEW_TIMEOUT = "audio_panel_view_timeout";
+
         /*
          * Whether to auto hide clock
          * @hide
