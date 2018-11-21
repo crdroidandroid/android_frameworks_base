@@ -68,6 +68,7 @@ import android.database.sqlite.SQLiteDebug.DbStats;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ImageDecoder;
+import android.graphics.Typeface;
 import android.hardware.display.DisplayManagerGlobal;
 import android.net.ConnectivityManager;
 import android.net.IConnectivityManager;
@@ -5240,8 +5241,12 @@ public final class ActivityThread extends ClientTransactionHandler {
         if (configDiff != 0) {
             // Ask text layout engine to free its caches if there is a locale change
             boolean hasLocaleConfigChange = ((configDiff & ActivityInfo.CONFIG_LOCALE) != 0);
-            if (hasLocaleConfigChange) {
+            boolean hasFontConfigChange = ((configDiff & ActivityInfo.CONFIG_THEME_FONT) != 0);
+            if (hasLocaleConfigChange || hasFontConfigChange) {
                 Canvas.freeTextLayoutCaches();
+                if (hasFontConfigChange) {
+                    Typeface.recreateDefaults();
+                }
                 if (DEBUG_CONFIGURATION) Slog.v(TAG, "Cleared TextLayout Caches");
             }
         }
