@@ -4750,6 +4750,18 @@ public final class Settings {
          */
         public static final String BERRY_SWITCH_STYLE = "berry_switch_style";
 
+	 /**
+         * Hold current font name and name of the originating package Uses "|" as a delimiter
+         * @hide
+         */
+        public static final String FONT_INFO = "font_info";
+        
+	 /**
+         * Hold list of installed font provider packages. Uses "|" as a delimiter
+         * @hide
+         */
+        public static final String FONT_PACKAGES = "font_packages";
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
