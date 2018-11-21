@@ -135,6 +135,8 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     private static final String VOLUME_PANEL_ON_LEFT =
             "lineagesecure:" + LineageSettings.Secure.VOLUME_PANEL_ON_LEFT;
+    public static final String AUDIO_PANEL_VIEW_TIMEOUT =
+            "system:" + Settings.System.AUDIO_PANEL_VIEW_TIMEOUT;
 
     static final int DIALOG_TIMEOUT_MILLIS = 3000;
     static final int DIALOG_SAFETYWARNING_TIMEOUT_MILLIS = 5000;
@@ -195,6 +197,8 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     private boolean mExpanded;
 
+    private int mTimeOutDesired, mTimeOut;
+
     public VolumeDialogImpl(Context context) {
         mContext =
                 new ContextThemeWrapper(context, R.style.qs_theme);
@@ -209,6 +213,7 @@ public class VolumeDialogImpl implements VolumeDialog,
                 Prefs.getBoolean(context, Prefs.Key.HAS_SEEN_ODI_CAPTIONS_TOOLTIP, false);
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, VOLUME_PANEL_ON_LEFT);
+        tunerService.addTunable(this, AUDIO_PANEL_VIEW_TIMEOUT);
     }
 
     @Override
@@ -408,6 +413,10 @@ public class VolumeDialogImpl implements VolumeDialog,
                         mConfigChanged = true;
                     });
                 }
+                break;
+            case AUDIO_PANEL_VIEW_TIMEOUT:
+                mTimeOutDesired = TunerService.parseInteger(newValue, 3);
+                mTimeOut = mTimeOutDesired * 1000;
                 break;
             default:
                 break;
@@ -941,8 +950,7 @@ public class VolumeDialogImpl implements VolumeDialog,
                     AccessibilityManager.FLAG_CONTENT_TEXT
                             | AccessibilityManager.FLAG_CONTENT_CONTROLS);
         }
-        return mAccessibilityMgr.getRecommendedTimeoutMillis(DIALOG_TIMEOUT_MILLIS,
-                AccessibilityManager.FLAG_CONTENT_CONTROLS);
+        return mTimeOut;
     }
 
     protected void dismissH(int reason) {
