@@ -175,7 +175,7 @@ public class VisualizerView extends View
 
     private void updateViewVisibility() {
         final int curVis = getVisibility();
-        final int newVis = mStatusBarState != StatusBarState.SHADE
+        final int newVis = mVisible && mStatusBarState != StatusBarState.SHADE
                 && mVisualizerEnabled ? View.VISIBLE : View.GONE;
         if (curVis != newVis) {
             setVisibility(newVis);
@@ -236,13 +236,11 @@ public class VisualizerView extends View
     }
 
     public void setVisible(boolean visible) {
-        if (mVisible != visible) {
-            if (DEBUG) {
-                Log.i(TAG, "setVisible() called with visible = [" + visible + "]");
-            }
-            mVisible = visible;
-            checkStateChanged();
+        if (DEBUG) {
+            Log.i(TAG, "setVisible() called with visible = [" + visible + "]");
         }
+        mVisible = visible;
+        updateViewVisibility();
     }
 
     public void setDozing(boolean dozing) {
@@ -293,14 +291,12 @@ public class VisualizerView extends View
     }
 
     public void setBitmap(Bitmap bitmap) {
-        if (mCurrentBitmap == bitmap) {
-            return;
-        }
-        mCurrentBitmap = bitmap;
-        if (bitmap != null) {
-            Palette.generateAsync(bitmap, this);
-        } else {
+        if (bitmap == null) {
+            mCurrentBitmap = bitmap;
             setColor(Color.TRANSPARENT);
+        } else if (mCurrentBitmap != bitmap) {
+            mCurrentBitmap = bitmap;
+            Palette.generateAsync(mCurrentBitmap, this);
         }
     }
 
@@ -346,7 +342,8 @@ public class VisualizerView extends View
     }
 
     private void checkStateChanged() {
-        if (getVisibility() == View.VISIBLE && mVisible && mPlaying && !mDozing && !mPowerSaveMode
+        boolean isVisible = getVisibility() == View.VISIBLE;
+        if (isVisible && mPlaying && !mDozing && !mPowerSaveMode
                 && mVisualizerEnabled && !mOccluded) {
             if (!mDisplaying) {
                 mDisplaying = true;
@@ -359,7 +356,7 @@ public class VisualizerView extends View
         } else {
             if (mDisplaying) {
                 mDisplaying = false;
-                if (mVisible) {
+                if (isVisible) {
                     animate()
                             .alpha(0f)
                             .withEndAction(mAsyncUnlinkVisualizer)
