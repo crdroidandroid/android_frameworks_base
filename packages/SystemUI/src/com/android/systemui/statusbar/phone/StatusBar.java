@@ -738,6 +738,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         mLockscreenUserManager = Dependency.get(NotificationLockscreenUserManager.class);
         mGutsManager = Dependency.get(NotificationGutsManager.class);
         mMediaManager = Dependency.get(NotificationMediaManager.class);
+        mMediaManager.addCallback(this);
         mEntryManager = Dependency.get(NotificationEntryManager.class);
         mViewHierarchyManager = Dependency.get(NotificationViewHierarchyManager.class);
         mAppOpsListener = Dependency.get(AppOpsListener.class);
@@ -1793,6 +1794,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     @Override
     public void updateMediaMetaData(boolean metaDataChanged, boolean allowEnterAnimation) {
         Trace.beginSection("StatusBar#updateMediaMetaData");
+
+        // ensure visualizer is visible regardless of artwork
+        mMediaManager.setMediaPlaying();
+
         if (!SHOW_LOCKSCREEN_MEDIA_ARTWORK) {
             Trace.endSection();
             return;
@@ -1850,25 +1855,20 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         boolean hideBecauseOccluded = mStatusBarKeyguardViewManager != null
                 && mStatusBarKeyguardViewManager.isOccluded();
 
-        final boolean keyguardVisible = (mState != StatusBarState.SHADE);
         final boolean hasArtwork = artworkDrawable != null;
         mColorExtractor.setHasBackdrop(hasArtwork);
         if (mScrimController != null) {
             mScrimController.setHasBackdrop(hasArtwork);
         }
 
-        if (!mKeyguardFadingAway && keyguardVisible && hasArtwork && mScreenOn) {
-            // if there's album art, ensure visualizer is visible
-            mVisualizerView.setPlaying(mMediaManager.getMediaController() != null
-                    && mMediaManager.getMediaController().getPlaybackState() != null
-                    && mMediaManager.getMediaController().getPlaybackState().getState()
-                            == PlaybackState.STATE_PLAYING);
-        }
-
-        if (keyguardVisible && mKeyguardShowingMedia &&
-                (artworkDrawable instanceof BitmapDrawable)) {
-            // always use current backdrop to color eq
-            mVisualizerView.setBitmap(((BitmapDrawable)artworkDrawable).getBitmap());
+        if (mVisualizerView != null) {
+            if (mKeyguardShowingMedia && artworkDrawable instanceof BitmapDrawable) {
+                // always use current backdrop to color eq
+                mVisualizerView.setBitmap(((BitmapDrawable)artworkDrawable).getBitmap());
+            } else {
+                // clear the color
+                mVisualizerView.setBitmap(null);
+            }
         }
 
         if ((hasArtwork || DEBUG_MEDIA_FAKE_ARTWORK)
