@@ -8836,6 +8836,24 @@ public final class Settings {
         public static final String SMARTBAR_DOUBLETAP_SLEEP = "smartbar_doubletap_sleep";
 
         /**
+         * Display input method and media actions on smartbar
+         * @hide
+         */
+        public static final String SMARTBAR_IME_HINT_MODE = "smartbar_ime_hint_mode";
+
+        /**
+         * Smartbar context buttons layout position
+         * @hide
+         */
+        public static final String SMARTBAR_CONTEXT_MENU_MODE = "smartbar_context_menu_mode";
+
+        /**
+         * Smarbar button touch animation
+         * @hide
+         */
+        public static final String SMARTBAR_BUTTON_ANIMATION_STYLE = "smartbar_button_animation_style";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
