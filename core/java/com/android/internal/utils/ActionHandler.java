@@ -152,7 +152,7 @@ public class ActionHandler {
         sDisabledActions.add(SYSTEMUI_TASK_ONE_HANDED_MODE_LEFT);
         sDisabledActions.add(SYSTEMUI_TASK_ONE_HANDED_MODE_RIGHT);
         sDisabledActions.add(SYSTEMUI_TASK_EXPANDED_DESKTOP);
-        sDisabledActions.add(SYSTEMUI_TASK_KILL_PROCESS);
+       // sDisabledActions.add(SYSTEMUI_TASK_KILL_PROCESS);
         sDisabledActions.add(SYSTEMUI_TASK_SCREENRECORD);
     }
 
@@ -532,9 +532,9 @@ public class ActionHandler {
             return;
         } else if (action.equals(SYSTEMUI_TASK_NO_ACTION)) {
             return;
-//        } else if (action.equals(SYSTEMUI_TASK_KILL_PROCESS)) {
-//            killProcess(context);
-//            return;
+        } else if (action.equals(SYSTEMUI_TASK_KILL_PROCESS)) {
+            killProcess(context);
+            return;
         } else if (action.equals(SYSTEMUI_TASK_SCREENSHOT)) {
             sendCommandToWindowManager(new Intent(INTENT_SCREENSHOT));
             return;
@@ -951,7 +951,7 @@ public class ActionHandler {
             e.printStackTrace();
         }
     }
-/*
+
     public static void killProcess(Context context) {
         if (context.checkCallingOrSelfPermission(android.Manifest.permission.FORCE_STOP_PACKAGES) == PackageManager.PERMISSION_GRANTED
             && !isLockTaskOn()) {
@@ -1017,7 +1017,7 @@ public class ActionHandler {
                     // Kill the app
                     iam.forceStopPackage(pkg, UserHandle.USER_CURRENT);
 
-                    // Remove killed app from Recents
+/*                    // Remove killed app from Recents
                     final ActivityManager am = (ActivityManager)
                             context.getSystemService(Context.ACTIVITY_SERVICE);
                     final List<ActivityManager.RecentTaskInfo> recentTasks =
@@ -1035,7 +1035,7 @@ public class ActionHandler {
                             am.removeTask(taskid);
                         }
                     }
-
+*/
                     String pkgName;
                     try {
                         pkgName = (String) packageManager.getApplicationLabel(
@@ -1062,7 +1062,7 @@ public class ActionHandler {
             Log.d("ActionHandler", "Caller cannot kill processes, aborting");
         }
     }
-*/
+
 
     public static Context getPackageContext(Context context, String packageName) {
         Context pkgContext = null;
@@ -1128,7 +1128,7 @@ public class ActionHandler {
         } catch (Exception e) {
         }
     }
-
+*/
     public static boolean isLockTaskOn() {
         try {
             return ActivityManagerNative.getDefault().isInLockTaskMode();
@@ -1136,7 +1136,7 @@ public class ActionHandler {
         }
         return false;
     }
-*/
+
     public static void volumePanel(Context context) {
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         am.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
