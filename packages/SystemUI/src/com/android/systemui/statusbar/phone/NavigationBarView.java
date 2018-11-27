@@ -42,6 +42,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -104,6 +105,8 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
 
     public static final String NAVIGATION_BAR_MENU_ARROW_KEYS =
             "lineagesystem:" + LineageSettings.System.NAVIGATION_BAR_MENU_ARROW_KEYS;
+    private static final String NAVIGATION_BAR_MODE =
+            Settings.Secure.NAVIGATION_BAR_MODE;
 
     // slippery nav bar when everything is disabled, e.g. during setup
     final static boolean SLIPPERY_WHEN_DISABLED = true;
@@ -184,6 +187,8 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     private int mBasePaddingTop;
 
     private ViewGroup mNavigationBarContents;
+
+    private int mBarMode = 0;
 
     private class NavTransitionListener implements TransitionListener {
         private boolean mBackTransitioning;
@@ -640,6 +645,9 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     }
 
     public void updateNavButtonIcons() {
+        if (mBarMode != 0)
+            return;
+
         // We have to replace or restore the back and home button icons when exiting or entering
         // carmode, respectively. Recents are not available in CarMode in nav bar so change
         // to recent icon is not required.
@@ -1046,6 +1054,9 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     }
 
     private void updateRecentsIcon() {
+        if (mBarMode != 0)
+            return;
+
         mDockedIcon.setRotation(mDockedStackExists && mVertical ? 90 : 0);
         getRecentsButton().setImageDrawable(mDockedStackExists ? mDockedIcon : mRecentIcon);
         mBarTransitions.reapplyDarkIntensity();
@@ -1285,6 +1296,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
                 NavGesture.class, false /* Only one */);
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, NAVIGATION_BAR_MENU_ARROW_KEYS);
+        tunerService.addTunable(this, NAVIGATION_BAR_MODE);
         setUpSwipeUpOnboarding(isQuickStepSwipeUpEnabled());
     }
 
@@ -1300,9 +1312,17 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (NAVIGATION_BAR_MENU_ARROW_KEYS.equals(key)) {
-            mShowDpadArrowKeys = TunerService.parseIntegerSwitch(newValue, false);
-            setNavigationIconHints(mNavigationIconHints);
+        switch (key) {
+            case NAVIGATION_BAR_MENU_ARROW_KEYS:
+                mShowDpadArrowKeys = TunerService.parseIntegerSwitch(newValue, false);
+                setNavigationIconHints(mNavigationIconHints);
+                break;
+            case NAVIGATION_BAR_MODE:
+                mBarMode = newValue == null ? 0 : Integer.parseInt(newValue);
+                updateNavButtonIcons();
+                break;
+            default:
+                break;
         }
     }
 
@@ -1393,6 +1413,9 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     }
 
     public void updateDpadKeys() {
+        if (mBarMode != 0)
+            return;
+
         final int visibility = mShowDpadArrowKeys && (mNavigationIconHints
                 & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0 ? View.VISIBLE : View.GONE;
 
