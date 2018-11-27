@@ -274,6 +274,20 @@ asked for it -->
                 android:minWidth="@dimen/notification_importance_toggle_size"
                 android:minHeight="@dimen/notification_importance_toggle_size"
                 android:maxWidth="200dp"
+                android:paddingEnd="15dp"
+                style="@style/TextAppearance.NotificationInfo.Button"/>
+            <TextView
+                android:id="@+id/notification_inspect_kill"
+                android:text="@string/guts_force_close_app"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/turn_off_notifications"
+                android:gravity="center_vertical"
+                android:minWidth="@dimen/notification_importance_toggle_size"
+                android:minHeight="@dimen/notification_importance_toggle_size"
+                android:maxWidth="125dp"
+                android:paddingEnd="15dp"
                 style="@style/TextAppearance.NotificationInfo.Button"/>
             <TextView
                 android:id="@+id/done"
