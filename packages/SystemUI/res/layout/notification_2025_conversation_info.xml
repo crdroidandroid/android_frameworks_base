@@ -158,6 +158,17 @@
 
         <!-- end aligned fields -->
         <ImageButton
+            android:id="@+id/force_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:background="@drawable/ripple_drawable"
+            android:contentDescription="@string/force_stop_dlg_title"
+            android:src="@drawable/ic_force_stop"
+            android:padding="@*android:dimen/notification_2025_margin"
+            android:tint="@androidprv:color/materialColorPrimary"/>
+
+        <ImageButton
             android:id="@+id/feedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

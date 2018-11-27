@@ -35,14 +35,18 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.app.ActivityManager;
 import android.app.Flags;
 import android.app.INotificationManager;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
@@ -52,6 +56,7 @@ import android.os.Handler;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.text.Annotation;
@@ -82,6 +87,8 @@ import com.android.systemui.statusbar.notification.collection.EntryAdapter;
 import com.android.systemui.statusbar.notification.collection.NotificationEntry;
 import com.android.systemui.statusbar.notification.shared.NotificationBundleUi;
 import com.android.systemui.statusbar.notification.stack.StackStateAnimator;
+import com.android.systemui.statusbar.phone.CentralSurfaces;
+import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.wmshell.BubblesManager;
 
 import java.lang.annotation.Retention;
@@ -279,6 +286,28 @@ public class NotificationConversationInfo extends LinearLayout implements
         done.setAccessibilityDelegate(mGutsContainer.getAccessibilityDelegate());
     }
 
+    private boolean isForceStopAllowed() {
+        if (TextUtils.isEmpty(mPackageName)) return false;
+
+        if ("android".equals(mPackageName)) return false;
+        if ("com.android.systemui".equals(mPackageName)) return false;
+
+        try {
+            ApplicationInfo ai = mPm.getApplicationInfo(mPackageName, 0);
+            final boolean isSystem = (ai.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+            if (isSystem) return false;
+        } catch (PackageManager.NameNotFoundException ignored) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isKeyguardLocked() {
+        KeyguardManager km = mContext.getSystemService(KeyguardManager.class);
+        return km != null && km.isKeyguardLocked();
+    }
+
     private void bindActions() {
         TextView defaultSummaryTextView = findViewById(R.id.default_summary);
         if (mAppBubble == BUBBLE_PREFERENCE_ALL
@@ -298,10 +327,53 @@ public class NotificationConversationInfo extends LinearLayout implements
         settingsButton.setOnClickListener(getSettingsOnClickListener());
         settingsButton.setVisibility(settingsButton.hasOnClickListeners() ? VISIBLE : GONE);
 
+        // Force stop button
+        final View killButton = findViewById(R.id.force_stop);
+        if (killButton != null) {
+            boolean killButtonEnabled = Settings.System.getIntForUser(
+                    mContext.getContentResolver(),
+                    Settings.System.NOTIFICATION_GUTS_KILL_APP_BUTTON, 0,
+                    UserHandle.USER_CURRENT) != 0;
+            killButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    if (isKeyguardLocked()) {
+                        return;
+                    }
+                    final SystemUIDialog killDialog = new SystemUIDialog(mContext);
+                    killDialog.setTitle(mContext.getText(R.string.force_stop_dlg_title));
+                    killDialog.setMessage(mContext.getText(R.string.force_stop_dlg_text));
+                    killDialog.setPositiveButton(
+                            android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            final int userId = mSbn != null ?
+                                mSbn.getUser().getIdentifier() : UserHandle.myUserId();
+                            try {
+                                ActivityManager.getService().forceStopPackage(mPackageName, userId);
+                            } catch (Exception re) {
+                                Log.w(TAG, "Force stop failed for " + mPackageName, re);
+                            } finally {
+                                closeGutsIfOpen();
+                            }
+                        }
+                    });
+                    killDialog.setNegativeButton(android.R.string.cancel, null);
+                    killDialog.show();
+                }
+            });
+            killButton.setVisibility(killButtonEnabled
+                && isForceStopAllowed() ? View.VISIBLE : View.GONE);
+        }
+
         bindFeedback();
 
         updateToggleActions(mSelectedAction == -1 ? getPriority() : mSelectedAction,
                 false);
+    }
+
+    private void closeGutsIfOpen() {
+        if (mGutsContainer != null) {
+            mGutsContainer.closeControls(this, true);
+        }
     }
 
     private void bindHeader() {
