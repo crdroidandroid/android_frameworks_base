@@ -131,4 +131,8 @@
     <string name="tristate_rotation_0">Portrait</string>
     <string name="tristate_rotation_90">Landscape (90°)</string>
     <string name="tristate_rotation_270">Landscape (270°)</string>
+
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Force stop?</string>
+    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
 </resources>
