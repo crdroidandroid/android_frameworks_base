@@ -173,4 +173,8 @@
 
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Recognizing face...</string>
+
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Force stop?</string>
+    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
 </resources>
