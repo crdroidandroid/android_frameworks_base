@@ -345,6 +345,14 @@ asked for it -->
                 android:maxWidth="200dp"
                 style="@style/TextAppearance.NotificationInfo.Button"/>
             <TextView
+                android:id="@+id/notification_inspect_kill"
+                android:text="@string/guts_force_close_app"
+                android:gravity="start|center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                style="@style/TextAppearance.NotificationInfo.Button"/>
+            <TextView
                 android:id="@+id/done"
                 android:text="@string/inline_ok_button"
                 android:layout_width="wrap_content"
