@@ -101,6 +101,9 @@ public final class ScanRecord {
      */
     @Nullable
     public byte[] getManufacturerSpecificData(int manufacturerId) {
+        if (mManufacturerSpecificData == null) {
+            return null;
+        }
         return mManufacturerSpecificData.get(manufacturerId);
     }
 
