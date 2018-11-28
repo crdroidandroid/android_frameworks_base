@@ -16,35 +16,35 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_toggleNavigationEditor">editorul de control al navigației</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_toggleNavigationEditor">Permite unei aplicații sa controleze editorul barei de navigare.</string>
-  <!-- AOKP custom system animations -->
-  <string name="animation_fade">Diminuează</string>
-  <string name="animation_slide_right">Glisați la dreapta</string>
-  <string name="animation_slide_left">Glisați la stânga</string>
-  <string name="animation_slide_right_no_fade">Glisează spre dreapta (Fără estompare)</string>
-  <string name="animation_slide_left_no_fade">Glisează spre stânga (Fără estompare)</string>
-  <string name="animation_slide_up">Glisează în jos</string>
-  <string name="animation_slide_down">Glisează în sus</string>
-  <string name="animation_default">Prestabilit</string>
-  <string name="animation_translucent">Translucent</string>
-  <string name="animation_grow_shrink">Crește în (Sus)</string>
-  <string name="animation_grow_shrink_center">Crește în (Centru)</string>
-  <string name="animation_grow_shrink_bottom">Crește în (Jos)</string>
-  <string name="animation_grow_shrink_left">Crește în (Stânga)</string>
-  <string name="animation_grow_shrink_right">Crește în (Dreapta)</string>
-  <string name="animation_random">Aleatoriu</string>
-  <string name="action_null">Gol</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFontManager">accesare manager fonturi</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessFontManager">Permite accesul unei aplicatii la managementul de fonturi.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Falsifică semnătura pachetului</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Permite aplicației să pretindă că este o aplicație diferită. Aplicațiile rău-intenționate ar putea să utilizeze aceasta pentru a accesa datele aplicațiilor private. Acordați această permisiune numai cu prudență!</string>
-  <!-- Pocket Lock -->
-  <string name="pocket_lock_message_long_press">Apasă îndelungat pe butonul de pornire pentru a interacționa</string>
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_toggleNavigationEditor">editorul de control al navigației</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_toggleNavigationEditor">Permite unei aplicații sa controleze editorul barei de navigare.</string>
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">Diminuează</string>
+    <string name="animation_slide_right">Glisați la dreapta</string>
+    <string name="animation_slide_left">Glisați la stânga</string>
+    <string name="animation_slide_right_no_fade">Glisează spre dreapta (Fără estompare)</string>
+    <string name="animation_slide_left_no_fade">Glisează spre stânga (Fără estompare)</string>
+    <string name="animation_slide_up">Glisează în jos</string>
+    <string name="animation_slide_down">Glisează în sus</string>
+    <string name="animation_default">Prestabilit</string>
+    <string name="animation_translucent">Translucent</string>
+    <string name="animation_grow_shrink">Crește în (Sus)</string>
+    <string name="animation_grow_shrink_center">Crește în (Centru)</string>
+    <string name="animation_grow_shrink_bottom">Crește în (Jos)</string>
+    <string name="animation_grow_shrink_left">Crește în (Stânga)</string>
+    <string name="animation_grow_shrink_right">Crește în (Dreapta)</string>
+    <string name="animation_random">Aleatoriu</string>
+    <string name="action_null">Gol</string>
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessFontManager">accesare manager fonturi</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessFontManager">Permite accesul unei aplicatii la managementul de fonturi.</string>
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Falsifică semnătura pachetului</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Permite aplicației să pretindă că este o aplicație diferită. Aplicațiile rău-intenționate ar putea să utilizeze aceasta pentru a accesa datele aplicațiilor private. Acordați această permisiune numai cu prudență!</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Apasă îndelungat pe butonul de pornire pentru a interacționa</string>
 </resources>
