@@ -46,5 +46,5 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Hiermee kan de app zich voordoen als een andere app. Schadelijke apps kunnen dit mogelijk gebruiken om toegang te krijgen tot persoonlijke toepassingsgegevens. Verleen deze toestemming alleen met de nodige voorzichtigheid!</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+    <string name="pocket_lock_message_long_press">Aan/uit-knop lang indrukken voor interactie</string>
 </resources>
