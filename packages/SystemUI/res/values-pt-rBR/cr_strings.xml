@@ -16,169 +16,169 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- High Brightness Mode Tile -->
-  <string name="quick_settings_high_brightness">Brilho alto</string>
-  <!-- Sound QS Tile -->
-  <string name="quick_settings_sound_label">Som</string>
-  <string name="quick_settings_sound_ring">Toque</string>
-  <string name="quick_settings_sound_vibrate">Vibrar</string>
-  <string name="quick_settings_sound_dnd">Não perturbe</string>
-  <!-- Compass QS Tile -->
-  <string name="quick_settings_compass_label">Bússola</string>
-  <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-  <string name="quick_settings_compass_init">Inicializando\u2026</string>
-  <string name="accessibility_quick_settings_compass_off">Bússola desligada.</string>
-  <string name="accessibility_quick_settings_compass_on">Bússola ligada.</string>
-  <string name="accessibility_quick_settings_compass_changed_off">Bússola desligada.</string>
-  <string name="accessibility_quick_settings_compass_changed_on">Bússola ligada.</string>
-  <string name="quick_settings_compass_N">N</string>
-  <string name="quick_settings_compass_NE">NE</string>
-  <string name="quick_settings_compass_E">E</string>
-  <string name="quick_settings_compass_SE">SE</string>
-  <string name="quick_settings_compass_S">S</string>
-  <string name="quick_settings_compass_SW">SW</string>
-  <string name="quick_settings_compass_W">W</string>
-  <string name="quick_settings_compass_NW">NW</string>
-  <!-- Music tile -->
-  <string name="quick_settings_music_label">Música</string>
-  <string name="quick_settings_music_play">Reproduzir</string>
-  <string name="quick_settings_music_pause">Pausar</string>
-  <!-- Expanded Desktop QS Tile -->
-  <string name="quick_settings_expanded_desktop_label">Área de trabalho expandida</string>
-  <string name="quick_settings_expanded_desktop">Expandido</string>
-  <string name="quick_settings_expanded_desktop_off">Normal</string>
-  <string name="quick_settings_expanded_navigation_off">Ocultar barra de navegação</string>
-  <string name="quick_settings_expanded_statusbar_off">Ocultar barra de status</string>
-  <!-- CPUInfo tile -->
-  <string name="quick_settings_cpuinfo_label">Informação da CPU</string>
-  <!-- Screenshot tile -->
-  <string name="quick_settings_screenshot_label">Captura da tela</string>
-  <string name="quick_settings_region_screenshot_label">Captura parcial de tela</string>
-  <!-- Reboot/Recovery/PowerOff QS Tile -->
-  <string name="quick_settings_reboot_label">Reiniciar</string>
-  <string name="quick_settings_reboot_recovery_label">Recuperação</string>
-  <string name="quick_settings_poweroff_label">Desligar</string>
-  <!-- Caffeine tile -->
-  <string name="caffeine_info_title">O que é isso?</string>
-  <string name="caffeine_info_message">O bloco de cafeína é uma bloco simples que você poderia ligar para manter sua tela ativada.\n\nSelecione que o estado do bloco será reiniciado após desligar a tela.</string>
-  <string name="recents_app_killed">Aplicativo encerrado</string>
-  <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_running_services">Abrir tela de serviços em execução.</string>
-  <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_dash_charging_time">Carregamento rápido (<xliff:g id="charging_time_left">%s</xliff:g> até concluir)</string>
-  <string name="keyguard_plugged_in_dash_charging">Carregamento rápido</string>
-  <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
-  <string name="keyguard_indication_turbo_power_time">Carregamento rápido (<xliff:g id="charging_time_left">%s</xliff:g> até concluir)</string>
-  <string name="keyguard_plugged_in_turbo_power_charging">Carregamento rápido conectado</string>
-  <!-- HW Keys Tile -->
-  <string name="quick_settings_hw_keys_label">Teclas físicas</string>
-  <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_disabled">Teclas físicas desabilitadas.</string>
-  <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_hw_keys_enabled">Teclas físicas ativadas.</string>
-  <!-- OmniJaws -->
-  <string name="omnijaws_service_error">Erro</string>
-  <string name="omnijaws_service_unkown">Sem dados meteorológicos</string>
-  <string name="omnijaws_service_error_long">Erro ao carregar dados meteorológicos</string>
-  <string name="omnijaws_service_disabled">Serviço desativado</string>
-  <string name="omnijaws_detail_header">Clima</string>
-  <string name="omnijaws_label_default">Clima</string>
-  <string name="omnijaws_current_text">Agora</string>
-  <string name="omnijaws_package_not_available">OmniJaws não disponível</string>
-  <string name="omnijaws_service_last_update">Última atualização:</string>
-  <!-- Assist/Google Tiles -->
-  <string name="quick_settings_google_assist_label">Assistente</string>
-  <string name="quick_settings_google_voice_assist_label">Assistente de voz</string>
-  <string name="quick_settings_google_now_label">Google</string>
-  <!-- Screenrecord Notification Ticker -->
-  <string name="screenrecord_notif_ticker">Tela está sendo gravada</string>
-  <string name="screenrecord_notif_final_ticker">Tela gravada com sucesso</string>
-  <!-- Screenrecord notification title -->
-  <string name="screenrecord_notif_title">Gravando tela</string>
-  <!-- Screenrecord notification action: Stop -->
-  <string name="screenrecord_notif_stop">Parar</string>
-  <string name="screenrecord_notif_completed">Tela gravada com sucesso</string>
-  <!-- Screenrecord notification action: show/hide pointer -->
-  <string name="screenrecord_notif_pointer_on">Mostrar ponteiro</string>
-  <string name="screenrecord_notif_pointer_off">Ocultar ponteiro</string>
-  <!-- Screen record notification error title -->
-  <string name="screenrecord_notif_error">Não é possível gravar tela</string>
-  <string name="notification_channel_screenrecord">Gravações de tela</string>
-  <string name="screenrecord_hide_hint">Esconder dicas</string>
-  <string name="screenrecord_show_hint">Mostrar dica</string>
-  <!-- Screenshot QS tile -->
-  <string name="quick_settings_screenrecord_label">Gravação de Tela</string>
-  <string name="quick_settings_screenrecord_lq_label">Gravação de tela 480p</string>
-  <string name="quick_settings_screenrecord_mq_label">Gravação de tela 720p</string>
-  <string name="quick_settings_screenrecord_hq_label">Gravação de tela 720p+</string>
-  <!-- Always on Display Tile -->
-  <string name="quick_settings_always_on_display_label">Tela sempre ativa</string>
-  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_off">Tela sempre ativa desligada.</string>
-  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_on">Tela sempre ativa ligada.</string>
-  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_off">Exibição ambiente desligada.</string>
-  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_always_on_display_changed_on">Exibição ambiente foi ligada.</string>
-  <!-- Name of the nfc status bar icon. -->
-  <string name="status_bar_nfc">NFC</string>
-  <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
-  <string name="accessibility_status_bar_nfc">NFC</string>
-  <!-- Heads up snooze toast -->
-  <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s </xliff:g> - As notificações estão cochilando durante 1 minuto.</string>
-  <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - As notificações estão cochilando por <xliff:g id="number">%d</xliff:g> minutos.</string>
-  <!-- Free ram -->
-  <string name="recents_free_ram">RAM Livre: %1$d MB</string>
-  <!-- On The Go -->
-  <string name="global_action_onthego">Modo Otg</string>
-  <string name="onthego_notif_ticker">Otg ativado</string>
-  <string name="onthego_notif_title">On-The-Go está ativo</string>
-  <string name="onthego_notif_stop">Parar</string>
-  <string name="onthego_notif_options">Opções</string>
-  <string name="onthego_notif_error">Não é possível iniciar On-The-Go</string>
-  <string name="onthego_notif_restart">Reiniciar On-The-Go</string>
-  <string name="onthego_notif_camera_changed">Modo de câmera alterado</string>
-  <string name="onthego_transparency">Transparência</string>
-  <string name="onthego_front_camera">Usar câmera frontal</string>
-  <string name="onthego_service_toggle">Reiniciar automaticamente o serviço</string>
-  <string name="onthego_channel_name">Principal</string>
-  <!-- Smart pixels QS tile -->
-  <string name="quick_settings_smart_pixels">Píxeis Inteligentes</string>
-  <string name="quick_settings_smart_pixels_on_power_save">Auto-ativação dos Píxeis Inteligentes</string>
-  <!-- Off/On/Toggle -->
-  <string name="off">Desativado</string>
-  <string name="on">Ligado</string>
-  <string name="toggle">Alternar</string>
-  <!-- Dialog Cancel/OK -->
-  <string name="cancel">Cancelar</string>
-  <string name="dlg_ok">Ok</string>
-  <string name="yes">Sim</string>
-  <string name="no">Não</string>
-  <!-- Slim Shortcut Actions -->
-  <string name="shortcut_picker">crDroid atalhos</string>
-  <string name="shortcut_rotation">Bloqueio de rotação alterado</string>
-  <string name="shortcut_torch">Lanterna</string>
-  <string name="shortcut_chamber">Câmara dos Segredos</string>
-  <string name="shortcut_reboot">Reiniciar</string>
-  <string name="shortcut_recovery">Recuperação</string>
-  <string name="shortcut_screensleep">Tela enquanto dorme</string>
-  <string name="shortcut_toggle_title">Ação a ser executada</string>
-  <string name="chamber_disabled">Câmara dos segredos é fechada</string>
-  <string name="chamber_title">Sequência de configurações de entrada</string>
-  <string name="chamber_message">Forneça uma sequência de configurações que seja ou uma função de ligar e desligar (caixa de seleção) ou, possivelmente, uma lista de preferências. Por exemplo, doze_enabled ou similar. As configurações podem ser encontradas no arquivo Settings.java. Aviso: Este processo é perigoso!</string>
-  <string name="chamber_invalid">Esta é uma entrada inválida. Tenha cuidado.</string>
-  <string name="chamber_invalid_setting">Tente alternar a configuração manualmente para garantir que o banco de dados de configurações para esta ação existe.</string>
-  <string name="chamber_checkbox">Caixa de seleção</string>
-  <string name="chamber_chk_message">É esta a definição de uma caixa de seleção?</string>
-  <string name="chamber_int">Valores de entrada</string>
-  <string name="chamber_int_message">Forneça os valores nos quais você gostaria que a configuração alternasse. Separe cada valor com uma vírgula. As configurações de cor aceitam valores hexadecimais como #FF00aacc ou valores de cor básica como o vermelho, verde e amarelo.</string>
-  <string name="chamber_name_title">Nome do atalho</string>
-  <string name="chamber_name_message">Nomeie o atalho a ser exibido com o ícone.</string>
-  <string name="chamber_name_toast">Utilizando o nome padrão</string>
-  <string name="shortcut_clear_notifications">Limpar notificações</string>
-  <!-- Pie controls -->
-  <string name="pie_state_summary">Usar os controles Pie durante o modo imersivo</string>
-  <string name="pie_battery_level">"NÍVEL DE BATERIA "</string>
-  <string name="quick_settings_pie">Torta</string>
+    <!-- High Brightness Mode Tile -->
+    <string name="quick_settings_high_brightness">Brilho alto</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Som</string>
+    <string name="quick_settings_sound_ring">Toque</string>
+    <string name="quick_settings_sound_vibrate">Vibrar</string>
+    <string name="quick_settings_sound_dnd">Não perturbe</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Bússola</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Inicializando\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Bússola desligada.</string>
+    <string name="accessibility_quick_settings_compass_on">Bússola ligada.</string>
+    <string name="accessibility_quick_settings_compass_changed_off">Bússola desligada.</string>
+    <string name="accessibility_quick_settings_compass_changed_on">Bússola ligada.</string>
+    <string name="quick_settings_compass_N">N</string>
+    <string name="quick_settings_compass_NE">NE</string>
+    <string name="quick_settings_compass_E">E</string>
+    <string name="quick_settings_compass_SE">SE</string>
+    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_SW">SW</string>
+    <string name="quick_settings_compass_W">W</string>
+    <string name="quick_settings_compass_NW">NW</string>
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">Música</string>
+    <string name="quick_settings_music_play">Reproduzir</string>
+    <string name="quick_settings_music_pause">Pausar</string>
+    <!-- Expanded Desktop QS Tile -->
+    <string name="quick_settings_expanded_desktop_label">Área de trabalho expandida</string>
+    <string name="quick_settings_expanded_desktop">Expandido</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="quick_settings_expanded_navigation_off">Ocultar barra de navegação</string>
+    <string name="quick_settings_expanded_statusbar_off">Ocultar barra de status</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Informação da CPU</string>
+    <!-- Screenshot tile -->
+    <string name="quick_settings_screenshot_label">Captura da tela</string>
+    <string name="quick_settings_region_screenshot_label">Captura parcial de tela</string>
+    <!-- Reboot/Recovery/PowerOff QS Tile -->
+    <string name="quick_settings_reboot_label">Reiniciar</string>
+    <string name="quick_settings_reboot_recovery_label">Recuperação</string>
+    <string name="quick_settings_poweroff_label">Desligar</string>
+    <!-- Caffeine tile -->
+    <string name="caffeine_info_title">O que é isso?</string>
+    <string name="caffeine_info_message">O bloco de cafeína é uma bloco simples que você poderia ligar para manter sua tela ativada.\n\nSelecione que o estado do bloco será reiniciado após desligar a tela.</string>
+    <string name="recents_app_killed">Aplicativo encerrado</string>
+    <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_running_services">Abrir tela de serviços em execução.</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time">Carregamento rápido (<xliff:g id="charging_time_left">%s</xliff:g> até concluir)</string>
+    <string name="keyguard_plugged_in_dash_charging">Carregamento rápido</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_power_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_turbo_power_time">Carregamento rápido (<xliff:g id="charging_time_left">%s</xliff:g> até concluir)</string>
+    <string name="keyguard_plugged_in_turbo_power_charging">Carregamento rápido conectado</string>
+    <!-- HW Keys Tile -->
+    <string name="quick_settings_hw_keys_label">Teclas físicas</string>
+    <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_hw_keys_disabled">Teclas físicas desabilitadas.</string>
+    <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_hw_keys_enabled">Teclas físicas ativadas.</string>
+    <!-- OmniJaws -->
+    <string name="omnijaws_service_error">Erro</string>
+    <string name="omnijaws_service_unkown">Sem dados meteorológicos</string>
+    <string name="omnijaws_service_error_long">Erro ao carregar dados meteorológicos</string>
+    <string name="omnijaws_service_disabled">Serviço desativado</string>
+    <string name="omnijaws_detail_header">Clima</string>
+    <string name="omnijaws_label_default">Clima</string>
+    <string name="omnijaws_current_text">Agora</string>
+    <string name="omnijaws_package_not_available">OmniJaws não disponível</string>
+    <string name="omnijaws_service_last_update">Última atualização:</string>
+    <!-- Assist/Google Tiles -->
+    <string name="quick_settings_google_assist_label">Assistente</string>
+    <string name="quick_settings_google_voice_assist_label">Assistente de voz</string>
+    <string name="quick_settings_google_now_label">Google</string>
+    <!-- Screenrecord Notification Ticker -->
+    <string name="screenrecord_notif_ticker">Tela está sendo gravada</string>
+    <string name="screenrecord_notif_final_ticker">Tela gravada com sucesso</string>
+    <!-- Screenrecord notification title -->
+    <string name="screenrecord_notif_title">Gravando tela</string>
+    <!-- Screenrecord notification action: Stop -->
+    <string name="screenrecord_notif_stop">Parar</string>
+    <string name="screenrecord_notif_completed">Tela gravada com sucesso</string>
+    <!-- Screenrecord notification action: show/hide pointer -->
+    <string name="screenrecord_notif_pointer_on">Mostrar ponteiro</string>
+    <string name="screenrecord_notif_pointer_off">Ocultar ponteiro</string>
+    <!-- Screen record notification error title -->
+    <string name="screenrecord_notif_error">Não é possível gravar tela</string>
+    <string name="notification_channel_screenrecord">Gravações de tela</string>
+    <string name="screenrecord_hide_hint">Esconder dicas</string>
+    <string name="screenrecord_show_hint">Mostrar dica</string>
+    <!-- Screenshot QS tile -->
+    <string name="quick_settings_screenrecord_label">Gravação de Tela</string>
+    <string name="quick_settings_screenrecord_lq_label">Gravação de tela 480p</string>
+    <string name="quick_settings_screenrecord_mq_label">Gravação de tela 720p</string>
+    <string name="quick_settings_screenrecord_hq_label">Gravação de tela 720p+</string>
+    <!-- Always on Display Tile -->
+    <string name="quick_settings_always_on_display_label">Tela sempre ativa</string>
+    <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_always_on_display_off">Tela sempre ativa desligada.</string>
+    <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_always_on_display_on">Tela sempre ativa ligada.</string>
+    <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_always_on_display_changed_off">Exibição ambiente desligada.</string>
+    <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_always_on_display_changed_on">Exibição ambiente foi ligada.</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+    <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
+    <string name="accessibility_status_bar_nfc">NFC</string>
+    <!-- Heads up snooze toast -->
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s </xliff:g> - As notificações estão cochilando durante 1 minuto.</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - As notificações estão cochilando por <xliff:g id="number">%d</xliff:g> minutos.</string>
+    <!-- Free ram -->
+    <string name="recents_free_ram">RAM Livre: %1$d MB</string>
+    <!-- On The Go -->
+    <string name="global_action_onthego">Modo Otg</string>
+    <string name="onthego_notif_ticker">Otg ativado</string>
+    <string name="onthego_notif_title">On-The-Go está ativo</string>
+    <string name="onthego_notif_stop">Parar</string>
+    <string name="onthego_notif_options">Opções</string>
+    <string name="onthego_notif_error">Não é possível iniciar On-The-Go</string>
+    <string name="onthego_notif_restart">Reiniciar On-The-Go</string>
+    <string name="onthego_notif_camera_changed">Modo de câmera alterado</string>
+    <string name="onthego_transparency">Transparência</string>
+    <string name="onthego_front_camera">Usar câmera frontal</string>
+    <string name="onthego_service_toggle">Reiniciar automaticamente o serviço</string>
+    <string name="onthego_channel_name">Principal</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Píxeis Inteligentes</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Auto-ativação dos Píxeis Inteligentes</string>
+    <!-- Off/On/Toggle -->
+    <string name="off">Desativado</string>
+    <string name="on">Ligado</string>
+    <string name="toggle">Alternar</string>
+    <!-- Dialog Cancel/OK -->
+    <string name="cancel">Cancelar</string>
+    <string name="dlg_ok">Ok</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <!-- Slim Shortcut Actions -->
+    <string name="shortcut_picker">crDroid atalhos</string>
+    <string name="shortcut_rotation">Bloqueio de rotação alterado</string>
+    <string name="shortcut_torch">Lanterna</string>
+    <string name="shortcut_chamber">Câmara dos Segredos</string>
+    <string name="shortcut_reboot">Reiniciar</string>
+    <string name="shortcut_recovery">Recuperação</string>
+    <string name="shortcut_screensleep">Tela enquanto dorme</string>
+    <string name="shortcut_toggle_title">Ação a ser executada</string>
+    <string name="chamber_disabled">Câmara dos segredos é fechada</string>
+    <string name="chamber_title">Sequência de configurações de entrada</string>
+    <string name="chamber_message">Forneça uma sequência de configurações que seja ou uma função de ligar e desligar (caixa de seleção) ou, possivelmente, uma lista de preferências. Por exemplo, doze_enabled ou similar. As configurações podem ser encontradas no arquivo Settings.java. Aviso: Este processo é perigoso!</string>
+    <string name="chamber_invalid">Esta é uma entrada inválida. Tenha cuidado.</string>
+    <string name="chamber_invalid_setting">Tente alternar a configuração manualmente para garantir que o banco de dados de configurações para esta ação existe.</string>
+    <string name="chamber_checkbox">Caixa de seleção</string>
+    <string name="chamber_chk_message">É esta a definição de uma caixa de seleção?</string>
+    <string name="chamber_int">Valores de entrada</string>
+    <string name="chamber_int_message">Forneça os valores nos quais você gostaria que a configuração alternasse. Separe cada valor com uma vírgula. As configurações de cor aceitam valores hexadecimais como #FF00aacc ou valores de cor básica como o vermelho, verde e amarelo.</string>
+    <string name="chamber_name_title">Nome do atalho</string>
+    <string name="chamber_name_message">Nomeie o atalho a ser exibido com o ícone.</string>
+    <string name="chamber_name_toast">Utilizando o nome padrão</string>
+    <string name="shortcut_clear_notifications">Limpar notificações</string>
+    <!-- Pie controls -->
+    <string name="pie_state_summary">Usar os controles Pie durante o modo imersivo</string>
+    <string name="pie_battery_level">"NÍVEL DE BATERIA "</string>
+    <string name="quick_settings_pie">Torta</string>
 </resources>
