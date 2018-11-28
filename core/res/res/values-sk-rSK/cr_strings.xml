@@ -16,35 +16,35 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_toggleNavigationEditor">ovládanie navigačného editora</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_toggleNavigationEditor">Umožňuje aplikácii upraviť navigačný panel.</string>
-  <!-- AOKP custom system animations -->
-  <string name="animation_fade">Miznutie</string>
-  <string name="animation_slide_right">Potiahnutie vpravo</string>
-  <string name="animation_slide_left">Potiahnutie vľavo</string>
-  <string name="animation_slide_right_no_fade">Posunutie vpravo (bez miznutia)</string>
-  <string name="animation_slide_left_no_fade">Posunutie vľavo (bez miznutia)</string>
-  <string name="animation_slide_up">Posunúť dolu</string>
-  <string name="animation_slide_down">Posunutie nahor</string>
-  <string name="animation_default">Predvolená</string>
-  <string name="animation_translucent">Priehľadnosť</string>
-  <string name="animation_grow_shrink">Zväčšenie (Zvrchu)</string>
-  <string name="animation_grow_shrink_center">Zväčšenie (Zo stredu)</string>
-  <string name="animation_grow_shrink_bottom">Zväčšenie (Zospodu)</string>
-  <string name="animation_grow_shrink_left">Zväčšenie (Zľava)</string>
-  <string name="animation_grow_shrink_right">Zväčšenie (Sprava)</string>
-  <string name="animation_random">Náhodne</string>
-  <string name="action_null">Prázdne</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFontManager">prístup k správcovi písiem</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessFontManager">Umožňuje aplikácii získať prístup k správcovi písiem.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Napodobniť podpis balíčku</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Umožňuje aplikácii vydávať sa sa inú aplikáciu. Škodlivé aplikácie by mohli použiť túto možnosť pre prístup k dátam súkromných aplikácií. Udeľujte toto oprávnenie s opatrnosťou!</string>
-  <!-- Pocket Lock -->
-  <string name="pocket_lock_message_long_press">Pre interakciu dlho stlačte tlačidlo Napájanie</string>
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_toggleNavigationEditor">ovládanie navigačného editora</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_toggleNavigationEditor">Umožňuje aplikácii upraviť navigačný panel.</string>
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">Miznutie</string>
+    <string name="animation_slide_right">Potiahnutie vpravo</string>
+    <string name="animation_slide_left">Potiahnutie vľavo</string>
+    <string name="animation_slide_right_no_fade">Posunutie vpravo (bez miznutia)</string>
+    <string name="animation_slide_left_no_fade">Posunutie vľavo (bez miznutia)</string>
+    <string name="animation_slide_up">Posunúť dolu</string>
+    <string name="animation_slide_down">Posunutie nahor</string>
+    <string name="animation_default">Predvolená</string>
+    <string name="animation_translucent">Priehľadnosť</string>
+    <string name="animation_grow_shrink">Zväčšenie (Zvrchu)</string>
+    <string name="animation_grow_shrink_center">Zväčšenie (Zo stredu)</string>
+    <string name="animation_grow_shrink_bottom">Zväčšenie (Zospodu)</string>
+    <string name="animation_grow_shrink_left">Zväčšenie (Zľava)</string>
+    <string name="animation_grow_shrink_right">Zväčšenie (Sprava)</string>
+    <string name="animation_random">Náhodne</string>
+    <string name="action_null">Prázdne</string>
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessFontManager">prístup k správcovi písiem</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessFontManager">Umožňuje aplikácii získať prístup k správcovi písiem.</string>
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Napodobniť podpis balíčku</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Umožňuje aplikácii vydávať sa sa inú aplikáciu. Škodlivé aplikácie by mohli použiť túto možnosť pre prístup k dátam súkromných aplikácií. Udeľujte toto oprávnenie s opatrnosťou!</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Pre interakciu dlho stlačte tlačidlo Napájanie</string>
 </resources>
