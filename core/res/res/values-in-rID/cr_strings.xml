@@ -16,35 +16,35 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_toggleNavigationEditor">mengontrol navigasi editor</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_toggleNavigationEditor">Mengizinkan aplikasi untuk mengontrol editor bar navigasi.</string>
-  <!-- AOKP custom system animations -->
-  <string name="animation_fade">Memudar</string>
-  <string name="animation_slide_right">Geser ke kanan</string>
-  <string name="animation_slide_left">Geser ke kiri</string>
-  <string name="animation_slide_right_no_fade">Geser ke kanan (Tanpa memudar)</string>
-  <string name="animation_slide_left_no_fade">Geser ke kiri (Tanpa memudar)</string>
-  <string name="animation_slide_up">Geser ke bawah</string>
-  <string name="animation_slide_down">Geser dari atas</string>
-  <string name="animation_default">Bawaan</string>
-  <string name="animation_translucent">Tembus</string>
-  <string name="animation_grow_shrink">Tumbuh di (Atas)</string>
-  <string name="animation_grow_shrink_center">Tumbuh di (tengah)</string>
-  <string name="animation_grow_shrink_bottom">Tumbuh di (Bawah)</string>
-  <string name="animation_grow_shrink_left">Tumbuh di (Kiri)</string>
-  <string name="animation_grow_shrink_right">Tumbuh di (Kiri)</string>
-  <string name="animation_random">Acak</string>
-  <string name="action_null">Kosong</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFontManager">akses Manajer Font</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessFontManager">Mengizinkan aplikasi untuk mengakses manajer font.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_fakePackageSignature">Tiruan tanda tangan paket</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_fakePackageSignature">Memungkinkan aplikasi untuk menirunya sebagai aplikasi yang berbeda. Aplikasi berbahaya mungkin dapat menggunakan hak ini untuk mengakses data aplikasi pribadi. Berikan izin ini hanya dengan hati-hati!</string>
-  <!-- Pocket Lock -->
-  <string name="pocket_lock_message_long_press">Tekan lama tombol daya untuk berinteraksi</string>
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_toggleNavigationEditor">mengontrol navigasi editor</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_toggleNavigationEditor">Mengizinkan aplikasi untuk mengontrol editor bar navigasi.</string>
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">Memudar</string>
+    <string name="animation_slide_right">Geser ke kanan</string>
+    <string name="animation_slide_left">Geser ke kiri</string>
+    <string name="animation_slide_right_no_fade">Geser ke kanan (Tanpa memudar)</string>
+    <string name="animation_slide_left_no_fade">Geser ke kiri (Tanpa memudar)</string>
+    <string name="animation_slide_up">Geser ke bawah</string>
+    <string name="animation_slide_down">Geser dari atas</string>
+    <string name="animation_default">Bawaan</string>
+    <string name="animation_translucent">Tembus</string>
+    <string name="animation_grow_shrink">Tumbuh di (Atas)</string>
+    <string name="animation_grow_shrink_center">Tumbuh di (tengah)</string>
+    <string name="animation_grow_shrink_bottom">Tumbuh di (Bawah)</string>
+    <string name="animation_grow_shrink_left">Tumbuh di (Kiri)</string>
+    <string name="animation_grow_shrink_right">Tumbuh di (Kiri)</string>
+    <string name="animation_random">Acak</string>
+    <string name="action_null">Kosong</string>
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessFontManager">akses Manajer Font</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessFontManager">Mengizinkan aplikasi untuk mengakses manajer font.</string>
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Tiruan tanda tangan paket</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Memungkinkan aplikasi untuk menirunya sebagai aplikasi yang berbeda. Aplikasi berbahaya mungkin dapat menggunakan hak ini untuk mengakses data aplikasi pribadi. Berikan izin ini hanya dengan hati-hati!</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Tekan lama tombol daya untuk berinteraksi</string>
 </resources>
