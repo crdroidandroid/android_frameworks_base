@@ -4715,6 +4715,12 @@ public final class Settings {
         public static final String BERRY_DARK_CHECK = "berry_dark_check";
 
         /**
+         * Select when dark theme is applied
+         * @hide
+         */
+        public static final String BERRY_THEME_OVERRIDE = "berry_theme_override";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
