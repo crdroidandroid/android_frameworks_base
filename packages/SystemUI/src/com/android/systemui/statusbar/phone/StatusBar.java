@@ -262,6 +262,7 @@ import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.volume.VolumeComponent;
 
+import lineageos.hardware.LiveDisplayManager;
 import lineageos.providers.LineageSettings;
 
 import java.io.FileDescriptor;
@@ -317,6 +318,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             "system:" + Settings.System.FORCE_AMBIENT_FOR_MEDIA;
     private static final String BERRY_ACCENT_PICKER =
             "system:" + Settings.System.BERRY_ACCENT_PICKER;
+    private static final String BERRY_THEME_OVERRIDE =
+            "system:" + Settings.System.BERRY_THEME_OVERRIDE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -497,6 +500,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private boolean mJustPeeked;
 
     private boolean mAmbientMediaPlaying;
+    private int mAccentSetting;
+    private int mThemeOverride;
 
     /**
      * Helper that is responsible for showing the right toast when a disallowed activity operation
@@ -528,6 +533,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         : null;
 
     private ScreenPinningRequest mScreenPinningRequest;
+
+    private UiModeManager mUiModeManager;
 
     private final MetricsLogger mMetricsLogger = Dependency.get(MetricsLogger.class);
 
@@ -763,6 +770,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, PULSE_APPS_BLACKLIST);
         tunerService.addTunable(this, FORCE_AMBIENT_FOR_MEDIA);
         tunerService.addTunable(this, BERRY_ACCENT_PICKER);
+        tunerService.addTunable(this, BERRY_THEME_OVERRIDE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -901,6 +909,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
         mScreenPinningRequest = new ScreenPinningRequest(mContext);
         mFalsingManager = FalsingManager.getInstance(mContext);
+
+        mUiModeManager = mContext.getSystemService(UiModeManager.class);
 
         Dependency.get(ActivityStarterDelegate.class).setActivityStarterImpl(this);
 
@@ -1071,9 +1081,11 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 if (mDozeServiceHost != null) {
                     mDozeServiceHost.firePowerSaveChanged(isPowerSave);
                 }
-                if (NIGHT_MODE_IN_BATTERY_SAVER) {
-                    mContext.getSystemService(UiModeManager.class).setNightMode(
-                        isPowerSave ? UiModeManager.MODE_NIGHT_YES : UiModeManager.MODE_NIGHT_NO);
+                if (NIGHT_MODE_IN_BATTERY_SAVER && mUiModeManager != null && mThemeOverride == 0) {
+                   if (isPowerSave)
+                       mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
+                   else
+                       updateTheme();
                 }
             }
 
@@ -2306,16 +2318,6 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     // Check for the dark system theme
     public boolean isUsingDarkTheme() {
         return ThemeAccentUtils.isUsingDarkTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
-    }
-
-    // Unloads the stock dark theme
-    public void unloadStockDarkTheme() {
-        ThemeAccentUtils.unloadStockDarkTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
-    }
-
-    // Check for black and white accent overlays
-    public void unfuckBlackWhiteAccent() {
-        ThemeAccentUtils.unfuckBlackWhiteAccent(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
     }
 
     @Nullable
@@ -4265,31 +4267,59 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         Trace.endSection();
     }
 
+    private boolean isLiveDisplayNightModeOn() {
+        // SystemUI is initialized before LiveDisplay, so the service may not
+        // be ready when this is called the first time
+        LiveDisplayManager manager = LiveDisplayManager.getInstance(mContext);
+        try {
+            return manager.isNightModeEnabled();
+        } catch (NullPointerException e) {
+            Log.w(TAG, e.getMessage());
+        }
+        return false;
+    }
+
     /**
      * Switches theme from light to dark and vice-versa.
      */
     protected void updateTheme() {
         final boolean inflated = mStackScroller != null && mStatusBarWindowManager != null;
 
-        // The system wallpaper defines if QS should be light or dark.
         WallpaperColors systemColors = mColorExtractor
                 .getWallpaperColors(WallpaperManager.FLAG_SYSTEM);
         final boolean wallpaperWantsDarkTheme = systemColors != null
                 && (systemColors.getColorHints() & WallpaperColors.HINT_SUPPORTS_DARK_THEME) != 0;
         final Configuration config = mContext.getResources().getConfiguration();
-        final boolean nightModeWantsDarkTheme = DARK_THEME_IN_NIGHT_MODE
-                && (config.uiMode & Configuration.UI_MODE_NIGHT_MASK)
-                    == Configuration.UI_MODE_NIGHT_YES;
-        final boolean useDarkTheme = nightModeWantsDarkTheme;
+        boolean useDarkTheme;
+
+        // 0 = auto, 1 = time-based, 2 = light, 3 = dark
+        switch (mThemeOverride) {
+            case 1:
+                useDarkTheme = isLiveDisplayNightModeOn();
+                break;
+            case 2:
+                useDarkTheme = false;
+                break;
+            case 3:
+                useDarkTheme = true;
+                break;
+            default:
+                useDarkTheme = wallpaperWantsDarkTheme;
+                break;
+        }
 
         Settings.System.putIntForUser(mContext.getContentResolver(),
                 Settings.System.BERRY_DARK_CHECK, useDarkTheme ? 1 : 0, UserHandle.USER_CURRENT);
 
         if (isUsingDarkTheme() != useDarkTheme) {
             mUiOffloadThread.submit(() -> {
-                unfuckBlackWhiteAccent();
                 ThemeAccentUtils.setLightDarkTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), useDarkTheme);
             });
+
+            if (mUiModeManager != null) {
+                mUiModeManager.setNightMode(useDarkTheme ?
+                        UiModeManager.MODE_NIGHT_YES : UiModeManager.MODE_NIGHT_NO);
+            }
         }
 
         // Lock wallpaper defines the color of the majority of the views, hence we'll use it
@@ -4318,6 +4348,13 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             // Make sure we have the correct navbar/statusbar colors.
             mStatusBarWindowManager.setKeyguardDark(useDarkText);
         }
+    }
+
+    private void updateAccent() {
+        mUiOffloadThread.submit(() -> {
+            ThemeAccentUtils.unloadAccents(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
+            ThemeAccentUtils.updateAccents(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), mAccentSetting);
+        });
     }
 
     private void updateDozingState() {
@@ -6127,8 +6164,18 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             case BERRY_ACCENT_PICKER:
                 int accentSetting =
                         newValue == null ? 0 : Integer.parseInt(newValue);
-                ThemeAccentUtils.unloadAccents(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
-                ThemeAccentUtils.updateAccents(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), accentSetting);
+                if (mAccentSetting != accentSetting) {
+                    mAccentSetting = accentSetting;
+                    updateAccent();
+                }
+                break;
+            case BERRY_THEME_OVERRIDE:
+                int themeOverride =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                if (mThemeOverride != themeOverride) {
+                    mThemeOverride = themeOverride;
+                    updateTheme();
+                }
                 break;
             default:
                 break;
