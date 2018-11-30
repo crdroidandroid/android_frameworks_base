@@ -102,7 +102,7 @@ public class ThemeAccentUtils {
             try {
                 om.setEnabled(theme,
                         useDarkTheme, userId);
-                unfuckBlackWhiteAccent(om, userId);
+                checkBlackWhiteAccent(om, userId);
                 if (useDarkTheme) {
                     unloadStockDarkTheme(om, userId);
                 }
@@ -112,7 +112,7 @@ public class ThemeAccentUtils {
     }
 
     // Check for black and white accent overlays
-    public static void unfuckBlackWhiteAccent(IOverlayManager om, int userId) {
+    public static void checkBlackWhiteAccent(IOverlayManager om, int userId) {
         OverlayInfo themeInfo = null;
         try {
             if (isUsingDarkTheme(om, userId)) {
