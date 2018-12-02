@@ -4705,6 +4705,12 @@ public final class Settings {
         public static final String BERRY_DARK_STYLE = "berry_dark_style";
 
         /**
+         * Switch between different notification styles
+         * @hide
+         */
+        public static final String BERRY_NOTIFICATION_STYLE = "berry_notification_style";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
