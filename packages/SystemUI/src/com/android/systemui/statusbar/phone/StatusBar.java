@@ -322,6 +322,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             "system:" + Settings.System.BERRY_THEME_OVERRIDE;
     private static final String BERRY_DARK_STYLE =
             "system:" + Settings.System.BERRY_DARK_STYLE;
+    private static final String BERRY_NOTIFICATION_STYLE =
+            "system:" + Settings.System.BERRY_NOTIFICATION_STYLE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -505,6 +507,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private int mAccentSetting;
     private int mThemeOverride;
     private int mDarkStyle;
+    private int mNotiStyle;
 
     /**
      * Helper that is responsible for showing the right toast when a disallowed activity operation
@@ -775,6 +778,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, BERRY_ACCENT_PICKER);
         tunerService.addTunable(this, BERRY_THEME_OVERRIDE);
         tunerService.addTunable(this, BERRY_DARK_STYLE);
+        tunerService.addTunable(this, BERRY_NOTIFICATION_STYLE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -2306,6 +2310,16 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             return ThemeAccentUtils.isUsingBlackTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
 
         return ThemeAccentUtils.isUsingDarkTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
+    }
+
+    // Check for the dark notification theme
+    public boolean isUsingDarkNotificationTheme() {
+        return ThemeAccentUtils.isUsingDarkNotificationTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
+    }
+
+    // Check for the black notification theme
+    public boolean isUsingBlackNotificationTheme() {
+        return ThemeAccentUtils.isUsingBlackNotificationTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
     }
 
     @Nullable
@@ -4295,6 +4309,20 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             }
         }
 
+        boolean useDarkNotificationTheme = (mNotiStyle == 0 && useDarkTheme && mDarkStyle == 0) ||
+                                            mNotiStyle == 2;
+        boolean useBlackNotificationTheme = (mNotiStyle == 0 && useDarkTheme && mDarkStyle == 1) ||
+                                            mNotiStyle == 3;
+
+        if ((isUsingDarkNotificationTheme() != useDarkNotificationTheme) ||
+                (isUsingBlackNotificationTheme() != useBlackNotificationTheme)) {
+            mUiOffloadThread.submit(() -> {
+                ThemeAccentUtils.setNotificationTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
+                                            useDarkTheme, mDarkStyle, mNotiStyle);
+                onOverlayChanged();
+            });
+        }
+
         // Lock wallpaper defines the color of the majority of the views, hence we'll use it
         // to set our default theme.
         final boolean lockDarkText = mColorExtractor.getColors(WallpaperManager.FLAG_LOCK, true
@@ -6151,6 +6179,14 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                         newValue == null ? 0 : Integer.parseInt(newValue);
                 if (mDarkStyle != darkStyle) {
                     mDarkStyle = darkStyle;
+                    updateTheme();
+                }
+                break;
+            case BERRY_NOTIFICATION_STYLE:
+                int notiStyle =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                if (mNotiStyle != notiStyle) {
+                    mNotiStyle = notiStyle;
                     updateTheme();
                 }
                 break;
