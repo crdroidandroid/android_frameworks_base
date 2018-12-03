@@ -24652,7 +24652,9 @@ public class ActivityManagerService extends IActivityManager.Stub
                         }
                         app.kill("excessive cpu " + cputimeUsed + " during " + uptimeSince
                                 + " dur=" + checkDur + " limit=" + cpuLimit, true);
-                        app.baseProcessTracker.reportExcessiveCpu(app.pkgList);
+                        if (app.baseProcessTracker != null) {
+                            app.baseProcessTracker.reportExcessiveCpu(app.pkgList);
+                        }
                     }
                 }
                 app.lastCpuTime = app.curCpuTime;
