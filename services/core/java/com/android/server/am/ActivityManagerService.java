@@ -15688,7 +15688,7 @@ public class ActivityManagerService extends IActivityManager.Stub
             }
         }
 
-        if ((violationMask & StrictMode.PENALTY_DIALOG) != 0) {
+        if ((violationMask & StrictMode.PENALTY_DIALOG) != 0 && app != null) {
             AppErrorResult result = new AppErrorResult();
             synchronized (this) {
                 final long origId = Binder.clearCallingIdentity();
