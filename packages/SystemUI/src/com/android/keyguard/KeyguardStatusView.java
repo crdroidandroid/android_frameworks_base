@@ -307,6 +307,12 @@ public class KeyguardStatusView extends GridLayout implements
                     getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
             mOwnerInfo.setTypeface(tfMedium);
         }
+        if (mLogoutView != null) {
+            mLogoutView.setTypeface(tfMedium);
+        }
+        if (mKeyguardSlice != null) {
+            mKeyguardSlice.refresh();
+        }
     }
 
     public void dozeTimeTick() {
