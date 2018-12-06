@@ -2324,11 +2324,13 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     }
 
     // Check for the dark system theme
-    public boolean isUsingDarkTheme() {
-        if (mDarkStyle == 1)
-            return ThemeAccentUtils.isUsingBlackTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
-
+    public boolean isUsingDarkSystemTheme() {
         return ThemeAccentUtils.isUsingDarkTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
+    }
+
+    // Check for the black system theme
+    public boolean isUsingBlackSystemTheme() {
+        return ThemeAccentUtils.isUsingBlackTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
     }
 
     // Check for the dark notification theme
@@ -3197,7 +3199,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         if (mOverlayManager == null) {
             pw.println("    overlay manager not initialized!");
         } else {
-            pw.println("    dark overlay on: " + isUsingDarkTheme());
+            pw.println("    dark overlay on: " + isUsingDarkSystemTheme());
+            pw.println("    black overlay on: " + isUsingBlackSystemTheme());
         }
         final boolean lightWpTheme = mContext.getThemeResId() == R.style.Theme_SystemUI_Light;
         pw.println("    light wallpaper theme: " + lightWpTheme);
@@ -4332,7 +4335,11 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         Settings.System.putIntForUser(mContext.getContentResolver(),
                 Settings.System.BERRY_DARK_CHECK, useDarkTheme ? 1 : 0, UserHandle.USER_CURRENT);
 
-        if (isUsingDarkTheme() != useDarkTheme) {
+        boolean useDarkSystemTheme = useDarkTheme && mDarkStyle == 0;
+        boolean useBlackSystemTheme = useDarkTheme && mDarkStyle == 1;
+
+        if ((isUsingDarkSystemTheme() != useDarkSystemTheme) ||
+                (isUsingBlackSystemTheme() != useBlackSystemTheme)) {
             mUiOffloadThread.submit(() -> {
                 ThemeAccentUtils.setSystemTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
                                             useDarkTheme, mDarkStyle);
