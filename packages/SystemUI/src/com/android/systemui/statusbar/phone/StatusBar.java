@@ -4346,8 +4346,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             });
 
             if (mUiModeManager != null) {
-                mUiModeManager.setNightMode(useDarkTheme ?
-                        UiModeManager.MODE_NIGHT_YES : UiModeManager.MODE_NIGHT_NO);
+                mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
+                if (useDarkTheme) mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
             }
         }
 
