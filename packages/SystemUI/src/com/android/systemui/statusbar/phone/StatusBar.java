@@ -508,6 +508,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private int mThemeOverride;
     private int mDarkStyle;
     private int mNotiStyle;
+    private boolean mPowerSave;
 
     /**
      * Helper that is responsible for showing the right toast when a disallowed activity operation
@@ -1073,11 +1074,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 if (mDozeServiceHost != null) {
                     mDozeServiceHost.firePowerSaveChanged(isPowerSave);
                 }
-                if (NIGHT_MODE_IN_BATTERY_SAVER && mUiModeManager != null && mThemeOverride == 0) {
-                   if (isPowerSave)
-                       mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
-                   else
-                       updateTheme();
+                if (NIGHT_MODE_IN_BATTERY_SAVER) {
+                    mPowerSave = isPowerSave;
+                    updateTheme();
                 }
             }
 
@@ -4293,7 +4292,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 useDarkTheme = true;
                 break;
             default:
-                useDarkTheme = wallpaperWantsDarkTheme;
+                useDarkTheme = wallpaperWantsDarkTheme || mPowerSave;
                 break;
         }
 
