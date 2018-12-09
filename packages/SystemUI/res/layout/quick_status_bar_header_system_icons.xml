@@ -46,6 +46,22 @@
         android:layout_weight="1"
         android:gravity="center_vertical|center_horizontal" />
 
+    <com.android.systemui.statusbar.LineageStatusBarItemHolder
+        android:id="@+id/network_traffic_holder"
+        android:paddingEnd="@dimen/status_bar_left_clock_end_padding"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        >
+
+        <org.lineageos.internal.statusbar.NetworkTraffic
+           android:id="@+id/network_traffic"
+           android:layout_height="match_parent"
+           android:layout_width="wrap_content"
+           android:gravity="right|center_vertical"
+           android:maxLines="2" />
+
+    </com.android.systemui.statusbar.LineageStatusBarItemHolder>
+
     <com.android.systemui.BatteryMeterView
         android:id="@+id/battery"
         android:layout_height="match_parent"
