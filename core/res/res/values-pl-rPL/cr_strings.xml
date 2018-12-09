@@ -46,5 +46,5 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Pozwala aplikacji na udawanie innej aplikacji. Złośliwe aplikacje mogą wykorzystać to w celu uzyskania dostępu do prywatnych danych. Zachowaj ostrożność udzielając to uprawnienie!</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+    <string name="pocket_lock_message_long_press">Przytrzymaj przycisk zasilania w celu interakcji</string>
 </resources>
