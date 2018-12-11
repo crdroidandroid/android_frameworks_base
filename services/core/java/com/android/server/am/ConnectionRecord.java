@@ -23,6 +23,7 @@ import android.util.proto.ProtoOutputStream;
 import android.util.proto.ProtoUtils;
 
 import java.io.PrintWriter;
+import java.util.Objects;
 
 /**
  * Description of a single binding to a service.
@@ -175,5 +176,26 @@ final class ConnectionRecord {
             proto.write(ConnectionRecordProto.SERVICE_NAME, binding.service.shortName);
         }
         proto.end(token);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ConnectionRecord that = (ConnectionRecord) o;
+        return flags == that.flags
+                && clientLabel == that.clientLabel
+                && serviceDead == that.serviceDead
+                && Objects.equals(binding, that.binding)
+                && Objects.equals(activity, that.activity)
+                && Objects.equals(conn, that.conn)
+                && Objects.equals(clientIntent, that.clientIntent)
+                && Objects.equals(stringName, that.stringName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(binding, activity, conn, flags, clientLabel, clientIntent
+                , stringName, serviceDead);
     }
 }
