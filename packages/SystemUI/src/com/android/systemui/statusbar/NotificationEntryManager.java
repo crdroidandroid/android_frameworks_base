@@ -941,6 +941,10 @@ public class NotificationEntryManager implements Dumpable, NotificationInflater.
         updateNotifications();
     }
 
+    public void onOverlayChanged() {
+        updateNotificationsOnDensityOrFontScaleChanged();
+    }
+
     protected boolean shouldPeek(NotificationData.Entry entry) {
         return shouldPeek(entry, entry.notification);
     }
