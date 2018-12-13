@@ -393,6 +393,19 @@ public class DecorView extends FrameLayout implements RootViewSurfaceTaker, Wind
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (mOutsets.left > 0) {
+            ev.offsetLocation(mOutsets.left, 0);
+        }
+        if (mOutsets.top > 0) {
+            ev.offsetLocation(0, -mOutsets.top);
+        }
+        if (mApplyFloatingVerticalInsets) {
+            ev.offsetLocation(0, -mFloatingInsets.top);
+        }
+        if (mApplyFloatingHorizontalInsets) {
+            ev.offsetLocation(-mFloatingInsets.left, 0);
+        }
+
         final Window.Callback cb = mWindow.getCallback();
         return cb != null && !mWindow.isDestroyed() && mFeatureId < 0
                 ? cb.dispatchTouchEvent(ev) : super.dispatchTouchEvent(ev);
