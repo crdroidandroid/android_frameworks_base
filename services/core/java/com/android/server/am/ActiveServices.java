@@ -3148,8 +3148,9 @@ public final class ActiveServices {
             try {
                 for (int i=0; i<mPendingServices.size(); i++) {
                     sr = mPendingServices.get(i);
-                    if (proc != sr.isolatedProc && (proc.uid != sr.appInfo.uid
-                            || !processName.equals(sr.processName))) {
+                    if (proc != sr.isolatedProc
+                        && Process.SYSTEM_UID != sr.appInfo.uid
+                        && (proc.uid != sr.appInfo.uid || !processName.equals(sr.processName))) {
                         continue;
                     }
 
