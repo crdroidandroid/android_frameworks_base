@@ -7667,10 +7667,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mWindowManagerDrawComplete = false;
             mScreenOnListener = screenOnListener;
 
-            if (mKeyguardDelegate != null && mKeyguardDelegate.hasKeyguard()) {
-                mHandler.removeMessages(MSG_KEYGUARD_DRAWN_TIMEOUT);
-                mHandler.sendEmptyMessageDelayed(MSG_KEYGUARD_DRAWN_TIMEOUT,
-                        getKeyguardDrawnTimeout());
+            if (mKeyguardDelegate != null) {
+                if (mKeyguardDelegate.hasKeyguard()) {
+                    mHandler.removeMessages(MSG_KEYGUARD_DRAWN_TIMEOUT);
+                    mHandler.sendEmptyMessageDelayed(MSG_KEYGUARD_DRAWN_TIMEOUT,
+                            getKeyguardDrawnTimeout());
+                } else {
+                    mHandler.sendEmptyMessage(MSG_KEYGUARD_DRAWN_COMPLETE);
+                }
                 mKeyguardDelegate.onScreenTurningOn(mKeyguardDrawnCallback);
             } else {
                 if (DEBUG_WAKEUP) Slog.d(TAG,
