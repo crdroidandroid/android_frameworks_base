@@ -310,9 +310,12 @@ public class CPUInfoService extends Service {
 
         mDreamManager = IDreamManager.Stub.asInterface(
                 ServiceManager.checkService(DreamService.DREAM_SERVICE));
-        IntentFilter screenStateFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(mScreenStateReceiver, screenStateFilter);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+
+        registerReceiver(mScreenStateReceiver, filter);
 
         WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
         wm.addView(mView, params);
@@ -371,13 +374,16 @@ public class CPUInfoService extends Service {
     private BroadcastReceiver mScreenStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+            String action = intent.getAction();
+            if (action == null) return;
+
+            if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 Log.d(TAG, "ACTION_SCREEN_ON " + isDozeMode());
                 if (!isDozeMode()) {
                     startThread();
                     mView.setVisibility(View.VISIBLE);
                 }
-            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 Log.d(TAG, "ACTION_SCREEN_OFF");
                 mView.setVisibility(View.GONE);
                 stopThread();
