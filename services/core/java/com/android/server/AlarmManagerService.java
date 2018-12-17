@@ -490,6 +490,8 @@ class AlarmManagerService extends SystemService {
 
     final LinkedList<WakeupEvent> mRecentWakeups = new LinkedList<WakeupEvent>();
     final long RECENT_WAKEUP_PERIOD = 1000L * 60 * 60 * 24; // one day
+    // Alarm Expire time limit
+    final long MAX_EXPIRE_TIME = 2147483647000L;
 
     final class Batch {
         long start;     // These endpoints are always in ELAPSED
@@ -1449,6 +1451,12 @@ class AlarmManagerService extends SystemService {
             Slog.w(TAG, "Alarms must either supply a PendingIntent or an AlarmReceiver");
             // NB: previous releases failed silently here, so we are continuing to do the same
             // rather than throw an IllegalArgumentException.
+            return;
+        }
+
+        // Ignore alarm which is set beyond max Posix/Epoch time
+        if (triggerAtTime > MAX_EXPIRE_TIME) {
+            Slog.w(TAG, "Alarm expire time must be less than maximum unix epoch time");
             return;
         }
 
