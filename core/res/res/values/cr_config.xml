@@ -35,4 +35,7 @@
 
     <!-- Whether device ignores the RSSNR signal implementation -->
     <bool name="config_ignoreRssnrSignalLevel">false</bool>
+
+    <!-- Whether auto face unlock is enabled by default -->
+    <bool name="config_face_unlock_enabled_by_default">false</bool>
 </resources>
