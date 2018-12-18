@@ -18,4 +18,7 @@
 
     <!-- Whether device has dash charging support -->
     <bool name="config_hasDashCharger">false</bool>
+
+    <!-- Whether auto face unlock is enabled by default -->
+    <bool name="config_face_unlock_enabled_by_default">false</bool>
 </resources>
