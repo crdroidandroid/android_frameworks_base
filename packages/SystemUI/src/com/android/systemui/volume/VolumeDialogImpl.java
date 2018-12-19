@@ -56,6 +56,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.database.ContentObserver;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.PixelFormat;
@@ -147,6 +148,8 @@ import com.android.systemui.volume.domain.interactor.VolumePanelNavigationIntera
 import com.android.systemui.volume.panel.shared.flag.VolumePanelFlag;
 import com.android.systemui.volume.ui.navigation.VolumeNavigator;
 import com.google.android.msdl.domain.MSDLPlayer;
+
+import lineageos.providers.LineageSettings;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -302,6 +305,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private ViewStub mODICaptionsTooltipViewStub;
     @VisibleForTesting View mODICaptionsTooltipView = null;
 
+    // Volume panel placement left or right
+    private boolean mVolumePanelOnLeft;
+
     private final boolean mUseBackgroundBlur;
     private Consumer<Boolean> mCrossWindowBlurEnabledListener;
     private BackgroundBlurDrawable mDialogRowsViewBackground;
@@ -404,6 +410,25 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                         enabled ? dialogRowsViewColorAboveBlur : dialogRowsViewColorNoBlur);
                 mDialogRowsView.invalidate();
             };
+        }
+
+        if (!mIsTv) {
+            ContentObserver volumePanelOnLeftObserver = new ContentObserver(null) {
+                @Override
+                public void onChange(boolean selfChange) {
+                    final boolean volumePanelOnLeft = LineageSettings.Secure.getInt(
+                            mContext.getContentResolver(),
+                            LineageSettings.Secure.VOLUME_PANEL_ON_LEFT, 0) != 0;
+                    if (mVolumePanelOnLeft != volumePanelOnLeft) {
+                        mVolumePanelOnLeft = volumePanelOnLeft;
+                        mHandler.post(mControllerCallbackH::onConfigurationChanged);
+                    }
+                }
+            };
+            mContext.getContentResolver().registerContentObserver(
+                    LineageSettings.Secure.getUriFor(LineageSettings.Secure.VOLUME_PANEL_ON_LEFT),
+                    false, volumePanelOnLeftObserver);
+            volumePanelOnLeftObserver.onChange(true);
         }
 
         initDimens();
@@ -574,6 +599,12 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         lp.windowAnimations = -1;
 
         mOriginalGravity = mContext.getResources().getInteger(R.integer.volume_dialog_gravity);
+        if (!mIsTv) {
+            // Clear the pre-defined gravity for left or right,
+            // this is handled by mVolumePanelOnLeft
+            mOriginalGravity &= ~(Gravity.LEFT | Gravity.RIGHT);
+            mOriginalGravity |= mVolumePanelOnLeft ? Gravity.LEFT : Gravity.RIGHT;
+        }
         mWindowGravity = Gravity.getAbsoluteGravity(mOriginalGravity,
                 mContext.getResources().getConfiguration().getLayoutDirection());
         lp.gravity = mWindowGravity;
