@@ -16,12 +16,14 @@
 
 package com.android.internal.util.crdroid;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.PowerManager;
+import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
@@ -86,6 +88,10 @@ public class Utils {
         FireActions.toggleCameraFlash();
     }
 
+    public static void clearAllNotifications() {
+        FireActions.clearAllNotifications();
+    }
+
     private static final class FireActions {
         private static IStatusBarService mStatusBarService = null;
 
@@ -104,6 +110,17 @@ public class Utils {
             if (service != null) {
                 try {
                     service.toggleCameraFlash();
+                } catch (RemoteException e) {
+                    // do nothing.
+                }
+            }
+        }
+
+        public static void clearAllNotifications() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.onClearAllNotifications(ActivityManager.getCurrentUser());
                 } catch (RemoteException e) {
                     // do nothing.
                 }
