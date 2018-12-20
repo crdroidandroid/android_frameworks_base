@@ -1947,6 +1947,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         am.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
     }
 
+    private void clearAllNotifications() {
+        IStatusBarService statusBarService = getStatusBarService();
+        if (statusBarService != null) {
+            try {
+                statusBarService.onClearAllNotifications(ActivityManager.getCurrentUser());
+            } catch (RemoteException e) {
+                // do nothing.
+            }
+        }
+    }
+
     private void performKeyAction(Action action, KeyEvent event) {
         switch (action) {
             case NOTHING:
@@ -1990,6 +2001,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             case VOLUME_PANEL:
                 toggleVolumePanel();
+                break;
+            case CLEAR_ALL_NOTIFICATIONS:
+                clearAllNotifications();
                 break;
             default:
                 break;
