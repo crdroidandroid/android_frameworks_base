@@ -1727,6 +1727,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case VOLUME_PANEL:
                 Utils.toggleVolumePanel(mContext);
                 break;
+            case CLEAR_ALL_NOTIFICATIONS:
+                Utils.clearAllNotifications();
+                break;
             default:
                 break;
         }
