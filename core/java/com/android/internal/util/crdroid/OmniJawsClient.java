@@ -126,6 +126,15 @@ public class OmniJawsClient {
         }
     }
 
+    public static class PackageInfo {
+        public String packageName;
+        public int resourceID;
+
+        public String toString() {
+            return "[" + packageName + ":" + resourceID + "]";
+        }
+    }
+
     public static interface OmniJawsObserver {
         public void weatherUpdated();
         public void weatherError(int errorReason);
@@ -176,6 +185,7 @@ public class OmniJawsClient {
 
     private Context mContext;
     private WeatherInfo mCachedInfo;
+    private PackageInfo mImageInfo;
     private Resources mRes;
     private String mPackageName;
     private String mIconPrefix;
@@ -242,6 +252,10 @@ public class OmniJawsClient {
 
     public WeatherInfo getWeatherInfo() {
         return mCachedInfo;
+    }
+
+    public PackageInfo getPackageInfo() {
+        return mImageInfo;
     }
 
     private static String getFormattedValue(float value) {
@@ -330,6 +344,7 @@ public class OmniJawsClient {
                 int resId = res.getIdentifier(iconPrefix + "_na", "drawable", packageName);
                 Drawable d = res.getDrawable(resId);
                 if (d != null) {
+                    setWeatherConditionImageResources(resId, packageName);
                     return d;
                 }
             }
@@ -357,6 +372,15 @@ public class OmniJawsClient {
         }
     }
 
+    private void setWeatherConditionImageResources(int resId, String PackageName) {
+        if (DEBUG) {
+            Log.d(TAG, "Setting mImageInfo.resourceID:" + resId);
+            Log.d(TAG, "Setting mImageInfo.packageName:" + PackageName);
+        }
+        mImageInfo.packageName = PackageName;
+        mImageInfo.resourceID = resId;
+    }
+
     public Drawable getWeatherConditionImage(int conditionCode) {
         if (!isOmniJawsEnabled()) {
             Log.w(TAG, "Requesting condition image while disabled");
@@ -371,15 +395,18 @@ public class OmniJawsClient {
             return null;
         }
         try {
+            mImageInfo = new PackageInfo();
             int resId = mRes.getIdentifier(mIconPrefix + "_" + conditionCode, "drawable", mPackageName);
             Drawable d = mRes.getDrawable(resId);
             if (d != null) {
+                setWeatherConditionImageResources(resId, mPackageName);
                 return d;
             }
             Log.w(TAG, "Failed to get condition image for " + conditionCode + " use default");
             resId = mRes.getIdentifier(mIconPrefix + "_na", "drawable", mPackageName);
             d = mRes.getDrawable(resId);
             if (d != null) {
+                setWeatherConditionImageResources(resId, mPackageName);
                 return d;
             }
         } catch(Exception e) {
