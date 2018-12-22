@@ -1253,7 +1253,8 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
             super();
             mWidth = 0;
             mHeight = 0;
-            mRequestRender = true;
+            // Render will be requested later when it'll be really needed
+            mRequestRender = false;
             mRenderMode = RENDERMODE_CONTINUOUSLY;
             mWantRenderNotification = false;
             mGLSurfaceViewWeakRef = glSurfaceViewWeakRef;
