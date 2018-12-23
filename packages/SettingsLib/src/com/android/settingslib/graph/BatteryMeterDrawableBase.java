@@ -190,13 +190,17 @@ public class BatteryMeterDrawableBase extends Drawable {
     }
 
     public void setShowPercent(boolean show) {
-        mShowPercent = show;
-        postInvalidate();
+        if (mShowPercent != show) {
+            mShowPercent = show;
+            postInvalidate();
+        }
     }
 
     public void setCharging(boolean val) {
-        mCharging = val;
-        postInvalidate();
+        if (mCharging != val) {
+            mCharging = val;
+            postInvalidate();
+        }
     }
 
     public boolean getCharging() {
@@ -204,8 +208,10 @@ public class BatteryMeterDrawableBase extends Drawable {
     }
 
     public void setBatteryLevel(int val) {
-        mLevel = val;
-        postInvalidate();
+        if (mLevel != val) {
+            mLevel = val;
+            postInvalidate();
+        }
     }
 
     public int getBatteryLevel() {
@@ -213,8 +219,10 @@ public class BatteryMeterDrawableBase extends Drawable {
     }
 
     public void setPowerSave(boolean val) {
-        mPowerSaveEnabled = val;
-        postInvalidate();
+        if (mPowerSaveEnabled != val) {
+            mPowerSaveEnabled = val;
+            postInvalidate();
+        }
     }
 
     protected void setPowerSaveAsColorError(boolean asError) {
