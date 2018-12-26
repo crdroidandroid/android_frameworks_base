@@ -2471,7 +2471,7 @@ public class ActivityManagerService extends IActivityManager.Stub
                     IStorageManager storageManager = IStorageManager.Stub.asInterface(service);
                     Log.d(TAG, "Storing locale " + l.toLanguageTag() + " for decryption UI");
                     storageManager.setField(StorageManager.SYSTEM_LOCALE_KEY, l.toLanguageTag());
-                } catch (RemoteException e) {
+                } catch (RemoteException | IllegalStateException e) {
                     Log.e(TAG, "Error storing locale for decryption UI", e);
                 }
                 break;
