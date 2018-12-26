@@ -2064,6 +2064,7 @@ public class ActivityManagerService extends IActivityManager.Stub
             } break;
             case SHOW_STRICT_MODE_VIOLATION_UI_MSG: {
                 HashMap<String, Object> data = (HashMap<String, Object>) msg.obj;
+                Dialog d = null;
                 synchronized (ActivityManagerService.this) {
                     ProcessRecord proc = (ProcessRecord) data.get("app");
                     if (proc == null) {
@@ -2076,15 +2077,17 @@ public class ActivityManagerService extends IActivityManager.Stub
                     }
                     AppErrorResult res = (AppErrorResult) data.get("result");
                     if (mShowDialogs && !mSleeping && !mShuttingDown) {
-                        Dialog d = new StrictModeViolationDialog(mUiContext,
+                        d = new StrictModeViolationDialog(mUiContext,
                                 ActivityManagerService.this, res, proc);
-                        d.show();
                         proc.crashDialog = d;
                     } else {
                         // The device is asleep, so just pretend that the user
                         // saw a crash dialog and hit "force quit".
                         res.set(0);
                     }
+                }
+                if (d != null) {
+                    d.show();
                 }
                 ensureBootCompleted();
             } break;
