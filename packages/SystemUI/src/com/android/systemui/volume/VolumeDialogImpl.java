@@ -154,12 +154,13 @@ public class VolumeDialogImpl implements VolumeDialog {
 
     private boolean mLeftVolumeRocker;
 
-    private boolean isMediaShowing = true;
+    private boolean isMediaShowing = false;
     private boolean isRingerShowing = false;
     private boolean isNotificationShowing = false;
     private boolean isAlarmShowing = false;
     private boolean isVoiceShowing = false;
     private boolean isBTSCOShowing = false;
+    private boolean isNotificationLinked = true;
 
     private class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
@@ -173,22 +174,24 @@ public class VolumeDialogImpl implements VolumeDialog {
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.AUDIO_PANEL_VIEW_ALARM), false, this, UserHandle.USER_ALL);
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.AUDIO_PANEL_VIEW_VOICE), false, this, UserHandle.USER_ALL);
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(Settings.System.AUDIO_PANEL_VIEW_BT_SCO), false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.Secure.getUriFor(Settings.Secure.VOLUME_LINK_NOTIFICATION), false, this, UserHandle.USER_ALL);
             update();
         }
 
         @Override
         public void onChange(boolean selfChange) {
             update();
+            updateRowsH(getActiveRow());
         }
 
         public void update() {
-            isMediaShowing = Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.AUDIO_PANEL_VIEW_MEDIA, 1, UserHandle.USER_CURRENT) == 1;
+            isMediaShowing = Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.AUDIO_PANEL_VIEW_MEDIA, 0, UserHandle.USER_CURRENT) == 1;
             isRingerShowing = Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.AUDIO_PANEL_VIEW_RINGER, 0, UserHandle.USER_CURRENT) == 1;
             isNotificationShowing = Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.AUDIO_PANEL_VIEW_NOTIFICATION, 0, UserHandle.USER_CURRENT) == 1;
             isAlarmShowing = Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.AUDIO_PANEL_VIEW_ALARM, 0, UserHandle.USER_CURRENT) == 1;
             isVoiceShowing = Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.AUDIO_PANEL_VIEW_VOICE, 0, UserHandle.USER_CURRENT) == 1;
             isBTSCOShowing = Settings.System.getIntForUser(mContext.getContentResolver(), Settings.System.AUDIO_PANEL_VIEW_BT_SCO, 0, UserHandle.USER_CURRENT) == 1;
-            updateRowsH(getActiveRow());
+            isNotificationLinked = Settings.Secure.getIntForUser(mContext.getContentResolver(), Settings.Secure.VOLUME_LINK_NOTIFICATION, 1, UserHandle.USER_CURRENT) == 1;
         }
     }
 
@@ -298,13 +301,10 @@ public class VolumeDialogImpl implements VolumeDialog {
             addRow(AudioManager.STREAM_MUSIC,
                     R.drawable.ic_volume_media, R.drawable.ic_volume_media_mute, true, true);
             if (!AudioSystem.isSingleVolume(mContext)) {
-                if (Util.isVoiceCapable(mContext)) {
-                    addRow(AudioManager.STREAM_RING, R.drawable.ic_volume_ringer,
-                            R.drawable.ic_volume_ringer_mute, true, false);
-                } else {
-                    addRow(AudioManager.STREAM_RING, R.drawable.ic_volume_notification,
-                            R.drawable.ic_volume_notification_mute, true, false);
-                }
+                addRow(AudioManager.STREAM_RING, R.drawable.ic_volume_ringer,
+                        R.drawable.ic_volume_ringer_mute, true, false);
+                addRow(AudioManager.STREAM_NOTIFICATION,
+                        R.drawable.ic_volume_notification, R.drawable.ic_volume_notification_mute, true, false);
                 addRow(STREAM_ALARM,
                         R.drawable.ic_volume_alarm, R.drawable.ic_volume_alarm_mute, true, false);
                 addRow(AudioManager.STREAM_VOICE_CALL,
@@ -318,12 +318,12 @@ public class VolumeDialogImpl implements VolumeDialog {
             addExistingRows();
         }
 
+        settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
+
         updateRowsH(getActiveRow());
         initRingerH();
         initSettingsH();
-
-        settingsObserver = new SettingsObserver(mHandler);
-        settingsObserver.observe();
     }
 
     protected ViewGroup getDialogView() {
@@ -663,8 +663,12 @@ public class VolumeDialogImpl implements VolumeDialog {
         if (row.stream == AudioManager.STREAM_RING && isRingerShowing) {
             return true;
         }
-        if (row.stream == AudioManager.STREAM_NOTIFICATION && isNotificationShowing) {
-            return true;
+        if (row.stream == AudioManager.STREAM_NOTIFICATION) {
+            if (isNotificationLinked)
+                return false;
+
+            if (isNotificationShowing)
+                return true;
         }
         if (row.stream == AudioManager.STREAM_ALARM && isAlarmShowing) {
             return true;
@@ -850,10 +854,6 @@ public class VolumeDialogImpl implements VolumeDialog {
             }
         }
 
-        if (Util.isVoiceCapable(mContext)) {
-            updateNotificationRowH();
-        }
-
         if (mActiveStream != state.activeStream) {
             mPrevActiveStream = mActiveStream;
             mActiveStream = state.activeStream;
@@ -870,16 +870,6 @@ public class VolumeDialogImpl implements VolumeDialog {
 
     CharSequence composeWindowTitle() {
         return mContext.getString(R.string.volume_dialog_title, getStreamLabelH(getActiveRow().ss));
-    }
-
-    private void updateNotificationRowH() {
-        VolumeRow notificationRow = findRow(AudioManager.STREAM_NOTIFICATION);
-        if (notificationRow != null && mState.linkedNotification) {
-            removeRow(notificationRow);
-        } else if (notificationRow == null && !mState.linkedNotification) {
-            addRow(AudioManager.STREAM_NOTIFICATION, R.drawable.ic_volume_notification,
-                    R.drawable.ic_volume_notification_mute, true, false);
-        }
     }
 
     private void updateVolumeRowH(VolumeRow row) {
