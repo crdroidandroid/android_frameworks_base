@@ -584,6 +584,9 @@ public class ActivityManagerService extends IActivityManager.Stub
     static final int CONTENT_PROVIDER_PUBLISH_TIMEOUT = 10*1000;
     // How long we wait for provider to be notify before we decide it may be hang.
     static final int CONTENT_PROVIDER_WAIT_TIMEOUT = 20*1000;
+    // How long we wait for a content provdier call into app process to return
+    // before we decide it must be hung.
+    static final int CONTENT_PROVIDER_CALL_TIMEOUT = 50*1000;
 
     // How long we wait for a launched process to attach to the activity manager
     // before we decide it's never going to come up for real, when the process was
@@ -13187,9 +13190,25 @@ public class ActivityManagerService extends IActivityManager.Stub
             ident = Binder.clearCallingIdentity();
         }
         ContentProviderHolder holder = null;
+        Runnable runnable = null;
         try {
             holder = getContentProviderExternalUnchecked(name, null, userId);
             if (holder != null) {
+                final ProcessRecord record;
+                final String reason = "query MIME type of " + holder.info.authority + " timeout";
+                synchronized (ActivityManagerService.this) {
+                    record = mProcessNames.get(holder.info.processName, userId);
+                }
+                if (record != null && record.pid != Process.myPid()) {
+                    runnable = () -> {
+                        synchronized (ActivityManagerService.this) {
+                            // kill the blocked process before system_server taken down
+                            // by watchdog because of none available binder threads
+                            record.kill(reason, true);
+                        }
+                    };
+                    mHandler.postDelayed(runnable, CONTENT_PROVIDER_CALL_TIMEOUT);
+                }
                 return holder.provider.getType(uri);
             }
         } catch (RemoteException e) {
@@ -13199,6 +13218,9 @@ public class ActivityManagerService extends IActivityManager.Stub
             Log.w(TAG, "Exception while determining type of " + uri, e);
             return null;
         } finally {
+            if (runnable != null) {
+                mHandler.removeCallbacks(runnable);
+            }
             // We need to clear the identity to call removeContentProviderExternalUnchecked
             if (!clearedIdentity) {
                 ident = Binder.clearCallingIdentity();
@@ -13413,6 +13435,7 @@ public class ActivityManagerService extends IActivityManager.Stub
         String name = uri.getAuthority();
         ContentProviderHolder cph = getContentProviderExternalUnchecked(name, null, userId);
         ParcelFileDescriptor pfd = null;
+        Runnable runnable = null;
         if (cph != null) {
             // We record the binder invoker's uid in thread-local storage before
             // going to the content provider to open the file.  Later, in the code
@@ -13424,11 +13447,30 @@ public class ActivityManagerService extends IActivityManager.Stub
             Binder token = new Binder();
             sCallerIdentity.set(new Identity(
                     token, Binder.getCallingPid(), Binder.getCallingUid()));
+
             try {
+                final ProcessRecord record;
+                final String reason = "open " + uriString + " timeout";
+                synchronized (ActivityManagerService.this) {
+                    record = mProcessNames.get(cph.info.processName, userId);
+                }
+                if (record != null && record.pid != Process.myPid()) {
+                    runnable = () -> {
+                        synchronized (ActivityManagerService.this) {
+                            // kill the blocked process before system_server taken down
+                            // by watchdog because of none available binder threads
+                            record.kill(reason, true);
+                        }
+                    };
+                    mHandler.postDelayed(runnable, CONTENT_PROVIDER_CALL_TIMEOUT);
+                }
                 pfd = cph.provider.openFile(null, uri, "r", null, token);
             } catch (FileNotFoundException e) {
                 // do nothing; pfd will be returned null
             } finally {
+                if (runnable != null) {
+                    mHandler.removeCallbacks(runnable);
+                }
                 // Ensure that whatever happens, we clean up the identity state
                 sCallerIdentity.remove();
                 // Ensure we're done with the provider.
