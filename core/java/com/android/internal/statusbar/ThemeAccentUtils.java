@@ -118,6 +118,13 @@ public class ThemeAccentUtils {
         "com.android.systemui.qsheader.transparent", // 4
     };
 
+    // Switch themes
+    private static final String[] SWITCH_STYLES = {
+        "com.android.system.switch.stock", // 0
+        "com.android.system.switch.md2", // 1
+        "com.android.system.switch.oneplus", // 2
+    };
+
     // Unloads the stock dark theme
     private static void unloadStockDarkTheme(IOverlayManager om, int userId) {
         OverlayInfo themeInfo = null;
@@ -182,6 +189,16 @@ public class ThemeAccentUtils {
     // Unloads the QS header styles
     private static void unloadQSHeaderStyle(IOverlayManager om, int userId) {
         for (String style : QS_HEADER_STYLES) {
+            try {
+                om.setEnabled(style, false, userId);
+            } catch (RemoteException e) {
+            }
+        }
+    }
+
+    // Unloads the switch styles
+    private static void unloadSwitchStyle(IOverlayManager om, int userId) {
+        for (String style : SWITCH_STYLES) {
             try {
                 om.setEnabled(style, false, userId);
             } catch (RemoteException e) {
@@ -398,4 +415,17 @@ public class ThemeAccentUtils {
         } catch (RemoteException e) {
         }
     }
-}
+
+    // Set switch style
+    public static void setSwitchStyle(IOverlayManager om, int userId, int switchStyle) {
+        // Always unload switch styles
+        unloadSwitchStyle(om, userId);
+
+        if (switchStyle == 0) return;
+
+        try {
+            om.setEnabled(SWITCH_STYLES[switchStyle], true, userId);
+            } catch (RemoteException e) {
+            }
+        }
+    }
