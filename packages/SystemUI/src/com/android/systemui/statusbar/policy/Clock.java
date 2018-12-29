@@ -92,6 +92,8 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     private SimpleDateFormat mClockFormat;
     private SimpleDateFormat mContentDescriptionFormat;
     private Locale mLocale;
+    private boolean mScreenOn = true;
+    private Handler autoHideHandler = new Handler();
 
     private static final int AM_PM_STYLE_NORMAL  = 0;
     private static final int AM_PM_STYLE_SMALL   = 1;
@@ -107,6 +109,8 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
 
     private static final int STYLE_DATE_LEFT = 0;
     private static final int STYLE_DATE_RIGHT = 1;
+    private static final int HIDE_DURATION = 60; // 1 minute
+    private static final int SHOW_DURATION = 5; // 5 seconds
 
     private int mAmPmStyle = AM_PM_STYLE_GONE;
     private final boolean mShowDark;
@@ -116,6 +120,8 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     private int mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
     private int mClockDatePosition;
     private String mClockDateFormat = null;
+    private boolean mClockAutoHide;
+    private int mHideDuration = HIDE_DURATION, mShowDuration = SHOW_DURATION;
 
     public static final String STATUS_BAR_CLOCK_SECONDS =
             "system:" + Settings.System.STATUS_BAR_CLOCK_SECONDS;
@@ -129,6 +135,12 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             "system:" + Settings.System.STATUS_BAR_CLOCK_DATE_POSITION;
     public static final String STATUS_BAR_CLOCK_DATE_FORMAT =
             "system:" + Settings.System.STATUS_BAR_CLOCK_DATE_FORMAT;
+    public static final String STATUS_BAR_CLOCK_AUTO_HIDE =
+            "system:" + Settings.System.STATUS_BAR_CLOCK_AUTO_HIDE;
+    public static final String STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION =
+            "system:" + Settings.System.STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION;
+    public static final String STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION =
+            "system:" + Settings.System.STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION;
 
     /**
      * Whether we should use colors that adapt based on wallpaper/the scrim behind quick settings
@@ -217,6 +229,8 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
             filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
             filter.addAction(Intent.ACTION_USER_SWITCHED);
+            filter.addAction(Intent.ACTION_SCREEN_ON);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
 
             // NOTE: This receiver could run before this method returns, as it's not dispatching
             // on the main thread and BroadcastDispatcher may not need to register with Context.
@@ -229,7 +243,10 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                     STATUS_BAR_CLOCK_DATE_DISPLAY,
                     STATUS_BAR_CLOCK_DATE_STYLE,
                     STATUS_BAR_CLOCK_DATE_POSITION,
-                    STATUS_BAR_CLOCK_DATE_FORMAT);
+                    STATUS_BAR_CLOCK_DATE_FORMAT,
+                    STATUS_BAR_CLOCK_AUTO_HIDE,
+                    STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION,
+                    STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION);
             mCommandQueue.addCallback(this);
             if (mShowDark) {
                 Dependency.get(DarkIconDispatcher.class).addDarkReceiver(this);
@@ -303,8 +320,15 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                     updateClock();
                     return;
                 });
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                mScreenOn = true;
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                mScreenOn = false;
             }
-            handler.post(() -> updateClock());
+            if (mScreenOn) {
+                handler.post(() -> updateClock());
+                if (mClockAutoHide) autoHideHandler.post(() -> updateClockVisibility());
+            }
         }
     };
 
@@ -332,9 +356,22 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     }
 
     private void updateClockVisibility() {
-        boolean visible = shouldBeVisible();
+        boolean visible = mClockVisibleByPolicy && mClockVisibleByUser;
         int visibility = visible ? View.VISIBLE : View.GONE;
-        super.setVisibility(visibility);
+        try {
+            autoHideHandler.removeCallbacksAndMessages(null);
+        } catch (NullPointerException e) {
+            // Do nothing
+        }
+        setVisibility(visibility);
+        if (mClockAutoHide && visible && mScreenOn) {
+            autoHideHandler.postDelayed(()->autoHideClock(), mShowDuration * 1000);
+        }
+    }
+
+    private void autoHideClock() {
+        setVisibility(View.GONE);
+        autoHideHandler.postDelayed(()->updateClockVisibility(), mHideDuration * 1000);
     }
 
     final void updateClock() {
@@ -370,6 +407,18 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                 break;
             case STATUS_BAR_CLOCK_DATE_FORMAT:
                 mClockDateFormat = newValue;
+                break;
+            case STATUS_BAR_CLOCK_AUTO_HIDE:
+                mClockAutoHide =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                break;
+            case STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION:
+                mHideDuration =
+                        TunerService.parseInteger(newValue, HIDE_DURATION);
+                break;
+            case STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION:
+                mShowDuration =
+                        TunerService.parseInteger(newValue, SHOW_DURATION);
                 break;
             default:
                 break;
