@@ -336,6 +336,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_BACKGROUND_BLUR;
     private static final String BERRY_DARK_STYLE =
             "system:" + Settings.System.BERRY_DARK_STYLE;
+    private static final String BERRY_SWITCH_STYLE =
+            "system:" + Settings.System.BERRY_SWITCH_STYLE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -668,6 +670,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private boolean mBouncerWasShowingWhenHidden;
 
     private int mDarkStyle;
+    private int mSwitchStyle;
     private boolean mPowerSave;
     private boolean mUseDarkTheme;
     private IOverlayManager mOverlayManager;
@@ -956,6 +959,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         tunerService.addTunable(this, SHOW_BACK_ARROW_GESTURE);
         tunerService.addTunable(this, QS_BACKGROUND_BLUR);
         tunerService.addTunable(this, BERRY_DARK_STYLE);
+        tunerService.addTunable(this, BERRY_SWITCH_STYLE);
     }
 
     // ================================================================================
@@ -3899,6 +3903,12 @@ public class StatusBar extends SystemUI implements DemoMode,
         updateCorners();
     }
 
+    private void updateSwitchStyle() {
+        mUiOffloadThread.submit(() -> {
+            ThemeAccentUtils.setSwitchStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), mSwitchStyle);
+        });
+    }
+
     private void updateCorners() {
         if (mSysuiRoundedFwvals && !isCurrentRoundedSameAsFw()) {
             float density = Resources.getSystem().getDisplayMetrics().density;
@@ -5374,6 +5384,14 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mDarkStyle != darkStyle) {
                     mDarkStyle = darkStyle;
                     updateTheme();
+                }
+                break;
+            case BERRY_SWITCH_STYLE:
+                int switchStyle =
+                        TunerService.parseInteger(newValue, 0);
+                if (mSwitchStyle != switchStyle) {
+                    mSwitchStyle = switchStyle;
+                    updateSwitchStyle();
                 }
                 break;
             default:

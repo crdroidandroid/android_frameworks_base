@@ -5298,6 +5298,12 @@ public final class Settings {
         public static final String VOLTE_VOWIFI_OVERRIDE = "volte_vowifi_override";
 
         /**
+         * Switch between different switch styles
+         * @hide
+         */
+        public static final String BERRY_SWITCH_STYLE = "berry_switch_style";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
