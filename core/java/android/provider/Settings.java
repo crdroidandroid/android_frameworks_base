@@ -4724,6 +4724,12 @@ public final class Settings {
          */
         public static final String BERRY_QS_HEADER_STYLE = "berry_qs_header_style";
 
+        /**
+         * Switch between different switch styles
+         * @hide
+         */
+        public static final String BERRY_SWITCH_STYLE = "berry_switch_style";
+
 	 /**
          * Hold current font name and name of the originating package Uses "|" as a delimiter
          * @hide
