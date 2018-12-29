@@ -328,6 +328,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             "system:" + Settings.System.BERRY_QS_TILE_STYLE;
     private static final String BERRY_QS_HEADER_STYLE =
             "system:" + Settings.System.BERRY_QS_HEADER_STYLE;
+    private static final String BERRY_SWITCH_STYLE =
+            "system:" + Settings.System.BERRY_SWITCH_STYLE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -514,6 +516,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private int mNotiStyle;
     private int mQSTileStyle;
     private int mQSHeaderStyle;
+    private int mSwitchStyle;
     private boolean mPowerSave;
 
     /**
@@ -788,6 +791,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, BERRY_NOTIFICATION_STYLE);
         tunerService.addTunable(this, BERRY_QS_TILE_STYLE);
         tunerService.addTunable(this, BERRY_QS_HEADER_STYLE);
+        tunerService.addTunable(this, BERRY_SWITCH_STYLE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -4419,6 +4423,12 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         });
     }
 
+    private void updateSwitchStyle() {
+        mUiOffloadThread.submit(() -> {
+            ThemeAccentUtils.setSwitchStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), mSwitchStyle);
+        });
+    }
+
     private void updateDozingState() {
         Trace.traceCounter(Trace.TRACE_TAG_APP, "dozing", mDozing ? 1 : 0);
         Trace.beginSection("StatusBar#updateDozingState");
@@ -6269,6 +6279,14 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 if (mQSHeaderStyle != qsHeaderStyle) {
                     mQSHeaderStyle = qsHeaderStyle;
                     updateQSHeaderStyle();
+                }
+                break;
+            case BERRY_SWITCH_STYLE:
+                int switchStyle =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                if (mSwitchStyle != switchStyle) {
+                    mSwitchStyle = switchStyle;
+                    updateSwitchStyle();
                 }
                 break;
             default:
