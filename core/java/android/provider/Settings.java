@@ -4834,6 +4834,16 @@ public final class Settings {
         public static final String SHOW_QS_CLOCK = "show_qs_clock";
 
         /**
+<<<<<<< HEAD
+=======
+         * Select which lockscreen clock style to display
+         * @hide
+         */
+        public static final String LOCKSCREEN_CLOCK_SELECTION = "lockscreen_clock_selection";
+
+        /**
+         * Whether to hide the items underneath the lockscreen clock
+>>>>>>> bdc6aa78898... Introduce lockscreen clock/date styles [1/2]
          * @hide
          */
         public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright (C) 2018 Havoc-OS
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<resources>
+ 
+  <!-- Power menu -->
+  <java-symbol type="array" name="config_custom_globalActionsList" />
+
+  <!-- Package Manager -->
+  <java-symbol type="array" name="config_disabledComponents" />
+
+  <!-- System update service -->
+  <java-symbol type="array" name="config_forceEnabledComponents" />
+
+  <java-symbol type="integer" name="config_buttonBrightnessSettingDefault" />
+  <java-symbol type="bool" name="config_deviceHasVariableButtonBrightness" />
+
+  <!-- Whether notify fingerprint client of successful cancelled authentication -->
+  <java-symbol type="bool" name="config_notifyClientOnFingerprintCancelSuccess" />
+
+  <java-symbol type="string" name="reboot_to_recovery_title" />
+  <java-symbol type="string" name="reboot_to_recovery_message" />
+  <java-symbol type="string" name="reboot_to_bootloader_title" />
+  <java-symbol type="string" name="reboot_to_bootloader_message" />
+  <java-symbol type="string" name="reboot_title" />
+  <java-symbol type="string" name="reboot_message" />
+
+  <!-- Emergency button in power menu -->
+  <java-symbol type="bool" name="config_showEmergencyButtonInPowerMenu" />
+
+  <java-symbol type="array" name="config_blockPackagesSensorDrain" /> 
+
+  <!-- Full screen aspect ratio -->
+  <java-symbol type="bool" name="config_haveHigherAspectRatioScreen" />
+  <java-symbol type="dimen" name="config_screenAspectRatio" />
+  
+  <!-- AOKP custom system animations -->
+  <java-symbol type="string" name="action_null"/>
+  <java-symbol type="string" name="animation_fade"/>
+  <java-symbol type="string" name="animation_slide_left"/>
+  <java-symbol type="string" name="animation_slide_right"/>
+  <java-symbol type="string" name="animation_slide_left_no_fade"/>
+  <java-symbol type="string" name="animation_slide_right_no_fade"/>
+  <java-symbol type="string" name="animation_slide_up"/>
+  <java-symbol type="string" name="animation_slide_down"/>
+  <java-symbol type="string" name="animation_default"/>
+  <java-symbol type="string" name="animation_translucent"/>
+  <java-symbol type="string" name="animation_grow_shrink"/>
+  <java-symbol type="string" name="animation_grow_shrink_center"/>
+  <java-symbol type="string" name="animation_grow_shrink_bottom"/>
+  <java-symbol type="string" name="animation_grow_shrink_left"/>
+  <java-symbol type="string" name="animation_grow_shrink_right"/>
+  <java-symbol type="string" name="animation_random"/>
+  <java-symbol type="anim" name="shrink_fade_out_ribbon" />
+  <java-symbol type="anim" name="shrink_fade_out_center_ribbon" />
+  <java-symbol type="anim" name="shrink_fade_out_right_ribbon" />
+  <java-symbol type="anim" name="shrink_fade_out_left_ribbon" />
+  <java-symbol type="anim" name="shrink_fade_out_from_bottom_ribbon" />
+  <java-symbol type="anim" name="grow_fade_in_ribbon" />
+  <java-symbol type="anim" name="grow_fade_in_center_ribbon" />
+  <java-symbol type="anim" name="grow_fade_in_left_ribbon" />
+  <java-symbol type="anim" name="grow_fade_in_right_ribbon" />
+  <java-symbol type="anim" name="grow_fade_in_from_bottom_ribbon" />
+  <java-symbol type="anim" name="translucent_enter_ribbon" />
+  <java-symbol type="anim" name="translucent_exit_ribbon" />
+  <java-symbol type="anim" name="slide_in_down" />
+  <java-symbol type="anim" name="slide_out_up" />
+  <java-symbol type="anim" name="slide_in_right_ribbon" />
+  <java-symbol type="anim" name="slide_out_right_ribbon" />
+  <java-symbol type="anim" name="slide_in_left_ribbon" />
+  <java-symbol type="anim" name="slide_out_left_ribbon" />
+  <java-symbol type="anim" name="slow_fade_in" />
+  <java-symbol type="anim" name="slow_fade_out" />
+  <java-symbol type="anim" name="slide_in_up_ribbon" />
+  <java-symbol type="anim" name="slide_out_down_ribbon" /> 
+  <java-symbol type="anim" name="slide_in_right_no_fade" />
+  <java-symbol type="anim" name="slide_out_left_no_fade" />
+  <java-symbol type="anim" name="slide_in_left_no_fade" />
+  <java-symbol type="anim" name="slide_out_right_no_fade" />
+
+  <!-- Toast Animation -->
+  <java-symbol type="style" name="Animation.Toast.Fade" />
+  <java-symbol type="style" name="Animation.Toast.SlideRight" />
+  <java-symbol type="style" name="Animation.Toast.SlideLeft" />
+  <java-symbol type="style" name="Animation.Toast.Xylon" />
+  <java-symbol type="style" name="Animation.Toast.Toko" />
+  <java-symbol type="style" name="Animation.Toast.Tn" />
+  <java-symbol type="style" name="Animation.Toast.Honami" />
+  <java-symbol type="style" name="Animation.Toast.FastFade" />
+  <java-symbol type="style" name="Animation.Toast.GrowFade" />
+  <java-symbol type="style" name="Animation.Toast.GrowFadeCenter" />
+  <java-symbol type="style" name="Animation.Toast.GrowFadeBottom" />
+  <java-symbol type="style" name="Animation.Toast.Translucent" />
+  <java-symbol type="style" name="Animation.Toast.SlideRightLeft" />
+  <java-symbol type="style" name="Animation.Toast.SlideLeftRight" />
+
+  <!-- Screenrecord -->
+  <java-symbol type="bool" name="config_enableScreenrecordChord" />
+
+  <!-- On-The-Go -->
+  <java-symbol type="drawable" name="ic_lock_onthego" />
+
+  <!-- IMESwitcher -->
+  <java-symbol type="bool" name="config_show_cmIMESwitcher"/>
+
+  <java-symbol type="bool" name="config_intrusiveBatteryLed" />
+  <java-symbol type="bool" name="config_multiColorBatteryLed" />
+  <java-symbol type="bool" name="config_ledCanPulse" />
+
+  <!-- Whether device has dash charging support -->
+  <java-symbol type="bool" name="config_hasDashCharger" />
+
+  <!-- Whether the device supports Smart Pixels -->
+  <java-symbol type="bool" name="config_enableSmartPixels" />
+
+  <!-- HW keys binding -->
+  <java-symbol type="anim" name="custom_app_in" />
+  <java-symbol type="anim" name="custom_app_out" />
+  <java-symbol type="integer" name="config_deviceHardwareKeys" />
+
+  <java-symbol type="bool" name="config_multiColorNotificationLed" />
+
+  <java-symbol type="array" name="config_vendorPlatformSignatures" />
+
+  <!-- Bottom gestures -->
+  <java-symbol type="integer" name="nav_gesture_swipe_min_length" />
+  <java-symbol type="integer" name="nav_gesture_swipe_timout" />
+  <java-symbol type="integer" name="nav_gesture_move_threshold" />
+
+  <!-- ADB notification -->
+  <java-symbol type="string" name="adb_net_active_notification_title" />
+  <java-symbol type="string" name="adb_both_active_notification_title" />
+  <java-symbol type="string" name="adb_active_generic_notification_message" />
+
+  <!-- In call notification vibration strength -->
+  <java-symbol type="integer" name="config_in_call_notification_vibration_strength" />
+
+  <!-- Notification info -->
+  <java-symbol type="color" name="notification_info_button_text" />
+
+  <!-- Toast text and bg colors -->
+  <java-symbol type="color" name="toast_bg_color" />
+  <java-symbol type="color" name="toast_text_color" />
+
+  <!-- Auto fill -->
+  <java-symbol type="color" name="autofill_save_title_color" />
+  <java-symbol type="color" name="autofill_autofill_save_custom_subtitle_color" />
+
+  <!-- Settings icon tint color -->
+  <java-symbol type="color" name="settings_icon_tint_color" />
+
+  <!-- Forcefully tint notification icon text -->
+  <java-symbol type="bool" name="config_useDarkBgNotificationIconTextTinting" />
+  <java-symbol type="bool" name="config_useDarkBgNotificationTinting_override" />
+  <java-symbol type="bool" name="config_notificationTinting_override" />
+
+  <!-- Fastscroller text color (Launcher3) -->
+  <java-symbol type="color" name="fastscroller_text_color" />
+
+  <!-- display for radio tech -->
+  <java-symbol type="bool" name="config_display_rat" />
+  <!-- config 2G/3G/4G RAT strings for carriers -->
+  <java-symbol type="string" name="config_rat_unknown" />
+  <java-symbol type="string" name="config_rat_2g" />
+  <java-symbol type="string" name="config_rat_3g" />
+  <java-symbol type="string" name="config_rat_4g" />
+
+  <!-- Doze mode -->
+  <java-symbol type="bool" name="config_doze_enabled_by_default" />
+
+  <!-- Oreo's recents component activity -->
+  <java-symbol type="string" name="config_recentsComponentNameOreo" />
+
+  <!-- SystemUI Restart -->
+  <java-symbol type="string" name="systemui_restart_title" />
+  <java-symbol type="string" name="systemui_restart_message" />
+
+  <!-- Proximity check on screen on -->
+  <java-symbol type="bool" name="config_proximityCheckOnWake" />
+
+  <!-- Proximity check timeout -->
+  <java-symbol type="integer" name="config_proximityCheckTimeout" />
+
+  <!-- Proximity check on screen on default -->
+  <java-symbol type="bool" name="config_proximityCheckOnWakeEnabledByDefault" />
+
+  <java-symbol type="string" name="config_comboNetworkLocationProvider" />
+
+  <!-- Weather icons -->
+  <java-symbol type="drawable" name="weather_clear_night" />
+  <java-symbol type="drawable" name="weather_cloudy" />
+  <java-symbol type="drawable" name="weather_foggy" />
+  <java-symbol type="drawable" name="weather_isolated_scattered_thunderstorms_night" />
+  <java-symbol type="drawable" name="weather_isolated_scattered_thunderstorms" />
+  <java-symbol type="drawable" name="weather_mostly_clear_night" />
+  <java-symbol type="drawable" name="weather_mostly_cloudy_night" />
+  <java-symbol type="drawable" name="weather_mostly_cloudy" />
+  <java-symbol type="drawable" name="weather_mostly_sunny" />
+  <java-symbol type="drawable" name="weather_partly_cloudy_night" />
+  <java-symbol type="drawable" name="weather_partly_cloudy" />
+  <java-symbol type="drawable" name="weather_rain" />
+  <java-symbol type="drawable" name="weather_scattered_showers_night" />
+  <java-symbol type="drawable" name="weather_scattered_showers" />
+  <java-symbol type="drawable" name="weather_snow" />
+  <java-symbol type="drawable" name="weather_sunny" />
+  <java-symbol type="drawable" name="weather_thunderstorms" />
+  <java-symbol type="drawable" name="weather_windy" />
+
+  <!-- Whether to cleanup fingerprints upon connection to the daemon and when user switches -->
+  <java-symbol type="bool" name="config_cleanupUnusedFingerprints" />
+
+  <!-- Privacy Guard -->
+  <java-symbol type="drawable" name="stat_notify_privacy_guard" />
+  <java-symbol type="string" name="privacy_guard_notification" />
+  <java-symbol type="string" name="privacy_guard_notification_detail" />
+  <java-symbol type="string" name="privacy_guard_dialog_title" />
+  <java-symbol type="string" name="privacy_guard_dialog_summary" />
+  <java-symbol type="id" name="permission_text" />
+  <java-symbol type="id" name="permission_remember_layout" />
+  <java-symbol type="id" name="permission_remember_choice_checkbox" />
+  <java-symbol type="id" name="permission_remember_choice_text" />
+  <java-symbol type="string" name="allow" />
+  <java-symbol type="string" name="deny" />
+  <java-symbol type="layout" name="permission_confirmation_dialog" />
+  <java-symbol type="array" name="app_ops_labels" />
+
+  <!-- Powermenu animations -->
+  <java-symbol type="style" name="GlobalActionsAnimation" />
+  <java-symbol type="style" name="GlobalActionsAnimationTop" />
+  <java-symbol type="style" name="GlobalActionsAnimationEnter" />
+  <java-symbol type="style" name="GlobalActionsAnimationFly" />
+  <java-symbol type="style" name="GlobalActionsAnimationTn" />
+  <java-symbol type="style" name="GlobalActionsAnimationTranslucent" />
+  <java-symbol type="style" name="GlobalActionsAnimationXylon" />
+  <java-symbol type="style" name="GlobalActionsAnimationCard" />
+  <java-symbol type="style" name="GlobalActionsAnimationRotate" />
+
+  <!-- System fonts -->
+  <java-symbol type="array" name="config_fontPackages" />
+  <java-symbol type="string" name="fontservice_incompatible_font" />
+
+  <!-- Power menu -->
+  <java-symbol type="drawable" name="ic_lock_screenrecord" />
+
+  <!-- Old QTI Blobs -->
+  <java-symbol type="bool" name="config_oldQtiTelephony" />
+
+  <!-- Whether device ignores the RSSNR signal implementation -->
+  <java-symbol type="bool" name="config_ignoreRssnrSignalLevel" />
+
+  <java-symbol type="bool" name="config_FastChargingLedSupported" />
+  <java-symbol type="integer" name="config_notificationsFastBatteryARGB" />
+
+  <java-symbol type="bool" name="config_canForceDozeNotifications" />
+
+  <!-- App error dialog -->
+  <java-symbol type="id" name="aerr_copy" />
+  <java-symbol type="string" name="url_copy_success" />
+  <java-symbol type="string" name="url_copy_failed" />
+
+  <!-- Shortcut actions -->
+  <java-symbol type="drawable" name="ic_shortcut_action_silent" />
+  <java-symbol type="drawable" name="ic_shortcut_action_theme_switch" />
+  <java-symbol type="drawable" name="ic_shortcut_action_torch" />
+  <java-symbol type="drawable" name="ic_shortcut_action_vib" />
+  <java-symbol type="drawable" name="ic_shortcut_action_back" />
+  <java-symbol type="drawable" name="ic_shortcut_action_back_ime" />
+  <java-symbol type="drawable" name="ic_shortcut_action_camera" />
+  <java-symbol type="drawable" name="ic_shortcut_action_expanded_desktop" />
+  <java-symbol type="drawable" name="ic_shortcut_action_home" />
+  <java-symbol type="drawable" name="ic_shortcut_action_ime_switcher" />
+  <java-symbol type="drawable" name="ic_shortcut_action_killtask" />
+  <java-symbol type="drawable" name="ic_shortcut_action_lastapp" />
+  <java-symbol type="drawable" name="ic_shortcut_action_menu_big" />
+  <java-symbol type="drawable" name="ic_shortcut_action_navbar" />
+  <java-symbol type="drawable" name="ic_shortcut_action_notifications" />
+  <java-symbol type="drawable" name="ic_shortcut_action_null" />
+  <java-symbol type="drawable" name="ic_shortcut_action_pie" />
+  <java-symbol type="drawable" name="ic_shortcut_action_power" />
+  <java-symbol type="drawable" name="ic_shortcut_action_power_menu" />
+  <java-symbol type="drawable" name="ic_shortcut_action_quicksettings" />
+  <java-symbol type="drawable" name="ic_shortcut_action_recent" />
+  <java-symbol type="drawable" name="ic_shortcut_action_ring_vib_silent" />
+  <java-symbol type="drawable" name="ic_shortcut_action_screenshot" />
+  <java-symbol type="drawable" name="ic_shortcut_action_search" />
+
+  <java-symbol type="integer" name="config_flashlightProximityTimeout" />
+
+  <!-- Device keyhandlers -->
+  <java-symbol type="array" name="config_deviceKeyHandlerLibs" />
+  <java-symbol type="array" name="config_deviceKeyHandlerClasses" />
+
+  <!-- Alternative keyhandler -->
+  <java-symbol type="string" name="config_alternativeDeviceKeyHandlerLib" />
+  <java-symbol type="string" name="config_alternativeDeviceKeyHandlerClass" />
+
+  <!-- Gesture Sensor -->
+  <java-symbol type="bool" name="config_enableGestureService" />
+
+  <!-- Custom Analog clock -->
+  <java-symbol type="drawable" name="custom_clock_dial" />
+  <java-symbol type="drawable" name="custom_clock_dial_ambient" />
+  <java-symbol type="drawable" name="custom_clock_hand_hour" />
+  <java-symbol type="drawable" name="custom_clock_hand_minute" />
+  <java-symbol type="color" name="analog_clock_border_color" />
+  <java-symbol type="color" name="analog_clock_face_color" />
+  <java-symbol type="color" name="analog_clock_hand_hour_color" />
+  <java-symbol type="color" name="analog_clock_hand_minute_color" />
+
+</resources>
