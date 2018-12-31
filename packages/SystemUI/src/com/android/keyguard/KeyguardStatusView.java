@@ -31,6 +31,7 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.support.v4.graphics.ColorUtils;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.ArraySet;
@@ -38,6 +39,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.RelativeLayout;
@@ -123,6 +125,7 @@ public class KeyguardStatusView extends GridLayout implements
     private int mClockSelection = 1;
     private boolean mWasLatestViewSmall;
     private boolean mClockAvailable;
+    private boolean mDigitalClock;
 
     private static final String LOCK_CLOCK_FONT_STYLE =
             "system:" + Settings.System.LOCK_CLOCK_FONT_STYLE;
@@ -391,9 +394,50 @@ public class KeyguardStatusView extends GridLayout implements
         layoutOwnerInfo();
     }
 
+    private void isDigitalClock() {
+        if (!mClockAvailable) {
+            mDigitalClock = true;
+            return;
+        }
+        switch (mClockSelection) {
+            case 1:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+                mDigitalClock = true;
+                mCustomClockView.setVisibility(View.GONE);
+                mCustomDarkClockView.setVisibility(View.GONE);
+                mSpideyClockView.setVisibility(View.GONE);
+                mDotClockView.setVisibility(View.GONE);
+                mSpectrumClockView.setVisibility(View.GONE);
+                mSneekyClockView.setVisibility(View.GONE);
+                mClockView.setVisibility(View.VISIBLE);
+                break;
+            default:
+                mDigitalClock = false;
+                break;
+        }
+    }
+
+    private void setDigitalClock() {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.widget_big_font_size));
+        setFontStyle(mClockView, mLockClockFontStyle);
+        mClockView.getPaint().setStrokeWidth(
+                getResources().getDimensionPixelSize(R.dimen.widget_small_font_stroke));
+        mClockView.setGravity(Gravity.CENTER);
+        mClockView.setLineSpacing(0, 0.8f);
+    }
+
     @Override
     public void onDensityOrFontScaleChanged() {
         mWidgetPadding = getResources().getDimension(R.dimen.widget_vertical_padding);
+        isDigitalClock();
         if (mClockAvailable && mClockSelection == 0) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
@@ -402,22 +446,7 @@ public class KeyguardStatusView extends GridLayout implements
             mDotClockView.setVisibility(View.GONE);
             mSpectrumClockView.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.GONE);
-        }
-        if (mClockAvailable && mClockSelection == 1) {
-            mCustomClockView.setVisibility(View.GONE);
-            mCustomDarkClockView.setVisibility(View.GONE);
-            mSpideyClockView.setVisibility(View.GONE);
-            mDotClockView.setVisibility(View.GONE);
-            mSpectrumClockView.setVisibility(View.GONE);
-            mSneekyClockView.setVisibility(View.GONE);
-            mClockView.setVisibility(View.VISIBLE);
-            mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimensionPixelSize(R.dimen.widget_big_font_size));
-            setFontStyle(mClockView, mLockClockFontStyle);
-            mClockView.getPaint().setStrokeWidth(
-                    getResources().getDimensionPixelSize(R.dimen.widget_small_font_stroke));
-        }
-        if (mClockAvailable && mClockSelection == 2) {
+        } else if (mClockAvailable && mClockSelection == 2) {
             mClockView.setVisibility(View.GONE);
             mCustomDarkClockView.setVisibility(View.GONE);
             mSpideyClockView.setVisibility(View.GONE);
@@ -425,8 +454,7 @@ public class KeyguardStatusView extends GridLayout implements
             mSpectrumClockView.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.VISIBLE);
-        }
-        if (mClockAvailable && mClockSelection == 3) {
+        } else if (mClockAvailable && mClockSelection == 3) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
             mSpideyClockView.setVisibility(View.GONE);
@@ -434,8 +462,7 @@ public class KeyguardStatusView extends GridLayout implements
             mSpectrumClockView.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.GONE);
             mCustomDarkClockView.setVisibility(View.VISIBLE);
-        }
-        if (mClockAvailable && mClockSelection == 4) {
+        } else if (mClockAvailable && mClockSelection == 4) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
             mCustomDarkClockView.setVisibility(View.GONE);
@@ -443,8 +470,7 @@ public class KeyguardStatusView extends GridLayout implements
             mSpectrumClockView.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.GONE);
             mSpideyClockView.setVisibility(View.VISIBLE);
-        }
-        if (mClockAvailable && mClockSelection == 5) {
+        } else if (mClockAvailable && mClockSelection == 5) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
             mCustomDarkClockView.setVisibility(View.GONE);
@@ -452,8 +478,7 @@ public class KeyguardStatusView extends GridLayout implements
             mSpectrumClockView.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.GONE);
             mDotClockView.setVisibility(View.VISIBLE);
-        }
-        if (mClockAvailable && mClockSelection == 6) {
+        } else if (mClockAvailable && mClockSelection == 6) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
             mCustomDarkClockView.setVisibility(View.GONE);
@@ -461,8 +486,7 @@ public class KeyguardStatusView extends GridLayout implements
             mDotClockView.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.GONE);
             mSpectrumClockView.setVisibility(View.VISIBLE);
-        }
-        if (mClockAvailable && mClockSelection == 7) {
+        } else if (mClockAvailable && mClockSelection == 7) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
             mCustomDarkClockView.setVisibility(View.GONE);
@@ -470,6 +494,10 @@ public class KeyguardStatusView extends GridLayout implements
             mDotClockView.setVisibility(View.GONE);
             mSpectrumClockView.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.VISIBLE);
+        }
+        if (mClockAvailable && mDigitalClock) {
+            refreshFormat();
+            setDigitalClock();
         }
         if (mOwnerInfo != null) {
             mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
@@ -496,8 +524,57 @@ public class KeyguardStatusView extends GridLayout implements
 
     private void refreshFormat() {
         Patterns.update(mContext);
-        mClockView.setFormat12Hour(Patterns.clockView12);
-        mClockView.setFormat24Hour(Patterns.clockView24);
+        if (mClockAvailable && mClockSelection == 1) {
+            mClockView.setSingleLine(true);
+            mClockView.setFormat12Hour(Patterns.clockView12);
+            mClockView.setFormat24Hour(Patterns.clockView24);
+        } else if (mClockAvailable && mClockSelection == 8) {
+            mClockView.setSingleLine(true);
+            mClockView.setFormat12Hour(Html.fromHtml("<strong>h</strong>mm"));
+            mClockView.setFormat24Hour(Html.fromHtml("<strong>kk</strong>mm"));
+        } else if (mClockAvailable && mClockSelection == 9) {
+            mClockView.setSingleLine(true);
+            mClockView.setFormat12Hour(Html.fromHtml("<font color=" +
+                getResources().getColor(R.color.accent_device_default_light) +
+                "><strong>h</strong>mm</font>"));
+            mClockView.setFormat24Hour(Html.fromHtml("<font color=" +
+                getResources().getColor(R.color.accent_device_default_light) +
+                "><strong>kk</strong>mm</font>"));
+        } else if (mClockAvailable && mClockSelection == 10) {
+            mClockView.setSingleLine(true);
+            mClockView.setFormat12Hour(Html.fromHtml("<font color=" +
+                getResources().getColor(R.color.accent_device_default_light) +
+                "><strong>h</strong></font>mm"));
+            mClockView.setFormat24Hour(Html.fromHtml("<font color=" +
+                getResources().getColor(R.color.accent_device_default_light) +
+                "><strong>kk</strong></font>mm"));
+        } else if (mClockAvailable && mClockSelection == 11) {
+            mClockView.setSingleLine(true);
+            mClockView.setFormat12Hour(Html.fromHtml("<strong>h</strong><font color=" +
+                getResources().getColor(R.color.accent_device_default_light) + ">mm</font>"));
+            mClockView.setFormat24Hour(Html.fromHtml("<strong>kk</strong><font color=" +
+                getResources().getColor(R.color.accent_device_default_light) + ">mm</font>"));
+        } else if (mClockAvailable && mClockSelection == 12) {
+            mClockView.setSingleLine(false);
+            mClockView.setFormat12Hour("hh\nmm");
+            mClockView.setFormat24Hour("kk\nmm");
+        } else if (mClockAvailable && mClockSelection == 13) {
+            mClockView.setSingleLine(false);
+            mClockView.setFormat12Hour(Html.fromHtml("<strong>hh</strong><br>mm"));
+            mClockView.setFormat24Hour(Html.fromHtml("<strong>kk</strong><br>mm"));
+        } else if (mClockAvailable && mClockSelection == 14) {
+            mClockView.setSingleLine(false);
+            mClockView.setFormat12Hour(Html.fromHtml("hh<br><font color=" +
+                getResources().getColor(R.color.accent_device_default_light) + ">mm</font>"));
+            mClockView.setFormat24Hour(Html.fromHtml("kk<br><font color=" +
+                getResources().getColor(R.color.accent_device_default_light) + ">mm</font>"));
+        } else if (mClockAvailable && mClockSelection == 15) {
+            mClockView.setSingleLine(false);
+            mClockView.setFormat12Hour(Html.fromHtml("<font color='#454545'>hh</font><br><font color=" +
+                getResources().getColor(R.color.accent_device_default_light) + ">mm</font>"));
+            mClockView.setFormat24Hour(Html.fromHtml("<font color='#454545'>kk</font><br><font color=" +
+                getResources().getColor(R.color.accent_device_default_light) + ">mm</font>"));
+        }
     }
 
     public int getLogoutButtonHeight() {
@@ -578,6 +655,7 @@ public class KeyguardStatusView extends GridLayout implements
                     mClockSelection = Integer.valueOf(newValue);
                 } catch (NumberFormatException ex) {}
                 onDensityOrFontScaleChanged();
+                break;
             default:
                 break;
         }
@@ -666,7 +744,9 @@ public class KeyguardStatusView extends GridLayout implements
     }
 
     private void prepareSmallView(boolean small) {
-        if (mWasLatestViewSmall == small || !mClockAvailable) return;
+        if (mWasLatestViewSmall == small || !mClockAvailable ||
+                mClockSelection == 0)
+            return;
         mWasLatestViewSmall = small;
         if (small) {
             mCustomClockView.setVisibility(View.GONE);
@@ -675,6 +755,10 @@ public class KeyguardStatusView extends GridLayout implements
             mDotClockView.setVisibility(View.GONE);
             mSpectrumClockView.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.GONE);
+            mClockView.setSingleLine(true);
+            mClockView.setFormat12Hour(Patterns.clockView12);
+            mClockView.setFormat24Hour(Patterns.clockView24);
+            setDigitalClock();
         } else {
             onDensityOrFontScaleChanged();
         }
