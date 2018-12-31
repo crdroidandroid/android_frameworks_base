@@ -114,5 +114,5 @@ public interface NotificationPresenter extends NotificationData.Environment,
      */
     void onUpdateRowStates();
 
-    void setAmbientMusicInfo(MediaMetadata mediaMetadata, String notificationText);
+    void setAmbientMusicInfo(MediaMetadata mediaMetadata, String notificationText, boolean nowPlaying);
 }
