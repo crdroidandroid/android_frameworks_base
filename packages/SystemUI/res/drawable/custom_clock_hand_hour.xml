@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-     Copyright (C) 2016-2019 crDroid Android Project
+<!-- Copyright (C) 2018 The Dirty Unicorns Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,17 +13,14 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="150.000000dp"
+    android:height="150.000000dp"
+    android:viewportWidth="512.000000"
+    android:viewportHeight="512.000000">
 
-    <declare-styleable name="BatteryBarController">
-        <attr name="viewLocation" format="integer" />
-    </declare-styleable>
-
-    <!-- Lockscreen clock styles -->
-    <declare-styleable name="CustomAnalogClock">
-        <attr name="custom_dial" format="reference"/>
-        <attr name="custom_hand_hour" format="reference"/>
-        <attr name="custom_hand_minute" format="reference"/>
-        <attr name="custom_clock_dial_ambient" format="reference"/>
-    </declare-styleable>
-</resources>
+    <path
+        android:fillColor="#d3d3d3"
+        android:strokeWidth="1"
+        android:pathData="m 249.74023,106.32032 h 12.51954 v 149.67967 h -12.51954 z" />
+</vector>

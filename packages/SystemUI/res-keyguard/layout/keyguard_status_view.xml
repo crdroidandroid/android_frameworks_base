@@ -21,6 +21,7 @@
 <com.android.keyguard.KeyguardStatusView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:androidprv="http://schemas.android.com/apk/res-auto"
+    xmlns:analog="http://schemas.android.com/apk/res-auto"
     android:id="@+id/keyguard_status_view"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -67,11 +68,83 @@
                 style="@style/widget_big_thin"
                 android:format12Hour="@string/keyguard_widget_12_hours_format"
                 android:format24Hour="@string/keyguard_widget_24_hours_format" />
+            <com.android.keyguard.CustomAnalogClock
+                android:id="@+id/custom_clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_below="@id/clock_view"
+                analog:custom_dial="@drawable/custom_num_clock_dial"
+                analog:custom_hand_hour="@drawable/custom_num_clock_hand_hour"
+                analog:custom_hand_minute="@drawable/custom_num_clock_hand_minute"
+                analog:custom_clock_dial_ambient="@drawable/custom_num_clock_dial_ambient"/>
+            <com.android.keyguard.CustomAnalogClock
+                android:id="@+id/custom_dark_clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_below="@id/custom_clock_view"
+                analog:custom_dial="@drawable/custom_clock_dial"
+                analog:custom_hand_hour="@drawable/custom_clock_hand_hour"
+                analog:custom_hand_minute="@drawable/custom_clock_hand_minute"
+                analog:custom_clock_dial_ambient="@drawable/custom_clock_dial_ambient"/>
+            <com.android.keyguard.CustomAnalogClock
+                android:id="@+id/spidey_clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_below="@id/custom_dark_clock_view"
+                analog:custom_dial="@drawable/spidey_clock_dial"
+                analog:custom_hand_hour="@drawable/spidey_clock_hand_hour"
+                analog:custom_hand_minute="@drawable/spidey_clock_hand_minute"
+                analog:custom_clock_dial_ambient="@drawable/spidey_clock_dial_ambient"/>
+            <com.android.keyguard.CustomAnalogClock
+                android:id="@+id/dot_clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_below="@id/spidey_clock_view"
+                analog:custom_dial="@drawable/dot_clock_dial"
+                analog:custom_hand_hour="@drawable/dot_clock_hand_hour"
+                analog:custom_hand_minute="@drawable/dot_clock_hand_minute"
+                analog:custom_clock_dial_ambient="@drawable/dot_clock_dial_ambient"/>
+            <com.android.keyguard.CustomAnalogClock
+                android:id="@+id/spectrum_clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_below="@id/dot_clock_view"
+                analog:custom_dial="@drawable/spectrum_clock_dial"
+                analog:custom_hand_hour="@drawable/spectrum_clock_hand_hour"
+                analog:custom_hand_minute="@drawable/spectrum_clock_hand_minute"
+                analog:custom_clock_dial_ambient="@drawable/spectrum_clock_dial_ambient"/>
+            <com.android.keyguard.CustomAnalogClock
+                android:id="@+id/sneeky_clock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_below="@id/spectrum_clock_view"
+                analog:custom_dial="@drawable/sneeky_clock_dial"
+                analog:custom_hand_hour="@drawable/sneeky_clock_hand_hour"
+                analog:custom_hand_minute="@drawable/sneeky_clock_hand_minute"
+                analog:custom_clock_dial_ambient="@drawable/sneeky_clock_dial_ambient"/>
             <View
                 android:id="@+id/clock_separator"
                 android:layout_width="@dimen/widget_separator_width"
                 android:layout_height="@dimen/widget_separator_thickness"
-                android:layout_below="@id/clock_view"
+                android:layout_below="@id/sneeky_clock_view"
                 android:background="#f00"
                 android:layout_centerHorizontal="true" />
 
