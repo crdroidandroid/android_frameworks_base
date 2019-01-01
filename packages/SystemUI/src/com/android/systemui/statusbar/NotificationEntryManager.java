@@ -475,7 +475,7 @@ public class NotificationEntryManager implements Dumpable, NotificationInflater.
         }
         entry.row.setLowPriorityStateUpdated(false);
 
-        if (mEntryToRefresh == entry) {
+        if (mEntryToRefresh == entry && mMediaManager.isMediaNotification(entry)) {
             final Notification n = entry.notification.getNotification();
             String notificationText = null;
             final String title = n.extras.getString(Notification.EXTRA_TITLE);
