@@ -24,15 +24,12 @@ import com.android.systemui.statusbar.phone.StatusBar;
 
 import com.android.systemui.ambientmusic.AmbientIndicationInflateListener;
 
-import java.util.concurrent.TimeUnit;
-
 public class AmbientIndicationContainer extends AutoReinflateContainer {
     private View mAmbientIndication;
     private ImageView mIcon;
     private CharSequence mIndication;
     private StatusBar mStatusBar;
     private TextView mText;
-    private TextView mTrackLenght;
     private Context mContext;
     private MediaMetadata mMediaMetaData;
     private String mMediaText;
@@ -40,7 +37,6 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
     private Handler mHandler;
     private boolean mInfoAvailable;
     private String mInfoToSet;
-    private String mLengthInfo;
     private boolean mKeyguard;
     private String mLastInfo;
 
@@ -69,7 +65,6 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
     public void updateAmbientIndicationView(View view) {
         mAmbientIndication = findViewById(R.id.ambient_indication);
         mText = (TextView)findViewById(R.id.ambient_indication_text);
-        mTrackLenght = (TextView)findViewById(R.id.ambient_indication_track_lenght);
         mIcon = (ImageView)findViewById(R.id.ambient_indication_icon);
         setIndication(mMediaMetaData, mMediaText, false);
     }
@@ -80,14 +75,12 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
         if (keyguard && (mInfoAvailable || mNpInfoAvailable)) {
             mText.setText(mInfoToSet);
             mLastInfo = mInfoToSet;
-            mTrackLenght.setText(mLengthInfo);
             mAmbientIndication.setVisibility(View.VISIBLE);
             updatePosition();
         } else {
             setCleanLayout(-1);
             mAmbientIndication.setVisibility(View.INVISIBLE);
             mText.setText(null);
-            mTrackLenght.setText(null);
         }
     }
 
@@ -138,7 +131,6 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
         // never override local music ticker
         if (nowPlaying && mInfoAvailable) return;
         CharSequence charSequence = null;
-        mLengthInfo = null;
         mInfoToSet = null;
         Typeface tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
 
@@ -146,17 +138,10 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
             CharSequence artist = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ARTIST);
             CharSequence album = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ALBUM);
             CharSequence title = mediaMetaData.getText(MediaMetadata.METADATA_KEY_TITLE);
-            long duration = mediaMetaData.getLong(MediaMetadata.METADATA_KEY_DURATION);
             if (artist != null && album != null && title != null) {
                 /* considering we are in Ambient mode here, it's not worth it to show
                     too many infos, so let's skip album name to keep a smaller text */
                 charSequence = String.format(mTrackInfoSeparator, title.toString(), artist.toString());
-                if (duration != 0) {
-                    mLengthInfo = String.format("%02d:%02d",
-                            TimeUnit.MILLISECONDS.toMinutes(duration),
-                            TimeUnit.MILLISECONDS.toSeconds(duration) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration))).toString();
-                }
             }
         }
         if (mKeyguard) {
@@ -169,7 +154,6 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
             mInfoToSet = charSequence.toString();
         } else if (!TextUtils.isEmpty(notificationText)) {
             mInfoToSet = notificationText;
-            mLengthInfo = null;
         }
 
         if (nowPlaying) {
@@ -192,8 +176,6 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
         }
         mText.setText(mInfoToSet);
         mText.setTypeface(tf);
-        mTrackLenght.setText(mLengthInfo);
-        mTrackLenght.setTypeface(tf);
         mAmbientIndication.setVisibility(mKeyguard && (mInfoAvailable || mNpInfoAvailable) ? View.VISIBLE : View.INVISIBLE);
     }
 
