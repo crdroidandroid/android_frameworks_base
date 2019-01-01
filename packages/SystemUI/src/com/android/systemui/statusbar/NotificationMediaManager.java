@@ -293,7 +293,7 @@ public class NotificationMediaManager implements Dumpable {
         return PlaybackState.STATE_NONE;
     }
 
-    private boolean isMediaNotification(NotificationData.Entry entry) {
+    protected boolean isMediaNotification(NotificationData.Entry entry) {
         // TODO: confirm that there's a valid media key
         return entry.getExpandedContentView() != null &&
                 entry.getExpandedContentView()
@@ -332,7 +332,7 @@ public class NotificationMediaManager implements Dumpable {
             boolean mediaNotification= false;
             for (int i = 0; i < N; i++) {
                 final NotificationData.Entry entry = activeNotifications.get(i);
-                if (isMediaNotification(entry) && entry.notification.getPackageName().equals(pkg)) {
+                if (entry.notification.getPackageName().equals(pkg)) {
                     // NotificationEntryManager onAsyncInflationFinished will get called
                     // when colors and album are loaded for the notification, then we can send
                     // those info to Pulse
