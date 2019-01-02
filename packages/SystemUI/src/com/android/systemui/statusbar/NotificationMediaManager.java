@@ -59,6 +59,8 @@ public class NotificationMediaManager implements Dumpable {
     private MediaMetadata mMediaMetadata;
     private MediaUpdateListener mListener;
 
+    private String mNowPlayingNotificationKey;
+
     private Set<String> mBlacklist = new HashSet<String>();
 
     // callback into NavigationFragment for Pulse
@@ -120,6 +122,10 @@ public class NotificationMediaManager implements Dumpable {
             clearCurrentMediaNotification();
             mPresenter.updateMediaMetaData(true, true);
         }
+        if (key.equals(mNowPlayingNotificationKey)) {
+            mNowPlayingNotificationKey = null;
+            setMediaNotificationText(null, true);
+        }
     }
 
     public String getMediaNotificationKey() {
@@ -151,6 +157,7 @@ public class NotificationMediaManager implements Dumpable {
                 final NotificationData.Entry entry = activeNotifications.get(i);
                 if (entry.notification.getPackageName().toLowerCase().equals(NOWPLAYING_SERVICE)) {
                     isThereNowPlayingNotification = true;
+                    mNowPlayingNotificationKey = entry.notification.getKey();
                     final Notification n = entry.notification.getNotification();
                     String notificationText = null;
                     final String title = n.extras.getString(Notification.EXTRA_TITLE);
