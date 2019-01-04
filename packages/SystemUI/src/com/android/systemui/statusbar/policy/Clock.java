@@ -109,6 +109,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     private String mClockDateFormat = null;
     private boolean mClockAutoHide;
     private int mHideDuration = HIDE_DURATION, mShowDuration = SHOW_DURATION;
+    private Handler mHandler = new Handler();
 
     private static final String STATUS_BAR_CLOCK_SECONDS =
             "system:" + Settings.System.STATUS_BAR_CLOCK_SECONDS;
@@ -240,7 +241,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             String action = intent.getAction();
             if (action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
                 String tz = intent.getStringExtra("time-zone");
-                getHandler().post(() -> {
+                mHandler.post(() -> {
                     mCalendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
                     if (mClockFormat != null) {
                         mClockFormat.setTimeZone(mCalendar.getTimeZone());
@@ -248,7 +249,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                 });
             } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 final Locale newLocale = getResources().getConfiguration().locale;
-                getHandler().post(() -> {
+                mHandler.post(() -> {
                     if (!newLocale.equals(mLocale)) {
                         mLocale = newLocale;
                     }
@@ -260,11 +261,13 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                 });
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 mScreenOn = true;
-                if (mClockAutoHide) updateClockVisibility();
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
             }
-            getHandler().post(() -> updateClock());
+            if (mScreenOn) {
+                mHandler.post(() -> updateClock());
+                if (mClockAutoHide) autoHideHandler.post(() -> updateClockVisibility());
+            }
         }
     };
 
