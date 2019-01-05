@@ -73,7 +73,6 @@ public class TunerServiceImpl extends TunerService {
             NotificationPanelView.STATUS_BAR_QUICK_QS_PULLDOWN,
             QSTileHost.TILES_SETTING,
             Settings.Secure.DOZE_ALWAYS_ON,
-            StatusBar.BERRY_GLOBAL_STYLE,
             StatusBar.FORCE_SHOW_NAVBAR,
             StatusBar.SCREEN_BRIGHTNESS_MODE,
             StatusBar.STATUS_BAR_BRIGHTNESS_CONTROL,
