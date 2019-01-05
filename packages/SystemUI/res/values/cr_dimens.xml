@@ -36,4 +36,7 @@
 
     <!-- Screenrecord -->
     <dimen name="screenrecord_hint_size">48dp</dimen>
+
+    <!-- the padding on the start and the end of the statusbar -->
+    <dimen name="status_bar_extra_padding">0dp</dimen>
 </resources>
