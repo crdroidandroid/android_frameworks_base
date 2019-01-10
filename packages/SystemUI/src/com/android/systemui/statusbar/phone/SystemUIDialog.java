@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.UserHandle;
@@ -37,7 +38,6 @@ import com.android.systemui.statusbar.policy.KeyguardMonitor;
 public class SystemUIDialog extends AlertDialog {
 
     private final Context mContext;
-    private DismissReceiver mDismissReceiver;
 
     public SystemUIDialog(Context context) {
         this(context, R.style.Theme_SystemUI_Dialog);
@@ -101,21 +101,11 @@ public class SystemUIDialog extends AlertDialog {
     }
 
     public static void registerDismissListener(Dialog dialog) {
+        DismissReceiver dismissReceiver = new DismissReceiver(dialog);
+        dismissReceiver.register();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mDismissReceiver.register();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mDismissReceiver.unregister();
-    }
-
-    private static class DismissReceiver extends BroadcastReceiver {
+    private static class DismissReceiver extends BroadcastReceiver implements OnDismissListener {
         private static final IntentFilter INTENT_FILTER = new IntentFilter();
         static {
             INTENT_FILTER.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
@@ -130,9 +120,6 @@ public class SystemUIDialog extends AlertDialog {
         }
 
         void register() {
-            if (mRegistered) {
-                return;
-            }
             mDialog.getContext()
                     .registerReceiverAsUser(this, UserHandle.CURRENT, INTENT_FILTER, null, null);
             mRegistered = true;
@@ -143,11 +130,11 @@ public class SystemUIDialog extends AlertDialog {
             mDialog.dismiss();
         }
 
-        void unregister() {
+        @Override
+        public void onDismiss(DialogInterface dialog) {
             if (mRegistered) {
                 mDialog.getContext().unregisterReceiver(this);
                 mRegistered = false;
             }
         }
-    }
-}
+    }}
