@@ -19,9 +19,9 @@ PRODUCT_PACKAGES := \
     AndroidClock.ttf
 
 ifeq ($(EXCLUDE_SERIF_FONTS),true)
-PRODUCT_PACKAGES := \
+PRODUCT_PACKAGES += \
     exclude_serif/fonts.xml
 else
-PRODUCT_PACKAGES := \
+PRODUCT_PACKAGES += \
     fonts.xml
 endif
