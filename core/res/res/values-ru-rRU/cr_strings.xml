@@ -17,15 +17,15 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+    <string name="pocket_lock_message_long_press">Удерживайте кнопку питания для взаимодействия</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
+    <string name="animation_fade">Затухание</string>
+    <string name="animation_slide_right">Сдвиг вправо</string>
+    <string name="animation_slide_left">Сдвиг влево</string>
+    <string name="animation_slide_right_no_fade">Сдвиг вправо (без затухания)</string>
+    <string name="animation_slide_left_no_fade">Сдвиг влево (без затухания)</string>
+    <string name="animation_slide_up">Сдвиг вниз</string>
+    <string name="animation_slide_down">Сдвиг вверх</string>
     <string name="animation_default">Default</string>
     <string name="animation_translucent">Translucent</string>
     <string name="animation_grow_shrink">Grow in (Top)</string>
