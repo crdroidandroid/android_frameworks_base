@@ -42,37 +42,37 @@
     <string name="screenrecord_hide_hint">Tipp ausblenden</string>
     <string name="screenrecord_show_hint">Tipp anzeigen</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Screenshot</string>
-    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <string name="quick_settings_screenshot_label">Bildschirmfoto</string>
+    <string name="quick_settings_region_screenshot_label">Partieller Screenshot</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
-    <string name="accessibility_quick_settings_cpuinfo_off">CPU Info off</string>
-    <string name="accessibility_quick_settings_cpuinfo_on">CPU Info on</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_off">CPU Info turned off</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_on">CPU Info turned on</string>
+    <string name="quick_settings_cpuinfo_label">CPU-Info</string>
+    <string name="accessibility_quick_settings_cpuinfo_off">CPU-Info aus</string>
+    <string name="accessibility_quick_settings_cpuinfo_on">CPU-Info an</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_off">Prozessor-Info ausgeschaltet</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_on">Prozessor-Info angeschaltet</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">Hardwaretasten</string>
     <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_disabled">HW Keys disabled.</string>
+    <string name="accessibility_quick_settings_hw_keys_disabled">Hardwaretasten deaktiviert.</string>
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
+    <string name="accessibility_quick_settings_hw_keys_enabled">Hardwaretasten aktiviert.</string>
     <!-- Heads up snooze toast -->
-    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
-    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s </xliff:g> - Heads-Up Benachrichtigungen sind 1 Minute lang deaktiviert.</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Heads-Up Benachrichtigungen sind für <xliff:g id="number">%d </xliff:g> Minuten deaktiviert.</string>
     <!-- Expanded Desktop QS Tile -->
-    <string name="quick_settings_expanded_desktop_label">Expanded desktop</string>
-    <string name="quick_settings_expanded_desktop">Expanded</string>
+    <string name="quick_settings_expanded_desktop_label">Erweiterter Desktop</string>
+    <string name="quick_settings_expanded_desktop">Erweitert</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
-    <string name="quick_settings_expanded_navigation_off">Hide navbar</string>
-    <string name="quick_settings_expanded_statusbar_off">Hide statusbar</string>
+    <string name="quick_settings_expanded_navigation_off">Navigationsleiste ausblenden</string>
+    <string name="quick_settings_expanded_statusbar_off">Statusleiste ausblenden</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">Kompass</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="accessibility_quick_settings_compass_changed_off">Compass turned off.</string>
-    <string name="accessibility_quick_settings_compass_changed_on">Compass turned on.</string>
+    <string name="quick_settings_compass_init">Initialisiere\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Kompass aus.</string>
+    <string name="accessibility_quick_settings_compass_on">Kompass an.</string>
+    <string name="accessibility_quick_settings_compass_changed_off">Kompass ausgeschaltet.</string>
+    <string name="accessibility_quick_settings_compass_changed_on">Kompass eingeschaltet.</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">NE</string>
     <string name="quick_settings_compass_E">E</string>
@@ -82,36 +82,36 @@
     <string name="quick_settings_compass_W">W</string>
     <string name="quick_settings_compass_NW">NW</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">Smart Pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Automatisch eingeschaltete Smart-Pixels</string>
     <!-- Music tile -->
-    <string name="quick_settings_music_label">Music</string>
-    <string name="quick_settings_music_play">Play</string>
-    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_label">Musik</string>
+    <string name="quick_settings_music_play">Wiedergabe</string>
+    <string name="quick_settings_music_pause">Pausieren</string>
     <!-- Always on Display Tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">Always-on-Display</string>
     <!-- On The Go -->
-    <string name="global_action_onthego">On-The-Go Mode</string>
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
+    <string name="global_action_onthego">On-The-Go Modus</string>
+    <string name="onthego_notif_ticker">On-The-Go aktiviert</string>
+    <string name="onthego_notif_title">On-The-Go ist aktiv</string>
+    <string name="onthego_notif_stop">Stopp</string>
+    <string name="onthego_notif_options">Optionen</string>
+    <string name="onthego_notif_error">On-The-Go kann nicht gestartet werden</string>
+    <string name="onthego_notif_restart">On-The-Go neustarten</string>
+    <string name="onthego_notif_camera_changed">Kamera Modus geändert</string>
+    <string name="onthego_transparency">Transparenz</string>
+    <string name="onthego_front_camera">Frontkamera verwenden</string>
+    <string name="onthego_service_toggle">Dienst automatisch neu starten</string>
+    <string name="onthego_channel_name">Haupt</string>
     <string name="quick_settings_onthego_label">On-The-Go</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Sprachsuche</string>
     <!-- Advance location quick setting tile -->
     <string name="quick_settings_secondary_location_off"></string>
-    <string name="quick_settings_location_secondary_battery_saving">Battery Saving</string>
-    <string name="accessibility_quick_settings_location_battery_saving">Location reporting: battery saving mode.</string>
-    <string name="quick_settings_location_secondary_gps_only">Sensors Only</string>
-    <string name="accessibility_quick_settings_location_gps_only">Location reporting: sensors only mode.</string>
-    <string name="quick_settings_location_secondary_high_accuracy">High Accuracy</string>
-    <string name="accessibility_quick_settings_location_high_accuracy">Location reporting: high accuracy mode.</string>
+    <string name="quick_settings_location_secondary_battery_saving">Energie sparen</string>
+    <string name="accessibility_quick_settings_location_battery_saving">Standortdienste: Energiesparmodus.</string>
+    <string name="quick_settings_location_secondary_gps_only">Nur Gerat</string>
+    <string name="accessibility_quick_settings_location_gps_only">Standortdienste: Nur Gerät.</string>
+    <string name="quick_settings_location_secondary_high_accuracy">Hohe Genauigkeit</string>
+    <string name="accessibility_quick_settings_location_high_accuracy">Standortdienste: Hohe Genauigkeit</string>
 </resources>
