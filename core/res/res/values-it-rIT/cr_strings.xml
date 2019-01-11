@@ -17,33 +17,33 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+    <string name="pocket_lock_message_long_press">Tieni premuto il tasto d\'accensione per interagire</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_fade">Dissolvenza</string>
+    <string name="animation_slide_right">Scorri verso destra</string>
+    <string name="animation_slide_left">Scorri verso sinistra</string>
+    <string name="animation_slide_right_no_fade">Scorri verso destra (nessuna dissolvenza)</string>
+    <string name="animation_slide_left_no_fade">Scorri verso sinistra (senza dissolvenza)</string>
+    <string name="animation_slide_up">Scorri verso il basso</string>
+    <string name="animation_slide_down">Scorri verso l\'alto</string>
+    <string name="animation_default">Predefinito</string>
+    <string name="animation_translucent">Traslucido</string>
+    <string name="animation_grow_shrink">Espandi (verso l\'alto)</string>
+    <string name="animation_grow_shrink_center">Espandi (al Centro)</string>
+    <string name="animation_grow_shrink_bottom">Espandi (in basso)</string>
+    <string name="animation_grow_shrink_left">Espandi (a sinistra)</string>
+    <string name="animation_grow_shrink_right">Espandi (a destra)</string>
+    <string name="animation_random">Casuale</string>
+    <string name="action_null">Vuoto</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Simula firma del pacchetto</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">Consente all\'applicazione di fingere di essere un\'app diversa. Le applicazioni dannose potrebbero essere in grado di utilizzarlo per accedere ai dati delle applicazioni private. Gli usi legittimi includono un emulatore che finge di essere ciò che emula. Concedi questo permesso con molta cautela!</string>
     <!-- SystemUI Restart -->
-    <string name="systemui_restart_title">SystemUI restart required</string>
-    <string name="systemui_restart_message">For all changes to take effect, a SystemUI restart is required. Restart SystemUI now?</string>
+    <string name="systemui_restart_title">Riavvio dell\'interfaccia utente richiesto</string>
+    <string name="systemui_restart_message">Per rendere effettive tutte le modifiche, è necessario un riavvio dell\'Interfaccia Utente. Riavviare l\'Interfaccia Utente ora?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_toggleNavigationEditor">Control navigation editor</string>
+    <string name="permlab_toggleNavigationEditor">Controlla editor di navigazione</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
