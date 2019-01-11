@@ -19,7 +19,7 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Long press power button to interact</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
+    <string name="animation_fade">Pudar</string>
     <string name="animation_slide_right">Slide in right</string>
     <string name="animation_slide_left">Slide in left</string>
     <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
