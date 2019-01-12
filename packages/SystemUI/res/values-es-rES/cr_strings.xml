@@ -94,10 +94,10 @@
     <string name="global_action_onthego">Modo en marcha</string>
     <string name="onthego_notif_ticker">Modo en marcha activado</string>
     <string name="onthego_notif_title">Modo en marcha activo</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
+    <string name="onthego_notif_stop">Detener</string>
+    <string name="onthego_notif_options">Opciones</string>
+    <string name="onthego_notif_error">No ha sido posible iniciar On-The-Go</string>
+    <string name="onthego_notif_restart">Reiniciar On-The-Go</string>
     <string name="onthego_notif_camera_changed">Camera mode changed</string>
     <string name="onthego_transparency">Transparency</string>
     <string name="onthego_front_camera">Use front camera</string>
