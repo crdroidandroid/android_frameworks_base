@@ -73,14 +73,14 @@
     <string name="accessibility_quick_settings_compass_on">指南针开启</string>
     <string name="accessibility_quick_settings_compass_changed_off">指南针已关闭</string>
     <string name="accessibility_quick_settings_compass_changed_on">指南针已开启</string>
-    <string name="quick_settings_compass_N">N</string>
+    <string name="quick_settings_compass_N">北</string>
     <string name="quick_settings_compass_NE">东北</string>
     <string name="quick_settings_compass_E">东</string>
     <string name="quick_settings_compass_SE">东南</string>
     <string name="quick_settings_compass_S">南</string>
     <string name="quick_settings_compass_SW">西南</string>
-    <string name="quick_settings_compass_W">正西</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="quick_settings_compass_W">西</string>
+    <string name="quick_settings_compass_NW">西北</string>
     <!-- Smart pixels QS tile -->
     <string name="quick_settings_smart_pixels">智能像素</string>
     <string name="quick_settings_smart_pixels_on_power_save">自动启用智能像素</string>
@@ -109,7 +109,7 @@
     <!-- Advance location quick setting tile -->
     <string name="quick_settings_secondary_location_off"></string>
     <string name="quick_settings_location_secondary_battery_saving">节省电量</string>
-    <string name="accessibility_quick_settings_location_battery_saving">位置报告：省电模式。</string>
+    <string name="accessibility_quick_settings_location_battery_saving">位置报告：省电模式</string>
     <string name="quick_settings_location_secondary_gps_only">仅限设备</string>
     <string name="accessibility_quick_settings_location_gps_only">位置报告：仅限设备</string>
     <string name="quick_settings_location_secondary_high_accuracy">高精确度</string>
