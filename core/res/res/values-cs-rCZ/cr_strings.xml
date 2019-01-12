@@ -17,37 +17,37 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+    <string name="pocket_lock_message_long_press">Pro interakci stiskněte dlouze tlačítko napájení</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_fade">Slábnutí</string>
+    <string name="animation_slide_right">Přejetí vpravo</string>
+    <string name="animation_slide_left">Přejetí vlevo</string>
+    <string name="animation_slide_right_no_fade">Přejetí vpravo (bez slábnutí)</string>
+    <string name="animation_slide_left_no_fade">Přejetí vlevo (bez slábnutí)</string>
+    <string name="animation_slide_up">Přejetí dolů</string>
+    <string name="animation_slide_down">Přejetí nahoru</string>
+    <string name="animation_default">Výchozí</string>
+    <string name="animation_translucent">Průhlednost</string>
+    <string name="animation_grow_shrink">Růst (nahoře)</string>
+    <string name="animation_grow_shrink_center">Růst (uprostřed)</string>
+    <string name="animation_grow_shrink_bottom">Růst (dole)</string>
+    <string name="animation_grow_shrink_left">Růst (vlevo)</string>
+    <string name="animation_grow_shrink_right">Růst (vpravo)</string>
+    <string name="animation_random">Náhodně</string>
+    <string name="action_null">Prázdné</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Napodobit podpis balíčku</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">Umožňuje aplikaci předstírat, že je jinou aplikací. Škodlivé aplikace by mohly použít tuto možnost k přístupu k datům soukromých aplikací. Legitimně používá emulátor, který předstírá, že je to, co napodobuje. Udělujte toto oprávnění s opatrností!</string>
     <!-- SystemUI Restart -->
-    <string name="systemui_restart_title">SystemUI restart required</string>
-    <string name="systemui_restart_message">For all changes to take effect, a SystemUI restart is required. Restart SystemUI now?</string>
+    <string name="systemui_restart_title">Je vyžadován restart SystemUI</string>
+    <string name="systemui_restart_message">Aby se projevily všechny změny, je třeba restartovat SystemUI. Restartovat nyní?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_toggleNavigationEditor">Control navigation editor</string>
+    <string name="permlab_toggleNavigationEditor">Ovládání navigačního editoru</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+    <string name="permdesc_toggleNavigationEditor">Umožní aplikaci provádět změny v editoru navigačního panelu.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">access font manager</string>
+    <string name="permlab_accessFontManager">přístup ke správci písem</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+    <string name="permdesc_accessFontManager">Umožňuje aplikaci přístup ke správci písem.</string>
 </resources>
