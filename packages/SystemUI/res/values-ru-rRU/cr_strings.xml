@@ -72,7 +72,7 @@
     <string name="accessibility_quick_settings_compass_off">Выключить компас.</string>
     <string name="accessibility_quick_settings_compass_on">Включить компас.</string>
     <string name="accessibility_quick_settings_compass_changed_off">Компас выключен.</string>
-    <string name="accessibility_quick_settings_compass_changed_on">Compass turned on.</string>
+    <string name="accessibility_quick_settings_compass_changed_on">Компас включен.</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">NE</string>
     <string name="quick_settings_compass_E">E</string>
@@ -82,8 +82,8 @@
     <string name="quick_settings_compass_W">W</string>
     <string name="quick_settings_compass_NW">NW</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">Умные пиксели</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Автоматическое включение умных пикселей</string>
     <!-- Music tile -->
     <string name="quick_settings_music_label">Музыка</string>
     <string name="quick_settings_music_play">Воспроизвести</string>
@@ -94,23 +94,23 @@
     <string name="global_action_onthego">Режим «На ходу»</string>
     <string name="onthego_notif_ticker">Режим «На ходу» включен</string>
     <string name="onthego_notif_title">Режим «На ходу» активен</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
+    <string name="onthego_notif_stop">Остановить</string>
+    <string name="onthego_notif_options">Настройки</string>
+    <string name="onthego_notif_error">Не удается включить режим \"на ходу\"</string>
+    <string name="onthego_notif_restart">Перезапустить режим «На ходу»</string>
+    <string name="onthego_notif_camera_changed">Режим камеры изменен</string>
+    <string name="onthego_transparency">Прозрачность</string>
+    <string name="onthego_front_camera">Использовать фронтальную камеру</string>
     <string name="onthego_service_toggle">Автоматически перезапускать службу</string>
     <string name="onthego_channel_name">Основной</string>
     <string name="quick_settings_onthego_label">Режим \"На ходу\"</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Поиск музыки</string>
     <!-- Advance location quick setting tile -->
     <string name="quick_settings_secondary_location_off"></string>
     <string name="quick_settings_location_secondary_battery_saving">Экономия заряда батареи</string>
-    <string name="accessibility_quick_settings_location_battery_saving">Location reporting: battery saving mode.</string>
-    <string name="quick_settings_location_secondary_gps_only">Sensors Only</string>
+    <string name="accessibility_quick_settings_location_battery_saving">Определение местоположения: по координатам сети.</string>
+    <string name="quick_settings_location_secondary_gps_only">Только по спутникам Gps</string>
     <string name="accessibility_quick_settings_location_gps_only">Определение местоположения: только GPS.</string>
     <string name="quick_settings_location_secondary_high_accuracy">Высокая точность</string>
     <string name="accessibility_quick_settings_location_high_accuracy">Определение местоположения: режим высокой точности.</string>
