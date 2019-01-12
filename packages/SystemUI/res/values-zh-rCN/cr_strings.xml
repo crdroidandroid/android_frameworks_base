@@ -61,7 +61,7 @@
     <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - 浮动通知暂停<xliff:g id="number">%d</xliff:g>分钟。</string>
     <!-- Expanded Desktop QS Tile -->
     <string name="quick_settings_expanded_desktop_label">扩展桌面</string>
-    <string name="quick_settings_expanded_desktop">展开</string>
+    <string name="quick_settings_expanded_desktop">扩展</string>
     <string name="quick_settings_expanded_desktop_off">正常</string>
     <string name="quick_settings_expanded_navigation_off">隐藏导航栏</string>
     <string name="quick_settings_expanded_statusbar_off">隐藏状态栏</string>
@@ -109,7 +109,7 @@
     <!-- Advance location quick setting tile -->
     <string name="quick_settings_secondary_location_off"></string>
     <string name="quick_settings_location_secondary_battery_saving">节省电量</string>
-    <string name="accessibility_quick_settings_location_battery_saving">位置报告：省电模式</string>
+    <string name="accessibility_quick_settings_location_battery_saving">位置报告: 省电模式</string>
     <string name="quick_settings_location_secondary_gps_only">仅限设备</string>
     <string name="accessibility_quick_settings_location_gps_only">位置报告：仅限设备</string>
     <string name="quick_settings_location_secondary_high_accuracy">高精确度</string>
