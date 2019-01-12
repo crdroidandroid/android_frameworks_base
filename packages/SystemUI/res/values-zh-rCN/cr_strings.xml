@@ -23,7 +23,7 @@
     <string name="screenrecord_notif_ticker">正在录制屏幕</string>
     <string name="screenrecord_notif_final_ticker">屏幕录制完成</string>
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">录制屏幕</string>
+    <string name="screenrecord_notif_title">正在录制屏幕</string>
     <!-- Screenrecord notification action: Stop -->
     <string name="screenrecord_notif_stop">停止</string>
     <string name="screenrecord_notif_completed">屏幕录制成功</string>
@@ -93,7 +93,7 @@
     <!-- On The Go -->
     <string name="global_action_onthego">行走模式</string>
     <string name="onthego_notif_ticker">行走模式已启动</string>
-    <string name="onthego_notif_title">正在使用行走模式</string>
+    <string name="onthego_notif_title">行走模式已激活</string>
     <string name="onthego_notif_stop">停止</string>
     <string name="onthego_notif_options">选项</string>
     <string name="onthego_notif_error">无法启动行走模式</string>
@@ -111,7 +111,7 @@
     <string name="quick_settings_location_secondary_battery_saving">节省电量</string>
     <string name="accessibility_quick_settings_location_battery_saving">位置报告: 省电模式</string>
     <string name="quick_settings_location_secondary_gps_only">仅限设备</string>
-    <string name="accessibility_quick_settings_location_gps_only">位置报告：仅限设备</string>
+    <string name="accessibility_quick_settings_location_gps_only">位置报告: 仅限设备</string>
     <string name="quick_settings_location_secondary_high_accuracy">高精确度</string>
-    <string name="accessibility_quick_settings_location_high_accuracy">位置报告：高精准度</string>
+    <string name="accessibility_quick_settings_location_high_accuracy">位置报告: 高精准度</string>
 </resources>
