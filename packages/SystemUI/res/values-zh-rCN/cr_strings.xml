@@ -27,7 +27,7 @@
     <!-- Screenrecord notification action: Stop -->
     <string name="screenrecord_notif_stop">停止</string>
     <string name="screenrecord_notif_completed">屏幕录制成功</string>
-    <string name="screenrecord_notif_duration">总计：</string>
+    <string name="screenrecord_notif_duration">总计:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
     <string name="screenrecord_notif_pointer_on">显示触摸点</string>
     <string name="screenrecord_notif_pointer_off">隐藏触摸点</string>
