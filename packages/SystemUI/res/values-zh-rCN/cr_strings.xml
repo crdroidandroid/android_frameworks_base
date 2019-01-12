@@ -17,101 +17,101 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time">Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging">Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time">Dash 闪充 (还需 <xliff:g id="charging_time_left" example="4小时2分钟">%s</xliff:g> 充满)</string>
+    <string name="keyguard_plugged_in_dash_charging">Dash 闪充</string>
     <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Screen is being recorded</string>
-    <string name="screenrecord_notif_final_ticker">Screen recorded successfully</string>
+    <string name="screenrecord_notif_ticker">正在录制屏幕</string>
+    <string name="screenrecord_notif_final_ticker">屏幕录制完成</string>
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Recording screen</string>
+    <string name="screenrecord_notif_title">录制屏幕</string>
     <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Stop</string>
-    <string name="screenrecord_notif_completed">Screen recorded successfully</string>
-    <string name="screenrecord_notif_duration">Total:</string>
+    <string name="screenrecord_notif_stop">停止</string>
+    <string name="screenrecord_notif_completed">屏幕录制成功</string>
+    <string name="screenrecord_notif_duration">总计：</string>
     <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Show pointer</string>
-    <string name="screenrecord_notif_pointer_off">Hide pointer</string>
+    <string name="screenrecord_notif_pointer_on">显示触摸点</string>
+    <string name="screenrecord_notif_pointer_off">隐藏触摸点</string>
     <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Unable to record screen</string>
-    <string name="notification_channel_screenrecord">Screenrecords</string>
+    <string name="screenrecord_notif_error">无法录制屏幕</string>
+    <string name="notification_channel_screenrecord">屏幕录像</string>
     <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Screenrecord</string>
-    <string name="quick_settings_screenrecord_lq_label">Low Quality</string>
-    <string name="quick_settings_screenrecord_mq_label">Medium Quality</string>
-    <string name="quick_settings_screenrecord_hq_label">High Quality</string>
-    <string name="screenrecord_hide_hint">Hide hint</string>
-    <string name="screenrecord_show_hint">Show hint</string>
+    <string name="quick_settings_screenrecord_label">屏幕录像</string>
+    <string name="quick_settings_screenrecord_lq_label">低质量</string>
+    <string name="quick_settings_screenrecord_mq_label">中等质量</string>
+    <string name="quick_settings_screenrecord_hq_label">高质量</string>
+    <string name="screenrecord_hide_hint">隐藏提示</string>
+    <string name="screenrecord_show_hint">显示提示</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Screenshot</string>
-    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <string name="quick_settings_screenshot_label">屏幕截图</string>
+    <string name="quick_settings_region_screenshot_label">部分截图</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
-    <string name="accessibility_quick_settings_cpuinfo_off">CPU Info off</string>
-    <string name="accessibility_quick_settings_cpuinfo_on">CPU Info on</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_off">CPU Info turned off</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_on">CPU Info turned on</string>
+    <string name="quick_settings_cpuinfo_label">CPU 信息</string>
+    <string name="accessibility_quick_settings_cpuinfo_off">关闭 CPU 信息</string>
+    <string name="accessibility_quick_settings_cpuinfo_on">启用 CPU 信息</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_off">CPU 信息已关闭</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_on">CPU 信息已启用</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">实体按键</string>
     <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_disabled">HW Keys disabled.</string>
+    <string name="accessibility_quick_settings_hw_keys_disabled">实体按键已禁用</string>
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
+    <string name="accessibility_quick_settings_hw_keys_enabled">实体按键已启用</string>
     <!-- Heads up snooze toast -->
-    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
-    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - 浮动通知暂停 1 分钟</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - 浮动通知暂停<xliff:g id="number">%d</xliff:g>分钟。</string>
     <!-- Expanded Desktop QS Tile -->
-    <string name="quick_settings_expanded_desktop_label">Expanded desktop</string>
-    <string name="quick_settings_expanded_desktop">Expanded</string>
-    <string name="quick_settings_expanded_desktop_off">Normal</string>
-    <string name="quick_settings_expanded_navigation_off">Hide navbar</string>
-    <string name="quick_settings_expanded_statusbar_off">Hide statusbar</string>
+    <string name="quick_settings_expanded_desktop_label">扩展桌面</string>
+    <string name="quick_settings_expanded_desktop">展开</string>
+    <string name="quick_settings_expanded_desktop_off">正常</string>
+    <string name="quick_settings_expanded_navigation_off">隐藏导航栏</string>
+    <string name="quick_settings_expanded_statusbar_off">隐藏状态栏</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">指南针</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="accessibility_quick_settings_compass_changed_off">Compass turned off.</string>
-    <string name="accessibility_quick_settings_compass_changed_on">Compass turned on.</string>
+    <string name="quick_settings_compass_init">正在初始化\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">指南针关闭</string>
+    <string name="accessibility_quick_settings_compass_on">指南针开启</string>
+    <string name="accessibility_quick_settings_compass_changed_off">指南针已关闭</string>
+    <string name="accessibility_quick_settings_compass_changed_on">指南针已开启</string>
     <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
-    <string name="quick_settings_compass_SE">SE</string>
-    <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
+    <string name="quick_settings_compass_NE">东北</string>
+    <string name="quick_settings_compass_E">东</string>
+    <string name="quick_settings_compass_SE">东南</string>
+    <string name="quick_settings_compass_S">南</string>
+    <string name="quick_settings_compass_SW">西南</string>
+    <string name="quick_settings_compass_W">正西</string>
     <string name="quick_settings_compass_NW">NW</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">智能像素</string>
+    <string name="quick_settings_smart_pixels_on_power_save">自动启用智能像素</string>
     <!-- Music tile -->
-    <string name="quick_settings_music_label">Music</string>
-    <string name="quick_settings_music_play">Play</string>
-    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_label">音乐</string>
+    <string name="quick_settings_music_play">播放</string>
+    <string name="quick_settings_music_pause">暂停</string>
     <!-- Always on Display Tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">总是显示</string>
     <!-- On The Go -->
-    <string name="global_action_onthego">On-The-Go Mode</string>
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
-    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="global_action_onthego">行走模式</string>
+    <string name="onthego_notif_ticker">行走模式已启动</string>
+    <string name="onthego_notif_title">正在使用行走模式</string>
+    <string name="onthego_notif_stop">停止</string>
+    <string name="onthego_notif_options">选项</string>
+    <string name="onthego_notif_error">无法启动行走模式</string>
+    <string name="onthego_notif_restart">重新启动行走模式</string>
+    <string name="onthego_notif_camera_changed">相机模式已更改</string>
+    <string name="onthego_transparency">透明度</string>
+    <string name="onthego_front_camera">使用前置摄像头</string>
+    <string name="onthego_service_toggle">自动重启服务</string>
+    <string name="onthego_channel_name">主要</string>
+    <string name="quick_settings_onthego_label">行走模式</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">语音搜索</string>
     <!-- Advance location quick setting tile -->
     <string name="quick_settings_secondary_location_off"></string>
-    <string name="quick_settings_location_secondary_battery_saving">Battery Saving</string>
-    <string name="accessibility_quick_settings_location_battery_saving">Location reporting: battery saving mode.</string>
-    <string name="quick_settings_location_secondary_gps_only">Sensors Only</string>
-    <string name="accessibility_quick_settings_location_gps_only">Location reporting: sensors only mode.</string>
-    <string name="quick_settings_location_secondary_high_accuracy">High Accuracy</string>
-    <string name="accessibility_quick_settings_location_high_accuracy">Location reporting: high accuracy mode.</string>
+    <string name="quick_settings_location_secondary_battery_saving">节省电量</string>
+    <string name="accessibility_quick_settings_location_battery_saving">位置报告：省电模式。</string>
+    <string name="quick_settings_location_secondary_gps_only">仅限设备</string>
+    <string name="accessibility_quick_settings_location_gps_only">位置报告：仅限设备</string>
+    <string name="quick_settings_location_secondary_high_accuracy">高精确度</string>
+    <string name="accessibility_quick_settings_location_high_accuracy">位置报告：高精准度</string>
 </resources>
