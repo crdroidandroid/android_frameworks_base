@@ -60,9 +60,8 @@ public class WeatherClient {
             COLUMN_TEMPERATURE_IMPERIAL
     };
 
-    private boolean mBootAndUnlockDone;
-
     private static final int WEATHER_UPDATE_INTERVAL = 60 * 20 * 1000; // 20 minutes
+    private boolean mBootAndUnlockDone;
     private String updateIntentAction;
     private PendingIntent pendingWeatherUpdate;
     private WeatherInfo mWeatherInfo = new WeatherInfo();
@@ -89,7 +88,8 @@ public class WeatherClient {
                 updateWeatherAndNotify(false);
             } else if (updateIntentAction.equals(intent.getAction())) {
                 updateWeatherAndNotify(false);
-            } else if (Intent.ACTION_TIME_CHANGED.equals(intent.getAction()) || Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction())) {
+            } else if (Intent.ACTION_TIME_CHANGED.equals(intent.getAction())
+                    || Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction())) {
                 updateWeatherAndNotify(true);
             }
         }
@@ -97,7 +97,6 @@ public class WeatherClient {
 
     public WeatherClient(Context context) {
         mContext = context;
-        mContext.enforceCallingOrSelfPermission(SERVICE_PACKAGE_PERMISSION, "Missing or invalid weather permission: " + SERVICE_PACKAGE_PERMISSION);
         updateIntentAction = "updateIntentAction_" + Integer.toString(getRandomInt());
         pendingWeatherUpdate = PendingIntent.getBroadcast(mContext, getRandomInt(), new Intent(updateIntentAction), 0);
         mObserver = new ArrayList<>();
@@ -110,6 +109,18 @@ public class WeatherClient {
         filter.addAction(updateIntentAction);
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         mContext.registerReceiver(weatherReceiver, filter);
+    }
+
+    public static boolean isAvailable(Context context) {
+        final PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(SERVICE_PACKAGE, PackageManager.GET_ACTIVITIES);
+            int enabled = pm.getApplicationEnabledSetting(SERVICE_PACKAGE);
+            return enabled != PackageManager.COMPONENT_ENABLED_STATE_DISABLED &&
+                    enabled != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
     private int getRandomInt() {
