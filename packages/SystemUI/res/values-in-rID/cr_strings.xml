@@ -64,15 +64,15 @@
     <string name="quick_settings_expanded_desktop">Expanded</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
     <string name="quick_settings_expanded_navigation_off">Sembunyikan navbar</string>
-    <string name="quick_settings_expanded_statusbar_off">Hide statusbar</string>
+    <string name="quick_settings_expanded_statusbar_off">Sembunyikan statusbar</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">Kompas</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="accessibility_quick_settings_compass_changed_off">Compass turned off.</string>
-    <string name="accessibility_quick_settings_compass_changed_on">Compass turned on.</string>
+    <string name="quick_settings_compass_init">Menginisialisasi\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Kompas mati.</string>
+    <string name="accessibility_quick_settings_compass_on">Kompas hidup.</string>
+    <string name="accessibility_quick_settings_compass_changed_off">Kompas dimatikan.</string>
+    <string name="accessibility_quick_settings_compass_changed_on">Kompas dihidupkan.</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">NE</string>
     <string name="quick_settings_compass_E">E</string>
@@ -85,18 +85,18 @@
     <string name="quick_settings_smart_pixels">Smart pixels</string>
     <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
     <!-- Music tile -->
-    <string name="quick_settings_music_label">Music</string>
-    <string name="quick_settings_music_play">Play</string>
-    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_label">Musik</string>
+    <string name="quick_settings_music_play">Putar</string>
+    <string name="quick_settings_music_pause">Jeda</string>
     <!-- Always on Display Tile -->
     <string name="quick_settings_always_on_display_label">Always on display</string>
     <!-- On The Go -->
     <string name="global_action_onthego">Mode On-The-Go</string>
     <string name="onthego_notif_ticker">On-The-Go diaktifkan</string>
     <string name="onthego_notif_title">On-The-Go sudah aktif</string>
-    <string name="onthego_notif_stop">Stop</string>
+    <string name="onthego_notif_stop">Hentikan</string>
     <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
+    <string name="onthego_notif_error">Tidak dapat memulai On-The-Go</string>
     <string name="onthego_notif_restart">Mulai ulang On-The-Go</string>
     <string name="onthego_notif_camera_changed">Camera mode changed</string>
     <string name="onthego_transparency">Transparency</string>
