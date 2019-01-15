@@ -123,13 +123,17 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
     }
 
     public void setNowPlayingIndication(String trackInfo) {
-        // don't trigger this if we are already showing local/remote session track info
         setIndication(null, trackInfo, true);
     }
 
     public void setIndication(MediaMetadata mediaMetaData, String notificationText, boolean nowPlaying) {
-        // never override local music ticker
+        // never override local music ticker but be sure to delete Now Playing info when needed
+        if (nowPlaying && notificationText == null) {
+            mMediaText = null;
+            mNpInfoAvailable = false;
+        }
         if (nowPlaying && mInfoAvailable) return;
+
         CharSequence charSequence = null;
         mInfoToSet = null;
         Typeface tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
