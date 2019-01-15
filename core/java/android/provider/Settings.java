@@ -8972,6 +8972,16 @@ public final class Settings {
         public static final String SYSUI_ROUNDED_FWVALS = "sysui_rounded_fwvals";
 
         /**
+         * Setting for one handed mode UI
+         * @hide
+         */
+        public static final String ONE_HANDED_MODE_UI = "one_handed_mode_ui";
+        public static final String ONE_HANDED_MODE_UI_YADJ = "one_handed_mode_ui_yadj";
+        public static final String ONE_HANDED_MODE_UI_XADJ = "one_handed_mode_ui_xadj";
+        public static final String ONE_HANDED_MODE_UI_SCALE = "one_handed_mode_ui_scale";
+        public static final String ONE_HANDED_MODE_UI_GRAVITY = "one_handed_mode_ui_gravity";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
