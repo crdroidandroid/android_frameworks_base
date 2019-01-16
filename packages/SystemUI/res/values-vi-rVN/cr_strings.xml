@@ -20,50 +20,50 @@
     <string name="keyguard_indication_dash_charging_time">Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> until full)</string>
     <string name="keyguard_plugged_in_dash_charging">Dash Charging</string>
     <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Screen is being recorded</string>
-    <string name="screenrecord_notif_final_ticker">Screen recorded successfully</string>
+    <string name="screenrecord_notif_ticker">Màn hình được ghi lại</string>
+    <string name="screenrecord_notif_final_ticker">Quay màn hình thành công</string>
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Recording screen</string>
+    <string name="screenrecord_notif_title">Đang quay màn hình</string>
     <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Stop</string>
-    <string name="screenrecord_notif_completed">Screen recorded successfully</string>
-    <string name="screenrecord_notif_duration">Total:</string>
+    <string name="screenrecord_notif_stop">Dừng</string>
+    <string name="screenrecord_notif_completed">Quay màn hình thành công</string>
+    <string name="screenrecord_notif_duration">Tổng cộng:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Show pointer</string>
-    <string name="screenrecord_notif_pointer_off">Hide pointer</string>
+    <string name="screenrecord_notif_pointer_on">Hiển thị con trỏ</string>
+    <string name="screenrecord_notif_pointer_off">Ẩn con trỏ</string>
     <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Unable to record screen</string>
-    <string name="notification_channel_screenrecord">Screenrecords</string>
+    <string name="screenrecord_notif_error">Không thể quay màn hình</string>
+    <string name="notification_channel_screenrecord">Quay màn hình</string>
     <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Screenrecord</string>
-    <string name="quick_settings_screenrecord_lq_label">Low Quality</string>
-    <string name="quick_settings_screenrecord_mq_label">Medium Quality</string>
-    <string name="quick_settings_screenrecord_hq_label">High Quality</string>
-    <string name="screenrecord_hide_hint">Hide hint</string>
-    <string name="screenrecord_show_hint">Show hint</string>
+    <string name="quick_settings_screenrecord_label">Quay màn hình</string>
+    <string name="quick_settings_screenrecord_lq_label">Chất lượng thấp:</string>
+    <string name="quick_settings_screenrecord_mq_label">Chất lượng trung bình</string>
+    <string name="quick_settings_screenrecord_hq_label">Chất lượng cao</string>
+    <string name="screenrecord_hide_hint">Ẩn gợi ý</string>
+    <string name="screenrecord_show_hint">Hiển thị gợi ý</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Screenshot</string>
-    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <string name="quick_settings_screenshot_label">Chụp màn hình</string>
+    <string name="quick_settings_region_screenshot_label">Chụp một phần màn hình</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
-    <string name="accessibility_quick_settings_cpuinfo_off">CPU Info off</string>
-    <string name="accessibility_quick_settings_cpuinfo_on">CPU Info on</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_off">CPU Info turned off</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_on">CPU Info turned on</string>
+    <string name="quick_settings_cpuinfo_label">Thông tin CPU</string>
+    <string name="accessibility_quick_settings_cpuinfo_off">Tắt thông tin CPU</string>
+    <string name="accessibility_quick_settings_cpuinfo_on">Bật thông tin CPU</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_off">Tắt thông tin CPU</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_on">Bật thông tin CPU</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">Phím cứng</string>
     <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_disabled">HW Keys disabled.</string>
+    <string name="accessibility_quick_settings_hw_keys_disabled">Phím cứng đã bị tắt.</string>
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
+    <string name="accessibility_quick_settings_hw_keys_enabled">Phím cứng đã được bật.</string>
     <!-- Heads up snooze toast -->
-    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
-    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Thông báo nổi sẽ báo lại trong 1 phút.</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Thông báo nổi sẽ báo lại trong <xliff:g id="number">%d</xliff:g> phút.</string>
     <!-- Expanded Desktop QS Tile -->
-    <string name="quick_settings_expanded_desktop_label">Expanded desktop</string>
-    <string name="quick_settings_expanded_desktop">Expanded</string>
-    <string name="quick_settings_expanded_desktop_off">Normal</string>
-    <string name="quick_settings_expanded_navigation_off">Hide navbar</string>
+    <string name="quick_settings_expanded_desktop_label">Mở rộng màn hình</string>
+    <string name="quick_settings_expanded_desktop">Đã mở rộng</string>
+    <string name="quick_settings_expanded_desktop_off">Bình thường</string>
+    <string name="quick_settings_expanded_navigation_off">Ẩn thanh điều hướng</string>
     <string name="quick_settings_expanded_statusbar_off">Hide statusbar</string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Compass</string>
@@ -105,13 +105,13 @@
     <string name="onthego_channel_name">Main</string>
     <string name="quick_settings_onthego_label">On-The-Go</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Tìm kiếm âm thanh</string>
     <!-- Advance location quick setting tile -->
     <string name="quick_settings_secondary_location_off"></string>
-    <string name="quick_settings_location_secondary_battery_saving">Battery Saving</string>
-    <string name="accessibility_quick_settings_location_battery_saving">Location reporting: battery saving mode.</string>
-    <string name="quick_settings_location_secondary_gps_only">Sensors Only</string>
-    <string name="accessibility_quick_settings_location_gps_only">Location reporting: sensors only mode.</string>
-    <string name="quick_settings_location_secondary_high_accuracy">High Accuracy</string>
-    <string name="accessibility_quick_settings_location_high_accuracy">Location reporting: high accuracy mode.</string>
+    <string name="quick_settings_location_secondary_battery_saving">Tiết kiệm pin</string>
+    <string name="accessibility_quick_settings_location_battery_saving">Báo cáo vị trí: chế độ tiết kiệm pin.</string>
+    <string name="quick_settings_location_secondary_gps_only">Chỉ các cảm biến</string>
+    <string name="accessibility_quick_settings_location_gps_only">Báo cáo vị trí: chỉ các cảm biến.</string>
+    <string name="quick_settings_location_secondary_high_accuracy">Độ chính xác cao</string>
+    <string name="accessibility_quick_settings_location_high_accuracy">Báo cáo vị trí: chế độ chính xác cao.</string>
 </resources>
