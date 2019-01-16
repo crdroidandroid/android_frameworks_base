@@ -105,6 +105,15 @@ public class ThemeAccentUtils {
         "com.android.systemui.qstile.wavey", // 18
     };
 
+    // QS Header Styles
+    private static final String[] QS_HEADER_STYLES = {
+        "com.android.systemui.qsheader.black", // 0
+        "com.android.systemui.qsheader.grey", // 1
+        "com.android.systemui.qsheader.lightgrey", // 2
+        "com.android.systemui.qsheader.accent", // 3
+        "com.android.systemui.qsheader.transparent", // 4
+    };
+
     // Unloads the stock dark theme
     private static void unloadStockDarkTheme(IOverlayManager om, int userId) {
         OverlayInfo themeInfo = null;
@@ -159,6 +168,16 @@ public class ThemeAccentUtils {
     // Unloads the QS tile styles
     private static void unloadQSTileStyle(IOverlayManager om, int userId) {
         for (String style : QS_TILE_STYLES) {
+            try {
+                om.setEnabled(style, false, userId);
+            } catch (RemoteException e) {
+            }
+        }
+    }
+
+    // Unloads the QS header styles
+    private static void unloadQSHeaderStyle(IOverlayManager om, int userId) {
+        for (String style : QS_HEADER_STYLES) {
             try {
                 om.setEnabled(style, false, userId);
             } catch (RemoteException e) {
@@ -358,6 +377,20 @@ public class ThemeAccentUtils {
         // Ensure requested QS theme is enabled
         try {
             om.setEnabled(QS_TILE_STYLES[qsTileStyle], true, userId);
+        } catch (RemoteException e) {
+        }
+    }
+
+    // Set QS header style
+    public static void setQSHeaderStyle(IOverlayManager om, int userId, int qsHeaderStyle) {
+        // Always unload QS header styles
+        unloadQSHeaderStyle(om, userId);
+
+        if (qsHeaderStyle == 0) return;
+
+        // Ensure requested QS theme is enabled
+        try {
+            om.setEnabled(QS_HEADER_STYLES[qsHeaderStyle], true, userId);
         } catch (RemoteException e) {
         }
     }
