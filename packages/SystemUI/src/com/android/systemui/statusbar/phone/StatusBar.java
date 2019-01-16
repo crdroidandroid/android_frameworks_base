@@ -324,6 +324,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             "system:" + Settings.System.BERRY_DARK_STYLE;
     private static final String BERRY_NOTIFICATION_STYLE =
             "system:" + Settings.System.BERRY_NOTIFICATION_STYLE;
+    private static final String BERRY_QS_TILE_STYLE =
+            "system:" + Settings.System.BERRY_QS_TILE_STYLE;
     private static final String SYSUI_ROUNDED_FWVALS =
             Settings.Secure.SYSUI_ROUNDED_FWVALS;
 
@@ -510,6 +512,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private int mThemeOverride;
     private int mDarkStyle;
     private int mNotiStyle;
+    private int mQSTileStyle;
     private boolean mPowerSave;
 
     private boolean mSysuiRoundedFwvals;
@@ -784,6 +787,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, BERRY_THEME_OVERRIDE);
         tunerService.addTunable(this, BERRY_DARK_STYLE);
         tunerService.addTunable(this, BERRY_NOTIFICATION_STYLE);
+        tunerService.addTunable(this, BERRY_QS_TILE_STYLE);
         tunerService.addTunable(this, SYSUI_ROUNDED_FWVALS);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
@@ -4409,6 +4413,12 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         });
     }
 
+    private void updateQSTileStyle() {
+        mUiOffloadThread.submit(() -> {
+            ThemeAccentUtils.setQSTileStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), mQSTileStyle);
+        });
+    }
+
     private void updateDozingState() {
         Trace.traceCounter(Trace.TRACE_TAG_APP, "dozing", mDozing ? 1 : 0);
         Trace.beginSection("StatusBar#updateDozingState");
@@ -6239,6 +6249,14 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 if (mNotiStyle != notiStyle) {
                     mNotiStyle = notiStyle;
                     updateTheme();
+                }
+                break;
+            case BERRY_QS_TILE_STYLE:
+                int qsTileStyle =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                if (mQSTileStyle != qsTileStyle) {
+                    mQSTileStyle = qsTileStyle;
+                    updateQSTileStyle();
                 }
                 break;
             case SYSUI_ROUNDED_FWVALS:

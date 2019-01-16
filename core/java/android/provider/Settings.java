@@ -4712,6 +4712,12 @@ public final class Settings {
          */
         public static final String BERRY_NOTIFICATION_STYLE = "berry_notification_style";
 
+        /**
+         * Switch between different qs tile styles
+         * @hide
+         */
+        public static final String BERRY_QS_TILE_STYLE = "berry_qs_tile_style";
+
 	 /**
          * Hold current font name and name of the originating package Uses "|" as a delimiter
          * @hide
