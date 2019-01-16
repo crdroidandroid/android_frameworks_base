@@ -4718,6 +4718,12 @@ public final class Settings {
          */
         public static final String BERRY_QS_TILE_STYLE = "berry_qs_tile_style";
 
+        /**
+         * Switch between different qs header styles
+         * @hide
+         */
+        public static final String BERRY_QS_HEADER_STYLE = "berry_qs_header_style";
+
 	 /**
          * Hold current font name and name of the originating package Uses "|" as a delimiter
          * @hide
