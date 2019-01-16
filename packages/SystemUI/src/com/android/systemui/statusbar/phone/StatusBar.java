@@ -326,6 +326,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             "system:" + Settings.System.BERRY_NOTIFICATION_STYLE;
     private static final String BERRY_QS_TILE_STYLE =
             "system:" + Settings.System.BERRY_QS_TILE_STYLE;
+    private static final String BERRY_QS_HEADER_STYLE =
+            "system:" + Settings.System.BERRY_QS_HEADER_STYLE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -511,6 +513,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private int mDarkStyle;
     private int mNotiStyle;
     private int mQSTileStyle;
+    private int mQSHeaderStyle;
     private boolean mPowerSave;
 
     /**
@@ -784,6 +787,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, BERRY_DARK_STYLE);
         tunerService.addTunable(this, BERRY_NOTIFICATION_STYLE);
         tunerService.addTunable(this, BERRY_QS_TILE_STYLE);
+        tunerService.addTunable(this, BERRY_QS_HEADER_STYLE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -4409,6 +4413,12 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         });
     }
 
+    private void updateQSHeaderStyle() {
+        mUiOffloadThread.submit(() -> {
+            ThemeAccentUtils.setQSHeaderStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), mQSHeaderStyle);
+        });
+    }
+
     private void updateDozingState() {
         Trace.traceCounter(Trace.TRACE_TAG_APP, "dozing", mDozing ? 1 : 0);
         Trace.beginSection("StatusBar#updateDozingState");
@@ -6251,6 +6261,14 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 if (mQSTileStyle != qsTileStyle) {
                     mQSTileStyle = qsTileStyle;
                     updateQSTileStyle();
+                }
+                break;
+            case BERRY_QS_HEADER_STYLE:
+                int qsHeaderStyle =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                if (mQSHeaderStyle != qsHeaderStyle) {
+                    mQSHeaderStyle = qsHeaderStyle;
+                    updateQSHeaderStyle();
                 }
                 break;
             default:
