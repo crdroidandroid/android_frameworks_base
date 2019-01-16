@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2018-2019 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,6 +82,29 @@ public class ThemeAccentUtils {
         "com.accents.userseven", // 28
     };
 
+    // QS Tile Styles
+    private static final String[] QS_TILE_STYLES = {
+        "com.android.systemui.qstile.default", // 0
+        "com.android.systemui.qstile.circlegradient", // 1
+        "com.android.systemui.qstile.circletrim", // 2
+        "com.android.systemui.qstile.dottedcircle", // 3
+        "com.android.systemui.qstile.dualtonecircle", // 4
+        "com.android.systemui.qstile.dualtonecircletrim", // 5
+        "com.android.systemui.qstile.ink", // 6
+        "com.android.systemui.qstile.inkdrop", // 7
+        "com.android.systemui.qstile.mountain", // 8
+        "com.android.systemui.qstile.ninja", // 9
+        "com.android.systemui.qstile.oreo", // 10
+        "com.android.systemui.qstile.oreocircletrim", // 11
+        "com.android.systemui.qstile.oreosquircletrim", // 12
+        "com.android.systemui.qstile.pokesign", // 13
+        "com.android.systemui.qstile.squaremedo", // 14
+        "com.android.systemui.qstile.squircle", // 15
+        "com.android.systemui.qstile.squircletrim", // 16
+        "com.android.systemui.qstile.teardrop", // 17
+        "com.android.systemui.qstile.wavey", // 18
+    };
+
     // Unloads the stock dark theme
     private static void unloadStockDarkTheme(IOverlayManager om, int userId) {
         OverlayInfo themeInfo = null;
@@ -128,6 +151,16 @@ public class ThemeAccentUtils {
         for (String theme : BLACK_THEMES) {
             try {
                 om.setEnabled(theme, false, userId);
+            } catch (RemoteException e) {
+            }
+        }
+    }
+
+    // Unloads the QS tile styles
+    private static void unloadQSTileStyle(IOverlayManager om, int userId) {
+        for (String style : QS_TILE_STYLES) {
+            try {
+                om.setEnabled(style, false, userId);
             } catch (RemoteException e) {
             }
         }
@@ -312,6 +345,20 @@ public class ThemeAccentUtils {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    // Set QS tile style
+    public static void setQSTileStyle(IOverlayManager om, int userId, int qsTileStyle) {
+        // Always unload QS tile styles
+        unloadQSTileStyle(om, userId);
+
+        if (qsTileStyle == 0) return;
+
+        // Ensure requested QS theme is enabled
+        try {
+            om.setEnabled(QS_TILE_STYLES[qsTileStyle], true, userId);
+        } catch (RemoteException e) {
         }
     }
 }
