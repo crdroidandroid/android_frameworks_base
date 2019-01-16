@@ -17,37 +17,39 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+    <string name="pocket_lock_message_long_press">Nhấn giữ nút nguồn để tương tác</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_fade">Mờ dần</string>
+    <string name="animation_slide_right">Trượt sang phải</string>
+    <string name="animation_slide_left">Trượt sang trái</string>
+    <string name="animation_slide_right_no_fade">Trượt sang phải (Không mờ dần)</string>
+    <string name="animation_slide_left_no_fade">Trượt sang trái (Không mờ dần)</string>
+    <string name="animation_slide_up">Trượt xuống dưới</string>
+    <string name="animation_slide_down">Trượt lên trên</string>
+    <string name="animation_default">Mặc định</string>
+    <string name="animation_translucent">Làm mờ</string>
+    <string name="animation_grow_shrink">Lớn dần (Trên cùng)</string>
+    <string name="animation_grow_shrink_center">Lớn dần (Ở giữa)</string>
+    <string name="animation_grow_shrink_bottom">Lớn dần (Dưới cùng)</string>
+    <string name="animation_grow_shrink_left">Lớn dần (Bên trái)</string>
+    <string name="animation_grow_shrink_right">Lớn dần (Bên phải)</string>
+    <string name="animation_random">Ngẫu nhiên</string>
+    <string name="action_null">Trống</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Giả mạo chữ ký gói</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">Cho phép ứng dụng có thể giả mạo làm ứng dụng khác. Các ứng dụng độc hại có thể sử dụng quyền này để truy cập trái phép vào dữ liệu riêng tư của bạn. Hãy thận trọng khi cấp quyền này!</string>
     <!-- SystemUI Restart -->
-    <string name="systemui_restart_title">SystemUI restart required</string>
-    <string name="systemui_restart_message">For all changes to take effect, a SystemUI restart is required. Restart SystemUI now?</string>
+    <string name="systemui_restart_title">Phải khởi động lại giao diện hệ thống</string>
+    <string name="systemui_restart_message">Để mọi thay đổi được áp dụng, phải khởi động lại giao diện hệ thống. Khởi động lại bây giờ?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_toggleNavigationEditor">Control navigation editor</string>
+    <string name="permlab_toggleNavigationEditor">Trình tùy biến thanh điều hướng</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+    <string name="permdesc_toggleNavigationEditor">Cho phép ứng dụng kiểm soát chỉnh sửa thanh điều hướng.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">access font manager</string>
+    <string name="permlab_accessFontManager">Truy cập trình quản lý phông chữ</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+    <string name="permdesc_accessFontManager">Cho phép ứng dụng truy cập trình quản lý phông chữ.</string>
+    <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
+    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Bấm vào vùng trống để thoát khỏi chế độ một tay</string>
 </resources>

@@ -17,37 +17,39 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+    <string name="pocket_lock_message_long_press">A hatás eléréséhez nyomja hosszan a bekapcsoló gombot</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_fade">Áttűnés</string>
+    <string name="animation_slide_right">Beúszás jobbról</string>
+    <string name="animation_slide_left">Beúszás balról</string>
+    <string name="animation_slide_right_no_fade">Beúszás jobbról (nincs áttűnés)</string>
+    <string name="animation_slide_left_no_fade">Beúszás balról (nincs áttűnés)</string>
+    <string name="animation_slide_up">Beúszás alulról</string>
+    <string name="animation_slide_down">Beúszás felülről</string>
+    <string name="animation_default">Alapértelmezett</string>
+    <string name="animation_translucent">Áttetsző</string>
+    <string name="animation_grow_shrink">Növekvő (fent)</string>
+    <string name="animation_grow_shrink_center">Növekvő (középen)</string>
+    <string name="animation_grow_shrink_bottom">Növekvő (lent)</string>
+    <string name="animation_grow_shrink_left">Növekvő (balra)</string>
+    <string name="animation_grow_shrink_right">Növekvő (jobbra)</string>
+    <string name="animation_random">Véletlenszerű</string>
+    <string name="action_null">Üres</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Hamis csomagaláírás</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">Engedélyezi az alkalmazás számára, hogy más alkalmazásnak tettesse magát. A kártékony alkalmazások ezt személyes adatok elérésére használhatják. Jogos például, ha egy emulátor, amely úgy tesz, mintha az lenne, amit emulál. Kellő elővigyázatossággal adja meg ezt az engedélyt!</string>
     <!-- SystemUI Restart -->
-    <string name="systemui_restart_title">SystemUI restart required</string>
-    <string name="systemui_restart_message">For all changes to take effect, a SystemUI restart is required. Restart SystemUI now?</string>
+    <string name="systemui_restart_title">Rendszerfelület-újraindítás szükséges</string>
+    <string name="systemui_restart_message">Az összes módosítás érvénybe léptetéséhez a rendszerfelület újraindítása szükséges. Újraindítja most?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_toggleNavigationEditor">Control navigation editor</string>
+    <string name="permlab_toggleNavigationEditor">Navigációssáv-szerkesztő kezelése</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+    <string name="permdesc_toggleNavigationEditor">Lehetővé teszi egy alkalmazás számára, hogy kezelje a navigációssáv-szerkesztőt.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">access font manager</string>
+    <string name="permlab_accessFontManager">hozzáférés a betűtípus-kezelőhöz</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+    <string name="permdesc_accessFontManager">Lehetővé teszi egy alkalmazás számára, hogy hozzáférjen a betűtípus-kezelőhöz.</string>
+    <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
+    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Az Egykezes módból való kilépéshez érintsen meg egy üres területet</string>
 </resources>
