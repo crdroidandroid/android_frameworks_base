@@ -2510,7 +2510,7 @@ class ActivityStack<T extends StackWindowController> extends ConfigurationContai
                 // the resumed activity to be shown so we can decide if the
                 // previous should actually be hidden depending on whether the
                 // new one is found to be full-screen or not.
-                if (prev.finishing) {
+                if (prev.finishing && prev.app != null) {
                     prev.setVisibility(false);
                     if (DEBUG_SWITCH) Slog.v(TAG_SWITCH,
                             "Not waiting for visible to hide: " + prev + ", waitingVisible="
@@ -2542,7 +2542,7 @@ class ActivityStack<T extends StackWindowController> extends ConfigurationContai
         // to ignore it when computing the desired screen orientation.
         boolean anim = true;
         if (prev != null) {
-            if (prev.finishing) {
+            if (prev.finishing && prev.app != null) {
                 if (DEBUG_TRANSITION) Slog.v(TAG_TRANSITION,
                         "Prepare close transition: prev=" + prev);
                 if (mStackSupervisor.mNoAnimActivities.contains(prev)) {
