@@ -36,6 +36,7 @@ import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.ResultReceiver;
 import android.os.ServiceManager;
@@ -55,6 +56,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import com.android.internal.R;
 import com.android.internal.app.DisableCarModeActivity;
@@ -291,8 +293,34 @@ final class UiModeManagerService extends SystemService {
             }
         }
 
+        private int messagingAppNightModeState = -1;
         @Override
         public void setNightMode(int mode) {
+            try {
+                ActivityManager manager = (ActivityManager) getContext().getSystemService(
+                        Context.ACTIVITY_SERVICE);
+                List<ActivityManager.RunningTaskInfo> runningTasks = manager.getRunningTasks(1);
+                if (runningTasks != null && runningTasks.size() > 0){
+                    String packageName = runningTasks.get(0).topActivity.getPackageName();
+                    if (packageName.equals("com.google.android.apps.messaging")
+                            && messagingAppNightModeState != mode) {
+                        if (messagingAppNightModeState == -1){
+                            messagingAppNightModeState = mode;
+                            return;
+                        }
+                        messagingAppNightModeState = mode;
+                        Intent launchIntent = getContext().getPackageManager()
+                                .getLaunchIntentForPackage(packageName);
+                        launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        getContext().startActivity(launchIntent);
+                        return;
+                    }
+                }
+            } catch (Exception e) {
+                // Nothing to see
+            }
             if (isNightModeLocked() &&  (getContext().checkCallingOrSelfPermission(
                     android.Manifest.permission.MODIFY_DAY_NIGHT_MODE)
                     != PackageManager.PERMISSION_GRANTED)) {
