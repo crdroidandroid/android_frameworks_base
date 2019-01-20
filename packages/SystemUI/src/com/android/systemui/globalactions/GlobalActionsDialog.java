@@ -171,7 +171,7 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener,
      * @param context everything needs a context :(
      */
     public GlobalActionsDialog(Context context, GlobalActionsManager windowManagerFuncs) {
-        mContext = new ContextThemeWrapper(context, com.android.systemui.R.style.qs_theme);
+        mContext = new ContextThemeWrapper(context, com.android.systemui.R.style.global_actions_theme);
         mWindowManagerFuncs = windowManagerFuncs;
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         mDreamManager = IDreamManager.Stub.asInterface(

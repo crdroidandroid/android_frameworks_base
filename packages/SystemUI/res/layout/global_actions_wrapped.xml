@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/global_actions_top_padding"
     android:clipToPadding="false"
-    android:theme="@style/qs_theme"
+    android:theme="@style/global_actions_theme"
     android:clipChildren="false">
 
     <!-- Global actions is right-aligned to be physically near power button -->
