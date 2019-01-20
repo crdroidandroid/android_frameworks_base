@@ -17,39 +17,39 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+    <string name="pocket_lock_message_long_press">長按電源鍵進行交互</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_fade">淡入淡出</string>
+    <string name="animation_slide_right">右側滑動</string>
+    <string name="animation_slide_left">左側滑動</string>
+    <string name="animation_slide_right_no_fade">右側滑動 (無淡入淡出)</string>
+    <string name="animation_slide_left_no_fade">左側滑動 (無淡入淡出)</string>
+    <string name="animation_slide_up">底部滑動</string>
+    <string name="animation_slide_down">頂部滑動</string>
+    <string name="animation_default">預設</string>
+    <string name="animation_translucent">半透明</string>
+    <string name="animation_grow_shrink">縮放 (頂部)</string>
+    <string name="animation_grow_shrink_center">縮放 (中央)</string>
+    <string name="animation_grow_shrink_bottom">縮放(底部)</string>
+    <string name="animation_grow_shrink_left">縮放 (左測)</string>
+    <string name="animation_grow_shrink_right">縮放 (右側)</string>
+    <string name="animation_random">隨機</string>
+    <string name="action_null">空白</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">模仿應用程式簽名</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">允許應用程式偽裝成不同的應用程式。有害的應用程式可能可以使用這個功能來存取私人的應用程式資料。授予此權限時請小心！</string>
     <!-- SystemUI Restart -->
-    <string name="systemui_restart_title">SystemUI restart required</string>
-    <string name="systemui_restart_message">For all changes to take effect, a SystemUI restart is required. Restart SystemUI now?</string>
+    <string name="systemui_restart_title">需要重新啟動使用者介面</string>
+    <string name="systemui_restart_message">要使所有更改生效，需要重新啟動使用者介面。 現在重新啟動使用者介面？</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_toggleNavigationEditor">Control navigation editor</string>
+    <string name="permlab_toggleNavigationEditor">導覽列編輯器</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+    <string name="permdesc_toggleNavigationEditor">允許應用程式控制導覽列編輯器。</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">access font manager</string>
+    <string name="permlab_accessFontManager">訪問字型管理器</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+    <string name="permdesc_accessFontManager">允許應用程式訪問字型管理器。</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
-    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Tap blank area to exit One handed mode</string>
+    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">點擊空白區域退出單手模式</string>
 </resources>

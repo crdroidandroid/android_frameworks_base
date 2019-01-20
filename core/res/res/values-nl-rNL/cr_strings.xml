@@ -17,39 +17,39 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+    <string name="pocket_lock_message_long_press">Aan/uit-knop lang indrukken voor interactie</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_fade">Vervagen</string>
+    <string name="animation_slide_right">Rechts inschuiven</string>
+    <string name="animation_slide_left">Links inschuiven</string>
+    <string name="animation_slide_right_no_fade">Rechts inschuiven (Geen vervaging)</string>
+    <string name="animation_slide_left_no_fade">Links inschuiven (Geen vervaging)</string>
+    <string name="animation_slide_up">Van onder inschuiven</string>
+    <string name="animation_slide_down">Van boven inschuiven</string>
+    <string name="animation_default">Standaard</string>
+    <string name="animation_translucent">Transparant</string>
+    <string name="animation_grow_shrink">Verschijnen (Boven)</string>
+    <string name="animation_grow_shrink_center">Verschijnen (Midden)</string>
+    <string name="animation_grow_shrink_bottom">Verschijnen (Onder)</string>
+    <string name="animation_grow_shrink_left">Verschijnen (Links)</string>
+    <string name="animation_grow_shrink_right">Verschijnen (Rechts)</string>
+    <string name="animation_random">Willekeurig</string>
+    <string name="action_null">Leeg</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Handtekeningen nabootsen</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">De app toestaan zich voor te doen als een andere app. Schadelijke apps kunnen dit mogelijk gebruiken om toegang te krijgen tot persoonlijke toepassingsgegevens. Legitieme toepassingen bevatten een emulator die pretendeert te zijn wat het emuleert. Verleen deze toestemming met de nodige voorzichtigheid!</string>
     <!-- SystemUI Restart -->
-    <string name="systemui_restart_title">SystemUI restart required</string>
-    <string name="systemui_restart_message">For all changes to take effect, a SystemUI restart is required. Restart SystemUI now?</string>
+    <string name="systemui_restart_title">SysteemUI herstart vereist</string>
+    <string name="systemui_restart_message">Een herstart van de Ui is nodig om alle wijzigingen door te voeren. Ui nu herstarten?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_toggleNavigationEditor">Control navigation editor</string>
+    <string name="permlab_toggleNavigationEditor">Navigatiebalk-editor beheren</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+    <string name="permdesc_toggleNavigationEditor">Een app toestaan om de navigitiebalk-editor te beheren.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">access font manager</string>
+    <string name="permlab_accessFontManager">toegang tot lettertype beheerder</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+    <string name="permdesc_accessFontManager">Laat een applicatie toe aan de lettertype beheerder.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
-    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Tap blank area to exit One handed mode</string>
+    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Tik op leeg gebied om One Handed modus af te sluiten</string>
 </resources>
