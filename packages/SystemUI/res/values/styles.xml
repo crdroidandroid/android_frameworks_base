@@ -337,8 +337,14 @@
 
     <!-- Overlay manager may replace this theme -->
     <style name="qs_base" parent="@*android:style/Theme.DeviceDefault.QuickSettings" />
+    <style name="global_actions_base" parent="@*android:style/Theme.DeviceDefault.QuickSettings" />
 
     <style name="qs_theme" parent="qs_base">
+        <item name="lightIconTheme">@style/QSIconTheme</item>
+        <item name="darkIconTheme">@style/QSIconTheme</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+    <style name="global_actions_theme" parent="global_actions_base">
         <item name="lightIconTheme">@style/QSIconTheme</item>
         <item name="darkIconTheme">@style/QSIconTheme</item>
         <item name="android:windowIsFloating">true</item>
