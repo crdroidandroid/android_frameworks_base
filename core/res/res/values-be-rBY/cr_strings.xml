@@ -19,37 +19,37 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Націсніце і ўтрымлівайце кнопку сілкавання для ўзаемадзеяння</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_fade">Згасанне</string>
+    <string name="animation_slide_right">Зрух управа</string>
+    <string name="animation_slide_left">Зрух улева</string>
+    <string name="animation_slide_right_no_fade">Зрух управа (без згасання)</string>
+    <string name="animation_slide_left_no_fade">Зрух улева (без згасання)</string>
+    <string name="animation_slide_up">Зрух уніз</string>
+    <string name="animation_slide_down">Зрух уверх</string>
+    <string name="animation_default">Па змаўчанні</string>
+    <string name="animation_translucent">Напаўпразрысты</string>
+    <string name="animation_grow_shrink">Павелічэнне (уверх)</string>
+    <string name="animation_grow_shrink_center">Павелічэнне (па цэнтры)</string>
+    <string name="animation_grow_shrink_bottom">Павелічэнне (уніз)</string>
+    <string name="animation_grow_shrink_left">Павелічэнне (улева)</string>
+    <string name="animation_grow_shrink_right">Павелічэнне (управа)</string>
+    <string name="animation_random">Выпадковы</string>
+    <string name="action_null">Пуста</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Дазволіць падмену подпісу</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">Дазволіць праграмам выдаваць сябе за іншыя. Шкоднасная праграма можа атрымаць доступ да вашых дадзеных. Легітымнае выкарыстанне ўключае ў сябе эмулятар, той, хто прыкідваецца тым, што ён эмулюе. Выкарыстоўвайце толькі на свой страх і рызыка!</string>
     <!-- SystemUI Restart -->
-    <string name="systemui_restart_title">SystemUI restart required</string>
-    <string name="systemui_restart_message">For all changes to take effect, a SystemUI restart is required. Restart SystemUI now?</string>
+    <string name="systemui_restart_title">Неабходная перазагрузка карыстацкага інтэрфейсу</string>
+    <string name="systemui_restart_message">Каб усе змены набылі сілу, патрабуецца перазагрузка карыстацкага інтэрфейсу. Перазагрузіць інтэрфейс?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_toggleNavigationEditor">Control navigation editor</string>
+    <string name="permlab_toggleNavigationEditor">Кіраванне рэдактарам панэлі навігацыі</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+    <string name="permdesc_toggleNavigationEditor">Дазваляе праграме рэдагаваць панэль навігацыі.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">access font manager</string>
+    <string name="permlab_accessFontManager">доступ да мэнэджэра шрыфтоў</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+    <string name="permdesc_accessFontManager">Дазваляе праграме атрымаць доступ да мэнэджэра шрыфтоў.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Tap blank area to exit One handed mode</string>
 </resources>
