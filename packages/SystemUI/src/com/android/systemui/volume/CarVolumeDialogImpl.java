@@ -115,7 +115,7 @@ public class CarVolumeDialogImpl implements VolumeDialog {
   private boolean mExpanded;
 
   public CarVolumeDialogImpl(Context context) {
-    mContext = new ContextThemeWrapper(context, com.android.systemui.R.style.qs_theme);
+    mContext = new ContextThemeWrapper(context, com.android.systemui.R.style.global_actions_theme);
     mKeyguard = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
     mCar = Car.createCar(mContext, mServiceConnection);
   }
@@ -412,7 +412,7 @@ public class CarVolumeDialogImpl implements VolumeDialog {
 
   private final class CustomDialog extends Dialog implements DialogInterface {
     public CustomDialog(Context context) {
-      super(context, com.android.systemui.R.style.qs_theme);
+      super(context, com.android.systemui.R.style.global_actions_theme);
     }
 
     @Override
