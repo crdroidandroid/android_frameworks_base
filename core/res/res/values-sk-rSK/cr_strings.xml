@@ -28,11 +28,11 @@
     <string name="animation_slide_down">Potiahnutie hore</string>
     <string name="animation_default">Predvolené</string>
     <string name="animation_translucent">Priehľadnosť</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
+    <string name="animation_grow_shrink">Zväčšenie (Zvrchu)</string>
+    <string name="animation_grow_shrink_center">Zväčšenie (Zo stredu)</string>
+    <string name="animation_grow_shrink_bottom">Zväčšenie (Zospodu)</string>
+    <string name="animation_grow_shrink_left">Zväčšenie (Zľava)</string>
+    <string name="animation_grow_shrink_right">Zväčšenie (Sprava)</string>
     <string name="animation_random">Náhodné</string>
     <string name="action_null">Prázdne</string>
     <!-- MicroG -->
