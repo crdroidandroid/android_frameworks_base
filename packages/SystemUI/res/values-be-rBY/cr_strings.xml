@@ -17,26 +17,26 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time">Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging">Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time">Хуткая зарадка (засталося <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g>)</string>
+    <string name="keyguard_plugged_in_dash_charging">Хуткая зарадка</string>
     <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Screen is being recorded</string>
-    <string name="screenrecord_notif_final_ticker">Screen recorded successfully</string>
+    <string name="screenrecord_notif_ticker">Ідзе запіс экрана</string>
+    <string name="screenrecord_notif_final_ticker">Запіс экрана прайшоў паспяхова</string>
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Recording screen</string>
+    <string name="screenrecord_notif_title">Запіс экрана</string>
     <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Stop</string>
-    <string name="screenrecord_notif_completed">Screen recorded successfully</string>
-    <string name="screenrecord_notif_duration">Total:</string>
+    <string name="screenrecord_notif_stop">Спыніць</string>
+    <string name="screenrecord_notif_completed">Запіс экрана прайшоў паспяхова</string>
+    <string name="screenrecord_notif_duration">Усяго:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Show pointer</string>
-    <string name="screenrecord_notif_pointer_off">Hide pointer</string>
+    <string name="screenrecord_notif_pointer_on">Паказаць паказальнік</string>
+    <string name="screenrecord_notif_pointer_off">Схаваць паказальнік</string>
     <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Unable to record screen</string>
-    <string name="notification_channel_screenrecord">Screenrecords</string>
+    <string name="screenrecord_notif_error">Запіс экрана немагчымы</string>
+    <string name="notification_channel_screenrecord">Запіс экрана</string>
     <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Screenrecord</string>
-    <string name="quick_settings_screenrecord_lq_label">Low Quality</string>
+    <string name="quick_settings_screenrecord_label">Запіс экрана</string>
+    <string name="quick_settings_screenrecord_lq_label">Нізкая якасць</string>
     <string name="quick_settings_screenrecord_mq_label">Medium Quality</string>
     <string name="quick_settings_screenrecord_hq_label">High Quality</string>
     <string name="screenrecord_hide_hint">Hide hint</string>
