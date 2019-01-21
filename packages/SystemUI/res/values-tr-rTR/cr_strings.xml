@@ -110,8 +110,8 @@
     <string name="quick_settings_secondary_location_off"></string>
     <string name="quick_settings_location_secondary_battery_saving">Pil tasarrufu</string>
     <string name="accessibility_quick_settings_location_battery_saving">Konum bildirimi: pil tasarrufu modu.</string>
-    <string name="quick_settings_location_secondary_gps_only">Sadece sensörler</string>
-    <string name="accessibility_quick_settings_location_gps_only">Konum bildirimi: sadece sensörler modu.</string>
+    <string name="quick_settings_location_secondary_gps_only">Yalnızca sensörler</string>
+    <string name="accessibility_quick_settings_location_gps_only">Konum bildirimi: yalnızca sensörler modu.</string>
     <string name="quick_settings_location_secondary_high_accuracy">Yüksek doğruluk</string>
     <string name="accessibility_quick_settings_location_high_accuracy">Konum bildirimi: yüksek doğruluk modu.</string>
 </resources>
