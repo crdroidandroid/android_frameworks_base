@@ -30,12 +30,12 @@
     <string name="screenrecord_notif_duration">Total:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
     <string name="screenrecord_notif_pointer_on">Tampilkan penunjuk</string>
-    <string name="screenrecord_notif_pointer_off">Hide pointer</string>
+    <string name="screenrecord_notif_pointer_off">Sembunyikan penunjuk</string>
     <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Unable to record screen</string>
-    <string name="notification_channel_screenrecord">Screenrecords</string>
+    <string name="screenrecord_notif_error">Tidak dapat merekam layar</string>
+    <string name="notification_channel_screenrecord">Rekaman layar</string>
     <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Screenrecord</string>
+    <string name="quick_settings_screenrecord_label">Rekam layar</string>
     <string name="quick_settings_screenrecord_lq_label">Kualitas Rendah</string>
     <string name="quick_settings_screenrecord_mq_label">Kualitas Menengah</string>
     <string name="quick_settings_screenrecord_hq_label">Kualitas Tinggi</string>
@@ -57,11 +57,11 @@
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_hw_keys_enabled">Tombol Fisik dihidupkan.</string>
     <!-- Heads up snooze toast -->
-    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
-    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Mengintip pemberitahuan tertunda selama 1 menit.</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Mengintip pemberitahuan tertunda selama <xliff:g id="number">%d</xliff:g> menit.</string>
     <!-- Expanded Desktop QS Tile -->
     <string name="quick_settings_expanded_desktop_label">Desktop yang diperluas</string>
-    <string name="quick_settings_expanded_desktop">Expanded</string>
+    <string name="quick_settings_expanded_desktop">Diperluas</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
     <string name="quick_settings_expanded_navigation_off">Sembunyikan navbar</string>
     <string name="quick_settings_expanded_statusbar_off">Sembunyikan statusbar</string>
@@ -83,7 +83,7 @@
     <string name="quick_settings_compass_NW">NW</string>
     <!-- Smart pixels QS tile -->
     <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Hidupkan otomatis smart pixels</string>
     <!-- Music tile -->
     <string name="quick_settings_music_label">Musik</string>
     <string name="quick_settings_music_play">Putar</string>
