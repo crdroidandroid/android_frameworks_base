@@ -17,19 +17,19 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time">Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging">Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time">Pengisian Baterai (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> until full)</string>
+    <string name="keyguard_plugged_in_dash_charging">Pengisian Baterai</string>
     <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Screen is being recorded</string>
-    <string name="screenrecord_notif_final_ticker">Screen recorded successfully</string>
+    <string name="screenrecord_notif_ticker">Layar sedang di rekam</string>
+    <string name="screenrecord_notif_final_ticker">Berhasil merekam layar</string>
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Recording screen</string>
+    <string name="screenrecord_notif_title">Merekam layar</string>
     <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Stop</string>
-    <string name="screenrecord_notif_completed">Screen recorded successfully</string>
+    <string name="screenrecord_notif_stop">Berhenti</string>
+    <string name="screenrecord_notif_completed">Berhasil merekam layar</string>
     <string name="screenrecord_notif_duration">Total:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Show pointer</string>
+    <string name="screenrecord_notif_pointer_on">Tampilkan penunjuk</string>
     <string name="screenrecord_notif_pointer_off">Hide pointer</string>
     <!-- Screen record notification error title -->
     <string name="screenrecord_notif_error">Unable to record screen</string>
