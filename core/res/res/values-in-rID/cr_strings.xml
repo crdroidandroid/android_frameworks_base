@@ -21,14 +21,14 @@
     <!-- AOKP custom system animations -->
     <string name="animation_fade">Pudar</string>
     <string name="animation_slide_right">Slide dalam kanan</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
+    <string name="animation_slide_left">Geser ke kiri</string>
+    <string name="animation_slide_right_no_fade">Geser ke kanan (tanpa pudar)</string>
+    <string name="animation_slide_left_no_fade">Geser ke kiri (tanpa pudar)</string>
+    <string name="animation_slide_up">Geser ke bawah</string>
+    <string name="animation_slide_down">Geser ke atas</string>
     <string name="animation_default">Standar</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
+    <string name="animation_translucent">Transparan</string>
+    <string name="animation_grow_shrink">Tumbuh di (atas)</string>
     <string name="animation_grow_shrink_center">Grow in (Center)</string>
     <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
     <string name="animation_grow_shrink_left">Grow in (Left)</string>
