@@ -96,7 +96,7 @@
     <string name="onthego_notif_title">On-The-Go está ativo</string>
     <string name="onthego_notif_stop">Parar</string>
     <string name="onthego_notif_options">Opções</string>
-    <string name="onthego_notif_error">Não a sido possível iniciar On-The-Go</string>
+    <string name="onthego_notif_error">Não foi possível iniciar On-The-Go</string>
     <string name="onthego_notif_restart">Reiniciar On-The-Go</string>
     <string name="onthego_notif_camera_changed">Modo de câmera alterado</string>
     <string name="onthego_transparency">Transparência</string>
