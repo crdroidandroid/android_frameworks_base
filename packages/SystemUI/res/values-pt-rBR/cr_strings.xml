@@ -17,7 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time">Carregamento Rápido (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> até à carga máxima)</string>
+    <string name="keyguard_indication_dash_charging_time">Carregamento Rápido (<xliff:g id="charging_time_left" example="4 horas e 2 minuos">%s</xliff:g> até completar)</string>
     <string name="keyguard_plugged_in_dash_charging">Carregamento Rápido</string>
     <!-- Screenrecord Notification Ticker -->
     <string name="screenrecord_notif_ticker">Ecrã está a ser gravado</string>
