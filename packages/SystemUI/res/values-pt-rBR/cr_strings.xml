@@ -20,25 +20,25 @@
     <string name="keyguard_indication_dash_charging_time">Carregamento Rápido (<xliff:g id="charging_time_left" example="4 horas e 2 minuos">%s</xliff:g> até completar)</string>
     <string name="keyguard_plugged_in_dash_charging">Carregamento Rápido</string>
     <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Ecrã está a ser gravado</string>
-    <string name="screenrecord_notif_final_ticker">Ecrã gravado com sucesso</string>
+    <string name="screenrecord_notif_ticker">A tela está sendo gravada</string>
+    <string name="screenrecord_notif_final_ticker">Tela gravada com sucesso</string>
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">A gravar ecrã</string>
+    <string name="screenrecord_notif_title">Gravando a tela</string>
     <!-- Screenrecord notification action: Stop -->
     <string name="screenrecord_notif_stop">Parar</string>
-    <string name="screenrecord_notif_completed">Ecrã gravado com sucesso</string>
+    <string name="screenrecord_notif_completed">Tela gravada com sucesso</string>
     <string name="screenrecord_notif_duration">Total:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
     <string name="screenrecord_notif_pointer_on">Mostrar ponteiro</string>
-    <string name="screenrecord_notif_pointer_off">Ocultar o ponteiro</string>
+    <string name="screenrecord_notif_pointer_off">Esconder ponteiro</string>
     <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Incapaz de gravar o ecrã</string>
-    <string name="notification_channel_screenrecord">Gravações de ecrã</string>
+    <string name="screenrecord_notif_error">Não é possível gravar a tela</string>
+    <string name="notification_channel_screenrecord">Gravações de tela</string>
     <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Filmar ecra</string>
-    <string name="quick_settings_screenrecord_lq_label">Baixa Qualidade</string>
+    <string name="quick_settings_screenrecord_label">Gravação de Tela</string>
+    <string name="quick_settings_screenrecord_lq_label">Qualidade Baixa</string>
     <string name="quick_settings_screenrecord_mq_label">Qualidade Média</string>
-    <string name="quick_settings_screenrecord_hq_label">Alta Qualidade</string>
+    <string name="quick_settings_screenrecord_hq_label">Qualidade Alta</string>
     <string name="screenrecord_hide_hint">Esconder dica</string>
     <string name="screenrecord_show_hint">Mostrar dica</string>
     <!-- Screenshot -->
