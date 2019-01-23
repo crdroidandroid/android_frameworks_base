@@ -449,6 +449,7 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
                     roaming == that.roaming &&
                     mobileIms == that.mobileIms &&
                     needsLeadingPadding == that.needsLeadingPadding &&
+                    provisioned == that.provisioned &&
                     Objects.equals(typeContentDescription, that.typeContentDescription);
         }
 
@@ -475,6 +476,7 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
             other.roaming = roaming;
             other.mobileIms = mobileIms;
             other.needsLeadingPadding = needsLeadingPadding;
+            other.provisioned = provisioned;
             other.typeContentDescription = typeContentDescription;
         }
 
