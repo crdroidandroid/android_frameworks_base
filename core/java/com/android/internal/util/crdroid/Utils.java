@@ -174,6 +174,19 @@ public class Utils {
         return false;
     }
 
+    public static boolean isPackageAvailable(String packageName, Context context) {
+        Context mContext = context;
+        final PackageManager pm = mContext.getPackageManager();
+        try {
+            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            int enabled = pm.getApplicationEnabledSetting(packageName);
+            return enabled != PackageManager.COMPONENT_ENABLED_STATE_DISABLED &&
+                enabled != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
     public static boolean isPackageEnabled(String packageName, PackageManager pm) {
         try {
             ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);

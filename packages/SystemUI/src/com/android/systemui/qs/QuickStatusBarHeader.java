@@ -128,6 +128,10 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     /** Counts how many times the long press tooltip has been shown to the user. */
     private int mShownCount;
 
+    // custom headers
+    private boolean mLandscape;
+    private boolean mHeaderImageEnabled;
+
     private final BroadcastReceiver mRingerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -143,6 +147,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     private static final String SHOW_QS_CLOCK =
             "system:" + Settings.System.SHOW_QS_CLOCK;
+    private static final String STATUS_BAR_CUSTOM_HEADER =
+            "system:" + Settings.System.STATUS_BAR_CUSTOM_HEADER;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -196,7 +202,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mDateView.setOnClickListener(this);
 
         Dependency.get(TunerService.class).addTunable(this,
-                SHOW_QS_CLOCK);
+                SHOW_QS_CLOCK,
+                STATUS_BAR_CUSTOM_HEADER);
     }
 
     private void updateStatusText() {
@@ -268,13 +275,10 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        mLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
         updateResources();
 
-        // Update color schemes in landscape to use wallpaperTextColor
-        boolean shouldUseWallpaperTextColor =
-                newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
-        mBatteryMeterView.useWallpaperTextColor(shouldUseWallpaperTextColor);
-        mClockView.useWallpaperTextColor(shouldUseWallpaperTextColor);
+        updateStatusbarProperties();
     }
 
     @Override
@@ -305,18 +309,31 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 resources.getDimensionPixelSize(R.dimen.qs_header_tooltip_height);
         mHeaderTextContainerView.setLayoutParams(mHeaderTextContainerView.getLayoutParams());
 
-        mSystemIconsView.getLayoutParams().height = resources.getDimensionPixelSize(
-                com.android.internal.R.dimen.quick_qs_offset_height);
+        int topMargin = resources.getDimensionPixelSize(
+                com.android.internal.R.dimen.quick_qs_offset_height) + (mHeaderImageEnabled ?
+                resources.getDimensionPixelSize(R.dimen.qs_header_image_offset) : 0);
+
+        int statusBarBottomMargin = resources.getDimensionPixelSize(
+                R.dimen.qs_header_image_bottom_margin);
+
+        mSystemIconsView.getLayoutParams().height = topMargin;
         mSystemIconsView.setLayoutParams(mSystemIconsView.getLayoutParams());
 
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) getLayoutParams();
         if (mQsDisabled) {
-            lp.height = resources.getDimensionPixelSize(
-                    com.android.internal.R.dimen.quick_qs_offset_height);
+            lp.height = topMargin;
         } else {
-            lp.height = Math.max(getMinimumHeight(),
-                    resources.getDimensionPixelSize(
-                            com.android.internal.R.dimen.quick_qs_total_height));
+            int qsHeight = resources.getDimensionPixelSize(
+                    com.android.internal.R.dimen.quick_qs_total_height);
+
+            if (mHeaderImageEnabled) {
+                qsHeight += resources.getDimensionPixelSize(R.dimen.qs_header_image_offset);
+            }
+
+            // always add the margin below the statusbar with or without image
+            qsHeight += statusBarBottomMargin;
+
+            lp.height = Math.max(getMinimumHeight(), qsHeight);
         }
 
         setLayoutParams(lp);
@@ -652,7 +669,26 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        mClockView.setClockVisibleByUser(newValue == null ? true :
-                Integer.valueOf(newValue) != 0);
+        switch (key) {
+            case SHOW_QS_CLOCK:
+                mClockView.setClockVisibleByUser(newValue == null ? true :
+                        Integer.valueOf(newValue) != 0);
+                break;
+            case STATUS_BAR_CUSTOM_HEADER:
+                mHeaderImageEnabled =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                updateResources();
+                updateStatusbarProperties();
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Update color schemes in landscape to use wallpaperTextColor
+    private void updateStatusbarProperties() {
+        boolean shouldUseWallpaperTextColor = mLandscape && !mHeaderImageEnabled;
+        mClockView.useWallpaperTextColor(shouldUseWallpaperTextColor);
+        mBatteryMeterView.useWallpaperTextColor(shouldUseWallpaperTextColor, false);
     }
 }
