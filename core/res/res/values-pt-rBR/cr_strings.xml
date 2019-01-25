@@ -17,7 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Pressione e segure o botão liga/desliga para interagir</string>
+    <string name="pocket_lock_message_long_press">Mantenha pressionado o botão de ligar/desligar para interagir</string>
     <!-- AOKP custom system animations -->
     <string name="animation_fade">Desvanescer</string>
     <string name="animation_slide_right">Deslizar da direita</string>
