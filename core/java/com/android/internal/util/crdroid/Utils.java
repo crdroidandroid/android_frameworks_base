@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 crDroid Android Project
+ * Copyright (C) 2017-2019 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,9 +75,12 @@ public class Utils {
         return (cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE) == false);
     }
 
+    public static void killPackage(Context context, String packageName) {
+        new killTask(context, packageName).execute();
+    }
 
     public static void restartSystemUi(Context context) {
-        new RestartSystemUiTask(context).execute();
+        new killTask(context, "com.android.systemui").execute();
     }
 
     public static void showSystemUiRestartDialog(Context context) {
@@ -93,13 +96,15 @@ public class Utils {
                 .show();
     }
 
-    private static class RestartSystemUiTask extends AsyncTask<Void, Void, Void> {
+    private static class killTask extends AsyncTask<Void, Void, Void> {
 
         private Context mContext;
+        private String mPackageName;
 
-        public RestartSystemUiTask(Context context) {
+        public killTask(Context context, String packageName) {
             super();
             mContext = context;
+            mPackageName = packageName;
         }
 
         @Override
@@ -109,23 +114,11 @@ public class Utils {
                         (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
                 IActivityManager ams = ActivityManager.getService();
                 for (ActivityManager.RunningAppProcessInfo app: am.getRunningAppProcesses()) {
-                    if ("com.android.systemui".equals(app.processName)) {
+                    if (mPackageName.equals(app.processName)) {
                         ams.killApplicationProcess(app.processName, app.uid);
                         break;
                     }
                 }
-                //Class ActivityManagerNative = Class.forName("android.app.ActivityManagerNative");
-                //Method getDefault = ActivityManagerNative.getDeclaredMethod("getDefault", null);
-                //Object amn = getDefault.invoke(null, null);
-                //Method killApplicationProcess = amn.getClass().getDeclaredMethod("killApplicationProcess", String.class, int.class);
-                //mContext.stopService(new Intent().setComponent(new ComponentName("com.android.systemui", "com.android.systemui.SystemUIService")));
-                //am.killBackgroundProcesses("com.android.systemui");
-                //for (ActivityManager.RunningAppProcessInfo app : am.getRunningAppProcesses()) {
-                //    if ("com.android.systemui".equals(app.processName)) {
-                //        killApplicationProcess.invoke(amn, app.processName, app.uid);
-                //        break;
-                //    }
-                //}
             } catch (Exception e) {
                 e.printStackTrace();
             }
