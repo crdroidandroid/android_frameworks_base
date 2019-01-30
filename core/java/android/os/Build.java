@@ -987,6 +987,20 @@ public class Build {
         SystemProperties.getBoolean("ro.treble.enabled", false);
 
     /**
+     * Skips consistent check if set for device.
+     * @hide
+     */
+    public static final boolean HIDE_WARNING =
+        SystemProperties.getBoolean("ro.hide.build.warning", false);
+
+    /**
+     * Skips treble check.
+     * @hide
+     */
+    public static final boolean SKIP_TREBLE_CHECK =
+        SystemProperties.getBoolean("ro.skip.treble.check", false);
+
+    /**
      * Verifies the current flash of the device is consistent with what
      * was expected at build time.
      *
@@ -1003,7 +1017,10 @@ public class Build {
         // Don't care on eng builds.  Incremental build may trigger false negative.
         if (IS_ENG) return true;
 
-        if (IS_TREBLE_ENABLED) {
+        // Don't care if hiddent by dev. False negative.
+        if (HIDE_WARNING) return true;
+
+        if (IS_TREBLE_ENABLED && !SKIP_TREBLE_CHECK) {
             // If we can run this code, the device should already pass AVB.
             // So, we don't need to check AVB here.
             int result = VintfObject.verifyWithoutAvb();
