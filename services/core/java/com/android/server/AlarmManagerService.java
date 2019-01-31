@@ -4594,7 +4594,8 @@ class AlarmManagerService extends SystemService {
             if (DEBUG_WAKELOCK) {
                 Slog.d(TAG, "mBroadcastRefCount -> " + mBroadcastRefCount);
             }
-            qcNsrmExt.removeTriggeredUid(inflight.mUid);
+            if (inflight != null)
+                qcNsrmExt.removeTriggeredUid(inflight.mUid);
 
             if (mBroadcastRefCount == 0) {
                 mHandler.obtainMessage(AlarmHandler.REPORT_ALARMS_ACTIVE, 0).sendToTarget();
