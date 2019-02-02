@@ -20,13 +20,14 @@ import android.annotation.MainThread;
 import android.annotation.Nullable;
 import android.annotation.WorkerThread;
 import java.util.ArrayDeque;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -180,13 +181,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class AsyncTask<Params, Progress, Result> {
     private static final String LOG_TAG = "AsyncTask";
 
-    private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
-    // We want at least 2 threads and at most 4 threads in the core pool,
-    // preferring to have 1 less than the CPU count to avoid saturating
-    // the CPU with background work
-    private static final int CORE_POOL_SIZE = Math.max(2, Math.min(CPU_COUNT - 1, 4));
-    private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
-    private static final int KEEP_ALIVE_SECONDS = 30;
+    // We keep only a single pool thread around all the time.
+    // We let the pool grow to a fairly large number of threads if necessary,
+    // but let them time out quickly. In the unlikely case that we run out of threads,
+    // we fall back to a simple unbounded-queue executor.
+    private static final int CORE_POOL_SIZE = 1;
+    private static final int MAXIMUM_POOL_SIZE = 20;
+    private static final int KEEP_ALIVE_SECONDS = 3;
 
     private static final ThreadFactory sThreadFactory = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
@@ -196,8 +197,36 @@ public abstract class AsyncTask<Params, Progress, Result> {
         }
     };
 
-    private static final BlockingQueue<Runnable> sPoolWorkQueue =
-            new LinkedBlockingQueue<Runnable>(128);
+    // Used only for rejected executions.
+    // Initialization protected by sRunOnSerialPolicy lock.
+    private static ThreadPoolExecutor sBackupExecutor;
+    private static LinkedBlockingQueue<Runnable> sBackupExecutorQueue;
+
+    private static final RejectedExecutionHandler sRunOnSerialPolicy =
+            new RejectedExecutionHandler() {
+        public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+            android.util.Log.w(LOG_TAG, "Exceeded ThreadPoolExecutor pool size");
+            // As a last ditch fallback, run it on an executor with an unbounded queue.
+            // Create this executor lazily, almost never.
+            synchronized (this) {
+                if (sBackupExecutor == null) {
+                    sBackupExecutorQueue = new LinkedBlockingQueue<Runnable>();
+                    sBackupExecutor = new ThreadPoolExecutor(
+                            1, 1, KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,
+                            sBackupExecutorQueue, sThreadFactory);
+                    sBackupExecutor.allowCoreThreadTimeOut(true);
+                }
+            }
+            sBackupExecutor.execute(r);
+            // We seem to be generating too many background tasks too quickly. Slow us down a
+            // little, or more if the queue is long.
+            try {
+                Thread.sleep(sBackupExecutorQueue.size());
+            } catch (InterruptedException exc) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    };
 
     /**
      * An {@link Executor} that can be used to execute tasks in parallel.
@@ -207,8 +236,8 @@ public abstract class AsyncTask<Params, Progress, Result> {
     static {
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
                 CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,
-                sPoolWorkQueue, sThreadFactory);
-        threadPoolExecutor.allowCoreThreadTimeOut(true);
+                new SynchronousQueue<Runnable>(), sThreadFactory);
+        threadPoolExecutor.setRejectedExecutionHandler(sRunOnSerialPolicy);
         THREAD_POOL_EXECUTOR = threadPoolExecutor;
     }
 
