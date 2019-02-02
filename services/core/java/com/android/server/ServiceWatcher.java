@@ -105,8 +105,7 @@ public class ServiceWatcher implements ServiceConnection {
                     sigs = pm.getPackageInfo(pkg, PackageManager.GET_SIGNATURES).signatures;
                     Log.i("ServiceWatcher", pkg + " is whitelisted, ignored PackageManager.MATCH_SYSTEM_ONLY");
                 } else {
-                    sigs = pm.getPackageInfo(pkg, PackageManager.MATCH_SYSTEM_ONLY
-                            | PackageManager.GET_SIGNATURES).signatures;
+                    sigs = pm.getPackageInfo(pkg, PackageManager.GET_SIGNATURES).signatures;
                 }
                 set.addAll(Arrays.asList(sigs));
                 sigSets.add(set);
