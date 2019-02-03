@@ -21,26 +21,26 @@
     <string name="keyguard_plugged_in_dash_charging">Швидка зарядка</string>
     <!-- Screenrecord Notification Ticker -->
     <string name="screenrecord_notif_ticker">Триває запис екрану</string>
-    <string name="screenrecord_notif_final_ticker">Screen recorded successfully</string>
+    <string name="screenrecord_notif_final_ticker">Екран успішно записано</string>
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Recording screen</string>
+    <string name="screenrecord_notif_title">Запис екрану</string>
     <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Stop</string>
-    <string name="screenrecord_notif_completed">Screen recorded successfully</string>
-    <string name="screenrecord_notif_duration">Total:</string>
+    <string name="screenrecord_notif_stop">Зупинити</string>
+    <string name="screenrecord_notif_completed">Екран успішно записано</string>
+    <string name="screenrecord_notif_duration">Всього:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Show pointer</string>
-    <string name="screenrecord_notif_pointer_off">Hide pointer</string>
+    <string name="screenrecord_notif_pointer_on">Показувати вказівник</string>
+    <string name="screenrecord_notif_pointer_off">Приховати вказівник</string>
     <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Unable to record screen</string>
-    <string name="notification_channel_screenrecord">Screenrecords</string>
+    <string name="screenrecord_notif_error">Неможливо записати екран</string>
+    <string name="notification_channel_screenrecord">Записи з екрану</string>
     <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Screenrecord</string>
-    <string name="quick_settings_screenrecord_lq_label">Low Quality</string>
-    <string name="quick_settings_screenrecord_mq_label">Medium Quality</string>
-    <string name="quick_settings_screenrecord_hq_label">High Quality</string>
-    <string name="screenrecord_hide_hint">Hide hint</string>
-    <string name="screenrecord_show_hint">Show hint</string>
+    <string name="quick_settings_screenrecord_label">Запис екрану</string>
+    <string name="quick_settings_screenrecord_lq_label">Низька якість</string>
+    <string name="quick_settings_screenrecord_mq_label">Середня якість</string>
+    <string name="quick_settings_screenrecord_hq_label">Висока якість</string>
+    <string name="screenrecord_hide_hint">Приховати підказку</string>
+    <string name="screenrecord_show_hint">Показати підказку</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Screenshot</string>
     <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
