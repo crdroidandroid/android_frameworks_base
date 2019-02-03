@@ -17,10 +17,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time">Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging">Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time">Швидке заряджання (<xliff:g id="charging_time_left" example="4 год. 2 хв.">%s</xliff:g> до повної зарядки)</string>
+    <string name="keyguard_plugged_in_dash_charging">Швидка зарядка</string>
     <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Screen is being recorded</string>
+    <string name="screenrecord_notif_ticker">Триває запис екрану</string>
     <string name="screenrecord_notif_final_ticker">Screen recorded successfully</string>
     <!-- Screenrecord notification title -->
     <string name="screenrecord_notif_title">Recording screen</string>
