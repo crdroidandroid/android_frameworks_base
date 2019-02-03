@@ -38,6 +38,8 @@ public class ThemeAccentUtils {
         "com.android.settings.intelligence.theme.dark",
         "com.android.sysui.theme.dark",
         "com.android.gboard.theme.dark",
+        "com.google.intelligence.sense.theme.dark",
+        "com.android.wellbeing.theme.dark",
     };
 
     // Black themes
@@ -47,6 +49,8 @@ public class ThemeAccentUtils {
         "com.android.settings.intelligence.theme.black",
         "com.android.sysui.theme.black",
         "com.android.gboard.theme.black",
+        "com.google.intelligence.sense.theme.black",
+        "com.android.wellbeing.theme.black",
     };
 
     // Accents
