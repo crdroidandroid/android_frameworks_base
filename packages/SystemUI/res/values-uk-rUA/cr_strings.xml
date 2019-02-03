@@ -92,26 +92,26 @@
     <string name="quick_settings_always_on_display_label">Постійно активний дисплей</string>
     <!-- On The Go -->
     <string name="global_action_onthego">Режим «На ходу»</string>
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
-    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="onthego_notif_ticker">Режим «На ходу» активовано</string>
+    <string name="onthego_notif_title">Режим «На ходу» активний</string>
+    <string name="onthego_notif_stop">Зупинити</string>
+    <string name="onthego_notif_options">Опції</string>
+    <string name="onthego_notif_error">Не вдається запустити режим «На ходу»</string>
+    <string name="onthego_notif_restart">Перезавантажити режим «На ходу»</string>
+    <string name="onthego_notif_camera_changed">Режим камери змінено</string>
+    <string name="onthego_transparency">Прозорість</string>
+    <string name="onthego_front_camera">Використовувати передню камеру</string>
+    <string name="onthego_service_toggle">Автоматично перезавантажувати сервіс</string>
+    <string name="onthego_channel_name">Основний</string>
+    <string name="quick_settings_onthego_label">Режим \"На ходу\"</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Пошук музики</string>
     <!-- Advance location quick setting tile -->
     <string name="quick_settings_secondary_location_off"></string>
-    <string name="quick_settings_location_secondary_battery_saving">Battery Saving</string>
-    <string name="accessibility_quick_settings_location_battery_saving">Location reporting: battery saving mode.</string>
-    <string name="quick_settings_location_secondary_gps_only">Sensors Only</string>
-    <string name="accessibility_quick_settings_location_gps_only">Location reporting: sensors only mode.</string>
-    <string name="quick_settings_location_secondary_high_accuracy">High Accuracy</string>
-    <string name="accessibility_quick_settings_location_high_accuracy">Location reporting: high accuracy mode.</string>
+    <string name="quick_settings_location_secondary_battery_saving">Енергозбереження</string>
+    <string name="accessibility_quick_settings_location_battery_saving">Визначення місцезнаходження: режим економії енергії.</string>
+    <string name="quick_settings_location_secondary_gps_only">Тільки GPS</string>
+    <string name="accessibility_quick_settings_location_gps_only">Визначення місцезнаходження: тільки GPS.</string>
+    <string name="quick_settings_location_secondary_high_accuracy">Висока точність</string>
+    <string name="accessibility_quick_settings_location_high_accuracy">Визначення місцезнаходження: режим високої точності.</string>
 </resources>
