@@ -42,7 +42,7 @@
     <string name="screenrecord_hide_hint">Приховати підказку</string>
     <string name="screenrecord_show_hint">Показати підказку</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Знімок екрана</string>
+    <string name="quick_settings_screenshot_label">Знімок екрану</string>
     <string name="quick_settings_region_screenshot_label">Знімок частини екрану</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Інформація про процесор</string>
