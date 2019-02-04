@@ -52,6 +52,7 @@ import android.view.inputmethod.InputMethodManagerInternal;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.internal.util.thermal.ThermalController;
 import com.android.server.EventLogTags;
 import com.android.server.LocalServices;
 import com.android.server.policy.WindowManagerPolicy;
@@ -734,6 +735,7 @@ final class Notifier {
         }
 
         if (mActivityManagerInternal.isSystemReady()) {
+            ThermalController.sendActivePackageChangedBroadcast("", mContext);
             mContext.sendOrderedBroadcastAsUser(mScreenOffIntent, UserHandle.ALL, null,
                     mGoToSleepBroadcastDone, mHandler, 0, null, null);
         } else {
