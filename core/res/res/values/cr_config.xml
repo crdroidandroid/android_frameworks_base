@@ -46,4 +46,7 @@
 
     <!-- Whether to enable OP5/T cam hack -->
     <bool name="config_enableOPcamhack">false</bool>
+
+    <!-- Whether to allow sending active app broadcast -->
+    <bool name="config_allowActivePackageBroadcast">false</bool>
 </resources>
