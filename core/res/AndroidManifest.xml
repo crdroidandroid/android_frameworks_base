@@ -618,6 +618,9 @@
     <!-- Font service -->
     <protected-broadcast android:name="com.android.server.ACTION_FONT_CHANGED" />
 
+    <!-- Used to get active package name -->
+    <protected-broadcast android:name="android.intent.action.ACTIVE_PACKAGE_CHANGED" />
+
     <!-- ====================================================================== -->
     <!--                          RUNTIME PERMISSIONS                           -->
     <!-- ====================================================================== -->

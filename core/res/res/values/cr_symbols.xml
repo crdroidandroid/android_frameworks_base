@@ -147,4 +147,7 @@
 
   <!-- Whether to enable OP5/T cam hack -->
   <java-symbol type="bool" name="config_enableOPcamhack" />
+
+  <!-- Whether to allow sending active app broadcast -->
+  <java-symbol type="bool" name="config_allowActivePackageBroadcast" />
 </resources>
