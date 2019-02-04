@@ -149,6 +149,7 @@ import com.android.internal.annotations.GuardedBy;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.app.IVoiceInteractor;
 import com.android.internal.os.BatteryStatsImpl;
+import com.android.internal.util.crdroid.Utils;
 import com.android.server.Watchdog;
 import com.android.server.am.ActivityManagerService.ItemMatcher;
 import com.android.server.wm.ConfigurationContainer;
@@ -2411,6 +2412,11 @@ class ActivityStack<T extends StackWindowController> extends ConfigurationContai
         next.launching = true;
 
         if (DEBUG_SWITCH) Slog.v(TAG_SWITCH, "Resuming " + next);
+
+        String nextActivePackageName = next.intent.getComponent().getPackageName();
+        if (mService.isAppBroadcastAllowed() && prev != next) {
+            Utils.sendActivePackageChangedBroadcast(nextActivePackageName, mService.getContext());
+        }
 
         // If we are currently pausing an activity, then don't do anything until that is done.
         if (!mStackSupervisor.allPausedActivitiesComplete()) {
