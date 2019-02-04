@@ -63,6 +63,8 @@ public class Utils {
 
     public static final String INTENT_SCREENSHOT = "action_take_screenshot";
     public static final String INTENT_REGION_SCREENSHOT = "action_take_region_screenshot";
+    public static final String ACTIVE_PACKAGE_CHANGED_ACTION = "android.intent.action.ACTIVE_PACKAGE_CHANGED";
+    public static final String ACTIVE_PACKAGE_CHANGED_EXTRA = "package_name";
 
     public static boolean isChineseLanguage() {
        return Resources.getSystem().getConfiguration().locale.getLanguage().startsWith(
@@ -464,5 +466,13 @@ public class Utils {
         SensorManager sm = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
         return sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
                 && sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null;
+    }
+
+    public static void sendActivePackageChangedBroadcast(String packageName, Context context) {
+        Intent intent = new Intent(ACTIVE_PACKAGE_CHANGED_ACTION);
+        intent.putExtra(ACTIVE_PACKAGE_CHANGED_EXTRA, packageName);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND
+                | Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
+        context.sendBroadcastAsUser(intent, UserHandle.SYSTEM);
     }
 }
