@@ -20,6 +20,7 @@ import com.android.systemui.AutoReinflateContainer;
 import com.android.systemui.R;
 import com.android.systemui.doze.DozeLog;
 import com.android.systemui.statusbar.phone.DozeParameters;
+import com.android.systemui.statusbar.NotificationLockscreenUserManager;
 import com.android.systemui.statusbar.phone.StatusBar;
 
 import com.android.systemui.ambientmusic.AmbientIndicationInflateListener;
@@ -38,6 +39,7 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
     private boolean mInfoAvailable;
     private String mInfoToSet;
     private boolean mKeyguard;
+    private boolean mDozing;
     private String mLastInfo;
 
     private boolean mNpInfoAvailable;
@@ -75,13 +77,31 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
         if (keyguard && (mInfoAvailable || mNpInfoAvailable)) {
             mText.setText(mInfoToSet);
             mLastInfo = mInfoToSet;
-            mAmbientIndication.setVisibility(View.VISIBLE);
             updatePosition();
         } else {
             setCleanLayout(-1);
-            mAmbientIndication.setVisibility(View.INVISIBLE);
             mText.setText(null);
         }
+
+        // StatusBar.updateKeyguardState will call updateDozingState later
+    }
+
+    public void updateDozingState(boolean dozing) {
+        mDozing = dozing;
+        mAmbientIndication.setVisibility(shouldShow() ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private boolean shouldShow() {
+        // if not dozing, show ambient music info only for Google Now Playing,
+        // not for local media players if they are showing a lockscreen media notification
+        final NotificationLockscreenUserManager lockscreenManager =
+                mStatusBar.getNotificationLockscreenUserManager();
+        boolean filtered = lockscreenManager.shouldHideNotifications(lockscreenManager.getCurrentUserId())
+                || lockscreenManager.shouldHideNotifications(mStatusBar.getMediaManager().getMediaNotificationKey());
+        return mKeyguard
+                && ((mDozing && (mInfoAvailable || mNpInfoAvailable))
+                || (!mDozing && mNpInfoAvailable && !mInfoAvailable)
+                || (!mDozing && mInfoAvailable && filtered));
     }
 
     private void setTickerMarquee(boolean enable, boolean extendPulseOnNewTrack) {
@@ -180,7 +200,7 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
         }
         mText.setText(mInfoToSet);
         mText.setTypeface(tf);
-        mAmbientIndication.setVisibility(mKeyguard && (mInfoAvailable || mNpInfoAvailable) ? View.VISIBLE : View.INVISIBLE);
+        mAmbientIndication.setVisibility(shouldShow() ? View.VISIBLE : View.INVISIBLE);
     }
 
     public View getIndication() {
