@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
+import android.media.MediaMetadata;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.RemoteException;
@@ -132,6 +133,8 @@ public class NotificationEntryManager implements Dumpable, NotificationInflater.
 
     private NotificationData.Entry mEntryToRefresh;
     private boolean mDontPulse;
+
+    private String mTrackInfoSeparator;
 
     /**
      * Notifications with keys in this set are not actually around anymore. We kept them around
@@ -245,6 +248,8 @@ public class NotificationEntryManager implements Dumpable, NotificationInflater.
         mMessagingUtil = new NotificationMessagingUtil(context);
         mSystemServicesProxy = SystemServicesProxy.getInstance(mContext);
         mGroupManager.setPendingEntries(mPendingNotifications);
+
+        mTrackInfoSeparator = mContext.getResources().getString(R.string.ambientmusic_songinfo);
     }
 
     public void setUpWithPresenter(NotificationPresenter presenter,
@@ -476,15 +481,20 @@ public class NotificationEntryManager implements Dumpable, NotificationInflater.
         entry.row.setLowPriorityStateUpdated(false);
 
         if (mEntryToRefresh == entry && mMediaManager.isMediaNotification(entry)) {
-            final Notification n = entry.notification.getNotification();
             String notificationText = null;
-            final CharSequence title = n.extras.getCharSequence(Notification.EXTRA_TITLE);
-            final CharSequence text = n.extras.getCharSequence(Notification.EXTRA_TEXT);
-            if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(text)) {
-                notificationText = title + " - " + text;
+            final MediaMetadata data = mMediaManager.getMediaMetadata();
+            if (data != null) {
+                CharSequence artist = data.getText(MediaMetadata.METADATA_KEY_ARTIST);
+                //CharSequence album = data.getText(MediaMetadata.METADATA_KEY_ALBUM);
+                CharSequence title = data.getText(MediaMetadata.METADATA_KEY_TITLE);
+                if (artist != null && title != null) {
+                    notificationText = String.format(mTrackInfoSeparator, title.toString(), artist.toString());
+                }
             }
             mMediaManager.setMediaNotificationText(notificationText, false);
+
             if (!mDontPulse) {
+                final Notification n = entry.notification.getNotification();
                 final int[] colors = {n.backgroundColor, n.foregroundColor,
                         n.primaryTextColor, n.secondaryTextColor};
                 mMediaManager.setPulseColors(n.isColorizedMedia(), colors);
