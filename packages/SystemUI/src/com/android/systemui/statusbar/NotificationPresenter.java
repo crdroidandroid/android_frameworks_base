@@ -16,7 +16,6 @@
 package com.android.systemui.statusbar;
 
 import android.content.Intent;
-import android.media.MediaMetadata;
 import android.os.Handler;
 import android.view.View;
 
@@ -114,5 +113,5 @@ public interface NotificationPresenter extends NotificationData.Environment,
      */
     void onUpdateRowStates();
 
-    void setAmbientMusicInfo(MediaMetadata mediaMetadata, String notificationText, boolean nowPlaying);
+    void setAmbientMusicInfo(String notificationText, boolean nowPlaying);
 }
