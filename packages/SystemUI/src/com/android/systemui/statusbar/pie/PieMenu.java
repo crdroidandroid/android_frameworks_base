@@ -245,6 +245,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
     private boolean mSnappointLaunched;
     private boolean mOpen;
     private boolean mPieBottom, mPieLeft, mPieRight;
+    private boolean mIsLandscape;
     private boolean mRegistered;
 
     private int mThemeMode;
@@ -429,6 +430,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
         mPieBottom = mPanelOrientation == Gravity.BOTTOM;
         mPieLeft = mPanelOrientation == Gravity.LEFT;
         mPieRight = mPanelOrientation == Gravity.RIGHT;
+        mIsLandscape = mPanel.isLandScape();
 
         Point outSize = new Point(0, 0);
         mWindowManager.getDefaultDisplay().getRealSize(outSize);
@@ -437,17 +439,17 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
 
         // Create snap points
         mNumberOfSnapPoints = 0;
-        if (isSnapPossible(Gravity.LEFT) && !isLandScape()) {
+        if (isSnapPossible(Gravity.LEFT) && !mIsLandscape) {
             mTogglePoint[mNumberOfSnapPoints++] = new SnapPoint(
                     0 - mSnapOffset, mHeight / 2, mSnapRadius, Gravity.LEFT);
         }
 
-        if (isSnapPossible(Gravity.RIGHT) && !isLandScape()) {
+        if (isSnapPossible(Gravity.RIGHT) && !mIsLandscape) {
             mTogglePoint[mNumberOfSnapPoints++] = new SnapPoint(
                     mWidth + mSnapOffset, mHeight / 2, mSnapRadius, Gravity.RIGHT);
         }
 
-        if ((!isLandScape() || ScreenType.isTablet(mContext)) && isSnapPossible(Gravity.BOTTOM)) {
+        if ((!mIsLandscape || ScreenType.isTablet(mContext)) && isSnapPossible(Gravity.BOTTOM)) {
             mTogglePoint[mNumberOfSnapPoints++] = new SnapPoint(
                     mWidth / 2, mHeight + mSnapOffset, mSnapRadius, Gravity.BOTTOM);
         }
@@ -459,9 +461,9 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
         }
         setColor(mSettingsLogo, mDarkThemeEnabled ? mForegroundColor : mBackgroundColor);
         mTogglePoint[mNumberOfSnapPoints++] = new SettingsPoint((mWidth / 2)
-                + (mPieBottom ? 0 : (mPieRight ? -mSettingsOffset : mSettingsOffset))
+                + (mPieBottom || mIsLandscape ? 0 : (mPieRight ? -mSettingsOffset : mSettingsOffset))
                 + (mPieBottom ? 0 :
-                (isLandScape() ? -mSettingsOffsetLand : (mPieRight ? -mNOTOffsetX : mNOTOffsetX))),
+                (mIsLandscape ? -mSettingsOffsetLand : (mPieRight ? -mNOTOffsetX : mNOTOffsetX))),
                 mHeight / (mPieBottom ? 6 : 2), mNOTRadius, mSettingsLogo,
                 mNOTSize);
 
@@ -473,7 +475,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
             }
             setColor(mNOTLogo, mDarkThemeEnabled ? mForegroundColor : mBackgroundColor);
             mTogglePoint[mNumberOfSnapPoints++] = new NowOnTapPoint((mWidth / 2) +
-                    (mPieBottom ? 0 : (isLandScape() ? mWidth / 7 :
+                    (mPieBottom ? 0 : (mIsLandscape ? mWidth / 7 :
                     (mPieRight ? -mNOTOffsetX : mNOTOffsetX))), (mHeight / 2) +
                     (mPieBottom ? mNOTOffsetY : 0),
                     mNOTRadius, mNOTLogo, mNOTSize);
@@ -647,10 +649,10 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
         // network icon layoutparams
         RelativeLayout.LayoutParams lp = new
                 RelativeLayout.LayoutParams(mStatusIconSize, mStatusIconSize);
-        lp.leftMargin = isLandScape() ? mStatusOffset : 0;
-        lp.rightMargin = isLandScape() ? 0 : mStatusOffset;
-        lp.topMargin = isLandScape() ? mHeight - mStatusOffset * 2 : mStatusOffset;
-        if (!isLandScape()) {
+        lp.leftMargin = mIsLandscape ? mStatusOffset : 0;
+        lp.rightMargin = mIsLandscape ? 0 : mStatusOffset;
+        lp.topMargin = mIsLandscape ? mHeight - mStatusOffset * 2 : mStatusOffset;
+        if (!mIsLandscape) {
             lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         }
         mNetworkIcon.setLayoutParams(lp);
@@ -763,13 +765,6 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
     }
 
     /**
-     * Checks whether the current rotation is landscape or not.
-     */
-    private boolean isLandScape() {
-        return mPanel.isLandScape();
-    }
-
-    /**
      * create notification icons
      */
     protected void updateNotifications() {
@@ -801,14 +796,14 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
                 view.setScaleType(ScaleType.FIT_XY);
                 RelativeLayout.LayoutParams lp = new
                         RelativeLayout.LayoutParams(mIconSize, mIconSize);
-                if (mPieBottom) {
+                if (mPieBottom || mIsLandscape) {
                     lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 }
-                lp.topMargin = mHeight / (mPieBottom ? 2 : 4) + (int)
-                        (mPieBottom ? mIconOffsetY : mIconOffsetYside) + (int)
-                        (isLandScape() ? mLandOffsetY : 0);
+                lp.topMargin = mHeight / (mPieBottom || mIsLandscape ? 2 : 4) + (int)
+                        (mPieBottom || mIsLandscape ? mIconOffsetY : mIconOffsetYside) + (int)
+                        (mIsLandscape ? mLandOffsetY : 0);
                 lp.leftMargin = mWidth / 2 - (int) iconOffsetX -
-                        (isLandScape() ? (int) mLandOffsetX : 0);
+                        (mIsLandscape ? (int) mLandOffsetX : 0);
                 view.setLayoutParams(lp);
                 addView(view);
                 mIconViews.add(view);
@@ -1216,18 +1211,18 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
             if (mStatusIndicator != 2 && mStatusIndicator != 3) {
                 mWifiIcon.setAlpha((int) (mBackgroundFraction * 0xff));
                 if (mSsidText != null) {
-                    canvas.drawText(mSsidText, mWidth / (isLandScape() ? 12 : 8), mStatusOffset
+                    canvas.drawText(mSsidText, mWidth / (mIsLandscape ? 12 : 8), mStatusOffset
                             + mStatusTextTopMargin, mStatusPaint);
                 }
             }
             if (mStatusIndicator != 1 && mStatusIndicator != 3) {
                 mNetworkIcon.setAlpha((int) (mBackgroundFraction * 0xff));
                 if (mNetworkText != null) {
-                    if (!isLandScape()) {
+                    if (!mIsLandscape) {
                         mStatusPaint.setTextAlign(Paint.Align.RIGHT);
                     }
-                    canvas.drawText(mNetworkText, isLandScape() ? mWidth / 12 : mWidth -
-                              (mWidth / 8), isLandScape() ? (mHeight - (mStatusOffset
+                    canvas.drawText(mNetworkText, mIsLandscape ? mWidth / 12 : mWidth -
+                              (mWidth / 8), mIsLandscape ? (mHeight - (mStatusOffset
                               + mStatusTextTopMarginLand)) : (mStatusOffset
                               + mStatusTextTopMargin), mStatusPaint);
                     // restore to default alignment
@@ -1235,26 +1230,26 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
                 }
             }
             canvas.drawText(mClockText, mWidth / 2 - mClockOffsetX -
-                    (isLandScape() ? mLandOffsetX : 0), mHeight / (mPieBottom ? 2 : 4)
-                    - mClockOffsetY + (isLandScape() ? mLandOffsetY : 0), mClockPaint);
+                    (mIsLandscape ? mLandOffsetX : 0), mHeight / (mPieBottom || mIsLandscape ? 2 : 4)
+                    - mClockOffsetY + (mIsLandscape ? mLandOffsetY : 0), mClockPaint);
             canvas.drawText(getSimpleDate(), mWidth / 2 - mDateOffsetX -
-                    (isLandScape() ? mLandOffsetX : 0), mHeight / (mPieBottom ? 2 : 4)
-                    - mDateOffsetY + (isLandScape() ? mLandOffsetY : 0), mStatusPaint);
+                    (mIsLandscape ? mLandOffsetX : 0), mHeight / (mPieBottom || mIsLandscape ? 2 : 4)
+                    - mDateOffsetY + (mIsLandscape ? mLandOffsetY : 0), mStatusPaint);
             // Don't draw battery text if disabled
             if (mBatteryMode != 1) {
                 canvas.drawText(mBatteryText, mWidth / 2 - mBatteryOffsetX -
-                        (isLandScape() ? mLandOffsetX : 0), mHeight / (mPieBottom ? 2 : 4) -
-                        (mPieBottom ? mBatteryOffsetY : mBatteryOffsetYSide) +
-                        (isLandScape() ? mLandOffsetY : 0), mStatusPaint);
+                        (mIsLandscape ? mLandOffsetX : 0), mHeight / (mPieBottom || mIsLandscape ? 2 : 4) -
+                        (mPieBottom || mIsLandscape ? mBatteryOffsetY : mBatteryOffsetYSide) +
+                        (mIsLandscape ? mLandOffsetY : 0), mStatusPaint);
             }
             // Hide line when there are no notifications
             if (mNotifications.size() > 0) {
-                canvas.drawLine(mWidth / 2 - mLineLength / 2 - (isLandScape() ? mLineOffsetLand : 0),
-                        (mPieBottom ? mHeight / 2 - mLineOffset : mHeight / 4 + mLineOffsetSide)
-                        + (isLandScape() ? mLandOffsetY : 0), mWidth / 2 + mLineLength / 2 -
-                        (isLandScape() ? mLineOffsetLand : 0),
-                        (mPieBottom ? mHeight / 2 - mLineOffset : mHeight / 4 + mLineOffsetSide)
-                        + (isLandScape() ? mLandOffsetY : 0), mLinePaint);
+                canvas.drawLine(mWidth / 2 - mLineLength / 2 - (mIsLandscape ? mLineOffsetLand : 0),
+                        (mPieBottom || mIsLandscape ? mHeight / 2 - mLineOffset : mHeight / 4 + mLineOffsetSide)
+                        + (mIsLandscape ? mLandOffsetY : 0), mWidth / 2 + mLineLength / 2 -
+                        (mIsLandscape ? mLineOffsetLand : 0),
+                        (mPieBottom || mIsLandscape ? mHeight / 2 - mLineOffset : mHeight / 4 + mLineOffsetSide)
+                        + (mIsLandscape ? mLandOffsetY : 0), mLinePaint);
             }
 
             // draw notification icons
@@ -1315,7 +1310,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
 
         if (mBatteryMode == 1 || mBatteryMode == 2) {
             // Draw battery circle
-            final float startAngle = mPieBottom ? 180 : (isLandScape() ? 90 : (mPieLeft ? 270 : 90));
+            final float startAngle = mPieBottom ? 180 : (mIsLandscape ? 90 : (mPieLeft ? 270 : 90));
             final float sweepAngle = (float) (mBatteryLevel / 100.0 * 180.0);
             state = canvas.save();
             canvas.drawArc(mCenter.x - circleRadius + mBatteryCircleRadius,
@@ -1445,7 +1440,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
                     }
                     for (AnimatedImageView view : mIconViews) {
                         Rect rect = new Rect(view.getLeft(), view.getTop() - 375,
-                                view.getRight(), view.getBottom() + (mPieBottom ? 375 : 0));
+                                view.getRight(), view.getBottom() + (mPieBottom || mIsLandscape ? 375 : 0));
                         if (!snappointActive && rect.contains((int) mX, (int) mY)) {
                             view.setSelected(true);
                         } else {
@@ -1645,7 +1640,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
             logo.setScaleType(ScaleType.FIT_XY);
             RelativeLayout.LayoutParams lp = new
                     RelativeLayout.LayoutParams(logoSize, logoSize);
-            if (mPieBottom) {
+            if (mPieBottom || mIsLandscape) {
                 lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             }
             lp.leftMargin = notX - logoSize / 2;
@@ -1684,7 +1679,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
             logo.setScaleType(ScaleType.FIT_XY);
             RelativeLayout.LayoutParams lp = new
                     RelativeLayout.LayoutParams(size, size);
-            if (mPieBottom) {
+            if (mPieBottom || mIsLandscape) {
                 lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             }
             lp.leftMargin = x - size / 2;
