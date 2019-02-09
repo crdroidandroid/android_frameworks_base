@@ -88,6 +88,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.lineageos.internal.util.ScreenType;
+
 /**
  * Pie menu
  * Handles creating, drawing, animations and touch eventing for pie.
@@ -443,7 +445,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
                     mWidth + mSnapOffset, mHeight / 2, mSnapRadius, Gravity.RIGHT);
         }
 
-        if ((!isLandScape() || isTablet()) && isSnapPossible(Gravity.BOTTOM)) {
+        if ((!isLandScape() || ScreenType.isTablet(mContext)) && isSnapPossible(Gravity.BOTTOM)) {
             mTogglePoint[mNumberOfSnapPoints++] = new SnapPoint(
                     mWidth / 2, mHeight + mSnapOffset, mSnapRadius, Gravity.BOTTOM);
         }
@@ -757,13 +759,6 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
      */
     protected boolean isShowing() {
         return mOpen;
-    }
-
-    /**
-     * Checks whether the current configuration is specified as for a tablet.
-     */
-    private boolean isTablet() {
-        return mResources.getBoolean(R.bool.config_isTablet);
     }
 
     /**
