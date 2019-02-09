@@ -21,13 +21,4 @@
          0) as we can allow the carrier text to stretch as far as needed in the QS footer. -->
     <integer name="qs_footer_actions_width">-2</integer>
     <integer name="qs_footer_actions_weight">0</integer>
-
-    <!-- Sensitivity of pie gestures controls.
-      Must be minimum 1 and maximum 10 (See @EdgeServiceConstants.java).
-      Default for pie is high sensitivity -->
-    <integer name="pie_gesture_sensitivity">10</integer>
-
-    <!-- Indicates wether device is a tablet or not -->
-    <bool name="config_isTablet">false</bool>
-
 </resources>
