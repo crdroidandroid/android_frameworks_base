@@ -244,7 +244,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
 
     private boolean mSnappointLaunched;
     private boolean mOpen;
-    private boolean mPieBottom;
+    private boolean mPieBottom, mPieLeft, mPieRight;
     private boolean mRegistered;
 
     private int mThemeMode;
@@ -426,7 +426,9 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
 
         // fetch orientation
         mPanelOrientation = mPanel.getOrientation();
-        mPieBottom = mPanelOrientation == Gravity.BOTTOM || isLandScape();
+        mPieBottom = mPanelOrientation == Gravity.BOTTOM;
+        mPieLeft = mPanelOrientation == Gravity.LEFT;
+        mPieRight = mPanelOrientation == Gravity.RIGHT;
 
         Point outSize = new Point(0, 0);
         mWindowManager.getDefaultDisplay().getRealSize(outSize);
@@ -450,18 +452,17 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
                     mWidth / 2, mHeight + mSnapOffset, mSnapRadius, Gravity.BOTTOM);
         }
 
-        final boolean pieRight = mPanelOrientation == Gravity.RIGHT;
         if (!mSettingsAttached) {
             mSettingsLogo.setImageResource(R.drawable.ic_settings);
             addView(mSettingsLogo);
             mSettingsAttached = true;
         }
         setColor(mSettingsLogo, mDarkThemeEnabled ? mForegroundColor : mBackgroundColor);
-        mTogglePoint[mNumberOfSnapPoints++] = new SettingsPoint(mWidth / 2
-                + (mPieBottom ? 0 : (pieRight ? -mSettingsOffset : mSettingsOffset))
-                + (mPanelOrientation == Gravity.BOTTOM ? 0 :
-                (isLandScape() ? -mSettingsOffsetLand : (pieRight ? -mNOTOffsetX : mNOTOffsetX))),
-                mHeight / (mPanelOrientation == Gravity.BOTTOM ? 6 : 2), mNOTRadius, mSettingsLogo,
+        mTogglePoint[mNumberOfSnapPoints++] = new SettingsPoint((mWidth / 2)
+                + (mPieBottom ? 0 : (mPieRight ? -mSettingsOffset : mSettingsOffset))
+                + (mPieBottom ? 0 :
+                (isLandScape() ? -mSettingsOffsetLand : (mPieRight ? -mNOTOffsetX : mNOTOffsetX))),
+                mHeight / (mPieBottom ? 6 : 2), mNOTRadius, mSettingsLogo,
                 mNOTSize);
 
         if (isAssistantAvailable()) {
@@ -471,10 +472,10 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
                 mNotAttached = true;
             }
             setColor(mNOTLogo, mDarkThemeEnabled ? mForegroundColor : mBackgroundColor);
-            mTogglePoint[mNumberOfSnapPoints++] = new NowOnTapPoint(mWidth / 2 +
-                    (mPanelOrientation == Gravity.BOTTOM ? 0 : (isLandScape() ? mWidth / 7 :
-                    (pieRight ? -mNOTOffsetX : mNOTOffsetX))), mHeight / 2 +
-                    (mPanelOrientation == Gravity.BOTTOM ? mNOTOffsetY : 0),
+            mTogglePoint[mNumberOfSnapPoints++] = new NowOnTapPoint((mWidth / 2) +
+                    (mPieBottom ? 0 : (isLandScape() ? mWidth / 7 :
+                    (mPieRight ? -mNOTOffsetX : mNOTOffsetX))), (mHeight / 2) +
+                    (mPieBottom ? mNOTOffsetY : 0),
                     mNOTRadius, mNOTLogo, mNOTSize);
         }
 
@@ -1287,7 +1288,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
                         - toggle.radius, toggle.x + toggle.radius, toggle.y + toggle.radius,
                         mShaderStartColor, mShaderEndColor, Shader.TileMode.CLAMP));
                 mToggleShaderPaint.setAlpha((int) ((!isTogglePoint && mBackgroundFraction == 1f ?
-                        toggleAnimatorFraction : (toggle instanceof SettingsPoint ?
+                        toggleAnimatorFraction : (isTogglePoint ?
                         mSettingsToggleFraction : mBackgroundFraction)) * 0xff));
                 state = canvas.save();
                 canvas.drawCircle(toggle.x, toggle.y, toggle.radius, mToggleShaderPaint);
@@ -1296,7 +1297,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
                 mToggleBackground.setColor(mForegroundColor);
             }
             toggle.draw(canvas, mToggleBackground, fraction, (!isTogglePoint && mBackgroundFraction
-                    == 1f ? toggleAnimatorFraction : (toggle instanceof SettingsPoint
+                    == 1f ? toggleAnimatorFraction : (isTogglePoint
                             ? mSettingsToggleFraction : mBackgroundFraction)));
             // Only draw when outside animator is running.
             if (mToggleOuterGrowAnimator.isStarted()) {
@@ -1314,9 +1315,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
 
         if (mBatteryMode == 1 || mBatteryMode == 2) {
             // Draw battery circle
-            final boolean pieLeft = mPanelOrientation == Gravity.LEFT;
-            final boolean pieBottom = mPanelOrientation == Gravity.BOTTOM;
-            final float startAngle = pieBottom ? 180 : (isLandScape() ? 90 : (pieLeft ? 270 : 90));
+            final float startAngle = mPieBottom ? 180 : (isLandScape() ? 90 : (mPieLeft ? 270 : 90));
             final float sweepAngle = (float) (mBatteryLevel / 100.0 * 180.0);
             state = canvas.save();
             canvas.drawArc(mCenter.x - circleRadius + mBatteryCircleRadius,
@@ -1646,7 +1645,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
             logo.setScaleType(ScaleType.FIT_XY);
             RelativeLayout.LayoutParams lp = new
                     RelativeLayout.LayoutParams(logoSize, logoSize);
-            if (mPanelOrientation == Gravity.BOTTOM) {
+            if (mPieBottom) {
                 lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             }
             lp.leftMargin = notX - logoSize / 2;
@@ -1685,7 +1684,7 @@ public class PieMenu extends RelativeLayout implements TunerService.Tunable {
             logo.setScaleType(ScaleType.FIT_XY);
             RelativeLayout.LayoutParams lp = new
                     RelativeLayout.LayoutParams(size, size);
-            if (mPanelOrientation == Gravity.BOTTOM) {
+            if (mPieBottom) {
                 lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             }
             lp.leftMargin = x - size / 2;
