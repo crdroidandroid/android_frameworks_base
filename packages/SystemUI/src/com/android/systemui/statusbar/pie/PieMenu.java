@@ -71,6 +71,7 @@ import android.widget.RelativeLayout;
 import com.android.internal.app.AssistUtils;
 import com.android.internal.statusbar.StatusBarIcon;
 
+import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.AnimatedImageView;
 import com.android.systemui.statusbar.phone.StatusBar;
@@ -79,6 +80,7 @@ import com.android.systemui.statusbar.StatusBarIconView;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.IconState;
 import com.android.systemui.statusbar.policy.NetworkController.SignalCallback;
+import com.android.systemui.tuner.TunerService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,7 +92,7 @@ import java.util.Locale;
  * Pie menu
  * Handles creating, drawing, animations and touch eventing for pie.
  */
-public class PieMenu extends RelativeLayout {
+public class PieMenu extends RelativeLayout implements TunerService.Tunable {
     private static final String TAG = PieMenu.class.getSimpleName();
     private static final boolean DEBUG = false;
 
@@ -225,6 +227,7 @@ public class PieMenu extends RelativeLayout {
 
     // Pie theme
     private boolean mDarkThemeEnabled;
+    private boolean mSystemDarkTheme;
 
     private boolean mHasShown;
     private boolean mReversing;
@@ -242,6 +245,7 @@ public class PieMenu extends RelativeLayout {
     private boolean mPieBottom;
     private boolean mRegistered;
 
+    private int mThemeMode;
     private int mBatteryMode;
     private int mStatusIndicator;
 
@@ -258,6 +262,15 @@ public class PieMenu extends RelativeLayout {
     private int mStatusIconSize;
     private int mWifiIconResId;
     private int mNetworkIconResId;
+
+    private static final String PIE_THEME_MODE =
+            Settings.Secure.PIE_THEME_MODE;
+    private static final String PIE_BATTERY_MODE =
+            Settings.Secure.PIE_BATTERY_MODE;
+    private static final String PIE_STATUS_INDICATOR =
+            Settings.Secure.PIE_STATUS_INDICATOR;
+    private static final String BERRY_DARK_CHECK =
+            "system:" + Settings.System.BERRY_DARK_CHECK;
 
     /**
      * Creates a new pie outline view
@@ -369,22 +382,11 @@ public class PieMenu extends RelativeLayout {
      */
     private void getDimensions() {
         // get theme status
-        int themeMode = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.PIE_THEME_MODE, 0);
-        if (themeMode == 0) {
-            int primaryTheme = mContext.getResources().getColor(R.color.system_primary_color);
-            mDarkThemeEnabled = primaryTheme == 1 || primaryTheme == 3;
+        if (mThemeMode == 0) {
+            mDarkThemeEnabled = mSystemDarkTheme;
         } else {
-            mDarkThemeEnabled = themeMode == 2;
+            mDarkThemeEnabled = mThemeMode == 2;
         }
-
-        // Battery circle status
-        mBatteryMode = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.PIE_BATTERY_MODE, 2);
-
-        // status indicator
-        mStatusIndicator = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.PIE_STATUS_INDICATOR, 0);
 
         // Settings
         mSettingsOffset = mResources.getDimensionPixelSize(R.dimen.pie_settings_offset);
@@ -1529,7 +1531,19 @@ public class PieMenu extends RelativeLayout {
 
     @Override
     protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
         setVisibility(View.GONE);
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, PIE_THEME_MODE);
+        tunerService.addTunable(this, PIE_BATTERY_MODE);
+        tunerService.addTunable(this, PIE_STATUS_INDICATOR);
+        tunerService.addTunable(this, BERRY_DARK_CHECK);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Dependency.get(TunerService.class).removeTunable(this);
     }
 
     @Override
@@ -1537,6 +1551,30 @@ public class PieMenu extends RelativeLayout {
         mWidth = w;
         mHeight = h;
         setOutlineProvider(new PieOutline());
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case PIE_THEME_MODE:
+                mThemeMode =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                break;
+            case PIE_BATTERY_MODE:
+                mBatteryMode =
+                        newValue == null ? 2 : Integer.parseInt(newValue);
+                break;
+            case PIE_STATUS_INDICATOR:
+                mStatusIndicator =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                break;
+            case BERRY_DARK_CHECK:
+                mSystemDarkTheme =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                break;
+            default:
+                break;
+        }
     }
 
     private class AnimatorUpdateListener implements ValueAnimator.AnimatorUpdateListener {
