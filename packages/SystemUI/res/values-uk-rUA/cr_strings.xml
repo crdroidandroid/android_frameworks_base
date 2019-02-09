@@ -119,8 +119,8 @@
     <string name="pie_hour_format_12">hh:mm</string>
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
-    <string name="pie_state_name">Pie Control</string>
-    <string name="pie_state_summary">Використовувати Pie-керування в повноекранному режимі</string>
+    <string name="pie_state_name">Панель управління Pie</string>
+    <string name="pie_state_summary">Використовувати Pie-управління в повноекранному режимі</string>
     <string name="pie_battery_level">"Заряд батареї "</string>
-    <string name="quick_settings_pie">Pie Control</string>
+    <string name="quick_settings_pie">Панель управління Pie</string>
 </resources>
