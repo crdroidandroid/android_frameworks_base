@@ -90,7 +90,6 @@ public class PieController extends EdgeGestureManager.EdgeGestureActivationListe
     private int mHeight;
     private int mRotation;
 
-    private int mPiePosition;
     private int mInjectKeycode;
 
     private boolean mPieEnabled;
@@ -123,7 +122,6 @@ public class PieController extends EdgeGestureManager.EdgeGestureActivationListe
         mOrientation = Gravity.BOTTOM;
         mRelocatePieOnRotation = mContext.getResources().getBoolean(
                 R.bool.config_relocatePieOnRotation);
-        mRotation = mWindowManager.getDefaultDisplay().getRotation();
 
         mEdgeGestureManager = EdgeGestureManager.getInstance();
         mEdgeGestureManager.setEdgeGestureActivationListener(this);
@@ -133,13 +131,13 @@ public class PieController extends EdgeGestureManager.EdgeGestureActivationListe
         mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
     }
 
-    public void resetPie(boolean enabled, int gravity) {
-        if (mPieEnabled == enabled && mPieGravity == gravity) return;
+    public void resetPie(boolean enabled, int gravity, int rotation) {
+        if (mPieEnabled == enabled && mPieGravity == gravity &&
+                mRotation == rotation) return;
 
         mPieEnabled = enabled;
         mPieGravity = gravity;
-
-        mRotation = mWindowManager.getDefaultDisplay().getRotation();
+        mRotation = rotation;
 
         if (mPieAttached) {
             // Remove the view
@@ -153,35 +151,67 @@ public class PieController extends EdgeGestureManager.EdgeGestureActivationListe
 
         switch (mPieGravity) {
             // this is just main gravity, the trigger is centered later
-            default:
+            case 0:
                 addPieInLocation(Gravity.LEFT);
                 break;
             case 1:
                 addPieInLocation(Gravity.RIGHT);
                 break;
             case 2:
+            default:
                 addPieInLocation(Gravity.BOTTOM);
                 break;
         }
     }
 
-    private void initOrientation(int orientation) {
-        mOrientation = orientation;
+    private void initOrientation(int gravity) {
+        int orientation;
 
         // Default to bottom if no pie gravity is set
-        if (mOrientation != Gravity.BOTTOM && mOrientation != Gravity.RIGHT
-                && mOrientation != Gravity.LEFT) {
-            mOrientation = Gravity.BOTTOM;
+        if (gravity != Gravity.BOTTOM && gravity != Gravity.RIGHT
+                && gravity != Gravity.LEFT) {
+            orientation = Gravity.BOTTOM;
+        } else {
+            orientation = gravity;
         }
+        mOrientation = convertRelativeToAbsoluteGravity(orientation);
     }
 
-    protected void reorient(int orientation) {
+    protected void reorient(int gravity) {
+        int orientation;
+
+        // Default to bottom if no pie gravity is set
+        if (gravity != Gravity.BOTTOM && gravity != Gravity.RIGHT
+                && gravity != Gravity.LEFT) {
+            orientation = Gravity.BOTTOM;
+        } else {
+            orientation = gravity;
+        }
         mOrientation = convertRelativeToAbsoluteGravity(orientation);
-        mPiePosition = getOrientation();
-        setupEdgeGesture(mPiePosition);
+
+        setupEdgeGesture();
         mPie.show(mPie.isShowing());
+        applyGravity(gravity);
+    }
+
+    private void applyGravity(int gravity) {
+        int val;
+
+        switch (gravity) {
+            case Gravity.LEFT:
+                val = 0;
+                break;
+            case Gravity.RIGHT:
+                val = 1;
+                break;
+            case Gravity.BOTTOM:
+            default: // fall back
+                val = 2;
+                break;
+        }
+
         Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                Settings.Secure.PIE_GRAVITY, mOrientation, UserHandle.USER_CURRENT);
+                Settings.Secure.PIE_GRAVITY, val, UserHandle.USER_CURRENT);
     }
 
     protected boolean isKeyguardLocked() {
@@ -209,8 +239,7 @@ public class PieController extends EdgeGestureManager.EdgeGestureActivationListe
         initOrientation(gravity);
 
         // pie edge gesture
-        mPiePosition = getOrientation();
-        setupEdgeGesture(mPiePosition);
+        setupEdgeGesture();
 
         // add pie view to windowmanager
         mWindowManager.addView(mPie, lp);
@@ -229,8 +258,8 @@ public class PieController extends EdgeGestureManager.EdgeGestureActivationListe
         return false;
     }
 
-    private void setupEdgeGesture(int gravity) {
-        int triggerSlot = convertToEdgeGesturePosition(gravity);
+    private void setupEdgeGesture() {
+        int triggerSlot = convertToEdgeGesturePosition();
 
         int sensitivity = mContext.getResources().getInteger(R.integer.pie_gesture_sensitivity);
         if (sensitivity < EdgeServiceConstants.SENSITIVITY_LOWEST
@@ -245,8 +274,8 @@ public class PieController extends EdgeGestureManager.EdgeGestureActivationListe
                         | EdgeServiceConstants.UNRESTRICTED);
     }
 
-    private int convertToEdgeGesturePosition(int gravity) {
-        switch (gravity) {
+    private int convertToEdgeGesturePosition() {
+        switch (getOrientation()) {
             case Gravity.LEFT:
                 return EdgeGesturePosition.LEFT.FLAG;
             case Gravity.RIGHT:
@@ -352,7 +381,7 @@ public class PieController extends EdgeGestureManager.EdgeGestureActivationListe
 
     protected void setCenter(int x, int y) {
         if (!mForcePieCentered) {
-            switch (mPiePosition) {
+            switch (getOrientation()) {
                 case Gravity.LEFT:
                 case Gravity.RIGHT:
                     y = mEdgeGestureTouchPos.y;
