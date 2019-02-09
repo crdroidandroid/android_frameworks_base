@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.media.MediaMetadata;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
@@ -32,7 +31,6 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
     private StatusBar mStatusBar;
     private TextView mText;
     private Context mContext;
-    private MediaMetadata mMediaMetaData;
     private String mMediaText;
     private boolean mForcedMediaDoze;
     private Handler mHandler;
@@ -46,16 +44,13 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
 
     private static final String FONT_FAMILY = "sans-serif-light";
 
-    private String mTrackInfoSeparator;
-
     public AmbientIndicationContainer(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         mContext = context;
-        mTrackInfoSeparator = getResources().getString(R.string.ambientmusic_songinfo);
     }
 
     public void hideIndication() {
-        setIndication(null, null, false);
+        setIndication(null, false);
     }
 
     public void initializeView(StatusBar statusBar, Handler handler) {
@@ -68,7 +63,7 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
         mAmbientIndication = findViewById(R.id.ambient_indication);
         mText = (TextView)findViewById(R.id.ambient_indication_text);
         mIcon = (ImageView)findViewById(R.id.ambient_indication_icon);
-        setIndication(mMediaMetaData, mMediaText, false);
+        setIndication(mMediaText, false);
     }
 
     public void updateKeyguardState(boolean keyguard) {
@@ -142,11 +137,7 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
         this.setLayoutParams(lp);
     }
 
-    public void setNowPlayingIndication(String trackInfo) {
-        setIndication(null, trackInfo, true);
-    }
-
-    public void setIndication(MediaMetadata mediaMetaData, String notificationText, boolean nowPlaying) {
+    public void setIndication(String notificationText, boolean nowPlaying) {
         // never override local music ticker but be sure to delete Now Playing info when needed
         if (nowPlaying && notificationText == null) {
             mMediaText = null;
@@ -154,29 +145,17 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
         }
         if (nowPlaying && mInfoAvailable) return;
 
-        CharSequence charSequence = null;
         mInfoToSet = null;
         Typeface tf = Typeface.create(FONT_FAMILY, Typeface.NORMAL);
 
-        if (mediaMetaData != null) {
-            CharSequence artist = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ARTIST);
-            CharSequence album = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ALBUM);
-            CharSequence title = mediaMetaData.getText(MediaMetadata.METADATA_KEY_TITLE);
-            if (artist != null && album != null && title != null) {
-                /* considering we are in Ambient mode here, it's not worth it to show
-                    too many infos, so let's skip album name to keep a smaller text */
-                charSequence = String.format(mTrackInfoSeparator, title.toString(), artist.toString());
-            }
-        }
+
         if (mKeyguard) {
             // if we are already showing an Ambient Notification with track info,
             // stop the current scrolling and start it delayed again for the next song
             setTickerMarquee(true, true);
         }
 
-        if (!TextUtils.isEmpty(charSequence)) {
-            mInfoToSet = charSequence.toString();
-        } else if (!TextUtils.isEmpty(notificationText)) {
+        if (!TextUtils.isEmpty(notificationText)) {
             mInfoToSet = notificationText;
         }
 
@@ -187,7 +166,6 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
         }
 
         if (mInfoAvailable || mNpInfoAvailable) {
-            mMediaMetaData = mediaMetaData;
             mMediaText = notificationText;
             boolean isAnotherTrack = (mInfoAvailable || mNpInfoAvailable)
                     && (TextUtils.isEmpty(mLastInfo) || (!TextUtils.isEmpty(mLastInfo) && !mLastInfo.equals(mInfoToSet)));

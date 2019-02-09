@@ -5795,10 +5795,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         getMediaManager().setPulseBlacklist(blacklist);
     }
 
-    public void setAmbientMusicInfo(MediaMetadata mediaMetadata, String notificationText, boolean nowPlaying) {
+    public void setAmbientMusicInfo(String notificationText, boolean nowPlaying) {
         if (isAmbientContainerAvailable()) {
             ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(
-                    mediaMetadata, notificationText, nowPlaying);
+                    notificationText, nowPlaying);
         }
     }
 
@@ -6390,8 +6390,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 mAmbientMediaPlaying =
                         TunerService.parseIntegerSwitch(newValue, false);
                 if (isAmbientContainerAvailable()) {
-                    ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(
-                    mMediaManager.getMediaMetadata(), null, false);
+                    ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(null, false);
                 }
                 break;
             case BERRY_ACCENT_PICKER:
