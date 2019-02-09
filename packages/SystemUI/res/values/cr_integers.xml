@@ -24,4 +24,8 @@
     <!-- The min animation duration for animating the fab out -->
     <integer name="recents_animate_fab_exit_duration">125</integer>
 
+    <!-- Sensitivity of pie gestures controls.
+      Must be minimum 1 and maximum 10 (See @EdgeServiceConstants.java).
+      Default for pie is high sensitivity -->
+    <integer name="pie_gesture_sensitivity">10</integer>
 </resources>

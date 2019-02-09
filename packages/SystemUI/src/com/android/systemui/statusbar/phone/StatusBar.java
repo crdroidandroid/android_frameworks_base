@@ -3639,8 +3639,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
        int rotation = mDisplay.getRotation();
         if (rotation != mOrientation) {
-            updatePieControls();
             mOrientation = rotation;
+            updatePieControls();
         }
     }
 
@@ -6395,7 +6395,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 break;
             case PIE_GRAVITY:
                 mPieGravity =
-                        newValue == null ? 0 : Integer.parseInt(newValue);
+                        newValue == null ? 2 : Integer.parseInt(newValue);
                 updatePieControls();
                 break;
             default:
@@ -6449,7 +6449,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         }
 
         toggleOrientationListener(mPieEnabled);
-        mPieController.resetPie(mPieEnabled, mPieGravity);
+        mPieController.resetPie(mPieEnabled, mPieGravity, mOrientation);
     }
 
     private void getOrientationListener() {
@@ -6459,8 +6459,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
              public void onOrientationChanged(int orientation) {
                 int rotation = mDisplay.getRotation();
                 if (rotation != mOrientation) {
-                    updatePieControls();
                     mOrientation = rotation;
+                    updatePieControls();
                 }
             }
          };
