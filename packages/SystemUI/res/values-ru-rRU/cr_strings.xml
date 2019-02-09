@@ -119,8 +119,8 @@
     <string name="pie_hour_format_12">hh:mm</string>
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
-    <string name="pie_state_name">Pie Control</string>
-    <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-    <string name="pie_battery_level">"BATTERY LEVEL "</string>
-    <string name="quick_settings_pie">Pie Control</string>
+    <string name="pie_state_name">Панель Pie</string>
+    <string name="pie_state_summary">Использовать Pie-управление в полноэкранном режиме</string>
+    <string name="pie_battery_level">"Заряд батареи "</string>
+    <string name="quick_settings_pie">Панель Pie</string>
 </resources>
