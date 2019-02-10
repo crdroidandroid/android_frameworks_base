@@ -114,4 +114,13 @@
     <string name="accessibility_quick_settings_location_gps_only">Вызначэнне месцазнаходжання: рэжым толькі датчыкі.</string>
     <string name="quick_settings_location_secondary_high_accuracy">Высокая дакладнасць</string>
     <string name="accessibility_quick_settings_location_high_accuracy">Вызначэнне месцазнаходжання: рэжым высокай дакладнасці.</string>
+    <!-- Pie controls -->
+    <string name="pie_date_format">EEEE, dd MMMM yyyy</string>
+    <string name="pie_hour_format_12">hh:mm</string>
+    <string name="pie_hour_format_24">HH:mm</string>
+    <string name="pie_am_pm">a</string>
+    <string name="pie_state_name">Панэль кіравання Pie</string>
+    <string name="pie_state_summary">Выкарыстоўваць кіраванне Pie у поўнаэкранным рэжыме</string>
+    <string name="pie_battery_level">"ЗАРАД БАТАРЭІ "</string>
+    <string name="quick_settings_pie">Панэль кіравання Pie</string>
 </resources>
