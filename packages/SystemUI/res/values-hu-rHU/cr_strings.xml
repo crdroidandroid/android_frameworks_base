@@ -120,7 +120,7 @@
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
     <string name="pie_state_name">Pie-vezérlés</string>
-    <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-    <string name="pie_battery_level">"BATTERY LEVEL "</string>
-    <string name="quick_settings_pie">Pie Control</string>
+    <string name="pie_state_summary">Körcikk alakú mozdulatvezérlés használata teljes képernyős üzemmódban</string>
+    <string name="pie_battery_level">"AKKUMULÁTORSZINT "</string>
+    <string name="quick_settings_pie">Pie-vezérlés</string>
 </resources>
