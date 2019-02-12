@@ -2480,7 +2480,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
             // Don't override if a valid battery status update has come in
             final BatteryStatus status = new BatteryStatus(BATTERY_STATUS_UNKNOWN,
                     /* level= */ level, /* plugged= */ 0, CHARGING_POLICY_DEFAULT,
-                    /* maxChargingWattage= */0, /* present= */true);
+                    /* maxChargingWattage= */0, /* present= */true,
+                    0.0f, 0.0f, 0.0f);
             mMainExecutor.execute(() -> {
                 if (mBatteryStatus == null) {
                     handleBatteryUpdate(status);
@@ -3802,12 +3803,20 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, CoreSt
         }
 
         // change in charging current while plugged in
-        if (nowPluggedIn && current.maxChargingWattage != old.maxChargingWattage) {
+        if (nowPluggedIn &&
+              (current.maxChargingWattage != old.maxChargingWattage ||
+               current.maxChargingCurrent != old.maxChargingCurrent ||
+               current.maxChargingVoltage != old.maxChargingVoltage)) {
             return true;
         }
 
         // change in battery is present or not
         if (old.present != current.present) {
+            return true;
+        }
+
+        // change in battery temperature
+        if (old.temperature != current.temperature) {
             return true;
         }
 
