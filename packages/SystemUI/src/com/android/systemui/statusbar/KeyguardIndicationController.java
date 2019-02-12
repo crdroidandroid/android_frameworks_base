@@ -122,7 +122,7 @@ public class KeyguardIndicationController implements StateListener,
     private boolean mBatteryOverheated;
     private boolean mEnableBatteryDefender;
     private int mChargingSpeed;
-    private int mChargingWattage;
+    private double mChargingWattage;
     private int mBatteryLevel;
     private long mChargingTimeRemaining;
     private float mDisclosureMaxAlpha;
@@ -566,6 +566,10 @@ public class KeyguardIndicationController implements StateListener,
          if (showbatteryInfo) {
             if (mChargingCurrent > 0) {
                 batteryInfo = batteryInfo + (mChargingCurrent / 1000) + "mA";
+            }
+            if (mChargingWattage > 0) {
+                batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
+                        String.format("%.1f" , (mChargingWattage / 1000 / 1000)) + "W";
             }
             if (mChargingVoltage > 0) {
                 batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
