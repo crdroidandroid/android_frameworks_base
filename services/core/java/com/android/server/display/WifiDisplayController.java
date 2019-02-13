@@ -549,7 +549,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
         }
 
         if (handlePreExistingConnection(device)) {
-            Slog.i(TAG, "already handle the preexisting p2p connection status");
+            Slog.i(TAG, "Already handle the preexisting P2P connection status");
             return;
         }
         mDesiredDevice = device;
@@ -927,7 +927,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
             }
 
             if (mDesiredDevice != null) {
-                Slog.i(TAG, "reconnect new device: " + mDesiredDevice.deviceName);
+                Slog.i(TAG, "Reconnect new device: " + mDesiredDevice.deviceName);
                 updateConnection();
                 return;
             }
@@ -1053,7 +1053,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
         if (mNetworkInfo == null || !mNetworkInfo.isConnected() || mWifiDisplayCertMode) {
             return false;
         }
-        Slog.i(TAG, "handle the preexisting p2p connection status");
+        if (DEBUG) Slog.i(TAG, "Handle the preexisting P2P connection status");
         mWifiP2pManager.requestGroupInfo(getWifiP2pChannel(), new GroupInfoListener() {
             @Override
             public void onGroupInfoAvailable(WifiP2pGroup info) {
@@ -1061,19 +1061,20 @@ final class WifiDisplayController implements DumpUtils.Dump {
                     return;
                 }
                 if (info.contains(device)) {
-                    Slog.i(TAG, "already connected to the desired device: " + device.deviceName);
+                    if (DEBUG) Slog.i(TAG, "Already connected to the desired device: "
+                            + device.deviceName);
                     updateConnection();
                     handleConnectionChanged(mNetworkInfo);
                 } else {
                     mWifiP2pManager.removeGroup(getWifiP2pChannel(), new ActionListener() {
                         @Override
                         public void onSuccess() {
-                            Slog.i(TAG, "disconnect the old device");
+                            Slog.i(TAG, "Disconnect the old device");
                         }
 
                         @Override
                         public void onFailure(int reason) {
-                            Slog.i(TAG, "Failed to disconnect the old device: reason=" + reason);
+                            Slog.w(TAG, "Failed to disconnect the old device: reason=" + reason);
                         }
                     });
                 }
