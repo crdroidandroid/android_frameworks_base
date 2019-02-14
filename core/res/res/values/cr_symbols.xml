@@ -144,4 +144,7 @@
   <java-symbol type="drawable" name="weather_sunny" />
   <java-symbol type="drawable" name="weather_thunderstorms" />
   <java-symbol type="drawable" name="weather_windy" />
+
+  <!-- Whether to enable OP5/T cam hack -->
+  <java-symbol type="bool" name="config_enableOPcamhack" />
 </resources>
