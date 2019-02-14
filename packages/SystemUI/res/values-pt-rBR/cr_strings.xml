@@ -51,14 +51,14 @@
     <string name="accessibility_quick_settings_cpuinfo_changed_off">Informações da CPU desativadas</string>
     <string name="accessibility_quick_settings_cpuinfo_changed_on">Informações da CPU ativadas</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">Botões físicos</string>
+    <string name="quick_settings_hw_keys_label">Teclas físicas</string>
     <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_disabled">Teclas físicas desactivadas.</string>
+    <string name="accessibility_quick_settings_hw_keys_disabled">Teclas físicas desabilitadas.</string>
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_enabled">Teclas físicas desactivadas.</string>
+    <string name="accessibility_quick_settings_hw_keys_enabled">Teclas físicas ativadas.</string>
     <!-- Heads up snooze toast -->
-    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Notificações furtivas estão pausadas por 1 minuto.</string>
-    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g>A notificação de espreitadela é uma repetição por <xliff:g id="number">%d</xliff:g> minutes.</string>
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s </xliff:g> - As notificações estão cochilando durante 1 minuto.</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - As notificações estão cochilando por <xliff:g id="number">%d</xliff:g> minutos.</string>
     <!-- Expanded Desktop QS Tile -->
     <string name="quick_settings_expanded_desktop_label">Área de trabalho expandida</string>
     <string name="quick_settings_expanded_desktop">Expandido</string>
@@ -89,7 +89,7 @@
     <string name="quick_settings_music_play">Reproduzir</string>
     <string name="quick_settings_music_pause">Pausar</string>
     <!-- Always on Display Tile -->
-    <string name="quick_settings_always_on_display_label">Ecrã sempre ativo</string>
+    <string name="quick_settings_always_on_display_label">Tela sempre ativa</string>
     <!-- On The Go -->
     <string name="global_action_onthego">Modo On-The-Go</string>
     <string name="onthego_notif_ticker">On-The-Go ativado</string>
@@ -120,7 +120,7 @@
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
     <string name="pie_state_name">Controlos Pie</string>
-    <string name="pie_state_summary">Usar os controlos Pie enquanto estiver em modo imersivo</string>
-    <string name="pie_battery_level">"NÍVEL DA BATERIA "</string>
+    <string name="pie_state_summary">Usar os controles Pie durante o modo imersivo</string>
+    <string name="pie_battery_level">"NÍVEL DE BATERIA "</string>
     <string name="quick_settings_pie">Controlos Pie</string>
 </resources>
