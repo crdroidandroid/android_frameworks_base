@@ -18,6 +18,7 @@ package android.hardware.camera2;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.content.res.Resources;
 import android.hardware.camera2.impl.CameraMetadataNative;
 import android.hardware.camera2.impl.PublicKey;
 import android.hardware.camera2.impl.SyntheticKey;
@@ -31,6 +32,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import android.app.ActivityThread;
 
 /**
  * <p>The properties describing a
@@ -220,6 +222,14 @@ public final class CameraCharacteristics extends CameraMetadata<CameraCharacteri
      */
     @Nullable
     public <T> T get(Key<T> key) {
+        if(key == INFO_SUPPORTED_HARDWARE_LEVEL){
+            boolean opCamHack = Resources.getSystem().getBoolean(
+                com.android.internal.R.bool.config_enableOPcamhack);
+            String packageName = ActivityThread.currentOpPackageName();
+            if(opCamHack && packageName.equals("com.oneplus.camera")){
+                return (T)new Integer(0x2);
+            }
+        }
         return mProperties.get(key);
     }
 
