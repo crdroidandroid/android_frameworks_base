@@ -668,7 +668,7 @@ public class Camera {
         String packageName = ActivityThread.currentOpPackageName();
 
         //Force HAL1 if the package name falls in this bucket
-        String packageList = SystemProperties.get("camera.hal1.packagelist", "");
+        String packageList = SystemProperties.get("vendor.camera.hal1.packagelist", "");
         if (packageList.length() > 0) {
             TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter(',');
             splitter.setString(packageList);
