@@ -122,5 +122,5 @@
     <string name="pie_state_name">扇形控制</string>
     <string name="pie_state_summary">在沉浸模式下启用扇形控制</string>
     <string name="pie_battery_level">"电池电量 "</string>
-    <string name="quick_settings_pie">Pie侧边工具</string>
+    <string name="quick_settings_pie">扇形控制</string>
 </resources>
