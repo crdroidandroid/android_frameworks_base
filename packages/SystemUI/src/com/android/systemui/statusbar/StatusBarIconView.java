@@ -173,7 +173,7 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
         mDensity = context.getResources().getDisplayMetrics().densityDpi;
         if (mNotification != null) {
             setDecorColor(getContext().getColor(
-                    com.android.internal.R.color.notification_default_color_light));
+                    com.android.internal.R.color.notification_default_color_dark));
         }
         reloadDimens();
         maybeUpdateIconScaleDimens();
