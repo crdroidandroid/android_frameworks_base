@@ -156,9 +156,9 @@ public class QSTileView extends QSTileBaseView {
         if (Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.QS_TILE_TITLE_VISIBILITY, 1,
                 UserHandle.USER_CURRENT) == 1) {
-           mLabel.setVisibility(View.VISIBLE);
+           mLabelContainer.setVisibility(View.VISIBLE);
         } else {
-           mLabel.setVisibility(View.GONE);
+           mLabelContainer.setVisibility(View.GONE);
         }
     }
 }
