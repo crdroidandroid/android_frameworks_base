@@ -203,9 +203,7 @@ public class NavigationBarFragment extends Fragment implements Callbacks,
     private final OverviewProxyListener mOverviewProxyListener = new OverviewProxyListener() {
         @Override
         public void onConnectionChanged(boolean isConnected) {
-            setFullGestureMode(); // updateStates will update back icon visibility
-            mNavigationBarView.updateStates();
-            updateScreenPinningGestures();
+            updateStates();
         }
 
         @Override
@@ -216,9 +214,7 @@ public class NavigationBarFragment extends Fragment implements Callbacks,
 
         @Override
         public void onInteractionFlagsChanged(@InteractionType int flags) {
-            setFullGestureMode();
-            mNavigationBarView.updateStates();
-            updateScreenPinningGestures();
+            updateStates();
         }
 
         @Override
@@ -234,6 +230,12 @@ public class NavigationBarFragment extends Fragment implements Callbacks,
             }
         }
     };
+
+    public void updateStates() {
+        setFullGestureMode();
+        mNavigationBarView.updateStates();
+        updateScreenPinningGestures();
+    }
 
     // ----- Fragment Lifecycle Callbacks -----
 

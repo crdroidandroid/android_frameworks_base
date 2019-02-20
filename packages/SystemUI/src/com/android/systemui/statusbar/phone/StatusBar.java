@@ -642,6 +642,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private boolean mScreenOn;
     private boolean mKeyguardShowingMedia;
     private boolean mShowMediaMetadata;
+    private boolean mNavbarVisible;
 
     private BroadcastReceiver mWallpaperChangedReceiver = new BroadcastReceiver() {
         @Override
@@ -1078,12 +1079,12 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             mNotificationPanelDebugText.setVisibility(View.VISIBLE);
         }
 
-        boolean showNav = LineageSettings.System.getIntForUser(mContext.getContentResolver(),
+        mNavbarVisible = LineageSettings.System.getIntForUser(mContext.getContentResolver(),
                 LineageSettings.System.FORCE_SHOW_NAVBAR,
                 Utils.hasNavbarByDefault(mContext) ? 1 : 0, UserHandle.USER_CURRENT) != 0;
         if (DEBUG)
-            Log.v(TAG, "hasNavigationBar=" + showNav);
-        if (showNav) {
+            Log.v(TAG, "hasNavigationBar=" + mNavbarVisible);
+        if (mNavbarVisible) {
             createNavigationBar();
         }
 
@@ -1294,21 +1295,25 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 ((NavigationBarFrame)mNavigationBarView).disableDeadZone();
             }
             mNavigationBar.setCurrentSysuiVisibility(mSystemUiVisibility);
+            mNavigationBar.updateStates();
         });
     }
 
     protected void removeNavigationBar() {
-        if (mNavigationBarView != null) {
+        if (mNavigationBar != null && mNavigationBarView != null) {
             FragmentHostManager fragmentHost = FragmentHostManager.get(mNavigationBarView);
             if (mNavigationBarView.isAttachedToWindow()) {
+                mNavigationBar.updateStates();
                 mWindowManager.removeViewImmediate(mNavigationBarView);
+                mNavigationBarView = null;
             }
-            if (mNavigationBar != null) {
-                fragmentHost.getFragmentManager().beginTransaction().remove(mNavigationBar).commit();
-                mNavigationBar = null;
-            }
-            mNavigationBarView = null;
+            fragmentHost.getFragmentManager().beginTransaction().remove(mNavigationBar).commit();
+            mNavigationBar = null;
         }
+    }
+
+    public boolean isNavBarVisible() {
+        return mNavbarVisible;
     }
 
     public NotificationMediaManager getMediaManager() {
@@ -6298,7 +6303,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 break;
             case FORCE_SHOW_NAVBAR:
                 if (mWindowManagerService == null) break;
-                boolean mNavbarVisible =
+                mNavbarVisible =
                         TunerService.parseIntegerSwitch(newValue, Utils.hasNavbarByDefault(mContext));
                 if (mNavbarVisible) {
                     createNavigationBar();
