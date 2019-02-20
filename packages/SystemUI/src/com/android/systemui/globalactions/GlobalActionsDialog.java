@@ -1794,6 +1794,8 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener,
 
         @Override
         public void dismiss() {
+            // Remove outside touch listener to avoid multiple dismiss calls.
+            mHardwareLayout.setOutsideTouchListener(null);
             mHardwareLayout.setTranslationX(0);
             mHardwareLayout.setAlpha(1);
             mHardwareLayout.animate()
