@@ -85,6 +85,8 @@ public class OverviewProxyService implements CallbackController<OverviewProxyLis
     private boolean mIsEnabled;
     private MotionEvent mStatusBarGestureDownEvent;
 
+    private final StatusBar statusBar;
+
     private ISystemUiProxy mSysUiProxy = new ISystemUiProxy.Stub() {
 
         public GraphicBufferCompat screenshot(Rect sourceCrop, int width, int height, int minLayer,
@@ -102,8 +104,6 @@ public class OverviewProxyService implements CallbackController<OverviewProxyLis
             long token = Binder.clearCallingIdentity();
             try {
                 mHandler.post(() -> {
-                    StatusBar statusBar = ((SystemUIApplication) mContext).getComponent(
-                            StatusBar.class);
                     if (statusBar != null) {
                         statusBar.showScreenPinningRequest(taskId, false /* allowCancel */);
                     }
@@ -180,8 +180,6 @@ public class OverviewProxyService implements CallbackController<OverviewProxyLis
             long token = Binder.clearCallingIdentity();
             try {
                 mHandler.post(() -> {
-                    StatusBar statusBar = ((SystemUIApplication) mContext).getComponent(
-                            StatusBar.class);
                     if (statusBar != null) {
                         statusBar.dispatchNotificationsPanelTouchEvent(motionEvent);
                         int actionMasked = motionEvent.getActionMasked();
@@ -307,13 +305,13 @@ public class OverviewProxyService implements CallbackController<OverviewProxyLis
             filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
             mContext.registerReceiver(mLauncherStateChangedReceiver, filter);
         }
+
+        statusBar = ((SystemUIApplication) mContext).getComponent(StatusBar.class);
     }
 
     public void cleanupAfterDeath() {
         if (mStatusBarGestureDownEvent != null) {
             mHandler.post(() -> {
-                StatusBar statusBar = ((SystemUIApplication) mContext).getComponent(
-                        StatusBar.class);
                 if (statusBar != null) {
                     mStatusBarGestureDownEvent.setAction(MotionEvent.ACTION_CANCEL);
                     statusBar.dispatchNotificationsPanelTouchEvent(mStatusBarGestureDownEvent);
@@ -380,7 +378,8 @@ public class OverviewProxyService implements CallbackController<OverviewProxyLis
     }
 
     public boolean shouldShowSwipeUpUI() {
-        return isEnabled() && ((mInteractionFlags & FLAG_DISABLE_SWIPE_UP) == 0);
+        boolean mNavBarVisible = statusBar == null ? true : statusBar.isNavBarVisible();
+        return mNavBarVisible && isEnabled() && ((mInteractionFlags & FLAG_DISABLE_SWIPE_UP) == 0);
     }
 
     public boolean isEnabled() {
