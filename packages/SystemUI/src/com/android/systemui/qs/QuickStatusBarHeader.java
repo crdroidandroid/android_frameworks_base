@@ -107,15 +107,13 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private static final int FADE_ANIMATION_DURATION_MS = 300;
     private static final int TOOLTIP_NOT_YET_SHOWN_COUNT = 0;
     public static final int MAX_TOOLTIP_SHOWN_COUNT = 2;
-    private static final int CLOCK_POSITION_LEFT = 2;
-    private static final int CLOCK_POSITION_HIDE = 3;
 
     private static final String QS_SHOW_AUTO_BRIGHTNESS =
             "lineagesecure:" + LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS;
     private static final String QS_SHOW_BRIGHTNESS_SLIDER =
             "lineagesecure:" + LineageSettings.Secure.QS_SHOW_BRIGHTNESS_SLIDER;
-    private static final String STATUS_BAR_CLOCK =
-            "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK;
+    private static final String SHOW_QS_CLOCK =
+            "system:" + Settings.System.SHOW_QS_CLOCK;
 
     private final Handler mHandler = new Handler();
     private final NextAlarmController mAlarmController;
@@ -266,6 +264,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
         mClockView = findViewById(R.id.clock);
         mClockView.setOnClickListener(this);
+        mClockView.setQsHeader();
         mDateView = findViewById(R.id.date);
         mSpace = findViewById(R.id.space);
 
@@ -287,7 +286,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         Dependency.get(TunerService.class).addTunable(this,
                 QS_SHOW_AUTO_BRIGHTNESS,
                 QS_SHOW_BRIGHTNESS_SLIDER,
-                STATUS_BAR_CLOCK);
+                SHOW_QS_CLOCK);
     }
 
     private List<String> getIgnoredIconSlots() {
@@ -741,10 +740,10 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                         TunerService.parseIntegerSwitch(newValue, true);
                 updateResources();
                 break;
-            case STATUS_BAR_CLOCK:
-                int showClock =
-                        TunerService.parseInteger(newValue, CLOCK_POSITION_LEFT);
-                mClockView.setClockVisibleByUser(showClock != CLOCK_POSITION_HIDE);
+            case SHOW_QS_CLOCK:
+                boolean showClock =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                mClockView.setClockVisibleByUser(showClock);
                 break;
             default:
                 break;
