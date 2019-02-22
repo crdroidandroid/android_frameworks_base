@@ -22,6 +22,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.DisplayCutout;
@@ -58,11 +59,8 @@ import java.util.List;
  */
 public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tunable {
 
-    private static final int CLOCK_POSITION_LEFT = 2;
-    private static final int CLOCK_POSITION_HIDE = 3;
-
-    private static final String STATUS_BAR_CLOCK =
-            "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK;
+    private static final String SHOW_QS_CLOCK =
+            "system:" + Settings.System.SHOW_QS_CLOCK;
 
     private boolean mExpanded;
     private boolean mQsDisabled;
@@ -150,6 +148,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
         mClockContainer = findViewById(R.id.clock_container);
         mClockView = findViewById(R.id.clock);
+        mClockView.setQsHeader();
         mDatePrivacySeparator = findViewById(R.id.space);
         // Tint for the battery icons are handled in setupHost()
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
@@ -170,7 +169,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 .build();
 
         Dependency.get(TunerService.class).addTunable(this,
-                STATUS_BAR_CLOCK);
+                SHOW_QS_CLOCK);
     }
 
     void onAttach(TintedIconManager iconManager,
@@ -580,10 +579,10 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
-            case STATUS_BAR_CLOCK:
-                int showClock =
-                        TunerService.parseInteger(newValue, CLOCK_POSITION_LEFT);
-                mClockView.setClockVisibleByUser(showClock != CLOCK_POSITION_HIDE);
+            case SHOW_QS_CLOCK:
+                boolean showClock =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                mClockView.setClockVisibleByUser(showClock);
                 break;
             default:
                 break;
