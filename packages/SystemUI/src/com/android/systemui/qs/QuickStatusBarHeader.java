@@ -32,6 +32,7 @@ import android.graphics.Rect;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.provider.AlarmClock;
+import android.provider.Settings;
 import android.service.notification.ZenModeConfig;
 import android.support.annotation.VisibleForTesting;
 import android.widget.FrameLayout;
@@ -64,8 +65,6 @@ import com.android.systemui.statusbar.policy.DateView;
 import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.tuner.TunerService;
-
-import lineageos.providers.LineageSettings;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -140,9 +139,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
      */
     private final Runnable mAutoFadeOutTooltipRunnable = () -> hideLongPressTooltip(false);
 
-    private static final int CLOCK_POSITION_HIDE = 3;
-    private static final String STATUS_BAR_CLOCK =
-            "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK;
+    private static final String SHOW_QS_CLOCK =
+            "system:" + Settings.System.SHOW_QS_CLOCK;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -190,10 +188,11 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mBatteryMeterView.setOnClickListener(this);
         mClockView = findViewById(R.id.clock);
         mClockView.setOnClickListener(this);
+        mClockView.setQsHeader();
         mDateView = findViewById(R.id.date);
 
         Dependency.get(TunerService.class).addTunable(this,
-                STATUS_BAR_CLOCK);
+                SHOW_QS_CLOCK);
     }
 
     private void updateStatusText() {
@@ -644,6 +643,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     @Override
     public void onTuningChanged(String key, String newValue) {
         mClockView.setClockVisibleByUser(newValue == null ? true :
-                Integer.valueOf(newValue) != CLOCK_POSITION_HIDE);
+                Integer.valueOf(newValue) != 0);
     }
 }
