@@ -80,8 +80,6 @@ import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.tuner.TunerService;
 
-import lineageos.providers.LineageSettings;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -152,9 +150,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     private PrivacyItemController mPrivacyItemController;
 
-    private static final int CLOCK_POSITION_HIDE = 3;
-    private static final String STATUS_BAR_CLOCK =
-            "lineagesystem:" + LineageSettings.System.STATUS_BAR_CLOCK;
+    private static final String SHOW_QS_CLOCK =
+            "system:" + Settings.System.SHOW_QS_CLOCK;
 
     private final BroadcastReceiver mRingerReceiver = new BroadcastReceiver() {
         @Override
@@ -250,6 +247,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
         mClockView = findViewById(R.id.clock);
         mClockView.setOnClickListener(this);
+        mClockView.setQsHeader();
         mDateView = findViewById(R.id.date);
         mSpace = findViewById(R.id.space);
 
@@ -269,7 +267,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 mContext.getMainExecutor(), mPropertyListener);
 
         Dependency.get(TunerService.class).addTunable(this,
-                STATUS_BAR_CLOCK);
+                SHOW_QS_CLOCK);
     }
 
     private List<String> getIgnoredIconSlots() {
@@ -671,6 +669,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     @Override
     public void onTuningChanged(String key, String newValue) {
         mClockView.setClockVisibleByUser(newValue == null ? true :
-                Integer.valueOf(newValue) != CLOCK_POSITION_HIDE);
+                Integer.valueOf(newValue) != 0);
     }
 }
