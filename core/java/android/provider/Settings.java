@@ -4818,12 +4818,6 @@ public final class Settings {
         public static final String USE_EDGE_SERVICE_FOR_GESTURES = "edge_service_for_gestures";
 
         /**
-         * Whether to display QS clock
-         * @hide
-         */
-        public static final String SHOW_QS_CLOCK = "show_qs_clock";
-
-        /**
          * @hide
          */
         public static final String FULL_GESTURE_NAVBAR = "full_gesture_navbar";

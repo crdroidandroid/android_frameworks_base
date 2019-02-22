@@ -76,23 +76,23 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     private static final String VISIBILITY = "visibility";
 
     private final CurrentUserTracker mCurrentUserTracker;
-    protected int mCurrentUserId;
+    private int mCurrentUserId;
 
-    protected boolean mClockVisibleByPolicy = true;
-    protected boolean mClockVisibleByUser = getVisibility() == View.VISIBLE;
+    private boolean mClockVisibleByPolicy = true;
+    private boolean mClockVisibleByUser = getVisibility() == View.VISIBLE;
 
     private boolean mAttached;
-    protected Calendar mCalendar;
-    protected String mClockFormatString;
-    protected SimpleDateFormat mClockFormat;
-    protected SimpleDateFormat mContentDescriptionFormat;
+    private Calendar mCalendar;
+    private String mClockFormatString;
+    private SimpleDateFormat mClockFormat;
+    private SimpleDateFormat mContentDescriptionFormat;
     private Locale mLocale;
     private boolean mScreenOn = true;
     private Handler autoHideHandler = new Handler();
 
-    protected static final int AM_PM_STYLE_NORMAL  = 0;
-    protected static final int AM_PM_STYLE_SMALL   = 1;
-    protected static final int AM_PM_STYLE_GONE    = 2;
+    private static final int AM_PM_STYLE_NORMAL  = 0;
+    private static final int AM_PM_STYLE_SMALL   = 1;
+    private static final int AM_PM_STYLE_GONE    = 2;
 
     private static final int CLOCK_DATE_DISPLAY_GONE = 0;
     private static final int CLOCK_DATE_DISPLAY_SMALL = 1;
@@ -107,9 +107,9 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     private static final int HIDE_DURATION = 60; // 1 minute
     private static final int SHOW_DURATION = 5; // 5 seconds
 
-    protected int mAmPmStyle = AM_PM_STYLE_GONE;
+    private int mAmPmStyle = AM_PM_STYLE_GONE;
     private final boolean mShowDark;
-    protected boolean mShowSeconds;
+    private boolean mShowSeconds;
     private Handler mSecondsHandler;
     private int mClockDateDisplay = CLOCK_DATE_DISPLAY_GONE;
     private int mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
@@ -323,7 +323,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
         updateClockVisibility();
     }
 
-    protected void updateClockVisibility() {
+    private void updateClockVisibility() {
         boolean visible = mClockVisibleByPolicy && mClockVisibleByUser;
         int visibility = visible ? View.VISIBLE : View.GONE;
         try {
@@ -465,7 +465,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
         }
     }
 
-    protected CharSequence getSmallTime() {
+    private final CharSequence getSmallTime() {
         Context context = getContext();
         boolean is24 = DateFormat.is24HourFormat(context, mCurrentUserId);
         LocaleData d = LocaleData.get(context.getResources().getConfiguration().locale);
