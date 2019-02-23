@@ -119,8 +119,8 @@
     <string name="pie_hour_format_12">hh:mm</string>
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
-    <string name="pie_state_name">Pie Control</string>
-    <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-    <string name="pie_battery_level">"BATTERY LEVEL "</string>
-    <string name="quick_settings_pie">Pie Control</string>
+    <string name="pie_state_name">扇形控制</string>
+    <string name="pie_state_summary">在沉浸式模式下使用扇形控制</string>
+    <string name="pie_battery_level">"電池電量 "</string>
+    <string name="quick_settings_pie">扇形控制</string>
 </resources>
