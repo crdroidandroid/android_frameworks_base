@@ -42,7 +42,6 @@ public class StatusBarNetworkTraffic extends NetworkTraffic implements StatusIco
     private int mVisibleState = -1;
     private boolean mSystemIconVisible = true;
     private boolean mColorIsStatic;
-    public static boolean mIconVisible;
 
     public StatusBarNetworkTraffic(Context context) {
         super(context);
@@ -74,14 +73,14 @@ public class StatusBarNetworkTraffic extends NetworkTraffic implements StatusIco
             return;
         }
         mIconTint = DarkIconDispatcher.getTint(area, this, tint);
-        if (mIconVisible && mSystemIconVisible) updateTrafficDrawable();
+        if (mAttached) updateTrafficDrawable();
     }
 
     @Override
     public void setStaticDrawableColor(int color) {
         mColorIsStatic = true;
         mIconTint = color;
-        if (mIconVisible && mSystemIconVisible) updateTrafficDrawable();
+        if (mAttached) updateTrafficDrawable();
     }
 
     @Override
@@ -95,7 +94,7 @@ public class StatusBarNetworkTraffic extends NetworkTraffic implements StatusIco
 
     @Override
     public boolean isIconVisible() {
-        return mIconVisible;
+        return mLocation == 1;
     }
 
     @Override
@@ -125,12 +124,12 @@ public class StatusBarNetworkTraffic extends NetworkTraffic implements StatusIco
 
     @Override
     protected void updateVisibility() {
-        mIconVisible = mConnectionAvailable && !mBelowThreshold &&
-                (mLocation == 1);
-        if (mIconVisible && mSystemIconVisible) {
+        boolean enabled = mIsActive && mSystemIconVisible
+                        && !blank.contentEquals(getText()) && (mLocation == 1);
+        if (enabled) {
             setVisibility(VISIBLE);
         } else {
-            setText("");
+            setText(blank);
             setVisibility(GONE);
         }
     }
