@@ -7384,6 +7384,14 @@ public class WindowManagerService extends IWindowManager.Stub
         public void waitForAllWindowsDrawn(Runnable callback, long timeout) {
             boolean allWindowsDrawn = false;
             synchronized (mWindowMap) {
+                // If we are already waiting for something to be drawn, clear out the old one so it
+                // still gets executed.
+                // TODO: Have a real system where we can wait on different windows to be drawn with
+                // different callbacks.
+                if (mWaitingForDrawnCallback != null && mWaitingForDrawnCallback != callback) {
+                    mWaitingForDrawnCallback.run();
+                }
+
                 mWaitingForDrawnCallback = callback;
                 getDefaultDisplayContentLocked().waitForAllWindowsDrawn();
                 mWindowPlacerLocked.requestTraversal();
