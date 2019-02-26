@@ -449,6 +449,9 @@ interface IWindowManager
     boolean isOneHandedModeAvailable();
 
     // This requires the ONE_HANDED_MODE permission.
+    boolean isOnehandTurnedON();
+
+    // This requires the ONE_HANDED_MODE permission.
     float getOneHandedModeShrinkingScale();
 
     /**
