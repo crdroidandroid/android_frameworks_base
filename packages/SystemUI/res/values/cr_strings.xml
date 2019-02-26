@@ -210,4 +210,7 @@
     <string name="text_clock_units_string_h_seventeen">Seventeen</string>
     <string name="text_clock_units_string_h_eighteen">Eighteen</string>
     <string name="text_clock_units_string_h_nineteen">Nineteen</string>
+
+    <!-- OneHand mode QS tile -->
+    <string name="qs_onehand_label">One Handed mode</string>
 </resources>
