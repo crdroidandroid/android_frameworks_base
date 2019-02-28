@@ -100,7 +100,8 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
     }
 
     private void setTickerMarquee(boolean enable, boolean extendPulseOnNewTrack) {
-        if (enable) {
+        // If it's enabled and we are supposed to show.
+        if (enable && shouldShow()) {
             setTickerMarquee(false, false);
             mHandler.postDelayed(new Runnable() {
                 @Override
