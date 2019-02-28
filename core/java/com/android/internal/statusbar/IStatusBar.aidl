@@ -35,6 +35,7 @@ oneway interface IStatusBar
     void animateExpandSettingsPanel(String subPanel);
     void animateCollapsePanels();
     void togglePanel();
+    void toggleSettingsPanel();
 
     void showWirelessChargingAnimation(int batteryLevel);
 
