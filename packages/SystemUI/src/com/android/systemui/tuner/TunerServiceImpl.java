@@ -38,6 +38,7 @@ import com.android.systemui.Dependency;
 import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.settings.CurrentUserTracker;
 import com.android.systemui.statusbar.phone.ClockController;
+import com.android.systemui.statusbar.phone.NavigationBarView;
 import com.android.systemui.statusbar.phone.NotificationPanelView;
 import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
@@ -61,6 +62,7 @@ public class TunerServiceImpl extends TunerService {
     // shouldn't be reset with tuner settings.
     private static final String[] RESET_BLACKLIST = new String[] {
             ClockController.CLOCK_POSITION,
+            NavigationBarView.NAVIGATION_BAR_MENU_ARROW_KEYS,
             NotificationPanelView.DOUBLE_TAP_SLEEP_GESTURE,
             NotificationPanelView.STATUS_BAR_QUICK_QS_PULLDOWN,
             QSTileHost.TILES_SETTING,

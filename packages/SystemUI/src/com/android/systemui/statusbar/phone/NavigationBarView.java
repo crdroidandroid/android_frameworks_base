@@ -104,7 +104,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     final static boolean DEBUG = false;
     final static String TAG = "StatusBar/NavBarView";
 
-    private static final String NAVIGATION_BAR_MENU_ARROW_KEYS =
+    public static final String NAVIGATION_BAR_MENU_ARROW_KEYS =
             "lineagesystem:" + LineageSettings.System.NAVIGATION_BAR_MENU_ARROW_KEYS;
     private static final String NAVIGATION_BAR_MODE =
             Settings.Secure.NAVIGATION_BAR_MODE;
