@@ -207,7 +207,8 @@ public class ActionHandler {
         OneHandedModeRight(SYSTEMUI_TASK_ONE_HANDED_MODE_RIGHT, SYSTEMUI, "label_action_one_handed_mode_right", "ic_sysbar_one_handed_mode_right"),
         MediaArrowLeft(SYSTEMUI_TASK_MEDIA_PREVIOUS, SYSTEMUI, "label_action_media_left", "ic_skip_previous"),
         MediaArrowRight(SYSTEMUI_TASK_MEDIA_NEXT, SYSTEMUI, "label_action_media_right", "ic_skip_next"),
-        AssistantSoundSearch(SYSTEMUI_TASK_ASSISTANT_SOUND_SEARCH, SYSTEMUI, "label_action_assistant_sound_search", "ic_assistant_sound_search");
+        AssistantSoundSearch(SYSTEMUI_TASK_ASSISTANT_SOUND_SEARCH, SYSTEMUI, "label_action_assistant_sound_search", "ic_assistant_sound_search"),
+        PlayPause(SYSTEMUI_TASK_MEDIA_PLAY_PAUSE, SYSTEMUI, "label_action_play_pause", "ic_sysbar_play_pause");
 
         String mAction;
         String mResPackage;
@@ -250,7 +251,8 @@ public class ActionHandler {
             SystemAction.EditingSmartbar, SystemAction.SplitScreen,
             SystemAction.RegionScreenshot, SystemAction.OneHandedModeLeft,
             SystemAction.OneHandedModeRight, SystemAction.MediaArrowLeft,
-            SystemAction.MediaArrowRight, SystemAction.AssistantSoundSearch
+            SystemAction.MediaArrowRight, SystemAction.AssistantSoundSearch,
+            SystemAction.PlayPause
     };
 
     public static class ActionIconResources {
@@ -307,9 +309,7 @@ public class ActionHandler {
                     || TextUtils.equals(action, SYSTEMUI_TASK_IME_NAVIGATION_LEFT)
                     || TextUtils.equals(action, SYSTEMUI_TASK_IME_NAVIGATION_RIGHT)
                     || TextUtils.equals(action, SYSTEMUI_TASK_IME_NAVIGATION_UP)
-                    || TextUtils.equals(action, SYSTEMUI_TASK_IME_SWITCHER)
-                    || TextUtils.equals(action, SYSTEMUI_TASK_MEDIA_PREVIOUS)
-                    || TextUtils.equals(action, SYSTEMUI_TASK_MEDIA_NEXT)) {
+                    || TextUtils.equals(action, SYSTEMUI_TASK_IME_SWITCHER)) {
                 continue;
             } else if (TextUtils.equals(action, SYSTEMUI_TASK_WIFIAP)
                     && !ActionUtils.deviceSupportsMobileData(context)) {
@@ -720,14 +720,15 @@ public class ActionHandler {
             triggerVirtualKeypress(context, KeyEvent.KEYCODE_DPAD_LEFT);
             return;
         } else if (action.equals(SYSTEMUI_TASK_MEDIA_PREVIOUS)) {
-            StatusBarHelper.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+            //StatusBarHelper.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
             dispatchMediaKeyWithWakeLock(KeyEvent.KEYCODE_MEDIA_PREVIOUS, context);
             return;
         } else if (action.equals(SYSTEMUI_TASK_MEDIA_NEXT)) {
-            StatusBarHelper.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_NEXT);
+            //StatusBarHelper.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_NEXT);
             dispatchMediaKeyWithWakeLock(KeyEvent.KEYCODE_MEDIA_NEXT, context);
             return;
         } else if (action.equals(SYSTEMUI_TASK_MEDIA_PLAY_PAUSE)) {
+            //StatusBarHelper.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
             dispatchMediaKeyWithWakeLock(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, context);
             return;
         } else if (action.equals(SYSTEMUI_TASK_SOUNDMODE_VIB)) {
