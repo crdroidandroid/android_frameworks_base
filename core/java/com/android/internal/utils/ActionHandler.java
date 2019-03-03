@@ -25,6 +25,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.ActivityOptions;
 import android.app.IActivityManager;
+import android.app.NotificationManager;
 import android.app.SearchManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.usage.UsageStats;
@@ -208,7 +209,8 @@ public class ActionHandler {
         MediaArrowLeft(SYSTEMUI_TASK_MEDIA_PREVIOUS, SYSTEMUI, "label_action_media_left", "ic_skip_previous"),
         MediaArrowRight(SYSTEMUI_TASK_MEDIA_NEXT, SYSTEMUI, "label_action_media_right", "ic_skip_next"),
         AssistantSoundSearch(SYSTEMUI_TASK_ASSISTANT_SOUND_SEARCH, SYSTEMUI, "label_action_assistant_sound_search", "ic_assistant_sound_search"),
-        PlayPause(SYSTEMUI_TASK_MEDIA_PLAY_PAUSE, SYSTEMUI, "label_action_play_pause", "ic_sysbar_play_pause");
+        PlayPause(SYSTEMUI_TASK_MEDIA_PLAY_PAUSE, SYSTEMUI, "label_action_play_pause", "ic_sysbar_play_pause"),
+        RingVibeSilent(SYSTEMUI_TASK_SOUNDMODE_VIB_SILENT, SYSTEMUI, "label_action_ring_vibe_silent", "ic_sysbar_ring_vibe_silent");
 
         String mAction;
         String mResPackage;
@@ -252,7 +254,7 @@ public class ActionHandler {
             SystemAction.RegionScreenshot, SystemAction.OneHandedModeLeft,
             SystemAction.OneHandedModeRight, SystemAction.MediaArrowLeft,
             SystemAction.MediaArrowRight, SystemAction.AssistantSoundSearch,
-            SystemAction.PlayPause
+            SystemAction.PlayPause, SystemAction.RingVibeSilent
     };
 
     public static class ActionIconResources {
@@ -731,57 +733,8 @@ public class ActionHandler {
             //StatusBarHelper.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
             dispatchMediaKeyWithWakeLock(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, context);
             return;
-        } else if (action.equals(SYSTEMUI_TASK_SOUNDMODE_VIB)) {
-            AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            if (am != null && ActivityManagerNative.isSystemReady()) {
-                if (am.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE) {
-                    am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    performHapticFeedback(context, HapticFeedbackConstants.VIRTUAL_KEY);
-                } else {
-                    am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    ToneGenerator tg = new ToneGenerator(
-                            AudioManager.STREAM_NOTIFICATION,
-                            (int) (ToneGenerator.MAX_VOLUME * 0.85));
-                    if (tg != null) {
-                        tg.startTone(ToneGenerator.TONE_PROP_BEEP);
-                    }
-                }
-            }
-            return;
-        } else if (action.equals(SYSTEMUI_TASK_SOUNDMODE_SILENT)) {
-            AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            if (am != null && ActivityManagerNative.isSystemReady()) {
-                if (am.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                    am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                } else {
-                    am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    ToneGenerator tg = new ToneGenerator(
-                            AudioManager.STREAM_NOTIFICATION,
-                            (int) (ToneGenerator.MAX_VOLUME * 0.85));
-                    if (tg != null) {
-                        tg.startTone(ToneGenerator.TONE_PROP_BEEP);
-                    }
-                }
-            }
-            return;
         } else if (action.equals(SYSTEMUI_TASK_SOUNDMODE_VIB_SILENT)) {
-            AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            if (am != null && ActivityManagerNative.isSystemReady()) {
-                if (am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-                    am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    performHapticFeedback(context, HapticFeedbackConstants.VIRTUAL_KEY);
-                } else if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
-                    am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                } else {
-                    am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    ToneGenerator tg = new ToneGenerator(
-                            AudioManager.STREAM_NOTIFICATION,
-                            (int) (ToneGenerator.MAX_VOLUME * 0.85));
-                    if (tg != null) {
-                        tg.startTone(ToneGenerator.TONE_PROP_BEEP);
-                    }
-                }
-            }
+            toggleVibeSilent(context);
             return;
         } else if (action.equals(SYSTEMUI_TASK_CLEAR_NOTIFICATIONS)) {
             StatusBarHelper.clearAllNotifications();
@@ -804,6 +757,29 @@ public class ActionHandler {
         } else if (action.equals(SYSTEMUI_TASK_ASSISTANT_SOUND_SEARCH)) {
             startAssistantSoundSearch(context);
             return;
+        }
+    }
+
+    public static void toggleVibeSilent(Context context) {
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
+        switch (am.getRingerMode()) {
+            case AudioManager.RINGER_MODE_NORMAL:
+                if (vibrator.hasVibrator()) {
+                    am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                }
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                NotificationManager notificationManager = (NotificationManager) context
+                        .getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.setInterruptionFilter(
+                        NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+                break;
+            case AudioManager.RINGER_MODE_SILENT:
+                am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                break;
         }
     }
 
