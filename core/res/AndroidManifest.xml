@@ -3597,7 +3597,7 @@
     <permission android:name="android.permission.ACCESS_FONT_MANAGER"
         android:label="@string/permlab_accessFontManager"
         android:description="@string/permdesc_accessFontManager"
-        android:protectionLevel="signatureOrSystem" />
+        android:protectionLevel="normal" />
 
     <!-- @SystemApi @hide Allows an application to mark other applications as harmful -->
     <permission android:name="android.permission.SET_HARMFUL_APP_WARNINGS"

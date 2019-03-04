@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2019 AquariOS
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+     Vector image designed and created by @calebcabob
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M7 19.3v-0.8C8.1 18.2 8.1 18 7.9 17c-0.2 -0.7 -0.5 -1.7 -0.7 -2.6H3.8c-0.2 0.7 -0.4 1.6 -0.6 2.3c-0.4 1.4 0.1 1.6 1.4 1.8v0.8l-4.5 0v-0.8c1.1 -0.2 1.1 -0.3 1.7 -2.2L5.2 4.4L6.7 4c1.1 4 2.3 8.1 3.4 11.9c0.6 2.1 0.8 2.3 1.9 2.5v0.8H7zM5.5 8.2c-0.5 1.6 -1 3.2 -1.4 4.9h2.8L5.5 8.2z"
+        android:fillColor="#000000" />
+    <group
+        android:scaleX="0.8073"
+        android:scaleY="1.18"
+        android:translateX="9.355"
+        android:translateY="15.8701">
+        <path
+            android:pathData="M5.42547 -5.753943L5.42547 -5.753943Q5.42547 -6.450533 4.989394 -6.767679Q4.553317 -7.084826 3.573561 -7.084826L3.573561 -7.084826L2.401252 -7.084826L2.401252 -4.213518L3.641521 -4.213518Q4.558981 -4.213518 4.992225 -4.575971Q5.42547 -4.938424 5.42547 -5.753943ZM5.997467 -2.163392L5.997467 -2.163392Q5.997467 -2.961922 5.465114 -3.33287Q4.93276 -3.703818 3.760451 -3.703818L3.760451 -3.703818L2.401252 -3.703818L2.401252 -0.5096997Q3.182792 -0.4757197 4.066271 -0.4757197L4.066271 -0.4757197Q5.0347 -0.4757197 5.516083 -0.8863112Q5.997467 -1.296903 5.997467 -2.163392ZM1.783949 0L0.3341365 0L0.3341365 -0.3001565L1.308229 -0.4530664L1.308229 -7.147123L0.3341365 -7.294369L0.3341365 -7.594526L3.805758 -7.594526Q5.249907 -7.594526 5.91818 -7.166944Q6.586453 -6.739363 6.586453 -5.810577L6.586453 -5.810577Q6.586453 -5.142304 6.175861 -4.672247Q5.76527 -4.202191 5.023374 -4.043618L5.023374 -4.043618Q6.048437 -3.936014 6.609106 -3.446136Q7.169776 -2.956258 7.169776 -2.186045L7.169776 -2.186045Q7.169776 -1.093023 6.413721 -0.5295214Q5.657667 0.03397998 4.207854 0.03397998L4.207854 0.03397998L1.783949 0Z"
+            android:fillColor="#000000" />
+    </group>
+    <group
+        android:rotation="55.36749"
+        android:scaleX="1.235712"
+        android:scaleY="1.14113"
+        android:translateX="17.1235"
+        android:translateY="21.5269">
+        <group
+            android:rotation="-75.43092">
+            <path
+                android:pathData="M4.050764 0.1046709L4.050764 0.1046709Q2.344628 0.1046709 1.392123 -0.8242833Q0.4396178 -1.753238 0.4396178 -3.427972L0.4396178 -3.427972Q0.4396178 -5.238778 1.355488 -6.167733Q2.271358 -7.096687 4.071698 -7.096687L4.071698 -7.096687Q5.165509 -7.096687 6.42156 -6.829776L6.42156 -6.829776L6.452961 -5.296347L6.107547 -5.296347L5.950541 -6.206984Q5.584192 -6.432027 5.10009 -6.555015Q4.615987 -6.678003 4.113566 -6.678003L4.113566 -6.678003Q2.768545 -6.678003 2.150987 -5.887738Q1.533429 -5.097473 1.533429 -3.438439L1.533429 -3.438439Q1.533429 -1.910244 2.179771 -1.104278Q2.826114 -0.2983121 4.061231 -0.2983121L4.061231 -0.2983121Q4.657855 -0.2983121 5.186443 -0.4422345Q5.715031 -0.586157 6.02381 -0.8269001L6.02381 -0.8269001L6.217451 -1.873609L6.557632 -1.873609L6.526231 -0.2250424Q5.374851 0.1046709 4.050764 0.1046709Z"
+                android:fillColor="#000000" />
+        </group>
+    </group>
+</vector>

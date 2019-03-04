@@ -235,6 +235,9 @@
     <!-- Weather on lockscreen -->
     <uses-permission android:name="com.crdroid.weather.client.READ_WEATHER" />
 
+    <!-- Font tile -->
+    <uses-permission android:name="android.permission.ACCESS_FONT_MANAGER" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"

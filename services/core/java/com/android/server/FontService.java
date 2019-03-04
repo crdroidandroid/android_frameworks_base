@@ -335,6 +335,14 @@ public class FontService extends IFontService.Stub {
             fontInfo.previewPath = fontFile.getAbsolutePath();
             infoList.add(fontInfo);
         }
+
+        if (SYSTEM_THEME_PREVIEW_CACHE_DIR.exists()) {
+            // Set permissions
+            setPermissionsRecursive(SYSTEM_THEME_PREVIEW_CACHE_DIR,
+                    FileUtils.S_IRWXU | FileUtils.S_IRGRP | FileUtils.S_IRWXO,
+                    FileUtils.S_IRWXU | FileUtils.S_IRWXG | FileUtils.S_IROTH | FileUtils.S_IXOTH);
+        }
+
         // add or replace font list
         if (mFontMap.containsKey(packageName)) {
             mFontMap.replace(packageName, infoList);
