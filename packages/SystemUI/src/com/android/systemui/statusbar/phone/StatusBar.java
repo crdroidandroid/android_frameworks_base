@@ -263,6 +263,7 @@ import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.OnHeadsUpChangedListener;
 import com.android.systemui.statusbar.policy.PreviewInflater;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
+import com.android.systemui.statusbar.policy.TelephonyIcons;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserInfoControllerImpl;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
@@ -345,6 +346,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             Settings.Secure.PIE_STATE;
     private static final String PIE_GRAVITY =
             Settings.Secure.PIE_GRAVITY;
+    private static final String USE_OLD_MOBILETYPE =
+            "system:" + Settings.System.USE_OLD_MOBILETYPE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -420,6 +423,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
      * libhwui.
      */
     private static final float SRC_MIN_ALPHA = 0.002f;
+
+    public static boolean mUseOldMobileType;
 
     static {
         boolean onlyCoreApps;
@@ -827,6 +832,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, SYSUI_ROUNDED_FWVALS);
         tunerService.addTunable(this, PIE_STATE);
         tunerService.addTunable(this, PIE_GRAVITY);
+        tunerService.addTunable(this, USE_OLD_MOBILETYPE);
 
         mPackageMonitor = new PackageMonitor();
         mPackageMonitor.register(mContext, mHandler);
@@ -6405,6 +6411,11 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 mPieGravity =
                         newValue == null ? 2 : Integer.parseInt(newValue);
                 updatePieControls();
+                break;
+            case USE_OLD_MOBILETYPE:
+                mUseOldMobileType =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                TelephonyIcons.updateIcons(mUseOldMobileType);
                 break;
             default:
                 break;
