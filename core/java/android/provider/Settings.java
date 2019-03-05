@@ -4851,6 +4851,11 @@ public final class Settings {
         public static final String SHOW_QS_CLOCK = "show_qs_clock";
 
         /**
+         * @hide
+         */
+        public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
