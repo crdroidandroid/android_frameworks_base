@@ -271,4 +271,7 @@
     <color name="misalignment_text_color">#F28B82</color>
 
     <color name="screenrecord_status_color">#E94235</color>
+
+    <color name="volume_background_tint">#f2f2f2</color>
+    <color name="divider_stroke_color">#E0E0E0</color>
 </resources>
