@@ -1097,4 +1097,5 @@
     <string name="media_output_dialog_disconnected" msgid="1834473104836986046">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g>(연결 끊김)"</string>
     <string name="media_output_dialog_connect_failed" msgid="3225190634236259010">"연결할 수 없습니다. 다시 시도하세요."</string>
     <string name="media_output_dialog_pairing_new" msgid="9099497976087485862">"새 기기와 페어링"</string>
+    <string name="media_output_title" msgid="115223550977351699">"미디어 출력 대상"</string>
 </resources>

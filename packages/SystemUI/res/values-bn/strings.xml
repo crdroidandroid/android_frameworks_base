@@ -1023,7 +1023,7 @@
     <string name="notification_content_gesture_nav_available" msgid="4431460803004659888">"সিস্টেম নেভিগেশন আপডেট করতে সেটিংসে যান"</string>
     <string name="inattentive_sleep_warning_title" msgid="3891371591713990373">"স্ট্যান্ডবাই"</string>
     <string name="priority_onboarding_title" msgid="2893070698479227616">"কথোপকথনকে \'গুরুত্বপূর্ণ\' হিসেবে সেট করা হয়েছে"</string>
-    <string name="priority_onboarding_behavior" msgid="5342816047020432929">"গুরুত্বপূর্ণ কথোপকথন:"</string>
+    <string name="priority_onboarding_behavior" msgid="5342816047020432929">"গুরুত্বপূর্ণ কথোপকথন:"</string>    
     <string name="priority_onboarding_show_at_top_text" msgid="1678400241025513541">"কথোপকথন বিভাগের একদম উপরে দেখুন"</string>
     <string name="priority_onboarding_show_avatar_text" msgid="5756291381124091508">"লক স্ক্রিনে প্রোফাইল ছবি দেখান"</string>
     <string name="priority_onboarding_appear_as_bubble_text" msgid="4227039772250263122">"অ্যাপের উপরে একটি ভাসমান বুদবুদ হিসেবে দেখা যাবে"</string>
@@ -1097,4 +1097,5 @@
     <string name="media_output_dialog_disconnected" msgid="1834473104836986046">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> (কানেক্ট করা নেই)"</string>
     <string name="media_output_dialog_connect_failed" msgid="3225190634236259010">"কানেক্ট করা যায়নি। আবার চেষ্টা করুন।"</string>
     <string name="media_output_dialog_pairing_new" msgid="9099497976087485862">"নতুন ডিভাইস পেয়ার করুন"</string>
+    <string name="media_output_title" msgid="115223550977351699">"মিডিয়া এতে চালান"</string>
 </resources>
