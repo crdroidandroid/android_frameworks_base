@@ -1,5 +1,5 @@
 <!--
-    Copyright (C) 2018 Havoc-OS
+    Copyright (C) 2020 The Paranoid Android Project
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -13,16 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<vector
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:height="24dp"
     android:width="24dp"
-    android:viewportHeight="24.0"
-    android:viewportWidth="24.0"
-    android:tint="?android:attr/colorControlNormal">
-
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M20,16H6L4,18V4H20" />
-
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="@android:color/white"
+        android:pathData="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
 </vector>
