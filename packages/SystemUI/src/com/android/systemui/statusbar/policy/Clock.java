@@ -121,13 +121,13 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     private Handler mHandler = new Handler();
     private boolean mQsHeader;
 
-    private static final String STATUS_BAR_CLOCK_SECONDS =
+    public static final String STATUS_BAR_CLOCK_SECONDS =
             "system:" + Settings.System.STATUS_BAR_CLOCK_SECONDS;
     private static final String STATUS_BAR_AM_PM =
             "lineagesystem:" + LineageSettings.System.STATUS_BAR_AM_PM;
-    private static final String STATUS_BAR_CLOCK_DATE_DISPLAY =
+    public static final String STATUS_BAR_CLOCK_DATE_DISPLAY =
             "system:" + Settings.System.STATUS_BAR_CLOCK_DATE_DISPLAY;
-    private static final String STATUS_BAR_CLOCK_DATE_STYLE =
+    public static final String STATUS_BAR_CLOCK_DATE_STYLE =
             "system:" + Settings.System.STATUS_BAR_CLOCK_DATE_STYLE;
     private static final String STATUS_BAR_CLOCK_DATE_POSITION =
             "system:" + Settings.System.STATUS_BAR_CLOCK_DATE_POSITION;
