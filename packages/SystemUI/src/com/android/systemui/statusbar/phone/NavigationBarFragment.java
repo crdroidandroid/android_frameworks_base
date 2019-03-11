@@ -233,7 +233,8 @@ public class NavigationBarFragment extends Fragment implements Callbacks,
 
     public void updateStates() {
         setFullGestureMode();
-        mNavigationBarView.updateStates();
+        if (mNavigationBarView != null && mNavigationBarView.getBaseView().isAttachedToWindow())
+            mNavigationBarView.updateStates();
         updateScreenPinningGestures();
     }
 
