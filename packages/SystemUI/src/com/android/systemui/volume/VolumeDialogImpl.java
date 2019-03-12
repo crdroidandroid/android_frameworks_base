@@ -518,9 +518,11 @@ public class VolumeDialogImpl implements VolumeDialog {
     private void cleanExpandRows() {
         for(int i = mRows.size() - 1; i >= 0; i--) {
             final VolumeRow row = mRows.get(i);
-            if (row.stream == AudioManager.STREAM_RING ||
-                    row.stream == AudioManager.STREAM_ALARM)
+            if ((row.stream == AudioManager.STREAM_RING ||
+                    row.stream == AudioManager.STREAM_ALARM) && row.stream != mActiveStream) {
+                // Remove streams, except the active one.
                 removeRow(row);
+            }
         }
     }
 
@@ -535,19 +537,43 @@ public class VolumeDialogImpl implements VolumeDialog {
             Dependency.get(ActivityStarter.class).startActivity(intent, true /* dismissShade */);
             return true;
         });
+
+        // When an active stream is equal to our extra elements
+        // we need to make sure it becomes visible.
+        if(!mExpanded) {
+            initialiseExtraRows(/* userTap */ false);
+        }
+
         mExpandRows.setOnClickListener(v -> {
             if(!mExpanded) {
-                addRow(AudioManager.STREAM_RING,
-                        R.drawable.ic_volume_ringer, R.drawable.ic_volume_ringer_mute, true, false);
-                addRow(AudioManager.STREAM_ALARM,
-                        R.drawable.ic_volume_alarm, R.drawable.ic_volume_alarm_mute, true, false);
-                updateAllActiveRows();
+                // Activate streams on user tap, and consider whether
+                // they were already opened.
+                initialiseExtraRows(/* userTap */ true);
                 mExpanded = true;
             } else {
                 cleanExpandRows();
                 mExpanded = false;
             }
         });
+    }
+
+    private void initialiseExtraRows(boolean userTap) {
+        // Let's check whether we should activate the ring stream.
+        VolumeRow row = findRow(AudioManager.STREAM_RING);
+        if (row == null && userTap || row == null &&
+                (mActiveStream == AudioManager.STREAM_RING && !userTap)) {
+            addRow(AudioManager.STREAM_RING,
+                    R.drawable.ic_volume_ringer, R.drawable.ic_volume_ringer_mute, true, false);
+        }
+        // Let's check whether we should activate the alarm stream.
+        row = findRow(AudioManager.STREAM_ALARM);
+        if (row == null && userTap || row == null &&
+                    (mActiveStream == AudioManager.STREAM_ALARM && !userTap)) {
+            addRow(AudioManager.STREAM_ALARM,
+                    R.drawable.ic_volume_alarm, R.drawable.ic_volume_alarm_mute, true, false);
+        }
+        // Update all active rows
+        updateAllActiveRows();
     }
 
     public void initRingerH() {
@@ -680,8 +706,11 @@ public class VolumeDialogImpl implements VolumeDialog {
     protected void dismissH(int reason) {
         // Avoid multiple animation calls on touch spams.
         if (!mShowing) {
+            // Close all the extra streams on touch spams.
+            cleanExpandRows();
             return;
         }
+
         mHandler.removeMessages(H.DISMISS);
         mHandler.removeMessages(H.SHOW);
         mDialogView.animate().cancel();
@@ -696,6 +725,9 @@ public class VolumeDialogImpl implements VolumeDialog {
                 .withEndAction(() -> mHandler.postDelayed(() -> {
                     if (D.BUG) Log.d(TAG, "mDialog.dismiss()");
                     mDialog.dismiss();
+                    // Dismiss the expanded view along the dialog.
+                    cleanExpandRows();
+                    mExpanded = false;
                 }, 50));
         if (!isLandscape()) animator.translationX((mDialogView.getWidth() / 2)*(!mLeftVolumeRocker ? 1 : -1));
         animator.start();
@@ -708,9 +740,6 @@ public class VolumeDialogImpl implements VolumeDialog {
                 mSafetyWarning.dismiss();
             }
         }
-
-        cleanExpandRows();
-        mExpanded = false;
     }
 
     private boolean shouldBeVisibleH(VolumeRow row, VolumeRow activeRow) {
