@@ -94,7 +94,6 @@ import com.android.systemui.plugins.VolumeDialog;
 import com.android.systemui.plugins.VolumeDialogController;
 import com.android.systemui.plugins.VolumeDialogController.State;
 import com.android.systemui.plugins.VolumeDialogController.StreamState;
-import com.android.systemui.statusbar.phone.ExpandableIndicator;
 import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.policy.AccessibilityManagerWrapper;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
@@ -128,7 +127,7 @@ public class VolumeDialogImpl implements VolumeDialog {
     private ViewGroup mRinger;
     private ImageButton mRingerIcon;
     private View mExpandRowsView;
-    private ExpandableIndicator mExpandRows;
+    private ImageButton mExpandRows;
     private FrameLayout mZenIcon;
     private final List<VolumeRow> mRows = new ArrayList<>();
     private ConfigurableTexts mConfigurableTexts;
@@ -312,12 +311,8 @@ public class VolumeDialogImpl implements VolumeDialog {
         mExpandRows = mDialog.findViewById(R.id.expandable_indicator);
         if(!mLeftVolumeRocker) {
             mRinger.setForegroundGravity(Gravity.RIGHT);
-            mExpandRows.setForegroundGravity(Gravity.RIGHT);
-            mExpandRows.setRotation(90);
         } else {
             mRinger.setForegroundGravity(Gravity.LEFT);
-            mExpandRows.setForegroundGravity(Gravity.LEFT);
-            mExpandRows.setRotation(-90);
         }
         mRingerIcon = mRinger.findViewById(R.id.ringer_icon);
         mZenIcon = mRinger.findViewById(R.id.dnd_icon);
@@ -543,7 +538,7 @@ public class VolumeDialogImpl implements VolumeDialog {
         mExpandRows.setOnClickListener(v -> {
             if(!mExpanded) {
                 addRow(AudioManager.STREAM_RING,
-                        R.drawable.ic_volume_notification, R.drawable.ic_volume_notification_mute, true, false);
+                        R.drawable.ic_volume_ringer, R.drawable.ic_volume_ringer_mute, true, false);
                 addRow(AudioManager.STREAM_ALARM,
                         R.drawable.ic_volume_alarm, R.drawable.ic_volume_alarm_mute, true, false);
                 updateAllActiveRows();
@@ -552,7 +547,6 @@ public class VolumeDialogImpl implements VolumeDialog {
                 cleanExpandRows();
                 mExpanded = false;
             }
-            mExpandRows.setExpanded(mExpanded);
         });
     }
 
@@ -713,7 +707,6 @@ public class VolumeDialogImpl implements VolumeDialog {
 
         cleanExpandRows();
         mExpanded = false;
-        mExpandRows.setExpanded(mExpanded);
     }
 
     private boolean shouldBeVisibleH(VolumeRow row, VolumeRow activeRow) {
