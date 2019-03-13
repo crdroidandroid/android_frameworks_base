@@ -82,16 +82,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_bg_bottom_background">
-                <com.android.systemui.statusbar.phone.ExpandableIndicator
+                <com.android.keyguard.AlphaOptimizedImageButton
                     android:id="@+id/expandable_indicator"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:src="@drawable/ic_volume_panel_expand"
+                    android:layout_width="@dimen/volume_dialog_tap_target_size"
+                    android:layout_height="@dimen/volume_dialog_tap_target_size"
+                    android:layout_gravity="center"
                     android:clipToPadding="false"
                     android:clickable="true"
                     android:focusable="true"
                     android:layout_marginRight="8dp"
                     android:layout_marginLeft="8dp"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:background="@drawable/ripple_drawable_20dp"
                     android:contentDescription="@string/accessibility_quick_settings_expand"
                     android:padding="14dp" />
             </FrameLayout>
