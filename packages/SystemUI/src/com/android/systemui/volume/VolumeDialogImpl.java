@@ -519,6 +519,7 @@ public class VolumeDialogImpl implements VolumeDialog {
         for(int i = mRows.size() - 1; i >= 0; i--) {
             final VolumeRow row = mRows.get(i);
             if ((row.stream == AudioManager.STREAM_RING ||
+                    row.stream == AudioManager.STREAM_NOTIFICATION ||
                     row.stream == AudioManager.STREAM_ALARM) && row.stream != mActiveStream) {
                 // Remove streams, except the active one.
                 removeRow(row);
@@ -564,6 +565,13 @@ public class VolumeDialogImpl implements VolumeDialog {
                 (mActiveStream == AudioManager.STREAM_RING && !userTap)) {
             addRow(AudioManager.STREAM_RING,
                     R.drawable.ic_volume_ringer, R.drawable.ic_volume_ringer_mute, true, false);
+        }
+        // Let's check whether we should activate the notification stream.
+        row = findRow(AudioManager.STREAM_NOTIFICATION);
+        if ((row == null && userTap || row == null &&
+                (mActiveStream == AudioManager.STREAM_NOTIFICATION && !userTap)) && !isNotificationLinked) {
+            addRow(AudioManager.STREAM_NOTIFICATION,
+                    R.drawable.ic_volume_notification, R.drawable.ic_volume_notification_mute, true, false);
         }
         // Let's check whether we should activate the alarm stream.
         row = findRow(AudioManager.STREAM_ALARM);
