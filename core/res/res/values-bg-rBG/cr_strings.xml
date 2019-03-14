@@ -24,32 +24,32 @@
     <string name="animation_slide_left">Приплъзване вляво</string>
     <string name="animation_slide_right_no_fade">Приплъзване вдясно (Без избледняване)</string>
     <string name="animation_slide_left_no_fade">Приплъзване вляво (Без избледняване)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_slide_up">Плъзване отдолу</string>
+    <string name="animation_slide_down">Плъзване отгоре</string>
+    <string name="animation_default">По подразбиране</string>
+    <string name="animation_translucent">Прозрачен</string>
+    <string name="animation_grow_shrink">Увеличение (нагоре)</string>
+    <string name="animation_grow_shrink_center">Увеличение (в средата)</string>
+    <string name="animation_grow_shrink_bottom">Увеличение (надолу)</string>
+    <string name="animation_grow_shrink_left">Увеличение (наляво)</string>
+    <string name="animation_grow_shrink_right">Увеличение (надясно)</string>
+    <string name="animation_random">Произволно</string>
+    <string name="action_null">Празно</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Мним подпис на пакета</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">Позволява на приложението да се представи като друго. Вредни приложения може да използват това, за да получат достъп до лична информация от приложенията. Легитимните употреби включват емулатор, удостоверяващ това, което емулира. Дайте това разрешение само с повишено внимание!</string>
     <!-- SystemUI Restart -->
-    <string name="systemui_restart_title">SystemUI restart required</string>
-    <string name="systemui_restart_message">For all changes to take effect, a SystemUI restart is required. Restart SystemUI now?</string>
+    <string name="systemui_restart_title">Необходимо е рестартиране на системния интерфейс</string>
+    <string name="systemui_restart_message">За да влязат в сила всички промени се изисква рестартиране на системния интерфейс. Рестартиране на системния интерфейс?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_toggleNavigationEditor">Control navigation editor</string>
+    <string name="permlab_toggleNavigationEditor">Управление редактора на навигация</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+    <string name="permdesc_toggleNavigationEditor">Разрешава на приложение да контролира редактора на навигационната лента.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">access font manager</string>
+    <string name="permlab_accessFontManager">достъп до мениджъра на шрифтове</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+    <string name="permdesc_accessFontManager">Позволява на приложение достъп до мениджъра на шрифтове.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
-    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Tap blank area to exit One handed mode</string>
+    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Натиснете върху празно пространство за да излезете от Режим с една ръка</string>
 </resources>
