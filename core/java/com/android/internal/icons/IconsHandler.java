@@ -24,6 +24,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
@@ -38,12 +39,15 @@ import android.os.Build;
 import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 
 import com.android.internal.icons.RecentPanelIcons;
 
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +57,7 @@ public class IconsHandler {
 
     private static final String TAG = "IconsHandler";
 
+    private Map<String, IconPackInfo> mIconPacks = new HashMap<>();
     private Map<String, String> mAppFilterDrawables = new HashMap<>();
     private List<Bitmap> mBackImages = new ArrayList<>();
     private List<String> mDrawables = new ArrayList<>();
@@ -170,6 +175,14 @@ public class IconsHandler {
         }
     }
 
+    public BitmapDrawable getBitmap(Context context, Drawable drawable) {
+        if (drawable != null && drawable instanceof BitmapDrawable) {
+            Bitmap bm = ((BitmapDrawable) drawable).getBitmap();
+            return new BitmapDrawable(context.getResources(), RecentPanelIcons.createIconBitmap(bm, context, mIconNormalizer, mShadowGenerator));
+        }
+        return null;
+    }
+
     public Drawable getIconFromHandler(Context context, ActivityInfo info) {
         final String packageName = info.applicationInfo.packageName;
         ComponentName defaultName = getDefaultName(packageName);
@@ -207,13 +220,25 @@ public class IconsHandler {
         return new BitmapDrawable(context.getResources(), RecentPanelIcons.createIconBitmap(bm, context, mIconNormalizer, mShadowGenerator));
     }
 
-    private ComponentName getDefaultName(String packageName) {
+    public ComponentName getDefaultName(String packageName) {
         Intent launchIntent = mPackageManager.getLaunchIntentForPackage(packageName);
         ComponentName defaultName = null;
         if (launchIntent != null) {
             defaultName = launchIntent.getComponent();
         }
         return defaultName;
+    }
+
+    public List<String> getAllDrawables(final String packageName) {
+        loadIconPack(packageName, true);
+        Collections.sort(mDrawables, new Comparator<String>() {
+            @Override
+            public int compare(String drawable, String drawable2) {
+                return drawable.compareToIgnoreCase(drawable2);
+            }
+        });
+
+        return mDrawables;
     }
 
     public boolean isDefaultIconPack() {
@@ -362,5 +387,76 @@ public class IconsHandler {
         mIconNormalizer = new IconNormalizer(ctx, mIconSizeId, mScaleFactor);
         mShadowGenerator = new ShadowGenerator(ctx, mIconSizeId, mScaleFactor);
         updatePrefs(mIconPackPackageName, true);
+    }
+
+    public List<String> getMatchingDrawables(String packageName) {
+        List<String> matchingDrawables = new ArrayList<>();
+        ApplicationInfo info = null;
+        try {
+            info = mPackageManager.getApplicationInfo(packageName, 0);
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String packageLabel = (info != null ? mPackageManager.getApplicationLabel(info).toString()
+                : packageName).replaceAll("[^a-zA-Z]", "").toLowerCase().trim();
+        for (String drawable : mDrawables) {
+            if (drawable == null) continue;
+            String filteredDrawable = drawable.replaceAll("[^a-zA-Z]", "").toLowerCase().trim();
+            if (filteredDrawable.length() > 2 && (packageLabel.contains(filteredDrawable)
+                    || filteredDrawable.contains(packageLabel))) {
+                matchingDrawables.add(drawable);
+            }
+        }
+        return matchingDrawables;
+    }
+
+    public Pair<List<String>, List<String>> getAllIconPacks() {
+        //be sure to update the icon packs list
+        loadAvailableIconPacks();
+
+        List<String> iconPackNames = new ArrayList<>();
+        List<String> iconPackLabels = new ArrayList<>();
+        List<IconPackInfo> iconPacks = new ArrayList<IconPackInfo>(mIconPacks.values());
+        Collections.sort(iconPacks, new Comparator<IconPackInfo>() {
+            @Override
+            public int compare(IconPackInfo info, IconPackInfo info2) {
+                return info.label.toString().compareToIgnoreCase(info2.label.toString());
+            }
+        });
+        for (IconPackInfo info : iconPacks) {
+            iconPackNames.add(info.packageName);
+            iconPackLabels.add(info.label.toString());
+        }
+        return new Pair<>(iconPackNames, iconPackLabels);
+    }
+
+    private void loadAvailableIconPacks() {
+        Map<String, IconPackInfo> iconPacks = new HashMap<>();
+        List<ResolveInfo> list;
+        list = mPackageManager.queryIntentActivities(new Intent("com.novalauncher.THEME"), 0);
+        list.addAll(mPackageManager.queryIntentActivities(new Intent("org.adw.launcher.icons.ACTION_PICK_ICON"), 0));
+        list.addAll(mPackageManager.queryIntentActivities(new Intent("com.dlto.atom.launcher.THEME"), 0));
+        list.addAll(mPackageManager.queryIntentActivities(new Intent("android.intent.action.MAIN").addCategory("com.anddoes.launcher.THEME"), 0));
+        for (ResolveInfo info : list) {
+            mIconPacks.put(info.activityInfo.packageName, new IconPackInfo(info, mPackageManager));
+        }
+    }
+
+    public static class IconPackInfo {
+        public String packageName;
+        public CharSequence label;
+        public Drawable icon;
+
+        public IconPackInfo(ResolveInfo r, PackageManager packageManager) {
+            packageName = r.activityInfo.packageName;
+            icon = r.loadIcon(packageManager);
+            label = r.loadLabel(packageManager);
+        }
+
+        public IconPackInfo(String label, Drawable icon, String packageName) {
+            this.label = label;
+            this.icon = icon;
+            this.packageName = packageName;
+        }
     }
 }
