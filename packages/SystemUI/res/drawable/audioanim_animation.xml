@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/audioanim">
+    <target
+        android:name="notehead"
+        android:animation="@anim/audioanim_notehead_animation" />
+    <target
+        android:name="rectangle_path_1"
+        android:animation="@anim/audioanim_rectangle_path_1_animation" />
+    <target
+        android:name="stem"
+        android:animation="@anim/audioanim_stem_animation" />
+    <target
+        android:name="flag"
+        android:animation="@anim/audioanim_flag_animation" />
+</animated-vector>
