@@ -3,7 +3,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:id="@+id/ambient_indication"
-    android:paddingTop="16.0dip"
+    android:paddingTop="8.0dip"
     android:visibility="invisible"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -13,24 +13,22 @@
     android:forceHasOverlappingRendering="false"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
-        android:id="@+id/ambient_indication_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8.0dip"
-        android:src="@drawable/ic_music_note_24dp"
-        android:tint="?attr/wallpaperTextColorSecondary"
-        android:tintMode="src_in"
-        android:forceHasOverlappingRendering="false" />
-
     <TextView
-        android:textSize="14.0sp"
-        android:textColor="?attr/wallpaperTextColorSecondary"
+        android:textSize="13.0sp"
+        android:textColor="#ffffff"
         android:id="@+id/ambient_indication_text"
+        android:background="@drawable/ambient_indication_pill_background"
         android:layout_marginBottom="6.0dip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="17.0sp"
+        android:paddingTop="8.0sp"
+        android:paddingRight="17.0sp"
+        android:paddingBottom="8.0sp"
         android:singleLine="true"
+        android:drawablePadding="12.0sp"
+        android:drawableTint="?wallpaperTextColorSecondary"
+        android:drawableTintMode="src_in"
         android:scrollHorizontally="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
