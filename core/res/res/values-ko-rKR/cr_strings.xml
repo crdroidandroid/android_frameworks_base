@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">커지기(오른쪽에서)</string>
     <string name="animation_random">임의</string>
     <string name="action_null">공백</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">패키지 서명 스푸핑</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">앱이 다른 앱인 것처럼 흉내내는 것을 허용합니다. 악성 앱들이 이 권한을 사용하여 사적인 앱 정보에 접근할 수 있으니 주의하세요.</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">SystemUI 다시 시작 필요</string>
     <string name="systemui_restart_message">모든 변경 사항을 적용하려면 SystemUI를 다시 시작해야합니다. 지금 SystemUI를 다시 시작 하시겠습니까?</string>
