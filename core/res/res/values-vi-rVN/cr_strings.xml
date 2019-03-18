@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">Lớn dần (Bên phải)</string>
     <string name="animation_random">Ngẫu nhiên</string>
     <string name="action_null">Trống</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Giả mạo chữ ký gói</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Cho phép ứng dụng có thể giả mạo làm ứng dụng khác. Các ứng dụng độc hại có thể sử dụng quyền này để truy cập trái phép vào dữ liệu riêng tư của bạn. Hãy thận trọng khi cấp quyền này!</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Phải khởi động lại giao diện hệ thống</string>
     <string name="systemui_restart_message">Để mọi thay đổi được áp dụng, phải khởi động lại giao diện hệ thống. Khởi động lại bây giờ?</string>
