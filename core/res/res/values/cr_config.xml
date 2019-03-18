@@ -104,4 +104,7 @@
         <item>com.google.android.settings.intelligence</item>
         <item>com.crdroid.faceunlock</item>
     </string-array>
+
+    <!-- Whether or not we should show vendor mismatch message -->
+    <bool name="config_show_vendor_mismatch_message">true</bool>
 </resources>
