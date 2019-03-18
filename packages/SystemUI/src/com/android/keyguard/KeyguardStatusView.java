@@ -113,9 +113,12 @@ public class KeyguardStatusView extends GridLayout implements
     private boolean mForcedMediaDoze;
 
     private int mLockClockFontStyle;
+    private int mLockDateFontStyle;
 
     private static final String LOCK_CLOCK_FONT_STYLE =
             "system:" + Settings.System.LOCK_CLOCK_FONT_STYLE;
+    private static final String LOCK_DATE_FONT_STYLE =
+            "system:" + Settings.System.LOCK_DATE_FONT_STYLE;
 
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -172,6 +175,9 @@ public class KeyguardStatusView extends GridLayout implements
         mHandler = new Handler(Looper.myLooper());
         mSmallClockScale = getResources().getDimension(R.dimen.widget_small_font_size)
                 / getResources().getDimension(R.dimen.widget_big_font_size);
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, LOCK_CLOCK_FONT_STYLE);
+        tunerService.addTunable(this, LOCK_DATE_FONT_STYLE);
         onDensityOrFontScaleChanged();
     }
 
@@ -325,7 +331,6 @@ public class KeyguardStatusView extends GridLayout implements
     @Override
     public void onDensityOrFontScaleChanged() {
         mWidgetPadding = getResources().getDimension(R.dimen.widget_vertical_padding);
-        Typeface tfMedium = Typeface.create("sans-serif-medium", Typeface.NORMAL);
         if (mClockView != null) {
             mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimensionPixelSize(R.dimen.widget_big_font_size));
@@ -336,12 +341,13 @@ public class KeyguardStatusView extends GridLayout implements
         if (mOwnerInfo != null) {
             mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
-            mOwnerInfo.setTypeface(tfMedium);
+            setFontStyle(mOwnerInfo, mLockDateFontStyle);
         }
         if (mLogoutView != null) {
-            mLogoutView.setTypeface(tfMedium);
+            setFontStyle(mLogoutView, mLockDateFontStyle);
         }
         if (mKeyguardSlice != null) {
+            mKeyguardSlice.setFontStyle(mLockDateFontStyle);
             mKeyguardSlice.refresh();
         }
     }
@@ -401,14 +407,11 @@ public class KeyguardStatusView extends GridLayout implements
         super.onAttachedToWindow();
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mInfoCallback);
         Dependency.get(ConfigurationController.class).addCallback(this);
-        final TunerService tunerService = Dependency.get(TunerService.class);
-        tunerService.addTunable(this, LOCK_CLOCK_FONT_STYLE);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        Dependency.get(TunerService.class).removeTunable(this);
         KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mInfoCallback);
         Dependency.get(ConfigurationController.class).removeCallback(this);
     }
@@ -429,6 +432,11 @@ public class KeyguardStatusView extends GridLayout implements
             case LOCK_CLOCK_FONT_STYLE:
                 mLockClockFontStyle =
                         newValue == null ? 4 : Integer.parseInt(newValue);
+                onDensityOrFontScaleChanged();
+                break;
+            case LOCK_DATE_FONT_STYLE:
+                mLockDateFontStyle =
+                        newValue == null ? 14 : Integer.parseInt(newValue);
                 onDensityOrFontScaleChanged();
                 break;
             default:
