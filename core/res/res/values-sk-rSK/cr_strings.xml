@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">Zväčšenie (Sprava)</string>
     <string name="animation_random">Náhodné</string>
     <string name="action_null">Prázdne</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Napodobniť podpis balíčku</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Umožňuje aplikácii vydávať sa za inú aplikáciu. Škodlivé aplikácie by mohli použiť túto možnosť pre prístup k dátam súkromných aplikácií. Legitímne použitie zahŕňa emulátor, ktorý predstiera, že je to, čo napodobňuje. Udeľujte toto oprávnenie s opatrnosťou!</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Vyžaduje sa reštart Systemového UI</string>
     <string name="systemui_restart_message">Aby sa všetky zmeny prejavili je potrebné reštartovať SystemUI. Reštartovať teraz?</string>

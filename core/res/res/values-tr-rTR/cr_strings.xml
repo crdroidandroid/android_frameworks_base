@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">Büyüt (Sağdan)</string>
     <string name="animation_random">Karışık</string>
     <string name="action_null">Boş</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Sahte paket imzası</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Uygulamanın farklı bir uygulama gibi davranmasına izin verir. Zararlı uygulamalar bu özelliği kullanarak özel içerikli bilgilere ulaşabilir. Bu izni verirken dikkatli olun!</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Sistem arayüzünü yeniden başlatma gerekli</string>
     <string name="systemui_restart_message">Tüm değişikliklerin etkili olması için Sistem arayüzünün yeniden başlatılması gerekiyor. Sistem arayüzünü şimdi yeniden başlatmak ister misiniz?</string>

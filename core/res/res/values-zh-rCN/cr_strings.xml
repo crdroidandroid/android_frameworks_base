@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">缩放 (右侧)</string>
     <string name="animation_random">随机</string>
     <string name="action_null">空白</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">模仿软件包签名</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">允许应用伪装成为其他应用。恶意应用程序可以借此来访问隐私应用程序数据。请小心授予此权限！</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">需要重启系统界面</string>
     <string name="systemui_restart_message">要使所有更改生效，需要重新启动系统界面。现在重新启动系统界面吗？</string>

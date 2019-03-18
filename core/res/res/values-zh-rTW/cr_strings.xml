@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">縮放 (右側)</string>
     <string name="animation_random">隨機</string>
     <string name="action_null">空白</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">模仿應用程式簽名</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">允許應用程式偽裝成不同的應用程式。有害的應用程式可能可以使用這個功能來存取私人的應用程式資料。授予此權限時請小心！</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">需要重新啟動使用者介面</string>
     <string name="systemui_restart_message">要使所有更改生效，需要重新啟動使用者介面。 現在重新啟動使用者介面？</string>

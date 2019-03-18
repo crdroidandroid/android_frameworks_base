@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">Збільшення (праворуч)</string>
     <string name="animation_random">Випадково</string>
     <string name="action_null">Пусто</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Підміна підпису додатка</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Дозволити додатку видавати себе за інший додаток. Небезпечні додатки можуть отримати доступ до приватних даних. Законне використання включає в себе емулятор, який прикидається тим, що емулює. Будьте обережні під час надання цього дозволу!</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Необхідне перезавантаження інтерфейсу системи</string>
     <string name="systemui_restart_message">Для застосування змін потрібно перезаватажити інтерфейс системи. Перезавантажити зараз?</string>

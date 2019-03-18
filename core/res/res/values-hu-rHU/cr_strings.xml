@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">Növekvő (jobbra)</string>
     <string name="animation_random">Véletlenszerű</string>
     <string name="action_null">Üres</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Hamis csomagaláírás</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Engedélyezi az alkalmazás számára, hogy más alkalmazásnak tettesse magát. A kártékony alkalmazások ezt személyes adatok elérésére használhatják. Jogos például, ha egy emulátor, amely úgy tesz, mintha az lenne, amit emulál. Kellő elővigyázatossággal adja meg ezt az engedélyt!</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Rendszerfelület-újraindítás szükséges</string>
     <string name="systemui_restart_message">Az összes módosítás érvénybe léptetéséhez a rendszerfelület újraindítása szükséges. Újraindítja most?</string>

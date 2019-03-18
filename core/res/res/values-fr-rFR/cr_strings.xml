@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">Agrandir (droite)</string>
     <string name="animation_random">Aléatoire</string>
     <string name="action_null">Vide</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Falsifier la signature du paquet</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Autorise l\'application à se faire passer pour une autre. Des applications malveillantes peuvent être capable de l\'utiliser pour accéder aux données d\'applications privées. Accordez cette autorisation avec prudence!</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Un redémarrage de SystemUI est nécessaire</string>
     <string name="systemui_restart_message">Afin que toutes les modifications soient prises en compte, un redémarrage de SystemUI est nécessaire. Voulez vous redémarrer SystemUI maintenant ?</string>

@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">Crește în (Dreapta)</string>
     <string name="animation_random">Aleatoriu</string>
     <string name="action_null">Gol</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Falsifică semnătura pachetului</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Permite aplicației să pretindă că este o aplicație diferită. Aplicațiile rău-intenționate ar putea să utilizeze aceasta pentru a accesa datele aplicațiilor private. Acordați această permisiune numai cu prudență!</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Repornire IU de sistem necesară</string>
     <string name="systemui_restart_message">Pentru ca toate modificările să aibă efect, este necesară o repornire a IU sistem. Reporniţi IU sistem acum?</string>

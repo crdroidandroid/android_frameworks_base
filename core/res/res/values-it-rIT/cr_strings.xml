@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">Espandi (a destra)</string>
     <string name="animation_random">Casuale</string>
     <string name="action_null">Vuoto</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Simula firma del pacchetto</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Consente all\'applicazione di fingere di essere un\'app diversa. Le applicazioni dannose potrebbero essere in grado di utilizzarlo per accedere ai dati delle applicazioni private. Gli usi legittimi includono un emulatore che finge di essere ciò che emula. Concedi questo permesso con molta cautela!</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Riavvio dell\'interfaccia utente richiesto</string>
     <string name="systemui_restart_message">Per rendere effettive tutte le modifiche, è necessario un riavvio dell\'Interfaccia Utente. Riavviare l\'Interfaccia Utente ora?</string>
