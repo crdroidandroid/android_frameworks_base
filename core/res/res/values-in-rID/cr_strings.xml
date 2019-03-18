@@ -35,11 +35,6 @@
     <string name="animation_grow_shrink_right">Tumbuh di (kanan)</string>
     <string name="animation_random">Acak</string>
     <string name="action_null">Kosong</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Memalsukan paket tandatangan</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Izinkan aplikasi menyamar menjadi aplikasi lain.
-Aplikasi jahat mungkin dapat menggunakan ini untuk masuk ke aplikasi data pribadi. Pengguna sah termasuk peniru berpura-pura menjadi yg di samar. Bolehkan perizinan ini dengan hati-hati!</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Diperlukan memulai ulang sistemUI</string>
     <string name="systemui_restart_message">Untuk melihat semua perubahan, diperlukannya memulai ulang SystemUI. mulai ulang sekarang?</string>
