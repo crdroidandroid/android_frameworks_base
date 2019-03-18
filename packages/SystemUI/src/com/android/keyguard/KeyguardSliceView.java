@@ -73,6 +73,33 @@ public class KeyguardSliceView extends LinearLayout implements View.OnClickListe
         Observer<Slice>, TunerService.Tunable, ConfigurationController.ConfigurationListener {
 
     private static final String TAG = "KeyguardSliceView";
+
+    private static final int FONT_NORMAL = 0;
+    private static final int FONT_ITALIC = 1;
+    private static final int FONT_BOLD = 2;
+    private static final int FONT_BOLD_ITALIC = 3;
+    private static final int FONT_LIGHT = 4;
+    private static final int FONT_LIGHT_ITALIC = 5;
+    private static final int FONT_THIN = 6;
+    private static final int FONT_THIN_ITALIC = 7;
+    private static final int FONT_CONDENSED = 8;
+    private static final int FONT_CONDENSED_ITALIC = 9;
+    private static final int FONT_CONDENSED_LIGHT = 10;
+    private static final int FONT_CONDENSED_LIGHT_ITALIC = 11;
+    private static final int FONT_CONDENSED_BOLD = 12;
+    private static final int FONT_CONDENSED_BOLD_ITALIC = 13;
+    private static final int FONT_MEDIUM = 14;
+    private static final int FONT_MEDIUM_ITALIC = 15;
+    private static final int FONT_BLACK = 16;
+    private static final int FONT_BLACK_ITALIC = 17;
+    private static final int FONT_DANCINGSCRIPT = 18;
+    private static final int FONT_DANCINGSCRIPT_BOLD = 19;
+    private static final int FONT_COMINGSOON = 20;
+    private static final int FONT_NOTOSERIF = 21;
+    private static final int FONT_NOTOSERIF_ITALIC = 22;
+    private static final int FONT_NOTOSERIF_BOLD = 23;
+    private static final int FONT_NOTOSERIF_BOLD_ITALIC = 24;
+
     public static final int DEFAULT_ANIM_DURATION = 550;
 
     private final HashMap<View, PendingIntent> mClickActions;
@@ -94,7 +121,7 @@ public class KeyguardSliceView extends LinearLayout implements View.OnClickListe
     private Slice mSlice;
     private boolean mPulsing;
 
-    private static final String FONT_FAMILY_MEDIUM = "sans-serif-medium";
+    private int mLockDateFontStyle = 14;
 
     public KeyguardSliceView(Context context) {
         this(context, null, 0);
@@ -181,10 +208,9 @@ public class KeyguardSliceView extends LinearLayout implements View.OnClickListe
                     true /* showStartItem */);
             SliceItem mainTitle = header.getTitleItem();
             CharSequence title = mainTitle != null ? mainTitle.getText() : null;
-            Typeface tf = Typeface.create(FONT_FAMILY_MEDIUM, Typeface.NORMAL);
 
             mTitle.setText(title);
-            mTitle.setTypeface(tf);
+            setFontStyle(mTitle, mLockDateFontStyle);
         }
 
         mClickActions.clear();
@@ -218,6 +244,7 @@ public class KeyguardSliceView extends LinearLayout implements View.OnClickListe
 
             final SliceItem titleItem = rc.getTitleItem();
             button.setText(titleItem == null ? null : titleItem.getText());
+            setFontStyle(button, mLockDateFontStyle);
             button.setContentDescription(rc.getContentDescription());
 
             Drawable iconDrawable = null;
@@ -376,6 +403,87 @@ public class KeyguardSliceView extends LinearLayout implements View.OnClickListe
         }
     }
 
+    private void setFontStyle(TextView view, int fontstyle) {
+        switch (fontstyle) {
+            case FONT_NORMAL:
+                view.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+                break;
+            case FONT_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif", Typeface.ITALIC));
+                break;
+            case FONT_BOLD:
+                view.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+                break;
+            case FONT_BOLD_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif", Typeface.BOLD_ITALIC));
+                break;
+            case FONT_LIGHT:
+                view.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                break;
+            case FONT_LIGHT_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-light", Typeface.ITALIC));
+                break;
+            case FONT_THIN:
+                view.setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
+                break;
+            case FONT_THIN_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-thin", Typeface.ITALIC));
+                break;
+            case FONT_CONDENSED:
+                view.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
+                break;
+            case FONT_CONDENSED_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC));
+                break;
+            case FONT_CONDENSED_LIGHT:
+                view.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.NORMAL));
+                break;
+            case FONT_CONDENSED_LIGHT_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.ITALIC));
+                break;
+            case FONT_CONDENSED_BOLD:
+                view.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
+                break;
+            case FONT_CONDENSED_BOLD_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD_ITALIC));
+                break;
+            case FONT_MEDIUM:
+            default:
+                view.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                break;
+            case FONT_MEDIUM_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-medium", Typeface.ITALIC));
+                break;
+            case FONT_BLACK:
+                view.setTypeface(Typeface.create("sans-serif-black", Typeface.NORMAL));
+                break;
+            case FONT_BLACK_ITALIC:
+                view.setTypeface(Typeface.create("sans-serif-black", Typeface.ITALIC));
+                break;
+            case FONT_DANCINGSCRIPT:
+                view.setTypeface(Typeface.create("cursive", Typeface.NORMAL));
+                break;
+            case FONT_DANCINGSCRIPT_BOLD:
+                view.setTypeface(Typeface.create("cursive", Typeface.BOLD));
+                break;
+            case FONT_COMINGSOON:
+                view.setTypeface(Typeface.create("casual", Typeface.NORMAL));
+                break;
+            case FONT_NOTOSERIF:
+                view.setTypeface(Typeface.create("serif", Typeface.NORMAL));
+                break;
+            case FONT_NOTOSERIF_ITALIC:
+                view.setTypeface(Typeface.create("serif", Typeface.ITALIC));
+                break;
+            case FONT_NOTOSERIF_BOLD:
+                view.setTypeface(Typeface.create("serif", Typeface.BOLD));
+                break;
+            case FONT_NOTOSERIF_BOLD_ITALIC:
+                view.setTypeface(Typeface.create("serif", Typeface.BOLD_ITALIC));
+                break;
+        }
+    }
+
     @VisibleForTesting
     int getTextColor() {
         return ColorUtils.blendARGB(mTextColor, Color.WHITE, mDarkAmount);
@@ -391,6 +499,10 @@ public class KeyguardSliceView extends LinearLayout implements View.OnClickListe
     public void onDensityOrFontScaleChanged() {
         mIconSize = mContext.getResources().getDimensionPixelSize(R.dimen.widget_icon_size);
         mWeatherIconSize = mContext.getResources().getDimensionPixelSize(R.dimen.weather_icon_size);
+    }
+
+    public void setFontStyle(int fontstyle) {
+        mLockDateFontStyle = fontstyle;
     }
 
     public void refresh() {
@@ -519,8 +631,6 @@ public class KeyguardSliceView extends LinearLayout implements View.OnClickListe
         @Override
         public void onDensityOrFontScaleChanged() {
             updatePadding();
-            Typeface tf = Typeface.create(FONT_FAMILY_MEDIUM, Typeface.NORMAL);
-            setTypeface(tf);
         }
 
         @Override
