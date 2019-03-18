@@ -35,10 +35,6 @@
     <string name="animation_grow_shrink_right">Verschijnen (Rechts)</string>
     <string name="animation_random">Willekeurig</string>
     <string name="action_null">Leeg</string>
-    <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Handtekeningen nabootsen</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">De app toestaan zich voor te doen als een andere app. Schadelijke apps kunnen dit mogelijk gebruiken om toegang te krijgen tot persoonlijke toepassingsgegevens. Legitieme toepassingen bevatten een emulator die pretendeert te zijn wat het emuleert. Verleen deze toestemming met de nodige voorzichtigheid!</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">SysteemUI herstart vereist</string>
     <string name="systemui_restart_message">Een herstart van de Ui is nodig om alle wijzigingen door te voeren. Ui nu herstarten?</string>
