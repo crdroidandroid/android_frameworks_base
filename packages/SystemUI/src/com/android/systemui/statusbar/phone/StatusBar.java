@@ -156,6 +156,7 @@ import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.ThemeAccentUtils;
 import com.android.internal.utils.ActionConstants;
 import com.android.internal.utils.ActionUtils;
+import com.android.internal.utils.ImageHelper;
 import com.android.internal.utils.PackageMonitor;
 import com.android.internal.utils.PackageMonitor.PackageChangedListener;
 import com.android.internal.utils.PackageMonitor.PackageState;
@@ -353,6 +354,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
     private static final String STOCK_STATUSBAR_IN_HIDE =
             "system:" + Settings.System.STOCK_STATUSBAR_IN_HIDE;
+    private static final String LOCKSCREEN_ALBUMART_FILTER =
+            Settings.Secure.LOCKSCREEN_ALBUMART_FILTER;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -778,6 +781,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private int mImmerseMode;
     private boolean mStatusBarStock;
 
+    private int mAlbumArtFilter;
+
     @Override
     public void start() {
         mGroupManager = Dependency.get(NotificationGroupManager.class);
@@ -843,6 +848,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, USE_OLD_MOBILETYPE);
         tunerService.addTunable(this, DISPLAY_CUTOUT_MODE);
         tunerService.addTunable(this, STOCK_STATUSBAR_IN_HIDE);
+        tunerService.addTunable(this, LOCKSCREEN_ALBUMART_FILTER);
 
         mPackageMonitor = new PackageMonitor();
         mPackageMonitor.register(mContext, mHandler);
@@ -1936,7 +1942,29 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 // might still be null
             }
             if (artworkBitmap != null) {
-                artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(), artworkBitmap);
+                switch (mAlbumArtFilter) {
+                    case 0:
+                    default:
+                        artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(), artworkBitmap);
+                        break;
+                    case 1:
+                        artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(),
+                            ImageHelper.toGrayscale(artworkBitmap));
+                        break;
+                    case 2:
+                        Drawable aw = new BitmapDrawable(mBackdropBack.getResources(), artworkBitmap);
+                        artworkDrawable = new BitmapDrawable(ImageHelper.getColoredBitmap(aw,
+                            mContext.getResources().getColor(R.color.fab_color)));
+                        break;
+                    case 3:
+                        artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(),
+                            ImageHelper.getBlurredImage(mContext, artworkBitmap, 7.0f));
+                        break;
+                    case 4:
+                        artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(),
+                            ImageHelper.getGrayscaleBlurredImage(mContext, artworkBitmap, 7.0f));
+                        break;
+                }
             }
         }
         mKeyguardShowingMedia = artworkDrawable != null;
@@ -6449,6 +6477,12 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 mStatusBarStock =
                         TunerService.parseIntegerSwitch(newValue, true);
                 handleCutout(null);
+                break;
+            case LOCKSCREEN_ALBUMART_FILTER:
+                mAlbumArtFilter = 0;
+                try {
+                    mAlbumArtFilter = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
                 break;
             default:
                 break;
