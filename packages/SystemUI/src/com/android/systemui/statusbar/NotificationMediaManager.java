@@ -41,6 +41,7 @@ import android.os.Trace;
 import android.os.UserHandle;
 import android.provider.DeviceConfig;
 import android.provider.DeviceConfig.Properties;
+import android.provider.Settings;
 import android.util.ArraySet;
 import android.util.Log;
 import android.view.View;
@@ -48,9 +49,11 @@ import android.widget.ImageView;
 
 import com.android.internal.config.sysui.SystemUiDeviceConfigFlags;
 import com.android.internal.statusbar.NotificationVisibility;
+import com.android.internal.util.crdroid.ImageHelper;
 import com.android.systemui.Dependency;
 import com.android.systemui.Dumpable;
 import com.android.systemui.Interpolators;
+import com.android.systemui.R;
 import com.android.systemui.colorextraction.SysuiColorExtractor;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.statusbar.notification.NotificationEntryListener;
@@ -93,6 +96,8 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
 
     private static final String LOCKSCREEN_MEDIA_METADATA =
             "lineagesecure:" + LineageSettings.Secure.LOCKSCREEN_MEDIA_METADATA;
+    private static final String LOCKSCREEN_ALBUMART_FILTER =
+            Settings.Secure.LOCKSCREEN_ALBUMART_FILTER;
 
     private final StatusBarStateController mStatusBarStateController
             = Dependency.get(StatusBarStateController.class);
@@ -134,6 +139,8 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
 
     private boolean mShowCompactMediaSeekbar;
     private boolean mShowMediaMetadata;
+
+    private int mAlbumArtFilter;
 
     private final DeviceConfig.OnPropertiesChangedListener mPropertiesChangedListener =
             new DeviceConfig.OnPropertiesChangedListener() {
@@ -219,14 +226,25 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
                 mPropertiesChangedListener);
 
         final TunerService tunerService = Dependency.get(TunerService.class);
-        tunerService.addTunable(this, LOCKSCREEN_MEDIA_METADATA);
+        tunerService.addTunable(this, LOCKSCREEN_MEDIA_METADATA,
+                                      LOCKSCREEN_ALBUMART_FILTER);
     }
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (LOCKSCREEN_MEDIA_METADATA.equals(key)) {
-            mShowMediaMetadata = TunerService.parseIntegerSwitch(newValue, true);
-            dispatchUpdateMediaMetaData(false /* changed */, true /* allowAnimation */);
+        switch (key) {
+            case LOCKSCREEN_MEDIA_METADATA:
+                mShowMediaMetadata =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                dispatchUpdateMediaMetaData(false /* changed */, true /* allowAnimation */);
+                break;
+            case LOCKSCREEN_ALBUMART_FILTER:
+                mAlbumArtFilter =
+                        TunerService.parseInteger(newValue, 0);
+                dispatchUpdateMediaMetaData(false /* changed */, true /* allowAnimation */);
+                break;
+            default:
+                break;
         }
     }
 
@@ -515,6 +533,7 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
         if (bmp != null) {
             artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(), bmp);
         }
+
         boolean hasMediaArtwork = artworkDrawable != null;
         boolean allowWhenShade = false;
         if (ENABLE_LOCKSCREEN_WALLPAPER && artworkDrawable == null) {
@@ -719,7 +738,22 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
             if (manager == null || bitmaps.length == 0 || isCancelled()) {
                 return null;
             }
-            return manager.processArtwork(bitmaps[0]);
+
+            switch (manager.mAlbumArtFilter) {
+                case 0:
+                default:
+                    return bitmaps[0];
+                case 1:
+                    return ImageHelper.toGrayscale(bitmaps[0]);
+                case 2:
+                    Drawable aw = new BitmapDrawable(manager.mBackdropBack.getResources(), bitmaps[0]);
+                    return ImageHelper.getColoredBitmap(aw,
+                        manager.mContext.getResources().getColor(R.color.accent_device_default_light));
+                case 3:
+                    return ImageHelper.getBlurredImage(manager.mContext, bitmaps[0], 7.0f);
+                case 4:
+                    return ImageHelper.getGrayscaleBlurredImage(manager.mContext, bitmaps[0], 7.0f);
+            }
         }
 
         @Override

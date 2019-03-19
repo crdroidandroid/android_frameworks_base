@@ -17,4 +17,6 @@
 <resources>
 
     <color name="qs_icon_active_color">@*android:color/qs_icon_active_color</color>
+
+    <color name="accent_device_default_light">@*android:color/accent_device_default_light</color>
 </resources>
