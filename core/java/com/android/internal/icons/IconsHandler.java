@@ -411,7 +411,7 @@ public class IconsHandler {
     }
 
     public Pair<List<String>, List<String>> getAllIconPacks() {
-        //be sure to update the icon packs list
+        // Ensure to update the icon packs list
         loadAvailableIconPacks();
 
         List<String> iconPackNames = new ArrayList<>();
@@ -431,7 +431,8 @@ public class IconsHandler {
     }
 
     private void loadAvailableIconPacks() {
-        Map<String, IconPackInfo> iconPacks = new HashMap<>();
+        // Remove all elements from global icon pack variable.
+        mIconPacks.clear();
         List<ResolveInfo> list;
         list = mPackageManager.queryIntentActivities(new Intent("com.novalauncher.THEME"), 0);
         list.addAll(mPackageManager.queryIntentActivities(new Intent("org.adw.launcher.icons.ACTION_PICK_ICON"), 0));
