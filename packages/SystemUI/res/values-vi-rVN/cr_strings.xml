@@ -123,4 +123,9 @@
     <string name="pie_state_summary">Sử dụng điều hướng pie trong chế độ toàn màn hình</string>
     <string name="pie_battery_level">"MỨC PIN "</string>
     <string name="quick_settings_pie">Điều hướng Pie</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sound</string>
+    <string name="quick_settings_sound_ring">Ring</string>
+    <string name="quick_settings_sound_vibrate">Vibrate</string>
+    <string name="quick_settings_sound_dnd">Do not disturb</string>
 </resources>
