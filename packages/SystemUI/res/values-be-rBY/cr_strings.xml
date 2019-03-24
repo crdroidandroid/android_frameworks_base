@@ -123,4 +123,9 @@
     <string name="pie_state_summary">Выкарыстоўваць кіраванне Pie у поўнаэкранным рэжыме</string>
     <string name="pie_battery_level">"ЗАРАД БАТАРЭІ "</string>
     <string name="quick_settings_pie">Панэль кіравання Pie</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sound</string>
+    <string name="quick_settings_sound_ring">Ring</string>
+    <string name="quick_settings_sound_vibrate">Vibrate</string>
+    <string name="quick_settings_sound_dnd">Do not disturb</string>
 </resources>
