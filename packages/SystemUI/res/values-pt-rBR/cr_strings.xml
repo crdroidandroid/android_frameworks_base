@@ -123,4 +123,9 @@
     <string name="pie_state_summary">Usar os controles Pie durante o modo imersivo</string>
     <string name="pie_battery_level">"NÍVEL DE BATERIA "</string>
     <string name="quick_settings_pie">Controlos Pie</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sound</string>
+    <string name="quick_settings_sound_ring">Ring</string>
+    <string name="quick_settings_sound_vibrate">Vibrate</string>
+    <string name="quick_settings_sound_dnd">Do not disturb</string>
 </resources>

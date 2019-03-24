@@ -123,4 +123,9 @@
     <string name="pie_state_summary">Utiliser le menu circulaire Pie mode immersif</string>
     <string name="pie_battery_level">"NIVEAU DE LA BATTERIE "</string>
     <string name="quick_settings_pie">Menu circulaire Pie</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sons</string>
+    <string name="quick_settings_sound_ring">Sonnerie</string>
+    <string name="quick_settings_sound_vibrate">Vibreur</string>
+    <string name="quick_settings_sound_dnd">Ne pas déranger</string>
 </resources>

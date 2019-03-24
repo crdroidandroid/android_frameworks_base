@@ -123,4 +123,9 @@
     <string name="pie_state_summary">Nella modalità immersiva, usa i controlli di Pie</string>
     <string name="pie_battery_level">"LIVELLO BATTERIA "</string>
     <string name="quick_settings_pie">Controlli Pie</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Suono</string>
+    <string name="quick_settings_sound_ring">Suoneria</string>
+    <string name="quick_settings_sound_vibrate">Vibrazione</string>
+    <string name="quick_settings_sound_dnd">Non disturbare</string>
 </resources>

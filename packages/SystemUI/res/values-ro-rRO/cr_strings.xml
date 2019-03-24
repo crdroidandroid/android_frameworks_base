@@ -123,4 +123,9 @@
     <string name="pie_state_summary">Utilizaţi controale Pie în modul imersiv</string>
     <string name="pie_battery_level">"NIVELUL BATERIEI "</string>
     <string name="quick_settings_pie">Control Pie</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sunet</string>
+    <string name="quick_settings_sound_ring">Suna</string>
+    <string name="quick_settings_sound_vibrate">Vibrează</string>
+    <string name="quick_settings_sound_dnd">Nu deranjaţi</string>
 </resources>

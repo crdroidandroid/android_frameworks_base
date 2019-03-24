@@ -123,4 +123,9 @@
     <string name="pie_state_summary">Tam ekran modundayken pie kontrollerini kullanın</string>
     <string name="pie_battery_level">"PİL SEVİYESİ "</string>
     <string name="quick_settings_pie">Pie kontrol</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sound</string>
+    <string name="quick_settings_sound_ring">Ring</string>
+    <string name="quick_settings_sound_vibrate">Vibrate</string>
+    <string name="quick_settings_sound_dnd">Do not disturb</string>
 </resources>

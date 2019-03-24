@@ -123,4 +123,9 @@
     <string name="pie_state_summary">Използвай Pie контроли в режим на цял екран</string>
     <string name="pie_battery_level">"НИВО НА БАТЕРИЯТА "</string>
     <string name="quick_settings_pie">Pie контрол</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Звук</string>
+    <string name="quick_settings_sound_ring">Звънене</string>
+    <string name="quick_settings_sound_vibrate">Вибрация</string>
+    <string name="quick_settings_sound_dnd">Не безпокойте</string>
 </resources>

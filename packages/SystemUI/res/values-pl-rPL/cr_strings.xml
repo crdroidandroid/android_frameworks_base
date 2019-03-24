@@ -123,4 +123,9 @@
     <string name="pie_state_summary">Używaj interfejsu Pie w trybie pełnoekranowym</string>
     <string name="pie_battery_level">"POZIOM NAŁADOWANIA BATERII "</string>
     <string name="quick_settings_pie">Kontrola Pie</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Dźwięk</string>
+    <string name="quick_settings_sound_ring">Dzwonek</string>
+    <string name="quick_settings_sound_vibrate">Wibracje</string>
+    <string name="quick_settings_sound_dnd">Nie przeszkadzać</string>
 </resources>

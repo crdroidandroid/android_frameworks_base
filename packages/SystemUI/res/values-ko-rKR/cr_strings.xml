@@ -121,6 +121,11 @@
     <string name="pie_am_pm">a</string>
     <string name="pie_state_name">Pie 컨트롤</string>
     <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-    <string name="pie_battery_level">"BATTERY LEVEL "</string>
+    <string name="pie_battery_level">"배터리 잔량 "</string>
     <string name="quick_settings_pie">Pie 컨트롤</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sound</string>
+    <string name="quick_settings_sound_ring">Ring</string>
+    <string name="quick_settings_sound_vibrate">Vibrate</string>
+    <string name="quick_settings_sound_dnd">Do not disturb</string>
 </resources>

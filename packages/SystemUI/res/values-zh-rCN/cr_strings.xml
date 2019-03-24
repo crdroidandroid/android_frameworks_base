@@ -123,4 +123,9 @@
     <string name="pie_state_summary">在沉浸模式下启用扇形控制</string>
     <string name="pie_battery_level">"电池电量 "</string>
     <string name="quick_settings_pie">扇形控制</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">声音</string>
+    <string name="quick_settings_sound_ring">铃声</string>
+    <string name="quick_settings_sound_vibrate">振动</string>
+    <string name="quick_settings_sound_dnd">请勿打扰</string>
 </resources>
