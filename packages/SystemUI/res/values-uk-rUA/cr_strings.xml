@@ -123,4 +123,9 @@
     <string name="pie_state_summary">Використовувати Pie-управління в повноекранному режимі</string>
     <string name="pie_battery_level">"Заряд батареї "</string>
     <string name="quick_settings_pie">Панель управління Pie</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sound</string>
+    <string name="quick_settings_sound_ring">Ring</string>
+    <string name="quick_settings_sound_vibrate">Vibrate</string>
+    <string name="quick_settings_sound_dnd">Do not disturb</string>
 </resources>
