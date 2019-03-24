@@ -123,4 +123,9 @@
     <string name="pie_state_summary">Körcikk alakú mozdulatvezérlés használata teljes képernyős üzemmódban</string>
     <string name="pie_battery_level">"AKKUMULÁTORSZINT "</string>
     <string name="quick_settings_pie">Pie-vezérlés</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sound</string>
+    <string name="quick_settings_sound_ring">Ring</string>
+    <string name="quick_settings_sound_vibrate">Vibrate</string>
+    <string name="quick_settings_sound_dnd">Do not disturb</string>
 </resources>
