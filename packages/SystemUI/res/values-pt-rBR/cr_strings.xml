@@ -124,8 +124,8 @@
     <string name="pie_battery_level">"NÍVEL DE BATERIA "</string>
     <string name="quick_settings_pie">Controlos Pie</string>
     <!-- Sound QS Tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">Som</string>
+    <string name="quick_settings_sound_ring">Campainha</string>
+    <string name="quick_settings_sound_vibrate">Vibração</string>
+    <string name="quick_settings_sound_dnd">Não pertube</string>
 </resources>
