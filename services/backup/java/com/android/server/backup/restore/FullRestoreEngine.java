@@ -57,11 +57,11 @@ import com.android.server.backup.utils.TarBackupReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Full restore engine, used by both adb restore and transport-based full restore.
@@ -627,7 +627,8 @@ public class FullRestoreEngine extends RestoreEngine {
     }
 
     private static boolean isCanonicalFilePath(String path) {
-        if (path.contains("..") || path.contains("//")) {
+        // Drop paths like '..' '../abc' 'abc/..' '/../abc'
+        if (Pattern.matches("((.*[/])|(^))\\.\\.((/.*)|($))", path) || path.contains("//")) {
             if (MORE_DEBUG) {
                 Slog.w(TAG, "Dropping invalid path " + path);
             }

@@ -71,6 +71,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 import java.util.zip.InflaterInputStream;
 
 import javax.crypto.BadPaddingException;
@@ -798,7 +799,8 @@ public class PerformAdbRestoreTask implements Runnable {
     }
 
     private static boolean isCanonicalFilePath(String path) {
-        if (path.contains("..") || path.contains("//")) {
+        // Drop paths like '..' '../abc' 'abc/..' '/../abc'
+        if (Pattern.matches("((.*[/])|(^))\\.\\.((/.*)|($))", path) || path.contains("//")) {
             if (MORE_DEBUG) {
                 Slog.w(TAG, "Dropping invalid path " + path);
             }
