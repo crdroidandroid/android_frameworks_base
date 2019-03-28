@@ -155,4 +155,7 @@
   <java-symbol type="drawable" name="ic_screenrecord" />
   <java-symbol type="string" name="global_action_screenrecord" />
   <java-symbol type="bool" name="config_showScreenRecord" />
+
+  <!-- Smart charging battery percentage -->
+  <java-symbol type="integer" name="config_smartChargingBatteryLevel" />
 </resources>

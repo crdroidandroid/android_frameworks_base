@@ -61,4 +61,7 @@
 
     <!-- Whether to use in-built Screen Record service -->
     <bool name="config_showScreenRecord">false</bool>
+
+    <!-- Smart charging battery percentage -->
+    <integer name="config_smartChargingBatteryLevel">80</integer>
 </resources>
