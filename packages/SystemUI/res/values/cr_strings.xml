@@ -140,4 +140,7 @@
     <string name="qs_lte_label">LTE</string>
     <string name="lte_on">LTE on</string>
     <string name="lte_off">LTE off</string>
+
+    <!-- Restart SystemUI via Advanced Power Menu -->
+    <string name="global_action_restart_systemui">SystemUI</string>
 </resources>
