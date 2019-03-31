@@ -129,7 +129,7 @@
     <string name="quick_settings_sound_vibrate">Trillen</string>
     <string name="quick_settings_sound_dnd">Niet storen</string>
     <!-- LTE QS Tile -->
-    <string name="qs_lte_label">LTE</string>
+    <string name="qs_lte_label">LTE/4G</string>
     <string name="lte_on">LTE ON</string>
-    <string name="lte_off">LTE OFF</string>
+    <string name="lte_off">LTE/4G uit</string>
 </resources>
