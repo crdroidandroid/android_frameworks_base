@@ -24,6 +24,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.audiofx.Visualizer;
+import android.os.AsyncTask;
 import android.os.UserHandle;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
@@ -32,7 +33,6 @@ import android.view.View;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.tuner.TunerService;
-import com.android.systemui.UiOffloadThread;
 
 import lineageos.providers.LineageSettings;
 
@@ -64,8 +64,6 @@ public class VisualizerView extends View
     private int mColor;
     private Bitmap mCurrentBitmap;
 
-    private final UiOffloadThread mUiOffloadThread;
-
     private Visualizer.OnDataCaptureListener mVisualizerListener =
             new Visualizer.OnDataCaptureListener() {
         byte rfk, ifk;
@@ -92,9 +90,13 @@ public class VisualizerView extends View
         }
     };
 
-    public void dolink() {
-        mUiOffloadThread.submit(() -> {
-            if (mVisualizer != null) return;
+    private final Runnable mLinkVisualizer = new Runnable() {
+        @Override
+        public void run() {
+            if (DEBUG) {
+                Log.w(TAG, "+++ mLinkVisualizer run()");
+            }
+
             try {
                 mVisualizer = new Visualizer(0);
             } catch (Exception e) {
@@ -107,18 +109,36 @@ public class VisualizerView extends View
             mVisualizer.setDataCaptureListener(mVisualizerListener,Visualizer.getMaxCaptureRate(),
                     false, true);
             mVisualizer.setEnabled(true);
-        });
-    }
 
-    private void unlink() {
-        mUiOffloadThread.submit(() -> {
+            if (DEBUG) {
+                Log.w(TAG, "--- mLinkVisualizer run()");
+            }
+        }
+    };
+
+    private final Runnable mAsyncUnlinkVisualizer = new Runnable() {
+        @Override
+        public void run() {
+            AsyncTask.execute(mUnlinkVisualizer);
+        }
+    };
+
+    private final Runnable mUnlinkVisualizer = new Runnable() {
+        @Override
+        public void run() {
+            if (DEBUG) {
+                Log.w(TAG, "+++ mUnlinkVisualizer run(), mVisualizer: " + mVisualizer);
+            }
             if (mVisualizer != null) {
                 mVisualizer.setEnabled(false);
                 mVisualizer.release();
                 mVisualizer = null;
             }
-        });
-    }
+            if (DEBUG) {
+                Log.w(TAG, "--- mUninkVisualizer run()");
+            }
+        }
+    };
 
     public VisualizerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -143,8 +163,6 @@ public class VisualizerView extends View
                 }
             });
         }
-
-        mUiOffloadThread = Dependency.get(UiOffloadThread.class);
     }
 
     public VisualizerView(Context context, AttributeSet attrs) {
@@ -333,7 +351,7 @@ public class VisualizerView extends View
                 && mVisualizerEnabled && !mOccluded) {
             if (!mDisplaying) {
                 mDisplaying = true;
-                dolink();
+                AsyncTask.execute(mLinkVisualizer);
                 animate()
                         .alpha(1f)
                         .withEndAction(null)
@@ -341,15 +359,16 @@ public class VisualizerView extends View
             }
         } else {
             if (mDisplaying) {
-                unlink();
                 mDisplaying = false;
                 if (isVisible) {
                     animate()
                             .alpha(0f)
+                            .withEndAction(mAsyncUnlinkVisualizer)
                             .setDuration(600);
                 } else {
                     animate().
                             alpha(0f)
+                            .withEndAction(mAsyncUnlinkVisualizer)
                             .setDuration(0);
                 }
             }
