@@ -186,8 +186,6 @@ public class VisualizerView extends View
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (mCurrentBitmap == null)
-            setColor(Color.TRANSPARENT);
         Dependency.get(TunerService.class).addTunable(this, LOCKSCREEN_VISUALIZER_ENABLED);
     }
 
@@ -293,14 +291,12 @@ public class VisualizerView extends View
     }
 
     public void setBitmap(Bitmap bitmap) {
-        if (mCurrentBitmap == bitmap) {
-            return;
-        }
-        mCurrentBitmap = bitmap;
-        if (bitmap != null) {
-            Palette.generateAsync(bitmap, this);
-        } else {
+        if (bitmap == null) {
+            mCurrentBitmap = bitmap;
             setColor(Color.TRANSPARENT);
+        } else if (mCurrentBitmap != bitmap) {
+            mCurrentBitmap = bitmap;
+            Palette.generateAsync(mCurrentBitmap, this);
         }
     }
 
