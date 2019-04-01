@@ -119,13 +119,17 @@
     <string name="pie_hour_format_12">hh:mm</string>
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
-    <string name="pie_state_name">Pie Control</string>
-    <string name="pie_state_summary">Use pie controls while in immersive mode</string>
-    <string name="pie_battery_level">"BATTERY LEVEL "</string>
-    <string name="quick_settings_pie">Pie Control</string>
+    <string name="pie_state_name">Pie Displaynavigatie</string>
+    <string name="pie_state_summary">Gebruik pie besturing in immersieve modus</string>
+    <string name="pie_battery_level">"BATTERIJNIVEAU "</string>
+    <string name="quick_settings_pie">Pie Displaynavigatie</string>
     <!-- Sound QS Tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">Geluid</string>
+    <string name="quick_settings_sound_ring">Beltoon</string>
+    <string name="quick_settings_sound_vibrate">Trillen</string>
+    <string name="quick_settings_sound_dnd">Niet storen</string>
+    <!-- LTE QS Tile -->
+    <string name="qs_lte_label">LTE/4G</string>
+    <string name="lte_on">LTE ON</string>
+    <string name="lte_off">LTE/4G uit</string>
 </resources>

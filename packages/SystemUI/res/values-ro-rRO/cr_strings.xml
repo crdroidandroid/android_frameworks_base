@@ -128,4 +128,8 @@
     <string name="quick_settings_sound_ring">Suna</string>
     <string name="quick_settings_sound_vibrate">Vibrează</string>
     <string name="quick_settings_sound_dnd">Nu deranjaţi</string>
+    <!-- LTE QS Tile -->
+    <string name="qs_lte_label">LTE</string>
+    <string name="lte_on">LTE este pornit</string>
+    <string name="lte_off">LTE este oprit</string>
 </resources>

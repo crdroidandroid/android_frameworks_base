@@ -128,4 +128,8 @@
     <string name="quick_settings_sound_ring">Sonnerie</string>
     <string name="quick_settings_sound_vibrate">Vibreur</string>
     <string name="quick_settings_sound_dnd">Ne pas déranger</string>
+    <!-- LTE QS Tile -->
+    <string name="qs_lte_label">4G</string>
+    <string name="lte_on">4G activée</string>
+    <string name="lte_off">4G désactivée</string>
 </resources>
