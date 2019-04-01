@@ -130,6 +130,6 @@
     <string name="quick_settings_sound_dnd">Не беспокоить</string>
     <!-- LTE QS Tile -->
     <string name="qs_lte_label">LTE</string>
-    <string name="lte_on">LTE on</string>
-    <string name="lte_off">LTE off</string>
+    <string name="lte_on">LTE вкл.</string>
+    <string name="lte_off">LTE выкл.</string>
 </resources>
