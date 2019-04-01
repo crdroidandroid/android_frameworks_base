@@ -130,6 +130,6 @@
     <string name="quick_settings_sound_dnd">請勿打擾</string>
     <!-- LTE QS Tile -->
     <string name="qs_lte_label">LTE</string>
-    <string name="lte_on">LTE 開啟</string>
-    <string name="lte_off">LTE 關閉</string>
+    <string name="lte_on">LTE on</string>
+    <string name="lte_off">LTE off</string>
 </resources>
