@@ -124,12 +124,12 @@
     <string name="pie_battery_level">"LEVEL BATERAI "</string>
     <string name="quick_settings_pie">Kontrol Pie</string>
     <!-- Sound QS Tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">Suara</string>
+    <string name="quick_settings_sound_ring">Dering</string>
+    <string name="quick_settings_sound_vibrate">Getar</string>
+    <string name="quick_settings_sound_dnd">Jangan ganggu</string>
     <!-- LTE QS Tile -->
     <string name="qs_lte_label">LTE</string>
-    <string name="lte_on">LTE ON</string>
-    <string name="lte_off">LTE OFF</string>
+    <string name="lte_on">LTE on</string>
+    <string name="lte_off">LTE off</string>
 </resources>
