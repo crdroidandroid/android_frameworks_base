@@ -130,6 +130,6 @@
     <string name="quick_settings_sound_dnd">Ne zavarjanak (DND)</string>
     <!-- LTE QS Tile -->
     <string name="qs_lte_label">LTE</string>
-    <string name="lte_on">LTE on</string>
-    <string name="lte_off">LTE off</string>
+    <string name="lte_on">LTE be</string>
+    <string name="lte_off">LTE ki</string>
 </resources>
