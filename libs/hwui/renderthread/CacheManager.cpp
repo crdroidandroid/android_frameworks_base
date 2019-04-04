@@ -113,9 +113,9 @@ void CacheManager::configureContext(GrContextOptions* contextOptions) {
     float decimalVal = std::modf(screenMP, &fontCacheMB);
 
     // This is a basic heuristic to size the cache to a multiple of 512 KB
-    if (decimalVal > 0.8f) {
+    if (decimalVal > 0.5f) {
         fontCacheMB += 1.0f;
-    } else if (decimalVal > 0.5f) {
+    } else if (decimalVal > 0.0f) {
         fontCacheMB += 0.5f;
     }
 
