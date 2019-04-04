@@ -130,6 +130,8 @@
     <string name="quick_settings_sound_dnd">Не турбаваць</string>
     <!-- LTE QS Tile -->
     <string name="qs_lte_label">LTE</string>
-    <string name="lte_on">LTE on</string>
-    <string name="lte_off">LTE off</string>
+    <string name="lte_on">LTE укл</string>
+    <string name="lte_off">LTE адкл</string>
+    <!-- Restart SystemUI via Advanced Power Menu -->
+    <string name="global_action_restart_systemui">SystemUI</string>
 </resources>
