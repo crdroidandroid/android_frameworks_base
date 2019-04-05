@@ -65,6 +65,54 @@
                 android:letterSpacing="0.03"
                 android:textColor="?attr/wallpaperTextColor"
                 style="@style/widget_big_thin" />
+
+            <LinearLayout
+                android:id="@+id/custom_textclock_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/custom_clock_left_padding"
+                android:layout_marginTop="@dimen/custom_clock_top_margin"
+                android:layout_alignParentTop="true"
+                android:layout_below="@id/clock_view"
+                android:orientation="vertical" >
+
+                <com.android.keyguard.CustomTextClock
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:letterSpacing="0.03"
+                    style="@style/customtextclock_big_thin"
+                    android:text="@string/custom_text_clock_top_text_default"
+                    analog:HandType="2" />
+                <com.android.keyguard.CustomTextClock
+                    android:id="@+id/custom_textclock_view1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.03"
+                    android:textColor="?attr/wallpaperTextColor"
+                    style="@style/customtextclock_big_thin"
+                    analog:HandType="0" />
+                <com.android.keyguard.CustomTextClock
+                    android:id="@+id/custom_textclock_view2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:letterSpacing="0.03"
+                    android:textColor="?attr/wallpaperTextColor"
+                    style="@style/customtextclock_big_thin"
+                    analog:HandType="1" />
+                <com.android.keyguard.CustomTextClock
+                    android:id="@+id/custom_textclock_view2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:letterSpacing="0.03"
+                    android:textColor="?attr/wallpaperTextColor"
+                    style="@style/customtextclock_big_thin"
+                    analog:HandType="3" />
+            </LinearLayout>
+
             <com.android.keyguard.CustomAnalogClock
                 android:id="@+id/custom_clock_view"
                 android:layout_width="wrap_content"
@@ -72,7 +120,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
-                android:layout_below="@id/clock_view"
+                android:layout_below="@id/custom_textclock_view"
                 analog:custom_dial="@drawable/custom_num_clock_dial"
                 analog:custom_hand_hour="@drawable/custom_num_clock_hand_hour"
                 analog:custom_hand_minute="@drawable/custom_num_clock_hand_minute"
