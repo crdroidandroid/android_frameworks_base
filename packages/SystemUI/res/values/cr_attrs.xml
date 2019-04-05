@@ -27,4 +27,8 @@
         <attr name="custom_hand_minute" format="reference"/>
         <attr name="custom_clock_dial_ambient" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="CustomTextClock">
+        <attr name="HandType"/>
+    </declare-styleable>
 </resources>

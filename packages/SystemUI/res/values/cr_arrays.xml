@@ -27,4 +27,80 @@
         <item>@string/quick_settings_compass_W</item>  <!-- West -->
         <item>@string/quick_settings_compass_NW</item> <!-- North west -->
     </string-array>
+
+    <string-array translatable="true" name="TensString">
+        <item></item>
+        <item>Ten</item>
+        <item>Twenty</item>
+        <item>Thirty</item>
+        <item>Forty</item>
+        <item>Fifty</item>
+        <item>Sixty</item>
+    </string-array>
+
+    <string-array translatable="true" name="UnitsString">
+        <item>"O'Clock"</item>
+        <item>"O'One"</item>
+        <item>"O'Two"</item>
+        <item>"O'Three"</item>
+        <item>"O'Four"</item>
+        <item>"O'Five"</item>
+        <item>"O'Six"</item>
+        <item>"O'Seven"</item>
+        <item>"O'Eight"</item>
+        <item>"O'Nine"</item>
+        <item>Ten</item>
+        <item>Eleven</item>
+        <item>Twelve</item>
+        <item>Thirteen</item>
+        <item>Fourteen</item>
+        <item>Fifteen</item>
+        <item>Sixteen</item>
+        <item>Seventeen</item>
+        <item>Eighteen</item>
+        <item>Nineteen</item>
+    </string-array>
+
+    <string-array translatable="true" name="TensStringH">
+        <item></item>
+        <item></item>
+        <item>Twenty</item>
+        <item>Thirty</item>
+        <item>Forty</item>
+        <item>Fifty</item>
+        <item>Sixty</item>
+    </string-array>
+
+    <string-array translatable="true" name="UnitsStringH">
+        <item>Twelve</item>
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
+        <item>Eleven</item>
+        <item>Twelve</item>
+        <item>Thirteen</item>
+        <item>Fourteen</item>
+        <item>Fifteen</item>
+        <item>Sixteen</item>
+        <item>Seventeen</item>
+        <item>Eighteen</item>
+        <item>Nineteen</item>
+    </string-array>
+
+    <string-array translatable="false" name="langExceptions">
+        <item>nl</item>
+        <item>it</item>
+        <item>fr</item>
+        <item>pt</item>
+        <item>pl</item>
+        <item>ja</item>
+        <item>tr</item>
+    </string-array>
 </resources>
