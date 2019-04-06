@@ -133,5 +133,5 @@
     <string name="lte_on">LTE укл</string>
     <string name="lte_off">LTE адкл</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Сістэмны інтэрфейс</string>
 </resources>
