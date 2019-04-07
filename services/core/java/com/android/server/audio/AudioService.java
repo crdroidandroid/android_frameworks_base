@@ -32,6 +32,7 @@ import android.Manifest;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.ActivityManager;
+import android.app.ActivityThread;
 import android.app.ActivityManagerInternal;
 import android.app.AppGlobals;
 import android.app.AppOpsManager;
@@ -198,6 +199,7 @@ public class AudioService extends IAudioService.Stub
     private static final int FLAG_ADJUST_VOLUME = 1;
 
     private final Context mContext;
+    private final Context mSysUiContext;
     private final ContentResolver mContentResolver;
     private final AppOpsManager mAppOps;
 
@@ -721,6 +723,7 @@ public class AudioService extends IAudioService.Stub
     /** @hide */
     public AudioService(Context context) {
         mContext = context;
+        mSysUiContext = ActivityThread.currentActivityThread().getSystemUiContext();
         mContentResolver = context.getContentResolver();
         mAppOps = (AppOpsManager)context.getSystemService(Context.APP_OPS_SERVICE);
 
@@ -2650,7 +2653,8 @@ public class AudioService extends IAudioService.Stub
         }
         maybeVibrate(effect);
         setRingerModeInternal(ringerMode, reason);
-        Toast.makeText(mContext, toastText, Toast.LENGTH_SHORT).show();
+        // Use the SystemUI context, so the toast gets themed properly.
+        Toast.makeText(mSysUiContext, toastText, Toast.LENGTH_SHORT).show();
     }
 
     private boolean maybeVibrate(VibrationEffect effect) {
