@@ -133,5 +133,5 @@
     <string name="lte_on">4G activée</string>
     <string name="lte_off">4G désactivée</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Interface système</string>
 </resources>
