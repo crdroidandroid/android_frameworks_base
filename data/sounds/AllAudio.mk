@@ -216,6 +216,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/effects/ogg/camera_focus.ogg:system/media/audio/ui/camera_focus.ogg \
     $(LOCAL_PATH)/effects/ogg/ChargingStarted.ogg:system/media/audio/ui/ChargingStarted.ogg \
     $(LOCAL_PATH)/effects/ogg/InCallNotification.ogg:system/media/audio/ui/InCallNotification.ogg \
+    $(LOCAL_PATH)/effects/ogg/NFCFailure.ogg:system/media/audio/ui/NFCFailure.ogg \
+    $(LOCAL_PATH)/effects/ogg/NFCInitiated.ogg:system/media/audio/ui/NFCInitiated.ogg \
+    $(LOCAL_PATH)/effects/ogg/NFCSuccess.ogg:system/media/audio/ui/NFCSuccess.ogg \
+    $(LOCAL_PATH)/effects/ogg/NFCTransferComplete.ogg:system/media/audio/ui/NFCTransferComplete.ogg \
+    $(LOCAL_PATH)/effects/ogg/NFCTransferInitiated.ogg:system/media/audio/ui/NFCTransferInitiated.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Callisto.ogg:system/media/audio/ringtones/Callisto.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Dione.ogg:system/media/audio/ringtones/Dione.ogg \
     $(LOCAL_PATH)/ringtones/material/ogg/Ganymede.ogg:system/media/audio/ringtones/Ganymede.ogg \
