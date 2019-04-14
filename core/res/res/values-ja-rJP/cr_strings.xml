@@ -23,29 +23,29 @@
     <string name="animation_slide_right">右にスライド</string>
     <string name="animation_slide_left">左にスライド</string>
     <string name="animation_slide_right_no_fade">右にスライド（フェードなし）</string>
-    <string name="animation_slide_left_no_fade">左にスライド (フェードなし)</string>
+    <string name="animation_slide_left_no_fade">左にスライド（フェードなし）</string>
     <string name="animation_slide_up">下にスライド</string>
     <string name="animation_slide_down">上にスライド</string>
     <string name="animation_default">デフォルト</string>
     <string name="animation_translucent">半透明</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_grow_shrink">拡大（上）</string>
+    <string name="animation_grow_shrink_center">拡大（中央）</string>
+    <string name="animation_grow_shrink_bottom">拡大（下）</string>
+    <string name="animation_grow_shrink_left">拡大（左）</string>
+    <string name="animation_grow_shrink_right">拡大（右）</string>
+    <string name="animation_random">ランダム</string>
+    <string name="action_null">なし</string>
     <!-- SystemUI Restart -->
-    <string name="systemui_restart_title">SystemUI restart required</string>
-    <string name="systemui_restart_message">For all changes to take effect, a SystemUI restart is required. Restart SystemUI now?</string>
+    <string name="systemui_restart_title">システム UI の再起動が必要です</string>
+    <string name="systemui_restart_message">すべての変更を反映するには、システム UI の再起動が必要です。再起動しますか？</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_toggleNavigationEditor">Control navigation editor</string>
+    <string name="permlab_toggleNavigationEditor">ナビゲーションバーエディターの制御</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Allows an application to control the navigation bar editor.</string>
+    <string name="permdesc_toggleNavigationEditor">アプリにナビゲーションバーエディターの制御を許可する</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">access font manager</string>
+    <string name="permlab_accessFontManager">フォントマネージャーへのアクセス</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Allows an application to access the font manager.</string>
+    <string name="permdesc_accessFontManager">アプリにフォントマネージャーへのアクセスを許可する</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
-    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Tap blank area to exit One handed mode</string>
+    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">空きエリアをタップして片手モードを終了</string>
 </resources>
