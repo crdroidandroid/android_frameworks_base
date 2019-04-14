@@ -35,10 +35,10 @@ public class LangGuard {
                 if (units == 1) {
                     numString = TensString[tens].substring(0, TensString[tens].length() - 1)+
                                 UnitsString[units].toLowerCase();
-                    return numString;                    
+                    return numString;
                 } else if (units == 3) {
                     numString = TensString[tens] + "tré";
-                    return numString; 
+                    return numString;
                 } else {
                     numString = TensString[tens] + UnitsString[units].toLowerCase();
                     return numString;

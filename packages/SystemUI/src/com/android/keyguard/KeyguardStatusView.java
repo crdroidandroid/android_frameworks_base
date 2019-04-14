@@ -788,6 +788,9 @@ public class KeyguardStatusView extends GridLayout implements
                 break;
             default:
                 break;
+            case 6: // custom text clock
+                params.addRule(RelativeLayout.BELOW, R.id.custom_textclock_view);
+                break;
         }
     }
 
