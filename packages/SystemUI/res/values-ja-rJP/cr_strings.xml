@@ -124,10 +124,10 @@
     <string name="pie_battery_level">"バッテリーレベル"</string>
     <string name="quick_settings_pie">Pie コントロール</string>
     <!-- Sound QS Tile -->
-    <string name="quick_settings_sound_label">サウンド</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">音</string>
+    <string name="quick_settings_sound_ring">通常</string>
+    <string name="quick_settings_sound_vibrate">振動</string>
+    <string name="quick_settings_sound_dnd">サイレント</string>
     <!-- LTE QS Tile -->
     <string name="qs_lte_label">LTE</string>
     <string name="lte_on">LTE ON</string>
