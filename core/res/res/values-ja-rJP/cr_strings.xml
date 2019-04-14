@@ -17,17 +17,17 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Long press power button to interact</string>
+    <string name="pocket_lock_message_long_press">電源ボタンを長押しで操作</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
+    <string name="animation_fade">フェード</string>
+    <string name="animation_slide_right">右にスライド</string>
+    <string name="animation_slide_left">左にスライド</string>
+    <string name="animation_slide_right_no_fade">右にスライド（フェードなし）</string>
+    <string name="animation_slide_left_no_fade">左にスライド (フェードなし)</string>
+    <string name="animation_slide_up">下にスライド</string>
+    <string name="animation_slide_down">上にスライド</string>
+    <string name="animation_default">デフォルト</string>
+    <string name="animation_translucent">半透明</string>
     <string name="animation_grow_shrink">Grow in (Top)</string>
     <string name="animation_grow_shrink_center">Grow in (Center)</string>
     <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
