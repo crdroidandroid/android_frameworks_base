@@ -546,6 +546,16 @@ public class WallpaperManager {
         return null;
     }
 
+    public Drawable getLockDrawable() {
+        Bitmap bm = sGlobals.peekWallpaperBitmap(mContext, true, FLAG_LOCK);
+        if (bm != null) {
+            Drawable dr = new BitmapDrawable(mContext.getResources(), bm);
+            dr.setDither(false);
+            return dr;
+        }
+        return null;
+    }
+
     /**
      * Obtain a drawable for the built-in static system wallpaper.
      */
