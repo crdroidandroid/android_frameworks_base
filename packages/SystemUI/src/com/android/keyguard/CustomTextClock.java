@@ -22,6 +22,10 @@ import android.support.v7.graphics.Palette;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import java.lang.NullPointerException;
+import java.lang.IllegalStateException;
+import android.graphics.Paint;
+import android.os.ParcelFileDescriptor;
+import android.graphics.BitmapFactory;
 
 import com.android.internal.util.ArrayUtils;
 
@@ -117,16 +121,38 @@ public class CustomTextClock extends TextView {
         super.onDraw(canvas);
         if (handType == 2) {
             Bitmap mBitmap;
+            //Get wallpaper as bitmap
             WallpaperManager manager = WallpaperManager.getInstance(mContext);
-            BitmapDrawable mBitmapDrawable = ( (BitmapDrawable) manager.getLockDrawable());
+            ParcelFileDescriptor pfd = manager.getWallpaperFile(WallpaperManager.FLAG_LOCK);
+
+            //Sometimes lock wallpaper maybe null as getWallpaperFile doesnt return builtin wallpaper
+            if (pfd == null)
+                pfd = manager.getWallpaperFile(WallpaperManager.FLAG_SYSTEM);
             try {
-                mBitmap = Bitmap.createBitmap(mBitmapDrawable.getBitmap());
+                if (pfd != null)
+                {
+                    mBitmap = BitmapFactory.decodeFileDescriptor(pfd.getFileDescriptor());
+                } else {
+                    //Incase both cases return null wallpaper, generate a yellow bitmap
+                    mBitmap = drawEmpty();
+                }
+                Palette palette = Palette.generate(mBitmap);
+
+                //For monochrome and single color bitmaps, the value returned is 0
+                if (Color.valueOf(palette.getLightVibrantColor(0x000000)).toArgb() == 0) {
+                    //So get bodycolor on dominant color instead as a hacky workaround
+                    setTextColor(palette.getDominantSwatch().getBodyTextColor());
+                //On Black Wallpapers set color to White
+                } else if(String.format("#%06X", (0xFFFFFF & (palette.getLightVibrantColor(0x000000)))) == "#000000") {
+                    setTextColor(Color.WHITE);
+                } else {
+                    setTextColor((Color.valueOf(palette.getLightVibrantColor(0xff000000))).toArgb());
+                }
+
+              //Just a fallback, although I doubt this case will ever come
             } catch (NullPointerException e) {
-                mBitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ALPHA_8);
-                Log.d("CustomTextClock", "NPE");
+                setTextColor(Color.WHITE);
             }
-            Palette palette = Palette.generate(mBitmap);
-            setTextColor((Color.valueOf(palette.getLightVibrantColor(0x000000))).toArgb());
         }
     }
 
@@ -224,7 +250,7 @@ public class CustomTextClock extends TextView {
                              NumString = TensString[tens] + UnitsString[units].toLowerCase();
                     }
                 } else {
-                    NumString = TensString[tens]+" "+UnitsString[units].substring(2, UnitsString[units].length());
+                    NumString = TensString[tens]+" "+UnitsString[units];
                 }
             }
         } else if (num < 20 ) {
@@ -262,7 +288,7 @@ public class CustomTextClock extends TextView {
                              NumString = TensString[tens] + UnitsString[units].toLowerCase();
                     }
                 } else {
-                    NumString = TensString[tens]+" "+UnitsString[units].substring(2, UnitsString[units].length());
+                    NumString = TensString[tens]+" "+UnitsString[units];
                 }
             }
         } else if (num < 10 ) {
@@ -276,6 +302,15 @@ public class CustomTextClock extends TextView {
 
     private boolean langExEval (String langVal) {
         return (ArrayUtils.contains(langExceptions, langVal) ? true : false);
+    }
+
+    private Bitmap drawEmpty() {
+        Bitmap convertedBitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(convertedBitmap);
+        Paint paint = new Paint();
+        paint.setColor(Color.YELLOW);
+        canvas.drawPaint(paint);
+        return convertedBitmap;
     }
 }
 
