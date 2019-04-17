@@ -29,6 +29,7 @@ import android.os.ParcelFileDescriptor;
 import android.graphics.BitmapFactory;
 
 import com.android.internal.util.ArrayUtils;
+import com.android.keyguard.clocks.LangGuard;
 
 import java.lang.String;
 import java.util.Locale;
@@ -235,37 +236,8 @@ public class CustomTextClock extends TextView {
             if ( units == 0 ) {
                 NumString = TensStringH[tens];
             } else {
-                // Guard exceptions for languages that don't do "number-to-text" typesetting
-                // ex. Thirty One, it's composed by Thirty and One
-                // ex. Trentuno (it), it's composed by Trenta (30) and Uno (1)
-                // in a cutted form for Trenta (Trent) and merged with Uno (1)
-                if (langExEval(curLang)) {
-                    switch (curLang) {
-                        case "it":
-                            if (units == 1) {
-                                NumString = TensString[tens].substring(0, TensString[tens].length() - 1)+
-                                            UnitsString[units].toLowerCase() + " e";
-                                break;
-                            }
-
-                            if (units == 3) {
-                                NumString = TensString[tens] + "tré" + " e";
-                                break;
-                            }
-
-                        case "pt":
-                            NumString = TensString[tens] + "e " + UnitsString[units].toLowerCase();
-                            break;
-
-                        case "fr":
-                            if (units == 1) {
-                                NumString = TensString[tens] + "et un";
-                            }
-                            break;
-
-                        default:
-                             NumString = TensString[tens] + UnitsString[units].toLowerCase();
-                    }
+                if (LangGuard.isAvailable(langExceptions,curLang)) {
+                    NumString = LangGuard.evaluateExMin(curLang, units, TensString, UnitsString, tens);
                 } else {
                     NumString = TensString[tens]+" "+UnitsString[units].substring(2, UnitsString[units].length());
                 }
@@ -286,34 +258,8 @@ public class CustomTextClock extends TextView {
             if ( units == 0 ) {
                 NumString = TensString[tens];
             } else {
-                // Guard exceptions part 2 - same reason as before
-                if (langExEval(curLang)) {
-                    switch (curLang) {
-                        case "it":
-                            if (units == 1) {
-                                NumString = TensString[tens].substring(0, TensString[tens].length() - 1)+
-                                            UnitsString[units].toLowerCase();
-                                            break;
-                            }
-
-                            if (units == 3) {
-                                 NumString = TensString[tens] + "tré";
-                                 break;
-                            }
-
-                        case "pt":
-                            NumString = TensString[tens] + "e " + UnitsString[units].toLowerCase();
-                            break;
-
-                        case "fr":
-                            if (units == 1) {
-                                NumString = TensString[tens] + "et un";
-                            }
-                            break;
-
-                        default:
-                             NumString = TensString[tens] + UnitsString[units].toLowerCase();
-                    }
+                if (LangGuard.isAvailable(langExceptions,curLang)) {
+                    NumString = LangGuard.evaluateExMin(curLang, units, TensString, UnitsString, tens);
                 } else {
                     NumString = TensString[tens]+" "+UnitsString[units].substring(2, UnitsString[units].length());
                 }
