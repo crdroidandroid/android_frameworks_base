@@ -164,8 +164,6 @@ public class CustomTextClock extends TextView {
         int hour = mCalendar.hour;
         int minute = mCalendar.minute;
 
-        Log.d("CustomTextClock", ""+h24);
-
         if (!h24) {
             if (hour > 12) {
                 hour = hour - 12;
