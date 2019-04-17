@@ -99,6 +99,8 @@
 
     <string-array translatable="false" name="langExceptions">
         <item>it</item>
+        <item>pt</item>
+        <item>fr</item>
     </string-array>
 
 </resources>

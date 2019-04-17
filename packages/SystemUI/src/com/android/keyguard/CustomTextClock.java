@@ -1,5 +1,6 @@
 package com.android.keyguard.clocks;
 
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContentResolver;
@@ -246,6 +247,16 @@ public class CustomTextClock extends TextView {
                                 break;
                             }
 
+                        case "pt":
+                            NumString = TensString[tens] + "e " + UnitsString[units].toLowerCase();
+                            break;
+
+                        case "fr":
+                            if (units == 1) {
+                                NumString = TensString[tens] + "et un";
+                            }
+                            break;
+
                         default:
                              NumString = TensString[tens] + UnitsString[units].toLowerCase();
                     }
@@ -283,6 +294,16 @@ public class CustomTextClock extends TextView {
                                  NumString = TensString[tens] + "tré";
                                  break;
                             }
+
+                        case "pt":
+                            NumString = TensString[tens] + "e " + UnitsString[units].toLowerCase();
+                            break;
+
+                        case "fr":
+                            if (units == 1) {
+                                NumString = TensString[tens] + "et un";
+                            }
+                            break;
 
                         default:
                              NumString = TensString[tens] + UnitsString[units].toLowerCase();
