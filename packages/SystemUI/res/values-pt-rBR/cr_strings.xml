@@ -130,8 +130,8 @@
     <string name="quick_settings_sound_dnd">Não pertube</string>
     <!-- LTE QS Tile -->
     <string name="qs_lte_label">LTE</string>
-    <string name="lte_on">LTE on</string>
-    <string name="lte_off">LTE off</string>
+    <string name="lte_on">LTE ativado</string>
+    <string name="lte_off">LTE desativado</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Interface de usuário</string>
 </resources>
