@@ -29,6 +29,7 @@ import android.os.ParcelFileDescriptor;
 import android.graphics.BitmapFactory;
 
 import com.android.internal.util.ArrayUtils;
+import com.android.keyguard.clocks.ColorText;
 import com.android.keyguard.clocks.LangGuard;
 
 import java.lang.String;
@@ -126,39 +127,7 @@ public class CustomTextClock extends TextView {
         super.onDraw(canvas);
         if (handType == 2) {
             setText(topText);
-            Bitmap mBitmap;
-            //Get wallpaper as bitmap
-            WallpaperManager manager = WallpaperManager.getInstance(mContext);
-            ParcelFileDescriptor pfd = manager.getWallpaperFile(WallpaperManager.FLAG_LOCK);
-
-            //Sometimes lock wallpaper maybe null as getWallpaperFile doesnt return builtin wallpaper
-            if (pfd == null)
-                pfd = manager.getWallpaperFile(WallpaperManager.FLAG_SYSTEM);
-            try {
-                if (pfd != null)
-                {
-                    mBitmap = BitmapFactory.decodeFileDescriptor(pfd.getFileDescriptor());
-                } else {
-                    //Incase both cases return null wallpaper, generate a yellow bitmap
-                    mBitmap = drawEmpty();
-                }
-                Palette palette = Palette.generate(mBitmap);
-
-                //For monochrome and single color bitmaps, the value returned is 0
-                if (Color.valueOf(palette.getLightVibrantColor(0x000000)).toArgb() == 0) {
-                    //So get bodycolor on dominant color instead as a hacky workaround
-                    setTextColor(palette.getDominantSwatch().getBodyTextColor());
-                //On Black Wallpapers set color to White
-                } else if(String.format("#%06X", (0xFFFFFF & (palette.getLightVibrantColor(0x000000)))) == "#000000") {
-                    setTextColor(Color.WHITE);
-                } else {
-                    setTextColor((Color.valueOf(palette.getLightVibrantColor(0xff000000))).toArgb());
-                }
-
-              //Just a fallback, although I doubt this case will ever come
-            } catch (NullPointerException e) {
-                setTextColor(Color.WHITE);
-            }
+            setTextColor(ColorText.getWallColor(mContext));
         }
     }
 
