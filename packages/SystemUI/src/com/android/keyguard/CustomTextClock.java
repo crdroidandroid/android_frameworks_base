@@ -126,7 +126,7 @@ public class CustomTextClock extends TextView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (handType == 2) {
-            setText(topText);
+            //setText(topText);
             setTextColor(ColorText.getWallColor(mContext));
         }
     }
