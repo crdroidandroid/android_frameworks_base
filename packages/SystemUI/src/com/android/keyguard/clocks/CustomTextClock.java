@@ -161,14 +161,14 @@ public class CustomTextClock extends TextView {
                 } else if (hour == 12 && minute == 0) {
                 setText(highNoonFirstRow);
                 } else {
-                setText(getIntString(hour));
+                setText(getIntString(hour, true));
                 }
                 break;
             case 1:
                 if (hour == 12 && minute == 0) {
                 setText(R.string.high_noon_second_row);
                 } else {
-                setText(getIntString(minute));
+                setText(getIntString(minute, false));
                 }
                 break;
             default:
@@ -208,7 +208,7 @@ public class CustomTextClock extends TextView {
         setContentDescription(contentDescription);
     }
 
-    private String getIntString (int num) {
+    private String getIntString (int num, boolean hours) {
         int tens, units;
         String NumString = "";
         if(num >= 20) {
@@ -223,8 +223,18 @@ public class CustomTextClock extends TextView {
                     NumString = TensString[tens]+" "+UnitsString[units].substring(2, UnitsString[units].length());
                 }
             }
-        } else if (num < 20 ) {
-            NumString = UnitsString[num];
+        } else if (num < 10 ) {
+            if (!LangGuard.isAvailable(langExceptions,curLang)) {
+                if (hours) {
+                    NumString = UnitsString[num].substring(2, UnitsString[num].length());
+                } else {
+                    NumString = UnitsString[num];
+                }
+            } else {
+                NumString = UnitsString[num];
+            }
+        } else if (num < 20 && num >= 10) {
+                NumString = UnitsString[num];
         }
 
         return NumString;
