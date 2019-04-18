@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2019 Project-Pearl
+<!--
+     Copyright (C) 2019 Descendant
+     Copyright (C) 2019 The Evolution X Project
+
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
@@ -19,9 +22,9 @@
 <resources>
 
     <!-- CustomText clock -->
-    <string name="custom_text_clock_top_text_default">Il est</string>
-    <string name="high_noon_first_row">Midi</string>
-    <string name="high_noon_second_row">Haut</string>
-    <string name="twelve_am">Douze</string>
+    <string name="custom_text_clock_top_text_default">Saat</string>
+    <string name="high_noon_first_row">Akşam üstü</string>
+    <string name="high_noon_second_row">Öglen vakti</string>
+    <string name="twelve_am">On iki</string>
 
 </resources>

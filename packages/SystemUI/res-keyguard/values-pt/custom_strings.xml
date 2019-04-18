@@ -25,5 +25,6 @@
     <string name="custom_text_clock_top_text_default">Isto é</string>
     <string name="high_noon_first_row">Meio</string>
     <string name="high_noon_second_row">Dia</string>
+    <string name="twelve_am">Doze</string>
 
 </resources>

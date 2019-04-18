@@ -18,5 +18,6 @@
     <string name="custom_text_clock_top_text_default">Sono le</string>
     <string name="high_noon_first_row">Dodici</string>
     <string name="high_noon_second_row">In Punto</string>
+    <string name="twelve_am">Dodici</string>
 
 </resources>

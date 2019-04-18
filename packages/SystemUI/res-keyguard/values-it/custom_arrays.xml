@@ -46,37 +46,4 @@
         <item>Diciannove</item>
     </string-array>
 
-    <string-array translatable="true" name="TensStringH">
-        <item></item>
-        <item></item>
-        <item>Venti</item>
-        <item>Trenta</item>
-        <item>Quaranta</item>
-        <item>Cinquanta</item>
-        <item>Sessanta</item>
-    </string-array>
-
-    <string-array translatable="true" name="UnitsStringH">
-        <item>Venti e</item>
-        <item>Una e</item>
-        <item>Due e</item>
-        <item>Tre e</item>
-        <item>Quattro e</item>
-        <item>Cinque e</item>
-        <item>Sei e</item>
-        <item>Sette e</item>
-        <item>Otto e</item>
-        <item>Nove e</item>
-        <item>Dieci e</item>
-        <item>Undici e</item>
-        <item>Dodici e</item>
-        <item>Tredici e</item>
-        <item>Quattordici e</item>
-        <item>Quindici e</item>
-        <item>Sedici e</item>
-        <item>Diciassette e</item>
-        <item>Diciotto e</item>
-        <item>Diciannove e</item>
-    </string-array>
-
 </resources>

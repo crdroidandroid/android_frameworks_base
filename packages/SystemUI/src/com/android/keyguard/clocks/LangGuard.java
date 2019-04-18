@@ -28,7 +28,7 @@ public class LangGuard {
         return (ArrayUtils.contains(langExceptions, langVal) ? true : false);
     }
 
-    public static String evaluateExMin (String lang, int units, String[] TensString, String[] UnitsString, int tens) {
+    public static String evaluateEx (String lang, int units, String[] TensString, String[] UnitsString, int tens) {
         String numString = "";
         switch (lang) {
             case "it":
@@ -55,25 +55,6 @@ public class LangGuard {
                     numString = TensString[tens] + UnitsString[units].toLowerCase();
                 }
                 return numString;
-        }
-        return numString;
-    }
-
-    public static String evaluateExHr (String lang, int units, String[] TensString, String[] UnitsString, int tens) {
-        String numString = "";
-        switch (lang) {
-            case "it":
-                if (units == 1) {
-                    numString = TensString[tens].substring(0, TensString[tens].length() - 1)+
-                                UnitsString[units].toLowerCase();
-                    return numString;
-                } else if (units == 3) {
-                    numString = TensString[tens] + "tré";
-                    return numString;                    
-                } else { 
-                    numString = TensString[tens] + UnitsString[units].toLowerCase();
-                    return numString;
-                }
         }
         return numString;
     }

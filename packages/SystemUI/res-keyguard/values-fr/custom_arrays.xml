@@ -52,37 +52,4 @@
         <item>Dix-neuf</item>
     </string-array>
 
-    <string-array translatable="true" name="TensStringH">
-        <item></item>
-        <item></item>
-        <item>Vingt</item>
-        <item>Trente</item>
-        <item>Quarante</item>
-        <item>Cinquante</item>
-        <item>Soixante</item>
-    </string-array>
-
-    <string-array translatable="true" name="UnitsStringH">
-        <item></item>
-        <item>Um</item>
-        <item>Deux</item>
-        <item>Trois</item>
-        <item>Quatre</item>
-        <item>Cinq</item>
-        <item>Six</item>
-        <item>Sept</item>
-        <item>Ouit</item>
-        <item>Neuf</item>
-        <item>Dix</item>
-        <item>Onze</item>
-        <item>Douze</item>
-        <item>Treize</item>
-        <item>Quatorze</item>
-        <item>Quinze</item>
-        <item>Seize</item>
-        <item>Dix-sept</item>
-        <item>Dix-huit</item>
-        <item>Dix-neuf</item>
-    </string-array>
-
 </resources>

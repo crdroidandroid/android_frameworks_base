@@ -30,39 +30,7 @@
     </string-array>
 
     <string-array translatable="true" name="UnitsString">
-        <item>"Tutto va bene :)"</item>
-        <item>Um</item>
-        <item>Dois</item>
-        <item>Três</item>
-        <item>Quatro</item>
-        <item>Cinco</item>
-        <item>Seis</item>
-        <item>Sete</item>
-        <item>Oito</item>
-        <item>Nove</item>
-        <item>Dez</item>
-        <item>Onze</item>
-        <item>Doze</item>
-        <item>Treze</item>
-        <item>Catorze</item>
-        <item>Quinze</item>
-        <item>Dezesseis</item>
-        <item>Dezessete</item>
-        <item>Dezoito</item>
-        <item>Dezenove</item>
-    </string-array>
-
-    <string-array translatable="true" name="TensStringH">
-        <item></item>
-        <item></item>
-        <item>Vinte</item>
-        <item>Trinta</item>
-        <item>Quarenta</item>
-        <item>Cinquenta</item>
-        <item>Sessenta</item>
-    </string-array>
-
-    <string-array translatable="true" name="UnitsStringH">
+        <item>Horas</item>
         <item>Um</item>
         <item>Dois</item>
         <item>Três</item>
