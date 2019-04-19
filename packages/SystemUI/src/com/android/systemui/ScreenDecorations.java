@@ -113,11 +113,6 @@ public class ScreenDecorations extends SystemUI implements Tunable {
     @Override
     public void start() {
         mHandler = startHandlerThread();
-
-        final TunerService tunerService = Dependency.get(TunerService.class);
-        tunerService.addTunable(this, SIZE);
-        tunerService.addTunable(this, DISPLAY_CUTOUT_MODE);
-
         mHandler.post(this::startOnScreenDecorationsThread);
         setupStatusBarPaddingIfNeeded();
     }
@@ -133,6 +128,11 @@ public class ScreenDecorations extends SystemUI implements Tunable {
         mRotation = RotationUtils.getExactRotation(mContext);
         mWindowManager = mContext.getSystemService(WindowManager.class);
         updateRoundedCornerRadii();
+
+        Dependency.get(Dependency.MAIN_HANDLER).post(
+                () -> Dependency.get(TunerService.class).addTunable(this, SIZE));
+        Dependency.get(Dependency.MAIN_HANDLER).post(
+                () -> Dependency.get(TunerService.class).addTunable(this, DISPLAY_CUTOUT_MODE));
 
         if (hasRoundedCorners() || shouldDrawCutout()) {
             setupDecorations();
