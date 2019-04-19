@@ -52,6 +52,12 @@ public class VisualizerView extends View
             Settings.Secure.LOCKSCREEN_LAVALAMP_ENABLED;
     private static final String LOCKSCREEN_LAVALAMP_SPEED =
             Settings.Secure.LOCKSCREEN_LAVALAMP_SPEED;
+    private static final String LOCKSCREEN_SOLID_UNITS_COUNT =
+            Settings.Secure.LOCKSCREEN_SOLID_UNITS_COUNT;
+    private static final String LOCKSCREEN_SOLID_FUDGE_FACTOR =
+            Settings.Secure.LOCKSCREEN_SOLID_FUDGE_FACTOR;
+    private static final String LOCKSCREEN_SOLID_UNITS_OPACITY =
+            Settings.Secure.LOCKSCREEN_SOLID_UNITS_OPACITY;
 
     private Paint mPaint;
     private Visualizer mVisualizer;
@@ -77,6 +83,10 @@ public class VisualizerView extends View
     private boolean mLavaLampEnabled;
     private int mLavaLampSpeed;
     private boolean shouldAnimate;
+    private int mUnits = 32;
+    private float mDbFuzzFactor = 16f;
+    private int mWidth, mHeight;
+    private int mOpacity = 140;
 
     private Visualizer.OnDataCaptureListener mVisualizerListener =
             new Visualizer.OnDataCaptureListener() {
@@ -90,7 +100,7 @@ public class VisualizerView extends View
 
         @Override
         public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
-            for (int i = 0; i < 32; i++) {
+            for (int i = 0; i < mUnits; i++) {
                 mValueAnimators[i].cancel();
                 rfk = fft[i * 2 + 2];
                 ifk = fft[i * 2 + 3];
@@ -98,7 +108,7 @@ public class VisualizerView extends View
                 dbValue = magnitude > 0 ? (int) (10 * Math.log10(magnitude)) : 0;
 
                 mValueAnimators[i].setFloatValues(mFFTPoints[i * 4 + 1],
-                        mFFTPoints[3] - (dbValue * 16f));
+                        mFFTPoints[3] - (dbValue * mDbFuzzFactor));
                 mValueAnimators[i].start();
             }
         }
@@ -168,24 +178,12 @@ public class VisualizerView extends View
 
         setColor(mColor);
 
-        mFFTPoints = new float[128];
-        mValueAnimators = new ValueAnimator[32];
+        mFFTPoints = new float[mUnits * 4];
 
         mLavaLamp = new ColorAnimator();
         mLavaLamp.setColorAnimatorListener(this);
 
-        for (int i = 0; i < 32; i++) {
-            final int j = i * 4 + 1;
-            mValueAnimators[i] = new ValueAnimator();
-            mValueAnimators[i].setDuration(128);
-            mValueAnimators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mFFTPoints[j] = (float) animation.getAnimatedValue();
-                    postInvalidate();
-                }
-            });
-        }
+        loadValueAnimators();
     }
 
     public VisualizerView(Context context, AttributeSet attrs) {
@@ -214,6 +212,9 @@ public class VisualizerView extends View
         tunerService.addTunable(this, LOCKSCREEN_VISUALIZER_AUTOCOLOR);
         tunerService.addTunable(this, LOCKSCREEN_LAVALAMP_ENABLED);
         tunerService.addTunable(this, LOCKSCREEN_LAVALAMP_SPEED);
+        tunerService.addTunable(this, LOCKSCREEN_SOLID_UNITS_COUNT);
+        tunerService.addTunable(this, LOCKSCREEN_SOLID_FUDGE_FACTOR);
+        tunerService.addTunable(this, LOCKSCREEN_SOLID_UNITS_OPACITY);
     }
 
     @Override
@@ -251,25 +252,78 @@ public class VisualizerView extends View
                 } catch (NumberFormatException ex) {}
                 mLavaLamp.setAnimationTime(mLavaLampSpeed);
                 break;
+            case LOCKSCREEN_SOLID_UNITS_COUNT:
+                int oldUnits = mUnits;
+                mUnits = 32;
+                try {
+                    mUnits = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
+                if (mUnits != oldUnits) {
+                    mFFTPoints = new float[mUnits * 4];
+                    onSizeChanged(0, 0, 0, 0);
+                }
+                break;
+            case LOCKSCREEN_SOLID_FUDGE_FACTOR:
+                mDbFuzzFactor = 16f;
+                try {
+                    mDbFuzzFactor = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
+                break;
+            case LOCKSCREEN_SOLID_UNITS_OPACITY:
+                mOpacity = 140;
+                try {
+                    mOpacity = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
+                break;
             default:
                 break;
         }
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    private void loadValueAnimators() {
+        if (mValueAnimators != null) {
+            for (int i = 0; i < mValueAnimators.length; i++) {
+                mValueAnimators[i].cancel();
+            }
+        }
+        mValueAnimators = new ValueAnimator[mUnits];
+        for (int i = 0; i < mUnits; i++) {
+            final int j = i * 4 + 1;
+            mValueAnimators[i] = new ValueAnimator();
+            mValueAnimators[i].setDuration(128);
+            mValueAnimators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    mFFTPoints[j] = (float) animation.getAnimatedValue();
+                    postInvalidate();
+                }
+            });
+        }
+    }
 
-        float barUnit = w / 32f;
+    private void setPortraitPoints() {
+        float units = Float.valueOf(mUnits);
+        float barUnit = mWidth / units;
         float barWidth = barUnit * 8f / 9f;
-        barUnit = barWidth + (barUnit - barWidth) * 32f / 31f;
+        barUnit = barWidth + (barUnit - barWidth) * units / (units - 1);
         mPaint.setStrokeWidth(barWidth);
 
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < mUnits; i++) {
             mFFTPoints[i * 4] = mFFTPoints[i * 4 + 2] = i * barUnit + (barWidth / 2);
-            mFFTPoints[i * 4 + 1] = h;
-            mFFTPoints[i * 4 + 3] = h;
+            mFFTPoints[i * 4 + 1] = mHeight;
+            mFFTPoints[i * 4 + 3] = mHeight;
         }
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        if (w > 0) mWidth = w;
+        if (h > 0) mHeight = h;
+
+        super.onSizeChanged(mWidth, mHeight, oldw, oldh);
+
+        loadValueAnimators();
+        setPortraitPoints();
     }
 
     @Override
@@ -389,7 +443,7 @@ public class VisualizerView extends View
             color = Color.WHITE;
         }
 
-        color = Color.argb(140, Color.red(color), Color.green(color), Color.blue(color));
+        color = Color.argb(mOpacity, Color.red(color), Color.green(color), Color.blue(color));
 
         if (mColor != color) {
             mColor = color;
