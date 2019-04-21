@@ -74,6 +74,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -105,6 +106,7 @@ import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Trace;
+import android.os.ParcelFileDescriptor;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.os.VibrationEffect;
@@ -653,7 +655,6 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
     private VisualizerView mVisualizerView;
     private boolean mScreenOn;
-    private boolean mKeyguardShowingMedia;
     private boolean mShowMediaMetadata;
     private boolean mNavbarVisible;
 
@@ -1967,19 +1968,27 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 }
             }
         }
-        mKeyguardShowingMedia = artworkDrawable != null;
+
+        if (artworkDrawable == null) {
+            //Get wallpaper as bitmap
+            WallpaperManager manager = WallpaperManager.getInstance(mContext);
+            ParcelFileDescriptor pfd = manager.getWallpaperFile(WallpaperManager.FLAG_LOCK);
+
+            //Sometimes lock wallpaper maybe null as getWallpaperFile doesnt return builtin wallpaper
+            if (pfd == null)
+                pfd = manager.getWallpaperFile(WallpaperManager.FLAG_SYSTEM);
+            if (pfd != null) {
+                Bitmap lockWallpaper = BitmapFactory.decodeFileDescriptor(pfd.getFileDescriptor());
+                artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(), lockWallpaper);
+            }
+        }
 
         boolean allowWhenShade = false;
-        if (ENABLE_LOCKSCREEN_WALLPAPER && artworkDrawable == null) {
-            Bitmap lockWallpaper = mLockscreenWallpaper.getBitmap();
-            if (lockWallpaper != null) {
-                artworkDrawable = new LockscreenWallpaper.WallpaperDrawable(
-                        mBackdropBack.getResources(), lockWallpaper);
-                // We're in the SHADE mode on the SIM screen - yet we still need to show
-                // the lockscreen wallpaper in that mode.
-                allowWhenShade = mStatusBarKeyguardViewManager != null
-                        && mStatusBarKeyguardViewManager.isShowing();
-            }
+        if (ENABLE_LOCKSCREEN_WALLPAPER && mLockscreenWallpaper.getBitmap() != null) {
+            // We're in the SHADE mode on the SIM screen - yet we still need to show
+            // the lockscreen wallpaper in that mode.
+            allowWhenShade = mStatusBarKeyguardViewManager != null
+                    && mStatusBarKeyguardViewManager.isShowing();
         }
 
         boolean hideBecauseOccluded = mStatusBarKeyguardViewManager != null
@@ -1992,7 +2001,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         }
 
         if (mVisualizerView != null) {
-            if (mKeyguardShowingMedia && artworkDrawable instanceof BitmapDrawable) {
+            if (hasArtwork && artworkDrawable instanceof BitmapDrawable) {
                 // always use current backdrop to color eq
                 mVisualizerView.setBitmap(((BitmapDrawable)artworkDrawable).getBitmap());
             } else {
