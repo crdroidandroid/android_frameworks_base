@@ -53,6 +53,7 @@ public class BatteryMeterDrawableBase extends Drawable {
     public static final int BATTERY_STYLE_SQUARE = 3;
     public static final int BATTERY_STYLE_TEXT = 4;
     public static final int BATTERY_STYLE_HIDDEN = 5;
+    public static final int BATTERY_STYLE_Q = 6;
 
     protected final Context mContext;
     protected final Paint mFramePaint;
@@ -791,7 +792,7 @@ public class BatteryMeterDrawableBase extends Drawable {
     }
 
     protected float getAspectRatio() {
-        if (mMeterStyle != BATTERY_STYLE_PORTRAIT) {
+        if (mMeterStyle != BATTERY_STYLE_PORTRAIT && mMeterStyle != BATTERY_STYLE_Q) {
             return SYMMETRY_ASPECT_RATIO;
         }
         return ASPECT_RATIO;
