@@ -42,6 +42,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.hardware.input.InputManager;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.media.session.MediaSessionLegacyHelper;
@@ -56,12 +57,14 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.service.wallpaper.WallpaperService;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Slog;
+import android.view.HapticFeedbackConstants;
 import android.view.IWindowManager;
 import android.view.InputDevice;
 import android.view.KeyCharacterMap;
@@ -81,6 +84,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.android.internal.statusbar.IStatusBarService;
+import com.android.internal.util.ArrayUtils;
 import com.android.internal.utils.Config.ActionConfig;
 
 public class ActionHandler {
@@ -153,6 +157,11 @@ public class ActionHandler {
 
     private static final String ACTION_ONEHAND_TRIGGER_EVENT =
             "com.android.server.wm.onehand.intent.action.ONEHAND_TRIGGER_EVENT";
+
+    private static final AudioAttributes VIBRATION_ATTRIBUTES = new AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+            .build();
 
     // remove actions from here as they come back on deck
     static final Set<String> sDisabledActions = new HashSet<String>();
@@ -518,6 +527,81 @@ public class ActionHandler {
         StatusBarHelper.dispatchNavigationEditorResult(intent);
     }
 
+    public static boolean performHapticFeedback(Context context, int effectId) {
+        Vibrator mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (mVibrator == null || !mVibrator.hasVibrator()) {
+            return false;
+        }
+        final boolean hapticsDisabled = Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.HAPTIC_FEEDBACK_ENABLED, 0, UserHandle.USER_CURRENT) == 0;
+        if (hapticsDisabled) {
+            return false;
+        }
+
+        VibrationEffect effect = getVibrationEffect(effectId, context);
+        if (effect == null) {
+            return false;
+        }
+
+        int owningUid = android.os.Process.myUid();
+        String owningPackage = context.getOpPackageName();
+        mVibrator.vibrate(owningUid, owningPackage, effect, VIBRATION_ATTRIBUTES);
+        return true;
+    }
+
+    private static VibrationEffect getVibrationEffect(int effectId, Context context) {
+        long[] pattern;
+        switch (effectId) {
+            case HapticFeedbackConstants.CLOCK_TICK:
+            case HapticFeedbackConstants.CONTEXT_CLICK:
+                return VibrationEffect.get(VibrationEffect.EFFECT_TICK);
+            case HapticFeedbackConstants.KEYBOARD_RELEASE:
+            case HapticFeedbackConstants.TEXT_HANDLE_MOVE:
+            case HapticFeedbackConstants.VIRTUAL_KEY_RELEASE:
+            case HapticFeedbackConstants.ENTRY_BUMP:
+            case HapticFeedbackConstants.DRAG_CROSSING:
+            case HapticFeedbackConstants.GESTURE_END:
+                return VibrationEffect.get(VibrationEffect.EFFECT_TICK, false);
+            case HapticFeedbackConstants.KEYBOARD_TAP: // == KEYBOARD_PRESS
+            case HapticFeedbackConstants.VIRTUAL_KEY:
+            case HapticFeedbackConstants.EDGE_RELEASE:
+            case HapticFeedbackConstants.CONFIRM:
+            case HapticFeedbackConstants.GESTURE_START:
+                return VibrationEffect.get(VibrationEffect.EFFECT_CLICK);
+            case HapticFeedbackConstants.LONG_PRESS:
+            case HapticFeedbackConstants.EDGE_SQUEEZE:
+                return VibrationEffect.get(VibrationEffect.EFFECT_HEAVY_CLICK);
+            case HapticFeedbackConstants.REJECT:
+                return VibrationEffect.get(VibrationEffect.EFFECT_DOUBLE_CLICK);
+
+            case HapticFeedbackConstants.CALENDAR_DATE:
+                pattern = getLongIntArray(context.getResources(),
+                    com.android.internal.R.array.config_calendarDateVibePattern);
+                break;
+            case HapticFeedbackConstants.SAFE_MODE_ENABLED:
+                pattern = getLongIntArray(context.getResources(),
+                    com.android.internal.R.array.config_safeModeEnabledVibePattern);
+                break;
+
+            default:
+                return null;
+        }
+        if (pattern.length == 0) {
+            // No vibration
+            return null;
+        } else if (pattern.length == 1) {
+            // One-shot vibration
+            return VibrationEffect.createOneShot(pattern[0], VibrationEffect.DEFAULT_AMPLITUDE);
+        } else {
+            // Pattern vibration
+            return VibrationEffect.createWaveform(pattern, -1);
+        }
+    }
+
+    static long[] getLongIntArray(Resources r, int resid) {
+        return ArrayUtils.convertToLongArray(r.getIntArray(resid));
+    }
+
     public static void performTask(Context context, String action) {
         // null: throw it out
         if (action == null) {
@@ -537,7 +621,9 @@ public class ActionHandler {
         } else if (action.equals(SYSTEMUI_TASK_NO_ACTION)) {
             return;
         } else if (action.equals(SYSTEMUI_TASK_KILL_PROCESS)) {
-            killProcess(context);
+            if (killProcess(context)) {
+                performHapticFeedback(context, HapticFeedbackConstants.LONG_PRESS);
+            }
             return;
         } else if (action.equals(SYSTEMUI_TASK_SCREENSHOT)) {
             sendCommandToWindowManager(new Intent(INTENT_SCREENSHOT));
@@ -649,10 +735,7 @@ public class ActionHandler {
             if (am != null && ActivityManagerNative.isSystemReady()) {
                 if (am.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE) {
                     am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    Vibrator vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-                    if (vib != null) {
-                        vib.vibrate(50);
-                    }
+                    performHapticFeedback(context, HapticFeedbackConstants.VIRTUAL_KEY);
                 } else {
                     am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                     ToneGenerator tg = new ToneGenerator(
@@ -685,10 +768,7 @@ public class ActionHandler {
             if (am != null && ActivityManagerNative.isSystemReady()) {
                 if (am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
                     am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    Vibrator vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-                    if (vib != null) {
-                        vib.vibrate(50);
-                    }
+                    performHapticFeedback(context, HapticFeedbackConstants.VIRTUAL_KEY);
                 } else if (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
                     am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                 } else {
@@ -956,14 +1036,14 @@ public class ActionHandler {
         }
     }
 
-    public static void killProcess(Context context) {
+    public static boolean killProcess(Context context) {
         if (context.checkCallingOrSelfPermission(
                 android.Manifest.permission.FORCE_STOP_PACKAGES) == PackageManager.PERMISSION_GRANTED
                 && !isLockTaskOn()) {
             try {
                 PackageManager packageManager = context.getPackageManager();
                 final Intent intent = new Intent(Intent.ACTION_MAIN);
-                String defaultHomePackage = "com.android.launcher";
+                String defaultHomePackage = "com.android.launcher3";
                 intent.addCategory(Intent.CATEGORY_HOME);
                 final ResolveInfo res = packageManager.resolveActivity(intent, 0);
                 if (res.activityInfo != null
@@ -1011,7 +1091,7 @@ public class ActionHandler {
                     }
                 }
 
-                if (pkg != null && !pkg.equals("com.android.systemui")
+                if (pkg != null && !pkg.equals(ActionUtils.PACKAGE_SYSTEMUI)
                         && !pkg.equals(defaultHomePackage) && !isPackageLiveWalls(context, pkg)) {
 
                     // Restore home screen stack before killing the app
@@ -1057,10 +1137,9 @@ public class ActionHandler {
                     Context ctx = getPackageContext(context, ActionUtils.PACKAGE_SYSTEMUI);
                     Toast.makeText(ctx != null ? ctx : context, toastMsg, Toast.LENGTH_SHORT)
                             .show();
-                    return;
+                    return true;
                 } else {
                     // make a "didnt kill anything" toast?
-                    return;
                 }
             } catch (RemoteException remoteException) {
                 Log.d("ActionHandler", "Caller cannot kill processes, aborting");
@@ -1068,6 +1147,7 @@ public class ActionHandler {
         } else {
             Log.d("ActionHandler", "Caller cannot kill processes, aborting");
         }
+        return false;
     }
 
     public static Context getPackageContext(Context context, String packageName) {

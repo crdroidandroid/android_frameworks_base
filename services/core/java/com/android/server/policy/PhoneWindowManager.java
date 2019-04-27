@@ -2236,11 +2236,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 return;
             }
 
-            if (ActionUtils.killForegroundApp(mContext, mCurrentUserId)) {
+            if (ActionHandler.killProcess(mContext)) {
                 performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
-                Toast.makeText(mContext,
-                        org.lineageos.platform.internal.R.string.app_killed_message,
-                        Toast.LENGTH_SHORT).show();
             }
         }
     };
