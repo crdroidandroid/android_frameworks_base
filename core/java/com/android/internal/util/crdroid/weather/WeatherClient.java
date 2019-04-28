@@ -27,9 +27,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Process;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemProperties;
+import android.service.dreams.DreamService;
+import android.service.dreams.IDreamManager;
+
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -67,38 +74,95 @@ public class WeatherClient {
     private Context mContext;
     private List<WeatherObserver> mObserver;
     private boolean isRunning;
-    private boolean isScreenOn = true;
-    private long lastUpdated;
+    private boolean mScreenOn;
+    private long lastUpdated = 0;
     private long scheduledAlarmTime = 0;
     private AlarmManager alarmManager;
-    private BroadcastReceiver weatherReceiver = new BroadcastReceiver() {
+    private IDreamManager mDreamManager;
+
+    private BroadcastReceiver mWeatherReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent == null) {
-                return;
+            String action = intent.getAction();
+            if (action == null) return;
+
+            if (DEBUG) Log.d(TAG, "Received intent: " + action);
+            if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                mScreenOn = false;
+                cancelWeatherUpdateAlarm();
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                if (!isDozeMode()) {
+                    mScreenOn = true;
+                }
+            } else if (Intent.ACTION_TIME_CHANGED.equals(action)
+                    || Intent.ACTION_TIMEZONE_CHANGED.equals(action)) {
+                resetScheduledAlarm();
             }
-            if (DEBUG) Log.d(TAG, "Received intent: " + intent.getAction());
-            if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
-                onScreenOff();
-            } else if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
-                onScreenOn();
-            } else if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-                updateWeatherAndNotify(false);
-            } else if (updateIntentAction.equals(intent.getAction())) {
-                updateWeatherAndNotify(false);
-            } else if (Intent.ACTION_TIME_CHANGED.equals(intent.getAction())
-                    || Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction())) {
-                updateWeatherAndNotify(true);
-            }
+            updateWeather(false);
         }
     };
 
+    public void updateWeather(boolean forced) {
+        if (forced) {
+            if (DEBUG) Log.d(TAG, "Forced update, triggering updateWeatherAndNotify");
+            updateWeatherAndNotify();
+        } else if (mScreenOn) {
+            if (needsUpdate()) {
+                if (DEBUG) Log.d(TAG, "Needs update, triggering updateWeatherAndNotify");
+                updateWeatherAndNotify();
+            } else {
+                if (DEBUG) Log.d(TAG, "Scheduling update");
+                scheduleWeatherUpdateAlarm();
+            }
+        }
+    }
+
+    private final Runnable mWeatherUpdate = new Runnable() {
+        @Override
+        public void run() {
+            if (DEBUG) Log.d(TAG, "updateWeatherData called");
+            updateWeatherData();
+            for (WeatherObserver observer : mObserver) {
+                try {
+                    observer.onWeatherUpdated(mWeatherInfo);
+                } catch (Exception ignored) {
+                }
+            }
+            lastUpdated = System.currentTimeMillis();
+            resetScheduledAlarm();
+            isRunning = false;
+        }
+    };
+
+    private final Runnable mAsyncWeatherUpdate = new Runnable() {
+        @Override
+        public void run() {
+            AsyncTask.execute(mWeatherUpdate);
+        }
+    };
+
+    private boolean isDozeMode() {
+        try {
+            if (mDreamManager != null && mDreamManager.isDozing()) {
+                return true;
+            }
+        } catch (RemoteException e) {
+            return false;
+        }
+        return false;
+    }
+
     public WeatherClient(Context context) {
         mContext = context;
+        mObserver = new ArrayList<>();
+        mDreamManager = IDreamManager.Stub.asInterface(
+                ServiceManager.checkService(DreamService.DREAM_SERVICE));
+
         updateIntentAction = "updateIntentAction_" + Integer.toString(getRandomInt());
         pendingWeatherUpdate = PendingIntent.getBroadcast(mContext, getRandomInt(), new Intent(updateIntentAction), 0);
-        mObserver = new ArrayList<>();
+
         IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_BOOT_COMPLETED);
@@ -106,7 +170,7 @@ public class WeatherClient {
         filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         filter.addAction(updateIntentAction);
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
-        mContext.registerReceiver(weatherReceiver, filter);
+        mContext.registerReceiver(mWeatherReceiver, filter);
     }
 
     public static boolean isAvailable(Context context) {
@@ -126,30 +190,16 @@ public class WeatherClient {
         return r.nextInt((20000000 - 10000000) + 1) + 10000000;
     }
 
-    private void updateWeatherAndNotify(boolean forceResetSchedule) {
-        if (!SystemProperties.get("sys.boot_completed").equals("1")) return;
+    private boolean isBootCompleted() {
+        return SystemProperties.get("sys.boot_completed").equals("1");
+    }
 
-        if (isRunning) {
-            if (forceResetSchedule) resetScheduledAlarm();
+    private void updateWeatherAndNotify() {
+        if (isRunning || !isBootCompleted()) {
             return;
         }
         isRunning = true;
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                updateWeatherData();
-                for (WeatherObserver observer : mObserver) {
-                    try {
-                        observer.onWeatherUpdated(mWeatherInfo);
-                    } catch (Exception ignored) {
-                    }
-                }
-                lastUpdated = System.currentTimeMillis();
-                resetScheduledAlarm();
-            }
-        });
-        thread.setPriority(Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
+        mAsyncWeatherUpdate.run();
     }
 
     private boolean needsUpdate() {
@@ -157,39 +207,13 @@ public class WeatherClient {
         return mWeatherInfo.getStatus() != WEATHER_UPDATE_SUCCESS || lastUpdatedExpired;
     }
 
-    private void onScreenOn() {
-        if (!SystemProperties.get("sys.boot_completed").equals("1") || isScreenOn){
-            return;
-        }
-        if (DEBUG) Log.d(TAG, "onScreenOn");
-        isScreenOn = true;
-        if (!isRunning) {
-            if (needsUpdate()) {
-                if (DEBUG) Log.d(TAG, "Needs update, triggering updateWeatherAndNotify");
-                updateWeatherAndNotify(false);
-            } else {
-                if (DEBUG) Log.d(TAG, "Scheduling update");
-                scheduleWeatherUpdateAlarm();
-            }
-        }
-    }
-
-    private void onScreenOff() {
-        if (DEBUG) Log.d(TAG, "onScreenOff");
-        isScreenOn = false;
-        cancelWeatherUpdateAlarm();
-    }
-
-    private void resetScheduledAlarm(){
+    private void resetScheduledAlarm() {
         scheduledAlarmTime = 0;
         scheduleWeatherUpdateAlarm();
     }
 
     private void scheduleWeatherUpdateAlarm() {
-        if (!isScreenOn) {
-            return;
-        }
-        if (System.currentTimeMillis() >= scheduledAlarmTime){
+        if (System.currentTimeMillis() >= scheduledAlarmTime) {
             scheduledAlarmTime = System.currentTimeMillis() + WEATHER_UPDATE_INTERVAL;
         }
         alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
@@ -205,7 +229,6 @@ public class WeatherClient {
     }
 
     private void updateWeatherData() {
-        isRunning = true;
         Cursor c = mContext.getContentResolver().query(WEATHER_URI, PROJECTION_DEFAULT_WEATHER,
                 null, null, null);
         if (c != null) {
@@ -230,38 +253,14 @@ public class WeatherClient {
         }
 
         if (DEBUG) Log.d(TAG, mWeatherInfo.toString());
-        isRunning = false;
     }
 
-    public void addObserver(final WeatherObserver observer, boolean withQuery) {
+    public void addObserver(final WeatherObserver observer) {
         mObserver.add(observer);
-        if (withQuery) {
-            if (isRunning) {
-                return;
-            }
-            isRunning = true;
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    updateWeatherData();
-                    try {
-                        observer.onWeatherUpdated(mWeatherInfo);
-                    } catch (Exception ignored) {
-                    }
-                }
-            });
-            thread.setPriority(Process.THREAD_PRIORITY_BACKGROUND);
-            thread.start();
-        }
     }
 
     public void removeObserver(WeatherObserver observer) {
         mObserver.remove(observer);
-    }
-
-    public void destroy(){
-        mContext.unregisterReceiver(weatherReceiver);
-        mObserver = new ArrayList<>();
     }
 
     public interface WeatherObserver {
