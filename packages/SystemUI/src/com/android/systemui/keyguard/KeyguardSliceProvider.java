@@ -258,6 +258,16 @@ public class KeyguardSliceProvider extends SliceProvider implements
             Settings.System.WEATHER_LOCKSCREEN_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
         mUseMetricUnit = Settings.System.getIntForUser(mContentResolver,
             Settings.System.WEATHER_LOCKSCREEN_UNIT, 0, UserHandle.USER_CURRENT) == 0;
+
+        if (mWeatherEnabled && mWeatherClient == null) {
+            mWeatherClient = new WeatherClient(getContext());
+            mWeatherClient.addObserver(this, false /*withQuery*/);
+        } else if (!mWeatherEnabled && mWeatherClient != null) {
+            mWeatherClient.removeObserver(this);
+            mWeatherClient.destroy();
+            mWeatherClient = null;
+        }
+
         mContentResolver.notifyChange(mSliceUri, null /* observer */);
     }
 
@@ -271,8 +281,6 @@ public class KeyguardSliceProvider extends SliceProvider implements
         mZenModeController.addCallback(this);
         mWeatherSettingsObserver = new WeatherSettingsObserver(mHandler);
         mWeatherSettingsObserver.observe();
-        mWeatherClient = new WeatherClient(getContext());
-        mWeatherClient.addObserver(this, false /*withQuery*/);
         mDatePattern = getContext().getString(R.string.system_ui_aod_date_pattern);
         registerClockUpdate();
         updateClock();
