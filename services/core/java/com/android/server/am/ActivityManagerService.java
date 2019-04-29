@@ -516,6 +516,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.android.internal.util.crdroid.cutout.CutoutFullscreenController;
+
 public class ActivityManagerService extends IActivityManager.Stub
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
 
@@ -2018,6 +2020,8 @@ public class ActivityManagerService extends IActivityManager.Stub
 
     // Lineage sdk activity related helper
     private LineageActivityManager mLineageActivityManager;
+
+    private CutoutFullscreenController mCutoutFullscreenController;
 
     final boolean mAllowAppBroadcast;
 
@@ -13065,6 +13069,9 @@ public class ActivityManagerService extends IActivityManager.Stub
         // LineageActivityManager depends on settings so we can initialize only
         // after providers are available.
         mLineageActivityManager = new LineageActivityManager(mContext);
+
+        // Force full screen for devices with cutout
+        mCutoutFullscreenController = new CutoutFullscreenController(mContext);
     }
 
     void startPersistentApps(int matchFlags) {
@@ -27472,4 +27479,12 @@ public class ActivityManagerService extends IActivityManager.Stub
     public boolean isAppBroadcastAllowed() {
         return mAllowAppBroadcast;
     }
+
+    @Override
+    public boolean shouldForceCutoutFullscreen(String packageName) {
+        synchronized (this) {
+            return mCutoutFullscreenController.shouldForceCutoutFullscreen(packageName);
+        }
+    }
+
 }
