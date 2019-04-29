@@ -263,6 +263,11 @@ public class WeatherClient {
         mObserver.remove(observer);
     }
 
+    public void destroy() {
+        mContext.unregisterReceiver(mWeatherReceiver);
+        mObserver = new ArrayList<>();
+    }
+
     public interface WeatherObserver {
         void onWeatherUpdated(WeatherInfo info);
     }
