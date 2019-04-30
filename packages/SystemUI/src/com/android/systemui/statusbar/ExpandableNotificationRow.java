@@ -92,6 +92,7 @@ import com.android.systemui.statusbar.stack.AnimationProperties;
 import com.android.systemui.statusbar.stack.ExpandableViewState;
 import com.android.systemui.statusbar.stack.NotificationChildrenContainer;
 import com.android.systemui.statusbar.stack.StackScrollState;
+import com.android.systemui.tuner.TunerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +104,7 @@ import java.util.function.Consumer;
  * the group summary (which contains 1 or more child notifications).
  */
 public class ExpandableNotificationRow extends ActivatableNotificationView
-        implements PluginListener<NotificationMenuRowPlugin> {
+        implements PluginListener<NotificationMenuRowPlugin>, TunerService.Tunable {
 
     private static final boolean DEBUG = false;
     private static final int DEFAULT_DIVIDER_ALPHA = 0x29;
@@ -232,6 +233,10 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
      * If {@code true}, the header background will disappear when expanded.
      */
     private boolean mShowGroupBackgroundWhenExpanded;
+    private boolean mForceExpanded;
+
+    private static final String FORCE_EXPANDED_NOTIFICATIONS =
+            "system:" + Settings.System.FORCE_EXPANDED_NOTIFICATIONS;
 
     private OnClickListener mExpandClickListener = new OnClickListener() {
         @Override
@@ -996,12 +1001,26 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         super.onAttachedToWindow();
         Dependency.get(PluginManager.class).addPluginListener(this,
                 NotificationMenuRowPlugin.class, false /* Allow multiple */);
+        Dependency.get(TunerService.class).addTunable(this, FORCE_EXPANDED_NOTIFICATIONS);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        Dependency.get(TunerService.class).removeTunable(this);
         Dependency.get(PluginManager.class).removePluginListener(this);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case FORCE_EXPANDED_NOTIFICATIONS:
+                mForceExpanded =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -1993,12 +2012,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
     }
 
     public boolean isUserExpanded() {
-        if (Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.FORCE_EXPANDED_NOTIFICATIONS, 0, UserHandle.USER_CURRENT) != 1) {
-            return mUserExpanded;
-        } else {
-            return true;
-        }
+        return mUserExpanded || (mExpandable && mForceExpanded);
     }
 
     /**
