@@ -17,7 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Mantenga pulsado el botón de apagado para interactuar</string>
+    <string name="pocket_lock_message_long_press">Mantén presionado el botón de apagado para interactuar</string>
     <!-- AOKP custom system animations -->
     <string name="animation_fade">Desvanecer</string>
     <string name="animation_slide_right">Deslizar a la derecha</string>
@@ -41,11 +41,11 @@
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_toggleNavigationEditor">Controlar el editor de la barra de navegación</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Permite a una aplicación controlar el editor de barra de navegación.</string>
+    <string name="permdesc_toggleNavigationEditor">Permite a una aplicación controlar el editor de la barra de navegación.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">acceder al gestor de fuentes</string>
+    <string name="permlab_accessFontManager">Acceder al gestor de fuentes</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_accessFontManager">Permite a una aplicación acceder al gestor de fuentes.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
-    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Toque el área vacía para salir del modo para una mano</string>
+    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Toca el área vacía para salir del modo una mano</string>
 </resources>
