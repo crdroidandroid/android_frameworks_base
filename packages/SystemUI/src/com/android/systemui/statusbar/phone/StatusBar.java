@@ -6400,56 +6400,70 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 }
                 break;
             case BERRY_ACCENT_PICKER:
-                int accentSetting =
-                        newValue == null ? 0 : Integer.parseInt(newValue);
+                int accentSetting = 0;
+                try {
+                    accentSetting = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
                 if (mAccentSetting != accentSetting) {
                     mAccentSetting = accentSetting;
                     updateAccent();
                 }
                 break;
             case BERRY_THEME_OVERRIDE:
-                int themeOverride =
-                        newValue == null ? 0 : Integer.parseInt(newValue);
+                int themeOverride = 0;
+                try {
+                    themeOverride = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
                 if (mThemeOverride != themeOverride) {
                     mThemeOverride = themeOverride;
                     updateTheme();
                 }
                 break;
             case BERRY_DARK_STYLE:
-                int darkStyle =
-                        newValue == null ? 0 : Integer.parseInt(newValue);
+                int darkStyle = 0;
+                try {
+                    darkStyle = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
                 if (mDarkStyle != darkStyle) {
                     mDarkStyle = darkStyle;
                     updateTheme();
                 }
                 break;
             case BERRY_NOTIFICATION_STYLE:
-                int notiStyle =
-                        newValue == null ? 0 : Integer.parseInt(newValue);
+                int notiStyle = 0;
+                try {
+                    notiStyle = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
                 if (mNotiStyle != notiStyle) {
                     mNotiStyle = notiStyle;
                     updateTheme();
                 }
                 break;
             case BERRY_QS_TILE_STYLE:
-                int qsTileStyle =
-                        newValue == null ? 0 : Integer.parseInt(newValue);
+                int qsTileStyle = 0;
+                try {
+                    qsTileStyle = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
                 if (mQSTileStyle != qsTileStyle) {
                     mQSTileStyle = qsTileStyle;
                     updateQSTileStyle();
                 }
                 break;
             case BERRY_QS_HEADER_STYLE:
-                int qsHeaderStyle =
-                        newValue == null ? 0 : Integer.parseInt(newValue);
+                int qsHeaderStyle = 0;
+                try {
+                    qsHeaderStyle = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
                 if (mQSHeaderStyle != qsHeaderStyle) {
                     mQSHeaderStyle = qsHeaderStyle;
                     updateQSHeaderStyle();
                 }
                 break;
             case BERRY_SWITCH_STYLE:
-                int switchStyle =
-                        newValue == null ? 0 : Integer.parseInt(newValue);
+                int switchStyle = 0;
+                try {
+                    switchStyle = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
                 if (mSwitchStyle != switchStyle) {
                     mSwitchStyle = switchStyle;
                     updateSwitchStyle();
@@ -6466,8 +6480,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 updatePieControls();
                 break;
             case PIE_GRAVITY:
-                mPieGravity =
-                        newValue == null ? 2 : Integer.parseInt(newValue);
+                mPieGravity = 2;
+                try {
+                    mPieGravity = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
                 updatePieControls();
                 break;
             case USE_OLD_MOBILETYPE:
