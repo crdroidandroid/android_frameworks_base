@@ -120,7 +120,7 @@
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
     <string name="pie_state_name">Controles Pie</string>
-    <string name="pie_state_summary">Usar controles Pie en modo inmersivo</string>
+    <string name="pie_state_summary">Usa los controles Pie en modo inmersivo</string>
     <string name="pie_battery_level">"NIVEL DE BATERÍA "</string>
     <string name="quick_settings_pie">Controles Pie</string>
     <!-- Sound QS Tile -->
