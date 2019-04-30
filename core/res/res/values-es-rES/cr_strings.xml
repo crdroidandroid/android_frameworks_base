@@ -17,7 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Mantén pulsado el botón de apagado para interactuar</string>
+    <string name="pocket_lock_message_long_press">Mantén presionado el botón de apagado para interactuar</string>
     <!-- AOKP custom system animations -->
     <string name="animation_fade">Desvanecer</string>
     <string name="animation_slide_right">Deslizar a la derecha</string>
