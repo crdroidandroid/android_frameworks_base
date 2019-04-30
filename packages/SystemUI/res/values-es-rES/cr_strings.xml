@@ -45,9 +45,9 @@
     <string name="quick_settings_screenshot_label">Captura de pantalla</string>
     <string name="quick_settings_region_screenshot_label">Captura de pantalla parcial</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">Información de CPU</string>
-    <string name="accessibility_quick_settings_cpuinfo_off">Información de CPU desactivada</string>
-    <string name="accessibility_quick_settings_cpuinfo_on">Información de CPU activada</string>
+    <string name="quick_settings_cpuinfo_label">Información de la CPU</string>
+    <string name="accessibility_quick_settings_cpuinfo_off">Información de la CPU desactivada</string>
+    <string name="accessibility_quick_settings_cpuinfo_on">Información de la CPU activada</string>
     <string name="accessibility_quick_settings_cpuinfo_changed_off">Información de CPU desactivada</string>
     <string name="accessibility_quick_settings_cpuinfo_changed_on">Información de CPU activada</string>
     <!-- HW Keys Tile -->
