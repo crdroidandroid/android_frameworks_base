@@ -107,6 +107,7 @@ public class ThemeAccentUtils {
         "com.android.systemui.qstile.squircletrim", // 16
         "com.android.systemui.qstile.teardrop", // 17
         "com.android.systemui.qstile.wavey", // 18
+        "com.android.systemui.qstile.cookie", //19
     };
 
     // QS Header Styles
