@@ -572,6 +572,81 @@ public abstract class LayoutInflater {
         return false;
     }
 
+    private static final View fastCreateView(String name, Context context, AttributeSet attrs) {
+        switch (name) {
+            case "ActionMenuView":
+                return new android.widget.ActionMenuView(context, attrs);
+            case "AutoCompleteTextView":
+                return new android.widget.AutoCompleteTextView(context, attrs);
+            case "Button":
+                return new android.widget.Button(context, attrs);
+            case "CheckBox":
+                return new android.widget.CheckBox(context, attrs);
+            case "CheckedTextView":
+                return new android.widget.CheckedTextView(context, attrs);
+            case "EditText":
+                return new android.widget.EditText(context, attrs);
+            case "FrameLayout":
+                return new android.widget.FrameLayout(context, attrs);
+            case "ImageButton":
+                return new android.widget.ImageButton(context, attrs);
+            case "ImageView":
+                return new android.widget.ImageView(context, attrs);
+            case "LinearLayout":
+                return new android.widget.LinearLayout(context, attrs);
+            case "ListView":
+                return new android.widget.ListView(context, attrs);
+            case "MultiAutoCompleteTextView":
+                return new android.widget.AutoCompleteTextView(context, attrs);
+            case "ProgressBar":
+                return new android.widget.ProgressBar(context, attrs);
+            case "RadioButton":
+                return new android.widget.RadioButton(context, attrs);
+            case "RatingBar":
+                return new android.widget.RatingBar(context, attrs);
+            case "RelativeLayout":
+                return new android.widget.RelativeLayout(context, attrs);
+            case "ScrollView":
+                return new android.widget.ScrollView(context, attrs);
+            case "SeekBar":
+                return new android.widget.SeekBar(context, attrs);
+            case "Space":
+                return new android.widget.Space(context, attrs);
+            case "Spinner":
+                return new android.widget.Spinner(context, attrs);
+            case "TextureView":
+                return new android.view.TextureView(context, attrs);
+            case "TextView":
+                return new android.widget.TextView(context, attrs);
+            case "ToggleButton":
+                return new android.widget.ToggleButton(context, attrs);
+            case "Toolbar":
+                return new android.widget.Toolbar(context, attrs);
+            case "View":
+                return new android.view.View(context, attrs);
+            case "ViewFlipper":
+                return new android.widget.ViewFlipper(context, attrs);
+            case "ViewStub":
+                return new android.view.ViewStub(context, attrs);
+            default:
+                return null;
+        }
+    }
+
+    private static Constructor<? extends View> loadViewConstructor(String name, String prefix,
+            ClassLoader loader) throws ClassNotFoundException, NoSuchMethodException {
+        String classname = prefix != null ? (prefix + name) : name;
+        String isboot = loader == BOOT_CLASS_LOADER ? " is_boot" : " not_boot";
+        // Class not found in the cache, see if it's real, and try to add it
+        Class<? extends View> clazz = Class.forName(classname, false,
+                loader).asSubclass(View.class);
+
+        Constructor<? extends View> constructor = clazz.getConstructor(mConstructorSignature);
+        constructor.setAccessible(true);
+        sConstructorMap.put(name, constructor);
+        return constructor;
+    }
+
     /**
      * Low-level function for instantiating a view by name. This attempts to
      * instantiate a view class of the given <var>name</var> found in this
@@ -591,39 +666,40 @@ public abstract class LayoutInflater {
      */
     public final View createView(String name, String prefix, AttributeSet attrs)
             throws ClassNotFoundException, InflateException {
-        Constructor<? extends View> constructor = sConstructorMap.get(name);
-        if (constructor != null && !verifyClassLoader(constructor)) {
-            constructor = null;
-            sConstructorMap.remove(name);
-        }
         Class<? extends View> clazz = null;
 
         try {
             Trace.traceBegin(Trace.TRACE_TAG_VIEW, name);
+            Object lastContext = mConstructorArgs[0];
+            if (mConstructorArgs[0] == null) {
+                // Fill in the context if not already within inflation.
+                mConstructorArgs[0] = mContext;
+            }
+            Object[] args = mConstructorArgs;
+            args[1] = attrs;
 
-            if (constructor == null) {
-                // Class not found in the cache, see if it's real, and try to add it
-                clazz = Class.forName(prefix != null ? (prefix + name) : name, false,
-                        mContext.getClassLoader()).asSubclass(View.class);
+            View view = fastCreateView(name, (Context) args[0], attrs);
 
-                if (mFilter != null && clazz != null) {
-                    boolean allowed = mFilter.onLoadClass(clazz);
-                    if (!allowed) {
-                        failNotAllowed(name, prefix, attrs);
+            if (view == null) {
+                Constructor<? extends View> constructor = sConstructorMap.get(name);
+
+                if (constructor == null) {
+                    constructor = loadViewConstructor(name, prefix, mContext.getClassLoader());
+                    if (constructor != null && !verifyClassLoader(constructor)) {
+                        constructor = null;
+                        sConstructorMap.remove(name);
                     }
                 }
-                constructor = clazz.getConstructor(mConstructorSignature);
-                constructor.setAccessible(true);
-                sConstructorMap.put(name, constructor);
-            } else {
                 // If we have a filter, apply it to cached constructor
                 if (mFilter != null) {
                     // Have we seen this name before?
                     Boolean allowedState = mFilterMap.get(name);
                     if (allowedState == null) {
                         // New class -- remember whether it is allowed
-                        clazz = Class.forName(prefix != null ? (prefix + name) : name, false,
-                                mContext.getClassLoader()).asSubclass(View.class);
+                        clazz = Class
+                                .forName(prefix != null ? (prefix + name) : name, false,
+                                        mContext.getClassLoader())
+                                .asSubclass(View.class);
 
                         boolean allowed = clazz != null && mFilter.onLoadClass(clazz);
                         mFilterMap.put(name, allowed);
@@ -634,17 +710,9 @@ public abstract class LayoutInflater {
                         failNotAllowed(name, prefix, attrs);
                     }
                 }
-            }
 
-            Object lastContext = mConstructorArgs[0];
-            if (mConstructorArgs[0] == null) {
-                // Fill in the context if not already within inflation.
-                mConstructorArgs[0] = mContext;
+                view = constructor.newInstance(args);
             }
-            Object[] args = mConstructorArgs;
-            args[1] = attrs;
-
-            final View view = constructor.newInstance(args);
             if (view instanceof ViewStub) {
                 // Use the same context when inflating ViewStub later.
                 final ViewStub viewStub = (ViewStub) view;
