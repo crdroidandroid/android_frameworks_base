@@ -36,8 +36,8 @@
     <string name="animation_random">Aleatorio</string>
     <string name="action_null">Vacío</string>
     <!-- SystemUI Restart -->
-    <string name="systemui_restart_title">Se requiere reiniciar la interfaz de usuario del sistema</string>
-    <string name="systemui_restart_message">Para que todos los cambios surjan efecto, se necesita reiniciar la interfaz de usuario del sistema. ¿Reiniciar ahora?</string>
+    <string name="systemui_restart_title">Se requiere reiniciar la UI del sistema</string>
+    <string name="systemui_restart_message">Para que todos los cambios surjan efecto, se necesita reiniciar la UI del sistema. ¿Reiniciar UI del sistema ahora?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_toggleNavigationEditor">Controlar el editor de la barra de navegación</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
