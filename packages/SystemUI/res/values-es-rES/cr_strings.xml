@@ -89,7 +89,7 @@
     <string name="quick_settings_music_play">Reproducir</string>
     <string name="quick_settings_music_pause">Pausar</string>
     <!-- Always on Display Tile -->
-    <string name="quick_settings_always_on_display_label">Pantalla ambiental siempre encendida</string>
+    <string name="quick_settings_always_on_display_label">AOD</string>
     <!-- On The Go -->
     <string name="global_action_onthego">Modo en marcha</string>
     <string name="onthego_notif_ticker">El modo en marcha ha sido activado</string>
