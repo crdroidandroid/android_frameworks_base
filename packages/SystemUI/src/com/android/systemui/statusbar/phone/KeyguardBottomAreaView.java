@@ -423,7 +423,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         if (mRightAffordanceView != null) {
             if (isRightAffordanceDefault()) {
                 updateRightAffordanceIcon();
-            } else if (mRightAffordanceView.getVisibility() != View.VISIBLE) {
+            } else if (mRightButton != null) {
                 // Also includes inflating preview
                 setRightButton(mRightButton);
             }
@@ -432,9 +432,9 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         if (mLeftAffordanceView != null) {
             if (mLeftButton instanceof DefaultLeftButton) {
                 updateLeftAffordanceIcon();
-            } else if (mLeftAffordanceView.getVisibility() != View.VISIBLE) {
+            } else if (mLeftButton != null) {
                 // Also includes inflating preview
-                updateLeftAffordance();
+                setLeftButton(mLeftButton);
             }
         }
     }
