@@ -135,5 +135,5 @@
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">UI del sistema</string>
     <!-- Ambient Display Pixel-Like string -->
-    <string name="ambientmusic_songinfo">%s by %s</string>
+    <string name="ambientmusic_songinfo">%s por %s</string>
 </resources>
