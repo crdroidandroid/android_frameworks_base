@@ -62,6 +62,15 @@
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_hw_keys_enabled">HW Keys enabled.</string>
 
+    <!-- Gaming Mode -->
+    <string name="gaming_mode_tile_title">Gaming Mode</string>
+    <string name="gaming_mode_tile_toast">Gaming mode enabled</string>
+    <string name="gaming_mode_tile_toast_disabled">Gaming mode disabled</string>
+    <string name="gaming_mode_dialog_title">Gaming Mode</string>
+    <string name="gaming_mode_dialog_message">When gaming mode is enabled, your ringer mode will change to vibrate mode, all heads-up messages will be disabled and hardware keys will be turned off. Media volume will be increased to the maximum value. All the disabled settings will be reset to default once you exit Gaming Mode.</string>
+    <string name="accessibility_quick_settings_gaming_mode_on">Gaming mode on</string>
+    <string name="accessibility_quick_settings_gaming_mode_off">Gaming mode off</string>
+
     <!-- Heads up snooze toast -->
     <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Peeking notification are snoozing for 1 minute.</string>
     <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Peeking notifications are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
