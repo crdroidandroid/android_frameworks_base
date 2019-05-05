@@ -14,6 +14,7 @@
 
 package com.android.systemui.tuner;
 
+import android.annotation.Nullable;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
@@ -82,9 +83,20 @@ public class LockscreenFragment extends PreferenceFragment {
     private Handler mHandler;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        mHandler = new Handler();
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         mTunerService = Dependency.get(TunerService.class);
-        mHandler = new Handler();
         addPreferencesFromResource(R.xml.lockscreen_settings);
         setupGroup(LOCKSCREEN_LEFT_BUTTON, LOCKSCREEN_LEFT_UNLOCK);
         setupGroup(LOCKSCREEN_RIGHT_BUTTON, LOCKSCREEN_RIGHT_UNLOCK);
