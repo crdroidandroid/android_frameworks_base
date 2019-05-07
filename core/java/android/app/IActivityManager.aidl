@@ -924,4 +924,9 @@ interface IActivityManager {
     void unregisterUidFrozenStateChangedCallback(in IUidFrozenStateChangedCallback callback);
     @JavaPassthrough(annotation="@android.annotation.RequiresPermission(android.Manifest.permission.PACKAGE_USAGE_STATS)")
     int[] getUidFrozenState(in int[] uids);
+
+    /**
+     *  Should disable touch if three fingers to screen shot is active?
+     */
+    boolean isSwipeToScreenshotGestureActive();
 }
