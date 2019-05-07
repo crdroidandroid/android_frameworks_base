@@ -693,4 +693,9 @@ interface IActivityManager {
      * @param enable set it to true to enable the app freezer, false to disable it.
      */
     boolean enableAppFreezer(in boolean enable);
+
+    /**
+     *  Should disable touch if three fingers to screen shot is active?
+     */
+    boolean isSwipeToScreenshotGestureActive();
 }
