@@ -683,4 +683,9 @@ interface IActivityManager {
      * Kills uid with the reason of permission change.
      */
     void killUidForPermissionChange(int appId, int userId, String reason);
+
+    /**
+     *  Should disable touch if three fingers to screen shot is active?
+     */
+    boolean isSwipeToScreenshotGestureActive();
 }
