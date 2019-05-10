@@ -1936,7 +1936,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         }
 
         Drawable artworkDrawable = null;
-        if (mediaMetadata != null && mShowMediaMetadata) {
+        if (mediaMetadata != null && mShowMediaMetadata && mMediaManager.isMediaPlaying()) {
             Bitmap artworkBitmap = mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
             if (artworkBitmap == null) {
                 artworkBitmap = mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
@@ -1969,7 +1969,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             }
         }
 
-        if (artworkDrawable == null) {
+        if (artworkDrawable == null && mMediaManager.isMediaPlaying()) {
             //Get wallpaper as bitmap
             WallpaperManager manager = WallpaperManager.getInstance(mContext);
             ParcelFileDescriptor pfd = manager.getWallpaperFile(WallpaperManager.FLAG_LOCK);
