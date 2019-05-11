@@ -212,4 +212,13 @@
 
   <!-- Whether device supports internal audio recording -->
   <java-symbol type="bool" name="config_hasInternalAudioRecordingSupport" />
+
+  <!-- Media notification seekbar control -->
+  <java-symbol type="id" name="notification_media_seekbar_container" />
+  <java-symbol type="layout" name="notification_material_media_seekbar" />
+  <java-symbol type="id" name="notification_media_progress" />
+  <java-symbol type="id" name="notification_media_progress_bar" />
+  <java-symbol type="id" name="notification_media_progress_time" />
+  <java-symbol type="id" name="notification_media_elapsed_time" />
+  <java-symbol type="id" name="notification_media_total_time" />
 </resources>
