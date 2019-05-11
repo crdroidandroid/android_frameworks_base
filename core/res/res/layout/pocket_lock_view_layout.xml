@@ -21,7 +21,7 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:padding="10dp"
-            android:src="@android:drawable/ic_lock_lock"
+            android:src="@android:drawable/ic_pocket_lock"
             android:tint="@android:color/white"
             android:alpha="1.0"/>
 
