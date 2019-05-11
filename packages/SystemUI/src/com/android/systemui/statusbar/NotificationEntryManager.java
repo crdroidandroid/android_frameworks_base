@@ -647,7 +647,7 @@ public class NotificationEntryManager implements Dumpable, NotificationInflater.
             NotificationListenerService.RankingMap ranking) {
         NotificationData.Entry entry = mNotificationData.remove(key, ranking);
         if (entry == null) {
-            Log.w(TAG, "removeNotification for unknown key: " + key);
+            Log.d(TAG, "removeNotification for unknown key: " + key);
             return null;
         }
         updateNotifications();
