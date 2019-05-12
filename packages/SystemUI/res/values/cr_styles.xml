@@ -36,4 +36,11 @@
         <!-- Note: must be dp to fit in status bar -->
         <item name="android:textSize">14dp</item>
     </style>
+
+    <!-- Carrier Label -->
+    <style name="TextAppearance.StatusBar.CarrierLabel" parent="@*android:style/TextAppearance.StatusBar.Icon">
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">@*android:string/config_headlineFontFamilyMedium</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>
