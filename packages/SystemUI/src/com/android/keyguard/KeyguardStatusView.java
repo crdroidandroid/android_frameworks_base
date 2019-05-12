@@ -104,7 +104,7 @@ public class KeyguardStatusView extends GridLayout implements
     private CustomAnalogClock mSpectrumClockView;
     private CustomAnalogClock mSneekyClockView;
     private CustomAnalogClock mDotClockView;
-    private LinearLayout mTextClock;
+    private TypographicClock mTextClock;
     private TextClock mClockView;
     private View mClockSeparator;
     private TextView mOwnerInfo;
