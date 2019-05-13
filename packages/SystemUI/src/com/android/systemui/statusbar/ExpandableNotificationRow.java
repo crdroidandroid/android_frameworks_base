@@ -983,7 +983,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
     }
 
     public void setGutsView(MenuItem item) {
-        if (mGuts != null && item.getGutsView() instanceof GutsContent) {
+        if (mGuts != null && item != null && item.getGutsView() instanceof GutsContent) {
             ((GutsContent) item.getGutsView()).setGutsParent(mGuts);
             mGuts.setGutsContent((GutsContent) item.getGutsView());
         }
