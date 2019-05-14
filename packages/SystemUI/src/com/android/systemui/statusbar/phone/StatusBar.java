@@ -1936,7 +1936,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         }
 
         Drawable artworkDrawable = null;
-        if (mediaMetadata != null && mShowMediaMetadata && mMediaManager.isMediaPlaying()) {
+        boolean isMediaPlaying = mMediaManager.isMediaPlaying();
+
+        if (mediaMetadata != null && mShowMediaMetadata && isMediaPlaying) {
             Bitmap artworkBitmap = mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
             if (artworkBitmap == null) {
                 artworkBitmap = mediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
@@ -1973,7 +1975,11 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         if (ENABLE_LOCKSCREEN_WALLPAPER && artworkDrawable == null) {
             Bitmap lockWallpaper = mLockscreenWallpaper.getBitmap();
             if (lockWallpaper != null) {
-                artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(), lockWallpaper);
+                if (isMediaPlaying)
+                    artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(), lockWallpaper);
+                else
+                    artworkDrawable = new LockscreenWallpaper.WallpaperDrawable(
+                        mBackdropBack.getResources(), lockWallpaper);
                 // We're in the SHADE mode on the SIM screen - yet we still need to show
                 // the lockscreen wallpaper in that mode.
                 allowWhenShade = mStatusBarKeyguardViewManager != null
@@ -1981,7 +1987,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             }
         }
 
-        if (artworkDrawable == null && mMediaManager.isMediaPlaying()) {
+        if (artworkDrawable == null && isMediaPlaying) {
             //Get wallpaper as bitmap
             WallpaperManager manager = WallpaperManager.getInstance(mContext);
             ParcelFileDescriptor pfd = manager.getWallpaperFile(WallpaperManager.FLAG_LOCK);
