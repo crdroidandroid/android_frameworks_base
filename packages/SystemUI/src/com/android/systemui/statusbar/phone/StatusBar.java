@@ -1969,6 +1969,18 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             }
         }
 
+        boolean allowWhenShade = false;
+        if (ENABLE_LOCKSCREEN_WALLPAPER && artworkDrawable == null) {
+            Bitmap lockWallpaper = mLockscreenWallpaper.getBitmap();
+            if (lockWallpaper != null) {
+                artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(), lockWallpaper);
+                // We're in the SHADE mode on the SIM screen - yet we still need to show
+                // the lockscreen wallpaper in that mode.
+                allowWhenShade = mStatusBarKeyguardViewManager != null
+                        && mStatusBarKeyguardViewManager.isShowing();
+            }
+        }
+
         if (artworkDrawable == null && mMediaManager.isMediaPlaying()) {
             //Get wallpaper as bitmap
             WallpaperManager manager = WallpaperManager.getInstance(mContext);
@@ -1981,14 +1993,6 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 Bitmap lockWallpaper = BitmapFactory.decodeFileDescriptor(pfd.getFileDescriptor());
                 artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(), lockWallpaper);
             }
-        }
-
-        boolean allowWhenShade = false;
-        if (ENABLE_LOCKSCREEN_WALLPAPER && mLockscreenWallpaper.getBitmap() != null) {
-            // We're in the SHADE mode on the SIM screen - yet we still need to show
-            // the lockscreen wallpaper in that mode.
-            allowWhenShade = mStatusBarKeyguardViewManager != null
-                    && mStatusBarKeyguardViewManager.isShowing();
         }
 
         boolean hideBecauseOccluded = mStatusBarKeyguardViewManager != null
