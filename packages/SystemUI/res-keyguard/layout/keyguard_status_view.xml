@@ -69,32 +69,29 @@
             <!-- Custom text clock. -->
             <LinearLayout
                 android:id="@+id/custom_textclock_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="@dimen/custom_clock_left_padding"
                 android:layout_marginTop="@dimen/custom_clock_top_margin"
                 android:layout_alignParentTop="true"
                 android:orientation="vertical" >
             <com.android.keyguard.clocks.CustomTextClock
                 android:id="@+id/custom_textclock_view0"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:text="@string/custom_text_clock_top_text_default"
                 android:letterSpacing="0.03"
                 analog:HandType="2" />
             <com.android.keyguard.clocks.CustomTextClock
                 android:id="@+id/custom_textclock_view1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.03"
                 android:textColor="?attr/wallpaperTextColor"
                 analog:HandType="0" />
             <com.android.keyguard.clocks.CustomTextClock
                 android:id="@+id/custom_textclock_view2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:letterSpacing="0.03"
                 android:textColor="?attr/wallpaperTextColor"
                 analog:HandType="1" />
