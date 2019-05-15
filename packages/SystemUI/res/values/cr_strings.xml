@@ -155,4 +155,7 @@
 
     <!-- Ambient Display Pixel-Like string -->
     <string name="ambientmusic_songinfo">%s by %s</string>
+
+    <!-- Custom text clock -->
+    <string name="custom_text_clock_top_text_default">It\'s</string>
 </resources>
