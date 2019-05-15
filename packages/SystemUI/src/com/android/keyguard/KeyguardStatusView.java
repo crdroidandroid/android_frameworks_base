@@ -130,6 +130,7 @@ public class KeyguardStatusView extends GridLayout implements
     private int mLockDateFontStyle;
     private int mClockSelection = 1;
     private boolean mWasLatestViewSmall;
+    private boolean mShowInfo;
     private boolean mClockAvailable;
     private boolean mDigitalClock;
 
@@ -541,8 +542,8 @@ public class KeyguardStatusView extends GridLayout implements
             mDotClockView.setVisibility(View.GONE);
             mSpectrumClockView.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.GONE);
-            mKeyguardSlice.setVisibility(View.GONE);
             mTextClock.setVisibility(View.VISIBLE);
+            mKeyguardSlice.setVisibility(mShowInfo ? View.VISIBLE : View.GONE);
         }
         refreshFormat();
         setDigitalClock();
