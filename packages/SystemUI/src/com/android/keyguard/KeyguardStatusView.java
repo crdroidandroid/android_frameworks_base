@@ -249,7 +249,7 @@ public class KeyguardStatusView extends GridLayout implements
         mKeyguardSlice = findViewById(R.id.keyguard_status_area);
         mClockSeparator = findViewById(R.id.clock_separator);
         mVisibleInDoze = Sets.newArraySet(mClockView, mKeyguardSlice, mCustomClockView, mCustomDarkClockView,
-                mSpideyClockView, mSpectrumClockView, mSneekyClockView, mDotClockView);
+                mSpideyClockView, mSpectrumClockView, mSneekyClockView, mDotClockView, mTextClock);
         mTextColor = mClockView.getCurrentTextColor();
 
         int clockStroke = getResources().getDimensionPixelSize(R.dimen.widget_small_font_stroke);
@@ -439,6 +439,7 @@ public class KeyguardStatusView extends GridLayout implements
                 mSneekyClockView.setVisibility(View.GONE);
                 mTextClock.setVisibility(View.GONE);
                 mClockView.setVisibility(View.VISIBLE);
+                mKeyguardSlice.setVisibility(mShowInfo ? View.VISIBLE : View.GONE);
                 break;
             default:
                 mDigitalClock = false;
@@ -471,6 +472,7 @@ public class KeyguardStatusView extends GridLayout implements
             mSpectrumClockView.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.GONE);
             mTextClock.setVisibility(View.GONE);
+            mKeyguardSlice.setVisibility(mShowInfo ? View.VISIBLE : View.GONE);
         } else if (mClockAvailable && mClockSelection == 2) {
             mClockView.setVisibility(View.GONE);
             mCustomDarkClockView.setVisibility(View.GONE);
@@ -480,6 +482,7 @@ public class KeyguardStatusView extends GridLayout implements
             mSneekyClockView.setVisibility(View.GONE);
             mTextClock.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.VISIBLE);
+            mKeyguardSlice.setVisibility(mShowInfo ? View.VISIBLE : View.GONE);
         } else if (mClockAvailable && mClockSelection == 3) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
@@ -489,6 +492,7 @@ public class KeyguardStatusView extends GridLayout implements
             mSneekyClockView.setVisibility(View.GONE);
             mTextClock.setVisibility(View.GONE);
             mCustomDarkClockView.setVisibility(View.VISIBLE);
+            mKeyguardSlice.setVisibility(mShowInfo ? View.VISIBLE : View.GONE);
         } else if (mClockAvailable && mClockSelection == 4) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
@@ -498,6 +502,7 @@ public class KeyguardStatusView extends GridLayout implements
             mSneekyClockView.setVisibility(View.GONE);
             mTextClock.setVisibility(View.GONE);
             mSpideyClockView.setVisibility(View.VISIBLE);
+            mKeyguardSlice.setVisibility(mShowInfo ? View.VISIBLE : View.GONE);
         } else if (mClockAvailable && mClockSelection == 5) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
@@ -507,6 +512,7 @@ public class KeyguardStatusView extends GridLayout implements
             mSneekyClockView.setVisibility(View.GONE);
             mTextClock.setVisibility(View.GONE);
             mDotClockView.setVisibility(View.VISIBLE);
+            mKeyguardSlice.setVisibility(mShowInfo ? View.VISIBLE : View.GONE);
         } else if (mClockAvailable && mClockSelection == 6) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
@@ -516,6 +522,7 @@ public class KeyguardStatusView extends GridLayout implements
             mSneekyClockView.setVisibility(View.GONE);
             mTextClock.setVisibility(View.GONE);
             mSpectrumClockView.setVisibility(View.VISIBLE);
+            mKeyguardSlice.setVisibility(mShowInfo ? View.VISIBLE : View.GONE);
         } else if (mClockAvailable && mClockSelection == 7) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
@@ -525,7 +532,7 @@ public class KeyguardStatusView extends GridLayout implements
             mSpectrumClockView.setVisibility(View.GONE);
             mTextClock.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.VISIBLE);
-        }
+            mKeyguardSlice.setVisibility(mShowInfo ? View.VISIBLE : View.GONE);
         } else if (mClockAvailable && mClockSelection == 8) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
@@ -534,6 +541,7 @@ public class KeyguardStatusView extends GridLayout implements
             mDotClockView.setVisibility(View.GONE);
             mSpectrumClockView.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.GONE);
+            mKeyguardSlice.setVisibility(View.GONE);
             mTextClock.setVisibility(View.VISIBLE);
         }
         refreshFormat();
