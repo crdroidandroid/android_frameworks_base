@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 Descendant
+	 Copyright (C) 2019 The Superior OS Project
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string-array translatable="true" name="TensString">
+        <item></item>
+        <item></item>
+        <item>Venti</item>
+        <item>Trenta</item>
+        <item>Quaranta</item>
+        <item>Cinquanta</item>
+        <item>Sessanta</item>
+    </string-array>
+
+    <string-array translatable="true" name="UnitsString">
+        <item>"Tutto va bene :)"</item>
+        <item>Uno</item>
+        <item>Due</item>
+        <item>Tre</item>
+        <item>Quattro</item>
+        <item>Cinque</item>
+        <item>Sei</item>
+        <item>Sette</item>
+        <item>Otto</item>
+        <item>Nove</item>
+        <item>Dieci</item>
+        <item>Undici</item>
+        <item>Dodici</item>
+        <item>Tredici</item>
+        <item>Quattordici</item>
+        <item>Quindici</item>
+        <item>Sedici</item>
+        <item>Diciassette</item>
+        <item>Diciotto</item>
+        <item>Diciannove</item>
+    </string-array>
+
+    <string-array translatable="true" name="TensStringH">
+        <item></item>
+        <item></item>
+        <item>Venti</item>
+        <item>Trenta</item>
+        <item>Quaranta</item>
+        <item>Cinquanta</item>
+        <item>Sessanta</item>
+    </string-array>
+
+    <string-array translatable="true" name="UnitsStringH">
+        <item>Venti e</item>
+        <item>Una e</item>
+        <item>Due e</item>
+        <item>Tre e</item>
+        <item>Quattro e</item>
+        <item>Cinque e</item>
+        <item>Sei e</item>
+        <item>Sette e</item>
+        <item>Otto e</item>
+        <item>Nove e</item>
+        <item>Dieci e</item>
+        <item>Undici e</item>
+        <item>Dodici e</item>
+        <item>Tredici e</item>
+        <item>Quattordici e</item>
+        <item>Quindici e</item>
+        <item>Sedici e</item>
+        <item>Diciassette e</item>
+        <item>Diciotto e</item>
+        <item>Diciannove e</item>
+    </string-array>
+
+</resources>

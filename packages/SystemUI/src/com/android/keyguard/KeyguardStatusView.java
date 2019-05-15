@@ -107,6 +107,9 @@ public class KeyguardStatusView extends GridLayout implements
     private CustomAnalogClock mDotClockView;
     private LinearLayout mTextClock;
     private TextClock mClockView;
+    private TextView mTextClockV0;
+    private TextView mTextClockV1;
+    private TextView mTextClockV2;
     private View mClockSeparator;
     private TextView mOwnerInfo;
     private KeyguardSliceView mKeyguardSlice;
@@ -239,6 +242,9 @@ public class KeyguardStatusView extends GridLayout implements
         mSneekyClockView = findViewById(R.id.sneeky_clock_view);
         mDotClockView = findViewById(R.id.dot_clock_view);
         mTextClock = findViewById(R.id.custom_textclock_view);
+        mTextClockV0 = findViewById(R.id.custom_textclock_view0);
+        mTextClockV1 = findViewById(R.id.custom_textclock_view1);
+        mTextClockV2 = findViewById(R.id.custom_textclock_view2);
         mOwnerInfo = findViewById(R.id.owner_info);
         mKeyguardSlice = findViewById(R.id.keyguard_status_area);
         mClockSeparator = findViewById(R.id.clock_separator);
@@ -326,6 +332,10 @@ public class KeyguardStatusView extends GridLayout implements
                 R.dimen.keyguard_security_view_top_margin);
         mTextClock.setLayoutParams(textlayoutParams);
 
+        /* TODO: Switch case for diff clock variants */
+        mTextClockV0.setTextAppearance(getContext(), R.style.customtextclock_big_thin);
+        mTextClockV1.setTextAppearance(getContext(), R.style.customtextclock_big_thin);
+        mTextClockV2.setTextAppearance(getContext(), R.style.customtextclock_big_thin);
         layoutParams = (RelativeLayout.LayoutParams) mClockSeparator.getLayoutParams();
         layoutParams.topMargin = smallClock ? (int) mWidgetPadding : 0;
         layoutParams.bottomMargin = layoutParams.topMargin;
