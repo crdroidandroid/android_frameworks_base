@@ -88,7 +88,6 @@
     <dimen name="pie_status_text_top_margin_land">9dp</dimen>
 
     <!-- Lockscreen clock styles -->
-    <dimen name="customtextclock_fontsize">40dp</dimen>
-    <dimen name="custom_clock_left_padding">64dp</dimen>
-    <dimen name="custom_clock_top_margin">72dp</dimen>
+    <dimen name="customtextclock_fontsize">42dp</dimen>
+    <dimen name="custom_clock_right_padding">6dp</dimen>
 </resources>
