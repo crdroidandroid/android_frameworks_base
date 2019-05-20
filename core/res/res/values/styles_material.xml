@@ -207,7 +207,7 @@ please see styles_device_defaults.xml.
 
     <style name="TextAppearance.Material.Subhead">
         <item name="textSize">@dimen/text_size_subhead_material</item>
-        <item name="fontFamily">@string/font_family_subhead_material</item>
+        <item name="fontFamily">@string/config_headlineFontFamily</item>
         <item name="textColor">?attr/textColorPrimary</item>
     </style>
 
@@ -220,7 +220,7 @@ please see styles_device_defaults.xml.
 
     <style name="TextAppearance.Material.Body2">
         <item name="textSize">@dimen/text_size_body_2_material</item>
-        <item name="fontFamily">@string/font_family_body_2_material</item>
+        <item name="fontFamily">@string/config_headlineFontFamilyMedium</item>
         <item name="textColor">?attr/textColorPrimary</item>
     </style>
 
@@ -332,7 +332,7 @@ please see styles_device_defaults.xml.
     <style name="TextAppearance.Material.Widget.PopupMenu.Large" parent="TextAppearance.Material.Menu" />
     <style name="TextAppearance.Material.Widget.PopupMenu.Small" parent="TextAppearance.Material.Menu" />
     <style name="TextAppearance.Material.Widget.PopupMenu.Header">
-        <item name="fontFamily">@string/font_family_title_material</item>
+        <item name="fontFamily">@string/config_headlineFontFamilyMedium</item>
         <item name="textSize">@dimen/text_size_menu_header_material</item>
         <item name="textColor">?attr/colorAccent</item>
     </style>
