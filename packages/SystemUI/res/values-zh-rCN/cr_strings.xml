@@ -136,14 +136,14 @@
     <string name="global_action_restart_systemui">系统界面</string>
     <!-- Ambient Display Pixel-Like string -->
     <string name="ambientmusic_songinfo">%s 由 %s</string>
-    <string name="custom_text_clock_top_text_default">It\'s</string>
+    <string name="custom_text_clock_top_text_default">现在是</string>
     <string name="text_clock_zero_h_min">O\'</string>
-    <string name="text_clock_high">High</string>
-    <string name="text_clock_noon">Noon</string>
+    <string name="text_clock_high">高</string>
+    <string name="text_clock_noon">中午</string>
     <!-- TensString -->
-    <string name="text_clock_tens_string_twenty">Twenty</string>
-    <string name="text_clock_tens_string_thirty">Thirty</string>
-    <string name="text_clock_tens_string_forty">Forty</string>
+    <string name="text_clock_tens_string_twenty">二十</string>
+    <string name="text_clock_tens_string_thirty">三十</string>
+    <string name="text_clock_tens_string_forty">四十</string>
     <string name="text_clock_tens_string_fifty">Fifty</string>
     <string name="text_clock_tens_string_sixty">Sixty</string>
     <!-- UnitsString -->
