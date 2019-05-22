@@ -150,6 +150,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     private ImageButton mRingerIcon;
     private View mExpandRowsView;
     private ExpandableIndicator mExpandRows;
+    private ImageButton mSettingsIcon;
     private FrameLayout mZenIcon;
     private final List<VolumeRow> mRows = new ArrayList<>();
     private ConfigurableTexts mConfigurableTexts;
@@ -175,9 +176,6 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     private boolean mHovering = false;
     private boolean mExpanded;
     private boolean mVoiceCapable;
-    // Volume panel placement setting state.
-    private boolean mVolumePanelOnLeftDesired;
-    // Volume panel placement that is currently in use.
     private boolean mVolumePanelOnLeft;
 
     private boolean mMediaShowing;
@@ -225,6 +223,8 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     }
 
     private void initDialog() {
+        if (mDialog != null) mDialog.dismiss();
+
         mDialog = new CustomDialog(mContext);
 
         mConfigurableTexts = new ConfigurableTexts(mContext);
@@ -294,6 +294,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
         mZenIcon = mRinger.findViewById(R.id.dnd_icon);
         mExpandRowsView = mDialog.findViewById(R.id.expandable_indicator_container);
         mExpandRows = mDialog.findViewById(R.id.expandable_indicator);
+        mSettingsIcon = mDialog.findViewById(R.id.settings);
         if (!mVolumePanelOnLeft) {
             ((LinearLayout.LayoutParams) mRinger.getLayoutParams()).gravity = Gravity.RIGHT;
             ((FrameLayout.LayoutParams) mExpandRows.getLayoutParams()).gravity = Gravity.RIGHT;
@@ -302,6 +303,14 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
             ((LinearLayout.LayoutParams) mRinger.getLayoutParams()).gravity = Gravity.LEFT;
             ((FrameLayout.LayoutParams) mExpandRows.getLayoutParams()).gravity = Gravity.LEFT;
             mExpandRows.setRotation(-90);
+        }
+        if (mRingerShowing || (mNotificationShowing && !mNotificationLinked) ||
+               mAlarmShowing || mBTSCOShowing) {
+            mSettingsIcon.setVisibility(GONE);
+            mExpandRows.setVisibility(VISIBLE);
+        } else {
+            mExpandRows.setVisibility(GONE);
+            mSettingsIcon.setVisibility(VISIBLE);
         }
 
         if (mRows.isEmpty()) {
@@ -348,7 +357,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
             case VOLUME_PANEL_ON_LEFT:
-                mVolumePanelOnLeftDesired = TunerService.parseIntegerSwitch(newValue, isAudioPanelOnLeftSide());
+                mVolumePanelOnLeft = TunerService.parseIntegerSwitch(newValue, isAudioPanelOnLeftSide());
                 break;
             case AUDIO_PANEL_VIEW_MEDIA:
                 mMediaShowing = TunerService.parseIntegerSwitch(newValue, false);
@@ -381,14 +390,9 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
             default:
                 break;
         }
-        if (mVolumePanelOnLeft != mVolumePanelOnLeftDesired) {
-            mVolumePanelOnLeft = mVolumePanelOnLeftDesired;
-            // Reinit the panel dialog
-            initDialog();
-            mConfigurableTexts.update();
-        } else {
-            updateRowsH(getActiveRow());
-        }
+        // Reinit the panel dialog
+        initDialog();
+        mConfigurableTexts.update();
     }
 
     private boolean isAudioPanelOnLeftSide() {
@@ -457,15 +461,6 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
                 mDialogRowsView.addView(row.view);
             }
             updateVolumeRowH(row);
-        }
-    }
-
-    private void cleanExpandedRows() {
-        for (int i = mRows.size() - 1; i >= 0; i--) {
-            final VolumeRow row = mRows.get(i);
-            if (row.stream == AudioManager.STREAM_RING || row.stream == AudioManager.STREAM_ALARM) {
-                removeRow(row);
-            }
         }
     }
 
@@ -581,6 +576,13 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     public void initSettingsH() {
         mExpandRowsView.setVisibility(
                 mDeviceProvisionedController.isCurrentUserSetup() ? VISIBLE : GONE);
+        mSettingsIcon.setOnClickListener(v -> {
+            Events.writeEvent(mContext, Events.EVENT_SETTINGS_CLICK);
+            Intent intent = new Intent(Settings.ACTION_SOUND_SETTINGS);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            dismissH(DISMISS_REASON_SETTINGS_CLICKED);
+            Dependency.get(ActivityStarter.class).startActivity(intent, true /* dismissShade */);
+        });
         mExpandRows.setOnLongClickListener(v -> {
             Events.writeEvent(mContext, Events.EVENT_SETTINGS_CLICK);
             Intent intent = new Intent(Settings.ACTION_SOUND_SETTINGS);
@@ -590,17 +592,8 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
             return true;
         });
         mExpandRows.setOnClickListener(v -> {
-            if (!mExpanded) {
-                addRow(AudioManager.STREAM_RING, R.drawable.ic_volume_ringer,
-                        R.drawable.ic_volume_ringer_mute, true, false);
-                addRow(AudioManager.STREAM_ALARM, R.drawable.ic_volume_alarm,
-                        R.drawable.ic_volume_alarm_mute, true, false);
-                updateAllActiveRows();
-                mExpanded = true;
-            } else {
-                cleanExpandedRows();
-                mExpanded = false;
-            }
+            mExpanded = !mExpanded;
+            updateRowsH(getActiveRow());
             mExpandRows.setExpanded(mExpanded);
         });
     }
@@ -735,6 +728,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     protected void dismissH(int reason) {
         if (!mShowing) {
             // This may happen when dismissing an expanded panel, don't animate again
+            mExpanded = false;
             return;
         }
         mHandler.removeMessages(H.DISMISS);
@@ -751,7 +745,6 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
                 .withEndAction(() -> mHandler.postDelayed(() -> {
                     if (D.BUG) Log.d(TAG, "mDialog.dismiss()");
                     mDialog.dismiss();
-                    cleanExpandedRows();
                     mExpanded = false;
                     mExpandRows.setExpanded(mExpanded);
                 }, 50));
@@ -769,26 +762,26 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     }
 
     private boolean shouldBeVisibleH(VolumeRow row, VolumeRow activeRow) {
-        if (row.stream == AudioManager.STREAM_MUSIC && mMediaShowing) {
+        if (mExpanded && row.stream == AudioManager.STREAM_MUSIC && mMediaShowing) {
             return true;
         }
-        if (row.stream == AudioManager.STREAM_RING && mRingerShowing) {
+        if (mExpanded && row.stream == AudioManager.STREAM_RING && mRingerShowing) {
             return true;
         }
-        if (mVoiceCapable && row.stream == AudioManager.STREAM_NOTIFICATION) {
+        if (mExpanded && mVoiceCapable && row.stream == AudioManager.STREAM_NOTIFICATION) {
             if (mNotificationLinked)
                 return false;
 
             if (mNotificationShowing)
                 return true;
         }
-        if (row.stream == AudioManager.STREAM_ALARM && mAlarmShowing) {
+        if (mExpanded && row.stream == AudioManager.STREAM_ALARM && mAlarmShowing) {
             return true;
         }
-        if (row.stream == AudioManager.STREAM_VOICE_CALL && mVoiceShowing) {
+        if (mExpanded && row.stream == AudioManager.STREAM_VOICE_CALL && mVoiceShowing) {
             return true;
         }
-        if (row.stream == AudioManager.STREAM_BLUETOOTH_SCO && mBTSCOShowing) {
+        if (mExpanded && row.stream == AudioManager.STREAM_BLUETOOTH_SCO && mBTSCOShowing) {
             return true;
         }
 
@@ -828,9 +821,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
         for (final VolumeRow row : mRows) {
             final boolean isActive = row == activeRow;
             final boolean shouldBeVisible = shouldBeVisibleH(row, activeRow);
-            if (!mExpanded) {
-                Util.setVisOrGone(row.view, shouldBeVisible);
-            }
+            Util.setVisOrGone(row.view, shouldBeVisible);
             if (row.view.isShown()) {
                 updateVolumeRowTintH(row, isActive);
             }
