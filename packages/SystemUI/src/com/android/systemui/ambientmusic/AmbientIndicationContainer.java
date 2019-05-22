@@ -101,6 +101,9 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
     }
 
     private boolean shouldShow() {
+        if (!mKeyguard && !isAod())
+            return false;
+
         // if not dozing, show ambient music info only for Google Now Playing,
         // not for local media players if they are showing a lockscreen media notification
         final NotificationLockscreenUserManager lockscreenManager =
@@ -108,10 +111,9 @@ public class AmbientIndicationContainer extends AutoReinflateContainer {
         boolean filtered = lockscreenManager.shouldHideNotifications(
                 lockscreenManager.getCurrentUserId()) || lockscreenManager.shouldHideNotifications(
                         mStatusBar.getMediaManager().getMediaNotificationKey());
-        return (mKeyguard || isAod())
-                && ((mDozing && (mInfoAvailable || mNpInfoAvailable))
+        return (mDozing && (mInfoAvailable || mNpInfoAvailable))
                 || (!mDozing && mNpInfoAvailable && !mInfoAvailable)
-                || (!mDozing && mInfoAvailable && filtered));
+                || (!mDozing && mInfoAvailable && filtered);
     }
 
     private void setTickerMarquee(boolean enable, boolean extendPulseOnNewTrack) {
