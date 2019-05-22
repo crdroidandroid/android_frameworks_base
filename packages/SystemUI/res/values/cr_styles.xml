@@ -43,4 +43,12 @@
         <item name="android:fontFamily">@*android:string/config_headlineFontFamilyMedium</item>
         <item name="android:textStyle">normal</item>
     </style>
+
+    <!-- Battery percentage -->
+    <style name="BatteryPercentageTextStyle">
+        <item name="android:textSize">@dimen/qs_time_expanded_size</item>
+        <item name="android:fontFamily">@*android:string/config_headlineFontFamilyMedium</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>
