@@ -147,10 +147,11 @@ public class KeyguardClockPositionAlgorithm {
     }
 
     public void run(Result result) {
-        final int y = getClockY();
+        final int y = getClockY(mPanelExpansion);
         result.clockY = y;
         result.clockAlpha = getClockAlpha(y);
         result.stackScrollerPadding = y + mKeyguardStatusHeight;
+        result.stackScrollerPaddingExpanded = getClockY(1.0f) + mKeyguardStatusHeight;
         result.clockX = (int) interpolate(0, burnInPreventionOffsetX(), mDarkAmount);
     }
 
@@ -195,7 +196,7 @@ public class KeyguardClockPositionAlgorithm {
         return (int) y;
     }
 
-    private int getClockY() {
+    private int getClockY(float panelExpansion) {
         // Dark: Align the bottom edge of the clock at about half of the screen:
         float clockYDark = (mHasCustomClock ? getPreferredClockY() : getMaxClockY())
                 + burnInPreventionOffsetY();
@@ -205,7 +206,7 @@ public class KeyguardClockPositionAlgorithm {
         float clockYBouncer = -mKeyguardStatusHeight;
 
         // Move clock up while collapsing the shade
-        float shadeExpansion = Interpolators.FAST_OUT_LINEAR_IN.getInterpolation(mPanelExpansion);
+        float shadeExpansion = Interpolators.FAST_OUT_LINEAR_IN.getInterpolation(panelExpansion);
         float clockY = MathUtils.lerp(clockYBouncer, clockYRegular, shadeExpansion);
         clockYDark = MathUtils.lerp(clockYBouncer, clockYDark, shadeExpansion);
 
@@ -257,5 +258,10 @@ public class KeyguardClockPositionAlgorithm {
          * The top padding of the stack scroller, in pixels.
          */
         public int stackScrollerPadding;
+
+        /**
+         * The top padding of the stack scroller, in pixels when fully expanded.
+         */
+        public int stackScrollerPaddingExpanded;
     }
 }
