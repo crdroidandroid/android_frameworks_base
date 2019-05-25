@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@*android:string/config_headlineFontFamilyMedium"
-            android:textAppearance="@android:style/TextAppearance.Material.Body2"
+            android:textAppearance="@*android:style/TextAppearancePreferenceCategory"
             android:textAlignment="viewStart"
             android:textColor="?android:attr/colorAccent"
             android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"/>

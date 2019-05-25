@@ -201,6 +201,8 @@
 
   <!-- Custom accent color -->
   <java-symbol type="color" name="custom_accent_color" />
+  <java-symbol type="style" name="TextAppearancePreference" />
+  <java-symbol type="style" name="TextAppearancePreferenceCategory" />
 
   <!-- Custom fonts -->
   <java-symbol type="style" name="TextAppearanceTitle" />
