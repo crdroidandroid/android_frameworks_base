@@ -108,7 +108,7 @@ public class CustomTextClock extends TextView implements TunerService.Tunable {
         final TypedArray a = context.obtainStyledAttributes(
                 attrs, R.styleable.CustomTextClock);
 
-        handType = a.getInteger(R.styleable.CustomTextClock_HandType, 2);
+        handType = a.getInteger(R.styleable.CustomTextClock_HandType, 0);
 
         mContext = context;
         mCalendar = new Time();
@@ -166,7 +166,7 @@ public class CustomTextClock extends TextView implements TunerService.Tunable {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (handType == 2) {
+        if (handType == 0) {
             if (langHasChanged) {
                 setText(topText);
                 langHasChanged = false;
@@ -285,8 +285,8 @@ public class CustomTextClock extends TextView implements TunerService.Tunable {
             }
         }
 
-        switch(handType){
-            case 0:
+        switch(handType) {
+            case 1:
                 if (curLang == "nl" && minute <= 9 && minute != 0) {
                     setText(getIntStringMinOneLiner(minute));
                 } else {
@@ -294,38 +294,34 @@ public class CustomTextClock extends TextView implements TunerService.Tunable {
                 }
                 break;
 
-            case 1:
+            case 2:
+                String text = "";
+                boolean lanAvailable = !LangGuard.isAvailable(langExceptions, curLang);
                 if (minute == 0) {
-                    setText(UnitsString[0]);
+                    text = UnitsString[0];
                 }
-                if (!LangGuard.isAvailable(langExceptions,curLang) && minute != 0) {
-                    setVisibility(VISIBLE);
-                    setText(getIntStringMinFirstRow(minute));
+                if (lanAvailable && minute != 0) {
+                    text = getIntStringMinFirstRow(minute);
+                } else if (curLang == "nl" && minute <= 9 && minute != 0) {
+                    text = getIntStringHour(hour);
+                } else if (!lanAvailable) {
+                    text = getIntStringMinOneLiner(minute);
                 }
-                if (LangGuard.isAvailable(langExceptions,curLang)) {
-                    setVisibility(VISIBLE);
-                    setText(getIntStringMinOneLiner(minute));
-                }
-                if (curLang == "nl" && minute <= 9 && minute != 0) {
-                    setVisibility(VISIBLE);
-                    setText(getIntStringHour(hour));
-                }
-                break;
-
-            case 3:
-                if (!LangGuard.isAvailable(langExceptions,curLang)) {
-                    if (getIntStringMinSecondRow(minute).contains("Clock") || getIntStringMinSecondRow(minute).contains("null")) {
-                        setVisibility(GONE);
-                    } else { 
-                        setText(getIntStringMinSecondRow(minute));
-                        setVisibility(VISIBLE);
+                if (lanAvailable) {
+                    String minSecondRow = getIntStringMinSecondRow(minute);
+                    if (!minSecondRow.contains("Clock") &&
+                            !minSecondRow.equals("") &&
+                            !minSecondRow.contains("null")) {
+                        text = text + " " + minSecondRow;
                     }
-                } 
-                if (LangGuard.isAvailable(langExceptions,curLang)) { 
-                    setVisibility(GONE); 
-                } 
+                }
+                if (!text.equals("")) {
+                    setText(text);
+                    setVisibility(VISIBLE);
+                } else {
+                    setVisibility(GONE);
+                }
                 break;
-
             default:
                 break;
         }
