@@ -141,7 +141,7 @@
     <string name="text_clock_high">Alto</string>
     <string name="text_clock_noon">Mediodía</string>
     <!-- TensString -->
-    <string name="text_clock_tens_string_twenty">Ocho</string>
+    <string name="text_clock_tens_string_twenty">Veinte</string>
     <string name="text_clock_tens_string_thirty">Treinta</string>
     <string name="text_clock_tens_string_forty">Cuarenta</string>
     <string name="text_clock_tens_string_fifty">Cincuenta</string>
