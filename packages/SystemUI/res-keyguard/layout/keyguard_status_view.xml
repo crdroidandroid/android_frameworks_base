@@ -85,17 +85,9 @@
                     android:letterSpacing="0.03"
                     style="@style/customtextclock_big_thin"
                     android:text="@string/custom_text_clock_top_text_default"
-                    analog:HandType="2" />
-                <com.android.keyguard.CustomTextClock
-                    android:id="@+id/custom_textclock_view1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:letterSpacing="0.03"
-                    android:textColor="?attr/wallpaperTextColor"
-                    style="@style/customtextclock_big_thin"
                     analog:HandType="0" />
                 <com.android.keyguard.CustomTextClock
-                    android:id="@+id/custom_textclock_view2"
+                    android:id="@+id/custom_textclock_view1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.03"
@@ -109,7 +101,7 @@
                     android:letterSpacing="0.03"
                     android:textColor="?attr/wallpaperTextColor"
                     style="@style/customtextclock_big_thin"
-                    analog:HandType="3" />
+                    analog:HandType="2" />
             </LinearLayout>
 
             <com.android.keyguard.CustomAnalogClock
