@@ -20,6 +20,7 @@ import static com.android.systemui.DejankUtils.whitelistIpcs;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -45,6 +46,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+
+import com.airbnb.lottie.LottieAnimationView;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.app.IBatteryStats;
@@ -98,6 +101,7 @@ public class KeyguardIndicationController implements StateListener,
     private ViewGroup mIndicationArea;
     private KeyguardIndicationTextView mTextView;
     private KeyguardIndicationTextView mDisclosure;
+    private LottieAnimationView mChargingIndicationView;
     private final IBatteryStats mBatteryInfo;
     private final SettableWakeLock mWakeLock;
     private final DockManager mDockManager;
@@ -182,6 +186,8 @@ public class KeyguardIndicationController implements StateListener,
         mTextView = indicationArea.findViewById(R.id.keyguard_indication_text);
         mInitialTextColorState = mTextView != null ?
                 mTextView.getTextColors() : ColorStateList.valueOf(Color.WHITE);
+        mChargingIndicationView = (LottieAnimationView) indicationArea.findViewById(
+                R.id.charging_indication);
         mDisclosure = indicationArea.findViewById(R.id.keyguard_indication_enterprise_disclosure);
         mDisclosureMaxAlpha = mDisclosure.getAlpha();
         updateIndication(false /* animate */);
@@ -429,6 +435,7 @@ public class KeyguardIndicationController implements StateListener,
                         .format(mBatteryLevel / 100f);
                 mTextView.switchIndication(percentage);
             }
+            mChargingIndicationView.setVisibility(View.GONE);
             return;
         }
 
@@ -483,8 +490,18 @@ public class KeyguardIndicationController implements StateListener,
         }
         mTextView.setTextColor(isError ? Utils.getColorError(mContext)
                 : mInitialTextColorState);
+        updateChargingIndication();
         if (hideIndication) {
             mIndicationArea.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateChargingIndication() {
+        if (!mDozing && mBatteryPresent && mPowerPluggedIn) {
+            mChargingIndicationView.setVisibility(View.VISIBLE);
+            mChargingIndicationView.playAnimation();
+        } else {
+            mChargingIndicationView.setVisibility(View.GONE);
         }
     }
 
