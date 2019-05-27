@@ -56,6 +56,7 @@ import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.settingslib.Utils;
 import com.android.settingslib.fuelgauge.BatteryStatus;
+import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.broadcast.BroadcastDispatcher;
@@ -66,6 +67,7 @@ import com.android.systemui.statusbar.phone.KeyguardIndicationTextView;
 import com.android.systemui.statusbar.phone.LockscreenLockIconController;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.wakelock.SettableWakeLock;
 import com.android.systemui.util.wakelock.WakeLock;
 
@@ -82,7 +84,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class KeyguardIndicationController implements StateListener,
-        KeyguardStateController.Callback {
+        KeyguardStateController.Callback, TunerService.Tunable {
 
     private static final String TAG = "KeyguardIndication";
     private static final boolean DEBUG_CHARGING_SPEED = false;
@@ -93,6 +95,9 @@ public class KeyguardIndicationController implements StateListener,
     private static final long TRANSIENT_BIOMETRIC_ERROR_TIMEOUT = 1300;
     private static final float BOUNCE_ANIMATION_FINAL_Y = 0f;
 
+    private static final String LOCKSCREEN_CHARGING_ANIMATION =
+            "system:" + Settings.System.LOCKSCREEN_CHARGING_ANIMATION;
+
     private final Context mContext;
     private final BroadcastDispatcher mBroadcastDispatcher;
     private final KeyguardStateController mKeyguardStateController;
@@ -102,6 +107,7 @@ public class KeyguardIndicationController implements StateListener,
     private KeyguardIndicationTextView mTextView;
     private KeyguardIndicationTextView mDisclosure;
     private LottieAnimationView mChargingIndicationView;
+    private boolean mChargingIndication = true;
     private final IBatteryStats mBatteryInfo;
     private final SettableWakeLock mWakeLock;
     private final DockManager mDockManager;
@@ -179,6 +185,21 @@ public class KeyguardIndicationController implements StateListener,
         mKeyguardUpdateMonitor.registerCallback(mTickReceiver);
         mStatusBarStateController.addCallback(this);
         mKeyguardStateController.addCallback(this);
+
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, LOCKSCREEN_CHARGING_ANIMATION);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case LOCKSCREEN_CHARGING_ANIMATION:
+                mChargingIndication =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                break;
+            default:
+                break;
+        }
     }
 
     public void setIndicationArea(ViewGroup indicationArea) {
@@ -435,7 +456,7 @@ public class KeyguardIndicationController implements StateListener,
                         .format(mBatteryLevel / 100f);
                 mTextView.switchIndication(percentage);
             }
-            mChargingIndicationView.setVisibility(View.GONE);
+            updateChargingIndication();
             return;
         }
 
@@ -497,7 +518,7 @@ public class KeyguardIndicationController implements StateListener,
     }
 
     private void updateChargingIndication() {
-        if (!mDozing && mBatteryPresent && mPowerPluggedIn) {
+        if (mChargingIndication && !mDozing && mBatteryPresent && mPowerPluggedIn) {
             mChargingIndicationView.setVisibility(View.VISIBLE);
             mChargingIndicationView.playAnimation();
         } else {
