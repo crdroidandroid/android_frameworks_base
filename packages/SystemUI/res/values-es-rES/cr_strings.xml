@@ -136,7 +136,7 @@
     <string name="global_action_restart_systemui">UI del sistema</string>
     <!-- Ambient Display Pixel-Like string -->
     <string name="ambientmusic_songinfo">%s por %s</string>
-    <string name="custom_text_clock_top_text_default">Es</string>
+    <string name="custom_text_clock_top_text_default">Son las</string>
     <string name="text_clock_zero_h_min">O\'</string>
     <string name="text_clock_high">Alto</string>
     <string name="text_clock_noon">Mediodía</string>

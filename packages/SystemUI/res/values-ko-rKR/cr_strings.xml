@@ -190,8 +190,8 @@
     <string name="text_clock_units_string_h_thirteen">13</string>
     <string name="text_clock_units_string_h_fourteen">14</string>
     <string name="text_clock_units_string_h_fifteen">15</string>
-    <string name="text_clock_units_string_h_sixteen">Sixteen</string>
-    <string name="text_clock_units_string_h_seventeen">Seventeen</string>
-    <string name="text_clock_units_string_h_eighteen">Eighteen</string>
-    <string name="text_clock_units_string_h_nineteen">Nineteen</string>
+    <string name="text_clock_units_string_h_sixteen">16</string>
+    <string name="text_clock_units_string_h_seventeen">17</string>
+    <string name="text_clock_units_string_h_eighteen">18</string>
+    <string name="text_clock_units_string_h_nineteen">19</string>
 </resources>
