@@ -305,6 +305,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_COLUMNS_PORTRAIT;
     private static final String QS_COLUMNS_LANDSCAPE =
             "system:" + Settings.System.QS_COLUMNS_LANDSCAPE;
+    private static final String LOCKSCREEN_CHARGING_ANIMATION =
+            "system:" + Settings.System.LOCKSCREEN_CHARGING_ANIMATION;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -756,6 +758,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         tunerService.addTunable(this, QS_ROWS_LANDSCAPE);
         tunerService.addTunable(this, QS_COLUMNS_PORTRAIT);
         tunerService.addTunable(this, QS_COLUMNS_LANDSCAPE);
+        tunerService.addTunable(this, LOCKSCREEN_CHARGING_ANIMATION);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -5005,6 +5008,12 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mQSPanel != null) {
                     mQSPanel.updateResources();
                 }
+                break;
+            case LOCKSCREEN_CHARGING_ANIMATION:
+                boolean showChargingAnimation =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                if (mKeyguardIndicationController != null)
+                    mKeyguardIndicationController.updateChargingIndication(showChargingAnimation);
                 break;
             default:
                 break;
