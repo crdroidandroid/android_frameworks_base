@@ -41,6 +41,7 @@
             android:layout_gravity="center"
             android:clickable="false"
             app:lottie_fileName="keyguard_charging_indication.json"
+            app:lottie_loop="true"
             android:visibility="gone" />
 
         <com.android.systemui.statusbar.phone.KeyguardIndicationTextView
