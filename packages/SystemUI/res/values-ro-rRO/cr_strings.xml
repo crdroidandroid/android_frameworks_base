@@ -137,7 +137,7 @@
     <!-- Ambient Display Pixel-Like string -->
     <string name="ambientmusic_songinfo">%s de %s</string>
     <string name="custom_text_clock_top_text_default">Este</string>
-    <string name="text_clock_zero_h_min"></string>
+    <string name="text_clock_zero_h_min">şi</string>
     <string name="text_clock_high"></string>
     <string name="text_clock_noon">Prânz</string>
     <!-- TensString -->
