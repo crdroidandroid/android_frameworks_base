@@ -147,7 +147,7 @@
     <string name="text_clock_tens_string_fifty">Cincuenta</string>
     <string name="text_clock_tens_string_sixty">Sesenta</string>
     <!-- UnitsString -->
-    <string name="text_clock_units_string_clock">Punto</string>
+    <string name="text_clock_units_string_clock">Cero</string>
     <string name="text_clock_units_string_one">Uno</string>
     <string name="text_clock_units_string_two">Dos</string>
     <string name="text_clock_units_string_three">Tres</string>
