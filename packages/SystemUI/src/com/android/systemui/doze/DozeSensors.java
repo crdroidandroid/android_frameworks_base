@@ -554,7 +554,7 @@ public class DozeSensors {
             mHandler.post(mWakeLock.wrap(() -> {
                 final long now = SystemClock.uptimeMillis();
                 if (now < mDebounceFrom + mDebounce) {
-                    if (DEBUG) Log.d(TAG, "onSensorEvent dropped: " + triggerEventToString(event));
+                    Log.d(TAG, "onSensorEvent dropped: " + triggerEventToString(event));
                     return;
                 }
                 if (DEBUG) Log.d(TAG, "onSensorEvent: " + triggerEventToString(event));
