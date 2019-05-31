@@ -17,4 +17,7 @@
 <resources>
 
     <color name="qs_icon_active_color">#ffffffff</color>
+
+    <!-- Custom accent color -->
+    <color name="custom_accent_color">@color/accent_device_default_light</color>
 </resources>

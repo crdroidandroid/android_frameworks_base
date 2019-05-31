@@ -16,4 +16,10 @@
 -->
 <resources>
 
+    <!-- Custom fonts -->
+    <style name="TextAppearanceTitle">
+        <item name="textSize">@dimen/text_size_title_material</item>
+        <item name="fontFamily">@string/config_headlineFontFamilyMedium</item>
+        <item name="textColor">?attr/textColorPrimary</item>
+    </style>
 </resources>
