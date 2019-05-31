@@ -138,7 +138,7 @@
     <string name="ambientmusic_songinfo">%s z %s</string>
     <string name="custom_text_clock_top_text_default">Je</string>
     <string name="text_clock_zero_h_min">Celá</string>
-    <string name="text_clock_high">High</string>
+    <string name="text_clock_high"></string>
     <string name="text_clock_noon">Poledne</string>
     <!-- TensString -->
     <string name="text_clock_tens_string_twenty">Dvacet</string>
