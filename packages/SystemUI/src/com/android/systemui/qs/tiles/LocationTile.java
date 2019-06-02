@@ -102,18 +102,49 @@ public class LocationTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleClick() {
-        final boolean wasEnabled = mState.value;
-        MetricsLogger.action(mContext, getMetricsCategory(), !wasEnabled);
-        mController.setLocationEnabled(!wasEnabled);
+        if (mKeyguard.isSecure() && mKeyguard.isShowing()) {
+            Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() -> {
+                mHost.openPanels();
+                switchCurrentState();
+            });
+            return;
+        }
+        switchCurrentState();
+    }
+
+    private void switchCurrentState() {
+        int currentState = mController.getLocationCurrentState();
+        switch (currentState) {
+            case Settings.Secure.LOCATION_MODE_OFF:
+            default:
+                //from off to high precision
+                mController.setLocationMode(Settings.Secure.LOCATION_MODE_HIGH_ACCURACY);
+                break;
+            case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
+                //from high precision to battery saving
+                mController.setLocationMode(Settings.Secure.LOCATION_MODE_BATTERY_SAVING);
+                break;
+            case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
+                //from battery saving to sensor only
+                mController.setLocationMode(Settings.Secure.LOCATION_MODE_SENSORS_ONLY);
+                break;
+            case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
+                //from sensor only to off
+                mController.setLocationMode(Settings.Secure.LOCATION_MODE_OFF);
+                break;
+        }
     }
 
     @Override
     protected void handleSecondaryClick() {
         if (mKeyguard.isSecure() && mKeyguard.isShowing()) {
             Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() -> {
-                final boolean wasEnabled = mState.value;
                 mHost.openPanels();
-                mController.setLocationEnabled(!wasEnabled);
+                final boolean wasEnabled = mState.value;
+                if (!wasEnabled) {
+                    mController.setLocationEnabled(!wasEnabled);
+                }
+                showDetail(true);
             });
             return;
         }
@@ -131,17 +162,11 @@ public class LocationTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        if (state.slash == null) {
-            state.slash = new SlashState();
-        }
         int currentState = arg instanceof Integer ? (Integer) arg :
                 mController.getLocationCurrentState();
         final boolean newValue = currentState != Settings.Secure.LOCATION_MODE_OFF;
         final boolean valueChanged = state.value != newValue;
 
-        // Work around for bug 15916487: don't show location tile on top of lock screen. After the
-        // bug is fixed, this should be reverted to only hiding it on secure lock screens:
-        // state.visible = !(mKeyguard.isSecure() && mKeyguard.isShowing());
         state.value = newValue;
         state.dualTarget = true;
         checkIfRestrictionEnforcedByAdminOnly(state, UserManager.DISALLOW_SHARE_LOCATION);
@@ -149,7 +174,6 @@ public class LocationTile extends QSTileImpl<BooleanState> {
             checkIfRestrictionEnforcedByAdminOnly(state, UserManager.DISALLOW_CONFIG_LOCATION);
         }
         state.label = mContext.getString(getStateLabelRes(currentState));
-        state.slash.isSlashed = currentState == Settings.Secure.LOCATION_MODE_OFF;
         switch (currentState) {
             case Settings.Secure.LOCATION_MODE_OFF:
                 state.contentDescription = mContext.getString(
