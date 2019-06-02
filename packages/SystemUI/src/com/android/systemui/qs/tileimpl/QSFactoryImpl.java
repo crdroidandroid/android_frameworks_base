@@ -50,6 +50,7 @@ import com.android.systemui.qs.tiles.LteTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.MusicTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
+import com.android.systemui.qs.tiles.OneHandTile;
 import com.android.systemui.qs.tiles.OnTheGoTile;
 import com.android.systemui.qs.tiles.PieTile;
 import com.android.systemui.qs.tiles.ProfilesTile;
@@ -172,6 +173,8 @@ public class QSFactoryImpl implements QSFactory {
                 return new SoundTile(mHost);
             case "lte":
                 return new LteTile(mHost);
+            case "onehand":
+                return new OneHandTile(mHost);
         }
 
         // Intent tiles.
