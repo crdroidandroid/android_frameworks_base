@@ -518,6 +518,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.android.internal.util.crdroid.GamingModeController;
 import com.android.internal.util.crdroid.cutout.CutoutFullscreenController;
 
 public class ActivityManagerService extends IActivityManager.Stub
@@ -2026,6 +2027,8 @@ public class ActivityManagerService extends IActivityManager.Stub
     private CutoutFullscreenController mCutoutFullscreenController;
 
     final boolean mAllowAppBroadcast;
+
+    private GamingModeController mGamingModeController;
 
     /**
      * Current global configuration information. Contains general settings for the entire system,
@@ -4597,6 +4600,17 @@ public class ActivityManagerService extends IActivityManager.Stub
                         app.info.dataDir, invokeWith, true,
                         new String[] {PROC_START_SEQ_IDENT + app.startSeq});
             }
+ 
+            if (mGamingModeController != null) {
+              if (mGamingModeController.gamingModeMaster()) {
+                if (hostingType.equals("activity")) {
+                    if (startResult != null) {
+                         mGamingModeController.noteStarted(app.info.packageName);
+                    }
+                }
+              }
+            }
+
             checkTime(startTime, "startProcess: returned from zygote!");
             return startResult;
         } finally {
@@ -13074,6 +13088,9 @@ public class ActivityManagerService extends IActivityManager.Stub
 
         // Force full screen for devices with cutout
         mCutoutFullscreenController = new CutoutFullscreenController(mContext);
+
+        // Gaming mode provider
+        mGamingModeController = new GamingModeController(mContext);
     }
 
     void startPersistentApps(int matchFlags) {
@@ -21647,6 +21664,9 @@ public class ActivityManagerService extends IActivityManager.Stub
                                         mAppWarnings.onPackageUninstalled(ssp);
                                         mCompatModePackages.handlePackageUninstalledLocked(ssp);
                                         mBatteryStatsService.notePackageUninstalled(ssp);
+                                        if (mGamingModeController != null) {
+                                             mGamingModeController.notePackageUninstalled(ssp);
+                                        }
                                     }
                                 } else {
                                     if (killProcess) {
@@ -25124,6 +25144,20 @@ public class ActivityManagerService extends IActivityManager.Stub
                 mBatteryStatsService.noteEvent(BatteryStats.HistoryItem.EVENT_TOP_START,
                         mCurResumedPackage, mCurResumedUid);
             }
+
+            if (mCurResumedPackage != null) {
+                if (mGamingModeController != null) {
+                    if (mGamingModeController.gamingModeMaster()) {
+                        if(mGamingModeController.topAppChanged(mCurResumedPackage) && !mGamingModeController.getEnabled()) {
+                              Settings.System.putInt(mContext.getContentResolver(),
+                                 Settings.System.ENABLE_GAMING_MODE, 1);
+                         } else {
+                              Settings.System.putInt(mContext.getContentResolver(),
+                                 Settings.System.ENABLE_GAMING_MODE, 0);
+                         }
+                    }
+                }
+           }
         }
         return act;
     }

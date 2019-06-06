@@ -154,4 +154,11 @@
   <!-- System-wide recents task view roundness to apply to all the recents view.
        this value will apply on Launcher3 quickstep view and also the normal recents -->
   <java-symbol type="dimen" name="recents_task_view_rounded_corners_radius" />
+
+  <!-- Gaming mode -->
+  <java-symbol type="drawable" name="ic_gaming_notif" />
+  <java-symbol type="string" name="gaming_notif_ticker" />
+  <java-symbol type="string" name="notification_channel_gaming" />
+  <java-symbol type="string" name="gaming_mode_enabled_toast" />
+  <java-symbol type="string" name="gaming_mode_disabled_toast" />
 </resources>
