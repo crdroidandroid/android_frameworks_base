@@ -53,4 +53,10 @@
 
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Tap blank area to exit One handed mode</string>
+
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Gaming mode</string>
+    <string name="gaming_notif_ticker">Gaming mode enabled</string>
+    <string name="gaming_mode_enabled_toast">Gaming mode activated</string>
+    <string name="gaming_mode_disabled_toast">Gaming mode deactivated</string>
 </resources>
