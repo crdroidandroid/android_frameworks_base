@@ -39,6 +39,7 @@ public class NotificationChannels extends SystemUI {
     public static String BATTERY     = "BAT";
     public static String HINTS       = "HNT";
     public static String SCREENRECORDS = "SCR";
+    public static String GAMING = "GAM";
 
     public static void createAll(Context context) {
         final NotificationManager nm = context.getSystemService(NotificationManager.class);
@@ -74,6 +75,12 @@ public class NotificationChannels extends SystemUI {
                 HINTS,
                 context.getString(R.string.notification_channel_hints),
                 NotificationManager.IMPORTANCE_DEFAULT);
+
+        final NotificationChannel gaming = new NotificationChannel(
+                GAMING,
+                context.getString(R.string.notification_channel_gaming),
+                NotificationManager.IMPORTANCE_LOW);
+
         // No need to bypass DND.
 
         nm.createNotificationChannels(Arrays.asList(
@@ -85,6 +92,7 @@ public class NotificationChannels extends SystemUI {
                         nm.getNotificationChannel(SCREENSHOTS_LEGACY)),
                 batteryChannel,
                 hint,
+                gaming,
                 new NotificationChannel(
                         SCREENRECORDS,
                         context.getString(R.string.notification_channel_screenrecord),
