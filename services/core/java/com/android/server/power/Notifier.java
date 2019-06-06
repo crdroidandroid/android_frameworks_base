@@ -152,10 +152,6 @@ public class Notifier {
     // True if the device should suspend when the screen is off due to proximity.
     private final boolean mSuspendWhenScreenOffDueToProximityConfig;
 
-    // True if the device should show the wireless charging animation when the device
-    // begins charging wirelessly
-    private final boolean mShowWirelessChargingAnimationConfig;
-
     // Encapsulates interactivity information about a particular display group.
     private static class Interactivity {
         public boolean isInteractive = true;
@@ -225,8 +221,6 @@ public class Notifier {
 
         mSuspendWhenScreenOffDueToProximityConfig = context.getResources().getBoolean(
                 com.android.internal.R.bool.config_suspendWhenScreenOffDueToProximity);
-        mShowWirelessChargingAnimationConfig = context.getResources().getBoolean(
-                com.android.internal.R.bool.config_showBuiltinWirelessChargingAnim);
 
         mWakeLockLog = new WakeLockLog(context);
 
@@ -1023,21 +1017,27 @@ public class Notifier {
     }
 
     private void showWirelessChargingStarted(int batteryLevel, @UserIdInt int userId) {
+        final boolean animationEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.CHARGING_ANIMATION, 1, userId) == 1;
+
         // play sounds + haptics
         playChargingStartedFeedback(userId, true /* wireless */);
 
         // show animation
-        if (mShowWirelessChargingAnimationConfig && mStatusBarManagerInternal != null) {
+        if (animationEnabled && mStatusBarManagerInternal != null) {
             mStatusBarManagerInternal.showChargingAnimation(batteryLevel);
         }
         mSuspendBlocker.release();
     }
 
     private void showWiredChargingStarted(int batteryLevel, @UserIdInt int userId) {
+        final boolean animationEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.CHARGING_ANIMATION, 1, userId) == 1;
+
         playChargingStartedFeedback(userId, false /* wireless */);
 
         // show animation
-        if (mStatusBarManagerInternal != null) {
+        if (animationEnabled && mStatusBarManagerInternal != null) {
             mStatusBarManagerInternal.showChargingAnimation(batteryLevel);
         }
         mSuspendBlocker.release();
