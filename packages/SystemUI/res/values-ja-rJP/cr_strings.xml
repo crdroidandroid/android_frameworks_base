@@ -17,7 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time">急速充電中（充電完了まで&lt;xliff:g id="charging_time_left" example="4 hours and 2 minutes"&gt;）</string>
+    <string name="keyguard_indication_dash_charging_time">急速充電中（充電完了まで<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g>）</string>
     <string name="keyguard_plugged_in_dash_charging">急速充電中</string>
     <!-- Screenrecord Notification Ticker -->
     <string name="screenrecord_notif_ticker">画面を録画中です</string>
@@ -187,5 +187,5 @@
     <string name="text_clock_units_string_h_eighteen">Eighteen</string>
     <string name="text_clock_units_string_h_nineteen">Nineteen</string>
     <!-- OneHand mode QS tile -->
-    <string name="qs_onehand_label">One Handed mode</string>
+    <string name="qs_onehand_label">片手モード</string>
 </resources>
