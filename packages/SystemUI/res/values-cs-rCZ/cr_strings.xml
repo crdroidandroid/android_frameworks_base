@@ -187,5 +187,5 @@
     <string name="text_clock_units_string_h_eighteen">Osmnáct</string>
     <string name="text_clock_units_string_h_nineteen">Devatenáct</string>
     <!-- OneHand mode QS tile -->
-    <string name="qs_onehand_label">One Handed mode</string>
+    <string name="qs_onehand_label">Ovládání jednou rukou</string>
 </resources>
