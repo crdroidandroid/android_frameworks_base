@@ -187,5 +187,5 @@
     <string name="text_clock_units_string_h_eighteen">On sekiz</string>
     <string name="text_clock_units_string_h_nineteen">On dokuz</string>
     <!-- OneHand mode QS tile -->
-    <string name="qs_onehand_label">One Handed mode</string>
+    <string name="qs_onehand_label">Tek el modu</string>
 </resources>
