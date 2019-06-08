@@ -186,4 +186,6 @@
     <string name="text_clock_units_string_h_seventeen">Șaptesprezece</string>
     <string name="text_clock_units_string_h_eighteen">Optsprezece</string>
     <string name="text_clock_units_string_h_nineteen">Nouăsprezece</string>
+    <!-- OneHand mode QS tile -->
+    <string name="qs_onehand_label">Modul \"o singură mână\"</string>
 </resources>
