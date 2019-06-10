@@ -187,5 +187,5 @@
     <string name="text_clock_units_string_h_eighteen">Васямнаццаць</string>
     <string name="text_clock_units_string_h_nineteen">Дзевятнаццаць</string>
     <!-- OneHand mode QS tile -->
-    <string name="qs_onehand_label">One Handed mode</string>
+    <string name="qs_onehand_label">Рэжым кіравання адной рукой</string>
 </resources>
