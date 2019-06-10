@@ -128,6 +128,7 @@ public class BatterySaverTile extends QSTileImpl<BooleanState> implements
             super(context, frameColor);
             // Show as full so it's always uniform color
             super.setBatteryLevel(MAX_BATTERY);
+            setMeterStyle(BatteryMeterDrawableBase.BATTERY_STYLE_PORTRAIT);
             setPowerSave(true);
             setCharging(false);
             setPowerSaveAsColorError(false);
