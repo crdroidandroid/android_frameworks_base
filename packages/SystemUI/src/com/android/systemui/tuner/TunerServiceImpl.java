@@ -47,7 +47,6 @@ import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.policy.Clock;
 import com.android.systemui.util.leak.LeakDetector;
-import com.android.systemui.volume.VolumeDialogImpl;
 
 import lineageos.providers.LineageSettings;
 
