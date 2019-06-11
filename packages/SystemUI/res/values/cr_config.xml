@@ -21,4 +21,7 @@
     <integer name="config_qs_rows_portrait">2</integer>
     <integer name="config_qs_columns_landscape">5</integer>
     <integer name="config_qs_rows_landscape">1</integer>
+
+    <!-- Allow devices override audio panel location to the left side -->
+    <bool name="config_audioPanelOnLeftSide">false</bool>
 </resources>
