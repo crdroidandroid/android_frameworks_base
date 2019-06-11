@@ -112,13 +112,13 @@ import java.util.List;
  *
  * Methods ending in "H" must be called on the (ui) handler.
  */
-public class VolumeDialogImpl implements VolumeDialog {
+public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     private static final String TAG = Util.logTag(VolumeDialogImpl.class);
 
     private static final long USER_ATTEMPT_GRACE_PERIOD = 1000;
     private static final int UPDATE_ANIMATION_DURATION = 80;
 
-    public static final String SETTING_VOLUME_PANEL_ON_LEFT =
+    public static final String VOLUME_PANEL_ON_LEFT =
             "lineagesecure:" + LineageSettings.Secure.VOLUME_PANEL_ON_LEFT;
 
     private final Context mContext;
@@ -169,7 +169,8 @@ public class VolumeDialogImpl implements VolumeDialog {
         mKeyguard = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
         mAccessibilityMgr = Dependency.get(AccessibilityManagerWrapper.class);
         mDeviceProvisionedController = Dependency.get(DeviceProvisionedController.class);
-        Dependency.get(TunerService.class).addTunable(mTunable, SETTING_VOLUME_PANEL_ON_LEFT);
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, VOLUME_PANEL_ON_LEFT);
     }
 
     public void init(int windowType, Callback callback) {
@@ -306,14 +307,16 @@ public class VolumeDialogImpl implements VolumeDialog {
         return mVolumePanelOnLeft ? -x : x;
     }
 
-    private final TunerService.Tunable mTunable = new TunerService.Tunable() {
-        @Override
-        public void onTuningChanged(String key, String newValue) {
-            if (key.equals(SETTING_VOLUME_PANEL_ON_LEFT)) {
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case VOLUME_PANEL_ON_LEFT:
                 mVolumePanelOnLeftDesired = TunerService.parseIntegerSwitch(newValue, false);
-            }
+                break;
+            default:
+                break;
         }
-    };
+    }
 
     protected ViewGroup getDialogView() {
         return mDialogView;
