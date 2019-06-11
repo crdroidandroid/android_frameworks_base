@@ -129,7 +129,7 @@ import java.util.List;
  * Methods ending in "H" must be called on the (ui) handler.
  */
 public class VolumeDialogImpl implements VolumeDialog,
-        ConfigurationController.ConfigurationListener {
+        ConfigurationController.ConfigurationListener, TunerService.Tunable {
     private static final String TAG = Util.logTag(VolumeDialogImpl.class);
 
     private static final String VOLUME_PANEL_ON_LEFT =
@@ -192,7 +192,6 @@ public class VolumeDialogImpl implements VolumeDialog,
     private boolean mHasSeenODICaptionsTooltip;
     private ViewStub mODICaptionsTooltipViewStub;
     private View mODICaptionsTooltipView = null;
-    private TunerService mTunerService;
 
     // Volume panel placement left or right
     private boolean mVolumePanelOnLeft;
@@ -211,11 +210,9 @@ public class VolumeDialogImpl implements VolumeDialog,
         mShowActiveStreamOnly = showActiveStreamOnly();
         mHasSeenODICaptionsTooltip =
                 Prefs.getBoolean(context, Prefs.Key.HAS_SEEN_ODI_CAPTIONS_TOOLTIP, false);
-        mTunerService = Dependency.get(TunerService.class);
 
-        if (!mShowActiveStreamOnly) {
-            mTunerService.addTunable(mTunable, VOLUME_PANEL_ON_LEFT);
-        }
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, VOLUME_PANEL_ON_LEFT);
     }
 
     @Override
@@ -408,10 +405,10 @@ public class VolumeDialogImpl implements VolumeDialog,
         return mVolumePanelOnLeft ? -x : x;
     }
 
-    private final TunerService.Tunable mTunable = new TunerService.Tunable() {
-        @Override
-        public void onTuningChanged(String key, String newValue) {
-            if (VOLUME_PANEL_ON_LEFT.equals(key)) {
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case VOLUME_PANEL_ON_LEFT:
                 final boolean volumePanelOnLeft = TunerService.parseIntegerSwitch(newValue, false);
                 if (mVolumePanelOnLeft != volumePanelOnLeft) {
                     mVolumePanelOnLeft = volumePanelOnLeft;
@@ -419,9 +416,11 @@ public class VolumeDialogImpl implements VolumeDialog,
                         mControllerCallbackH.onConfigurationChanged();
                     });
                 }
-            }
+                break;
+            default:
+                break;
         }
-    };
+    }
 
     protected ViewGroup getDialogView() {
         return mDialogView;
