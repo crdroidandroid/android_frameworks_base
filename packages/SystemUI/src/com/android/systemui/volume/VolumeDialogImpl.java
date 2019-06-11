@@ -403,7 +403,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
             case VOLUME_PANEL_ON_LEFT:
-                final boolean volumePanelOnLeft = TunerService.parseIntegerSwitch(newValue, false);
+                final boolean volumePanelOnLeft = TunerService.parseIntegerSwitch(newValue, isAudioPanelOnLeftSide());
                 if (mVolumePanelOnLeft != volumePanelOnLeft) {
                     mVolumePanelOnLeft = volumePanelOnLeft;
                     mHandler.post(() -> {
@@ -415,6 +415,10 @@ public class VolumeDialogImpl implements VolumeDialog,
             default:
                 break;
         }
+    }
+
+    private boolean isAudioPanelOnLeftSide() {
+        return mContext.getResources().getBoolean(R.bool.config_audioPanelOnLeftSide);
     }
 
     protected ViewGroup getDialogView() {
