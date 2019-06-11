@@ -311,11 +311,15 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
             case VOLUME_PANEL_ON_LEFT:
-                mVolumePanelOnLeftDesired = TunerService.parseIntegerSwitch(newValue, false);
+                mVolumePanelOnLeftDesired = TunerService.parseIntegerSwitch(newValue, isAudioPanelOnLeftSide());
                 break;
             default:
                 break;
         }
+    }
+
+    private boolean isAudioPanelOnLeftSide() {
+        return mContext.getResources().getBoolean(R.bool.config_audioPanelOnLeftSide);
     }
 
     protected ViewGroup getDialogView() {
