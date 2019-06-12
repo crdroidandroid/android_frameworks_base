@@ -16,12 +16,11 @@
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          style="?android:attr/preferenceCategoryStyle"
+          style="@style/TextAppearancePreferenceCategory"
           android:layout_width="match_parent"
           android:layout_height="36dp"
           android:gravity="center_vertical"
           android:paddingStart="?android:attr/listPreferredItemPaddingStart"
           android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
           android:textColor="?android:attr/colorAccent"
-          android:textStyle="bold"
           tools:text="@string/language_picker_section_all"/>
