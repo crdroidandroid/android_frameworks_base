@@ -50,6 +50,7 @@ import android.database.ContentObserver;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
@@ -127,7 +128,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     private static final int MESSAGE_ADD_PROXY_DELAYED = 400;
     private static final int MESSAGE_BIND_PROFILE_SERVICE = 401;
     private static final int MESSAGE_RESTORE_USER_SETTING = 500;
-
+    private static final int WAIT_ENABLE = 600;
     private static final int RESTORE_SETTING_TO_ON = 1;
     private static final int RESTORE_SETTING_TO_OFF = 0;
 
@@ -166,6 +167,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     private boolean mQuietEnable = false;
     private boolean mEnable;
 
+    private Handler mPostMessageHandler;
     private static CharSequence timeToLog(long timestamp) {
         return android.text.format.DateFormat.format("MM-dd HH:mm:ss", timestamp);
     }
@@ -371,6 +373,25 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     BluetoothManagerService(Context context) {
         mHandler = new BluetoothHandler(IoThread.get().getLooper());
 
+        HandlerThread bgthread = new HandlerThread("BluetoothManagerService_postMessage",
+                                                   Process.THREAD_PRIORITY_BACKGROUND);
+        bgthread.start();
+        mPostMessageHandler = new Handler(bgthread.getLooper(), new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case WAIT_ENABLE:
+                        Slog.d(TAG, "WAIT_ENABLE");
+                        waitForOnOff(false, true);
+                        mHandler.sendMessage(mHandler.obtainMessage(MESSAGE_ENABLE, msg.arg1, 0));
+                        mPostMessageHandler.removeMessages(WAIT_ENABLE);
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
         mContext = context;
 
         mPermissionReviewRequired = context.getResources()
@@ -1577,7 +1598,6 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                         // message. On slower devices, that delay needs to be
                         // on the order of (2 * SERVICE_RESTART_TIME_MS).
                         //
-                        waitForOnOff(false, true);
                         Message restartMsg =
                                 mHandler.obtainMessage(MESSAGE_RESTART_BLUETOOTH_SERVICE);
                         mHandler.sendMessageDelayed(restartMsg, 2 * SERVICE_RESTART_TIME_MS);
@@ -2195,6 +2215,11 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     }
 
     private void sendEnableMsg(boolean quietMode, int reason, String packageName) {
+        if (mBluetooth != null) {
+            mPostMessageHandler.sendMessage(mPostMessageHandler.obtainMessage(WAIT_ENABLE,
+                    quietMode ? 1 : 0));
+            return;
+        }
         mHandler.sendMessage(mHandler.obtainMessage(MESSAGE_ENABLE, quietMode ? 1 : 0, 0));
         addActiveLog(reason, packageName, true);
         mLastEnabledTime = SystemClock.elapsedRealtime();
