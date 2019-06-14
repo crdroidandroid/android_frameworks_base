@@ -206,4 +206,7 @@
 
   <!-- Custom fonts -->
   <java-symbol type="style" name="TextAppearanceTitle" />
+
+  <!-- Custom styles -->
+  <java-symbol type="style" name="CustomThemeDeviceDefaultDialogAlert" />
 </resources>
