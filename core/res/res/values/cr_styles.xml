@@ -32,4 +32,7 @@
         <item name="fontFamily">@string/config_headlineFontFamilyMedium</item>
         <item name="textColor">?attr/textColorPrimary</item>
     </style>
+
+    <!-- Custom styles -->
+    <style name="CustomThemeDeviceDefaultDialogAlert" parent="@*android:style/Theme.DeviceDefault.Light.Dialog.Alert" />
 </resources>
