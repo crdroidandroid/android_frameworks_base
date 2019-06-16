@@ -108,6 +108,11 @@ public class ThemeAccentUtils {
         "com.android.systemui.qstile.teardrop", // 17
         "com.android.systemui.qstile.wavey", // 18
         "com.android.systemui.qstile.cookie", //19
+        "com.android.systemui.qstile.cosmos", //20
+        "com.android.systemui.qstile.dividedcircle", //21
+        "com.android.systemui.qstile.justicons", //22
+        "com.android.systemui.qstile.neonlike", //23
+        "com.android.systemui.qstile.triangle", //24
     };
 
     // QS Header Styles
