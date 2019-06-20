@@ -211,4 +211,7 @@
  
     <!-- Free ram -->
     <string name="recents_free_ram">Free RAM: %1$d MB</string>
+
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
 </resources>
