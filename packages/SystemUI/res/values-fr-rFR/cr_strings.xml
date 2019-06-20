@@ -188,4 +188,6 @@
     <string name="text_clock_units_string_h_nineteen">Dix-neuf</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Mode une main</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
 </resources>
