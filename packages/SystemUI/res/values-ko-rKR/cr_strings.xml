@@ -188,4 +188,6 @@
     <string name="text_clock_units_string_h_nineteen">19</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">한 손 조작 모드</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
 </resources>
