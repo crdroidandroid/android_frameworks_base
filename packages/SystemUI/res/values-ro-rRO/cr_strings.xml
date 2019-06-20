@@ -188,4 +188,6 @@
     <string name="text_clock_units_string_h_nineteen">Nouăsprezece</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Modul \"o singură mână\"</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
 </resources>
