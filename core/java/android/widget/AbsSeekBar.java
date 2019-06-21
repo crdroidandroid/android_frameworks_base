@@ -81,6 +81,7 @@ public abstract class AbsSeekBar extends ProgressBar {
     private int mScaledTouchSlop;
     private float mTouchDownX;
     private boolean mIsDragging;
+    private float mTouchThumbOffset = 0.0f;
 
     public AbsSeekBar(Context context) {
         super(context);
@@ -767,6 +768,14 @@ public abstract class AbsSeekBar extends ProgressBar {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if (mThumb != null) {
+                    final int availableWidth = getWidth() - mPaddingLeft - mPaddingRight;
+                    mTouchThumbOffset = (getProgress() - getMin()) / (float) (getMax()
+                        - getMin()) - (event.getX() - mPaddingLeft) / availableWidth;
+                    if (Math.abs(mTouchThumbOffset * availableWidth) > getThumbOffset()) {
+                        mTouchThumbOffset = 0;
+                    }
+                }
                 if (isInScrollingContainer()) {
                     mTouchDownX = event.getX();
                 } else {
@@ -848,7 +857,8 @@ public abstract class AbsSeekBar extends ProgressBar {
             } else if (x < mPaddingLeft) {
                 scale = 1.0f;
             } else {
-                scale = (availableWidth - x + mPaddingLeft) / (float) availableWidth;
+                scale = (availableWidth - x + mPaddingLeft) / (float) availableWidth
+                    + mTouchThumbOffset;
                 progress = mTouchProgressOffset;
             }
         } else {
@@ -857,7 +867,7 @@ public abstract class AbsSeekBar extends ProgressBar {
             } else if (x > width - mPaddingRight) {
                 scale = 1.0f;
             } else {
-                scale = (x - mPaddingLeft) / (float) availableWidth;
+                scale = (x - mPaddingLeft) / (float) availableWidth + mTouchThumbOffset;
                 progress = mTouchProgressOffset;
             }
         }
