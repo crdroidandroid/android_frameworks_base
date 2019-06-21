@@ -128,8 +128,8 @@
     <string name="global_action_restart_systemui">SystemUI</string>
     <!-- Ambient Display Pixel-Like string -->
     <string name="ambientmusic_songinfo">%s von %s</string>
-    <string name="custom_text_clock_top_text_default">It\'s</string>
-    <string name="text_clock_zero_h_min">O\'</string>
+    <string name="custom_text_clock_top_text_default">Es ist</string>
+    <string name="text_clock_zero_h_min"></string>
     <string name="text_clock_high">High</string>
     <string name="text_clock_noon">Noon</string>
     <!-- TensString -->
