@@ -17,7 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Appuyez longuement sur le bouton d\'alimentation pour interagir</string>
+    <string name="pocket_lock_message_long_press">Appui prolongé sur le bouton d\'alimentation pour interagir</string>
     <!-- AOKP custom system animations -->
     <string name="animation_fade">Fondu</string>
     <string name="animation_slide_right">Faites glisser à droite</string>
