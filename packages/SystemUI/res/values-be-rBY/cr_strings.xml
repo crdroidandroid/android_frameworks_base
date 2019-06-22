@@ -190,4 +190,6 @@
     <string name="qs_onehand_label">Рэжым кіравання адной рукой</string>
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
+    <!-- Free ram -->
+    <string name="recents_free_ram">Free RAM: %1$d MB</string>
 </resources>
