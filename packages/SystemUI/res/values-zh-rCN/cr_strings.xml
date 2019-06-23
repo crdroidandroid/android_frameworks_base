@@ -190,4 +190,10 @@
     <string name="qs_onehand_label">单手模式</string>
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
+    <!-- Free ram -->
+    <string name="recents_free_ram">可用运存: %1$d MB</string>
+    <!-- Reboot/Recovery/PowerOff QS Tile -->
+    <string name="quick_settings_reboot_label">重新启动</string>
+    <string name="quick_settings_reboot_recovery_label">恢复模式</string>
+    <string name="quick_settings_poweroff_label">关机</string>
 </resources>

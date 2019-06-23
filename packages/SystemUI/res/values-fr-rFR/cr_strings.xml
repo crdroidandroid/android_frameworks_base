@@ -78,9 +78,9 @@
     <string name="quick_settings_compass_E">E</string>
     <string name="quick_settings_compass_SE">SE</string>
     <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="quick_settings_compass_SW">SO</string>
+    <string name="quick_settings_compass_W">O</string>
+    <string name="quick_settings_compass_NW">NO</string>
     <!-- Smart pixels QS tile -->
     <string name="quick_settings_smart_pixels">Smart pixels</string>
     <string name="quick_settings_smart_pixels_on_power_save">Activation automatique de Smart pixels</string>
@@ -107,7 +107,7 @@
     <!--Google sound search tile -->
     <string name="quick_settings_sound_search">Recherche audio</string>
     <!-- Pie controls -->
-    <string name="pie_date_format">EEEE, dd MMMM yyyy</string>
+    <string name="pie_date_format">EEEE, jj MMMM aaaa</string>
     <string name="pie_hour_format_12">hh:mm</string>
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
@@ -190,4 +190,10 @@
     <string name="qs_onehand_label">Mode une main</string>
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
+    <!-- Free ram -->
+    <string name="recents_free_ram">RAM disponible: %1$d MB</string>
+    <!-- Reboot/Recovery/PowerOff QS Tile -->
+    <string name="quick_settings_reboot_label">Reboot</string>
+    <string name="quick_settings_reboot_recovery_label">Recovery</string>
+    <string name="quick_settings_poweroff_label">Power off</string>
 </resources>

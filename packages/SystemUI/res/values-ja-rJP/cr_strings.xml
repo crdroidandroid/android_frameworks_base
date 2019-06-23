@@ -190,4 +190,10 @@
     <string name="qs_onehand_label">片手モード</string>
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
+    <!-- Free ram -->
+    <string name="recents_free_ram">空きメモリ: %1$d MB</string>
+    <!-- Reboot/Recovery/PowerOff QS Tile -->
+    <string name="quick_settings_reboot_label">再起動</string>
+    <string name="quick_settings_reboot_recovery_label">リカバリー</string>
+    <string name="quick_settings_poweroff_label">電源を切る</string>
 </resources>
