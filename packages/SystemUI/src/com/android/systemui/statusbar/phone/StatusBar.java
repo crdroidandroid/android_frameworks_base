@@ -6391,6 +6391,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                             == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
                 } catch (NumberFormatException ex) {}
                 break;
+            case STATUS_BAR_BRIGHTNESS_CONTROL:
+                    mBrightnessControl = TunerService.parseIntegerSwitch(newValue, false);
+                break;
             case LOCKSCREEN_MEDIA_METADATA:
                 mShowMediaMetadata = TunerService.parseIntegerSwitch(newValue, true);
                 break;
