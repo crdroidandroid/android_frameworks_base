@@ -799,11 +799,28 @@ public class ConnectivityManager {
     /**
      * @hide
      */
+    public static final String PRIVATE_DNS_MODE_CLOUDFLARE = "cloudflare";
+    /**
+     * @hide
+     */
     public static final String PRIVATE_DNS_MODE_OPPORTUNISTIC = "opportunistic";
     /**
      * @hide
      */
     public static final String PRIVATE_DNS_MODE_PROVIDER_HOSTNAME = "hostname";
+    /**
+     * @hide
+     * Alternative: 1dot1dot1dot1.cloudflare-dns.com
+     */
+    public static final String PRIVATE_DNS_SPECIFIER_CLOUDFLARE = "one.one.one.one";
+    /**
+     * @hide
+     */
+    public static final String DNS_CLOUDFLARE_IP1 = "1.1.1.1";
+    /**
+     * @hide
+     */
+    public static final String DNS_CLOUDFLARE_IP2 = "1.0.0.1";
     /**
      * The default Private DNS mode.
      *
