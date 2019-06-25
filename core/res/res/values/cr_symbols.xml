@@ -112,6 +112,25 @@
   <java-symbol type="anim" name="ethans_wallpaper_intra_close_exit" />
   <java-symbol type="anim" name="ethans_launch_task_behind_source" />
   <java-symbol type="anim" name="ethans_launch_task_behind_target" />
+  <java-symbol type="string" name="animation_q"/>
+  <java-symbol type="anim" name="q_activity_open_enter" />
+  <java-symbol type="anim" name="q_activity_open_exit" />
+  <java-symbol type="anim" name="q_activity_close_enter" />
+  <java-symbol type="anim" name="q_activity_close_exit" />
+  <java-symbol type="anim" name="q_task_open_enter" />
+  <java-symbol type="anim" name="q_task_open_exit" />
+  <java-symbol type="anim" name="q_task_close_enter" />
+  <java-symbol type="anim" name="q_task_close_exit" />
+  <java-symbol type="anim" name="q_wallpaper_open_enter" />
+  <java-symbol type="anim" name="q_wallpaper_open_exit" />
+  <java-symbol type="anim" name="q_wallpaper_close_enter" />
+  <java-symbol type="anim" name="q_wallpaper_close_exit" />
+  <java-symbol type="anim" name="q_wallpaper_intra_open_enter" />
+  <java-symbol type="anim" name="q_wallpaper_intra_open_exit" />
+  <java-symbol type="anim" name="q_wallpaper_intra_close_enter" />
+  <java-symbol type="anim" name="q_wallpaper_intra_close_exit" />
+  <java-symbol type="anim" name="q_launch_task_behind_source" />
+  <java-symbol type="anim" name="q_launch_task_behind_target" />
 
   <!-- Whether the device supports Smart Pixels -->
   <java-symbol type="bool" name="config_supportSmartPixels" />
