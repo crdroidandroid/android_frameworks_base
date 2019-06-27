@@ -187,13 +187,13 @@
     <string name="text_clock_units_string_h_eighteen">Achtzehn Uhr</string>
     <string name="text_clock_units_string_h_nineteen">Neunzehn Uhr</string>
     <!-- OneHand mode QS tile -->
-    <string name="qs_onehand_label">One Handed mode</string>
+    <string name="qs_onehand_label">Einhandmodus</string>
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">Free RAM: %1$d MB</string>
+    <string name="recents_free_ram">Freier Arbeitsspeicher: %1$d MB</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">Neustart</string>
+    <string name="quick_settings_reboot_recovery_label">Wiederherstellung</string>
+    <string name="quick_settings_poweroff_label">Ausschalten</string>
 </resources>
