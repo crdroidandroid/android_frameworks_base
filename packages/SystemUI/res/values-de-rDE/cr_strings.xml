@@ -191,7 +191,7 @@
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">Freier Arbeitsspeicher: %1$d MB</string>
+    <string name="recents_free_ram">RAM: %1$d MB frei</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">Neustart</string>
     <string name="quick_settings_reboot_recovery_label">Wiederherstellung</string>
