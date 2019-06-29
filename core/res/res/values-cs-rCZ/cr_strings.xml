@@ -49,8 +49,8 @@
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Klepnutím na prázdné místo ukončíte režim Ovládání jednou rukou</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
+    <string name="notification_channel_gaming">Herní režim</string>
+    <string name="gaming_mode_notification_title">Herní režim povolen</string>
     <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
     <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
     <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
