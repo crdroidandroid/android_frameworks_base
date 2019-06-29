@@ -625,6 +625,10 @@
     <!-- Used to get active package name -->
     <protected-broadcast android:name="android.intent.action.ACTIVE_PACKAGE_CHANGED" />
 
+    <!-- Gaming mode -->
+    <protected-broadcast android:name="android.intent.action.GAMING_MODE_TURN_OFF" />
+    <protected-broadcast android:name="android.intent.action.GAMING_MODE_TURN_ON" />
+
     <!-- ====================================================================== -->
     <!--                          RUNTIME PERMISSIONS                           -->
     <!-- ====================================================================== -->
