@@ -57,6 +57,7 @@ public class SystemNotificationChannels {
     public static String HEAVY_WEIGHT_APP = "HEAVY_WEIGHT_APP";
     public static String SYSTEM_CHANGES = "SYSTEM_CHANGES";
     public static String DO_NOT_DISTURB = "DO_NOT_DISTURB";
+    public static String GAMING = "GAM";
 
     public static void createAll(Context context) {
         final NotificationManager nm = context.getSystemService(NotificationManager.class);
@@ -164,6 +165,11 @@ public class SystemNotificationChannels {
                 NotificationManager.IMPORTANCE_MIN);
         usb.setBlockable(true);
         channelsList.add(usb);
+
+        channelsList.add(new NotificationChannel(
+                GAMING,
+                context.getString(R.string.notification_channel_gaming),
+                NotificationManager.IMPORTANCE_LOW));
 
         NotificationChannel foregroundChannel = new NotificationChannel(
                 FOREGROUND_SERVICE,
