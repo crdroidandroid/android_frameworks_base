@@ -1,7 +1,7 @@
 /**
- * Copyright (C) 2018 The LineageOS project
  * Copyright (C) 2019 The PixelExperience project
  * Copyright (C) 2019 The Syberia project
+ * Copyright (C) 2019 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,11 @@ import android.app.ActivityManager;
 import android.app.ActivityThread;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -61,12 +63,21 @@ public class GamingModeController {
     AudioManager mAudioManager;
     NotificationManager mNotificationManager;
     PackageManager pm;
-    private boolean gamingEnabled;
-    private boolean gamingModeMaster;
-    private boolean isDynamicGamingMode;
+    private boolean mGamingModeEnabled;
+    private boolean mDynamicGamingMode;
     private Toast toast;
     private String mGamingPackageList;
     private ArrayList<String> mGameApp = new ArrayList<String>();
+
+    private boolean mGamingModeActivated;
+    private static int mRingerState;
+    private static int mZenState;
+    private static int mHwKeysState;
+    private static int mHeadsUpState;
+    private static int mAdaptiveBrightness;
+
+    public static final String GAMING_MODE_TURN_OFF = "android.intent.action.GAMING_MODE_TURN_OFF";
+    public static final String GAMING_MODE_TURN_ON = "android.intent.action.GAMING_MODE_TURN_ON";
 
     private static final String TAG = "GamingModeController";
     private static final int GAMING_NOTIFICATION_ID = 420;
@@ -77,12 +88,12 @@ public class GamingModeController {
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        gamingModeMaster = Settings.System.getInt(mContext.getContentResolver(),
-                            Settings.System.GAMING_MODE_MASTER_SWITCH, 1) == 1;
-
-        isDynamicGamingMode = Settings.System.getInt(mContext.getContentResolver(),
-                               Settings.System.GAMING_MODE_DYNAMIC_STATE, 1) == 1;
-
+        mGamingModeEnabled = Settings.System.getInt(mContext.getContentResolver(),
+                            Settings.System.GAMING_MODE_ENABLED, 0) == 1;
+        mDynamicGamingMode = Settings.System.getInt(mContext.getContentResolver(),
+                               Settings.System.GAMING_MODE_DYNAMIC_STATE, 0) == 1;
+        mGamingModeActivated = Settings.System.getInt(mContext.getContentResolver(),
+                               Settings.System.GAMING_MODE_ACTIVE, 0) == 1;
         parsePackageList();
 
         SettingsObserver observer = new SettingsObserver(
@@ -122,12 +133,12 @@ public class GamingModeController {
         return (mGameApp.contains(packageName));
     }
 
-    public boolean gamingModeMaster() {
-        return gamingModeMaster;
+    public boolean isGamingModeEnabled() {
+        return mGamingModeEnabled;
     }
 
     public void notePackageUninstalled(String pkgName) {
-     // remove from list
+        // remove from list
         if (mGameApp.remove(pkgName)) {
             savePackageList(mGameApp);
         }
@@ -138,17 +149,14 @@ public class GamingModeController {
     }
 
     public void noteStarted(String packageName) {
-        if (isGameApp(packageName)) {
+        if (!mDynamicGamingMode || isGameApp(packageName)) {
             return;
         }
         appInfo = getAppInfoFromPkgName(mContext, packageName);
-        if(isDynamicGamingMode && appInfo != null && (appInfo.category == ApplicationInfo.CATEGORY_GAME ||
+        if (appInfo != null && (appInfo.category == ApplicationInfo.CATEGORY_GAME ||
             (appInfo.flags & ApplicationInfo.FLAG_IS_GAME) == ApplicationInfo.FLAG_IS_GAME)) {
-                addGameApp(packageName);
-            if (!gamingEnabled)  {
-                Settings.System.putInt(mContext.getContentResolver(),
-                          Settings.System.ENABLE_GAMING_MODE, 1);
-            }
+            addGameApp(packageName);
+            activateGamingMode(true);
         }
     }
 
@@ -230,64 +238,50 @@ public class GamingModeController {
     }
 
     private void enableGamingFeatures() {
-      if (!ActivityManager.isSystemReady())
-          return;
+        if (!ActivityManager.isSystemReady())
+            return;
         // Lock brightness
-        boolean enableManualBrightness = Settings.System.getInt(mContext.getContentResolver(),
+        boolean lockBrightness = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.GAMING_MODE_MANUAL_BRIGHTNESS_TOGGLE, 1) == 1;
-        if (enableManualBrightness) {
+        if (lockBrightness) {
             final boolean isAdaptiveEnabledByUser = Settings.System.getInt(mContext.getContentResolver(),
-                              Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
-                Settings.System.putInt(mContext.getContentResolver(),
-                    Settings.System.GAMING_SCREEN_BRIGHTNESS_MODE, isAdaptiveEnabledByUser ? Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC : Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-                Settings.System.putInt(mContext.getContentResolver(),
+                              Settings.System.SCREEN_BRIGHTNESS_MODE, SCREEN_BRIGHTNESS_MODE_MANUAL) == SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+            mAdaptiveBrightness = isAdaptiveEnabledByUser ? SCREEN_BRIGHTNESS_MODE_AUTOMATIC : SCREEN_BRIGHTNESS_MODE_MANUAL;
+            Settings.System.putInt(mContext.getContentResolver(),
                     Settings.System.SCREEN_BRIGHTNESS_MODE, SCREEN_BRIGHTNESS_MODE_MANUAL);
         }
-        boolean enableHeadsUp = Settings.System.getInt(mContext.getContentResolver(),
+        boolean blockHeadsUp = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.GAMING_MODE_HEADSUP_TOGGLE, 1) == 1;
         // Heads up
-        if (enableHeadsUp) {
-            final boolean isHeadsUpEnabledByUser = Settings.Global.getInt(mContext.getContentResolver(),
-                              Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED, 1) == 1;
-                Settings.Global.putInt(mContext.getContentResolver(),
-                    Settings.Global.GAMING_HEADS_UP_NOTIFICATIONS_ENABLED, isHeadsUpEnabledByUser ? 1 : 0);
-                Settings.Global.putInt(mContext.getContentResolver(),
+        if (blockHeadsUp) {
+            mHeadsUpState = Settings.Global.getInt(mContext.getContentResolver(),
+                              Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED, 1);
+            Settings.Global.putInt(mContext.getContentResolver(),
                     Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED, 0);
         }
-        // Capacitive keys
+        // HW Buttons
         boolean disableHwKeys = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.GAMING_MODE_HW_KEYS_TOGGLE, 1) == 1;
+                    Settings.System.GAMING_MODE_HW_KEYS_TOGGLE, 0) == 1;
         if (disableHwKeys) {
-            final boolean isHwKeysEnabledByUser = Settings.Secure.getInt(mContext.getContentResolver(),
-                              Settings.Secure.HARDWARE_KEYS_DISABLE, 0) == 0;
-                Settings.Secure.putInt(mContext.getContentResolver(),
-                    Settings.Secure.GAMING_HARDWARE_KEYS_DISABLE, isHwKeysEnabledByUser ? 0 : 1);
-                Settings.Secure.putInt(mContext.getContentResolver(),
-                    Settings.Secure.HARDWARE_KEYS_DISABLE, 1);
+            mHwKeysState = Settings.Secure.getInt(mContext.getContentResolver(),
+                              Settings.Secure.HARDWARE_KEYS_DISABLE, 0);
+            Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.HARDWARE_KEYS_DISABLE, 1);
         }
-        // Ringer mode (0: OFF, 1: Vibrate, 2:DND: 3:Silent
-            int ringerMode = Settings.System.getInt(mContext.getContentResolver(),
-                 Settings.System.GAMING_MODE_RINGER_MODE, 0);
-            int userState = getRingerModeInternal();
-              if (userState >= 0) {
-                    Settings.System.putInt(mContext.getContentResolver(),
-                        Settings.System.GAMING_RINGER_STATE, userState);
-              }
-            int userZenState = getZenMode();
-              if (userZenState >= 0) {
-                    Settings.System.putInt(mContext.getContentResolver(),
-                        Settings.System.GAMING_MODE_ZEN_STATE, userZenState);
-              }
-        if (ringerMode != 0 || ringerMode != userState) {
+
+        // Ringer mode (0: Off, 1: Vibrate, 2:DND: 3:Silent)
+        int ringerMode = Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.GAMING_MODE_RINGER_MODE, 0);
+        if (ringerMode != 0) {
+            mRingerState = getRingerModeInternal();
+            mZenState = getZenMode();
             if (ringerMode == 1) {
                 setRingerModeInternal(AudioManager.RINGER_MODE_VIBRATE);
                 setZenMode(ZEN_MODE_OFF);
-            }
-            else if (ringerMode == 2) {
+            } else if (ringerMode == 2) {
                 setRingerModeInternal(AudioManager.RINGER_MODE_NORMAL);
                 setZenMode(ZEN_MODE_IMPORTANT_INTERRUPTIONS);
-            }
-            else if (ringerMode == 3) {
+            } else if (ringerMode == 3) {
                 setRingerModeInternal(AudioManager.RINGER_MODE_SILENT);
                 setZenMode(ZEN_MODE_OFF);
             }
@@ -305,55 +299,74 @@ public class GamingModeController {
         if (!ActivityManager.isSystemReady())
              return;
         ContentResolver resolver = mContext.getContentResolver();
-            final boolean wasAdaptiveEnabledByUser = Settings.System.getInt(resolver,
-                              Settings.System.GAMING_SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL) ==
-                                   Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
-                Settings.System.putInt(resolver,
-                    Settings.System.SCREEN_BRIGHTNESS_MODE, wasAdaptiveEnabledByUser ? Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC : Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-            final boolean wasHeadsUpEnabledByUser = Settings.Global.getInt(resolver,
-                              Settings.Global.GAMING_HEADS_UP_NOTIFICATIONS_ENABLED, 1) == 1;
-                Settings.Global.putInt(resolver,
-                    Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED, wasHeadsUpEnabledByUser ? 1 : 0);
-            final boolean wasHwKeyEnabledByUser = Settings.Secure.getInt(resolver,
-                              Settings.Secure.GAMING_HARDWARE_KEYS_DISABLE, 0) == 0;
-                Settings.Secure.putInt(resolver,
-                    Settings.Secure.HARDWARE_KEYS_DISABLE, wasHwKeyEnabledByUser ? 0 : 1);
-            int ringerMode = Settings.System.getInt(mContext.getContentResolver(),
-                 Settings.System.GAMING_MODE_RINGER_MODE, 0);
-            final int ringerState = Settings.System.getInt(resolver,
-                  Settings.System.GAMING_RINGER_STATE, AudioManager.RINGER_MODE_NORMAL);
-            final int zenState = Settings.System.getInt(resolver,
-                  Settings.System.GAMING_MODE_ZEN_STATE, ZEN_MODE_OFF);
-            if (getRingerModeInternal() >= 0 && ringerState != getRingerModeInternal())
-                 setRingerModeInternal(ringerState);
-            if (getZenMode() >= 0 && zenState != getZenMode())
-                   setZenMode(zenState);
-
-            int mNotifications = Settings.System.getInt(mContext.getContentResolver(),
-                          Settings.System.GAMING_MODE_NOTIFICATIONS, 3);
-            if(mNotifications == 2 || mNotifications == 3)
-                showToast(mContext.getResources().getString(R.string.gaming_mode_disabled_toast), Toast.LENGTH_LONG);
-            mNotificationManager.cancel(GAMING_NOTIFICATION_ID);
+        boolean lockBrightness = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.GAMING_MODE_MANUAL_BRIGHTNESS_TOGGLE, 1) == 1;
+        if (lockBrightness) {
+            Settings.System.putInt(mContext.getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS_MODE, mAdaptiveBrightness);
         }
-
+        boolean blockHeadsUp = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.GAMING_MODE_HEADSUP_TOGGLE, 1) == 1;
+        if (blockHeadsUp) {
+            Settings.Global.putInt(mContext.getContentResolver(),
+                    Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED, mHeadsUpState);
+        }
+        boolean disableHwKeys = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.GAMING_MODE_HW_KEYS_TOGGLE, 0) == 1;
+        if (disableHwKeys) {
+            Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.HARDWARE_KEYS_DISABLE, mHwKeysState);
+        }
+        int ringerMode = Settings.System.getInt(mContext.getContentResolver(),
+                 Settings.System.GAMING_MODE_RINGER_MODE, 0);
+        if (ringerMode != 0 && (mRingerState != getRingerModeInternal() ||
+                mZenState != getZenMode())) {
+            setRingerModeInternal(mRingerState);
+            setZenMode(mZenState);
+        }
+        int mNotifications = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.GAMING_MODE_NOTIFICATIONS, 3);
+        if(mNotifications == 2 || mNotifications == 3)
+            showToast(mContext.getResources().getString(R.string.gaming_mode_disabled_toast), Toast.LENGTH_LONG);
+     
+   mNotificationManager.cancel(GAMING_NOTIFICATION_ID);
+    }
 
     private void addNotification() {
         final Resources r = mContext.getResources();
+        Intent intent = new Intent(GAMING_MODE_TURN_OFF);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND
+                | Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         // Display a notification
         Notification.Builder builder = new Notification.Builder(mContext, SystemNotificationChannels.GAMING)
-            .setTicker(r.getString(com.android.internal.R.string.gaming_notif_ticker))
-            .setContentTitle(r.getString(com.android.internal.R.string.gaming_notif_ticker))
+            .setTicker(r.getString(com.android.internal.R.string.gaming_mode_notification_title))
+            .setContentTitle(r.getString(com.android.internal.R.string.gaming_mode_notification_title))
+            .setContentText(r.getString(com.android.internal.R.string.gaming_mode_notification_content))
             .setSmallIcon(com.android.internal.R.drawable.ic_gaming_notif)
             .setWhen(java.lang.System.currentTimeMillis())
-            .setOngoing(true);
+            .setOngoing(true)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(false);
 
         Notification notif = builder.build();
         mNotificationManager.notify(GAMING_NOTIFICATION_ID, notif);
     }
 
+    public boolean isGamingModeActivated() {
+      return mGamingModeActivated;
+    }
 
-    public boolean getEnabled() {
-      return gamingEnabled;
+    private void activateGamingMode(boolean enabled) {
+        if (mGamingModeActivated == enabled)
+            return;
+        mGamingModeActivated = enabled;
+        if (mGamingModeActivated) {
+            enableGamingFeatures();
+        } else {
+            disableGamingFeatures();
+        }
     }
 
     class SettingsObserver extends ContentObserver {
@@ -365,11 +378,11 @@ public class GamingModeController {
             ContentResolver resolver = mContext.getContentResolver();
 
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.GAMING_MODE_MASTER_SWITCH), false, this,
+                    Settings.System.GAMING_MODE_ENABLED), false, this,
                     UserHandle.USER_ALL);
 
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ENABLE_GAMING_MODE), false, this,
+                    Settings.System.GAMING_MODE_ACTIVE), false, this,
                     UserHandle.USER_ALL);
 
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -387,27 +400,21 @@ public class GamingModeController {
                              Settings.System.GAMING_MODE_VALUES))) {
                 parsePackageList();
             } else if (uri.equals(Settings.System.getUriFor(
-                                   Settings.System.ENABLE_GAMING_MODE))) {
-                updateGamingMode();
+                    Settings.System.GAMING_MODE_DYNAMIC_STATE))) {
+                mDynamicGamingMode = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.GAMING_MODE_DYNAMIC_STATE, 0) == 1;
             } else if (uri.equals(Settings.System.getUriFor(
-                                   Settings.System.GAMING_MODE_DYNAMIC_STATE))) {
-                isDynamicGamingMode = Settings.System.getInt(mContext.getContentResolver(),
-                                       Settings.System.GAMING_MODE_DYNAMIC_STATE, 1) == 1;
+                                   Settings.System.GAMING_MODE_ENABLED))) {
+                mGamingModeEnabled = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.GAMING_MODE_ENABLED, 0) == 1;
+                if (!mGamingModeEnabled) Settings.System.putInt(mContext.getContentResolver(),
+                    Settings.System.GAMING_MODE_ACTIVE, 0);
             } else if (uri.equals(Settings.System.getUriFor(
-                                   Settings.System.GAMING_MODE_MASTER_SWITCH))) {
-                gamingModeMaster = Settings.System.getInt(mContext.getContentResolver(),
-                                       Settings.System.GAMING_MODE_MASTER_SWITCH, 1) == 1;
+                                   Settings.System.GAMING_MODE_ACTIVE))) {
+                boolean enable = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.GAMING_MODE_ACTIVE, 0) == 1;
+                activateGamingMode(enable);
             }
-        }
-
-        public void updateGamingMode() {
-            ContentResolver resolver = mContext.getContentResolver();
-
-            gamingEnabled = Settings.System.getInt(resolver,
-                             Settings.System.ENABLE_GAMING_MODE, 0) == 1;
-
-            if (gamingEnabled)  enableGamingFeatures();
-            if (!gamingEnabled) disableGamingFeatures();
         }
     }
 }

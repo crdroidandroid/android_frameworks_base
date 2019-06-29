@@ -4949,38 +4949,20 @@ public final class Settings {
          * Gaming mode master switch
          * @hide
          */
-        public static final String GAMING_MODE_MASTER_SWITCH = "gaming_mode_master_switch";
+        public static final String GAMING_MODE_ENABLED = "gaming_mode_enabled";
 
         /**
-         * Save the user defined brightness state
+         * Gaming mode active state - to disable via notification / tile
          * @hide
          */
-        public static final String GAMING_SCREEN_BRIGHTNESS_MODE = "gaming_screen_brightness_mode";
+        public static final String GAMING_MODE_ACTIVE = "gaming_mode_active";
 
-        /**
-         * Save the current user ringer mode
-         * @hide
-         */
-        public static final String GAMING_RINGER_STATE = "gaming_ringer_state";
-
-        /**
-         * Save the current user zen mode
-         * @hide
-         */
-        public static final String GAMING_MODE_ZEN_STATE = "gaming_mode_zen_state";
-
-        /**
-         * Whether to enable gaming mode or not
-         * @hide
-         */
-        public static final String ENABLE_GAMING_MODE = "enable_gaming_mode";
 
         /**
          * Package name of apps for enabling Gaming mode
          * @hide
          */
         public static final String GAMING_MODE_VALUES = "gaming_mode_values";
-
         public static final String GAMING_MODE_DUMMY = "gaming_mode_dummy";
 
         /**
@@ -5002,7 +4984,7 @@ public final class Settings {
         public static final String GAMING_MODE_RINGER_MODE = "gaming_mode_ringer_mode";
 
         /**
-         * Whether to show notifications/toasts (0:OFF, 1:notifications, 2:toasts, 3: all
+         * Whether to show notifications/toasts (0:OFF, 1:notifications, 2:toasts, 3: all)
          * @hide
          */
         public static final String GAMING_MODE_NOTIFICATIONS = "gaming_mode_notifications";
@@ -9370,12 +9352,6 @@ public final class Settings {
         public static final String LOCKSCREEN_SOLID_UNITS_OPACITY = "lockscreen_solid_units_opacity";
 
         /**
-         * Save hardware buttons toggle state.
-         * @hide
-         */
-        public static final String GAMING_HARDWARE_KEYS_DISABLE = "gaming_hardware_keys_disable";
-
-        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -13139,13 +13115,6 @@ public final class Settings {
          */
         public static final String HEADS_UP_NOTIFICATIONS_ENABLED =
                 "heads_up_notifications_enabled";
-
-        /**
-         * Save user defined heads up toggle state.
-         * @hide
-         */
-        public static final String GAMING_HEADS_UP_NOTIFICATIONS_ENABLED =
-                "gaming_heads_up_notifications_enabled";
 
         /** @hide */ public static final int HEADS_UP_OFF = 0;
         /** @hide */ public static final int HEADS_UP_ON = 1;
