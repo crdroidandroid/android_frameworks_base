@@ -75,6 +75,8 @@ public class NotificationInterruptionStateProvider {
     protected boolean mUseHeadsUp = false;
     private boolean mDisableNotificationAlerts;
 
+    private boolean mSkipHeadsUp;
+
     @Inject
     public NotificationInterruptionStateProvider(Context context, NotificationFilter filter,
             StatusBarStateController stateController, BatteryController batteryController) {
@@ -218,6 +220,13 @@ public class NotificationInterruptionStateProvider {
     private boolean shouldHeadsUpWhenAwake(NotificationEntry entry) {
         StatusBarNotification sbn = entry.notification;
 
+        if (shouldSkipHeadsUp(sbn)) {
+            if (DEBUG_HEADS_UP) {
+                Log.d(TAG, "No alerting: gaming mode");
+            }
+            return false;
+        }
+
         if (!mUseHeadsUp) {
             if (DEBUG_HEADS_UP) {
                 Log.d(TAG, "No heads up: no huns");
@@ -353,6 +362,23 @@ public class NotificationInterruptionStateProvider {
             return false;
         }
         return true;
+    }
+
+    public void setGamingPeekMode(boolean skipHeadsUp) {
+        mSkipHeadsUp = skipHeadsUp;
+    }
+
+    public boolean shouldSkipHeadsUp(StatusBarNotification sbn) {
+        String notificationPackageName = sbn.getPackageName().toLowerCase();
+
+        // Gaming mode takes precedence since messaging headsup is intrusive
+        if (mSkipHeadsUp) {
+            boolean isNonInstrusive = notificationPackageName.contains("dialer") ||
+                notificationPackageName.contains("clock");
+            return !mStatusBarStateController.isDozing() && mSkipHeadsUp && !isNonInstrusive;
+        }
+
+        return false;
     }
 
     /**
