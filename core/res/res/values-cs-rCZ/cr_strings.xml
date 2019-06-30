@@ -48,4 +48,10 @@
     <string name="permdesc_accessFontManager">Umožňuje aplikaci přístup ke správci písem.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Klepnutím na prázdné místo ukončíte režim Ovládání jednou rukou</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Herní režim</string>
+    <string name="gaming_mode_notification_title">Herní režim povolen</string>
+    <string name="gaming_mode_notification_content">Klepněte sem pro vypnutí Herního režimu</string>
+    <string name="gaming_mode_enabled_toast">Herní režim je zapnutý</string>
+    <string name="gaming_mode_disabled_toast">Herní režim je vypnutý</string>
 </resources>

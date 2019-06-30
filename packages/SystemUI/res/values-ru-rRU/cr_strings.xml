@@ -196,4 +196,6 @@
     <string name="quick_settings_reboot_label">Перезагрузка</string>
     <string name="quick_settings_reboot_recovery_label">Режим восстановления</string>
     <string name="quick_settings_poweroff_label">Выключение</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Игровой режим</string>
 </resources>

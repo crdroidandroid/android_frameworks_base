@@ -130,7 +130,7 @@
     <string name="ambientmusic_songinfo">%s von %s</string>
     <string name="custom_text_clock_top_text_default">Es ist</string>
     <string name="text_clock_zero_h_min"></string>
-    <string name="text_clock_high">High</string>
+    <string name="text_clock_high">Hoch</string>
     <string name="text_clock_noon">Mittag</string>
     <!-- TensString -->
     <string name="text_clock_tens_string_twenty">Zwanzig</string>
@@ -182,18 +182,20 @@
     <string name="text_clock_units_string_h_thirteen">Dreizehn</string>
     <string name="text_clock_units_string_h_fourteen">Vierzehn</string>
     <string name="text_clock_units_string_h_fifteen">Fünfzehn</string>
-    <string name="text_clock_units_string_h_sixteen">Sixteen</string>
-    <string name="text_clock_units_string_h_seventeen">Seventeen</string>
-    <string name="text_clock_units_string_h_eighteen">Eighteen</string>
-    <string name="text_clock_units_string_h_nineteen">Nineteen</string>
+    <string name="text_clock_units_string_h_sixteen">Sechzehn Uhr</string>
+    <string name="text_clock_units_string_h_seventeen">Siebzehn Uhr</string>
+    <string name="text_clock_units_string_h_eighteen">Achtzehn Uhr</string>
+    <string name="text_clock_units_string_h_nineteen">Neunzehn Uhr</string>
     <!-- OneHand mode QS tile -->
-    <string name="qs_onehand_label">One Handed mode</string>
+    <string name="qs_onehand_label">Einhandmodus</string>
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">Free RAM: %1$d MB</string>
+    <string name="recents_free_ram">RAM: %1$d MB frei</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">Neustart</string>
+    <string name="quick_settings_reboot_recovery_label">Wiederherstellung</string>
+    <string name="quick_settings_poweroff_label">Ausschalten</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Gaming mode</string>
 </resources>

@@ -48,4 +48,10 @@
     <string name="permdesc_accessFontManager">Lehetővé teszi egy alkalmazás számára, hogy hozzáférjen a betűtípus-kezelőhöz.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Az Egykezes módból való kilépéshez érintsen meg egy üres területet</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Játékmód</string>
+    <string name="gaming_mode_notification_title">A Játékmód engedélyezve</string>
+    <string name="gaming_mode_notification_content">Érintse meg a Játékmódból való kilépéshez</string>
+    <string name="gaming_mode_enabled_toast">A Játékmód bekapcsolásra került</string>
+    <string name="gaming_mode_disabled_toast">A Játékmód kikapcsolásra került</string>
 </resources>

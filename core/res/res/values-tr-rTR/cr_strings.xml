@@ -48,4 +48,10 @@
     <string name="permdesc_accessFontManager">Bir uygulamanın yazı tipi yöneticisine erişmesine izin verir.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Tek elle modundan çıkmak için boş alana dokunun</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Oyun modu</string>
+    <string name="gaming_mode_notification_title">Oyun modu etkin</string>
+    <string name="gaming_mode_notification_content">Oyun modunu kapatmak için dokunun</string>
+    <string name="gaming_mode_enabled_toast">Oyun modu açık</string>
+    <string name="gaming_mode_disabled_toast">Oyun modu kapalı</string>
 </resources>

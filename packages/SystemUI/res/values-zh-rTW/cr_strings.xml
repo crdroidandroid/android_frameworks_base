@@ -191,9 +191,11 @@
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">Free RAM: %1$d MB</string>
+    <string name="recents_free_ram">可用記憶體：%1$d MB</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">重新開機</string>
+    <string name="quick_settings_reboot_recovery_label">恢復模式</string>
+    <string name="quick_settings_poweroff_label">關閉電源</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Gaming mode</string>
 </resources>
