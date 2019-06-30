@@ -420,6 +420,7 @@ public class KeyguardStatusView extends GridLayout implements
             case 14:
             case 15:
             case 16:
+            case 17:
                 mDigitalClock = true;
                 mCustomClockView.setVisibility(View.GONE);
                 mCustomDarkClockView.setVisibility(View.GONE);
@@ -515,7 +516,8 @@ public class KeyguardStatusView extends GridLayout implements
             mSpectrumClockView.setVisibility(View.GONE);
             mTextClock.setVisibility(View.GONE);
             mSneekyClockView.setVisibility(View.VISIBLE);
-        } else if (mClockAvailable && mClockSelection == 16) {
+        } else if (mClockAvailable && (mClockSelection == 16 ||
+                mClockSelection == 17)) {
             mClockView.setVisibility(View.GONE);
             mCustomClockView.setVisibility(View.GONE);
             mCustomDarkClockView.setVisibility(View.GONE);
