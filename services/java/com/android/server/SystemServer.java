@@ -116,6 +116,7 @@ import com.android.server.soundtrigger.SoundTriggerService;
 import com.android.server.stats.StatsCompanionService;
 import com.android.server.statusbar.StatusBarManagerService;
 import com.android.server.storage.DeviceStorageMonitorService;
+import com.android.server.substratum.SubstratumService;
 import com.android.server.telecom.TelecomLoaderService;
 import com.android.server.textclassifier.TextClassificationManagerService;
 import com.android.server.trust.TrustManagerService;
@@ -707,6 +708,11 @@ public final class SystemServer {
         OverlayManagerService overlayManagerService = new OverlayManagerService(
                 mSystemContext, installer);
         mSystemServiceManager.startService(overlayManagerService);
+
+        // Substratum system server implementation
+        traceBeginAndSlog("StartSubstratumService");
+        mSystemServiceManager.startService(new SubstratumService(mSystemContext));
+
         traceEnd();
 
         if (SystemProperties.getInt("persist.sys.displayinset.top", 0) > 0) {
@@ -1753,6 +1759,12 @@ public final class SystemServer {
 
         if (safeMode) {
             mActivityManagerService.showSafeModeOverlay();
+        }
+
+        // Let's check whether we should disable all theme overlays
+        final boolean disableOverlays = wm.detectDisableOverlays();
+        if (disableOverlays) {
+            mActivityManagerService.disableOverlays();
         }
 
         // Update the configuration for this context by hand, because we're going

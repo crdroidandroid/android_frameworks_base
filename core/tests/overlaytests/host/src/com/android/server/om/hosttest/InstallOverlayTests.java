@@ -95,6 +95,16 @@ public class InstallOverlayTests extends BaseHostJUnit4Test {
     }
 
     @Test
+    public void installAndDisableOverlay() throws Exception {
+        final String pkgName = "com.android.server.om.hosttest.app_overlay";
+        installPackage("OverlayHostTests_AppOverlayV1.apk");
+        assertTrue(overlayManagerContainsPackage(pkgName));
+        assertFalse(overlayManagerContainsPackage("--- " + pkgName));
+        setPackageEnabled(pkgName, false);
+        assertTrue(overlayManagerContainsPackage("--- " + pkgName));
+    }
+
+    @Test
     public void installPlatformSignedAppOverlayAndUpdate() throws Exception {
         assertTrue(runDeviceTests(DEVICE_TEST_PKG, DEVICE_TEST_CLS, "expectAppResource"));
 
