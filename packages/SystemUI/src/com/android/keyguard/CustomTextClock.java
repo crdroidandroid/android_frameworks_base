@@ -94,9 +94,12 @@ public class CustomTextClock extends TextView implements TunerService.Tunable {
     private boolean h24;
     private boolean langHasChanged;
     private int mLockClockFontStyle;
+    private boolean mUseAccentColor;
 
     private static final String LOCK_CLOCK_FONT_STYLE =
             "system:" + Settings.System.LOCK_CLOCK_FONT_STYLE;
+    private static final String LOCKSCREEN_CLOCK_SELECTION =
+            "system:" + Settings.System.LOCKSCREEN_CLOCK_SELECTION;
 
     public CustomTextClock(Context context) {
         this(context, null);
@@ -141,6 +144,7 @@ public class CustomTextClock extends TextView implements TunerService.Tunable {
 
             final TunerService tunerService = Dependency.get(TunerService.class);
             tunerService.addTunable(this, LOCK_CLOCK_FONT_STYLE);
+            tunerService.addTunable(this, LOCKSCREEN_CLOCK_SELECTION);
         }
 
         // NOTE: It's safe to do these after registering the receiver since the receiver always runs
@@ -171,7 +175,11 @@ public class CustomTextClock extends TextView implements TunerService.Tunable {
                 setText(topText);
                 langHasChanged = false;
             }
-            setTextColor(ColorText.getWallColor(mContext));
+            if (mUseAccentColor) {
+                setTextColor(getResources().getColor(R.color.accent_device_default_light, null));
+            } else {
+                setTextColor(ColorText.getWallColor(mContext));
+            }
         }
     }
 
@@ -184,6 +192,14 @@ public class CustomTextClock extends TextView implements TunerService.Tunable {
                     mLockClockFontStyle = Integer.valueOf(newValue);
                 } catch (NumberFormatException ex) {}
                 refreshFontStyle();
+                break;
+            case LOCKSCREEN_CLOCK_SELECTION:
+                int clockSelection = 1;
+                try {
+                    clockSelection = Integer.valueOf(newValue);
+                } catch (NumberFormatException ex) {}
+                mUseAccentColor =
+                        clockSelection == 17;
                 break;
             default:
                 break;
