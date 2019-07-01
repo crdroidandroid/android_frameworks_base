@@ -191,11 +191,11 @@
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">Free RAM: %1$d MB</string>
+    <string name="recents_free_ram">사용가능한 RAM: %1$d MB</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">다시 시작</string>
+    <string name="quick_settings_reboot_recovery_label">리커버리</string>
+    <string name="quick_settings_poweroff_label">전원 끄기</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
+    <string name="notification_channel_gaming">게이밍 모드</string>
 </resources>
