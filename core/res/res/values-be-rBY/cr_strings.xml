@@ -49,9 +49,9 @@
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Краніцеся пустой вобласці для выхаду з рэжыму адной рукой</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">Гульнявы рэжым</string>
+    <string name="gaming_mode_notification_title">Гульнявы рэжым уключаны</string>
+    <string name="gaming_mode_notification_content">Націсніце, каб пераключыць рэжым гульні</string>
+    <string name="gaming_mode_enabled_toast">Гульнявы рэжым уключаны</string>
+    <string name="gaming_mode_disabled_toast">Гульнявы рэжым адключаны</string>
 </resources>

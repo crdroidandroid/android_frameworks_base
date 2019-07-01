@@ -49,9 +49,9 @@
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">한 손으로 모드를 종료 하려면 빈 영역을 누릅니다</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">게이밍 모드</string>
+    <string name="gaming_mode_notification_title">게이밍 모드 활성화</string>
+    <string name="gaming_mode_notification_content">탭 하여 게이밍 모드 끄기</string>
+    <string name="gaming_mode_enabled_toast">게이밍 모드 켜짐</string>
+    <string name="gaming_mode_disabled_toast">게이밍 모드 꺼짐</string>
 </resources>
