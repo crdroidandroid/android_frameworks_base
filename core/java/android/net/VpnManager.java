@@ -816,4 +816,15 @@ public class VpnManager {
             throw e.rethrowFromSystemServer();
         }
     }
+
+    /**
+     * @hide
+     */
+    public VpnProfile[] getAllLegacyVpns() {
+        try {
+            return mService.getAllLegacyVpns();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
 }

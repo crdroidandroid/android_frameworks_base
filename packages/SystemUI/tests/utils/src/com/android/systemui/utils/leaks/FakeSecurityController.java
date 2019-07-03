@@ -19,8 +19,12 @@ import android.content.ComponentName;
 import android.graphics.drawable.Drawable;
 import android.testing.LeakCheck;
 
+import com.android.internal.net.VpnProfile;
 import com.android.systemui.statusbar.policy.SecurityController;
 import com.android.systemui.statusbar.policy.SecurityController.SecurityControllerCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FakeSecurityController extends BaseLeakChecker<SecurityControllerCallback>
         implements SecurityController {
@@ -166,5 +170,26 @@ public class FakeSecurityController extends BaseLeakChecker<SecurityControllerCa
     @Override
     public CharSequence getLabel() {
         return null;
+    }
+
+    public List<VpnProfile> getConfiguredLegacyVpns() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> getVpnAppPackageNames() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void connectLegacyVpn(VpnProfile profile) {
+    }
+
+    @Override
+    public void launchVpnApp(String packageName) {
+    }
+
+    @Override
+    public void disconnectPrimaryVpn() {
     }
 }
