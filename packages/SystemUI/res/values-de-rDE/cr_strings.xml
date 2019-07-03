@@ -182,10 +182,10 @@
     <string name="text_clock_units_string_h_thirteen">Dreizehn</string>
     <string name="text_clock_units_string_h_fourteen">Vierzehn</string>
     <string name="text_clock_units_string_h_fifteen">Fünfzehn</string>
-    <string name="text_clock_units_string_h_sixteen">Sechzehn Uhr</string>
-    <string name="text_clock_units_string_h_seventeen">Siebzehn Uhr</string>
-    <string name="text_clock_units_string_h_eighteen">Achtzehn Uhr</string>
-    <string name="text_clock_units_string_h_nineteen">Neunzehn Uhr</string>
+    <string name="text_clock_units_string_h_sixteen">Sechzehn</string>
+    <string name="text_clock_units_string_h_seventeen">Siebzehn</string>
+    <string name="text_clock_units_string_h_eighteen">Achtzehn</string>
+    <string name="text_clock_units_string_h_nineteen">Neunzehn</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Einhandmodus</string>
     <!-- VPN icon -->
