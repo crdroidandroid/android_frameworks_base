@@ -711,6 +711,9 @@ final class LocalDisplayAdapter extends DisplayAdapter {
 
             SurfaceControl.setAllowedDisplayConfigs(getDisplayTokenLocked(), allowedPhysIndexes);
             int activePhysIndex = SurfaceControl.getActiveConfig(getDisplayTokenLocked());
+            if (activePhysIndex < 0) {
+                return false;
+            }
             return updateActiveModeLocked(activePhysIndex);
         }
 
