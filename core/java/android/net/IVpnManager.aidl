@@ -59,4 +59,6 @@ interface IVpnManager {
     /** General system APIs */
     VpnConfig getVpnConfig(int userId);
     void factoryReset();
+
+    VpnProfile[] getAllLegacyVpns();
 }
