@@ -867,7 +867,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
     final Configuration mTempConfiguration = new Configuration();
 
-    final HighRefreshRateBlacklist mHighRefreshRateBlacklist = HighRefreshRateBlacklist.create();
+    final HighRefreshRateBlacklist mHighRefreshRateBlacklist;
 
     // If true, only the core apps and services are being launched because the device
     // is in a special boot mode, such as being encrypted or waiting for a decryption password.
@@ -1153,6 +1153,8 @@ public class WindowManagerService extends IWindowManager.Stub
         mTaskPositioningController = new TaskPositioningController(
                 this, mInputManager, mActivityTaskManager, mH.getLooper());
         mDragDropController = new DragDropController(this, mH.getLooper());
+
+        mHighRefreshRateBlacklist = HighRefreshRateBlacklist.create(context.getResources());
 
         mSystemGestureExclusionLimitDp = Math.max(MIN_GESTURE_EXCLUSION_LIMIT_DP,
                 DeviceConfig.getInt(DeviceConfig.NAMESPACE_WINDOW_MANAGER,
@@ -5946,6 +5948,12 @@ public class WindowManagerService extends IWindowManager.Stub
         mRoot.dumpTokens(pw, dumpAll);
     }
 
+
+    private void dumpHighRefreshRateBlacklist(PrintWriter pw) {
+        pw.println("WINDOW MANAGER HIGH REFRESH RATE BLACKLIST (dumpsys window refresh)");
+        mHighRefreshRateBlacklist.dump(pw);
+    }
+
     private void dumpTraceStatus(PrintWriter pw) {
         pw.println("WINDOW MANAGER TRACE (dumpsys window trace)");
         pw.print(mWindowTracing.getStatus() + "\n");
@@ -6345,6 +6353,9 @@ public class WindowManagerService extends IWindowManager.Stub
             } else if ("trace".equals(cmd)) {
                 dumpTraceStatus(pw);
                 return;
+            } else if ("refresh".equals(cmd)) {
+                dumpHighRefreshRateBlacklist(pw);
+                return;
             } else {
                 // Dumping a single name?
                 if (!dumpWindows(pw, cmd, args, opti, dumpAll)) {
@@ -6400,6 +6411,10 @@ public class WindowManagerService extends IWindowManager.Stub
                 pw.println(separator);
             }
             dumpTraceStatus(pw);
+            if (dumpAll) {
+                pw.println(separator);
+            }
+            dumpHighRefreshRateBlacklist(pw);
         }
     }
 
