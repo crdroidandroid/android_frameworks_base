@@ -361,6 +361,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             Settings.Secure.LOCKSCREEN_ALBUMART_FILTER;
     private static final String LOCKSCREEN_CHARGING_ANIMATION =
             "system:" + Settings.System.LOCKSCREEN_CHARGING_ANIMATION;
+    private static final String GAMING_MODE_ACTIVE =
+            "system:" + Settings.System.GAMING_MODE_ACTIVE;
+    private static final String GAMING_MODE_HEADSUP_TOGGLE =
+            "system:" + Settings.System.GAMING_MODE_HEADSUP_TOGGLE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -553,6 +557,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
     private boolean mPowerSave;
 
     private boolean mSysuiRoundedFwvals;
+
+    private boolean mHeadsUpDisabled, mGamingModeActivated;
 
     /**
      * Helper that is responsible for showing the right toast when a disallowed activity operation
@@ -865,6 +871,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         tunerService.addTunable(this, STOCK_STATUSBAR_IN_HIDE);
         tunerService.addTunable(this, LOCKSCREEN_ALBUMART_FILTER);
         tunerService.addTunable(this, LOCKSCREEN_CHARGING_ANIMATION);
+        tunerService.addTunable(this, GAMING_MODE_ACTIVE);
+        tunerService.addTunable(this, GAMING_MODE_HEADSUP_TOGGLE);
 
         mPackageMonitor = new PackageMonitor();
         mPackageMonitor.register(mContext, mHandler);
@@ -2295,6 +2303,10 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             if (DEBUG) {
                 Log.d(TAG, "No peeking: disabled panel : " + sbn.getKey());
             }
+            return false;
+        }
+
+        if (mEntryManager.shouldSkipHeadsUp(sbn)) {
             return false;
         }
 
@@ -6545,6 +6557,16 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                         TunerService.parseIntegerSwitch(newValue, true);
                 if (mKeyguardIndicationController != null)
                     mKeyguardIndicationController.updateChargingIndication(showChargingAnimation);
+                break;
+            case GAMING_MODE_ACTIVE:
+                mGamingModeActivated =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                mEntryManager.setGamingPeekMode(mGamingModeActivated && mHeadsUpDisabled);
+                break;
+            case GAMING_MODE_HEADSUP_TOGGLE:
+                mHeadsUpDisabled =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                mEntryManager.setGamingPeekMode(mGamingModeActivated && mHeadsUpDisabled);
                 break;
             default:
                 break;

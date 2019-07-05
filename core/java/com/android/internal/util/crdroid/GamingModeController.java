@@ -73,7 +73,6 @@ public class GamingModeController {
     private static int mRingerState;
     private static int mZenState;
     private static int mHwKeysState;
-    private static int mHeadsUpState;
     private static int mAdaptiveBrightness;
 
     public static final String GAMING_MODE_TURN_OFF = "android.intent.action.GAMING_MODE_TURN_OFF";
@@ -250,15 +249,6 @@ public class GamingModeController {
             Settings.System.putInt(mContext.getContentResolver(),
                     Settings.System.SCREEN_BRIGHTNESS_MODE, SCREEN_BRIGHTNESS_MODE_MANUAL);
         }
-        boolean blockHeadsUp = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.GAMING_MODE_HEADSUP_TOGGLE, 1) == 1;
-        // Heads up
-        if (blockHeadsUp) {
-            mHeadsUpState = Settings.Global.getInt(mContext.getContentResolver(),
-                              Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED, 1);
-            Settings.Global.putInt(mContext.getContentResolver(),
-                    Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED, 0);
-        }
         // HW Buttons
         boolean disableHwKeys = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.GAMING_MODE_HW_KEYS_TOGGLE, 0) == 1;
@@ -305,12 +295,6 @@ public class GamingModeController {
             Settings.System.putInt(mContext.getContentResolver(),
                     Settings.System.SCREEN_BRIGHTNESS_MODE, mAdaptiveBrightness);
         }
-        boolean blockHeadsUp = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.GAMING_MODE_HEADSUP_TOGGLE, 1) == 1;
-        if (blockHeadsUp) {
-            Settings.Global.putInt(mContext.getContentResolver(),
-                    Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED, mHeadsUpState);
-        }
         boolean disableHwKeys = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.GAMING_MODE_HW_KEYS_TOGGLE, 0) == 1;
         if (disableHwKeys) {
@@ -328,8 +312,8 @@ public class GamingModeController {
                 Settings.System.GAMING_MODE_NOTIFICATIONS, 3);
         if(mNotifications == 2 || mNotifications == 3)
             showToast(mContext.getResources().getString(R.string.gaming_mode_disabled_toast), Toast.LENGTH_LONG);
-     
-   mNotificationManager.cancel(GAMING_NOTIFICATION_ID);
+
+        mNotificationManager.cancel(GAMING_NOTIFICATION_ID);
     }
 
     private void addNotification() {
