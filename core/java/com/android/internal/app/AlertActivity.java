@@ -51,6 +51,7 @@ public abstract class AlertActivity extends Activity implements DialogInterface 
 
         mAlert = AlertController.create(this, this, getWindow());
         mAlertParams = new AlertController.AlertParams(this);
+        setTheme(com.android.internal.R.style.CustomThemeDeviceDefaultDialogAlert);
     }
 
     public void cancel() {
