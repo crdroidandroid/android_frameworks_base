@@ -197,10 +197,10 @@
     <string name="quick_settings_reboot_recovery_label">Рэжым аднаўлення</string>
     <string name="quick_settings_poweroff_label">Выключыць</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Гульнявы рэжым адключаны ў наладах</string>
+    <string name="quick_settings_gaming_mode_label">Гульнявы рэжым</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Гульнявы рэжым адключаны.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Гульнявы рэжым уключаны.</string>
 </resources>
