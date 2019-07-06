@@ -343,9 +343,9 @@ public class GamingModeController {
     }
 
     private void activateGamingMode(boolean enabled) {
-        if (mGamingModeActivated == enabled)
+        if (mGamingModeActivated == enabled && mGamingModeEnabled)
             return;
-        mGamingModeActivated = enabled;
+        mGamingModeActivated = enabled && mGamingModeEnabled;
         if (mGamingModeActivated) {
             enableGamingFeatures();
         } else {
@@ -391,8 +391,9 @@ public class GamingModeController {
                                    Settings.System.GAMING_MODE_ENABLED))) {
                 mGamingModeEnabled = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.GAMING_MODE_ENABLED, 0) == 1;
-                if (!mGamingModeEnabled) Settings.System.putInt(mContext.getContentResolver(),
-                    Settings.System.GAMING_MODE_ACTIVE, 0);
+                if (!mGamingModeEnabled)
+                    Settings.System.putInt(mContext.getContentResolver(),
+                         Settings.System.GAMING_MODE_ACTIVE, 0);
             } else if (uri.equals(Settings.System.getUriFor(
                                    Settings.System.GAMING_MODE_ACTIVE))) {
                 boolean enable = Settings.System.getInt(mContext.getContentResolver(),
