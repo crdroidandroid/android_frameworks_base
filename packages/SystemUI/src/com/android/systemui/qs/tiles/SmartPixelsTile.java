@@ -50,11 +50,8 @@ public class SmartPixelsTile extends QSTileImpl<BooleanState> implements
 
     public static final String TILE_SPEC = "smartpixels";
 
-    private static final ComponentName SMART_PIXELS_SETTING_COMPONENT = new ComponentName(
-            "com.android.settings", "com.android.settings.Settings$SmartPixelsActivity");
 
-    private static final Intent SMART_PIXELS_SETTINGS =
-            new Intent().setComponent(SMART_PIXELS_SETTING_COMPONENT);
+    private static final Intent SMART_PIXELS_SETTINGS = new Intent("android.settings.SMART_PIXELS_SETTINGS");
 
     private final BatteryController mBatteryController;
 
