@@ -35,11 +35,7 @@ import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.R;
 
 public class SmartPixelsTile extends QSTileImpl<BooleanState> {
-    private static final ComponentName SMART_PIXELS_SETTING_COMPONENT = new ComponentName(
-            "com.android.settings", "com.android.settings.Settings$SmartPixelsActivity");
-
-    private static final Intent SMART_PIXELS_SETTINGS =
-            new Intent().setComponent(SMART_PIXELS_SETTING_COMPONENT);
+    private static final Intent SMART_PIXELS_SETTINGS = new Intent("android.settings.SMART_PIXELS_SETTINGS");
 
     private boolean mSmartPixelsEnable;
     private boolean mSmartPixelsOnPowerSave;
