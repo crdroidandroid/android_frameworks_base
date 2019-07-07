@@ -6565,7 +6565,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 break;
             case GAMING_MODE_HEADSUP_TOGGLE:
                 mHeadsUpDisabled =
-                        TunerService.parseIntegerSwitch(newValue, false);
+                        TunerService.parseIntegerSwitch(newValue, true);
                 mEntryManager.setGamingPeekMode(mGamingModeActivated && mHeadsUpDisabled);
                 break;
             default:
