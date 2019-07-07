@@ -43,6 +43,9 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 /** Quick settings tile: Expanded desktop **/
 public class ExpandedDesktopTile extends QSTileImpl<BooleanState> {
 
+    private static final Intent EXPANDED_DESKTOP_SETTINGS =
+            new Intent("org.lineageos.lineageparts.EXPANDED_DESKTOP_SETTINGS");
+
     private static final int STATE_ENABLE_FOR_ALL = 1;
     private static final int STATE_ENABLE_FOR_STATUSBAR = 2;
     private static final int STATE_ENABLE_FOR_NAVBAR = 3;
@@ -72,8 +75,7 @@ public class ExpandedDesktopTile extends QSTileImpl<BooleanState> {
 
     @Override
     public Intent getLongClickIntent() {
-        return new Intent().setComponent(new ComponentName(
-            "com.android.settings", "com.android.settings.Settings$ExpandedDesktopSettingsActivity"));
+        return EXPANDED_DESKTOP_SETTINGS;
     }
 
     @Override
