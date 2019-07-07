@@ -200,7 +200,7 @@
     <string name="gaming_mode_not_enabled">Игровой режим отключен в настройках</string>
     <string name="quick_settings_gaming_mode_label">Игровой режим</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Игровой режим выключен.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Игровой режим отключен.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Игровой режим включен.</string>
 </resources>
