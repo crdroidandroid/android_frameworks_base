@@ -37,6 +37,7 @@ public class GamingModeTile extends QSTileImpl<BooleanState> {
 
     private final SystemSetting mGamingModeActivated;
     private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_gaming_mode);
+    private static final Intent GAMING_MODE_SETTINGS = new Intent("android.settings.GAMING_MODE_SETTINGS");
 
     public GamingModeTile(QSHost host) {
         super(host);
@@ -75,7 +76,7 @@ public class GamingModeTile extends QSTileImpl<BooleanState> {
 
     @Override
     public Intent getLongClickIntent() {
-        return null;
+        return GAMING_MODE_SETTINGS;
     }
 
     @Override
