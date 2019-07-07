@@ -36,17 +36,17 @@ import javax.inject.Inject;
 public class OnTheGoTile extends QSTileImpl<BooleanState> {
 
     private final Icon mIcon = ResourceIcon.get(drawable.ic_qs_onthego);
-    private boolean mIsEnabled;
 
     @Inject
     public OnTheGoTile(QSHost host) {
         super(host);
-        mIsEnabled = isOnTheGoEnabled();
     }
 
     @Override
     public BooleanState newTileState() {
-        return new BooleanState();
+        BooleanState state = new BooleanState();
+        state.handlesLongClick = false;
+        return state;
     }
 
     @Override
@@ -61,20 +61,14 @@ public class OnTheGoTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleClick() {
-        toggleService();
-    }
-
-    protected void toggleService() {
         ComponentName cn = new ComponentName("com.android.systemui",
                 "com.android.systemui.crdroid.onthego.OnTheGoService");
         Intent startIntent = new Intent();
         startIntent.setComponent(cn);
         if (isOnTheGoEnabled()) {
             startIntent.setAction("stop");
-            mIsEnabled = false;
         } else {
             startIntent.setAction("start");
-            mIsEnabled = true;
         }
         mContext.startService(startIntent);
         refreshState();
@@ -92,7 +86,7 @@ public class OnTheGoTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        state.value = mIsEnabled;
+        state.value = isOnTheGoEnabled();
         state.state = state.value ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
         state.label = mContext.getString(R.string.quick_settings_onthego_label);
         state.icon = mIcon;
