@@ -36,6 +36,8 @@ import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
 
+    private static final Intent DOZE_SETTINGS = new Intent("android.settings.DOZE_SETTINGS");
+
     private final SecureSetting mSetting;
 
     public AlwaysOnDisplayTile(QSHost host) {
@@ -68,8 +70,7 @@ public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
 
     @Override
     public Intent getLongClickIntent() {
-        return new Intent().setComponent(new ComponentName(
-            "com.custom.ambient.display", "com.custom.ambient.display.DozeService"));
+        return DOZE_SETTINGS;
     }
 
     @Override
