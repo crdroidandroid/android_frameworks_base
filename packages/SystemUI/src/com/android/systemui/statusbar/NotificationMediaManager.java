@@ -370,6 +370,9 @@ public class NotificationMediaManager implements Dumpable {
             for (int i = 0; i < N; i++) {
                 final NotificationData.Entry entry = activeNotifications.get(i);
                 if (entry.notification.getPackageName().equals(pkg)) {
+                    if (mStatusBar != null && mStatusBar.mTickerEnabled == 2) {
+                        mStatusBar.tick(entry.notification, true, true, mMediaMetadata, null);
+                    }
                     // NotificationEntryManager onAsyncInflationFinished will get called
                     // when colors and album are loaded for the notification, then we can send
                     // those info to Pulse
@@ -400,6 +403,9 @@ public class NotificationMediaManager implements Dumpable {
             }
             if (mStatusBar != null && mStatusBar.getVisualizer() != null) {
                 mStatusBar.getVisualizer().setPlaying(false);
+            }
+            if (mStatusBar != null) {
+                mStatusBar.resetTrackInfo();
             }
         }
     }
