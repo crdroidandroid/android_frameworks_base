@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">縮放 (右側)</string>
     <string name="animation_random">隨機</string>
     <string name="action_null">空白</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">需要重新啟動使用者介面</string>
     <string name="systemui_restart_message">要使所有更改生效，需要重新啟動使用者介面。 現在重新啟動使用者介面？</string>
