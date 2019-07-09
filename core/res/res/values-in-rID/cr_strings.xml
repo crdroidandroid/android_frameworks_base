@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Tumbuh di (kanan)</string>
     <string name="animation_random">Acak</string>
     <string name="action_null">Kosong</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Diperlukan memulai ulang sistemUI</string>
     <string name="systemui_restart_message">Untuk melihat semua perubahan, diperlukannya memulai ulang SystemUI. mulai ulang sekarang?</string>
