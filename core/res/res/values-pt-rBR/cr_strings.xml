@@ -36,7 +36,7 @@
     <string name="animation_random">Aleatória</string>
     <string name="action_null">Em branco</string>
     <string name="animation_ethans">Ethans</string>
-    <string name="animation_q">Q style</string>
+    <string name="animation_q">Estilo Android Q</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Reinício da interface do sistema requerido</string>
     <string name="systemui_restart_message">Para que todas as alterações tenham efeito, é necessário o reinício da Ui do sistema. Reiniciar a Ui do sistema agora?</string>
