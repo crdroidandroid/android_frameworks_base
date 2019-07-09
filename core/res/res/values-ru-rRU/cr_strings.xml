@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Увеличение (вправо)</string>
     <string name="animation_random">Случайно</string>
     <string name="action_null">Пусто</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Необходима перезагрузка интерфейса</string>
     <string name="systemui_restart_message">Чтобы все изменения вступили в силу, требуется перезагрузка пользовательского интерфейса. Перезагрузить интерфейс?</string>
