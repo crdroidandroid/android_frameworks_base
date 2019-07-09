@@ -53,5 +53,5 @@
     <string name="gaming_mode_notification_title">Modalità di gioco attivata</string>
     <string name="gaming_mode_notification_content">Tocca per disattivare la modalità gioco</string>
     <string name="gaming_mode_enabled_toast">Modalità gioco attivata</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="gaming_mode_disabled_toast">Modalità gioco disattivata</string>
 </resources>
