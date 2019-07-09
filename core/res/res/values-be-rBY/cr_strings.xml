@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Павелічэнне (управа)</string>
     <string name="animation_random">Выпадковы</string>
     <string name="action_null">Пуста</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Неабходная перазагрузка карыстацкага інтэрфейсу</string>
     <string name="systemui_restart_message">Каб усе змены набылі сілу, патрабуецца перазагрузка карыстацкага інтэрфейсу. Перазагрузіць інтэрфейс?</string>
