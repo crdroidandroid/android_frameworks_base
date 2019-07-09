@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Lớn dần (Bên phải)</string>
     <string name="animation_random">Ngẫu nhiên</string>
     <string name="action_null">Trống</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Phải khởi động lại giao diện hệ thống</string>
     <string name="systemui_restart_message">Để mọi thay đổi được áp dụng, phải khởi động lại giao diện hệ thống. Khởi động lại bây giờ?</string>
