@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">拡大（右）</string>
     <string name="animation_random">ランダム</string>
     <string name="action_null">なし</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">システム UI の再起動が必要です</string>
     <string name="systemui_restart_message">すべての変更を反映するには、システム UI の再起動が必要です。再起動しますか？</string>
