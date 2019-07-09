@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Espandi (a destra)</string>
     <string name="animation_random">Casuale</string>
     <string name="action_null">Vuoto</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Riavvio dell\'interfaccia utente richiesto</string>
     <string name="systemui_restart_message">Per rendere effettive tutte le modifiche, è necessario un riavvio dell\'Interfaccia Utente. Riavviare l\'Interfaccia Utente ora?</string>
