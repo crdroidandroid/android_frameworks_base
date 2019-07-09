@@ -36,7 +36,7 @@
     <string name="animation_random">Véletlenszerű</string>
     <string name="action_null">Üres</string>
     <string name="animation_ethans">Ethans</string>
-    <string name="animation_q">Q style</string>
+    <string name="animation_q">Q stílusú</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Rendszerfelület-újraindítás szükséges</string>
     <string name="systemui_restart_message">Az összes módosítás érvénybe léptetéséhez a rendszerfelület újraindítása szükséges. Újraindítja most?</string>
