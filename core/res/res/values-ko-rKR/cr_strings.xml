@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">커지기(오른쪽에서)</string>
     <string name="animation_random">임의</string>
     <string name="action_null">공백</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">SystemUI 다시 시작 필요</string>
     <string name="systemui_restart_message">모든 변경 사항을 적용하려면 SystemUI를 다시 시작해야합니다. 지금 SystemUI를 다시 시작 하시겠습니까?</string>
