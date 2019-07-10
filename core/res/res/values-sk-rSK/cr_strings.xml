@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Zväčšenie (Sprava)</string>
     <string name="animation_random">Náhodné</string>
     <string name="action_null">Prázdne</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Vyžaduje sa reštart Systemového UI</string>
     <string name="systemui_restart_message">Aby sa všetky zmeny prejavili je potrebné reštartovať SystemUI. Reštartovať teraz?</string>

@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Увеличение (надясно)</string>
     <string name="animation_random">Произволно</string>
     <string name="action_null">Празно</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Необходимо е рестартиране на системния интерфейс</string>
     <string name="systemui_restart_message">За да влязат в сила всички промени се изисква рестартиране на системния интерфейс. Рестартиране на системния интерфейс?</string>

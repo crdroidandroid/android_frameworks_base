@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Verschijnen (Rechts)</string>
     <string name="animation_random">Willekeurig</string>
     <string name="action_null">Leeg</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">SysteemUI herstart vereist</string>
     <string name="systemui_restart_message">Een herstart van de Ui is nodig om alle wijzigingen door te voeren. Ui nu herstarten?</string>

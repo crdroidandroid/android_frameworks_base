@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Espandi (a destra)</string>
     <string name="animation_random">Casuale</string>
     <string name="action_null">Vuoto</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Riavvio dell\'interfaccia utente richiesto</string>
     <string name="systemui_restart_message">Per rendere effettive tutte le modifiche, è necessario un riavvio dell\'Interfaccia Utente. Riavviare l\'Interfaccia Utente ora?</string>
@@ -49,9 +51,9 @@
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Clicca sulla zona vuota per uscire dalla modalità Una mano</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">Modalità di gioco</string>
+    <string name="gaming_mode_notification_title">Modalità di gioco attivata</string>
+    <string name="gaming_mode_notification_content">Tocca per disattivare la modalità gioco</string>
+    <string name="gaming_mode_enabled_toast">Modalità gioco attivata</string>
+    <string name="gaming_mode_disabled_toast">Modalità gioco disattivata</string>
 </resources>

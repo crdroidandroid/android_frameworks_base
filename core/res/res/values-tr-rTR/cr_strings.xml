@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Büyüt (Sağdan)</string>
     <string name="animation_random">Karışık</string>
     <string name="action_null">Boş</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q stili</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Sistem arayüzünü yeniden başlatma gerekli</string>
     <string name="systemui_restart_message">Tüm değişikliklerin etkili olması için Sistem arayüzünün yeniden başlatılması gerekiyor. Sistem arayüzünü şimdi yeniden başlatmak ister misiniz?</string>

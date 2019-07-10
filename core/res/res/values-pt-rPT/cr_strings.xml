@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Crescer (Direita)</string>
     <string name="animation_random">random</string>
     <string name="action_null">Em branco</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Reinício da interface do sistema requerido</string>
     <string name="systemui_restart_message">Para que todas as alterações tenham efeito, é necessário o reinício da UI do sistema. Reiniciar a UI do sistema agora?</string>

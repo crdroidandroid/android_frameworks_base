@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Crește în (Dreapta)</string>
     <string name="animation_random">Aleatoriu</string>
     <string name="action_null">Gol</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Stil Q</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Repornire IU de sistem necesară</string>
     <string name="systemui_restart_message">Pentru ca toate modificările să aibă efect, este necesară o repornire a IU sistem. Reporniţi IU sistem acum?</string>

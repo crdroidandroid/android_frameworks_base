@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Agrandir (droite)</string>
     <string name="animation_random">Aléatoire</string>
     <string name="action_null">Vide</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Q style</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Un redémarrage de SystemUI est nécessaire</string>
     <string name="systemui_restart_message">Afin que toutes les modifications soient prises en compte, un redémarrage de SystemUI est nécessaire. Voulez vous redémarrer SystemUI maintenant ?</string>

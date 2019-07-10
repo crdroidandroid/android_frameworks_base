@@ -35,6 +35,8 @@
     <string name="animation_grow_shrink_right">Růst (vpravo)</string>
     <string name="animation_random">Náhodně</string>
     <string name="action_null">Prázdné</string>
+    <string name="animation_ethans">Ethans</string>
+    <string name="animation_q">Ve stylu Q</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Je vyžadován restart SystemUI</string>
     <string name="systemui_restart_message">Aby se projevily všechny změny, je třeba restartovat SystemUI. Restartovat nyní?</string>
