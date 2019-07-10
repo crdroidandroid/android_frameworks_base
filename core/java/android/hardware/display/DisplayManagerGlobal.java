@@ -596,6 +596,14 @@ public final class DisplayManagerGlobal {
         }
     }
 
+    public void requestScreenMode(int modeId) {
+        try {
+            mDm.requestScreenMode(modeId);
+        } catch (RemoteException ex) {
+            throw ex.rethrowFromSystemServer();
+        }
+    }
+
     private final class DisplayManagerCallback extends IDisplayManagerCallback.Stub {
         @Override
         public void onDisplayEvent(int displayId, int event) {

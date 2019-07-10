@@ -157,6 +157,13 @@ final class LocalDisplayAdapter extends DisplayAdapter {
         }
     }
 
+    public void requestScreenMode(int modeId) {
+        LocalDisplayDevice device = (LocalDisplayDevice) mDevices.get(Display.DEFAULT_DISPLAY);
+        if (device != null) {
+            device.requestModeLocked(modeId);
+        }
+    }
+
     private final class LocalDisplayDevice extends DisplayDevice {
         private final int mBuiltInDisplayId;
         private final Light mBacklight;

@@ -764,6 +764,10 @@ public final class DisplayManager {
         return mGlobal.getMinimumBrightnessCurve();
     }
 
+    public void requestScreenMode(int modeId) {
+        mGlobal.requestScreenMode(modeId);
+    }
+
     /**
      * Listens for changes in available display devices.
      */

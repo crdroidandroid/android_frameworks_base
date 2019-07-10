@@ -296,6 +296,8 @@ public final class DisplayManagerService extends SystemService {
     private final Curve mMinimumBrightnessCurve;
     private final Spline mMinimumBrightnessSpline;
 
+    LocalDisplayAdapter mLocalDisplayAdapter;
+
     public DisplayManagerService(Context context) {
         this(context, new Injector());
     }
@@ -823,9 +825,9 @@ public final class DisplayManagerService extends SystemService {
     private void registerDefaultDisplayAdapters() {
         // Register default display adapters.
         synchronized (mSyncRoot) {
+            mLocalDisplayAdapter = new LocalDisplayAdapter(mSyncRoot, mContext, mHandler, mDisplayAdapterListener);
             // main display adapter
-            registerDisplayAdapterLocked(new LocalDisplayAdapter(
-                    mSyncRoot, mContext, mHandler, mDisplayAdapterListener));
+            registerDisplayAdapterLocked(mLocalDisplayAdapter);
 
             // Standalone VR devices rely on a virtual display as their primary display for
             // 2D UI. We register virtual display adapter along side the main display adapter
@@ -2159,6 +2161,18 @@ public final class DisplayManagerService extends SystemService {
             return mContext.checkCallingPermission(
                     android.Manifest.permission.CAPTURE_SECURE_VIDEO_OUTPUT)
                     == PackageManager.PERMISSION_GRANTED;
+        }
+
+        public void requestScreenMode(int modeId) {
+            long token = Binder.clearCallingIdentity();
+            try {
+                if (mLocalDisplayAdapter != null) {
+                    mLocalDisplayAdapter.requestScreenMode(modeId);
+                }
+                Binder.restoreCallingIdentity(token);
+            } catch (Throwable th) {
+                Binder.restoreCallingIdentity(token);
+            }
         }
     }
 
