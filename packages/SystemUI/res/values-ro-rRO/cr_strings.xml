@@ -197,10 +197,10 @@
     <string name="quick_settings_reboot_recovery_label">Recuperare</string>
     <string name="quick_settings_poweroff_label">Oprire</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Mod pentru jocuri este dezactivat din setari</string>
+    <string name="quick_settings_gaming_mode_label">Mod pentru jocuri</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Mod pentru jocuri oprit.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Mod pentru jocuri pornit.</string>
 </resources>
