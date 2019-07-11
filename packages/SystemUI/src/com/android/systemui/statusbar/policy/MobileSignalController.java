@@ -96,6 +96,7 @@ public class MobileSignalController extends SignalController<
     private boolean mVoLTEicon;
     private boolean mRoamingIconAllowed;
     private boolean mShow4gForLte;
+    private boolean mDataDisabledIcon;
 
     private static final String SHOW_VOLTE_ICON =
             "system:" + Settings.System.SHOW_VOLTE_ICON;
@@ -103,6 +104,8 @@ public class MobileSignalController extends SignalController<
             "system:" + Settings.System.ROAMING_INDICATOR_ICON;
     private static final String SHOW_FOURG_ICON =
             "system:" + Settings.System.SHOW_FOURG_ICON;
+    private static final String DATA_DISABLED_ICON =
+            "system:" + Settings.System.DATA_DISABLED_ICON;
 
     // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
     // need listener lists anymore.
@@ -154,6 +157,7 @@ public class MobileSignalController extends SignalController<
         Dependency.get(TunerService.class).addTunable(this, SHOW_VOLTE_ICON);
         Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
         Dependency.get(TunerService.class).addTunable(this, SHOW_FOURG_ICON);
+        Dependency.get(TunerService.class).addTunable(this, DATA_DISABLED_ICON);
     }
 
     @Override
@@ -174,6 +178,11 @@ public class MobileSignalController extends SignalController<
                         TunerService.parseIntegerSwitch(newValue, false);
                      mapIconSets();
                 break;
+            case DATA_DISABLED_ICON:
+                     mDataDisabledIcon = 
+                        TunerService.parseIntegerSwitch(newValue, true);
+                     updateTelephony();                
+                break; 
             default:
                 break;
         }
@@ -562,7 +571,7 @@ public class MobileSignalController extends SignalController<
         mCurrentState.roaming = isRoaming() && mRoamingIconAllowed;
         if (isCarrierNetworkChangeActive()) {
             mCurrentState.iconGroup = TelephonyIcons.CARRIER_NETWORK_CHANGE;
-        } else if (isDataDisabled() && !mConfig.alwaysShowDataRatIcon) {
+        } else if (isDataDisabled() && mDataDisabledIcon) {
             if (mSubscriptionInfo.getSubscriptionId()
                     != mDefaults.getDefaultDataSubId()) {
                 mCurrentState.iconGroup = TelephonyIcons.NOT_DEFAULT_DATA;
