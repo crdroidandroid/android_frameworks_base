@@ -241,6 +241,7 @@ applications that come with the platform
 
     <privapp-permissions package="com.android.settings">
         <permission name="android.permission.ACCESS_CHECKIN_PROPERTIES"/>
+        <permission name="android.permission.ACCESS_FONT_MANAGER"/>
         <permission name="android.permission.ACCESS_NOTIFICATIONS"/>
         <permission name="android.permission.BACKUP"/>
         <permission name="android.permission.BATTERY_STATS"/>
