@@ -113,6 +113,7 @@ public class ThemeAccentUtils {
         "com.android.systemui.qstile.justicons", //22
         "com.android.systemui.qstile.neonlike", //23
         "com.android.systemui.qstile.triangle", //24
+        "com.android.systemui.qstile.oos", //25
     };
 
     // QS Header Styles
