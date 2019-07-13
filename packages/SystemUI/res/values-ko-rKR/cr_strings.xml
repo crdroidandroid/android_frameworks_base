@@ -197,10 +197,10 @@
     <string name="quick_settings_reboot_recovery_label">리커버리</string>
     <string name="quick_settings_poweroff_label">전원 끄기</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">게임 모드가 설정에서 사용 중지되었습니다.</string>
+    <string name="quick_settings_gaming_mode_label">게임 모드</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">게임 모드가 꺼졌습니다.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">게임 모드가 켜져 있습니다.</string>
 </resources>
