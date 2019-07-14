@@ -133,10 +133,10 @@
     <string name="text_clock_high">High</string>
     <string name="text_clock_noon">Noon</string>
     <!-- TensString -->
-    <string name="text_clock_tens_string_twenty">Twenty</string>
-    <string name="text_clock_tens_string_thirty">Thirty</string>
-    <string name="text_clock_tens_string_forty">Forty</string>
-    <string name="text_clock_tens_string_fifty">Fifty</string>
+    <string name="text_clock_tens_string_twenty">Dwadzieścia</string>
+    <string name="text_clock_tens_string_thirty">Trzydzieści</string>
+    <string name="text_clock_tens_string_forty">Czterdzieści</string>
+    <string name="text_clock_tens_string_fifty">Pięćdziesiąt</string>
     <string name="text_clock_tens_string_sixty">Sixty</string>
     <!-- UnitsString -->
     <string name="text_clock_units_string_clock">Clock</string>
