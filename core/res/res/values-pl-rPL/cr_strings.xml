@@ -36,7 +36,7 @@
     <string name="animation_random">Losowo</string>
     <string name="action_null">Pusto</string>
     <string name="animation_ethans">Ethans</string>
-    <string name="animation_q">Q style</string>
+    <string name="animation_q">Styl Q</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Wymagany restart SystemUI</string>
     <string name="systemui_restart_message">Aby wszystkie zmiany zostały wprowadzone wymagany jest restart SystemUI. Zrestartować SystemUI teraz?</string>
@@ -53,7 +53,7 @@
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Tryb grania włączony</string>
     <string name="gaming_mode_notification_title">Tryb grania wyłączony</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="gaming_mode_notification_content">Naciśnij, aby wyłączyć tryb gry</string>
+    <string name="gaming_mode_enabled_toast">Tryb gry włączony</string>
+    <string name="gaming_mode_disabled_toast">Tryb gry wyłączony</string>
 </resources>
