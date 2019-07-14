@@ -1002,12 +1002,12 @@ public class NotificationEntryManager implements Dumpable, NotificationInflater.
         // Gaming mode takes precedence since messaging headsup is intrusive
         if (mSkipHeadsUp) {
             boolean isNonInstrusive = notificationPackageName.contains("dialer") ||
-                notificationPackageName.contains("alarm");
+                notificationPackageName.contains("clock");
             return !mPresenter.isDozing() && mSkipHeadsUp && !isNonInstrusive;
         }
 
         boolean isLessBoring = notificationPackageName.contains("dialer") ||
-                notificationPackageName.contains("alarm") ||
+                notificationPackageName.contains("clock") ||
                 notificationPackageName.contains("messaging");
         return !mPresenter.isDozing() && mLessBoringHeadsUp && !isLessBoring;
     }
