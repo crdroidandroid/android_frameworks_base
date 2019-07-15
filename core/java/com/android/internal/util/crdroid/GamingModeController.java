@@ -391,7 +391,7 @@ public class GamingModeController {
                                    Settings.System.GAMING_MODE_ENABLED))) {
                 mGamingModeEnabled = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.GAMING_MODE_ENABLED, 0) == 1;
-                if (!mGamingModeEnabled)
+                if (!mGamingModeEnabled && mGamingModeActivated)
                     Settings.System.putInt(mContext.getContentResolver(),
                          Settings.System.GAMING_MODE_ACTIVE, 0);
             } else if (uri.equals(Settings.System.getUriFor(
