@@ -130,8 +130,8 @@
     <string name="ambientmusic_songinfo">%s by %s</string>
     <string name="custom_text_clock_top_text_default">Ini</string>
     <string name="text_clock_zero_h_min">0</string>
-    <string name="text_clock_high">High</string>
-    <string name="text_clock_noon">Noon</string>
+    <string name="text_clock_high">Tinggi</string>
+    <string name="text_clock_noon">Tengah hari</string>
     <!-- TensString -->
     <string name="text_clock_tens_string_twenty">Dua puluh</string>
     <string name="text_clock_tens_string_thirty">Tiga puluh</string>
@@ -183,24 +183,24 @@
     <string name="text_clock_units_string_h_fourteen">Empat belas</string>
     <string name="text_clock_units_string_h_fifteen">Lima Belas</string>
     <string name="text_clock_units_string_h_sixteen">Enam belas</string>
-    <string name="text_clock_units_string_h_seventeen">Seventeen</string>
-    <string name="text_clock_units_string_h_eighteen">Eighteen</string>
-    <string name="text_clock_units_string_h_nineteen">Nineteen</string>
+    <string name="text_clock_units_string_h_seventeen">Tujuh Belas</string>
+    <string name="text_clock_units_string_h_eighteen">Delapan Belas</string>
+    <string name="text_clock_units_string_h_nineteen">Sembilan Belas</string>
     <!-- OneHand mode QS tile -->
-    <string name="qs_onehand_label">One Handed mode</string>
+    <string name="qs_onehand_label">Mode satu tangan</string>
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">Free RAM: %1$d MB</string>
+    <string name="recents_free_ram">RAM TERSEDIA: %1$d MB</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">Nyalakan ulang</string>
+    <string name="quick_settings_reboot_recovery_label">Pemulihan</string>
+    <string name="quick_settings_poweroff_label">Matikan Daya</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Mode permainan dinonaktifkan di pengaturan</string>
+    <string name="quick_settings_gaming_mode_label">Mode permainan</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Mode permainan dimatikan.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Mode permainan dihidupkan.</string>
 </resources>
