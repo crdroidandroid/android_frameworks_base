@@ -133,20 +133,20 @@
         <item quantity="other"><annotation name="color">现在是</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Q Clock - Hour -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
+    <string name="text_clock_h_one">一</string>
+    <string name="text_clock_h_two">二</string>
+    <string name="text_clock_h_three">三</string>
+    <string name="text_clock_h_four">四</string>
+    <string name="text_clock_h_five">五</string>
+    <string name="text_clock_h_six">六</string>
+    <string name="text_clock_h_seven">七</string>
     <string name="text_clock_h_eight">Eight</string>
     <string name="text_clock_h_nine">Nine</string>
     <string name="text_clock_h_ten">Ten</string>
     <string name="text_clock_h_eleven">Eleven</string>
     <string name="text_clock_h_twelve">Twelve</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">O’Clock</string>
+    <string name="text_clock_m_zero">O\'Clock</string>
     <string name="text_clock_m_one">O’One</string>
     <string name="text_clock_m_two">O’Two</string>
     <string name="text_clock_m_three">O’Three</string>
