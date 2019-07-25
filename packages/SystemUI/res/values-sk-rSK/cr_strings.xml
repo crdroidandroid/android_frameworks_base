@@ -128,64 +128,95 @@
     <string name="global_action_restart_systemui">SystemUI</string>
     <!-- Ambient Display Pixel-Like string -->
     <string name="ambientmusic_songinfo">%s z %s</string>
-    <string name="custom_text_clock_top_text_default">It\'s</string>
-    <string name="text_clock_zero_h_min">O\'</string>
-    <string name="text_clock_high">High</string>
-    <string name="text_clock_noon">Noon</string>
-    <!-- TensString -->
-    <string name="text_clock_tens_string_twenty">Twenty</string>
-    <string name="text_clock_tens_string_thirty">Thirty</string>
-    <string name="text_clock_tens_string_forty">Forty</string>
-    <string name="text_clock_tens_string_fifty">Fifty</string>
-    <string name="text_clock_tens_string_sixty">Sixty</string>
-    <!-- UnitsString -->
-    <string name="text_clock_units_string_clock">Clock</string>
-    <string name="text_clock_units_string_one">One</string>
-    <string name="text_clock_units_string_two">Two</string>
-    <string name="text_clock_units_string_three">Three</string>
-    <string name="text_clock_units_string_four">Four</string>
-    <string name="text_clock_units_string_five">Five</string>
-    <string name="text_clock_units_string_six">Six</string>
-    <string name="text_clock_units_string_seven">Seven</string>
-    <string name="text_clock_units_string_eight">Eight</string>
-    <string name="text_clock_units_string_nine">Nine</string>
-    <string name="text_clock_units_string_ten">Ten</string>
-    <string name="text_clock_units_string_eleven">Eleven</string>
-    <string name="text_clock_units_string_twelve">Twelve</string>
-    <string name="text_clock_units_string_thirteen">Thirteen</string>
-    <string name="text_clock_units_string_fourteen">Fourteen</string>
-    <string name="text_clock_units_string_fifteen">Fifteen</string>
-    <string name="text_clock_units_string_sixteen">Sixteen</string>
-    <string name="text_clock_units_string_seventeen">Seventeen</string>
-    <string name="text_clock_units_string_eighteen">Eighteen</string>
-    <string name="text_clock_units_string_nineteen">Nineteen</string>
-    <!-- TensStringH -->
-    <string name="text_clock_tens_string_h_twenty">Twenty</string>
-    <string name="text_clock_tens_string_h_thirty">Thirty</string>
-    <string name="text_clock_tens_string_h_forty">Forty</string>
-    <string name="text_clock_tens_string_h_fifty">Fifty</string>
-    <string name="text_clock_tens_string_h_sixty">Sixty</string>
-    <!-- UnitsStringH -->
-    <string name="text_clock_units_string_h_twelve_h">Twelve</string>
-    <string name="text_clock_units_string_h_one">One</string>
-    <string name="text_clock_units_string_h_two">Two</string>
-    <string name="text_clock_units_string_h_three">Three</string>
-    <string name="text_clock_units_string_h_four">Four</string>
-    <string name="text_clock_units_string_h_five">Five</string>
-    <string name="text_clock_units_string_h_six">Six</string>
-    <string name="text_clock_units_string_h_seven">Seven</string>
-    <string name="text_clock_units_string_h_eight">Eight</string>
-    <string name="text_clock_units_string_h_nine">Nine</string>
-    <string name="text_clock_units_string_h_ten">Ten</string>
-    <string name="text_clock_units_string_h_eleven">Eleven</string>
-    <string name="text_clock_units_string_h_twelve">Twelve</string>
-    <string name="text_clock_units_string_h_thirteen">Thirteen</string>
-    <string name="text_clock_units_string_h_fourteen">Fourteen</string>
-    <string name="text_clock_units_string_h_fifteen">Fifteen</string>
-    <string name="text_clock_units_string_h_sixteen">Sixteen</string>
-    <string name="text_clock_units_string_h_seventeen">Seventeen</string>
-    <string name="text_clock_units_string_h_eighteen">Eighteen</string>
-    <string name="text_clock_units_string_h_nineteen">Nineteen</string>
+    <!-- Q Clock -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">It’s</annotation>\"
+^1
+^2\"</item>
+        <item quantity="one"><annotation name="color">It’s</annotation>\"
+^1
+^2\"</item>
+        <item quantity="few"><annotation name="color">It’s</annotation>\"
+^1
+^2\"</item>
+        <item quantity="many"><annotation name="color">It’s</annotation>\"
+^1
+^2\"</item>
+    </plurals>
+    <!-- Q Clock - Hour -->
+    <string name="text_clock_h_one">One</string>
+    <string name="text_clock_h_two">Two</string>
+    <string name="text_clock_h_three">Three</string>
+    <string name="text_clock_h_four">Four</string>
+    <string name="text_clock_h_five">Five</string>
+    <string name="text_clock_h_six">Six</string>
+    <string name="text_clock_h_seven">Seven</string>
+    <string name="text_clock_h_eight">Eight</string>
+    <string name="text_clock_h_nine">Nine</string>
+    <string name="text_clock_h_ten">Ten</string>
+    <string name="text_clock_h_eleven">Eleven</string>
+    <string name="text_clock_h_twelve">Twelve</string>
+    <!-- Q Clock - Minutes -->
+    <string name="text_clock_m_zero">O’Clock</string>
+    <string name="text_clock_m_one">O’One</string>
+    <string name="text_clock_m_two">O’Two</string>
+    <string name="text_clock_m_three">O’Three</string>
+    <string name="text_clock_m_four">O’Four</string>
+    <string name="text_clock_m_five">O’Five</string>
+    <string name="text_clock_m_six">O’Six</string>
+    <string name="text_clock_m_seven">O’Seven</string>
+    <string name="text_clock_m_eight">O’Eight</string>
+    <string name="text_clock_m_nine">O’Nine</string>
+    <string name="text_clock_m_ten">Ten</string>
+    <string name="text_clock_m_eleven">Eleven</string>
+    <string name="text_clock_m_twelve">Twelve</string>
+    <string name="text_clock_m_thirteen">Thirteen</string>
+    <string name="text_clock_m_fourteen">Fourteen</string>
+    <string name="text_clock_m_fifteen">Fifteen</string>
+    <string name="text_clock_m_sixteen">Sixteen</string>
+    <string name="text_clock_m_seventeen">Seventeen</string>
+    <string name="text_clock_m_eighteen">Eighteen</string>
+    <string name="text_clock_m_nineteen">Nineteen</string>
+    <string name="text_clock_m_twenty">Twenty</string>
+    <string name="text_clock_m_twenty_one">Twenty One</string>
+    <string name="text_clock_m_twenty_two">Twenty Two</string>
+    <string name="text_clock_m_twenty_three">Twenty Three</string>
+    <string name="text_clock_m_twenty_four">Twenty Four</string>
+    <string name="text_clock_m_twenty_five">Twenty Five</string>
+    <string name="text_clock_m_twenty_six">Twenty Six</string>
+    <string name="text_clock_m_twenty_seven">Twenty Seven</string>
+    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
+    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
+    <string name="text_clock_m_thirty">Thirty</string>
+    <string name="text_clock_m_thirty_one">Thirty One</string>
+    <string name="text_clock_m_thirty_two">Thirty Two</string>
+    <string name="text_clock_m_thirty_three">Thirty Three</string>
+    <string name="text_clock_m_thirty_four">Thirty Four</string>
+    <string name="text_clock_m_thirty_five">Thirty Five</string>
+    <string name="text_clock_m_thirty_six">Thirty Six</string>
+    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
+    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
+    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
+    <string name="text_clock_m_forty">Forty</string>
+    <string name="text_clock_m_forty_one">Forty One</string>
+    <string name="text_clock_m_forty_two">Forty Two</string>
+    <string name="text_clock_m_forty_three">Forty Three</string>
+    <string name="text_clock_m_forty_four">Forty Four</string>
+    <string name="text_clock_m_forty_five">Forty Five</string>
+    <string name="text_clock_m_forty_six">Forty Six</string>
+    <string name="text_clock_m_forty_seven">Forty Seven</string>
+    <string name="text_clock_m_forty_eight">Forty Eight</string>
+    <string name="text_clock_m_forty_nine">Forty Nine</string>
+    <string name="text_clock_m_fifty">Fifty</string>
+    <string name="text_clock_m_fifty_one">Fifty One</string>
+    <string name="text_clock_m_fifty_two">Fifty Two</string>
+    <string name="text_clock_m_fifty_three">Fifty Three</string>
+    <string name="text_clock_m_fifty_four">Fifty Four</string>
+    <string name="text_clock_m_fifty_five">Fifty Five</string>
+    <string name="text_clock_m_fifty_six">Fifty Six</string>
+    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
+    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
+    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">One Handed mode</string>
     <!-- VPN icon -->
