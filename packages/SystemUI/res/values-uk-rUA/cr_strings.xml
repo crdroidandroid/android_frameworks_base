@@ -130,10 +130,8 @@
     <string name="ambientmusic_songinfo">%s від %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\"
-^1
-^2\"</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\"
+        <item quantity="other"><annotation name="color">Зараз</annotation>\" ^1 ^2\"</item>
+        <item quantity="one"><annotation name="color">Зараз</annotation>\" 
 ^1
 ^2\"</item>
         <item quantity="few"><annotation name="color">It’s</annotation>\"
@@ -144,8 +142,8 @@
 ^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
+    <string name="text_clock_h_one">Один</string>
+    <string name="text_clock_h_two">Два</string>
     <string name="text_clock_h_three">Three</string>
     <string name="text_clock_h_four">Four</string>
     <string name="text_clock_h_five">Five</string>
