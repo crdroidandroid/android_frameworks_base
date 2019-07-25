@@ -137,9 +137,7 @@
         <item quantity="few"><annotation name="color">It’s</annotation>\"
 ^1
 ^2\"</item>
-        <item quantity="many"><annotation name="color">It’s</annotation>\"
-^1
-^2\"</item>
+        <item quantity="many"><annotation name="color">Зараз</annotation>\" ^1 ^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
     <string name="text_clock_h_one">Один</string>
@@ -194,27 +192,27 @@
     <string name="text_clock_m_thirty_six">Тридцять шість</string>
     <string name="text_clock_m_thirty_seven">Тридцять сім</string>
     <string name="text_clock_m_thirty_eight">Тридцять вісім</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_thirty_nine">Тридцять дев\'ять</string>
+    <string name="text_clock_m_forty">Сорок</string>
+    <string name="text_clock_m_forty_one">Сорок один</string>
+    <string name="text_clock_m_forty_two">Сорок два</string>
+    <string name="text_clock_m_forty_three">Сорок три</string>
+    <string name="text_clock_m_forty_four">Сорок чотири</string>
+    <string name="text_clock_m_forty_five">Сорок п\'ять</string>
+    <string name="text_clock_m_forty_six">Сорок шість</string>
+    <string name="text_clock_m_forty_seven">Сорок сім</string>
+    <string name="text_clock_m_forty_eight">Сорок вісім</string>
+    <string name="text_clock_m_forty_nine">Сорок дев\'ять</string>
+    <string name="text_clock_m_fifty">П\'ятдесят</string>
+    <string name="text_clock_m_fifty_one">П\'ятдесят один</string>
+    <string name="text_clock_m_fifty_two">П\'ятдесят два</string>
+    <string name="text_clock_m_fifty_three">П\'ятдесят три</string>
+    <string name="text_clock_m_fifty_four">П\'ятдесят чотири</string>
+    <string name="text_clock_m_fifty_five">П\'ятдесят п\'ять</string>
+    <string name="text_clock_m_fifty_six">П\'ятдесят шість</string>
+    <string name="text_clock_m_fifty_seven">П\'ятдесят сім</string>
+    <string name="text_clock_m_fifty_eight">П\'ятдесят вісім</string>
+    <string name="text_clock_m_fifty_nine">П\'ятдесят дев\'ять</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Режим керування однією рукою</string>
     <!-- VPN icon -->
