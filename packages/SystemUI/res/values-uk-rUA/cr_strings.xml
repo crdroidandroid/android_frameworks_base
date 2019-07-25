@@ -131,12 +131,8 @@
     <!-- Q Clock -->
     <plurals name="type_clock_header">
         <item quantity="other"><annotation name="color">Зараз</annotation>\" ^1 ^2\"</item>
-        <item quantity="one"><annotation name="color">Зараз</annotation>\" 
-^1
-^2\"</item>
-        <item quantity="few"><annotation name="color">It’s</annotation>\"
-^1
-^2\"</item>
+        <item quantity="one"><annotation name="color">Зараз</annotation>\" ^1 ^2\"</item>
+        <item quantity="few"><annotation name="color">Зараз</annotation>\" ^1 ^2\"</item>
         <item quantity="many"><annotation name="color">Зараз</annotation>\" ^1 ^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
@@ -153,16 +149,16 @@
     <string name="text_clock_h_eleven">Одинадцять</string>
     <string name="text_clock_h_twelve">Дванадцять</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
+    <string name="text_clock_m_zero">Нуль</string>
+    <string name="text_clock_m_one">Один</string>
+    <string name="text_clock_m_two">Два</string>
+    <string name="text_clock_m_three">Три</string>
+    <string name="text_clock_m_four">Чотири</string>
+    <string name="text_clock_m_five">П\'ять</string>
+    <string name="text_clock_m_six">Шість</string>
+    <string name="text_clock_m_seven">Сім</string>
+    <string name="text_clock_m_eight">Вісім</string>
+    <string name="text_clock_m_nine">Дев\'ять</string>
     <string name="text_clock_m_ten">Десять</string>
     <string name="text_clock_m_eleven">Одинадцять</string>
     <string name="text_clock_m_twelve">Дванадцять</string>
