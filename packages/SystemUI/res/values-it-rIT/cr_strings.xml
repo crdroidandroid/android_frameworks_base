@@ -152,13 +152,13 @@
     <string name="text_clock_h_twelve">Dodici</string>
     <!-- Q Clock - Minutes -->
     <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
+    <string name="text_clock_m_one">E uno</string>
+    <string name="text_clock_m_two">E due</string>
+    <string name="text_clock_m_three">E tre</string>
+    <string name="text_clock_m_four">E quattro</string>
+    <string name="text_clock_m_five">E cinque</string>
+    <string name="text_clock_m_six">E sei</string>
+    <string name="text_clock_m_seven">E sette</string>
     <string name="text_clock_m_eight">O’Eight</string>
     <string name="text_clock_m_nine">O’Nine</string>
     <string name="text_clock_m_ten">Ten</string>
