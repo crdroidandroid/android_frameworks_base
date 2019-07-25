@@ -128,64 +128,88 @@
     <string name="global_action_restart_systemui">Interfata sistem</string>
     <!-- Ambient Display Pixel-Like string -->
     <string name="ambientmusic_songinfo">%s de %s</string>
-    <string name="custom_text_clock_top_text_default">Este</string>
-    <string name="text_clock_zero_h_min">şi</string>
-    <string name="text_clock_high"></string>
-    <string name="text_clock_noon">Prânz</string>
-    <!-- TensString -->
-    <string name="text_clock_tens_string_twenty">Douăzeci</string>
-    <string name="text_clock_tens_string_thirty">Treizeci</string>
-    <string name="text_clock_tens_string_forty">Patruzeci</string>
-    <string name="text_clock_tens_string_fifty">Cincizeci</string>
-    <string name="text_clock_tens_string_sixty">Șaizeci</string>
-    <!-- UnitsString -->
-    <string name="text_clock_units_string_clock"></string>
-    <string name="text_clock_units_string_one">Unu</string>
-    <string name="text_clock_units_string_two">Două</string>
-    <string name="text_clock_units_string_three">Trei</string>
-    <string name="text_clock_units_string_four">Patru</string>
-    <string name="text_clock_units_string_five">Cinci</string>
-    <string name="text_clock_units_string_six">Șase</string>
-    <string name="text_clock_units_string_seven">Șapte</string>
-    <string name="text_clock_units_string_eight">Opt</string>
-    <string name="text_clock_units_string_nine">Nouă</string>
-    <string name="text_clock_units_string_ten">Zece</string>
-    <string name="text_clock_units_string_eleven">Unsprezece</string>
-    <string name="text_clock_units_string_twelve">Doisprezece</string>
-    <string name="text_clock_units_string_thirteen">Treisprezece</string>
-    <string name="text_clock_units_string_fourteen">Paisprezece</string>
-    <string name="text_clock_units_string_fifteen">Cincisprezece</string>
-    <string name="text_clock_units_string_sixteen">Șaisprezece</string>
-    <string name="text_clock_units_string_seventeen">Șaptesprezece</string>
-    <string name="text_clock_units_string_eighteen">Optsprezece</string>
-    <string name="text_clock_units_string_nineteen">Nouăsprezece</string>
-    <!-- TensStringH -->
-    <string name="text_clock_tens_string_h_twenty">Douăzeci</string>
-    <string name="text_clock_tens_string_h_thirty">Treizeci</string>
-    <string name="text_clock_tens_string_h_forty">Patruzeci</string>
-    <string name="text_clock_tens_string_h_fifty">Cincizeci</string>
-    <string name="text_clock_tens_string_h_sixty">Șaizeci</string>
-    <!-- UnitsStringH -->
-    <string name="text_clock_units_string_h_twelve_h">Doisprezece</string>
-    <string name="text_clock_units_string_h_one">Unu</string>
-    <string name="text_clock_units_string_h_two">Două</string>
-    <string name="text_clock_units_string_h_three">Trei</string>
-    <string name="text_clock_units_string_h_four">Patru</string>
-    <string name="text_clock_units_string_h_five">Cinci</string>
-    <string name="text_clock_units_string_h_six">Șase</string>
-    <string name="text_clock_units_string_h_seven">Șapte</string>
-    <string name="text_clock_units_string_h_eight">Opt</string>
-    <string name="text_clock_units_string_h_nine">Nouă</string>
-    <string name="text_clock_units_string_h_ten">Zece</string>
-    <string name="text_clock_units_string_h_eleven">Unsprezece</string>
-    <string name="text_clock_units_string_h_twelve">Doisprezece</string>
-    <string name="text_clock_units_string_h_thirteen">Treisprezece</string>
-    <string name="text_clock_units_string_h_fourteen">Paisprezece</string>
-    <string name="text_clock_units_string_h_fifteen">Cincisprezece</string>
-    <string name="text_clock_units_string_h_sixteen">Șaisprezece</string>
-    <string name="text_clock_units_string_h_seventeen">Șaptesprezece</string>
-    <string name="text_clock_units_string_h_eighteen">Optsprezece</string>
-    <string name="text_clock_units_string_h_nineteen">Nouăsprezece</string>
+    <!-- Q Clock -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Este</annotation>\" ^1 ^2\"</item>
+        <item quantity="one"><annotation name="color">Este</annotation>\"
+^1
+^2\"</item>
+        <item quantity="few"><annotation name="color">Este</annotation>\" ^1 ^2\"</item>
+    </plurals>
+    <!-- Q Clock - Hour -->
+    <string name="text_clock_h_one">Unu</string>
+    <string name="text_clock_h_two">Două</string>
+    <string name="text_clock_h_three">Trei</string>
+    <string name="text_clock_h_four">Patru</string>
+    <string name="text_clock_h_five">Cinci</string>
+    <string name="text_clock_h_six">Șase</string>
+    <string name="text_clock_h_seven">Șapte</string>
+    <string name="text_clock_h_eight">Opt</string>
+    <string name="text_clock_h_nine">Nouă</string>
+    <string name="text_clock_h_ten">Zece</string>
+    <string name="text_clock_h_eleven">Unsprezece</string>
+    <string name="text_clock_h_twelve">Doisprezece</string>
+    <!-- Q Clock - Minutes -->
+    <string name="text_clock_m_zero">fix</string>
+    <string name="text_clock_m_one">și Unu</string>
+    <string name="text_clock_m_two">și Două</string>
+    <string name="text_clock_m_three">și Trei</string>
+    <string name="text_clock_m_four">și Patru</string>
+    <string name="text_clock_m_five">și Cinci</string>
+    <string name="text_clock_m_six">și Şase</string>
+    <string name="text_clock_m_seven">și Şapte</string>
+    <string name="text_clock_m_eight">și Opt</string>
+    <string name="text_clock_m_nine">și Nouă</string>
+    <string name="text_clock_m_ten">și Zece</string>
+    <string name="text_clock_m_eleven">și Unsprezece</string>
+    <string name="text_clock_m_twelve">și Doisprezece</string>
+    <string name="text_clock_m_thirteen">și Treisprezece</string>
+    <string name="text_clock_m_fourteen">și Paisprezece</string>
+    <string name="text_clock_m_fifteen">și Cincisprezece</string>
+    <string name="text_clock_m_sixteen">și Șaisprezece</string>
+    <string name="text_clock_m_seventeen">și Șaptesprezece</string>
+    <string name="text_clock_m_eighteen">și Optsprezece</string>
+    <string name="text_clock_m_nineteen">și Nouăsprezece</string>
+    <string name="text_clock_m_twenty">și Douăzeci</string>
+    <string name="text_clock_m_twenty_one">Douăzeci și Unu</string>
+    <string name="text_clock_m_twenty_two">Douăzeci și Doi</string>
+    <string name="text_clock_m_twenty_three">Douăzeci și Trei</string>
+    <string name="text_clock_m_twenty_four">Douăzeci și Patru</string>
+    <string name="text_clock_m_twenty_five">Douăzeci și Cinci</string>
+    <string name="text_clock_m_twenty_six">Douăzeci și Şase</string>
+    <string name="text_clock_m_twenty_seven">Douăzeci și Şapte</string>
+    <string name="text_clock_m_twenty_eight">Douăzeci și Opt</string>
+    <string name="text_clock_m_twenty_nine">Douăzeci și Nouă</string>
+    <string name="text_clock_m_thirty">și Treizeci</string>
+    <string name="text_clock_m_thirty_one">Treizeci și Unu</string>
+    <string name="text_clock_m_thirty_two">Treizeci și Doi</string>
+    <string name="text_clock_m_thirty_three">Treizeci și Trei</string>
+    <string name="text_clock_m_thirty_four">Treizeci și Patru</string>
+    <string name="text_clock_m_thirty_five">Treizeci și Cinci</string>
+    <string name="text_clock_m_thirty_six">Treizeci și Şase</string>
+    <string name="text_clock_m_thirty_seven">Treizeci și Şapte</string>
+    <string name="text_clock_m_thirty_eight">Treizeci și Opt</string>
+    <string name="text_clock_m_thirty_nine">Treizeci și Nouă</string>
+    <string name="text_clock_m_forty">și Patruzeci</string>
+    <string name="text_clock_m_forty_one">Patruzeci și Unu</string>
+    <string name="text_clock_m_forty_two">Patruzeci și Doi</string>
+    <string name="text_clock_m_forty_three">Patruzeci și Trei</string>
+    <string name="text_clock_m_forty_four">Patruzeci și Patru</string>
+    <string name="text_clock_m_forty_five">Patruzeci și Cinci</string>
+    <string name="text_clock_m_forty_six">Patruzeci și Şase</string>
+    <string name="text_clock_m_forty_seven">Patruzeci și Şapte</string>
+    <string name="text_clock_m_forty_eight">Patruzeci și Opt</string>
+    <string name="text_clock_m_forty_nine">Patruzeci și Nouă</string>
+    <string name="text_clock_m_fifty">și Cincizeci</string>
+    <string name="text_clock_m_fifty_one">Cincizeci și Unu</string>
+    <string name="text_clock_m_fifty_two">Cincizeci și Doi</string>
+    <string name="text_clock_m_fifty_three">Cincizeci și Trei</string>
+    <string name="text_clock_m_fifty_four">Cincizeci și Patru</string>
+    <string name="text_clock_m_fifty_five">Cincizeci și Cinci</string>
+    <string name="text_clock_m_fifty_six">Cincizeci și Şase</string>
+    <string name="text_clock_m_fifty_seven">Cincizeci și Şapte</string>
+    <string name="text_clock_m_fifty_eight">Cincizeci și Opt</string>
+    <string name="text_clock_m_fifty_nine">Cincizeci și Nouă</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Modul \"o singură mână\"</string>
     <!-- VPN icon -->

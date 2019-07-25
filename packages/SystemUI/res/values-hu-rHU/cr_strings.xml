@@ -128,64 +128,87 @@
     <string name="global_action_restart_systemui">Rendszerfelület</string>
     <!-- Ambient Display Pixel-Like string -->
     <string name="ambientmusic_songinfo">%s – %s</string>
-    <string name="custom_text_clock_top_text_default">Az idő:</string>
-    <string name="text_clock_zero_h_min">Kerek</string>
-    <string name="text_clock_high">Fő</string>
-    <string name="text_clock_noon">Dél</string>
-    <!-- TensString -->
-    <string name="text_clock_tens_string_twenty">Huszon</string>
-    <string name="text_clock_tens_string_thirty">Harminc</string>
-    <string name="text_clock_tens_string_forty">Negyven</string>
-    <string name="text_clock_tens_string_fifty">Ötven</string>
-    <string name="text_clock_tens_string_sixty">Hatvan</string>
-    <!-- UnitsString -->
-    <string name="text_clock_units_string_clock">Óra</string>
-    <string name="text_clock_units_string_one">Egy</string>
-    <string name="text_clock_units_string_two">Kettő</string>
-    <string name="text_clock_units_string_three">Három</string>
-    <string name="text_clock_units_string_four">Négy</string>
-    <string name="text_clock_units_string_five">Öt</string>
-    <string name="text_clock_units_string_six">Hat</string>
-    <string name="text_clock_units_string_seven">Hét</string>
-    <string name="text_clock_units_string_eight">Nyolc</string>
-    <string name="text_clock_units_string_nine">Kilenc</string>
-    <string name="text_clock_units_string_ten">Tíz</string>
-    <string name="text_clock_units_string_eleven">Tizenegy</string>
-    <string name="text_clock_units_string_twelve">Tizenkettő</string>
-    <string name="text_clock_units_string_thirteen">Tizenhárom</string>
-    <string name="text_clock_units_string_fourteen">Tizennégy</string>
-    <string name="text_clock_units_string_fifteen">Tizenöt</string>
-    <string name="text_clock_units_string_sixteen">Tizenhat</string>
-    <string name="text_clock_units_string_seventeen">Tizenhét</string>
-    <string name="text_clock_units_string_eighteen">Tizennyolc</string>
-    <string name="text_clock_units_string_nineteen">Tizenkilenc</string>
-    <!-- TensStringH -->
-    <string name="text_clock_tens_string_h_twenty">Huszon</string>
-    <string name="text_clock_tens_string_h_thirty">Harminc</string>
-    <string name="text_clock_tens_string_h_forty">Negyven</string>
-    <string name="text_clock_tens_string_h_fifty">Ötven</string>
-    <string name="text_clock_tens_string_h_sixty">Hatvan</string>
-    <!-- UnitsStringH -->
-    <string name="text_clock_units_string_h_twelve_h">Tizenkettő</string>
-    <string name="text_clock_units_string_h_one">Egy</string>
-    <string name="text_clock_units_string_h_two">Kettő</string>
-    <string name="text_clock_units_string_h_three">Három</string>
-    <string name="text_clock_units_string_h_four">Négy</string>
-    <string name="text_clock_units_string_h_five">Öt</string>
-    <string name="text_clock_units_string_h_six">Hat</string>
-    <string name="text_clock_units_string_h_seven">Hét</string>
-    <string name="text_clock_units_string_h_eight">Nyolc</string>
-    <string name="text_clock_units_string_h_nine">Kilenc</string>
-    <string name="text_clock_units_string_h_ten">Tíz</string>
-    <string name="text_clock_units_string_h_eleven">Tizenegy</string>
-    <string name="text_clock_units_string_h_twelve">Tizenkettő</string>
-    <string name="text_clock_units_string_h_thirteen">Tizenhárom</string>
-    <string name="text_clock_units_string_h_fourteen">Tizennégy</string>
-    <string name="text_clock_units_string_h_fifteen">Tizenöt</string>
-    <string name="text_clock_units_string_h_sixteen">Tizenhat</string>
-    <string name="text_clock_units_string_h_seventeen">Tizenhét</string>
-    <string name="text_clock_units_string_h_eighteen">Tizennyolc</string>
-    <string name="text_clock_units_string_h_nineteen">Tizenkilenc</string>
+    <!-- Q Clock -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Az idő</annotation>\" ^1 ^2\"</item>
+        <item quantity="one"><annotation name="color">Az idő</annotation>\"
+^1
+^2\"</item>
+    </plurals>
+    <!-- Q Clock - Hour -->
+    <string name="text_clock_h_one">Egy</string>
+    <string name="text_clock_h_two">Kettő</string>
+    <string name="text_clock_h_three">Három</string>
+    <string name="text_clock_h_four">Négy</string>
+    <string name="text_clock_h_five">Öt</string>
+    <string name="text_clock_h_six">Hat</string>
+    <string name="text_clock_h_seven">Hét</string>
+    <string name="text_clock_h_eight">Nyolc</string>
+    <string name="text_clock_h_nine">Kilenc</string>
+    <string name="text_clock_h_ten">Tíz</string>
+    <string name="text_clock_h_eleven">Tizenegy</string>
+    <string name="text_clock_h_twelve">Tizenkettő</string>
+    <!-- Q Clock - Minutes -->
+    <string name="text_clock_m_zero">óra</string>
+    <string name="text_clock_m_one">óra egy</string>
+    <string name="text_clock_m_two">óra kettő</string>
+    <string name="text_clock_m_three">óra három</string>
+    <string name="text_clock_m_four">óra négy</string>
+    <string name="text_clock_m_five">óra öt</string>
+    <string name="text_clock_m_six">óra hat</string>
+    <string name="text_clock_m_seven">óra hét</string>
+    <string name="text_clock_m_eight">óra nyolc</string>
+    <string name="text_clock_m_nine">óra kilenc</string>
+    <string name="text_clock_m_ten">Tíz</string>
+    <string name="text_clock_m_eleven">Tizenegy</string>
+    <string name="text_clock_m_twelve">Tizenkettő</string>
+    <string name="text_clock_m_thirteen">Tizenhárom</string>
+    <string name="text_clock_m_fourteen">Tizennégy</string>
+    <string name="text_clock_m_fifteen">Tizenöt</string>
+    <string name="text_clock_m_sixteen">Tizenhat</string>
+    <string name="text_clock_m_seventeen">Tizenhét</string>
+    <string name="text_clock_m_eighteen">Tizennyolc</string>
+    <string name="text_clock_m_nineteen">Tizenkilenc</string>
+    <string name="text_clock_m_twenty">Huszon</string>
+    <string name="text_clock_m_twenty_one">Huszonegy</string>
+    <string name="text_clock_m_twenty_two">Huszonkettő</string>
+    <string name="text_clock_m_twenty_three">Huszonhárom</string>
+    <string name="text_clock_m_twenty_four">Huszonnégy</string>
+    <string name="text_clock_m_twenty_five">Huszonöt</string>
+    <string name="text_clock_m_twenty_six">Huszonhat</string>
+    <string name="text_clock_m_twenty_seven">Huszonhét</string>
+    <string name="text_clock_m_twenty_eight">Huszonnyolc</string>
+    <string name="text_clock_m_twenty_nine">Huszonkilenc</string>
+    <string name="text_clock_m_thirty">Harminc</string>
+    <string name="text_clock_m_thirty_one">Harmicegy</string>
+    <string name="text_clock_m_thirty_two">Harminckettő</string>
+    <string name="text_clock_m_thirty_three">Harminchárom</string>
+    <string name="text_clock_m_thirty_four">Harmincnégy</string>
+    <string name="text_clock_m_thirty_five">Harmincöt</string>
+    <string name="text_clock_m_thirty_six">Harminchat</string>
+    <string name="text_clock_m_thirty_seven">Harminchét</string>
+    <string name="text_clock_m_thirty_eight">Harmincnyolc</string>
+    <string name="text_clock_m_thirty_nine">Harminckilenc</string>
+    <string name="text_clock_m_forty">Negyven</string>
+    <string name="text_clock_m_forty_one">Negyvenegy</string>
+    <string name="text_clock_m_forty_two">Negyvenkettő</string>
+    <string name="text_clock_m_forty_three">Negyvenhárom</string>
+    <string name="text_clock_m_forty_four">Negyvennégy</string>
+    <string name="text_clock_m_forty_five">Negyvenöt</string>
+    <string name="text_clock_m_forty_six">Negyvenhat</string>
+    <string name="text_clock_m_forty_seven">Negyvenhét</string>
+    <string name="text_clock_m_forty_eight">Negyvennyolc</string>
+    <string name="text_clock_m_forty_nine">Negyvenkilenc</string>
+    <string name="text_clock_m_fifty">Ötven</string>
+    <string name="text_clock_m_fifty_one">Ötvenegy</string>
+    <string name="text_clock_m_fifty_two">Ötvenkettő</string>
+    <string name="text_clock_m_fifty_three">Ötvenhárom</string>
+    <string name="text_clock_m_fifty_four">Ötvennégy</string>
+    <string name="text_clock_m_fifty_five">Ötvenöt</string>
+    <string name="text_clock_m_fifty_six">Ötvenhat</string>
+    <string name="text_clock_m_fifty_seven">Ötvenhét</string>
+    <string name="text_clock_m_fifty_eight">Ötvennyolc</string>
+    <string name="text_clock_m_fifty_nine">Ötvenkilenc</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Egykezes üzemmód</string>
     <!-- VPN icon -->

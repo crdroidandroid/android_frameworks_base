@@ -128,64 +128,87 @@
     <string name="global_action_restart_systemui">Arayüz</string>
     <!-- Ambient Display Pixel-Like string -->
     <string name="ambientmusic_songinfo">%s - %s</string>
-    <string name="custom_text_clock_top_text_default">Saat</string>
-    <string name="text_clock_zero_h_min">O\'</string>
-    <string name="text_clock_high">Akşam vakti</string>
-    <string name="text_clock_noon">Öğle vakti</string>
-    <!-- TensString -->
-    <string name="text_clock_tens_string_twenty">Yirmi</string>
-    <string name="text_clock_tens_string_thirty">Otuz</string>
-    <string name="text_clock_tens_string_forty">Kırk</string>
-    <string name="text_clock_tens_string_fifty">Elli</string>
-    <string name="text_clock_tens_string_sixty">Altmış</string>
-    <!-- UnitsString -->
-    <string name="text_clock_units_string_clock">Saat</string>
-    <string name="text_clock_units_string_one">Bir</string>
-    <string name="text_clock_units_string_two">İki</string>
-    <string name="text_clock_units_string_three">Üç</string>
-    <string name="text_clock_units_string_four">Dört</string>
-    <string name="text_clock_units_string_five">Beş</string>
-    <string name="text_clock_units_string_six">Altı</string>
-    <string name="text_clock_units_string_seven">Yedi</string>
-    <string name="text_clock_units_string_eight">Sekiz</string>
-    <string name="text_clock_units_string_nine">Dokuz</string>
-    <string name="text_clock_units_string_ten">On</string>
-    <string name="text_clock_units_string_eleven">On bir</string>
-    <string name="text_clock_units_string_twelve">On iki</string>
-    <string name="text_clock_units_string_thirteen">On üç</string>
-    <string name="text_clock_units_string_fourteen">On dört</string>
-    <string name="text_clock_units_string_fifteen">On beş</string>
-    <string name="text_clock_units_string_sixteen">On altı</string>
-    <string name="text_clock_units_string_seventeen">On yedi</string>
-    <string name="text_clock_units_string_eighteen">On sekiz</string>
-    <string name="text_clock_units_string_nineteen">On dokuz</string>
-    <!-- TensStringH -->
-    <string name="text_clock_tens_string_h_twenty">Yirmi</string>
-    <string name="text_clock_tens_string_h_thirty">Otuz</string>
-    <string name="text_clock_tens_string_h_forty">Kırk</string>
-    <string name="text_clock_tens_string_h_fifty">Elli</string>
-    <string name="text_clock_tens_string_h_sixty">Altmış</string>
-    <!-- UnitsStringH -->
-    <string name="text_clock_units_string_h_twelve_h">On iki</string>
-    <string name="text_clock_units_string_h_one">Bir</string>
-    <string name="text_clock_units_string_h_two">İki</string>
-    <string name="text_clock_units_string_h_three">Üç</string>
-    <string name="text_clock_units_string_h_four">Dört</string>
-    <string name="text_clock_units_string_h_five">Beş</string>
-    <string name="text_clock_units_string_h_six">Altı</string>
-    <string name="text_clock_units_string_h_seven">Yedi</string>
-    <string name="text_clock_units_string_h_eight">Sekiz</string>
-    <string name="text_clock_units_string_h_nine">Dokuz</string>
-    <string name="text_clock_units_string_h_ten">On</string>
-    <string name="text_clock_units_string_h_eleven">On bir</string>
-    <string name="text_clock_units_string_h_twelve">On iki</string>
-    <string name="text_clock_units_string_h_thirteen">On üç</string>
-    <string name="text_clock_units_string_h_fourteen">On dört</string>
-    <string name="text_clock_units_string_h_fifteen">On beş</string>
-    <string name="text_clock_units_string_h_sixteen">On altı</string>
-    <string name="text_clock_units_string_h_seventeen">On yedi</string>
-    <string name="text_clock_units_string_h_eighteen">On sekiz</string>
-    <string name="text_clock_units_string_h_nineteen">On dokuz</string>
+    <!-- Q Clock -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Saat</annotation>\" ^1 ^2\"</item>
+        <item quantity="one"><annotation name="color">Saat</annotation>\"
+^1
+^2\"</item>
+    </plurals>
+    <!-- Q Clock - Hour -->
+    <string name="text_clock_h_one">Bir</string>
+    <string name="text_clock_h_two">İki</string>
+    <string name="text_clock_h_three">Üç</string>
+    <string name="text_clock_h_four">Dört</string>
+    <string name="text_clock_h_five">Beş</string>
+    <string name="text_clock_h_six">Altı</string>
+    <string name="text_clock_h_seven">Yedi</string>
+    <string name="text_clock_h_eight">Sekiz</string>
+    <string name="text_clock_h_nine">Dokuz</string>
+    <string name="text_clock_h_ten">On</string>
+    <string name="text_clock_h_eleven">On bir</string>
+    <string name="text_clock_h_twelve">On iki</string>
+    <!-- Q Clock - Minutes -->
+    <string name="text_clock_m_zero">O’Saat</string>
+    <string name="text_clock_m_one">O’Bir</string>
+    <string name="text_clock_m_two">O’İki</string>
+    <string name="text_clock_m_three">O’Üç</string>
+    <string name="text_clock_m_four">O’Dört</string>
+    <string name="text_clock_m_five">O’Beş</string>
+    <string name="text_clock_m_six">O’Altı</string>
+    <string name="text_clock_m_seven">O’Yedi</string>
+    <string name="text_clock_m_eight">O’Sekiz</string>
+    <string name="text_clock_m_nine">O’Dokuz</string>
+    <string name="text_clock_m_ten">On</string>
+    <string name="text_clock_m_eleven">On bir</string>
+    <string name="text_clock_m_twelve">On iki</string>
+    <string name="text_clock_m_thirteen">On üç</string>
+    <string name="text_clock_m_fourteen">On dört</string>
+    <string name="text_clock_m_fifteen">On beş</string>
+    <string name="text_clock_m_sixteen">On altı</string>
+    <string name="text_clock_m_seventeen">On yedi</string>
+    <string name="text_clock_m_eighteen">On sekiz</string>
+    <string name="text_clock_m_nineteen">On dokuz</string>
+    <string name="text_clock_m_twenty">Yirmi</string>
+    <string name="text_clock_m_twenty_one">Yirmi bir</string>
+    <string name="text_clock_m_twenty_two">Yirmi iki</string>
+    <string name="text_clock_m_twenty_three">Yirmi üç</string>
+    <string name="text_clock_m_twenty_four">Yirmi dört</string>
+    <string name="text_clock_m_twenty_five">Yirmi beş</string>
+    <string name="text_clock_m_twenty_six">Yirmi altı</string>
+    <string name="text_clock_m_twenty_seven">Yirmi yedi</string>
+    <string name="text_clock_m_twenty_eight">Yirmi sekiz</string>
+    <string name="text_clock_m_twenty_nine">Yirmi dokuz</string>
+    <string name="text_clock_m_thirty">Otuz</string>
+    <string name="text_clock_m_thirty_one">Otuz bir</string>
+    <string name="text_clock_m_thirty_two">Otuz iki</string>
+    <string name="text_clock_m_thirty_three">Otuz üç</string>
+    <string name="text_clock_m_thirty_four">Otuz dört</string>
+    <string name="text_clock_m_thirty_five">Otuz beş</string>
+    <string name="text_clock_m_thirty_six">Otuz altı</string>
+    <string name="text_clock_m_thirty_seven">Otuz yedi</string>
+    <string name="text_clock_m_thirty_eight">Otuz sekiz</string>
+    <string name="text_clock_m_thirty_nine">Otuz dokuz</string>
+    <string name="text_clock_m_forty">Kırk</string>
+    <string name="text_clock_m_forty_one">Kırk bir</string>
+    <string name="text_clock_m_forty_two">Kırk iki</string>
+    <string name="text_clock_m_forty_three">Kırk üç</string>
+    <string name="text_clock_m_forty_four">Kırk dört</string>
+    <string name="text_clock_m_forty_five">Kırk beş</string>
+    <string name="text_clock_m_forty_six">Kırk altı</string>
+    <string name="text_clock_m_forty_seven">Kırk yedi</string>
+    <string name="text_clock_m_forty_eight">Kırk sekiz</string>
+    <string name="text_clock_m_forty_nine">Kırk dokuz</string>
+    <string name="text_clock_m_fifty">Elli</string>
+    <string name="text_clock_m_fifty_one">Elli bir</string>
+    <string name="text_clock_m_fifty_two">Elli iki</string>
+    <string name="text_clock_m_fifty_three">Elli üç</string>
+    <string name="text_clock_m_fifty_four">Elli dört</string>
+    <string name="text_clock_m_fifty_five">Elli beş</string>
+    <string name="text_clock_m_fifty_six">Elli altı</string>
+    <string name="text_clock_m_fifty_seven">Elli yedi</string>
+    <string name="text_clock_m_fifty_eight">Elli sekiz</string>
+    <string name="text_clock_m_fifty_nine">Elli dokuz</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Tek el modu</string>
     <!-- VPN icon -->
