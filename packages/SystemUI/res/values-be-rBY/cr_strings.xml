@@ -144,18 +144,18 @@
 ^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">Адзін</string>
+    <string name="text_clock_h_two">Два</string>
+    <string name="text_clock_h_three">Тры</string>
+    <string name="text_clock_h_four">Чатыры</string>
+    <string name="text_clock_h_five">Пяць</string>
+    <string name="text_clock_h_six">Шэсць</string>
+    <string name="text_clock_h_seven">Сем</string>
+    <string name="text_clock_h_eight">Восем</string>
+    <string name="text_clock_h_nine">Дзевяць</string>
+    <string name="text_clock_h_ten">Дзесяць</string>
+    <string name="text_clock_h_eleven">Адзінаццаць</string>
+    <string name="text_clock_h_twelve">Дванаццаць</string>
     <!-- Q Clock - Minutes -->
     <string name="text_clock_m_zero">O’Clock</string>
     <string name="text_clock_m_one">O’One</string>
@@ -167,17 +167,17 @@
     <string name="text_clock_m_seven">O’Seven</string>
     <string name="text_clock_m_eight">O’Eight</string>
     <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
-    <string name="text_clock_m_fourteen">Fourteen</string>
-    <string name="text_clock_m_fifteen">Fifteen</string>
-    <string name="text_clock_m_sixteen">Sixteen</string>
-    <string name="text_clock_m_seventeen">Seventeen</string>
-    <string name="text_clock_m_eighteen">Eighteen</string>
-    <string name="text_clock_m_nineteen">Nineteen</string>
-    <string name="text_clock_m_twenty">Twenty</string>
+    <string name="text_clock_m_ten">Дзесяць</string>
+    <string name="text_clock_m_eleven">Адзінаццаць</string>
+    <string name="text_clock_m_twelve">Дванаццаць</string>
+    <string name="text_clock_m_thirteen">Трынаццаць</string>
+    <string name="text_clock_m_fourteen">Чатырнаццаць</string>
+    <string name="text_clock_m_fifteen">Пятнаццаць</string>
+    <string name="text_clock_m_sixteen">Шаснаццаць</string>
+    <string name="text_clock_m_seventeen">Сямнаццаць</string>
+    <string name="text_clock_m_eighteen">Васямнаццаць</string>
+    <string name="text_clock_m_nineteen">Дзевятнаццаць</string>
+    <string name="text_clock_m_twenty">Дваццаць</string>
     <string name="text_clock_m_twenty_one">Twenty One</string>
     <string name="text_clock_m_twenty_two">Twenty Two</string>
     <string name="text_clock_m_twenty_three">Twenty Three</string>
