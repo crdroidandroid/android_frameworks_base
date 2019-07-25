@@ -133,18 +133,18 @@
         <item quantity="other"><annotation name="color">现在是</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Q Clock - Hour -->
-    <string name="text_clock_h_one">一</string>
-    <string name="text_clock_h_two">二</string>
-    <string name="text_clock_h_three">三</string>
-    <string name="text_clock_h_four">四</string>
-    <string name="text_clock_h_five">五</string>
-    <string name="text_clock_h_six">六</string>
-    <string name="text_clock_h_seven">七</string>
+    <string name="text_clock_h_one">一点</string>
+    <string name="text_clock_h_two">两点</string>
+    <string name="text_clock_h_three">三点</string>
+    <string name="text_clock_h_four">四点</string>
+    <string name="text_clock_h_five">五点</string>
+    <string name="text_clock_h_six">六点</string>
+    <string name="text_clock_h_seven">七点</string>
     <string name="text_clock_h_eight">八点</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_nine">九点</string>
+    <string name="text_clock_h_ten">十点</string>
+    <string name="text_clock_h_eleven">十一点</string>
+    <string name="text_clock_h_twelve">十二点</string>
     <!-- Q Clock - Minutes -->
     <string name="text_clock_m_zero">O\'Clock</string>
     <string name="text_clock_m_one">O’One</string>
@@ -169,9 +169,9 @@
     <string name="text_clock_m_twenty">Twenty</string>
     <string name="text_clock_m_twenty_one">Twenty One</string>
     <string name="text_clock_m_twenty_two">Twenty Two</string>
-    <string name="text_clock_m_twenty_three">Twenty Three</string>
-    <string name="text_clock_m_twenty_four">Twenty Four</string>
-    <string name="text_clock_m_twenty_five">Twenty Five</string>
+    <string name="text_clock_m_twenty_three">Twenty three</string>
+    <string name="text_clock_m_twenty_four">Twenty four</string>
+    <string name="text_clock_m_twenty_five">Twenty five</string>
     <string name="text_clock_m_twenty_six">Twenty Six</string>
     <string name="text_clock_m_twenty_seven">Twenty Seven</string>
     <string name="text_clock_m_twenty_eight">Twenty Eight</string>
@@ -183,11 +183,11 @@
     <string name="text_clock_m_thirty_four">Thirty Four</string>
     <string name="text_clock_m_thirty_five">Thirty Five</string>
     <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
+    <string name="text_clock_m_thirty_seven">三十七分</string>
+    <string name="text_clock_m_thirty_eight">三十八分</string>
+    <string name="text_clock_m_thirty_nine">三十九分</string>
+    <string name="text_clock_m_forty">四十分</string>
+    <string name="text_clock_m_forty_one">四十一分</string>
     <string name="text_clock_m_forty_two">Forty Two</string>
     <string name="text_clock_m_forty_three">Forty Three</string>
     <string name="text_clock_m_forty_four">Forty Four</string>
@@ -197,15 +197,15 @@
     <string name="text_clock_m_forty_eight">Forty Eight</string>
     <string name="text_clock_m_forty_nine">Forty Nine</string>
     <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_fifty_one">五十一分</string>
+    <string name="text_clock_m_fifty_two">五十二分</string>
+    <string name="text_clock_m_fifty_three">五十三分</string>
+    <string name="text_clock_m_fifty_four">五十四分</string>
+    <string name="text_clock_m_fifty_five">五十五分</string>
+    <string name="text_clock_m_fifty_six">五十六分</string>
+    <string name="text_clock_m_fifty_seven">五十七分</string>
+    <string name="text_clock_m_fifty_eight">五十八分</string>
+    <string name="text_clock_m_fifty_nine">五十九分</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">单手模式</string>
     <!-- VPN icon -->
