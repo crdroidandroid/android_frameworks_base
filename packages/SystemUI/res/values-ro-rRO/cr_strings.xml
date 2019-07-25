@@ -130,10 +130,10 @@
     <string name="ambientmusic_songinfo">%s de %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\"
+        <item quantity="other"><annotation name="color">Este</annotation>\" ^1 ^2\"</item>
+        <item quantity="one"><annotation name="color">Este</annotation>\"
 ^1
 ^2\"</item>
-        <item quantity="one"><annotation name="color">Este</annotation>\" ^1 ^2\"</item>
         <item quantity="few"><annotation name="color">It’s</annotation>\"
 ^1
 ^2\"</item>
@@ -173,45 +173,45 @@
     <string name="text_clock_m_eighteen">și Optsprezece</string>
     <string name="text_clock_m_nineteen">și Nouăsprezece</string>
     <string name="text_clock_m_twenty">și Douăzeci</string>
-    <string name="text_clock_m_twenty_one">Twenty One</string>
-    <string name="text_clock_m_twenty_two">Twenty Two</string>
-    <string name="text_clock_m_twenty_three">Twenty Three</string>
-    <string name="text_clock_m_twenty_four">Twenty Four</string>
-    <string name="text_clock_m_twenty_five">Twenty Five</string>
-    <string name="text_clock_m_twenty_six">Twenty Six</string>
-    <string name="text_clock_m_twenty_seven">Twenty Seven</string>
-    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_twenty_one">Douăzeci și Unu</string>
+    <string name="text_clock_m_twenty_two">Douăzeci și Doi</string>
+    <string name="text_clock_m_twenty_three">Douăzeci și Trei</string>
+    <string name="text_clock_m_twenty_four">Douăzeci și Patru</string>
+    <string name="text_clock_m_twenty_five">Douăzeci și Cinci</string>
+    <string name="text_clock_m_twenty_six">Douăzeci și Şase</string>
+    <string name="text_clock_m_twenty_seven">Douăzeci și Şapte</string>
+    <string name="text_clock_m_twenty_eight">Douăzeci și Opt</string>
+    <string name="text_clock_m_twenty_nine">Douăzeci și Nouă</string>
+    <string name="text_clock_m_thirty">și Treizeci</string>
+    <string name="text_clock_m_thirty_one">Treizeci și Unu</string>
+    <string name="text_clock_m_thirty_two">Treizeci și Doi</string>
+    <string name="text_clock_m_thirty_three">Treizeci și Trei</string>
+    <string name="text_clock_m_thirty_four">Treizeci și Patru</string>
+    <string name="text_clock_m_thirty_five">Treizeci și Cinci</string>
+    <string name="text_clock_m_thirty_six">Treizeci și Şase</string>
+    <string name="text_clock_m_thirty_seven">Treizeci și Şapte</string>
+    <string name="text_clock_m_thirty_eight">Treizeci și Opt</string>
+    <string name="text_clock_m_thirty_nine">Treizeci și Nouă</string>
+    <string name="text_clock_m_forty">și Patruzeci</string>
+    <string name="text_clock_m_forty_one">Patruzeci și Unu</string>
+    <string name="text_clock_m_forty_two">Patruzeci și Doi</string>
+    <string name="text_clock_m_forty_three">Patruzeci și Trei</string>
+    <string name="text_clock_m_forty_four">Patruzeci și Patru</string>
+    <string name="text_clock_m_forty_five">Patruzeci și Cinci</string>
+    <string name="text_clock_m_forty_six">Patruzeci și Şase</string>
+    <string name="text_clock_m_forty_seven">Patruzeci și Şapte</string>
+    <string name="text_clock_m_forty_eight">Patruzeci și Opt</string>
+    <string name="text_clock_m_forty_nine">Patruzeci și Nouă</string>
+    <string name="text_clock_m_fifty">și Cincizeci</string>
+    <string name="text_clock_m_fifty_one">Cincizeci și Unu</string>
+    <string name="text_clock_m_fifty_two">Cincizeci și Doi</string>
+    <string name="text_clock_m_fifty_three">Cincizeci și Trei</string>
+    <string name="text_clock_m_fifty_four">Cincizeci și Patru</string>
+    <string name="text_clock_m_fifty_five">Cincizeci și Cinci</string>
+    <string name="text_clock_m_fifty_six">Cincizeci și Şase</string>
+    <string name="text_clock_m_fifty_seven">Cincizeci și Şapte</string>
+    <string name="text_clock_m_fifty_eight">Cincizeci și Opt</string>
+    <string name="text_clock_m_fifty_nine">Cincizeci și Nouă</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Modul \"o singură mână\"</string>
     <!-- VPN icon -->
