@@ -130,44 +130,36 @@
     <string name="ambientmusic_songinfo">%s от %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\"
-^1
-^2\"</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\"
-^1
-^2\"</item>
-        <item quantity="few"><annotation name="color">It’s</annotation>\"
-^1
-^2\"</item>
-        <item quantity="many"><annotation name="color">It’s</annotation>\"
-^1
-^2\"</item>
+        <item quantity="other"><annotation name="color">Сейчас</annotation>\" ^1 ^2\"</item>
+        <item quantity="one"><annotation name="color">Сейчас</annotation>\" ^1 ^2\"</item>
+        <item quantity="few"><annotation name="color">Сейчас</annotation>\" ^1 ^2\"</item>
+        <item quantity="many"><annotation name="color">Сейчас</annotation>\" ^1 ^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">Один</string>
+    <string name="text_clock_h_two">Два</string>
+    <string name="text_clock_h_three">Три</string>
+    <string name="text_clock_h_four">Четыре</string>
+    <string name="text_clock_h_five">Пять</string>
+    <string name="text_clock_h_six">Шесть</string>
+    <string name="text_clock_h_seven">Семь</string>
+    <string name="text_clock_h_eight">Восемь</string>
+    <string name="text_clock_h_nine">Девять</string>
+    <string name="text_clock_h_ten">Десять</string>
+    <string name="text_clock_h_eleven">Одиннадцать</string>
+    <string name="text_clock_h_twelve">Двенадцать</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
+    <string name="text_clock_m_zero">ровно</string>
+    <string name="text_clock_m_one">ноль одна</string>
+    <string name="text_clock_m_two">ноль две</string>
+    <string name="text_clock_m_three">ноль три</string>
+    <string name="text_clock_m_four">ноль четыре</string>
+    <string name="text_clock_m_five">ноль пять</string>
+    <string name="text_clock_m_six">ноль шесть</string>
+    <string name="text_clock_m_seven">ноль семь</string>
+    <string name="text_clock_m_eight">ноль восемь</string>
+    <string name="text_clock_m_nine">ноль девять</string>
+    <string name="text_clock_m_ten">десять</string>
     <string name="text_clock_m_eleven">Eleven</string>
     <string name="text_clock_m_twelve">Twelve</string>
     <string name="text_clock_m_thirteen">Thirteen</string>
