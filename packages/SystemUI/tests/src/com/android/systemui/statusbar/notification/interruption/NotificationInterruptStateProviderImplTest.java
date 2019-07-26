@@ -144,6 +144,7 @@ public class NotificationInterruptStateProviderImplTest extends SysuiTestCase {
 
         mNotifInterruptionStateProvider =
                 new NotificationInterruptStateProviderImpl(
+                        mContext,
                         mPowerManager,
                         mAmbientDisplayConfiguration,
                         mBatteryController,
