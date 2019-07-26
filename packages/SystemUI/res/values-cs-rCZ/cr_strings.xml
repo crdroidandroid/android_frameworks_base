@@ -131,9 +131,7 @@
     <!-- Q Clock -->
     <plurals name="type_clock_header">
         <item quantity="other"><annotation name="color">Je (Other)</annotation>\" ^1 ^2\"</item>
-        <item quantity="one"><annotation name="color">Je (One)</annotation>\"
-^1
-^2\"</item>
+        <item quantity="one"><annotation name="color">Je (One)</annotation>\" ^1 ^2\"</item>
         <item quantity="few"><annotation name="color">Jsou (Few)</annotation>\" ^1 ^2\"</item>
         <item quantity="many"><annotation name="color">Je (Many)</annotation>\" ^1 ^2\"</item>
     </plurals>
