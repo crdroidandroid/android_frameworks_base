@@ -297,6 +297,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
             "system:" + Settings.System.NOTIFICATION_MATERIAL_DISMISS;
     private static final String PULSE_ON_NEW_TRACKS =
             Settings.Secure.PULSE_ON_NEW_TRACKS;
+    private static final String LESS_BORING_HEADS_UP =
+            "system:" + Settings.System.LESS_BORING_HEADS_UP;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -953,6 +955,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
         mTunerService.addTunable(this, QS_TRANSPARENCY);
         mTunerService.addTunable(this, NOTIFICATION_MATERIAL_DISMISS);
         mTunerService.addTunable(this, PULSE_ON_NEW_TRACKS);
+        mTunerService.addTunable(this, LESS_BORING_HEADS_UP);
 
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 
@@ -4278,6 +4281,11 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
                 KeyguardSliceProvider sliceProvider = KeyguardSliceProvider.getAttachedInstance();
                 if (sliceProvider != null)
                     sliceProvider.setPulseOnNewTracks(showPulseOnNewTracks);
+                break;
+            case LESS_BORING_HEADS_UP:
+                boolean lessBoringHeadsUp =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                mNotificationInterruptStateProvider.setUseLessBoringHeadsUp(lessBoringHeadsUp);
                 break;
             default:
                 break;
