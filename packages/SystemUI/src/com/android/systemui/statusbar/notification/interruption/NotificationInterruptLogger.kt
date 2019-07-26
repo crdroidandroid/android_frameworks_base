@@ -68,6 +68,14 @@ class NotificationInterruptLogger @Inject constructor(
         })
     }
 
+    fun logNoHeadsUpShouldSkipPackage(sbn: StatusBarNotification) {
+        hunBuffer.log(TAG, DEBUG, {
+            str1 = sbn.key
+        }, {
+            "No alerting: boring apps"
+        })  
+    }
+
     fun logNoHeadsUpPackageSnoozed(sbn: StatusBarNotification) {
         hunBuffer.log(TAG, DEBUG, {
             str1 = sbn.key
