@@ -302,7 +302,8 @@ public class CentralSurfacesImplTest extends SysuiTestCase {
                 Handler.createAsync(Looper.myLooper()));
 
         mNotificationInterruptStateProvider =
-                new TestableNotificationInterruptStateProviderImpl(mContext.getContentResolver(),
+                new TestableNotificationInterruptStateProviderImpl(mContext,
+                        mContext.getContentResolver(),
                         mPowerManager,
                         mDreamManager, mAmbientDisplayConfiguration, mNotificationFilter,
                         mStatusBarStateController, mBatteryController, mHeadsUpManager,
@@ -1018,6 +1019,7 @@ public class CentralSurfacesImplTest extends SysuiTestCase {
             NotificationInterruptStateProviderImpl {
 
         TestableNotificationInterruptStateProviderImpl(
+                Context context,
                 ContentResolver contentResolver,
                 PowerManager powerManager,
                 IDreamManager dreamManager,
@@ -1030,7 +1032,7 @@ public class CentralSurfacesImplTest extends SysuiTestCase {
                 Handler mainHandler,
                 NotifPipelineFlags flags,
                 KeyguardNotificationVisibilityProvider keyguardNotificationVisibilityProvider) {
-            super(contentResolver, powerManager, dreamManager, ambientDisplayConfiguration, filter,
+            super(context, contentResolver, powerManager, dreamManager, ambientDisplayConfiguration, filter,
                     batteryController, controller, headsUpManager, logger, mainHandler,
                     flags, keyguardNotificationVisibilityProvider);
             mUseHeadsUp = true;
