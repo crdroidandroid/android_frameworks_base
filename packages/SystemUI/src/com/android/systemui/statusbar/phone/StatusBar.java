@@ -300,6 +300,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.GAMING_MODE_ACTIVE;
     private static final String GAMING_MODE_HEADSUP_TOGGLE =
             "system:" + Settings.System.GAMING_MODE_HEADSUP_TOGGLE;
+    private static final String LESS_BORING_HEADS_UP =
+            "system:" + Settings.System.LESS_BORING_HEADS_UP;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -497,6 +499,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private final DisplayMetrics mDisplayMetrics;
 
     private boolean mHeadsUpDisabled, mGamingModeActivated;
+    private boolean mlessBoringHeadsUp;
 
     // XXX: gesture research
     private final GestureRecorder mGestureRec = DEBUG_GESTURES
@@ -957,6 +960,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, QS_TILE_TITLE_VISIBILITY);
         mTunerService.addTunable(this, GAMING_MODE_ACTIVE);
         mTunerService.addTunable(this, GAMING_MODE_HEADSUP_TOGGLE);
+        mTunerService.addTunable(this, LESS_BORING_HEADS_UP);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -4761,6 +4765,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mHeadsUpDisabled =
                         TunerService.parseIntegerSwitch(newValue, true);
                 mNotificationInterruptStateProvider.setGamingPeekMode(mGamingModeActivated && mHeadsUpDisabled);
+                break;
+            case LESS_BORING_HEADS_UP:
+                mlessBoringHeadsUp = 
+                        TunerService.parseIntegerSwitch(newValue, false);
+                mNotificationInterruptStateProvider.setUseLessBoringHeadsUp(mlessBoringHeadsUp);
                 break;
             default:
                 break;
