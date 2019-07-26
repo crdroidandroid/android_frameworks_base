@@ -173,4 +173,9 @@ public interface NotificationInterruptStateProvider {
      * Add a component that can suppress visual interruptions.
      */
     void addSuppressor(NotificationInterruptSuppressor suppressor);
+
+    /**
+     * Whether heads-up notification should be skipped when Less Boring heads up is enabled.
+     */
+    void setUseLessBoringHeadsUp(boolean lessBoring);
 }
