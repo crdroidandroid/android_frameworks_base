@@ -130,46 +130,46 @@
     <string name="ambientmusic_songinfo">%s z %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">Je</annotation>\" ^1 ^2\"</item>
-        <item quantity="one"><annotation name="color">Je</annotation>\"
+        <item quantity="other"><annotation name="color">Jsou (Other)</annotation>\" ^1 ^2\"</item>
+        <item quantity="one"><annotation name="color">Je (One)</annotation>\"
 ^1
 ^2\"</item>
-        <item quantity="few"><annotation name="color">Je</annotation>\" ^1 ^2\"</item>
-        <item quantity="many"><annotation name="color">Je</annotation>\" ^1 ^2\"</item>
+        <item quantity="few"><annotation name="color">Jsou (Few)</annotation>\" ^1 ^2\"</item>
+        <item quantity="many"><annotation name="color">Jsou (Many)</annotation>\" ^1 ^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
     <string name="text_clock_h_one">jedna</string>
-    <string name="text_clock_h_two">Dvě</string>
-    <string name="text_clock_h_three">Tři</string>
-    <string name="text_clock_h_four">Čtyři</string>
-    <string name="text_clock_h_five">Pět</string>
-    <string name="text_clock_h_six">Šest</string>
-    <string name="text_clock_h_seven">Sedm</string>
-    <string name="text_clock_h_eight">Osm</string>
-    <string name="text_clock_h_nine">Devět</string>
-    <string name="text_clock_h_ten">Deset</string>
-    <string name="text_clock_h_eleven">Jedenáct</string>
-    <string name="text_clock_h_twelve">Dvanáct</string>
+    <string name="text_clock_h_two">dvě</string>
+    <string name="text_clock_h_three">tři</string>
+    <string name="text_clock_h_four">čtyři</string>
+    <string name="text_clock_h_five">pět</string>
+    <string name="text_clock_h_six">šest</string>
+    <string name="text_clock_h_seven">sedm</string>
+    <string name="text_clock_h_eight">osm</string>
+    <string name="text_clock_h_nine">devět</string>
+    <string name="text_clock_h_ten">deset</string>
+    <string name="text_clock_h_eleven">jedenáct</string>
+    <string name="text_clock_h_twelve">dvanáct</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">Nula</string>
-    <string name="text_clock_m_one">Nula jedna</string>
-    <string name="text_clock_m_two">Nula dva</string>
-    <string name="text_clock_m_three">Nula tři</string>
-    <string name="text_clock_m_four">Nula čtyři</string>
-    <string name="text_clock_m_five">Nula pět</string>
-    <string name="text_clock_m_six">Nula šest</string>
-    <string name="text_clock_m_seven">Nula sedm</string>
-    <string name="text_clock_m_eight">Nula osm</string>
-    <string name="text_clock_m_nine">Nula devět</string>
-    <string name="text_clock_m_ten">Deset</string>
-    <string name="text_clock_m_eleven">Jedenáct</string>
-    <string name="text_clock_m_twelve">Dvanáct</string>
-    <string name="text_clock_m_thirteen">Třináct</string>
-    <string name="text_clock_m_fourteen">Čtrnáct</string>
-    <string name="text_clock_m_fifteen">Patnáct</string>
-    <string name="text_clock_m_sixteen">Šestnáct</string>
-    <string name="text_clock_m_seventeen">Sedmnáct</string>
-    <string name="text_clock_m_eighteen">Osmnáct</string>
+    <string name="text_clock_m_zero">nula</string>
+    <string name="text_clock_m_one">nula jedna</string>
+    <string name="text_clock_m_two">nula dvě</string>
+    <string name="text_clock_m_three">nula tři</string>
+    <string name="text_clock_m_four">nula čtyři</string>
+    <string name="text_clock_m_five">nula pět</string>
+    <string name="text_clock_m_six">nula šest</string>
+    <string name="text_clock_m_seven">nula sedm</string>
+    <string name="text_clock_m_eight">nula osm</string>
+    <string name="text_clock_m_nine">nula devět</string>
+    <string name="text_clock_m_ten">deset</string>
+    <string name="text_clock_m_eleven">jedenáct</string>
+    <string name="text_clock_m_twelve">dvanáct</string>
+    <string name="text_clock_m_thirteen">třináct</string>
+    <string name="text_clock_m_fourteen">čtrnáct</string>
+    <string name="text_clock_m_fifteen">patnáct</string>
+    <string name="text_clock_m_sixteen">šestnáct</string>
+    <string name="text_clock_m_seventeen">sedmnáct</string>
+    <string name="text_clock_m_eighteen">osmnáct</string>
     <string name="text_clock_m_nineteen">Devatenáct</string>
     <string name="text_clock_m_twenty">Dvacet</string>
     <string name="text_clock_m_twenty_one">Dvacet jedna</string>
