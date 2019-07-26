@@ -305,6 +305,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.SCREEN_BRIGHTNESS_MODE;
     private static final String STATUS_BAR_BRIGHTNESS_CONTROL =
             "lineagesystem:" + LineageSettings.System.STATUS_BAR_BRIGHTNESS_CONTROL;
+    private static final String LESS_BORING_HEADS_UP =
+            "system:" + Settings.System.LESS_BORING_HEADS_UP;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -990,7 +992,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 FORCE_SHOW_NAVBAR,
                 PULSE_ON_NEW_TRACKS,
                 SCREEN_BRIGHTNESS_MODE,
-                STATUS_BAR_BRIGHTNESS_CONTROL);
+                STATUS_BAR_BRIGHTNESS_CONTROL,
+                LESS_BORING_HEADS_UP);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -5159,6 +5162,11 @@ public class StatusBar extends SystemUI implements DemoMode,
             case STATUS_BAR_BRIGHTNESS_CONTROL:
                 mBrightnessControl =
                         TunerService.parseIntegerSwitch(newValue, false);
+                break;
+            case LESS_BORING_HEADS_UP:
+                boolean lessBoringHeadsUp = 
+                        TunerService.parseIntegerSwitch(newValue, false);
+                mNotificationInterruptStateProvider.setUseLessBoringHeadsUp(lessBoringHeadsUp);
                 break;
             default:
                 break;
