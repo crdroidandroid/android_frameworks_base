@@ -138,7 +138,7 @@
         <item quantity="many"><annotation name="color">Je</annotation>\" ^1 ^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
-    <string name="text_clock_h_one">Jedna</string>
+    <string name="text_clock_h_one">jedna</string>
     <string name="text_clock_h_two">Dvě</string>
     <string name="text_clock_h_three">Tři</string>
     <string name="text_clock_h_four">Čtyři</string>
