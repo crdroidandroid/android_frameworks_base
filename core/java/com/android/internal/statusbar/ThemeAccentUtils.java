@@ -84,6 +84,27 @@ public class ThemeAccentUtils {
         "com.accents.userfive", // 26
         "com.accents.usersix", // 27
         "com.accents.userseven", // 28
+        "com.accents.brandone", // 29
+        "com.accents.brandtwo", // 30
+        "com.accents.brandthree", // 31
+        "com.accents.brandfour", // 32
+        "com.accents.brandfive", // 33
+        "com.accents.brandsix", // 34
+        "com.accents.brandseven", // 35
+        "com.accents.brandeight", // 36
+        "com.accents.brandnine", // 37
+        "com.accents.brandten", // 38
+        "com.accents.brandeleven", // 39
+        "com.accents.brandtwelve", // 40
+        "com.accents.brandthirteen", // 41
+        "com.accents.brandfourteen", // 42
+        "com.accents.brandfifteen", // 43
+        "com.accents.brandsixteen", // 44
+        "com.accents.brandseventeen", // 45
+        "com.accents.brandeighteen", // 46
+        "com.accents.brandnineteen", // 47
+        "com.accents.brandtwenty", // 48
+
     };
 
     // QS Tile Styles
