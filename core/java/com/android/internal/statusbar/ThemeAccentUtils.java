@@ -84,6 +84,26 @@ public class ThemeAccentUtils {
         "com.accents.userfive", // 26
         "com.accents.usersix", // 27
         "com.accents.userseven", // 28
+        "com.accents.aospagreen", // 29
+        "com.accents.androidonegreen", // 30
+        "com.accents.cocacolared", // 31
+        "com.accents.discordpurple", // 32
+        "com.accents.facebookblue", // 33
+        "com.accents.instagramcerise", // 34
+        "com.accents.jollibeecrimson", // 35
+        "com.accents.monsterenergygreen", // 36
+        "com.accents.nextbitmint", // 37
+        "com.accents.oneplusred", // 38
+        "com.accents.pepsiblue", // 39
+        "com.accents.pocophoneyellow", // 40
+        "com.accents.razergreen", // 41
+        "com.accents.samsungblue", // 42
+        "com.accents.spotifygreen", // 43
+        "com.accents.starbucksgreen", // 44
+        "com.accents.twitchpurple", // 45
+        "com.accents.twitterblue", // 46
+        "com.accents.xboxgreen", // 47
+        "com.accents.xiaomiorange", // 48
     };
 
     // QS Tile Styles
