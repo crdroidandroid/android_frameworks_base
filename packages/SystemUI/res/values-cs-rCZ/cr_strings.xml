@@ -130,93 +130,85 @@
     <string name="ambientmusic_songinfo">%s z %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\"
-^1
-^2\"</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\"
-^1
-^2\"</item>
-        <item quantity="few"><annotation name="color">It’s</annotation>\"
-^1
-^2\"</item>
-        <item quantity="many"><annotation name="color">It’s</annotation>\"
-^1
-^2\"</item>
+        <item quantity="other"><annotation name="color">Je (Other)</annotation>\" ^1 ^2\"</item>
+        <item quantity="one"><annotation name="color">Je (One)</annotation>\" ^1 ^2\"</item>
+        <item quantity="few"><annotation name="color">Jsou (Few)</annotation>\" ^1 ^2\"</item>
+        <item quantity="many"><annotation name="color">Je (Many)</annotation>\" ^1 ^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">jedna</string>
+    <string name="text_clock_h_two">dvě</string>
+    <string name="text_clock_h_three">tři</string>
+    <string name="text_clock_h_four">čtyři</string>
+    <string name="text_clock_h_five">pět</string>
+    <string name="text_clock_h_six">šest</string>
+    <string name="text_clock_h_seven">sedm</string>
+    <string name="text_clock_h_eight">osm</string>
+    <string name="text_clock_h_nine">devět</string>
+    <string name="text_clock_h_ten">deset</string>
+    <string name="text_clock_h_eleven">jedenáct</string>
+    <string name="text_clock_h_twelve">dvanáct</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
-    <string name="text_clock_m_fourteen">Fourteen</string>
-    <string name="text_clock_m_fifteen">Fifteen</string>
-    <string name="text_clock_m_sixteen">Sixteen</string>
-    <string name="text_clock_m_seventeen">Seventeen</string>
-    <string name="text_clock_m_eighteen">Eighteen</string>
-    <string name="text_clock_m_nineteen">Nineteen</string>
-    <string name="text_clock_m_twenty">Twenty</string>
-    <string name="text_clock_m_twenty_one">Twenty One</string>
-    <string name="text_clock_m_twenty_two">Twenty Two</string>
-    <string name="text_clock_m_twenty_three">Twenty Three</string>
-    <string name="text_clock_m_twenty_four">Twenty Four</string>
-    <string name="text_clock_m_twenty_five">Twenty Five</string>
-    <string name="text_clock_m_twenty_six">Twenty Six</string>
-    <string name="text_clock_m_twenty_seven">Twenty Seven</string>
-    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_zero">nula nula</string>
+    <string name="text_clock_m_one">nula jedna</string>
+    <string name="text_clock_m_two">nula dva</string>
+    <string name="text_clock_m_three">nula tři</string>
+    <string name="text_clock_m_four">nula čtyři</string>
+    <string name="text_clock_m_five">nula pět</string>
+    <string name="text_clock_m_six">nula šest</string>
+    <string name="text_clock_m_seven">nula sedm</string>
+    <string name="text_clock_m_eight">nula osm</string>
+    <string name="text_clock_m_nine">nula devět</string>
+    <string name="text_clock_m_ten">deset</string>
+    <string name="text_clock_m_eleven">jedenáct</string>
+    <string name="text_clock_m_twelve">dvanáct</string>
+    <string name="text_clock_m_thirteen">třináct</string>
+    <string name="text_clock_m_fourteen">čtrnáct</string>
+    <string name="text_clock_m_fifteen">patnáct</string>
+    <string name="text_clock_m_sixteen">šestnáct</string>
+    <string name="text_clock_m_seventeen">sedmnáct</string>
+    <string name="text_clock_m_eighteen">osmnáct</string>
+    <string name="text_clock_m_nineteen">devatenáct</string>
+    <string name="text_clock_m_twenty">dvacet</string>
+    <string name="text_clock_m_twenty_one">dvacet jedna</string>
+    <string name="text_clock_m_twenty_two">dvacet dva</string>
+    <string name="text_clock_m_twenty_three">dvacet tři</string>
+    <string name="text_clock_m_twenty_four">dvacet čtyři</string>
+    <string name="text_clock_m_twenty_five">dvacet pět</string>
+    <string name="text_clock_m_twenty_six">dvacet šest</string>
+    <string name="text_clock_m_twenty_seven">dvacet sedm</string>
+    <string name="text_clock_m_twenty_eight">dvacet osm</string>
+    <string name="text_clock_m_twenty_nine">dvacet devět</string>
+    <string name="text_clock_m_thirty">třicet</string>
+    <string name="text_clock_m_thirty_one">třicet jedna</string>
+    <string name="text_clock_m_thirty_two">třicet dva</string>
+    <string name="text_clock_m_thirty_three">třicet tři</string>
+    <string name="text_clock_m_thirty_four">třicet čtyři</string>
+    <string name="text_clock_m_thirty_five">třicet pět</string>
+    <string name="text_clock_m_thirty_six">třicet šest</string>
+    <string name="text_clock_m_thirty_seven">třicet sedm</string>
+    <string name="text_clock_m_thirty_eight">třicet osm</string>
+    <string name="text_clock_m_thirty_nine">třicet devět</string>
+    <string name="text_clock_m_forty">čtyřicet</string>
+    <string name="text_clock_m_forty_one">čtyřicet jedna</string>
+    <string name="text_clock_m_forty_two">čtyřicet dva</string>
+    <string name="text_clock_m_forty_three">čtyřicet tři</string>
+    <string name="text_clock_m_forty_four">čtyřicet čtyři</string>
+    <string name="text_clock_m_forty_five">čtyřicet pět</string>
+    <string name="text_clock_m_forty_six">čtyřicet šest</string>
+    <string name="text_clock_m_forty_seven">čtyřicet sedm</string>
+    <string name="text_clock_m_forty_eight">čtyřicet osm</string>
+    <string name="text_clock_m_forty_nine">čtyřicet devět</string>
+    <string name="text_clock_m_fifty">padesát</string>
+    <string name="text_clock_m_fifty_one">padesát jedna</string>
+    <string name="text_clock_m_fifty_two">padesát dva</string>
+    <string name="text_clock_m_fifty_three">padesát tři</string>
+    <string name="text_clock_m_fifty_four">padesát čtyři</string>
+    <string name="text_clock_m_fifty_five">padesát pět</string>
+    <string name="text_clock_m_fifty_six">padesát šest</string>
+    <string name="text_clock_m_fifty_seven">padesát sedm</string>
+    <string name="text_clock_m_fifty_eight">padesát osm</string>
+    <string name="text_clock_m_fifty_nine">padesát devět</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Ovládání jednou rukou</string>
     <!-- VPN icon -->
