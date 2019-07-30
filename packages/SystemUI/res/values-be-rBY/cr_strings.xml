@@ -130,16 +130,16 @@
     <string name="ambientmusic_songinfo">%s ад %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\"
+        <item quantity="other"><annotation name="color">Зараз</annotation>\"
 ^1
 ^2\"</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\"
+        <item quantity="one"><annotation name="color">Зараз</annotation>\"
 ^1
 ^2\"</item>
-        <item quantity="few"><annotation name="color">It’s</annotation>\"
+        <item quantity="few"><annotation name="color">Зараз</annotation>\"
 ^1
 ^2\"</item>
-        <item quantity="many"><annotation name="color">It’s</annotation>\"
+        <item quantity="many"><annotation name="color">Зараз</annotation>\"
 ^1
 ^2\"</item>
     </plurals>
@@ -157,9 +157,9 @@
     <string name="text_clock_h_eleven">Адзінаццаць</string>
     <string name="text_clock_h_twelve">Дванаццаць</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
+    <string name="text_clock_m_zero">Нуль</string>
+    <string name="text_clock_m_one">Адна</string>
+    <string name="text_clock_m_two">Дзве</string>
     <string name="text_clock_m_three">O’Three</string>
     <string name="text_clock_m_four">O’Four</string>
     <string name="text_clock_m_five">O’Five</string>
