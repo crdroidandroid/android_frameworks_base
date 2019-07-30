@@ -127,7 +127,7 @@
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">SystemUI</string>
     <!-- Ambient Display Pixel-Like string -->
-    <string name="ambientmusic_songinfo">%s z %s</string>
+    <string name="ambientmusic_songinfo">%s od %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
         <item quantity="other"><annotation name="color">Je (Other)</annotation>\" ^1 ^2\"</item>
