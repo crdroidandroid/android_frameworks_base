@@ -150,15 +150,15 @@
     <string name="text_clock_h_twelve">Doze</string>
     <!-- Q Clock - Minutes -->
     <string name="text_clock_m_zero">Horas</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
+    <string name="text_clock_m_one">E uma</string>
+    <string name="text_clock_m_two">E duas</string>
+    <string name="text_clock_m_three">E três</string>
+    <string name="text_clock_m_four">E quatro</string>
+    <string name="text_clock_m_five">E cinco</string>
+    <string name="text_clock_m_six">E seis</string>
+    <string name="text_clock_m_seven">E sete</string>
+    <string name="text_clock_m_eight">E oito</string>
+    <string name="text_clock_m_nine">E nove</string>
     <string name="text_clock_m_ten">Dez</string>
     <string name="text_clock_m_eleven">Onze</string>
     <string name="text_clock_m_twelve">Doze</string>
