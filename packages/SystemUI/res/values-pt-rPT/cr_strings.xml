@@ -42,7 +42,7 @@
     <string name="screenrecord_hide_hint">Esconder dica</string>
     <string name="screenrecord_show_hint">Mostrar dica</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Captura da tela</string>
+    <string name="quick_settings_screenshot_label">Captura de ecrã</string>
     <string name="quick_settings_region_screenshot_label">Captura de ecrã parcial</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Informação do dispositivo</string>
