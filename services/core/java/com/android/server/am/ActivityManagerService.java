@@ -4601,11 +4601,6 @@ public class ActivityManagerService extends IActivityManager.Stub
                         new String[] {PROC_START_SEQ_IDENT + app.startSeq});
             }
  
-            if (mGamingModeController != null && mGamingModeController.isGamingModeEnabled() &&
-                    hostingType.equals("activity") && startResult != null) {
-                mGamingModeController.noteStarted(app.info.packageName);
-            }
-
             checkTime(startTime, "startProcess: returned from zygote!");
             return startResult;
         } finally {

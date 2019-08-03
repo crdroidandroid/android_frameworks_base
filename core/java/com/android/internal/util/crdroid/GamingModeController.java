@@ -144,19 +144,19 @@ public class GamingModeController {
     }
 
     public boolean topAppChanged(String packageName) {
-        return isGameApp(packageName);
-    }
+        if (isGameApp(packageName))
+            return true;
 
-    public void noteStarted(String packageName) {
-        if (!mDynamicGamingMode || isGameApp(packageName)) {
-            return;
-        }
+        if (!mDynamicGamingMode)
+            return false;
+
         appInfo = getAppInfoFromPkgName(mContext, packageName);
         if (appInfo != null && (appInfo.category == ApplicationInfo.CATEGORY_GAME ||
             (appInfo.flags & ApplicationInfo.FLAG_IS_GAME) == ApplicationInfo.FLAG_IS_GAME)) {
             addGameApp(packageName);
-            activateGamingMode(true);
+            return true;
         }
+        return false;
     }
 
     private void splitAndAddToArrayList(ArrayList<String> arrayList,
