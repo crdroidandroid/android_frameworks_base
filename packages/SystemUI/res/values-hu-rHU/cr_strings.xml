@@ -130,10 +130,8 @@
     <string name="ambientmusic_songinfo">%s – %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">Az idő</annotation>\" ^1 ^2\"</item>
-        <item quantity="one"><annotation name="color">Az idő</annotation>\"
-^1
-^2\"</item>
+        <item quantity="other"><annotation name="color">It’s</annotation>\"\n^1\n^2\"</item>
+        <item quantity="one"><annotation name="color">It’s</annotation>\"\n^1\n^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
     <string name="text_clock_h_one">Egy</string>
