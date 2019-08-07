@@ -130,8 +130,8 @@
     <string name="ambientmusic_songinfo">%s par %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">Il est</annotation>\" ^1 ^2\"</item>
-        <item quantity="one"><annotation name="color">Il est</annotation>\" ^1 ^2\"</item>
+        <item quantity="other"><annotation name="color">Il est</annotation>\"\n^1\n^2\"</item>
+        <item quantity="one"><annotation name="color">Il est</annotation>\"\n^1\n^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
     <string name="text_clock_h_one">Un</string>
