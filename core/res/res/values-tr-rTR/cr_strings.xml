@@ -49,7 +49,7 @@
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_accessFontManager">Bir uygulamanın yazı tipi yöneticisine erişmesine izin verir.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
-    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Tek elle modundan çıkmak için boş alana dokunun</string>
+    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Tek el modundan çıkmak için boş alana dokunun</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Oyun modu</string>
     <string name="gaming_mode_notification_title">Oyun modu etkin</string>
