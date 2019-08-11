@@ -113,17 +113,17 @@
     <string name="pie_am_pm">a</string>
     <string name="pie_state_name">Kontrol Pie</string>
     <string name="pie_state_summary">Gunakan Kontrol Pie Pada Mode Layar Penuh</string>
-    <string name="pie_battery_level">"LEVEL BATERAI "</string>
+    <string name="pie_battery_level">"Daya Baterai "</string>
     <string name="quick_settings_pie">Kontrol Pie</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Suara</string>
     <string name="quick_settings_sound_ring">Dering</string>
     <string name="quick_settings_sound_vibrate">Getar</string>
-    <string name="quick_settings_sound_dnd">Jangan ganggu</string>
+    <string name="quick_settings_sound_dnd">Jangan Ganggu</string>
     <!-- LTE QS Tile -->
     <string name="qs_lte_label">LTE</string>
-    <string name="lte_on">LTE hidup</string>
-    <string name="lte_off">LTE mati</string>
+    <string name="lte_on">LTE Aktif</string>
+    <string name="lte_off">LTE Nonaktif</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">Antarmuka Sistem</string>
     <!-- Ambient Display Pixel-Like string -->
@@ -217,10 +217,10 @@
     <string name="quick_settings_reboot_recovery_label">Pemulihan</string>
     <string name="quick_settings_poweroff_label">Matikan Daya</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Mode Permainan dimatikan</string>
+    <string name="gaming_mode_not_enabled">Mode Permainan Dimatikan</string>
     <string name="quick_settings_gaming_mode_label">Mode Permainan</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Mode Permainan dimatikan.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Mode Permainan Nonaktif.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Mode Permainan diaktifkan.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Mode Permainan Aktif.</string>
 </resources>
