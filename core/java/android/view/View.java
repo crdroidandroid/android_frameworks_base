@@ -141,6 +141,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
+import com.android.internal.custom.longshot.injector.ViewInjector;
+
 /**
  * <p>
  * This class represents the basic building block for user interface components. A View
@@ -13725,6 +13727,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
                 || (viewFlags & LONG_CLICKABLE) == LONG_CLICKABLE)
                 || (viewFlags & CONTEXT_CLICKABLE) == CONTEXT_CLICKABLE;
 
+        ViewInjector.View.isInjection = (event.getSource() & 268435456) != 0;
         if ((viewFlags & ENABLED_MASK) == DISABLED) {
             if (action == MotionEvent.ACTION_UP && (mPrivateFlags & PFLAG_PRESSED) != 0) {
                 setPressed(false);
@@ -13737,6 +13740,22 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         if (mTouchDelegate != null) {
             if (mTouchDelegate.onTouchEvent(event)) {
                 return true;
+            }
+        }
+
+        if (action == 0 && isInScrollingContainer() && ViewInjector.View.isInjection) {
+            ViewParent targetView = getParent();
+            while (true) {
+                if (targetView == null || !(targetView instanceof ViewGroup)) {
+                    break;
+                } else if (((ViewGroup) targetView).shouldDelayChildPressedState()) {
+                    int[] position = new int[2];
+                    ((ViewGroup) targetView).getLocationOnScreen(position);
+                    ViewInjector.View.setScrolledViewTop(mContext, position[1]);
+                    break;
+                } else {
+                    targetView = targetView.getParent();
+                }
             }
         }
 
@@ -16264,7 +16283,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     protected boolean awakenScrollBars(int startDelay, boolean invalidate) {
         final ScrollabilityCache scrollCache = mScrollCache;
 
-        if (scrollCache == null || !scrollCache.fadeScrollBars) {
+        if (ViewInjector.View.onAwakenScrollBars(mContext) || scrollCache == null || !scrollCache.fadeScrollBars) {
             return false;
         }
 
@@ -24450,6 +24469,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
         onOverScrolled(newScrollX, newScrollY, clampedX, clampedY);
 
+        ViewInjector.View.onOverScrolled(mContext, clampedY);
         return clampedX || clampedY;
     }
 

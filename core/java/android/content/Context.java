@@ -4230,6 +4230,12 @@ public abstract class Context {
     public static final String SECURE_ELEMENT_SERVICE = "secure_element";
 
     /**
+     * Long screenshot
+     * @hide
+     */
+    public static final String LONGSCREENSHOT_SERVICE = "longshot";
+
+    /**
      * Determine whether the given permission is allowed for a particular
      * process and user ID running in the system.
      *
