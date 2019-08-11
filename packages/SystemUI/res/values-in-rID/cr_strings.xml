@@ -105,7 +105,7 @@
     <string name="onthego_channel_name">Utama</string>
     <string name="quick_settings_onthego_label">On-The-Go</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Pencarian suara</string>
+    <string name="quick_settings_sound_search">Pencarian Suara</string>
     <!-- Pie controls -->
     <string name="pie_date_format">EEEE, dd MMMM yyyy</string>
     <string name="pie_hour_format_12">hh:mm</string>
@@ -130,7 +130,7 @@
     <string name="ambientmusic_songinfo">%s by %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">Sekarang</annotation>\"\n^1\n^2\"</item>
+        <item quantity="other"><annotation name="color">Jam</annotation>\"\n^1\n^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
     <string name="text_clock_h_one">Satu</string>
@@ -144,9 +144,9 @@
     <string name="text_clock_h_nine">Sembilan</string>
     <string name="text_clock_h_ten">Sepuluh</string>
     <string name="text_clock_h_eleven">Sebelas</string>
-    <string name="text_clock_h_twelve">Dua belas</string>
+    <string name="text_clock_h_twelve">Dua Belas</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">Jam</string>
+    <string name="text_clock_m_zero">Pas</string>
     <string name="text_clock_m_one">Satu Menit</string>
     <string name="text_clock_m_two">Dua Menit</string>
     <string name="text_clock_m_three">Tiga Menit</string>
@@ -207,20 +207,20 @@
     <string name="text_clock_m_fifty_eight">Lima Delapan</string>
     <string name="text_clock_m_fifty_nine">Lima Sembilan</string>
     <!-- OneHand mode QS tile -->
-    <string name="qs_onehand_label">Mode satu tangan</string>
+    <string name="qs_onehand_label">Mode Satu Tangan</string>
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">RAM TERSEDIA: %1$d MB</string>
+    <string name="recents_free_ram">RAM Tersedia: %1$d MB</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
-    <string name="quick_settings_reboot_label">Nyalakan ulang</string>
+    <string name="quick_settings_reboot_label">Mulai Ulang</string>
     <string name="quick_settings_reboot_recovery_label">Pemulihan</string>
     <string name="quick_settings_poweroff_label">Matikan Daya</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Mode permainan dinonaktifkan di pengaturan</string>
-    <string name="quick_settings_gaming_mode_label">Mode permainan</string>
+    <string name="gaming_mode_not_enabled">Mode Permainan dimatikan</string>
+    <string name="quick_settings_gaming_mode_label">Mode Permainan</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Mode permainan dimatikan.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Mode Permainan dimatikan.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Mode permainan dihidupkan.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Mode Permainan diaktifkan.</string>
 </resources>
