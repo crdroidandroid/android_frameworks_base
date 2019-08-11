@@ -147,8 +147,8 @@
     <string name="text_clock_h_twelve">Dua belas</string>
     <!-- Q Clock - Minutes -->
     <string name="text_clock_m_zero">Jam</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
+    <string name="text_clock_m_one">Satu Menit</string>
+    <string name="text_clock_m_two">Dua Menit</string>
     <string name="text_clock_m_three">O’Three</string>
     <string name="text_clock_m_four">O’Four</string>
     <string name="text_clock_m_five">O’Five</string>
