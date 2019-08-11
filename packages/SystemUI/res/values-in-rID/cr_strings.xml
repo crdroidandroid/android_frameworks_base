@@ -73,14 +73,14 @@
     <string name="accessibility_quick_settings_compass_on">Kompas hidup.</string>
     <string name="accessibility_quick_settings_compass_changed_off">Kompas dimatikan.</string>
     <string name="accessibility_quick_settings_compass_changed_on">Kompas dihidupkan.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
-    <string name="quick_settings_compass_SE">SE</string>
-    <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="quick_settings_compass_N">Utara</string>
+    <string name="quick_settings_compass_NE">Timur Laut</string>
+    <string name="quick_settings_compass_E">Timur</string>
+    <string name="quick_settings_compass_SE">Tenggara</string>
+    <string name="quick_settings_compass_S">Selatan</string>
+    <string name="quick_settings_compass_SW">Barat Daya</string>
+    <string name="quick_settings_compass_W">Barat</string>
+    <string name="quick_settings_compass_NW">Barat Laut</string>
     <!-- Smart pixels QS tile -->
     <string name="quick_settings_smart_pixels">Smart pixels</string>
     <string name="quick_settings_smart_pixels_on_power_save">Hidupkan otomatis smart pixels</string>
@@ -107,9 +107,9 @@
     <!--Google sound search tile -->
     <string name="quick_settings_sound_search">Pencarian Suara</string>
     <!-- Pie controls -->
-    <string name="pie_date_format">EEEE, dd MMMM yyyy</string>
-    <string name="pie_hour_format_12">hh:mm</string>
-    <string name="pie_hour_format_24">HH:mm</string>
+    <string name="pie_date_format">Minggu, hari Bulan tahun</string>
+    <string name="pie_hour_format_12">jam:menit</string>
+    <string name="pie_hour_format_24">Jam:menit</string>
     <string name="pie_am_pm">a</string>
     <string name="pie_state_name">Kontrol Pie</string>
     <string name="pie_state_summary">Gunakan Kontrol Pie Pada Mode Layar Penuh</string>
