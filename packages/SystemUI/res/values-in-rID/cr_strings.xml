@@ -136,15 +136,15 @@
     <string name="text_clock_h_one">Satu</string>
     <string name="text_clock_h_two">Dua</string>
     <string name="text_clock_h_three">Tiga</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_four">Empat</string>
+    <string name="text_clock_h_five">Lima</string>
+    <string name="text_clock_h_six">Enam</string>
+    <string name="text_clock_h_seven">Tujuh</string>
+    <string name="text_clock_h_eight">Delapan</string>
+    <string name="text_clock_h_nine">Sembilan</string>
+    <string name="text_clock_h_ten">Sepuluh</string>
+    <string name="text_clock_h_eleven">Sebelas</string>
+    <string name="text_clock_h_twelve">Dua belas</string>
     <!-- Q Clock - Minutes -->
     <string name="text_clock_m_zero">O’Clock</string>
     <string name="text_clock_m_one">O’One</string>
