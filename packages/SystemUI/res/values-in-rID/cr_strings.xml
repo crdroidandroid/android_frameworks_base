@@ -43,10 +43,10 @@
     <string name="screenrecord_show_hint">Tampilkan petunjuk</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Tangkapan layar</string>
-    <string name="quick_settings_region_screenshot_label">Menangkap sebagian layar</string>
+    <string name="quick_settings_region_screenshot_label">Tangkapan Layar Sebagian</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Info CPU</string>
-    <string name="accessibility_quick_settings_cpuinfo_off">Info CPU nonaktif</string>
+    <string name="accessibility_quick_settings_cpuinfo_off">Info CPU Nonaktif</string>
     <string name="accessibility_quick_settings_cpuinfo_on">Info CPU aktif</string>
     <string name="accessibility_quick_settings_cpuinfo_changed_off">Info CPU dinonaktifkan</string>
     <string name="accessibility_quick_settings_cpuinfo_changed_on">Info CPU diaktifkan</string>
@@ -103,7 +103,7 @@
     <string name="onthego_front_camera">Gunakan kamera depan</string>
     <string name="onthego_service_toggle">Layanan mulai ulang otomatis</string>
     <string name="onthego_channel_name">Utama</string>
-    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="quick_settings_onthego_label">Mode Berjalan</string>
     <!--Google sound search tile -->
     <string name="quick_settings_sound_search">Pencarian Suara</string>
     <!-- Pie controls -->
