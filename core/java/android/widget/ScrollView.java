@@ -49,6 +49,8 @@ import com.android.internal.R;
 
 import java.util.List;
 
+import com.android.internal.custom.longshot.injector.ScrollViewInjector;
+
 /**
  * A view group that allows the view hierarchy placed within it to be scrolled.
  * Scroll view may have only one direct child placed within it.
@@ -622,6 +624,8 @@ public class ScrollView extends FrameLayout {
         }
         vtev.offsetLocation(0, mNestedYOffset);
 
+        ScrollViewInjector.ScrollView.isInjection = (ev.getSource() & 268435456) != 0;
+
         switch (actionMasked) {
             case MotionEvent.ACTION_DOWN: {
                 if (getChildCount() == 0) {
@@ -712,12 +716,14 @@ public class ScrollView extends FrameLayout {
                             if (!mEdgeGlowBottom.isFinished()) {
                                 mEdgeGlowBottom.onRelease();
                             }
+                            ScrollViewInjector.ScrollView.onOverScrolled(mContext, true);
                         } else if (pulledToY > range) {
                             mEdgeGlowBottom.onPull((float) deltaY / getHeight(),
                                     1.f - ev.getX(activePointerIndex) / getWidth());
                             if (!mEdgeGlowTop.isFinished()) {
                                 mEdgeGlowTop.onRelease();
                             }
+                            ScrollViewInjector.ScrollView.onOverScrolled(mContext, true);
                         }
                         if (mEdgeGlowTop != null
                                 && (!mEdgeGlowTop.isFinished() || !mEdgeGlowBottom.isFinished())) {

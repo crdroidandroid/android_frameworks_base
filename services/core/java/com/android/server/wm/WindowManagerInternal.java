@@ -425,4 +425,9 @@ public abstract class WindowManagerInternal {
      * the window token is not found.
      */
     public abstract int getWindowOwnerUserId(IBinder windowToken);
+
+    /**
+     * Long screenshot
+     */
+    public abstract boolean isMinimizedDock();
 }
