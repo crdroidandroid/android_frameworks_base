@@ -130,12 +130,12 @@
     <string name="ambientmusic_songinfo">%s by %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\"\n^1\n^2\"</item>
+        <item quantity="other"><annotation name="color">Sekarang</annotation>\"\n^1\n^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
+    <string name="text_clock_h_one">Satu</string>
+    <string name="text_clock_h_two">Dua</string>
+    <string name="text_clock_h_three">Tiga</string>
     <string name="text_clock_h_four">Four</string>
     <string name="text_clock_h_five">Five</string>
     <string name="text_clock_h_six">Six</string>
