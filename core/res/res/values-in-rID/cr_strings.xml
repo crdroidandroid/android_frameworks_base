@@ -41,9 +41,9 @@
     <string name="systemui_restart_title">Mulai Ulang SistemUI</string>
     <string name="systemui_restart_message">Untuk Perubahan, Harus Memulai Ulang SistemUI. Mulai Ulang Sekarang?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_toggleNavigationEditor">Mengontrol navigasi editor</string>
+    <string name="permlab_toggleNavigationEditor">Kontrol Penyunting Bilah Navigasi</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Mengizinkan aplikasi mengontrol editor bar navigasi.</string>
+    <string name="permdesc_toggleNavigationEditor">Mengizinkan Aplikasi Menyunting Bilah Navigasi.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_accessFontManager">mengakses pengelola font</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
