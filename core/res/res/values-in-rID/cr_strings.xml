@@ -17,13 +17,13 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Tekan Lama Tombol Daya Untuk Mengaktifkan Layar</string>
+    <string name="pocket_lock_message_long_press">Tekan Lama Tombol Daya Untuk Menggunakan</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Buram</string>
-    <string name="animation_slide_right">Geser Kanan</string>
-    <string name="animation_slide_left">Geser Kiri</string>
-    <string name="animation_slide_right_no_fade">Geser Kanan (Tanpa Buram)</string>
-    <string name="animation_slide_left_no_fade">Geser Kiri (Tanpa Buram)</string>
+    <string name="animation_fade">Memudar</string>
+    <string name="animation_slide_right">Geser ke Kanan</string>
+    <string name="animation_slide_left">Geser ke Kiri</string>
+    <string name="animation_slide_right_no_fade">Geser ke Kanan (Tanpa Memudar)</string>
+    <string name="animation_slide_left_no_fade">Geser Kiri (Tanpa Memudar)</string>
     <string name="animation_slide_up">Geser Bawah</string>
     <string name="animation_slide_down">Geser Atas</string>
     <string name="animation_default">Standar</string>
