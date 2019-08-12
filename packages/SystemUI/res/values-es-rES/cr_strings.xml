@@ -190,29 +190,50 @@ Y Cuatro</string>
 Y Cinco</string>
     <string name="text_clock_m_thirty_six">Y Treinta
 Y Seis</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_thirty_seven">Y Treinta
+Y Siete</string>
+    <string name="text_clock_m_thirty_eight">Y Treinta
+Y Ocho</string>
+    <string name="text_clock_m_thirty_nine">Y Treinta
+Y Nueve</string>
+    <string name="text_clock_m_forty">Y Cuarenta</string>
+    <string name="text_clock_m_forty_one">Y Cuarenta
+Y Uno</string>
+    <string name="text_clock_m_forty_two">Y Cuarenta
+Y Dos</string>
+    <string name="text_clock_m_forty_three">Y Cuarenta
+Y Tres</string>
+    <string name="text_clock_m_forty_four">Y Cuarenta
+Y Cuatro</string>
+    <string name="text_clock_m_forty_five">Y Cuarenta
+Y Cinco</string>
+    <string name="text_clock_m_forty_six">Y Cuarenta
+Y Seis</string>
+    <string name="text_clock_m_forty_seven">Y Cuarenta
+Y Siete</string>
+    <string name="text_clock_m_forty_eight">Y Cuarenta
+Y Ocho</string>
+    <string name="text_clock_m_forty_nine">Y Cuarenta
+Y Nueve</string>
+    <string name="text_clock_m_fifty">Y Cincuenta</string>
+    <string name="text_clock_m_fifty_one">Y Cincuenta
+Y Uno</string>
+    <string name="text_clock_m_fifty_two">Y Cincuenta
+Y Dos</string>
+    <string name="text_clock_m_fifty_three">Y Cincuenta
+Y Tres</string>
+    <string name="text_clock_m_fifty_four">Y Cincuenta
+Y Cuatro</string>
+    <string name="text_clock_m_fifty_five">Y Cincuenta
+Y Cinco</string>
+    <string name="text_clock_m_fifty_six">Y Cincuenta
+Y Seis</string>
+    <string name="text_clock_m_fifty_seven">Y Cincuenta
+Y Siete</string>
+    <string name="text_clock_m_fifty_eight">Y Cincuenta
+Y Ocho</string>
+    <string name="text_clock_m_fifty_nine">Y Cincuenta
+Y Nueve</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Modo de una mano</string>
     <!-- VPN icon -->
