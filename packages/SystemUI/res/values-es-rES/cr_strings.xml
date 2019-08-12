@@ -163,7 +163,7 @@
     <string name="text_clock_m_thirteen">Y Trece</string>
     <string name="text_clock_m_fourteen">Y Catorce</string>
     <string name="text_clock_m_fifteen">Y Quince</string>
-    <string name="text_clock_m_sixteen">Y Dieciseis</string>
+    <string name="text_clock_m_sixteen">Y Dieciséis</string>
     <string name="text_clock_m_seventeen">Y Diecisiete</string>
     <string name="text_clock_m_eighteen">Y Dieciocho</string>
     <string name="text_clock_m_nineteen">Y Diecinueve</string>
@@ -174,16 +174,22 @@
     <string name="text_clock_m_twenty_four">Y Veinticuatro</string>
     <string name="text_clock_m_twenty_five">Y Veinticinco</string>
     <string name="text_clock_m_twenty_six">Y Veintiséis</string>
-    <string name="text_clock_m_twenty_seven">Twenty Seven</string>
-    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
+    <string name="text_clock_m_twenty_seven">Y Veintisiete</string>
+    <string name="text_clock_m_twenty_eight">Y Veintiocho</string>
+    <string name="text_clock_m_twenty_nine">Y Veintinueve</string>
+    <string name="text_clock_m_thirty">Y Treinta</string>
+    <string name="text_clock_m_thirty_one">Y Treinta
+Y Uno</string>
+    <string name="text_clock_m_thirty_two">Y Treinta
+Y Dos</string>
+    <string name="text_clock_m_thirty_three">Y Treinta
+Y Tres</string>
+    <string name="text_clock_m_thirty_four">Y Treinta
+Y Cuatro</string>
+    <string name="text_clock_m_thirty_five">Y Treinta
+Y Cinco</string>
+    <string name="text_clock_m_thirty_six">Y Treinta
+Y Seis</string>
     <string name="text_clock_m_thirty_seven">Thirty Seven</string>
     <string name="text_clock_m_thirty_eight">Thirty Eight</string>
     <string name="text_clock_m_thirty_nine">Thirty Nine</string>
