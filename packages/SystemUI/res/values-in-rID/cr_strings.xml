@@ -17,32 +17,32 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time">Pengisian cepat (sekitar <xliff:g id="charging_time_left" example="4 Jam 2 Menit">%s</xliff:g>)</string>
+    <string name="keyguard_indication_dash_charging_time">Pengisian Cepat (Sekitar <xliff:g id="charging_time_left" example="4 Jam 2 Menit">%s</xliff:g>)</string>
     <string name="keyguard_plugged_in_dash_charging">Pengisian Cepat</string>
     <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Perekaman Layar Sedang Berlangsung</string>
-    <string name="screenrecord_notif_final_ticker">Berhasil Merekam Layar</string>
+    <string name="screenrecord_notif_ticker">Layar sedang direkam</string>
+    <string name="screenrecord_notif_final_ticker">Layar telah berhasil direkam</string>
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Merekam Layar</string>
+    <string name="screenrecord_notif_title">Merekam layar</string>
     <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Berhenti</string>
-    <string name="screenrecord_notif_completed">Berhasil Merekam Layar</string>
+    <string name="screenrecord_notif_stop">Hentikan</string>
+    <string name="screenrecord_notif_completed">Layar telah berhasil direkam</string>
     <string name="screenrecord_notif_duration">Total:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Tampilkan Penunjuk</string>
-    <string name="screenrecord_notif_pointer_off">Sembunyikan Penunjuk</string>
+    <string name="screenrecord_notif_pointer_on">Tampilkan penunjuk</string>
+    <string name="screenrecord_notif_pointer_off">Sembunyikan penunjuk</string>
     <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Tidak Dapat Merekam Layar</string>
-    <string name="notification_channel_screenrecord">Perekam Layar</string>
+    <string name="screenrecord_notif_error">Tidak dapat merekam layar</string>
+    <string name="notification_channel_screenrecord">Perekam layar</string>
     <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Rekam Layar</string>
-    <string name="quick_settings_screenrecord_lq_label">Kualitas Rendah</string>
-    <string name="quick_settings_screenrecord_mq_label">Kualitas Sedang</string>
-    <string name="quick_settings_screenrecord_hq_label">Kualitas Tinggi</string>
-    <string name="screenrecord_hide_hint">Sembunyikan Tanda</string>
-    <string name="screenrecord_show_hint">Tampilkan Tanda</string>
+    <string name="quick_settings_screenrecord_label">Rekam layar</string>
+    <string name="quick_settings_screenrecord_lq_label">Kualitas rendah</string>
+    <string name="quick_settings_screenrecord_mq_label">Kualitas sedang</string>
+    <string name="quick_settings_screenrecord_hq_label">Kualitas tinggi</string>
+    <string name="screenrecord_hide_hint">Sembunyikan tanda</string>
+    <string name="screenrecord_show_hint">Tampilkan penanda</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Tangkapan Layar</string>
+    <string name="quick_settings_screenshot_label">Tangkapan layar</string>
     <string name="quick_settings_region_screenshot_label">Tangkapan Layar Sebagian</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Info CPU</string>
