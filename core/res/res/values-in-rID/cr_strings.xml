@@ -49,10 +49,10 @@
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_accessFontManager">Mengizinkan Aplikasi Mengakses Pengelola Huruf.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
-    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Ketuk area kosong untuk keluar dari mode satu tangan</string>
+    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Ketuk Pada Area Bebas Untuk Keluar Dari Mode Satu Tangan</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Mode permainan</string>
-    <string name="gaming_mode_notification_title">Mode permainan diaktifkan</string>
+    <string name="notification_channel_gaming">Mode Permainan</string>
+    <string name="gaming_mode_notification_title">Mode Permainan Diaktifkan</string>
     <string name="gaming_mode_notification_content">Tekan untuk mematikan mode Gaming</string>
     <string name="gaming_mode_enabled_toast">Mode game dihidupkan</string>
     <string name="gaming_mode_disabled_toast">Mode game dimatikan</string>
