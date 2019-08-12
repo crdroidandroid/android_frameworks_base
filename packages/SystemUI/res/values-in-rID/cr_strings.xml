@@ -29,18 +29,18 @@
     <string name="screenrecord_notif_completed">Berhasil Merekam Layar</string>
     <string name="screenrecord_notif_duration">Total:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Tampilkan penunjuk</string>
-    <string name="screenrecord_notif_pointer_off">Sembunyikan penunjuk</string>
+    <string name="screenrecord_notif_pointer_on">Tampilkan Penunjuk</string>
+    <string name="screenrecord_notif_pointer_off">Sembunyikan Penunjuk</string>
     <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Tidak dapat merekam layar</string>
-    <string name="notification_channel_screenrecord">Rekaman layar</string>
+    <string name="screenrecord_notif_error">Tidak Dapat Merekam Layar</string>
+    <string name="notification_channel_screenrecord">Perekam Layar</string>
     <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Rekam layar</string>
+    <string name="quick_settings_screenrecord_label">Rekam Layar</string>
     <string name="quick_settings_screenrecord_lq_label">Kualitas Rendah</string>
-    <string name="quick_settings_screenrecord_mq_label">Kualitas Menengah</string>
+    <string name="quick_settings_screenrecord_mq_label">Kualitas Sedang</string>
     <string name="quick_settings_screenrecord_hq_label">Kualitas Tinggi</string>
-    <string name="screenrecord_hide_hint">Sembunyikan petunjuk</string>
-    <string name="screenrecord_show_hint">Tampilkan petunjuk</string>
+    <string name="screenrecord_hide_hint">Sembunyikan Tanda</string>
+    <string name="screenrecord_show_hint">Tampilkan Tanda</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Tangkapan Layar</string>
     <string name="quick_settings_region_screenshot_label">Tangkapan Layar Sebagian</string>
