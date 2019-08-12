@@ -5050,6 +5050,18 @@ public final class Settings {
         public static final String HEADSET_CONNECT_PLAYER = "headset_connect_player";
 
         /**
+         * Show battery percentage when charging
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY_TEXT_CHARGING = "status_bar_battery_text_charging";
+
+        /**
+         * Battery percentage position with respect to battery icon
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY_TEXT_POSITION = "status_bar_battery_text_position";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
