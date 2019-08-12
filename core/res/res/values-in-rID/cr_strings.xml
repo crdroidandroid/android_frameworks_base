@@ -17,10 +17,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Tekan Lama Tombol Daya Untuk Menggunakan</string>
+    <string name="pocket_lock_message_long_press">Tekan lama tombol daya untuk menggunakan</string>
     <!-- AOKP custom system animations -->
     <string name="animation_fade">Memudar</string>
-    <string name="animation_slide_right">Geser ke Kanan</string>
+    <string name="animation_slide_right">Geser ke kanan</string>
     <string name="animation_slide_left">Geser ke Kiri</string>
     <string name="animation_slide_right_no_fade">Geser ke Kanan (Tanpa Memudar)</string>
     <string name="animation_slide_left_no_fade">Geser ke Kiri (Tanpa Memudar)</string>
