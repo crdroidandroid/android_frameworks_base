@@ -25,16 +25,16 @@
     <string name="animation_slide_right_no_fade">Geser ke Kanan (Tanpa Memudar)</string>
     <string name="animation_slide_left_no_fade">Geser ke Kiri (Tanpa Memudar)</string>
     <string name="animation_slide_up">Geser ke Bawah</string>
-    <string name="animation_slide_down">Geser di Atas</string>
+    <string name="animation_slide_down">Geser ke Atas</string>
     <string name="animation_default">Bawaan</string>
-    <string name="animation_translucent">Tembus Pandang</string>
-    <string name="animation_grow_shrink">Perbesar (Atas)</string>
-    <string name="animation_grow_shrink_center">Perbesar (Tengah)</string>
-    <string name="animation_grow_shrink_bottom">Perbesar (Bawah)</string>
-    <string name="animation_grow_shrink_left">Perbesar (Kiri)</string>
-    <string name="animation_grow_shrink_right">Perbesar (Kanan)</string>
+    <string name="animation_translucent">Transparan</string>
+    <string name="animation_grow_shrink">Tumbuh di (Atas)</string>
+    <string name="animation_grow_shrink_center">Tumbuh di (tengah)</string>
+    <string name="animation_grow_shrink_bottom">Tumbuh di (Bawah)</string>
+    <string name="animation_grow_shrink_left">Tumbuh di (Kiri)</string>
+    <string name="animation_grow_shrink_right">Tumbuh di (Kanan)</string>
     <string name="animation_random">Acak</string>
-    <string name="action_null">Tidak Ada</string>
+    <string name="action_null">Kosong</string>
     <string name="animation_ethans">Etans</string>
     <string name="animation_q">Gaya Q</string>
     <!-- SystemUI Restart -->
