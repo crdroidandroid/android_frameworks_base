@@ -53,7 +53,7 @@
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Mode Permainan</string>
     <string name="gaming_mode_notification_title">Mode Permainan Diaktifkan</string>
-    <string name="gaming_mode_notification_content">Tekan untuk mematikan mode Gaming</string>
-    <string name="gaming_mode_enabled_toast">Mode game dihidupkan</string>
-    <string name="gaming_mode_disabled_toast">Mode game dimatikan</string>
+    <string name="gaming_mode_notification_content">Ketuk Untuk Keluar Dari Mode Permainan</string>
+    <string name="gaming_mode_enabled_toast">Mode Permainan Aktif</string>
+    <string name="gaming_mode_disabled_toast">Mode Permainan Nonaktif</string>
 </resources>
