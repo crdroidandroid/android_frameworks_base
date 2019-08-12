@@ -28,13 +28,13 @@
     <string name="animation_slide_down">Geser Atas</string>
     <string name="animation_default">Standar</string>
     <string name="animation_translucent">Transparan</string>
-    <string name="animation_grow_shrink">Tumbuh di (atas)</string>
-    <string name="animation_grow_shrink_center">Tumbuh di (tengah)</string>
-    <string name="animation_grow_shrink_bottom">Tumbuh di (bawah)</string>
-    <string name="animation_grow_shrink_left">Tumbuh di (kiri)</string>
-    <string name="animation_grow_shrink_right">Tumbuh di (kanan)</string>
+    <string name="animation_grow_shrink">Perbesar (Atas)</string>
+    <string name="animation_grow_shrink_center">Perbesar (Tengah)</string>
+    <string name="animation_grow_shrink_bottom">Perbesar (Bawah)</string>
+    <string name="animation_grow_shrink_left">Perbesar (Kiri)</string>
+    <string name="animation_grow_shrink_right">Perbesar (Kanan)</string>
     <string name="animation_random">Acak</string>
-    <string name="action_null">Kosong</string>
+    <string name="action_null">Tidak Ada</string>
     <string name="animation_ethans">Etans</string>
     <string name="animation_q">Gaya Q</string>
     <!-- SystemUI Restart -->
