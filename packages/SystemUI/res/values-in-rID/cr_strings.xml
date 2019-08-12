@@ -17,210 +17,210 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time">Pengisian Baterai (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging">Pengisian Baterai</string>
+    <string name="keyguard_indication_dash_charging_time">Pengisian Cepat (Sekitar <xliff:g id="charging_time_left" example="4 Jam 2 Menit">%s</xliff:g>)</string>
+    <string name="keyguard_plugged_in_dash_charging">Pengisian Cepat</string>
     <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Layar sedang di rekam</string>
-    <string name="screenrecord_notif_final_ticker">Berhasil merekam layar</string>
+    <string name="screenrecord_notif_ticker">Perekaman Layar Sedang Berlangsung</string>
+    <string name="screenrecord_notif_final_ticker">Berhasil Merekam Layar</string>
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Merekam layar</string>
+    <string name="screenrecord_notif_title">Merekam Layar</string>
     <!-- Screenrecord notification action: Stop -->
     <string name="screenrecord_notif_stop">Berhenti</string>
-    <string name="screenrecord_notif_completed">Berhasil merekam layar</string>
+    <string name="screenrecord_notif_completed">Berhasil Merekam Layar</string>
     <string name="screenrecord_notif_duration">Total:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Tampilkan penunjuk</string>
-    <string name="screenrecord_notif_pointer_off">Sembunyikan penunjuk</string>
+    <string name="screenrecord_notif_pointer_on">Tampilkan Penunjuk</string>
+    <string name="screenrecord_notif_pointer_off">Sembunyikan Penunjuk</string>
     <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Tidak dapat merekam layar</string>
-    <string name="notification_channel_screenrecord">Rekaman layar</string>
+    <string name="screenrecord_notif_error">Tidak Dapat Merekam Layar</string>
+    <string name="notification_channel_screenrecord">Perekam Layar</string>
     <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Rekam layar</string>
+    <string name="quick_settings_screenrecord_label">Rekam Layar</string>
     <string name="quick_settings_screenrecord_lq_label">Kualitas Rendah</string>
-    <string name="quick_settings_screenrecord_mq_label">Kualitas Menengah</string>
+    <string name="quick_settings_screenrecord_mq_label">Kualitas Sedang</string>
     <string name="quick_settings_screenrecord_hq_label">Kualitas Tinggi</string>
-    <string name="screenrecord_hide_hint">Sembunyikan petunjuk</string>
-    <string name="screenrecord_show_hint">Tampilkan petunjuk</string>
+    <string name="screenrecord_hide_hint">Sembunyikan Tanda</string>
+    <string name="screenrecord_show_hint">Tampilkan Tanda</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Tangkapan layar</string>
-    <string name="quick_settings_region_screenshot_label">Menangkap sebagian layar</string>
+    <string name="quick_settings_screenshot_label">Tangkapan Layar</string>
+    <string name="quick_settings_region_screenshot_label">Tangkapan Layar Sebagian</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Info CPU</string>
-    <string name="accessibility_quick_settings_cpuinfo_off">Info CPU nonaktif</string>
-    <string name="accessibility_quick_settings_cpuinfo_on">Info CPU aktif</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_off">Info CPU dinonaktifkan</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_on">Info CPU diaktifkan</string>
+    <string name="accessibility_quick_settings_cpuinfo_off">Info CPU Nonaktif</string>
+    <string name="accessibility_quick_settings_cpuinfo_on">Info CPU Aktif</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_off">Info CPU Dinonaktifkan</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_on">Info CPU Diaktifkan</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">Tombol Fisik</string>
     <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_disabled">Tombol Fisik dimatikan.</string>
+    <string name="accessibility_quick_settings_hw_keys_disabled">Tombol Fisik Dinonaktifkan.</string>
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_enabled">Tombol Fisik dihidupkan.</string>
+    <string name="accessibility_quick_settings_hw_keys_enabled">Tombol Fisik Diaktifkan.</string>
     <!-- Heads up snooze toast -->
-    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Mengintip pemberitahuan tertunda selama 1 menit.</string>
-    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Mengintip pemberitahuan tertunda selama <xliff:g id="number">%d</xliff:g> menit.</string>
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Sorot Pemberitahuan Tertunda Selama 1 Menit.</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Sorot Pemberitahuan Tertunda Selama <xliff:g id="number">%d </xliff:g> Menit.</string>
     <!-- Expanded Desktop QS Tile -->
-    <string name="quick_settings_expanded_desktop_label">Desktop yang diperluas</string>
+    <string name="quick_settings_expanded_desktop_label">Tampilan Diperluas</string>
     <string name="quick_settings_expanded_desktop">Diperluas</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
-    <string name="quick_settings_expanded_navigation_off">Sembunyikan navbar</string>
-    <string name="quick_settings_expanded_statusbar_off">Sembunyikan statusbar</string>
+    <string name="quick_settings_expanded_navigation_off">Sembunyikan Navbar</string>
+    <string name="quick_settings_expanded_statusbar_off">Sembunyikan Statusbar</string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Kompas</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="derajat">%1$.0f</xliff:g>\u00b0<xliff:g id="arah">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Menginisialisasi\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Kompas mati.</string>
-    <string name="accessibility_quick_settings_compass_on">Kompas hidup.</string>
-    <string name="accessibility_quick_settings_compass_changed_off">Kompas dimatikan.</string>
-    <string name="accessibility_quick_settings_compass_changed_on">Kompas dihidupkan.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
-    <string name="quick_settings_compass_SE">SE</string>
+    <string name="accessibility_quick_settings_compass_off">Kompas Nonaktif.</string>
+    <string name="accessibility_quick_settings_compass_on">Kompas Aktif.</string>
+    <string name="accessibility_quick_settings_compass_changed_off">Kompas Dinonaktifkan.</string>
+    <string name="accessibility_quick_settings_compass_changed_on">Kompas Diaktifkan.</string>
+    <string name="quick_settings_compass_N">U</string>
+    <string name="quick_settings_compass_NE">TL</string>
+    <string name="quick_settings_compass_E">T</string>
+    <string name="quick_settings_compass_SE">TG</string>
     <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="quick_settings_compass_SW">BD</string>
+    <string name="quick_settings_compass_W">B</string>
+    <string name="quick_settings_compass_NW">BL</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Hidupkan otomatis smart pixels</string>
+    <string name="quick_settings_smart_pixels">Piksel Cerdas</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Hidupkan Otomatis Piksel Cerdas</string>
     <!-- Music tile -->
     <string name="quick_settings_music_label">Musik</string>
     <string name="quick_settings_music_play">Putar</string>
     <string name="quick_settings_music_pause">Jeda</string>
     <!-- Always on Display Tile -->
-    <string name="quick_settings_always_on_display_label">Layar selalu hidup</string>
+    <string name="quick_settings_always_on_display_label">Layar Selalu Hidup</string>
     <!-- On The Go -->
     <string name="global_action_onthego">Mode On-The-Go</string>
-    <string name="onthego_notif_ticker">On-The-Go diaktifkan</string>
-    <string name="onthego_notif_title">On-The-Go sudah aktif</string>
+    <string name="onthego_notif_ticker">On-The-Go Diaktifkan</string>
+    <string name="onthego_notif_title">On-The-Go Aktif</string>
     <string name="onthego_notif_stop">Hentikan</string>
     <string name="onthego_notif_options">Pilihan</string>
-    <string name="onthego_notif_error">Tidak dapat memulai On-The-Go</string>
-    <string name="onthego_notif_restart">Mulai ulang On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Mode kamera berubah</string>
+    <string name="onthego_notif_error">Tidak Dapat Memulai On-The-Go</string>
+    <string name="onthego_notif_restart">Mulai Ulang On-The-Go</string>
+    <string name="onthego_notif_camera_changed">Mode Kamera Berubah</string>
     <string name="onthego_transparency">Transparansi</string>
-    <string name="onthego_front_camera">Gunakan kamera depan</string>
-    <string name="onthego_service_toggle">Layanan mulai ulang otomatis</string>
+    <string name="onthego_front_camera">Gunakan Kamera Depan</string>
+    <string name="onthego_service_toggle">Mulai Ulang Layanan Secara Otomatis</string>
     <string name="onthego_channel_name">Utama</string>
     <string name="quick_settings_onthego_label">On-The-Go</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Pencarian suara</string>
+    <string name="quick_settings_sound_search">Pencarian Suara</string>
     <!-- Pie controls -->
-    <string name="pie_date_format">EEEE, dd MMMM yyyy</string>
-    <string name="pie_hour_format_12">hh:mm</string>
-    <string name="pie_hour_format_24">HH:mm</string>
+    <string name="pie_date_format">Minggu, hari Bulan tahun</string>
+    <string name="pie_hour_format_12">jam:menit</string>
+    <string name="pie_hour_format_24">Jam:menit</string>
     <string name="pie_am_pm">a</string>
     <string name="pie_state_name">Kontrol Pie</string>
-    <string name="pie_state_summary">Gunakan kontrol pie selama di mode immersive</string>
-    <string name="pie_battery_level">"LEVEL BATERAI "</string>
+    <string name="pie_state_summary">Gunakan Kontrol Pie Pada Mode Layar Penuh</string>
+    <string name="pie_battery_level">"Tingkat Baterai "</string>
     <string name="quick_settings_pie">Kontrol Pie</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Suara</string>
     <string name="quick_settings_sound_ring">Dering</string>
     <string name="quick_settings_sound_vibrate">Getar</string>
-    <string name="quick_settings_sound_dnd">Jangan ganggu</string>
+    <string name="quick_settings_sound_dnd">Jangan Ganggu</string>
     <!-- LTE QS Tile -->
     <string name="qs_lte_label">LTE</string>
-    <string name="lte_on">LTE hidup</string>
-    <string name="lte_off">LTE mati</string>
+    <string name="lte_on">LTE Aktif</string>
+    <string name="lte_off">LTE Nonaktif</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">Antarmuka Sistem</string>
+    <string name="global_action_restart_systemui">SistemUI</string>
     <!-- Ambient Display Pixel-Like string -->
-    <string name="ambientmusic_songinfo">%s by %s</string>
+    <string name="ambientmusic_songinfo">%s dari %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\"\n^1\n^2\"</item>
+        <item quantity="other"><annotation name="color">Jam</annotation>\"\n^1\n^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">Satu</string>
+    <string name="text_clock_h_two">Dua</string>
+    <string name="text_clock_h_three">Tiga</string>
+    <string name="text_clock_h_four">Empat</string>
+    <string name="text_clock_h_five">Lima</string>
+    <string name="text_clock_h_six">Enam</string>
+    <string name="text_clock_h_seven">Tujuh</string>
+    <string name="text_clock_h_eight">Delapan</string>
+    <string name="text_clock_h_nine">Sembilan</string>
+    <string name="text_clock_h_ten">Sepuluh</string>
+    <string name="text_clock_h_eleven">Sebelas</string>
+    <string name="text_clock_h_twelve">Dua Belas</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
-    <string name="text_clock_m_fourteen">Fourteen</string>
-    <string name="text_clock_m_fifteen">Fifteen</string>
-    <string name="text_clock_m_sixteen">Sixteen</string>
-    <string name="text_clock_m_seventeen">Seventeen</string>
-    <string name="text_clock_m_eighteen">Eighteen</string>
-    <string name="text_clock_m_nineteen">Nineteen</string>
-    <string name="text_clock_m_twenty">Twenty</string>
-    <string name="text_clock_m_twenty_one">Twenty One</string>
-    <string name="text_clock_m_twenty_two">Twenty Two</string>
-    <string name="text_clock_m_twenty_three">Twenty Three</string>
-    <string name="text_clock_m_twenty_four">Twenty Four</string>
-    <string name="text_clock_m_twenty_five">Twenty Five</string>
-    <string name="text_clock_m_twenty_six">Twenty Six</string>
-    <string name="text_clock_m_twenty_seven">Twenty Seven</string>
-    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_zero">Tepat</string>
+    <string name="text_clock_m_one">Satu Menit</string>
+    <string name="text_clock_m_two">Dua Menit</string>
+    <string name="text_clock_m_three">Tiga Menit</string>
+    <string name="text_clock_m_four">Empat Menit</string>
+    <string name="text_clock_m_five">Lima Menit</string>
+    <string name="text_clock_m_six">Enam Menit</string>
+    <string name="text_clock_m_seven">Tujuh Menit</string>
+    <string name="text_clock_m_eight">Delapan Menit</string>
+    <string name="text_clock_m_nine">Sembilan Menit</string>
+    <string name="text_clock_m_ten">Sepuluh Menit</string>
+    <string name="text_clock_m_eleven">Sebelas Menit</string>
+    <string name="text_clock_m_twelve">Dua Belas</string>
+    <string name="text_clock_m_thirteen">Tiga Belas</string>
+    <string name="text_clock_m_fourteen">Empat Belas</string>
+    <string name="text_clock_m_fifteen">Lima Belas</string>
+    <string name="text_clock_m_sixteen">Enam Belas</string>
+    <string name="text_clock_m_seventeen">Tujuh Belas</string>
+    <string name="text_clock_m_eighteen">Delapan Belas</string>
+    <string name="text_clock_m_nineteen">Sembilan Belas</string>
+    <string name="text_clock_m_twenty">Dua Puluh</string>
+    <string name="text_clock_m_twenty_one">Dua Satu</string>
+    <string name="text_clock_m_twenty_two">Dua Dua</string>
+    <string name="text_clock_m_twenty_three">Dua Tiga</string>
+    <string name="text_clock_m_twenty_four">Dua Empat</string>
+    <string name="text_clock_m_twenty_five">Dua Lima</string>
+    <string name="text_clock_m_twenty_six">Dua Enam</string>
+    <string name="text_clock_m_twenty_seven">Dua Tujuh</string>
+    <string name="text_clock_m_twenty_eight">Dua Delapan</string>
+    <string name="text_clock_m_twenty_nine">Dua Sembilan</string>
+    <string name="text_clock_m_thirty">Tiga Puluh</string>
+    <string name="text_clock_m_thirty_one">Tiga Satu</string>
+    <string name="text_clock_m_thirty_two">Tiga Dua</string>
+    <string name="text_clock_m_thirty_three">Tiga Tiga</string>
+    <string name="text_clock_m_thirty_four">Tiga Empat</string>
+    <string name="text_clock_m_thirty_five">Tiga Lima</string>
+    <string name="text_clock_m_thirty_six">Tiga Enam</string>
+    <string name="text_clock_m_thirty_seven">Tiga Tujuh</string>
+    <string name="text_clock_m_thirty_eight">Tiga Delapan</string>
+    <string name="text_clock_m_thirty_nine">Tiga Sembilan</string>
+    <string name="text_clock_m_forty">Empat Puluh</string>
+    <string name="text_clock_m_forty_one">Empat Satu</string>
+    <string name="text_clock_m_forty_two">Empat Dua</string>
+    <string name="text_clock_m_forty_three">Empat Tiga</string>
+    <string name="text_clock_m_forty_four">Empat Empat</string>
+    <string name="text_clock_m_forty_five">Empat Lima</string>
+    <string name="text_clock_m_forty_six">Empat Enam</string>
+    <string name="text_clock_m_forty_seven">Empat Tujuh</string>
+    <string name="text_clock_m_forty_eight">Empat Delapan</string>
+    <string name="text_clock_m_forty_nine">Empat Sembilan</string>
+    <string name="text_clock_m_fifty">Lima Puluh</string>
+    <string name="text_clock_m_fifty_one">Lima Satu</string>
+    <string name="text_clock_m_fifty_two">Lima Dua</string>
+    <string name="text_clock_m_fifty_three">Lima Tiga</string>
+    <string name="text_clock_m_fifty_four">Lima Empat</string>
+    <string name="text_clock_m_fifty_five">Lima Lima</string>
+    <string name="text_clock_m_fifty_six">Lima Enam</string>
+    <string name="text_clock_m_fifty_seven">Lima Tujuh</string>
+    <string name="text_clock_m_fifty_eight">Lima Delapan</string>
+    <string name="text_clock_m_fifty_nine">Lima Sembilan</string>
     <!-- OneHand mode QS tile -->
-    <string name="qs_onehand_label">Mode satu tangan</string>
+    <string name="qs_onehand_label">Mode Satu Tangan</string>
     <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_vpn">Vpn</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">RAM TERSEDIA: %1$d MB</string>
+    <string name="recents_free_ram">RAM Tersedia: %1$d MB</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
-    <string name="quick_settings_reboot_label">Nyalakan ulang</string>
+    <string name="quick_settings_reboot_label">Mulai Ulang</string>
     <string name="quick_settings_reboot_recovery_label">Pemulihan</string>
     <string name="quick_settings_poweroff_label">Matikan Daya</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Mode permainan dinonaktifkan di pengaturan</string>
-    <string name="quick_settings_gaming_mode_label">Mode permainan</string>
+    <string name="gaming_mode_not_enabled">Mode Permainan Dinonaktifkan</string>
+    <string name="quick_settings_gaming_mode_label">Mode Permainan</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Mode permainan dimatikan.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Mode Permainan Nonaktif.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Mode permainan dihidupkan.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Mode Permainan Aktif.</string>
 </resources>
