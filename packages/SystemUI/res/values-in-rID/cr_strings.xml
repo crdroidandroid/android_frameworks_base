@@ -96,14 +96,14 @@
     <string name="onthego_notif_title">On-The-Go Aktif</string>
     <string name="onthego_notif_stop">Hentikan</string>
     <string name="onthego_notif_options">Pilihan</string>
-    <string name="onthego_notif_error">Tidak Dapat Mengaktifkan On-The-Go</string>
+    <string name="onthego_notif_error">Tidak Dapat Memulai On-The-Go</string>
     <string name="onthego_notif_restart">Mulai Ulang On-The-Go</string>
     <string name="onthego_notif_camera_changed">Mode Kamera Berubah</string>
     <string name="onthego_transparency">Transparansi</string>
-    <string name="onthego_front_camera">Gunakan kamera depan</string>
-    <string name="onthego_service_toggle">Layanan mulai ulang otomatis</string>
+    <string name="onthego_front_camera">Gunakan Kamera Depan</string>
+    <string name="onthego_service_toggle">Mulai Ulang Layanan Secara Otomatis</string>
     <string name="onthego_channel_name">Utama</string>
-    <string name="quick_settings_onthego_label">Mode Berjalan</string>
+    <string name="quick_settings_onthego_label">On-The-Go</string>
     <!--Google sound search tile -->
     <string name="quick_settings_sound_search">Pencarian Suara</string>
     <!-- Pie controls -->
@@ -113,7 +113,7 @@
     <string name="pie_am_pm">a</string>
     <string name="pie_state_name">Kontrol Pie</string>
     <string name="pie_state_summary">Gunakan Kontrol Pie Pada Mode Layar Penuh</string>
-    <string name="pie_battery_level">"Daya Baterai "</string>
+    <string name="pie_battery_level">"Tingkat Baterai "</string>
     <string name="quick_settings_pie">Kontrol Pie</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Suara</string>
