@@ -209,7 +209,7 @@
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Mode Satu Tangan</string>
     <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_vpn">Vpn</string>
     <!-- Free ram -->
     <string name="recents_free_ram">RAM Tersedia: %1$d MB</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
