@@ -75,6 +75,10 @@ public class BatteryMeterView extends LinearLayout implements
             "lineagesystem:" + LineageSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT;
     public static final String TEXT_CHARGING_SYMBOL =
             "system:" + Settings.System.TEXT_CHARGING_SYMBOL;
+    public static final String STATUS_BAR_BATTERY_TEXT_CHARGING =
+            "system:" + Settings.System.STATUS_BAR_BATTERY_TEXT_CHARGING;
+    public static final String STATUS_BAR_BATTERY_TEXT_POSITION =
+            "system:" + Settings.System.STATUS_BAR_BATTERY_TEXT_POSITION;
 
     private ThemedBatteryDrawable mDrawable;
     private final String mSlotBattery;
@@ -114,6 +118,8 @@ public class BatteryMeterView extends LinearLayout implements
     private int mShowBatteryPercent;
     private int mTextChargingSymbol;
     private boolean mPowerSave;
+    private boolean mBatteryPercentPosition;
+    private boolean mBatteryPercentCharging;
 
     public BatteryMeterView(Context context) {
         this(context, null, 0);
@@ -224,7 +230,7 @@ public class BatteryMeterView extends LinearLayout implements
                     mBatteryStyle = Integer.valueOf(newValue);
                 } catch (NumberFormatException ex) {}
                 mDrawable.setMeterStyle(mBatteryStyle);
-                reloadImage();
+                removeBatteryPercentView();
                 updateShowPercent();
                 updateVisibility();
                 break;
@@ -233,6 +239,7 @@ public class BatteryMeterView extends LinearLayout implements
                 try {
                     mShowBatteryPercent = Integer.valueOf(newValue);
                 } catch (NumberFormatException ex) {}
+                removeBatteryPercentView();
                 updateShowPercent();
                 break;
             case TEXT_CHARGING_SYMBOL:
@@ -240,6 +247,19 @@ public class BatteryMeterView extends LinearLayout implements
                 try {
                     mTextChargingSymbol = Integer.valueOf(newValue);
                 } catch (NumberFormatException ex) {}
+                removeBatteryPercentView();
+                updateShowPercent();
+                break;
+            case STATUS_BAR_BATTERY_TEXT_CHARGING:
+                mBatteryPercentCharging =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                removeBatteryPercentView();
+                updateShowPercent();
+                break;
+            case STATUS_BAR_BATTERY_TEXT_POSITION:
+                mBatteryPercentPosition =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                removeBatteryPercentView();
                 updateShowPercent();
                 break;
             default:
@@ -256,7 +276,9 @@ public class BatteryMeterView extends LinearLayout implements
                 .addTunable(this, StatusBarIconController.ICON_BLACKLIST, 
                                   STATUS_BAR_BATTERY_STYLE,
                                   STATUS_BAR_SHOW_BATTERY_PERCENT,
-                                  TEXT_CHARGING_SYMBOL);
+                                  TEXT_CHARGING_SYMBOL,
+                                  STATUS_BAR_BATTERY_TEXT_CHARGING,
+                                  STATUS_BAR_BATTERY_TEXT_POSITION);
         Dependency.get(ConfigurationController.class).addCallback(this);
     }
 
@@ -278,8 +300,9 @@ public class BatteryMeterView extends LinearLayout implements
             mCharging = pluggedIn;
             mDrawable.setCharging(mCharging);
             updateShowPercent();
+        } else {
+            updatePercentText();
         }
-        updatePercentText();
         setContentDescription(
                 getContext().getString(charging ? R.string.accessibility_battery_level_charging
                         : R.string.accessibility_battery_level, level));
@@ -319,34 +342,44 @@ public class BatteryMeterView extends LinearLayout implements
             }
         }
 
-        if (mBatteryIconView != null) pct = pct + " ";
+        if (mBatteryIconView != null && !mBatteryPercentPosition) {
+            pct = pct + " ";
+        } else if (mBatteryIconView != null) {
+            pct = " " + pct;
+        }
 
         mBatteryPercentView.setText(pct);
         mBatteryPercentView.setTypeface(tf);
     }
 
+    private void removeBatteryPercentView() {
+        if (mBatteryPercentView != null) {
+            removeView(mBatteryPercentView);
+            mBatteryPercentView = null;
+        }
+    }
+
     private void updateShowPercent() {
-        final boolean showing = mBatteryPercentView != null;
         final boolean drawPercentInside = mShowBatteryPercent == 1;
-        final boolean showPercent = mShowBatteryPercent == 2;
-        if ((showPercent || mForceShowPercent) &&
-                (!drawPercentInside || mCharging) || mBatteryStyle == BATTERY_STYLE_TEXT) {
+        final boolean showPercent = mShowBatteryPercent == 2 
+                                    || mForceShowPercent
+                                    || (mBatteryPercentCharging && mCharging)
+                                    || mBatteryStyle == BATTERY_STYLE_TEXT;
+        if (showPercent) {
             mDrawable.setShowPercent(false);
-            if (!showing) {
+            if (mBatteryPercentView == null) {
+                if (mBatteryPercentPosition) reloadImage();
                 mBatteryPercentView = loadPercentView();
                 addView(mBatteryPercentView,
                         new ViewGroup.LayoutParams(
                                 LayoutParams.WRAP_CONTENT,
                                 LayoutParams.MATCH_PARENT));
-                reloadImage();
+                if (mTextColor != 0) mBatteryPercentView.setTextColor(mTextColor);
+                updatePercentText();
+                if (!mBatteryPercentPosition) reloadImage();
             }
-            if (mTextColor != 0) mBatteryPercentView.setTextColor(mTextColor);
-            updatePercentText();
         } else {
-            if (showing) {
-                removeView(mBatteryPercentView);
-                mBatteryPercentView = null;
-            }
+            removeBatteryPercentView();
             mDrawable.setShowPercent(drawPercentInside);
         }
         useWallpaperTextColor(mUseWallpaperTextColors, true);		
