@@ -207,15 +207,15 @@
     <string name="text_clock_m_fifty_eight">Lima Delapan</string>
     <string name="text_clock_m_fifty_nine">Lima Sembilan</string>
     <!-- OneHand mode QS tile -->
-    <string name="qs_onehand_label">Mode Satu Tangan</string>
+    <string name="qs_onehand_label">Mode satu tangan</string>
     <!-- VPN icon -->
     <string name="status_bar_vpn">Vpn</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">RAM Tersedia: %1$d MB</string>
+    <string name="recents_free_ram">RAM bebas: %1$d MB</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
-    <string name="quick_settings_reboot_label">Mulai Ulang</string>
+    <string name="quick_settings_reboot_label">Mulai ulang</string>
     <string name="quick_settings_reboot_recovery_label">Pemulihan</string>
-    <string name="quick_settings_poweroff_label">Matikan Daya</string>
+    <string name="quick_settings_poweroff_label">Matikan daya</string>
     <!-- Gaming mode -->
     <string name="gaming_mode_not_enabled">Mode Permainan Dinonaktifkan</string>
     <string name="quick_settings_gaming_mode_label">Mode Permainan</string>
