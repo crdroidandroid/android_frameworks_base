@@ -28,18 +28,18 @@
     <string name="animation_slide_down">Geser ke Atas</string>
     <string name="animation_default">Bawaan</string>
     <string name="animation_translucent">Transparan</string>
-    <string name="animation_grow_shrink">Tumbuh di (Atas)</string>
-    <string name="animation_grow_shrink_center">Tumbuh di (tengah)</string>
-    <string name="animation_grow_shrink_bottom">Tumbuh di (Bawah)</string>
-    <string name="animation_grow_shrink_left">Tumbuh di (Kiri)</string>
-    <string name="animation_grow_shrink_right">Tumbuh di (Kanan)</string>
+    <string name="animation_grow_shrink">Timbul di (Atas)</string>
+    <string name="animation_grow_shrink_center">Timbul di (Tengah)</string>
+    <string name="animation_grow_shrink_bottom">Timbul di (Bawah)</string>
+    <string name="animation_grow_shrink_left">Timbul di (Kiri)</string>
+    <string name="animation_grow_shrink_right">Timbul di (Kanan)</string>
     <string name="animation_random">Acak</string>
     <string name="action_null">Tidak Ada</string>
     <string name="animation_ethans">Etans</string>
     <string name="animation_q">Gaya Q</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Mulai Ulang SystemUI Diperlukan</string>
-    <string name="systemui_restart_message">Untuk membuat perubahan, diperlukan memulai ulang SystemUI. Mulai ulang sekarang?</string>
+    <string name="systemui_restart_message">Untuk Perubahan, Harus Memulai Ulang SistemUI. Mulai Ulang Sekarang?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_toggleNavigationEditor">Penyunting Bilah Navigasi</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
