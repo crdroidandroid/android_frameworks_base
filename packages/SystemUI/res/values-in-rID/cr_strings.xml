@@ -73,13 +73,13 @@
     <string name="accessibility_quick_settings_compass_on">Kompas aktif.</string>
     <string name="accessibility_quick_settings_compass_changed_off">Kompas dinonaktifkan.</string>
     <string name="accessibility_quick_settings_compass_changed_on">Kompas diaktifkan.</string>
-    <string name="quick_settings_compass_N">U</string>
+    <string name="quick_settings_compass_N">Utara</string>
     <string name="quick_settings_compass_NE">TL</string>
-    <string name="quick_settings_compass_E">T</string>
+    <string name="quick_settings_compass_E">Timur</string>
     <string name="quick_settings_compass_SE">TG</string>
-    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_S">Selatan</string>
     <string name="quick_settings_compass_SW">BD</string>
-    <string name="quick_settings_compass_W">B</string>
+    <string name="quick_settings_compass_W">Barat</string>
     <string name="quick_settings_compass_NW">BL</string>
     <!-- Smart pixels QS tile -->
     <string name="quick_settings_smart_pixels">Piksel cerdas</string>
@@ -217,10 +217,10 @@
     <string name="quick_settings_reboot_recovery_label">Pemulihan</string>
     <string name="quick_settings_poweroff_label">Matikan daya</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Mode Permainan Dinonaktifkan</string>
-    <string name="quick_settings_gaming_mode_label">Mode Permainan</string>
+    <string name="gaming_mode_not_enabled">Mode permainan dinonaktifkan di pengaturan</string>
+    <string name="quick_settings_gaming_mode_label">Mode permainan</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Mode Permainan Nonaktif.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Mode permainan nonaktif.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Mode Permainan Aktif.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Mode permainan aktif.</string>
 </resources>
