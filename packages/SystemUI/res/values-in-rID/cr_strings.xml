@@ -20,13 +20,13 @@
     <string name="keyguard_indication_dash_charging_time">Pengisian Cepat (Sekitar <xliff:g id="charging_time_left" example="4 Jam 2 Menit">%s</xliff:g>)</string>
     <string name="keyguard_plugged_in_dash_charging">Pengisian Cepat</string>
     <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Layar sedang di rekam</string>
-    <string name="screenrecord_notif_final_ticker">Berhasil merekam layar</string>
+    <string name="screenrecord_notif_ticker">Perekaman Layar Sedang Berlangsung</string>
+    <string name="screenrecord_notif_final_ticker">Berhasil Merekam Layar</string>
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Merekam layar</string>
+    <string name="screenrecord_notif_title">Merekam Layar</string>
     <!-- Screenrecord notification action: Stop -->
     <string name="screenrecord_notif_stop">Berhenti</string>
-    <string name="screenrecord_notif_completed">Berhasil merekam layar</string>
+    <string name="screenrecord_notif_completed">Berhasil Merekam Layar</string>
     <string name="screenrecord_notif_duration">Total:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
     <string name="screenrecord_notif_pointer_on">Tampilkan penunjuk</string>
