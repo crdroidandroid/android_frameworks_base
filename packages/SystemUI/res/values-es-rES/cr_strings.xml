@@ -131,24 +131,24 @@
     <!-- Q Clock -->
     <plurals name="type_clock_header">
         <item quantity="other"><annotation name="color">It’s</annotation>\"\n^1\n^2\"</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\"\n^1\n^2\"</item>
+        <item quantity="one"><annotation name="color">Son</annotation>\"\n^1\n^2\"</item>
     </plurals>
     <!-- Q Clock - Hour -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">Una</string>
+    <string name="text_clock_h_two">Dos</string>
+    <string name="text_clock_h_three">Tres</string>
+    <string name="text_clock_h_four">Cuatro</string>
+    <string name="text_clock_h_five">Cinco</string>
+    <string name="text_clock_h_six">Seis</string>
+    <string name="text_clock_h_seven">Siete</string>
+    <string name="text_clock_h_eight">Ocho</string>
+    <string name="text_clock_h_nine">Nueve</string>
+    <string name="text_clock_h_ten">Diez</string>
+    <string name="text_clock_h_eleven">Once</string>
+    <string name="text_clock_h_twelve">Doce</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
+    <string name="text_clock_m_zero">En punto</string>
+    <string name="text_clock_m_one">Y Uno</string>
     <string name="text_clock_m_two">O’Two</string>
     <string name="text_clock_m_three">O’Three</string>
     <string name="text_clock_m_four">O’Four</string>
