@@ -47,7 +47,7 @@
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_accessFontManager">akses pengelola huruf</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Izinkan aplikasi untuk melakukan akses ke pengelola huruf.</string>
+    <string name="permdesc_accessFontManager">Mengizinkan Aplikasi Mengakses Pengelola Huruf.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Ketuk area kosong untuk keluar dari mode satu tangan</string>
     <!-- Gaming mode -->
