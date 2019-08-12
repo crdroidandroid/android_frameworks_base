@@ -42,20 +42,20 @@
     <string name="screenrecord_hide_hint">Sembunyikan petunjuk</string>
     <string name="screenrecord_show_hint">Tampilkan petunjuk</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Tangkapan layar</string>
+    <string name="quick_settings_screenshot_label">Tangkapan Layar</string>
     <string name="quick_settings_region_screenshot_label">Tangkapan Layar Sebagian</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Info CPU</string>
     <string name="accessibility_quick_settings_cpuinfo_off">Info CPU Nonaktif</string>
-    <string name="accessibility_quick_settings_cpuinfo_on">Info CPU aktif</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_off">Info CPU dinonaktifkan</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_on">Info CPU diaktifkan</string>
+    <string name="accessibility_quick_settings_cpuinfo_on">Info CPU Aktif</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_off">Info CPU Dinonaktifkan</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_on">Info CPU Diaktifkan</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">Tombol Fisik</string>
     <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_disabled">Tombol Fisik dimatikan.</string>
+    <string name="accessibility_quick_settings_hw_keys_disabled">Tombol Fisik Dinonaktifkan.</string>
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_enabled">Tombol Fisik dihidupkan.</string>
+    <string name="accessibility_quick_settings_hw_keys_enabled">Tombol Fisik Diaktifkan.</string>
     <!-- Heads up snooze toast -->
     <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Mengintip pemberitahuan tertunda selama 1 menit.</string>
     <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> - Mengintip pemberitahuan tertunda selama <xliff:g id="number">%d</xliff:g> menit.</string>
