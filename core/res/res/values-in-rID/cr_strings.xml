@@ -43,11 +43,11 @@
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_toggleNavigationEditor">Mengontrol navigasi editor</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Izinkan Aplikasi Mengontrol Penyunting Navbar.</string>
+    <string name="permdesc_toggleNavigationEditor">Mengizinkan aplikasi untuk mengontrol editor bar navigasi.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">akses pengelola huruf</string>
+    <string name="permlab_accessFontManager">mengakses pengelola gaya huruf</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Mengizinkan Aplikasi Mengakses Pengelola Huruf.</string>
+    <string name="permdesc_accessFontManager">Mengizinkan aplikasi untuk mengakses pengelola gaya huruf.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Ketuk Pada Area Bebas Untuk Keluar Dari Mode Satu Tangan</string>
     <!-- Gaming mode -->
