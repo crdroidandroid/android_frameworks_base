@@ -19,13 +19,13 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Tekan Lama Tombol Daya Untuk Mengaktifkan Layar</string>
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Pudar</string>
+    <string name="animation_fade">Buram</string>
     <string name="animation_slide_right">Geser Kanan</string>
-    <string name="animation_slide_left">Geser ke kiri</string>
-    <string name="animation_slide_right_no_fade">Geser ke kanan (tanpa pudar)</string>
-    <string name="animation_slide_left_no_fade">Geser ke kiri (tanpa pudar)</string>
-    <string name="animation_slide_up">Geser ke bawah</string>
-    <string name="animation_slide_down">Geser ke atas</string>
+    <string name="animation_slide_left">Geser Kiri</string>
+    <string name="animation_slide_right_no_fade">Geser Kanan (Tanpa Buram)</string>
+    <string name="animation_slide_left_no_fade">Geser Kiri (Tanpa Buram)</string>
+    <string name="animation_slide_up">Geser Bawah</string>
+    <string name="animation_slide_down">Geser Atas</string>
     <string name="animation_default">Standar</string>
     <string name="animation_translucent">Transparan</string>
     <string name="animation_grow_shrink">Tumbuh di (atas)</string>
