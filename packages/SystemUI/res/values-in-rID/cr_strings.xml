@@ -46,21 +46,21 @@
     <string name="quick_settings_region_screenshot_label">Tangkapan layar sebagian</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Info CPU</string>
-    <string name="accessibility_quick_settings_cpuinfo_off">Info CPU Nonaktif</string>
-    <string name="accessibility_quick_settings_cpuinfo_on">Info CPU Aktif</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_off">Info CPU Dinonaktifkan</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_on">Info CPU Diaktifkan</string>
+    <string name="accessibility_quick_settings_cpuinfo_off">Info CPU nonaktif</string>
+    <string name="accessibility_quick_settings_cpuinfo_on">Info CPU aktif</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_off">Info CPU dinonaktifkan</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_on">Info CPU diaktifkan</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">Tombol Fisik</string>
+    <string name="quick_settings_hw_keys_label">Tombol HW</string>
     <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_disabled">Tombol Fisik Dinonaktifkan.</string>
+    <string name="accessibility_quick_settings_hw_keys_disabled">Tombol HW dinonaktifkan.</string>
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_enabled">Tombol Fisik Diaktifkan.</string>
+    <string name="accessibility_quick_settings_hw_keys_enabled">Tombol HW diaktifkan.</string>
     <!-- Heads up snooze toast -->
-    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Sorot Pemberitahuan Tertunda Selama 1 Menit.</string>
-    <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Sorot Pemberitahuan Tertunda Selama <xliff:g id="number">%d </xliff:g> Menit.</string>
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Lihat pemberitahuan yang tertunda selama 1 menit.</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Lihat pemberitahuan yang tertunda selama <xliff:g id="number">%d </xliff:g> menit.</string>
     <!-- Expanded Desktop QS Tile -->
-    <string name="quick_settings_expanded_desktop_label">Tampilan Diperluas</string>
+    <string name="quick_settings_expanded_desktop_label">Desktop yang diperluas</string>
     <string name="quick_settings_expanded_desktop">Diperluas</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
     <string name="quick_settings_expanded_navigation_off">Sembunyikan Navbar</string>
