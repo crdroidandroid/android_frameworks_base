@@ -20,59 +20,59 @@
     <string name="keyguard_indication_dash_charging_time">Pengisian Cepat (Sekitar <xliff:g id="charging_time_left" example="4 Jam 2 Menit">%s</xliff:g>)</string>
     <string name="keyguard_plugged_in_dash_charging">Pengisian Cepat</string>
     <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Perekaman Layar Sedang Berlangsung</string>
-    <string name="screenrecord_notif_final_ticker">Berhasil Merekam Layar</string>
+    <string name="screenrecord_notif_ticker">Layar sedang direkam</string>
+    <string name="screenrecord_notif_final_ticker">Layar telah berhasil direkam</string>
     <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Merekam Layar</string>
+    <string name="screenrecord_notif_title">Merekam layar</string>
     <!-- Screenrecord notification action: Stop -->
     <string name="screenrecord_notif_stop">Berhenti</string>
-    <string name="screenrecord_notif_completed">Berhasil Merekam Layar</string>
+    <string name="screenrecord_notif_completed">Layar telah berhasil direkam</string>
     <string name="screenrecord_notif_duration">Total:</string>
     <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Tampilkan Penunjuk</string>
-    <string name="screenrecord_notif_pointer_off">Sembunyikan Penunjuk</string>
+    <string name="screenrecord_notif_pointer_on">Tampilkan penanda</string>
+    <string name="screenrecord_notif_pointer_off">Sembunyikan penanda</string>
     <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Tidak Dapat Merekam Layar</string>
-    <string name="notification_channel_screenrecord">Perekam Layar</string>
+    <string name="screenrecord_notif_error">Tidak dapat merekam layar</string>
+    <string name="notification_channel_screenrecord">Perekam layar</string>
     <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Rekam Layar</string>
-    <string name="quick_settings_screenrecord_lq_label">Kualitas Rendah</string>
-    <string name="quick_settings_screenrecord_mq_label">Kualitas Sedang</string>
-    <string name="quick_settings_screenrecord_hq_label">Kualitas Tinggi</string>
-    <string name="screenrecord_hide_hint">Sembunyikan Tanda</string>
-    <string name="screenrecord_show_hint">Tampilkan Tanda</string>
+    <string name="quick_settings_screenrecord_label">Rekam layar</string>
+    <string name="quick_settings_screenrecord_lq_label">Kualitas rendah</string>
+    <string name="quick_settings_screenrecord_mq_label">Kualitas sedang</string>
+    <string name="quick_settings_screenrecord_hq_label">Kualitas tinggi</string>
+    <string name="screenrecord_hide_hint">Sembunyikan penanda</string>
+    <string name="screenrecord_show_hint">Tampilkan penanda</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Tangkapan Layar</string>
-    <string name="quick_settings_region_screenshot_label">Tangkapan Layar Sebagian</string>
+    <string name="quick_settings_screenshot_label">Tangkapan layar</string>
+    <string name="quick_settings_region_screenshot_label">Tangkapan layar sebagian</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Info CPU</string>
-    <string name="accessibility_quick_settings_cpuinfo_off">Info CPU Nonaktif</string>
-    <string name="accessibility_quick_settings_cpuinfo_on">Info CPU Aktif</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_off">Info CPU Dinonaktifkan</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_on">Info CPU Diaktifkan</string>
+    <string name="accessibility_quick_settings_cpuinfo_off">Info CPU nonaktif</string>
+    <string name="accessibility_quick_settings_cpuinfo_on">Info CPU aktif</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_off">Info CPU dinonaktifkan</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_on">Info CPU diaktifkan</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">Tombol Fisik</string>
+    <string name="quick_settings_hw_keys_label">Tombol HW</string>
     <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_disabled">Tombol Fisik Dinonaktifkan.</string>
+    <string name="accessibility_quick_settings_hw_keys_disabled">Tombol HW dinonaktifkan.</string>
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_enabled">Tombol Fisik Diaktifkan.</string>
+    <string name="accessibility_quick_settings_hw_keys_enabled">Tombol HW diaktifkan.</string>
     <!-- Heads up snooze toast -->
-    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Sorot Pemberitahuan Tertunda Selama 1 Menit.</string>
-    <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Sorot Pemberitahuan Tertunda Selama <xliff:g id="number">%d </xliff:g> Menit.</string>
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Lihat pemberitahuan yang tertunda selama 1 menit.</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Lihat pemberitahuan yang tertunda selama <xliff:g id="number">%d </xliff:g> menit.</string>
     <!-- Expanded Desktop QS Tile -->
-    <string name="quick_settings_expanded_desktop_label">Tampilan Diperluas</string>
+    <string name="quick_settings_expanded_desktop_label">Desktop yang diperluas</string>
     <string name="quick_settings_expanded_desktop">Diperluas</string>
     <string name="quick_settings_expanded_desktop_off">Normal</string>
-    <string name="quick_settings_expanded_navigation_off">Sembunyikan Navbar</string>
-    <string name="quick_settings_expanded_statusbar_off">Sembunyikan Statusbar</string>
+    <string name="quick_settings_expanded_navigation_off">Sembunyikan navbar</string>
+    <string name="quick_settings_expanded_statusbar_off">Sembunyikan statusbar</string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Kompas</string>
     <string name="quick_settings_compass_value"><xliff:g id="derajat">%1$.0f</xliff:g>\u00b0<xliff:g id="arah">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Menginisialisasi\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Kompas Nonaktif.</string>
-    <string name="accessibility_quick_settings_compass_on">Kompas Aktif.</string>
-    <string name="accessibility_quick_settings_compass_changed_off">Kompas Dinonaktifkan.</string>
-    <string name="accessibility_quick_settings_compass_changed_on">Kompas Diaktifkan.</string>
+    <string name="quick_settings_compass_init">Memulai\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Kompas nonaktif.</string>
+    <string name="accessibility_quick_settings_compass_on">Kompas aktif.</string>
+    <string name="accessibility_quick_settings_compass_changed_off">Kompas dinonaktifkan.</string>
+    <string name="accessibility_quick_settings_compass_changed_on">Kompas diaktifkan.</string>
     <string name="quick_settings_compass_N">U</string>
     <string name="quick_settings_compass_NE">TL</string>
     <string name="quick_settings_compass_E">T</string>
@@ -82,55 +82,55 @@
     <string name="quick_settings_compass_W">B</string>
     <string name="quick_settings_compass_NW">BL</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Piksel Cerdas</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Hidupkan Otomatis Piksel Cerdas</string>
+    <string name="quick_settings_smart_pixels">Piksel cerdas</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Otomatis hidupkan piksel cerdas</string>
     <!-- Music tile -->
     <string name="quick_settings_music_label">Musik</string>
     <string name="quick_settings_music_play">Putar</string>
     <string name="quick_settings_music_pause">Jeda</string>
     <!-- Always on Display Tile -->
-    <string name="quick_settings_always_on_display_label">Layar Selalu Hidup</string>
+    <string name="quick_settings_always_on_display_label">Layar selalu hidup</string>
     <!-- On The Go -->
     <string name="global_action_onthego">Mode On-The-Go</string>
-    <string name="onthego_notif_ticker">On-The-Go Diaktifkan</string>
-    <string name="onthego_notif_title">On-The-Go Aktif</string>
-    <string name="onthego_notif_stop">Hentikan</string>
+    <string name="onthego_notif_ticker">On-The-Go diaktifkan</string>
+    <string name="onthego_notif_title">On-The-Go aktif</string>
+    <string name="onthego_notif_stop">Berhenti</string>
     <string name="onthego_notif_options">Pilihan</string>
-    <string name="onthego_notif_error">Tidak Dapat Memulai On-The-Go</string>
-    <string name="onthego_notif_restart">Mulai Ulang On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Mode Kamera Berubah</string>
+    <string name="onthego_notif_error">Tidak dapat memulai On-The-Go</string>
+    <string name="onthego_notif_restart">Mulai ulang On-The-Go</string>
+    <string name="onthego_notif_camera_changed">Mode kamera berubah</string>
     <string name="onthego_transparency">Transparansi</string>
-    <string name="onthego_front_camera">Gunakan Kamera Depan</string>
-    <string name="onthego_service_toggle">Mulai Ulang Layanan Secara Otomatis</string>
+    <string name="onthego_front_camera">Gunakan kamera depan</string>
+    <string name="onthego_service_toggle">Mulai ulang layanan secara otomatis</string>
     <string name="onthego_channel_name">Utama</string>
     <string name="quick_settings_onthego_label">On-The-Go</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Pencarian Suara</string>
+    <string name="quick_settings_sound_search">Pencarian suara</string>
     <!-- Pie controls -->
     <string name="pie_date_format">Minggu, hari Bulan tahun</string>
     <string name="pie_hour_format_12">jam:menit</string>
     <string name="pie_hour_format_24">Jam:menit</string>
     <string name="pie_am_pm">a</string>
     <string name="pie_state_name">Kontrol Pie</string>
-    <string name="pie_state_summary">Gunakan Kontrol Pie Pada Mode Layar Penuh</string>
-    <string name="pie_battery_level">"Tingkat Baterai "</string>
+    <string name="pie_state_summary">Gunakan kontrol pie ketika dalam mode layar penuh</string>
+    <string name="pie_battery_level">"Tingkat baterai "</string>
     <string name="quick_settings_pie">Kontrol Pie</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Suara</string>
     <string name="quick_settings_sound_ring">Dering</string>
     <string name="quick_settings_sound_vibrate">Getar</string>
-    <string name="quick_settings_sound_dnd">Jangan Ganggu</string>
+    <string name="quick_settings_sound_dnd">Jangan ganggu</string>
     <!-- LTE QS Tile -->
     <string name="qs_lte_label">LTE</string>
-    <string name="lte_on">LTE Aktif</string>
-    <string name="lte_off">LTE Nonaktif</string>
+    <string name="lte_on">LTE aktif</string>
+    <string name="lte_off">LTE nonaktif</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">SistemUI</string>
     <!-- Ambient Display Pixel-Like string -->
     <string name="ambientmusic_songinfo">%s dari %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">Jam</annotation>\"\n^1\n^2\"</item>
+        <item quantity="other"><annotation name="color">Jam</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Q Clock - Hour -->
     <string name="text_clock_h_one">Satu</string>
@@ -207,20 +207,20 @@
     <string name="text_clock_m_fifty_eight">Lima Delapan</string>
     <string name="text_clock_m_fifty_nine">Lima Sembilan</string>
     <!-- OneHand mode QS tile -->
-    <string name="qs_onehand_label">Mode Satu Tangan</string>
+    <string name="qs_onehand_label">Mode satu tangan</string>
     <!-- VPN icon -->
     <string name="status_bar_vpn">Vpn</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">RAM Tersedia: %1$d MB</string>
+    <string name="recents_free_ram">RAM bebas: %1$d MB</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
-    <string name="quick_settings_reboot_label">Mulai Ulang</string>
+    <string name="quick_settings_reboot_label">Mulai ulang</string>
     <string name="quick_settings_reboot_recovery_label">Pemulihan</string>
-    <string name="quick_settings_poweroff_label">Matikan Daya</string>
+    <string name="quick_settings_poweroff_label">Matikan daya</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Mode Permainan Dinonaktifkan</string>
-    <string name="quick_settings_gaming_mode_label">Mode Permainan</string>
+    <string name="gaming_mode_not_enabled">Mode permainan dinonaktifkan di pengaturan</string>
+    <string name="quick_settings_gaming_mode_label">Mode permainan</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Mode Permainan Nonaktif.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Mode permainan nonaktif.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Mode Permainan Aktif.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Mode permainan aktif.</string>
 </resources>
