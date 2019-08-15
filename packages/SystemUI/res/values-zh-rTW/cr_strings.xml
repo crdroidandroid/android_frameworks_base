@@ -130,7 +130,7 @@
     <string name="ambientmusic_songinfo">%s 由 %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">現在是</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Q Clock - Hour -->
     <string name="text_clock_h_one">一點</string>
@@ -198,14 +198,14 @@
     <string name="text_clock_m_forty_nine">四十九分</string>
     <string name="text_clock_m_fifty">五十分</string>
     <string name="text_clock_m_fifty_one">五十一分</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_fifty_two">五十二分</string>
+    <string name="text_clock_m_fifty_three">五十三分</string>
+    <string name="text_clock_m_fifty_four">五十四分</string>
+    <string name="text_clock_m_fifty_five">五十五分</string>
+    <string name="text_clock_m_fifty_six">五十六分</string>
+    <string name="text_clock_m_fifty_seven">五十七分</string>
+    <string name="text_clock_m_fifty_eight">五十八分</string>
+    <string name="text_clock_m_fifty_nine">五十九分</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">單手模式</string>
     <!-- VPN icon -->
