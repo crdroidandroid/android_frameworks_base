@@ -246,7 +246,6 @@ public abstract class FileSystemProvider extends DocumentsProvider {
         onDocIdChanged(docId);
         onDocIdChanged(afterDocId);
 
-
         final File afterVisibleFile = getFileForDocId(afterDocId, true);
         moveInMediaStore(beforeVisibleFile, afterVisibleFile);
 
