@@ -20,16 +20,19 @@ package com.android.systemui.qs.tiles;
 import static lineageos.hardware.LiveDisplayManager.FEATURE_MANAGED_OUTDOOR_MODE;
 import static lineageos.hardware.LiveDisplayManager.MODE_AUTO;
 import static lineageos.hardware.LiveDisplayManager.MODE_DAY;
+import static lineageos.hardware.LiveDisplayManager.MODE_NIGHT;
 import static lineageos.hardware.LiveDisplayManager.MODE_OFF;
 import static lineageos.hardware.LiveDisplayManager.MODE_OUTDOOR;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
 import android.os.Handler;
 import android.os.UserHandle;
-import android.provider.Settings;
 import android.service.quicksettings.Tile;
 
 import com.android.internal.app.ColorDisplayController;
@@ -60,9 +63,11 @@ public class LiveDisplayTile extends QSTileImpl<LiveDisplayState> {
 
     private boolean mListening;
 
-    private int mDayTemperature;
+    private int mDayTemperature = -1;
 
-    private final boolean mOutdoorModeAvailable;
+    private final boolean mNightDisplayAvailable;
+    private boolean mOutdoorModeAvailable;
+    private boolean mReceiverRegistered;
 
     private final LiveDisplayManager mLiveDisplay;
 
@@ -70,6 +75,7 @@ public class LiveDisplayTile extends QSTileImpl<LiveDisplayState> {
 
     public LiveDisplayTile(QSHost host) {
         super(host);
+        mNightDisplayAvailable = ColorDisplayController.isAvailable(mContext);
 
         Resources res = mContext.getResources();
         TypedArray typedArray = res.obtainTypedArray(R.array.live_display_drawables);
@@ -82,17 +88,37 @@ public class LiveDisplayTile extends QSTileImpl<LiveDisplayState> {
         updateEntries();
 
         mLiveDisplay = LiveDisplayManager.getInstance(mContext);
-        if (mLiveDisplay.getConfig() != null) {
-            mOutdoorModeAvailable = mLiveDisplay.getConfig().hasFeature(MODE_OUTDOOR) &&
-                    !mLiveDisplay.getConfig().hasFeature(FEATURE_MANAGED_OUTDOOR_MODE);
-            mDayTemperature = mLiveDisplay.getDayColorTemperature();
-        } else {
-            mOutdoorModeAvailable = false;
-            mDayTemperature = -1;
+        if (!updateConfig()) {
+            mContext.registerReceiver(mReceiver, new IntentFilter(
+                    lineageos.content.Intent.ACTION_INITIALIZE_LIVEDISPLAY));
+            mReceiverRegistered = true;
         }
 
         mObserver = new LiveDisplayObserver(mHandler);
         mObserver.startObserving();
+    }
+
+    @Override
+    protected void handleDestroy() {
+        super.handleDestroy();
+        unregisterReceiver();
+    }
+
+    private void unregisterReceiver() {
+        if (mReceiverRegistered) {
+            mContext.unregisterReceiver(mReceiver);
+            mReceiverRegistered = false;
+        }
+    }
+
+    private boolean updateConfig() {
+        if (mLiveDisplay.getConfig() != null) {
+            mOutdoorModeAvailable = mLiveDisplay.getConfig().hasFeature(MODE_OUTDOOR) &&
+                    !mLiveDisplay.getConfig().hasFeature(FEATURE_MANAGED_OUTDOOR_MODE);
+            mDayTemperature = mLiveDisplay.getDayColorTemperature();
+            return true;
+        }
+        return false;
     }
 
     private void updateEntries() {
@@ -102,11 +128,6 @@ public class LiveDisplayTile extends QSTileImpl<LiveDisplayState> {
         mDescriptionEntries = res.getStringArray(R.array.live_display_description);
         mAnnouncementEntries = res.getStringArray(R.array.live_display_announcement);
         mValues = res.getStringArray(R.array.live_display_values);
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return !ColorDisplayController.isAvailable(mContext);
     }
 
     @Override
@@ -139,7 +160,8 @@ public class LiveDisplayTile extends QSTileImpl<LiveDisplayState> {
         state.secondaryLabel = mEntries[state.mode];
         state.icon = ResourceIcon.get(mEntryIconRes[state.mode]);
         state.contentDescription = mDescriptionEntries[state.mode];
-        state.state = mLiveDisplay.getMode() != MODE_OFF ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
+        state.state = (mNightDisplayAvailable && !mOutdoorModeAvailable) ? Tile.STATE_UNAVAILABLE:
+                mLiveDisplay.getMode() != MODE_OFF ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
     }
 
     @Override
@@ -184,10 +206,12 @@ public class LiveDisplayTile extends QSTileImpl<LiveDisplayState> {
 
         while (true) {
             nextMode = Integer.valueOf(mValues[next]);
-            // Skip outdoor mode if it's unsupported, and skip the day setting
-            // if it's the same as the off setting
+            // Skip outdoor mode if it's unsupported, skip the day setting
+            // if it's the same as the off setting, and skip night display
+            // on HWC2
             if ((!mOutdoorModeAvailable && nextMode == MODE_OUTDOOR) ||
-                    (mDayTemperature == OFF_TEMPERATURE && nextMode == MODE_DAY)) {
+                    (mDayTemperature == OFF_TEMPERATURE && nextMode == MODE_DAY) ||
+                    (mNightDisplayAvailable && (nextMode == MODE_DAY || nextMode == MODE_NIGHT))) {
                 next++;
                 if (next >= mValues.length) {
                     next = 0;
@@ -224,4 +248,13 @@ public class LiveDisplayTile extends QSTileImpl<LiveDisplayState> {
             mContext.getContentResolver().unregisterContentObserver(this);
         }
     }
+
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateConfig();
+            refreshState();
+            unregisterReceiver();
+        }
+    };
 }
