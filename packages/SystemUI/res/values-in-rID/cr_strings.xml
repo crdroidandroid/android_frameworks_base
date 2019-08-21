@@ -125,9 +125,9 @@
     <string name="lte_on">LTE aktif</string>
     <string name="lte_off">LTE nonaktif</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SistemUI</string>
+    <string name="global_action_restart_systemui">SystemUI</string>
     <!-- Ambient Display Pixel-Like string -->
-    <string name="ambientmusic_songinfo">%s dari %s</string>
+    <string name="ambientmusic_songinfo">%s by %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
         <item quantity="other"><annotation name="color">Jam</annotation>\n^1\n^2</item>
@@ -211,7 +211,7 @@
     <!-- VPN icon -->
     <string name="status_bar_vpn">Vpn</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">RAM bebas: %1$d MB</string>
+    <string name="recents_free_ram">RAM Tersedia: %1$d MB</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">Mulai ulang</string>
     <string name="quick_settings_reboot_recovery_label">Pemulihan</string>

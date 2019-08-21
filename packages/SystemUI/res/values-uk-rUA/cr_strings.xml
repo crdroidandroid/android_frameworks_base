@@ -131,7 +131,7 @@
     <!-- Q Clock -->
     <plurals name="type_clock_header">
         <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
         <item quantity="few"><annotation name="color">It’s</annotation>\n^1\n^2</item>
         <item quantity="many"><annotation name="color">It’s</annotation>\n^1\n^2</item>
     </plurals>
