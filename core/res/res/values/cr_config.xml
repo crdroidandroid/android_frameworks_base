@@ -84,4 +84,7 @@
 
     <!-- Whether to use in-built Screen Record service -->
     <bool name="config_showScreenRecord">true</bool>
+
+    <!-- Whether device supports internal audio recording -->
+    <bool name="config_hasInternalAudioRecordingSupport">true</bool>
 </resources>
