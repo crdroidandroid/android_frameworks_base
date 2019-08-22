@@ -22,4 +22,7 @@
   <!-- Package Manager -->
   <java-symbol type="array" name="config_disabledComponents" />
   <java-symbol type="array" name="config_forceEnabledComponents" />
+
+  <!-- Whether device supports internal audio recording -->
+  <java-symbol type="bool" name="config_hasInternalAudioRecordingSupport" />
 </resources>
