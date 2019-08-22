@@ -209,4 +209,7 @@
 
   <!-- Custom styles -->
   <java-symbol type="style" name="CustomThemeDeviceDefaultDialogAlert" />
+
+  <!-- Whether device supports internal audio recording -->
+  <java-symbol type="bool" name="config_hasInternalAudioRecordingSupport" />
 </resources>
