@@ -177,4 +177,7 @@
   <java-symbol type="drawable" name="ic_screenrecord" />
   <java-symbol type="string" name="global_action_screenrecord" />
   <java-symbol type="bool" name="config_showScreenRecord" />
+
+  <!-- Whether device supports internal audio recording -->
+  <java-symbol type="bool" name="config_hasInternalAudioRecordingSupport" />
 </resources>
