@@ -39,15 +39,15 @@
     <string name="animation_q">Ve stylu Q</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Je vyžadován restart SystemUI</string>
-    <string name="systemui_restart_message">Aby se projevily všechny změny, je třeba restartovat SystemUI. Restartovat nyní?</string>
+    <string name="systemui_restart_message">Aby se projevily všechny změny, je třeba restartovat SystemUI. Restartovat jej nyní?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_toggleNavigationEditor">Ovládání navigačního editoru</string>
+    <string name="permlab_toggleNavigationEditor">Ovládání editoru navigačního panelu</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_toggleNavigationEditor">Umožní aplikaci provádět změny v editoru navigačního panelu.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">přístup ke správci písem</string>
+    <string name="permlab_accessFontManager">Přístup ke správci písem</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Umožňuje aplikaci přístup ke správci písem.</string>
+    <string name="permdesc_accessFontManager">Umožní aplikaci přístup ke správci písem.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Klepnutím na prázdné místo ukončíte režim Ovládání jednou rukou</string>
     <!-- Gaming mode -->
