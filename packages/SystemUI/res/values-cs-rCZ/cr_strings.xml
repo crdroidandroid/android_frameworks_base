@@ -32,7 +32,7 @@
     <string name="screenrecord_notif_pointer_on">Zobrazit ukazatel</string>
     <string name="screenrecord_notif_pointer_off">Skrýt ukazatel</string>
     <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Záznam obrazovky není možný</string>
+    <string name="screenrecord_notif_error">Nelze provést záznam obrazovky</string>
     <string name="notification_channel_screenrecord">Záznamy obrazovky</string>
     <!-- Screenrecord QS tile -->
     <string name="quick_settings_screenrecord_label">Záznam obrazovky</string>
@@ -46,8 +46,8 @@
     <string name="quick_settings_region_screenshot_label">Částečný snímek obrazovky</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Informace o CPU</string>
-    <string name="accessibility_quick_settings_cpuinfo_off">Informace o CPU vypnuty</string>
-    <string name="accessibility_quick_settings_cpuinfo_on">Informace o CPU zapnuty</string>
+    <string name="accessibility_quick_settings_cpuinfo_off">Informace o CPU vyp.</string>
+    <string name="accessibility_quick_settings_cpuinfo_on">Informace o CPU zap.</string>
     <string name="accessibility_quick_settings_cpuinfo_changed_off">Informace o CPU byly vypnuty</string>
     <string name="accessibility_quick_settings_cpuinfo_changed_on">Informace o CPU byly zapnuty</string>
     <!-- HW Keys Tile -->
@@ -57,30 +57,30 @@
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_hw_keys_enabled">HW tlačítka jsou povolena.</string>
     <!-- Heads up snooze toast -->
-    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> - Plovoucí oznámení jsou odložena na dobu 1 minuty.</string>
-    <string name="heads_up_snooze_message"><xliff:g id="string">%s </xliff:g> - Plovoucí oznámení jsou odložena na dobu <xliff:g id="number">%d </xliff:g> minut.</string>
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> – Plovoucí oznámení jsou odložena po dobu 1 minuty.</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> – Plovoucí oznámení jsou odložena po dobu <xliff:g id="number">%d</xliff:g> minut.</string>
     <!-- Expanded Desktop QS Tile -->
-    <string name="quick_settings_expanded_desktop_label">Rozšířená plocha</string>
+    <string name="quick_settings_expanded_desktop_label">Rozšířená obrazovka</string>
     <string name="quick_settings_expanded_desktop">Rozšířená</string>
     <string name="quick_settings_expanded_desktop_off">Normální</string>
     <string name="quick_settings_expanded_navigation_off">Skrýt navigační panel</string>
-    <string name="quick_settings_expanded_statusbar_off">Skrýt stavovou lištu</string>
+    <string name="quick_settings_expanded_statusbar_off">Skrýt stavový řádek</string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Kompas</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Inicializace\u2026</string>
+    <string name="quick_settings_compass_init">Inicializuje se\u2026</string>
     <string name="accessibility_quick_settings_compass_off">Kompas vyp.</string>
     <string name="accessibility_quick_settings_compass_on">Kompas zap.</string>
-    <string name="accessibility_quick_settings_compass_changed_off">Kompas byl vypnutý.</string>
-    <string name="accessibility_quick_settings_compass_changed_on">Kompas byl zapnutý.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
-    <string name="quick_settings_compass_SE">SE</string>
-    <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="accessibility_quick_settings_compass_changed_off">Kompas byl vypnut.</string>
+    <string name="accessibility_quick_settings_compass_changed_on">Kompas byl zapnut.</string>
+    <string name="quick_settings_compass_N">S</string>
+    <string name="quick_settings_compass_NE">SV</string>
+    <string name="quick_settings_compass_E">V</string>
+    <string name="quick_settings_compass_SE">JV</string>
+    <string name="quick_settings_compass_S">J</string>
+    <string name="quick_settings_compass_SW">JZ</string>
+    <string name="quick_settings_compass_W">Z</string>
+    <string name="quick_settings_compass_NW">SZ</string>
     <!-- Smart pixels QS tile -->
     <string name="quick_settings_smart_pixels">Smart Pixels</string>
     <string name="quick_settings_smart_pixels_on_power_save">Automaticky povolit Smart Pixels</string>
@@ -89,21 +89,21 @@
     <string name="quick_settings_music_play">Přehrát</string>
     <string name="quick_settings_music_pause">Pozastavit</string>
     <!-- Always on Display Tile -->
-    <string name="quick_settings_always_on_display_label">„Always on“ displej</string>
+    <string name="quick_settings_always_on_display_label">Vždy zapnutý displej</string>
     <!-- On The Go -->
-    <string name="global_action_onthego">Režim On-The-Go</string>
-    <string name="onthego_notif_ticker">On-The-Go aktivováno</string>
-    <string name="onthego_notif_title">On-The-Go je aktivní</string>
+    <string name="global_action_onthego">Režim On‑The‑Go</string>
+    <string name="onthego_notif_ticker">On‑The‑Go aktivováno</string>
+    <string name="onthego_notif_title">On‑The‑Go je aktivní</string>
     <string name="onthego_notif_stop">Zastavit</string>
     <string name="onthego_notif_options">Možnosti</string>
-    <string name="onthego_notif_error">Nelze spustit On-The-Go</string>
-    <string name="onthego_notif_restart">Restartovat On-The-Go</string>
+    <string name="onthego_notif_error">Nelze spustit On‑The‑Go</string>
+    <string name="onthego_notif_restart">Restartovat On‑The‑Go</string>
     <string name="onthego_notif_camera_changed">Režim fotoaparátu byl změněn</string>
     <string name="onthego_transparency">Průhlednost</string>
     <string name="onthego_front_camera">Použít přední fotoaparát</string>
     <string name="onthego_service_toggle">Automaticky restartovat službu</string>
     <string name="onthego_channel_name">Hlavní</string>
-    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="quick_settings_onthego_label">On‑The‑Go</string>
     <!--Google sound search tile -->
     <string name="quick_settings_sound_search">Zvukové vyhledávání</string>
     <!-- Pie controls -->
@@ -112,7 +112,7 @@
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
     <string name="pie_state_name">Ovládání Pie</string>
-    <string name="pie_state_summary">Použít ovládací prvky Pie v pohlcujícím režimu</string>
+    <string name="pie_state_summary">Použít ovládací prvky Pie v Pohlcujícím režimu</string>
     <string name="pie_battery_level">"ÚROVEŇ NABITÍ BATERIE "</string>
     <string name="quick_settings_pie">Ovládání Pie</string>
     <!-- Sound QS Tile -->
@@ -122,8 +122,8 @@
     <string name="quick_settings_sound_dnd">Nerušit</string>
     <!-- LTE QS Tile -->
     <string name="qs_lte_label">LTE</string>
-    <string name="lte_on">LTE zapnuto</string>
-    <string name="lte_off">LTE vypnuto</string>
+    <string name="lte_on">LTE zap.</string>
+    <string name="lte_off">LTE vyp.</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">SystemUI</string>
     <!-- Ambient Display Pixel-Like string -->
@@ -220,10 +220,10 @@
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
     <string name="quick_settings_poweroff_label">Vypnout</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Herní režim je zakázán v Nastavení</string>
+    <string name="gaming_mode_not_enabled">Herní režim je vypnutý v Nastavení</string>
     <string name="quick_settings_gaming_mode_label">Herní režim</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Herní režim vypnutý.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Herní režim byl vypnut.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Herní režim zapnutý.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Herní režim byl zapnut.</string>
 </resources>
