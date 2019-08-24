@@ -59,6 +59,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     SystemUI-tags \
     SystemUI-proto \
     org.lineageos.platform.internal \
+    vendor.lineage.biometrics.fingerprint.inscreen-V1.0-java \
     trail-drawing \
     rebound \
     guava
