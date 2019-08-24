@@ -745,6 +745,7 @@ public class StatusBarManagerService extends IStatusBarService.Stub {
                 // do nothing
             }
         }
+    }
 
     @Override
     public void toggleCameraFlash() {
