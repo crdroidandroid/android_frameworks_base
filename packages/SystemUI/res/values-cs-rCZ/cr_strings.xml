@@ -146,7 +146,7 @@
     <string name="text_clock_h_eight">osm</string>
     <string name="text_clock_h_nine">devět</string>
     <string name="text_clock_h_ten">deset</string>
-    <string name="text_clock_h_eleven">jedenáct</string>
+    <string name="text_clock_h_eleven">jedenáct hodin</string>
     <string name="text_clock_h_twelve">dvanáct</string>
     <!-- Q Clock - Minutes -->
     <string name="text_clock_m_zero">nula nula</string>
@@ -208,7 +208,7 @@
     <string name="text_clock_m_fifty_six">padesát šest</string>
     <string name="text_clock_m_fifty_seven">padesát sedm</string>
     <string name="text_clock_m_fifty_eight">padesát osm</string>
-    <string name="text_clock_m_fifty_nine">padesát devět</string>
+    <string name="text_clock_m_fifty_nine">a padesát devět\nminut</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Ovládání jednou rukou</string>
     <!-- VPN icon -->
