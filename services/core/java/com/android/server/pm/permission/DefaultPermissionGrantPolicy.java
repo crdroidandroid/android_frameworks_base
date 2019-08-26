@@ -927,6 +927,9 @@ public final class DefaultPermissionGrantPolicy {
 
         // Google prebuilt WP picker
         grantPermissionsToSystemPackage(pm, "com.android.wallpaper.livepicker", userId, WALLPAPER_PERMISSIONS);
+
+        // Google Markup
+        grantSystemFixedPermissionsToSystemPackage(pm, "com.google.android.markup", userId, STORAGE_PERMISSIONS);
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(PackageManagerWrapper pm,
