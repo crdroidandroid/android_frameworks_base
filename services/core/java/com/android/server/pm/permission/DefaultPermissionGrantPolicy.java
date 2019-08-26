@@ -986,6 +986,12 @@ public final class DefaultPermissionGrantPolicy {
             grantRuntimePermissions(mediascannerPackage, STORAGE_PERMISSIONS, true, userId);
         }
 
+        // Google Markup
+        PackageParser.Package googlemarkupPackage = getSystemPackage("com.google.android.markup");
+        if (googlemarkupPackage != null && doesPackageSupportRuntimePermissions(googlemarkupPackage)) {
+            grantRuntimePermissions(googlemarkupPackage, STORAGE_PERMISSIONS, userId);
+        }
+
         // Google sound picker
         PackageParser.Package googleSoundPackage = getSystemPackage("com.google.android.soundpicker");
         if (googleSoundPackage != null) {
