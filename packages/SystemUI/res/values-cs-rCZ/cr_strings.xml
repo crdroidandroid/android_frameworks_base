@@ -45,20 +45,20 @@
     <string name="quick_settings_screenshot_label">Snímek obrazovky</string>
     <string name="quick_settings_region_screenshot_label">Částečný snímek obrazovky</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">Informace o CPU</string>
-    <string name="accessibility_quick_settings_cpuinfo_off">Informace o CPU vyp.</string>
-    <string name="accessibility_quick_settings_cpuinfo_on">Informace o CPU zap.</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_off">Informace o CPU byly vypnuty</string>
-    <string name="accessibility_quick_settings_cpuinfo_changed_on">Informace o CPU byly zapnuty</string>
+    <string name="quick_settings_cpuinfo_label">Informace o\u00a0CPU</string>
+    <string name="accessibility_quick_settings_cpuinfo_off">Informace o\u00a0CPU vyp.</string>
+    <string name="accessibility_quick_settings_cpuinfo_on">Informace o\u00a0CPU zap.</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_off">Informace o\u00a0CPU byly vypnuty</string>
+    <string name="accessibility_quick_settings_cpuinfo_changed_on">Informace o\u00a0CPU byly zapnuty</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">HW tlačítka</string>
     <!-- Content description of the HW keys tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_disabled">HW tlačítka jsou zakázána.</string>
+    <string name="accessibility_quick_settings_hw_keys_disabled">HW\u00a0tlačítka jsou zakázána.</string>
     <!-- Content description of the HW keys tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_hw_keys_enabled">HW tlačítka jsou povolena.</string>
+    <string name="accessibility_quick_settings_hw_keys_enabled">HW\u00a0tlačítka jsou povolena.</string>
     <!-- Heads up snooze toast -->
-    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> – Plovoucí oznámení jsou odložena po dobu 1 minuty.</string>
-    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> – Plovoucí oznámení jsou odložena po dobu <xliff:g id="number">%d</xliff:g> minut.</string>
+    <string name="heads_up_snooze_message_one_minute"><xliff:g id="string">%s</xliff:g> – Plovoucí oznámení jsou odložena po dobu 1\u00a0minuty.</string>
+    <string name="heads_up_snooze_message"><xliff:g id="string">%s</xliff:g> – Plovoucí oznámení jsou odložena po dobu <xliff:g id="number">%d</xliff:g>\u00a0minut.</string>
     <!-- Expanded Desktop QS Tile -->
     <string name="quick_settings_expanded_desktop_label">Rozšířená obrazovka</string>
     <string name="quick_settings_expanded_desktop">Rozšířená</string>
@@ -107,12 +107,12 @@
     <!--Google sound search tile -->
     <string name="quick_settings_sound_search">Zvukové vyhledávání</string>
     <!-- Pie controls -->
-    <string name="pie_date_format">EEEE, dd MMMM yyyy</string>
+    <string name="pie_date_format">EEEE, dd.\u00a0MMMM yyyy</string>
     <string name="pie_hour_format_12">hh:mm</string>
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
     <string name="pie_state_name">Ovládání Pie</string>
-    <string name="pie_state_summary">Použít ovládací prvky Pie v Pohlcujícím režimu</string>
+    <string name="pie_state_summary">Použít ovládací prvky Pie v\u00a0Pohlcujícím režimu</string>
     <string name="pie_battery_level">"ÚROVEŇ NABITÍ BATERIE "</string>
     <string name="quick_settings_pie">Ovládání Pie</string>
     <!-- Sound QS Tile -->
@@ -136,91 +136,91 @@
         <item quantity="many"><annotation name="color">Je</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Q Clock - Hour -->
-    <string name="text_clock_h_one">jedna</string>
-    <string name="text_clock_h_two">dvě</string>
-    <string name="text_clock_h_three">tři</string>
-    <string name="text_clock_h_four">čtyři</string>
-    <string name="text_clock_h_five">pět</string>
-    <string name="text_clock_h_six">šest</string>
-    <string name="text_clock_h_seven">sedm</string>
-    <string name="text_clock_h_eight">osm</string>
-    <string name="text_clock_h_nine">devět</string>
-    <string name="text_clock_h_ten">deset</string>
-    <string name="text_clock_h_eleven">jedenáct</string>
-    <string name="text_clock_h_twelve">dvanáct</string>
+    <string name="text_clock_h_one">jedna hodina</string>
+    <string name="text_clock_h_two">dvě hodiny</string>
+    <string name="text_clock_h_three">tři hodiny</string>
+    <string name="text_clock_h_four">čtyři hodiny</string>
+    <string name="text_clock_h_five">pět hodin</string>
+    <string name="text_clock_h_six">šest hodin</string>
+    <string name="text_clock_h_seven">sedm hodin</string>
+    <string name="text_clock_h_eight">osm hodin</string>
+    <string name="text_clock_h_nine">devět hodin</string>
+    <string name="text_clock_h_ten">deset hodin</string>
+    <string name="text_clock_h_eleven">jedenáct hodin</string>
+    <string name="text_clock_h_twelve">dvanáct hodin</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">nula nula</string>
-    <string name="text_clock_m_one">nula jedna</string>
-    <string name="text_clock_m_two">nula dva</string>
-    <string name="text_clock_m_three">nula tři</string>
-    <string name="text_clock_m_four">nula čtyři</string>
-    <string name="text_clock_m_five">nula pět</string>
-    <string name="text_clock_m_six">nula šest</string>
-    <string name="text_clock_m_seven">nula sedm</string>
-    <string name="text_clock_m_eight">nula osm</string>
-    <string name="text_clock_m_nine">nula devět</string>
-    <string name="text_clock_m_ten">deset</string>
-    <string name="text_clock_m_eleven">jedenáct</string>
-    <string name="text_clock_m_twelve">dvanáct</string>
-    <string name="text_clock_m_thirteen">třináct</string>
-    <string name="text_clock_m_fourteen">čtrnáct</string>
-    <string name="text_clock_m_fifteen">patnáct</string>
-    <string name="text_clock_m_sixteen">šestnáct</string>
-    <string name="text_clock_m_seventeen">sedmnáct</string>
-    <string name="text_clock_m_eighteen">osmnáct</string>
-    <string name="text_clock_m_nineteen">devatenáct</string>
-    <string name="text_clock_m_twenty">dvacet</string>
-    <string name="text_clock_m_twenty_one">dvacet jedna</string>
-    <string name="text_clock_m_twenty_two">dvacet dva</string>
-    <string name="text_clock_m_twenty_three">dvacet tři</string>
-    <string name="text_clock_m_twenty_four">dvacet čtyři</string>
-    <string name="text_clock_m_twenty_five">dvacet pět</string>
-    <string name="text_clock_m_twenty_six">dvacet šest</string>
-    <string name="text_clock_m_twenty_seven">dvacet sedm</string>
-    <string name="text_clock_m_twenty_eight">dvacet osm</string>
-    <string name="text_clock_m_twenty_nine">dvacet devět</string>
-    <string name="text_clock_m_thirty">třicet</string>
-    <string name="text_clock_m_thirty_one">třicet jedna</string>
-    <string name="text_clock_m_thirty_two">třicet dva</string>
-    <string name="text_clock_m_thirty_three">třicet tři</string>
-    <string name="text_clock_m_thirty_four">třicet čtyři</string>
-    <string name="text_clock_m_thirty_five">třicet pět</string>
-    <string name="text_clock_m_thirty_six">třicet šest</string>
-    <string name="text_clock_m_thirty_seven">třicet sedm</string>
-    <string name="text_clock_m_thirty_eight">třicet osm</string>
-    <string name="text_clock_m_thirty_nine">třicet devět</string>
-    <string name="text_clock_m_forty">čtyřicet</string>
-    <string name="text_clock_m_forty_one">čtyřicet jedna</string>
-    <string name="text_clock_m_forty_two">čtyřicet dva</string>
-    <string name="text_clock_m_forty_three">čtyřicet tři</string>
-    <string name="text_clock_m_forty_four">čtyřicet čtyři</string>
-    <string name="text_clock_m_forty_five">čtyřicet pět</string>
-    <string name="text_clock_m_forty_six">čtyřicet šest</string>
-    <string name="text_clock_m_forty_seven">čtyřicet sedm</string>
-    <string name="text_clock_m_forty_eight">čtyřicet osm</string>
-    <string name="text_clock_m_forty_nine">čtyřicet devět</string>
-    <string name="text_clock_m_fifty">padesát</string>
-    <string name="text_clock_m_fifty_one">padesát jedna</string>
-    <string name="text_clock_m_fifty_two">padesát dva</string>
-    <string name="text_clock_m_fifty_three">padesát tři</string>
-    <string name="text_clock_m_fifty_four">padesát čtyři</string>
-    <string name="text_clock_m_fifty_five">padesát pět</string>
-    <string name="text_clock_m_fifty_six">padesát šest</string>
-    <string name="text_clock_m_fifty_seven">padesát sedm</string>
-    <string name="text_clock_m_fifty_eight">padesát osm</string>
-    <string name="text_clock_m_fifty_nine">padesát devět</string>
+    <string name="text_clock_m_zero">nula minut</string>
+    <string name="text_clock_m_one">a jedna minuta</string>
+    <string name="text_clock_m_two">a dvě minuty</string>
+    <string name="text_clock_m_three">a tři minuty</string>
+    <string name="text_clock_m_four">a čtyři minuty</string>
+    <string name="text_clock_m_five">a pět minut</string>
+    <string name="text_clock_m_six">a šest minut</string>
+    <string name="text_clock_m_seven">a sedm minut</string>
+    <string name="text_clock_m_eight">a osm minut</string>
+    <string name="text_clock_m_nine">a devět minut</string>
+    <string name="text_clock_m_ten">a deset minut</string>
+    <string name="text_clock_m_eleven">a jedenáct minut</string>
+    <string name="text_clock_m_twelve">a dvanáct minut</string>
+    <string name="text_clock_m_thirteen">a třináct minut</string>
+    <string name="text_clock_m_fourteen">a čtrnáct minut</string>
+    <string name="text_clock_m_fifteen">a patnáct minut</string>
+    <string name="text_clock_m_sixteen">a šestnáct minut</string>
+    <string name="text_clock_m_seventeen">a sedmnáct minut</string>
+    <string name="text_clock_m_eighteen">a osmnáct minut</string>
+    <string name="text_clock_m_nineteen">a devatenáct minut</string>
+    <string name="text_clock_m_twenty">a dvacet minut</string>
+    <string name="text_clock_m_twenty_one">a dvacet jedna minut</string>
+    <string name="text_clock_m_twenty_two">a dvacet dva minut</string>
+    <string name="text_clock_m_twenty_three">a dvacet tři minut</string>
+    <string name="text_clock_m_twenty_four">a dvacet čtyři minut</string>
+    <string name="text_clock_m_twenty_five">a dvacet pět minut</string>
+    <string name="text_clock_m_twenty_six">a dvacet šest minut</string>
+    <string name="text_clock_m_twenty_seven">a dvacet sedm minut</string>
+    <string name="text_clock_m_twenty_eight">a dvacet osm minut</string>
+    <string name="text_clock_m_twenty_nine">a dvacet devět minut</string>
+    <string name="text_clock_m_thirty">a třicet minut</string>
+    <string name="text_clock_m_thirty_one">a třicet jedna minut</string>
+    <string name="text_clock_m_thirty_two">a třicet dva minut</string>
+    <string name="text_clock_m_thirty_three">a třicet tři minut</string>
+    <string name="text_clock_m_thirty_four">a třicet čtyři minut</string>
+    <string name="text_clock_m_thirty_five">a třicet pět minut</string>
+    <string name="text_clock_m_thirty_six">a třicet šest minut</string>
+    <string name="text_clock_m_thirty_seven">a třicet sedm minut</string>
+    <string name="text_clock_m_thirty_eight">a třicet osm minut</string>
+    <string name="text_clock_m_thirty_nine">a třicet devět minut</string>
+    <string name="text_clock_m_forty">a čtyřicet minut</string>
+    <string name="text_clock_m_forty_one">a čtyřicet jedna minut</string>
+    <string name="text_clock_m_forty_two">a čtyřicet dva minut</string>
+    <string name="text_clock_m_forty_three">a čtyřicet tři minut</string>
+    <string name="text_clock_m_forty_four">a čtyřicet čtyři minut</string>
+    <string name="text_clock_m_forty_five">a čtyřicet pět minut</string>
+    <string name="text_clock_m_forty_six">a čtyřicet šest minut</string>
+    <string name="text_clock_m_forty_seven">a čtyřicet sedm minut</string>
+    <string name="text_clock_m_forty_eight">a čtyřicet osm minut</string>
+    <string name="text_clock_m_forty_nine">a čtyřicet devět minut</string>
+    <string name="text_clock_m_fifty">a padesát minut</string>
+    <string name="text_clock_m_fifty_one">a padesát jedna minut</string>
+    <string name="text_clock_m_fifty_two">a padesát dva minut</string>
+    <string name="text_clock_m_fifty_three">a padesát tři minut</string>
+    <string name="text_clock_m_fifty_four">a padesát čtyři minut</string>
+    <string name="text_clock_m_fifty_five">a padesát pět minut</string>
+    <string name="text_clock_m_fifty_six">a padesát šest minut</string>
+    <string name="text_clock_m_fifty_seven">a padesát sedm minut</string>
+    <string name="text_clock_m_fifty_eight">a padesát osm minut</string>
+    <string name="text_clock_m_fifty_nine">a padesát devět\nminut</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Ovládání jednou rukou</string>
     <!-- VPN icon -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
-    <string name="recents_free_ram">Volná paměť RAM: %1$d MB</string>
+    <string name="recents_free_ram">Volná paměť RAM: %1$d\u00a0MB</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">Restartovat</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
     <string name="quick_settings_poweroff_label">Vypnout</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Herní režim je vypnutý v Nastavení</string>
+    <string name="gaming_mode_not_enabled">Herní režim je vypnutý v\u00a0Nastavení</string>
     <string name="quick_settings_gaming_mode_label">Herní režim</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_disabled">Herní režim byl vypnut.</string>

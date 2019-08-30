@@ -17,7 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Pro interakci dlouze stiskněte tlačítko napájení</string>
+    <string name="pocket_lock_message_long_press">Pro interakci dlouze stiskněte tlačítko „Napájení“</string>
     <!-- AOKP custom system animations -->
     <string name="animation_fade">Slábnutí</string>
     <string name="animation_slide_right">Přejetí vpravo</string>
@@ -36,20 +36,20 @@
     <string name="animation_random">Náhodně</string>
     <string name="action_null">Prázdné</string>
     <string name="animation_ethans">Ethans</string>
-    <string name="animation_q">Ve stylu Q</string>
+    <string name="animation_q">Ve stylu\u00a0Q</string>
     <!-- SystemUI Restart -->
     <string name="systemui_restart_title">Je vyžadován restart SystemUI</string>
     <string name="systemui_restart_message">Aby se projevily všechny změny, je třeba restartovat SystemUI. Restartovat jej nyní?</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_toggleNavigationEditor">Ovládání editoru navigačního panelu</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_toggleNavigationEditor">Umožní aplikaci provádět změny v editoru navigačního panelu.</string>
+    <string name="permdesc_toggleNavigationEditor">Umožní aplikaci provádět změny v\u00a0editoru navigačního panelu.</string>
     <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessFontManager">Přístup ke správci písem</string>
+    <string name="permlab_accessFontManager">Přístup ke Správci písem</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessFontManager">Umožní aplikaci přístup ke správci písem.</string>
+    <string name="permdesc_accessFontManager">Umožní aplikaci přístup ke Správci písem.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
-    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Klepnutím na prázdné místo ukončíte režim Ovládání jednou rukou</string>
+    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Klepnutím na prázdné místo ukončíte režim „Ovládání jednou rukou“</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Herní režim</string>
     <string name="gaming_mode_notification_title">Herní režim povolen</string>
