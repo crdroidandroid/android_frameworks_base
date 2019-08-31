@@ -67,6 +67,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import com.android.internal.util.custom.recorder.InternalAudioRecorder;
+
 /**
  *  Source of truth for all state / events related to the volume dialog.  No presentation.
  *
@@ -131,6 +133,8 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
 
     protected final VC mVolumeController = new VC();
 
+    private boolean mIsInternalAudioRecordingSupported;
+
     public VolumeDialogControllerImpl(Context context) {
         mContext = context.getApplicationContext();
         mNotificationManager = (NotificationManager) mContext.getSystemService(
@@ -157,6 +161,8 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         mVolumeController.setA11yMode(accessibilityVolumeStreamActive ?
                     VolumePolicy.A11Y_MODE_INDEPENDENT_A11Y_VOLUME :
                         VolumePolicy.A11Y_MODE_MEDIA_A11Y_VOLUME);
+
+        mIsInternalAudioRecordingSupported = InternalAudioRecorder.isSupported(context);
     }
 
     public AudioManager getAudioManager() {
@@ -950,15 +956,16 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
                         .getIntExtra(AudioManager.EXTRA_VOLUME_STREAM_DEVICES, -1);
                 final int oldDevices = intent
                         .getIntExtra(AudioManager.EXTRA_PREV_VOLUME_STREAM_DEVICES, -1);
-                final boolean routedToSubmixAndEarphone = (mAudio.getDevicesForStream(AudioManager.STREAM_MUSIC) &
-                    AudioManager.DEVICE_OUT_REMOTE_SUBMIX) != 0 &&
-                    (mAudio.getDevicesForStream(AudioManager.STREAM_MUSIC) &
-                            (AudioManager.DEVICE_OUT_BLUETOOTH_A2DP |
-                            AudioManager.DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
-                            AudioManager.DEVICE_OUT_BLUETOOTH_A2DP_SPEAKER |
-                            AudioManager.DEVICE_OUT_WIRED_HEADSET |
-                            AudioManager.DEVICE_OUT_WIRED_HEADPHONE |
-                            AudioManager.DEVICE_OUT_USB_HEADSET)) != 0;
+                final boolean routedToSubmixAndEarphone = mIsInternalAudioRecordingSupported &&
+                        (mAudio.getDevicesForStream(AudioManager.STREAM_MUSIC) &
+                            AudioManager.DEVICE_OUT_REMOTE_SUBMIX) != 0 &&
+                                (mAudio.getDevicesForStream(AudioManager.STREAM_MUSIC) &
+                                    (AudioManager.DEVICE_OUT_BLUETOOTH_A2DP |
+                                    AudioManager.DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
+                                    AudioManager.DEVICE_OUT_BLUETOOTH_A2DP_SPEAKER |
+                                    AudioManager.DEVICE_OUT_WIRED_HEADSET |
+                                    AudioManager.DEVICE_OUT_WIRED_HEADPHONE |
+                                    AudioManager.DEVICE_OUT_USB_HEADSET)) != 0;
                 if (D.BUG) Log.d(TAG, "onReceive STREAM_DEVICES_CHANGED_ACTION stream="
                         + stream + " devices=" + devices + " oldDevices=" + oldDevices);
                 changed = checkRoutedToBluetoothW(stream);
