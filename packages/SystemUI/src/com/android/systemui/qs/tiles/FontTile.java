@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 AquariOS
+ *               2019 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +18,6 @@
  */
 
 package com.android.systemui.qs.tiles;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import com.android.systemui.R;
-import com.android.systemui.plugins.qs.DetailAdapter;
-import com.android.systemui.plugins.qs.QSTile;
-import com.android.systemui.plugins.qs.QSTile.BooleanState;
-import com.android.systemui.qs.QSDetailItemsList;
-import com.android.systemui.qs.QSHost;
-import com.android.systemui.qs.QSDetailItems.Item;
-import com.android.systemui.qs.tileimpl.QSTileImpl;
-import com.android.systemui.qs.tileimpl.QSTileImpl.ResourceIcon;
 
 import android.content.Context;
 import android.content.FontInfo;
@@ -51,6 +37,20 @@ import android.widget.ListView;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.systemui.R;
+import com.android.systemui.plugins.qs.DetailAdapter;
+import com.android.systemui.plugins.qs.QSTile;
+import com.android.systemui.plugins.qs.QSTile.BooleanState;
+import com.android.systemui.qs.QSDetailItemsList;
+import com.android.systemui.qs.QSHost;
+import com.android.systemui.qs.QSDetailItems.Item;
+import com.android.systemui.qs.tileimpl.QSTileImpl;
+import com.android.systemui.qs.tileimpl.QSTileImpl.ResourceIcon;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class FontTile extends QSTileImpl<BooleanState> {
     private static final String TAG = "FontTile";
@@ -181,7 +181,7 @@ public class FontTile extends QSTileImpl<BooleanState> {
                 item.fontPath = fontInfo.previewPath;
                 item.icon = getIcon(fontInfo.packageName);
                 item.line1 = fontInfo.fontName.replace("_", " ");
-                item.line2 = getPackageLabel(fontInfo.packageName).replace("_", " ");
+                item.line2 = mContext.getString(R.string.quick_settings_font_pangram);
                 mFontItems.add(item);
             }
             mAdapter.notifyDataSetChanged();
@@ -199,19 +199,6 @@ public class FontTile extends QSTileImpl<BooleanState> {
         @Override
         public int getMetricsCategory() {
             return MetricsEvent.CRDROID_SETTINGS;
-        }
-    }
-
-    private String getPackageLabel(String packageName) {
-        String label = null;
-        if (packageName.equals("android")) {
-            return "Android";
-        }
-        try {
-            ApplicationInfo info = mContext.getPackageManager().getApplicationInfo(packageName, 0);
-            label = (String) info.loadLabel(mContext.getPackageManager());
-        } finally {
-            return label;
         }
     }
 
