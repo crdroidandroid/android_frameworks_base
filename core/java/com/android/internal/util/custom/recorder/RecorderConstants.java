@@ -15,10 +15,6 @@
 */
 package com.android.internal.util.custom.recorder;
 
-import android.content.Context;
-
-public class InternalAudioRecorder {
-    public static boolean isSupported(Context context) {
-        return context.getResources().getBoolean(com.android.internal.R.bool.config_hasInternalAudioRecordingSupport);
-    }
+public class RecorderConstants {
+    public static final String APP_PACKAGE_NAME = "org.pixelexperience.recorder";
 }

@@ -41,6 +41,8 @@ import java.util.UUID;
 
 import static android.media.MediaRouter.ROUTE_TYPE_REMOTE_DISPLAY;
 
+import com.android.internal.util.custom.recorder.RecorderConstants;
+
 /** Platform implementation of the cast controller. **/
 public class CastControllerImpl implements CastController {
     private static final String TAG = "CastController";
@@ -133,6 +135,10 @@ public class CastControllerImpl implements CastController {
     public Set<CastDevice> getCastDevices() {
         final ArraySet<CastDevice> devices = new ArraySet<CastDevice>();
         synchronized (mProjectionLock) {
+            if (mProjection != null && mProjection.getPackageName().equals(
+                    RecorderConstants.APP_PACKAGE_NAME)){
+                mProjection = null;
+            }
             if (mProjection != null) {
                 final CastDevice device = new CastDevice();
                 device.id = mProjection.getPackageName();
