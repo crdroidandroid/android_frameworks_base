@@ -224,4 +224,7 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">Oyun modu kapalı.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Oyun modu açık.</string>
+    <!-- Font Tile -->
+    <string name="quick_settings_font_label">Yazı tipi</string>
+    <string name="quick_settings_font_detail_label">Bir yazı tipi seçin</string>
 </resources>

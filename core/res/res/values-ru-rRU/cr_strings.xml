@@ -48,6 +48,8 @@
     <string name="permlab_accessFontManager">доступ к менеджеру шрифтов</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_accessFontManager">Позволяет приложению получить доступ к менеджеру шрифтов.</string>
+    <!-- [CHAR LIMIT=NONE] Error when a package is installed but got the missing fonts.xml file, notifying the user why it isn't showing up. -->
+    <string name="fontservice_incompatible_font">Пакет шрифта который вы установили несовместим, из-за отсутствия fonts.xml в нём. Пожалуйста, обратитесь к разработчику пакета для помощи.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Коснитесь пустой области для выхода из режима одной рукой</string>
     <!-- Gaming mode -->

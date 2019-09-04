@@ -226,4 +226,7 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">Herní režim byl vypnut.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Herní režim byl zapnut.</string>
+    <!-- Font Tile -->
+    <string name="quick_settings_font_label">Písma</string>
+    <string name="quick_settings_font_detail_label">Vyberte písmo</string>
 </resources>

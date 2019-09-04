@@ -223,4 +223,7 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">游戏模式已关闭</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">游戏模式已开启</string>
+    <!-- Font Tile -->
+    <string name="quick_settings_font_label">字体</string>
+    <string name="quick_settings_font_detail_label">选择字体</string>
 </resources>
