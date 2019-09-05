@@ -149,7 +149,7 @@
     <string name="text_clock_h_eleven">Адзінаццаць</string>
     <string name="text_clock_h_twelve">Дванаццаць</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">Роўна</string>
+    <string name="text_clock_m_zero">Нуль нуль</string>
     <string name="text_clock_m_one">Нуль адна</string>
     <string name="text_clock_m_two">Нуль дзве</string>
     <string name="text_clock_m_three">Нуль тры</string>
