@@ -51,7 +51,7 @@
     <!-- [CHAR LIMIT=NONE] Error when a package is installed but got the missing fonts.xml file, notifying the user why it isn't showing up. -->
     <string name="fontservice_incompatible_font">Balíček písem, který jste nainstalovali, není kompatibilní kvůli chybějícímu souboru fonts.xml. Pro podporu se obraťte na vývojáře balíčku.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
-    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Klepnutím na prázdné místo ukončíte režim „Ovládání jednou rukou“</string>
+    <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Klepnutím na prázdné místo ukončíte režim <i>Ovládání jednou rukou</i></string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Herní režim</string>
     <string name="gaming_mode_notification_title">Herní režim povolen</string>

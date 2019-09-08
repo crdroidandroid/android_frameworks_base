@@ -149,16 +149,16 @@
     <string name="text_clock_h_eleven">Адзінаццаць</string>
     <string name="text_clock_h_twelve">Дванаццаць</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">Нуль</string>
-    <string name="text_clock_m_one">Адна</string>
-    <string name="text_clock_m_two">Дзве</string>
-    <string name="text_clock_m_three">Тры</string>
-    <string name="text_clock_m_four">Чатыры</string>
-    <string name="text_clock_m_five">Пяць</string>
-    <string name="text_clock_m_six">Шэсць</string>
-    <string name="text_clock_m_seven">Сем</string>
-    <string name="text_clock_m_eight">Восем</string>
-    <string name="text_clock_m_nine">Дзевяць</string>
+    <string name="text_clock_m_zero">Нуль нуль</string>
+    <string name="text_clock_m_one">Нуль адна</string>
+    <string name="text_clock_m_two">Нуль дзве</string>
+    <string name="text_clock_m_three">Нуль тры</string>
+    <string name="text_clock_m_four">Нуль чатыры</string>
+    <string name="text_clock_m_five">Нуль пяць</string>
+    <string name="text_clock_m_six">Нуль шэсць</string>
+    <string name="text_clock_m_seven">Нуль сем</string>
+    <string name="text_clock_m_eight">Нуль восем</string>
+    <string name="text_clock_m_nine">Нуль дзевяць</string>
     <string name="text_clock_m_ten">Дзесяць</string>
     <string name="text_clock_m_eleven">Адзінаццаць</string>
     <string name="text_clock_m_twelve">Дванаццаць</string>

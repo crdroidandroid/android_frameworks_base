@@ -224,6 +224,6 @@
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">遊戲模式已開啟.</string>
     <!-- Font Tile -->
-    <string name="quick_settings_font_label">Fonts</string>
-    <string name="quick_settings_font_detail_label">Select a font</string>
+    <string name="quick_settings_font_label">字體</string>
+    <string name="quick_settings_font_detail_label">設定字體</string>
 </resources>
