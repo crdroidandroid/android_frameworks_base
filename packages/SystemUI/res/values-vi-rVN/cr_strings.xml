@@ -19,28 +19,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">Đang sạc nhanh (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> cho tới khi đầy)</string>
     <string name="keyguard_plugged_in_dash_charging">Đang sạc nhanh</string>
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Màn hình được ghi lại</string>
-    <string name="screenrecord_notif_final_ticker">Quay màn hình thành công</string>
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Đang quay màn hình</string>
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Dừng</string>
-    <string name="screenrecord_notif_completed">Quay màn hình thành công</string>
-    <string name="screenrecord_notif_duration">Tổng cộng:</string>
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Hiển thị con trỏ</string>
-    <string name="screenrecord_notif_pointer_off">Ẩn con trỏ</string>
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Không thể quay màn hình</string>
-    <string name="notification_channel_screenrecord">Quay màn hình</string>
-    <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Quay màn hình</string>
-    <string name="quick_settings_screenrecord_lq_label">Chất lượng thấp:</string>
-    <string name="quick_settings_screenrecord_mq_label">Chất lượng trung bình</string>
-    <string name="quick_settings_screenrecord_hq_label">Chất lượng cao</string>
-    <string name="screenrecord_hide_hint">Ẩn gợi ý</string>
-    <string name="screenrecord_show_hint">Hiển thị gợi ý</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Chụp màn hình</string>
     <string name="quick_settings_region_screenshot_label">Chụp một phần màn hình</string>
@@ -208,10 +186,10 @@
     <string name="text_clock_m_fifty_nine">Năm mươi chín</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Chế độ một tay</string>
-    <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
     <string name="recents_free_ram">RAM trống: %1$d MB</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">Khởi động lại</string>
     <string name="quick_settings_reboot_recovery_label">Chế độ Phục hồi</string>
