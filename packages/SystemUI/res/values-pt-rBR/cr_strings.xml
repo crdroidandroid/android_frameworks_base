@@ -19,28 +19,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">Carregamento Rápido (<xliff:g id="charging_time_left" example="4 horas e 2 minuos">%s</xliff:g> até completar)</string>
     <string name="keyguard_plugged_in_dash_charging">Carregamento Rápido</string>
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">A tela está sendo gravada</string>
-    <string name="screenrecord_notif_final_ticker">Tela gravada com sucesso</string>
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Gravando a tela</string>
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Parar</string>
-    <string name="screenrecord_notif_completed">Tela gravada com sucesso</string>
-    <string name="screenrecord_notif_duration">Total:</string>
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Mostrar ponteiro</string>
-    <string name="screenrecord_notif_pointer_off">Esconder ponteiro</string>
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Não é possível gravar a tela</string>
-    <string name="notification_channel_screenrecord">Gravações de tela</string>
-    <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Gravação de Tela</string>
-    <string name="quick_settings_screenrecord_lq_label">Qualidade Baixa</string>
-    <string name="quick_settings_screenrecord_mq_label">Qualidade Média</string>
-    <string name="quick_settings_screenrecord_hq_label">Qualidade Alta</string>
-    <string name="screenrecord_hide_hint">Esconder dica</string>
-    <string name="screenrecord_show_hint">Mostrar dica</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Captura de tela</string>
     <string name="quick_settings_region_screenshot_label">Captura parcial da tela</string>
@@ -209,10 +187,10 @@
     <string name="text_clock_m_fifty_nine">Cinquenta e nove</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Modo de uma mão</string>
-    <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
     <string name="recents_free_ram">RAM Livre: %1$d MB</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">Reiniciar</string>
     <string name="quick_settings_reboot_recovery_label">Recuperação</string>
