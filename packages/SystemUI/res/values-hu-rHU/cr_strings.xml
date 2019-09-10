@@ -19,28 +19,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">Dash töltés (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> a teljes feltöltésig)</string>
     <string name="keyguard_plugged_in_dash_charging">Dash töltés</string>
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">A képernyőfelvétel elkészült</string>
-    <string name="screenrecord_notif_final_ticker">A Képernyővideó-felvétel elkészült</string>
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Képernyőfelvétel</string>
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Megállítás</string>
-    <string name="screenrecord_notif_completed">A Képernyővideó-felvétel elkészült</string>
-    <string name="screenrecord_notif_duration">Összesen:</string>
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">A Mutató megjelenítése</string>
-    <string name="screenrecord_notif_pointer_off">A Mutató elrejtése</string>
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">A képernyőfelvétel nem lehetséges</string>
-    <string name="notification_channel_screenrecord">Képernyőfelvételek</string>
-    <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Képernyőfelvétel</string>
-    <string name="quick_settings_screenrecord_lq_label">Alacsony minőség</string>
-    <string name="quick_settings_screenrecord_mq_label">Közepes minőség</string>
-    <string name="quick_settings_screenrecord_hq_label">Magas minőség</string>
-    <string name="screenrecord_hide_hint">A tanács elrejtése</string>
-    <string name="screenrecord_show_hint">A tanács megjelenítése</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Képernyőmentés</string>
     <string name="quick_settings_region_screenshot_label">Részleges képernyőmentés</string>
@@ -209,10 +187,10 @@
     <string name="text_clock_m_fifty_nine">Ötvenkilenc</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Egykezes üzemmód</string>
-    <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
     <string name="recents_free_ram">Elérhető RAM: %1$d MB</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">Újraindítás</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
