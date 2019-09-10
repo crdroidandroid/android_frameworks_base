@@ -19,28 +19,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">고속 충전중 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> 후 충전 완료)</string>
     <string name="keyguard_plugged_in_dash_charging">고속 충전중</string>
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">화면이 녹화되고 있습니다.</string>
-    <string name="screenrecord_notif_final_ticker">화면이 성공적으로 녹화되었습니다</string>
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">화면 녹화 중...</string>
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">중지</string>
-    <string name="screenrecord_notif_completed">화면이 성공적으로 녹화되었습니다</string>
-    <string name="screenrecord_notif_duration">전체:</string>
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">포인터 표시</string>
-    <string name="screenrecord_notif_pointer_off">포인터 숨기기</string>
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">화면을 녹화할 수 없습니다.</string>
-    <string name="notification_channel_screenrecord">화면 녹화</string>
-    <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">화면녹화</string>
-    <string name="quick_settings_screenrecord_lq_label">저화질</string>
-    <string name="quick_settings_screenrecord_mq_label">일반화질</string>
-    <string name="quick_settings_screenrecord_hq_label">고화질</string>
-    <string name="screenrecord_hide_hint">힌트 숨기기</string>
-    <string name="screenrecord_show_hint">힌트 보기</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">스크린샷</string>
     <string name="quick_settings_region_screenshot_label">부분 스크린 샷</string>
@@ -208,10 +186,10 @@
     <string name="text_clock_m_fifty_nine">Fifty Nine</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">한 손 조작 모드</string>
-    <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
     <string name="recents_free_ram">사용가능한 RAM: %1$d MB</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">다시 시작</string>
     <string name="quick_settings_reboot_recovery_label">리커버리</string>
