@@ -19,28 +19,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">Dash 閃充中 (<xliff:g id="charging_time_left" example="4小时2分钟">%s</xliff:g> 後充滿)</string>
     <string name="keyguard_plugged_in_dash_charging">Dash 閃充中</string>
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">正在錄製螢幕</string>
-    <string name="screenrecord_notif_final_ticker">螢幕錄製成功</string>
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">螢幕錄影中</string>
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">停止</string>
-    <string name="screenrecord_notif_completed">螢幕錄製成功</string>
-    <string name="screenrecord_notif_duration">總計:</string>
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">顯示觸摸點</string>
-    <string name="screenrecord_notif_pointer_off">隱藏觸摸點</string>
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">無法錄製螢幕</string>
-    <string name="notification_channel_screenrecord">螢幕錄製</string>
-    <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">螢幕錄製</string>
-    <string name="quick_settings_screenrecord_lq_label">低品質</string>
-    <string name="quick_settings_screenrecord_mq_label">中品質</string>
-    <string name="quick_settings_screenrecord_hq_label">高品質</string>
-    <string name="screenrecord_hide_hint">隱藏提示</string>
-    <string name="screenrecord_show_hint">顯示提示</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">螢幕快照</string>
     <string name="quick_settings_region_screenshot_label">部分截圖</string>
@@ -208,10 +186,10 @@
     <string name="text_clock_m_fifty_nine">五十九分</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">單手模式</string>
-    <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
     <string name="recents_free_ram">可用記憶體：%1$d MB</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">重新開機</string>
     <string name="quick_settings_reboot_recovery_label">恢復模式</string>
