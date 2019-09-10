@@ -19,28 +19,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">Быстрая зарядка (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> до полной)</string>
     <string name="keyguard_plugged_in_dash_charging">Быстрая зарядка</string>
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Идёт запись экрана</string>
-    <string name="screenrecord_notif_final_ticker">Запись экрана прошла успешно</string>
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Запись экрана</string>
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Остановить</string>
-    <string name="screenrecord_notif_completed">Запись экрана прошла успешно</string>
-    <string name="screenrecord_notif_duration">Всего:</string>
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Показать указатель</string>
-    <string name="screenrecord_notif_pointer_off">Скрыть указатель</string>
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Невозможно записать экран</string>
-    <string name="notification_channel_screenrecord">Записи экрана</string>
-    <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Запись экрана</string>
-    <string name="quick_settings_screenrecord_lq_label">Низкое качество</string>
-    <string name="quick_settings_screenrecord_mq_label">Среднее качество</string>
-    <string name="quick_settings_screenrecord_hq_label">Высокое качество</string>
-    <string name="screenrecord_hide_hint">Скрыть подсказку</string>
-    <string name="screenrecord_show_hint">Показать подсказку</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Снимок экрана</string>
     <string name="quick_settings_region_screenshot_label">Скриншот части экрана</string>
@@ -211,10 +189,10 @@
     <string name="text_clock_m_fifty_nine">Пятьдесят девять</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Управление одной рукой</string>
-    <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
     <string name="recents_free_ram">Свободно ОЗУ: %1$d МБ</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">Перезагрузка</string>
     <string name="quick_settings_reboot_recovery_label">Режим восстановления</string>

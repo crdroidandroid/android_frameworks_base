@@ -19,28 +19,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">Бързо зареждане (<xliff:g id="charging_time_left" example="4 часа и 2 минути">%s</xliff:g> до пълното зареждане)</string>
     <string name="keyguard_plugged_in_dash_charging">Бързо зареждане</string>
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Екранът се записва</string>
-    <string name="screenrecord_notif_final_ticker">Екранът е записан успешно</string>
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Записване на екрана</string>
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Стоп</string>
-    <string name="screenrecord_notif_completed">Екранът е записан успешно</string>
-    <string name="screenrecord_notif_duration">Общо:</string>
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Покажи показалец</string>
-    <string name="screenrecord_notif_pointer_off">Скрий показалеца</string>
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Екранът не може да бъде записан</string>
-    <string name="notification_channel_screenrecord">Записи на екрана</string>
-    <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Запис на екрана</string>
-    <string name="quick_settings_screenrecord_lq_label">Ниско качество</string>
-    <string name="quick_settings_screenrecord_mq_label">Средно качество</string>
-    <string name="quick_settings_screenrecord_hq_label">Високо качество</string>
-    <string name="screenrecord_hide_hint">Скриване на съвети</string>
-    <string name="screenrecord_show_hint">Показване на съвети</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Екранна снимка</string>
     <string name="quick_settings_region_screenshot_label">Частична екранна снимка</string>
@@ -209,10 +187,10 @@
     <string name="text_clock_m_fifty_nine">Fifty Nine</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">One Handed mode</string>
-    <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
     <string name="recents_free_ram">Free RAM: %1$d MB</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">Reboot</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
