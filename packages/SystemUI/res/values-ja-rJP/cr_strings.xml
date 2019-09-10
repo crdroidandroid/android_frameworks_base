@@ -19,28 +19,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">急速充電中（充電完了まで<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g>）</string>
     <string name="keyguard_plugged_in_dash_charging">急速充電中</string>
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">画面を録画中です</string>
-    <string name="screenrecord_notif_final_ticker">画面を録画しました</string>
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">画面を録画</string>
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">停止</string>
-    <string name="screenrecord_notif_completed">画面を録画しました</string>
-    <string name="screenrecord_notif_duration">合計：</string>
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">タップを表示</string>
-    <string name="screenrecord_notif_pointer_off">タップを非表示</string>
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">画面を録画できません</string>
-    <string name="notification_channel_screenrecord">画面の録画</string>
-    <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">画面の録画</string>
-    <string name="quick_settings_screenrecord_lq_label">低画質</string>
-    <string name="quick_settings_screenrecord_mq_label">標準画質</string>
-    <string name="quick_settings_screenrecord_hq_label">高画質</string>
-    <string name="screenrecord_hide_hint">ヒントを隠す</string>
-    <string name="screenrecord_show_hint">ヒントを表示</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">スクリーンショット</string>
     <string name="quick_settings_region_screenshot_label">範囲を選択してスクリーンショット</string>
@@ -208,10 +186,10 @@
     <string name="text_clock_m_fifty_nine">Fifty Nine</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">片手モード</string>
-    <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
     <string name="recents_free_ram">空きメモリ: %1$d MB</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">再起動</string>
     <string name="quick_settings_reboot_recovery_label">リカバリー</string>
