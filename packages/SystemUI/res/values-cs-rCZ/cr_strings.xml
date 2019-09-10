@@ -19,28 +19,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">DASH nabíjení (plně nabito za <xliff:g id="charging_time_left" example="4 hodiny a 2 minuty">%s</xliff:g>)</string>
     <string name="keyguard_plugged_in_dash_charging">DASH nabíjení</string>
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Obrazovka je zaznamenávána</string>
-    <string name="screenrecord_notif_final_ticker">Obrazovka byla úspěšně zaznamenána</string>
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Záznam obrazovky</string>
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Zastavit</string>
-    <string name="screenrecord_notif_completed">Obrazovka byla úspěšně zaznamenána</string>
-    <string name="screenrecord_notif_duration">Celkem:</string>
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Zobrazit ukazatel</string>
-    <string name="screenrecord_notif_pointer_off">Skrýt ukazatel</string>
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Nelze provést záznam obrazovky</string>
-    <string name="notification_channel_screenrecord">Záznamy obrazovky</string>
-    <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Záznam obrazovky</string>
-    <string name="quick_settings_screenrecord_lq_label">Nízká kvalita</string>
-    <string name="quick_settings_screenrecord_mq_label">Střední kvalita</string>
-    <string name="quick_settings_screenrecord_hq_label">Vysoká kvalita</string>
-    <string name="screenrecord_hide_hint">Skrýt nápovědu</string>
-    <string name="screenrecord_show_hint">Zobrazit nápovědu</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Snímek obrazovky</string>
     <string name="quick_settings_region_screenshot_label">Částečný snímek obrazovky</string>
@@ -211,10 +189,10 @@
     <string name="text_clock_m_fifty_nine">a padesát devět\nminut</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Ovládání jednou rukou</string>
-    <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
     <string name="recents_free_ram">Volná paměť RAM: %1$d\u00a0MB</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">Restartovat</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
