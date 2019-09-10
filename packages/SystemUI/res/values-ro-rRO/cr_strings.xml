@@ -19,28 +19,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">Incarcare Dash (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> până este plină bateria)</string>
     <string name="keyguard_plugged_in_dash_charging">Incarcare Dash</string>
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Ecranul este inregistrat</string>
-    <string name="screenrecord_notif_final_ticker">Ecran înregistrat cu succes</string>
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Înregistrare ecran</string>
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Oprește</string>
-    <string name="screenrecord_notif_completed">Ecran înregistrat cu succes</string>
-    <string name="screenrecord_notif_duration">Total:</string>
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">Arată indicatorul</string>
-    <string name="screenrecord_notif_pointer_off">Ascunde indicatorul</string>
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Imposibil de inregistrat ecranul</string>
-    <string name="notification_channel_screenrecord">Înregistrări ecran</string>
-    <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Înregistrare Ecran</string>
-    <string name="quick_settings_screenrecord_lq_label">Calitate scăzută</string>
-    <string name="quick_settings_screenrecord_mq_label">Calitate medie</string>
-    <string name="quick_settings_screenrecord_hq_label">Calitate înaltă</string>
-    <string name="screenrecord_hide_hint">Ascunde indiciile</string>
-    <string name="screenrecord_show_hint">Afiseaza indiciile</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Captură ecran</string>
     <string name="quick_settings_region_screenshot_label">Captură parțială de ecran</string>
@@ -210,10 +188,10 @@
     <string name="text_clock_m_fifty_nine">Cincizeci și Nouă</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Modul \"o singură mână\"</string>
-    <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
     <string name="recents_free_ram">Memorie liberă: %1$d MB</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">Repornire</string>
     <string name="quick_settings_reboot_recovery_label">Recuperare</string>
