@@ -19,28 +19,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">Dash Şarj oluyor (tam dolmasına <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> kaldı)</string>
     <string name="keyguard_plugged_in_dash_charging">Dash Şarj oluyor</string>
-    <!-- Screenrecord Notification Ticker -->
-    <string name="screenrecord_notif_ticker">Ekran kaydediliyor</string>
-    <string name="screenrecord_notif_final_ticker">Ekran başarıyla kaydedildi</string>
-    <!-- Screenrecord notification title -->
-    <string name="screenrecord_notif_title">Ekran kaydediliyor</string>
-    <!-- Screenrecord notification action: Stop -->
-    <string name="screenrecord_notif_stop">Durdur</string>
-    <string name="screenrecord_notif_completed">Ekran başarıyla kaydedildi</string>
-    <string name="screenrecord_notif_duration">Toplam:</string>
-    <!-- Screenrecord notification action: show/hide pointer -->
-    <string name="screenrecord_notif_pointer_on">İşaretçiyi göster</string>
-    <string name="screenrecord_notif_pointer_off">İşaretçiyi gizle</string>
-    <!-- Screen record notification error title -->
-    <string name="screenrecord_notif_error">Ekran kaydedilemiyor</string>
-    <string name="notification_channel_screenrecord">Ekran kayıtları</string>
-    <!-- Screenrecord QS tile -->
-    <string name="quick_settings_screenrecord_label">Ekran kaydı</string>
-    <string name="quick_settings_screenrecord_lq_label">Düşük kalite</string>
-    <string name="quick_settings_screenrecord_mq_label">Orta kalite</string>
-    <string name="quick_settings_screenrecord_hq_label">Yüksek kalite</string>
-    <string name="screenrecord_hide_hint">İpuçlarını gizle</string>
-    <string name="screenrecord_show_hint">İpuçlarını göster</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Ekran görüntüsü</string>
     <string name="quick_settings_region_screenshot_label">Kısmi ekran görüntüsü</string>
@@ -209,10 +187,10 @@
     <string name="text_clock_m_fifty_nine">Elli dokuz</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Tek el modu</string>
-    <!-- VPN icon -->
-    <string name="status_bar_vpn">VPN</string>
     <!-- Free ram -->
     <string name="recents_free_ram">Boş RAM: %1$d MB</string>
+    <!-- VPN icon -->
+    <string name="status_bar_vpn">VPN</string>
     <!-- Reboot/Recovery/PowerOff QS Tile -->
     <string name="quick_settings_reboot_label">Yeniden başlat</string>
     <string name="quick_settings_reboot_recovery_label">Kurtarma modu (Recovery)</string>
