@@ -21,4 +21,7 @@
 
     <!-- Whether device has warp charging support -->
     <bool name="config_hasWarpCharger">false</bool>
+
+    <!-- Whether device ignores the RSSNR signal implementation -->
+    <bool name="config_ignoreRssnrSignalLevel">false</bool>
 </resources>
