@@ -123,21 +123,21 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
 
     public static final String STATUS_BAR_CLOCK_SECONDS =
             "system:" + Settings.System.STATUS_BAR_CLOCK_SECONDS;
-    private static final String STATUS_BAR_AM_PM =
+    public static final String STATUS_BAR_AM_PM =
             "lineagesystem:" + LineageSettings.System.STATUS_BAR_AM_PM;
     public static final String STATUS_BAR_CLOCK_DATE_DISPLAY =
             "system:" + Settings.System.STATUS_BAR_CLOCK_DATE_DISPLAY;
     public static final String STATUS_BAR_CLOCK_DATE_STYLE =
             "system:" + Settings.System.STATUS_BAR_CLOCK_DATE_STYLE;
-    private static final String STATUS_BAR_CLOCK_DATE_POSITION =
+    public static final String STATUS_BAR_CLOCK_DATE_POSITION =
             "system:" + Settings.System.STATUS_BAR_CLOCK_DATE_POSITION;
-    private static final String STATUS_BAR_CLOCK_DATE_FORMAT =
+    public static final String STATUS_BAR_CLOCK_DATE_FORMAT =
             "system:" + Settings.System.STATUS_BAR_CLOCK_DATE_FORMAT;
-    private static final String STATUS_BAR_CLOCK_AUTO_HIDE =
+    public static final String STATUS_BAR_CLOCK_AUTO_HIDE =
             "system:" + Settings.System.STATUS_BAR_CLOCK_AUTO_HIDE;
-    private static final String STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION =
+    public static final String STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION =
             "system:" + Settings.System.STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION;
-    private static final String STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION =
+    public static final String STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION =
             "system:" + Settings.System.STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION;
 
     /**
@@ -366,28 +366,20 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                 updateShowSeconds();
                 break;
             case STATUS_BAR_AM_PM:
-                mAmPmStyle = AM_PM_STYLE_GONE;
-                try {
-                    mAmPmStyle = Integer.valueOf(newValue);
-                } catch (NumberFormatException ex) {}
+                mAmPmStyle =
+                        TunerService.parseInteger(newValue, AM_PM_STYLE_GONE);
                 break;
             case STATUS_BAR_CLOCK_DATE_DISPLAY:
-                mClockDateDisplay = CLOCK_DATE_DISPLAY_GONE;
-                try {
-                    mClockDateDisplay = Integer.valueOf(newValue);
-                } catch (NumberFormatException ex) {}
+                mClockDateDisplay =
+                        TunerService.parseInteger(newValue, CLOCK_DATE_DISPLAY_GONE);
                 break;
             case STATUS_BAR_CLOCK_DATE_STYLE:
-                mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
-                try {
-                    mClockDateStyle = Integer.valueOf(newValue);
-                } catch (NumberFormatException ex) {}
+                mClockDateStyle =
+                        TunerService.parseInteger(newValue, CLOCK_DATE_STYLE_REGULAR);
                 break;
             case STATUS_BAR_CLOCK_DATE_POSITION:
-                mClockDatePosition = STYLE_DATE_LEFT;
-                try {
-                    mClockDatePosition = Integer.valueOf(newValue);
-                } catch (NumberFormatException ex) {}
+                mClockDatePosition =
+                        TunerService.parseInteger(newValue, STYLE_DATE_LEFT);
                 break;
             case STATUS_BAR_CLOCK_DATE_FORMAT:
                 mClockDateFormat = newValue;
@@ -398,11 +390,11 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                 break;
             case STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION:
                 mHideDuration =
-                        newValue == null ? HIDE_DURATION : Integer.parseInt(newValue);
+                        TunerService.parseInteger(newValue, HIDE_DURATION);
                 break;
             case STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION:
                 mShowDuration =
-                        newValue == null ? SHOW_DURATION : Integer.parseInt(newValue);
+                        TunerService.parseInteger(newValue, SHOW_DURATION);
                 break;
             default:
                 break;
