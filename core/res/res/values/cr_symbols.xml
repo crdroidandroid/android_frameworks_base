@@ -109,4 +109,7 @@
   <java-symbol type="id" name="aerr_copy" />
   <java-symbol type="string" name="url_copy_success" />
   <java-symbol type="string" name="url_copy_failed" />
+
+  <!-- Whether device ignores the RSSNR signal implementation -->
+  <java-symbol type="bool" name="config_ignoreRssnrSignalLevel" />
 </resources>
