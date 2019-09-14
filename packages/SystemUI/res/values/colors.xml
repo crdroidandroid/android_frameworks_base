@@ -149,6 +149,12 @@
     <color name="overlay_button_ripple">#1f000000</color>
     <color name="overlay_background_protection_start">#40000000</color> <!-- 25% black -->
 
+    <!-- Color for the Assistant invocation lights -->
+    <color name="edge_light_blue">#ff4185f4</color>
+    <color name="edge_light_green">#ff3aa853</color>
+    <color name="edge_light_red">#ffea4234</color>
+    <color name="edge_light_yellow">#fffbbc06</color>
+
     <!-- GM2 colors -->
     <color name="GM2_grey_100">#F1F3F4</color>
     <color name="GM2_grey_200">#E8EAED</color>
