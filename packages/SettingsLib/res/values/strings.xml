@@ -1180,4 +1180,7 @@
 
     <!-- Name of the this device. [CHAR LIMIT=30] -->
     <string name="media_transfer_this_device_name">This device</string>
+
+    <!-- Deep sleep info -->
+    <string name="status_deep_sleep">(Deep sleep: %1$d%2$s)</string>
 </resources>
