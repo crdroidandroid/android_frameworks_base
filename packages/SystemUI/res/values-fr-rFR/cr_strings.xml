@@ -108,8 +108,8 @@
     <string name="ambientmusic_songinfo">%s par %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Il est</annotation>\"\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Il est</annotation>\"\n^1\n^2</item>
     </plurals>
     <!-- Q Clock - Hour -->
     <string name="text_clock_h_one">Un</string>
@@ -125,7 +125,7 @@
     <string name="text_clock_h_eleven">Onze</string>
     <string name="text_clock_h_twelve">Douze</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">O’Clock</string>
+    <string name="text_clock_m_zero">Horloge</string>
     <string name="text_clock_m_one">Une</string>
     <string name="text_clock_m_two">Deux</string>
     <string name="text_clock_m_three">Trois</string>
@@ -177,14 +177,14 @@
     <string name="text_clock_m_forty_nine">Quarante Neuf</string>
     <string name="text_clock_m_fifty">Cinquante</string>
     <string name="text_clock_m_fifty_one">Cinquante et un</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_fifty_two">Cinquante-deux</string>
+    <string name="text_clock_m_fifty_three">Cinquante-trois</string>
+    <string name="text_clock_m_fifty_four">Cinquante-quatre</string>
+    <string name="text_clock_m_fifty_five">Cinquante-cinq</string>
+    <string name="text_clock_m_fifty_six">Cinquante-six</string>
+    <string name="text_clock_m_fifty_seven">Cinquante-sept</string>
+    <string name="text_clock_m_fifty_eight">Cinquante-huit</string>
+    <string name="text_clock_m_fifty_nine">Cinquante-neuf</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Mode une main</string>
     <!-- Free ram -->
@@ -203,6 +203,6 @@
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Mode jeu activé.</string>
     <!-- Font Tile -->
-    <string name="quick_settings_font_label">Fonts</string>
-    <string name="quick_settings_font_detail_label">Select a font</string>
+    <string name="quick_settings_font_label">Polices</string>
+    <string name="quick_settings_font_detail_label">Sélectionner la police</string>
 </resources>
