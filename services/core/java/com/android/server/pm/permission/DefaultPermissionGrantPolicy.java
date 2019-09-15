@@ -1002,6 +1002,14 @@ public final class DefaultPermissionGrantPolicy {
             grantRuntimePermissions(googleSoundPackage, STORAGE_PERMISSIONS, true, userId);
         }
 
+        // crDroid Home
+        PackageParser.Package crDroidHome = getSystemPackage("ch.deletescape.lawnchair.crdroid");
+        if (crDroidHome != null) {
+            grantRuntimePermissions(crDroidHome, STORAGE_PERMISSIONS, true, userId);
+            grantRuntimePermissions(crDroidHome, PHONE_PERMISSIONS, userId);
+            grantRuntimePermissions(crDroidHome, LOCATION_PERMISSIONS, userId);
+        }
+
         if (mPermissionGrantedCallback != null) {
             mPermissionGrantedCallback.onDefaultRuntimePermissionsGranted(userId);
         }
