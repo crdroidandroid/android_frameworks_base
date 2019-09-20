@@ -786,6 +786,10 @@ public final class DefaultPermissionGrantPolicy {
         // Google Play Store
         grantSystemFixedPermissionsToSystemPackage("com.android.vending", userId, CONTACTS_PERMISSIONS,
                 PHONE_PERMISSIONS, ALWAYS_LOCATION_PERMISSIONS, SMS_PERMISSIONS, STORAGE_PERMISSIONS);
+
+        // Project Fi
+        grantSystemFixedPermissionsToSystemPackage("com.google.android.apps.tycho", userId, CONTACTS_PERMISSIONS,
+                PHONE_PERMISSIONS, MICROPHONE_PERMISSIONS, ALWAYS_LOCATION_PERMISSIONS, SMS_PERMISSIONS);
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(String category, int userId) {
