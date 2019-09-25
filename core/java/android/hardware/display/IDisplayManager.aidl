@@ -116,4 +116,6 @@ interface IDisplayManager {
 
     // Get the minimum brightness curve.
     Curve getMinimumBrightnessCurve();
+
+    void requestScreenMode(int i);
 }
