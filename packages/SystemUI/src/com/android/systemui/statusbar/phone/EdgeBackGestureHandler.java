@@ -36,6 +36,8 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.MathUtils;
 import android.util.StatsLog;
@@ -148,6 +150,8 @@ public class EdgeBackGestureHandler implements DisplayListener, TunerService.Tun
     private int mRightInset;
     private float mLongSwipeWidth;
 
+    private int mEdgeHeight;
+
     public EdgeBackGestureHandler(Context context, OverviewProxyService overviewProxyService) {
         final Resources res = context.getResources();
         mContext = context;
@@ -179,6 +183,28 @@ public class EdgeBackGestureHandler implements DisplayListener, TunerService.Tun
                 com.android.internal.R.dimen.navigation_bar_gesture_height);
     }
 
+    private void updateEdgeHeightValue() {
+        if (mDisplaySize == null) {
+            return;
+        }
+        int edgeHeightSetting = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.BACK_GESTURE_HEIGHT, 0, UserHandle.USER_CURRENT);
+        // edgeHeigthSettings cant be range 0 - 3
+        // 0 means full height
+        // 1 measns half of the screen
+        // 2 means lower third of the screen
+        // 3 means lower sicth of the screen
+        if (edgeHeightSetting == 0) {
+            mEdgeHeight = mDisplaySize.y;
+        } else if (edgeHeightSetting == 1) {
+            mEdgeHeight = mDisplaySize.y / 2;
+        } else if (edgeHeightSetting == 2) {
+            mEdgeHeight = mDisplaySize.y / 3;
+        } else {
+            mEdgeHeight = mDisplaySize.y / 6;
+        }
+    }
+
     /**
      * @see NavigationBarView#onAttachedToWindow()
      */
@@ -205,6 +231,10 @@ public class EdgeBackGestureHandler implements DisplayListener, TunerService.Tun
         mIsInTransientImmersiveStickyState =
                 (systemUiVisibility & SYSTEM_UI_FLAG_IMMERSIVE_STICKY) != 0
                 && (systemUiVisibility & NAVIGATION_BAR_TRANSIENT) != 0;
+    }
+
+    public void onSettingsChanged() {
+        updateEdgeHeightValue();
     }
 
     private void disposeInputChannel() {
@@ -306,6 +336,10 @@ public class EdgeBackGestureHandler implements DisplayListener, TunerService.Tun
     }
 
     private boolean isWithinTouchRegion(int x, int y) {
+        if (mEdgeHeight > 0 && y < mDisplaySize.y - mNavBarHeight - mEdgeHeight) {
+                return false;
+        }
+        
         // Disallow if too far from the edge
         if (x > mEdgeWidth + mLeftInset && x < (mDisplaySize.x - mEdgeWidth - mRightInset)) {
             return false;
@@ -477,6 +511,7 @@ public class EdgeBackGestureHandler implements DisplayListener, TunerService.Tun
     private void updateDisplaySize() {
         mContext.getDisplay().getRealSize(mDisplaySize);
         updateLongSwipeWidth();
+        updateEdgeHeightValue();
     }
 
     @Override
