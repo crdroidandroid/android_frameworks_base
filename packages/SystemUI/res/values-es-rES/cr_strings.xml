@@ -108,8 +108,8 @@
     <string name="ambientmusic_songinfo">%s por %s</string>
     <!-- Q Clock -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">Son</annotation>\"\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Son</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Son</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Q Clock - Hour -->
     <string name="text_clock_h_one">Una</string>
@@ -230,6 +230,6 @@ Y Nueve</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Modo de juego activado.</string>
     <!-- Font Tile -->
-    <string name="quick_settings_font_label">Fonts</string>
-    <string name="quick_settings_font_detail_label">Select a font</string>
+    <string name="quick_settings_font_label">Fuentes</string>
+    <string name="quick_settings_font_detail_label">Elegir fuente</string>
 </resources>
