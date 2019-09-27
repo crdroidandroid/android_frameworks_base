@@ -433,6 +433,15 @@
             </intent-filter>
         </receiver>
 
+        <service android:name="com.android.systemui.CPUInfoService"
+                android:exported="true" />
+
+        <receiver android:name=".BootReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <service android:name=".wallpapers.ImageWallpaper"
                 android:singleUser="true"
                 android:permission="android.permission.BIND_WALLPAPER"
