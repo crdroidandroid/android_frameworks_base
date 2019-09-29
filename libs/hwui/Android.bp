@@ -62,12 +62,8 @@ cc_defaults {
         "external/skia/src/core",
     ],
 
-    product_variables: {
-        eng: {
-            lto: {
-                never: true,
-            },
-        },
+    lto: {
+        thin: true,
     },
 
     target: {
