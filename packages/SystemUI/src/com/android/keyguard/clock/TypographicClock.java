@@ -41,12 +41,15 @@ public class TypographicClock extends TextView {
     private static final String ANNOTATION_COLOR = "color";
 
     private final Resources mResources;
-    private final String[] mHours;
+    private String[] mHours;
     private final String[] mMinutes;
     private int mAccentColor;
+    private int hour;
     private final Calendar mTime = Calendar.getInstance(TimeZone.getDefault());
     private String mDescFormat;
     private TimeZone mTimeZone;
+
+    private boolean h24;
 
     public TypographicClock(Context context) {
         this(context, null);
@@ -60,7 +63,9 @@ public class TypographicClock extends TextView {
         super(context, attrs, defStyleAttr);
         mDescFormat = ((SimpleDateFormat) DateFormat.getTimeFormat(context)).toLocalizedPattern();
         mResources = context.getResources();
-        mHours = mResources.getStringArray(R.array.type_clock_hours);
+        h24 = DateFormat.is24HourFormat(getContext());
+        if (!h24) mHours = mResources.getStringArray(R.array.type_clock_hours_12);
+            else mHours = mResources.getStringArray(R.array.type_clock_hours_24);
         mMinutes = mResources.getStringArray(R.array.type_clock_minutes);
         mAccentColor = mResources.getColor(R.color.typeClockAccentColor, null);
     }
@@ -69,15 +74,20 @@ public class TypographicClock extends TextView {
      * Call when the time changes to update the text of the time.
      */
     public void onTimeChanged() {
+        h24 = DateFormat.is24HourFormat(getContext());
         mTime.setTimeInMillis(System.currentTimeMillis());
         setContentDescription(DateFormat.format(mDescFormat, mTime));
-        final int hour = mTime.get(Calendar.HOUR) % 12;
+        if (!h24) {
+             mHours = mResources.getStringArray(R.array.type_clock_hours_12);
+             hour = mTime.get(Calendar.HOUR) % 12;
+        } else {
+             mHours = mResources.getStringArray(R.array.type_clock_hours_24);
+             hour = mTime.get(Calendar.HOUR_OF_DAY);
+        }
         final int minute = mTime.get(Calendar.MINUTE) % 60;
 
-        // Get the quantity based on the hour for languages like Portuguese and Czech.
         SpannedString typeTemplate = (SpannedString) mResources.getQuantityText(
                 R.plurals.type_clock_header, hour);
-
         // Find the "color" annotation and set the foreground color to the accent color.
         Annotation[] annotations = typeTemplate.getSpans(0, typeTemplate.length(),
                 Annotation.class);

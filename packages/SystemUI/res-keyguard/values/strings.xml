@@ -425,7 +425,7 @@ number">%d</xliff:g> remaining attempts before SIM becomes permanently unusable.
     </plurals>
 
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string-array name="type_clock_hours">
+    <string-array name="type_clock_hours_12">
         <item>Twelve</item>
         <item>One</item>
         <item>Two</item>
@@ -438,6 +438,33 @@ number">%d</xliff:g> remaining attempts before SIM becomes permanently unusable.
         <item>Nine</item>
         <item>Ten</item>
         <item>Eleven</item>
+    </string-array>
+
+    <string-array name="type_clock_hours_24">
+        <item>O</item>
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
+        <item>Eleven</item>
+        <item>Twelve</item>
+        <item>Thirteen</item>
+        <item>Fourteen</item>
+        <item>Fiveteen</item>
+        <item>Sixteen</item>
+        <item>Seventeen</item>
+        <item>Eighteen</item>
+        <item>Nineteen</item>
+        <item>Twenty</item>
+        <item>Twenty One</item>
+        <item>Twenty Two</item>
+        <item>Twenty Three</item>
     </string-array>
 
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
