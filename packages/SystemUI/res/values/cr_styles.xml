@@ -66,4 +66,9 @@
         <item name="android:fontFamily">google-sans-flex</item>
         <item name="android:lineHeight">@dimen/weather_dream_overlay_complication_line_height</item>
     </style>
+
+    <!-- Tri-state UI -->
+    <style name="qs_theme" parent="Theme.SystemUI.QuickSettings">
+        <item name="android:windowIsFloating">true</item>
+    </style>
 </resources>

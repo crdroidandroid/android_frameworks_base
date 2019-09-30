@@ -30,11 +30,14 @@ import com.android.settingslib.applications.InterestingConfigChanges;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.demomode.DemoMode;
 import com.android.systemui.demomode.DemoModeController;
+import com.android.systemui.tristate.TriStateUiController;
+import com.android.systemui.tristate.TriStateUiControllerImpl;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.PluginDependencyProvider;
 import com.android.systemui.plugins.VolumeDialog;
 import com.android.systemui.plugins.VolumeDialogController;
+import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.ExtensionController;
 import com.android.systemui.tuner.TunerService;
 
@@ -49,7 +52,7 @@ import javax.inject.Inject;
  */
 @SysUISingleton
 public class VolumeDialogComponent implements VolumeComponent, TunerService.Tunable,
-        VolumeDialogControllerImpl.UserActivityListener{
+        VolumeDialogControllerImpl.UserActivityListener, TriStateUiController.UserActivityListener {
 
     public static final String VOLUME_DOWN_SILENT = "sysui_volume_down_silent";
     public static final String VOLUME_UP_SILENT = "sysui_volume_up_silent";
@@ -66,6 +69,7 @@ public class VolumeDialogComponent implements VolumeComponent, TunerService.Tuna
 
     protected final Context mContext;
     private final VolumeDialogControllerImpl mController;
+    private TriStateUiControllerImpl mTriStateController;
     private final InterestingConfigChanges mConfigChanges = new InterestingConfigChanges(
             ActivityInfo.CONFIG_FONT_SCALE | ActivityInfo.CONFIG_LOCALE
             | ActivityInfo.CONFIG_ASSETS_PATHS | ActivityInfo.CONFIG_UI_MODE);
@@ -80,6 +84,7 @@ public class VolumeDialogComponent implements VolumeComponent, TunerService.Tuna
             KeyguardViewMediator keyguardViewMediator,
             ActivityStarter activityStarter,
             VolumeDialogControllerImpl volumeDialogController,
+            ConfigurationController configurationController,
             DemoModeController demoModeController,
             PluginDependencyProvider pluginDependencyProvider,
             ExtensionController extensionController,
@@ -90,6 +95,8 @@ public class VolumeDialogComponent implements VolumeComponent, TunerService.Tuna
         mActivityStarter = activityStarter;
         mController = volumeDialogController;
         mController.setUserActivityListener(this);
+        boolean hasAlertSlider = mContext.getResources().
+                getBoolean(com.android.internal.R.bool.config_hasAlertSlider);
         // Allow plugins to reference the VolumeDialogController.
         pluginDependencyProvider.allowPluginDependency(VolumeDialogController.class);
         extensionController.newExtension(VolumeDialog.class)
@@ -101,6 +108,14 @@ public class VolumeDialogComponent implements VolumeComponent, TunerService.Tuna
                     }
                     mDialog = dialog;
                     mDialog.init(LayoutParams.TYPE_VOLUME_OVERLAY, mVolumeDialogCallback);
+                    if (hasAlertSlider) {
+                        if (mTriStateController != null) {
+                            mTriStateController.destroy();
+                        }
+                        mTriStateController = new TriStateUiControllerImpl(mContext,
+                            volumeDialogController, configurationController, tunerService);
+                        mTriStateController.init(LayoutParams.TYPE_VOLUME_OVERLAY, this);
+                    }
                 }).build();
 
 
@@ -199,6 +214,11 @@ public class VolumeDialogComponent implements VolumeComponent, TunerService.Tuna
 
     private void startSettings(Intent intent) {
         mActivityStarter.startActivity(intent, true /* onlyProvisioned */, true /* dismissShade */);
+    }
+
+    @Override
+    public void onTriStateUserActivity() {
+        onUserActivity();
     }
 
     private final VolumeDialogImpl.Callback mVolumeDialogCallback = new VolumeDialogImpl.Callback() {
