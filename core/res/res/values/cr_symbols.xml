@@ -160,4 +160,10 @@
 
   <!-- Device has OnePlus haptic motor -->
   <java-symbol type="bool" name="config_hasOnePlusHapticMotor" />
+
+  <!-- Whether device has physical tri state switch -->
+  <java-symbol type="bool" name="config_hasAlertSlider" />
+
+  <!-- The location of the devices physical tri state switch -->
+  <java-symbol type="integer" name="config_alertSliderLocation" />
 </resources>
