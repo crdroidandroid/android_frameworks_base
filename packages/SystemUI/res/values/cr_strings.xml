@@ -231,4 +231,13 @@
     <string name="screenrecord_taps_title">Show touches on screen</string>
     <string name="screenrecord_stopdot_title">Show stop dot</string>
     <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Data saver</string>
+
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Roaming</string>
 </resources>
