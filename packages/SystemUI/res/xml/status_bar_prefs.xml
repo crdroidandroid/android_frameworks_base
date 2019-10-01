@@ -99,6 +99,14 @@
         android:key="camera"
         android:title="@string/status_bar_camera" />
 
+    <com.android.systemui.tuner.StatusBarSwitch
+        android:key="vpn"
+        android:title="@string/status_bar_vpn" />
+
+    <com.android.systemui.tuner.StatusBarSwitch
+        android:key="data_saver"
+        android:title="@string/status_bar_data_saver" />
+
     <!-- secure -->
 
     <com.android.systemui.tuner.TunerSwitch
