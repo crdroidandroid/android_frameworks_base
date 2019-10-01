@@ -46,6 +46,10 @@
         android:key="bluetooth"
         android:title="@string/quick_settings_bluetooth_label" />
 
+    <com.android.systemui.tuner.StatusBarSwitch
+        android:key="data_saver"
+        android:title="@string/status_bar_data_saver" />
+
     <!-- nfc -->
     <!-- tty -->
     <!-- speakerphone -->
@@ -66,8 +70,16 @@
         android:title="@string/status_bar_nfc" />
 
     <com.android.systemui.tuner.StatusBarSwitch
+        android:key="roaming"
+        android:title="@string/status_bar_roaming" />
+
+    <com.android.systemui.tuner.StatusBarSwitch
         android:key="volume"
         android:title="@*android:string/volume_unknown" />
+
+    <com.android.systemui.tuner.StatusBarSwitch
+        android:key="vpn"
+        android:title="@string/status_bar_vpn" />
 
     <com.android.systemui.tuner.StatusBarSwitch
         android:key="wifi"
