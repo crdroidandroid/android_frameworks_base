@@ -58,6 +58,7 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
     private boolean mBlockEthernet;
     private boolean mActivityEnabled;
     private boolean mForceBlockWifi;
+    private boolean mBlockVpn;
 
     // Track as little state as possible, and only for padding purposes
     private boolean mIsAirplaneMode = false;
@@ -92,7 +93,7 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
     }
 
     private void updateVpn() {
-        boolean vpnVisible = mSecurityController.isVpnEnabled();
+        boolean vpnVisible = mSecurityController.isVpnEnabled() && !mBlockVpn;
         int vpnIconId = currentVpnIconId(mSecurityController.isVpnBranded());
 
         mIconController.setIcon(mSlotVpn, vpnIconId,
@@ -122,16 +123,20 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
         boolean blockMobile = blockList.contains(mSlotMobile);
         boolean blockWifi = blockList.contains(mSlotWifi);
         boolean blockEthernet = blockList.contains(mSlotEthernet);
+        boolean blockVpn = blockList.contains(mSlotVpn);
 
         if (blockAirplane != mBlockAirplane || blockMobile != mBlockMobile
-                || blockEthernet != mBlockEthernet || blockWifi != mBlockWifi) {
+                || blockEthernet != mBlockEthernet || blockWifi != mBlockWifi
+                || blockVpn != mBlockVpn) {
             mBlockAirplane = blockAirplane;
             mBlockMobile = blockMobile;
             mBlockEthernet = blockEthernet;
+            mBlockVpn = blockVpn;
             mBlockWifi = blockWifi || mForceBlockWifi;
             // Re-register to get new callbacks.
             mNetworkController.removeCallback(this);
             mNetworkController.addCallback(this);
+            updateVpn();
         }
     }
 
