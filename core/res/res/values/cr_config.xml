@@ -90,4 +90,7 @@
         <item>com.google.android.apps.wellbeing</item>
         <!-- <item>more packages</item>-->
     </string-array>
+
+    <!-- -1 means use same as config_screenBrightnessDoze -->
+    <integer name="config_screenBrightnessPulse">-1</integer>
 </resources>
