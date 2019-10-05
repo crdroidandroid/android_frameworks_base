@@ -61,4 +61,7 @@
     <!-- FOD recognizing animation -->
     <dimen name="fod_animation_size">280dp</dimen>
     <dimen name="fod_animation_offset">0dp</dimen>
+
+    <!-- Bottom margin size when fingerprint in display is active -->
+    <dimen name="keyguard_indication_margin_bottom_fingerprint_in_display">30dp</dimen>
 </resources>
