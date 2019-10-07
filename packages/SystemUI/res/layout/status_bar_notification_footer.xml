@@ -31,7 +31,7 @@
             android:id="@+id/manage_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
+            android:layout_gravity="end"
             android:focusable="true"
             android:contentDescription="@string/accessibility_manage_notification"
             android:text="@string/manage_notifications_text"
@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:focusable="true"
+            android:visibility="gone"
             android:contentDescription="@string/accessibility_clear_all"
             android:text="@string/clear_all_notifications_text"
             android:textColor="?attr/wallpaperTextColor"/>
