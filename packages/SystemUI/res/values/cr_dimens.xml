@@ -113,4 +113,10 @@
 
     <!-- Weather condition icon  -->
     <dimen name="weather_icon_size">24dp</dimen>
+
+    <!-- Clear all notifications button -->
+    <dimen name="dismiss_all_button_elevation">10dp</dimen>
+    <dimen name="dismiss_all_button_height_width">58dp</dimen>
+    <dimen name="dismiss_all_button_margin_bottom">35dp</dimen>
+    <dimen name="dismiss_all_fab_src_size">30dp</dimen>
 </resources>
