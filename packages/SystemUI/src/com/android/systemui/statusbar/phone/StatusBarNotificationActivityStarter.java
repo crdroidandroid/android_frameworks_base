@@ -351,8 +351,6 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
             }
         }
         mIsCollapsingToShowActivityOverLockscreen = false;
-        if (!shouldCollapse()) mMainThreadHandler.post(() ->
-                mNotificationPanel.onNotificationClick());
     }
 
     private void expandBubbleStackOnMainThread(String notificationKey) {
