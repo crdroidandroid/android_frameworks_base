@@ -5463,7 +5463,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
     }
 
     @ShadeViewRefactor(RefactorComponent.SHADE_VIEW)
-    private void clearNotifications(
+    public void clearNotifications(
             @SelectedRows int selection,
             boolean closeShade) {
         // animate-swipe all dismissable notifications, then animate the shade closed
@@ -5608,10 +5608,6 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
     protected void inflateFooterView() {
         FooterView footerView = (FooterView) LayoutInflater.from(mContext).inflate(
                 R.layout.status_bar_notification_footer, this, false);
-        footerView.setDismissButtonClickListener(v -> {
-            mMetricsLogger.action(MetricsEvent.ACTION_DISMISS_ALL_NOTES);
-            clearNotifications(ROWS_ALL, true /* closeShade */);
-        });
         footerView.setManageButtonClickListener(this::manageNotifications);
         setFooterView(footerView);
     }
