@@ -165,6 +165,7 @@ android_library {
         "androidx.activity_activity-compose",
         "androidx.compose.animation_animation-graphics",
         "vendor.lineage.powershare-V1.0-java",
+        "FadingEdgeLayoutLib",
     ],
     libs: [
         "keepanno-annotations",
