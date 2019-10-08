@@ -22,7 +22,7 @@ import static com.android.systemui.navigationbar.NavigationBarInflaterView.MENU_
 import static com.android.systemui.navigationbar.NavigationBarInflaterView.NAVSPACE;
 import static com.android.systemui.navigationbar.NavigationBarInflaterView.NAV_BAR_LEFT;
 import static com.android.systemui.navigationbar.NavigationBarInflaterView.NAV_BAR_RIGHT;
-import static com.android.systemui.navigationbar.NavigationBarInflaterView.NAV_BAR_VIEWS;
+import static com.android.systemui.navigationbar.NavigationBarInflaterView.NAVBAR_LAYOUT_VIEWS;
 import static com.android.systemui.navigationbar.NavigationBarInflaterView.extractButton;
 import static com.android.systemui.navigationbar.NavigationBarInflaterView.extractImage;
 import static com.android.systemui.navigationbar.NavigationBarInflaterView.extractKeycode;
@@ -112,11 +112,11 @@ public class NavBarTuner extends TunerPreferenceFragment {
                 val = "default";
             }
             preference.setValue(val);
-        }), NAV_BAR_VIEWS);
+        }), NAVBAR_LAYOUT_VIEWS);
         preference.setOnPreferenceChangeListener((preference1, newValue) -> {
             String val = (String) newValue;
             if ("default".equals(val)) val = null;
-            Dependency.get(TunerService.class).setValue(NAV_BAR_VIEWS, val);
+            Dependency.get(TunerService.class).setValue(NAVBAR_LAYOUT_VIEWS, val);
             return true;
         });
     }
