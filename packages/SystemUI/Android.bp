@@ -541,6 +541,7 @@ android_library {
         "displaylib",
         "aconfig_settings_flags_lib",
         "vendor.lineage.powershare-V1-java",
+        "FadingEdgeLayoutLib",
     ],
     libs: [
         "keepanno-annotations",
