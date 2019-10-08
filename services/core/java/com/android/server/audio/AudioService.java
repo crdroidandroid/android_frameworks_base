@@ -4802,6 +4802,16 @@ public class AudioService extends IAudioService.Stub
         return UserHandle.USER_SYSTEM;
     }
 
+    private void sendVolumeChangedIntent(Intent intent, int streamType, int oldIndex, int index, Bundle bundle) {        
+        intent.putExtra(AudioManager.EXTRA_VOLUME_STREAM_VALUE, index);
+        intent.putExtra(AudioManager.EXTRA_PREV_VOLUME_STREAM_VALUE, oldIndex);
+        intent.putExtra(AudioManager.EXTRA_VOLUME_STREAM_TYPE_ALIAS,
+                mStreamVolumeAlias[streamType]);
+        AudioService.sVolumeLogger.enqueue(new VolChangedBroadcastEvent(
+                streamType, mStreamVolumeAlias[streamType], index));
+        sendBroadcastToAll(intent, bundle);
+    }
+
     // UI update and Broadcast Intent
     protected void sendVolumeUpdate(int streamType, int oldIndex, int index, int flags, int device)
     {
@@ -4811,6 +4821,20 @@ public class AudioService extends IAudioService.Stub
             flags &= ~AudioManager.FLAG_SHOW_UI;
         }
         mVolumeController.postVolumeChanged(streamType, flags);
+        if (mIsSingleVolume) {
+            if ((flags & AudioManager.FLAG_FIXED_VOLUME) == 0) {
+                oldIndex = (oldIndex + 5) / 10;
+                index = (index + 5) / 10;
+
+                // log base stream changes to the event log
+                if (mStreamVolumeAlias[streamType] == streamType) {
+                    EventLogTags.writeVolumeChanged(streamType, oldIndex, index,
+                            MAX_STREAM_VOLUME[streamType], "isSingleVolume=true");
+                }
+                Intent intent = new Intent(AudioManager.VOLUME_CHANGED_ACTION);
+                sendVolumeChangedIntent(intent, streamType, oldIndex, index, null);
+            }
+        }
     }
 
     // Don't show volume UI when:
@@ -8707,7 +8731,8 @@ public class AudioService extends IAudioService.Stub
                     }
                 }
             }
-            if (changed) {
+
+            if (changed && !mIsSingleVolume) {
                 // If associated to volume group, update group cache
                 updateVolumeGroupIndex(device, /* forceMuteState= */ false);
 
@@ -8724,13 +8749,7 @@ public class AudioService extends IAudioService.Stub
                 // fire changed intents for all streams, but only when the device it changed on
                 //  is the current device
                 if ((index != oldIndex) && isCurrentDevice) {
-                    mVolumeChanged.putExtra(AudioManager.EXTRA_VOLUME_STREAM_VALUE, index);
-                    mVolumeChanged.putExtra(AudioManager.EXTRA_PREV_VOLUME_STREAM_VALUE, oldIndex);
-                    mVolumeChanged.putExtra(AudioManager.EXTRA_VOLUME_STREAM_TYPE_ALIAS,
-                            mStreamVolumeAlias[mStreamType]);
-                    AudioService.sVolumeLogger.enqueue(new VolChangedBroadcastEvent(
-                            mStreamType, mStreamVolumeAlias[mStreamType], index));
-                    sendBroadcastToAll(mVolumeChanged, mVolumeChangedOptions);
+                    sendVolumeChangedIntent(mVolumeChanged, mStreamType, oldIndex, index, mVolumeChangedOptions);
                 }
             }
             return changed;
