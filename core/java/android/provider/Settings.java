@@ -10655,6 +10655,18 @@ public final class Settings {
         public static final String PULSE_SMOOTHING_ENABLED = "pulse_smoothing_enabled";
 
         /**
+         * Select from different navigation bar layouts
+         * @hide
+         */
+        public static final String NAVBAR_LAYOUT_VIEWS = "navbar_layout_views";
+
+        /**
+         * Inverse navigation bar layout
+         * @hide
+         */
+        public static final String NAVBAR_INVERSE_LAYOUT = "navbar_inverse_layout";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
