@@ -28,4 +28,8 @@
     <dimen name="qs_top_brightness_margin_bottom">8dp</dimen>
     <dimen name="qs_bottom_brightness_margin_top">8dp</dimen>
     <dimen name="qs_bottom_brightness_margin_bottom">4dp</dimen>
+
+    <!-- OmniStyle custom headers -->
+    <dimen name="qs_header_image_height">142dp</dimen>
+    <dimen name="qs_header_image_fade_size">80dp</dimen>
 </resources>
