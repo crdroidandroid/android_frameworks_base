@@ -576,6 +576,7 @@ android_library {
         "ax_compose",
         "axquicklook-client",
         "ax_platform_hooks",
+        "FadingEdgeLayoutLib",
     ],
     enable_ksp: true,
     annotation_processor_flags: [
