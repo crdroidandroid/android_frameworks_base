@@ -53,6 +53,8 @@ import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static android.os.Environment.DIRECTORY_MOVIES;
+
 /**
  * A service which records the device screen and optionally microphone input.
  */
@@ -224,9 +226,12 @@ public class RecordingService extends Service {
      */
     private void startRecording() {
         try {
-            mTempFile = File.createTempFile("temp", ".mp4");
-            Log.d(TAG, "Writing video output to: " + mTempFile.getAbsolutePath());
-
+            try {
+                mTempFile = File.createTempFile("temp", ".mp4");
+                Log.d(TAG, "Writing video output to: " + mTempFile.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             setTapsVisible(mShowTaps);
 
             // Set up media recorder
@@ -399,7 +404,7 @@ public class RecordingService extends Service {
     }
 
     private void saveRecording(NotificationManager notificationManager) {
-        String fileName = new SimpleDateFormat("'screen-'yyyyMMdd-HHmmss'.mp4'")
+        String fileName = new SimpleDateFormat("'screenrecord-'yyyyMMdd-HHmmss'.mp4'")
                 .format(new Date());
 
         ContentValues values = new ContentValues();
