@@ -4853,28 +4853,37 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (SCREEN_BRIGHTNESS_MODE.equals(key)) {
-            try {
-                mAutomaticBrightness = newValue != null && Integer.parseInt(newValue)
-                        == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
-            } catch (NumberFormatException ex) {}
-        } else if (STATUS_BAR_BRIGHTNESS_CONTROL.equals(key)) {
-            mBrightnessControl = TunerService.parseIntegerSwitch(newValue, false);
-        } else if (FORCE_SHOW_NAVBAR.equals(key) && mDisplayId == Display.DEFAULT_DISPLAY &&
-                mWindowManagerService != null) {
-            boolean mNavbarVisible =
-                    TunerService.parseIntegerSwitch(newValue, Utils.hasNavbarByDefault(mContext));;
-            boolean hasNavbar = getNavigationBarView() != null;
-            if (mNavbarVisible) {
-                if (!hasNavbar) {
-                    mNavigationBarController.onDisplayReady(mDisplayId,
-                            mNavigationBarSystemUiVisibility);
+        switch (key) {
+            case SCREEN_BRIGHTNESS_MODE:
+                try {
+                    mAutomaticBrightness = newValue != null && Integer.parseInt(newValue)
+                            == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+                } catch (NumberFormatException ex) {}
+                break;
+            case STATUS_BAR_BRIGHTNESS_CONTROL:
+                mBrightnessControl =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                break;
+            case FORCE_SHOW_NAVBAR:
+                if (mDisplayId != Display.DEFAULT_DISPLAY ||
+                        mWindowManagerService == null)
+                    return;
+                boolean mNavbarVisible =
+                        TunerService.parseIntegerSwitch(newValue, Utils.hasNavbarByDefault(mContext));
+                boolean hasNavbar = getNavigationBarView() != null;
+                if (mNavbarVisible) {
+                    if (!hasNavbar) {
+                        mNavigationBarController.onDisplayReady(mDisplayId,
+                                mNavigationBarSystemUiVisibility);
+                    }
+                } else {
+                    if (hasNavbar) {
+                        mNavigationBarController.onDisplayRemoved(mDisplayId);
+                    }
                 }
-            } else {
-                if (hasNavbar) {
-                    mNavigationBarController.onDisplayRemoved(mDisplayId);
-                }
-            }
+                break;
+            default:
+                break;
         }
     }
     // End Extra BaseStatusBarMethods.
