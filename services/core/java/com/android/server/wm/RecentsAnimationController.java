@@ -455,7 +455,7 @@ public class RecentsAnimationController implements DeathRecipient {
                 mService.getStableInsets(mDisplayId, mTmpRect);
                 contentInsets = mTmpRect;
             }
-            mRunner.onAnimationStart(mController, appTargets, contentInsets, minimizedHomeBounds);
+            if (mRunner != null) mRunner.onAnimationStart(mController, appTargets, contentInsets, minimizedHomeBounds);
             if (DEBUG_RECENTS_ANIMATIONS) {
                 Slog.d(TAG, "startAnimation(): Notify animation start:");
                 for (int i = 0; i < mPendingAnimations.size(); i++) {
@@ -500,10 +500,10 @@ public class RecentsAnimationController implements DeathRecipient {
                     // Screen shot previous task when next task starts transition.
                     final Task task = mPendingAnimations.get(0).mTask;
                     screenshotRecentTask(task, reorderMode, runSynchronously);
-                    mRunner.onAnimationCanceled(true /* deferredWithScreenshot */);
+                    if (mRunner != null) mRunner.onAnimationCanceled(true /* deferredWithScreenshot */);
                     return;
                 }
-                mRunner.onAnimationCanceled(false /* deferredWithScreenshot */);
+                if (mRunner != null) mRunner.onAnimationCanceled(false /* deferredWithScreenshot */);
             } catch (RemoteException e) {
                 Slog.e(TAG, "Failed to cancel recents animation", e);
             }
@@ -611,14 +611,14 @@ public class RecentsAnimationController implements DeathRecipient {
 
     private void linkToDeathOfRunner() throws RemoteException {
         if (!mLinkedToDeathOfRunner) {
-            mRunner.asBinder().linkToDeath(this, 0);
+            if (mRunner != null) mRunner.asBinder().linkToDeath(this, 0);
             mLinkedToDeathOfRunner = true;
         }
     }
 
     private void unlinkToDeathOfRunner() {
         if (mLinkedToDeathOfRunner) {
-            mRunner.asBinder().unlinkToDeath(this, 0);
+            if (mRunner != null) mRunner.asBinder().unlinkToDeath(this, 0);
             mLinkedToDeathOfRunner = false;
         }
     }
