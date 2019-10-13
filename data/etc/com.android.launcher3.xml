@@ -19,5 +19,8 @@
         <permission name="android.permission.BIND_APPWIDGET"/>
         <permission name="android.permission.CONTROL_REMOTE_APP_TRANSITION_ANIMATIONS"/>
         <permission name="android.permission.GET_ACCOUNTS_PRIVILEGED"/>
+        <permission name="android.permission.MANAGE_ACTIVITY_STACKS"/>
+        <permission name="android.permission.STATUS_BAR"/>
+        <permission name="android.permission.MANAGE_USERS"/>
     </privapp-permissions>
 </permissions>
