@@ -181,10 +181,10 @@
     <string name="text_clock_m_fifty_three">Fifty Three</string>
     <string name="text_clock_m_fifty_four">Fifty Four</string>
     <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_fifty_six">Cinquantasei</string>
+    <string name="text_clock_m_fifty_seven">Cinquantasette</string>
+    <string name="text_clock_m_fifty_eight">Cinquantotto</string>
+    <string name="text_clock_m_fifty_nine">Cinquantanove</string>
     <!-- OneHand mode QS tile -->
     <string name="qs_onehand_label">Modalità a una mano</string>
     <!-- Free ram -->
@@ -203,6 +203,6 @@
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Modalità gioco attivata.</string>
     <!-- Font Tile -->
-    <string name="quick_settings_font_label">Fonts</string>
-    <string name="quick_settings_font_detail_label">Select a font</string>
+    <string name="quick_settings_font_label">Caratteri</string>
+    <string name="quick_settings_font_detail_label">Seleziona un carattere</string>
 </resources>
