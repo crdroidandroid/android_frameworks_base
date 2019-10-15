@@ -49,7 +49,7 @@
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_accessFontManager">Consenti ad un\'applicazione di accedere alla gestione dei caratteri.</string>
     <!-- [CHAR LIMIT=NONE] Error when a package is installed but got the missing fonts.xml file, notifying the user why it isn't showing up. -->
-    <string name="fontservice_incompatible_font">The font package you\'ve installed is not compatible due to missing fonts.xml on their files. Please contact the package developer for support.</string>
+    <string name="fontservice_incompatible_font">Il pacchetto dei caratteri che hai installato non è compatibile a causa della mancanza di fonts.xml sui loro file. Si prega di contattare lo sviluppatore del pacchetto per il supporto.</string>
     <!-- Informative text shown when the device is in One handed mode. It also explains how to exit the mode. -->
     <string name="onehand_guide" xliff:restype="x-GENERIC/FULLSCREEN/TEXT">Clicca sulla zona vuota per uscire dalla modalità Una mano</string>
     <!-- Gaming mode -->
