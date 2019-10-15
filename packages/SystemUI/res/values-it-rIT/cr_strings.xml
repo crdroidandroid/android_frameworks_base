@@ -109,7 +109,7 @@
     <!-- Q Clock -->
     <plurals name="type_clock_header">
         <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Sono le</annotation>\n^1 e\n^2</item>
     </plurals>
     <!-- Q Clock - Hour -->
     <string name="text_clock_h_one">Una</string>
@@ -125,7 +125,7 @@
     <string name="text_clock_h_eleven">Undici</string>
     <string name="text_clock_h_twelve">Dodici</string>
     <!-- Q Clock - Minutes -->
-    <string name="text_clock_m_zero">O’Clock</string>
+    <string name="text_clock_m_zero">In punto</string>
     <string name="text_clock_m_one">E uno</string>
     <string name="text_clock_m_two">E due</string>
     <string name="text_clock_m_three">E tre</string>
@@ -154,33 +154,33 @@
     <string name="text_clock_m_twenty_six">E ventisei</string>
     <string name="text_clock_m_twenty_seven">E ventisette</string>
     <string name="text_clock_m_twenty_eight">E vent\'otto</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
+    <string name="text_clock_m_twenty_nine">Ventinove</string>
+    <string name="text_clock_m_thirty">Trenta</string>
+    <string name="text_clock_m_thirty_one">Trentuno</string>
+    <string name="text_clock_m_thirty_two">Trentadue</string>
+    <string name="text_clock_m_thirty_three">Trentatre</string>
+    <string name="text_clock_m_thirty_four">Trentaquattro</string>
+    <string name="text_clock_m_thirty_five">Trentacinque</string>
+    <string name="text_clock_m_thirty_six">Trentasei</string>
+    <string name="text_clock_m_thirty_seven">Trentasette</string>
+    <string name="text_clock_m_thirty_eight">Trentotto</string>
+    <string name="text_clock_m_thirty_nine">Trentanove</string>
+    <string name="text_clock_m_forty">Quaranta</string>
+    <string name="text_clock_m_forty_one">Quarantuno</string>
+    <string name="text_clock_m_forty_two">Quarantadue</string>
+    <string name="text_clock_m_forty_three">Quarantatre</string>
+    <string name="text_clock_m_forty_four">Quarantaquattro</string>
+    <string name="text_clock_m_forty_five">Quarantacinque</string>
+    <string name="text_clock_m_forty_six">Quarantasei</string>
+    <string name="text_clock_m_forty_seven">Quarantasette</string>
+    <string name="text_clock_m_forty_eight">Quarantotto</string>
+    <string name="text_clock_m_forty_nine">Quarantanove</string>
+    <string name="text_clock_m_fifty">Cinquanta</string>
+    <string name="text_clock_m_fifty_one">Cinquantuno</string>
+    <string name="text_clock_m_fifty_two">Cinquantadue</string>
+    <string name="text_clock_m_fifty_three">Cinquantatre</string>
+    <string name="text_clock_m_fifty_four">Cinquantaquattro</string>
+    <string name="text_clock_m_fifty_five">Cinquantacinque</string>
     <string name="text_clock_m_fifty_six">Cinquantasei</string>
     <string name="text_clock_m_fifty_seven">Cinquantasette</string>
     <string name="text_clock_m_fifty_eight">Cinquantotto</string>
