@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     Copyright (C) 2019 The PixelDust Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="one"><annotation name="color">Es ist</annotation>\n^1\n^2</item>
+        <item quantity="few"><annotation name="color">Es ist</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Es ist</annotation>\n^1\n^2</item>
+    </plurals>
+
+    <!-- [CHAR LIMIT=12] -->
+    <string-array name="type_clock_hours_12">
+        <item>Null</item>
+        <item>Ein</item>
+        <item>Zwei</item>
+        <item>Drei</item>
+        <item>Vier</item>
+        <item>Fünf</item>
+        <item>Sechs</item>
+        <item>Sieben</item>
+        <item>Acht</item>
+        <item>Neun</item>
+        <item>Zehn</item>
+        <item>Elf</item>
+    </string-array>
+
+    <string-array name="type_clock_hours_24">
+        <item>Null</item>
+        <item>Ein</item>
+        <item>Zwei</item>
+        <item>Drei</item>
+        <item>Vier</item>
+        <item>Fünf</item>
+        <item>Sechs</item>
+        <item>Sieben</item>
+        <item>Acht</item>
+        <item>Neun</item>
+        <item>Zehn</item>
+        <item>Elf</item>
+        <item>Zwölf</item>
+        <item>Dreizehn</item>
+        <item>Vierzehn</item>
+        <item>Fünfzehn</item>
+        <item>Sechzehn</item>
+        <item>Siebzehn</item>
+        <item>Achzehn</item>
+        <item>Neunzehn</item>
+        <item>Zwanzig</item>
+        <item>Einundzwanzig</item>
+        <item>Zweiundzwanzig</item>
+        <item>Dreiundzwanzig</item>
+    </string-array>
+
+    <!-- [CHAR LIMIT=20] -->
+    <string-array name="type_clock_minutes">
+        <item>Uhr</item>
+        <item>Uhr\nEins</item>
+        <item>Uhr\nZwei</item>
+        <item>Uhr\nDrei</item>
+        <item>Uhr\nVier</item>
+        <item>Uhr\nFünf</item>
+        <item>Uhr\nSechs</item>
+        <item>Uhr\nSieben</item>
+        <item>Uhr\nAcht</item>
+        <item>Uhr\nNeun</item>
+        <item>Uhr\nZehn</item>
+        <item>Uhr\nElf</item>
+        <item>Uhr\nZwölf</item>
+        <item>Uhr\nDreizehn</item>
+        <item>Uhr\nVierzehn</item>
+        <item>Uhr\nFünfzehn</item>
+        <item>Uhr\nSechzehn</item>
+        <item>Uhr\nSiebzehn</item>
+        <item>Uhr\nAchzehn</item>
+        <item>Uhr\nNeunzehn</item>
+        <item>Uhr\nZwanzig</item>
+        <item>Uhr\nEinundzwanzig</item>
+        <item>Uhr\nZweiundzwanzig</item>
+        <item>Uhr\nDreiundzwanzig</item>
+        <item>Uhr\nVierundzwanzig</item>
+        <item>Uhr\nFünfundzwanzig</item>
+        <item>Uhr\nSechsundzwanzig</item>
+        <item>Uhr\nSiebenundzwanzig</item>
+        <item>Uhr\nAchtundzwanzig</item>
+        <item>Uhr\nNeunundzwanzig</item>
+        <item>Uhr\nDreißig</item>
+        <item>Uhr\nEinunddreißig</item>
+        <item>Uhr\nZweiunddreißig</item>
+        <item>Uhr\nDreiunddreißig</item>
+        <item>Uhr\nVierunddreißig</item>
+        <item>Uhr\nFünfunddreißig</item>
+        <item>Uhr\nSechsunddreißig</item>
+        <item>Uhr\nSiebenunddreißig</item>
+        <item>Uhr\nAchtunddreißig</item>
+        <item>Uhr\nNeununddreißig</item>
+        <item>Uhr\nVierzig</item>
+        <item>Uhr\nEinundvierzig</item>
+        <item>Uhr\nZweiundvierzig</item>
+        <item>Uhr\nDreiundvierzig</item>
+        <item>Uhr\nVierundvierzig</item>
+        <item>Uhr\nFünfundvierzig</item>
+        <item>Uhr\nSechsundvierzig</item>
+        <item>Uhr\nSiebenundvierzig</item>
+        <item>Uhr\nAchtundvierzig</item>
+        <item>Uhr\nNeunundvierzig</item>
+        <item>Uhr\nFünfzig</item>
+        <item>Uhr\nEinundfünfzig</item>
+        <item>Uhr\nZweiundfünfzig</item>
+        <item>Uhr\nDreiundfünfzig</item>
+        <item>Uhr\nVierundfünfzig</item>
+        <item>Uhr\nFünfundfünfzig</item>
+        <item>Uhr\nSechsundfünfzig</item>
+        <item>Uhr\nSiebenundfünfzig</item>
+        <item>Uhr\nAchtundfünfzig</item>
+        <item>Uhr\nNeunundfünfzig</item>
+    </string-array>
+
+    <!-- [CHAR LIMIT=8] -->
+    <string name="clock_title_default" translatable="false">Standard</string>
+    <!-- [CHAR LIMIT=8] -->
+    <string name="clock_title_bubble" translatable="false">Blase</string>
+    <!-- [CHAR LIMIT=8] -->
+    <string name="clock_title_analog" translatable="false">Analog</string>
+    <!-- [CHAR LIMIT=8] -->
+    <string name="clock_title_type" translatable="false">Typografisch</string>
+
+</resources>
