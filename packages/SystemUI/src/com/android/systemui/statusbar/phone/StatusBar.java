@@ -292,8 +292,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_TILE_TITLE_VISIBILITY;
     private static final String SYSUI_ROUNDED_FWVALS =
             Settings.Secure.SYSUI_ROUNDED_FWVALS;
-    private static final String BERRY_ACCENT_PICKER =
-            "system:" + Settings.System.BERRY_ACCENT_PICKER;
     private static final String BERRY_THEME_OVERRIDE =
             "system:" + Settings.System.BERRY_THEME_OVERRIDE;
 
@@ -601,10 +599,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     private boolean mWereIconsJustHidden;
     private boolean mBouncerWasShowingWhenHidden;
 
-    private int mAccentSetting;
     private int mThemeOverride;
     private boolean mPowerSave;
-    private boolean mUseDarkTheme;
 
     // Notifies StatusBarKeyguardViewManager every time the keyguard transition is over,
     // this animation is tied to the scrim for historic reasons.
@@ -745,7 +741,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         tunerService.addTunable(this, FORCE_SHOW_NAVBAR);
         tunerService.addTunable(this, QS_TILE_TITLE_VISIBILITY);
         tunerService.addTunable(this, SYSUI_ROUNDED_FWVALS);
-        tunerService.addTunable(this, BERRY_ACCENT_PICKER);
         tunerService.addTunable(this, BERRY_THEME_OVERRIDE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
@@ -3616,8 +3611,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         boolean isDark = mUiModeManager.getNightMode() == UiModeManager.MODE_NIGHT_YES;
 
         if (mUiModeManager != null && isDark != useDarkTheme) {
-            mUseDarkTheme = useDarkTheme;
-            if (mUseDarkTheme) {
+            if (useDarkTheme) {
                 mUiOffloadThread.submit(() -> {
                     mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
                 });
@@ -3626,9 +3620,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                     mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
                 });
             }
-            updateAccent();
             Settings.System.putIntForUser(mContext.getContentResolver(),
-                    Settings.System.BERRY_DARK_CHECK, mUseDarkTheme ? 1 : 0, UserHandle.USER_CURRENT);
+                    Settings.System.BERRY_DARK_CHECK, useDarkTheme ? 1 : 0, UserHandle.USER_CURRENT);
         }
 
         // Lock wallpaper defines the color of the majority of the views, hence we'll use it
@@ -3640,13 +3633,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             Dependency.get(ConfigurationController.class).notifyThemeChanged();
         }
         updateCorners();
-    }
-
-    private void updateAccent() {
-        mUiOffloadThread.submit(() -> {
-            ThemeAccentUtils.unloadAccents(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
-            ThemeAccentUtils.updateAccents(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), mAccentSetting, mUseDarkTheme);
-        });
     }
 
     private void updateCorners() {
@@ -5023,14 +5009,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mSysuiRoundedFwvals =
                         TunerService.parseIntegerSwitch(newValue, true);
                 updateCorners();
-                break;
-            case BERRY_ACCENT_PICKER:
-                int accentSetting =
-                        TunerService.parseInteger(newValue, 0);
-                if (mAccentSetting != accentSetting) {
-                    mAccentSetting = accentSetting;
-                    updateAccent();
-                }
                 break;
             case BERRY_THEME_OVERRIDE:
                 int themeOverride =
