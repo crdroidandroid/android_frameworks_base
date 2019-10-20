@@ -4710,12 +4710,6 @@ public final class Settings {
         public static final String STATUS_BAR_IME_SWITCHER = "status_bar_ime_switcher";
 
         /**
-         * Select various accents to go along with system themes
-         * @hide
-         */
-        public static final String BERRY_ACCENT_PICKER = "berry_accent_picker";
-
-        /**
          * Check if using dark theme
          * @hide
          */
