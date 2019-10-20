@@ -3478,9 +3478,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 break;
         }
 
-        boolean isDark = mUiModeManager.getNightMode() == UiModeManager.MODE_NIGHT_YES;
-
-        if (mUiModeManager != null && isDark != useDarkTheme) {
+        if (mUiModeManager != null && isUsingDarkSystemTheme() != useDarkTheme) {
+            mUiOffloadThread.submit(() -> {
+                ThemeAccentUtils.setSystemTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
+                                            useDarkTheme);
+            });
             if (useDarkTheme) {
                 mUiOffloadThread.submit(() -> {
                     mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
@@ -3503,6 +3505,11 @@ public class StatusBar extends SystemUI implements DemoMode,
             Dependency.get(ConfigurationController.class).notifyThemeChanged();
         }
         updateCorners();
+    }
+
+    // Check for the dark system theme
+    public boolean isUsingDarkSystemTheme() {
+        return ThemeAccentUtils.isUsingDarkTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
     }
 
     private void updateCorners() {
