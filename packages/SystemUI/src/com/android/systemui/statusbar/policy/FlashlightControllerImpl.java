@@ -230,7 +230,7 @@ public class FlashlightControllerImpl implements FlashlightController {
                     mContext.getContentResolver(), Settings.Secure.FLASHLIGHT_AVAILABLE, 1);
                 Settings.Secure.putInt(
                     mContext.getContentResolver(), Secure.FLASHLIGHT_ENABLED, enabled ? 1 : 0);
-                mContext.sendBroadcast(new Intent(ACTION_FLASHLIGHT_CHANGED));
+                //mContext.sendBroadcast(new Intent(ACTION_FLASHLIGHT_CHANGED));
             }
         }
 
