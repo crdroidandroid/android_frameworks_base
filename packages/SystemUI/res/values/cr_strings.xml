@@ -193,4 +193,7 @@
     <string name="text_clock_m_fifty_seven">Fifty Seven</string>
     <string name="text_clock_m_fifty_eight">Fifty Eight</string>
     <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+
+    <!-- Binary clock -->
+    <string name="clock_title_binary" translatable="false">Binary</string>
 </resources>
