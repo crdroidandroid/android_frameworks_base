@@ -65,7 +65,7 @@ public class Build {
     /**
      * The build date
      */
-    public static final String DATE = getString("ro.build.date");
+    public static final String DATE = getString("ro.build.date.utc");
 
     /**
      * The name of the instruction set (CPU type + ABI convention) of native code.
