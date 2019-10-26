@@ -14850,6 +14850,12 @@ public final class Settings {
         public static final String LOCKSCREEN_ENABLE_POWER_MENU = "lockscreen_enable_power_menu";
 
         /**
+         * Whether to show quick settings on secure LockScreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_ENABLE_QS = "lockscreen_enable_qs";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
