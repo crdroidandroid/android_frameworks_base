@@ -221,4 +221,7 @@
 
     <!-- QS Header data usage info -->
     <string name="usage_data">used</string>
+
+    <!-- Screen recorder -->
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
 </resources>
