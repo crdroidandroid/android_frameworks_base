@@ -106,4 +106,7 @@
 
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">SystemUI</string>
+
+    <!-- Screen recorder -->
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
 </resources>
