@@ -183,6 +183,7 @@ import com.android.server.pm.dex.OdsignStatsLogger;
 import com.android.server.pm.permission.PermissionMigrationHelper;
 import com.android.server.pm.permission.PermissionMigrationHelperImpl;
 import com.android.server.pm.verify.domain.DomainVerificationService;
+import com.android.server.pocket.PocketService;
 import com.android.server.policy.AppOpsPolicy;
 import com.android.server.policy.PermissionPolicyService;
 import com.android.server.policy.PhoneWindowManager;
@@ -502,6 +503,8 @@ public final class SystemServer implements Dumpable {
     private final boolean mRuntimeRestart;
     private final long mRuntimeStartElapsedTime;
     private final long mRuntimeStartUptime;
+
+    public boolean safeMode = false;
 
     private static final String START_HIDL_SERVICES = "StartHidlServices";
     private static final String START_SENSOR_MANAGER_SERVICE = "StartISensorManagerService";
@@ -1746,7 +1749,10 @@ public final class SystemServer implements Dumpable {
 
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
-        final boolean safeMode = wm.detectSafeMode();
+
+        if(wm != null) {
+            safeMode = wm.detectSafeMode();
+        }
         if (safeMode) {
             // If yes, immediately turn on the global setting for airplane mode.
             // Note that this does not send broadcasts at this stage because
@@ -2623,6 +2629,10 @@ public final class SystemServer implements Dumpable {
 
             t.traceBegin("StartCrossProfileAppsService");
             mSystemServiceManager.startService(CrossProfileAppsService.class);
+            t.traceEnd();
+
+            t.traceBegin("StartPocketService");
+            mSystemServiceManager.startService(PocketService.class);
             t.traceEnd();
 
             t.traceBegin("StartPeopleService");
