@@ -153,6 +153,7 @@ import com.android.server.os.DeviceIdentifiersPolicyService;
 import com.android.server.os.NativeTombstoneManagerService;
 import com.android.server.os.SchedulingPolicyService;
 import com.android.server.people.PeopleService;
+import com.android.server.pocket.PocketService;
 import com.android.server.pm.ApexManager;
 import com.android.server.pm.ApexSystemServiceInfo;
 import com.android.server.pm.CrossProfileAppsService;
@@ -486,6 +487,8 @@ public final class SystemServer implements Dumpable {
 
     /** Start the IStats services. This is a blocking call and can take time. */
     private static native void startIStatsService();
+
+    public boolean safeMode = false;
 
     /**
      * Start the memtrack proxy service.
@@ -1676,7 +1679,10 @@ public final class SystemServer implements Dumpable {
 
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
-        final boolean safeMode = wm.detectSafeMode();
+
+        if(wm != null) {
+            safeMode = wm.detectSafeMode();
+        }
         if (safeMode) {
             // If yes, immediately turn on the global setting for airplane mode.
             // Note that this does not send broadcasts at this stage because
@@ -2506,6 +2512,10 @@ public final class SystemServer implements Dumpable {
 
             t.traceBegin("StartCrossProfileAppsService");
             mSystemServiceManager.startService(CrossProfileAppsService.class);
+            t.traceEnd();
+
+            t.traceBegin("StartPocketService");
+            mSystemServiceManager.startService(PocketService.class);
             t.traceEnd();
 
             t.traceBegin("StartPeopleService");
