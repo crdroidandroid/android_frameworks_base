@@ -392,6 +392,10 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         }
     };
 
+    public boolean isPocketLockVisible(){
+        return mPocketManager.isPocketLockVisible();
+    }
+
     private SparseBooleanArray mBiometricEnabledForUser = new SparseBooleanArray();
     private BiometricManager mBiometricManager;
     private IBiometricEnabledOnKeyguardCallback mBiometricEnabledCallback =
