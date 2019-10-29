@@ -46,4 +46,10 @@
 
     <!-- Sensor block -->
     <java-symbol type="array" name="config_blockPackagesSensorDrain" />
+
+    <!-- Pocket Lock -->
+    <java-symbol type="layout" name="pocket_lock_view_layout" />
+    <java-symbol type="id" name="pocket_hint_container" />
+    <java-symbol type="id" name="pocket_hint_image" />
+    <java-symbol type="id" name="pocket_hint_message" />
 </resources>
