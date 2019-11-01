@@ -46,6 +46,7 @@ import android.util.Log;
 
 import com.android.ims.ImsException;
 import com.android.ims.ImsManager;
+import com.android.ims.FeatureConnector;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.settingslib.Utils;
 import com.android.settingslib.graph.SignalDrawable;
@@ -95,7 +96,7 @@ public class MobileSignalController extends SignalController<
     boolean mInflateSignalStrengths = false;
 
     private ImsManager mImsManager;
-    private ImsManager.Connector mImsManagerConnector;
+    private FeatureConnector<ImsManager> mFeatureConnector;
     private int mCallState = TelephonyManager.CALL_STATE_IDLE;
 
     // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
@@ -130,8 +131,18 @@ public class MobileSignalController extends SignalController<
         updateDataSim();
 
         int phoneId = mSubscriptionInfo.getSimSlotIndex();
-        mImsManagerConnector = new ImsManager.Connector(mContext, phoneId,
-                new ImsManager.Connector.Listener() {
+        mFeatureConnector = new FeatureConnector(mContext, phoneId,
+                new FeatureConnector.Listener<ImsManager> () {
+                    @Override
+                    public boolean isSupported() {
+                        return true;
+                    }
+
+                    @Override
+                    public ImsManager getFeatureManager() {
+                        return ImsManager.getInstance(mContext, phoneId);
+                    }
+
                     @Override
                     public void connectionReady(ImsManager manager) throws ImsException {
                         Log.d(mTag, "ImsManager: connection ready.");
@@ -206,7 +217,7 @@ public class MobileSignalController extends SignalController<
                 true, mObserver);
         mContext.registerReceiver(mVolteSwitchObserver,
                 new IntentFilter("org.codeaurora.intent.action.ACTION_ENHANCE_4G_SWITCH"));
-        mImsManagerConnector.connect();
+        mFeatureConnector.connect();
     }
 
     /**
@@ -216,7 +227,7 @@ public class MobileSignalController extends SignalController<
         mPhone.listen(mPhoneStateListener, 0);
         mContext.getContentResolver().unregisterContentObserver(mObserver);
         mContext.unregisterReceiver(mVolteSwitchObserver);
-        mImsManagerConnector.disconnect();
+        mFeatureConnector.disconnect();
     }
 
     /**
