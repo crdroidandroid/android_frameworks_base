@@ -159,6 +159,9 @@ public class KeyguardSliceProvider extends SliceProvider implements
     private boolean mWeatherEnabled;
     private boolean mShowWeatherSlice;
 
+    private boolean mPulseOnNewTracks;
+    private static final String PULSE_ACTION = "com.android.systemui.doze.pulse";
+
     /**
      * Receiver responsible for time ticking and updating the date format.
      */
@@ -605,6 +608,15 @@ public class KeyguardSliceProvider extends SliceProvider implements
         mMediaArtist = artist;
         mMediaIsVisible = nextVisible;
         notifyChange();
+        // if AoD is disabled, the device is not already dozing and we get a new track, trigger an ambient pulse event
+        if (mPulseOnNewTracks && mMediaIsVisible && !mDozeParameters.getAlwaysOn() && mDozing) {
+            getContext().sendBroadcastAsUser(new Intent(PULSE_ACTION),
+                    new UserHandle(UserHandle.USER_CURRENT));
+        }
+    }
+
+    public void setPulseOnNewTracks(boolean enabled) {
+        mPulseOnNewTracks = enabled;
     }
 
     protected void notifyChange() {
