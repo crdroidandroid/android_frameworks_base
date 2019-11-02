@@ -57,7 +57,8 @@ public class AmbientDisplayConfiguration {
                 || handwaveGestureEnabled(user)
                 || pocketGestureEnabled(user)
                 || tapGestureEnabled(user)
-                || doubleTapGestureEnabled(user);
+                || doubleTapGestureEnabled(user)
+                || isAmbientTickerEnabled(user);
     }
 
     /** {@hide} */
@@ -174,6 +175,11 @@ public class AmbientDisplayConfiguration {
     public boolean pulseOnLongPressEnabled(int user) {
         return pulseOnLongPressAvailable() && boolSettingDefaultOff(
                 Settings.Secure.DOZE_PULSE_ON_LONG_PRESS, user);
+    }
+
+    /** {@hide} */
+    public boolean isAmbientTickerEnabled(int user) {
+        return boolSettingDefaultOff(Settings.Secure.PULSE_ON_NEW_TRACKS, user);
     }
 
     private boolean pulseOnLongPressAvailable() {
