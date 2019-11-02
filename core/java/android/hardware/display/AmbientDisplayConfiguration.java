@@ -51,6 +51,7 @@ public class AmbientDisplayConfiguration {
         return pulseOnNotificationEnabled(user)
                 || pulseOnLongPressEnabled(user)
                 || alwaysOnEnabled(user)
+                || isAmbientTickerEnabled(user)
                 || wakeLockScreenGestureEnabled(user)
                 || wakeDisplayGestureEnabled(user)
                 || pickupGestureEnabled(user)
@@ -72,6 +73,11 @@ public class AmbientDisplayConfiguration {
     /** {@hide} */
     public boolean pulseOnNotificationAvailable() {
         return ambientDisplayAvailable();
+    }
+
+    /** {@hide} */
+    public boolean isAmbientTickerEnabled(int user) {
+        return boolSettingDefaultOff(Settings.Secure.PULSE_ON_NEW_TRACKS, user);
     }
 
     /** {@hide} */
