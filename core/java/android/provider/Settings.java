@@ -9608,6 +9608,12 @@ public final class Settings {
         public static final String QUICK_SETTINGS_VIBRATE = "quick_settings_vibrate";
 
         /**
+         * Whether to pulse ambient on new music tracks
+         * @hide
+         */
+        public static final String PULSE_ON_NEW_TRACKS = "pulse_on_new_tracks";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
