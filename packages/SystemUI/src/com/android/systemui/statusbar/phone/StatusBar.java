@@ -307,6 +307,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_COLUMNS_LANDSCAPE;
     private static final String LOCKSCREEN_CHARGING_ANIMATION =
             "system:" + Settings.System.LOCKSCREEN_CHARGING_ANIMATION;
+    private static final String PULSE_ON_NEW_TRACKS =
+            Settings.Secure.PULSE_ON_NEW_TRACKS;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -698,6 +700,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     private ActivityIntentHelper mActivityIntentHelper;
     private ShadeController mShadeController;
 
+    private KeyguardSliceProvider mSliceProvider;
+
     @Override
     public void onActiveStateChanged(int code, int uid, String packageName, boolean active) {
         Dependency.get(MAIN_HANDLER).post(() -> {
@@ -733,9 +737,9 @@ public class StatusBar extends SystemUI implements DemoMode,
         mNavigationBarSystemUiVisibility = mNavigationBarController.createSystemUiVisibility();
         mActivityIntentHelper = new ActivityIntentHelper(mContext);
 
-        KeyguardSliceProvider sliceProvider = KeyguardSliceProvider.getAttachedInstance();
-        if (sliceProvider != null) {
-            sliceProvider.initDependencies(mMediaManager, mStatusBarStateController,
+        mSliceProvider = KeyguardSliceProvider.getAttachedInstance();
+        if (mSliceProvider != null) {
+            mSliceProvider.initDependencies(mMediaManager, mStatusBarStateController,
                     mKeyguardBypassController, DozeParameters.getInstance(mContext));
         } else {
             Log.w(TAG, "Cannot init KeyguardSliceProvider dependencies");
@@ -759,6 +763,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         tunerService.addTunable(this, QS_COLUMNS_PORTRAIT);
         tunerService.addTunable(this, QS_COLUMNS_LANDSCAPE);
         tunerService.addTunable(this, LOCKSCREEN_CHARGING_ANIMATION);
+        tunerService.addTunable(this, PULSE_ON_NEW_TRACKS);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -5014,6 +5019,12 @@ public class StatusBar extends SystemUI implements DemoMode,
                         TunerService.parseIntegerSwitch(newValue, true);
                 if (mKeyguardIndicationController != null)
                     mKeyguardIndicationController.updateChargingIndication(showChargingAnimation);
+                break;
+            case PULSE_ON_NEW_TRACKS:
+                boolean showPulseOnNewTracks =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                if (mSliceProvider != null)
+                    mSliceProvider.setPulseOnNewTracks(showPulseOnNewTracks);
                 break;
             default:
                 break;
