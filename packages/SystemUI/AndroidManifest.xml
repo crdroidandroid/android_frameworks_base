@@ -430,6 +430,7 @@
     <protected-broadcast android:name="com.android.settings.flashlight.action.FLASHLIGHT_CHANGED" />
     <protected-broadcast android:name="com.android.systemui.action.LAUNCH_SYSTEM_MEDIA_OUTPUT_DIALOG" />
     <protected-broadcast android:name="com.android.systemui.STARTED" />
+    <protected-broadcast android:name="com.android.systemui.doze.pulse" />
 
     <application
         android:name=".application.impl.SystemUIApplicationImpl"
