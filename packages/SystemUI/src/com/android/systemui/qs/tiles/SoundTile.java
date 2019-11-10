@@ -139,6 +139,7 @@ public class SoundTile extends QSTileImpl<BooleanState> {
             default:
                 break;
         }
+        state.state = Tile.STATE_INACTIVE;
     }
 
     @Override
