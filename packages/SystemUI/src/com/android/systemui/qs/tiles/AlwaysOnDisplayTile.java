@@ -56,7 +56,9 @@ public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
 
     @Override
     public BooleanState newTileState() {
-        return new BooleanState();
+        BooleanState state = new BooleanState();
+        state.handlesLongClick = false;
+        return state;
     }
 
     @Override
@@ -67,7 +69,6 @@ public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
 
     @Override
     public Intent getLongClickIntent() {
-        handleClick();
         return null;
     }
 
