@@ -3528,7 +3528,7 @@ public class PackageManagerService extends IPackageManager.Stub
         // This also serves to "GC" unused entries when the package cache version changes (which
         // can only happen during upgrades).
         if (isUpgrade) {
-            FileUtils.deleteContents(cacheBaseDir);
+            FileUtils.deleteContentsAndDir(cacheBaseDir);
         }
 
 
@@ -3559,7 +3559,7 @@ public class PackageManagerService extends IPackageManager.Stub
             // we know that they will work.
             File frameworkDir = new File(Environment.getRootDirectory(), "framework");
             if (cacheDir.lastModified() < frameworkDir.lastModified()) {
-                FileUtils.deleteContents(cacheBaseDir);
+                FileUtils.deleteContentsAndDir(cacheBaseDir);
                 cacheDir = FileUtils.createDir(cacheBaseDir, PACKAGE_PARSER_CACHE_VERSION);
             }
         }
