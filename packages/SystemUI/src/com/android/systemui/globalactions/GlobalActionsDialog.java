@@ -466,7 +466,7 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener,
         OnItemLongClickListener onItemLongClickListener = (parent, view, position, id) -> {
             final Action action = mAdapter.getItem(position);
             if (action instanceof LongPressAction) {
-                mDialog.dismiss();
+                if (mDialog != null) mDialog.dismiss();
                 return ((LongPressAction) action).onLongPress();
             }
             return false;
@@ -1097,7 +1097,7 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener,
     public void onClick(DialogInterface dialog, int which) {
         Action item = mAdapter.getItem(which);
         if (!(item instanceof SilentModeTriStateAction)) {
-            dialog.dismiss();
+            if (dialog != null) dialog.dismiss();
         }
         item.onPress();
     }
