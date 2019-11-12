@@ -73,14 +73,14 @@ public class StatusBarNetworkTraffic extends NetworkTraffic implements StatusIco
             return;
         }
         mIconTint = DarkIconDispatcher.getTint(area, this, tint);
-        if (mAttached) updateTrafficDrawable();
+        if (mAttached) updateVisibility();
     }
 
     @Override
     public void setStaticDrawableColor(int color) {
         mColorIsStatic = true;
         mIconTint = color;
-        if (mAttached) updateTrafficDrawable();
+        if (mAttached) updateVisibility();
     }
 
     @Override
@@ -132,5 +132,6 @@ public class StatusBarNetworkTraffic extends NetworkTraffic implements StatusIco
             setText(blank);
             setVisibility(GONE);
         }
+        updateTrafficDrawable(enabled);
     }
 }
