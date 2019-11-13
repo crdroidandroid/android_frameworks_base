@@ -105,8 +105,7 @@ public class BatteryMeterDrawableBase extends Drawable {
     private final Path mShapePath = new Path();
     private final Path mOutlinePath = new Path();
     private final Path mTextPath = new Path();
-
-    private DashPathEffect mPathEffect;
+    private final DashPathEffect mPathEffect = new DashPathEffect(new float[]{3,2},0);
 
     public BatteryMeterDrawableBase(Context context, int frameColor) {
         // Circle is the default drawable style
@@ -176,8 +175,6 @@ public class BatteryMeterDrawableBase extends Drawable {
         mPowersavePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPowersavePaint.setColor(mPlusPaint.getColor());
         mPowersavePaint.setStyle(Style.STROKE);
-
-        mPathEffect = new DashPathEffect(new float[]{3,2},0);
 
         mIntrinsicWidth = context.getResources().getDimensionPixelSize(R.dimen.battery_width);
         mIntrinsicHeight = context.getResources().getDimensionPixelSize(R.dimen.battery_height);
@@ -421,10 +418,10 @@ public class BatteryMeterDrawableBase extends Drawable {
             }
         }
 
-        // compute percentage text
-        float pctX = 0, pctY = 0;
-        String pctText = null;
-        if (!mCharging && level != 100 && mShowPercent) {
+        if (!mCharging && level != 100 && mShowPercent && !mPowerSaveEnabled) {
+            // compute percentage text
+            float pctX = 0, pctY = 0;
+            String pctText = null;
             mTextPaint.setColor(getColorForLevel(level));
             mTextPaint.setTextSize(mHeight * (SINGLE_DIGIT_PERCENT ? 0.86f : 0.52f));
             mTextHeight = -mTextPaint.getFontMetrics().ascent;
@@ -434,6 +431,35 @@ public class BatteryMeterDrawableBase extends Drawable {
             pctY = (mHeight + mTextHeight) * 0.47f;
 
             c.drawText(pctText, pctX, pctY, mTextPaint);
+        } else if (mPowerSaveEnabled) {
+            // define the plus shape
+            final float pw = mFrame.width() / 2;
+            final float pl = mFrame.left + (mFrame.width() - pw) / 2;
+            final float pt = mFrame.top + (mFrame.height() - pw) / 2;
+            final float pr = mFrame.right - (mFrame.width() - pw) / 2;
+            final float pb = mFrame.bottom - (mFrame.height() - pw) / 2;
+            if (mPlusFrame.left != pl || mPlusFrame.top != pt
+                    || mPlusFrame.right != pr || mPlusFrame.bottom != pb) {
+                mPlusFrame.set(pl, pt, pr, pb);
+                mPlusPath.reset();
+                mPlusPath.moveTo(
+                        mPlusFrame.left + mPlusPoints[0] * mPlusFrame.width(),
+                        mPlusFrame.top + mPlusPoints[1] * mPlusFrame.height());
+                for (int i = 2; i < mPlusPoints.length; i += 2) {
+                    mPlusPath.lineTo(
+                            mPlusFrame.left + mPlusPoints[i] * mPlusFrame.width(),
+                            mPlusFrame.top + mPlusPoints[i + 1] * mPlusFrame.height());
+                }
+                mPlusPath.lineTo(
+                        mPlusFrame.left + mPlusPoints[0] * mPlusFrame.width(),
+                        mPlusFrame.top + mPlusPoints[1] * mPlusFrame.height());
+            }
+
+            // Always cut out of the whole shape, and sometimes filled colorError
+            mShapePath.op(mPlusPath, Path.Op.DIFFERENCE);
+            if (mPowerSaveAsColorError) {
+                c.drawPath(mPlusPath, mPlusPaint);
+            }
         }
     }
 
