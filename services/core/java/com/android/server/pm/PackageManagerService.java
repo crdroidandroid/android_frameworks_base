@@ -7654,7 +7654,7 @@ public class PackageManagerService extends IPackageManager.Stub
                 }
             }
 
-            mCacheDir = preparePackageParserCache(mIsEngBuild);
+            mCacheDir = preparePackageParserCache(mIsEngBuild, mIsUpgrade);
 
             // Set flag to monitor and not change apk file paths when
             // scanning install directories.
@@ -8487,7 +8487,7 @@ public class PackageManagerService extends IPackageManager.Stub
         setUpInstantAppInstallerActivityLP(getInstantAppInstallerLPr());
     }
 
-    private @Nullable File preparePackageParserCache(boolean forEngBuild) {
+    private @Nullable File preparePackageParserCache(boolean forEngBuild, boolean isUpgrade) {
         if (!FORCE_PACKAGE_PARSED_CACHE_ENABLED) {
             if (!DEFAULT_PACKAGE_PARSER_CACHE_ENABLED) {
                 return null;
@@ -8518,7 +8518,7 @@ public class PackageManagerService extends IPackageManager.Stub
 
         // Reconcile cache directories, keeping only what we'd actually use.
         for (File cacheDir : FileUtils.listFilesOrEmpty(cacheBaseDir)) {
-            if (Objects.equals(cacheName, cacheDir.getName())) {
+            if (!isUpgrade && Objects.equals(cacheName, cacheDir.getName())) {
                 Slog.d(TAG, "Keeping known cache " + cacheDir.getName());
             } else {
                 Slog.d(TAG, "Destroying unknown cache " + cacheDir.getName());
