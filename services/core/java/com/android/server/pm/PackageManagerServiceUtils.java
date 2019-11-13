@@ -1343,7 +1343,7 @@ public class PackageManagerServiceUtils {
     }
 
     public static @Nullable File preparePackageParserCache(boolean forEngBuild,
-            boolean isUserDebugBuild, String incrementalVersion) {
+            boolean isUserDebugBuild, String incrementalVersion, boolean isUpgrade) {
         if (!FORCE_PACKAGE_PARSED_CACHE_ENABLED) {
             if (!DEFAULT_PACKAGE_PARSER_CACHE_ENABLED) {
                 return null;
@@ -1374,7 +1374,7 @@ public class PackageManagerServiceUtils {
 
         // Reconcile cache directories, keeping only what we'd actually use.
         for (File cacheDir : FileUtils.listFilesOrEmpty(cacheBaseDir)) {
-            if (Objects.equals(cacheName, cacheDir.getName())) {
+            if (!isUpgrade && Objects.equals(cacheName, cacheDir.getName())) {
                 Slog.d(TAG, "Keeping known cache " + cacheDir.getName());
             } else {
                 Slog.d(TAG, "Destroying unknown cache " + cacheDir.getName());
@@ -1399,7 +1399,7 @@ public class PackageManagerServiceUtils {
         // NOTE: When no BUILD_NUMBER is set by the build system, it defaults to a build
         // that starts with "eng." to signify that this is an engineering build and not
         // destined for release.
-        if (isUserDebugBuild && incrementalVersion.startsWith("eng.")) {
+        if (isUpgrade || (isUserDebugBuild && incrementalVersion.startsWith("eng."))) {
             // Heuristic: If the /system directory has been modified recently due to an "adb sync"
             // or a regular make, then blow away the cache. Note that mtimes are *NOT* reliable
             // in general and should not be used for production changes. In this specific case,
