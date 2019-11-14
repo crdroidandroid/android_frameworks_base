@@ -19,6 +19,18 @@
     android:title="@string/status_bar">
 
     <com.android.systemui.tuner.StatusBarSwitch
+        android:key="camera"
+        android:title="@string/status_bar_camera" />
+
+    <com.android.systemui.tuner.StatusBarSwitch
+        android:key="location"
+        android:title="@string/status_bar_location" />
+
+    <com.android.systemui.tuner.StatusBarSwitch
+        android:key="microphone"
+        android:title="@string/status_bar_microphone" />
+
+    <com.android.systemui.tuner.StatusBarSwitch
         android:key="rotate"
         android:title="@string/status_bar_settings_auto_rotation" />
 
