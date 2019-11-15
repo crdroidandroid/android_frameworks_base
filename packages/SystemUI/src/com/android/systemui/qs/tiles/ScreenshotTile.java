@@ -91,6 +91,7 @@ public class ScreenshotTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
+        state.state = Tile.STATE_INACTIVE;
         if (mRegion) {
             state.label = mContext.getString(R.string.quick_settings_region_screenshot_label);
             state.icon = ResourceIcon.get(R.drawable.ic_qs_region_screenshot);
