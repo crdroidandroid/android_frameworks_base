@@ -35,6 +35,7 @@ import com.android.internal.telephony.TelephonyProperties;
 import com.android.systemui.R;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
+import com.android.systemui.statusbar.phone.UnlockMethodCache;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.qs.GlobalSetting;
 import com.android.systemui.qs.QSHost;
@@ -50,6 +51,7 @@ public class AirplaneModeTile extends QSTileImpl<BooleanState> {
 
     private boolean mListening;
     private final KeyguardMonitor mKeyguardMonitor;
+    private final UnlockMethodCache mUnlockMethodCache;
 
     @Inject
     public AirplaneModeTile(QSHost host, ActivityStarter activityStarter,
@@ -57,6 +59,7 @@ public class AirplaneModeTile extends QSTileImpl<BooleanState> {
         super(host);
         mActivityStarter = activityStarter;
         mKeyguardMonitor = keyguardMonitor;
+        mUnlockMethodCache = UnlockMethodCache.getInstance(mContext);
 
         mSetting = new GlobalSetting(mContext, mHandler, Global.AIRPLANE_MODE_ON) {
             @Override
@@ -81,7 +84,7 @@ public class AirplaneModeTile extends QSTileImpl<BooleanState> {
                     new Intent(TelephonyIntents.ACTION_SHOW_NOTICE_ECM_BLOCK_OTHERS), 0);
             return;
         }
-        if (mKeyguardMonitor.isSecure() && !mKeyguardMonitor.canSkipBouncer()) {
+        if (mKeyguardMonitor.isSecure() && !mUnlockMethodCache.canSkipBouncer()) {
             mActivityStarter.postQSRunnableDismissingKeyguard(() -> {
                 setEnabled(!mState.value);
             });
