@@ -86,6 +86,8 @@ public class StatusBarWindowView extends FrameLayout {
 
     private static final String DOUBLE_TAP_SLEEP_GESTURE =
             "lineagesystem:" + LineageSettings.System.DOUBLE_TAP_SLEEP_GESTURE;
+    private static final String DOUBLE_TAP_TO_WAKE =
+            Settings.Secure.DOUBLE_TAP_TO_WAKE;
 
     private final GestureDetector mGestureDetector;
     private final StatusBarStateController mStatusBarStateController;
@@ -120,6 +122,8 @@ public class StatusBarWindowView extends FrameLayout {
     private boolean mExpandAnimationPending;
     private boolean mSuppressingWakeUpGesture;
 
+    private boolean mDoubleTapEnabledNative;
+
     private final GestureDetector.SimpleOnGestureListener mGestureListener =
             new GestureDetector.SimpleOnGestureListener() {
         @Override
@@ -142,7 +146,7 @@ public class StatusBarWindowView extends FrameLayout {
                 }
                 return true;
             }
-            if (mDoubleTapEnabled || mSingleTapEnabled) {
+            if (mDoubleTapEnabled || mSingleTapEnabled || mDoubleTapEnabledNative) {
                 mService.wakeUpIfDozing(SystemClock.uptimeMillis(), StatusBarWindowView.this,
                         "DOUBLE_TAP");
                 return true;
@@ -160,7 +164,12 @@ public class StatusBarWindowView extends FrameLayout {
                 mSingleTapEnabled = configuration.tapGestureEnabled(UserHandle.USER_CURRENT);
                 break;
             case DOUBLE_TAP_SLEEP_GESTURE:
-                mDoubleTapToSleepEnabled = newValue == null || Integer.parseInt(newValue) == 1;
+                mDoubleTapToSleepEnabled =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                break;
+            case DOUBLE_TAP_TO_WAKE:
+                mDoubleTapEnabledNative =
+                        TunerService.parseIntegerSwitch(newValue, false);
                 break;
         }
     };
@@ -183,7 +192,8 @@ public class StatusBarWindowView extends FrameLayout {
         Dependency.get(TunerService.class).addTunable(mTunable,
                 Settings.Secure.DOZE_DOUBLE_TAP_GESTURE,
                 Settings.Secure.DOZE_TAP_SCREEN_GESTURE,
-                DOUBLE_TAP_SLEEP_GESTURE);
+                DOUBLE_TAP_SLEEP_GESTURE,
+                DOUBLE_TAP_TO_WAKE);
         mQuickQsOffsetHeight = getResources().getDimensionPixelSize(
                 com.android.internal.R.dimen.quick_qs_offset_height);
     }
