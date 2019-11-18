@@ -324,6 +324,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.STATUS_BAR_TICKER_ANIMATION_MODE;
     private static final String STATUS_BAR_TICKER_TICK_DURATION =
             "system:" + Settings.System.STATUS_BAR_TICKER_TICK_DURATION;
+    private static final String SHOW_BACK_ARROW_GESTURE =
+            Settings.Secure.SHOW_BACK_ARROW_GESTURE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -800,6 +802,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         tunerService.addTunable(this, PULSE_ON_NEW_TRACKS);
         tunerService.addTunable(this, STATUS_BAR_TICKER_ANIMATION_MODE);
         tunerService.addTunable(this, STATUS_BAR_TICKER_TICK_DURATION);
+        tunerService.addTunable(this, SHOW_BACK_ARROW_GESTURE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -5273,6 +5276,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                         TunerService.parseInteger(newValue, 3000);
                 if (mTicker != null) {
                     mTicker.updateTickDuration(mTickerTickDuration);
+                }
+                break;
+            case SHOW_BACK_ARROW_GESTURE:
+                if (getNavigationBarView() != null) {
+                    getNavigationBarView().updateBackArrowForGesture();
                 }
                 break;
             default:
