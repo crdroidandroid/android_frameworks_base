@@ -25,6 +25,8 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.os.SystemClock;
 import android.os.VibrationEffect;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.MathUtils;
 import android.view.ContextThemeWrapper;
@@ -171,6 +173,7 @@ public class NavigationBarEdgePanel extends View {
      * The current translation of the arrow
      */
     private float mCurrentTranslation;
+    private boolean mBackArrowVisibility;
     /**
      * Where the arrow will be in the resting position.
      */
@@ -313,6 +316,7 @@ public class NavigationBarEdgePanel extends View {
 
         loadColors(context);
         updateArrowDirection();
+        setBackArrowVisibility();
 
         mSwipeThreshold = context.getResources()
                 .getDimension(R.dimen.navigation_edge_action_drag_threshold);
@@ -340,6 +344,12 @@ public class NavigationBarEdgePanel extends View {
 
     public void setIsLeftPanel(boolean isLeftPanel) {
         mIsLeftPanel = isLeftPanel;
+    }
+
+    public void setBackArrowVisibility() {
+        mBackArrowVisibility = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.SHOW_BACK_ARROW_GESTURE, 1,
+                UserHandle.USER_CURRENT) == 1;
     }
 
     /**
@@ -391,7 +401,7 @@ public class NavigationBarEdgePanel extends View {
                 resetOnDown();
                 mStartX = event.getX();
                 mStartY = event.getY();
-                setVisibility(VISIBLE);
+                setVisibility(mBackArrowVisibility ? VISIBLE : INVISIBLE);
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
