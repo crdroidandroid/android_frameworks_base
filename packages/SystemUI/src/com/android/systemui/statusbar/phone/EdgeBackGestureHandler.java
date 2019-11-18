@@ -267,6 +267,12 @@ public class EdgeBackGestureHandler implements DisplayListener, TunerService.Tun
         updateEdgeHeightValue();
     }
 
+    public void setStateForBackArrowGesture() {
+        if (mEdgePanel != null) {
+            mEdgePanel.setBackArrowVisibility();
+        }
+    }
+
     private void disposeInputChannel() {
         if (mInputEventReceiver != null) {
             mInputEventReceiver.dispose();
