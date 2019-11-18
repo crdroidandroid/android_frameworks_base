@@ -782,6 +782,10 @@ public class NavigationBarView extends FrameLayout implements
         updatePanelSystemUiStateFlags();
     }
 
+    public void updateBackArrowForGesture() {
+        mEdgeBackGestureHandler.setStateForBackArrowGesture();
+    }
+
     public void updateDisabledSystemUiStateFlags() {
         int displayId = mContext.getDisplayId();
         mOverviewProxyService.setSystemUiStateFlag(SYSUI_STATE_SCREEN_PINNING,
