@@ -34,6 +34,8 @@ import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
+import javax.inject.Inject;
+
 public class CompassTile extends QSTileImpl<BooleanState> implements SensorEventListener {
     private final static float ALPHA = 0.97f;
 

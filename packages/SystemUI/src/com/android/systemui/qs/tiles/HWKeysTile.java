@@ -32,6 +32,8 @@ import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
+import javax.inject.Inject;
+
 import lineageos.hardware.LineageHardwareManager;
 
 public class HWKeysTile extends QSTileImpl<BooleanState> {

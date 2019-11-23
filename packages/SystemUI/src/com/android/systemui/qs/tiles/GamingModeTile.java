@@ -33,6 +33,8 @@ import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
+import javax.inject.Inject;
+
 public class GamingModeTile extends QSTileImpl<BooleanState> {
 
     private final SystemSetting mGamingModeActivated;

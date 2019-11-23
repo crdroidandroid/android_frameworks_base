@@ -32,6 +32,8 @@ import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.SecureSetting;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
+import javax.inject.Inject;
+
 public class AlwaysOnDisplayTile extends QSTileImpl<BooleanState> {
 
     private final SecureSetting mSetting;

@@ -30,6 +30,8 @@ import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.R;
 
+import javax.inject.Inject;
+
 public class SoundSearchTile extends QSTileImpl<BooleanState> {
 
     private final String soundSearchApp = "com.google.android.googlequicksearchbox";

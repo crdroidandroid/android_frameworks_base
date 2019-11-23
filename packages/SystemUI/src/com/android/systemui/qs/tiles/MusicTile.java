@@ -39,6 +39,8 @@ import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
+import javax.inject.Inject;
+
 /** Quick settings tile: Music **/
 public class MusicTile extends QSTileImpl<BooleanState> {
 

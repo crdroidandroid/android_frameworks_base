@@ -32,6 +32,8 @@ import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.R;
 
+import javax.inject.Inject;
+
 /** Quick settings tile: Screenshot **/
 public class ScreenshotTile extends QSTileImpl<BooleanState> {
 

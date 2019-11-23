@@ -32,6 +32,8 @@ import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.ZenModeController;
 
+import javax.inject.Inject;
+
 public class SoundTile extends QSTileImpl<BooleanState> {
 
     private final ZenModeController mZenController;

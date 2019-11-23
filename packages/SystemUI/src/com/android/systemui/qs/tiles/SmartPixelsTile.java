@@ -33,6 +33,8 @@ import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.R;
 
+import javax.inject.Inject;
+
 public class SmartPixelsTile extends QSTileImpl<BooleanState> {
     private static final Intent SMART_PIXELS_SETTINGS = new Intent("android.settings.SMART_PIXELS_SETTINGS");
 

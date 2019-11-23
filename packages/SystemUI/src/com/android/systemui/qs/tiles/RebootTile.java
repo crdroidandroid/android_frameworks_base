@@ -29,6 +29,8 @@ import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
+import javax.inject.Inject;
+
 public class RebootTile extends QSTileImpl<BooleanState> {
 
     private int mRebootToRecovery = 0;

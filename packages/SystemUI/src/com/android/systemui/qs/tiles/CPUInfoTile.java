@@ -30,6 +30,8 @@ import com.android.systemui.R;
 
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
+import javax.inject.Inject;
+
 /** Quick settings tile: CPUInfo overlay **/
 public class CPUInfoTile extends QSTileImpl<BooleanState> {
 
