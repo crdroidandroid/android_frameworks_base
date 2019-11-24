@@ -16,9 +16,10 @@
 
 package com.android.systemui.qs.tiles;
 
-import android.app.UiModeManager;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.database.ContentObserver;
+import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.widget.Switch;
@@ -29,7 +30,6 @@ import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.statusbar.policy.BatteryController;
-import com.android.systemui.statusbar.policy.ConfigurationController;
 
 import javax.inject.Inject;
 
@@ -40,27 +40,22 @@ import javax.inject.Inject;
  * taken by {@link NightDisplayTile}.
  */
 public class UiModeNightTile extends QSTileImpl<QSTile.BooleanState> implements
-        ConfigurationController.ConfigurationListener,
         BatteryController.BatteryStateChangeCallback {
 
     private final Icon mIcon = ResourceIcon.get(
             com.android.internal.R.drawable.ic_qs_ui_mode_night);
-    private final UiModeManager mUiModeManager;
     private final BatteryController mBatteryController;
+    private final ThemeOverrideObserver mObserver;
+    private int mThemeOverride;
+    private boolean mListening;
 
     @Inject
-    public UiModeNightTile(QSHost host, ConfigurationController configurationController,
-            BatteryController batteryController) {
+    public UiModeNightTile(QSHost host, BatteryController batteryController) {
         super(host);
         mBatteryController = batteryController;
-        mUiModeManager = mContext.getSystemService(UiModeManager.class);
-        configurationController.observe(getLifecycle(), this);
         batteryController.observe(getLifecycle(), this);
-    }
-
-    @Override
-    public void onUiModeChanged() {
-        refreshState();
+        mObserver = new ThemeOverrideObserver(mHandler);
+        mObserver.startObserving();
     }
 
     @Override
@@ -75,33 +70,54 @@ public class UiModeNightTile extends QSTileImpl<QSTile.BooleanState> implements
 
     @Override
     protected void handleClick() {
-        if (getState().state == Tile.STATE_UNAVAILABLE) {
-            return;
+        if (mThemeOverride == 0) {
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.BERRY_THEME_OVERRIDE, 1, UserHandle.USER_CURRENT);
+        } else if (mThemeOverride == 1) {
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.BERRY_THEME_OVERRIDE, 2, UserHandle.USER_CURRENT);
+        } else if (mThemeOverride == 2) {
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.BERRY_THEME_OVERRIDE, 3, UserHandle.USER_CURRENT);
+        } else if (mThemeOverride == 3) {
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.BERRY_THEME_OVERRIDE, 0, UserHandle.USER_CURRENT);
         }
-        boolean newState = !mState.value;
-        mUiModeManager.setNightMode(newState ? UiModeManager.MODE_NIGHT_YES
-                : UiModeManager.MODE_NIGHT_NO);
-        refreshState(newState);
     }
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         boolean powerSave = mBatteryController.isPowerSave();
-        boolean nightMode = (mContext.getResources().getConfiguration().uiMode
-                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        boolean nightMode = (Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.BERRY_DARK_CHECK,
+                0, UserHandle.USER_CURRENT) != 0);
+        mThemeOverride = Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.BERRY_THEME_OVERRIDE,
+                0, UserHandle.USER_CURRENT);
 
         state.value = nightMode;
-        state.label = mContext.getString(powerSave
-                ? R.string.quick_settings_ui_mode_night_label_battery_saver
-                : R.string.quick_settings_ui_mode_night_label);
+        state.label = mContext.getString(R.string.quick_settings_ui_mode_night_label);
+
+        switch (mThemeOverride) {
+            case 0:
+            default:
+                state.secondaryLabel = mContext.getString(R.string.quick_settings_ui_mode_automatic_wallpaper);
+                break;
+            case 1:
+                state.secondaryLabel = mContext.getString(R.string.quick_settings_ui_mode_automatic_livedisplay);
+                break;
+            case 2:
+                state.secondaryLabel = mContext.getString(R.string.quick_settings_ui_mode_disabled);
+                break;
+            case 3:
+                state.secondaryLabel = mContext.getString(R.string.quick_settings_ui_mode_enabled);
+                break;
+        }
+
         state.contentDescription = state.label;
         state.icon = mIcon;
         state.expandedAccessibilityClassName = Switch.class.getName();
-        if (powerSave) {
-            state.state = Tile.STATE_UNAVAILABLE;
-        } else {
-            state.state = state.value ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
-        }
+        state.state = state.value ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
         state.showRippleEffect = false;
     }
 
@@ -117,10 +133,42 @@ public class UiModeNightTile extends QSTileImpl<QSTile.BooleanState> implements
 
     @Override
     protected void handleSetListening(boolean listening) {
+        if (mListening == listening)
+            return;
+        mListening = listening;
+        if (listening) {
+            mObserver.startObserving();
+        } else {
+            mObserver.endObserving();
+        }
     }
 
     @Override
     public CharSequence getTileLabel() {
         return getState().label;
+    }
+
+    private class ThemeOverrideObserver extends ContentObserver {
+        public ThemeOverrideObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            refreshState();
+        }
+
+        public void startObserving() {
+            mContext.getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.BERRY_DARK_CHECK),
+                    false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.BERRY_THEME_OVERRIDE),
+                    false, this, UserHandle.USER_ALL);
+        }
+
+        public void endObserving() {
+            mContext.getContentResolver().unregisterContentObserver(this);
+        }
     }
 }

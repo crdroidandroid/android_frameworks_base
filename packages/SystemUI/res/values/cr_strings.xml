@@ -85,4 +85,10 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+
+    <!-- UI mode tile -->
+    <string name="quick_settings_ui_mode_automatic_wallpaper">Automatic (wallpaper)</string>
+    <string name="quick_settings_ui_mode_automatic_livedisplay">Automatic (livedisplay)</string>
+    <string name="quick_settings_ui_mode_disabled">Disabled</string>
+    <string name="quick_settings_ui_mode_enabled">Enabled</string>
 </resources>
