@@ -636,6 +636,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     protected boolean mPanelExpanded;
     private IOverlayManager mOverlayManager;
     private UiModeManager mUiModeManager;
+    private boolean mUseDarkTheme;
     protected boolean mIsKeyguard;
     private LogMaker mStatusBarStateLog;
     protected NotificationIconAreaController mNotificationIconAreaController;
@@ -3530,22 +3531,23 @@ public class StatusBar extends SystemUI implements DemoMode,
                 break;
         }
 
-        if (mUiModeManager != null && isUsingDarkSystemTheme() != useDarkTheme) {
-            mUiOffloadThread.submit(() -> {
-                ThemeAccentUtils.setSystemTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
-                                            useDarkTheme);
-            });
-            if (useDarkTheme) {
+        if (mUiModeManager != null && mUseDarkTheme != useDarkTheme) {
+            mUseDarkTheme = useDarkTheme;
+            if (mUseDarkTheme) {
                 mUiOffloadThread.submit(() -> {
                     mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
+                ThemeAccentUtils.checkBlackWhiteAccent(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
+                                            mUseDarkTheme);
                 });
             } else {
                 mUiOffloadThread.submit(() -> {
                     mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
+                ThemeAccentUtils.checkBlackWhiteAccent(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
+                                            mUseDarkTheme);
                 });
             }
             Settings.System.putIntForUser(mContext.getContentResolver(),
-                    Settings.System.BERRY_DARK_CHECK, useDarkTheme ? 1 : 0, UserHandle.USER_CURRENT);
+                    Settings.System.BERRY_DARK_CHECK, mUseDarkTheme ? 1 : 0, UserHandle.USER_CURRENT);
         }
 
         // Lock wallpaper defines the color of the majority of the views, hence we'll use it
@@ -3557,11 +3559,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             Dependency.get(ConfigurationController.class).notifyThemeChanged();
         }
         updateCorners();
-    }
-
-    // Check for the dark system theme
-    public boolean isUsingDarkSystemTheme() {
-        return ThemeAccentUtils.isUsingDarkTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
     }
 
     private void updateCorners() {
