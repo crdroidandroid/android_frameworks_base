@@ -22,17 +22,17 @@
     <string name="animation_slide_left">Balra csúsztatás</string>
     <string name="animation_slide_right_no_fade">Jobbra csúsztatás (nincs halványítás)</string>
     <string name="animation_slide_left_no_fade">Balra csúsztatás (nincs halványítás)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
+    <string name="animation_slide_up">Felfelé csúsztatás</string>
+    <string name="animation_slide_down">Lefelé csúsztatás</string>
+    <string name="animation_default">Alapértelmezett</string>
+    <string name="animation_translucent">Áttetsző</string>
     <string name="animation_grow_shrink">Grow in (Top)</string>
     <string name="animation_grow_shrink_center">Grow in (Center)</string>
     <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
     <string name="animation_grow_shrink_left">Grow in (Left)</string>
     <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_random">Véletlenszerű</string>
+    <string name="action_null">Üres</string>
     <string name="animation_ethans">Ethans</string>
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">Copy crash log URL</string>
@@ -41,9 +41,9 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">Játékmód</string>
+    <string name="gaming_mode_notification_title">A Játékmód engedélyezve</string>
+    <string name="gaming_mode_notification_content">Érintse meg a Játékmódból való kilépéshez</string>
+    <string name="gaming_mode_enabled_toast">A Játékmód bekapcsolásra került</string>
+    <string name="gaming_mode_disabled_toast">A Játékmód kikapcsolásra került</string>
 </resources>
