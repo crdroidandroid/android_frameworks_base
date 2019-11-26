@@ -91,4 +91,11 @@
     <string name="quick_settings_ui_mode_automatic_livedisplay">Automatic (livedisplay)</string>
     <string name="quick_settings_ui_mode_disabled">Disabled</string>
     <string name="quick_settings_ui_mode_enabled">Enabled</string>
+
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Switch data card</string>
+    <string name="qs_data_switch_toast_0">Currently no SIM card is inserted</string>
+    <string name="qs_data_switch_toast_1">Currently only one SIM card is inserted</string>
+    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
+    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
 </resources>
