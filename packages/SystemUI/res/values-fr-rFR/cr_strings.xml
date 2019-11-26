@@ -71,7 +71,7 @@
     <string name="accessibility_quick_settings_gaming_mode_enabled">Mode jeu activé.</string>
     <!-- UI mode tile -->
     <string name="quick_settings_ui_mode_automatic_wallpaper">Automatique (basé sur le fond d’écran)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Automatic (livedisplay)</string>
+    <string name="quick_settings_ui_mode_automatic_livedisplay">Automatique (LiveDisplay)</string>
     <string name="quick_settings_ui_mode_disabled">Désactivé</string>
     <string name="quick_settings_ui_mode_enabled">Activé</string>
 </resources>
