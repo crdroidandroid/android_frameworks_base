@@ -72,6 +72,6 @@
     <!-- UI mode tile -->
     <string name="quick_settings_ui_mode_automatic_wallpaper">Automaticky (podle tapety)</string>
     <string name="quick_settings_ui_mode_automatic_livedisplay">Automaticky (LiveDisplay)</string>
-    <string name="quick_settings_ui_mode_disabled">Disabled</string>
-    <string name="quick_settings_ui_mode_enabled">Enabled</string>
+    <string name="quick_settings_ui_mode_disabled">Zakázáno</string>
+    <string name="quick_settings_ui_mode_enabled">Povoleno</string>
 </resources>
