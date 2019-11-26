@@ -30,48 +30,48 @@
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Informace o\u00a0CPU</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">HW tlačítka</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">Kompas</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
-    <string name="quick_settings_compass_SE">SE</string>
-    <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="quick_settings_compass_init">Inicializuje se\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Kompas vyp.</string>
+    <string name="accessibility_quick_settings_compass_on">Kompas zap.</string>
+    <string name="quick_settings_compass_N">S</string>
+    <string name="quick_settings_compass_NE">SV</string>
+    <string name="quick_settings_compass_E">V</string>
+    <string name="quick_settings_compass_SE">JV</string>
+    <string name="quick_settings_compass_S">J</string>
+    <string name="quick_settings_compass_SW">JZ</string>
+    <string name="quick_settings_compass_W">Z</string>
+    <string name="quick_settings_compass_NW">SZ</string>
     <!-- Music tile -->
-    <string name="quick_settings_music_label">Music</string>
-    <string name="quick_settings_music_play">Play</string>
-    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_label">Hudba</string>
+    <string name="quick_settings_music_play">Přehrát</string>
+    <string name="quick_settings_music_pause">Pozastavit</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">Vždy zapnutý displej</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Zvukové vyhledávání</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">Zvuk</string>
+    <string name="quick_settings_sound_ring">Vyzvánění</string>
+    <string name="quick_settings_sound_vibrate">Vibrace</string>
+    <string name="quick_settings_sound_dnd">Nerušit</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
+    <string name="quick_settings_reboot_label">Restartovat</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_poweroff_label">Vypnout</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Herní režim je vypnutý v\u00a0Nastavení</string>
+    <string name="quick_settings_gaming_mode_label">Herní režim</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Herní režim byl vypnut.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Herní režim byl zapnut.</string>
     <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Automatic (wallpaper)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Automatic (livedisplay)</string>
+    <string name="quick_settings_ui_mode_automatic_wallpaper">Automaticky (podle tapety)</string>
+    <string name="quick_settings_ui_mode_automatic_livedisplay">Automaticky (LiveDisplay)</string>
     <string name="quick_settings_ui_mode_disabled">Disabled</string>
     <string name="quick_settings_ui_mode_enabled">Enabled</string>
 </resources>
