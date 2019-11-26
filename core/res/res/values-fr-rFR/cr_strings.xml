@@ -17,33 +17,33 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_fade">Fondu</string>
+    <string name="animation_slide_right">Glisser vers la droite</string>
+    <string name="animation_slide_left">Glisser vers la gauche</string>
+    <string name="animation_slide_right_no_fade">Glisser vers la droite (Sans fondu)</string>
+    <string name="animation_slide_left_no_fade">Glissez vers la gauche (sans fondu)</string>
+    <string name="animation_slide_up">Glisser vers le bas</string>
+    <string name="animation_slide_down">Glisser vers le haut</string>
+    <string name="animation_default">Par défaut</string>
+    <string name="animation_translucent">Translucide</string>
+    <string name="animation_grow_shrink">Agrandissement (Haut)</string>
+    <string name="animation_grow_shrink_center">Agrandissement (Centre)</string>
+    <string name="animation_grow_shrink_bottom">Agrandissement (Bas)</string>
+    <string name="animation_grow_shrink_left">Agrandissement (Gauche)</string>
+    <string name="animation_grow_shrink_right">Agrandissement (Droite)</string>
+    <string name="animation_random">Aléatoire</string>
+    <string name="action_null">Vide</string>
     <string name="animation_ethans">Ethans</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">Copier l\'URL du rapport d\'erreur</string>
+    <string name="url_copy_success">URL copiée avec succès</string>
+    <string name="url_copy_failed">Une erreur est survenue pendant l\'envoi du rapport à dogbin</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">Appuyez et maintenez le bouton Marche/Arrêt pour déverrouiller</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">Mode jeu</string>
+    <string name="gaming_mode_notification_title">Mode jeu activé</string>
+    <string name="gaming_mode_notification_content">Appuyez pour désactiver le mode Jeu</string>
+    <string name="gaming_mode_enabled_toast">Mode jeu activé</string>
+    <string name="gaming_mode_disabled_toast">Mode jeu désactivé</string>
 </resources>
