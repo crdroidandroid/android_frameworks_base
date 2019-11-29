@@ -51,6 +51,7 @@ import com.android.systemui.statusbar.StatusIconDisplayable;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.MobileIconState;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.WifiIconState;
 import com.android.systemui.statusbar.policy.StatusBarNetworkTraffic;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.Utils.DisableStateTracker;
 
 import java.util.List;
@@ -196,7 +197,7 @@ public interface StatusBarIconController {
     /**
      * Turns info from StatusBarIconController into ImageViews in a ViewGroup.
      */
-    public static class IconManager implements DemoMode {
+    public static class IconManager implements DemoMode, TunerService.Tunable {
         protected final ViewGroup mGroup;
         protected final Context mContext;
         protected final int mIconSize;
@@ -207,7 +208,12 @@ public interface StatusBarIconController {
         protected boolean mDemoable = true;
         private boolean mIsInDemoMode;
         protected DemoStatusIcons mDemoStatusIcons;
-        protected final int mConfigUseOldMobileType;
+        protected final boolean mConfigUseOldMobileType;
+
+        private boolean mOldStyleType;
+
+        private static final String USE_OLD_MOBILETYPE =
+            "system:" + Settings.System.USE_OLD_MOBILETYPE;
 
         public IconManager(ViewGroup group) {
             mGroup = group;
@@ -215,7 +221,7 @@ public interface StatusBarIconController {
             mIconSize = mContext.getResources().getDimensionPixelSize(
                     com.android.internal.R.dimen.status_bar_icon_size);
             mConfigUseOldMobileType = mContext.getResources().
-                    getBoolean(com.android.internal.R.bool.config_useOldMobileIcons) ? 1 : 0;
+                    getBoolean(com.android.internal.R.bool.config_useOldMobileIcons);
 
             DisableStateTracker tracker =
                     new DisableStateTracker(DISABLE_NONE, DISABLE2_SYSTEM_ICONS);
@@ -296,12 +302,15 @@ public interface StatusBarIconController {
         @VisibleForTesting
         protected StatusBarMobileView addMobileIcon(int index, String slot, MobileIconState state) {
             StatusBarMobileView view = onCreateStatusBarMobileView(slot);
-            view.applyMobileState(state, useOldStyleMobileDataIcons());
+            view.applyMobileState(state);
             mGroup.addView(view, index, onCreateLayoutParams());
 
             if (mIsInDemoMode) {
                 mDemoStatusIcons.addMobileView(state);
             }
+
+            Dependency.get(TunerService.class).addTunable(this, USE_OLD_MOBILETYPE);
+
             return view;
         }
 
@@ -331,6 +340,7 @@ public interface StatusBarIconController {
 
         protected void destroy() {
             mGroup.removeAllViews();
+            Dependency.get(TunerService.class).removeTunable(this);
         }
 
         protected void onIconExternal(int viewIndex, int height) {
@@ -402,7 +412,7 @@ public interface StatusBarIconController {
         public void onSetMobileIcon(int viewIndex, MobileIconState state) {
             StatusBarMobileView view = (StatusBarMobileView) mGroup.getChildAt(viewIndex);
             if (view != null) {
-                view.applyMobileState(state, useOldStyleMobileDataIcons());
+                view.applyMobileState(state);
             }
 
             if (mIsInDemoMode) {
@@ -440,10 +450,26 @@ public interface StatusBarIconController {
             return new DemoStatusIcons((LinearLayout) mGroup, mIconSize);
         }
 
-        private boolean useOldStyleMobileDataIcons() {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.USE_OLD_MOBILETYPE, mConfigUseOldMobileType,
-                    UserHandle.USER_CURRENT) != 0;
+        @Override
+        public void onTuningChanged(String key, String newValue) {
+            switch (key) {
+                case USE_OLD_MOBILETYPE:
+                    mOldStyleType =
+                        TunerService.parseIntegerSwitch(newValue, mConfigUseOldMobileType);
+                    updateOldStyleMobileDataIcons();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void updateOldStyleMobileDataIcons() {
+            for (int i = 0; i < mGroup.getChildCount(); i++) {
+                View child = mGroup.getChildAt(i);
+                if (child instanceof StatusBarMobileView) {
+                    ((StatusBarMobileView) child).updateDisplayType(mOldStyleType);
+                }
+            }
         }
     }
 }
