@@ -48,30 +48,30 @@
     <!-- Music tile -->
     <string name="quick_settings_music_label">Müzik</string>
     <string name="quick_settings_music_play">Oynat</string>
-    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_pause">Duraklat</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">Her zaman ekranda</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Sesli arama</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">Ses</string>
+    <string name="quick_settings_sound_ring">Zil sesi</string>
+    <string name="quick_settings_sound_vibrate">Titreşim</string>
+    <string name="quick_settings_sound_dnd">Rahatsız etmeyin</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">Yeniden başlat</string>
+    <string name="quick_settings_reboot_recovery_label">Kurtarma</string>
+    <string name="quick_settings_poweroff_label">Kapat</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Oyun modu ayarlardan devre dışı bırakıldı</string>
+    <string name="quick_settings_gaming_mode_label">Oyun modu</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Oyun modu kapatıldı.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Oyun modu açıldı.</string>
     <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Automatic (wallpaper)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Automatic (livedisplay)</string>
-    <string name="quick_settings_ui_mode_disabled">Disabled</string>
-    <string name="quick_settings_ui_mode_enabled">Enabled</string>
+    <string name="quick_settings_ui_mode_automatic_wallpaper">Otomatik (duvar kağıdı)</string>
+    <string name="quick_settings_ui_mode_automatic_livedisplay">Otomatik (canlı ekran)</string>
+    <string name="quick_settings_ui_mode_disabled">Devre dışı</string>
+    <string name="quick_settings_ui_mode_enabled">Etkin</string>
 </resources>
