@@ -17,10 +17,10 @@
 package android.adb;
 
 import android.adbroot.IADBRootService;
-import android.annotation.SystemApi;
-import android.content.Context;
+import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.util.Slog;
 
 /**
  * {@hide}
@@ -30,26 +30,44 @@ public class ADBRootService {
 
     private static final String ADB_ROOT_SERVICE = "adbroot_service";
 
-    private IADBRootService mADBRootService;
-    private Context mContext;
+    private IADBRootService mService;
 
-    /**
-     * Creates a new instance.
-     */
-    public ADBRootService(Context context) {
-        mADBRootService = IADBRootService.Stub.asInterface(
-                ServiceManager.getService(ADB_ROOT_SERVICE));
-        mContext = context;
+    private final IBinder.DeathRecipient mDeathRecipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            if (mService != null) {
+                mService.asBinder().unlinkToDeath(this, 0);
+            }
+            mService = null;
+        }
+    };
+
+    private synchronized IADBRootService getService()
+            throws RemoteException {
+        if (mService != null) {
+            return mService;
+        }
+
+        final IBinder service = ServiceManager.getService(ADB_ROOT_SERVICE);
+        if (service != null) {
+            service.linkToDeath(mDeathRecipient, 0);
+            mService = IADBRootService.Stub.asInterface(service);
+            return mService;
+        }
+
+        Slog.e(TAG, "Unable to acquire ADBRootService");
+        return null;
     }
 
     /**
      * @hide
      */
     public void setEnabled(boolean enable) {
-        mContext.enforceCallingOrSelfPermission(
-                android.Manifest.permission.ADBROOT, "adbroot");
         try {
-            mADBRootService.setEnabled(enable);
+            final IADBRootService svc = getService();
+            if (svc != null) {
+                svc.setEnabled(enable);
+            }
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
@@ -59,12 +77,14 @@ public class ADBRootService {
      * @hide
      */
     public boolean getEnabled() {
-        mContext.enforceCallingOrSelfPermission(
-                android.Manifest.permission.ADBROOT, "adbroot");
         try {
-            return mADBRootService.getEnabled();
+            final IADBRootService svc = getService();
+            if (svc != null) {
+                return svc.getEnabled();
+            }
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
+        return false;
     }
 }
