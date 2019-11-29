@@ -5207,6 +5207,30 @@ public final class Settings {
         public static final String RINGTONE_VIBRATION_PATTERN = "ringtone_vibration_pattern";
 
         /**
+         * Screenrecord: enable mic
+         * @hide
+         */
+        public static final String SCREENRECORD_ENABLE_MIC = "screenrecord_enable_mic";
+
+        /**
+         * Screenrecord: show taps
+         * @hide
+         */
+        public static final String SCREENRECORD_SHOW_TAPS = "screenrecord_show_taps";
+
+        /**
+         * Screenrecord: show stop dot
+         * @hide
+         */
+        public static final String SCREENRECORD_STOP_DOT = "screenrecord_stop_dot";
+
+        /**
+         * Screenrecord: low quality
+         * @hide
+         */
+        public static final String SCREENRECORD_LOW_QUALITY = "screenrecord_low_quality";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
