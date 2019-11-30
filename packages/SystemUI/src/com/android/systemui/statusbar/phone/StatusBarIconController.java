@@ -207,12 +207,15 @@ public interface StatusBarIconController {
         protected boolean mDemoable = true;
         private boolean mIsInDemoMode;
         protected DemoStatusIcons mDemoStatusIcons;
+        protected final int mConfigUseOldMobileType;
 
         public IconManager(ViewGroup group) {
             mGroup = group;
             mContext = group.getContext();
             mIconSize = mContext.getResources().getDimensionPixelSize(
                     com.android.internal.R.dimen.status_bar_icon_size);
+            mConfigUseOldMobileType = mContext.getResources().
+                    getBoolean(com.android.internal.R.bool.config_useOldMobileIcons) ? 1 : 0;
 
             DisableStateTracker tracker =
                     new DisableStateTracker(DISABLE_NONE, DISABLE2_SYSTEM_ICONS);
@@ -439,7 +442,7 @@ public interface StatusBarIconController {
 
         private boolean useOldStyleMobileDataIcons() {
             return Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.USE_OLD_MOBILETYPE, 0,
+                    Settings.System.USE_OLD_MOBILETYPE, mConfigUseOldMobileType,
                     UserHandle.USER_CURRENT) != 0;
         }
     }
