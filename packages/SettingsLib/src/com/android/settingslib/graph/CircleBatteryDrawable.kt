@@ -51,6 +51,9 @@ class CircleBatteryDrawable(private val context: Context, frameColor: Int) : Dra
     private var height = 0
     private var width = 0
 
+    private var BATTERY_STYLE_CIRCLE = 1
+    private var BATTERY_STYLE_DOTTED_CIRCLE = 2
+
     // Dual tone implies that battery level is a clipped overlay over top of the whole shape
     private var dualTone = false
 
@@ -82,7 +85,7 @@ class CircleBatteryDrawable(private val context: Context, frameColor: Int) : Dra
             postInvalidate()
         }
 
-    var usePathEffect = false
+    var meterStyle = BATTERY_STYLE_CIRCLE
         set(value) {
             field = value
             postInvalidate()
@@ -165,7 +168,7 @@ class CircleBatteryDrawable(private val context: Context, frameColor: Int) : Dra
         framePaint.style = Paint.Style.STROKE
         batteryPaint.strokeWidth = strokeWidth
         batteryPaint.style = Paint.Style.STROKE
-        if (usePathEffect) {
+        if (meterStyle == BATTERY_STYLE_DOTTED_CIRCLE) {
             batteryPaint.pathEffect = pathEffect
             powerSavePaint.pathEffect = pathEffect
         } else {
