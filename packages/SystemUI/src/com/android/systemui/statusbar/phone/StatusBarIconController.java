@@ -259,6 +259,7 @@ public interface StatusBarIconController {
         private final boolean mShowNotificationCount;
 
         private boolean mOldStyleType;
+        private boolean mConfigUseOldMobileType;
 
         private static final String USE_OLD_MOBILETYPE =
             "system:" + Settings.System.USE_OLD_MOBILETYPE;
@@ -275,6 +276,8 @@ public interface StatusBarIconController {
                 Settings.System.STATUSBAR_NOTIF_COUNT,
                 mContext.getResources().getBoolean(R.bool.config_statusBarShowNumber) ? 1 : 0,
                 UserHandle.USER_CURRENT) == 1;
+            mConfigUseOldMobileType = mContext.getResources().
+                    getBoolean(com.android.internal.R.bool.config_useOldMobileIcons);
         }
 
         public boolean isDemoable() {
@@ -521,7 +524,7 @@ public interface StatusBarIconController {
             switch (key) {
                 case USE_OLD_MOBILETYPE:
                     mOldStyleType =
-                        TunerService.parseIntegerSwitch(newValue, false);
+                        TunerService.parseIntegerSwitch(newValue, mConfigUseOldMobileType);
                     updateOldStyleMobileDataIcons();
                     break;
                 default:
