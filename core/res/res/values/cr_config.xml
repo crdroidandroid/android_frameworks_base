@@ -44,4 +44,7 @@
 
     <!-- Whether to use scaled brightness (set -1 to disable) -->
     <integer name="config_useScaleBrightness">-1</integer>
+
+    <!-- Whether to use old mobile type icons as default -->
+    <bool name="config_useOldMobileIcons">false</bool>
 </resources>
