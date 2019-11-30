@@ -219,6 +219,7 @@ public interface StatusBarIconController {
         protected DemoStatusIcons mDemoStatusIcons;
 
         private boolean mOldStyleType;
+        private boolean mConfigUseOldMobileType;
 
         private static final String USE_OLD_MOBILETYPE =
             "system:" + Settings.System.USE_OLD_MOBILETYPE;
@@ -228,6 +229,8 @@ public interface StatusBarIconController {
             mContext = group.getContext();
             mIconSize = mContext.getResources().getDimensionPixelSize(
                     com.android.internal.R.dimen.status_bar_icon_size);
+            mConfigUseOldMobileType = mContext.getResources().
+                    getBoolean(com.android.internal.R.bool.config_useOldMobileIcons);
 
             DisableStateTracker tracker =
                     new DisableStateTracker(DISABLE_NONE, DISABLE2_SYSTEM_ICONS, commandQueue);
@@ -459,7 +462,7 @@ public interface StatusBarIconController {
             switch (key) {
                 case USE_OLD_MOBILETYPE:
                     mOldStyleType =
-                        TunerService.parseIntegerSwitch(newValue, false);
+                        TunerService.parseIntegerSwitch(newValue, mConfigUseOldMobileType);
                     updateOldStyleMobileDataIcons();
                     break;
                 default:
