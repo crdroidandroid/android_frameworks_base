@@ -74,6 +74,7 @@ import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController.DeviceProvisionedListener;
 import com.android.systemui.util.kotlin.JavaAdapter;
 import com.android.systemui.util.settings.SecureSettings;
+import com.android.systemui.util.settings.SystemSettings;
 
 import com.google.common.util.concurrent.MoreExecutors;
 
@@ -120,6 +121,8 @@ public class ThemeOverlayControllerTest extends SysuiTestCase {
     private ThemeOverlayApplier mThemeOverlayApplier;
     @Mock
     private SecureSettings mSecureSettings;
+    @Mock
+    private SystemSettings mSystemSettings;
     @Mock
     private WallpaperManager mWallpaperManager;
     @Mock
@@ -185,7 +188,8 @@ public class ThemeOverlayControllerTest extends SysuiTestCase {
 
         mThemeOverlayController = new ThemeOverlayController(mContext,
                 mBroadcastDispatcher, mBgHandler, mMainExecutor, mBgExecutor, mThemeOverlayApplier,
-                mSecureSettings, mWallpaperManager, mUserManager, mDeviceProvisionedController,
+                mSecureSettings, mSystemSettings, mWallpaperManager, mUserManager,
+                mDeviceProvisionedController,
                 mUserTracker, mDumpManager, mFeatureFlags, mResources, mWakefulnessLifecycle,
                 mJavaAdapter, mKeyguardTransitionInteractor, mUiModeManager, mActivityManager,
                 mSystemProperties) {
@@ -923,7 +927,8 @@ public class ThemeOverlayControllerTest extends SysuiTestCase {
 
         mThemeOverlayController = new ThemeOverlayController(mContext,
                 mBroadcastDispatcher, mBgHandler, executor, executor, mThemeOverlayApplier,
-                mSecureSettings, mWallpaperManager, mUserManager, mDeviceProvisionedController,
+                mSecureSettings, mSystemSettings, mWallpaperManager, mUserManager,
+                mDeviceProvisionedController,
                 mUserTracker, mDumpManager, mFeatureFlags, mResources, mWakefulnessLifecycle,
                 mJavaAdapter, mKeyguardTransitionInteractor, mUiModeManager, mActivityManager,
                 mSystemProperties) {
@@ -964,7 +969,8 @@ public class ThemeOverlayControllerTest extends SysuiTestCase {
         Executor executor = MoreExecutors.directExecutor();
         mThemeOverlayController = new ThemeOverlayController(mContext,
                 mBroadcastDispatcher, mBgHandler, executor, executor, mThemeOverlayApplier,
-                mSecureSettings, mWallpaperManager, mUserManager, mDeviceProvisionedController,
+                mSecureSettings, mSystemSettings, mWallpaperManager, mUserManager,
+                mDeviceProvisionedController,
                 mUserTracker, mDumpManager, mFeatureFlags, mResources, mWakefulnessLifecycle,
                 mJavaAdapter, mKeyguardTransitionInteractor, mUiModeManager, mActivityManager,
                 mSystemProperties) {
