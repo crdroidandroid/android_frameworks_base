@@ -500,7 +500,7 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
                 UserHandle.USER_ALL);
 
         mSystemSettings.registerContentObserverForUser(
-                LineageSettings.System.getUriFor(LineageSettings.System.STATUS_BAR_BATTERY_STYLE),
+                Settings.System.getUriFor(Settings.System.STATUS_BAR_BATTERY_STYLE),
                 false,
                 new ContentObserver(mBgHandler) {
                     @Override
@@ -515,13 +515,7 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
                             mDeferredThemeEvaluation = true;
                             return;
                         }
-                        boolean isCircleBattery = LineageSettings.System.getIntForUser(
-                                mContext.getContentResolver(),
-                                LineageSettings.System.STATUS_BAR_BATTERY_STYLE,
-                                0, UserHandle.USER_CURRENT) == 1;
-                        if (isCircleBattery) {
-                            reevaluateSystemTheme(true /* forceReload */);
-                        }
+                        reevaluateSystemTheme(true /* forceReload */);
                     }
                 },
                 UserHandle.USER_ALL);
