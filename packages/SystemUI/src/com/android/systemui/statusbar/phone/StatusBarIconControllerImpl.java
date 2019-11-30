@@ -83,6 +83,7 @@ public class StatusBarIconControllerImpl implements Tunable,
     private final Context mContext;
 
     private boolean mIsOldSignalStyle;
+    private boolean mConfigUseOldMobileType;
 
     /** */
     @Inject
@@ -99,8 +100,10 @@ public class StatusBarIconControllerImpl implements Tunable,
         mStatusBarIconList = statusBarIconList;
         mContext = context;
         mStatusBarPipelineFlags = statusBarPipelineFlags;
+        mConfigUseOldMobileType = mContext.getResources().
+            getBoolean(com.android.internal.R.bool.config_useOldMobileIcons);
         mIsOldSignalStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
-            Settings.System.USE_OLD_MOBILETYPE, 0, UserHandle.USER_CURRENT) == 1;
+            Settings.System.USE_OLD_MOBILETYPE, mConfigUseOldMobileType ? 1 : 0, UserHandle.USER_CURRENT) == 1;
 
         configurationController.addCallback(this);
         commandQueue.addCallback(this);
@@ -161,7 +164,8 @@ public class StatusBarIconControllerImpl implements Tunable,
     @Override
     public void onTuningChanged(String key, String newValue) {
         if (USE_OLD_MOBILETYPE.equals(key)) {
-            boolean isOldSignalStyle = (Boolean) newValue;
+            boolean isOldSignalStyle =
+                TunerService.parseIntegerSwitch(newValue, mConfigUseOldMobileType);
             if (mIsOldSignalStyle == isOldSignalStyle) return;
             mIsOldSignalStyle = isOldSignalStyle;
             mIconGroups.forEach(group -> {
