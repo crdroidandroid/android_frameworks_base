@@ -357,7 +357,7 @@ public class NotificationInterruptionStateProvider {
                 notificationPackageName.contains("clock") ||
                 notificationPackageName.contains("messaging");
 
-        return !getShadeController().isDozing() && mSkipHeadsUp && !isLessBoring;
+        return !getShadeController().isDozing() && mLessBoringHeadsUp && !isLessBoring;
     }
 
     /**
