@@ -46,32 +46,32 @@
     <string name="quick_settings_compass_W">W</string>
     <string name="quick_settings_compass_NW">NW</string>
     <!-- Music tile -->
-    <string name="quick_settings_music_label">Music</string>
-    <string name="quick_settings_music_play">Play</string>
-    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_label">Muzyka</string>
+    <string name="quick_settings_music_play">Odtwórz</string>
+    <string name="quick_settings_music_pause">Wstrzymaj</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">Aktywny wyświetlacz</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Wyszykiwanie głosowe</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">Dźwięk</string>
+    <string name="quick_settings_sound_ring">Dzwonek</string>
+    <string name="quick_settings_sound_vibrate">Wibracje</string>
+    <string name="quick_settings_sound_dnd">Nie przeszkadzać</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
+    <string name="quick_settings_reboot_label">Uruchom ponownie</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_poweroff_label">Wyłącz</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Tryb gry jest wyłączony w ustawieniach</string>
+    <string name="quick_settings_gaming_mode_label">Tryb grania</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Tryb gry wyłączony.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Tryb gry włączony.</string>
     <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Automatic (wallpaper)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Automatic (livedisplay)</string>
-    <string name="quick_settings_ui_mode_disabled">Disabled</string>
-    <string name="quick_settings_ui_mode_enabled">Enabled</string>
+    <string name="quick_settings_ui_mode_automatic_wallpaper">Automatycznie (tapeta)</string>
+    <string name="quick_settings_ui_mode_automatic_livedisplay">Automatyczne (livedisplay)</string>
+    <string name="quick_settings_ui_mode_disabled">Nieaktywne</string>
+    <string name="quick_settings_ui_mode_enabled">Włączono</string>
 </resources>
