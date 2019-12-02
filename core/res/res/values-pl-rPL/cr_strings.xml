@@ -17,33 +17,33 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_fade">Zanikanie</string>
+    <string name="animation_slide_right">Przesuń w prawo</string>
+    <string name="animation_slide_left">Przesuń w lewo</string>
+    <string name="animation_slide_right_no_fade">Przesuń w prawo (Bez zanikania)</string>
+    <string name="animation_slide_left_no_fade">Przesuń w lewo (Bez zanikania)</string>
+    <string name="animation_slide_up">Przesuń w dół</string>
+    <string name="animation_slide_down">Przesuń w górę</string>
+    <string name="animation_default">Domyślnie</string>
+    <string name="animation_translucent">Przeźroczysty</string>
+    <string name="animation_grow_shrink">Powiększenie (od góry)</string>
+    <string name="animation_grow_shrink_center">Powiększenie (ze środka)</string>
+    <string name="animation_grow_shrink_bottom">Powiększenie (z dołu)</string>
+    <string name="animation_grow_shrink_left">Powiększenie (z lewej)</string>
+    <string name="animation_grow_shrink_right">Powiększenie (z prawej)</string>
+    <string name="animation_random">Losowo</string>
+    <string name="action_null">Pusto</string>
     <string name="animation_ethans">Ethans</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">Skopiuj logi awarii</string>
+    <string name="url_copy_success">URL skopiowany pomyślnie</string>
+    <string name="url_copy_failed">Wystąpił błąd podczas przesyłania logów do serwisu dogbin</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">Naciśnij i przytrzymaj przycisk zasilania aby odblokować</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">Tryb grania</string>
+    <string name="gaming_mode_notification_title">Tryb gry włączony</string>
+    <string name="gaming_mode_notification_content">Naciśnij, aby wyłączyć tryb gry</string>
+    <string name="gaming_mode_enabled_toast">Tryb gry włączony</string>
+    <string name="gaming_mode_disabled_toast">Tryb gry wyłączony</string>
 </resources>
