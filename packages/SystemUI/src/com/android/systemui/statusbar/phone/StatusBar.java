@@ -5203,12 +5203,16 @@ public class StatusBar extends SystemUI implements DemoMode,
                 boolean hasNavbar = getNavigationBarView() != null;
                 if (mNavbarVisible) {
                     if (!hasNavbar) {
-                        mNavigationBarController.onDisplayReady(mDisplayId,
-                                mNavigationBarSystemUiVisibility);
+                        try {
+                           mNavigationBarController.onDisplayReady(mDisplayId,
+                                   mNavigationBarSystemUiVisibility);
+                        } catch (Exception e) { }
                     }
                 } else {
                     if (hasNavbar) {
-                        mNavigationBarController.onDisplayRemoved(mDisplayId);
+                        try {
+                            mNavigationBarController.onDisplayRemoved(mDisplayId);
+                        } catch (Exception e) { }
                     }
                 }
                 break;
