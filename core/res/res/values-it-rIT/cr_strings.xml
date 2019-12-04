@@ -25,7 +25,7 @@
     <string name="animation_slide_up">Scorri in basso</string>
     <string name="animation_slide_down">Scorri in alto</string>
     <string name="animation_default">Predefinito</string>
-    <string name="animation_translucent">Translucent</string>
+    <string name="animation_translucent">Traslucido</string>
     <string name="animation_grow_shrink">Espandi (in alto)</string>
     <string name="animation_grow_shrink_center">Espandi (al centro)</string>
     <string name="animation_grow_shrink_bottom">Espandi (basso)</string>
@@ -35,15 +35,15 @@
     <string name="action_null">Vuoto</string>
     <string name="animation_ethans">Ethans</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">Copia l\' URL del log di crash</string>
+    <string name="url_copy_success">URL copiato con successo</string>
+    <string name="url_copy_failed">È stato riscontrato un errore durante il caricamento del log su dogbin</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">Tieni premuto e mantieni il tasto di accensione per sbloccare</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
+    <string name="notification_channel_gaming">Modalità di gioco</string>
     <string name="gaming_mode_notification_title">Modalità di gioco abilitata</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="gaming_mode_notification_content">Tocca per disabilitare la modalità di gioco</string>
+    <string name="gaming_mode_enabled_toast">Modalità di gioco abilitata</string>
+    <string name="gaming_mode_disabled_toast">Modalità di gioco disabilitata</string>
 </resources>
