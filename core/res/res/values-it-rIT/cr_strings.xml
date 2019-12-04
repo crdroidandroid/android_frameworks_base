@@ -17,22 +17,22 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
+    <string name="animation_fade">Dissolvenza</string>
+    <string name="animation_slide_right">Scorri a destra</string>
+    <string name="animation_slide_left">Scorri a sinistra</string>
+    <string name="animation_slide_right_no_fade">Scorri a destra (senza dissolvenza)</string>
+    <string name="animation_slide_left_no_fade">Scorri a sinistra (senza dissolvenza)</string>
+    <string name="animation_slide_up">Scorri in basso</string>
+    <string name="animation_slide_down">Scorri in alto</string>
+    <string name="animation_default">Predefinito</string>
     <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_grow_shrink">Espandi (in alto)</string>
+    <string name="animation_grow_shrink_center">Espandi (al centro)</string>
+    <string name="animation_grow_shrink_bottom">Espandi (basso)</string>
+    <string name="animation_grow_shrink_left">Espandi (a sinistra)</string>
+    <string name="animation_grow_shrink_right">Espandi (a destra)</string>
+    <string name="animation_random">Casuale</string>
+    <string name="action_null">Vuoto</string>
     <string name="animation_ethans">Ethans</string>
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">Copy crash log URL</string>
@@ -42,7 +42,7 @@
     <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
+    <string name="gaming_mode_notification_title">Modalità di gioco abilitata</string>
     <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
     <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
     <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
