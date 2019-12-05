@@ -46,4 +46,9 @@
     <string name="gaming_mode_notification_content">Appuyez pour désactiver le mode Jeu</string>
     <string name="gaming_mode_enabled_toast">Mode jeu activé</string>
     <string name="gaming_mode_disabled_toast">Mode jeu désactivé</string>
+    <!-- MicroG -->
+    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
 </resources>
