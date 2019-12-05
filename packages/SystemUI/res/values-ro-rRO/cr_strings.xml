@@ -17,22 +17,22 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Încărcare DASH (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> până la finalizare)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Încărcare DASH</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">Pixeli inteligenți</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Auto-activare pixeli inteligenți</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Screenshot</string>
-    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <string name="quick_settings_screenshot_label">Captură ecran</string>
+    <string name="quick_settings_region_screenshot_label">Captură parțială de ecran</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <string name="quick_settings_cpuinfo_label">Info procesor</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">Taste fizice</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">Busolă</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Initializing\u2026</string>
     <string name="accessibility_quick_settings_compass_off">Compass off.</string>
