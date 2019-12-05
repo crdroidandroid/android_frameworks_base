@@ -78,6 +78,6 @@
     <string name="qs_data_switch_label">Přepnout SIM pro data</string>
     <string name="qs_data_switch_toast_0">Momentálně není vložena žádná SIM karta</string>
     <string name="qs_data_switch_toast_1">Momentálně je vložena pouze jedna SIM karta</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_changed_1">Mobilní data jsou používána na SIM\u00a01</string>
+    <string name="qs_data_switch_changed_2">Mobilní data jsou používána na SIM\u00a02</string>
 </resources>
