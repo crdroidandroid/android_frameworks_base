@@ -46,4 +46,9 @@
     <string name="gaming_mode_notification_content">Mängimisrežiimi väljalülitamiseks koputage</string>
     <string name="gaming_mode_enabled_toast">Mängimisrežiim sisselülitatud</string>
     <string name="gaming_mode_disabled_toast">Mängimisrežiim välja lülitatud</string>
+    <!-- MicroG -->
+    <string name="permlab_fakePackageSignature">Peta paketi allkirja</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Lubab rakendusel teeselda teist rakendust. Pahatahtlikud rakendused võivad seda ära kasutada, et tungida rakenduse privaatsetesse andmetesse. Heatahtlike kasutuste seas on näiteks emulaator, mis teeskleb olevat see, mida see emuleerib. Anna see luba ainult siis, kui sa oled selles täiesti kindel!</string>
 </resources>

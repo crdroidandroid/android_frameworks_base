@@ -74,4 +74,10 @@
     <string name="quick_settings_ui_mode_automatic_livedisplay">Automatikus (élőképernyő)</string>
     <string name="quick_settings_ui_mode_disabled">Letiltva</string>
     <string name="quick_settings_ui_mode_enabled">Engedélyezve</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">SIM-kártya váltása</string>
+    <string name="qs_data_switch_toast_0">Jelenleg nincs SIM-kártya beillesztve</string>
+    <string name="qs_data_switch_toast_1">Jelenleg csak egy SIM-kártya van beillesztve</string>
+    <string name="qs_data_switch_changed_1">A SIM1 használata mobiladat-forgalomhoz</string>
+    <string name="qs_data_switch_changed_2">A SIM2 használata mobiladat-forgalomhoz</string>
 </resources>

@@ -74,4 +74,10 @@
     <string name="quick_settings_ui_mode_automatic_livedisplay">Automaticky (LiveDisplay)</string>
     <string name="quick_settings_ui_mode_disabled">Zakázáno</string>
     <string name="quick_settings_ui_mode_enabled">Povoleno</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Přepnout SIM pro data</string>
+    <string name="qs_data_switch_toast_0">Momentálně není vložena žádná SIM karta</string>
+    <string name="qs_data_switch_toast_1">Momentálně je vložena pouze jedna SIM karta</string>
+    <string name="qs_data_switch_changed_1">Mobilní data jsou používána na SIM\u00a01</string>
+    <string name="qs_data_switch_changed_2">Mobilní data jsou používána na SIM\u00a02</string>
 </resources>

@@ -46,4 +46,9 @@
     <string name="gaming_mode_notification_content">Klepněte sem pro vypnutí Herního režimu</string>
     <string name="gaming_mode_enabled_toast">Herní režim je zapnutý</string>
     <string name="gaming_mode_disabled_toast">Herní režim je vypnutý</string>
+    <!-- MicroG -->
+    <string name="permlab_fakePackageSignature">Napodobit podpis balíčku</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Umožňuje aplikaci předstírat, že je jinou aplikací. Škodlivé aplikace by mohly použít tuto možnost k přístupu k datům soukromých aplikací. Legitimně používá emulátor, který předstírá, že je to, co napodobuje. Udělujte toto oprávnění s opatrností!</string>
 </resources>
