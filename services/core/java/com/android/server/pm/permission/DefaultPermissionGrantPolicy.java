@@ -208,6 +208,12 @@ public final class DefaultPermissionGrantPolicy {
         SUSPEND_APP_PERMISSIONS.add(Manifest.permission.SUSPEND_APPS);
     }
 
+    private static final Set<String> WALLPAPER_PERMISSIONS = new ArraySet<>();
+    static {
+        WALLPAPER_PERMISSIONS.add(Manifest.permission.BIND_WALLPAPER);
+        WALLPAPER_PERMISSIONS.add(Manifest.permission.SET_WALLPAPER_COMPONENT);
+    }
+
     private static final int MSG_READ_DEFAULT_PERMISSION_EXCEPTIONS = 1;
 
     private static final String ACTION_TRACK = "com.android.fitness.TRACK";
@@ -918,6 +924,9 @@ public final class DefaultPermissionGrantPolicy {
         grantSystemFixedPermissionsToSystemPackage(pm,
                 getDefaultProviderAuthorityPackage("com.google.android.apps.wellbeing", userId),
                 userId, SUSPEND_APP_PERMISSIONS);
+
+        // Google prebuilt WP picker
+        grantPermissionsToSystemPackage(pm, "com.android.wallpaper.livepicker", userId, WALLPAPER_PERMISSIONS);
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(PackageManagerWrapper pm,
