@@ -80,6 +80,7 @@ import android.util.Slog;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 
+import com.android.internal.R;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
@@ -2073,6 +2074,17 @@ public class PermissionManagerService {
         }
     }
 
+    private boolean isCustomPermission(String pkg) {
+        String[] apps = mContext.getResources().getStringArray(
+                R.array.config_customPermissionsList);
+        for(String app : apps) {
+            if (pkg.equals(app)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void grantRuntimePermission(String permName, String packageName, boolean overridePolicy,
             int callingUid, final int userId, PermissionCallback callback) {
         if (!mUserManagerInt.exists(userId)) {
@@ -2106,7 +2118,9 @@ public class PermissionManagerService {
             throw new IllegalArgumentException("Unknown package: " + packageName);
         }
 
-        bp.enforceDeclaredUsedAndRuntimeOrDevelopment(pkg);
+        if (!isCustomPermission(packageName)) {
+            bp.enforceDeclaredUsedAndRuntimeOrDevelopment(pkg);
+        }
 
         // If a permission review is required for legacy apps we represent
         // their permissions as always granted runtime ones since we need
