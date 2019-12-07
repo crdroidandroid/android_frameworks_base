@@ -128,4 +128,7 @@
   <java-symbol type="string" name="gaming_mode_notification_content" />
   <java-symbol type="string" name="gaming_mode_enabled_toast" />
   <java-symbol type="string" name="gaming_mode_disabled_toast" />
+
+  <!-- Whether device supports variable refresh rate -->
+  <java-symbol type="bool" name="config_hasVariableRefreshRate" />
 </resources>
