@@ -43,11 +43,11 @@
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Herný režim</string>
     <string name="gaming_mode_notification_title">Herný režim povolený</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
+    <string name="gaming_mode_notification_content">Kliknite sem pre vypnutie Herného režimu</string>
     <string name="gaming_mode_enabled_toast">Herný režim zapnutý</string>
     <string name="gaming_mode_disabled_toast">Herný režim vypnutý</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Napodobniť podpis balíčku</string>
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Umožňuje aplikácii vydávať sa za inú aplikáciu. Škodlivé aplikácie by mohli použiť túto možnosť pre prístup k súkromným dátam aplikácií. Legitímne použitie zahŕňa emulátor, ktorý predstiera, že je to, čo napodobňuje. Udeľujte toto oprávnenie s opatrnosťou!</string>
