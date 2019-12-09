@@ -23,10 +23,10 @@
     <string name="animation_slide_right_no_fade">Rechts inschuiven (Geen vervaging)</string>
     <string name="animation_slide_left_no_fade">Links inschuiven (Geen vervaging)</string>
     <string name="animation_slide_up">Van onder inschuiven</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
+    <string name="animation_slide_down">Van boven inschuiven</string>
+    <string name="animation_default">Standaard</string>
+    <string name="animation_translucent">Transparant</string>
+    <string name="animation_grow_shrink">Verschijnen (Boven)</string>
     <string name="animation_grow_shrink_center">Grow in (Center)</string>
     <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
     <string name="animation_grow_shrink_left">Grow in (Left)</string>
