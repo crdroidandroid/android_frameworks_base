@@ -17,67 +17,67 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc nhanh (<xliff:g id="charging_time_left" example="4 giờ và 2 phút">%s</xliff:g> đến khi đầy)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> • Đang sạc nhanh</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">Điểm ảnh thông minh</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Tự động kích hoạt điểm ảnh thông minh</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Screenshot</string>
-    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <string name="quick_settings_screenshot_label">Chụp ảnh màn hình</string>
+    <string name="quick_settings_region_screenshot_label">Ảnh chụp một phần màn hình</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <string name="quick_settings_cpuinfo_label">Thông tin CPU</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">Phím cứng</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">La bàn</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
-    <string name="quick_settings_compass_SE">SE</string>
-    <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="quick_settings_compass_init">Đang khởi tạo\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">La bàn tắt.</string>
+    <string name="accessibility_quick_settings_compass_on">Bật la bàn.</string>
+    <string name="quick_settings_compass_N">B</string>
+    <string name="quick_settings_compass_NE">ĐB</string>
+    <string name="quick_settings_compass_E">Đ</string>
+    <string name="quick_settings_compass_SE">ĐN</string>
+    <string name="quick_settings_compass_S">N</string>
+    <string name="quick_settings_compass_SW">TN</string>
+    <string name="quick_settings_compass_W">T</string>
+    <string name="quick_settings_compass_NW">TB</string>
     <!-- Music tile -->
-    <string name="quick_settings_music_label">Music</string>
-    <string name="quick_settings_music_play">Play</string>
-    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_label">Nhạc</string>
+    <string name="quick_settings_music_play">Phát</string>
+    <string name="quick_settings_music_pause">Tạm dừng</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">Màn hình luôn luôn bật</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Tìm kiếm âm thanh</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">Âm thanh</string>
+    <string name="quick_settings_sound_ring">Chuông</string>
+    <string name="quick_settings_sound_vibrate">Rung</string>
+    <string name="quick_settings_sound_dnd">Không làm phiền</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">Khởi động lại</string>
+    <string name="quick_settings_reboot_recovery_label">Chế độ Phục hồi</string>
+    <string name="quick_settings_poweroff_label">Tắt nguồn</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Chế độ trò chơi đang tắt trong cài đặt</string>
+    <string name="quick_settings_gaming_mode_label">Chế độ chơi game</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Chế độ chơi game đã tắt.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Chế độ chơi game đã bật.</string>
     <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Automatic (wallpaper)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Automatic (livedisplay)</string>
-    <string name="quick_settings_ui_mode_disabled">Disabled</string>
-    <string name="quick_settings_ui_mode_enabled">Enabled</string>
+    <string name="quick_settings_ui_mode_automatic_wallpaper">Tự động (Hình nền)</string>
+    <string name="quick_settings_ui_mode_automatic_livedisplay">Tự động (Hình nền động)</string>
+    <string name="quick_settings_ui_mode_disabled">Vô hiệu hóa</string>
+    <string name="quick_settings_ui_mode_enabled">Kích hoạt</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_toast_0">Currently no SIM card is inserted</string>
-    <string name="qs_data_switch_toast_1">Currently only one SIM card is inserted</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">Chuyển SIM dữ liệu</string>
+    <string name="qs_data_switch_toast_0">Hiện tại không có thẻ SIM nào được gắn</string>
+    <string name="qs_data_switch_toast_1">Hiện tại chỉ có 1 thẻ SIM được gắn</string>
+    <string name="qs_data_switch_changed_1">Sử dụng SIM 1 cho Dữ liệu di động</string>
+    <string name="qs_data_switch_changed_2">Sử dụng SIM 2 cho Dữ liệu di động</string>
 </resources>
