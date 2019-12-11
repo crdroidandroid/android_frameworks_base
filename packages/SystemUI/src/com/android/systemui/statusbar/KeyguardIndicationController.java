@@ -148,7 +148,7 @@ public class KeyguardIndicationController {
     private long mChargingTimeRemaining;
     private int mChargingCurrent;
     private double mChargingVoltage;
-    private int mTemperature;
+    private float mTemperature;
     private String mMessageToShowOnScreenOn;
     protected int mLockScreenMode;
     private boolean mInited;
