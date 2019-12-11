@@ -1120,7 +1120,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                 final int maxChargingMicroAmp = intent.getIntExtra(EXTRA_MAX_CHARGING_CURRENT, -1);
                 int maxChargingMicroVolt = intent.getIntExtra(EXTRA_MAX_CHARGING_VOLTAGE, -1);
                 final int maxChargingMicroWatt;
-                final int temperature = intent.getIntExtra(EXTRA_TEMPERATURE, -1);;
+                final float temperature = intent.getIntExtra(EXTRA_TEMPERATURE, -1);;
 
                 if (maxChargingMicroVolt <= 0) {
                     maxChargingMicroVolt = DEFAULT_CHARGING_VOLTAGE_MICRO_VOLT;
@@ -1386,12 +1386,12 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         public final int maxChargingCurrent;
         public final int maxChargingVoltage;
         public final int maxChargingWattage;
-        public final int temperature;
+        public final float temperature;
         public final boolean dashChargeStatus;
         public final boolean warpChargeStatus;
         public BatteryStatus(int status, int level, int plugged, int health,
                 int maxChargingCurrent, int maxChargingVoltage, int maxChargingWattage,
-                int temperature, boolean dashChargeStatus, boolean warpChargeStatus) {
+                float temperature, boolean dashChargeStatus, boolean warpChargeStatus) {
             this.status = status;
             this.level = level;
             this.plugged = plugged;
