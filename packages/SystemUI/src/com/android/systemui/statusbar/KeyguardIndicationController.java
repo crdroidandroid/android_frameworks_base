@@ -128,7 +128,7 @@ public class KeyguardIndicationController implements StateListener,
     private float mDisclosureMaxAlpha;
     private int mChargingCurrent;
     private double mChargingVoltage;
-    private int mTemperature;
+    private float mTemperature;
     private String mMessageToShowOnScreenOn;
 
     private KeyguardUpdateMonitorCallback mUpdateMonitorCallback;
