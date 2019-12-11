@@ -41,6 +41,7 @@ public:
     sk_sp<SkColorSpace> getWideColorSpace() const { return mWideColorSpace; }
     SkColorType getWideColorType() const { return mWideColorType; }
     float getMaxRefreshRate() const { return mMaxRefreshRate; }
+    nsecs_t getAppOffset() const { return mDisplayInfo.appVsyncOffset; }
 
     void onDisplayConfigChanged();
 
