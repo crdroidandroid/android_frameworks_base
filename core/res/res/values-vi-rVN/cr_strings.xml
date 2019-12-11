@@ -22,8 +22,8 @@
     <string name="animation_slide_left">Trượt sang trái</string>
     <string name="animation_slide_right_no_fade">Trượt sang phải (Không mờ dần)</string>
     <string name="animation_slide_left_no_fade">Trượt sang trái (Không mờ dần)</string>
-    <string name="animation_slide_up">Trượt từ dưới cùng</string>
-    <string name="animation_slide_down">Trượt từ trên cùng</string>
+    <string name="animation_slide_up">Trượt dưới cùng</string>
+    <string name="animation_slide_down">Trượt trên cùng</string>
     <string name="animation_default">Mặc định</string>
     <string name="animation_translucent">Trong suốt</string>
     <string name="animation_grow_shrink">Lớn dần (Trên cùng)</string>
@@ -47,7 +47,7 @@
     <string name="gaming_mode_enabled_toast">Chế độ chơi game đã bật</string>
     <string name="gaming_mode_disabled_toast">Chế độ chơi game đã tắt</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Giả mạo chữ ký gói</string>
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Cho phép ứng dụng có thể giả mạo làm ứng dụng khác. Các ứng dụng độc hại có thể sử dụng quyền này để truy cập trái phép vào dữ liệu riêng tư của bạn. Hãy thận trọng khi cấp quyền này!</string>
