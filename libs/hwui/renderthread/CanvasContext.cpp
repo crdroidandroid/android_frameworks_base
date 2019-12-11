@@ -425,7 +425,8 @@ void CanvasContext::setPresentTime() {
 
     if (renderAhead) {
         presentTime = mCurrentFrameInfo->get(FrameInfoIndex::Vsync) +
-                (frameIntervalNanos * (renderAhead + 1));
+                (frameIntervalNanos * (renderAhead + 1)) - DeviceInfo::get()->getAppOffset() +
+                (frameIntervalNanos / 2);
     }
     native_window_set_buffers_timestamp(mNativeSurface.get(), presentTime);
 }
