@@ -469,7 +469,7 @@ public class NotificationInfo extends LinearLayout implements NotificationGuts.G
                             actMan.forceStopPackage(mPackageName);
                         }
                     });
-                    killDialog.setNegativeButton(android.R.string.ok, null);
+                    killDialog.setNegativeButton(android.R.string.cancel, null);
                     killDialog.show();
                 }
             });
