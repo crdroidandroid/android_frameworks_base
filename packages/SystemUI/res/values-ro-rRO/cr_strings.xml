@@ -80,4 +80,8 @@
     <string name="qs_data_switch_toast_1">În prezent este introdusă o singură cartelă SIM</string>
     <string name="qs_data_switch_changed_1">Utilizare SIM 1 pentru date mobile</string>
     <string name="qs_data_switch_changed_2">Utilizare SIM 2 pentru date mobile</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Force stop?</string>
+    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="guts_force_close_app">Close App</string>
 </resources>
