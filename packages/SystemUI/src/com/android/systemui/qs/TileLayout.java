@@ -2,8 +2,11 @@ package com.android.systemui.qs;
 
 import static com.android.systemui.util.Utils.useQsMediaPlayer;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
@@ -40,6 +43,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     private int mMinRows = 1;
     private int mMaxColumns = NO_MAX_COLUMNS;
     private int mResourceColumns;
+    private int mResourceRows;
 
     public TileLayout(Context context) {
         this(context, null);
@@ -110,7 +114,28 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     public boolean updateResources() {
         final Resources res = mContext.getResources();
-        mResourceColumns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
+        final ContentResolver resolver = mContext.getContentResolver();
+        if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mResourceColumns = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_COLUMNS_PORTRAIT, 4,
+                    UserHandle.USER_CURRENT);
+            mResourceRows = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_ROWS_PORTRAIT, 2,
+                    UserHandle.USER_CURRENT);
+        } else {
+            mResourceColumns = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_COLUMNS_LANDSCAPE, 5,
+                    UserHandle.USER_CURRENT);
+            mResourceRows = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_ROWS_LANDSCAPE, 1,
+                    UserHandle.USER_CURRENT);
+        }
+        if (mResourceColumns < 1) {
+            mResourceColumns = 1;
+        }
+        if (mResourceRows < 1) {
+            mResourceRows = 1;
+        }
         mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height);
         mCellMarginHorizontal = res.getDimensionPixelSize(R.dimen.qs_tile_margin_horizontal);
         mCellMarginVertical= res.getDimensionPixelSize(R.dimen.qs_tile_margin_vertical);
@@ -126,8 +151,10 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     private boolean updateColumns() {
         int oldColumns = mColumns;
+        int oldRows = mRows;
         mColumns = Math.min(mResourceColumns, mMaxColumns);
-        return oldColumns != mColumns;
+        mRows = Math.min(mResourceRows, mMaxAllowedRows);
+        return oldColumns != mColumns || oldRows != mRows;
     }
 
     @Override
@@ -164,7 +191,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     /**
      * Determines the maximum number of rows that can be shown based on height. Clips at a minimum
-     * of 1 and a maximum of mMaxAllowedRows.
+     * of 1.
      *
      * @param allowedHeight The height this view has visually available
      * @param tilesCount Upper limit on the number of tiles to show. to prevent empty rows.
@@ -174,12 +201,6 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
                 // Add the cell margin in order to divide easily by the height + the margin below
                 + mCellMarginVertical;
         final int previousRows = mRows;
-        mRows = availableHeight / (mCellHeight + mCellMarginVertical);
-        if (mRows < mMinRows) {
-            mRows = mMinRows;
-        } else if (mRows >= mMaxAllowedRows) {
-            mRows = mMaxAllowedRows;
-        }
         if (mRows > (tilesCount + mColumns - 1) / mColumns) {
             mRows = (tilesCount + mColumns - 1) / mColumns;
         }
