@@ -81,7 +81,7 @@
     <string name="qs_data_switch_changed_1">Kasutad andmesideks SIM 1-te</string>
     <string name="qs_data_switch_changed_2">Kasutad andmesideks SIM 2-te</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Sundsulge?</string>
+    <string name="force_stop_dlg_text">Kui sunnite rakenduse peatuma, võib see valesti käituda.</string>
+    <string name="guts_force_close_app">Sulge rakendus</string>
 </resources>
