@@ -81,7 +81,7 @@
     <string name="qs_data_switch_changed_1">A SIM1 használata mobiladat-forgalomhoz</string>
     <string name="qs_data_switch_changed_2">A SIM2 használata mobiladat-forgalomhoz</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Leállítja erőltetetten?</string>
+    <string name="force_stop_dlg_text">Ha egy alkalmazást leállásra kényszerít, lehetséges, hogy az hibásan fog működni.</string>
+    <string name="guts_force_close_app">Az alkalmazás bezárása</string>
 </resources>
