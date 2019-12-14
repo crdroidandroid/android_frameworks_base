@@ -81,7 +81,7 @@
     <string name="qs_data_switch_changed_1">Использование SIM 1 для передачи данных</string>
     <string name="qs_data_switch_changed_2">Использование SIM 2 для передачи данных</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Остановить принудительно?</string>
+    <string name="force_stop_dlg_text">Если вы принудительно остановите приложение, оно может работать неправильно.</string>
+    <string name="guts_force_close_app">Закрыть приложение</string>
 </resources>
