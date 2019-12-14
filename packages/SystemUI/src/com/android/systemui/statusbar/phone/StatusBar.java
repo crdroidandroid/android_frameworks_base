@@ -297,6 +297,14 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.GAMING_MODE_HEADSUP_TOGGLE;
     private static final String LESS_BORING_HEADS_UP =
             "system:" + Settings.System.LESS_BORING_HEADS_UP;
+    private static final String QS_ROWS_PORTRAIT =
+            "system:" + Settings.System.QS_ROWS_PORTRAIT;
+    private static final String QS_ROWS_LANDSCAPE =
+            "system:" + Settings.System.QS_ROWS_LANDSCAPE;
+    private static final String QS_COLUMNS_PORTRAIT =
+            "system:" + Settings.System.QS_COLUMNS_PORTRAIT;
+    private static final String QS_COLUMNS_LANDSCAPE =
+            "system:" + Settings.System.QS_COLUMNS_LANDSCAPE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -744,6 +752,10 @@ public class StatusBar extends SystemUI implements DemoMode,
         tunerService.addTunable(this, GAMING_MODE_ACTIVE);
         tunerService.addTunable(this, GAMING_MODE_HEADSUP_TOGGLE);
         tunerService.addTunable(this, LESS_BORING_HEADS_UP);
+        tunerService.addTunable(this, QS_ROWS_PORTRAIT);
+        tunerService.addTunable(this, QS_ROWS_LANDSCAPE);
+        tunerService.addTunable(this, QS_COLUMNS_PORTRAIT);
+        tunerService.addTunable(this, QS_COLUMNS_LANDSCAPE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -4985,6 +4997,14 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mlessBoringHeadsUp = 
                         TunerService.parseIntegerSwitch(newValue, false);
                 mNotificationInterruptionStateProvider.setUseLessBoringHeadsUp(mlessBoringHeadsUp);
+                break;
+            case QS_ROWS_PORTRAIT:
+            case QS_ROWS_LANDSCAPE:
+            case QS_COLUMNS_PORTRAIT:
+            case QS_COLUMNS_LANDSCAPE:
+                if (mQSPanel != null) {
+                    mQSPanel.updateResources();
+                }
                 break;
             default:
                 break;
