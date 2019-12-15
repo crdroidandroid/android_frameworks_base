@@ -81,7 +81,7 @@
     <string name="qs_data_switch_changed_1">Używanie karty SIM 1 dla danych mobilnych</string>
     <string name="qs_data_switch_changed_2">Używanie karty SIM 2 dla danych mobilnych</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="force_stop_dlg_title">Wymusić zatrzymanie?</string>
+    <string name="force_stop_dlg_text">Wymuszenie zatrzymania aplikacji może spowodować jej nieprawidłowe działanie.</string>
     <string name="guts_force_close_app">Close App</string>
 </resources>
