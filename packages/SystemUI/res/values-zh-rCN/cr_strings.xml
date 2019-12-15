@@ -81,7 +81,7 @@
     <string name="qs_data_switch_changed_1">移动数据使用 SIM 卡 1</string>
     <string name="qs_data_switch_changed_2">移动数据使用 SIM 卡 2</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">要强制停止吗？</string>
+    <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
+    <string name="guts_force_close_app">关闭应用程序</string>
 </resources>
