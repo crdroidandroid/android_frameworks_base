@@ -83,5 +83,5 @@
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Wymusić zatrzymanie?</string>
     <string name="force_stop_dlg_text">Wymuszenie zatrzymania aplikacji może spowodować jej nieprawidłowe działanie.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="guts_force_close_app">Zamknij aplikację</string>
 </resources>
