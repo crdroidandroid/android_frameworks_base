@@ -81,7 +81,7 @@
     <string name="qs_data_switch_changed_1">Mobilní data jsou používána na SIM\u00a01</string>
     <string name="qs_data_switch_changed_2">Mobilní data jsou používána na SIM\u00a02</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Vynutit ukončení?</string>
+    <string name="force_stop_dlg_text">Vynucené ukončení může způsobit nepředvídatelné chování aplikace.</string>
+    <string name="guts_force_close_app">Zavřít aplikaci</string>
 </resources>
