@@ -17,8 +17,8 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time">&lt;xliff:g id="percentage"&gt;%2$s&lt;/xliff:g&gt; • Szybkie ładowanie (&lt;xliff:g id="charging_time_left" Na przykład="4 godziny i 2 minuty"&gt;%s&lt;/xliff:g&gt; do pełnego naładowania)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • Szybkie ładowanie</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
@@ -34,17 +34,17 @@
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Kompas</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
+    <string name="quick_settings_compass_init">Inicjowanie\u2026</string>
     <string name="accessibility_quick_settings_compass_off">Kompas wył.</string>
     <string name="accessibility_quick_settings_compass_on">Kompas wł.</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">Pn-Wsch</string>
     <string name="quick_settings_compass_E">Wsch</string>
-    <string name="quick_settings_compass_SE">SE</string>
-    <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="quick_settings_compass_SE">Płd. Wsch.</string>
+    <string name="quick_settings_compass_S">Płd.</string>
+    <string name="quick_settings_compass_SW">Płd. Zach.</string>
+    <string name="quick_settings_compass_W">Zach.</string>
+    <string name="quick_settings_compass_NW">Płn. Zach.</string>
     <!-- Music tile -->
     <string name="quick_settings_music_label">Muzyka</string>
     <string name="quick_settings_music_play">Odtwórz</string>
@@ -75,13 +75,13 @@
     <string name="quick_settings_ui_mode_disabled">Nieaktywne</string>
     <string name="quick_settings_ui_mode_enabled">Włączono</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_toast_0">Currently no SIM card is inserted</string>
-    <string name="qs_data_switch_toast_1">Currently only one SIM card is inserted</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">Przełączanie karty pamięci</string>
+    <string name="qs_data_switch_toast_0">Obecnie nie ma włożonej karty SIM</string>
+    <string name="qs_data_switch_toast_1">Obecnie włożono tylko jedną kartę SIM</string>
+    <string name="qs_data_switch_changed_1">Używanie karty SIM 1 dla danych mobilnych</string>
+    <string name="qs_data_switch_changed_2">Używanie karty SIM 2 dla danych mobilnych</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Wymusić zatrzymanie?</string>
+    <string name="force_stop_dlg_text">Wymuszenie zatrzymania aplikacji może spowodować jej nieprawidłowe działanie.</string>
+    <string name="guts_force_close_app">Zamknij aplikację</string>
 </resources>
