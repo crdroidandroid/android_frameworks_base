@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.PowerManager;
 import android.os.ServiceManager;
 import android.os.SystemClock;
@@ -108,5 +109,10 @@ public class Utils {
                 }
             }
         }
+    }
+
+    public static void toggleVolumePanel(Context context) {
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        am.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
     }
 }
