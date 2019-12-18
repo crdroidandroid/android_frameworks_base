@@ -59,6 +59,7 @@ import com.android.server.LocalServices;
 import com.android.server.notification.NotificationDelegate;
 import com.android.server.policy.GlobalActionsProvider;
 import com.android.server.power.ShutdownThread;
+import com.android.server.UiThread;
 import com.android.server.wm.WindowManagerService;
 
 import java.io.FileDescriptor;
@@ -1104,7 +1105,7 @@ public class StatusBarManagerService extends IStatusBarService.Stub implements D
     }
 
     private void notifyBarAttachChanged() {
-        mHandler.post(() -> {
+        UiThread.getHandler().post(() -> {
             if (mGlobalActionListener == null) return;
             mGlobalActionListener.onGlobalActionsAvailableChanged(mBar != null);
         });
