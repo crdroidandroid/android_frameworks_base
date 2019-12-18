@@ -30,6 +30,7 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.input.InputManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.Looper;
@@ -399,5 +400,10 @@ public class Utils {
         SensorManager sm = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
         return sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
                 && sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null;
+    }
+
+    public static void toggleVolumePanel(Context context) {
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        am.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
     }
 }
