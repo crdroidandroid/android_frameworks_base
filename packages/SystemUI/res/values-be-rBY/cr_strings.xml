@@ -81,7 +81,7 @@
     <string name="qs_data_switch_changed_1">Выкарыстанне SIM 1 для перадачы дадзеных</string>
     <string name="qs_data_switch_changed_2">Выкарыстанне SIM 2 для перадачы дадзеных</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Спынiць прымусова?</string>
+    <string name="force_stop_dlg_text">Прымусовае закрыццё праграмы можа адбіцца на яе функцыянальнасці.</string>
+    <string name="guts_force_close_app">Закрыць праграму</string>
 </resources>
