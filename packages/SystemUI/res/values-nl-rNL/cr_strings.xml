@@ -81,7 +81,7 @@
     <string name="qs_data_switch_changed_1">SIM-1 voor mobiele gegevens gebruiken</string>
     <string name="qs_data_switch_changed_2">SIM-2 voor mobiele gegevens gebruiken</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Gedwongen stoppen?</string>
+    <string name="force_stop_dlg_text">Als je een app gedwongen stopt, kan deze onverwacht gedrag vertonen.</string>
+    <string name="guts_force_close_app">App sluiten</string>
 </resources>
