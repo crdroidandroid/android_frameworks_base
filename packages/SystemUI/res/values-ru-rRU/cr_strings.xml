@@ -17,8 +17,11 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Быстрая зарядка (<xliff:g id="charging_time_left" example="4 часа и 2 минуты">%s</xliff:g> до полной зарядки)</string>
-    <string name="keyguard_plugged_in_dash_charging">Идет зарядка (<xliff:g id="PERCENTAGE">%s</xliff:g>)</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash зарядка (<xliff:g id="charging_time_left" example="4 часа и 2 минуты">%1$s</xliff:g> до полной)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash зарядка</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g>  Warp зарядка (<xliff:g id="charging_time_left" example="4 часа и 2 минуты">%s</xliff:g> до полной)</string>
+    <string name="keyguard_plugged_in_warp_charging">Warp зарядка</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">Модуль NFC</string>
     <!-- Smart pixels QS tile -->
@@ -26,7 +29,7 @@
     <string name="quick_settings_smart_pixels_on_power_save">Автоматическое включение умных пикселей</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Скриншот</string>
-    <string name="quick_settings_region_screenshot_label">Скриншот выбранной области экрана</string>
+    <string name="quick_settings_region_screenshot_label">Скриншот части экрана</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Информация о процессоре</string>
     <!-- HW Keys Tile -->
@@ -57,10 +60,10 @@
     <string name="quick_settings_sound_label">Звук</string>
     <string name="quick_settings_sound_ring">Звонок</string>
     <string name="quick_settings_sound_vibrate">Вибрация</string>
-    <string name="quick_settings_sound_dnd">\"Не беспокоить\"</string>
+    <string name="quick_settings_sound_dnd">Не беспокоить</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
     <string name="quick_settings_reboot_label">Перезагрузка</string>
-    <string name="quick_settings_reboot_recovery_label">Перезагрузка в рекавери</string>
+    <string name="quick_settings_reboot_recovery_label">Режим восстановления</string>
     <string name="quick_settings_poweroff_label">Выключение</string>
     <!-- Gaming mode -->
     <string name="gaming_mode_not_enabled">Игровой режим отключен в настройках</string>
@@ -71,15 +74,15 @@
     <string name="accessibility_quick_settings_gaming_mode_enabled">Игровой режим включен.</string>
     <!-- UI mode tile -->
     <string name="quick_settings_ui_mode_automatic_wallpaper">Автоматически (в зависимости от обоев)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Автоматический (livedisplay)</string>
+    <string name="quick_settings_ui_mode_automatic_livedisplay">Автоматически (livedisplay)</string>
     <string name="quick_settings_ui_mode_disabled">Отключено</string>
     <string name="quick_settings_ui_mode_enabled">Включено</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Сменить Sim-карту для использования Моб. Данных</string>
-    <string name="qs_data_switch_toast_0">В настоящее время SIM-карта не вставлена</string>
-    <string name="qs_data_switch_toast_1">В настоящее время вставлена только одна SIM-карта</string>
-    <string name="qs_data_switch_changed_1">Использование SIM 1 для передачи данных</string>
-    <string name="qs_data_switch_changed_2">Использование SIM 2 для передачи данных</string>
+    <string name="qs_data_switch_label">Поменять SIM для передачи данных</string>
+    <string name="qs_data_switch_toast_0">Нет SIM карт</string>
+    <string name="qs_data_switch_toast_1">Установлена только одна SIM карта</string>
+    <string name="qs_data_switch_changed_1">Используется SIM 1 для передачи данных</string>
+    <string name="qs_data_switch_changed_2">Используется SIM 2 для передачи данных</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Остановить принудительно?</string>
     <string name="force_stop_dlg_text">Если вы принудительно остановите приложение, оно может работать неправильно.</string>

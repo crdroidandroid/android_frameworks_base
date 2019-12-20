@@ -17,9 +17,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
+    <string name="animation_fade">淡入淡出</string>
+    <string name="animation_slide_right">從右側滑入</string>
+    <string name="animation_slide_left">從左側滑入</string>
     <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
     <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
     <string name="animation_slide_up">Slide in bottom</string>
