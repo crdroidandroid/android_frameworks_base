@@ -49,4 +49,7 @@
         <item>com.google.android.apps.wellbeing</item>
         <!-- <item>more packages</item>-->
     </string-array>
+
+    <!-- Whether to use scaled brightness (set -1 to disable) -->
+    <integer name="config_useScaleBrightness">-1</integer>
 </resources>
