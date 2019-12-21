@@ -41,4 +41,7 @@
 
     <!-- Whether doze feature is enabled by default in settings -->
     <bool name="config_doze_enabled_by_default">false</bool>
+
+    <!-- Whether to use scaled brightness (set -1 to disable) -->
+    <integer name="config_useScaleBrightness">-1</integer>
 </resources>
