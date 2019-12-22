@@ -74,6 +74,8 @@ public class ThemeAccentUtils {
         "com.accents.twitterblue", // 46
         "com.accents.xboxgreen", // 47
         "com.accents.xiaomiorange", // 48
+        "com.android.system.theme.charcoalblack", // 49
+        "com.android.system.theme.amoledblack", // 50
     };
 
     // Accents
@@ -128,6 +130,55 @@ public class ThemeAccentUtils {
         "com.accents.xboxgreen", // 47
         "com.accents.xiaomiorange", // 48
     };
+
+    // Dark Variants
+    private static final String[] DARK_THEMES = {
+        "com.android.system.theme.charcoalblack", // 0
+        "com.android.system.theme.amoledblack", // 1
+    };
+
+    // Check for the dark system theme
+    public static int getDarkStyle(IOverlayManager om, int userId) {
+        OverlayInfo themeInfo = null;
+
+        for (int darkStyle = 0; darkStyle < DARK_THEMES.length; darkStyle++) {
+            String darktheme = DARK_THEMES[darkStyle];
+            try {
+                themeInfo = om.getOverlayInfo(darktheme, userId);
+                if (themeInfo != null && themeInfo.isEnabled())
+                    return (darkStyle + 1);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
+    // Unloads the dark themes
+    private static void unloadDarkTheme(IOverlayManager om, int userId) {
+        for (String theme : DARK_THEMES) {
+            try {
+                om.setEnabled(theme, false, userId);
+            } catch (RemoteException e) {
+            }
+        }
+    }
+
+    // Set dark system theme
+    public static void setSystemTheme(IOverlayManager om, int userId, boolean useDarkTheme, int darkStyle) {
+         unloadDarkTheme(om, userId);
+
+        // Ensure dark/black theme enabled if requested
+        if (useDarkTheme && darkStyle > 0) {
+            try {
+                om.setEnabled(DARK_THEMES[darkStyle - 1], useDarkTheme, userId);
+            } catch (RemoteException e) {
+            }
+        }
+
+        // Check black/white accent proper usage
+        checkBlackWhiteAccent(om, userId, useDarkTheme);
+    }
 
     public static void checkBlackWhiteAccent(IOverlayManager om, int userId, boolean useDarkTheme) {
         OverlayInfo themeInfo = null;
