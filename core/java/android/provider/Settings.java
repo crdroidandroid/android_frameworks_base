@@ -4734,6 +4734,12 @@ public final class Settings {
         public static final String BERRY_THEME_OVERRIDE = "berry_theme_override";
 
         /**
+         * Switch between different dark styles
+         * @hide
+         */
+        public static final String BERRY_DARK_STYLE = "berry_dark_style";
+
+        /**
          * Enable\Disable Bluetooth Battery bar
          * @hide
          */
