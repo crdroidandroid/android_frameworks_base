@@ -24,28 +24,28 @@
     <string name="animation_slide_left_no_fade">Deslizar a la izquierda (sin desvanecer)</string>
     <string name="animation_slide_up">Deslizar hacia abajo</string>
     <string name="animation_slide_down">Deslizar hacia arriba</string>
-    <string name="animation_default">Default</string>
+    <string name="animation_default">Por defecto</string>
     <string name="animation_translucent">Traslúcido</string>
     <string name="animation_grow_shrink">Expandirse (Arriba)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_grow_shrink_center">Aparecer (desde el centro)</string>
+    <string name="animation_grow_shrink_bottom">Aparecer (desde abajo)</string>
+    <string name="animation_grow_shrink_left">Aparecer (por la izquierda)</string>
+    <string name="animation_grow_shrink_right">Aparecer (por la derecha)</string>
+    <string name="animation_random">Aleatorio</string>
+    <string name="action_null">Vacío</string>
     <string name="animation_ethans">Ethans</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">Copiar URL del registro de errores</string>
+    <string name="url_copy_success">URL copiada satisfactoriamente</string>
+    <string name="url_copy_failed">Se ha producido un error al cargar el registro en dogbin</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">Pulse y mantenga el botón de encendido para desbloquear</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">Modo Gaming</string>
+    <string name="gaming_mode_notification_title">Modo Gaming activado</string>
+    <string name="gaming_mode_notification_content">Toca para desactivar el modo Gaming</string>
+    <string name="gaming_mode_enabled_toast">Modo Gaming activado</string>
+    <string name="gaming_mode_disabled_toast">Modo Gaming desactivado</string>
     <!-- MicroG -->
     <string name="permlab_fakePackageSignature">Spoof package signature</string>
     <!-- Description of an application permission, listed so the user can choose whether
