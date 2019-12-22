@@ -17,26 +17,26 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_fade">Ausblenden</string>
+    <string name="animation_slide_right">Gleiten von rechts</string>
+    <string name="animation_slide_left">Von links hereingleiten</string>
+    <string name="animation_slide_right_no_fade">Von rechts hereingleiten (ohne Verblassen)</string>
+    <string name="animation_slide_left_no_fade">Von links hereingleiten (ohne Verblassen)</string>
+    <string name="animation_slide_up">Von unten hereingleiten</string>
+    <string name="animation_slide_down">Von oben hereingleiten</string>
+    <string name="animation_default">Standard</string>
+    <string name="animation_translucent">Durchsichtig</string>
+    <string name="animation_grow_shrink">Hineinwachsen (oben)</string>
+    <string name="animation_grow_shrink_center">Hineinwachsen (Mitte)</string>
+    <string name="animation_grow_shrink_bottom">Hineinwachsen (Unten)</string>
+    <string name="animation_grow_shrink_left">Hineinwachsen (Links)</string>
+    <string name="animation_grow_shrink_right">Hineinwachsen (rechts)</string>
+    <string name="animation_random">Zufällig</string>
+    <string name="action_null">Leer</string>
     <string name="animation_ethans">Ethans</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
+    <string name="aerr_copy">URL des Absturzberichts kopieren</string>
+    <string name="url_copy_success">URL erfolgreich kopiert</string>
     <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
