@@ -55,36 +55,36 @@
     <!-- Always on Display tile -->
     <string name="quick_settings_always_on_display_label">AOD</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Buscar sonido</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">Sonido</string>
+    <string name="quick_settings_sound_ring">Timbre</string>
+    <string name="quick_settings_sound_vibrate">Vibrar</string>
+    <string name="quick_settings_sound_dnd">No molestar</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">Reiniciar</string>
+    <string name="quick_settings_reboot_recovery_label">Recuperación</string>
+    <string name="quick_settings_poweroff_label">Apagar</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Modo Gaming está desactivado en los ajustes</string>
+    <string name="quick_settings_gaming_mode_label">Modo Gaming</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Modo Gaming desactivado.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Modo Gaming activado.</string>
     <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Automatic (wallpaper)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Automatic (livedisplay)</string>
-    <string name="quick_settings_ui_mode_disabled">Disabled</string>
-    <string name="quick_settings_ui_mode_enabled">Enabled</string>
+    <string name="quick_settings_ui_mode_automatic_wallpaper">Automático (fondo de pantalla)</string>
+    <string name="quick_settings_ui_mode_automatic_livedisplay">Automático (Livedisplay)</string>
+    <string name="quick_settings_ui_mode_disabled">Desactivado</string>
+    <string name="quick_settings_ui_mode_enabled">Activado</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_toast_0">Currently no SIM card is inserted</string>
-    <string name="qs_data_switch_toast_1">Currently only one SIM card is inserted</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">Cambiar tarjeta de datos</string>
+    <string name="qs_data_switch_toast_0">Actualmente no se ha insertado ninguna tarjeta SIM</string>
+    <string name="qs_data_switch_toast_1">Actualmente sólo se ha insertado una tarjeta SIM</string>
+    <string name="qs_data_switch_changed_1">Utilizando SIM 1 para datos móviles</string>
+    <string name="qs_data_switch_changed_2">Utilizando SIM 2 para datos móviles</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">¿Forzar detención?</string>
+    <string name="force_stop_dlg_text">Si se detiene una aplicación, es posible que no funcione correctamente.</string>
+    <string name="guts_force_close_app">Cerrar aplicación</string>
 </resources>
