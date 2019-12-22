@@ -294,6 +294,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             Settings.Secure.SYSUI_ROUNDED_FWVALS;
     private static final String BERRY_THEME_OVERRIDE =
             "system:" + Settings.System.BERRY_THEME_OVERRIDE;
+    private static final String BERRY_DARK_STYLE =
+            "system:" + Settings.System.BERRY_DARK_STYLE;
     private static final String GAMING_MODE_ACTIVE =
             "system:" + Settings.System.GAMING_MODE_ACTIVE;
     private static final String GAMING_MODE_HEADSUP_TOGGLE =
@@ -617,6 +619,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private boolean mBouncerWasShowingWhenHidden;
 
     private int mThemeOverride;
+    private int mDarkStyle;
     private boolean mPowerSave;
 
     // Notifies StatusBarKeyguardViewManager every time the keyguard transition is over,
@@ -760,6 +763,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         tunerService.addTunable(this, QS_TILE_TITLE_VISIBILITY);
         tunerService.addTunable(this, SYSUI_ROUNDED_FWVALS);
         tunerService.addTunable(this, BERRY_THEME_OVERRIDE);
+        tunerService.addTunable(this, BERRY_DARK_STYLE);
         tunerService.addTunable(this, GAMING_MODE_ACTIVE);
         tunerService.addTunable(this, GAMING_MODE_HEADSUP_TOGGLE);
         tunerService.addTunable(this, LESS_BORING_HEADS_UP);
@@ -3633,19 +3637,20 @@ public class StatusBar extends SystemUI implements DemoMode,
                 break;
         }
 
-        if (mUiModeManager != null && mUseDarkTheme != useDarkTheme) {
+        if (mUiModeManager != null && (mUseDarkTheme != useDarkTheme ||
+                mDarkStyle != ThemeAccentUtils.getDarkStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId()))) {
             mUseDarkTheme = useDarkTheme;
             if (mUseDarkTheme) {
                 mUiOffloadThread.submit(() -> {
                     mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
-                ThemeAccentUtils.checkBlackWhiteAccent(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
-                                            mUseDarkTheme);
+                ThemeAccentUtils.setSystemTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
+                                            mUseDarkTheme, mDarkStyle);
                 });
             } else {
                 mUiOffloadThread.submit(() -> {
                     mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
-                ThemeAccentUtils.checkBlackWhiteAccent(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
-                                            mUseDarkTheme);
+                ThemeAccentUtils.setSystemTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
+                                            mUseDarkTheme, mDarkStyle);
                 });
             }
             Settings.System.putIntForUser(mContext.getContentResolver(),
@@ -5043,6 +5048,14 @@ public class StatusBar extends SystemUI implements DemoMode,
                         TunerService.parseInteger(newValue, 0);
                 if (mThemeOverride != themeOverride) {
                     mThemeOverride = themeOverride;
+                    updateTheme();
+                }
+                break;
+            case BERRY_DARK_STYLE:
+                int darkStyle =
+                        TunerService.parseInteger(newValue, 0);
+                if (mDarkStyle != darkStyle) {
+                    mDarkStyle = darkStyle;
                     updateTheme();
                 }
                 break;
