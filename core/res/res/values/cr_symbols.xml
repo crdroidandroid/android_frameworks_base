@@ -128,4 +128,8 @@
 
     <!-- Parallel space max count. -->
     <java-symbol type="integer" name="config_parallelSpaceMaxCount" />
+
+    <!-- App version -->
+    <java-symbol type="string" name="old_version_number" />
+    <java-symbol type="string" name="new_version_number" />
 </resources>
