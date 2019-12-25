@@ -19,6 +19,9 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Dash (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> até a carga completa)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> • Carregando rapidamente</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="PERCENTAGE">%2$s</xliff:g> • Carregando (<xliff:g id="CHARGING_TIME_LEFT">%s</xliff:g> até a conclusão)</string>
+    <string name="keyguard_plugged_in_warp_charging">Carregamento Rápido</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
@@ -81,7 +84,7 @@
     <string name="qs_data_switch_changed_1">Usando o SIM 1 para dados móveis</string>
     <string name="qs_data_switch_changed_2">Usando o SIM 2 para dados móveis</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Forçar parada?</string>
+    <string name="force_stop_dlg_text">Se você forçar a parada de um app, ele pode apresentar mau funcionamento.</string>
+    <string name="guts_force_close_app">Fechar aplicativo</string>
 </resources>
