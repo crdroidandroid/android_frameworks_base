@@ -130,4 +130,8 @@
     <java-symbol type="integer" name="config_parallelSpaceMaxCount" />
     <java-symbol type="array" name="config_parallelSpaceWhitelist" />
     <java-symbol type="array" name="config_parallelSpaceBlocklist" />
+
+    <!-- App version -->
+    <java-symbol type="string" name="old_version_number" />
+    <java-symbol type="string" name="new_version_number" />
 </resources>
