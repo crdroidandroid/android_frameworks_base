@@ -19,6 +19,10 @@ package com.android.systemui.statusbar.phone;
 import android.annotation.ColorInt;
 import android.annotation.DrawableRes;
 import android.annotation.LayoutRes;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.TimeAnimator;
+import android.animation.ValueAnimator;
 import android.app.StatusBarManager;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -29,6 +33,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.display.AmbientDisplayConfiguration;
 import android.media.AudioManager;
 import android.media.session.MediaSessionLegacyHelper;
@@ -39,6 +44,7 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.DisplayCutout;
 import android.view.GestureDetector;
@@ -55,7 +61,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowInsetsController;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.view.FloatingActionMode;
@@ -87,6 +97,7 @@ public class StatusBarWindowView extends FrameLayout {
     private static final String DOUBLE_TAP_TO_WAKE =
             Settings.Secure.DOUBLE_TAP_TO_WAKE;
 
+    private static Context mStaticContext;
     private final GestureDetector mGestureDetector;
     private final StatusBarStateController mStatusBarStateController;
     private boolean mDoubleTapEnabled;
@@ -122,6 +133,10 @@ public class StatusBarWindowView extends FrameLayout {
     private boolean mSuppressingWakeUpGesture;
 
     private boolean mDoubleTapEnabledNative;
+
+    private static ImageButton mDismissAllButton;
+    private static boolean wasHideAnimationAlreadyCalled = false;
+    private static boolean wasShowAnimationAlreadyCalled = false;
 
     private final GestureDetector.SimpleOnGestureListener mGestureListener =
             new GestureDetector.SimpleOnGestureListener() {
@@ -195,6 +210,8 @@ public class StatusBarWindowView extends FrameLayout {
                 DOUBLE_TAP_TO_WAKE);
         mQuickQsOffsetHeight = getResources().getDimensionPixelSize(
                 com.android.internal.R.dimen.quick_qs_offset_height);
+
+        mStaticContext = context;
     }
 
     @Override
@@ -284,6 +301,82 @@ public class StatusBarWindowView extends FrameLayout {
         mNotificationPanel = findViewById(R.id.notification_panel);
         mBrightnessMirror = findViewById(R.id.brightness_mirror);
         mLockIcon = findViewById(R.id.lock_icon);
+        mDismissAllButton = (ImageButton) findViewById(R.id.clear_notifications);
+    }
+
+    public static void setDismissAllOnClickListener(OnClickListener listener) {
+        if (mDismissAllButton != null) {
+            mDismissAllButton.setOnClickListener(listener);
+        }
+    }
+
+    public static void setDismissAllVisible(boolean animate) {
+        if (mDismissAllButton.getVisibility() == View.VISIBLE) {
+            Log.v(TAG, Integer.toString(mDismissAllButton.getVisibility()));
+        } else if (mDismissAllButton != null && mDismissAllButton.getVisibility() != View.VISIBLE
+            && !wasShowAnimationAlreadyCalled) {
+            if (animate) {
+                Animation loadAnimation = AnimationUtils.loadAnimation(mStaticContext, R.anim.dismiss_all_show);
+                mDismissAllButton.setVisibility(View.VISIBLE);
+                mDismissAllButton.startAnimation(loadAnimation);
+            } else {
+                mDismissAllButton.setVisibility(View.VISIBLE);
+            }
+            wasShowAnimationAlreadyCalled = true;
+            wasHideAnimationAlreadyCalled = false;
+        }
+    }
+
+    public static void setDismissAllHidden(boolean animate) {
+        if (mDismissAllButton != null && !wasHideAnimationAlreadyCalled
+            && mDismissAllButton.getVisibility() != View.GONE) {
+            if (animate) {
+                Animation hideAnimation = AnimationUtils.loadAnimation(mStaticContext, R.anim.dismiss_all_hide);
+                hideAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                    public void onAnimationStart(Animation animation) {
+                    }
+                    public void onAnimationEnd(Animation animation) {
+                        mDismissAllButton.setVisibility(View.GONE);
+                        wasShowAnimationAlreadyCalled = false;
+                    }
+                });
+                wasHideAnimationAlreadyCalled = true;
+                mDismissAllButton.startAnimation(hideAnimation);
+            } else {
+                mDismissAllButton.setVisibility(View.GONE);
+                wasShowAnimationAlreadyCalled = false;
+                wasHideAnimationAlreadyCalled = true;
+            }
+        }
+    }
+
+    public static void updateDismissAllButton(int backgroundcolor, int iconcolor) {
+        if (mDismissAllButton != null) {
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mDismissAllButton.getLayoutParams();
+            layoutParams.width = mStaticContext.getResources().getDimensionPixelSize(R.dimen.dismiss_all_button_width);
+            layoutParams.height = mStaticContext.getResources().getDimensionPixelSize(R.dimen.dismiss_all_button_height);
+            layoutParams.bottomMargin = mStaticContext.getResources().getDimensionPixelSize(R.dimen.dismiss_all_button_margin_bottom);
+            mDismissAllButton.setElevation(mStaticContext.getResources().getDimension(R.dimen.dismiss_all_button_elevation));
+
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.OVAL);
+            shape.setColor(backgroundcolor);
+
+            mDismissAllButton.setColorFilter(iconcolor);
+            mDismissAllButton.setBackground(shape);
+        }
+    }
+
+    public static void updateDismissAllButtonOnlyDimens() {
+        if (mDismissAllButton != null) {
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mDismissAllButton.getLayoutParams();
+            layoutParams.width = mStaticContext.getResources().getDimensionPixelSize(R.dimen.dismiss_all_button_width);
+            layoutParams.height = mStaticContext.getResources().getDimensionPixelSize(R.dimen.dismiss_all_button_height);
+            layoutParams.bottomMargin = mStaticContext.getResources().getDimensionPixelSize(R.dimen.dismiss_all_button_margin_bottom);
+            mDismissAllButton.setElevation(mStaticContext.getResources().getDimension(R.dimen.dismiss_all_button_elevation));
+        }
     }
 
     @Override

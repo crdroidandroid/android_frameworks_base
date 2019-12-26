@@ -28,4 +28,8 @@
 
     <!-- Screenrecord -->
     <color name="screenrecord_icon_color">#B71C1C</color>
+
+    <!-- OxygenOS styled dismiss all button -->
+    <color name="recents_dismiss_all_background_color">@android:color/white</color>
+    <color name="recents_dismiss_all_icon_color">#8a000000</color>
 </resources>
