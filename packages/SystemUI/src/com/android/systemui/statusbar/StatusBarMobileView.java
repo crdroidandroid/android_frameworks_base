@@ -162,14 +162,12 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
             mMobileGroup.setVisibility(View.VISIBLE);
         }
         mMobileDrawable.setLevel(mState.strengthId);
-        boolean showRoamingSpace = false;
         if (mState.typeId > 0) {
             if (mOldStyleType) {
                 mMobileType.setVisibility(View.GONE);
                 mMobileTypeSmall.setContentDescription(mState.typeContentDescription);
                 mMobileTypeSmall.setImageResource(mState.typeId);
                 mMobileTypeSmall.setVisibility(View.VISIBLE);
-                showRoamingSpace = true;
                 setMobileSignalWidth(false);
             } else {
                 mMobileType.setContentDescription(mState.typeContentDescription);
@@ -188,7 +186,7 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
             setMobileSignalWidth(true);
         }
         mMobileRoaming.setVisibility(mState.roaming ? View.VISIBLE : View.GONE);
-        mMobileRoamingSpace.setVisibility(mState.roaming || showRoamingSpace ? View.VISIBLE : View.GONE);
+        mMobileRoamingSpace.setVisibility(mState.roaming || mOldStyleType ? View.VISIBLE : View.GONE);
         mIn.setVisibility(mState.activityIn ? View.VISIBLE : View.GONE);
         mOut.setVisibility(mState.activityOut ? View.VISIBLE : View.GONE);
         mInoutContainer.setVisibility((mState.activityIn || mState.activityOut)
@@ -229,7 +227,6 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         if (mState.strengthId != state.strengthId) {
             mMobileDrawable.setLevel(state.strengthId);
         }
-        boolean showRoamingSpace = false;
         if (mState.typeId != state.typeId || mOldStyleType != oldStyleType) {
             needsLayout |= state.typeId == 0 || mState.typeId == 0;
             if (state.typeId != 0) {
@@ -238,7 +235,6 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
                     mMobileTypeSmall.setContentDescription(state.typeContentDescription);
                     mMobileTypeSmall.setImageResource(state.typeId);
                     mMobileTypeSmall.setVisibility(View.VISIBLE);
-                    showRoamingSpace = true;
                     setMobileSignalWidth(false);
                 } else {
                     mMobileType.setContentDescription(state.typeContentDescription);
@@ -258,7 +254,7 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
             setMobileSignalWidth(true);
         }
         mMobileRoaming.setVisibility(state.roaming ? View.VISIBLE : View.GONE);
-        mMobileRoamingSpace.setVisibility(showRoamingSpace || state.roaming ? View.VISIBLE : View.GONE);
+        mMobileRoamingSpace.setVisibility(oldStyleType || state.roaming ? View.VISIBLE : View.GONE);
         mIn.setVisibility(state.activityIn ? View.VISIBLE : View.GONE);
         mOut.setVisibility(state.activityOut ? View.VISIBLE : View.GONE);
         mInoutContainer.setVisibility((state.activityIn || state.activityOut)
@@ -372,49 +368,5 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
     @Override
     public String toString() {
         return "StatusBarMobileView(slot=" + mSlot + " state=" + mState + ")";
-    }
-
-    public void updateDisplayType(boolean oldStyleType) {
-        boolean needsLayout = false;
-        boolean showRoamingSpace = false;
-
-        if (mOldStyleType != oldStyleType) {
-            if (mState.typeId != 0) {
-                if (oldStyleType) {
-                    mMobileType.setVisibility(View.GONE);
-                    mMobileTypeSmall.setContentDescription(mState.typeContentDescription);
-                    mMobileTypeSmall.setImageResource(mState.typeId);
-                    mMobileTypeSmall.setVisibility(View.VISIBLE);
-                    showRoamingSpace = true;
-                    setMobileSignalWidth(false);
-                } else {
-                    mMobileType.setContentDescription(mState.typeContentDescription);
-                    mMobileType.setImageResource(mState.typeId);
-                    mMobileType.setVisibility(View.VISIBLE);
-                    setMobileSignalWidth(true);
-                }
-            } else {
-                mMobileType.setVisibility(View.GONE);
-                mMobileTypeSmall.setVisibility(View.GONE);
-                setMobileSignalWidth(true);
-            }
-        }
-        if (mState.roaming) {
-            mMobileTypeSmall.setVisibility(View.GONE);
-            setMobileSignalWidth(true);
-        }
-        mMobileRoaming.setVisibility(mState.roaming ? View.VISIBLE : View.GONE);
-        mMobileRoamingSpace.setVisibility(showRoamingSpace || mState.roaming ? View.VISIBLE : View.GONE);
-        mIn.setVisibility(mState.activityIn ? View.VISIBLE : View.GONE);
-        mOut.setVisibility(mState.activityOut ? View.VISIBLE : View.GONE);
-        mInoutContainer.setVisibility((mState.activityIn || mState.activityOut)
-                ? View.VISIBLE : View.GONE);
-
-        needsLayout = mOldStyleType != oldStyleType;
-        mOldStyleType = oldStyleType;
-
-        if (needsLayout) {
-            requestLayout();
-        }
     }
 }
