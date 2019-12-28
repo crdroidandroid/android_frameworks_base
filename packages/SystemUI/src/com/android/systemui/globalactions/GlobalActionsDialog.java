@@ -906,11 +906,18 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
 
         @Override
         public boolean onLongPress() {
-            if (FeatureFlagUtils.isEnabled(mContext, FeatureFlagUtils.SCREENRECORD_LONG_PRESS)) {
-                mScreenRecordHelper.launchRecordPrompt();
-            } else {
-                mScreenshotHelper.takeScreenshot(2, true, true, mHandler, null);
-            }
+            // Add a little delay before executing, to give the
+            // dialog a chance to go away before it takes a
+            // screenshot.
+            // TODO: instead, omit global action dialog layer
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mScreenshotHelper.takeScreenshot(2, true, true, mHandler, null);
+                    MetricsLogger.action(mContext,
+                            MetricsEvent.ACTION_SCREENSHOT_POWER_MENU);
+                }
+            }, 500);
             return true;
         }
     }
