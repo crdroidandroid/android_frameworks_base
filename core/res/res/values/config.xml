@@ -2884,6 +2884,7 @@
         <item>logout</item>
         <item>bugreport</item>
         <item>screenshot</item>
+        <item>screenrecord</item>
         <item>emergency</item>
     </string-array>
 
