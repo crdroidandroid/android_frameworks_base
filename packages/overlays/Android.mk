@@ -24,7 +24,9 @@ LOCAL_REQUIRED_MODULES := \
 	FontAmaranteSourceOverlay \
 	FontBariolSourceOverlay \
 	FontCagliostroSourceOverlay \
+	FontComicSansSourceOverlay \
 	FontCoolstorySourceOverlay \
+	FontGoogleSansSourceOverlay \
 	FontLGSmartGothicSourceOverlay \
 	FontNotoSerifSourceOverlay \
 	FontOneplusSlateSource \
