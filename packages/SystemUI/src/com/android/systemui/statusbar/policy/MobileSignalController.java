@@ -98,8 +98,8 @@ public class MobileSignalController extends SignalController<
     private boolean mShow4gForLte;
     private boolean mDataDisabledIcon;
 
-    private static final String SHOW_VOLTE_ICON =
-            "system:" + Settings.System.SHOW_VOLTE_ICON;
+    private static final String VOLTE_ICON_STYLE =
+            "system:" + Settings.System.VOLTE_ICON_STYLE;
     private static final String ROAMING_INDICATOR_ICON =
             "system:" + Settings.System.ROAMING_INDICATOR_ICON;
     private static final String SHOW_FOURG_ICON =
@@ -156,7 +156,7 @@ public class MobileSignalController extends SignalController<
             }
         };
 
-        Dependency.get(TunerService.class).addTunable(this, SHOW_VOLTE_ICON);
+        Dependency.get(TunerService.class).addTunable(this, VOLTE_ICON_STYLE);
         Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
         Dependency.get(TunerService.class).addTunable(this, SHOW_FOURG_ICON);
         Dependency.get(TunerService.class).addTunable(this, DATA_DISABLED_ICON);
@@ -166,7 +166,7 @@ public class MobileSignalController extends SignalController<
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
-            case SHOW_VOLTE_ICON:
+            case VOLTE_ICON_STYLE:
                      mVoLTEicon =
                         TunerService.parseIntegerSwitch(newValue, false);
                      updateTelephony();
