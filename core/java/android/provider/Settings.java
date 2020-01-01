@@ -4524,7 +4524,7 @@ public final class Settings {
          * Whether to display VoLTE icon when VoLTE present
          * @hide
          */
-        public static final String SHOW_VOLTE_ICON = "show_volte_icon";
+        public static final String VOLTE_ICON_STYLE = "volte_icon_style";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
