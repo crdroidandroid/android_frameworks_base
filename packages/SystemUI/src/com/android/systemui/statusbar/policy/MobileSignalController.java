@@ -103,10 +103,10 @@ public class MobileSignalController extends SignalController<
     private FeatureConnector<ImsManager> mFeatureConnector;
     private int mCallState = TelephonyManager.CALL_STATE_IDLE;
 
-    private boolean mVoLTEicon;
+    private int mVoLTEicon = 0;
 
-    private static final String SHOW_VOLTE_ICON =
-            "system:" + Settings.System.SHOW_VOLTE_ICON;
+    private static final String VOLTE_ICON_STYLE =
+            "system:" + Settings.System.VOLTE_ICON_STYLE;
 
     // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
     // need listener lists anymore.
@@ -169,16 +169,16 @@ public class MobileSignalController extends SignalController<
             }
         };
 
-        Dependency.get(TunerService.class).addTunable(this, SHOW_VOLTE_ICON);
+        Dependency.get(TunerService.class).addTunable(this, VOLTE_ICON_STYLE);
     }
 
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
-            case SHOW_VOLTE_ICON:
+            case VOLTE_ICON_STYLE:
                 mVoLTEicon =
-                    TunerService.parseIntegerSwitch(newValue, false);
-                updateTelephony();
+                    TunerService.parseInteger(newValue, 0);
+                notifyListeners();
                 break;
             default:
                 break;
@@ -425,14 +425,44 @@ public class MobileSignalController extends SignalController<
     }
 
     private boolean isVolteSwitchOn() {
-        return mImsManager != null && mImsManager.isEnhanced4gLteModeSettingEnabledByUser();
+        return mImsManager != null && mVoLTEicon > 0;
     }
 
     private int getVolteResId() {
         int resId = 0;
-        if ( (mCurrentState.voiceCapable || mCurrentState.videoCapable)
-                &&  mCurrentState.imsRegistered && mVoLTEicon) {
-            resId = R.drawable.ic_volte;
+        if ((mCurrentState.voiceCapable || mCurrentState.videoCapable)
+                &&  mCurrentState.imsRegistered) {
+            switch (mVoLTEicon) {
+                case 1:
+                    resId = R.drawable.ic_volte1;
+                    break;
+                case 2:
+                    resId = R.drawable.ic_volte2;
+                    break;
+                case 3:
+                    resId = R.drawable.ic_volte3;
+                    break;
+                case 4:
+                    resId = R.drawable.ic_volte4;
+                    break;
+                case 5:
+                    resId = R.drawable.ic_volte5;
+                    break;
+                case 6:
+                    resId = R.drawable.ic_volte6;
+                    break;
+                case 7:
+                    resId = R.drawable.ic_volte7;
+                    break;
+                case 8:
+                    resId = R.drawable.ic_volte8; // EMUI icon
+                    break;
+                case 9:
+                    resId = R.drawable.ic_volte9; //Oneplus Compact
+                    break;
+                default:
+                    break;
+            }
         }
         return resId;
     }
