@@ -28,6 +28,7 @@ import android.database.ContentObserver;
 import android.net.NetworkCapabilities;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.CellSignalStrength;
@@ -68,12 +69,14 @@ import com.android.settingslib.mobile.MobileStatusTracker.MobileStatus;
 import com.android.settingslib.mobile.MobileStatusTracker.SubscriptionDefaults;
 import com.android.settingslib.mobile.TelephonyIcons;
 import com.android.settingslib.net.SignalStrengthUtil;
+import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.statusbar.FeatureFlags;
 import com.android.systemui.statusbar.policy.NetworkController.IconState;
 import com.android.systemui.statusbar.policy.NetworkController.MobileDataIndicators;
 import com.android.systemui.statusbar.policy.NetworkController.SignalCallback;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.CarrierConfigTracker;
 
 import java.io.PrintWriter;
@@ -86,7 +89,8 @@ import java.util.Map;
 /**
  * Monitors the mobile signal changes and update the SysUI icons.
  */
-public class MobileSignalController extends SignalController<MobileState, MobileIconGroup> {
+public class MobileSignalController extends SignalController<MobileState, MobileIconGroup>
+        implements TunerService.Tunable {
     private static final SimpleDateFormat SSDF = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
     private static final int STATUS_HISTORY_SIZE = 64;
     private static final int IMS_TYPE_WWAN = 1;
@@ -139,6 +143,11 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
     private FeatureConnector<ImsManager> mFeatureConnector;
     private int mCallState = TelephonyManager.CALL_STATE_IDLE;
     private boolean mShowVolteIcon;
+
+    private int mVoLTEicon = 0;
+
+    private static final String VOLTE_ICON_STYLE =
+            "system:" + Settings.System.VOLTE_ICON_STYLE;
 
     // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
     // need listener lists anymore.
@@ -301,6 +310,21 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
                 info, mDefaults, mCallback);
         mProviderModelBehavior = featureFlags.isCombinedStatusBarSignalIconsEnabled();
         mProviderModelSetting = featureFlags.isProviderModelSettingEnabled();
+
+        Dependency.get(TunerService.class).addTunable(this, VOLTE_ICON_STYLE);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case VOLTE_ICON_STYLE:
+                mVoLTEicon =
+                    TunerService.parseInteger(newValue, 0);
+                notifyListeners();
+                break;
+            default:
+                break;
+        }
     }
 
     public void setConfiguration(Config config) {
@@ -429,15 +453,44 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
     }
 
     private boolean isVolteSwitchOn() {
-        return mImsManager != null && mImsManager.isEnhanced4gLteModeSettingEnabledByUser();
+        return mImsManager != null && mVoLTEicon > 0;
     }
 
     private int getVolteResId() {
         int resId = 0;
-
-        if ( (mCurrentState.voiceCapable || mCurrentState.videoCapable)
-                &&  mCurrentState.imsRegistered ) {
-            resId = R.drawable.ic_volte;
+        if ((mCurrentState.voiceCapable || mCurrentState.videoCapable)
+                &&  mCurrentState.imsRegistered) {
+            switch (mVoLTEicon) {
+                case 1:
+                    resId = R.drawable.ic_volte1;
+                    break;
+                case 2:
+                    resId = R.drawable.ic_volte2;
+                    break;
+                case 3:
+                    resId = R.drawable.ic_volte3;
+                    break;
+                case 4:
+                    resId = R.drawable.ic_volte4;
+                    break;
+                case 5:
+                    resId = R.drawable.ic_volte5;
+                    break;
+                case 6:
+                    resId = R.drawable.ic_volte6;
+                    break;
+                case 7:
+                    resId = R.drawable.ic_volte7;
+                    break;
+                case 8:
+                    resId = R.drawable.ic_volte8; // EMUI icon
+                    break;
+                case 9:
+                    resId = R.drawable.ic_volte9; //Oneplus Compact
+                    break;
+                default:
+                    break;
+            }
         }
         return resId;
     }
