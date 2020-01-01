@@ -37,7 +37,6 @@
             android:layout_height="wrap_content"
             android:paddingStart="3dp"
             android:paddingEnd="1dp"
-            android:src="@drawable/volte"
             android:visibility="gone"
             />
 
