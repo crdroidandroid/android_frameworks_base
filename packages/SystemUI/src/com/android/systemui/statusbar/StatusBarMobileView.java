@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -37,13 +38,15 @@ import android.widget.LinearLayout;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.settingslib.graph.SignalDrawable;
+import com.android.systemui.Dependency;
 import com.android.systemui.DualToneHandler;
 import com.android.systemui.R;
 import com.android.systemui.plugins.DarkIconDispatcher.DarkReceiver;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.MobileIconState;
+import com.android.systemui.tuner.TunerService;
 
 public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
-        StatusIconDisplayable {
+        StatusIconDisplayable, TunerService.Tunable {
     private static final String TAG = "StatusBarMobileView";
 
     /// Used to show etc dots
@@ -63,6 +66,11 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
     private View mMobileSignalType;
     private boolean mOldStyleType;
     private ImageView mMobileTypeSmall;
+
+    private static final String VOLTE_ICON_STYLE =
+            "system:" + Settings.System.VOLTE_ICON_STYLE;
+
+    private int mVoLTEicon;
 
     public static StatusBarMobileView fromContext(Context context, String slot) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -114,6 +122,7 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         mOut = findViewById(R.id.mobile_out);
         mInoutContainer = findViewById(R.id.inout_container);
         mMobileImsImageView = findViewById(R.id.ims_hd);
+        mMobileImsImageView.setImageResource(R.drawable.ic_volte1);
         mMobileSignalType = findViewById(R.id.mobile_signal_type);
         mMobileTypeSmall = findViewById(R.id.mobile_type_small);
 
@@ -121,6 +130,8 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         mMobile.setImageDrawable(mMobileDrawable);
 
         initDotView();
+
+        Dependency.get(TunerService.class).addTunable(this, VOLTE_ICON_STYLE);
     }
 
     private void initDotView() {
@@ -263,6 +274,44 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         mState = state;
         mOldStyleType = oldStyleType;
         return needsLayout;
+    }
+
+    private void updateVoLTEicon() {
+        switch (mVoLTEicon) {
+            case 0:
+            case 1:
+            default:
+                mMobileImsImageView.setImageResource(R.drawable.ic_volte1);
+                break;
+            case 2:
+                mMobileImsImageView.setImageResource(R.drawable.ic_volte2);
+                break;
+            case 3:
+                mMobileImsImageView.setImageResource(R.drawable.ic_volte3);
+                break;
+            case 4:
+                mMobileImsImageView.setImageResource(R.drawable.ic_volte4);
+                break;
+            case 5:
+                mMobileImsImageView.setImageResource(R.drawable.ic_volte5);
+                break;
+            case 6:
+                mMobileImsImageView.setImageResource(R.drawable.ic_volte6);
+                break;
+        }
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case VOLTE_ICON_STYLE:
+                mVoLTEicon =
+                    TunerService.parseInteger(newValue, 0);
+                updateVoLTEicon();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
