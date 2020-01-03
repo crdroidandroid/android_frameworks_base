@@ -119,6 +119,10 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             "system:" + Settings.System.QS_SHOW_BATTERY_ESTIMATE;
     public static final String STATUS_BAR_BATTERY_STYLE =
             "system:" + Settings.System.STATUS_BAR_BATTERY_STYLE;
+    public static final String QS_BATTERY_STYLE =
+            "system:" + Settings.System.QS_BATTERY_STYLE;
+    public static final String QS_BATTERY_LOCATION =
+            "system:" + Settings.System.QS_BATTERY_LOCATION;
 
     private final Handler mHandler = new Handler();
     private final NextAlarmController mAlarmController;
@@ -160,8 +164,11 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private Clock mClockView;
     private DateView mDateView;
     private BatteryMeterView mBatteryRemainingIcon;
+    private BatteryMeterView mBatteryIcon;
     private RingerModeTracker mRingerModeTracker;
     private BroadcastDispatcher mBroadcastDispatcher;
+
+    private int mStatusBarBatteryStyle, mQSBatteryStyle;
 
     // Used for RingerModeTracker
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
@@ -256,8 +263,10 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
         // Tint for the battery icons are handled in setupHost()
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
+        mBatteryIcon = findViewById(R.id.batteryIcon);
         // Don't need to worry about tuner settings for this icon
         mBatteryRemainingIcon.setIgnoreTunerUpdates(true);
+        mBatteryIcon.setIgnoreTunerUpdates(true);
         mRingerModeTextView.setSelected(true);
         mNextAlarmTextView.setSelected(true);
 
@@ -267,7 +276,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 SHOW_QS_CLOCK,
                 QS_SHOW_BATTERY_PERCENT,
                 QS_SHOW_BATTERY_ESTIMATE,
-                STATUS_BAR_BATTERY_STYLE);
+                STATUS_BAR_BATTERY_STYLE,
+                QS_BATTERY_STYLE,
+                QS_BATTERY_LOCATION);
     }
 
     public QuickQSPanel getHeaderQsPanel() {
@@ -646,6 +657,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         float intensity = getColorIntensity(colorForeground);
         int fillColor = mDualToneHandler.getSingleColor(intensity);
         mBatteryRemainingIcon.onDarkChanged(tintArea, intensity, fillColor);
+        mBatteryIcon.setColorsFromContext(mHost.getContext());
+        mBatteryIcon.onDarkChanged(new Rect(), 0, DarkIconDispatcher.DEFAULT_ICON_TINT);
     }
 
     public void setCallback(Callback qsPanelCallback) {
@@ -709,6 +722,23 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         }
     }
 
+    private void updateBatteryStyle() {
+        int style;
+        if (mQSBatteryStyle == -1) {
+            style = mStatusBarBatteryStyle;
+        } else {
+            style = mQSBatteryStyle;
+        }
+        mBatteryRemainingIcon.mBatteryStyle = style;
+        mBatteryIcon.mBatteryStyle = style;
+        mBatteryRemainingIcon.updateBatteryStyle();
+        mBatteryRemainingIcon.updatePercentView();
+        mBatteryRemainingIcon.updateVisibility();
+        mBatteryIcon.updateBatteryStyle();
+        mBatteryIcon.updatePercentView();
+        mBatteryIcon.updateVisibility();
+    }
+
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
@@ -728,21 +758,43 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             case QS_SHOW_BATTERY_PERCENT:
                 mBatteryRemainingIcon.mShowBatteryPercent =
                         TunerService.parseInteger(newValue, 2);
+                mBatteryIcon.mShowBatteryPercent =
+                        TunerService.parseInteger(newValue, 2);
                 mBatteryRemainingIcon.updatePercentView();
                 mBatteryRemainingIcon.updateVisibility();
+                mBatteryIcon.updatePercentView();
+                mBatteryIcon.updateVisibility();
                 break;
             case QS_SHOW_BATTERY_ESTIMATE:
                 mBatteryRemainingIcon.mShowBatteryEstimate =
                         TunerService.parseInteger(newValue, 0);
+                mBatteryIcon.mShowBatteryEstimate =
+                        TunerService.parseInteger(newValue, 0);
                 mBatteryRemainingIcon.updatePercentView();
                 mBatteryRemainingIcon.updateVisibility();
+                mBatteryIcon.updatePercentView();
+                mBatteryIcon.updateVisibility();
                 break;
             case STATUS_BAR_BATTERY_STYLE:
-                mBatteryRemainingIcon.mBatteryStyle =
+                mStatusBarBatteryStyle =
                         TunerService.parseInteger(newValue, 0);
-                mBatteryRemainingIcon.updateBatteryStyle();
-                mBatteryRemainingIcon.updatePercentView();
-                mBatteryRemainingIcon.updateVisibility();
+                updateBatteryStyle();
+                break;
+            case QS_BATTERY_STYLE:
+                mQSBatteryStyle =
+                        TunerService.parseInteger(newValue, -1);
+                updateBatteryStyle();
+                break;
+            case QS_BATTERY_LOCATION:
+                int location =
+                        TunerService.parseInteger(newValue, 0);
+                if (location == 0) {
+                    mBatteryIcon.setVisibility(View.GONE);
+                    mBatteryRemainingIcon.setVisibility(View.VISIBLE);
+                } else {
+                    mBatteryRemainingIcon.setVisibility(View.GONE);
+                    mBatteryIcon.setVisibility(View.VISIBLE);
+                }
                 break;
             default:
                 break;

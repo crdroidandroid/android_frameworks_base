@@ -47,4 +47,16 @@
         android:gravity="center_vertical|end"
         android:layout_gravity="center_vertical|end"
         android:visibility="gone" />
+
+    <com.android.systemui.BatteryMeterView
+        android:id="@+id/batteryIcon"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:gravity="center_vertical|end"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.StatusBar.Clock"
+        android:paddingStart="2dp"
+        systemui:showDark="false"
+        android:visibility="gone" />
 </FrameLayout>
