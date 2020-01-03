@@ -69,5 +69,16 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
+    <com.android.systemui.BatteryMeterView
+        android:id="@+id/batteryIcon"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:gravity="center_vertical|end"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.StatusBar.Clock"
+        android:paddingStart="2dp"
+        systemui:showDark="false"
+        android:visibility="gone" />
+
     </LinearLayout>
 </LinearLayout>
