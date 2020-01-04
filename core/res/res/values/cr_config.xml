@@ -58,4 +58,7 @@
 
     <!-- Name of a font family to use as regular font. For theming purpose. -->
     <string name="config_regularFontFamily" translatable="false">sans-serif-regular</string>
+
+    <!-- Whether to use in-built Screen Record service -->
+    <bool name="config_showScreenRecord">false</bool>
 </resources>
