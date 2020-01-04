@@ -177,6 +177,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
     private String[] mRestartMenuActions;
     private String[] mCurrentMenuActions;
     private boolean mIsRestartMenu;
+    private boolean mScreenRecordAvailable;
 
     /**
      * @param context everything needs a context :(
@@ -239,6 +240,8 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
                 com.android.internal.R.array.config_globalActionsList);
         mRestartMenuActions = mContext.getResources().getStringArray(
                 org.lineageos.platform.internal.R.array.config_restartActionsList);
+        mScreenRecordAvailable = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_showScreenRecord);
 
         updatePowerMenuActions();
     }
@@ -466,7 +469,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
                 mItems.add(new RestartSystemUIAction());
             } else if (GLOBAL_ACTION_KEY_SCREENSHOT.equals(actionKey)) {
                 mItems.add(new ScreenshotAction());
-            } else if (GLOBAL_ACTION_KEY_SCREENRECORD.equals(actionKey)) {
+            } else if (mScreenRecordAvailable && GLOBAL_ACTION_KEY_SCREENRECORD.equals(actionKey)) {
                 mItems.add(new ScreenrecordAction());
             } else if (GLOBAL_ACTION_KEY_LOGOUT.equals(actionKey)) {
                 if (mDevicePolicyManager.isLogoutEnabled()
