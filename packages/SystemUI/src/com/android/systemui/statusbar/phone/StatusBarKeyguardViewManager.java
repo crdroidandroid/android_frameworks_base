@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ import com.android.keyguard.KeyguardViewController;
 import com.android.keyguard.ViewMediatorCallback;
 import com.android.settingslib.animation.AppearAnimationUtils;
 import com.android.systemui.DejankUtils;
+import com.android.systemui.Dependency;
 import com.android.systemui.SystemUIFactory;
 import com.android.systemui.dock.DockManager;
 import com.android.systemui.keyguard.DismissCallbackRegistry;
@@ -62,6 +64,7 @@ import com.android.systemui.statusbar.notification.ViewGroupFadeHelper;
 import com.android.systemui.statusbar.phone.KeyguardBouncer.BouncerExpansionCallback;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
+import com.android.systemui.tuner.TunerService;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -79,7 +82,7 @@ import javax.inject.Singleton;
 public class StatusBarKeyguardViewManager implements RemoteInputController.Callback,
         StatusBarStateController.StateListener, ConfigurationController.ConfigurationListener,
         PanelExpansionListener, NavigationModeController.ModeChangedListener,
-        KeyguardViewController {
+        KeyguardViewController, TunerService.Tunable {
 
     // When hiding the Keyguard with timing supplied from WindowManager, better be early than late.
     private static final long HIDE_TIMING_CORRECTION_MS = - 16 * 3;
@@ -96,6 +99,11 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
     private static final long KEYGUARD_DISMISS_DURATION_LOCKED = 2000;
 
     private static String TAG = "StatusBarKeyguardViewManager";
+
+    private static final String LOCKSCREEN_LOCK_ICON =
+            "system:" + Settings.System.LOCKSCREEN_LOCK_ICON;
+
+    private boolean mLockIcon;
 
     protected final Context mContext;
     private final ConfigurationController mConfigurationController;
@@ -260,6 +268,19 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
         if (mDockManager != null) {
             mDockManager.addListener(mDockEventListener);
             mIsDocked = mDockManager.isDocked();
+        }
+        Dependency.get(TunerService.class).addTunable(this, LOCKSCREEN_LOCK_ICON);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case LOCKSCREEN_LOCK_ICON:
+                mLockIcon =
+                    TunerService.parseIntegerSwitch(newValue, true);
+                break;
+            default:
+                break;
         }
     }
 
@@ -830,7 +851,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
             updateNavigationBarVisibility(navBarVisible);
         }
 
-        mLockIconContainer.setVisibility((mLastLockVisible && mDozing)
+        mLockIconContainer.setVisibility(!mLockIcon || (mLastLockVisible && mDozing)
                  ? View.GONE : View.VISIBLE);
 
         if (bouncerShowing != mLastBouncerShowing || mFirstUpdate) {
