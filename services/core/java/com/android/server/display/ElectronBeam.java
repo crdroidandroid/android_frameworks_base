@@ -35,7 +35,6 @@ import android.opengl.EGLDisplay;
 import android.opengl.EGLSurface;
 import android.opengl.GLES10;
 import android.opengl.GLES11Ext;
-import android.os.IBinder;
 import android.os.Looper;
 import android.util.Slog;
 import android.view.DisplayInfo;
@@ -460,20 +459,13 @@ final class ElectronBeam implements ScreenStateAnimator {
             final SurfaceTexture st = new SurfaceTexture(mTexNames[0]);
             final Surface s = new Surface(st);
             try {
-                final IBinder token = SurfaceControl.getInternalDisplayToken();
-                if (token == null) {
-                    Slog.e(TAG,
-                            "Failed to take screenshot because internal display is disconnected");
-                    return false;
-                }
-
-                SurfaceControl.screenshot(token, s);
-                st.updateTexImage();
-                st.getTransformMatrix(mTexMatrix);
+                SurfaceControl.screenshot(SurfaceControl.getInternalDisplayToken(), s);
             } finally {
                 s.release();
-                st.release();
             }
+
+            st.updateTexImage();
+            st.getTransformMatrix(mTexMatrix);
 
             // Set up texture coordinates for a quad.
             // We might need to change this if the texture ends up being
@@ -581,7 +573,7 @@ final class ElectronBeam implements ScreenStateAnimator {
             try {
                 int flags;
                 if (mMode == MODE_FADE) {
-                    flags = SurfaceControl.FX_SURFACE_DIM | SurfaceControl.HIDDEN;
+                    flags = SurfaceControl.FX_SURFACE_EFFECT | SurfaceControl.HIDDEN;
                 } else {
                     flags = SurfaceControl.OPAQUE | SurfaceControl.HIDDEN;
                 }
@@ -593,6 +585,7 @@ final class ElectronBeam implements ScreenStateAnimator {
                 mSurfaceControl = builder.build();
             } catch (OutOfResourcesException ex) {
                 Slog.e(TAG, "Unable to create surface.", ex);
+                t.close();
                 return false;
             }
 
@@ -601,7 +594,8 @@ final class ElectronBeam implements ScreenStateAnimator {
             mSurface = new Surface();
             mSurface.copyFrom(mSurfaceControl);
 
-            mSurfaceLayout = new NaturalSurfaceLayout(mDisplayManager, mDisplayId, mSurfaceControl);
+            mSurfaceLayout = new NaturalSurfaceLayout(mDisplayManager,
+                    mDisplayId, mSurfaceControl);
             mSurfaceLayout.onDisplayTransaction(t);
             t.apply();
         }
@@ -782,21 +776,21 @@ final class ElectronBeam implements ScreenStateAnimator {
                 DisplayInfo displayInfo = mDisplayManagerInternal.getDisplayInfo(mDisplayId);
                 switch (displayInfo.rotation) {
                     case Surface.ROTATION_0:
-                        mSurfaceControl.setPosition(0, 0);
-                        mSurfaceControl.setMatrix(1, 0, 0, 1);
+                        t.setPosition(mSurfaceControl, 0, 0);
+                        t.setMatrix(mSurfaceControl, 1, 0, 0, 1);
                         break;
                     case Surface.ROTATION_90:
-                        mSurfaceControl.setPosition(0, displayInfo.logicalHeight);
-                        mSurfaceControl.setMatrix(0, -1, 1, 0);
+                        t.setPosition(mSurfaceControl, 0, displayInfo.logicalHeight);
+                        t.setMatrix(mSurfaceControl, 0, -1, 1, 0);
                         break;
                     case Surface.ROTATION_180:
-                        mSurfaceControl.setPosition(displayInfo.logicalWidth,
+                        t.setPosition(mSurfaceControl, displayInfo.logicalWidth,
                                 displayInfo.logicalHeight);
-                        mSurfaceControl.setMatrix(-1, 0, 0, -1);
+                        t.setMatrix(mSurfaceControl, -1, 0, 0, -1);
                         break;
                     case Surface.ROTATION_270:
-                        mSurfaceControl.setPosition(displayInfo.logicalWidth, 0);
-                        mSurfaceControl.setMatrix(0, 1, -1, 0);
+                        t.setPosition(mSurfaceControl, displayInfo.logicalWidth, 0);
+                        t.setMatrix(mSurfaceControl, 0, 1, -1, 0);
                         break;
                 }
             }
