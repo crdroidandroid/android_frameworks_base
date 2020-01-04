@@ -91,5 +91,5 @@
     <string name="global_action_restart_systemui">SystemUI</string>
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_low_quality_label">Nízká kvalita</string>
 </resources>
