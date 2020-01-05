@@ -26,4 +26,8 @@
     <string name="config_headlineFontFamilyMedium" translatable="false">googlesans-bold</string>
     <!-- Allows setting custom fontFeatureSettings on specific text. -->
     <string name="config_headlineFontFeatureSettings">ss03</string>
+    <!-- Name of a font family to use as light font. For theming purpose. -->
+    <string name="config_lightFontFamily" translatable="false">@string/config_bodyFontFamily</string>
+    <!-- Name of a font family to use as regular font. For theming purpose. -->
+    <string name="config_regularFontFamily" translatable="false">@string/config_bodyFontFamily</string>
 </resources>
