@@ -144,4 +144,8 @@
 
   <!-- Whether to use old mobile type icons as default -->
   <java-symbol type="bool" name="config_useOldMobileIcons" />
+
+  <!-- Light / Regular style fonts -->
+  <java-symbol type="string" name="config_lightFontFamily" />
+  <java-symbol type="string" name="config_regularFontFamily" />
 </resources>
