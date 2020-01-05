@@ -18,4 +18,8 @@
 
   <!-- Long-press kill application -->
   <java-symbol name="app_killed_message" type="string" />
+
+  <!-- Light / Regular style fonts -->
+  <java-symbol type="string" name="config_lightFontFamily" />
+  <java-symbol type="string" name="config_regularFontFamily" />
 </resources>
