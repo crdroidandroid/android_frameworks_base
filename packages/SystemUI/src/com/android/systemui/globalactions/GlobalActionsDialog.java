@@ -462,6 +462,9 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
             mItems.add(new RestartAction());
         }
 
+        boolean showEmergencyAffordance = Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.POWER_MENU_EMERGENCY_AFFORDANCE, 1) != 0;
+
         ArraySet<String> addedKeys = new ArraySet<String>();
         mHasLogoutButton = false;
         mHasLockdownButton = false;
@@ -532,7 +535,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
                     mItems.add(new LogoutAction());
                     mHasLogoutButton = true;
                 }
-            } else if (GLOBAL_ACTION_KEY_EMERGENCY.equals(actionKey)) {
+            } else if (showEmergencyAffordance && GLOBAL_ACTION_KEY_EMERGENCY.equals(actionKey)) {
                 if (!mEmergencyAffordanceManager.needsEmergencyAffordance() && !mIsRestartMenu) {
                     mItems.add(new EmergencyDialerAction());
                 }
@@ -542,9 +545,6 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
             // Add here so we don't add more than one.
             addedKeys.add(actionKey);
         }
-
-        boolean showEmergencyAffordance = Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.POWER_MENU_EMERGENCY_AFFORDANCE, 1) != 0;
 
         if (showEmergencyAffordance && mEmergencyAffordanceManager.needsEmergencyAffordance() && !mIsRestartMenu) {
             mItems.add(new EmergencyAffordanceAction());
