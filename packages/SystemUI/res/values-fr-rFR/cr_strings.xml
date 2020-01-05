@@ -90,6 +90,6 @@
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">Interface utilisateur</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_label">Afficher le point d\'arrêt</string>
     <string name="screenrecord_low_quality_label">Qualité inférieure</string>
 </resources>
