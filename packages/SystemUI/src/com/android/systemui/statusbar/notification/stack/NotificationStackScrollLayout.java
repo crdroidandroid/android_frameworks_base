@@ -666,7 +666,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
     @ShadeViewRefactor(RefactorComponent.SHADE_VIEW)
     public void onDensityOrFontScaleChanged() {
         reinflateViews();
-        StatusBarWindowView.updateDismissAllButtonOnlyDimens();
+        StatusBar.updateDismissAllButtonOnlyDimens();
     }
 
     private void reinflateViews() {
@@ -710,21 +710,9 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
         if (needsColorRefresh) {
             mBackgroundColor = mContext.getColor(R.color.recents_dismiss_all_background_color);
             mIconColor = mContext.getColor(R.color.recents_dismiss_all_icon_color);
-            StatusBarWindowView.updateDismissAllButton(mBackgroundColor, mIconColor);
+            StatusBar.updateDismissAllButton(mBackgroundColor, mIconColor);
             needsColorRefresh = false;
         }
-
-        if (showDismissView && showFooterView && mNotificationPanel.isFullyExpanded()
-            && isDismissAllButtonEnabled() && mStatusBarState != 1 && !mNotificationPanel.isQsExpanded()
-            && !mNotificationPanel.isCollapsing() && !onKeyguard()) {
-            StatusBarWindowView.setDismissAllVisible(isDismissAllButtonAnimationsEnabled());
-        } else {
-            StatusBarWindowView.setDismissAllHidden(isDismissAllButtonAnimationsEnabled());
-        }
-    }
-
-    public static void hideDismissAllOnCollapse() {
-        StatusBarWindowView.setDismissAllHidden(false);
     }
 
     private boolean isDismissAllButtonEnabled() {
@@ -813,7 +801,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
         updateBackgroundDimming();
         mShelf.onUiModeChanged();
         mSectionsManager.onUiModeChanged();
-        StatusBarWindowView.updateDismissAllButton(mBackgroundColor, mIconColor);
+        StatusBar.updateDismissAllButton(mBackgroundColor, mIconColor);
     }
 
     @ShadeViewRefactor(RefactorComponent.DECORATOR)
