@@ -2320,6 +2320,7 @@ public class NotificationPanelView extends PanelView implements
             alpha *= mClockPositionResult.clockAlpha;
         }
         mNotificationStackScroller.setAlpha(alpha);
+        mStatusBar.updateBlurVisibility();
     }
 
     private float getFadeoutAlpha() {
