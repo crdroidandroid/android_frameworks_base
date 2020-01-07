@@ -113,4 +113,7 @@
 
     <!-- Binary clock -->
     <string name="clock_title_binary" translatable="false">Binary</string>
+
+    <!-- Samsung clock -->
+    <string name="clock_title_samsung" translatable="false">Samsung</string> 
 </resources>
