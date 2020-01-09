@@ -72,6 +72,7 @@ public class FloatingRotationButton implements RotationButton {
 
     private AnimatedVectorDrawable mAnimatedDrawable;
     private boolean mIsShowing;
+    private boolean mCanShow = true;
     private int mDisplayRotation;
 
     private boolean mIsTaskbarVisible = false;
@@ -150,7 +151,7 @@ public class FloatingRotationButton implements RotationButton {
 
     @Override
     public boolean show() {
-        if (mIsShowing) {
+        if (!mCanShow || mIsShowing) {
             return false;
         }
 
@@ -220,6 +221,14 @@ public class FloatingRotationButton implements RotationButton {
     @Override
     public void setDarkIntensity(float darkIntensity) {
         mKeyButtonView.setDarkIntensity(darkIntensity);
+    }
+
+    @Override
+    public void setCanShowRotationButton(boolean canShow) {
+        mCanShow = canShow;
+        if (!mCanShow) {
+            hide();
+        }
     }
 
     @Override

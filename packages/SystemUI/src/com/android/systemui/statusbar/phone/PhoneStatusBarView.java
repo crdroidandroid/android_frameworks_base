@@ -21,15 +21,21 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Insets;
 import android.graphics.Rect;
+import android.inputmethodservice.InputMethodService;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.DisplayCutout;
+import android.view.IWindowManager;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
+import android.view.WindowManagerGlobal;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -37,12 +43,17 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 
 import com.android.internal.policy.SystemBarUtils;
+import com.android.settingslib.Utils;
 import com.android.systemui.Dependency;
 import com.android.systemui.Flags;
 import com.android.systemui.Gefingerpoken;
 import com.android.systemui.res.R;
 import com.android.systemui.shade.ShadeExpandsOnStatusBarLongPress;
 import com.android.systemui.shade.StatusBarLongPressGestureDetector;
+import com.android.systemui.shared.rotation.FloatingRotationButton;
+import com.android.systemui.shared.rotation.RotationButtonController;
+import com.android.systemui.statusbar.CommandQueue;
+import com.android.systemui.statusbar.CommandQueue.Callbacks;
 import com.android.systemui.statusbar.phone.userswitcher.StatusBarUserSwitcherContainer;
 import com.android.systemui.statusbar.window.StatusBarWindowControllerStore;
 import com.android.systemui.user.ui.binder.StatusBarUserChipViewBinder;
@@ -51,11 +62,13 @@ import com.android.systemui.util.leak.RotationUtils;
 
 import java.util.Objects;
 
-public class PhoneStatusBarView extends FrameLayout {
+public class PhoneStatusBarView extends FrameLayout implements Callbacks {
     private static final String TAG = "PhoneStatusBarView";
+    private final CommandQueue mCommandQueue;
     private final StatusBarWindowControllerStore mStatusBarWindowControllerStore;
 
     private int mRotationOrientation = -1;
+    private RotationButtonController mRotationButtonController;
     @Nullable
     private View mCutoutSpace;
     @Nullable
@@ -80,7 +93,52 @@ public class PhoneStatusBarView extends FrameLayout {
 
     public PhoneStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mCommandQueue = Dependency.get(CommandQueue.class);
         mStatusBarWindowControllerStore = Dependency.get(StatusBarWindowControllerStore.class);
+
+        // Only create FRB here if there is no navbar
+        if (!hasNavigationBar()) {
+            final Context lightContext = new ContextThemeWrapper(context,
+                    Utils.getThemeAttr(context, R.attr.lightIconTheme));
+            final Context darkContext = new ContextThemeWrapper(context,
+                    Utils.getThemeAttr(context, R.attr.darkIconTheme));
+            final int lightIconColor =
+                    Utils.getColorAttrDefaultColor(lightContext, R.attr.singleToneColor);
+            final int darkIconColor =
+                    Utils.getColorAttrDefaultColor(darkContext, R.attr.singleToneColor);
+            final FloatingRotationButton floatingRotationButton = new FloatingRotationButton(
+                    context,
+                    R.string.accessibility_rotate_button, R.layout.rotate_suggestion,
+                    R.id.rotate_suggestion, R.dimen.floating_rotation_button_min_margin,
+                    R.dimen.rounded_corner_content_padding,
+                    R.dimen.floating_rotation_button_taskbar_left_margin,
+                    R.dimen.floating_rotation_button_taskbar_bottom_margin,
+                    R.dimen.floating_rotation_button_diameter, R.dimen.key_button_ripple_max_width,
+                    R.bool.floating_rotation_button_position_left);
+
+            mRotationButtonController = new RotationButtonController(lightContext, lightIconColor,
+                    darkIconColor, R.drawable.ic_sysbar_rotate_button_ccw_start_0,
+                    R.drawable.ic_sysbar_rotate_button_ccw_start_90,
+                    R.drawable.ic_sysbar_rotate_button_cw_start_0,
+                    R.drawable.ic_sysbar_rotate_button_cw_start_90,
+                    () -> getDisplay().getRotation());
+            mRotationButtonController.setRotationButton(floatingRotationButton, null);
+        }
+    }
+
+    @Override
+    public void onRotationProposal(final int rotation, boolean isValid) {
+        if (mRotationButtonController != null && !hasNavigationBar()) {
+            mRotationButtonController.onRotationProposal(rotation, isValid);
+        }
+    }
+
+    private boolean hasNavigationBar() {
+        try {
+            IWindowManager windowManager = WindowManagerGlobal.getWindowManagerService();
+            return windowManager.hasNavigationBar(Display.DEFAULT_DISPLAY);
+        } catch (RemoteException ex) { }
+        return false;
     }
 
     void setLongPressGestureDetector(
@@ -124,12 +182,20 @@ public class PhoneStatusBarView extends FrameLayout {
             updateLayoutForCutout();
             updateWindowHeight();
         }
+
+        if (mRotationButtonController != null && !hasNavigationBar()) {
+            mCommandQueue.addCallback(this);
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mDisplayCutout = null;
+
+        if (mRotationButtonController != null) {
+            mCommandQueue.removeCallback(this);
+        }
     }
 
     // Per b/300629388, we let the PhoneStatusBarView detect onConfigurationChanged to
@@ -235,6 +301,15 @@ public class PhoneStatusBarView extends FrameLayout {
         } else {
             mTouchEventHandler.onInterceptTouchEvent(event);
             return super.onInterceptTouchEvent(event);
+        }
+    }
+
+    @Override
+    public void setImeWindowStatus(int displayId, int vis, int backDisposition,
+            boolean showImeSwitcher) {
+        if (mRotationButtonController != null) {
+            final boolean imeShown = (vis & InputMethodService.IME_VISIBLE) != 0;
+            mRotationButtonController.getRotationButton().setCanShowRotationButton(!imeShown);
         }
     }
 
