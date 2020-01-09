@@ -41,6 +41,7 @@ import com.android.systemui.plugins.DarkIconDispatcher;
 import com.android.systemui.plugins.PluginManager;
 import com.android.systemui.plugins.VolumeDialogController;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
+import com.android.systemui.rotation.RotationPolicyWrapper;
 import com.android.systemui.settings.UserTracker;
 import com.android.systemui.shared.plugins.PackageConfig;
 import com.android.systemui.statusbar.CommandQueue;
@@ -156,6 +157,7 @@ public class Dependency {
     @Inject Lazy<StatusBarWindowControllerStore> mStatusBarWindowControllerStoreLazy;
     @Inject Lazy<SysUIStateDisplaysInteractor> mSysUIStateDisplaysInteractor;
     @Inject Lazy<LockscreenSmartspaceController> mLockscreenSmartspaceControllerLazy;
+    @Inject Lazy<RotationPolicyWrapper> mRotationPolicyWrapperLazy;
 
     @Inject
     public Dependency() {
@@ -206,6 +208,7 @@ public class Dependency {
                 StatusBarWindowControllerStore.class, mStatusBarWindowControllerStoreLazy::get);
         mProviders.put(LockscreenSmartspaceController.class,
                 mLockscreenSmartspaceControllerLazy::get);
+        mProviders.put(RotationPolicyWrapper.class, mRotationPolicyWrapperLazy::get);
 
         Dependency.setInstance(this);
     }
