@@ -41,6 +41,7 @@ import com.android.systemui.plugins.DarkIconDispatcher;
 import com.android.systemui.plugins.PluginManager;
 import com.android.systemui.plugins.VolumeDialogController;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
+import com.android.systemui.rotation.RotationPolicyWrapper;
 import com.android.systemui.settings.UserTracker;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.notification.collection.render.GroupExpansionManager;
@@ -152,6 +153,7 @@ public class Dependency {
     @Inject Lazy<UserTracker> mUserTrackerLazy;
     @Inject Lazy<StatusBarWindowControllerStore> mStatusBarWindowControllerStoreLazy;
     @Inject Lazy<SysUIStateDisplaysInteractor> mSysUIStateDisplaysInteractor;
+    @Inject Lazy<RotationPolicyWrapper> mRotationPolicyWrapperLazy;
 
     @Inject
     public Dependency() {
@@ -199,6 +201,7 @@ public class Dependency {
         mProviders.put(SysUIStateDisplaysInteractor.class, mSysUIStateDisplaysInteractor::get);
         mProviders.put(
                 StatusBarWindowControllerStore.class, mStatusBarWindowControllerStoreLazy::get);
+        mProviders.put(RotationPolicyWrapper.class, mRotationPolicyWrapperLazy::get);
 
         Dependency.setInstance(this);
     }
