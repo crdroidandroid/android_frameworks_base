@@ -369,11 +369,11 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
         if (edgeHeightSetting == 0) {
             mEdgeHeight = mDisplaySize.y;
         } else if (edgeHeightSetting == 1) {
-            mEdgeHeight = mDisplaySize.y / 2;
+            mEdgeHeight = (mDisplaySize.y * 3) / 4;
         } else if (edgeHeightSetting == 2) {
-            mEdgeHeight = mDisplaySize.y / 3;
+            mEdgeHeight = mDisplaySize.y / 2;
         } else {
-            mEdgeHeight = mDisplaySize.y / 6;
+            mEdgeHeight = mDisplaySize.y / 4;
         }
     }
 
