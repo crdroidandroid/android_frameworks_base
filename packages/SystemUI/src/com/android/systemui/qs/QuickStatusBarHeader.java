@@ -28,6 +28,7 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,10 @@ import android.widget.ImageView;
 import com.android.systemui.R;
 import com.android.systemui.crdroid.header.StatusBarHeaderMachine;
 import com.android.systemui.util.LargeScreenUtils;
+
+import com.bosphere.fadingedgelayout.FadingEdgeLayout;
+
+import java.lang.Math;
 
 /**
  * View that contains the top-most bits of the QS panel (primarily the status bar with date, time,
@@ -52,10 +57,11 @@ public class QuickStatusBarHeader extends FrameLayout
 
     // QS Header
     private ImageView mQsHeaderImageView;
-    private View mQsHeaderLayout;
+    private FadingEdgeLayout mQsHeaderLayout;
     private boolean mHeaderImageEnabled;
     private StatusBarHeaderMachine mStatusBarHeaderMachine;
     private Drawable mCurrentBackground;
+    private int mHeaderImageHeight;
     private final Handler mHandler = new Handler();
 
     private class OmniSettingsObserver extends ContentObserver {
@@ -67,6 +73,9 @@ public class QuickStatusBarHeader extends FrameLayout
             ContentResolver resolver = getContext().getContentResolver();
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.STATUS_BAR_CUSTOM_HEADER), false,
+                    this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT), false,
                     this, UserHandle.USER_ALL);
             }
 
@@ -175,6 +184,7 @@ public class QuickStatusBarHeader extends FrameLayout
         mHeaderImageEnabled = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
                 UserHandle.USER_CURRENT) == 1;
+        updateHeaderImage();
         updateResources();
     }
 
@@ -253,5 +263,27 @@ public class QuickStatusBarHeader extends FrameLayout
         if (mCurrentBackground != null && mQsHeaderImageView.getDrawable() != null) {
             mQsHeaderImageView.setImageAlpha(255 - headerShadow);
         }
+    }
+
+    private void updateHeaderImage() {
+        mHeaderImageEnabled = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
+                UserHandle.USER_CURRENT) == 1;
+        int headerHeight = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT, 142,
+                UserHandle.USER_CURRENT);
+        int bottomFadeSize = (int) Math.round(headerHeight * 0.555);
+
+        // Set the image header size
+        mHeaderImageHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 
+            headerHeight, getContext().getResources().getDisplayMetrics());
+        ViewGroup.MarginLayoutParams qsHeaderParams = 
+            (ViewGroup.MarginLayoutParams) mQsHeaderLayout.getLayoutParams();
+        qsHeaderParams.height = mHeaderImageHeight;
+        mQsHeaderLayout.setLayoutParams(qsHeaderParams);
+
+        // Set the image fade size (it has to be a 55,5% related to the main size)
+        mQsHeaderLayout.setFadeSizes(0,0,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 
+            bottomFadeSize, getContext().getResources().getDisplayMetrics()), 0);
     }
 }
