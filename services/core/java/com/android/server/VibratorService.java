@@ -34,6 +34,7 @@ import android.hardware.input.InputManager;
 import android.hardware.vibrator.IVibrator;
 import android.hardware.vibrator.V1_0.EffectStrength;
 import android.icu.text.DateFormat;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.os.BatteryStats;
 import android.os.Binder;
@@ -118,6 +119,18 @@ public class VibratorService extends IVibratorService.Stub
     // If HAL supports callbacks set the timeout to ASYNC_TIMEOUT_MULTIPLIER * duration.
     private static final long ASYNC_TIMEOUT_MULTIPLIER = 2;
 
+    // OnePlus haptic motor specific constants, started shipping since the OnePlus 7 Pro.
+    // Needs config_hasOnePlusHapticMotor=true
+    private static final int ONEPLUS_SCALE = 100000;
+    private static final int ONEPLUS_BREAK_CONSTANT = 9990;
+    private static final int ONEPLUS_EFFECT_THRESHOLD = 100;
+    private static final long ONEPLUS_EFFECT_CLICK = 5909995;
+    private static final long[] ONEPLUS_DOUBLE_CLICK_EFFECT_FALLBACK_TIMINGS = { 0, 80, 25, 75 };
+    private static final long ONEPLUS_EFFECT_HEAVY_CLICK = 1600051;
+    private static final long ONEPLUS_EFFECT_TEXTURE_TICK = 1100111;
+    private static final long ONEPLUS_EFFECT_TICK = 1100031;
+    private static final long ONEPLUS_EFFECT_POP = 1100041;
+    private static final long ONEPLUS_EFFECT_THUD = 3000003;
 
     // A mapping from the intensity adjustment to the scaling to apply, where the intensity
     // adjustment is defined as the delta between the default intensity level and the user selected
@@ -171,6 +184,7 @@ public class VibratorService extends IVibratorService.Stub
     @GuardedBy("mLock")
     private final RemoteCallbackList<IVibratorStateListener> mVibratorStateListeners =
                 new RemoteCallbackList<>();
+    private boolean mHasOnePlusHapticMotor;
     private int mHapticFeedbackIntensity;
     private int mNotificationIntensity;
     private int mRingIntensity;
@@ -394,6 +408,9 @@ public class VibratorService extends IVibratorService.Stub
         mAllowPriorityVibrationsInLowPowerMode = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_allowPriorityVibrationsInLowPowerMode);
 
+        mHasOnePlusHapticMotor = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_hasOnePlusHapticMotor);
+
         mPreviousRingVibrations = new LinkedList<>();
         mPreviousNotificationVibrations = new LinkedList<>();
         mPreviousAlarmVibrations = new LinkedList<>();
@@ -407,7 +424,8 @@ public class VibratorService extends IVibratorService.Stub
         VibrationEffect clickEffect = createEffectFromResource(
                 com.android.internal.R.array.config_virtualKeyVibePattern);
         VibrationEffect doubleClickEffect = VibrationEffect.createWaveform(
-                DOUBLE_CLICK_EFFECT_FALLBACK_TIMINGS, -1 /*repeatIndex*/);
+                (mHasOnePlusHapticMotor) ? ONEPLUS_DOUBLE_CLICK_EFFECT_FALLBACK_TIMINGS :
+                    DOUBLE_CLICK_EFFECT_FALLBACK_TIMINGS, -1 /*repeatIndex*/);
         VibrationEffect heavyClickEffect = createEffectFromResource(
                 com.android.internal.R.array.config_longPressVibePattern);
         VibrationEffect tickEffect = createEffectFromResource(
@@ -964,6 +982,52 @@ public class VibratorService extends IVibratorService.Stub
         }
     }
 
+    // OnePlus proprietary vibrator hal doesn't work the way open-source one does.
+    // This function acts as a translator between aosp frontend implementation and
+    // the proprietary HAL.
+    private long doOnePlusEncoding(long millis, VibrationAttributes attrs) {
+        final VibrationEffect effect = mCurrentVibration.effect;
+
+        if (effect instanceof VibrationEffect.Prebaked) {
+            switch (((VibrationEffect.Prebaked) effect).getId()) {
+                case VibrationEffect.EFFECT_CLICK:
+                    return ONEPLUS_EFFECT_CLICK;
+                case VibrationEffect.EFFECT_HEAVY_CLICK:
+                    return ONEPLUS_EFFECT_HEAVY_CLICK;
+                case VibrationEffect.EFFECT_TEXTURE_TICK:
+                    return ONEPLUS_EFFECT_TEXTURE_TICK;
+                case VibrationEffect.EFFECT_TICK:
+                    return ONEPLUS_EFFECT_TICK;
+                case VibrationEffect.EFFECT_POP:
+                    return ONEPLUS_EFFECT_POP;
+                case VibrationEffect.EFFECT_THUD:
+                    return ONEPLUS_EFFECT_THUD;
+                default:
+                    Slog.w(TAG, "doOnePlusEncoding: Unknown prebaked vibration effect, "
+                                + "returning default CLICK");
+                    return ONEPLUS_EFFECT_CLICK;
+            }
+        } else if (millis >= 0) {
+            final int usage = attrs.getAudioAttributes().getUsage();
+
+            if (isRingtone(usage)) {
+                return (ONEPLUS_SCALE * millis) + mRingIntensity;
+            } else if (isNotification(usage)) {
+                return (ONEPLUS_SCALE * millis) + mNotificationIntensity;
+            } else if (isAlarm(usage)) {
+                return (ONEPLUS_SCALE * millis) + Vibrator.VIBRATION_INTENSITY_HIGH;
+            } else if (millis <= ONEPLUS_EFFECT_THRESHOLD) {
+                return ((ONEPLUS_SCALE * millis) + ONEPLUS_BREAK_CONSTANT +
+                        ((millis == ONEPLUS_EFFECT_THRESHOLD) ? 9 : millis / 10));
+            } else {
+                return ((ONEPLUS_SCALE * millis) + mHapticFeedbackIntensity);
+            }
+        }
+
+        // Only reached when millis == 0, which shouldn't happen but isn't critical
+        return 0;
+    }
+
     private boolean isAllowedToVibrateLocked(Vibration vib) {
         if (!mLowPowerMode) {
             return true;
@@ -1269,9 +1333,16 @@ public class VibratorService extends IVibratorService.Stub
         return vibratorExists();
     }
 
+    private void doVibratorOn(int uid, VibrationAttributes attrs) {
+        doVibratorOn(-1, mDefaultVibrationAmplitude, uid, attrs);
+    }
+
     private void doVibratorOn(long millis, int amplitude, int uid, VibrationAttributes attrs) {
         Trace.traceBegin(Trace.TRACE_TAG_VIBRATOR, "doVibratorOn");
         try {
+            if (mHasOnePlusHapticMotor) {
+                millis = doOnePlusEncoding(millis, attrs);
+            }
             synchronized (mInputDeviceVibrators) {
                 if (amplitude == VibrationEffect.DEFAULT_AMPLITUDE) {
                     amplitude = mDefaultVibrationAmplitude;
@@ -1337,7 +1408,7 @@ public class VibratorService extends IVibratorService.Stub
                 usingInputDeviceVibrators = !mInputDeviceVibrators.isEmpty();
             }
             // Input devices don't support prebaked effect, so skip trying it with them.
-            if (!usingInputDeviceVibrators) {
+            if (!usingInputDeviceVibrators && !mHasOnePlusHapticMotor) {
                 long duration = vibratorPerformEffect(prebaked.getId(),
                         prebaked.getEffectStrength(), vib,
                         hasCapability(IVibrator.CAP_PERFORM_CALLBACK));
@@ -1349,6 +1420,9 @@ public class VibratorService extends IVibratorService.Stub
                     noteVibratorOnLocked(vib.uid, duration);
                     return timeout;
                 }
+            } else if (mHasOnePlusHapticMotor && prebaked.getId() != VibrationEffect.EFFECT_DOUBLE_CLICK /* handled differently */) {
+                doVibratorOn(vib.uid, vib.attrs);
+                return 0;
             }
             if (!prebaked.shouldFallback()) {
                 return 0;
