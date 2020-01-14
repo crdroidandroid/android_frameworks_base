@@ -4157,6 +4157,16 @@ public final class Settings {
         public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
 
         /**
+         * @hide
+         */
+        public static final String REVENGEOS_SMART_CHARGING = "revengeos_smart_charging";
+
+        /**
+         * @hide
+         */
+        public static final String REVENGEOS_SMART_CHARGING_LEVEL = "revengeos_smart_charging_level";
+
+        /**
          * crDroid OTA support
          * @hide
          */

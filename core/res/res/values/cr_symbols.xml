@@ -221,4 +221,7 @@
   <java-symbol type="id" name="notification_media_progress_time" />
   <java-symbol type="id" name="notification_media_elapsed_time" />
   <java-symbol type="id" name="notification_media_total_time" />
+
+  <!-- Smart charging battery percentage -->
+  <java-symbol type="integer" name="config_smartChargingBatteryLevel" />
 </resources>
