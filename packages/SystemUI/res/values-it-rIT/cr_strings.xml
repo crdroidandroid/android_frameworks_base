@@ -18,15 +18,15 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time">Dash charge</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Animazione di carica</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carica Rapida(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Carica Rapida</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
     <string name="quick_settings_smart_pixels">Smart pixel</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Attiva Smart Pixel automaticamente</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Istantanea</string>
     <string name="quick_settings_region_screenshot_label">Istantanea parziale</string>
@@ -37,7 +37,7 @@
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Bussola</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
+    <string name="quick_settings_compass_init">Inizializzazione\u2026</string>
     <string name="accessibility_quick_settings_compass_off">Bussola disattivata.</string>
     <string name="accessibility_quick_settings_compass_on">Bussola attivata.</string>
     <string name="quick_settings_compass_N">N</string>
@@ -78,18 +78,18 @@
     <string name="quick_settings_ui_mode_disabled">Disabilitato</string>
     <string name="quick_settings_ui_mode_enabled">Abilitato</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_toast_0">Currently no SIM card is inserted</string>
-    <string name="qs_data_switch_toast_1">Currently only one SIM card is inserted</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">Switcha scheda dati</string>
+    <string name="qs_data_switch_toast_0">Attualmente nessuna SIM card è inserita</string>
+    <string name="qs_data_switch_toast_1">Attualmente solo una SIM card è inserita</string>
+    <string name="qs_data_switch_changed_1">Usando SIM 1 per dati mobili</string>
+    <string name="qs_data_switch_changed_2">Usando SIM 2 per dati mobili</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Forzare chiusura?</string>
+    <string name="force_stop_dlg_text">Se forzi la chiusura di quest\'applicazione, essa potrebbe iniziare a comportarsi in modo anomalo.</string>
+    <string name="guts_force_close_app">Chiudi app</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Interfaccia di sistema</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_stopdot_label">Mostra tasto di stop</string>
+    <string name="screenrecord_low_quality_label">Bassa qualità</string>
 </resources>
