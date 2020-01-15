@@ -189,10 +189,6 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
                     clearCurrentMediaNotification();
                 }
                 dispatchUpdateMediaMetaData(true /* changed */, true /* allowAnimation */);
-                if (mStatusBar != null) {
-                    mStatusBar.getVisualizer().setPlaying(state.getState()
-                            == PlaybackState.STATE_PLAYING);
-                }
             }
         }
 
@@ -250,6 +246,10 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, LOCKSCREEN_MEDIA_METADATA,
                                       LOCKSCREEN_ALBUMART_FILTER);
+    }
+
+    public void addCallback(StatusBar statusBar) {
+        mStatusBar = statusBar;
     }
 
     @Override
@@ -494,11 +494,48 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
         mMediaController = null;
     }
 
+    public void setMediaPlaying() {
+        if (mStatusBar == null) return;
+
+        if (mMediaController != null && (PlaybackState.STATE_PLAYING ==
+                getMediaControllerPlaybackState(mMediaController))) {
+            ArrayList<NotificationEntry> activeNotifications =
+                    mEntryManager.getNotificationData().getActiveNotifications();
+            int N = activeNotifications.size();
+            final String pkg = mMediaController.getPackageName();
+
+            for (int i = 0; i < N; i++) {
+                final NotificationEntry entry = activeNotifications.get(i);
+                if (entry.notification.getPackageName().equals(pkg)) {
+                    if (mStatusBar.mTickerEnabled == 2) {
+                        mHandler.postDelayed(() -> {
+                            mStatusBar.tick(entry.notification, true, true, mMediaMetadata, null);
+                        }, 500);
+                    }
+                    break;
+                }
+            }
+
+            if (mStatusBar.getVisualizer() != null) {
+                mStatusBar.getVisualizer().setPlaying(true);
+            }
+        } else {
+            if (mStatusBar.getVisualizer() != null) {
+                mStatusBar.getVisualizer().setPlaying(false);
+            }
+            mStatusBar.resetTrackInfo();
+        }
+    }
+
     /**
      * Refresh or remove lockscreen artwork from media metadata or the lockscreen wallpaper.
      */
     public void updateMediaMetaData(boolean metaDataChanged, boolean allowEnterAnimation) {
         Trace.beginSection("StatusBar#updateMediaMetaData");
+
+        // ensure visualizer is visible regardless of artwork
+        setMediaPlaying();
+
         if (!SHOW_LOCKSCREEN_MEDIA_ARTWORK) {
             Trace.endSection();
             return;
@@ -606,24 +643,17 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
             mScrimController.setHasBackdrop(hasArtwork);
         }
 
-        mStatusBar = SysUiServiceProvider.getComponent(mContext, StatusBar.class);
-        if (mStatusBar != null && mStatusBarStateController.getState() != StatusBarState.SHADE) {
-            VisualizerView visualizerView = mStatusBar.getVisualizer();
-            if (!mKeyguardMonitor.isKeyguardFadingAway() && !mStatusBar.isScreenFullyOff()) {
-                visualizerView.setPlaying(getMediaControllerPlaybackState(mMediaController) ==
-                        PlaybackState.STATE_PLAYING);
-            }
-
+        if (mStatusBar != null && mStatusBar.getVisualizer() != null) {
             if (artworkDrawable instanceof BitmapDrawable) {
                 // always use current backdrop to color eq
-                visualizerView.setBitmap(((BitmapDrawable) artworkDrawable).getBitmap());
+                mStatusBar.getVisualizer().setBitmap(((BitmapDrawable) artworkDrawable).getBitmap());
             } else if (lockWallpaper instanceof Bitmap) {
                 // use lockscreen wallpaper in case user set one
-                visualizerView.setBitmap(lockWallpaper.getConfig() == Bitmap.Config.HARDWARE ?
+                mStatusBar.getVisualizer().setBitmap(lockWallpaper.getConfig() == Bitmap.Config.HARDWARE ?
                         lockWallpaper.copy(Bitmap.Config.ARGB_8888, false) : lockWallpaper);
             } else {
                 // use regular wallpaper
-                visualizerView.setBitmap(mWallpaperManager.getBitmap(false));
+                mStatusBar.getVisualizer().setBitmap(mWallpaperManager.getBitmap(false));
             }
         }
 
