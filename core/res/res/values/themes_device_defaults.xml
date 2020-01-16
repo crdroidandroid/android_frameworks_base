@@ -1040,6 +1040,7 @@ easier.
 
         <!-- Text styles -->
         <item name="textAppearanceButton">@style/TextAppearance.DeviceDefault.Widget.Button</item>
+        <item name="textAppearanceMedium">@style/TextAppearance.DeviceDefault.Medium</item>
 
         <!-- Button styles -->
         <item name="buttonCornerRadius">@dimen/config_buttonCornerRadius</item>
@@ -2106,6 +2107,7 @@ easier.
 
         <!-- Text styles -->
         <item name="textAppearanceButton">@style/TextAppearance.DeviceDefault.Widget.Button</item>
+        <item name="textAppearanceMedium">@style/TextAppearance.DeviceDefault.Medium</item>
 
         <!-- Button styles -->
         <item name="buttonCornerRadius">@dimen/config_buttonCornerRadius</item>
