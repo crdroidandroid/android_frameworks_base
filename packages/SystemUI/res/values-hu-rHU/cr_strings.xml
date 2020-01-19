@@ -92,4 +92,6 @@
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">Megállítógomb megjelenítése</string>
     <string name="screenrecord_low_quality_label">Alacsony minőségű</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
 </resources>
