@@ -100,4 +100,7 @@
 
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">SystemUI</string>
+
+    <!-- Binary clock -->
+    <string name="clock_title_binary" translatable="false">Binary</string>
 </resources>
