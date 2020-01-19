@@ -30,8 +30,6 @@ class OngoingPrivacyChip @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttrs, defStyleRes) {
 
-    private val iconMarginExpanded = context.resources.getDimensionPixelSize(
-                    R.dimen.ongoing_appops_chip_icon_margin_expanded)
     private val iconMarginCollapsed = context.resources.getDimensionPixelSize(
                     R.dimen.ongoing_appops_chip_icon_margin_collapsed)
     private val iconSize =
@@ -47,7 +45,6 @@ class OngoingPrivacyChip @JvmOverloads constructor(
         set(value) {
             if (value != field) {
                 field = value
-                updateView()
             }
         }
 
@@ -68,8 +65,8 @@ class OngoingPrivacyChip @JvmOverloads constructor(
 
     // Should only be called if the builder icons or app changed
     private fun updateView() {
-        back.background = if (expanded) backgroundDrawable else null
-        val padding = if (expanded) sidePadding else 0
+        back.background = null
+        val padding = 0
         back.setPaddingRelative(padding, 0, padding, 0)
         fun setIcons(dialogBuilder: PrivacyDialogBuilder, iconsContainer: ViewGroup) {
             iconsContainer.removeAllViews()
@@ -83,7 +80,7 @@ class OngoingPrivacyChip @JvmOverloads constructor(
                 iconsContainer.addView(image, iconSize, iconSize)
                 if (i != 0) {
                     val lp = image.layoutParams as MarginLayoutParams
-                    lp.marginStart = if (expanded) iconMarginExpanded else iconMarginCollapsed
+                    lp.marginStart = iconMarginCollapsed
                     image.layoutParams = lp
                 }
             }
@@ -93,8 +90,7 @@ class OngoingPrivacyChip @JvmOverloads constructor(
             generateContentDescription()
             setIcons(builder, iconsContainer)
             val lp = iconsContainer.layoutParams as FrameLayout.LayoutParams
-            lp.gravity = Gravity.CENTER_VERTICAL or
-                    (if (expanded) Gravity.CENTER_HORIZONTAL else Gravity.END)
+            lp.gravity = Gravity.CENTER_VERTICAL or Gravity.END
             iconsContainer.layoutParams = lp
         } else {
             iconsContainer.removeAllViews()
