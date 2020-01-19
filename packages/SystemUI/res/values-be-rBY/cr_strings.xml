@@ -92,4 +92,6 @@
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">Паказаць кнопку спынення</string>
     <string name="screenrecord_low_quality_label">Нізкая якасць</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
 </resources>
