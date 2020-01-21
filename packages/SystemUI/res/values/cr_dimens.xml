@@ -123,4 +123,7 @@
     <color name="edge_light_green">#3aa853</color>
     <color name="edge_light_red">#ea4234</color>
     <color name="edge_light_yellow">#fbbc06</color>
+
+    <!-- Daily data usage -->
+    <dimen name="data_usage_padding_start">4dp</dimen>
 </resources>
