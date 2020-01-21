@@ -199,6 +199,7 @@ import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.CrossFadeHelper;
 import com.android.systemui.statusbar.EmptyShadeView;
 import com.android.systemui.statusbar.GestureRecorder;
+import com.android.systemui.statusbar.info.DataUsageView;
 import com.android.systemui.statusbar.KeyboardShortcuts;
 import com.android.systemui.statusbar.KeyguardIndicationController;
 import com.android.systemui.statusbar.NavigationBarController;
@@ -564,6 +565,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             mLinger = BRIGHTNESS_CONTROL_LINGER_THRESHOLD + 1;
         }
     };
+
+    private boolean dataupdated = false;
 
     public void resetTrackInfo() {
         if (mTicker != null) {
@@ -1216,6 +1219,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         ThreadedRenderer.overrideProperty("ambientRatio", String.valueOf(1.5f));
 
         mFlashlightController = Dependency.get(FlashlightController.class);
+
     }
 
     protected QS createDefaultQSFragment() {
@@ -5240,6 +5244,11 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         int QSBlurAlpha = Math.round(255.0f * mNotificationPanel.getExpandedFraction());
 
+        if (QSBlurAlpha > 0 && !dataupdated && !mIsKeyguard) {
+            DataUsageView.updateUsage();
+            dataupdated = true;
+        }
+
         if (QSBlurAlpha > 0 && !mIsKeyguard) {
             if (!mQSBlurred) {
                 mQSBlurred = true;
@@ -5253,6 +5262,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         } else if (QSBlurAlpha == 0 || mIsKeyguard) {
             mQSBlurView.setVisibility(View.GONE);
             mQSBlurred = false;
+            dataupdated = false;
         }
     }
 

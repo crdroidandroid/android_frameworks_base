@@ -5100,6 +5100,12 @@ public final class Settings {
                 "status_bar_ticker_tick_duration";
 
         /**
+         * Show data usage in QS header
+         * @hide
+         */
+        public static final String QS_DATAUSAGE = "qs_datausage";
+
+        /**
          * @hide
          */
         public static final String SMART_CHARGING = "smart_charging";
