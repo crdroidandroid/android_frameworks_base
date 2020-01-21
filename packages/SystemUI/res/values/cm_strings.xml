@@ -143,4 +143,6 @@
 
     <!-- Name of the battery status bar icon. -->
     <string name="status_bar_battery">Battery</string>
+
+    <string name="usage_data">used</string>
 </resources>
