@@ -38,6 +38,7 @@ import android.os.ServiceManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
+import android.text.format.Time;
 import android.util.Log;
 import android.util.Range;
 
@@ -294,5 +295,52 @@ public class DataUsageController {
 
     public interface Callback {
         void onMobileDataEnabled(boolean enabled);
+    }
+
+    public DataUsageInfo getDailyDataUsageInfo() {
+        NetworkTemplate template = DataUsageUtils.getMobileTemplate(mContext, mSubscriptionId);
+        return getDailyDataUsageInfo(template);
+    }
+
+    public DataUsageInfo getDailyWifiDataUsageInfo() {
+        NetworkTemplate template = NetworkTemplate.buildTemplateWifiWildcard();
+        return getDailyDataUsageInfo(template);
+    }
+
+    // Returns today's passed time in Millisecond
+    public static long getTodayMillis() {
+        final long passedMillis;
+        Time time = new Time();
+        time.set(System.currentTimeMillis());
+        passedMillis = ((time.hour * 60 * 60) + (time.minute * 60) + time.second) * 1000;
+        return passedMillis;
+    }
+
+    public DataUsageInfo getDailyDataUsageInfo(NetworkTemplate template) {
+        final NetworkPolicy policy = findNetworkPolicy(template);
+        final long end = System.currentTimeMillis();
+        long start = end - getTodayMillis();
+
+        final long totalBytes = getUsageLevel(template, start, end);
+        if (totalBytes < 0L) {
+            return warn("no entry data");
+        }
+        final DataUsageInfo usage = new DataUsageInfo();
+        usage.startDate = start;
+        usage.usageLevel = totalBytes;
+        usage.period = formatDateRange(start, end);
+        usage.cycleStart = start;
+        usage.cycleEnd = end;
+
+        if (policy != null) {
+            usage.limitLevel = policy.limitBytes > 0 ? policy.limitBytes : 0;
+            usage.warningLevel = policy.warningBytes > 0 ? policy.warningBytes : 0;
+        } else {
+            usage.warningLevel = getDefaultWarningLevel();
+        }
+        if (usage != null && mNetworkController != null) {
+            usage.carrier = mNetworkController.getMobileDataNetworkName();
+        }
+        return usage;
     }
 }
