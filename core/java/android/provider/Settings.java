@@ -5235,6 +5235,12 @@ public final class Settings {
         public static final String RINGTONE_VIBRATION_PATTERN = "ringtone_vibration_pattern";
 
         /**
+         * Show data usage in QS header
+         * @hide
+         */
+        public static final String QS_DATAUSAGE = "qs_datausage";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
