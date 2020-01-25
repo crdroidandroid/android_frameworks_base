@@ -2124,7 +2124,7 @@ public class ApplicationsState {
 
         @Override
         public boolean filterApp(AppEntry entry) {
-            return true;
+            return !hasFlag(entry.info.privateFlags, ApplicationInfo.PRIVATE_FLAG_IS_RESOURCE_OVERLAY);
         }
     };
 
