@@ -40,6 +40,8 @@ LOCAL_REQUIRED_MODULES := \
 	FontSurferSourceOverlay \
 	FontNokiaPureSourceOverlay \
 	FontFifa2018SourceOverlay \
+	FontCoconSourceOverlay \
+	FontQuandoSourceOverlay \
 	IconPackCircularAndroidOverlay \
 	IconPackCircularLauncherOverlay \
 	IconPackCircularSettingsOverlay \
@@ -55,7 +57,7 @@ LOCAL_REQUIRED_MODULES := \
 	IconPackRoundedSettingsOverlay \
 	IconPackRoundedSystemUIOverlay \
 	IconPackRoundedThemePickerOverlay \
-        IconShapeCylinderOverlay \
+	IconShapeCylinderOverlay \
 	IconShapeHexagonOverlay \
 	IconShapeRoundedRectOverlay \
 	IconShapeSquareOverlay \
