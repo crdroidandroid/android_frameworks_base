@@ -224,6 +224,7 @@ internal class AppListRepositoryImplHelper(private val context: Context) {
         ) =
             when {
                 !showInstantApps && isInstantApp -> false
+                isResourceOverlay -> false
                 !Flags.removeHiddenModuleUsage() && (packageName in hiddenSystemModules) -> false
                 packageName in hideWhenDisabledPackages -> enabled && !isDisabledUntilUsed
                 enabled -> true
