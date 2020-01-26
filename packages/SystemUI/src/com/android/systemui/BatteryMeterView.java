@@ -225,28 +225,22 @@ public class BatteryMeterView extends LinearLayout implements
                 setVisibility(mBatteryHidden ? View.GONE : View.VISIBLE);
                 break;
             case STATUS_BAR_BATTERY_STYLE:
-                mBatteryStyle = BATTERY_STYLE_CIRCLE;
-                try {
-                    mBatteryStyle = Integer.valueOf(newValue);
-                } catch (NumberFormatException ex) {}
+                mBatteryStyle =
+                        TunerService.parseInteger(newValue, BATTERY_STYLE_CIRCLE);
                 mDrawable.setMeterStyle(mBatteryStyle);
                 removeBatteryPercentView();
                 updateShowPercent();
                 updateVisibility();
                 break;
             case STATUS_BAR_SHOW_BATTERY_PERCENT:
-                mShowBatteryPercent = 1;
-                try {
-                    mShowBatteryPercent = Integer.valueOf(newValue);
-                } catch (NumberFormatException ex) {}
+                mShowBatteryPercent =
+                        TunerService.parseInteger(newValue, 1);
                 removeBatteryPercentView();
                 updateShowPercent();
                 break;
             case TEXT_CHARGING_SYMBOL:
-                mTextChargingSymbol = 0;
-                try {
-                    mTextChargingSymbol = Integer.valueOf(newValue);
-                } catch (NumberFormatException ex) {}
+                mTextChargingSymbol =
+                        TunerService.parseInteger(newValue, 0);
                 removeBatteryPercentView();
                 updateShowPercent();
                 break;

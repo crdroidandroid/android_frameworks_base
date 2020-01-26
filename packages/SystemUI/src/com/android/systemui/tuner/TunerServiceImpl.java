@@ -64,6 +64,10 @@ public class TunerServiceImpl extends TunerService {
     // shouldn't be reset with tuner settings.
     private static final String[] RESET_BLACKLIST = new String[] {
             BatteryMeterView.STATUS_BAR_BATTERY_STYLE,
+            BatteryMeterView.STATUS_BAR_SHOW_BATTERY_PERCENT,
+            BatteryMeterView.TEXT_CHARGING_SYMBOL,
+            BatteryMeterView.STATUS_BAR_BATTERY_TEXT_CHARGING,
+            BatteryMeterView.STATUS_BAR_BATTERY_TEXT_POSITION,
             Clock.STATUS_BAR_CLOCK_SECONDS,
             Clock.STATUS_BAR_AM_PM,
             Clock.STATUS_BAR_CLOCK_DATE_DISPLAY,
