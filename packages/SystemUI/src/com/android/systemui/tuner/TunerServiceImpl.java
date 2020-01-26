@@ -35,6 +35,7 @@ import android.util.ArrayMap;
 import android.util.ArraySet;
 
 import com.android.internal.util.ArrayUtils;
+import com.android.systemui.BatteryMeterView;
 import com.android.systemui.DemoMode;
 import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.settings.CurrentUserTracker;
@@ -71,6 +72,9 @@ public class TunerServiceImpl extends TunerService {
     // shouldn't be reset with tuner settings.
     // Do not add Lineage specific keys here as they are blacklisted automatically
     private static final String[] RESET_BLACKLIST = new String[] {
+            BatteryMeterView.STATUS_BAR_BATTERY_STYLE,
+            BatteryMeterView.STATUS_BAR_SHOW_BATTERY_PERCENT,
+            BatteryMeterView.STATUS_BAR_BATTERY_TEXT_CHARGING,
             Clock.STATUS_BAR_CLOCK_SECONDS,
             Clock.STATUS_BAR_CLOCK_DATE_DISPLAY,
             Clock.STATUS_BAR_CLOCK_DATE_STYLE,
