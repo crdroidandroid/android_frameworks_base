@@ -4892,6 +4892,7 @@ public final class Settings {
         public static final String GAMING_MODE_DUMMY = "gaming_mode_dummy";
 
         /**
+
          * Whether to disable hardware keys in gaming mode
          * @hide
          */
@@ -5154,6 +5155,12 @@ public final class Settings {
          * @hide
          */
         public static final String FOD_ICON_WALLPAPER_COLOR = "fod_icon_wallpaper_color";
+
+        /**
+         * FOD recognizing animation
+         * @hide
+         */
+        public static final String FOD_RECOGNIZING_ANIMATION = "fod_recognizing_animation";
 
         /**
          * Whether to use the custom status bar header or not
