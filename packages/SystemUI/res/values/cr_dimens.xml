@@ -57,4 +57,7 @@
     <dimen name="config_customCutoutTopHeight">0.0px</dimen>
     <dimen name="config_customCutoutBottomWidth">0.0px</dimen>
     <dimen name="config_customCutoutBottomHeight">0.0px</dimen>
+
+    <!-- FOD recognizing animation -->
+    <dimen name="fod_animation_size">280dp</dimen>
 </resources>
