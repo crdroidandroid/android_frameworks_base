@@ -17,10 +17,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 快速充電中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 快速充電中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
@@ -79,19 +79,19 @@
     <string name="quick_settings_ui_mode_enabled">已啟用</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">切換數據卡</string>
-    <string name="qs_data_switch_toast_0">Currently no SIM card is inserted</string>
-    <string name="qs_data_switch_toast_1">Currently only one SIM card is inserted</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_toast_0">當前未插入SIM卡</string>
+    <string name="qs_data_switch_toast_1">目前僅插入一張SIM卡</string>
+    <string name="qs_data_switch_changed_1">使用SIM 1移動數據</string>
+    <string name="qs_data_switch_changed_2">使用SIM 2移動數據</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">強制停止？</string>
+    <string name="force_stop_dlg_text">如果您強制停止應用程式，應用程式可能無法正常運作。</string>
+    <string name="guts_force_close_app">關閉應用程式</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">系統使用者介面</string>
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_low_quality_label">低品質</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
 </resources>
