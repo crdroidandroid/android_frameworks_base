@@ -5162,6 +5162,12 @@ public final class Settings {
         public static final String BACK_GESTURE_HEIGHT = "back_gesture_height";
 
         /**
+         * FOD pressed state
+         * @hide
+         */
+        public static final String FOD_PRESSED_STATE = "fod_pressed_state";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
