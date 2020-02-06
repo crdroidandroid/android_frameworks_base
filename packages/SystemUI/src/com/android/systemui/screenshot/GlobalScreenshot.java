@@ -69,6 +69,8 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.Process;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -89,6 +91,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.internal.messages.nano.SystemMessageProto.SystemMessage;
+import com.android.internal.statusbar.IStatusBarService;
 import com.android.systemui.R;
 import com.android.systemui.SysUiServiceProvider;
 import com.android.systemui.SystemUI;
@@ -665,9 +668,26 @@ class GlobalScreenshot {
     }
 
     void takeScreenshot(Runnable finisher, boolean statusBarVisible, boolean navBarVisible) {
+        if (mScreenshotLayout.getParent() != null) {
+            finisher.run();
+            return;
+        }
+
         mDisplay.getRealMetrics(mDisplayMetrics);
         takeScreenshot(finisher, statusBarVisible, navBarVisible,
                 new Rect(0, 0, mDisplayMetrics.widthPixels, mDisplayMetrics.heightPixels));
+    }
+
+    void setBlockedGesturalNavigation(boolean blocked) {
+        IStatusBarService service = IStatusBarService.Stub.asInterface(
+                ServiceManager.getService(Context.STATUS_BAR_SERVICE));
+        if (service != null) {
+            try {
+                service.setBlockedGesturalNavigation(blocked);
+            } catch (RemoteException e) {
+                // end of the world
+            }
+        }
     }
 
     /**
@@ -675,6 +695,12 @@ class GlobalScreenshot {
      */
     void takeScreenshotPartial(final Runnable finisher, final boolean statusBarVisible,
             final boolean navBarVisible) {
+        if (mScreenshotLayout.getParent() != null) {
+            finisher.run();
+            return;
+        }
+
+        setBlockedGesturalNavigation(true);
         mWindowManager.addView(mScreenshotLayout, mWindowLayoutParams);
         mScreenshotSelectorView.setSelectionListener(
                 new ScreenshotSelectorView.OnSelectionListener() {
@@ -728,6 +754,7 @@ class GlobalScreenshot {
         mScreenshotSelectorView.stopSelection();
         mScreenshotSelectorView.setVisibility(View.GONE);
         mCaptureButton.setVisibility(View.GONE);
+        setBlockedGesturalNavigation(false);
     }
 
     /**
@@ -742,6 +769,8 @@ class GlobalScreenshot {
             } catch (IllegalArgumentException ignored) {
             }
         }
+
+        setBlockedGesturalNavigation(false);
     }
 
     /**
