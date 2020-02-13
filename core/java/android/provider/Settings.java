@@ -5499,6 +5499,11 @@ public final class Settings {
          */
         public static final String NOTIFICATION_PULSE_COLOR = "ambient_notification_light_color";
 
+         /**
+         * @hide
+         */
+        public static final String NOTIFICATION_PULSE_COLOR_AUTOMATIC = "ambient_notification_light_color_automatic";
+
         /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
