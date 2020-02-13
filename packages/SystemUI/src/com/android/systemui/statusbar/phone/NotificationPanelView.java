@@ -694,6 +694,7 @@ public class NotificationPanelView extends PanelView implements
     @Override
     public void onDensityOrFontScaleChanged() {
         updateShowEmptyShadeView();
+        reInflateViews();
     }
 
     @Override
