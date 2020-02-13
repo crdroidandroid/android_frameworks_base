@@ -26,7 +26,7 @@ import android.icu.text.DisplayContext;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.TextClock;
 
 import com.android.internal.colorextraction.ColorExtractor;
 import com.android.systemui.R;
@@ -74,9 +74,9 @@ public class MNMLBoxClockController implements ClockPlugin {
     /**
      * Text clock in preview view hierarchy.
      */
-    private TextView mClock;
-    private TextView mDate;
-    private TextView mDateDay;
+    private TextClock mClock;
+    private TextClock mDate;
+    private TextClock mDateDay;
 
     /**
      * Time and calendars to check the date
@@ -134,9 +134,9 @@ public class MNMLBoxClockController implements ClockPlugin {
     public Bitmap getPreview(int width, int height) {
 
         View previewView = mLayoutInflater.inflate(R.layout.digital_mnml_box_preview, null);
-        TextView previewTime = previewView.findViewById(R.id.clock);
-        TextView previewDate = previewView.findViewById(R.id.bigDate);
-        TextView previewDateDay = previewView.findViewById(R.id.bigDateDay);
+        TextClock previewTime = previewView.findViewById(R.id.clock);
+        TextClock previewDate = previewView.findViewById(R.id.bigDate);
+        TextClock previewDateDay = previewView.findViewById(R.id.bigDateDay);
 
         // Initialize state of plugin before generating preview.
         previewTime.setTextColor(Color.WHITE);
@@ -182,7 +182,10 @@ public class MNMLBoxClockController implements ClockPlugin {
 
     @Override
     public void onTimeTick() {
-
+        mView.onTimeChanged();
+        mClock.refresh();
+        mDate.refresh();
+        mDateDay.refresh();
     }
 
     @Override
