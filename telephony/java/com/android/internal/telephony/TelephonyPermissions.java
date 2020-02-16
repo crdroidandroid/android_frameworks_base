@@ -29,6 +29,7 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.telephony.Rlog;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -382,6 +383,9 @@ public final class TelephonyPermissions {
      */
     private static boolean reportAccessDeniedToReadIdentifiers(Context context, int subId, int pid,
             int uid, String callingPackage, String message) {
+        // Check if the identifier restriction can be relaxed
+        boolean relaxDeviceIdentifierCheck = Settings.Global.getInt(context.getContentResolver(),
+                Settings.Global.PRIVILEGED_DEVICE_IDENTIFIER_CHECK_RELAXED, 0) == 1;
         boolean isPreinstalled = false;
         boolean isPrivApp = false;
         ApplicationInfo callingPackageInfo = null;
@@ -402,40 +406,46 @@ public final class TelephonyPermissions {
             Log.e(LOG_TAG, "Exception caught obtaining package info for package " + callingPackage,
                     e);
         }
-        // The current package should only be reported in StatsLog if it has not previously been
-        // reported for the currently invoked device identifier method.
-        boolean packageReported = sReportedDeviceIDPackages.containsKey(callingPackage);
-        if (!packageReported || !sReportedDeviceIDPackages.get(callingPackage).contains(
-                message)) {
-            Set invokedMethods;
-            if (!packageReported) {
-                invokedMethods = new HashSet<String>();
-                sReportedDeviceIDPackages.put(callingPackage, invokedMethods);
-            } else {
-                invokedMethods = sReportedDeviceIDPackages.get(callingPackage);
+        // The new Q restrictions for device identifier access will be enforced for all apps with
+        // settings to disable the new restrictions for all apps.
+        if (!relaxDeviceIdentifierCheck) {
+            // The current package should only be reported in StatsLog if it has not previously been
+            // reported for the currently invoked device identifier method.
+            boolean packageReported = sReportedDeviceIDPackages.containsKey(callingPackage);
+            if (!packageReported || !sReportedDeviceIDPackages.get(callingPackage).contains(
+                    message)) {
+                Set invokedMethods;
+                if (!packageReported) {
+                    invokedMethods = new HashSet<String>();
+                    sReportedDeviceIDPackages.put(callingPackage, invokedMethods);
+                } else {
+                    invokedMethods = sReportedDeviceIDPackages.get(callingPackage);
+                }
+                invokedMethods.add(message);
+                StatsLog.write(StatsLog.DEVICE_IDENTIFIER_ACCESS_DENIED, callingPackage, message,
+                        isPreinstalled, isPrivApp);
             }
-            invokedMethods.add(message);
-            StatsLog.write(StatsLog.DEVICE_IDENTIFIER_ACCESS_DENIED, callingPackage, message,
-                    isPreinstalled, isPrivApp);
+            Log.w(LOG_TAG, "reportAccessDeniedToReadIdentifiers:" + callingPackage + ":" + message
+                    + ":isPreinstalled=" + isPreinstalled + ":isPrivApp=" + isPrivApp);
+            // if the target SDK is pre-Q then check if the calling package would have previously
+            // had access to device identifiers.
+            if (callingPackageInfo != null && (
+                    callingPackageInfo.targetSdkVersion < Build.VERSION_CODES.Q)) {
+                if (context.checkPermission(
+                        android.Manifest.permission.READ_PHONE_STATE,
+                        pid,
+                        uid) == PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+                if (checkCarrierPrivilegeForSubId(subId)) {
+                    return false;
+                }
+            }
+            throw new SecurityException(message + ": The user " + uid
+                    + " does not meet the requirements to access device identifiers.");
+        } else {
+            return checkReadPhoneState(context, subId, pid, uid, callingPackage, message);
         }
-        Log.w(LOG_TAG, "reportAccessDeniedToReadIdentifiers:" + callingPackage + ":" + message
-                + ":isPreinstalled=" + isPreinstalled + ":isPrivApp=" + isPrivApp);
-        // if the target SDK is pre-Q then check if the calling package would have previously
-        // had access to device identifiers.
-        if (callingPackageInfo != null && (
-                callingPackageInfo.targetSdkVersion < Build.VERSION_CODES.Q)) {
-            if (context.checkPermission(
-                    android.Manifest.permission.READ_PHONE_STATE,
-                    pid,
-                    uid) == PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-            if (checkCarrierPrivilegeForSubId(subId)) {
-                return false;
-            }
-        }
-        throw new SecurityException(message + ": The user " + uid
-                + " does not meet the requirements to access device identifiers.");
     }
 
     /**
