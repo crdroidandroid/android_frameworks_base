@@ -14560,6 +14560,14 @@ public final class Settings {
                 "location_global_kill_switch";
 
         /**
+         * If set to 1, the device identifier check will be relaxed to the previous READ_PHONE_STATE
+         * permission check for all apps.
+         * @hide
+         */
+        public static final String PRIVILEGED_DEVICE_IDENTIFIER_CHECK_RELAXED =
+                "privileged_device_identifier_check_relaxed";
+
+        /**
          * If set to 1, SettingsProvider's restoreAnyVersion="true" attribute will be ignored
          * and restoring to lower version of platform API will be skipped.
          *
