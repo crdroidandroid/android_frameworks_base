@@ -108,7 +108,7 @@
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
         <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
         <item quantity="few"><annotation name="color">It’s</annotation>\n^1\n^2</item>
         <item quantity="many"><annotation name="color">It’s</annotation>\n^1\n^2</item>
     </plurals>
@@ -136,17 +136,17 @@
     <string name="text_clock_m_seven">O’Seven</string>
     <string name="text_clock_m_eight">O’Eight</string>
     <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
-    <string name="text_clock_m_fourteen">Fourteen</string>
-    <string name="text_clock_m_fifteen">Fifteen</string>
-    <string name="text_clock_m_sixteen">Sixteen</string>
-    <string name="text_clock_m_seventeen">Seventeen</string>
-    <string name="text_clock_m_eighteen">Eighteen</string>
-    <string name="text_clock_m_nineteen">Nineteen</string>
-    <string name="text_clock_m_twenty">Twenty</string>
+    <string name="text_clock_m_ten">Десять</string>
+    <string name="text_clock_m_eleven">Одинадцять</string>
+    <string name="text_clock_m_twelve">Дванадцять</string>
+    <string name="text_clock_m_thirteen">Тринадцять</string>
+    <string name="text_clock_m_fourteen">Чотирнадцять</string>
+    <string name="text_clock_m_fifteen">П\'ятнадцять</string>
+    <string name="text_clock_m_sixteen">Шістнадцять</string>
+    <string name="text_clock_m_seventeen">Сімнадцять</string>
+    <string name="text_clock_m_eighteen">Вісімнадцять</string>
+    <string name="text_clock_m_nineteen">Дев\'ятнадцять</string>
+    <string name="text_clock_m_twenty">Двадцять</string>
     <string name="text_clock_m_twenty_one">Twenty One</string>
     <string name="text_clock_m_twenty_two">Twenty Two</string>
     <string name="text_clock_m_twenty_three">Twenty Three</string>
@@ -162,28 +162,48 @@
     <string name="text_clock_m_thirty_three">Thirty Three</string>
     <string name="text_clock_m_thirty_four">Thirty Four</string>
     <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
+    <string name="text_clock_m_thirty_six">Тридцять
+шість</string>
     <string name="text_clock_m_thirty_seven">Thirty Seven</string>
     <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_thirty_nine">Тридцять
+дев\'ять</string>
+    <string name="text_clock_m_forty">Сорок</string>
+    <string name="text_clock_m_forty_one">Сорок
+одна</string>
+    <string name="text_clock_m_forty_two">Сорок
+дві</string>
+    <string name="text_clock_m_forty_three">Сорок
+три</string>
+    <string name="text_clock_m_forty_four">Сорок
+чотири</string>
+    <string name="text_clock_m_forty_five">Сорок
+п\'ять</string>
+    <string name="text_clock_m_forty_six">Сорок
+шість</string>
+    <string name="text_clock_m_forty_seven">Сорок
+сім</string>
+    <string name="text_clock_m_forty_eight">Сорок
+вісім</string>
+    <string name="text_clock_m_forty_nine">Сорок
+дев\'ять</string>
+    <string name="text_clock_m_fifty">П\'ятдесят</string>
+    <string name="text_clock_m_fifty_one">П\'ятдесят
+одна</string>
+    <string name="text_clock_m_fifty_two">П\'ятдесят
+дві</string>
+    <string name="text_clock_m_fifty_three">П\'ятдесят
+три</string>
+    <string name="text_clock_m_fifty_four">П\'ятдесят
+чотири</string>
+    <string name="text_clock_m_fifty_five">П\'ятдесят
+п\'ять</string>
+    <string name="text_clock_m_fifty_six">П\'ятдесят
+шість</string>
+    <string name="text_clock_m_fifty_seven">П\'ятдесят
+сім</string>
+    <string name="text_clock_m_fifty_eight">П\'ятдесят
+вісім</string>
+    <string name="text_clock_m_fifty_nine">П\'ятдесят
+дев\'ять</string>
 </resources>
