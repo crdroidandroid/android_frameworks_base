@@ -107,15 +107,15 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">现在是</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
+    <string name="text_clock_h_one">一点</string>
+    <string name="text_clock_h_two">两点</string>
+    <string name="text_clock_h_three">三点</string>
+    <string name="text_clock_h_four">四点</string>
+    <string name="text_clock_h_five">五点</string>
+    <string name="text_clock_h_six">六点</string>
     <string name="text_clock_h_seven">Seven</string>
     <string name="text_clock_h_eight">Eight</string>
     <string name="text_clock_h_nine">Nine</string>
