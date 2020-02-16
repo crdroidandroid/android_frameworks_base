@@ -107,10 +107,10 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="few"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="many"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Сейчас</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Сейчас</annotation>\n^1\n^2</item>
+        <item quantity="few"><annotation name="color">Сейчас</annotation>\n^1\n^2</item>
+        <item quantity="many"><annotation name="color">Сейчас</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
     <string name="text_clock_h_one">Час</string>
@@ -126,10 +126,10 @@
     <string name="text_clock_h_eleven">Одиннадцать</string>
     <string name="text_clock_h_twelve">Двенадцать</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">Ровно</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
+    <string name="text_clock_m_zero">ровно</string>
+    <string name="text_clock_m_one">Ноль Один</string>
+    <string name="text_clock_m_two">Ноль Два</string>
+    <string name="text_clock_m_three">Ноль Три</string>
     <string name="text_clock_m_four">O’Four</string>
     <string name="text_clock_m_five">O’Five</string>
     <string name="text_clock_m_six">O’Six</string>
