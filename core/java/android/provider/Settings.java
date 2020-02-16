@@ -5575,6 +5575,21 @@ public final class Settings {
         };
 
         /**
+         * Recents component
+         * 0 - Quickstep
+         * 1 - AOSP
+         * 2 - OmniSwitch
+         * @hide
+         */
+        public static final String RECENTS_COMPONENT = "recents_component";
+
+        /**
+         * Whether to enable OmniSwitch as recents implementation.
+         * @hide
+         */
+        public static final String RECENTS_OMNI_SWITCH_ENABLED = "recents_omni_switch";
+
+        /**
          * These are all public system settings
          *
          * @hide
@@ -5681,6 +5696,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(EGG_MODE);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE_VENDOR_HINT);
+            PRIVATE_SETTINGS.add(RECENTS_OMNI_SWITCH_ENABLED);
         }
 
         /**

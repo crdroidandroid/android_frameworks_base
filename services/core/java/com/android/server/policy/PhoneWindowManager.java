@@ -217,6 +217,7 @@ import com.android.internal.policy.TransitionAnimation;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.crdroid.Utils;
+import com.android.internal.util.omni.OmniSwitchConstants;
 import com.android.server.ExtconStateObserver;
 import com.android.server.ExtconUEventObserver;
 import com.android.server.GestureLauncherService;
@@ -349,6 +350,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private static final String ACTION_TORCH_OFF =
             "com.android.server.policy.PhoneWindowManager.ACTION_TORCH_OFF";
+
+    // OmniSwitch
+    private boolean mOmniSwitchRecents;
 
     /**
      * Keyguard stuff
@@ -958,6 +962,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.THREE_FINGER_GESTURE), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.RECENTS_OMNI_SWITCH_ENABLED), false, this,
                     UserHandle.USER_ALL);
 
             updateSettings();
@@ -1913,6 +1920,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // Remember that home is pressed and handle special actions.
             if (repeatCount == 0) {
                 mHomePressed = true;
+                if (mOmniSwitchRecents) {
+                    OmniSwitchConstants.hideOmniSwitchRecents(mContext, UserHandle.CURRENT);
+                }
                 if (mHomeDoubleTapPending) {
                     mHomeDoubleTapPending = false;
                     mHandler.removeCallbacks(mHomeDoubleTapTimeoutRunnable);
@@ -2683,6 +2693,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Global.KEY_CHORD_POWER_VOLUME_UP,
                     mContext.getResources().getInteger(
                             com.android.internal.R.integer.config_keyChordPowerVolumeUp));
+            mOmniSwitchRecents = Settings.System.getIntForUser(resolver,
+                    Settings.System.RECENTS_OMNI_SWITCH_ENABLED, 0,
+                    UserHandle.USER_CURRENT) == 1;
         }
         if (updateRotation) {
             updateRotation(true);
