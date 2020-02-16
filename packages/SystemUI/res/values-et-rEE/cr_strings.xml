@@ -93,4 +93,95 @@
     <string name="screenrecord_low_quality_label">Madal kvaliteet</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Kell on</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Kell on</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">Üks</string>
+    <string name="text_clock_h_two">Kaks</string>
+    <string name="text_clock_h_three">Kolm</string>
+    <string name="text_clock_h_four">Neli</string>
+    <string name="text_clock_h_five">Viis</string>
+    <string name="text_clock_h_six">Kuus</string>
+    <string name="text_clock_h_seven">Seitse</string>
+    <string name="text_clock_h_eight">Kaheksa</string>
+    <string name="text_clock_h_nine">Üheksa</string>
+    <string name="text_clock_h_ten">Kümme</string>
+    <string name="text_clock_h_eleven">Üksteist</string>
+    <string name="text_clock_h_twelve">Kaksteist</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">Null null</string>
+    <string name="text_clock_m_one">Null üks</string>
+    <string name="text_clock_m_two">Null kaks</string>
+    <string name="text_clock_m_three">Null kolm</string>
+    <string name="text_clock_m_four">Null neli</string>
+    <string name="text_clock_m_five">Null viis</string>
+    <string name="text_clock_m_six">Null kuus</string>
+    <string name="text_clock_m_seven">Null seitse</string>
+    <string name="text_clock_m_eight">Null kaheksa</string>
+    <string name="text_clock_m_nine">Null üheksa</string>
+    <string name="text_clock_m_ten">Kümme</string>
+    <string name="text_clock_m_eleven">Üksteist</string>
+    <string name="text_clock_m_twelve">Kaksteist</string>
+    <string name="text_clock_m_thirteen">Kolmteist</string>
+    <string name="text_clock_m_fourteen">Neliteist</string>
+    <string name="text_clock_m_fifteen">Viisteist</string>
+    <string name="text_clock_m_sixteen">Kuusteist</string>
+    <string name="text_clock_m_seventeen">Seitseteist</string>
+    <string name="text_clock_m_eighteen">Kaheksateist</string>
+    <string name="text_clock_m_nineteen">Üheksateist</string>
+    <string name="text_clock_m_twenty">Kakskümmend</string>
+    <string name="text_clock_m_twenty_one">Kakskümmend üks</string>
+    <string name="text_clock_m_twenty_two">Kakskümmend kaks</string>
+    <string name="text_clock_m_twenty_three">Kakskümmend kolm</string>
+    <string name="text_clock_m_twenty_four">Kakskümmend neli</string>
+    <string name="text_clock_m_twenty_five">Kakskümmend viis</string>
+    <string name="text_clock_m_twenty_six">Kakskümmend kuus</string>
+    <string name="text_clock_m_twenty_seven">Kakskümmend seitse</string>
+    <string name="text_clock_m_twenty_eight">Kakskümmend kaheksa</string>
+    <string name="text_clock_m_twenty_nine">Kakskümmend üheksa</string>
+    <string name="text_clock_m_thirty">Kolmkümmend</string>
+    <string name="text_clock_m_thirty_one">Kolmkümmend üks</string>
+    <string name="text_clock_m_thirty_two">Kolmkümmend kaks</string>
+    <string name="text_clock_m_thirty_three">Kolmkümmend kolm</string>
+    <string name="text_clock_m_thirty_four">Kolmkümmend neli</string>
+    <string name="text_clock_m_thirty_five">Kolmkümmend viis</string>
+    <string name="text_clock_m_thirty_six">Kolmkümmend kuus</string>
+    <string name="text_clock_m_thirty_seven">Kolmkümmend seitse</string>
+    <string name="text_clock_m_thirty_eight">Kolmkümmend kaheksa</string>
+    <string name="text_clock_m_thirty_nine">Kolmkümmend üheksa</string>
+    <string name="text_clock_m_forty">Nelikümmend</string>
+    <string name="text_clock_m_forty_one">Nelikümmend üks</string>
+    <string name="text_clock_m_forty_two">Nelikümmend kaks</string>
+    <string name="text_clock_m_forty_three">Nelikümmend kolm</string>
+    <string name="text_clock_m_forty_four">Nelikümmend neli</string>
+    <string name="text_clock_m_forty_five">Nelikümmend viis</string>
+    <string name="text_clock_m_forty_six">Nelikümmend kuus</string>
+    <string name="text_clock_m_forty_seven">Nelikümmend seitse</string>
+    <string name="text_clock_m_forty_eight">Nelikümmend kaheksa</string>
+    <string name="text_clock_m_forty_nine">Nelikümmend üheksa</string>
+    <string name="text_clock_m_fifty">Viiskümmend</string>
+    <string name="text_clock_m_fifty_one">Viiskümmend üks</string>
+    <string name="text_clock_m_fifty_two">Viiskümmend kaks</string>
+    <string name="text_clock_m_fifty_three">Viiskümmend kolm</string>
+    <string name="text_clock_m_fifty_four">Viiskümmend neli</string>
+    <string name="text_clock_m_fifty_five">Viiskümmend viis</string>
+    <string name="text_clock_m_fifty_six">Viiskümmend kuus</string>
+    <string name="text_clock_m_fifty_seven">Viiskümmend seitse</string>
+    <string name="text_clock_m_fifty_eight">Viiskümmend kaheksa</string>
+    <string name="text_clock_m_fifty_nine">Viiskümmend üheksa</string>
 </resources>

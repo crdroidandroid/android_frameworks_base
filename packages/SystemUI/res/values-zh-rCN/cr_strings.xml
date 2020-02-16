@@ -20,7 +20,7 @@
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash 闪充</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp 闪充中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 后充满)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp 闪充</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
@@ -89,8 +89,98 @@
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">系统界面</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_label">显示停止点</string>
     <string name="screenrecord_low_quality_label">低质量</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">现在是</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">一点</string>
+    <string name="text_clock_h_two">两点</string>
+    <string name="text_clock_h_three">三点</string>
+    <string name="text_clock_h_four">四点</string>
+    <string name="text_clock_h_five">五点</string>
+    <string name="text_clock_h_six">六点</string>
+    <string name="text_clock_h_seven">七点</string>
+    <string name="text_clock_h_eight">八点</string>
+    <string name="text_clock_h_nine">九点</string>
+    <string name="text_clock_h_ten">十点</string>
+    <string name="text_clock_h_eleven">十一点</string>
+    <string name="text_clock_h_twelve">十二点</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">整</string>
+    <string name="text_clock_m_one">零一分</string>
+    <string name="text_clock_m_two">零二分</string>
+    <string name="text_clock_m_three">零三分</string>
+    <string name="text_clock_m_four">零四分</string>
+    <string name="text_clock_m_five">零五分</string>
+    <string name="text_clock_m_six">零六分</string>
+    <string name="text_clock_m_seven">零七分</string>
+    <string name="text_clock_m_eight">零八分</string>
+    <string name="text_clock_m_nine">零九分</string>
+    <string name="text_clock_m_ten">十分</string>
+    <string name="text_clock_m_eleven">十一分</string>
+    <string name="text_clock_m_twelve">十二分</string>
+    <string name="text_clock_m_thirteen">十三分</string>
+    <string name="text_clock_m_fourteen">十四分</string>
+    <string name="text_clock_m_fifteen">十五分</string>
+    <string name="text_clock_m_sixteen">十六分</string>
+    <string name="text_clock_m_seventeen">十七分</string>
+    <string name="text_clock_m_eighteen">十八分</string>
+    <string name="text_clock_m_nineteen">十九分</string>
+    <string name="text_clock_m_twenty">二十分</string>
+    <string name="text_clock_m_twenty_one">二十一分</string>
+    <string name="text_clock_m_twenty_two">二十二分</string>
+    <string name="text_clock_m_twenty_three">二十三分</string>
+    <string name="text_clock_m_twenty_four">二十四分</string>
+    <string name="text_clock_m_twenty_five">二十五分</string>
+    <string name="text_clock_m_twenty_six">二十六分</string>
+    <string name="text_clock_m_twenty_seven">二十七分</string>
+    <string name="text_clock_m_twenty_eight">二十八分</string>
+    <string name="text_clock_m_twenty_nine">二十九分</string>
+    <string name="text_clock_m_thirty">三十分</string>
+    <string name="text_clock_m_thirty_one">三十一分</string>
+    <string name="text_clock_m_thirty_two">三十二分</string>
+    <string name="text_clock_m_thirty_three">三十三分</string>
+    <string name="text_clock_m_thirty_four">三十四分</string>
+    <string name="text_clock_m_thirty_five">三十五分</string>
+    <string name="text_clock_m_thirty_six">三十六分</string>
+    <string name="text_clock_m_thirty_seven">三十七分</string>
+    <string name="text_clock_m_thirty_eight">三十八分</string>
+    <string name="text_clock_m_thirty_nine">三十九分</string>
+    <string name="text_clock_m_forty">四十分</string>
+    <string name="text_clock_m_forty_one">四十一分</string>
+    <string name="text_clock_m_forty_two">四十二分</string>
+    <string name="text_clock_m_forty_three">四十三分</string>
+    <string name="text_clock_m_forty_four">四十四分</string>
+    <string name="text_clock_m_forty_five">四十五分</string>
+    <string name="text_clock_m_forty_six">四十六分</string>
+    <string name="text_clock_m_forty_seven">四十七分</string>
+    <string name="text_clock_m_forty_eight">四十八分</string>
+    <string name="text_clock_m_forty_nine">四十九分</string>
+    <string name="text_clock_m_fifty">五十分</string>
+    <string name="text_clock_m_fifty_one">五十一分</string>
+    <string name="text_clock_m_fifty_two">五十二分</string>
+    <string name="text_clock_m_fifty_three">五十三分</string>
+    <string name="text_clock_m_fifty_four">五十四分</string>
+    <string name="text_clock_m_fifty_five">五十五分</string>
+    <string name="text_clock_m_fifty_six">五十六分</string>
+    <string name="text_clock_m_fifty_seven">五十七分</string>
+    <string name="text_clock_m_fifty_eight">五十八分</string>
+    <string name="text_clock_m_fifty_nine">五十九分</string>
 </resources>

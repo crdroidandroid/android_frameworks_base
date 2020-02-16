@@ -93,4 +93,97 @@
     <string name="screenrecord_low_quality_label">Nízká kvalita</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Je</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Je</annotation>\n^1\n^2</item>
+        <item quantity="few"><annotation name="color">Jsou</annotation>\n^1\n^2</item>
+        <item quantity="many"><annotation name="color">Je</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">jedna hodina</string>
+    <string name="text_clock_h_two">dvě hodiny</string>
+    <string name="text_clock_h_three">tři hodiny</string>
+    <string name="text_clock_h_four">čtyři hodiny</string>
+    <string name="text_clock_h_five">pět hodin</string>
+    <string name="text_clock_h_six">šest hodin</string>
+    <string name="text_clock_h_seven">sedm hodin</string>
+    <string name="text_clock_h_eight">osm hodin</string>
+    <string name="text_clock_h_nine">devět hodin</string>
+    <string name="text_clock_h_ten">deset hodin</string>
+    <string name="text_clock_h_eleven">jedenáct hodin</string>
+    <string name="text_clock_h_twelve">dvanáct hodin</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">nula minut</string>
+    <string name="text_clock_m_one">a jedna minuta</string>
+    <string name="text_clock_m_two">a dvě minuty</string>
+    <string name="text_clock_m_three">a tři minuty</string>
+    <string name="text_clock_m_four">a čtyři minuty</string>
+    <string name="text_clock_m_five">a pět minut</string>
+    <string name="text_clock_m_six">a šest minut</string>
+    <string name="text_clock_m_seven">a sedm minut</string>
+    <string name="text_clock_m_eight">a osm minut</string>
+    <string name="text_clock_m_nine">a devět minut</string>
+    <string name="text_clock_m_ten">a deset minut</string>
+    <string name="text_clock_m_eleven">a jedenáct minut</string>
+    <string name="text_clock_m_twelve">a dvanáct minut</string>
+    <string name="text_clock_m_thirteen">a třináct minut</string>
+    <string name="text_clock_m_fourteen">a čtrnáct minut</string>
+    <string name="text_clock_m_fifteen">a patnáct minut</string>
+    <string name="text_clock_m_sixteen">a šestnáct minut</string>
+    <string name="text_clock_m_seventeen">a sedmnáct minut</string>
+    <string name="text_clock_m_eighteen">a osmnáct minut</string>
+    <string name="text_clock_m_nineteen">a devatenáct minut</string>
+    <string name="text_clock_m_twenty">a dvacet minut</string>
+    <string name="text_clock_m_twenty_one">a dvacet jedna minut</string>
+    <string name="text_clock_m_twenty_two">a dvacet dva minut</string>
+    <string name="text_clock_m_twenty_three">a dvacet tři minut</string>
+    <string name="text_clock_m_twenty_four">a dvacet čtyři minut</string>
+    <string name="text_clock_m_twenty_five">a dvacet pět minut</string>
+    <string name="text_clock_m_twenty_six">a dvacet šest minut</string>
+    <string name="text_clock_m_twenty_seven">a dvacet sedm minut</string>
+    <string name="text_clock_m_twenty_eight">a dvacet osm minut</string>
+    <string name="text_clock_m_twenty_nine">a dvacet devět minut</string>
+    <string name="text_clock_m_thirty">a třicet minut</string>
+    <string name="text_clock_m_thirty_one">a třicet jedna minut</string>
+    <string name="text_clock_m_thirty_two">a třicet dva minut</string>
+    <string name="text_clock_m_thirty_three">a třicet tři minut</string>
+    <string name="text_clock_m_thirty_four">a třicet čtyři minut</string>
+    <string name="text_clock_m_thirty_five">a třicet pět minut</string>
+    <string name="text_clock_m_thirty_six">a třicet šest minut</string>
+    <string name="text_clock_m_thirty_seven">a třicet sedm minut</string>
+    <string name="text_clock_m_thirty_eight">a třicet osm minut</string>
+    <string name="text_clock_m_thirty_nine">a třicet devět minut</string>
+    <string name="text_clock_m_forty">a čtyřicet minut</string>
+    <string name="text_clock_m_forty_one">a čtyřicet jedna minut</string>
+    <string name="text_clock_m_forty_two">a čtyřicet dva minut</string>
+    <string name="text_clock_m_forty_three">a čtyřicet tři minut</string>
+    <string name="text_clock_m_forty_four">a čtyřicet čtyři minut</string>
+    <string name="text_clock_m_forty_five">a čtyřicet pět minut</string>
+    <string name="text_clock_m_forty_six">a čtyřicet šest minut</string>
+    <string name="text_clock_m_forty_seven">a čtyřicet sedm minut</string>
+    <string name="text_clock_m_forty_eight">a čtyřicet osm minut</string>
+    <string name="text_clock_m_forty_nine">a čtyřicet devět minut</string>
+    <string name="text_clock_m_fifty">a padesát minut</string>
+    <string name="text_clock_m_fifty_one">a padesát jedna minut</string>
+    <string name="text_clock_m_fifty_two">a padesát dva minut</string>
+    <string name="text_clock_m_fifty_three">a padesát tři minut</string>
+    <string name="text_clock_m_fifty_four">a padesát čtyři minut</string>
+    <string name="text_clock_m_fifty_five">a padesát pět minut</string>
+    <string name="text_clock_m_fifty_six">a padesát šest minut</string>
+    <string name="text_clock_m_fifty_seven">a padesát sedm minut</string>
+    <string name="text_clock_m_fifty_eight">a padesát osm minut</string>
+    <string name="text_clock_m_fifty_nine">a padesát devět\nminut</string>
 </resources>
