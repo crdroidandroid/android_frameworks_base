@@ -132,8 +132,8 @@
     <string name="text_clock_m_five">Null viis</string>
     <string name="text_clock_m_six">Null kuus</string>
     <string name="text_clock_m_seven">Null seitse</string>
-    <string name="text_clock_m_eight">null kaheksa</string>
-    <string name="text_clock_m_nine">null üheksa</string>
+    <string name="text_clock_m_eight">Null kaheksa</string>
+    <string name="text_clock_m_nine">Null üheksa</string>
     <string name="text_clock_m_ten">Kümme</string>
     <string name="text_clock_m_eleven">Üksteist</string>
     <string name="text_clock_m_twelve">Kaksteist</string>
