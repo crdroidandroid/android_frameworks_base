@@ -113,20 +113,20 @@
         <item quantity="many"><annotation name="color">It’s</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">П\'ять</string>
-    <string name="text_clock_h_six">Шість</string>
-    <string name="text_clock_h_seven">Сім</string>
-    <string name="text_clock_h_eight">Вісім</string>
-    <string name="text_clock_h_nine">Дев’ять</string>
-    <string name="text_clock_h_ten">Десять</string>
-    <string name="text_clock_h_eleven">Одинадцять</string>
-    <string name="text_clock_h_twelve">Дванадцять</string>
+    <string name="text_clock_h_one">Перша</string>
+    <string name="text_clock_h_two">Друга</string>
+    <string name="text_clock_h_three">Третя</string>
+    <string name="text_clock_h_four">Четверта</string>
+    <string name="text_clock_h_five">П’ята</string>
+    <string name="text_clock_h_six">Шоста</string>
+    <string name="text_clock_h_seven">Сьома</string>
+    <string name="text_clock_h_eight">Восьма</string>
+    <string name="text_clock_h_nine">Дев’ята</string>
+    <string name="text_clock_h_ten">Десята</string>
+    <string name="text_clock_h_eleven">Одинадцята</string>
+    <string name="text_clock_h_twelve">Дванадцята</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
+    <string name="text_clock_m_zero">година рівно</string>
     <string name="text_clock_m_one">Одна</string>
     <string name="text_clock_m_two">Дві</string>
     <string name="text_clock_m_three">Три</string>
