@@ -107,10 +107,10 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
         <item quantity="one"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
-        <item quantity="few"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="many"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="few"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
+        <item quantity="many"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
     <string name="text_clock_h_one">Перша</string>
@@ -126,7 +126,8 @@
     <string name="text_clock_h_eleven">Одинадцята</string>
     <string name="text_clock_h_twelve">Дванадцята</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">година рівно</string>
+    <string name="text_clock_m_zero">година
+рівно</string>
     <string name="text_clock_m_one">Одна</string>
     <string name="text_clock_m_two">Дві</string>
     <string name="text_clock_m_three">Три</string>
