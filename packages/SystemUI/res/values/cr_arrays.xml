@@ -27,4 +27,82 @@
         <item>@string/quick_settings_compass_W</item>  <!-- West -->
         <item>@string/quick_settings_compass_NW</item> <!-- North west -->
     </string-array>
+
+    <string-array name="type_clock_hours">
+        <item>@string/text_clock_h_twelve</item>
+        <item>@string/text_clock_h_one</item>
+        <item>@string/text_clock_h_two</item>
+        <item>@string/text_clock_h_three</item>
+        <item>@string/text_clock_h_four</item>
+        <item>@string/text_clock_h_five</item>
+        <item>@string/text_clock_h_six</item>
+        <item>@string/text_clock_h_seven</item>
+        <item>@string/text_clock_h_eight</item>
+        <item>@string/text_clock_h_nine</item>
+        <item>@string/text_clock_h_ten</item>
+        <item>@string/text_clock_h_eleven</item>
+    </string-array>
+
+    <string-array name="type_clock_minutes">
+        <item>@string/text_clock_m_zero</item>
+        <item>@string/text_clock_m_one</item>
+        <item>@string/text_clock_m_two</item>
+        <item>@string/text_clock_m_three</item>
+        <item>@string/text_clock_m_four</item>
+        <item>@string/text_clock_m_five</item>
+        <item>@string/text_clock_m_six</item>
+        <item>@string/text_clock_m_seven</item>
+        <item>@string/text_clock_m_eight</item>
+        <item>@string/text_clock_m_nine</item>
+        <item>@string/text_clock_m_ten</item>
+        <item>@string/text_clock_m_eleven</item>
+        <item>@string/text_clock_m_twelve</item>
+        <item>@string/text_clock_m_thirteen</item>
+        <item>@string/text_clock_m_fourteen</item>
+        <item>@string/text_clock_m_fifteen</item>
+        <item>@string/text_clock_m_sixteen</item>
+        <item>@string/text_clock_m_seventeen</item>
+        <item>@string/text_clock_m_eighteen</item>
+        <item>@string/text_clock_m_nineteen</item>
+        <item>@string/text_clock_m_twenty</item>
+        <item>@string/text_clock_m_twenty_one</item>
+        <item>@string/text_clock_m_twenty_two</item>
+        <item>@string/text_clock_m_twenty_three</item>
+        <item>@string/text_clock_m_twenty_four</item>
+        <item>@string/text_clock_m_twenty_five</item>
+        <item>@string/text_clock_m_twenty_six</item>
+        <item>@string/text_clock_m_twenty_seven</item>
+        <item>@string/text_clock_m_twenty_eight</item>
+        <item>@string/text_clock_m_twenty_nine</item>
+        <item>@string/text_clock_m_thirty</item>
+        <item>@string/text_clock_m_thirty_one</item>
+        <item>@string/text_clock_m_thirty_two</item>
+        <item>@string/text_clock_m_thirty_three</item>
+        <item>@string/text_clock_m_thirty_four</item>
+        <item>@string/text_clock_m_thirty_five</item>
+        <item>@string/text_clock_m_thirty_six</item>
+        <item>@string/text_clock_m_thirty_seven</item>
+        <item>@string/text_clock_m_thirty_eight</item>
+        <item>@string/text_clock_m_thirty_nine</item>
+        <item>@string/text_clock_m_forty</item>
+        <item>@string/text_clock_m_forty_one</item>
+        <item>@string/text_clock_m_forty_two</item>
+        <item>@string/text_clock_m_forty_three</item>
+        <item>@string/text_clock_m_forty_four</item>
+        <item>@string/text_clock_m_forty_five</item>
+        <item>@string/text_clock_m_forty_six</item>
+        <item>@string/text_clock_m_forty_seven</item>
+        <item>@string/text_clock_m_forty_eight</item>
+        <item>@string/text_clock_m_forty_nine</item>
+        <item>@string/text_clock_m_fifty</item>
+        <item>@string/text_clock_m_fifty_one</item>
+        <item>@string/text_clock_m_fifty_two</item>
+        <item>@string/text_clock_m_fifty_three</item>
+        <item>@string/text_clock_m_fifty_four</item>
+        <item>@string/text_clock_m_fifty_five</item>
+        <item>@string/text_clock_m_fifty_six</item>
+        <item>@string/text_clock_m_fifty_seven</item>
+        <item>@string/text_clock_m_fifty_eight</item>
+        <item>@string/text_clock_m_fifty_nine</item>
+    </string-array>
 </resources>
