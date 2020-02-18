@@ -108,21 +108,21 @@
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
         <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Il est</annotation>\"\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
+    <string name="text_clock_h_one">Un</string>
+    <string name="text_clock_h_two">Deux</string>
+    <string name="text_clock_h_three">Trois</string>
+    <string name="text_clock_h_four">Quatre</string>
+    <string name="text_clock_h_five">Cinq</string>
     <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_seven">Sept</string>
+    <string name="text_clock_h_eight">Huit</string>
+    <string name="text_clock_h_nine">Neuf</string>
+    <string name="text_clock_h_ten">Dix</string>
+    <string name="text_clock_h_eleven">Onze</string>
+    <string name="text_clock_h_twelve">Douze</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
     <string name="text_clock_m_zero">O’Clock</string>
     <string name="text_clock_m_one">O’One</string>
@@ -154,13 +154,13 @@
     <string name="text_clock_m_twenty_seven">Twenty Seven</string>
     <string name="text_clock_m_twenty_eight">Twenty Eight</string>
     <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
+    <string name="text_clock_m_thirty">Trente</string>
+    <string name="text_clock_m_thirty_one">Trente et un</string>
+    <string name="text_clock_m_thirty_two">Trente-deux</string>
+    <string name="text_clock_m_thirty_three">Trente-trois</string>
+    <string name="text_clock_m_thirty_four">Trente-quatre</string>
+    <string name="text_clock_m_thirty_five">Trente cinq</string>
+    <string name="text_clock_m_thirty_six">Trente Six</string>
     <string name="text_clock_m_thirty_seven">Thirty Seven</string>
     <string name="text_clock_m_thirty_eight">Thirty Eight</string>
     <string name="text_clock_m_thirty_nine">Thirty Nine</string>
@@ -181,7 +181,7 @@
     <string name="text_clock_m_fifty_four">Fifty Four</string>
     <string name="text_clock_m_fifty_five">Fifty Five</string>
     <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_fifty_seven">Cinquante-sept</string>
+    <string name="text_clock_m_fifty_eight">Cinquante-huit</string>
+    <string name="text_clock_m_fifty_nine">Cinquante-neuf</string>
 </resources>
