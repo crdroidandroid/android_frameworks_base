@@ -67,6 +67,7 @@ android_library {
         "jsr330",
         "org.lineageos.platform.internal",
         "vendor.lineage.biometrics.fingerprint.inscreen-V1.0-java",
+        "vendor.lineage.biometrics.fingerprint.inscreen-V1.1-java",
         "vendor.lineage.powershare-V1.0-java",
         "airbnb-lottie",
     ],
@@ -128,6 +129,7 @@ android_library {
         "jsr330",
         "org.lineageos.platform.internal",
         "vendor.lineage.biometrics.fingerprint.inscreen-V1.0-java",
+        "vendor.lineage.biometrics.fingerprint.inscreen-V1.1-java",
         "airbnb-lottie",
     ],
     libs: [
