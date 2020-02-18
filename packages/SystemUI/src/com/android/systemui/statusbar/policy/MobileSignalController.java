@@ -149,11 +149,6 @@ public class MobileSignalController extends SignalController<
         mFeatureConnector = new FeatureConnector(mContext, phoneId,
                 new FeatureConnector.Listener<ImsManager> () {
                     @Override
-                    public boolean isSupported() {
-                        return true;
-                    }
-
-                    @Override
                     public ImsManager getFeatureManager() {
                         return ImsManager.getInstance(mContext, phoneId);
                     }
@@ -170,7 +165,7 @@ public class MobileSignalController extends SignalController<
                         Log.d(mTag, "ImsManager: connection unavailable.");
                         removeListeners();
                     }
-        });
+        }, "?");
 
 
         mObserver = new ContentObserver(new Handler(receiverLooper)) {
