@@ -5348,6 +5348,11 @@ public final class Settings {
         public static final String STOCK_STATUSBAR_IN_HIDE = "stock_statusbar_in_hide";
 
         /**
+         * @hide
+         */
+        public static final String AUTO_BRIGHTNESS_MIN_VALUE = "auto_brightness_min_value";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
