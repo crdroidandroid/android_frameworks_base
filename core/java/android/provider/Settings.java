@@ -5348,6 +5348,13 @@ public final class Settings {
         public static final String STOCK_STATUSBAR_IN_HIDE = "stock_statusbar_in_hide";
 
         /**
+         * @hide
+         */
+        public static final String AUTO_BRIGHTNESS_MIN_VALUE = "auto_brightness_min_value";
+
+        private static final Validator AUTO_BRIGHTNESS_MIN_VALUE_VALIDATOR = ANY_INTEGER_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -5411,6 +5418,7 @@ public final class Settings {
             DISPLAY_COLOR_MODE,
             ALARM_ALERT,
             NOTIFICATION_LIGHT_PULSE,
+            AUTO_BRIGHTNESS_MIN_VALUE,
         };
 
         /**
@@ -5529,6 +5537,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LOCK_TO_APP_ENABLED);
             PRIVATE_SETTINGS.add(EGG_MODE);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
+            PRIVATE_SETTINGS.add(AUTO_BRIGHTNESS_MIN_VALUE);
         }
 
         /**
@@ -5623,6 +5632,7 @@ public final class Settings {
             VALIDATORS.put(NOTIFICATION_LIGHT_PULSE, BOOLEAN_VALIDATOR);
             VALIDATORS.put(ACCELEROMETER_ROTATION_ANGLES,
                     ACCELEROMETER_ROTATION_ANGLES_VALIDATOR);
+            VALIDATORS.put(AUTO_BRIGHTNESS_MIN_VALUE, AUTO_BRIGHTNESS_MIN_VALUE_VALIDATOR);
         }
 
         /**
