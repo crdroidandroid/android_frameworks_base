@@ -5162,6 +5162,9 @@ public final class Settings {
         /** @hide */
         public static final String GESTURE_PILL_TOGGLE = "gesture_pill_toggle";
 
+        /** @hide */
+        public static final String BACK_GESTURE_HAPTIC = "back_gesture_haptic";
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
