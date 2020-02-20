@@ -19,8 +19,8 @@
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc nhanh (<xliff:g id="charging_time_left" example="4 giờ và 2 phút">%s</xliff:g> đến khi đầy)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> • Đang sạc nhanh</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc nhanh (<xliff:g id="charging_time_left" example="4 giờ và 2 phút">%s</xliff:g> nữa sẽ đầy)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="Percentage">%s</xliff:g> • Sạc thần tốc</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
@@ -87,10 +87,10 @@
     <string name="force_stop_dlg_text">Nếu bạn buộc dừng một ứng dụng, ứng dụng đó có thể hoạt động sai.</string>
     <string name="guts_force_close_app">Đóng ứng dụng</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Hệ thống</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_stopdot_label">Hiển thị dấu chấm</string>
+    <string name="screenrecord_low_quality_label">Chất lượng kém</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
@@ -110,43 +110,43 @@
         <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">Một</string>
+    <string name="text_clock_h_two">Hai</string>
+    <string name="text_clock_h_three">Ba</string>
+    <string name="text_clock_h_four">Bốn</string>
+    <string name="text_clock_h_five">Năm</string>
+    <string name="text_clock_h_six">Sáu</string>
+    <string name="text_clock_h_seven">Bảy</string>
+    <string name="text_clock_h_eight">Tám</string>
+    <string name="text_clock_h_nine">Chín</string>
+    <string name="text_clock_h_ten">Mười</string>
+    <string name="text_clock_h_eleven">Mười một</string>
+    <string name="text_clock_h_twelve">Mười hai</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
-    <string name="text_clock_m_fourteen">Fourteen</string>
-    <string name="text_clock_m_fifteen">Fifteen</string>
-    <string name="text_clock_m_sixteen">Sixteen</string>
-    <string name="text_clock_m_seventeen">Seventeen</string>
-    <string name="text_clock_m_eighteen">Eighteen</string>
-    <string name="text_clock_m_nineteen">Nineteen</string>
-    <string name="text_clock_m_twenty">Twenty</string>
-    <string name="text_clock_m_twenty_one">Twenty One</string>
-    <string name="text_clock_m_twenty_two">Twenty Two</string>
-    <string name="text_clock_m_twenty_three">Twenty Three</string>
+    <string name="text_clock_m_zero">Giờ</string>
+    <string name="text_clock_m_one">Một phút</string>
+    <string name="text_clock_m_two">Hai phút</string>
+    <string name="text_clock_m_three">Ba phút</string>
+    <string name="text_clock_m_four">Bốn phút</string>
+    <string name="text_clock_m_five">Năm phút</string>
+    <string name="text_clock_m_six">Sáu phút</string>
+    <string name="text_clock_m_seven">Bảy phút</string>
+    <string name="text_clock_m_eight">Tám phút</string>
+    <string name="text_clock_m_nine">Chín phút</string>
+    <string name="text_clock_m_ten">Mười</string>
+    <string name="text_clock_m_eleven">Mười một</string>
+    <string name="text_clock_m_twelve">Mười hai</string>
+    <string name="text_clock_m_thirteen">Mười ba</string>
+    <string name="text_clock_m_fourteen">Mười bốn</string>
+    <string name="text_clock_m_fifteen">Mười lăm</string>
+    <string name="text_clock_m_sixteen">Mười sáu</string>
+    <string name="text_clock_m_seventeen">Mười bảy</string>
+    <string name="text_clock_m_eighteen">Mười tám</string>
+    <string name="text_clock_m_nineteen">Mười chín</string>
+    <string name="text_clock_m_twenty">Hai mươi</string>
+    <string name="text_clock_m_twenty_one">Hai mươi mốt</string>
+    <string name="text_clock_m_twenty_two">Hai mươi hai</string>
+    <string name="text_clock_m_twenty_three">Hai mươi ba</string>
     <string name="text_clock_m_twenty_four">Twenty Four</string>
     <string name="text_clock_m_twenty_five">Twenty Five</string>
     <string name="text_clock_m_twenty_six">Twenty Six</string>
