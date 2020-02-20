@@ -30,11 +30,14 @@ import android.graphics.Region;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.DisplayManager.DisplayListener;
 import android.hardware.input.InputManager;
+import android.os.AsyncTask;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
+import android.os.Vibrator;
+import android.os.VibrationEffect;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.MathUtils;
@@ -173,10 +176,15 @@ public class EdgeBackGestureHandler implements DisplayListener {
     private int mRightInset;
 
     private int mEdgeHeight;
+    private boolean mEdgeHaptic;
+    private static final int HAPTIC_DURATION = 20;
+
+    private final Vibrator mVibrator;
 
     public EdgeBackGestureHandler(Context context, OverviewProxyService overviewProxyService) {
         final Resources res = context.getResources();
         mContext = context;
+        mVibrator = context.getSystemService(Vibrator.class);
         mDisplayId = context.getDisplayId();
         mMainExecutor = context.getMainExecutor();
         mWm = context.getSystemService(WindowManager.class);
@@ -192,12 +200,18 @@ public class EdgeBackGestureHandler implements DisplayListener {
         mNavBarHeight = res.getDimensionPixelSize(R.dimen.navigation_bar_frame_height);
         mMinArrowPosition = res.getDimensionPixelSize(R.dimen.navigation_edge_arrow_min_y);
         mFingerOffset = res.getDimensionPixelSize(R.dimen.navigation_edge_finger_offset);
+        updateEdgeHaptic();
         updateCurrentUserResources(res);
     }
 
     public void updateCurrentUserResources(Resources res) {
         mEdgeWidth = res.getDimensionPixelSize(
                 com.android.internal.R.dimen.config_backGestureInset);
+    }
+
+    private void vibrateTick() {
+            AsyncTask.execute(() ->
+                    mVibrator.vibrate(VibrationEffect.createOneShot(HAPTIC_DURATION, VibrationEffect.DEFAULT_AMPLITUDE)));
     }
 
     private void updateEdgeHeightValue() {
@@ -220,6 +234,11 @@ public class EdgeBackGestureHandler implements DisplayListener {
         } else {
             mEdgeHeight = mDisplaySize.y / 4;
         }
+    }
+
+    private void updateEdgeHaptic() {
+        mEdgeHaptic = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.BACK_GESTURE_HAPTIC, 0, UserHandle.USER_CURRENT) == 1;
     }
 
     /**
@@ -252,6 +271,7 @@ public class EdgeBackGestureHandler implements DisplayListener {
 
     public void onSettingsChanged() {
         updateEdgeHeightValue();
+        updateEdgeHaptic();
     }
 
     public void setStateForBackArrowGesture() {
@@ -461,6 +481,9 @@ public class EdgeBackGestureHandler implements DisplayListener {
             if (isUp) {
                 boolean performAction = mEdgePanel.shouldTriggerBack();
                 if (performAction) {
+                    if (mEdgeHaptic) {
+                        vibrateTick();
+                    }
                     // Perform back
                     sendEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK);
                     sendEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK);
