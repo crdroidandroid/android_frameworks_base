@@ -2002,6 +2002,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case CLEAR_ALL_NOTIFICATIONS:
                 clearAllNotifications();
                 break;
+            case NOTIFICATIONS:
+                toggleNotificationPanel();
+                break;
             default:
                 break;
         }
