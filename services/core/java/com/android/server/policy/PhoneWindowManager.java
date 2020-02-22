@@ -1730,6 +1730,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case CLEAR_ALL_NOTIFICATIONS:
                 Utils.clearAllNotifications();
                 break;
+            case NOTIFICATIONS:
+                Utils.toggleNotifications();
+                break;
             default:
                 break;
         }
