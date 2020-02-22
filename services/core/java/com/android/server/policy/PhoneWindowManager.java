@@ -1733,6 +1733,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case NOTIFICATIONS:
                 Utils.toggleNotifications();
                 break;
+            case QS_PANEL:
+                Utils.toggleQsPanel();
+                break;
+            case RINGER_MODES:
+                Utils.toggleRingerModes(mContext);
+                break;
             default:
                 break;
         }
