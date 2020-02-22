@@ -107,12 +107,12 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">É</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">É</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">São</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">São</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">Um</string>
-    <string name="text_clock_h_two">Dois</string>
+    <string name="text_clock_h_one">Uma</string>
+    <string name="text_clock_h_two">Duas</string>
     <string name="text_clock_h_three">Três</string>
     <string name="text_clock_h_four">Quatro</string>
     <string name="text_clock_h_five">Cinco</string>
@@ -145,8 +145,8 @@
     <string name="text_clock_m_eighteen">Dezoito</string>
     <string name="text_clock_m_nineteen">Dezenove</string>
     <string name="text_clock_m_twenty">Vinte</string>
-    <string name="text_clock_m_twenty_one">Vinte e um</string>
-    <string name="text_clock_m_twenty_two">Vinte e dois</string>
+    <string name="text_clock_m_twenty_one">Vinte e uma</string>
+    <string name="text_clock_m_twenty_two">Vinte e duas</string>
     <string name="text_clock_m_twenty_three">Vinte e três</string>
     <string name="text_clock_m_twenty_four">Vinte e quatro</string>
     <string name="text_clock_m_twenty_five">Vinte e cinco</string>
