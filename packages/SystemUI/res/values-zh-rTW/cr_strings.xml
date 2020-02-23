@@ -89,7 +89,7 @@
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">系統使用者介面</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_label">顯示停止鍵</string>
     <string name="screenrecord_low_quality_label">低品質</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
