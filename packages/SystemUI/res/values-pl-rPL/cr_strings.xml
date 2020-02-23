@@ -89,7 +89,7 @@
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">Interfejs</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_label">Pokaż kropkę do zatrzymania</string>
     <string name="screenrecord_low_quality_label">Niska jakość</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
@@ -126,16 +126,16 @@
     <string name="text_clock_h_eleven">Jedenasta</string>
     <string name="text_clock_h_twelve">Dwunasta</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
+    <string name="text_clock_m_zero">Godzina</string>
+    <string name="text_clock_m_one">Pierwsza</string>
+    <string name="text_clock_m_two">Druga</string>
+    <string name="text_clock_m_three">Trzecia</string>
+    <string name="text_clock_m_four">Czwarta</string>
+    <string name="text_clock_m_five">Piąta</string>
+    <string name="text_clock_m_six">Szósta</string>
+    <string name="text_clock_m_seven">Siódma</string>
+    <string name="text_clock_m_eight">Ósma</string>
+    <string name="text_clock_m_nine">Dziewiąta</string>
     <string name="text_clock_m_ten">Dziesięć</string>
     <string name="text_clock_m_eleven">Jedenaście</string>
     <string name="text_clock_m_twelve">Dwanaście</string>
