@@ -10545,6 +10545,12 @@ public final class Settings {
         public static final String PULSE_AMBIENT_LIGHT_DURATION = "pulse_ambient_light_duration";
 
         /**
+         * Ambient Edge Light Layout
+         * @hide
+         */
+        public static final String PULSE_AMBIENT_LIGHT_LAYOUT = "pulse_ambient_light_layout";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
