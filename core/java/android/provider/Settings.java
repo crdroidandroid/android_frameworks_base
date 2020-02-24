@@ -5269,6 +5269,12 @@ public final class Settings {
         public static final String LOCKSCREEN_WEATHER_STYLE = "lockscreen_weather_style";
 
         /**
+         * Ambient Edge Light Layout
+         * @hide
+         */
+        public static final String PULSE_AMBIENT_LIGHT_LAYOUT = "pulse_ambient_light_layout";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
