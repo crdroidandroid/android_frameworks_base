@@ -21,9 +21,4 @@
         <!-- Note: must be dp to fit in status bar -->
         <item name="android:textSize">14dp</item>
     </style>
-
-    <style name="TriStateUiText">
-        <item name="android:textSize">14.0sp</item>
-        <item name="android:fontFamily">@*android:string/config_headlineFontFamilyMedium</item>
-    </style>
 </resources>
