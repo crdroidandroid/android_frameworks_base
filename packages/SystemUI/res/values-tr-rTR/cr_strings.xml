@@ -121,8 +121,10 @@
     <string name="text_clock_h_eight">Sekiz</string>
     <string name="text_clock_h_nine">Dokuz</string>
     <string name="text_clock_h_ten">On</string>
-    <string name="text_clock_h_eleven">On Bir</string>
-    <string name="text_clock_h_twelve">On İki</string>
+    <string name="text_clock_h_eleven">On
+Bir</string>
+    <string name="text_clock_h_twelve">On
+İki</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
     <string name="text_clock_m_zero"></string>
     <string name="text_clock_m_one">Bir</string>
