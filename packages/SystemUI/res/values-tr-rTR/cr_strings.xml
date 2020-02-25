@@ -135,15 +135,24 @@
     <string name="text_clock_m_eight">Sekiz</string>
     <string name="text_clock_m_nine">Dokuz</string>
     <string name="text_clock_m_ten">On</string>
-    <string name="text_clock_m_eleven">On Bir</string>
-    <string name="text_clock_m_twelve">On İki</string>
-    <string name="text_clock_m_thirteen">On Üç</string>
-    <string name="text_clock_m_fourteen">On Dört</string>
-    <string name="text_clock_m_fifteen">On Beş</string>
-    <string name="text_clock_m_sixteen">On Altı</string>
-    <string name="text_clock_m_seventeen">On Yedi</string>
-    <string name="text_clock_m_eighteen">On Sekiz</string>
-    <string name="text_clock_m_nineteen">On Dokuz</string>
+    <string name="text_clock_m_eleven">On
+Bir</string>
+    <string name="text_clock_m_twelve">On
+İki</string>
+    <string name="text_clock_m_thirteen">On
+Üç</string>
+    <string name="text_clock_m_fourteen">On
+Dört</string>
+    <string name="text_clock_m_fifteen">On
+Beş</string>
+    <string name="text_clock_m_sixteen">On
+Altı</string>
+    <string name="text_clock_m_seventeen">On
+Yedi</string>
+    <string name="text_clock_m_eighteen">On
+Sekiz</string>
+    <string name="text_clock_m_nineteen">On
+Dokuz</string>
     <string name="text_clock_m_twenty">Yirmi</string>
     <string name="text_clock_m_twenty_one">Yirmi
 Bir</string>
