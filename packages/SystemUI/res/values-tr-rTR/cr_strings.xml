@@ -107,8 +107,8 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Saat</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Saat</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
     <string name="text_clock_h_one">Bir</string>
@@ -124,16 +124,16 @@
     <string name="text_clock_h_eleven">On Bir</string>
     <string name="text_clock_h_twelve">On İki</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
+    <string name="text_clock_m_zero"></string>
+    <string name="text_clock_m_one">Bir</string>
+    <string name="text_clock_m_two">İki</string>
+    <string name="text_clock_m_three">Üç</string>
+    <string name="text_clock_m_four">Dört</string>
+    <string name="text_clock_m_five">Beş</string>
+    <string name="text_clock_m_six">Altı</string>
+    <string name="text_clock_m_seven">Yedi</string>
+    <string name="text_clock_m_eight">Sekiz</string>
+    <string name="text_clock_m_nine">Dokuz</string>
     <string name="text_clock_m_ten">On</string>
     <string name="text_clock_m_eleven">On Bir</string>
     <string name="text_clock_m_twelve">On İki</string>
@@ -161,35 +161,63 @@ Altı</string>
 Yedi</string>
     <string name="text_clock_m_twenty_eight">Yirmi
 Sekiz</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_twenty_nine">Yirmi
+Dokuz</string>
+    <string name="text_clock_m_thirty">Otuz</string>
+    <string name="text_clock_m_thirty_one">Otuz
+Bir</string>
+    <string name="text_clock_m_thirty_two">Otuz
+İki</string>
+    <string name="text_clock_m_thirty_three">Otuz
+Üç</string>
+    <string name="text_clock_m_thirty_four">Otuz
+Dört</string>
+    <string name="text_clock_m_thirty_five">Otuz
+Beş</string>
+    <string name="text_clock_m_thirty_six">Otuz
+Altı</string>
+    <string name="text_clock_m_thirty_seven">Otuz
+Yedi</string>
+    <string name="text_clock_m_thirty_eight">Otuz
+Sekiz</string>
+    <string name="text_clock_m_thirty_nine">Otuz
+Dokuz</string>
+    <string name="text_clock_m_forty">Kırk</string>
+    <string name="text_clock_m_forty_one">Kırk
+Bir</string>
+    <string name="text_clock_m_forty_two">Kırk
+İki</string>
+    <string name="text_clock_m_forty_three">Kırk
+Üç</string>
+    <string name="text_clock_m_forty_four">Kırk
+Dört</string>
+    <string name="text_clock_m_forty_five">Kırk
+Beş</string>
+    <string name="text_clock_m_forty_six">Kırk
+Altı</string>
+    <string name="text_clock_m_forty_seven">Kırk
+Yedi</string>
+    <string name="text_clock_m_forty_eight">Kırk
+Sekiz</string>
+    <string name="text_clock_m_forty_nine">Kırk
+Dokuz</string>
+    <string name="text_clock_m_fifty">Elli</string>
+    <string name="text_clock_m_fifty_one">Elli
+Bir</string>
+    <string name="text_clock_m_fifty_two">Elli
+İki</string>
+    <string name="text_clock_m_fifty_three">Elli
+Üç</string>
+    <string name="text_clock_m_fifty_four">Elli
+Dört</string>
+    <string name="text_clock_m_fifty_five">Elli
+Beş</string>
+    <string name="text_clock_m_fifty_six">Elli
+Altı</string>
+    <string name="text_clock_m_fifty_seven">Elli
+Yedi</string>
+    <string name="text_clock_m_fifty_eight">Elli
+Sekiz</string>
+    <string name="text_clock_m_fifty_nine">Elli
+Dokuz</string>
 </resources>
