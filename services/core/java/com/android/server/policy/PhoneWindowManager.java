@@ -2583,9 +2583,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mCameraWakeScreen = (LineageSettings.System.getIntForUser(resolver,
                     LineageSettings.System.CAMERA_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1)
                     && ((mDeviceHardwareWakeKeys & KEY_MASK_CAMERA) != 0);
-            mCameraSleepOnRelease = LineageSettings.System.getIntForUser(resolver,
-                    LineageSettings.System.CAMERA_SLEEP_ON_RELEASE, 0,
-                    UserHandle.USER_CURRENT) == 1;
+            mCameraSleepOnRelease = mCameraWakeScreen &&
+                    LineageSettings.System.getIntForUser(resolver,
+                            LineageSettings.System.CAMERA_SLEEP_ON_RELEASE, 0,
+                            UserHandle.USER_CURRENT) == 1;
             mCameraLaunch = LineageSettings.System.getIntForUser(resolver,
                     LineageSettings.System.CAMERA_LAUNCH, 0,
                     UserHandle.USER_CURRENT) == 1;
@@ -4685,7 +4686,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     // Check if screen is fully on before letting the device go to sleep
                     if (mDefaultDisplayPolicy.isScreenOnFully() && mIsFocusPressed) {
                         mPowerManager.goToSleep(SystemClock.uptimeMillis());
-                    } else {
+                    } else if (!interactive && mCameraSleepOnRelease) {
                         mFocusReleasedGoToSleep = true;
                     }
                     mIsFocusPressed = false;

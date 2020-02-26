@@ -608,6 +608,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private VisualizerView mVisualizerView;
 
     private boolean mWallpaperSupportsAmbientMode;
+
     private final BroadcastReceiver mWallpaperChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
