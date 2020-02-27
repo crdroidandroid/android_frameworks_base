@@ -58,11 +58,16 @@ import com.android.systemui.plugins.VolumeDialogController;
 import com.android.systemui.plugins.VolumeDialogController.Callbacks;
 import com.android.systemui.plugins.VolumeDialogController.State;
 import com.android.systemui.statusbar.policy.ConfigurationController;
-import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
+import com.android.systemui.tuner.TunerService;
 
-public class TriStateUiControllerImpl implements ConfigurationListener, TriStateUiController {
+public class TriStateUiControllerImpl implements TriStateUiController,
+        ConfigurationController.ConfigurationListener, TunerService.Tunable {
+
 
     private static String TAG = "TriStateUiControllerImpl";
+
+    public static final String ALERT_SLIDER_NOTIFICATIONS =
+            "system:" + Settings.System.ALERT_SLIDER_NOTIFICATIONS;
 
     private static final int MSG_DIALOG_SHOW = 1;
     private static final int MSG_DIALOG_DISMISS = 2;
@@ -163,10 +168,15 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
     private String mIntentAction;
     private boolean mIntentActionSupported;
     private boolean mSliderPositionChanged;
+    private boolean mAlertSliderNotification;
 
     private final BroadcastReceiver mSliderStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (!mAlertSliderNotification) {
+                mSliderPositionChanged = false;
+                return;
+            }
 
             String action = intent.getAction();
             if (action.equals(mIntentAction)) {
@@ -180,7 +190,8 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
                                     + " with value " + mPositionValue);
             }
 
-            if (mSliderPositionChanged || !mIntentActionSupported) {
+            if (mAlertSliderNotification &&
+                        (mSliderPositionChanged || !mIntentActionSupported)) {
                 mSliderPositionChanged = false;
                 if (mTriStateMode != -1) {
                     mHandler.sendEmptyMessageDelayed(MSG_DIALOG_SHOW, (long) DIALOG_DELAY);
@@ -235,6 +246,22 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
         if (mIntentActionSupported)
             filter.addAction(mIntentAction);
         mContext.registerReceiver(mSliderStateReceiver, filter);
+
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, ALERT_SLIDER_NOTIFICATIONS);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case ALERT_SLIDER_NOTIFICATIONS:
+                mAlertSliderNotification
+                        = TunerService.parseIntegerSwitch(newValue, true);
+                mHandler.sendEmptyMessage(MSG_DIALOG_DISMISS);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
