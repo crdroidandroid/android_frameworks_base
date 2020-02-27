@@ -55,11 +55,16 @@ import com.android.systemui.plugins.VolumeDialogController;
 import com.android.systemui.plugins.VolumeDialogController.Callbacks;
 import com.android.systemui.plugins.VolumeDialogController.State;
 import com.android.systemui.statusbar.policy.ConfigurationController;
-import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
+import com.android.systemui.tuner.TunerService;
 
-public class TriStateUiControllerImpl implements ConfigurationListener, TriStateUiController {
+public class TriStateUiControllerImpl implements TriStateUiController,
+        ConfigurationController.ConfigurationListener, TunerService.Tunable {
+
 
     private static String TAG = "TriStateUiControllerImpl";
+
+    public static final String ALERT_SLIDER_NOTIFICATIONS =
+            "system:" + Settings.System.ALERT_SLIDER_NOTIFICATIONS;
 
     private static final int MSG_DIALOG_SHOW = 1;
     private static final int MSG_DIALOG_DISMISS = 2;
@@ -146,10 +151,17 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
     private String mIntentAction;
     private boolean mIntentActionSupported;
     private boolean mRingModeChanged, mSliderPositionChanged;
+    private boolean mAlertSliderNotification;
 
     private final BroadcastReceiver mRingerStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (!mAlertSliderNotification) {
+                mRingModeChanged = false;
+                mSliderPositionChanged = false;
+                return;
+            }
+
             String action = intent.getAction();
             if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION)) {
                 mHandler.sendEmptyMessage(MSG_DIALOG_DISMISS);
@@ -160,7 +172,8 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
                 mPosition = intent.getIntExtra(EXTRA_SLIDER_POSITION, -1);
             }
 
-            if (mRingModeChanged && (mSliderPositionChanged || !mIntentActionSupported)) {
+            if (mRingModeChanged && mAlertSliderNotification &&
+                        (mSliderPositionChanged || !mIntentActionSupported)) {
                 mRingModeChanged = false;
                 mSliderPositionChanged = false;
                 if (mTriStateMode != -1) {
@@ -216,6 +229,22 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
         if (mIntentActionSupported)
             filter.addAction(mIntentAction);
         mContext.registerReceiver(mRingerStateReceiver, filter);
+
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, ALERT_SLIDER_NOTIFICATIONS);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case ALERT_SLIDER_NOTIFICATIONS:
+                mAlertSliderNotification
+                        = TunerService.parseIntegerSwitch(newValue, true);
+                mHandler.sendEmptyMessage(MSG_DIALOG_DISMISS);
+                break;
+            default:
+                break;
+        }
     }
 
     private void checkOrientationType() {
