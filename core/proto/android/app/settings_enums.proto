@@ -2691,4 +2691,8 @@ enum PageId {
 
     // OS: R QPR2
     BLUETOOTH_PAIRING_RECEIVER = 1851;
+
+    // crDroid Additions
+    // Panel for Mobile Data
+    PANEL_MOBILE_DATA = 2000;
 }
