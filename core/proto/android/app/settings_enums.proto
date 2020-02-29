@@ -2688,4 +2688,8 @@ enum PageId {
     // CATEGORY: SETTINGS
     // OS: R QPR
     ADAPTIVE_CONNECTIVITY_CATEGORY = 1850;
+
+    // crDroid Additions
+    // Panel for Mobile Data
+    PANEL_MOBILE_DATA = 2000;
 }
