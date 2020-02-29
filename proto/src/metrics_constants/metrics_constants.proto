@@ -7438,5 +7438,8 @@ message MetricsEvent {
 
     // crDroid Settings
     CRDROID_SETTINGS = 4000;
+
+    // Panel for Mobile Data
+    PANEL_MOBILE_DATA = 2002;
   }
 }
