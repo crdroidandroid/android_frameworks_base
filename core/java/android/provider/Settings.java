@@ -18316,6 +18316,18 @@ public final class Settings {
         @SdkConstant(SdkConstant.SdkConstantType.ACTIVITY_INTENT_ACTION)
         public static final String ACTION_BLUETOOTH =
                 "android.settings.panel.action.BLUETOOTH";
+
+        /**
+         * Activity Action: Show a settings dialog containing controls for Mobile Data.
+         * <p>
+         * Input: Nothing.
+         * <p>
+         * Output: Nothing.
+         * @hide
+         */
+        @SdkConstant(SdkConstant.SdkConstantType.ACTIVITY_INTENT_ACTION)
+        public static final String ACTION_MOBILE_DATA =
+                "android.settings.panel.action.MOBILE_DATA";
     }
 
     /**
