@@ -2683,4 +2683,8 @@ enum PageId {
     // CATEGORY: SETTINGS
     // OS: R
     MEDIA_CONTROLS_SETTINGS = 1845;
+
+    // crDroid Additions
+    // Panel for Mobile Data
+    PANEL_MOBILE_DATA = 2000;
 }
