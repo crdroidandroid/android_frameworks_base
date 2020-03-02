@@ -38,11 +38,11 @@ public class BinderWorkSourceService extends Service {
         }
 
         public void setWorkSourceProvider(int uid) {
-            Binder.setWorkSourceProvider((x) -> uid);
+            Binder.setWorkSourceProvider(() -> uid);
         }
 
         public void clearWorkSourceProvider() {
-            Binder.setWorkSourceProvider((x) -> Binder.getCallingUid());
+            Binder.setWorkSourceProvider(Binder::getCallingUid);
         }
     };
 

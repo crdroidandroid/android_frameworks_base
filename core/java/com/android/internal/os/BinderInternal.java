@@ -97,10 +97,9 @@ public class BinderInternal {
          * <p>The implementation should never execute a binder call since it is called during a
          * binder transaction.
          *
-         * @param untrustedWorkSourceUid The work source set by the caller.
          * @return the uid of the process to attribute the binder transaction to.
          */
-        int resolveWorkSourceUid(int untrustedWorkSourceUid);
+        int resolveWorkSourceUid();
     }
 
     /**
