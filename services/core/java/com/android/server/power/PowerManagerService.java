@@ -1200,9 +1200,9 @@ public final class PowerManagerService extends SystemService
                 LineageSettings.Secure.KEYBOARD_BRIGHTNESS, mKeyboardBrightnessSettingDefault,
                 UserHandle.USER_CURRENT);
 
-        mProximityWakeEnabled = LineageSettings.System.getInt(resolver,
+        mProximityWakeEnabled = LineageSettings.System.getIntForUser(resolver,
                 LineageSettings.System.PROXIMITY_ON_WAKE,
-                mProximityWakeEnabledByDefaultConfig ? 1 : 0) == 1;
+                mProximityWakeEnabledByDefaultConfig ? 1 : 0, UserHandle.USER_CURRENT) == 1;
 
         mHardwareKeysDisable = Settings.Secure.getIntForUser(resolver,
                 Settings.Secure.HARDWARE_KEYS_DISABLE, 0,
@@ -4730,8 +4730,17 @@ public final class PowerManagerService extends SystemService
                     Binder.restoreCallingIdentity(ident);
                 }
             };
-            if (checkProximity) {
-                runWithProximityCheck(r);
+            if (checkProximity && mProximityWakeSupported && mProximityWakeEnabled
+                    && mProximitySensor != null) {
+
+                final TelephonyManager tm = mContext.getSystemService(TelephonyManager.class);
+                final boolean hasIncomingCall = tm.getCallState() == TelephonyManager.CALL_STATE_RINGING;
+
+                if (!hasIncomingCall) {
+                    runWithProximityCheck(r);
+                } else {
+                    r.run();
+                }
             } else {
                 r.run();
             }
@@ -5423,18 +5432,10 @@ public final class PowerManagerService extends SystemService
             return;
         }
 
-        final TelephonyManager tm = mContext.getSystemService(TelephonyManager.class);
-        final boolean hasIncomingCall = tm.getCallState() == TelephonyManager.CALL_STATE_RINGING;
-
-        if (mProximityWakeSupported && mProximityWakeEnabled
-                && mProximitySensor != null && !hasIncomingCall) {
-            final Message msg = mHandler.obtainMessage(MSG_WAKE_UP);
-            msg.obj = r;
-            mHandler.sendMessageDelayed(msg, mProximityTimeOut);
-            runPostProximityCheck(r);
-        } else {
-            r.run();
-        }
+        final Message msg = mHandler.obtainMessage(MSG_WAKE_UP);
+        msg.obj = r;
+        mHandler.sendMessageDelayed(msg, mProximityTimeOut);
+        runPostProximityCheck(r);
     }
 
     private void runPostProximityCheck(final Runnable r) {
