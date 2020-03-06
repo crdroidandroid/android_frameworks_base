@@ -345,6 +345,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
     private static final String STOCK_STATUSBAR_IN_HIDE =
             "system:" + Settings.System.STOCK_STATUSBAR_IN_HIDE;
+    private static final String NAVBAR_STYLE =
+            "system:" + Settings.System.NAVBAR_STYLE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -679,6 +681,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private int mDarkStyle;
     private int mSwitchStyle;
+    private int mNavbarStyle;
     private boolean mPowerSave;
     private boolean mUseDarkTheme;
     private IOverlayManager mOverlayManager;
@@ -977,6 +980,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         tunerService.addTunable(this, BERRY_SWITCH_STYLE);
         tunerService.addTunable(this, DISPLAY_CUTOUT_MODE);
         tunerService.addTunable(this, STOCK_STATUSBAR_IN_HIDE);
+        tunerService.addTunable(this, NAVBAR_STYLE);
     }
 
     // ================================================================================
@@ -3932,6 +3936,12 @@ public class StatusBar extends SystemUI implements DemoMode,
         });
     }
 
+    private void updateNavbarStyle() {
+        mUiOffloadThread.submit(() -> {
+            ThemeAccentUtils.setNavbarStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), mNavbarStyle);
+        });
+    }
+
     private void updateCorners() {
         if (mSysuiRoundedFwvals && !isCurrentRoundedSameAsFw()) {
             float density = Resources.getSystem().getDisplayMetrics().density;
@@ -5429,6 +5439,14 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mStockStatusBar != stockStatusBar) {
                     mStockStatusBar = stockStatusBar;
                     handleCutout();
+                }
+                break;
+            case NAVBAR_STYLE:
+                int navbarStyle =
+                        TunerService.parseInteger(newValue, 0);
+                if (mNavbarStyle != navbarStyle) {
+                    mNavbarStyle = navbarStyle;
+                    updateNavbarStyle();
                 }
                 break;
             default:
