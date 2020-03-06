@@ -107,7 +107,7 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">現在是</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
     <string name="text_clock_h_one">One</string>
@@ -144,16 +144,16 @@
     <string name="text_clock_m_eighteen">Eighteen</string>
     <string name="text_clock_m_nineteen">Nineteen</string>
     <string name="text_clock_m_twenty">Twenty</string>
-    <string name="text_clock_m_twenty_one">Twenty One</string>
-    <string name="text_clock_m_twenty_two">Twenty Two</string>
-    <string name="text_clock_m_twenty_three">Twenty Three</string>
-    <string name="text_clock_m_twenty_four">Twenty Four</string>
-    <string name="text_clock_m_twenty_five">Twenty Five</string>
-    <string name="text_clock_m_twenty_six">Twenty Six</string>
-    <string name="text_clock_m_twenty_seven">Twenty Seven</string>
-    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
+    <string name="text_clock_m_twenty_one">二十一分</string>
+    <string name="text_clock_m_twenty_two">二十二分</string>
+    <string name="text_clock_m_twenty_three">二十二分</string>
+    <string name="text_clock_m_twenty_four">二十三分</string>
+    <string name="text_clock_m_twenty_five">二十四分</string>
+    <string name="text_clock_m_twenty_six">二十五分</string>
+    <string name="text_clock_m_twenty_seven">二十六分</string>
+    <string name="text_clock_m_twenty_eight">二十七分</string>
+    <string name="text_clock_m_twenty_nine">二十九分</string>
+    <string name="text_clock_m_thirty">三十分</string>
     <string name="text_clock_m_thirty_one">Thirty One</string>
     <string name="text_clock_m_thirty_two">Thirty Two</string>
     <string name="text_clock_m_thirty_three">Thirty Three</string>
@@ -169,18 +169,18 @@
     <string name="text_clock_m_forty_three">Forty Three</string>
     <string name="text_clock_m_forty_four">Forty Four</string>
     <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
+    <string name="text_clock_m_forty_six">四十六分</string>
+    <string name="text_clock_m_forty_seven">四十六分</string>
+    <string name="text_clock_m_forty_eight">四十八分</string>
+    <string name="text_clock_m_forty_nine">四十八分</string>
+    <string name="text_clock_m_fifty">四十九分</string>
+    <string name="text_clock_m_fifty_one">五十分</string>
+    <string name="text_clock_m_fifty_two">五十一分</string>
+    <string name="text_clock_m_fifty_three">五十二分</string>
+    <string name="text_clock_m_fifty_four">五十三分</string>
+    <string name="text_clock_m_fifty_five">五十四分</string>
+    <string name="text_clock_m_fifty_six">五十五分</string>
+    <string name="text_clock_m_fifty_seven">五十六分</string>
     <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_fifty_nine">五十九分</string>
 </resources>
