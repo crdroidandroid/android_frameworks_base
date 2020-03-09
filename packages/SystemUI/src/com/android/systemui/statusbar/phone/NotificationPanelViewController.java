@@ -3054,10 +3054,13 @@ public class NotificationPanelViewController extends PanelViewController {
                         + " mPulseLightHandled = " + mPulseLightHandled + " mDozing = " + mDozing
                         + " pulseReason = " + pulseReason + " ambientLightsTimeout = " + ambientLightsTimeout);
             }
-            int pulseColor = mPulseLightsView.getDefaultNotificationLightsColor();
+            int pulseColor = mPulseLightsView.getNotificationLightsColor();
             if (row != null) {
+                if (DEBUG_PULSE_LIGHT) {
+                    Log.d(TAG, "setPulsing notification = " + row.getNotificationColor());
+                }
                 if (pulseColorAutomatic) {
-                    int notificationColor = row.getStatusBarNotification().getNotification().color;
+                    int notificationColor = row.getNotificationColor();
                     if (notificationColor != Notification.COLOR_DEFAULT) {
                         pulseColor = notificationColor;
                     }
@@ -3066,24 +3069,28 @@ public class NotificationPanelViewController extends PanelViewController {
                 }
             }
             if (mPulsing) {
-                if (activeNotif && pulseReasonNotification) {
-                    // show the bars if we have to
-                    if (pulseLights) {
-                        mPulseLightsView.animateNotificationWithColor(pulseColor);
-                        mPulseLightsView.setVisibility(View.VISIBLE);
-                    } else {
-                        // bars can still be visible as leftover
-                        // but we dont want them here
-                        mPulseLightsView.setVisibility(View.GONE);
+                if (pulseReasonNotification) {
+                    if (activeNotif) {
+                        // show the bars if we have to
+                        if (pulseLights) {
+                            mPulseLightsView.animateNotificationWithColor(pulseColor);
+                            mPulseLightsView.setVisibility(View.VISIBLE);
+                        } else if (!mAmbientPulseLightRunning) {
+                            // bars can still be visible as leftover
+                            // but we dont want them here
+                            mPulseLightsView.setVisibility(View.GONE);
+                        }
+                        if (ambientLights) {
+                            mPulseLightHandled = false;
+                            // tell power manager that we want to enable aod
+                            // must do that here already not on pulsing = false
+                            Settings.System.putIntForUser(mView.getContext().getContentResolver(),
+                                    Settings.System.AOD_NOTIFICATION_PULSE_TRIGGER, 1,
+                                    UserHandle.USER_CURRENT);
+                        }
                     }
-                    if (ambientLights) {
-                        mPulseLightHandled = false;
-                        // tell power manager that we want to enable aod
-                        // must do that here already not on pulsing = false
-                        Settings.System.putIntForUser(mView.getContext().getContentResolver(),
-                                Settings.System.AOD_NOTIFICATION_PULSE_TRIGGER, 1,
-                                UserHandle.USER_CURRENT);
-                    }
+                } else {
+                    showAodContent(true);
                 }
             } else {
                 // continue to pulse - if not screen was turned on in the meantime
