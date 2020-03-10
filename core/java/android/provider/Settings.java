@@ -4740,18 +4740,6 @@ public final class Settings {
         public static final String STATUS_BAR_IME_SWITCHER = "status_bar_ime_switcher";
 
         /**
-         * Check if using dark theme
-         * @hide
-         */
-        public static final String BERRY_DARK_CHECK = "berry_dark_check";
-
-        /**
-         * Select when dark theme is applied
-         * @hide
-         */
-        public static final String BERRY_THEME_OVERRIDE = "berry_theme_override";
-
-        /**
          * Switch between different dark styles
          * @hide
          */

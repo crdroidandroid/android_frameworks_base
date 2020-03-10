@@ -309,8 +309,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_TILE_TITLE_VISIBILITY;
     private static final String SYSUI_ROUNDED_FWVALS =
             Settings.Secure.SYSUI_ROUNDED_FWVALS;
-    private static final String BERRY_THEME_OVERRIDE =
-            "system:" + Settings.System.BERRY_THEME_OVERRIDE;
     private static final String BERRY_DARK_STYLE =
             "system:" + Settings.System.BERRY_DARK_STYLE;
     private static final String GAMING_MODE_ACTIVE =
@@ -671,7 +669,6 @@ public class StatusBar extends SystemUI implements DemoMode,
     private boolean mWereIconsJustHidden;
     private boolean mBouncerWasShowingWhenHidden;
 
-    private int mThemeOverride;
     private int mDarkStyle;
     private boolean mPowerSave;
 
@@ -948,7 +945,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         tunerService.addTunable(this, FORCE_SHOW_NAVBAR);
         tunerService.addTunable(this, QS_TILE_TITLE_VISIBILITY);
         tunerService.addTunable(this, SYSUI_ROUNDED_FWVALS);
-        tunerService.addTunable(this, BERRY_THEME_OVERRIDE);
         tunerService.addTunable(this, BERRY_DARK_STYLE);
         tunerService.addTunable(this, GAMING_MODE_ACTIVE);
         tunerService.addTunable(this, GAMING_MODE_HEADSUP_TOGGLE);
@@ -1096,7 +1092,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     if (mDozeServiceHost != null && mPowerSave != isPowerSave) {
                         mDozeServiceHost.firePowerSaveChanged(isPowerSave);
                         mPowerSave = isPowerSave;
-                        updateTheme();
                     }
                 }
 
@@ -1463,6 +1458,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (mBrightnessMirrorController != null) {
             mBrightnessMirrorController.onUiModeChanged();
         }
+        updateTheme();
     }
 
     protected void createUserSwitcher() {
@@ -3860,65 +3856,29 @@ public class StatusBar extends SystemUI implements DemoMode,
                 (sbPaddingRes == sbPadding);
     }
 
-    private boolean isLiveDisplayNightModeOn() {
-        // SystemUI is initialized before LiveDisplay, so the service may not
-        // be ready when this is called the first time
-        LiveDisplayManager manager = LiveDisplayManager.getInstance(mContext);
-        try {
-            return manager.isNightModeEnabled();
-        } catch (NullPointerException e) {
-            Log.w(TAG, e.getMessage());
-        }
-        return false;
-    }
-
     /**
      * Switches theme from light to dark and vice-versa.
      */
     protected void updateTheme() {
-
-        WallpaperColors systemColors = mColorExtractor
-                .getWallpaperColors(WallpaperManager.FLAG_SYSTEM);
-        final boolean wallpaperWantsDarkTheme = systemColors != null
-                && (systemColors.getColorHints() & WallpaperColors.HINT_SUPPORTS_DARK_THEME) != 0;
-        boolean useDarkTheme;
+        boolean useDarkTheme = (mContext.getResources().getConfiguration().uiMode
+                        & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
 
         haltTicker();
-
-        // 0 = auto, 1 = time-based, 2 = light, 3 = dark
-        switch (mThemeOverride) {
-            case 1:
-                useDarkTheme = isLiveDisplayNightModeOn();
-                break;
-            case 2:
-                useDarkTheme = false;
-                break;
-            case 3:
-                useDarkTheme = true;
-                break;
-            default:
-                useDarkTheme = wallpaperWantsDarkTheme || mPowerSave;
-                break;
-        }
 
         if (mUiModeManager != null && (mUseDarkTheme != useDarkTheme ||
                 mDarkStyle != ThemeAccentUtils.getDarkStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId()))) {
             mUseDarkTheme = useDarkTheme;
             if (mUseDarkTheme) {
                 mUiOffloadThread.submit(() -> {
-                    mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
-                ThemeAccentUtils.setSystemTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
+                    ThemeAccentUtils.setSystemTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
                                             mUseDarkTheme, mDarkStyle);
                 });
             } else {
                 mUiOffloadThread.submit(() -> {
-                    mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
-                ThemeAccentUtils.setSystemTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
+                    ThemeAccentUtils.setSystemTheme(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
                                             mUseDarkTheme, mDarkStyle);
                 });
             }
-            Settings.System.putIntForUser(mContext.getContentResolver(),
-                    Settings.System.BERRY_DARK_CHECK, mUseDarkTheme ? 1 : 0, UserHandle.USER_CURRENT);
         }
 
         // Lock wallpaper defines the color of the majority of the views, hence we'll use it
@@ -5340,14 +5300,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mSysuiRoundedFwvals =
                         TunerService.parseIntegerSwitch(newValue, true);
                 updateCorners();
-                break;
-            case BERRY_THEME_OVERRIDE:
-                int themeOverride =
-                        TunerService.parseInteger(newValue, 0);
-                if (mThemeOverride != themeOverride) {
-                    mThemeOverride = themeOverride;
-                    updateTheme();
-                }
                 break;
             case BERRY_DARK_STYLE:
                 int darkStyle =
