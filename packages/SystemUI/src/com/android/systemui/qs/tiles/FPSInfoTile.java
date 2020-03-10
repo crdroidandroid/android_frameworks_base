@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 The OmniROM Project
+ * Copyright (C) 2020 crDroid
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.service.quicksettings.Tile;
+import android.text.TextUtils;
 
 import com.android.systemui.R;
 import com.android.systemui.Dependency;
@@ -106,6 +108,14 @@ public class FPSInfoTile extends QSTileImpl<BooleanState> {
     private boolean FPSInfoEnabled() {
         return Settings.Global.getInt(mContext.getContentResolver(),
                 Settings.Global.SHOW_FPS_OVERLAY, 0) == 1;
+    }
+
+    @Override
+    public boolean isAvailable() {
+        final String fpsInfoSysNode = mContext.getResources().getString(
+                R.string.config_fpsInfoSysNode);
+        boolean fpsInfoSupported = !TextUtils.isEmpty(fpsInfoSysNode);
+        return fpsInfoSupported;
     }
 
     @Override
