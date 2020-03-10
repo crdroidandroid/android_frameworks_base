@@ -14776,6 +14776,11 @@ public final class Settings {
         /**
          * @hide
          */
+        public static final String SHOW_FPS_OVERLAY = "show_fps_overlay";
+
+        /**
+         * @hide
+         */
         public static final String POWER_MENU_EMERGENCY_AFFORDANCE = "power_menu_emergency_affordance";
 
         /**
