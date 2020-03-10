@@ -380,6 +380,9 @@
         <service android:name="com.android.systemui.CPUInfoService"
                 android:exported="true" />
 
+        <service android:name="com.android.systemui.FPSInfoService"
+                android:exported="true" />
+
         <receiver android:name=".BootReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
