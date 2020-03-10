@@ -71,11 +71,6 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">Herní režim byl vypnut.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Herní režim byl zapnut.</string>
-    <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Automaticky (podle tapety)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Automaticky (LiveDisplay)</string>
-    <string name="quick_settings_ui_mode_disabled">Zakázáno</string>
-    <string name="quick_settings_ui_mode_enabled">Povoleno</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Přepnout SIM pro data</string>
     <string name="qs_data_switch_toast_0">Momentálně není vložena žádná SIM karta</string>
@@ -88,9 +83,6 @@
     <string name="guts_force_close_app">Zavřít aplikaci</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">SystemUI</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Zobrazit puntík pro zastavení</string>
-    <string name="screenrecord_low_quality_label">Nízká kvalita</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
