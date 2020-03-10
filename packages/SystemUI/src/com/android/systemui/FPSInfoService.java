@@ -95,10 +95,7 @@ public class FPSInfoService extends Service {
 
             final int textSize = Math.round(12 * density);
 
-            Typeface typeface = Typeface.create("monospace", Typeface.NORMAL);
-
             mOnlinePaint = new Paint();
-            mOnlinePaint.setTypeface(typeface);
             mOnlinePaint.setAntiAlias(true);
             mOnlinePaint.setTextSize(textSize);
             mOnlinePaint.setColor(Color.WHITE);
