@@ -41,4 +41,7 @@
     <!-- Whether the binned brightness sensor reports a value of 0 on proximity
          near events -->
     <bool name="doze_brightness_sensor_reports_proximity" translatable="false">true</bool>
+
+    <!-- FPSInfoService FPS node file path -->
+    <string name="config_fpsInfoSysNode" translatable="false"></string>
 </resources>
