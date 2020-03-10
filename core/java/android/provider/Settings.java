@@ -4809,6 +4809,12 @@ public final class Settings {
          */
 
         /**
+         * Switch between different dark styles
+         * @hide
+         */
+        public static final String BERRY_DARK_STYLE = "berry_dark_style";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
