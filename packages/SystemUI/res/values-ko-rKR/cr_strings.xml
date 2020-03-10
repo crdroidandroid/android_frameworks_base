@@ -71,11 +71,6 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">게임 모드가 꺼졌습니다.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">게임 모드가 켜져 있습니다.</string>
-    <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">자동 (배경화면)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">자동 (실시간 표시)</string>
-    <string name="quick_settings_ui_mode_disabled">비활성화</string>
-    <string name="quick_settings_ui_mode_enabled">활성화됨</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">데이터 카드 전환</string>
     <string name="qs_data_switch_toast_0">현재 SIM 카드가 삽입되어 있지 않습니다</string>
@@ -88,9 +83,6 @@
     <string name="guts_force_close_app">어플리케이션 닫기</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">시스템UI</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">정지 점 표시</string>
-    <string name="screenrecord_low_quality_label">저화질</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
