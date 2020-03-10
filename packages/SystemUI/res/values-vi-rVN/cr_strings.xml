@@ -71,11 +71,6 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">Chế độ chơi game đã tắt.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Chế độ chơi game đã bật.</string>
-    <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Tự động (Hình nền)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Tự động (Hình nền động)</string>
-    <string name="quick_settings_ui_mode_disabled">Vô hiệu hóa</string>
-    <string name="quick_settings_ui_mode_enabled">Kích hoạt</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Chuyển SIM dữ liệu</string>
     <string name="qs_data_switch_toast_0">Hiện tại không có thẻ SIM nào được gắn</string>
@@ -88,9 +83,6 @@
     <string name="guts_force_close_app">Đóng ứng dụng</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">Hệ thống</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Hiển thị dấu chấm</string>
-    <string name="screenrecord_low_quality_label">Chất lượng kém</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
@@ -107,7 +99,7 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Bây giờ là</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
     <string name="text_clock_h_one">Một</string>
@@ -151,36 +143,36 @@
     <string name="text_clock_m_twenty_five">Hai mươi năm</string>
     <string name="text_clock_m_twenty_six">Hai mươi năm</string>
     <string name="text_clock_m_twenty_seven">Hai mươi năm</string>
-    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
+    <string name="text_clock_m_twenty_eight">Hai Mươi Tám</string>
     <string name="text_clock_m_twenty_nine">Hai mươi năm</string>
-    <string name="text_clock_m_thirty">Thirty</string>
+    <string name="text_clock_m_thirty">Ba Mươi</string>
     <string name="text_clock_m_thirty_one">Ba mươi năm</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
+    <string name="text_clock_m_thirty_two">Ba Mươi Hai</string>
+    <string name="text_clock_m_thirty_three">Ba Mươi Ba</string>
+    <string name="text_clock_m_thirty_four">Ba Mươi Bốn</string>
     <string name="text_clock_m_thirty_five">Ba mươi năm</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_thirty_six">Ba Mươi Sáu</string>
+    <string name="text_clock_m_thirty_seven">Ba Mươi Bảy</string>
+    <string name="text_clock_m_thirty_eight">Ba Mươi Tám</string>
+    <string name="text_clock_m_thirty_nine">Ba Mươi Chín</string>
+    <string name="text_clock_m_forty">Bốn Mươi</string>
+    <string name="text_clock_m_forty_one">Bốn Mươi Mốt</string>
+    <string name="text_clock_m_forty_two">Bốn Mươi Hai</string>
+    <string name="text_clock_m_forty_three">Bốn Mươi Ba</string>
+    <string name="text_clock_m_forty_four">Bốn Mươi Bốn</string>
+    <string name="text_clock_m_forty_five">Bốn Mươi Lăm</string>
+    <string name="text_clock_m_forty_six">Bốn Mươi Sáu</string>
+    <string name="text_clock_m_forty_seven">Bốn Mươi Bảy</string>
+    <string name="text_clock_m_forty_eight">Bốn Mươi Tám</string>
+    <string name="text_clock_m_forty_nine">Bốn Mươi Chín</string>
+    <string name="text_clock_m_fifty">Năm Mươi</string>
+    <string name="text_clock_m_fifty_one">Năm Mươi Mốt</string>
+    <string name="text_clock_m_fifty_two">Năm Mươi Hai</string>
+    <string name="text_clock_m_fifty_three">Năm Mươi Ba</string>
+    <string name="text_clock_m_fifty_four">Năm Mươi Bốn</string>
+    <string name="text_clock_m_fifty_five">Năm Mươi Lăm</string>
+    <string name="text_clock_m_fifty_six">Năm Mươi Sáu</string>
+    <string name="text_clock_m_fifty_seven">Năm Mươi Bảy</string>
+    <string name="text_clock_m_fifty_eight">Năm Mươi Tám</string>
+    <string name="text_clock_m_fifty_nine">Năm Mươi Chín</string>
 </resources>
