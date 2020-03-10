@@ -71,11 +71,6 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">Игровой режим выключен.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Игровой режим включен.</string>
-    <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Автоматически (в зависимости от обоев)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Автоматически (livedisplay)</string>
-    <string name="quick_settings_ui_mode_disabled">Отключено</string>
-    <string name="quick_settings_ui_mode_enabled">Включено</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Поменять SIM для передачи данных</string>
     <string name="qs_data_switch_toast_0">Нет SIM карт</string>
@@ -88,9 +83,6 @@
     <string name="guts_force_close_app">Закрыть приложение</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">Интерфейс системы</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Показать кнопку остановки</string>
-    <string name="screenrecord_low_quality_label">Низкое качество</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
