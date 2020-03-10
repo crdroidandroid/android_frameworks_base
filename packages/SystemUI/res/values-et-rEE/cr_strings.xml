@@ -71,11 +71,6 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">Mängimisrežiim välja lülitatud.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Mängimisrežiim sisselülitatud.</string>
-    <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Automaatne (taustapildi järgi)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Automaatne (LiveDisplay)</string>
-    <string name="quick_settings_ui_mode_disabled">Keelatud</string>
-    <string name="quick_settings_ui_mode_enabled">Lubatud</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Vaheta andmeside SIMi</string>
     <string name="qs_data_switch_toast_0">Hetkel pole SIM-kaarti sisestatud</string>
@@ -88,9 +83,6 @@
     <string name="guts_force_close_app">Sulge rakendus</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">Süsteemiliides</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Kuva peatamispunkti</string>
-    <string name="screenrecord_low_quality_label">Madal kvaliteet</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
