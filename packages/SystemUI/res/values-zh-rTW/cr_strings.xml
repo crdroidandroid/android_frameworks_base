@@ -71,11 +71,6 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">遊戲模式已關閉.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">遊戲模式已開啟.</string>
-    <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">自動 (桌布)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">自動 (實時顯示)</string>
-    <string name="quick_settings_ui_mode_disabled">已停用</string>
-    <string name="quick_settings_ui_mode_enabled">已啟用</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">切換數據卡</string>
     <string name="qs_data_switch_toast_0">當前未插入SIM卡</string>
@@ -88,9 +83,6 @@
     <string name="guts_force_close_app">關閉應用程式</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">系統使用者介面</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">顯示停止鍵</string>
-    <string name="screenrecord_low_quality_label">低品質</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.

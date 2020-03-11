@@ -71,11 +71,6 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">O modo de jogo está desativado.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">O modo de jogo está ativado.</string>
-    <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Automático (baseado na imagem de fundo)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Automático (livedisplay)</string>
-    <string name="quick_settings_ui_mode_disabled">Desativado</string>
-    <string name="quick_settings_ui_mode_enabled">Ativado</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Trocar cartão de dados</string>
     <string name="qs_data_switch_toast_0">Atualmente nenhum cartão SIM foi inserido</string>
@@ -88,9 +83,6 @@
     <string name="guts_force_close_app">Fechar aplicação</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">IU do sistema</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Mostrar ponto de parada</string>
-    <string name="screenrecord_low_quality_label">Qualidade baixa</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.

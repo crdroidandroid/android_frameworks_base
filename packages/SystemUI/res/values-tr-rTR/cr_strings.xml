@@ -71,11 +71,6 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">Oyun modu kapatıldı.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">Oyun modu açıldı.</string>
-    <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Otomatik (duvar kağıdı)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Otomatik (canlı ekran)</string>
-    <string name="quick_settings_ui_mode_disabled">Devre dışı</string>
-    <string name="quick_settings_ui_mode_enabled">Etkin</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Veri kartını değiştir</string>
     <string name="qs_data_switch_toast_0">Şu anda SIM kart takılı değil</string>
@@ -88,9 +83,6 @@
     <string name="guts_force_close_app">Uygulamayı kapat</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">Sistem Arayüzü</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Durdurma noktasını göster</string>
-    <string name="screenrecord_low_quality_label">Düşük kalite</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.

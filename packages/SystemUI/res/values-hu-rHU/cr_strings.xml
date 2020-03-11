@@ -71,11 +71,6 @@
     <string name="accessibility_quick_settings_gaming_mode_disabled">A Játékmód kikapcsolásra került.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_enabled">A Játékmód bekapcsolásra került.</string>
-    <!-- UI mode tile -->
-    <string name="quick_settings_ui_mode_automatic_wallpaper">Automatikus (háttérképfüggő)</string>
-    <string name="quick_settings_ui_mode_automatic_livedisplay">Automatikus (élőképernyő)</string>
-    <string name="quick_settings_ui_mode_disabled">Letiltva</string>
-    <string name="quick_settings_ui_mode_enabled">Engedélyezve</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">SIM-kártya váltása</string>
     <string name="qs_data_switch_toast_0">Jelenleg nincs SIM-kártya beillesztve</string>
@@ -88,9 +83,6 @@
     <string name="guts_force_close_app">Az alkalmazás bezárása</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">Rendszerfelület</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Megállítógomb megjelenítése</string>
-    <string name="screenrecord_low_quality_label">Alacsony minőségű</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
