@@ -27,4 +27,7 @@
         <item>@string/quick_settings_compass_W</item>  <!-- West -->
         <item>@string/quick_settings_compass_NW</item> <!-- North west -->
     </string-array>
+
+    <integer-array name="fod_animation_resources">
+    </integer-array>
 </resources>
