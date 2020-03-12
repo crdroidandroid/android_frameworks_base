@@ -105,4 +105,7 @@
         <item>@string/text_clock_m_fifty_eight</item>
         <item>@string/text_clock_m_fifty_nine</item>
     </string-array>
+
+    <integer-array name="fod_animation_resources">
+    </integer-array>
 </resources>
