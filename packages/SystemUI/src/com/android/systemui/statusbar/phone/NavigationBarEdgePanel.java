@@ -182,7 +182,9 @@ public class NavigationBarEdgePanel extends View {
     private boolean mDragSlopPassed;
     private boolean mArrowsPointLeft;
     private float mMaxTranslation;
+    private float mLongSwipeThreshold;
     private boolean mTriggerBack;
+    private boolean mTriggerLongSwipe;
     private float mPreviousTouchTranslation;
     private float mTotalTouchDelta;
     private float mVerticalTranslation;
@@ -194,6 +196,8 @@ public class NavigationBarEdgePanel extends View {
     private float mDisappearAmount;
     private long mVibrationTime;
     private int mScreenSize;
+
+    private boolean mIsLongSwipeEnabled;
 
     private DynamicAnimation.OnAnimationEndListener mSetGoneEndListener
             = new DynamicAnimation.OnAnimationEndListener() {
@@ -332,6 +336,10 @@ public class NavigationBarEdgePanel extends View {
         return mTriggerBack;
     }
 
+    public boolean shouldTriggerLongSwipe() {
+        return mTriggerLongSwipe;
+    }
+
     public void setIsDark(boolean isDark, boolean animate) {
         mIsDark = isDark;
         updateIsDark(animate);
@@ -344,6 +352,12 @@ public class NavigationBarEdgePanel extends View {
 
     public void setIsLeftPanel(boolean isLeftPanel) {
         mIsLeftPanel = isLeftPanel;
+    }
+
+    public void setLongSwipeThreshold(float longSwipeThreshold) {
+        mLongSwipeThreshold = longSwipeThreshold;
+        mIsLongSwipeEnabled = mLongSwipeThreshold > 0;
+        setTriggerLongSwipe(mIsLongSwipeEnabled && mTriggerLongSwipe, false /* animated */);
     }
 
     public void setBackArrowVisibility() {
@@ -446,6 +460,11 @@ public class NavigationBarEdgePanel extends View {
         float x = (polarToCartX(mCurrentAngle) * mArrowLength);
         float y = (polarToCartY(mCurrentAngle) * mArrowLength);
         Path arrowPath = calculatePath(x,y);
+        if (mTriggerLongSwipe) {
+            arrowPath.addPath(calculatePath(x,y),
+                    mArrowThickness * 2.0f * (mIsLeftPanel ? 1 : -1), 0.0f);
+        }
+
         if (mShowProtection) {
             canvas.drawPath(arrowPath, mProtectionPaint);
         }
@@ -596,6 +615,7 @@ public class NavigationBarEdgePanel extends View {
         mTranslationAnimation.setSpring(mRegularTranslationSpring);
         // Reset the arrow to the side
         setTriggerBack(false /* triggerBack */, false /* animated */);
+        setTriggerLongSwipe(false /* triggerLongSwipe */, false /* animated */);
         setDesiredTranslation(0, false /* animated */);
         setCurrentTranslation(0);
         updateAngle(false /* animate */);
@@ -619,6 +639,7 @@ public class NavigationBarEdgePanel extends View {
             }
         }
         mPreviousTouchTranslation = touchTranslation;
+        boolean isLongSwipe = touchTranslation > mLongSwipeThreshold;
 
         // Apply a haptic on drag slop passed
         if (!mDragSlopPassed && touchTranslation > mSwipeThreshold) {
@@ -670,6 +691,12 @@ public class NavigationBarEdgePanel extends View {
         if (Math.abs(yOffset) > Math.abs(x - mStartX) * 2) {
             triggerBack = false;
         }
+
+        if (mIsLongSwipeEnabled) {
+            boolean triggerLongSwipe = triggerBack && isLongSwipe;
+            setTriggerLongSwipe(triggerLongSwipe, true /* animated */);
+        }
+
         setTriggerBack(triggerBack, true /* animated */);
 
         if (!mTriggerBack) {
@@ -732,6 +759,18 @@ public class NavigationBarEdgePanel extends View {
     private void setTriggerBack(boolean triggerBack, boolean animated) {
         if (mTriggerBack != triggerBack) {
             mTriggerBack = triggerBack;
+            mAngleAnimation.cancel();
+            updateAngle(animated);
+            // Whenever the trigger back state changes the existing translation animation should be
+            // cancelled
+            mTranslationAnimation.cancel();
+        }
+    }
+
+    private void setTriggerLongSwipe(boolean triggerLongSwipe, boolean animated) {
+        if (mTriggerLongSwipe != triggerLongSwipe) {
+            mTriggerLongSwipe = triggerLongSwipe;
+            mVibratorHelper.vibrate(VibrationEffect.EFFECT_CLICK);
             mAngleAnimation.cancel();
             updateAngle(animated);
             // Whenever the trigger back state changes the existing translation animation should be
