@@ -31,6 +31,10 @@
     <string name="quick_settings_region_screenshot_label">Знімок частини екрану</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Інформація про процесор</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Інформація про FPS</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">Інформація про FPS вимкнена</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">Інформація про FPS увімкнена</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">Апаратні клавіші</string>
     <!-- Compass QS Tile -->
