@@ -31,6 +31,10 @@
     <string name="quick_settings_region_screenshot_label">Částečný snímek obrazovky</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Informace o\u00a0CPU</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">FPS Info</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">HW tlačítka</string>
     <!-- Compass QS Tile -->
