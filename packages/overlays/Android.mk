@@ -39,6 +39,7 @@ LOCAL_REQUIRED_MODULES := \
 	FontSonySketchSourceOverlay \
 	FontSurferSourceOverlay \
 	FontNokiaPureSourceOverlay \
+	FontNunitoSourceOverlay \
 	FontFifa2018SourceOverlay \
 	FontCoconSourceOverlay \
 	FontQuandoSourceOverlay \
