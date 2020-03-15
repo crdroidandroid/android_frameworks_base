@@ -31,6 +31,10 @@
     <string name="quick_settings_region_screenshot_label">Captura de pantalla parcial</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">FPS Info</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">Botones del hardware</string>
     <!-- Compass QS Tile -->
