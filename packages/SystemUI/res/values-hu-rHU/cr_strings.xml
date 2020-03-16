@@ -32,9 +32,9 @@
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU-adatok</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">FPS-adatok</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS-adatok ki</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS-adatok be</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">Hardvergombok</string>
     <!-- Compass QS Tile -->
