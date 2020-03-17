@@ -32,9 +32,9 @@
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Informace o\u00a0CPU</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">Informace o\u00aFPS</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">Informace o\u00aFPS vypnuty</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">Informace o\u00aFPS zapnuty</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">HW tlačítka</string>
     <!-- Compass QS Tile -->

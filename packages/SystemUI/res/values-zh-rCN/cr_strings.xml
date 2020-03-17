@@ -32,9 +32,9 @@
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU 信息</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">FPS 信息</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">关闭 FPS 信息</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">开启 FPS 信息</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">实体按键</string>
     <!-- Compass QS Tile -->

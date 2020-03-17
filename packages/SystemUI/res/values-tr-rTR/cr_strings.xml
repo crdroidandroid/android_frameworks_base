@@ -32,9 +32,9 @@
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">İşlemci bilgisi</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">FPS bilgisi</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS bilgisi kapalı</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS bilgisi açık</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">Donanım tuşları</string>
     <!-- Compass QS Tile -->
