@@ -20,6 +20,7 @@ package com.android.systemui.qs.tiles;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.provider.Settings;
 import android.service.quicksettings.Tile;
 
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
@@ -33,7 +34,7 @@ import javax.inject.Inject;
 
 public class VolumeTile extends QSTileImpl<BooleanState> {
 
-    private static final Intent SOUND_SETTINGS = new Intent("android.settings.SOUND_SETTINGS");
+    private static final Intent SOUND_SETTINGS = new Intent(Settings.Panel.ACTION_VOLUME);
 
     @Inject
     public VolumeTile(QSHost host) {
