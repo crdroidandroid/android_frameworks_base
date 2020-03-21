@@ -183,12 +183,12 @@
     <string name="text_clock_m_fifty_eight">Пятьдесят восемь</string>
     <string name="text_clock_m_fifty_nine">Пятьдесят девять</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
+    <string name="quick_settings_stabilization_label">Стабилизация экрана</string>
+    <string name="quick_settings_stabilization_off">Стабилизация отключена</string>
+    <string name="quick_settings_stabilization_on">Стабилизация включена</string>
+    <string name="low_label">Низкий</string>
+    <string name="high_label">Высокий</string>
+    <string name="stabilization_velocity_friction">Скорость трения</string>
+    <string name="stabilization_velocity_amplitude">Амплитуда скорости</string>
     <string name="stabilization_position_friction">Position Friction</string>
 </resources>
