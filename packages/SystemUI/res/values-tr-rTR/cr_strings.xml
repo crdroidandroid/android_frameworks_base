@@ -228,11 +228,11 @@ Sekiz</string>
     <string name="text_clock_m_fifty_nine">Elli
 Dokuz</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
+    <string name="quick_settings_stabilization_label">Ekran sabitleme</string>
+    <string name="quick_settings_stabilization_off">Sabitleme kapatıldı</string>
+    <string name="quick_settings_stabilization_on">Sabitleme açıldı</string>
+    <string name="low_label">Düşük</string>
+    <string name="high_label">Yüksek</string>
     <string name="stabilization_velocity_friction">Velocity Friction</string>
     <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
     <string name="stabilization_position_friction">Position Friction</string>
