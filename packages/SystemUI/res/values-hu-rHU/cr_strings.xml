@@ -186,7 +186,7 @@
     <string name="quick_settings_stabilization_on">Stabilizáció bekapcsolva</string>
     <string name="low_label">Alacsony</string>
     <string name="high_label">Magas</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="stabilization_velocity_friction">VF (surlódási sebesség)</string>
+    <string name="stabilization_velocity_amplitude">VA (kilengési sebesség)</string>
+    <string name="stabilization_position_friction">PF (surlódási pozíció)</string>
 </resources>
