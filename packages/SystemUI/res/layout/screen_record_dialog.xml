@@ -17,6 +17,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
     android:background="@drawable/bottom_sheet_background"
     android:orientation="vertical">
 
@@ -36,7 +37,6 @@
                 android:layout_gravity="center"
                 android:paddingBottom="10dp"
                 android:paddingTop="?android:attr/dialogPreferredPadding"
-                android:tint="@android:color/holo_red_dark"
                 android:src="@drawable/ic_screenrecord_recording" />
 
             <TextView
@@ -269,7 +269,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="8dp"
                 android:background="#e3e3e3"/>
 
             <RelativeLayout
@@ -277,7 +277,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="?android:attr/dialogPreferredPadding"
                 android:paddingEnd="?android:attr/dialogPreferredPadding"
-                android:paddingBottom="?android:attr/dialogPreferredPadding">
+                android:paddingBottom="8dp">
 
                 <Button
                     android:id="@+id/cancel_button"

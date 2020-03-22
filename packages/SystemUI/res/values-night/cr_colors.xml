@@ -16,16 +16,6 @@
 -->
 <resources>
 
-    <color name="qs_icon_active_color">@*android:color/qs_icon_active_color</color>
-
-    <color name="accent_device_default_light">@*android:color/accent_device_default_light</color>
-
-    <!-- Binary clock -->
-    <color name="binary_clock_dot_color">#ffffff</color>
-    <color name="binary_clock_empty_dot_color">#ffffff</color>
-    <color name="binary_clock_ambient_dot_color">#ffffff</color>
-    <color name="binary_clock_ambient_empty_dot_color">#ffffff</color>
-
     <!-- Screenrecord -->
-    <color name="screenrecord_icon_color">#B71C1C</color>
+    <color name="screenrecord_icon_color">#E45245</color>
 </resources>
