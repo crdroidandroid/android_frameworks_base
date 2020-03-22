@@ -17,10 +17,10 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 快速充電中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash 閃充中</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 快速充電中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp 閃充中</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
@@ -32,9 +32,9 @@
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU 資訊</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">FPS 資訊</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS 資訊關閉</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS 資訊開啟</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">實體按鍵</string>
     <!-- Compass QS Tile -->
@@ -180,12 +180,12 @@
     <string name="text_clock_m_fifty_eight">五十八分</string>
     <string name="text_clock_m_fifty_nine">五十九分</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
+    <string name="quick_settings_stabilization_label">螢幕穩定</string>
+    <string name="quick_settings_stabilization_off">穩定已停用</string>
+    <string name="quick_settings_stabilization_on">穩定已啟用</string>
     <string name="low_label">Low</string>
     <string name="high_label">High</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="stabilization_velocity_friction">移動速度</string>
+    <string name="stabilization_velocity_amplitude">移動幅度</string>
+    <string name="stabilization_position_friction">移動位置</string>
 </resources>
