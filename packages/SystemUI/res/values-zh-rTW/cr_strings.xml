@@ -106,18 +106,18 @@
         <item quantity="other"><annotation name="color">現在是</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">一點</string>
+    <string name="text_clock_h_two">二點</string>
+    <string name="text_clock_h_three">三點</string>
+    <string name="text_clock_h_four">四點</string>
+    <string name="text_clock_h_five">五點</string>
+    <string name="text_clock_h_six">六點</string>
+    <string name="text_clock_h_seven">七點</string>
+    <string name="text_clock_h_eight">八點</string>
+    <string name="text_clock_h_nine">九點</string>
+    <string name="text_clock_h_ten">十點</string>
+    <string name="text_clock_h_eleven">十一點</string>
+    <string name="text_clock_h_twelve">十二點</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
     <string name="text_clock_m_zero">點整</string>
     <string name="text_clock_m_one">零一分</string>
@@ -129,7 +129,7 @@
     <string name="text_clock_m_seven">零七分</string>
     <string name="text_clock_m_eight">零八分</string>
     <string name="text_clock_m_nine">零九分</string>
-    <string name="text_clock_m_ten">Ten</string>
+    <string name="text_clock_m_ten">十分</string>
     <string name="text_clock_m_eleven">十一分</string>
     <string name="text_clock_m_twelve">十二分</string>
     <string name="text_clock_m_thirteen">十三分</string>
