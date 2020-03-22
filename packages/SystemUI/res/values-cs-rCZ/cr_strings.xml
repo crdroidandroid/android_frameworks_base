@@ -182,4 +182,13 @@
     <string name="text_clock_m_fifty_seven">a padesát sedm minut</string>
     <string name="text_clock_m_fifty_eight">a padesát osm minut</string>
     <string name="text_clock_m_fifty_nine">a padesát devět\nminut</string>
+    <!-- Screen Stabilization -->
+    <string name="quick_settings_stabilization_label">Stabilizace obrazovky</string>
+    <string name="quick_settings_stabilization_off">Stabilizace je vypnuta</string>
+    <string name="quick_settings_stabilization_on">Stabilizace je zapnuta</string>
+    <string name="low_label">Nízká</string>
+    <string name="high_label">Vysoká</string>
+    <string name="stabilization_velocity_friction">Rychlost přesunu</string>
+    <string name="stabilization_velocity_amplitude">Amplituda rychlosti</string>
+    <string name="stabilization_position_friction">Pozice přesunu</string>
 </resources>

@@ -179,4 +179,13 @@
     <string name="text_clock_m_fifty_seven">五十七分</string>
     <string name="text_clock_m_fifty_eight">五十八分</string>
     <string name="text_clock_m_fifty_nine">五十九分</string>
+    <!-- Screen Stabilization -->
+    <string name="quick_settings_stabilization_label">屏幕稳定</string>
+    <string name="quick_settings_stabilization_off">稳定已禁用</string>
+    <string name="quick_settings_stabilization_on">稳定已启用</string>
+    <string name="low_label">Low</string>
+    <string name="high_label">High</string>
+    <string name="stabilization_velocity_friction">移动速度</string>
+    <string name="stabilization_velocity_amplitude">移动幅度</string>
+    <string name="stabilization_position_friction">移动位置</string>
 </resources>

@@ -180,4 +180,13 @@
     <string name="text_clock_m_fifty_seven">Ötvenhét</string>
     <string name="text_clock_m_fifty_eight">Ötvennyolc</string>
     <string name="text_clock_m_fifty_nine">Ötvenkilenc</string>
+    <!-- Screen Stabilization -->
+    <string name="quick_settings_stabilization_label">Képstabilizáció</string>
+    <string name="quick_settings_stabilization_off">Stabilizáció kikapcsolva</string>
+    <string name="quick_settings_stabilization_on">Stabilizáció bekapcsolva</string>
+    <string name="low_label">Alacsony</string>
+    <string name="high_label">Magas</string>
+    <string name="stabilization_velocity_friction">VF (surlódási sebesség)</string>
+    <string name="stabilization_velocity_amplitude">VA (kilengési sebesség)</string>
+    <string name="stabilization_position_friction">PF (surlódási pozíció)</string>
 </resources>
