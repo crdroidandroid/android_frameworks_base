@@ -220,12 +220,12 @@
     <string name="text_clock_m_fifty_nine">П\'ятдесят
 дев\'ять</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="quick_settings_stabilization_label">Стабілізація екрану</string>
+    <string name="quick_settings_stabilization_off">Стабілізація вимкнена</string>
+    <string name="quick_settings_stabilization_on">Стабілізація увімкнена</string>
+    <string name="low_label">Низький</string>
+    <string name="high_label">Високий</string>
+    <string name="stabilization_velocity_friction">Швидкість тертя</string>
+    <string name="stabilization_velocity_amplitude">Амплітуда швидкості</string>
+    <string name="stabilization_position_friction">Позиція тертя</string>
 </resources>
