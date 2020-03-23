@@ -21,4 +21,11 @@
         <!-- Note: must be dp to fit in status bar -->
         <item name="android:textSize">14dp</item>
     </style>
+
+    <style name="TextAppearance.QSEdit.CustomHeaders"
+    parent="@*android:style/TextAppearance.DeviceDefault.Body2">
+    <item name="android:textSize">14sp</item>
+    <item name="android:textColor">@*android:color/accent_device_default_light</item>
+    <item name="android:textAllCaps">false</item>
+    </style>
 </resources>

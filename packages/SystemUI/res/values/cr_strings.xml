@@ -46,6 +46,11 @@
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">HW Keys</string>
 
+    <!-- Label for area where tiles can be added to the qs panel -->
+    <string name="drag_or_tap_to_add_tiles">Hold &amp; drag or tap to add tiles</string>
+    <!-- Label for header of customize QS -->
+    <string name="drag_or_tap_to_rearrange_tiles">Hold &amp; drag to rearrange or tap to remove</string>
+
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Compass</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
