@@ -80,6 +80,7 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
     private static final int MODE_RING = 605;
     // AICP additions: arbitrary value which hopefully doesn't conflict with upstream anytime soon
     private static final int MODE_SILENT = 620;
+    private static final int MODE_FLASHLIGHT = 621;
 
     private static final String EXTRA_SLIDER_POSITION = "position";
     private static final String EXTRA_SLIDER_POSITION_VALUE = "position_value";
@@ -308,11 +309,6 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
                 int positionX = mWindowLayoutParams.x;
                 int gravity = mWindowLayoutParams.gravity;
                 switch (mTriStateMode) {
-                    case MODE_TOTAL_SILENCE:
-                    case MODE_SILENT:
-                        iconId = R.drawable.ic_volume_ringer_mute;
-                        textId = R.string.volume_ringer_status_silent;
-                        break;
                     case MODE_RING:
                     case MODE_NONE:
                         iconId = R.drawable.ic_volume_ringer;
@@ -322,13 +318,25 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
                         iconId = R.drawable.ic_volume_ringer_vibrate;
                         textId = R.string.volume_ringer_status_vibrate;
                         break;
+                    case MODE_SILENT:
+                        iconId = R.drawable.ic_volume_ringer_mute;
+                        textId = R.string.volume_ringer_status_silent;
+                        break;
                     case MODE_PRIORITY_ONLY:
-                        iconId = R.drawable.ic_volume_ringer;
+                        iconId = R.drawable.ic_qs_dnd_on;
                         textId = R.string.volume_ringer_priority_only;
                         break;
                     case MODE_ALARMS_ONLY:
-                        iconId = R.drawable.ic_volume_ringer;
+                        iconId = R.drawable.ic_qs_dnd_on;
                         textId = R.string.volume_ringer_alarms_only;
+                        break;
+                    case MODE_TOTAL_SILENCE:
+                        iconId = R.drawable.ic_qs_dnd_on;
+                        textId = R.string.volume_ringer_dnd;
+                        break;
+                    case MODE_FLASHLIGHT:
+                        iconId = R.drawable.ic_tristate_flashlight;
+                        textId = R.string.tristate_flashlight;
                         break;
                 }
 
