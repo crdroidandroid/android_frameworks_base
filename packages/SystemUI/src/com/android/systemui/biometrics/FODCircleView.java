@@ -173,6 +173,15 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
                 show();
             }
         }
+
+        @Override
+        public void onBiometricHelp(int msgId, String helpString,
+                BiometricSourceType biometricSourceType) {
+            if (msgId == -1) { // Auth error
+                hideCircle();
+                mHandler.post(() -> mFODAnimation.hideFODanimation());
+            }
+        }
     };
 
     private boolean mCutoutMasked;
@@ -638,7 +647,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
                 com.android.internal.R.dimen.status_bar_height_portrait);
         boolean cutoutMasked = getContext().getResources().getBoolean(
                 com.android.internal.R.bool.config_maskMainBuiltInDisplayCutout);
-        if (mCutoutMasked != cutoutMasked){
+        if (mCutoutMasked != cutoutMasked) {
             mCutoutMasked = cutoutMasked;
             updatePosition();
         }
