@@ -748,7 +748,7 @@
     <!-- Line spacing modifier for the message field of the harmful app dialog -->
     <item name="harmful_app_message_line_spacing_modifier" type="dimen">1.22</item>
 
-    <dimen name="seekbar_thumb_exclusion_max_size">48dp</dimen>
+    <dimen name="seekbar_thumb_exclusion_max_size">10dp</dimen>
 
     <!-- chooser/resolver (sharesheet) spacing -->
     <dimen name="chooser_corner_radius">8dp</dimen>
