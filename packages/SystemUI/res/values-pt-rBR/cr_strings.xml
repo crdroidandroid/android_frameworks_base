@@ -32,9 +32,9 @@
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Informações da CPU</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">Informação de FPS</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">Informações da CPU desligada</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">Informações da CPU ligada</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">Teclas físicas</string>
     <!-- Compass QS Tile -->
@@ -181,12 +181,12 @@
     <string name="text_clock_m_fifty_eight">Cinquenta e oito</string>
     <string name="text_clock_m_fifty_nine">Cinquenta e nove</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="quick_settings_stabilization_label">Estabilização de tela</string>
+    <string name="quick_settings_stabilization_off">A estabilização está desativada</string>
+    <string name="quick_settings_stabilization_on">A estabilização está ativada</string>
+    <string name="low_label">Baixo</string>
+    <string name="high_label">Alta</string>
+    <string name="stabilization_velocity_friction">Velocidade de atrito</string>
+    <string name="stabilization_velocity_amplitude">Velocidade de Amplitude</string>
+    <string name="stabilization_position_friction">Posição de atrito</string>
 </resources>

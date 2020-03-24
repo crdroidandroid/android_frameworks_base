@@ -33,8 +33,8 @@
     <string name="quick_settings_cpuinfo_label">CPU-Info</string>
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">Prozessor-Info deaktiviert</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">Prozessor-Info aktiviert</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">Hardwaretasten</string>
     <!-- Compass QS Tile -->
@@ -181,12 +181,12 @@
     <string name="text_clock_m_fifty_eight">Achtundfünfzig</string>
     <string name="text_clock_m_fifty_nine">Neunundfünfzig</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="quick_settings_stabilization_label">Bildstabilisierung</string>
+    <string name="quick_settings_stabilization_off">Stabilisierung ist deaktiviert</string>
+    <string name="quick_settings_stabilization_on">Stabilisierung ist aktiviert</string>
+    <string name="low_label">Niedrig</string>
+    <string name="high_label">Hoch</string>
+    <string name="stabilization_velocity_friction">Spannungsgeschwindigkeit</string>
+    <string name="stabilization_velocity_amplitude">Geschwindigkeits-Amplitude</string>
+    <string name="stabilization_position_friction">Spannungsposition</string>
 </resources>

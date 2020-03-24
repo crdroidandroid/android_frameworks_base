@@ -182,12 +182,12 @@
     <string name="text_clock_m_fifty_eight">Cincizeci și Opt</string>
     <string name="text_clock_m_fifty_nine">Cincizeci și Nouă</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="quick_settings_stabilization_label">Stabilizare ecran</string>
+    <string name="quick_settings_stabilization_off">Stabilizarea este dezactivată</string>
+    <string name="quick_settings_stabilization_on">Stabilizarea este activată</string>
+    <string name="low_label">Scăzut</string>
+    <string name="high_label">Ridicat</string>
+    <string name="stabilization_velocity_friction">Fricțiune de velocitate</string>
+    <string name="stabilization_velocity_amplitude">Amplitudine Velocitate</string>
+    <string name="stabilization_position_friction">Fricțiune poziție</string>
 </resources>

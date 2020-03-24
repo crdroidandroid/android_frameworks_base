@@ -228,7 +228,7 @@ Sekiz</string>
     <string name="text_clock_m_fifty_nine">Elli
 Dokuz</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Ekran sabitleme</string>
+    <string name="quick_settings_stabilization_label">Ekran Sabitleme</string>
     <string name="quick_settings_stabilization_off">Sabitleme kapatıldı</string>
     <string name="quick_settings_stabilization_on">Sabitleme açıldı</string>
     <string name="low_label">Düşük</string>
