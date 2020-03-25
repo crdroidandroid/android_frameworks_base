@@ -216,4 +216,6 @@ Y Nueve</string>
     <string name="stabilization_velocity_friction">Velocity Friction</string>
     <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
     <string name="stabilization_position_friction">Position Friction</string>
+    <!-- QS Header data usage info -->
+    <string name="usage_data">used</string>
 </resources>
