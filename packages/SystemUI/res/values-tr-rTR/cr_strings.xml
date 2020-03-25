@@ -237,5 +237,5 @@ Dokuz</string>
     <string name="stabilization_velocity_amplitude">Hız Genliği</string>
     <string name="stabilization_position_friction">Sürtünme Konumu</string>
     <!-- QS Header data usage info -->
-    <string name="usage_data">used</string>
+    <string name="usage_data">kullanıldı</string>
 </resources>
