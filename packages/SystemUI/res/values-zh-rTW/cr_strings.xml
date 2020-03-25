@@ -188,4 +188,6 @@
     <string name="stabilization_velocity_friction">移動速度</string>
     <string name="stabilization_velocity_amplitude">移動幅度</string>
     <string name="stabilization_position_friction">移動位置</string>
+    <!-- QS Header data usage info -->
+    <string name="usage_data">used</string>
 </resources>

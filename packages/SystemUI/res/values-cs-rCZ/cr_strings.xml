@@ -191,4 +191,6 @@
     <string name="stabilization_velocity_friction">Rychlost přesunu</string>
     <string name="stabilization_velocity_amplitude">Amplituda rychlosti</string>
     <string name="stabilization_position_friction">Pozice přesunu</string>
+    <!-- QS Header data usage info -->
+    <string name="usage_data">využito</string>
 </resources>

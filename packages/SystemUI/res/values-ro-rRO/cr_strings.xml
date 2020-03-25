@@ -190,4 +190,6 @@
     <string name="stabilization_velocity_friction">Fricțiune de velocitate</string>
     <string name="stabilization_velocity_amplitude">Amplitudine Velocitate</string>
     <string name="stabilization_position_friction">Fricțiune poziție</string>
+    <!-- QS Header data usage info -->
+    <string name="usage_data">utilizat</string>
 </resources>

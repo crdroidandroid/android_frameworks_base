@@ -228,4 +228,6 @@
     <string name="stabilization_velocity_friction">Швидкість тертя</string>
     <string name="stabilization_velocity_amplitude">Амплітуда швидкості</string>
     <string name="stabilization_position_friction">Позиція тертя</string>
+    <!-- QS Header data usage info -->
+    <string name="usage_data">використано</string>
 </resources>

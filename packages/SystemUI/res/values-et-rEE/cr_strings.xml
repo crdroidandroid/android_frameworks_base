@@ -189,4 +189,6 @@
     <string name="stabilization_velocity_friction">Hõõrdekiirus</string>
     <string name="stabilization_velocity_amplitude">Amplituudikiirus</string>
     <string name="stabilization_position_friction">Hõõrdeasend</string>
+    <!-- QS Header data usage info -->
+    <string name="usage_data">kasutatud</string>
 </resources>
