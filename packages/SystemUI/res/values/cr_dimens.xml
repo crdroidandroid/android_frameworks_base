@@ -111,4 +111,8 @@
 
     <!-- Screen recorder -->
     <dimen name="screenrecord_dot_size">48dp</dimen>
+
+    <!-- The margin between Emergency Carrier area and pattern/pin
+         view to incorporate the FOD icon -->
+    <dimen name="keyguard_security_fod_view_margin">140dp</dimen>
 </resources>
