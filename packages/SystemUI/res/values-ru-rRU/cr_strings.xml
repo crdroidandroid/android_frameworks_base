@@ -192,5 +192,5 @@
     <string name="stabilization_velocity_amplitude">Скорость амплитуды</string>
     <string name="stabilization_position_friction">Положение трения</string>
     <!-- QS Header data usage info -->
-    <string name="usage_data">used</string>
+    <string name="usage_data">использовано</string>
 </resources>
