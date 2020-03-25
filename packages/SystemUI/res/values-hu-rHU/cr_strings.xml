@@ -190,5 +190,5 @@
     <string name="stabilization_velocity_amplitude">VA (kilengési sebesség)</string>
     <string name="stabilization_position_friction">PF (surlódási pozíció)</string>
     <!-- QS Header data usage info -->
-    <string name="usage_data">used</string>
+    <string name="usage_data">felhasznált</string>
 </resources>
