@@ -186,9 +186,9 @@
     <string name="quick_settings_stabilization_on">La stabilizzazione è abilitata</string>
     <string name="low_label">Basso</string>
     <string name="high_label">Alto</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="stabilization_velocity_friction">Attrito alla velocità</string>
+    <string name="stabilization_velocity_amplitude">Ampiezza della velocità</string>
+    <string name="stabilization_position_friction">Attrito di posizione</string>
     <!-- QS Header data usage info -->
-    <string name="usage_data">used</string>
+    <string name="usage_data">utilizzato</string>
 </resources>
