@@ -97,6 +97,8 @@ public class KeyguardIndicationController implements StateListener,
 
     private static final String LOCKSCREEN_CHARGING_ANIMATION_STYLE =
             "system:" + Settings.System.LOCKSCREEN_CHARGING_ANIMATION_STYLE;
+    private static final String LOCKSCREEN_BATTERY_INFO =
+            "system:" + Settings.System.LOCKSCREEN_BATTERY_INFO;
 
     private final Context mContext;
     private final BroadcastDispatcher mBroadcastDispatcher;
@@ -141,6 +143,8 @@ public class KeyguardIndicationController implements StateListener,
     private double mChargingVoltage;
     private float mTemperature;
     private String mMessageToShowOnScreenOn;
+
+    private boolean mShowBatteryInfo;
 
     private KeyguardUpdateMonitorCallback mUpdateMonitorCallback;
 
@@ -188,6 +192,7 @@ public class KeyguardIndicationController implements StateListener,
 
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, LOCKSCREEN_CHARGING_ANIMATION_STYLE);
+        tunerService.addTunable(this, LOCKSCREEN_BATTERY_INFO);
     }
 
     @Override
@@ -197,6 +202,10 @@ public class KeyguardIndicationController implements StateListener,
                 mChargingIndication =
                         TunerService.parseInteger(newValue, 1);
                 if (mChargingIndicationView != null) updateChargingIndicationStyle();
+                break;
+            case LOCKSCREEN_BATTERY_INFO:
+                mShowBatteryInfo =
+                        TunerService.parseIntegerSwitch(newValue, true);
                 break;
             default:
                 break;
@@ -659,9 +668,7 @@ public class KeyguardIndicationController implements StateListener,
         }
 
         String batteryInfo = "";
-        boolean showbatteryInfo = Settings.System.getIntForUser(mContext.getContentResolver(),
-            Settings.System.LOCKSCREEN_BATTERY_INFO, 1, UserHandle.USER_CURRENT) == 1;
-         if (showbatteryInfo) {
+        if (mShowBatteryInfo) {
             if (mChargingCurrent > 0) {
                 batteryInfo = batteryInfo + (mChargingCurrent / 1000) + "mA";
             }
