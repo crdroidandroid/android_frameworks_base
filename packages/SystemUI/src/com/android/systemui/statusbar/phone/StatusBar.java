@@ -324,8 +324,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.QS_COLUMNS_PORTRAIT;
     private static final String QS_COLUMNS_LANDSCAPE =
             "system:" + Settings.System.QS_COLUMNS_LANDSCAPE;
-    private static final String LOCKSCREEN_CHARGING_ANIMATION_STYLE =
-            "system:" + Settings.System.LOCKSCREEN_CHARGING_ANIMATION_STYLE;
     private static final String PULSE_ON_NEW_TRACKS =
             Settings.Secure.PULSE_ON_NEW_TRACKS;
     private static final String STATUS_BAR_TICKER_ANIMATION_MODE =
@@ -547,8 +545,6 @@ public class StatusBar extends SystemUI implements DemoMode,
     private ImageView mQSBlurView;
     private boolean mQSBlurEnabled;
     private boolean mQSBlurred;
-
-    private int mChargingAnimation = 1;
 
     // XXX: gesture research
     private final GestureRecorder mGestureRec = DEBUG_GESTURES
@@ -954,7 +950,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         tunerService.addTunable(this, QS_ROWS_LANDSCAPE);
         tunerService.addTunable(this, QS_COLUMNS_PORTRAIT);
         tunerService.addTunable(this, QS_COLUMNS_LANDSCAPE);
-        tunerService.addTunable(this, LOCKSCREEN_CHARGING_ANIMATION_STYLE);
         tunerService.addTunable(this, PULSE_ON_NEW_TRACKS);
         tunerService.addTunable(this, STATUS_BAR_TICKER_ANIMATION_MODE);
         tunerService.addTunable(this, STATUS_BAR_TICKER_TICK_DURATION);
@@ -1080,7 +1075,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 SystemUIFactory.getInstance().createKeyguardIndicationController(mContext,
                         mStatusBarWindow.findViewById(R.id.keyguard_indication_area),
                         mStatusBarWindow.findViewById(R.id.lock_icon));
-        mKeyguardIndicationController.updateChargingIndication(mChargingAnimation);
         mNotificationPanel.setKeyguardIndicationController(mKeyguardIndicationController);
 
         mAmbientIndicationContainer = mStatusBarWindow.findViewById(
@@ -5339,12 +5333,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mQSPanel != null) {
                     mQSPanel.updateResources();
                 }
-                break;
-            case LOCKSCREEN_CHARGING_ANIMATION_STYLE:
-                mChargingAnimation =
-                        TunerService.parseInteger(newValue, 1);
-                if (mKeyguardIndicationController != null)
-                    mKeyguardIndicationController.updateChargingIndication(mChargingAnimation);
                 break;
             case PULSE_ON_NEW_TRACKS:
                 boolean showPulseOnNewTracks =
