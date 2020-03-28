@@ -663,11 +663,13 @@ public abstract class BiometricServiceBase extends SystemService
         mPowerManager = mContext.getSystemService(PowerManager.class);
         mUserManager = UserManager.get(mContext);
         mMetricsLogger = new MetricsLogger();
-        mCleanupUnusedFingerprints = mContext.getResources().getBoolean(
+        mCleanupUnusedFingerprints = statsModality() == BiometricsProtoEnums.MODALITY_FINGERPRINT &&
+                mContext.getResources().getBoolean(
                 org.lineageos.platform.internal.R.bool.config_cleanupUnusedFingerprints);
-        mPostResetRunnableForAllClients = mContext.getResources().getBoolean(
-                org.lineageos.platform.internal.R.bool
-                        .config_fingerprintPostResetRunnableForAllClients);
+        mPostResetRunnableForAllClients =
+                statsModality() == BiometricsProtoEnums.MODALITY_FINGERPRINT &&
+                mContext.getResources().getBoolean(
+                org.lineageos.platform.internal.R.bool.config_fingerprintPostResetRunnableForAllClients);
     }
 
     @Override
