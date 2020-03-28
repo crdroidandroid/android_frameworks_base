@@ -100,4 +100,7 @@
   <java-symbol type="string" name="config_alertSliderIntent" />
 
   <java-symbol type="array" name="config_blockPackagesSensorDrain" />
+
+    <!-- Enable face auth only when swiping security view -->
+    <java-symbol type="bool" name="config_faceAuthOnlyOnSecurityView" />
 </resources>
