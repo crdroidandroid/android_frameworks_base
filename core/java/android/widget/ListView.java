@@ -264,8 +264,8 @@ public class ListView extends AbsListView {
             }
         }
 
-        mHeaderDividersEnabled = a.getBoolean(R.styleable.ListView_headerDividersEnabled, true);
-        mFooterDividersEnabled = a.getBoolean(R.styleable.ListView_footerDividersEnabled, true);
+        mHeaderDividersEnabled = a.getBoolean(R.styleable.ListView_headerDividersEnabled, false);
+        mFooterDividersEnabled = a.getBoolean(R.styleable.ListView_footerDividersEnabled, false);
 
         a.recycle();
     }
