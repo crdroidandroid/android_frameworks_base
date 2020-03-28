@@ -180,7 +180,7 @@
     <string name="text_clock_m_fifty_eight">Năm Mươi Tám</string>
     <string name="text_clock_m_fifty_nine">Năm Mươi Chín</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Ổn định khung hình (EIS)</string>
+    <string name="quick_settings_stabilization_label">Ổn định màn hình</string>
     <string name="quick_settings_stabilization_off">Đã vô hiệu ổn định khung hình (EIS)</string>
     <string name="quick_settings_stabilization_on">Đã bật ổn định khung hình (EIS)</string>
     <string name="low_label">Thấp</string>
