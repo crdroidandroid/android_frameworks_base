@@ -122,7 +122,7 @@
     <string name="text_clock_h_eleven">jedenáct hodin</string>
     <string name="text_clock_h_twelve">dvanáct hodin</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">nula minut</string>
+    <string name="text_clock_m_zero"></string>
     <string name="text_clock_m_one">a jedna minuta</string>
     <string name="text_clock_m_two">a dvě minuty</string>
     <string name="text_clock_m_three">a tři minuty</string>
@@ -194,6 +194,6 @@
     <!-- QS Header data usage info -->
     <string name="usage_data">využito</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_label">Zobrazit puntík pro zastavení</string>
     <string name="screenrecord_low_quality_label">Nízká kvalita</string>
 </resources>
