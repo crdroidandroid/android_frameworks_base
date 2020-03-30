@@ -50,4 +50,6 @@
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Autorise l\'application à se faire passer pour une autre. Des applications malveillantes peuvent être capable de l\'utiliser pour accéder aux données d\'applications privées. Accordez cette autorisation avec prudence!</string>
+    <!-- Screen recorder -->
+    <string name="global_action_screenrecord">Screenrecord</string>
 </resources>
