@@ -50,4 +50,6 @@
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Uygulamanın farklı bir uygulama gibi davranmasına izin verir. Zararlı uygulamalar bu özelliği kullanarak özel içerikli bilgilere ulaşabilir. Bu izni verirken dikkatli olun!</string>
+    <!-- Screen recorder -->
+    <string name="global_action_screenrecord">Screenrecord</string>
 </resources>
