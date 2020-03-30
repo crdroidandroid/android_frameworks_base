@@ -239,6 +239,6 @@ Dokuz</string>
     <!-- QS Header data usage info -->
     <string name="usage_data">kullanıldı</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_stopdot_label">Durdurma noktasını göster</string>
+    <string name="screenrecord_low_quality_label">Düşük kalite</string>
 </resources>
