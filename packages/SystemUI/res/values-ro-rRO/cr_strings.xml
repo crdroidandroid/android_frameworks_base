@@ -192,4 +192,7 @@
     <string name="stabilization_position_friction">Fricțiune poziție</string>
     <!-- QS Header data usage info -->
     <string name="usage_data">utilizat</string>
+    <!-- Screen recorder -->
+    <string name="screenrecord_stopdot_label">Afișare stop punct</string>
+    <string name="screenrecord_low_quality_label">Calitate scăzută</string>
 </resources>

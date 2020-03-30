@@ -50,4 +50,6 @@
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Дозволити додатку видавати себе за інший додаток. Шкідливі програми можуть використовувати це для доступу до приватних даних програми. Законне використання включає емулятор, яке видає себе за те що емулює. Дозволяйте це з обережністю!</string>
+    <!-- Screen recorder -->
+    <string name="global_action_screenrecord">Screenrecord</string>
 </resources>

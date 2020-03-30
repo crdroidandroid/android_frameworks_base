@@ -180,9 +180,9 @@
     <string name="text_clock_m_fifty_eight">Năm Mươi Tám</string>
     <string name="text_clock_m_fifty_nine">Năm Mươi Chín</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Ổn định khung hình (EIS)</string>
-    <string name="quick_settings_stabilization_off">Đã vô hiệu ổn định khung hình (EIS)</string>
-    <string name="quick_settings_stabilization_on">Đã bật ổn định khung hình (EIS)</string>
+    <string name="quick_settings_stabilization_label">Ổn định màn hình</string>
+    <string name="quick_settings_stabilization_off">Đã tắt ổn định màn hình</string>
+    <string name="quick_settings_stabilization_on">Đã bật ổn định màn hình</string>
     <string name="low_label">Thấp</string>
     <string name="high_label">Cao</string>
     <string name="stabilization_velocity_friction">Vận tốc ma sát</string>
@@ -190,4 +190,7 @@
     <string name="stabilization_position_friction">Vị trí ma sát</string>
     <!-- QS Header data usage info -->
     <string name="usage_data">đã sử dụng</string>
+    <!-- Screen recorder -->
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_low_quality_label">Low quality</string>
 </resources>

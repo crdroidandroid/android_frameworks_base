@@ -50,4 +50,6 @@
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Дазволіць праграмам выдаваць сябе за іншыя. Шкоднасная праграма можа атрымаць доступ да вашых дадзеных. Легітымнае выкарыстанне ўключае ў сябе эмулятар, той, хто прыкідваецца тым, што ён эмулюе. Выкарыстоўвайце толькі на свой страх і рызыка!</string>
+    <!-- Screen recorder -->
+    <string name="global_action_screenrecord">Screenrecord</string>
 </resources>

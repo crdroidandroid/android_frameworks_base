@@ -238,4 +238,7 @@ Dokuz</string>
     <string name="stabilization_position_friction">Sürtünme Konumu</string>
     <!-- QS Header data usage info -->
     <string name="usage_data">kullanıldı</string>
+    <!-- Screen recorder -->
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_low_quality_label">Low quality</string>
 </resources>
