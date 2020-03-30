@@ -51,5 +51,5 @@
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Permite aplicației să pretindă că este o aplicație diferită. Aplicațiile rău-intenționate ar putea să utilizeze aceasta pentru a accesa datele aplicațiilor private. Acordați această permisiune numai cu prudență!</string>
     <!-- Screen recorder -->
-    <string name="global_action_screenrecord">Screenrecord</string>
+    <string name="global_action_screenrecord">Înregistrare Ecran</string>
 </resources>
