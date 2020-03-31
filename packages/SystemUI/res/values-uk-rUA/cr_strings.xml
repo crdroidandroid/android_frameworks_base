@@ -231,6 +231,6 @@
     <!-- QS Header data usage info -->
     <string name="usage_data">використано</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_stopdot_label">Показувати кнопку зупинки</string>
+    <string name="screenrecord_low_quality_label">Низька якість</string>
 </resources>
