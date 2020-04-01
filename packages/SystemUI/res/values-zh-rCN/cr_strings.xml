@@ -191,6 +191,6 @@
     <!-- QS Header data usage info -->
     <string name="usage_data">已使用</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_stopdot_label">显示停止圆点</string>
+    <string name="screenrecord_low_quality_label">低画质</string>
 </resources>

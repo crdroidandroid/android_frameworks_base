@@ -51,5 +51,5 @@
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Разрешить приложению выдавать себя за другое. Вредоносное приложение может получить доступ к вашим данным. Легитимное использовение включает в себя эмулятор, притворяющийся тем, что он эмулирует. Используйте только на свой страх и риск!</string>
     <!-- Screen recorder -->
-    <string name="global_action_screenrecord">Screenrecord</string>
+    <string name="global_action_screenrecord">Запись экрана</string>
 </resources>
