@@ -51,5 +51,5 @@
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Consente all\'applicazione di fingere di essere un\'app diversa. Le applicazioni dannose potrebbero essere in grado di utilizzarlo per accedere ai dati delle applicazioni private. Gli usi legittimi includono un emulatore che finge di essere ciò che emula. Concedi questo permesso con molta cautela!</string>
     <!-- Screen recorder -->
-    <string name="global_action_screenrecord">Screenrecord</string>
+    <string name="global_action_screenrecord">Registra schermo</string>
 </resources>
