@@ -5526,6 +5526,12 @@ public final class Settings {
         public static final String BATTERY_FULLY_CHARGED_VIBRATE = "battery_fully_charged_vibrate";
 
         /**
+         * Settings dashboard icon style
+         * @hide
+         */
+        public static final String THEMING_SETTINGS_DASHBOARD_ICONS = "theming_settings_dashboard_icons";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
