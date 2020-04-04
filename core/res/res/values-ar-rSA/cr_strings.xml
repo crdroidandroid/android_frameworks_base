@@ -32,7 +32,7 @@
     <string name="animation_grow_shrink_right">نمو (لليمين)</string>
     <string name="animation_random">عشوائي</string>
     <string name="action_null">فارغ</string>
-    <string name="animation_ethans">Ethans</string>
+    <string name="animation_ethans">ايثان</string>
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">نسخ رابط سجل العُطل</string>
     <string name="url_copy_success">تم نسخ الرابط بنجاح</string>
