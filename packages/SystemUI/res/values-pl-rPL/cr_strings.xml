@@ -218,9 +218,9 @@ osiem</string>
     <string name="text_clock_m_fifty_nine">Pięćdziesiąt
 dziewięć</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
+    <string name="quick_settings_stabilization_label">Stabilizacja ekranu</string>
+    <string name="quick_settings_stabilization_off">Stabilizacja jest wyłączona</string>
+    <string name="quick_settings_stabilization_on">Stabilizacja jest włączona</string>
     <string name="low_label">Low</string>
     <string name="high_label">High</string>
     <string name="stabilization_velocity_friction">Velocity Friction</string>
@@ -230,5 +230,5 @@ dziewięć</string>
     <string name="usage_data">used</string>
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_low_quality_label">Niska jakość</string>
 </resources>
