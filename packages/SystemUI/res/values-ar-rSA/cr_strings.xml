@@ -16,36 +16,36 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شحن سريع (يتبقى <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> حتى يكتمل)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • شحن سريع</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شحن سريع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> ليكتمل الشحن)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • شحن سريع جدا</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">البكسلات الذكية</string>
+    <string name="quick_settings_smart_pixels_on_power_save">تمكين البكسلات الذكية تلقائياً</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Screenshot</string>
-    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <string name="quick_settings_screenshot_label">لقطة الشاشة</string>
+    <string name="quick_settings_region_screenshot_label">لقطة جزئية للشاشة</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <string name="quick_settings_cpuinfo_label">معلومات المعالج</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">معلومات معدَّل العرض</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">معلومات معدَّل العرض موقفة</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">معلومات معدَّل العرض مفعلة</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">أزرار الهاتف</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">بوصلة</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
+    <string name="quick_settings_compass_init">تهيئة/u2026</string>
+    <string name="accessibility_quick_settings_compass_off">البوصلة موقفة.</string>
+    <string name="accessibility_quick_settings_compass_on">البوصلة مفعلة.</string>
+    <string name="quick_settings_compass_N">ش</string>
+    <string name="quick_settings_compass_NE">ش. شرق</string>
+    <string name="quick_settings_compass_E">شرق</string>
     <string name="quick_settings_compass_SE">SE</string>
     <string name="quick_settings_compass_S">S</string>
     <string name="quick_settings_compass_SW">SW</string>
@@ -130,14 +130,14 @@
     <string name="text_clock_m_three">O’Three</string>
     <string name="text_clock_m_four">O’Four</string>
     <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
+    <string name="text_clock_m_six">وست دقائق</string>
+    <string name="text_clock_m_seven">وسبع دقائق</string>
+    <string name="text_clock_m_eight">وثمان دقائق</string>
+    <string name="text_clock_m_nine">وتسع دقائق</string>
+    <string name="text_clock_m_ten">وعشرة</string>
+    <string name="text_clock_m_eleven">وإحدى عشر</string>
+    <string name="text_clock_m_twelve">وإثنا عشر</string>
+    <string name="text_clock_m_thirteen">وثلاثة عشر</string>
     <string name="text_clock_m_fourteen">Fourteen</string>
     <string name="text_clock_m_fifteen">Fifteen</string>
     <string name="text_clock_m_sixteen">Sixteen</string>
