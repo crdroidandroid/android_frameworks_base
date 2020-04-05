@@ -6517,12 +6517,8 @@ public class UserManagerService extends IUserManager.Stub {
      */
     private static int getMaxUsersOfTypePerParent(UserTypeDetails userTypeDetails) {
         final int defaultMax = userTypeDetails.getMaxAllowedPerParent();
-        if (!Build.IS_DEBUGGABLE) {
-            return defaultMax;
-        } else {
-            if (userTypeDetails.isManagedProfile()) {
-                return SystemProperties.getInt("persist.sys.max_profiles", defaultMax);
-            }
+        if (userTypeDetails.isManagedProfile()) {
+            return SystemProperties.getInt("persist.sys.max_profiles", defaultMax);
         }
         return defaultMax;
     }
