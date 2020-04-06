@@ -55,6 +55,7 @@ import com.android.systemui.util.sensors.AsyncSensorManager;
 import com.android.systemui.util.sensors.ProximitySensor;
 import com.android.systemui.util.settings.SecureSettings;
 import com.android.systemui.util.wakelock.WakeLock;
+import com.android.systemui.R;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -119,6 +120,7 @@ public class DozeSensors {
     private boolean mListeningTouchScreenSensors;
     private boolean mListeningProxSensors;
     private boolean mUdfpsEnrolled;
+    private boolean mProximitySupported;
 
     @DevicePostureController.DevicePostureInt
     private int mDevicePosture;
@@ -169,6 +171,7 @@ public class DozeSensors {
         mProximitySensor.setTag(TAG);
         mSelectivelyRegisterProxSensors = dozeParameters.getSelectivelyRegisterSensorsUsingProx();
         mListeningProxSensors = !mSelectivelyRegisterProxSensors;
+        mProximitySupported = context.getResources().getBoolean(R.bool.doze_proximity_sensor_supported);
         mScreenOffUdfpsEnabled =
                 config.screenOffUdfpsEnabled(KeyguardUpdateMonitor.getCurrentUser());
         mDevicePostureController = devicePostureController;
@@ -259,13 +262,15 @@ public class DozeSensors {
                         false /* ignoresSetting */,
                         false /* requiresProx */),
         };
-        setProxListening(false);  // Don't immediately start listening when we register.
-        mProximitySensor.register(
-                proximityEvent -> {
-                    if (proximityEvent != null) {
-                        mProxCallback.accept(!proximityEvent.getBelow());
-                    }
-                });
+        if (mProximitySupported) {
+            setProxListening(false);  // Don't immediately start listening when we register.
+            mProximitySensor.register(
+                    proximityEvent -> {
+                        if (proximityEvent != null) {
+                            mProxCallback.accept(!proximityEvent.getBelow());
+                        }
+                    });
+        }
 
         mDevicePostureController.addCallback(mDevicePostureCallback);
     }
@@ -472,14 +477,15 @@ public class DozeSensors {
         for (TriggerSensor s : mTriggerSensors) {
             idpw.println("Sensor: " + s.toString());
         }
-        idpw.println("ProxSensor: " + mProximitySensor.toString());
+        if (mProximitySupported) // Useless
+            idpw.println("ProxSensor: " + mProximitySensor.toString());
     }
 
     /**
      * @return true if prox is currently near, false if far or null if unknown.
      */
     public Boolean isProximityCurrentlyNear() {
-        return mProximitySensor.isNear();
+        return !mProximitySupported ? null : mProximitySensor.isNear();
     }
 
     @VisibleForTesting
