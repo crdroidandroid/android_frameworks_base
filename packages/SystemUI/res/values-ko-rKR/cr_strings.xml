@@ -224,6 +224,6 @@
     <!-- QS Header data usage info -->
     <string name="usage_data">사용됨</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_stopdot_label">정지 점 표시</string>
+    <string name="screenrecord_low_quality_label">저화질</string>
 </resources>
