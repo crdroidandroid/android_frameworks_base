@@ -157,6 +157,7 @@ public final class ClockManager {
         addBuiltinClock(() -> new TypeClockAltController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new BinaryClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new DividedLinesClockController(res, layoutInflater, colorExtractor));
+        addBuiltinClock(() -> new SfunyClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new LineageClockController(res, layoutInflater, colorExtractor));
 
         // Store the size of the display for generation of clock preview.
