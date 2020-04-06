@@ -128,4 +128,11 @@
         <item>4Mbps</item> 
         <item>1Mbps</item> 
     </string-array> 
+
+    <!-- Audio recorder entries -->
+    <string-array name="screen_audio_recording_entries" translatable="false">
+        <item>@string/screenrecord_audio_recording_off</item>
+        <item>@string/screenrecord_audio_recording_internal</item>
+        <item>@string/screenrecord_audio_recording_microphone</item>
+    </string-array>
 </resources>
