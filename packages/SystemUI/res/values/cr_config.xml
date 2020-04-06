@@ -80,4 +80,7 @@
 
     <!-- Whether show refresh rate QS tile -->
     <bool name="config_showRefreshRateQsTile">false</bool>
+
+    <!-- Whether usage of the proximity sensor during doze is supported -->
+    <bool name="doze_proximity_sensor_supported">true</bool>
 </resources>
