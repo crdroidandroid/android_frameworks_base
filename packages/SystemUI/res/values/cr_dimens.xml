@@ -129,4 +129,7 @@
 
     <!-- Biometric Prompt -->
     <dimen name="biometric_dialog_fod_margin">12dp</dimen>
+
+     <!-- Oroño clock -->
+     <dimen name="clock_oronos_outline_size">4dp</dimen>
 </resources>
