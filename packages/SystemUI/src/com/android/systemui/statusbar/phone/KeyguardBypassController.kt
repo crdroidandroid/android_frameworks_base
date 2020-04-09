@@ -86,6 +86,8 @@ open class KeyguardBypassController : Dumpable, StackScrollAlgorithm.BypassContr
         }
         private set
 
+    var bypassEnabledBiometric: Boolean = false
+
     var bouncerShowing: Boolean = false
     var altBouncerShowing: Boolean = false
     var launchingAffordance: Boolean = false
@@ -130,7 +132,7 @@ open class KeyguardBypassController : Dumpable, StackScrollAlgorithm.BypassContr
                         com.android.internal.R.bool.config_faceAuthDismissesKeyguard)) 1 else 0
         tunerService.addTunable(object : TunerService.Tunable {
             override fun onTuningChanged(key: String?, newValue: String?) {
-                bypassEnabled = tunerService.getValue(key, dismissByDefault) != 0
+                bypassEnabledBiometric = tunerService.getValue(key, dismissByDefault) != 0
             }
         }, Settings.Secure.FACE_UNLOCK_DISMISSES_KEYGUARD)
         lockscreenUserManager.addUserChangedListener(
@@ -150,8 +152,8 @@ open class KeyguardBypassController : Dumpable, StackScrollAlgorithm.BypassContr
         biometricSourceType: BiometricSourceType,
         isStrongBiometric: Boolean
     ): Boolean {
-        if (biometricSourceType == BiometricSourceType.FACE && bypassEnabled) {
-            val can = canBypass()
+        if (bypassEnabledBiometric) {
+            val can = biometricSourceType != BiometricSourceType.FACE || canBypass()
             if (!can && (isPulseExpanding || qSExpanded)) {
                 pendingUnlock = PendingUnlock(biometricSourceType, isStrongBiometric)
             }
@@ -175,7 +177,7 @@ open class KeyguardBypassController : Dumpable, StackScrollAlgorithm.BypassContr
      * If keyguard can be dismissed because of bypass.
      */
     fun canBypass(): Boolean {
-        if (bypassEnabled) {
+        if (bypassEnabledBiometric) {
             return when {
                 bouncerShowing -> true
                 altBouncerShowing -> true
@@ -192,7 +194,7 @@ open class KeyguardBypassController : Dumpable, StackScrollAlgorithm.BypassContr
      * If shorter animations should be played when unlocking.
      */
     fun canPlaySubtleWindowAnimations(): Boolean {
-        if (bypassEnabled) {
+        if (bypassEnabledBiometric) {
             return when {
                 statusBarStateController.state != StatusBarState.KEYGUARD -> false
                 qSExpanded -> false
@@ -215,6 +217,7 @@ open class KeyguardBypassController : Dumpable, StackScrollAlgorithm.BypassContr
             pw.println("  mPendingUnlock: $pendingUnlock")
         }
         pw.println("  bypassEnabled: $bypassEnabled")
+        pw.println("  bypassEnabledBiometric: $bypassEnabledBiometric")
         pw.println("  canBypass: ${canBypass()}")
         pw.println("  bouncerShowing: $bouncerShowing")
         pw.println("  altBouncerShowing: $altBouncerShowing")
