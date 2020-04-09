@@ -63,6 +63,8 @@ open class KeyguardBypassController : Dumpable {
         get() = field && mKeyguardStateController.isFaceAuthEnabled
         private set
 
+    var bypassEnabledBiometric: Boolean = false
+
     var bouncerShowing: Boolean = false
     var launchingAffordance: Boolean = false
     var qSExpanded = false
@@ -104,7 +106,7 @@ open class KeyguardBypassController : Dumpable {
                         com.android.internal.R.bool.config_faceAuthDismissesKeyguard)) 1 else 0
         tunerService.addTunable(object : TunerService.Tunable {
             override fun onTuningChanged(key: String?, newValue: String?) {
-                bypassEnabled = tunerService.getValue(key, dismissByDefault) != 0
+                bypassEnabledBiometric = tunerService.getValue(key, dismissByDefault) != 0
             }
         }, Settings.Secure.FACE_UNLOCK_DISMISSES_KEYGUARD)
         lockscreenUserManager.addUserChangedListener(
@@ -124,8 +126,8 @@ open class KeyguardBypassController : Dumpable {
         biometricSourceType: BiometricSourceType,
         isStrongBiometric: Boolean
     ): Boolean {
-        if (bypassEnabled) {
-            val can = canBypass()
+        if (bypassEnabledBiometric) {
+            val can = biometricSourceType != BiometricSourceType.FACE || canBypass()
             if (!can && (isPulseExpanding || qSExpanded)) {
                 pendingUnlock = PendingUnlock(biometricSourceType, isStrongBiometric)
             }
@@ -149,7 +151,7 @@ open class KeyguardBypassController : Dumpable {
      * If keyguard can be dismissed because of bypass.
      */
     fun canBypass(): Boolean {
-        if (bypassEnabled) {
+        if (bypassEnabledBiometric) {
             return when {
                 bouncerShowing -> true
                 statusBarStateController.state != StatusBarState.KEYGUARD -> false
@@ -165,7 +167,7 @@ open class KeyguardBypassController : Dumpable {
      * If shorter animations should be played when unlocking.
      */
     fun canPlaySubtleWindowAnimations(): Boolean {
-        if (bypassEnabled) {
+        if (bypassEnabledBiometric) {
             return when {
                 statusBarStateController.state != StatusBarState.KEYGUARD -> false
                 qSExpanded -> false
@@ -188,6 +190,7 @@ open class KeyguardBypassController : Dumpable {
             pw.println("  mPendingUnlock: $pendingUnlock")
         }
         pw.println("  bypassEnabled: $bypassEnabled")
+        pw.println("  bypassEnabledBiometric: $bypassEnabledBiometric")
         pw.println("  canBypass: ${canBypass()}")
         pw.println("  bouncerShowing: $bouncerShowing")
         pw.println("  isPulseExpanding: $isPulseExpanding")
