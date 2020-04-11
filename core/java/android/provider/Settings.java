@@ -5258,12 +5258,6 @@ public final class Settings {
         public static final String RINGTONE_VIBRATION_PATTERN = "ringtone_vibration_pattern";
 
         /**
-         * Show data usage in QS header
-         * @hide
-         */
-        public static final String QS_DATAUSAGE = "qs_datausage";
-
-        /**
          * Screenrecord: enable mic
          * @hide
          */
