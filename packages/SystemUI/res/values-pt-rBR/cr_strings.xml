@@ -189,8 +189,6 @@
     <string name="stabilization_velocity_friction">Velocidade de atrito</string>
     <string name="stabilization_velocity_amplitude">Velocidade de Amplitude</string>
     <string name="stabilization_position_friction">Posição de atrito</string>
-    <!-- QS Header data usage info -->
-    <string name="usage_data">utilizado</string>
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">Mostrar ponto de parada</string>
     <string name="screenrecord_low_quality_label">Baixa qualidade</string>
