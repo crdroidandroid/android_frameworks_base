@@ -24,8 +24,8 @@
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">Смарт пиксели</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Автоматично включване на смарт пиксели</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">Екранна снимка</string>
     <string name="quick_settings_region_screenshot_label">Частична екранна снимка</string>
@@ -172,14 +172,14 @@
     <string name="text_clock_m_forty_nine">Четиридесет и девет</string>
     <string name="text_clock_m_fifty">Петдесет</string>
     <string name="text_clock_m_fifty_one">Петдесет и едно</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_fifty_two">Петдесет и две</string>
+    <string name="text_clock_m_fifty_three">Петдесет и три</string>
+    <string name="text_clock_m_fifty_four">Петдесет и четири</string>
+    <string name="text_clock_m_fifty_five">Петдесет и пет</string>
+    <string name="text_clock_m_fifty_six">Петдесет и шест</string>
+    <string name="text_clock_m_fifty_seven">Петдесет и седем</string>
+    <string name="text_clock_m_fifty_eight">Петдесет и осем</string>
+    <string name="text_clock_m_fifty_nine">Петдесет и девет</string>
     <!-- Screen Stabilization -->
     <string name="quick_settings_stabilization_label">Стабилизация на екрана</string>
     <string name="quick_settings_stabilization_off">Стабилизация на екрана е деактивирана</string>
@@ -190,6 +190,6 @@
     <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
     <string name="stabilization_position_friction">Position Friction</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_label">Покажи стоп бутон</string>
     <string name="screenrecord_low_quality_label">Ниско качество</string>
 </resources>
