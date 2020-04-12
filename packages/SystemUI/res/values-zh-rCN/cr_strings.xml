@@ -188,8 +188,6 @@
     <string name="stabilization_velocity_friction">移动速度</string>
     <string name="stabilization_velocity_amplitude">移动幅度</string>
     <string name="stabilization_position_friction">移动位置</string>
-    <!-- QS Header data usage info -->
-    <string name="usage_data">已使用</string>
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">显示停止圆点</string>
     <string name="screenrecord_low_quality_label">低画质</string>

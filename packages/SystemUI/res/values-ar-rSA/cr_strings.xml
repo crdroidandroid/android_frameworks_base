@@ -193,8 +193,6 @@
     <string name="stabilization_velocity_friction">سرعة الاحتكاك</string>
     <string name="stabilization_velocity_amplitude">مدى الاحتكاك</string>
     <string name="stabilization_position_friction">موضع الاحتكاك</string>
-    <!-- QS Header data usage info -->
-    <string name="usage_data">مستخدم</string>
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">إظهار نقطة التوقف</string>
     <string name="screenrecord_low_quality_label">جودة منخفضة</string>

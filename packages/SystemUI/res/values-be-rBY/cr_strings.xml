@@ -191,8 +191,6 @@
     <string name="stabilization_velocity_friction">Хуткасць трэння</string>
     <string name="stabilization_velocity_amplitude">Амплітуда хуткасці</string>
     <string name="stabilization_position_friction">Палажэнне трэння</string>
-    <!-- QS Header data usage info -->
-    <string name="usage_data">выкарыстаны</string>
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">Паказаць кнопку спынення</string>
     <string name="screenrecord_low_quality_label">Нізкая якасць</string>

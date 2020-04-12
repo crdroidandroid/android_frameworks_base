@@ -221,8 +221,6 @@
     <string name="stabilization_velocity_friction">속도 마찰</string>
     <string name="stabilization_velocity_amplitude">속도 진폭</string>
     <string name="stabilization_position_friction">위치 마찰</string>
-    <!-- QS Header data usage info -->
-    <string name="usage_data">사용됨</string>
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">정지 점 표시</string>
     <string name="screenrecord_low_quality_label">저화질</string>

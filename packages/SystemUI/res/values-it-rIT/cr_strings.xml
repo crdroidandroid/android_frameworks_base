@@ -189,8 +189,6 @@
     <string name="stabilization_velocity_friction">Attrito alla velocità</string>
     <string name="stabilization_velocity_amplitude">Ampiezza della velocità</string>
     <string name="stabilization_position_friction">Attrito di posizione</string>
-    <!-- QS Header data usage info -->
-    <string name="usage_data">utilizzato</string>
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">Mostra punto di arresto</string>
     <string name="screenrecord_low_quality_label">Bassa qualità</string>
