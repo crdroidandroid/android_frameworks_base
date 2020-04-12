@@ -86,7 +86,7 @@
     <string name="force_stop_dlg_text">Ако изключите програмата принудително, това може да се отрази зле на нейната функционалност.</string>
     <string name="guts_force_close_app">Затвори приложението</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Системен UI</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
@@ -103,22 +103,22 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Часът е</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Часът е</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">Един</string>
+    <string name="text_clock_h_two">Два</string>
+    <string name="text_clock_h_three">Три</string>
+    <string name="text_clock_h_four">Четири</string>
+    <string name="text_clock_h_five">Пет</string>
+    <string name="text_clock_h_six">Шест</string>
+    <string name="text_clock_h_seven">Седем</string>
+    <string name="text_clock_h_eight">Осем</string>
+    <string name="text_clock_h_nine">Девет</string>
+    <string name="text_clock_h_ten">Десет</string>
+    <string name="text_clock_h_eleven">Единадесет</string>
+    <string name="text_clock_h_twelve">Дванадесет</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
     <string name="text_clock_m_zero">O’Clock</string>
     <string name="text_clock_m_one">O’One</string>
@@ -130,30 +130,30 @@
     <string name="text_clock_m_seven">O’Seven</string>
     <string name="text_clock_m_eight">O’Eight</string>
     <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
-    <string name="text_clock_m_fourteen">Fourteen</string>
-    <string name="text_clock_m_fifteen">Fifteen</string>
-    <string name="text_clock_m_sixteen">Sixteen</string>
-    <string name="text_clock_m_seventeen">Seventeen</string>
-    <string name="text_clock_m_eighteen">Eighteen</string>
-    <string name="text_clock_m_nineteen">Nineteen</string>
-    <string name="text_clock_m_twenty">Twenty</string>
-    <string name="text_clock_m_twenty_one">Twenty One</string>
-    <string name="text_clock_m_twenty_two">Twenty Two</string>
-    <string name="text_clock_m_twenty_three">Twenty Three</string>
-    <string name="text_clock_m_twenty_four">Twenty Four</string>
-    <string name="text_clock_m_twenty_five">Twenty Five</string>
-    <string name="text_clock_m_twenty_six">Twenty Six</string>
-    <string name="text_clock_m_twenty_seven">Twenty Seven</string>
-    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
+    <string name="text_clock_m_ten">Десет</string>
+    <string name="text_clock_m_eleven">Единадесет</string>
+    <string name="text_clock_m_twelve">Дванадесет</string>
+    <string name="text_clock_m_thirteen">Тринадесет</string>
+    <string name="text_clock_m_fourteen">Четиринадесет</string>
+    <string name="text_clock_m_fifteen">Петнадесет</string>
+    <string name="text_clock_m_sixteen">Шестнадесет</string>
+    <string name="text_clock_m_seventeen">Седемнадесет</string>
+    <string name="text_clock_m_eighteen">Осемнадесет</string>
+    <string name="text_clock_m_nineteen">Деветнадесет</string>
+    <string name="text_clock_m_twenty">Двадесет</string>
+    <string name="text_clock_m_twenty_one">Дватесет и една</string>
+    <string name="text_clock_m_twenty_two">Дватесет и две</string>
+    <string name="text_clock_m_twenty_three">Дватесет и три</string>
+    <string name="text_clock_m_twenty_four">Дватесет и четири</string>
+    <string name="text_clock_m_twenty_five">Двадесет и пет</string>
+    <string name="text_clock_m_twenty_six">Двадесет и шест</string>
+    <string name="text_clock_m_twenty_seven">Двадесет и седем</string>
+    <string name="text_clock_m_twenty_eight">Дватесет и осем</string>
+    <string name="text_clock_m_twenty_nine">Дватесет и девет</string>
+    <string name="text_clock_m_thirty">Тридесет</string>
+    <string name="text_clock_m_thirty_one">Тридесет и една</string>
+    <string name="text_clock_m_thirty_two">Тридесет и две</string>
+    <string name="text_clock_m_thirty_three">Тридесет и три</string>
     <string name="text_clock_m_thirty_four">Тридесет и четири</string>
     <string name="text_clock_m_thirty_five">Тридесет и пет</string>
     <string name="text_clock_m_thirty_six">Тридесет и шест</string>
@@ -161,7 +161,7 @@
     <string name="text_clock_m_thirty_eight">Тридесет и осем</string>
     <string name="text_clock_m_thirty_nine">Тридесет и девет</string>
     <string name="text_clock_m_forty">Четиридесет</string>
-    <string name="text_clock_m_forty_one">Четиридесет и едно</string>
+    <string name="text_clock_m_forty_one">Четиридесет и една</string>
     <string name="text_clock_m_forty_two">Четиридесет и две</string>
     <string name="text_clock_m_forty_three">Четиридесет и три</string>
     <string name="text_clock_m_forty_four">Четиридесет и четири</string>
@@ -171,7 +171,7 @@
     <string name="text_clock_m_forty_eight">Четиридесет и осем</string>
     <string name="text_clock_m_forty_nine">Четиридесет и девет</string>
     <string name="text_clock_m_fifty">Петдесет</string>
-    <string name="text_clock_m_fifty_one">Петдесет и едно</string>
+    <string name="text_clock_m_fifty_one">Петдесет и една</string>
     <string name="text_clock_m_fifty_two">Петдесет и две</string>
     <string name="text_clock_m_fifty_three">Петдесет и три</string>
     <string name="text_clock_m_fifty_four">Петдесет и четири</string>
