@@ -16,11 +16,11 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Pengisian Daya Cepat (<xliff:g id="charging_time_left" example="4 jam 2 menit">%s</xliff:g> hingga penuh)</string>
+    <string name="keyguard_plugged_in_dash_charging">Pengisian Daya Cepat</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Pengisian Daya Cepat (<xliff:g id="charging_time_left" example="4 jam 2 menit">%s</xliff:g> hingga penuh)</string>
+    <string name="keyguard_plugged_in_warp_charging">Pengisian Daya Cepat</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
@@ -156,34 +156,52 @@ Tujuh</string>
     <string name="text_clock_m_thirty">Tiga Puluh</string>
     <string name="text_clock_m_thirty_one">Tiga Puluh
 Satu</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_thirty_two">Tiga Puluh
+Dua</string>
+    <string name="text_clock_m_thirty_three">Tiga Puluh
+Tiga</string>
+    <string name="text_clock_m_thirty_four">Tiga Puluh Empat</string>
+    <string name="text_clock_m_thirty_five">Tiga Puluh
+Lima</string>
+    <string name="text_clock_m_thirty_six">Tiga Puluh
+Enam</string>
+    <string name="text_clock_m_thirty_seven">Tiga Puluh
+Tujuh</string>
+    <string name="text_clock_m_thirty_eight">Tiga Puluh Delapan</string>
+    <string name="text_clock_m_thirty_nine">Tiga Puluh Sembilan</string>
+    <string name="text_clock_m_forty">Empat Puluh</string>
+    <string name="text_clock_m_forty_one">Empat Puluh
+Satu</string>
+    <string name="text_clock_m_forty_two">Empat Puluh Dua</string>
+    <string name="text_clock_m_forty_three">Empat Puluh
+Tiga</string>
+    <string name="text_clock_m_forty_four">Empat Puluh
+Empat</string>
+    <string name="text_clock_m_forty_five">Empat Puluh
+Lima</string>
+    <string name="text_clock_m_forty_six">Empat Puluh
+Enam</string>
+    <string name="text_clock_m_forty_seven">Empat Puluh
+Tujuh</string>
+    <string name="text_clock_m_forty_eight">Empat Puluh
+Delapan</string>
+    <string name="text_clock_m_forty_nine">Empat Puluh Sembilan</string>
+    <string name="text_clock_m_fifty">Lima Puluh</string>
+    <string name="text_clock_m_fifty_one">Lima Puluh Satu</string>
+    <string name="text_clock_m_fifty_two">Lima Puluh Dua</string>
+    <string name="text_clock_m_fifty_three">Lima Puluh Tiga</string>
+    <string name="text_clock_m_fifty_four">Lima Puluh
+Empat</string>
+    <string name="text_clock_m_fifty_five">Lima Puluh
+Lima</string>
+    <string name="text_clock_m_fifty_six">Lima Puluh
+Enam</string>
+    <string name="text_clock_m_fifty_seven">Lima Puluh
+Tujuh</string>
+    <string name="text_clock_m_fifty_eight">Lima Puluh
+Delapan</string>
+    <string name="text_clock_m_fifty_nine">Lima Puluh
+Sembilan</string>
     <!-- Screen Stabilization -->
     <string name="quick_settings_stabilization_label">Stabilisasi Layar</string>
     <string name="quick_settings_stabilization_off">Stabilisasi nonaktif</string>
