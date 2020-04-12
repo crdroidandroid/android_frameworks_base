@@ -34,6 +34,7 @@ LOCAL_REQUIRED_MODULES := \
 	FontLGSmartGothicSourceOverlay \
 	FontNotoSerifSourceOverlay \
 	FontOneplusSlateSource \
+	FontReemKufiSourceOverlay \
 	FontRosemarySourceOverlay \
 	FontSamsungOneSourceOverlay \
 	FontSonySketchSourceOverlay \
