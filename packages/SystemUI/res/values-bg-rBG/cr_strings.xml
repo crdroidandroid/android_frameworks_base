@@ -56,35 +56,35 @@
     <string name="quick_settings_music_play">Възпроизвеждане</string>
     <string name="quick_settings_music_pause">Пауза</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">Винаги се показва</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Звуково търсене</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">Звук</string>
+    <string name="quick_settings_sound_ring">Звънене</string>
+    <string name="quick_settings_sound_vibrate">Вибрация</string>
+    <string name="quick_settings_sound_dnd">Не безпокойте</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">Рестартиране</string>
+    <string name="quick_settings_reboot_recovery_label">Режим на Възстановяване</string>
+    <string name="quick_settings_poweroff_label">Изключване</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Режим на игра е изключен в настройките</string>
+    <string name="quick_settings_gaming_mode_label">Режим на игра</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Режимът на игра е изключен.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Режимът на игра е включен.</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_toast_0">Currently no SIM card is inserted</string>
-    <string name="qs_data_switch_toast_1">Currently only one SIM card is inserted</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">Смени картата с данни</string>
+    <string name="qs_data_switch_toast_0">Няма поставена СИМ карта</string>
+    <string name="qs_data_switch_toast_1">Само една СИМ карта е поставена</string>
+    <string name="qs_data_switch_changed_1">Използване на СИМ 1 за мобилни данни</string>
+    <string name="qs_data_switch_changed_2">Използване на СИМ 2 за мобилни данни</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Принудително спиране?</string>
+    <string name="force_stop_dlg_text">Ако изключите програмата принудително, това може да се отрази зле на нейната функционалност.</string>
+    <string name="guts_force_close_app">Затвори приложението</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">SystemUI</string>
     <!-- Binary clock -->
@@ -154,24 +154,24 @@
     <string name="text_clock_m_thirty_one">Thirty One</string>
     <string name="text_clock_m_thirty_two">Thirty Two</string>
     <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
+    <string name="text_clock_m_thirty_four">Тридесет и четири</string>
+    <string name="text_clock_m_thirty_five">Тридесет и пет</string>
+    <string name="text_clock_m_thirty_six">Тридесет и шест</string>
+    <string name="text_clock_m_thirty_seven">Тридесет и седем</string>
+    <string name="text_clock_m_thirty_eight">Тридесет и осем</string>
+    <string name="text_clock_m_thirty_nine">Тридесет и девет</string>
+    <string name="text_clock_m_forty">Четиридесет</string>
+    <string name="text_clock_m_forty_one">Четиридесет и едно</string>
+    <string name="text_clock_m_forty_two">Четиридесет и две</string>
+    <string name="text_clock_m_forty_three">Четиридесет и три</string>
+    <string name="text_clock_m_forty_four">Четиридесет и четири</string>
+    <string name="text_clock_m_forty_five">Четиридесет и пет</string>
+    <string name="text_clock_m_forty_six">Четиридесет и шест</string>
+    <string name="text_clock_m_forty_seven">Четиридесет и седем</string>
+    <string name="text_clock_m_forty_eight">Четиридесет и осем</string>
+    <string name="text_clock_m_forty_nine">Четиридесет и девет</string>
+    <string name="text_clock_m_fifty">Петдесет</string>
+    <string name="text_clock_m_fifty_one">Петдесет и едно</string>
     <string name="text_clock_m_fifty_two">Fifty Two</string>
     <string name="text_clock_m_fifty_three">Fifty Three</string>
     <string name="text_clock_m_fifty_four">Fifty Four</string>
@@ -181,15 +181,15 @@
     <string name="text_clock_m_fifty_eight">Fifty Eight</string>
     <string name="text_clock_m_fifty_nine">Fifty Nine</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
+    <string name="quick_settings_stabilization_label">Стабилизация на екрана</string>
+    <string name="quick_settings_stabilization_off">Стабилизация на екрана е деактивирана</string>
+    <string name="quick_settings_stabilization_on">Стабилизация на екрана е активирана</string>
+    <string name="low_label">Ниска</string>
+    <string name="high_label">Висока</string>
     <string name="stabilization_velocity_friction">Velocity Friction</string>
     <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
     <string name="stabilization_position_friction">Position Friction</string>
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_low_quality_label">Ниско качество</string>
 </resources>
