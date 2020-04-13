@@ -16,77 +16,77 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Бързо зареждане (<xliff:g id="charging_time_left" example="4 часа и 2 минути">%1$s</xliff:g> до пълно зареждане)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Бързо зареждане</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp зареждане (<xliff:g id="charging_time_left" example="4 часа и 2 минути">%1$s</xliff:g> до пълно зареждане)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp зареждане</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">Смарт пиксели</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Автоматично включване на смарт пиксели</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Screenshot</string>
-    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <string name="quick_settings_screenshot_label">Екранна снимка</string>
+    <string name="quick_settings_region_screenshot_label">Частична екранна снимка</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <string name="quick_settings_cpuinfo_label">Информация за CPU</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">Информация за FPS</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">Информация за FPS изключена</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">Информация за FPS включена</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">Хардуерни бутони</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">Компас</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
-    <string name="quick_settings_compass_SE">SE</string>
-    <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="quick_settings_compass_init">Подготвяне\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Компас изключен.</string>
+    <string name="accessibility_quick_settings_compass_on">Компас включен.</string>
+    <string name="quick_settings_compass_N">Север</string>
+    <string name="quick_settings_compass_NE">Североизток</string>
+    <string name="quick_settings_compass_E">Изток</string>
+    <string name="quick_settings_compass_SE">Югоизток</string>
+    <string name="quick_settings_compass_S">Юг</string>
+    <string name="quick_settings_compass_SW">Югозапад</string>
+    <string name="quick_settings_compass_W">Запад</string>
+    <string name="quick_settings_compass_NW">Северозапад</string>
     <!-- Music tile -->
-    <string name="quick_settings_music_label">Music</string>
-    <string name="quick_settings_music_play">Play</string>
-    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_label">Музика</string>
+    <string name="quick_settings_music_play">Възпроизвеждане</string>
+    <string name="quick_settings_music_pause">Пауза</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">Винаги се показва</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Звуково търсене</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">Звук</string>
+    <string name="quick_settings_sound_ring">Звънене</string>
+    <string name="quick_settings_sound_vibrate">Вибрация</string>
+    <string name="quick_settings_sound_dnd">Не безпокойте</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">Рестартиране</string>
+    <string name="quick_settings_reboot_recovery_label">Режим на Възстановяване</string>
+    <string name="quick_settings_poweroff_label">Изключване</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Режим на игра е изключен в настройките</string>
+    <string name="quick_settings_gaming_mode_label">Режим на игра</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Режимът на игра е изключен.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Режимът на игра е включен.</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_toast_0">Currently no SIM card is inserted</string>
-    <string name="qs_data_switch_toast_1">Currently only one SIM card is inserted</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">Смени картата с данни</string>
+    <string name="qs_data_switch_toast_0">Няма поставена СИМ карта</string>
+    <string name="qs_data_switch_toast_1">Само една СИМ карта е поставена</string>
+    <string name="qs_data_switch_changed_1">Използване на СИМ 1 за мобилни данни</string>
+    <string name="qs_data_switch_changed_2">Използване на СИМ 2 за мобилни данни</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Принудително спиране?</string>
+    <string name="force_stop_dlg_text">Ако изключите програмата принудително, това може да се отрази зле на нейната функционалност.</string>
+    <string name="guts_force_close_app">Затвори приложението</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Системен UI</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
@@ -103,22 +103,22 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Часът е</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Часът е</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">Един</string>
+    <string name="text_clock_h_two">Два</string>
+    <string name="text_clock_h_three">Три</string>
+    <string name="text_clock_h_four">Четири</string>
+    <string name="text_clock_h_five">Пет</string>
+    <string name="text_clock_h_six">Шест</string>
+    <string name="text_clock_h_seven">Седем</string>
+    <string name="text_clock_h_eight">Осем</string>
+    <string name="text_clock_h_nine">Девет</string>
+    <string name="text_clock_h_ten">Десет</string>
+    <string name="text_clock_h_eleven">Единадесет</string>
+    <string name="text_clock_h_twelve">Дванадесет</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
     <string name="text_clock_m_zero">O’Clock</string>
     <string name="text_clock_m_one">O’One</string>
@@ -130,66 +130,66 @@
     <string name="text_clock_m_seven">O’Seven</string>
     <string name="text_clock_m_eight">O’Eight</string>
     <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
-    <string name="text_clock_m_fourteen">Fourteen</string>
-    <string name="text_clock_m_fifteen">Fifteen</string>
-    <string name="text_clock_m_sixteen">Sixteen</string>
-    <string name="text_clock_m_seventeen">Seventeen</string>
-    <string name="text_clock_m_eighteen">Eighteen</string>
-    <string name="text_clock_m_nineteen">Nineteen</string>
-    <string name="text_clock_m_twenty">Twenty</string>
-    <string name="text_clock_m_twenty_one">Twenty One</string>
-    <string name="text_clock_m_twenty_two">Twenty Two</string>
-    <string name="text_clock_m_twenty_three">Twenty Three</string>
-    <string name="text_clock_m_twenty_four">Twenty Four</string>
-    <string name="text_clock_m_twenty_five">Twenty Five</string>
-    <string name="text_clock_m_twenty_six">Twenty Six</string>
-    <string name="text_clock_m_twenty_seven">Twenty Seven</string>
-    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_ten">Десет</string>
+    <string name="text_clock_m_eleven">Единадесет</string>
+    <string name="text_clock_m_twelve">Дванадесет</string>
+    <string name="text_clock_m_thirteen">Тринадесет</string>
+    <string name="text_clock_m_fourteen">Четиринадесет</string>
+    <string name="text_clock_m_fifteen">Петнадесет</string>
+    <string name="text_clock_m_sixteen">Шестнадесет</string>
+    <string name="text_clock_m_seventeen">Седемнадесет</string>
+    <string name="text_clock_m_eighteen">Осемнадесет</string>
+    <string name="text_clock_m_nineteen">Деветнадесет</string>
+    <string name="text_clock_m_twenty">Двадесет</string>
+    <string name="text_clock_m_twenty_one">Дватесет и една</string>
+    <string name="text_clock_m_twenty_two">Дватесет и две</string>
+    <string name="text_clock_m_twenty_three">Дватесет и три</string>
+    <string name="text_clock_m_twenty_four">Дватесет и четири</string>
+    <string name="text_clock_m_twenty_five">Двадесет и пет</string>
+    <string name="text_clock_m_twenty_six">Двадесет и шест</string>
+    <string name="text_clock_m_twenty_seven">Двадесет и седем</string>
+    <string name="text_clock_m_twenty_eight">Дватесет и осем</string>
+    <string name="text_clock_m_twenty_nine">Дватесет и девет</string>
+    <string name="text_clock_m_thirty">Тридесет</string>
+    <string name="text_clock_m_thirty_one">Тридесет и една</string>
+    <string name="text_clock_m_thirty_two">Тридесет и две</string>
+    <string name="text_clock_m_thirty_three">Тридесет и три</string>
+    <string name="text_clock_m_thirty_four">Тридесет и четири</string>
+    <string name="text_clock_m_thirty_five">Тридесет и пет</string>
+    <string name="text_clock_m_thirty_six">Тридесет и шест</string>
+    <string name="text_clock_m_thirty_seven">Тридесет и седем</string>
+    <string name="text_clock_m_thirty_eight">Тридесет и осем</string>
+    <string name="text_clock_m_thirty_nine">Тридесет и девет</string>
+    <string name="text_clock_m_forty">Четиридесет</string>
+    <string name="text_clock_m_forty_one">Четиридесет и една</string>
+    <string name="text_clock_m_forty_two">Четиридесет и две</string>
+    <string name="text_clock_m_forty_three">Четиридесет и три</string>
+    <string name="text_clock_m_forty_four">Четиридесет и четири</string>
+    <string name="text_clock_m_forty_five">Четиридесет и пет</string>
+    <string name="text_clock_m_forty_six">Четиридесет и шест</string>
+    <string name="text_clock_m_forty_seven">Четиридесет и седем</string>
+    <string name="text_clock_m_forty_eight">Четиридесет и осем</string>
+    <string name="text_clock_m_forty_nine">Четиридесет и девет</string>
+    <string name="text_clock_m_fifty">Петдесет</string>
+    <string name="text_clock_m_fifty_one">Петдесет и една</string>
+    <string name="text_clock_m_fifty_two">Петдесет и две</string>
+    <string name="text_clock_m_fifty_three">Петдесет и три</string>
+    <string name="text_clock_m_fifty_four">Петдесет и четири</string>
+    <string name="text_clock_m_fifty_five">Петдесет и пет</string>
+    <string name="text_clock_m_fifty_six">Петдесет и шест</string>
+    <string name="text_clock_m_fifty_seven">Петдесет и седем</string>
+    <string name="text_clock_m_fifty_eight">Петдесет и осем</string>
+    <string name="text_clock_m_fifty_nine">Петдесет и девет</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
+    <string name="quick_settings_stabilization_label">Стабилизация на екрана</string>
+    <string name="quick_settings_stabilization_off">Стабилизация на екрана е деактивирана</string>
+    <string name="quick_settings_stabilization_on">Стабилизация на екрана е активирана</string>
+    <string name="low_label">Ниска</string>
+    <string name="high_label">Висока</string>
     <string name="stabilization_velocity_friction">Velocity Friction</string>
     <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
     <string name="stabilization_position_friction">Position Friction</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_stopdot_label">Покажи стоп бутон</string>
+    <string name="screenrecord_low_quality_label">Ниско качество</string>
 </resources>
