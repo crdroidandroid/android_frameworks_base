@@ -146,9 +146,12 @@
   <!-- Whether to use old mobile type icons as default -->
   <java-symbol type="bool" name="config_useOldMobileIcons" />
 
-  <!-- Light / Regular style fonts -->
+  <!-- Fonts -->
   <java-symbol type="string" name="config_lightFontFamily" />
   <java-symbol type="string" name="config_regularFontFamily" />
+  <java-symbol type="string" name="config_headlineFontFamilyMedium" />
+  <java-symbol type="string" name="config_bodyFontFamily" />
+  <java-symbol type="string" name="config_bodyFontFamilyMedium" />
 
   <!-- Smart charging -->
   <java-symbol type="bool" name="config_smartChargingAvailable" />
