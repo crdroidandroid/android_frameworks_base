@@ -14880,6 +14880,12 @@ public final class Settings {
         public static final String LOCKSCREEN_ENABLE_QS = "lockscreen_enable_qs";
 
         /**
+         * Whether to ask pin for shutdown/reboot on secure LockScreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_POWERMENU_SECURE = "lockscreen_powermenu_secure";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
