@@ -108,6 +108,7 @@ import com.android.systemui.MultiListLayout;
 import com.android.systemui.MultiListLayout.MultiListAdapter;
 import com.android.systemui.colorextraction.SysuiColorExtractor;
 import com.android.systemui.plugins.ActivityStarter;
+import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.plugins.GlobalActions.GlobalActionsManager;
 import com.android.systemui.plugins.GlobalActionsPanelPlugin;
 import com.android.systemui.statusbar.phone.ScrimController;
@@ -147,6 +148,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
     private final DevicePolicyManager mDevicePolicyManager;
     private final LockPatternUtils mLockPatternUtils;
     private final KeyguardManager mKeyguardManager;
+    private final KeyguardMonitor mKeyguardMonitor = Dependency.get(KeyguardMonitor.class);
 
     private ArrayList<Action> mItems;
     private ActionsDialog mDialog;
@@ -178,6 +180,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
     private String[] mCurrentMenuActions;
     private boolean mIsRestartMenu;
     private boolean mScreenRecordAvailable;
+    private boolean mSecure;
 
     /**
      * @param context everything needs a context :(
@@ -192,6 +195,8 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
                 Context.DEVICE_POLICY_SERVICE);
         mLockPatternUtils = new LockPatternUtils(mContext);
         mKeyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
+        mSecure = Settings.Global.getInt(
+                        mContext.getContentResolver(), Settings.Global.LOCK_POWER_MENU_SECURE, 1) != 0;
 
         // receive broadcasts
         IntentFilter filter = new IntentFilter();
@@ -558,8 +563,15 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
         public boolean onLongPress() {
             UserManager um = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
             if (!um.hasUserRestriction(UserManager.DISALLOW_SAFE_BOOT)) {
-                mWindowManagerFuncs.reboot(true, null);
-                return true;
+                if (mKeyguardMonitor.isSecure() && mKeyguardMonitor.isShowing() && mSecure){
+                    Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() -> {
+                        mWindowManagerFuncs.reboot(true, null);
+                    });
+                    return true;
+                }else{
+                     mWindowManagerFuncs.reboot(true, null);
+                     return true;
+                }
             }
             return false;
         }
@@ -576,9 +588,15 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
 
         @Override
         public void onPress() {
-            // shutdown by making sure radio and power are handled accordingly.
-            mWindowManagerFuncs.shutdown();
-        }
+            if (mKeyguardMonitor.isSecure() && mKeyguardMonitor.isShowing() && mSecure){
+                Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() -> {
+                    // shutdown by making sure radio and power are handled accordingly.
+                    mWindowManagerFuncs.shutdown();
+                });
+	    }else{
+  	         mWindowManagerFuncs.shutdown();
+            }
+       }
     }
 
     private abstract class EmergencyAction extends SinglePressAction {
@@ -667,8 +685,15 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
         public boolean onLongPress() {
             UserManager um = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
             if (!um.hasUserRestriction(UserManager.DISALLOW_SAFE_BOOT)) {
-                mWindowManagerFuncs.reboot(true, null);
-                return true;
+               if (mKeyguardMonitor.isSecure() && mKeyguardMonitor.isShowing() && mSecure){
+                   Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() -> {
+                      mWindowManagerFuncs.reboot(true, null);
+                   });
+                   return true;
+ 	       }else{
+                  mWindowManagerFuncs.reboot(true, null);
+                  return true;
+	       }
             }
             return false;
         }
@@ -699,7 +724,13 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
             } else {
                 mHandler.sendEmptyMessage(MESSAGE_DISMISS);
                 if (mIsRestartMenu || !PowerMenuUtils.isAdvancedRestartPossible(mContext)) {
-                    mWindowManagerFuncs.reboot(false, null);
+                   if (mKeyguardMonitor.isSecure() && mKeyguardMonitor.isShowing() && mSecure){
+                       Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() -> {
+                           mWindowManagerFuncs.reboot(false, null);
+                       });
+                   }else{
+                        mWindowManagerFuncs.reboot(false, null);
+                   }
                 }
             }
         }
@@ -723,7 +754,13 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
 
         @Override
         public void onPress() {
-            mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_RECOVERY);
+            if (mKeyguardMonitor.isSecure() && mKeyguardMonitor.isShowing() && mSecure){
+                Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() -> {
+                   mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_RECOVERY);
+                });
+            }else{
+                mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_RECOVERY);
+            }
         }
     }
 
@@ -745,7 +782,13 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
 
         @Override
         public void onPress() {
-            mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_BOOTLOADER);
+            if (mKeyguardMonitor.isSecure() && mKeyguardMonitor.isShowing() && mSecure){
+                Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() -> {
+                   mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_BOOTLOADER);
+                });
+            }else{
+                mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_BOOTLOADER);
+            }
         }
     }
 
@@ -767,7 +810,13 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
 
         @Override
         public void onPress() {
-            mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_DOWNLOAD);
+            if (mKeyguardMonitor.isSecure() && mKeyguardMonitor.isShowing() && mSecure){
+                Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() -> {
+                   mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_DOWNLOAD);
+                });
+            }else{
+                mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_DOWNLOAD);
+            }
         }
     }
 
@@ -789,7 +838,13 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
 
         @Override
         public void onPress() {
-            mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_FASTBOOT);
+            if (mKeyguardMonitor.isSecure() && mKeyguardMonitor.isShowing() && mSecure){
+                Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() -> {
+                   mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_FASTBOOT);
+                });
+            }else{
+                mWindowManagerFuncs.reboot(false, PowerManager.REBOOT_FASTBOOT);
+            }
         }
     }
 
@@ -811,7 +866,13 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
 
         @Override
         public void onPress() {
-            Process.killProcess(Process.myPid());
+            if (mKeyguardMonitor.isSecure() && mKeyguardMonitor.isShowing() && mSecure){
+                Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() -> {
+                   Process.killProcess(Process.myPid());
+                });
+            }else{
+                Process.killProcess(Process.myPid());
+            }
         }
     }
 
