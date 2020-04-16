@@ -180,7 +180,7 @@
     <string name="text_clock_m_fifty_eight">五十八分</string>
     <string name="text_clock_m_fifty_nine">五十九分</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">屏幕稳定</string>
+    <string name="quick_settings_stabilization_label">屏幕防抖</string>
     <string name="quick_settings_stabilization_off">稳定已禁用</string>
     <string name="quick_settings_stabilization_on">稳定已启用</string>
     <string name="low_label">低</string>
