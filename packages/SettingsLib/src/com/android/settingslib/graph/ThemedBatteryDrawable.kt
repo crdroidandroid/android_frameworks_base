@@ -259,8 +259,10 @@ open class ThemedBatteryDrawable(private val context: Context, frameColor: Int) 
             // If power save is enabled draw the level path with colorError
             c.drawPath(levelPath, errorPaint)
             // And draw the plus sign on top of the fill
-            fillPaint.color = fillColor
-            c.drawPath(scaledPlus, fillPaint)
+            if (!showPercent) {
+                fillPaint.color = fillColor
+                c.drawPath(scaledPlus, fillPaint)
+            }
         }
         c.restore()
 
