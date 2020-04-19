@@ -120,7 +120,7 @@
     <string name="text_clock_h_eleven">Onze</string>
     <string name="text_clock_h_twelve">Douze</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
+    <string name="text_clock_m_zero">Heures</string>
     <string name="text_clock_m_one">O’One</string>
     <string name="text_clock_m_two">O’Two</string>
     <string name="text_clock_m_three">O’Three</string>
@@ -130,12 +130,12 @@
     <string name="text_clock_m_seven">O’Seven</string>
     <string name="text_clock_m_eight">O’Eight</string>
     <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
-    <string name="text_clock_m_fourteen">Fourteen</string>
-    <string name="text_clock_m_fifteen">Fifteen</string>
+    <string name="text_clock_m_ten">Dix</string>
+    <string name="text_clock_m_eleven">Onze</string>
+    <string name="text_clock_m_twelve">Douze</string>
+    <string name="text_clock_m_thirteen">Treize</string>
+    <string name="text_clock_m_fourteen">Quatorze</string>
+    <string name="text_clock_m_fifteen">Quinze</string>
     <string name="text_clock_m_sixteen">Sixteen</string>
     <string name="text_clock_m_seventeen">Seventeen</string>
     <string name="text_clock_m_eighteen">Eighteen</string>
