@@ -17,5 +17,5 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Headline / Body font Nunito overlay -->
-    <string name="font_nunito_source_overlay" translatable="false">Cocon</string>
+    <string name="font_nunito_source_overlay" translatable="false">Nunito</string>
 </resources>
