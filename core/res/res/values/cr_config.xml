@@ -34,6 +34,7 @@
 
     <!-- Whether device supports variable refresh rate -->
     <bool name="config_hasVariableRefreshRate">false</bool>
+    <integer name="config_defaultVariableRefreshRateSetting">0</integer>
 
     <!-- Whether device supports sensor based doze customizations -->
     <bool name="config_dozePulseTilt">false</bool>
