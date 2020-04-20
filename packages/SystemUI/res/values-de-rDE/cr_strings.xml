@@ -190,6 +190,6 @@
     <string name="stabilization_velocity_amplitude">Geschwindigkeits-Amplitude</string>
     <string name="stabilization_position_friction">Spannungsposition</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Low quality</string>
+    <string name="screenrecord_stopdot_label">Stop-Punkt anzeigen</string>
+    <string name="screenrecord_low_quality_label">Niedrige Qualität</string>
 </resources>
