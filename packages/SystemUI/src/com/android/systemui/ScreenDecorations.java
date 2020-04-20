@@ -106,6 +106,8 @@ public class ScreenDecorations extends SystemUI implements Tunable,
     public static final String SIZE = "sysui_rounded_size";
     public static final String PADDING = "sysui_rounded_content_padding";
     public static final String SBPADDING = "sysui_status_bar_padding";
+    public static final String CUTOUT = "sysui_display_cutout";
+
     private static final boolean DEBUG_SCREENSHOT_ROUNDED_CORNERS =
             SystemProperties.getBoolean("debug.screenshot_rounded_corners", false);
     private static final boolean VERBOSE = false;
@@ -134,6 +136,7 @@ public class ScreenDecorations extends SystemUI implements Tunable,
     private boolean mIsReceivingNavBarColor = false;
     private boolean mInGesturalMode;
     private boolean mCustomCutout;
+    private boolean mShowTopCutout;
 
     /**
      * Converts a set of {@link Rect}s into a {@link Region}
@@ -332,6 +335,8 @@ public class ScreenDecorations extends SystemUI implements Tunable,
 
         Dependency.get(Dependency.MAIN_HANDLER).post(
                 () -> Dependency.get(TunerService.class).addTunable(this, SIZE));
+        Dependency.get(Dependency.MAIN_HANDLER).post(
+                () -> Dependency.get(TunerService.class).addTunable(this, CUTOUT));
 
         if (hasRoundedCorners() || shouldDrawCutout() || shouldHostHandles()) {
             setupDecorations();
@@ -579,6 +584,7 @@ public class ScreenDecorations extends SystemUI implements Tunable,
 
         updateAssistantHandleViews();
         mCutoutTop.setRotation(mRotation);
+        mCutoutTop.setShowCutout(mShowTopCutout);
         mCutoutBottom.setRotation(mRotation);
 
         updateWindowVisibilities();
@@ -772,6 +778,13 @@ public class ScreenDecorations extends SystemUI implements Tunable,
                     setSize(mBottomOverlay.findViewById(R.id.right), sizeBottom);
                 });
                 break;
+            case CUTOUT:
+                mHandler.post(() -> {
+                    if (mCutoutTop == null) return;
+                    mShowTopCutout = TunerService.parseIntegerSwitch(newValue, true);
+                    mCutoutTop.setShowCutout(mShowTopCutout);
+                });
+                break;
             default:
                 break;
         }
@@ -882,6 +895,7 @@ public class ScreenDecorations extends SystemUI implements Tunable,
         private int mColor = Color.BLACK;
         private boolean mStart;
         private int mRotation;
+        private boolean mShowCutout = true;
 
         public DisplayCutoutView(Context context, boolean start,
                 Runnable visibilityChangedListener, ScreenDecorations decorations) {
@@ -949,6 +963,11 @@ public class ScreenDecorations extends SystemUI implements Tunable,
             update();
         }
 
+        public void setShowCutout(boolean showCutout) {
+            mShowCutout = showCutout;
+            update();
+        }
+
         private boolean isStart() {
             final boolean flipped = (mRotation == RotationUtils.ROTATION_SEASCAPE
                     || mRotation == RotationUtils.ROTATION_UPSIDE_DOWN);
@@ -966,7 +985,7 @@ public class ScreenDecorations extends SystemUI implements Tunable,
             mBoundingRect.setEmpty();
             mBoundingPath.reset();
             int newVisible;
-            if (shouldDrawCutout(getContext()) && hasCutout()) {
+            if (shouldDrawCutout(getContext()) && hasCutout() && mShowCutout) {
                 mBounds.addAll(mInfo.displayCutout.getBoundingRects());
                 localBounds(mBoundingRect);
                 updateGravity();
