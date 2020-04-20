@@ -81,8 +81,6 @@
 
     </com.android.systemui.statusbar.LineageStatusBarItemHolder>
 
-    </LinearLayout>
-
     <com.android.systemui.BatteryMeterView
         android:id="@+id/batteryIcon"
         android:layout_height="match_parent"
@@ -94,4 +92,5 @@
         systemui:showDark="false"
         android:visibility="gone" />
 
+    </LinearLayout>
 </LinearLayout>
