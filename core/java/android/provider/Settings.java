@@ -4921,11 +4921,6 @@ public final class Settings {
         public static final String NOTIFICATION_SOUND_VIB_SCREEN_ON = "notification_sound_vib_screen_on";
 
         /**
-         * @hide
-         */
-        public static final String REFRESH_RATE_SETTING = "refresh_rate_setting";
-
-        /**
          * Whether to enable Ambient edge light
          * @hide
          */
@@ -14856,6 +14851,13 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_POWERMENU_SECURE = "lockscreen_powermenu_secure";
+
+        /**
+         * Set variable refresh rate setting on boot if available
+         * 0 - auto/default, 1 - 60Hz, 2 - 90Hz, 3 - 120Hz
+         * @hide
+         */
+        public static final String REFRESH_RATE_SETTING = "refresh_rate_setting";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
