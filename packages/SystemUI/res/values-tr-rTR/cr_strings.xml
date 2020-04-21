@@ -239,4 +239,10 @@ Dokuz</string>
     <!-- Screen recorder -->
     <string name="screenrecord_stopdot_label">Durdurma noktasını göster</string>
     <string name="screenrecord_low_quality_label">Düşük kalite</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Data saver</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Roaming</string>
 </resources>
