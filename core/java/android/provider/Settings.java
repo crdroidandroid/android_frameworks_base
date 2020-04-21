@@ -9948,12 +9948,6 @@ public final class Settings {
         public static final String SHOW_BACK_ARROW_GESTURE = "show_back_arrow_gesture";
 
         /**
-         * Whether to unlock with fingerprint on notification double tap
-         * @hide
-         */
-        public static final String UNLOCK_WITHOUT_BOUNCER = "unlock_without_bouncer";
-
-        /**
          * Setting to disable black in cut-out
          * @hide
          */
