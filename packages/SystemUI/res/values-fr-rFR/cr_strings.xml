@@ -186,16 +186,16 @@
     <string name="quick_settings_stabilization_on">Stabilisation activée</string>
     <string name="low_label">Basse</string>
     <string name="high_label">Élevée</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="stabilization_velocity_friction">Friction de vitesse</string>
+    <string name="stabilization_velocity_amplitude">Amplitude de vitesse</string>
+    <string name="stabilization_position_friction">Friction de position</string>
     <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_label">Afficher le point d\'arrêt</string>
     <string name="screenrecord_low_quality_label">Qualité inférieure</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Économiseur de données</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming</string>
+    <string name="status_bar_roaming">Itinérance</string>
 </resources>
