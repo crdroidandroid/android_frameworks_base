@@ -237,21 +237,21 @@ Dokuz</string>
     <string name="stabilization_velocity_amplitude">Hız Genliği</string>
     <string name="stabilization_position_friction">Sürtünme Konumu</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
+    <string name="screenrecord_dialog_title">Kayıt başlasın mı?</string>
+    <string name="screenrecord_dialog_summary">Kayıt sırasında Android sistemi, ekranınızda görünen veya cihazınızda oynatılan tüm hassas bilgileri yakalayabilir.  Buna şifreler, ödeme bilgileri, fotoğraflar, mesajlar ve ses dahildir.</string>
+    <string name="screenrecord_dialog_start">Başlat</string>
+    <string name="screenrecord_dialog_cancel">İptal</string>
+    <string name="screenrecord_audio_recording_title">Ses kaynağı</string>
+    <string name="screenrecord_audio_recording_internal">İç</string>
+    <string name="screenrecord_audio_recording_microphone">Mikrofon</string>
+    <string name="screenrecord_audio_recording_off">Devre dışı</string>
+    <string name="screenrecord_taps_title">Ekranda dokunmaları göster</string>
     <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_video_bitrate_title">Video bit hızı</string>
     <!-- Name of the data saver status bar icon. -->
     <string name="status_bar_data_saver">Data saver</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming</string>
+    <string name="status_bar_roaming">Dolaşım</string>
 </resources>
