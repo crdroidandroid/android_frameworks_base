@@ -193,7 +193,7 @@
     <string name="stabilization_position_friction">Pozice přesunu</string>
     <!-- Screen record -->
     <string name="screenrecord_dialog_title">Spustit nahrávání?</string>
-    <string name="screenrecord_dialog_summary">Během nahrávání může systém Android zachytit jakékoli citlivé informace, které jsou viditelné nebo přehrávané na obrazovce vašeho zařízení. To zahrnuje hesla, informace o platbách, fotografie, zprávy a zvuk.</string>
+    <string name="screenrecord_dialog_summary">Během nahrávání může systém Android zachytit jakékoliv citlivé informace, které jsou právě zobrazené nebo přehrávané na obrazovce vašeho zařízení. To zahrnuje hesla, informace o\u00a0platbách, fotografie, zprávy a\u00a0zvuk.</string>
     <string name="screenrecord_dialog_start">Spustit</string>
     <string name="screenrecord_dialog_cancel">Zrušit</string>
     <string name="screenrecord_audio_recording_title">Zdroj zvuku</string>
