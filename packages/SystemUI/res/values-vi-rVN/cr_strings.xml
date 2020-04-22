@@ -189,21 +189,21 @@
     <string name="stabilization_velocity_amplitude">Biên độ vận tốc</string>
     <string name="stabilization_position_friction">Vị trí ma sát</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_dialog_title">Bắt đầu ghi?</string>
+    <string name="screenrecord_dialog_summary">Trong khi ghi, hệ thống có thể ghi tất cả thông tin nhạy cảm nào có thể nhìn thấy trên màn hình hoặc phát trên thiết bị. Bao gồm mật khẩu, thông tin thanh toán, hình ảnh, tin nhắn và âm thanh.</string>
+    <string name="screenrecord_dialog_start">Bắt đầu</string>
+    <string name="screenrecord_dialog_cancel">Hủy</string>
+    <string name="screenrecord_audio_recording_title">Nguồn âm thanh</string>
+    <string name="screenrecord_audio_recording_internal">Bộ nhớ trong</string>
+    <string name="screenrecord_audio_recording_microphone">Micro</string>
+    <string name="screenrecord_audio_recording_off">Đã tắt</string>
+    <string name="screenrecord_taps_title">Hiện số lần chạm</string>
+    <string name="screenrecord_stopdot_title">Hiện dấu chấm dừng</string>
+    <string name="screenrecord_video_bitrate_title">Tộc độ bit video</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Tiết kiệm dữ liệu</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming</string>
+    <string name="status_bar_roaming">Chuyển vùng</string>
 </resources>
