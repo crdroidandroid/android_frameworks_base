@@ -194,21 +194,21 @@
     <string name="stabilization_velocity_amplitude">مدى الاحتكاك</string>
     <string name="stabilization_position_friction">موضع الاحتكاك</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_dialog_title">بدء التسجيل؟</string>
+    <string name="screenrecord_dialog_summary">أثناء التسجيل، يمكن لنظام الأندرويد أن يلتقط أي معلومات حساسة مرئية على شاشتك أو مشغلة على جهازك. هذا يشمل كلمات المرور، معلومات الدفع، الصور والرسائل والصوتيات.</string>
+    <string name="screenrecord_dialog_start">بدء</string>
+    <string name="screenrecord_dialog_cancel">إلغاء</string>
+    <string name="screenrecord_audio_recording_title">مصدر الصوت</string>
+    <string name="screenrecord_audio_recording_internal">الداخلية</string>
+    <string name="screenrecord_audio_recording_microphone">الميكروفون</string>
+    <string name="screenrecord_audio_recording_off">معطّل</string>
+    <string name="screenrecord_taps_title">إظهار اللمسات على الشاشة</string>
+    <string name="screenrecord_stopdot_title">إظهار نقطة الإيقاف</string>
+    <string name="screenrecord_video_bitrate_title">معدل البت للفيديو</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">موفِّر البيانات</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming</string>
+    <string name="status_bar_roaming">التجوال</string>
 </resources>
