@@ -193,7 +193,22 @@
     <string name="stabilization_velocity_friction">سرعة الاحتكاك</string>
     <string name="stabilization_velocity_amplitude">مدى الاحتكاك</string>
     <string name="stabilization_position_friction">موضع الاحتكاك</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">إظهار نقطة التوقف</string>
-    <string name="screenrecord_low_quality_label">جودة منخفضة</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">بدء التسجيل؟</string>
+    <string name="screenrecord_dialog_summary">أثناء التسجيل، يمكن لنظام الأندرويد أن يلتقط أي معلومات حساسة مرئية على شاشتك أو مشغلة على جهازك. هذا يشمل كلمات المرور، معلومات الدفع، الصور والرسائل والصوتيات.</string>
+    <string name="screenrecord_dialog_start">بدء</string>
+    <string name="screenrecord_dialog_cancel">إلغاء</string>
+    <string name="screenrecord_audio_recording_title">مصدر الصوت</string>
+    <string name="screenrecord_audio_recording_internal">الداخلية</string>
+    <string name="screenrecord_audio_recording_microphone">الميكروفون</string>
+    <string name="screenrecord_audio_recording_off">معطّل</string>
+    <string name="screenrecord_taps_title">إظهار اللمسات على الشاشة</string>
+    <string name="screenrecord_stopdot_title">إظهار نقطة الإيقاف</string>
+    <string name="screenrecord_video_bitrate_title">معدل البت للفيديو</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">موفِّر البيانات</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">التجوال</string>
 </resources>

@@ -228,7 +228,22 @@
     <string name="stabilization_velocity_friction">Швидкість тертя</string>
     <string name="stabilization_velocity_amplitude">Амплітуда швидкості</string>
     <string name="stabilization_position_friction">Позиція тертя</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Показувати кнопку зупинки</string>
-    <string name="screenrecord_low_quality_label">Низька якість</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">Почати запис?</string>
+    <string name="screenrecord_dialog_summary">Під час запису система Android може захоплювати будь-яку приватну інформацію, що відображається на вашому екрані або відтворюється на вашому пристрої. Включаючи паролі, платіжну інформацію, фотографії, повідомлення та аудіо.</string>
+    <string name="screenrecord_dialog_start">Розпочати</string>
+    <string name="screenrecord_dialog_cancel">Скасувати</string>
+    <string name="screenrecord_audio_recording_title">Джерело звуку</string>
+    <string name="screenrecord_audio_recording_internal">Внутріннє</string>
+    <string name="screenrecord_audio_recording_microphone">Мікрофон</string>
+    <string name="screenrecord_audio_recording_off">Вимкнено</string>
+    <string name="screenrecord_taps_title">Показувати дотики на екрані</string>
+    <string name="screenrecord_stopdot_title">Показувати кнопку зупинки</string>
+    <string name="screenrecord_video_bitrate_title">Відео бітрейт</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Заощадження трафіку</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">Мережа VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Роумінг</string>
 </resources>

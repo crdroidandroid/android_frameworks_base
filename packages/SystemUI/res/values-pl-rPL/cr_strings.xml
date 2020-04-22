@@ -32,9 +32,9 @@
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Informacje o CPU</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">Wskaźnik FPS</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">Wskażnik FPS wył.</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">Wskaźnik FPS wł.</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">Klawisze sprzętowe</string>
     <!-- Compass QS Tile -->
@@ -221,12 +221,27 @@ dziewięć</string>
     <string name="quick_settings_stabilization_label">Stabilizacja ekranu</string>
     <string name="quick_settings_stabilization_off">Stabilizacja jest wyłączona</string>
     <string name="quick_settings_stabilization_on">Stabilizacja jest włączona</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
+    <string name="low_label">Niski</string>
+    <string name="high_label">Wysoki</string>
     <string name="stabilization_velocity_friction">Velocity Friction</string>
     <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
     <string name="stabilization_position_friction">Position Friction</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_low_quality_label">Niska jakość</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">Rozpocząć nagrywanie?</string>
+    <string name="screenrecord_dialog_summary">Podczas nagrywania, system Android może przechwycić wszelkie wrażliwe dane widoczne lub odtwarzane na ekranie telefonu. Wliczając w to hasła, dane o płatnościach, zdjęcia, wiadomości oraz dźwięk.</string>
+    <string name="screenrecord_dialog_start">Rozpocznij</string>
+    <string name="screenrecord_dialog_cancel">Anuluj</string>
+    <string name="screenrecord_audio_recording_title">Źródło dźwięku</string>
+    <string name="screenrecord_audio_recording_internal">Wewnętrzne</string>
+    <string name="screenrecord_audio_recording_microphone">Mikrofon</string>
+    <string name="screenrecord_audio_recording_off">Wyłączone</string>
+    <string name="screenrecord_taps_title">Pokaż dotknięcia na ekranie</string>
+    <string name="screenrecord_stopdot_title">Wyświetl \"kropkę zatrzymania\"</string>
+    <string name="screenrecord_video_bitrate_title">Przepływność obrazu</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Oszczędzanie danych</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Roaming</string>
 </resources>

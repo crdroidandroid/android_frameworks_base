@@ -236,7 +236,22 @@ Dokuz</string>
     <string name="stabilization_velocity_friction">Sürtünme Hızı</string>
     <string name="stabilization_velocity_amplitude">Hız Genliği</string>
     <string name="stabilization_position_friction">Sürtünme Konumu</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Durdurma noktasını göster</string>
-    <string name="screenrecord_low_quality_label">Düşük kalite</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">Kayıt başlasın mı?</string>
+    <string name="screenrecord_dialog_summary">Kayıt sırasında Android sistemi, ekranınızda görünen veya cihazınızda oynatılan tüm hassas bilgileri yakalayabilir.  Buna şifreler, ödeme bilgileri, fotoğraflar, mesajlar ve ses dahildir.</string>
+    <string name="screenrecord_dialog_start">Başlat</string>
+    <string name="screenrecord_dialog_cancel">İptal</string>
+    <string name="screenrecord_audio_recording_title">Ses kaynağı</string>
+    <string name="screenrecord_audio_recording_internal">İç</string>
+    <string name="screenrecord_audio_recording_microphone">Mikrofon</string>
+    <string name="screenrecord_audio_recording_off">Devre dışı</string>
+    <string name="screenrecord_taps_title">Ekranda dokunmaları göster</string>
+    <string name="screenrecord_stopdot_title">Show stop dot</string>
+    <string name="screenrecord_video_bitrate_title">Video bit hızı</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Data saver</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Dolaşım</string>
 </resources>

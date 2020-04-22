@@ -189,7 +189,22 @@
     <string name="stabilization_velocity_friction">VF (surlódási sebesség)</string>
     <string name="stabilization_velocity_amplitude">VA (kilengési sebesség)</string>
     <string name="stabilization_position_friction">PF (surlódási pozíció)</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Megállítógomb megjelenítése</string>
-    <string name="screenrecord_low_quality_label">Gyenge minőségű</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">Elindítja a felvételt?</string>
+    <string name="screenrecord_dialog_summary">Felvétel közben az Android rendszer bármilyen érzékeny információt rögzíthet, amely a képernyőn látható vagy az eszközön lejátszódik. Ide tartoznak a jelszavak, a fizetési információk, a fényképek, az üzenetek és a hang.</string>
+    <string name="screenrecord_dialog_start">Elindítás</string>
+    <string name="screenrecord_dialog_cancel">Mégse</string>
+    <string name="screenrecord_audio_recording_title">A hang forrása</string>
+    <string name="screenrecord_audio_recording_internal">Belső</string>
+    <string name="screenrecord_audio_recording_microphone">Mikrofon</string>
+    <string name="screenrecord_audio_recording_off">Letiltva</string>
+    <string name="screenrecord_taps_title">Érintésmegjelenítés a képernyőn</string>
+    <string name="screenrecord_stopdot_title">Megállítógomb-megjelenítés</string>
+    <string name="screenrecord_video_bitrate_title">Videó-bitráta</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Adatforgalom-csökkentő</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Barangolás</string>
 </resources>

@@ -191,7 +191,22 @@
     <string name="stabilization_velocity_friction">Rychlost přesunu</string>
     <string name="stabilization_velocity_amplitude">Amplituda rychlosti</string>
     <string name="stabilization_position_friction">Pozice přesunu</string>
-    <!-- Screen recorder -->
-    <string name="screenrecord_stopdot_label">Zobrazit puntík pro zastavení</string>
-    <string name="screenrecord_low_quality_label">Nízká kvalita</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">Spustit nahrávání?</string>
+    <string name="screenrecord_dialog_summary">Během nahrávání může systém Android zachytit jakékoli citlivé informace, které jsou viditelné nebo přehrávané na obrazovce vašeho zařízení. To zahrnuje hesla, informace o platbách, fotografie, zprávy a zvuk.</string>
+    <string name="screenrecord_dialog_start">Spustit</string>
+    <string name="screenrecord_dialog_cancel">Zrušit</string>
+    <string name="screenrecord_audio_recording_title">Zdroj zvuku</string>
+    <string name="screenrecord_audio_recording_internal">Ze zařízení</string>
+    <string name="screenrecord_audio_recording_microphone">Mikrofon</string>
+    <string name="screenrecord_audio_recording_off">Vypnutý</string>
+    <string name="screenrecord_taps_title">Zobrazit na obrazovce doteky</string>
+    <string name="screenrecord_stopdot_title">Zobrazit puntík pro zastavení</string>
+    <string name="screenrecord_video_bitrate_title">Bitrate videa</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Spořič dat</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Roaming</string>
 </resources>
