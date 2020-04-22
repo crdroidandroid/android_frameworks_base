@@ -192,17 +192,17 @@
     <string name="stabilization_velocity_amplitude">Скорость амплитуды</string>
     <string name="stabilization_position_friction">Положение трения</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
+    <string name="screenrecord_dialog_title">Начать запись?</string>
+    <string name="screenrecord_dialog_summary">Во время записи система Android может захватить любую важную информацию, которая видна на вашем экране или воспроизведена на вашем устройстве. Сюда входят пароли, платежные данные, фотографии, сообщения и аудио.</string>
+    <string name="screenrecord_dialog_start">Старт</string>
+    <string name="screenrecord_dialog_cancel">Отмена</string>
+    <string name="screenrecord_audio_recording_title">Источник звука</string>
     <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
+    <string name="screenrecord_audio_recording_microphone">Микрофон</string>
+    <string name="screenrecord_audio_recording_off">Отключено</string>
+    <string name="screenrecord_taps_title">Показывать касания на экране</string>
     <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_video_bitrate_title">Битрейт видео</string>
     <!-- Name of the data saver status bar icon. -->
     <string name="status_bar_data_saver">Экономия трафика</string>
     <!-- Name of the vpn status bar icon. -->
