@@ -56,4 +56,7 @@
 
     <!-- Whether device has warp charging support -->
     <bool name="config_hasWarpCharger">false</bool>
+
+    <!-- Whether device has VOOC charging support -->
+    <bool name="config_hasVoocCharger">false</bool>
 </resources>
