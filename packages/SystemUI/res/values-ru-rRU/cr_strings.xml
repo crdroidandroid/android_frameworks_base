@@ -197,16 +197,16 @@
     <string name="screenrecord_dialog_start">Старт</string>
     <string name="screenrecord_dialog_cancel">Отмена</string>
     <string name="screenrecord_audio_recording_title">Источник звука</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
+    <string name="screenrecord_audio_recording_internal">Внутренняя</string>
     <string name="screenrecord_audio_recording_microphone">Микрофон</string>
     <string name="screenrecord_audio_recording_off">Отключено</string>
     <string name="screenrecord_taps_title">Показывать касания на экране</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
+    <string name="screenrecord_stopdot_title">Показать кнопку остановки</string>
     <string name="screenrecord_video_bitrate_title">Битрейт видео</string>
     <!-- Name of the data saver status bar icon. -->
     <string name="status_bar_data_saver">Экономия трафика</string>
     <!-- Name of the vpn status bar icon. -->
-    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_vpn">ВПН</string>
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Роуминг</string>
 </resources>
