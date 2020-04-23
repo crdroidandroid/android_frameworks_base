@@ -195,6 +195,10 @@ public final class BatteryService extends SystemService {
     private boolean mHasWarpCharger;
     private boolean mLastWarpCharger;
 
+    private boolean mVoocCharger;
+    private boolean mHasVoocCharger;
+    private boolean mLastVoocCharger;
+
     private long mDischargeStartTime;
     private int mDischargeStartLevel;
 
@@ -243,6 +247,8 @@ public final class BatteryService extends SystemService {
                 com.android.internal.R.bool.config_hasDashCharger);
         mHasWarpCharger = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_hasWarpCharger);
+        mHasVoocCharger = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_hasVoocCharger);
 
         mCriticalBatteryLevel = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_criticalBatteryWarningLevel);
@@ -602,6 +608,7 @@ public final class BatteryService extends SystemService {
 
         mDashCharger = mHasDashCharger && isDashCharger();
         mWarpCharger = mHasWarpCharger && isWarpCharger();
+        mVoocCharger = mHasVoocCharger && isVoocCharger();
 
         if (force || (mHealthInfo.batteryStatus != mLastBatteryStatus ||
                 mHealthInfo.batteryHealth != mLastBatteryHealth ||
@@ -620,7 +627,8 @@ public final class BatteryService extends SystemService {
                 mBatteryModProps.modType != mLastModType ||
                 mBatteryModProps.modPowerSource != mLastModPowerSource ||
                 mDashCharger != mLastDashCharger ||
-                mWarpCharger != mLastWarpCharger)) {
+                mWarpCharger != mLastWarpCharger ||
+                mVoocCharger != mLastVoocCharger)) {
 
             if (mPlugType != mLastPlugType) {
                 if (mLastPlugType == BATTERY_PLUGGED_NONE) {
@@ -798,6 +806,7 @@ public final class BatteryService extends SystemService {
             mLastModPowerSource = mBatteryModProps.modPowerSource;
             mLastDashCharger = mDashCharger;
             mLastWarpCharger = mWarpCharger;
+            mLastVoocCharger = mVoocCharger;
 
         }
     }
@@ -834,6 +843,7 @@ public final class BatteryService extends SystemService {
         intent.putExtra(BatteryManager.EXTRA_MOD_POWER_SOURCE, mBatteryModProps.modPowerSource);
         intent.putExtra(BatteryManager.EXTRA_DASH_CHARGER, mDashCharger);
         intent.putExtra(BatteryManager.EXTRA_WARP_CHARGER, mWarpCharger);
+        intent.putExtra(BatteryManager.EXTRA_VOOC_CHARGER, mVoocCharger);
         if (DEBUG) {
             Slog.d(TAG, "Sending ACTION_BATTERY_CHANGED. scale:" + BATTERY_SCALE
                     + ", info:" + mHealthInfo.toString());
@@ -905,6 +915,20 @@ public final class BatteryService extends SystemService {
     private boolean isWarpCharger() {
         try {
             FileReader file = new FileReader("/sys/class/power_supply/battery/fastchg_status");
+            BufferedReader br = new BufferedReader(file);
+            String state = br.readLine();
+            br.close();
+            file.close();
+            return "1".equals(state);
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
+        return false;
+    }
+
+    private boolean isVoocCharger() {
+        try {
+            FileReader file = new FileReader("/sys/class/power_supply/battery/voocchg_ing");
             BufferedReader br = new BufferedReader(file);
             String state = br.readLine();
             br.close();
