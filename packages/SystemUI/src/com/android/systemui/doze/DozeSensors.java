@@ -179,7 +179,7 @@ public class DozeSensors {
         mProximitySensor.register(
                 proximityEvent -> {
                     if (proximityEvent != null) {
-                        mProxCallback.accept(!proximityEvent.getNear());
+                        mProxCallback.accept(!proximityEvent.getBelow());
                     }
                 });
     }

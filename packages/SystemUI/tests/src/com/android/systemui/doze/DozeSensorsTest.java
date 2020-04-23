@@ -84,7 +84,10 @@ public class DozeSensorsTest extends SysuiTestCase {
     @Mock
     private DozeLog mDozeLog;
     @Mock
-    private ProximitySensor mProximitySensor;
+    private Sensor mProximitySensor;
+    @Mock
+    private ProximitySensor mMockProxSensor;
+
     private SensorManagerPlugin.SensorEventListener mWakeLockScreenListener;
     private TestableLooper mTestableLooper;
     private DozeSensors mDozeSensors;
@@ -105,8 +108,10 @@ public class DozeSensorsTest extends SysuiTestCase {
     @Test
     public void testRegisterProx() {
         assertFalse(mProximitySensor.isRegistered());
+        // We should not register with the sensor manager initially.
+        verify(mMockProxSensor).pause();
         mDozeSensors.setProxListening(true);
-        verify(mProximitySensor).resume();
+        verify(mMockProxSensor).resume();
     }
 
     @Test
@@ -170,7 +175,7 @@ public class DozeSensorsTest extends SysuiTestCase {
         TestableDozeSensors() {
             super(getContext(), mAlarmManager, mSensorManager, mDozeParameters,
                     mAmbientDisplayConfiguration, mWakeLock, mCallback, mProxCallback, mDozeLog,
-                    mProximitySensor);
+                    mMockProxSensor);
             for (TriggerSensor sensor : mSensors) {
                 if (sensor instanceof PluginSensor
                         && ((PluginSensor) sensor).mPluginSensor.getType()
