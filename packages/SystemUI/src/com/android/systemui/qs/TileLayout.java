@@ -115,19 +115,25 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     public boolean updateResources() {
         final Resources res = mContext.getResources();
         final ContentResolver resolver = mContext.getContentResolver();
+
+        int col_portrait = res.getInteger(R.integer.config_qs_columns_portrait);
+        int row_portrait = res.getInteger(R.integer.config_qs_rows_portrait);
+        int col_landscape = res.getInteger(R.integer.config_qs_columns_landscape);
+        int row_landscape = res.getInteger(R.integer.config_qs_rows_landscape);
+
         if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mResourceColumns = Settings.System.getIntForUser(resolver,
-                    Settings.System.QS_COLUMNS_PORTRAIT, 4,
+                    Settings.System.QS_COLUMNS_PORTRAIT, col_portrait,
                     UserHandle.USER_CURRENT);
             mResourceRows = Settings.System.getIntForUser(resolver,
-                    Settings.System.QS_ROWS_PORTRAIT, 2,
+                    Settings.System.QS_ROWS_PORTRAIT, row_portrait,
                     UserHandle.USER_CURRENT);
         } else {
             mResourceColumns = Settings.System.getIntForUser(resolver,
-                    Settings.System.QS_COLUMNS_LANDSCAPE, 5,
+                    Settings.System.QS_COLUMNS_LANDSCAPE, col_landscape,
                     UserHandle.USER_CURRENT);
             mResourceRows = Settings.System.getIntForUser(resolver,
-                    Settings.System.QS_ROWS_LANDSCAPE, 1,
+                    Settings.System.QS_ROWS_LANDSCAPE, row_landscape,
                     UserHandle.USER_CURRENT);
         }
         if (mResourceColumns < 1) {
