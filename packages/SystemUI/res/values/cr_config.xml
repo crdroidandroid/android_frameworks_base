@@ -16,4 +16,9 @@
 -->
 <resources>
 
+    <!-- Default no. of QS tile rows and columns -->
+    <integer name="config_qs_columns_portrait">4</integer>
+    <integer name="config_qs_rows_portrait">2</integer>
+    <integer name="config_qs_columns_landscape">5</integer>
+    <integer name="config_qs_rows_landscape">1</integer>
 </resources>
