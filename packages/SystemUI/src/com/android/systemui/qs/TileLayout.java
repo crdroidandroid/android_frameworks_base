@@ -90,19 +90,25 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
         int columns;
         int rows;
+
+        int col_portrait = res.getInteger(R.integer.config_qs_columns_portrait);
+        int row_portrait = res.getInteger(R.integer.config_qs_rows_portrait);
+        int col_landscape = res.getInteger(R.integer.config_qs_columns_landscape);
+        int row_landscape = res.getInteger(R.integer.config_qs_rows_landscape);
+
         if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             columns = Settings.System.getIntForUser(resolver,
-                    Settings.System.QS_COLUMNS_PORTRAIT, 4,
+                    Settings.System.QS_COLUMNS_PORTRAIT, col_portrait,
                     UserHandle.USER_CURRENT);
             rows = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.QS_ROWS_PORTRAIT, 2,
+                    Settings.System.QS_ROWS_PORTRAIT, row_portrait,
                     UserHandle.USER_CURRENT);
         } else {
             columns = Settings.System.getIntForUser(resolver,
-                    Settings.System.QS_COLUMNS_LANDSCAPE, 4,
+                    Settings.System.QS_COLUMNS_LANDSCAPE, col_landscape,
                     UserHandle.USER_CURRENT);
             rows = Settings.System.getIntForUser(resolver,
-                    Settings.System.QS_ROWS_LANDSCAPE, 2,
+                    Settings.System.QS_ROWS_LANDSCAPE, row_landscape,
                     UserHandle.USER_CURRENT);
         }
         if (columns < 1) {
