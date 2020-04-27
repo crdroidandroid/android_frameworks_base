@@ -102,9 +102,7 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
     private int mActivePointerId = -1;
     private boolean mIsDragging;
     private float mStartTouchY = -1;
-    private final int mNavigationBarSize;
     private final int mFODmargin;
-    private final int mFODmarginmax;
 
     // Used to notify the container when something interesting happens.
     public interface SecurityCallback {
@@ -140,12 +138,8 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
             SystemUIFactory.getInstance().getRootComponent());
         mUnlockMethodCache = UnlockMethodCache.getInstance(context);
         mViewConfiguration = ViewConfiguration.get(context);
-        mNavigationBarSize = mContext.getResources().getDimensionPixelSize(
-            R.dimen.navigation_bar_size);
         mFODmargin = mContext.getResources().getDimensionPixelSize(
             R.dimen.keyguard_security_fod_view_margin);
-        mFODmarginmax = mContext.getResources().getDimensionPixelSize(
-            R.dimen.keyguard_security_fod_view_margin_max);
     }
 
     public void setSecurityCallback(SecurityCallback callback) {
@@ -314,10 +308,8 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
                         || securityMode == SecurityMode.PIN)) {
                 ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams)
                             eca.getLayoutParams();
-                lp.setMargins(lp.leftMargin, lp.topMargin, lp.rightMargin,
-                            (mFODmargin + mNavigationBarSize != mFODmarginmax)
-                            ? ((mFODmarginmax - (mFODmargin + mNavigationBarSize))) + mFODmargin
-                            : mFODmargin);
+                lp.setMargins(lp.leftMargin, mFODmargin, lp.rightMargin,
+                            lp.bottomMargin);
             }
             mSecurityViewFlipper.addView(v);
             updateSecurityView(v);
