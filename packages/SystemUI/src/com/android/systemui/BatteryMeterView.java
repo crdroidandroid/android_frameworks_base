@@ -72,6 +72,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.lang.annotation.Retention;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class BatteryMeterView extends LinearLayout implements
         BatteryStateChangeCallback, Tunable, DarkReceiver, ConfigurationListener {
@@ -133,6 +134,8 @@ public class BatteryMeterView extends LinearLayout implements
      * Whether we should use colors that adapt based on wallpaper/the scrim behind quick settings.
      */
     private boolean mUseWallpaperTextColors;
+
+    private final ArrayList<BatteryMeterViewCallbacks> mCallbacks = new ArrayList<>();
 
     private int mNonAdaptedSingleToneColor;
     private int mNonAdaptedForegroundColor;
@@ -497,6 +500,9 @@ public class BatteryMeterView extends LinearLayout implements
             mBatteryIconView.setVisibility(View.VISIBLE);
             scaleBatteryMeterViews();
         }
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            mCallbacks.get(i).onHiddenBattery(mBatteryStyle == BATTERY_STYLE_HIDDEN);
+        }
     }
 
     @Override
@@ -630,5 +636,17 @@ public class BatteryMeterView extends LinearLayout implements
                 updatePercentText();
             }
         }
+    }
+
+    public interface BatteryMeterViewCallbacks {
+        default void onHiddenBattery(boolean hidden) {}
+    }
+
+    public void addCallback(BatteryMeterViewCallbacks callback) {
+        mCallbacks.add(callback);
+    }
+
+    public void removeCallback(BatteryMeterViewCallbacks callbacks) {
+        mCallbacks.remove(callbacks);
     }
 }
