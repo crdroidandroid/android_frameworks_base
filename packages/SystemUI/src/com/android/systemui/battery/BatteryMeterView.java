@@ -96,6 +96,8 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
 
     private DualToneHandler mDualToneHandler;
 
+    private final ArrayList<BatteryMeterViewCallbacks> mCallbacks = new ArrayList<>();
+
     private int mNonAdaptedSingleToneColor;
     private int mNonAdaptedForegroundColor;
     private int mNonAdaptedBackgroundColor;
@@ -395,6 +397,9 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
             mBatteryIconView.setVisibility(View.VISIBLE);
             scaleBatteryMeterViews();
         }
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            mCallbacks.get(i).onHiddenBattery(mBatteryStyle == BATTERY_STYLE_HIDDEN);
+        }
     }
 
     private Drawable getUnknownStateDrawable() {
@@ -524,6 +529,18 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
     public interface BatteryEstimateFetcher {
         void fetchBatteryTimeRemainingEstimate(
                 BatteryController.EstimateFetchCompletion completion);
+    }
+
+    public interface BatteryMeterViewCallbacks {
+        default void onHiddenBattery(boolean hidden) {}
+    }
+
+    public void addCallback(BatteryMeterViewCallbacks callback) {
+        mCallbacks.add(callback);
+    }
+
+    public void removeCallback(BatteryMeterViewCallbacks callbacks) {
+        mCallbacks.remove(callbacks);
     }
 }
 
