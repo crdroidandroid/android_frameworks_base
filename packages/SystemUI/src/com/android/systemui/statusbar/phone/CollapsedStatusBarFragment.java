@@ -30,6 +30,7 @@ import android.annotation.Nullable;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.Settings;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.LinearLayout;
 
+import com.android.systemui.BatteryMeterView;
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.animation.Interpolators;
@@ -98,6 +100,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private final NotificationIconAreaController mNotificationIconAreaController;
     private final StatusBarIconController mStatusBarIconController;
     private ClockController mClockController;
+    private BatteryMeterView mBatteryMeterView;
+    private StatusIconContainer mStatusIcons;
+    private int mSignalClusterEndPadding = 0;
 
     private List<String> mBlockedIcons = new ArrayList<>();
 
@@ -112,6 +117,16 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         @Override
         public void onOngoingCallStateChanged(boolean animate) {
             disable(getContext().getDisplayId(), mDisabled1, mDisabled2, animate);
+        }
+    };
+
+    private BatteryMeterView.BatteryMeterViewCallbacks mBatteryMeterViewCallback =
+            new BatteryMeterView.BatteryMeterViewCallbacks() {
+        @Override
+        public void onHiddenBattery(boolean hidden) {
+            mStatusIcons.setPadding(
+                    mStatusIcons.getPaddingLeft(), mStatusIcons.getPaddingTop(),
+                    (hidden ? 0 : mSignalClusterEndPadding), mStatusIcons.getPaddingBottom());
         }
     };
 
@@ -169,6 +184,14 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mCustomIconArea = mStatusBar.findViewById(R.id.left_icon_area);
         mCenterClockLayout = mStatusBar.findViewById(R.id.centered_area);
         mClockController = new ClockController(getContext(), mStatusBar);
+        mSignalClusterEndPadding = getResources().getDimensionPixelSize(R.dimen.signal_cluster_battery_padding);
+        mStatusIcons = mStatusBar.findViewById(R.id.statusIcons);
+        int batteryStyle = Settings.System.getInt(getContext().getContentResolver(),
+                Settings.System.STATUS_BAR_BATTERY_STYLE, 0);
+        mStatusIcons.setPadding(mStatusIcons.getPaddingLeft(), mStatusIcons.getPaddingTop(),
+               (batteryStyle == 5/*hidden*/ ? 0 : mSignalClusterEndPadding), mStatusIcons.getPaddingBottom());
+        mBatteryMeterView = mStatusBar.findViewById(R.id.battery);
+        mBatteryMeterView.addCallback(mBatteryMeterViewCallback);
         mOngoingCallChip = mStatusBar.findViewById(R.id.ongoing_call_chip);
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
@@ -208,6 +231,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mAnimationScheduler.removeCallback(this);
         if (mNetworkController.hasEmergencyCryptKeeperText()) {
             mNetworkController.removeCallback(mSignalCallback);
+        }
+        if (mBatteryMeterView != null) {
+            mBatteryMeterView.removeCallback(mBatteryMeterViewCallback);
         }
     }
 
