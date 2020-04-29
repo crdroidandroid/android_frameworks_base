@@ -126,6 +126,8 @@
         <item>com.spotify.music.MainActivity</item>
         <item>com.android.vending</item>
         <item>com.trtf.blue</item>
+        <item>com.truecaller</item>
+        <item>com.gaana</item>
         <item>com.facebook.katana.LoginActivity</item>
     </string-array>
 </resources>
