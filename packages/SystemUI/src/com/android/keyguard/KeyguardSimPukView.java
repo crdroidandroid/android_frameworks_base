@@ -440,8 +440,8 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
                                 if (DEBUG) Log.d(LOG_TAG, "verifyPasswordAndUnlock "
                                         + " UpdateSim.onSimCheckResponse: "
                                         + " attemptsRemaining=" + attemptsRemaining);
-                                mStateMachine.reset();
                             }
+                            mStateMachine.reset();
                             mCheckSimPukThread = null;
                         }
                     });
