@@ -133,4 +133,7 @@
 
     <!-- Padding on the end of the quick statusbar (not top-most statusbar) -->
     <dimen name="qs_header_end_padding">@dimen/status_bar_padding_end</dimen>
+
+    <!-- App lock -->
+    <dimen name="applock_icon_dimension">54dp</dimen>
 </resources>
