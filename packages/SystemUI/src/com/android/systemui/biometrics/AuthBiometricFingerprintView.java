@@ -64,6 +64,11 @@ public class AuthBiometricFingerprintView extends AuthBiometricView {
     }
 
     @Override
+    protected int getDescriptionTextId() {
+        return R.string.applock_fingerprint;
+    }
+
+    @Override
     public void updateState(@BiometricState int newState) {
         updateIcon(mState, newState);
 
