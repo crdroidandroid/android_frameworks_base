@@ -62,11 +62,13 @@ import static com.android.server.wm.ActivityStackSupervisor.ON_TOP;
 import static com.android.server.wm.ActivityStackSupervisor.PRESERVE_WINDOWS;
 import static com.android.server.wm.ActivityStackSupervisor.TAG_TASKS;
 import static com.android.server.wm.ActivityTaskManagerDebugConfig.DEBUG_ACTIVITY_STARTS;
+import static com.android.server.wm.ActivityTaskManagerDebugConfig.DEBUG_APPLOCK;
 import static com.android.server.wm.ActivityTaskManagerDebugConfig.DEBUG_CONFIGURATION;
 import static com.android.server.wm.ActivityTaskManagerDebugConfig.DEBUG_PERMISSIONS_REVIEW;
 import static com.android.server.wm.ActivityTaskManagerDebugConfig.DEBUG_RESULTS;
 import static com.android.server.wm.ActivityTaskManagerDebugConfig.DEBUG_TASKS;
 import static com.android.server.wm.ActivityTaskManagerDebugConfig.DEBUG_USER_LEAVING;
+import static com.android.server.wm.ActivityTaskManagerDebugConfig.POSTFIX_APPLOCK;
 import static com.android.server.wm.ActivityTaskManagerDebugConfig.POSTFIX_CONFIGURATION;
 import static com.android.server.wm.ActivityTaskManagerDebugConfig.POSTFIX_FOCUS;
 import static com.android.server.wm.ActivityTaskManagerDebugConfig.POSTFIX_RESULTS;
@@ -139,6 +141,7 @@ class ActivityStarter {
     private static final String TAG_FOCUS = TAG + POSTFIX_FOCUS;
     private static final String TAG_CONFIGURATION = TAG + POSTFIX_CONFIGURATION;
     private static final String TAG_USER_LEAVING = TAG + POSTFIX_USER_LEAVING;
+    private static final String TAG_APPLOCK = TAG + POSTFIX_APPLOCK;
     private static final int INVALID_LAUNCH_MODE = -1;
 
     private final ActivityTaskManagerService mService;
@@ -1003,6 +1006,15 @@ class ActivityStarter {
                 callingPid, resolvedType, aInfo.applicationInfo);
         abort |= !mService.getPermissionPolicyInternal().checkStartActivity(intent, callingUid,
                 callingPackage);
+
+        final String pkg = aInfo == null ? null : aInfo.packageName;
+        if (mService.isAppLocked(pkg) && !mService.isAppOpened(pkg)
+                && !mService.isAlarmOrCallIntent(intent)) {
+            if (DEBUG_APPLOCK) Slog.d(TAG_APPLOCK, "Locked pkg:" + pkg + " intent:" + intent);
+            mService.mAppLockService.setAppIntent(pkg, intent);
+            mService.mAppLockService.launchBeforeActivity(pkg);
+            abort = true;
+        }
 
         boolean restrictedBgActivity = false;
         if (!abort) {
