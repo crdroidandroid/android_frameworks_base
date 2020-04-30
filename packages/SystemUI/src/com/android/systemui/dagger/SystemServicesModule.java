@@ -21,6 +21,7 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.ActivityTaskManager;
 import android.app.AlarmManager;
+import android.app.AppLockManager;
 import android.app.IActivityManager;
 import android.app.IActivityTaskManager;
 import android.app.IWallpaperManager;
@@ -332,5 +333,11 @@ public class SystemServicesModule {
     @Singleton
     static RoleManager provideRoleManager(Context context) {
         return context.getSystemService(RoleManager.class);
+    }
+
+    @Provides
+    @Singleton
+    static AppLockManager provideAppLockManager(Context context) {
+        return context.getSystemService(AppLockManager.class);
     }
 }

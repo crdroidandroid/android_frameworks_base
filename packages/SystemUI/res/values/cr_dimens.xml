@@ -126,4 +126,7 @@
 
     <!-- Daily data usage -->
     <dimen name="data_usage_padding_start">4dp</dimen>
+
+    <!-- App Lock -->
+    <dimen name="applock_icon_dimension">54dp</dimen>
 </resources>
