@@ -215,9 +215,35 @@ public abstract class AuthCredentialView extends LinearLayout {
         super.onAttachedToWindow();
 
         final CharSequence title = getTitle(mBiometricPromptBundle);
-        setText(mTitleView, title);
         setTextOrHide(mSubtitleView, getSubtitle(mBiometricPromptBundle));
-        setTextOrHide(mDescriptionView, getDescription(mBiometricPromptBundle));
+
+        final String credText;
+        final @Utils.CredentialType int credentialType =
+                Utils.getCredentialType(mContext, mEffectiveUserId);
+
+        switch (credentialType) {
+            case Utils.CREDENTIAL_PIN:
+                credText = getResources().getString(R.string.biometric_dialog_use_pin);
+                break;
+            case Utils.CREDENTIAL_PATTERN:
+                credText = getResources().getString(R.string.biometric_dialog_use_pattern);
+                break;
+            case Utils.CREDENTIAL_PASSWORD:
+                credText = getResources().getString(R.string.biometric_dialog_use_password);
+                break;
+            default:
+                credText = getResources().getString(R.string.biometric_dialog_use_password);
+                break;
+        }
+
+        final CharSequence applockPackage = mBiometricPromptBundle.getCharSequence(BiometricPrompt.KEY_APPLOCK_PKG);
+        if (TextUtils.isEmpty(applockPackage)) {
+            setText(mTitleView, title);
+            setTextOrHide(mDescriptionView, getDescription(mBiometricPromptBundle));
+        } else {
+            setText(mTitleView, title + getResources().getString(R.string.applock_locked));
+            setTextOrHide(mDescriptionView, credText + getResources().getString(R.string.applock_credential));
+        }
         announceForAccessibility(title);
 
         if (mIconView != null) {
