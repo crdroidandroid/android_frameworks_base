@@ -45,6 +45,9 @@
     <!-- FPSInfoService FPS node file path -->
     <string name="config_fpsInfoSysNode" translatable="false"></string>
 
+    <!-- Enable face auth only when swiping security view -->
+    <bool name="config_faceAuthOnlyOnSecurityView">false</bool>
+
     <!-- Default no. of QS tile rows and columns -->
     <integer name="config_qs_columns_portrait">4</integer>
     <integer name="config_qs_rows_portrait">2</integer>
