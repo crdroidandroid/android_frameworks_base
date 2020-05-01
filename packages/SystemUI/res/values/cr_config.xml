@@ -52,4 +52,7 @@
     <integer name="config_qs_rows_portrait">2</integer>
     <integer name="config_qs_columns_landscape">4</integer>
     <integer name="config_qs_rows_landscape">2</integer>
+
+    <!-- Enable face auth only when swiping security view -->
+    <bool name="config_faceAuthOnlyOnSecurityView">false</bool>
 </resources>
