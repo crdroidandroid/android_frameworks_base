@@ -61,4 +61,7 @@
 
     <!-- Whether to show VoWiFi icon in the status bar -->
     <bool name="config_display_vowifi">true</bool>
+
+    <!-- Allow devices to enforce the H265 encoder for screen recordings -->
+    <bool name="config_useNewScreenRecEncoder">true</bool>
 </resources>
