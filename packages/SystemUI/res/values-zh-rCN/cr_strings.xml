@@ -189,21 +189,21 @@
     <string name="stabilization_velocity_amplitude">移动幅度</string>
     <string name="stabilization_position_friction">移动位置</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_dialog_title">开始录制？</string>
+    <string name="screenrecord_dialog_summary">在录制过程中，安卓系统可以捕获在您的屏幕上可见或在您的设备上播放的任何敏感信息。 这包括密码、付款信息、照片、消息和音频。</string>
+    <string name="screenrecord_dialog_start">开始</string>
+    <string name="screenrecord_dialog_cancel">取消</string>
+    <string name="screenrecord_audio_recording_title">音频源</string>
+    <string name="screenrecord_audio_recording_internal">内置储存</string>
+    <string name="screenrecord_audio_recording_microphone">麦克风</string>
+    <string name="screenrecord_audio_recording_off">已禁用</string>
+    <string name="screenrecord_taps_title">显示触摸效果</string>
+    <string name="screenrecord_stopdot_title">显示停止圆点</string>
+    <string name="screenrecord_video_bitrate_title">视频比特率</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">流量节省程序</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming</string>
+    <string name="status_bar_roaming">漫游中</string>
 </resources>

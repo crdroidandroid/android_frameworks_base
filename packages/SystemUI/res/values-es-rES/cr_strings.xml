@@ -217,21 +217,21 @@ Y Nueve</string>
     <string name="stabilization_velocity_amplitude">Amplitud de Velocidad</string>
     <string name="stabilization_position_friction">Fricción de Posicion</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_dialog_title">¿Empezar a grabar?</string>
+    <string name="screenrecord_dialog_summary">Durante la grabación, el sistema Android puede capturar cualquier información sensible que sea visible en tu pantalla o reproducida en tu dispositivo. Esto incluye contraseñas, información de pago, fotos, mensajes y audio.</string>
+    <string name="screenrecord_dialog_start">Iniciar</string>
+    <string name="screenrecord_dialog_cancel">Cancelar</string>
+    <string name="screenrecord_audio_recording_title">Fuente de audio</string>
+    <string name="screenrecord_audio_recording_internal">Almacenamiento interno</string>
+    <string name="screenrecord_audio_recording_microphone">Micrófono</string>
+    <string name="screenrecord_audio_recording_off">Deshabilitado</string>
+    <string name="screenrecord_taps_title">Mostrar toques en pantalla</string>
+    <string name="screenrecord_stopdot_title">Mostrar punto de parada</string>
+    <string name="screenrecord_video_bitrate_title">Frecuencia de bits (Bitrate) de video</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Ahorro de datos</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming</string>
+    <string name="status_bar_roaming">Itinerancia</string>
 </resources>

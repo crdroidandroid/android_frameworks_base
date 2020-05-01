@@ -212,15 +212,15 @@ Sembilan</string>
     <string name="stabilization_velocity_amplitude">Amplitudo Kecepatan</string>
     <string name="stabilization_position_friction">Gesekan posisi</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
+    <string name="screenrecord_dialog_title">Mulai perekaman?</string>
+    <string name="screenrecord_dialog_summary">Saat merekam, sistem Android dapat menangkap informasi sensitif yang terlihat pada layar Anda atau yang sedang dijalankan pada perangkat Anda. Termasuk kata sandi, info pembayaran, foto-foto, pesan-pesan, dan audio.</string>
+    <string name="screenrecord_dialog_start">Mulai</string>
+    <string name="screenrecord_dialog_cancel">Batal</string>
+    <string name="screenrecord_audio_recording_title">Sumber suara</string>
     <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
+    <string name="screenrecord_audio_recording_microphone">Mikrofon</string>
+    <string name="screenrecord_audio_recording_off">Nonaktif</string>
+    <string name="screenrecord_taps_title">Tampilkan sentuhan pada layar</string>
     <string name="screenrecord_stopdot_title">Show stop dot</string>
     <string name="screenrecord_video_bitrate_title">Video bitrate</string>
     <!-- Name of the data saver status bar icon. -->
