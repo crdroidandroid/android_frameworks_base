@@ -33,8 +33,8 @@
     <string name="quick_settings_cpuinfo_label">CPU-info</string>
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info uit</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info aan</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">HW knoppen</string>
     <!-- Compass QS Tile -->
@@ -181,28 +181,28 @@
     <string name="text_clock_m_fifty_eight">Achtenvijftig</string>
     <string name="text_clock_m_fifty_nine">Negenenvijftig</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="quick_settings_stabilization_label">Beeldstabilisatie</string>
+    <string name="quick_settings_stabilization_off">Stabilisatie is uitgeschakeld</string>
+    <string name="quick_settings_stabilization_on">Stabilisatie is ingeschakeld</string>
+    <string name="low_label">Laag</string>
+    <string name="high_label">Hoog</string>
+    <string name="stabilization_velocity_friction">Snelheid wrijving</string>
+    <string name="stabilization_velocity_amplitude">Snelheid Amplitude</string>
+    <string name="stabilization_position_friction">Positie wrijving</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_dialog_title">Opname starten?</string>
+    <string name="screenrecord_dialog_summary">Tijdens het opnemen kan Android gevoelige informatie vastleggen die zichtbaar is op je scherm of wordt afgespeeld op je apparaat. Dit omvat wachtwoorden, betalingsinformatie, foto\'s, berichten en audio.</string>
+    <string name="screenrecord_dialog_start">Begin</string>
+    <string name="screenrecord_dialog_cancel">Annuleren</string>
+    <string name="screenrecord_audio_recording_title">Audiobron</string>
+    <string name="screenrecord_audio_recording_internal">Intern</string>
+    <string name="screenrecord_audio_recording_microphone">Microfoon</string>
+    <string name="screenrecord_audio_recording_off">Uitgeschakeld</string>
+    <string name="screenrecord_taps_title">Aanrakingen op het scherm weergeven</string>
+    <string name="screenrecord_stopdot_title">Toon stop stip</string>
+    <string name="screenrecord_video_bitrate_title">Video Bitrate</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Databesparing</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
