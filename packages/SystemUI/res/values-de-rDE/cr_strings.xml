@@ -190,19 +190,19 @@
     <string name="stabilization_velocity_amplitude">Geschwindigkeits-Amplitude</string>
     <string name="stabilization_position_friction">Spannungsposition</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_dialog_title">Bildschirmaufnahme starten?</string>
+    <string name="screenrecord_dialog_summary">Während der Aufnahme kann das Android-System alle sensiblen Informationen erfassen, die auf Ihrem Bildschirm sichtbar oder auf Ihrem Gerät abgespielt werden. Dazu gehören Passwörter, Zahlungsinformationen, Fotos, Nachrichten und Audio.</string>
+    <string name="screenrecord_dialog_start">Anfang</string>
+    <string name="screenrecord_dialog_cancel">Abbrechen</string>
+    <string name="screenrecord_audio_recording_title">Audioquelle</string>
+    <string name="screenrecord_audio_recording_internal">Intern</string>
+    <string name="screenrecord_audio_recording_microphone">Mikrofon</string>
+    <string name="screenrecord_audio_recording_off">Deaktiviert</string>
+    <string name="screenrecord_taps_title">Berührungen auf dem Bildschirm anzeigen</string>
+    <string name="screenrecord_stopdot_title">Zeige Stop-Punkt</string>
+    <string name="screenrecord_video_bitrate_title">Video Bitrate</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Datensparmodus</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
