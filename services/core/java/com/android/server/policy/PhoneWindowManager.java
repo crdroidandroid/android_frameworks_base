@@ -1981,6 +1981,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case SCREENSHOT:
                 takeScreenshot(TAKE_SCREENSHOT_FULLSCREEN);
                 break;
+            case VOLUME_PANEL:
+                Utils.toggleVolumePanel(mContext);
+                break;
             default:
                 break;
         }
