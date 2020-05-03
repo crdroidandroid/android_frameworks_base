@@ -1939,6 +1939,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         im.injectInputEvent(upEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
     }
 
+    private void toggleVolumePanel() {
+        AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        am.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
+    }
+
     private void performKeyAction(Action action, KeyEvent event) {
         switch (action) {
             case NOTHING:
@@ -1979,6 +1984,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             case SCREENSHOT:
                 interceptScreenshotChord(TAKE_SCREENSHOT_FULLSCREEN, SCREENSHOT_KEY_OTHER, 0 /*pressDelay*/);
+                break;
+            case VOLUME_PANEL:
+                toggleVolumePanel();
                 break;
             default:
                 break;
