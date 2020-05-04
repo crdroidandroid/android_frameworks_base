@@ -103,25 +103,20 @@ public class AODTile extends QSTileImpl<BooleanState> implements
 
     @Override
     public CharSequence getTileLabel() {
-        if (mBatteryController.isAodPowerSave()) {
-            return mContext.getString(R.string.quick_settings_aod_off_powersave_label);
-        }
-        return mContext.getString(R.string.quick_settings_aod_label);
+        return mContext.getString(R.string.quick_settings_always_on_display_label);
     }
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         final int value = arg instanceof Integer ? (Integer) arg : mSetting.getValue();
         final boolean enable = value != 0;
-        if (state.slash == null) {
-            state.slash = new SlashState();
-        }
         state.icon = mIcon;
         state.value = enable;
-        state.slash.isSlashed = state.value;
-        state.label = mContext.getString(R.string.quick_settings_aod_label);
+        state.label = mContext.getString(R.string.quick_settings_always_on_display_label);
+        state.secondaryLabel = null;
         if (mBatteryController.isAodPowerSave()) {
             state.state = Tile.STATE_UNAVAILABLE;
+            state.secondaryLabel = mContext.getString(R.string.quick_settings_dark_mode_secondary_label_battery_saver);
         } else {
             state.state = enable ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
         }
