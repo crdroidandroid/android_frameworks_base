@@ -75,7 +75,7 @@ public class AODTile extends QSTileImpl<BooleanState> implements
 
     @Override
     public void handleClick() {
-        setEnabled(!mState.value);
+        mSetting.setValue(mState.value ? 0 : 1);
         refreshState();
     }
 
@@ -84,35 +84,24 @@ public class AODTile extends QSTileImpl<BooleanState> implements
         return null;
     }
 
-    private void setEnabled(boolean enabled) {
-        Settings.Secure.putInt(mContext.getContentResolver(),
-                Settings.Secure.DOZE_ALWAYS_ON,
-                enabled ? 1 : 0);
-    }
-
     @Override
     public CharSequence getTileLabel() {
-        if (mBatteryController.isAodPowerSave()) {
-            return mContext.getString(R.string.quick_settings_aod_off_powersave_label);
-        }
-        return mContext.getString(R.string.quick_settings_aod_label);
+        return mContext.getString(R.string.quick_settings_always_on_display_label);
     }
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         final int value = arg instanceof Integer ? (Integer) arg : mSetting.getValue();
         final boolean enable = value != 0;
-        if (state.slash == null) {
-            state.slash = new SlashState();
-        }
         state.icon = mIcon;
         state.value = enable;
-        state.slash.isSlashed = state.value;
-        state.label = mContext.getString(R.string.quick_settings_aod_label);
+        state.label = mContext.getString(R.string.quick_settings_always_on_display_label);
         if (mBatteryController.isAodPowerSave()) {
             state.state = Tile.STATE_UNAVAILABLE;
+        } else if (state.value) {
+            state.state = Tile.STATE_ACTIVE;
         } else {
-            state.state = enable ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
+            state.state = Tile.STATE_INACTIVE;
         }
     }
 
