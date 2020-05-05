@@ -221,10 +221,10 @@ Sembilan</string>
     <string name="screenrecord_audio_recording_microphone">Mikrofon</string>
     <string name="screenrecord_audio_recording_off">Nonaktif</string>
     <string name="screenrecord_taps_title">Tampilkan sentuhan pada layar</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_stopdot_title">Tampilkan titik berhenti</string>
+    <string name="screenrecord_video_bitrate_title">Bitrate video</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Penghemat Data</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
