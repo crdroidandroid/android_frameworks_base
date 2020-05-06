@@ -2956,22 +2956,6 @@ public class CarrierConfigManager {
             "data_switch_validation_timeout_long";
 
     /**
-     * Title text to be used in the emergency notification displayed when VoWifi is available
-     *
-     * @hide
-     */
-    public static final String KEY_EMERGENCY_NOTIFICATION_TITLE_STRING =
-            "emergency_notification_title_string";
-
-    /**
-     * Summary text to be used in the emergency notification displayed when VoWifi is available
-     *
-     * @hide
-     */
-    public static final String KEY_EMERGENCY_NOTIFICATION_SUMMARY_STRING =
-            "emergency_notification_summary_string";
-
-    /**
      * GPS configs. See android.hardware.gnss@1.0 IGnssConfiguration.
      * @hide
      */
@@ -3789,8 +3773,6 @@ public class CarrierConfigManager {
         sDefaults.putStringArray(KEY_CARRIER_CERTIFICATE_STRING_ARRAY, null);
         sDefaults.putLong(KEY_DATA_SWITCH_VALIDATION_TIMEOUT_LONG, 2000);
         sDefaults.putLong(KEY_DATA_SWITCH_VALIDATION_MIN_GAP_LONG, 0);
-        sDefaults.putString(KEY_EMERGENCY_NOTIFICATION_SUMMARY_STRING, "");
-        sDefaults.putString(KEY_EMERGENCY_NOTIFICATION_TITLE_STRING, "");
         sDefaults.putBoolean(KEY_CARRIER_SUPPORTS_MULTIANCHOR_CONFERENCE, false);
         sDefaults.putInt(KEY_DEFAULT_RTT_MODE_INT, 0);
     }
