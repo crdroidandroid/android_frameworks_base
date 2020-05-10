@@ -156,21 +156,18 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
     @Override
     protected void handleSecondaryClick() {
         if (DEBUG) Log.d(TAG, "handleSecondaryClick");
-        if (!mWeatherClient.isOmniJawsServiceInstalled()) {
-            Toast.makeText(mContext, R.string.omnijaws_package_not_available, Toast.LENGTH_SHORT).show();
-            return;
-        }
         // Secondary clicks are also on quickbar tiles
         showDetail(true);
     }
 
     @Override
+    public boolean isAvailable() {
+        return mWeatherClient.isOmniJawsServiceInstalled();
+    }
+
+    @Override
     protected void handleClick() {
         if (DEBUG) Log.d(TAG, "handleClick");
-        if (!mWeatherClient.isOmniJawsServiceInstalled()) {
-            Toast.makeText(mContext, R.string.omnijaws_package_not_available, Toast.LENGTH_SHORT).show();
-            return;
-        }
         if (!mState.value) {
             if (!mWeatherClient.isOmniJawsSetupDone()) {
                 mActivityStarter.postStartActivityDismissingKeyguard(mWeatherClient.getSettingsIntent(), 0);
@@ -214,15 +211,11 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         if (DEBUG) Log.d(TAG, "handleUpdateState " + mEnabled);
-        if (state.slash == null) {
-            state.slash = new SlashState();
-        }
         state.dualTarget = true;
         state.value = mEnabled;
         state.state = state.value ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
         state.icon = mIcon;
         state.label = mContext.getResources().getString(R.string.omnijaws_label_default);
-        state.slash.isSlashed = !state.value;
         if (mEnabled) {
             if (mWeatherImage == null) {
                 state.secondaryLabel = mContext.getResources().getString(R.string.omnijaws_service_error_long);
