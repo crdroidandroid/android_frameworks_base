@@ -40,11 +40,11 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Πατήστε και κρατήστε πατημένο το κουμπί λειτουργίας για ξεκλείδωμα</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Λειτουργία παιχνιδιού</string>
-    <string name="gaming_mode_notification_title">Η λειτουργία παιχνιδιού ενεργοποιήθηκε</string>
-    <string name="gaming_mode_notification_content">Πατήστε για απενεργοποίηση της λειτουργίας παιχνιδιού</string>
-    <string name="gaming_mode_enabled_toast">Η λειτουργία παιχνιδιού ενεργοποιήθηκε</string>
-    <string name="gaming_mode_disabled_toast">Η λειτουργία παιχνιδιού απενεργοποιήθηκε</string>
+    <string name="notification_channel_gaming">Gaming mode</string>
+    <string name="gaming_mode_notification_title">Το Gaming mode ενεργοποιήθηκε</string>
+    <string name="gaming_mode_notification_content">Πατήστε για απενεργοποίηση του Gaming mode</string>
+    <string name="gaming_mode_enabled_toast">Το Gaming mode ενεργοποιήθηκε</string>
+    <string name="gaming_mode_disabled_toast">Το Gaming mode απενεργοποιήθηκε</string>
     <!-- MicroG -->
     <string name="permlab_fakePackageSignature">Μίμηση υπογραφής πακέτου</string>
     <!-- Description of an application permission, listed so the user can choose whether
