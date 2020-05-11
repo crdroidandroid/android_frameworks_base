@@ -69,12 +69,12 @@
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
     <string name="quick_settings_poweroff_label">Απενεργοποίηση</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Η λειτουργία παιχνιδιού είναι ανενεργή στις ρυθμίσεις</string>
-    <string name="quick_settings_gaming_mode_label">Λειτουργία παιχνιδιού</string>
+    <string name="gaming_mode_not_enabled">Το Gaming mode είναι ανενεργό στις ρυθμίσεις</string>
+    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Η λειτουργία παιχνιδιού απενεργοποιήθηκε.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Το Gaming mode απενεργοποιήθηκε.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Η λειτουργία παιχνιδιού ενεργοποιήθηκε.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Το Gaming mode ενεργοποιήθηκε.</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Εναλλαγή κάρτας δεδομένων</string>
     <string name="qs_data_switch_toast_0">Προς το παρόν δεν έχει τοποθετηθεί κάρτα SIM</string>
