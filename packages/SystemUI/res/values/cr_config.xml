@@ -53,4 +53,7 @@
     <integer name="config_qs_rows_portrait">2</integer>
     <integer name="config_qs_columns_landscape">4</integer>
     <integer name="config_qs_rows_landscape">2</integer>
+
+    <!-- Whether to disable assist hint on lockscreen -->
+    <bool name="config_disableAssistHintOnLockscreen">false</bool>
 </resources>
