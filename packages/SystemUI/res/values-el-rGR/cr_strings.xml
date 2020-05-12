@@ -244,13 +244,13 @@
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Περιαγωγή</string>
     <!-- Omnijaws Weather -->
-    <string name="omnijaws_service_error">Error</string>
-    <string name="omnijaws_service_unkown">No weather data</string>
-    <string name="omnijaws_service_error_long">Error loading weather data</string>
-    <string name="omnijaws_service_disabled">Service is disabled</string>
-    <string name="omnijaws_detail_header">Weather</string>
-    <string name="omnijaws_label_default">Weather</string>
-    <string name="omnijaws_current_text">Now</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
-    <string name="omnijaws_service_last_update">Last update:</string>
+    <string name="omnijaws_service_error">Σφάλμα</string>
+    <string name="omnijaws_service_unkown">Δεν υπάρχουν δεδομένα καιρού</string>
+    <string name="omnijaws_service_error_long">Σφάλμα κατά τη φόρτωση δεδομένων καιρού</string>
+    <string name="omnijaws_service_disabled">Η υπηρεσία είναι απενεργοποιημένη</string>
+    <string name="omnijaws_detail_header">Καιρός</string>
+    <string name="omnijaws_label_default">Καιρός</string>
+    <string name="omnijaws_current_text">Τώρα</string>
+    <string name="omnijaws_package_not_available">Το OmniJaws δεν είναι διαθέσιμο</string>
+    <string name="omnijaws_service_last_update">Τελευταία ενημέρωση:</string>
 </resources>
