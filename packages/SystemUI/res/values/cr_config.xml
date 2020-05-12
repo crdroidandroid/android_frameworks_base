@@ -42,4 +42,7 @@
 
     <!-- Config to enable/disable qs tile tinting -->
     <bool name="config_enable_qs_tile_tinting">false</bool>
+    
+    <!-- Whether to disable assist hint on lockscreen -->
+    <bool name="config_disableAssistHintOnLockscreen">false</bool>
 </resources>
