@@ -247,13 +247,13 @@
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Роумінг</string>
     <!-- Omnijaws Weather -->
-    <string name="omnijaws_service_error">Error</string>
-    <string name="omnijaws_service_unkown">No weather data</string>
-    <string name="omnijaws_service_error_long">Error loading weather data</string>
-    <string name="omnijaws_service_disabled">Service is disabled</string>
-    <string name="omnijaws_detail_header">Weather</string>
-    <string name="omnijaws_label_default">Weather</string>
-    <string name="omnijaws_current_text">Now</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
-    <string name="omnijaws_service_last_update">Last update:</string>
+    <string name="omnijaws_service_error">Помилка</string>
+    <string name="omnijaws_service_unkown">Немає даних про погоду</string>
+    <string name="omnijaws_service_error_long">Помилка завантаження даних про погоду</string>
+    <string name="omnijaws_service_disabled">Службу вимкнено</string>
+    <string name="omnijaws_detail_header">Погода</string>
+    <string name="omnijaws_label_default">Погода</string>
+    <string name="omnijaws_current_text">Зараз</string>
+    <string name="omnijaws_package_not_available">OmniJaws недоступний</string>
+    <string name="omnijaws_service_last_update">Останнє оновлення:</string>
 </resources>
