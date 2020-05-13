@@ -207,4 +207,14 @@
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Barangolás</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Hiba</string>
+    <string name="omnijaws_service_unkown">Nincsenek időjárásadatok</string>
+    <string name="omnijaws_service_error_long">Hiba az időjárásadatok betöltésekor</string>
+    <string name="omnijaws_service_disabled">A szolgáltatás ki van kapcsolva</string>
+    <string name="omnijaws_detail_header">Időjárás</string>
+    <string name="omnijaws_label_default">Időjárás</string>
+    <string name="omnijaws_current_text">Most</string>
+    <string name="omnijaws_package_not_available">Az OmniJaws nem elérhető</string>
+    <string name="omnijaws_service_last_update">Utoljára frissítve:</string>
 </resources>

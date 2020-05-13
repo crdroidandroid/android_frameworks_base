@@ -207,4 +207,14 @@
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Roaming</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Fout</string>
+    <string name="omnijaws_service_unkown">Geen weergegevens</string>
+    <string name="omnijaws_service_error_long">Fout bij het laden van weergegevens</string>
+    <string name="omnijaws_service_disabled">Service is uitgeschakeld</string>
+    <string name="omnijaws_detail_header">Weer</string>
+    <string name="omnijaws_label_default">Weer</string>
+    <string name="omnijaws_current_text">Nu</string>
+    <string name="omnijaws_package_not_available">OmniJaws niet beschikbaar</string>
+    <string name="omnijaws_service_last_update">Laatste update:</string>
 </resources>

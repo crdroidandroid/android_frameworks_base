@@ -209,4 +209,14 @@
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Роўмінг</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Памылка</string>
+    <string name="omnijaws_service_unkown">Няма дадзеных аб надвор\'і</string>
+    <string name="omnijaws_service_error_long">Памылка загрузкі дадзеных аб надвор\'і</string>
+    <string name="omnijaws_service_disabled">Служба адключана</string>
+    <string name="omnijaws_detail_header">Надвор\'е</string>
+    <string name="omnijaws_label_default">Надвор\'е</string>
+    <string name="omnijaws_current_text">Зараз</string>
+    <string name="omnijaws_package_not_available">OmniJaws недаступны</string>
+    <string name="omnijaws_service_last_update">Апошняе абнаўленне:</string>
 </resources>

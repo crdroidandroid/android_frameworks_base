@@ -208,4 +208,14 @@
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Roaming</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Eroare</string>
+    <string name="omnijaws_service_unkown">Fară informatii vreme</string>
+    <string name="omnijaws_service_error_long">Eroare la incărcare data vreme</string>
+    <string name="omnijaws_service_disabled">Serviciul este dezactivat</string>
+    <string name="omnijaws_detail_header">Vremea</string>
+    <string name="omnijaws_label_default">Vremea</string>
+    <string name="omnijaws_current_text">Acum</string>
+    <string name="omnijaws_package_not_available">OmniJaws nu este disponibil</string>
+    <string name="omnijaws_service_last_update">Ultima actualizare:</string>
 </resources>
