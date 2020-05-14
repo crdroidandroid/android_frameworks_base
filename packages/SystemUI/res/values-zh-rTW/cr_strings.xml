@@ -207,13 +207,13 @@
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">漫遊</string>
     <!-- Omnijaws Weather -->
-    <string name="omnijaws_service_error">Error</string>
-    <string name="omnijaws_service_unkown">No weather data</string>
-    <string name="omnijaws_service_error_long">Error loading weather data</string>
-    <string name="omnijaws_service_disabled">Service is disabled</string>
-    <string name="omnijaws_detail_header">Weather</string>
-    <string name="omnijaws_label_default">Weather</string>
-    <string name="omnijaws_current_text">Now</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
-    <string name="omnijaws_service_last_update">Last update:</string>
+    <string name="omnijaws_service_error">錯誤</string>
+    <string name="omnijaws_service_unkown">沒有天氣資訊</string>
+    <string name="omnijaws_service_error_long">載入天氣資訊時錯誤</string>
+    <string name="omnijaws_service_disabled">服務已停用</string>
+    <string name="omnijaws_detail_header">天氣</string>
+    <string name="omnijaws_label_default">天氣</string>
+    <string name="omnijaws_current_text">現在</string>
+    <string name="omnijaws_package_not_available">OmniJaws 不可用</string>
+    <string name="omnijaws_service_last_update">最後更新：</string>
 </resources>
