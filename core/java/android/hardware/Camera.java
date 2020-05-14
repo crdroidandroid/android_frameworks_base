@@ -289,12 +289,11 @@ public class Camera {
          */
         String packageName = ActivityThread.currentOpPackageName();
         List<String> packageList = Arrays.asList(
-                SystemProperties.get("vendor.camera.aux.packagelist", "").split(","));
+                SystemProperties.get("vendor.camera.aux.packagelist", packageName).split(","));
         List<String> packageBlacklist = Arrays.asList(
                 SystemProperties.get("vendor.camera.aux.packageblacklist", "").split(","));
 
-        return !packageBlacklist.contains(packageName) &&
-                (packageList.isEmpty() || packageList.contains(packageName));
+        return packageList.contains(packageName) && !packageBlacklist.contains(packageName);
     }
 
     /**
