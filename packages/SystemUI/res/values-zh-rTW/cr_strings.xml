@@ -209,7 +209,7 @@
     <!-- Omnijaws Weather -->
     <string name="omnijaws_service_error">錯誤</string>
     <string name="omnijaws_service_unkown">沒有天氣資訊</string>
-    <string name="omnijaws_service_error_long">載入天氣資訊時錯誤</string>
+    <string name="omnijaws_service_error_long">載入天氣資訊時發生錯誤</string>
     <string name="omnijaws_service_disabled">服務已停用</string>
     <string name="omnijaws_detail_header">天氣</string>
     <string name="omnijaws_label_default">天氣</string>
