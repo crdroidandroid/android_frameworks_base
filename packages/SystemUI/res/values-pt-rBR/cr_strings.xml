@@ -208,13 +208,13 @@
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Roaming</string>
     <!-- Omnijaws Weather -->
-    <string name="omnijaws_service_error">Error</string>
-    <string name="omnijaws_service_unkown">No weather data</string>
-    <string name="omnijaws_service_error_long">Error loading weather data</string>
-    <string name="omnijaws_service_disabled">Service is disabled</string>
-    <string name="omnijaws_detail_header">Weather</string>
-    <string name="omnijaws_label_default">Weather</string>
-    <string name="omnijaws_current_text">Now</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
-    <string name="omnijaws_service_last_update">Last update:</string>
+    <string name="omnijaws_service_error">Erro</string>
+    <string name="omnijaws_service_unkown">Sem informações do clima</string>
+    <string name="omnijaws_service_error_long">Erro ao carregar as informações do clima</string>
+    <string name="omnijaws_service_disabled">Serviço desativado</string>
+    <string name="omnijaws_detail_header">Clima</string>
+    <string name="omnijaws_label_default">Tempo</string>
+    <string name="omnijaws_current_text">Agora</string>
+    <string name="omnijaws_package_not_available">OmniJaws não disponível</string>
+    <string name="omnijaws_service_last_update">Última atualização:</string>
 </resources>
