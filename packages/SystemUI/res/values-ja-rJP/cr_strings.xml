@@ -25,68 +25,68 @@
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
     <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">smart pixelsを自動的に有効にする</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Screenshot</string>
-    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <string name="quick_settings_screenshot_label">スクリーンショット</string>
+    <string name="quick_settings_region_screenshot_label">範囲を選択してスクリーンショット</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <string name="quick_settings_cpuinfo_label">CPU 情報</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">FPS 情報</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS 情報 オフ</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS 情報 ON</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">ハードウェアキー</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">コンパス</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
-    <string name="quick_settings_compass_SE">SE</string>
-    <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="quick_settings_compass_init">初期化中\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">コンパスは OFF です</string>
+    <string name="accessibility_quick_settings_compass_on">コンパスは ON です</string>
+    <string name="quick_settings_compass_N">北</string>
+    <string name="quick_settings_compass_NE">北東</string>
+    <string name="quick_settings_compass_E">東</string>
+    <string name="quick_settings_compass_SE">南東</string>
+    <string name="quick_settings_compass_S">南</string>
+    <string name="quick_settings_compass_SW">南西</string>
+    <string name="quick_settings_compass_W">西</string>
+    <string name="quick_settings_compass_NW">北西</string>
     <!-- Music tile -->
-    <string name="quick_settings_music_label">Music</string>
-    <string name="quick_settings_music_play">Play</string>
-    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_label">音楽</string>
+    <string name="quick_settings_music_play">再生</string>
+    <string name="quick_settings_music_pause">一時停止</string>
     <!-- Always on Display tile -->
     <string name="quick_settings_always_on_display_label">Always on display</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">音声検索</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">サウンド</string>
+    <string name="quick_settings_sound_ring">着信音</string>
+    <string name="quick_settings_sound_vibrate">バイブレーション</string>
+    <string name="quick_settings_sound_dnd">サイレント</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">再起動</string>
+    <string name="quick_settings_reboot_recovery_label">リカバリー</string>
+    <string name="quick_settings_poweroff_label">電源を切る</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">ゲームモードが設定で無効になっています</string>
+    <string name="quick_settings_gaming_mode_label">ゲームモード</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">ゲームモードをオフにしました.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">ゲームモードをオンにしました</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_toast_0">Currently no SIM card is inserted</string>
-    <string name="qs_data_switch_toast_1">Currently only one SIM card is inserted</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">SIM の切り替え</string>
+    <string name="qs_data_switch_toast_0">現在 SIM カードは挿入されていません</string>
+    <string name="qs_data_switch_toast_1">現在1枚のみ SIM カードが挿入されています</string>
+    <string name="qs_data_switch_changed_1">SIM 1をデータ通信に使用</string>
+    <string name="qs_data_switch_changed_2">SIM 2をデータ通信に使用</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">強制停止しますか？</string>
+    <string name="force_stop_dlg_text">アプリを強制停止すると、アプリが正常に機能しないことがあります。</string>
+    <string name="guts_force_close_app">アプリを終了</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">システムUI</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
@@ -103,29 +103,29 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">現在</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">1時</string>
+    <string name="text_clock_h_two">2時</string>
+    <string name="text_clock_h_three">3時</string>
+    <string name="text_clock_h_four">4時</string>
+    <string name="text_clock_h_five">5時</string>
+    <string name="text_clock_h_six">6時</string>
+    <string name="text_clock_h_seven">7時</string>
+    <string name="text_clock_h_eight">8時</string>
+    <string name="text_clock_h_nine">9時</string>
+    <string name="text_clock_h_ten">10時</string>
+    <string name="text_clock_h_eleven">11時</string>
+    <string name="text_clock_h_twelve">12時</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
+    <string name="text_clock_m_zero">ちょうど</string>
+    <string name="text_clock_m_one">1分</string>
+    <string name="text_clock_m_two">2分</string>
+    <string name="text_clock_m_three">3分</string>
+    <string name="text_clock_m_four">4分</string>
+    <string name="text_clock_m_five">5分</string>
+    <string name="text_clock_m_six">6分</string>
     <string name="text_clock_m_seven">O’Seven</string>
     <string name="text_clock_m_eight">O’Eight</string>
     <string name="text_clock_m_nine">O’Nine</string>
