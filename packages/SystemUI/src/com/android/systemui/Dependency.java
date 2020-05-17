@@ -96,6 +96,7 @@ import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NextAlarmController;
+import com.android.systemui.statusbar.policy.PulseController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
 import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.SecurityController;
@@ -297,6 +298,7 @@ public class Dependency {
     @Inject Lazy<ChannelEditorDialogController> mChannelEditorDialogController;
     @Inject Lazy<INotificationManager> mINotificationManager;
     @Inject Lazy<FalsingManager> mFalsingManager;
+    @Inject Lazy<PulseController> mPulseController;
 
     @Inject
     public Dependency() {
@@ -486,6 +488,7 @@ public class Dependency {
         mProviders.put(ChannelEditorDialogController.class, mChannelEditorDialogController::get);
         mProviders.put(INotificationManager.class, mINotificationManager::get);
         mProviders.put(FalsingManager.class, mFalsingManager::get);
+        mProviders.put(PulseController.class, mPulseController::get);
 
         // TODO(b/118592525): to support multi-display , we start to add something which is
         //                    per-display, while others may be global. I think it's time to add
