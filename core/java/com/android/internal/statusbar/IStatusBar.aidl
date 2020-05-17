@@ -180,4 +180,7 @@ oneway interface IStatusBar
     void onRecentsAnimationStateChanged(boolean running);
 
     void toggleCameraFlash();
+
+    void screenPinningStateChanged(boolean enabled);
+    void leftInLandscapeChanged(boolean isLeft);
 }
