@@ -119,4 +119,6 @@ interface IStatusBarService
     void setAutoRotate(boolean enabled);
 
     void toggleCameraFlash();
+
+    void screenPinningStateChanged(boolean enabled);
 }
