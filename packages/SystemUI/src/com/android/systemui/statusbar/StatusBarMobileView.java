@@ -199,8 +199,11 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
             mMobileGroup.setVisibility(newVisibility);
             needsLayout = true;
         }
-        if (mState.strengthId != state.strengthId) {
+        if (state.strengthId > 0) {
             mMobileDrawable.setLevel(state.strengthId);
+            mMobile.setVisibility(View.VISIBLE);
+        } else {
+            mMobile.setVisibility(View.GONE);
         }
         if (mState.typeId != state.typeId) {
             needsLayout |= state.typeId == 0 || mState.typeId == 0;
