@@ -44,6 +44,8 @@ public class TelephonyIcons {
     public static final int ICON_5G = R.drawable.ic_5g_mobiledata;
     public static final int ICON_5G_PLUS = R.drawable.ic_5g_plus_mobiledata;
     public static final int ICON_CWF = R.drawable.ic_carrier_wifi;
+    public static final int ICON_VOWIFI = R.drawable.ic_vowifi;
+    public static final int ICON_VOWIFI_CALLING = R.drawable.ic_vowifi_calling;
 
     public static final MobileIconGroup CARRIER_NETWORK_CHANGE = new MobileIconGroup(
             "CARRIER_NETWORK_CHANGE",
@@ -308,6 +310,30 @@ public class TelephonyIcons {
             R.string.data_connection_carrier_wifi,
             TelephonyIcons.ICON_CWF
     );
+
+    public static final MobileIconGroup VOWIFI = new MobileIconGroup(
+            "VoWIFI",
+            null,
+            null,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
+            0, 0,
+            0,
+            0,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
+            0,
+            TelephonyIcons.ICON_VOWIFI);
+
+    public static final MobileIconGroup VOWIFI_CALLING = new MobileIconGroup(
+            "VoWIFICall",
+            null,
+            null,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
+            0, 0,
+            0,
+            0,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
+            0,
+            TelephonyIcons.ICON_VOWIFI_CALLING);
 
     // When adding a new MobileIconGround, check if the dataContentDescription has to be filtered
     // in QSCarrier#hasValidTypeContentDescription
