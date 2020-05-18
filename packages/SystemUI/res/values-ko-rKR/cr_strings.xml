@@ -246,7 +246,7 @@
     <string name="omnijaws_service_disabled">서비스 사용 중지됨</string>
     <string name="omnijaws_detail_header">날씨</string>
     <string name="omnijaws_label_default">날씨</string>
-    <string name="omnijaws_current_text">Now</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
+    <string name="omnijaws_current_text">현재</string>
+    <string name="omnijaws_package_not_available">OmniJaws를 사용할 수 없음</string>
     <string name="omnijaws_service_last_update">최근 업데이트:</string>
 </resources>
