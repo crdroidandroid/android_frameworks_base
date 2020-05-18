@@ -17,6 +17,7 @@
 package com.android.systemui.biometrics;
 
 import static android.view.Gravity.CENTER;
+import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -34,6 +35,8 @@ import android.hardware.biometrics.BiometricPrompt;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -46,6 +49,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.util.crdroid.FodUtils;
 import com.android.systemui.R;
 
 import java.lang.annotation.Retention;
@@ -200,6 +204,7 @@ public abstract class AuthBiometricView extends LinearLayout {
     protected Bundle mSavedState;
 
     protected final PackageManager mPackageManager;
+    protected boolean mHasFod;
 
     /**
      * Delay after authentication is confirmed, before the dialog should be animated away.
@@ -268,6 +273,7 @@ public abstract class AuthBiometricView extends LinearLayout {
         mInjector.mBiometricView = this;
 
         mPackageManager = context.getPackageManager();
+        mHasFod = FodUtils.hasFodSupport(context);
 
         mAccessibilityManager = context.getSystemService(AccessibilityManager.class);
 
@@ -565,6 +571,10 @@ public abstract class AuthBiometricView extends LinearLayout {
         mSavedState = savedState;
     }
 
+    public boolean getHasFod() {
+        return mHasFod;
+    }
+
     private void setTextOrHide(TextView view, String string) {
         if (TextUtils.isEmpty(string)) {
             view.setVisibility(View.GONE);
@@ -657,7 +667,30 @@ public abstract class AuthBiometricView extends LinearLayout {
             if (!Utils.canAuthenticateWithFace(mContext, mUserId)){
                 mUseFaceButton.setVisibility(View.GONE);
             }
+            if (mHasFod) {
+                boolean isGesturalNav = Integer.parseInt(Settings.Secure.getStringForUser(
+                        mContext.getContentResolver(), Settings.Secure.NAVIGATION_MODE,
+                        UserHandle.USER_CURRENT)) == NAV_BAR_MODE_GESTURAL;
+                final int navbarHeight = getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_height);
+                final int fodMargin = getResources().getDimensionPixelSize(
+                        R.dimen.biometric_dialog_fod_margin);
+
+                mIconView.setVisibility(View.INVISIBLE);
+                // The view is invisible, so it still takes space and
+                // we use that to adjust for the FOD
+
+                mIconView.setPadding(0, 0, 0, isGesturalNav ? fodMargin : (fodMargin > navbarHeight)
+                    ? (fodMargin - navbarHeight) : 0);
+
+                // Add IndicatorView above the biometric icon
+                this.removeView(mIndicatorView);
+                this.addView(mIndicatorView, this.indexOfChild(mIconView));
+            } else {
+                mIconView.setVisibility(View.VISIBLE);
+            }
         } else if (this instanceof AuthBiometricFaceView) {
+            mIconView.setVisibility(View.VISIBLE);
             mUseFaceButton.setVisibility(View.GONE);
         }
     }
