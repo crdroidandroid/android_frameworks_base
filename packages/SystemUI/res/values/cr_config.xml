@@ -58,4 +58,7 @@
 
     <!-- Whether to disable assist hint on lockscreen -->
     <bool name="config_disableAssistHintOnLockscreen">false</bool>
+
+    <!-- Whether to show VoWiFi icon in the status bar -->
+    <bool name="config_display_vowifi">true</bool>
 </resources>
