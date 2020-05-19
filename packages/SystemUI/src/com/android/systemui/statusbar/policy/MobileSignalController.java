@@ -110,13 +110,13 @@ public class MobileSignalController extends SignalController<
     private boolean mShow4gForLte;
     private boolean mDataDisabledIcon;
 
-    private static final String VOLTE_ICON_STYLE =
+    public static final String VOLTE_ICON_STYLE =
             "system:" + Settings.System.VOLTE_ICON_STYLE;
-    private static final String ROAMING_INDICATOR_ICON =
+    public static final String ROAMING_INDICATOR_ICON =
             "system:" + Settings.System.ROAMING_INDICATOR_ICON;
-    private static final String SHOW_FOURG_ICON =
+    public static final String SHOW_FOURG_ICON =
             "system:" + Settings.System.SHOW_FOURG_ICON;
-    private static final String DATA_DISABLED_ICON =
+    public static final String DATA_DISABLED_ICON =
             "system:" + Settings.System.DATA_DISABLED_ICON;
 
     // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
