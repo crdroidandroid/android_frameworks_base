@@ -47,6 +47,7 @@ import com.android.systemui.statusbar.phone.NotificationPanelView;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.policy.Clock;
+import com.android.systemui.statusbar.policy.MobileSignalController;
 import com.android.systemui.util.leak.LeakDetector;
 import com.android.systemui.volume.VolumeDialogImpl;
 
@@ -87,6 +88,11 @@ public class TunerServiceImpl extends TunerService {
             Clock.STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION,
             ClockController.STATUS_BAR_CLOCK,
             EdgeBackGestureHandler.KEY_EDGE_LONG_SWIPE_ACTION,
+            MobileSignalController.VOLTE_ICON_STYLE,
+            MobileSignalController.ROAMING_INDICATOR_ICON,
+            MobileSignalController.SHOW_FOURG_ICON,
+            MobileSignalController.DATA_DISABLED_ICON,
+            MobileSignalController.USE_OLD_MOBILETYPE,
             NavigationBarView.NAVIGATION_BAR_MENU_ARROW_KEYS,
             NotificationPanelView.DOUBLE_TAP_SLEEP_GESTURE,
             NotificationPanelView.STATUS_BAR_QUICK_QS_PULLDOWN,
