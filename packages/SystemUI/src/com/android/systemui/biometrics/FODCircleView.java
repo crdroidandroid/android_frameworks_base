@@ -26,12 +26,14 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.hardware.biometrics.BiometricSourceType;
 import android.graphics.drawable.AnimationDrawable;
@@ -101,11 +103,14 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
     private final boolean mShouldBoostBrightness;
     private final Paint mPaintFingerprintBackground = new Paint();
     private final Paint mPaintFingerprint = new Paint();
+    private final Paint mPaintIcon = new Paint();
     private final WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
     private final WindowManager.LayoutParams mPressedParams = new WindowManager.LayoutParams();
     private final WindowManager mWindowManager;
 
     private IFingerprintInscreen mFingerprintInscreenDaemon;
+
+    private Bitmap mIconBitmap;
 
     private int mDreamingOffsetY;
 
@@ -508,9 +513,6 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
         mIsCircleShowing = false;
 
         setFODIcon();
-        mIconStyles = mContext.getResources().obtainTypedArray(R.array.fod_icon_resources);
-        setImageResource(mIconStyles.getResourceId(mSelectedIcon, -1));
-
         updateIconDim();
         invalidate();
 
@@ -537,13 +539,21 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
                     if (iconcolor != wallColor) {
                         iconcolor = wallColor;
                     }
-                    this.setColorFilter(lighter(iconcolor, 3));
+                    mIconStyles = mContext.getResources().obtainTypedArray(R.array.fod_icon_resources);
+                    mIconBitmap = BitmapFactory.decodeResource(getResources(),
+                            mIconStyles.getResourceId(mSelectedIcon, -1)).copy(Bitmap.Config.ARGB_8888, true);
+                    mPaintIcon.setColorFilter(new PorterDuffColorFilter(lighter(iconcolor, 3),
+                            PorterDuff.Mode.SRC_IN));
+                    Canvas canvas = new Canvas(mIconBitmap);
+                    canvas.drawBitmap(mIconBitmap, 0, 0, mPaintIcon);
+                    setImageBitmap(mIconBitmap);
                 }
             } catch (Exception e) {
                 // Nothing to do
             }
         } else {
-            this.setColorFilter(null);
+            mIconStyles = mContext.getResources().obtainTypedArray(R.array.fod_icon_resources);
+            setImageResource(mIconStyles.getResourceId(mSelectedIcon, -1));
         }
     }
 
