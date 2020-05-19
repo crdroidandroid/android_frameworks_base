@@ -46,6 +46,7 @@ import com.android.systemui.statusbar.phone.NotificationPanelView;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.policy.Clock;
+import com.android.systemui.statusbar.policy.MobileSignalController;
 import com.android.systemui.util.leak.LeakDetector;
 
 import lineageos.providers.LineageSettings;
@@ -83,6 +84,10 @@ public class TunerServiceImpl extends TunerService {
             Clock.STATUS_BAR_CLOCK_AUTO_HIDE,
             Clock.STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION,
             Clock.STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION,
+            MobileSignalController.VOLTE_ICON_STYLE,
+            MobileSignalController.ROAMING_INDICATOR_ICON,
+            MobileSignalController.SHOW_FOURG_ICON,
+            MobileSignalController.DATA_DISABLED_ICON,
             QSTileHost.TILES_SETTING,
             Settings.Secure.DOZE_ALWAYS_ON,
             StatusBar.SCREEN_BRIGHTNESS_MODE,
