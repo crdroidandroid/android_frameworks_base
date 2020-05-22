@@ -5218,7 +5218,7 @@ public final class Settings {
          * Screenrecord: audio source
          * @hide
          */
-        public static final String SCREENRECORD_AUDIO_SOURCE = "screenrecord_audio_source";
+        public static final String SCREENRECORD_AUDIO_OPT = "screenrecord_audio_opt";
 
         /**
          * Screenrecord: show taps
