@@ -56,4 +56,7 @@
 
     <!-- Whether to disable assist hint on lockscreen -->
     <bool name="config_disableAssistHintOnLockscreen">false</bool>
+
+    <!-- Device supports internal audio recording -->
+    <bool name="config_recorderInternalAudio">true</bool>
 </resources>
