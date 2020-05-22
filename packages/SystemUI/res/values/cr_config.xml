@@ -43,4 +43,7 @@
 
     <!-- FPSInfoService FPS node file path -->
     <string name="config_fpsInfoSysNode" translatable="false"></string>
+
+    <!-- Device supports internal audio recording -->
+    <bool name="config_recorderInternalAudio">true</bool>
 </resources>
