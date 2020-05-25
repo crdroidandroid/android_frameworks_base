@@ -2382,6 +2382,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                     Slog.d(TAG, "Bluetooth is complete send Service Down");
                 }
                 sendBluetoothServiceDownCallback();
+                sendBluetoothStateCallback(false);
                 unbindAndFinish();
                 sendBleStateChanged(prevState, newState);
                 // Don't broadcast as it has already been broadcast before
