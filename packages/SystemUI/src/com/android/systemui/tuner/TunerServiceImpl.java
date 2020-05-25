@@ -73,11 +73,11 @@ public class TunerServiceImpl extends TunerService {
 
     // Things that use the tunable infrastructure but are now real user settings and
     // shouldn't be reset with tuner settings.
+    // Do not add Lineage specific keys here as they are blacklisted automatically
     private static final String[] RESET_BLACKLIST = new String[] {
             BatteryMeterView.STATUS_BAR_BATTERY_STYLE,
             BatteryMeterView.STATUS_BAR_SHOW_BATTERY_PERCENT,
             BatteryMeterView.STATUS_BAR_BATTERY_TEXT_CHARGING,
-            Clock.STATUS_BAR_AM_PM,
             Clock.STATUS_BAR_CLOCK_SECONDS,
             Clock.STATUS_BAR_CLOCK_DATE_DISPLAY,
             Clock.STATUS_BAR_CLOCK_DATE_STYLE,
@@ -86,23 +86,14 @@ public class TunerServiceImpl extends TunerService {
             Clock.STATUS_BAR_CLOCK_AUTO_HIDE,
             Clock.STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION,
             Clock.STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION,
-            ClockController.STATUS_BAR_CLOCK,
-            EdgeBackGestureHandler.KEY_EDGE_LONG_SWIPE_ACTION,
             MobileSignalController.VOLTE_ICON_STYLE,
             MobileSignalController.ROAMING_INDICATOR_ICON,
             MobileSignalController.SHOW_FOURG_ICON,
             MobileSignalController.DATA_DISABLED_ICON,
             MobileSignalController.USE_OLD_MOBILETYPE,
-            NavigationBarView.NAVIGATION_BAR_MENU_ARROW_KEYS,
-            NotificationPanelView.DOUBLE_TAP_SLEEP_GESTURE,
-            NotificationPanelView.STATUS_BAR_QUICK_QS_PULLDOWN,
-            NotificationStackScrollLayout.LOCKSCREEN_TRANSLUCENT_NOTIFICATIONS_BG_ENABLED,
             QSTileHost.TILES_SETTING,
             Settings.Secure.DOZE_ALWAYS_ON,
-            StatusBar.FORCE_SHOW_NAVBAR,
             StatusBar.SCREEN_BRIGHTNESS_MODE,
-            StatusBar.STATUS_BAR_BRIGHTNESS_CONTROL,
-            VolumeDialogImpl.VOLUME_PANEL_ON_LEFT,
     };
 
     private final Observer mObserver = new Observer();
@@ -178,6 +169,10 @@ public class TunerServiceImpl extends TunerService {
                     () -> clearAllFromUser(user), 5000);
         }
         setValue(TUNER_VERSION, newVersion);
+    }
+
+    private boolean isLineageSetting(String key) {
+        return isLineageGlobal(key) || isLineageSystem(key) || isLineageSecure(key);
     }
 
     private boolean isLineageGlobal(String key) {
@@ -410,7 +405,7 @@ public class TunerServiceImpl extends TunerService {
         mContext.sendBroadcast(intent);
 
         for (String key : mTunableLookup.keySet()) {
-            if (ArrayUtils.contains(RESET_BLACKLIST, key)) {
+            if (ArrayUtils.contains(RESET_BLACKLIST, key) || isLineageSetting(key)) {
                 continue;
             }
             setValue(key, null);
