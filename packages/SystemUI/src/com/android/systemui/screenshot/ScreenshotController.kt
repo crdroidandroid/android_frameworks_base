@@ -25,10 +25,13 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Insets
 import android.graphics.Rect
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Process
 import android.os.UserHandle
 import android.os.UserManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.Log
@@ -116,11 +119,17 @@ internal constructor(
                 ActivityInfo.CONFIG_ASSETS_PATHS
         )
 
+    private val audioManager: AudioManager
+    private val vibrator: Vibrator?
+
     init {
         screenshotHandler.defaultTimeoutMillis = SCREENSHOT_CORNER_DEFAULT_TIMEOUT_MILLIS
 
         window = screenshotWindowFactory.create(display)
         context = window.getContext()
+
+        audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
 
         viewProxy = viewProxyFactory.getProxy(context, display.displayId)
 
@@ -450,13 +459,43 @@ internal constructor(
         screenshotSoundController?.playScreenshotSoundAsync()
     }
 
+    private fun playShutterSound() {
+        var playSound = false
+        when (audioManager.ringerMode) {
+            AudioManager.RINGER_MODE_SILENT -> {
+                // do nothing
+            }
+            AudioManager.RINGER_MODE_VIBRATE -> {
+                vibrator?.takeIf { it.hasVibrator() }?.vibrate(
+                    VibrationEffect.createOneShot(
+                        50,
+                        VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+                )
+            }
+            AudioManager.RINGER_MODE_NORMAL -> {
+                // in this case we want to play sound even if not forced on
+                playSound = true
+            }
+        }
+        if (playSound && Settings.System.getIntForUser(
+                context.contentResolver,
+                Settings.System.SCREENSHOT_SHUTTER_SOUND,
+                1,
+                UserHandle.USER_CURRENT
+            ) == 1
+        ) {
+            playCameraSoundIfNeeded()
+        }
+    }
+
     /**
      * Save the bitmap but don't show the normal screenshot UI.. just a toast (or notification on
      * failure).
      */
     private fun saveScreenshotAndToast(screenshot: ScreenshotData, finisher: Consumer<Uri?>) {
         // Play the shutter sound to notify that we've taken a screenshot
-        playCameraSoundIfNeeded()
+        playShutterSound()
 
         saveScreenshotInBackground(screenshot, UUID.randomUUID(), finisher) {
             result: ImageExporter.Result ->
@@ -485,7 +524,7 @@ internal constructor(
             viewProxy.createScreenshotDropInAnimation(screenRect, showFlash).apply {
                 doOnEnd { onAnimationComplete?.run() }
                 // Play the shutter sound to notify that we've taken a screenshot
-                playCameraSoundIfNeeded()
+                playShutterSound()
                 if (LogConfig.DEBUG_ANIM) {
                     Log.d(TAG, "starting post-screenshot animation")
                 }
