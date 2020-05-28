@@ -87,9 +87,9 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
             return;
         }
         if (DEBUG) Log.d(TAG, "enableUpdates");
+        setVisibility(View.VISIBLE);
         mWeatherClient = new OmniJawsClient(getContext(), false);
         if (mWeatherClient.isOmniJawsEnabled()) {
-            setVisibility(View.VISIBLE);
             mWeatherClient.addSettingsObserver();
             mWeatherClient.addObserver(this);
             queryAndUpdateWeather();
@@ -102,6 +102,7 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
             return;
         }
         if (DEBUG) Log.d(TAG, "disableUpdates");
+        setVisibility(View.GONE);
         if (mWeatherClient != null) {
             mWeatherClient.removeObserver(this);
             mWeatherClient.cleanupObserver();
@@ -121,8 +122,12 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
     private void updateWeatherData(OmniJawsClient.WeatherInfo weatherData) {
         if (DEBUG) Log.d(TAG, "updateWeatherData");
 
-        if (!mWeatherClient.isOmniJawsEnabled() || weatherData == null) {
+        if (!mWeatherClient.isOmniJawsEnabled()) {
             setErrorView();
+            return;
+        }
+        if (weatherData == null) {
+            setBlankView();
             return;
         }
         Drawable d = mWeatherClient.getWeatherConditionImage(weatherData.conditionCode);
@@ -141,6 +146,12 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
         Drawable d = mContext.getResources().getDrawable(R.drawable.ic_qs_weather_default_off_white);
         updateTint(d);
         mCurrentImage.setImageDrawable(d);
+        mLeftText.setText("");
+        mRightText.setText("");
+    }
+
+    private void setBlankView() {
+        mCurrentImage.setImageDrawable(null);
         mLeftText.setText("");
         mRightText.setText("");
     }
@@ -172,11 +183,14 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
     }
 
     private void queryAndUpdateWeather() {
-        if (mWeatherClient != null) {
+        if (mWeatherClient == null) return;
+        try {
             if (DEBUG) Log.d(TAG, "queryAndUpdateWeather");
             mWeatherClient.queryWeather();
             OmniJawsClient.WeatherInfo weatherData = mWeatherClient.getWeatherInfo();
             updateWeatherData(weatherData);
+        } catch(Exception e) {
+            // Do nothing
         }
     }
 
