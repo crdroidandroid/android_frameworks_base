@@ -36,4 +36,7 @@
 
     <!-- Pocket Lock -->
     <bool name="config_pocketModeSupported">true</bool>
+
+    <!-- Defines custom OEM sensor for pocket detection. -->
+    <string name="config_pocketJudgeVendorSensorName"></string>
 </resources>
