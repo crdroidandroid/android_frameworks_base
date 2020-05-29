@@ -629,8 +629,8 @@ public final class PowerManagerService extends SystemService
     private int mSmartChargingResumeLevel;
     private int mSmartChargingLevelDefaultConfig;
     private int mSmartChargingResumeLevelDefaultConfig;
-    private static String mPowerInputSuspendSysfsNode;
-    private static String mPowerInputSuspendValue;
+    private static String mPowerInputSupsendSysfsNode;
+    private static String mPowerInputSupsendValue;
     private static String mPowerInputResumeValue;
 
     /**
@@ -1104,14 +1104,14 @@ public final class PowerManagerService extends SystemService
                 com.android.internal.R.integer.config_smartChargingBatteryLevel);
         mSmartChargingResumeLevelDefaultConfig = resources.getInteger(
                 com.android.internal.R.integer.config_smartChargingBatteryResumeLevel);
-        mPowerInputSuspendSysfsNode = resources.getString(
-                com.android.internal.R.string.config_smartChargingSysfsNode);
-        mPowerInputSuspendValue = resources.getString(
-                com.android.internal.R.string.config_smartChargingSuspendValue);
+        mPowerInputSupsendSysfsNode = resources.getString(
+                com.android.internal.R.string.config_SmartChargingSysfsNode);
+        mPowerInputSupsendValue = resources.getString(
+                com.android.internal.R.string.config_SmartChargingSupspendValue);
         mPowerInputResumeValue = resources.getString(
-                com.android.internal.R.string.config_smartChargingResumeValue);
-        mSmartChargingResetStats = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SMART_CHARGING_RESET_STATS, 0, UserHandle.USER_CURRENT) == 1;
+                com.android.internal.R.string.config_SmartChargingResumeValue);
+        mSmartChargingResetStats = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SMART_CHARGING_RESET_STATS, 0) == 1;
     }
 
     private void updateSettingsLocked() {
@@ -1153,6 +1153,14 @@ public final class PowerManagerService extends SystemService
                 mSmartChargingResumeLevelDefaultConfig, UserHandle.USER_CURRENT);
         mSmartChargingResetStats = Settings.System.getIntForUser(resolver,
                 Settings.System.SMART_CHARGING_RESET_STATS, 0, UserHandle.USER_CURRENT) == 1;
+        mSmartChargingLevel = Settings.System.getInt(resolver,
+                Settings.System.SMART_CHARGING_LEVEL,
+                mSmartChargingLevelDefaultConfig);
+        mSmartChargingResumeLevel = Settings.System.getInt(resolver,
+                Settings.System.SMART_CHARGING_RESUME_LEVEL,
+                mSmartChargingResumeLevelDefaultConfig);
+        mSmartChargingResetStats = Settings.System.getInt(resolver,
+                Settings.System.SMART_CHARGING_RESET_STATS, 0) == 1;
 
         if (mSupportsDoubleTapWakeConfig) {
             boolean doubleTapWakeEnabled = Settings.Secure.getIntForUser(resolver,
@@ -1978,10 +1986,10 @@ public final class PowerManagerService extends SystemService
         if (mPowerInputSuspended && (mBatteryLevel <= mSmartChargingResumeLevel) ||
             (mPowerInputSuspended && !mSmartChargingEnabled)) {
             try {
-                FileUtils.stringToFile(mPowerInputSuspendSysfsNode, mPowerInputResumeValue);
+                FileUtils.stringToFile(mPowerInputSupsendSysfsNode, mPowerInputResumeValue);
                 mPowerInputSuspended = false;
             } catch (IOException e) {
-                Slog.e(TAG, "failed to write to " + mPowerInputSuspendSysfsNode);
+                Slog.e(TAG, "failed to write to " + mPowerInputSupsendSysfsNode);
             }
             return;
         }
@@ -1997,10 +2005,10 @@ public final class PowerManagerService extends SystemService
             }
 
             try {
-                FileUtils.stringToFile(mPowerInputSuspendSysfsNode, mPowerInputSuspendValue);
+                FileUtils.stringToFile(mPowerInputSupsendSysfsNode, mPowerInputSupsendValue);
                 mPowerInputSuspended = true;
             } catch (IOException e) {
-                    Slog.e(TAG, "failed to write to " + mPowerInputSuspendSysfsNode);
+                    Slog.e(TAG, "failed to write to " + mPowerInputSupsendSysfsNode);
             }
         }
     }
