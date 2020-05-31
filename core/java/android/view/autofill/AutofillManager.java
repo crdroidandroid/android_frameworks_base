@@ -297,9 +297,7 @@ public final class AutofillManager {
     /** @hide */ public static final int RECEIVER_FLAG_SESSION_FOR_AUGMENTED_AUTOFILL_ONLY = 0x1;
 
     /** @hide */
-    public static final int DEFAULT_LOGGING_LEVEL = Build.IS_DEBUGGABLE
-            ? AutofillManager.FLAG_ADD_CLIENT_DEBUG
-            : AutofillManager.NO_LOGGING;
+    public static final int DEFAULT_LOGGING_LEVEL = AutofillManager.NO_LOGGING;
 
     /** @hide */
     public static final int DEFAULT_MAX_PARTITIONS_SIZE = 10;
