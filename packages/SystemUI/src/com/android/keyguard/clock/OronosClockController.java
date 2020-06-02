@@ -103,9 +103,13 @@ public class OronosClockController implements ClockPlugin {
     private void createViews() {
         mView = (ClockLayout) mLayoutInflater
                 .inflate(R.layout.oronos_clock, null);
-        mHourClock = mView.findViewById(R.id.clockHr);
-        mMinuteClock = mView.findViewById(R.id.clockMin);
-        mLongDate = mView.findViewById(R.id.longDate);
+        setViews(mView);
+    }
+
+    private void setViews(View view) {
+        mHourClock = view.findViewById(R.id.clockHr);
+        mMinuteClock = view.findViewById(R.id.clockMin);
+        mLongDate = view.findViewById(R.id.longDate);
         onTimeTick();
         ColorExtractor.GradientColors colors = mColorExtractor.getColors(
                 WallpaperManager.FLAG_LOCK);
@@ -144,46 +148,8 @@ public class OronosClockController implements ClockPlugin {
 
     @Override
     public Bitmap getPreview(int width, int height) {
-
-        View previewView = mLayoutInflater.inflate(R.layout.oronos_clock, null);
-        TextClock previewHourTime = previewView.findViewById(R.id.clockHr);
-        TextClock previewMinuteTime = previewView.findViewById(R.id.clockMin);
-        TextView previewDate = previewView.findViewById(R.id.longDate);
-
-        // Initialize state of plugin before generating preview.
-        ColorExtractor.GradientColors colors = mColorExtractor.getColors(
-                WallpaperManager.FLAG_LOCK);
-        int[] palette = colors.getColorPalette();
-        if (palette == null) {
-            ColorExtractor.GradientColors sysColors = mColorExtractor.getColors(
-                    WallpaperManager.FLAG_SYSTEM);
-            palette = sysColors.getColorPalette();
-        }
-
-        final int bgColor = palette[Math.max(0, palette.length - 11)];
-        final int hiColor = palette[Math.max(0, palette.length - 5)];
-
-        GradientDrawable hourBg = (GradientDrawable) previewHourTime.getBackground();
-        GradientDrawable minBg = (GradientDrawable) previewMinuteTime.getBackground();
-        GradientDrawable dateBg = (GradientDrawable) previewDate.getBackground();
-
-        // Things that needs to be tinted with the background color
-        previewHourTime.setTextColor(bgColor);
-        minBg.setColor(bgColor);
-        dateBg.setColor(bgColor);
-
-        // Things that needs to be tinted with the highlighted color
-        hourBg.setColor(hiColor);
-        minBg.setStroke(mResources.getDimensionPixelSize(R.dimen.clock_oronos_outline_size),
-                            hiColor);
-        dateBg.setStroke(mResources.getDimensionPixelSize(R.dimen.clock_oronos_outline_size),
-                            hiColor);
-        previewMinuteTime.setTextColor(hiColor);
-        previewDate.setTextColor(hiColor);
-
-        mTime.setTimeInMillis(System.currentTimeMillis());
-        previewDate.setText(mResources.getString(R.string.date_long_title_today, mTime.getDisplayName(
-                Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault())));
+        View previewView = mLayoutInflater.inflate(R.layout.oronos_clock_preview, null);
+        setViews(previewView);
 
         return mRenderer.createPreview(previewView, width, height);
     }
