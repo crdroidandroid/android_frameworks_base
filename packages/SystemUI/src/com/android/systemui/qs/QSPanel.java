@@ -125,7 +125,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
     private BrightnessMirrorController mBrightnessMirrorController;
     private View mDivider;
 
-    private int mBrightnessSlider = 1;
     private int animStyle, animDuration, interpolatorType;
 
     public QSPanel(Context context) {
@@ -146,17 +145,22 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
         mBrightnessView = LayoutInflater.from(mContext).inflate(
             R.layout.quick_settings_brightness_dialog, this, false);
+        addView(mBrightnessView);
 
         mTileLayout = (QSTileLayout) LayoutInflater.from(mContext).inflate(
                 R.layout.qs_paged_tile_layout, this, false);
         mTileLayout.setListening(mListening);
+        addView((View) mTileLayout);
 
         mQsTileRevealController = new QSTileRevealController(mContext, this,
                 (PagedTileLayout) mTileLayout);
 
-        mFooter = new QSSecurityFooter(this, context);
+        addDivider();
 
-        addQSPanel();
+        mFooter = new QSSecurityFooter(this, context);
+        addView(mFooter.getView());
+
+        updateResources();
 
         mBrightnessController = new BrightnessController(getContext(),
                 findViewById(R.id.brightness_icon),
@@ -167,29 +171,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
         mIsAutomaticBrightnessAvailable = getResources().getBoolean(
                 com.android.internal.R.bool.config_automatic_brightness_available);
-    }
-
-    private void addQSPanel() {
-        if (mBrightnessSlider == 1) {
-            addView(mBrightnessView);
-            addView((View) mTileLayout);
-        } else {
-            addView((View) mTileLayout);
-            addView(mBrightnessView);
-        }
-
-        addDivider();
-        addView(mFooter.getView());
-        updateResources();
-    }
-
-    private void restartQSPanel() {
-        if (mFooter.getView() != null) removeView(mFooter.getView());
-        if (mDivider != null) removeView(mDivider);
-        if ((View) mTileLayout != null) removeView((View) mTileLayout);
-        if (mBrightnessView != null) removeView(mBrightnessView);
-
-        addQSPanel();
     }
 
     protected void addDivider() {
@@ -274,9 +255,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         if (QS_SHOW_AUTO_BRIGHTNESS.equals(key) && mIsAutomaticBrightnessAvailable) {
             updateViewVisibilityForTuningValue(mAutoBrightnessView, newValue);
         } else if (QS_SHOW_BRIGHTNESS_SLIDER.equals(key)) {
-            mBrightnessSlider = TunerService.parseInteger(newValue, 1);
-            mBrightnessView.setVisibility(mBrightnessSlider != 0 ? VISIBLE : GONE);
-            restartQSPanel();
+            updateViewVisibilityForTuningValue(mBrightnessView, newValue);
         } else if (ANIM_TILE_STYLE.equals(key)) {
             animStyle = TunerService.parseInteger(newValue, 0);
             if (mHost != null) {
