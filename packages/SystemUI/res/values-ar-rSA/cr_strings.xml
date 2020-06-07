@@ -212,13 +212,13 @@
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">التجوال</string>
     <!-- Omnijaws Weather -->
-    <string name="omnijaws_service_error">Error</string>
-    <string name="omnijaws_service_unkown">No weather data</string>
-    <string name="omnijaws_service_error_long">Error loading weather data</string>
-    <string name="omnijaws_service_disabled">Service is disabled</string>
-    <string name="omnijaws_detail_header">Weather</string>
-    <string name="omnijaws_label_default">Weather</string>
-    <string name="omnijaws_current_text">Now</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
-    <string name="omnijaws_service_last_update">Last update:</string>
+    <string name="omnijaws_service_error">خطأ</string>
+    <string name="omnijaws_service_unkown">لا يوجد بيانات للطقس</string>
+    <string name="omnijaws_service_error_long">حدث خطأ أثناء تحميل بيانات الطقس</string>
+    <string name="omnijaws_service_disabled">تم نعطيل الخدمة</string>
+    <string name="omnijaws_detail_header">الطقس</string>
+    <string name="omnijaws_label_default">الطقس</string>
+    <string name="omnijaws_current_text">الآن</string>
+    <string name="omnijaws_package_not_available">OmniJaws ليس متوفراً</string>
+    <string name="omnijaws_service_last_update">آخر تحديث:</string>
 </resources>
