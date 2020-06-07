@@ -101,6 +101,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
     private final int mDreamingMaxOffset;
     private final int mNavigationBarSize;
     private final boolean mShouldBoostBrightness;
+    private final boolean mTargetUsesInKernelDimming;
     private final Paint mPaintFingerprintBackground = new Paint();
     private final Paint mPaintFingerprint = new Paint();
     private final Paint mPaintIcon = new Paint();
@@ -245,6 +246,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
         mPaintFingerprintBackground.setColor(res.getColor(R.color.config_fodColorBackground));
         mPaintFingerprintBackground.setAntiAlias(true);
 
+        mTargetUsesInKernelDimming = res.getBoolean(com.android.internal.R.bool.config_targetUsesInKernelDimming);
+
         mWindowManager = context.getSystemService(WindowManager.class);
 
         mNavigationBarSize = res.getDimensionPixelSize(R.dimen.navigation_bar_size);
@@ -374,7 +377,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
     }
 
     public void updateIconDim() {
-        if (!mIsCircleShowing) {
+        if (!mIsCircleShowing && mTargetUsesInKernelDimming) {
             setColorFilter(Color.argb(getDimAlpha(), 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
         } else {
             setColorFilter(Color.argb(0, 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
