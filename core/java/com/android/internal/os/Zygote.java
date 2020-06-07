@@ -130,9 +130,6 @@ public final class Zygote {
     /** Number of bytes sent to the Zygote over USAP pipes or the pool event FD */
     public static final int USAP_MANAGEMENT_MESSAGE_BYTES = 8;
 
-    /** Make the new process have top application priority. */
-    public static final String START_AS_TOP_APP_ARG = "--is-top-app";
-
     /**
      * An extraArg passed when a zygote process is forking a child-zygote, specifying a name
      * in the abstract socket namespace. This socket name is what the new child zygote
@@ -230,7 +227,6 @@ public final class Zygote {
      * new zygote process.
      * @param instructionSet null-ok the instruction set to use.
      * @param appDataDir null-ok the data directory of the app.
-     * @param isTopApp true if the process is for top (high priority) application.
      *
      * @return 0 if this is the child, pid of the child
      * if this is the parent, or -1 on error.
@@ -238,13 +234,13 @@ public final class Zygote {
     public static int forkAndSpecialize(int uid, int gid, int[] gids, int runtimeFlags,
             int[][] rlimits, int mountExternal, String seInfo, String niceName, int[] fdsToClose,
             int[] fdsToIgnore, boolean startChildZygote, String instructionSet, String appDataDir,
-            int targetSdkVersion, boolean isTopApp) {
+            int targetSdkVersion) {
         ZygoteHooks.preFork();
         // Resets nice priority for zygote process.
         resetNicePriority();
         int pid = nativeForkAndSpecialize(
                 uid, gid, gids, runtimeFlags, rlimits, mountExternal, seInfo, niceName, fdsToClose,
-                fdsToIgnore, startChildZygote, instructionSet, appDataDir, isTopApp);
+                fdsToIgnore, startChildZygote, instructionSet, appDataDir);
         // Enable tracing as soon as possible for the child process.
         if (pid == 0) {
             Zygote.disableExecuteOnly(targetSdkVersion);
@@ -260,7 +256,7 @@ public final class Zygote {
     private static native int nativeForkAndSpecialize(int uid, int gid, int[] gids,
             int runtimeFlags, int[][] rlimits, int mountExternal, String seInfo, String niceName,
             int[] fdsToClose, int[] fdsToIgnore, boolean startChildZygote, String instructionSet,
-            String appDataDir, boolean isTopApp);
+            String appDataDir);
 
     /**
      * Specialize an unspecialized app process.  The current VM must have been started
@@ -282,13 +278,12 @@ public final class Zygote {
      * new zygote process.
      * @param instructionSet null-ok  The instruction set to use.
      * @param appDataDir null-ok  The data directory of the app.
-     * @param isTopApp  True if the process is for top (high priority) application.
      */
     public static void specializeAppProcess(int uid, int gid, int[] gids, int runtimeFlags,
             int[][] rlimits, int mountExternal, String seInfo, String niceName,
-            boolean startChildZygote, String instructionSet, String appDataDir, boolean isTopApp) {
+            boolean startChildZygote, String instructionSet, String appDataDir) {
         nativeSpecializeAppProcess(uid, gid, gids, runtimeFlags, rlimits, mountExternal, seInfo,
-                niceName, startChildZygote, instructionSet, appDataDir, isTopApp);
+                                 niceName, startChildZygote, instructionSet, appDataDir);
 
         // Enable tracing as soon as possible for the child process.
         Trace.setTracingEnabled(true, runtimeFlags);
@@ -307,7 +302,7 @@ public final class Zygote {
 
     private static native void nativeSpecializeAppProcess(int uid, int gid, int[] gids,
             int runtimeFlags, int[][] rlimits, int mountExternal, String seInfo, String niceName,
-            boolean startChildZygote, String instructionSet, String appDataDir, boolean isTopApp);
+            boolean startChildZygote, String instructionSet, String appDataDir);
 
     /**
      * Called to do any initialization before starting an application.
@@ -620,7 +615,7 @@ public final class Zygote {
             specializeAppProcess(args.mUid, args.mGid, args.mGids,
                                  args.mRuntimeFlags, rlimits, args.mMountExternal,
                                  args.mSeInfo, args.mNiceName, args.mStartChildZygote,
-                                 args.mInstructionSet, args.mAppDataDir, args.mIsTopApp);
+                                 args.mInstructionSet, args.mAppDataDir);
 
             disableExecuteOnly(args.mTargetSdkVersion);
 
