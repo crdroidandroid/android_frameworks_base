@@ -19,8 +19,8 @@
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • DASH nabíjanie (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> do plného nabitia)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • DASH nabíjanie</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percent">%2$s</xliff:g> • Warp Nabíjanie (<xliff:g id="charging_time_left" príklad="4 hodiny a 2 minúty">%1$s</xliff:g> do nabitia)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percent">%s</xliff:g> • Warp Nabíjanie</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
@@ -33,8 +33,8 @@
     <string name="quick_settings_cpuinfo_label">Informácie o CPU</string>
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info vypnuté</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info zapnuté</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">Hardvérové tlačidlá</string>
     <!-- Compass QS Tile -->
@@ -82,9 +82,9 @@
     <string name="qs_data_switch_changed_1">Mobilné dáta sú používané na SIM 1</string>
     <string name="qs_data_switch_changed_2">Mobilné dáta sú používané na SIM 2</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Vynútiť zastavenie?</string>
+    <string name="force_stop_dlg_text">Ak sa vynúti zastavenie aplikácie, môže zblbnúť.</string>
+    <string name="guts_force_close_app">Zavrieť aplikáciu</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">SystemUI</string>
     <!-- Binary clock -->
@@ -103,120 +103,120 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="few"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="many"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Je</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Je</annotation>\n^1\n^2</item>
+        <item quantity="few"><annotation name="color">Sú</annotation>\n^1\n^2</item>
+        <item quantity="many"><annotation name="color">Sú</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">Jedna</string>
+    <string name="text_clock_h_two">Dve</string>
+    <string name="text_clock_h_three">Tri</string>
+    <string name="text_clock_h_four">Štyri</string>
+    <string name="text_clock_h_five">Päť</string>
+    <string name="text_clock_h_six">Šesť</string>
+    <string name="text_clock_h_seven">Sedem</string>
+    <string name="text_clock_h_eight">Osem</string>
+    <string name="text_clock_h_nine">Deväť</string>
+    <string name="text_clock_h_ten">Desať</string>
+    <string name="text_clock_h_eleven">Jedenásť</string>
+    <string name="text_clock_h_twelve">Dvanásť</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
-    <string name="text_clock_m_fourteen">Fourteen</string>
-    <string name="text_clock_m_fifteen">Fifteen</string>
-    <string name="text_clock_m_sixteen">Sixteen</string>
-    <string name="text_clock_m_seventeen">Seventeen</string>
-    <string name="text_clock_m_eighteen">Eighteen</string>
-    <string name="text_clock_m_nineteen">Nineteen</string>
-    <string name="text_clock_m_twenty">Twenty</string>
-    <string name="text_clock_m_twenty_one">Twenty One</string>
-    <string name="text_clock_m_twenty_two">Twenty Two</string>
-    <string name="text_clock_m_twenty_three">Twenty Three</string>
-    <string name="text_clock_m_twenty_four">Twenty Four</string>
-    <string name="text_clock_m_twenty_five">Twenty Five</string>
-    <string name="text_clock_m_twenty_six">Twenty Six</string>
-    <string name="text_clock_m_twenty_seven">Twenty Seven</string>
-    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_zero"></string>
+    <string name="text_clock_m_one"></string>
+    <string name="text_clock_m_two"></string>
+    <string name="text_clock_m_three"></string>
+    <string name="text_clock_m_four"></string>
+    <string name="text_clock_m_five"></string>
+    <string name="text_clock_m_six"></string>
+    <string name="text_clock_m_seven"></string>
+    <string name="text_clock_m_eight"></string>
+    <string name="text_clock_m_nine"></string>
+    <string name="text_clock_m_ten">Desať</string>
+    <string name="text_clock_m_eleven">Jedenásť</string>
+    <string name="text_clock_m_twelve">Dvanásť</string>
+    <string name="text_clock_m_thirteen">Trinásť</string>
+    <string name="text_clock_m_fourteen">Štrnásť</string>
+    <string name="text_clock_m_fifteen">Pätnásť</string>
+    <string name="text_clock_m_sixteen">Šestnásť</string>
+    <string name="text_clock_m_seventeen">Sedemnásť</string>
+    <string name="text_clock_m_eighteen">Osemnásť</string>
+    <string name="text_clock_m_nineteen">Devätnásť</string>
+    <string name="text_clock_m_twenty">Dvadsať</string>
+    <string name="text_clock_m_twenty_one">Dvadsať jedna</string>
+    <string name="text_clock_m_twenty_two">Dvadsať dva</string>
+    <string name="text_clock_m_twenty_three">Dvadsať tri</string>
+    <string name="text_clock_m_twenty_four">Dvadsať štyri</string>
+    <string name="text_clock_m_twenty_five">Dvadsať päť</string>
+    <string name="text_clock_m_twenty_six">Dvadsať šesť</string>
+    <string name="text_clock_m_twenty_seven">Dvadsať sedem</string>
+    <string name="text_clock_m_twenty_eight">Dvadsať osem</string>
+    <string name="text_clock_m_twenty_nine">Dvadsať deväť</string>
+    <string name="text_clock_m_thirty">Tridsať</string>
+    <string name="text_clock_m_thirty_one">Tridsať jedna</string>
+    <string name="text_clock_m_thirty_two">Tridsať dva</string>
+    <string name="text_clock_m_thirty_three">Tridsať tri</string>
+    <string name="text_clock_m_thirty_four">Tridsať štyri</string>
+    <string name="text_clock_m_thirty_five">Tridsať päť</string>
+    <string name="text_clock_m_thirty_six">Tridsať šesť</string>
+    <string name="text_clock_m_thirty_seven">Tridsať sedem</string>
+    <string name="text_clock_m_thirty_eight">Tridsať osem</string>
+    <string name="text_clock_m_thirty_nine">Tridsať deväť</string>
+    <string name="text_clock_m_forty">Štyridsať</string>
+    <string name="text_clock_m_forty_one">Štyridsať jedna</string>
+    <string name="text_clock_m_forty_two">Štyridsať dva</string>
+    <string name="text_clock_m_forty_three">Štyridsať tri</string>
+    <string name="text_clock_m_forty_four">Štyridsať štyri</string>
+    <string name="text_clock_m_forty_five">Štyridsať päť</string>
+    <string name="text_clock_m_forty_six">Štyridsať šesť</string>
+    <string name="text_clock_m_forty_seven">Štyridsať sedem</string>
+    <string name="text_clock_m_forty_eight">Štyridsať osem</string>
+    <string name="text_clock_m_forty_nine">Štyridsať deväť</string>
+    <string name="text_clock_m_fifty">Päťdesiat</string>
+    <string name="text_clock_m_fifty_one">Päťdesiat jedna</string>
+    <string name="text_clock_m_fifty_two">Päťdesiat dva</string>
+    <string name="text_clock_m_fifty_three">Päťdesiat tri</string>
+    <string name="text_clock_m_fifty_four">Päťdesiat štyri</string>
+    <string name="text_clock_m_fifty_five">Päťdesiat päť</string>
+    <string name="text_clock_m_fifty_six">Päťdesiat šesť</string>
+    <string name="text_clock_m_fifty_seven">Päťdesiat sedem</string>
+    <string name="text_clock_m_fifty_eight">Päťdesiat osem</string>
+    <string name="text_clock_m_fifty_nine">Päťdesiat deväť</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="quick_settings_stabilization_label">Stabilizácia obrazu</string>
+    <string name="quick_settings_stabilization_off">Stabilizácia je vypnutá</string>
+    <string name="quick_settings_stabilization_on">Stabilizácia je zapnutá</string>
+    <string name="low_label">Nízko</string>
+    <string name="high_label">Vysoko</string>
+    <string name="stabilization_velocity_friction">Rýchlosť presunu</string>
+    <string name="stabilization_velocity_amplitude">Amplitúda rýchlosti</string>
+    <string name="stabilization_position_friction">Pozícia presunu</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_dialog_title">Začať nahrávať?</string>
+    <string name="screenrecord_dialog_summary">Android systém môže počas nahrávania zaznamenať akékoľvek citlivé informácie viditeľné na vašej obrazovke. Toto zahŕňa heslá, platobné údaje, fotky, správy a audio.</string>
+    <string name="screenrecord_dialog_start">Štart</string>
+    <string name="screenrecord_dialog_cancel">Zrušiť</string>
+    <string name="screenrecord_audio_recording_title">Zdroj zvuku</string>
+    <string name="screenrecord_audio_recording_internal">Interné</string>
+    <string name="screenrecord_audio_recording_microphone">Mikrofón</string>
+    <string name="screenrecord_audio_recording_off">Vypnuté</string>
+    <string name="screenrecord_taps_title">Zobraziť dotyky</string>
+    <string name="screenrecord_stopdot_title">Zobraziť stop bodku</string>
+    <string name="screenrecord_video_bitrate_title">Bitrate videa</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Šetrič dát</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Roaming</string>
     <!-- Omnijaws Weather -->
-    <string name="omnijaws_service_error">Error</string>
-    <string name="omnijaws_service_unkown">No weather data</string>
-    <string name="omnijaws_service_error_long">Error loading weather data</string>
-    <string name="omnijaws_service_disabled">Service is disabled</string>
-    <string name="omnijaws_detail_header">Weather</string>
-    <string name="omnijaws_label_default">Weather</string>
-    <string name="omnijaws_current_text">Now</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
-    <string name="omnijaws_service_last_update">Last update:</string>
+    <string name="omnijaws_service_error">Chyba</string>
+    <string name="omnijaws_service_unkown">Žiadne údaje o počasí</string>
+    <string name="omnijaws_service_error_long">Chyba pri načítavaní údajov o počasí</string>
+    <string name="omnijaws_service_disabled">Služba je vypnutá</string>
+    <string name="omnijaws_detail_header">Počasie</string>
+    <string name="omnijaws_label_default">Počasie</string>
+    <string name="omnijaws_current_text">Teraz</string>
+    <string name="omnijaws_package_not_available">OmniJaws nie je k dispozícii</string>
+    <string name="omnijaws_service_last_update">Posledná aktualizácia:</string>
 </resources>
