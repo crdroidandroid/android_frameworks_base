@@ -184,8 +184,6 @@
 
   <java-symbol type="array" name="config_customPermissionsList" />
 
-  <java-symbol type="array" name="config_blockPackagesSensorDrain" />
-
   <!-- FOD -->
   <java-symbol type="bool" name="config_targetUsesInKernelDimming" />
 </resources>
