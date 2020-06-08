@@ -127,4 +127,10 @@
     <!-- Custom padding size on biometric dialog when fingerprint in display is active -->
     <dimen name="fp_dialog_error_padding_top_fingerprint_in_display">@dimen/fp_dialog_error_padding_top</dimen>
     <dimen name="fp_dialog_error_padding_bottom_fingerprint_in_display">72dp</dimen>
+
+    <!-- Padding on the start of the quick statusbar (not top-most statusbar) -->
+    <dimen name="qs_header_start_padding">@dimen/status_bar_padding_start</dimen>
+
+    <!-- Padding on the end of the quick statusbar (not top-most statusbar) -->
+    <dimen name="qs_header_end_padding">@dimen/status_bar_padding_end</dimen>
 </resources>
