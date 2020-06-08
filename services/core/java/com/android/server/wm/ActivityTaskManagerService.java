@@ -196,6 +196,7 @@ import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.hardware.SystemSensorManager;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -811,6 +812,8 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
     // Lineage sdk activity related helper
     private LineageActivityManager mLineageActivityManager;
 
+    private SystemSensorManager mSystemSensorManager;
+
     private final class SettingObserver extends ContentObserver {
         private final Uri mFontScaleUri = Settings.System.getUriFor(FONT_SCALE);
         private final Uri mHideErrorDialogsUri = Settings.Global.getUriFor(HIDE_ERROR_DIALOGS);
@@ -916,6 +919,9 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
         // LineageActivityManager depends on settings so we can initialize only
         // after providers are available.
         mLineageActivityManager = new LineageActivityManager(mContext);
+
+        // Block sensor usage per app
+        mSystemSensorManager = new SystemSensorManager(mContext, mContext.getMainLooper());
     }
 
     public void retrieveSettings(ContentResolver resolver) {
@@ -6427,6 +6433,9 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
                 mAppWarnings.onPackageUninstalled(name, userId);
                 mCompatModePackages.handlePackageUninstalledLocked(name);
                 mPackageConfigPersister.onPackageUninstall(name, userId);
+                if (mSystemSensorManager != null) {
+                   mSystemSensorManager.notePackageUninstalled(name);
+                }
             }
         }
 
