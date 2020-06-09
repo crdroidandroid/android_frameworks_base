@@ -104,6 +104,8 @@ public class ImsRegistrationImplBase {
     private int mRegistrationState = REGISTRATION_STATE_UNKNOWN;
     // Locked on mLock, create unspecified disconnect cause.
     private ImsReasonInfo mLastDisconnectCause = new ImsReasonInfo();
+    // Locked on mLock. caches the last updated uris
+    private Uri[] mSubscriberAssociatedUris = null;
 
     /**
      * @hide
@@ -210,6 +212,7 @@ public class ImsRegistrationImplBase {
      * @param uris
      */
     public final void onSubscriberAssociatedUriChanged(Uri[] uris) {
+        updateSubscriberAssociatedUri(uris);
         mCallbacks.broadcast((c) -> {
             try {
                 c.onSubscriberAssociatedUriChanged(uris);
@@ -228,6 +231,9 @@ public class ImsRegistrationImplBase {
             mConnectionType = connType;
             mRegistrationState = newState;
             mLastDisconnectCause = null;
+            if (newState != REGISTRATION_STATE_REGISTERED) {
+                mSubscriberAssociatedUris = null;
+            }
         }
     }
 
@@ -240,6 +246,13 @@ public class ImsRegistrationImplBase {
                 Log.w(LOG_TAG, "updateToDisconnectedState: no ImsReasonInfo provided.");
                 mLastDisconnectCause = new ImsReasonInfo();
             }
+        }
+    }
+
+    private void updateSubscriberAssociatedUri(Uri[] uris) {
+        Log.d(LOG_TAG, "updateSubscriberAssociatedUri: cache new uri");
+        synchronized (mLock) {
+            mSubscriberAssociatedUris = uris;
         }
     }
 
@@ -262,9 +275,11 @@ public class ImsRegistrationImplBase {
     private void updateNewCallbackWithState(IImsRegistrationCallback c) throws RemoteException {
         int state;
         ImsReasonInfo disconnectInfo;
+        Uri[] uris;
         synchronized (mLock) {
             state = mRegistrationState;
             disconnectInfo = mLastDisconnectCause;
+            uris = mSubscriberAssociatedUris;
         }
         switch (state) {
             case REGISTRATION_STATE_NOT_REGISTERED: {
@@ -277,6 +292,9 @@ public class ImsRegistrationImplBase {
             }
             case REGISTRATION_STATE_REGISTERED: {
                 c.onRegistered(getConnectionType());
+                if (uris != null) {
+                    c.onSubscriberAssociatedUriChanged(uris);
+                }
                 break;
             }
             case REGISTRATION_STATE_UNKNOWN: {
