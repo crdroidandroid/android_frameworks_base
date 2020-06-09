@@ -205,6 +205,9 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
     private final SysuiStatusBarStateController mStatusbarStateController;
     private final KeyguardMediaController mKeyguardMediaController;
 
+    private static final String NOTIFICATION_MATERIAL_DISMISS =
+            "system:" + Settings.System.NOTIFICATION_MATERIAL_DISMISS;
+
     private ExpandHelper mExpandHelper;
     private final NotificationSwipeHelper mSwipeHelper;
     private int mCurrentStackHeight = Integer.MAX_VALUE;
@@ -545,6 +548,8 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
 
     private int mWaterfallTopInset;
 
+    private boolean mShowDimissButton;
+
     private SysuiColorExtractor.OnColorsChangedListener mOnColorsChangedListener =
             (colorExtractor, which) -> {
                 final boolean useDarkText = mColorExtractor.getNeutralColors().supportsDarkText();
@@ -650,9 +655,13 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
                 updateDismissRtlSetting("1".equals(newValue));
             } else if (key.equals(Settings.Secure.NOTIFICATION_HISTORY_ENABLED)) {
                 updateFooter();
+            } else if (key.equals(NOTIFICATION_MATERIAL_DISMISS)) {
+                mShowDimissButton = TunerService.parseIntegerSwitch(newValue, false);
+                updateFooter();
             }
         }, HIGH_PRIORITY, Settings.Secure.NOTIFICATION_DISMISS_RTL,
-                Settings.Secure.NOTIFICATION_HISTORY_ENABLED);
+                Settings.Secure.NOTIFICATION_HISTORY_ENABLED,
+                NOTIFICATION_MATERIAL_DISMISS);
 
         mDeviceProvisionedController.addCallback(
                 new DeviceProvisionedListener() {
@@ -5094,7 +5103,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
         }
         boolean animate = mIsExpanded && mAnimationsEnabled;
         mFooterView.setVisible(visible, animate);
-        mFooterView.setSecondaryVisible(showDismissView, animate);
+        mFooterView.setSecondaryVisible(!mShowDimissButton && showDismissView, animate);
         mFooterView.showHistory(showHistory);
     }
 
@@ -5814,14 +5823,22 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
     protected void inflateFooterView() {
         FooterView footerView = (FooterView) LayoutInflater.from(mContext).inflate(
                 R.layout.status_bar_notification_footer, this, false);
+        footerView.setDismissButtonClickListener(v -> {
+            if (!mShowDimissButton) {
+                mMetricsLogger.action(MetricsEvent.ACTION_DISMISS_ALL_NOTES);
+                clearNotifications(ROWS_ALL, true /* closeShade */);
+            }
+        });
         footerView.setManageButtonClickListener(v -> {
             mNotificationActivityStarter.startHistoryIntent(mFooterView.isHistoryShown());
         });
         if (mStatusBar != null) {
             if (mStatusBar.getDismissAllButton() != null) {
                 mStatusBar.getDismissAllButton().setOnClickListener(v -> {
-                    mMetricsLogger.action(MetricsEvent.ACTION_DISMISS_ALL_NOTES);
-                    clearNotifications(ROWS_ALL, true /* closeShade */);
+                    if (mShowDimissButton) {
+                        mMetricsLogger.action(MetricsEvent.ACTION_DISMISS_ALL_NOTES);
+                        clearNotifications(ROWS_ALL, true /* closeShade */);
+                    }
                 });
             }
         }
