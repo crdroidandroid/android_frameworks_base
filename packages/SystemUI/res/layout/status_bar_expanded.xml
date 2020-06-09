@@ -106,6 +106,15 @@
         android:src="@drawable/dismiss_all_icon"
         android:background="@drawable/floating_action_button"
         android:scaleType="centerInside"
-        android:elevation="@dimen/dismiss_all_button_elevation"/>
+        android:elevation="@dimen/dismiss_all_button_elevation"
+        android:visibility="gone" />
+
+    <com.android.systemui.statusbar.AlphaOptimizedView
+        android:id="@+id/qs_navbar_scrim"
+        android:layout_height="96dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:visibility="invisible"
+        android:background="@drawable/qs_navbar_scrim" />
 
 </com.android.systemui.statusbar.phone.NotificationPanelView>
