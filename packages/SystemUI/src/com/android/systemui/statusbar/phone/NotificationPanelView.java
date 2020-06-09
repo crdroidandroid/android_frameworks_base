@@ -175,6 +175,8 @@ public class NotificationPanelView extends PanelView implements
             "system:" + Settings.System.LOCKSCREEN_STATUS_BAR;
     private static final String LOCKSCREEN_ENABLE_QS =
             "global:" + Settings.Global.LOCKSCREEN_ENABLE_QS;
+    public static final String NOTIFICATION_MATERIAL_DISMISS =
+            "system:" + Settings.System.NOTIFICATION_MATERIAL_DISMISS;
 
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
     private static final Rect mEmptyRect = new Rect();
@@ -256,6 +258,7 @@ public class NotificationPanelView extends PanelView implements
     protected FrameLayout mQsFrame;
     @VisibleForTesting
     protected KeyguardStatusView mKeyguardStatusView;
+    private View mQsNavbarScrim;
     private ImageView mDismissAllButton;
     private Animation mDismissShowAnim;
     private Animation mDismissHideAnim;
@@ -361,6 +364,7 @@ public class NotificationPanelView extends PanelView implements
     private boolean mPulseLights;
     private boolean mShowLockscreenStatusBar;
     private boolean mStatusBarShownOnSecureKeyguard;
+    private boolean mShowDimissButton;
 
     private Runnable mHeadsUpExistenceChangedRunnable = new Runnable() {
         @Override
@@ -563,6 +567,7 @@ public class NotificationPanelView extends PanelView implements
         mNotificationStackScroller.setOnEmptySpaceClickListener(this);
         addTrackingHeadsUpListener(mNotificationStackScroller::setTrackingHeadsUp);
         mKeyguardBottomArea = findViewById(R.id.keyguard_bottom_area);
+        mQsNavbarScrim = findViewById(R.id.qs_navbar_scrim);
         mDismissAllButton = findViewById(R.id.clear_notifications);
         mLastOrientation = getResources().getConfiguration().orientation;
         mPulseLightsView = (NotificationLightsView) findViewById(R.id.lights_container);
@@ -593,12 +598,12 @@ public class NotificationPanelView extends PanelView implements
         mDismissShowAnim = AnimationUtils.loadAnimation(mContext,
                 R.anim.dismiss_all_show);
 
-        mDismissAllButton.setVisibility(View.INVISIBLE);
+        mDismissAllButton.setVisibility(View.GONE);
         mDismissHideAnim.setAnimationListener(new AnimationListener() {
             public void onAnimationStart(Animation animation) {}
 
             public void onAnimationEnd(Animation animation) {
-                mDismissAllButton.setVisibility(View.INVISIBLE);
+                mDismissAllButton.setVisibility(View.GONE);
                 mDismissAllButton.setAlpha(0f);
                 mDismissAllShowing = false;
             }
@@ -631,6 +636,7 @@ public class NotificationPanelView extends PanelView implements
         Dependency.get(TunerService.class).addTunable(this, PULSE_AMBIENT_LIGHT);
         Dependency.get(TunerService.class).addTunable(this, LOCKSCREEN_STATUS_BAR);
         Dependency.get(TunerService.class).addTunable(this, LOCKSCREEN_ENABLE_QS);
+        Dependency.get(TunerService.class).addTunable(this, NOTIFICATION_MATERIAL_DISMISS);
         mUpdateMonitor.registerCallback(mKeyguardUpdateCallback);
         // Theme might have changed between inflating this view and attaching it to the window, so
         // force a call to onThemeChanged
@@ -679,6 +685,12 @@ public class NotificationPanelView extends PanelView implements
                 mStatusBarShownOnSecureKeyguard =
                         TunerService.parseIntegerSwitch(newValue, true);
                 mStatusBar.updateQsExpansionEnabled();
+                break;
+            case NOTIFICATION_MATERIAL_DISMISS:
+                mShowDimissButton =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                handleDismissAllVisibility();
+                break;
             default:
                 break;
         }
@@ -1973,6 +1985,10 @@ public class NotificationPanelView extends PanelView implements
                 mBarState != StatusBarState.KEYGUARD && (!mQsExpanded
                         || mQsExpansionFromOverscroll));
         updateEmptyShadeView();
+        mQsNavbarScrim.setVisibility(mBarState == StatusBarState.SHADE && mQsExpanded
+                && !mStackScrollerOverscrolling && mQsScrimEnabled
+                ? View.VISIBLE
+                : View.INVISIBLE);
         if (mKeyguardUserSwitcher != null && mQsExpanded && !mStackScrollerOverscrolling) {
             mKeyguardUserSwitcher.hideIfNotSimple(true /* animate */);
         }
@@ -1997,6 +2013,10 @@ public class NotificationPanelView extends PanelView implements
                 || mBarState == StatusBarState.KEYGUARD) {
             updateKeyguardBottomAreaAlpha();
             updateBigClockAlpha();
+        }
+        if (mBarState == StatusBarState.SHADE && mQsExpanded
+                && !mStackScrollerOverscrolling && mQsScrimEnabled) {
+            mQsNavbarScrim.setAlpha(getQsExpansionFraction());
         }
         handleDismissAllVisibility();
 
@@ -3729,7 +3749,7 @@ public class NotificationPanelView extends PanelView implements
     }
 
     private void showDismissAnimate() {
-        if (!mDismissAllShowing) {
+        if (!mDismissAllShowing && mShowDimissButton) {
             if (mDismissShowAnim.hasStarted() && !mDismissShowAnim.hasEnded()) {
                 return;
             }
