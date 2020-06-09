@@ -316,6 +316,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             Settings.Secure.PULSE_ON_NEW_TRACKS;
     private static final String BERRY_QS_TILE_STYLE =
             "system:" + Settings.System.BERRY_QS_TILE_STYLE;
+    private static final String NOTIFICATION_MATERIAL_DISMISS =
+            "system:" + Settings.System.NOTIFICATION_MATERIAL_DISMISS;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -524,7 +526,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     private final MetricsLogger mMetricsLogger;
 
     private ImageButton mDismissAllButton;
-    public boolean mClearableNotifications = true;
+    private boolean mClearableNotifications = true;
+    private boolean mShowDimissButton;
 
     private final Runnable mLongPressBrightnessChange = new Runnable() {
         @Override
@@ -987,6 +990,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, QS_PANEL_BG_USE_NEW_TINT);
         mTunerService.addTunable(this, PULSE_ON_NEW_TRACKS);
         mTunerService.addTunable(this, BERRY_QS_TILE_STYLE);
+        mTunerService.addTunable(this, NOTIFICATION_MATERIAL_DISMISS);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -2407,7 +2411,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     public void updateDismissAllVisibility(boolean visible) {
-        if (mClearableNotifications && mState != StatusBarState.KEYGUARD && visible) {
+        if (mDismissAllButton == null) return;
+        if (mShowDimissButton && mClearableNotifications && mState != StatusBarState.KEYGUARD && visible) {
             mDismissAllButton.setVisibility(View.VISIBLE);
             int DismissAllAlpha = Math.round(255.0f * mNotificationPanelViewController.getExpandedFraction());
             mDismissAllButton.setAlpha(DismissAllAlpha);
@@ -2415,7 +2420,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         } else {
             mDismissAllButton.setAlpha(0);
             mDismissAllButton.getBackground().setAlpha(0);
-            mDismissAllButton.setVisibility(View.INVISIBLE);
+            mDismissAllButton.setVisibility(View.GONE);
         }
     }
 
@@ -4878,6 +4883,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                     mQSTileStyle = qsTileStyle;
                     updateQSTileStyle();
                 }
+                break;
+            case NOTIFICATION_MATERIAL_DISMISS:
+                mShowDimissButton =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                updateDismissAllVisibility(true);
                 break;
             default:
                 break;
