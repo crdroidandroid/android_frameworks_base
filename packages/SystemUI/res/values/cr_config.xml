@@ -26,7 +26,7 @@
     <integer name="config_cpuTempDivider" translatable="false">1</integer>
 
     <!-- Max visible system icons -->
-    <integer name="config_maxVisibleStatusIconContainer">6</integer>
+    <integer name="config_maxVisibleStatusIconContainer">5</integer>
 
     <!-- Burn in protection -->
     <bool name="config_statusBarBurnInProtection">false</bool>
