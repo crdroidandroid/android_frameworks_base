@@ -229,6 +229,20 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
                     boolean removedByUser) {
                 onNotificationRemoved(entry.key);
             }
+
+            // these get called from NotificationEntryManager.onAsyncInflationFinished
+            // so we are sure the final media notification albumart and colors elaboration
+            // has been completed by the system
+            @Override
+            public void onNotificationAdded(
+                    NotificationEntry entry) {
+                checkMediaNotificationColor(entry);
+            }
+            @Override
+            public void onEntryReinflated(
+                    NotificationEntry entry) {
+                checkMediaNotificationColor(entry);
+            }
         });
 
         mShowCompactMediaSeekbar = "true".equals(
@@ -278,6 +292,17 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
         if (key.equals(mMediaNotificationKey)) {
             clearCurrentMediaNotification();
             dispatchUpdateMediaMetaData(true /* changed */, true /* allowEnterAnimation */);
+        }
+    }
+
+    private void checkMediaNotificationColor(NotificationEntry entry) {
+        if (entry.key.equals(mMediaNotificationKey)) {
+            ArrayList<MediaListener> callbacks = new ArrayList<>(mMediaListeners);
+            for (int i = 0; i < callbacks.size(); i++) {
+                callbacks.get(i).setMediaNotificationColor(
+                        entry.notification.getNotification().isColorizedMedia(),
+                        entry.getRow().getCurrentBackgroundTint());
+            }
         }
     }
 
@@ -846,5 +871,7 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
          * @see PlaybackState.State
          */
         void onMetadataOrStateChanged(MediaMetadata metadata, @PlaybackState.State int state);
+
+        default void setMediaNotificationColor(boolean colorizedMedia, int color) {};
     }
 }
