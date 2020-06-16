@@ -336,7 +336,6 @@ public interface StatusBarIconController {
 
         private StatusBarNetworkTraffic onCreateNetworkTraffic(String slot) {
             StatusBarNetworkTraffic view = new StatusBarNetworkTraffic(mContext);
-            view.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
             return view;
         }
 
