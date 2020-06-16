@@ -256,4 +256,10 @@
     <string name="omnijaws_current_text">Зараз</string>
     <string name="omnijaws_package_not_available">OmniJaws недоступний</string>
     <string name="omnijaws_service_last_update">Останнє оновлення:</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">кб/с</string>
+    <string name="megabitspersecond_short">Мб/с</string>
+    <string name="kilobytespersecond_short">кБ/с</string>
+    <string name="megabytespersecond_short">МБ/с</string>
+    <string name="gigabytespersecond_short">ГБ/с</string>
 </resources>
