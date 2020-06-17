@@ -93,4 +93,7 @@
         <item>com.google.android.apps.wellbeing</item>
         <!-- <item>more packages</item>-->
     </string-array>
+
+    <!-- Wired/BT headset focus mode -->
+    <bool name="config_deviceRingtoneFocusMode">false</bool>
 </resources>
