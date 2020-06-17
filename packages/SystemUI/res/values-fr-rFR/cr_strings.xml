@@ -217,4 +217,11 @@
     <string name="omnijaws_current_text">Maintenant</string>
     <string name="omnijaws_package_not_available">OmniJaws indisponible</string>
     <string name="omnijaws_service_last_update">Dernière mise à jour :</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">ko/s</string>
+    <string name="megabytespersecond_short">Mo/s</string>
+    <string name="gigabytespersecond_short">Go/s</string>
 </resources>
