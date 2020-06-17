@@ -222,6 +222,7 @@
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">кбит/с</string>
     <string name="megabitspersecond_short">Мбит/с</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
     <string name="kilobytespersecond_short">кБ/с</string>
     <string name="megabytespersecond_short">МБ/с</string>
     <string name="gigabytespersecond_short">ГБ/с</string>
