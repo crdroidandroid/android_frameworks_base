@@ -242,6 +242,7 @@ Sembilan</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/d</string>
     <string name="megabitspersecond_short">Mb/d</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
     <string name="kilobytespersecond_short">kB/d</string>
     <string name="megabytespersecond_short">MB/d</string>
     <string name="gigabytespersecond_short">GB/d</string>
