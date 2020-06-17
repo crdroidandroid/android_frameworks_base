@@ -188,4 +188,7 @@
 
   <!-- FOD -->
   <java-symbol type="bool" name="config_targetUsesInKernelDimming" />
+
+  <!-- Wired/BT headset focus mode -->
+  <java-symbol type="bool" name="config_deviceRingtoneFocusMode" />
 </resources>

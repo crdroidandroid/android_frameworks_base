@@ -134,4 +134,7 @@
 
     <!-- FOD -->
     <bool name="config_targetUsesInKernelDimming">true</bool>
+
+    <!-- Wired/BT headset focus mode -->
+    <bool name="config_deviceRingtoneFocusMode">false</bool>
 </resources>
