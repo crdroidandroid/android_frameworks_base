@@ -64,10 +64,10 @@ public class ProximitySensor implements ThresholdSensor {
     private final DelayableExecutor mDelayableExecutor;
     private final List<ThresholdSensor.Listener> mListeners = new ArrayList<>();
     private String mTag = null;
+    @VisibleForTesting protected boolean mPaused;
     private ThresholdSensorEvent mLastPrimaryEvent;
     @VisibleForTesting
     ThresholdSensorEvent mLastEvent;
-    @VisibleForTesting protected boolean mPaused;
     private boolean mRegistered;
     private final AtomicBoolean mAlerting = new AtomicBoolean();
     private Runnable mCancelSecondaryRunnable;
@@ -86,9 +86,12 @@ public class ProximitySensor implements ThresholdSensor {
         public void onThresholdCrossed(ThresholdSensorEvent event) {
             // If we no longer have a "below" signal and the secondary sensor is not
             // considered "safe", then we need to turn it off.
-            if (!mSecondarySafe && (!mLastPrimaryEvent.getBelow() || !event.getBelow())) {
+            if (!mSecondarySafe
+                    && (mLastPrimaryEvent == null
+                    || !mLastPrimaryEvent.getBelow()
+                    || !event.getBelow())) {
                 mSecondaryThresholdSensor.pause();
-                if (!mLastPrimaryEvent.getBelow()) {
+                if (mLastPrimaryEvent == null || !mLastPrimaryEvent.getBelow()) {
                     // Only check the secondary as long as the primary thinks we're near.
                     mCancelSecondaryRunnable = null;
                     return;
@@ -100,7 +103,9 @@ public class ProximitySensor implements ThresholdSensor {
             }
             logDebug("Secondary sensor event: " + event.getBelow() + ".");
 
-            onSensorEvent(event);
+            if (!mPaused) {
+                onSensorEvent(event);
+            }
         }
     };
 
@@ -247,13 +252,17 @@ public class ProximitySensor implements ThresholdSensor {
 
     /** Update all listeners with the last value this class received from the sensor. */
     public void alertListeners() {
+        Assert.isMainThread();
         if (mAlerting.getAndSet(true)) {
             return;
         }
+        if (mLastEvent != null) {
+            ThresholdSensorEvent lastEvent = mLastEvent;  // Listeners can null out mLastEvent.
+            List<ThresholdSensor.Listener> listeners = new ArrayList<>(mListeners);
+            listeners.forEach(proximitySensorListener ->
+                    proximitySensorListener.onThresholdCrossed(lastEvent));
+        }
 
-        List<ProximitySensorListener> listeners = new ArrayList<>(mListeners);
-        listeners.forEach(proximitySensorListener ->
-                proximitySensorListener.onSensorEvent(mLastEvent));
         mAlerting.set(false);
     }
 
@@ -310,7 +319,7 @@ public class ProximitySensor implements ThresholdSensor {
         private final ProximitySensor mSensor;
         private final DelayableExecutor mDelayableExecutor;
         private List<Consumer<Boolean>> mCallbacks = new ArrayList<>();
-        private final ProximitySensor.ProximitySensorListener mListener;
+        private final ThresholdSensor.Listener mListener;
         private final AtomicBoolean mRegistered = new AtomicBoolean();
 
         @Inject
@@ -351,11 +360,11 @@ public class ProximitySensor implements ThresholdSensor {
             mRegistered.set(false);
         }
 
-        private void onProximityEvent(ProximityEvent proximityEvent) {
+        private void onProximityEvent(ThresholdSensorEvent proximityEvent) {
             mCallbacks.forEach(
                     booleanConsumer ->
                             booleanConsumer.accept(
-                                    proximityEvent == null ? null : proximityEvent.getNear()));
+                                    proximityEvent == null ? null : proximityEvent.getBelow()));
             mCallbacks.clear();
             unregister();
             mRegistered.set(false);
