@@ -186,4 +186,7 @@
   <java-symbol type="bool" name="config_hasInternalAudioRecordingSupport" />
 
   <java-symbol type="array" name="config_customPermissionsList" />
+
+  <!-- Wired/BT headset focus mode -->
+  <java-symbol type="bool" name="config_deviceRingtoneFocusMode" />
 </resources>
