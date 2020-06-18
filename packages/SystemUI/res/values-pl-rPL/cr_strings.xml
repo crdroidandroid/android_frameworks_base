@@ -103,10 +103,10 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">Jest godzina</annotation>\n^1\n^2</item>
-        <item quantity="few"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="many"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Jest</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Jest</annotation>\n^1\n^2</item>
+        <item quantity="few"><annotation name="color">Jest</annotation>\n^1\n^2</item>
+        <item quantity="many"><annotation name="color">Jest</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
     <string name="text_clock_h_one">Pierwsza</string>
@@ -223,9 +223,9 @@ dziewięć</string>
     <string name="quick_settings_stabilization_on">Stabilizacja jest włączona</string>
     <string name="low_label">Niski</string>
     <string name="high_label">Wysoki</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="stabilization_velocity_friction">Prędkość tarcia</string>
+    <string name="stabilization_velocity_amplitude">Amplituda prędkości</string>
+    <string name="stabilization_position_friction">Pozycja tarcia</string>
     <!-- Screen record -->
     <string name="screenrecord_dialog_title">Rozpocząć nagrywanie?</string>
     <string name="screenrecord_dialog_summary">Podczas nagrywania, system Android może przechwycić wszelkie wrażliwe dane widoczne lub odtwarzane na ekranie telefonu. Wliczając w to hasła, dane o płatnościach, zdjęcia, wiadomości oraz dźwięk.</string>
