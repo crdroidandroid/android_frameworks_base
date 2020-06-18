@@ -215,12 +215,12 @@
     <string name="omnijaws_label_default">天气</string>
     <string name="omnijaws_current_text">现在</string>
     <string name="omnijaws_package_not_available">OmniJaws 不可用</string>
-    <string name="omnijaws_service_last_update">最后更新：</string>
+    <string name="omnijaws_service_last_update">最后更新</string>
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">千比特/秒</string>
-    <string name="megabitspersecond_short">兆比特/秒</string>
-    <string name="gigabitspersecond_short">千兆字节/秒</string>
-    <string name="kilobytespersecond_short">千字节/秒</string>
-    <string name="megabytespersecond_short">兆字节/秒</string>
-    <string name="gigabytespersecond_short">千兆字节/秒</string>
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
 </resources>
