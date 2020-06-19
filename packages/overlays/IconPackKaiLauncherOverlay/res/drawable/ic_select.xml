@@ -1,0 +1,21 @@
+<!--
+   Copyright (C) 2020 The Android Open Source Project
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<vector android:height="24dp" android:viewportHeight="24" android:viewportWidth="24" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+  <path android:fillColor="@android:color/white" android:pathData="M 11.25 1 H 12.75 V 4 H 11.25 V 1 Z"/>
+  <path android:fillColor="@android:color/white" android:pathData="M 15.69 4.06 H 18.69 V 5.56 H 15.69 V 4.06 Z"/>
+  <path android:fillColor="@android:color/white" android:pathData="M 6.06 3.31 H 7.56 V 6.31 H 6.06 V 3.31 Z"/>
+  <path android:fillColor="@android:color/white" android:pathData="M15.5,12.5l-1.25,0V8.12C14.25,6.95,13.3,6,12.12,6S10,6.95,10,8.12v7.9L8.03,15.5c-0.39-0.1-1.23-0.36-2.56,0.97 c-0.29,0.29-0.29,0.75-0.01,1.05l3.79,3.98c0,0,0,0,0,0.01c1.37,1.41,3.28,1.51,4.04,1.49l2.2,0c2.12,0.06,5.25-1.01,5.25-5.25 C20.75,13.19,17.23,12.46,15.5,12.5z M15.5,21.5l-2.25,0c-0.44,0.01-1.93-0.02-2.92-1.03l-3.27-3.43c0.17-0.1,0.38-0.13,0.58-0.08 l2.91,0.78c0.47,0.12,0.94-0.23,0.94-0.72V8.12c0-0.34,0.28-0.62,0.62-0.62s0.62,0.28,0.62,0.62v5.12c0,0.41,0.33,0.75,0.75,0.75 l2.05,0c1.26-0.03,3.7,0.37,3.7,3.75C19.25,21.14,16.78,21.53,15.5,21.5z"/>
+</vector>
