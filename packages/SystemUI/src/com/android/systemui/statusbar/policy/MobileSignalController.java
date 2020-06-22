@@ -601,8 +601,13 @@ public class MobileSignalController extends SignalController<
             mCurrentState.networkNameData = mServiceState.getDataOperatorAlphaShort();
         }
 
+        TelephonyManager tm = mPhone.createForSubscriptionId(mSubscriptionInfo.getSubscriptionId());
+        boolean voiceCapable = tm.isVolteAvailable();
+        boolean videoCapable = tm.isVideoTelephonyAvailable();
+        boolean imsRegistered = mPhone.isImsRegistered(mSubscriptionInfo.getSubscriptionId());
+
         mCurrentState.mobileIms = mVoLTEicon &&
-                mPhone.isImsRegistered(mSubscriptionInfo.getSubscriptionId());
+                (voiceCapable || videoCapable) && imsRegistered;
 
         notifyListenersIfNecessary();
     }
