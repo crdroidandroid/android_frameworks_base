@@ -5238,6 +5238,12 @@ public final class Settings {
         public static final String VOLTE_ICON_STYLE = "volte_icon_style";
 
         /**
+         * VoWiFi icon style
+         * @hide
+         */
+        public static final String VOWIFI_ICON_STYLE = "vowifi_icon_style";
+
+        /**
          * Whether to display roaming indicator for roaming signal connection
          * @hide
          */
