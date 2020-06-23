@@ -1,0 +1,34 @@
+<!--
+    Copyright (c) 2021 ShapeShiftOS
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp"
+    android:height="15dp"
+    android:viewportWidth="16"
+    android:viewportHeight="15">
+    <path
+        android:fillColor="#000"
+        android:fillType="evenOdd"
+        android:pathData="M11.86 0.18c1.62 0.93 2.7 2.69 2.7 4.7c0 0.98-0.26 1.9-0.72 2.7L12.9 7.04c0.37-0.64 0.58-1.38 0.58-2.17c0-1.6-0.87-3-2.16-3.75l0.54-0.94zM9.14 2.7c1.2 0 2.17 0.97 2.17 2.17s-0.97 2.17-2.17 2.17s-2.17-0.97-2.17-2.17S7.94 2.7 9.14 2.7zM2.96 1.62l1.68 3.82l1.68-3.82h1.41L5.35 7.04H3.94L1.55 1.62h1.41zm8.09-0.03c1.13 0.65 1.89 1.88 1.89 3.28c0 0.7-0.19 1.34-0.51 1.9l-0.94-0.54c0.23-0.4 0.36-0.86 0.36-1.36c0-1-0.54-1.88-1.35-2.34l0.55-0.94zm-1.9 2.2c-0.6 0-1.1 0.48-1.1 1.08c0 0.6 0.5 1.09 1.1 1.09c0.6 0 1.08-0.49 1.08-1.09c0-0.6-0.49-1.08-1.09-1.08z"/>
+    <path
+        android:fillColor="#000"
+        android:pathData="M2.43 14.18h1.04l0.96-3.3h0.04l0.96 3.3h1.04l1.45-5.05H6.75l-0.84 3.51H5.87l-0.92-3.5h-1l-0.92 3.5H3l-0.83-3.5H0.99l1.44 5.04z"/>
+    <path
+        android:fillColor="#000"
+        android:pathData="M8.47 14.18h1.05v-3.79H8.47v3.79zM8.99 9.9c0.32 0 0.57-0.23 0.57-0.53c0-0.29-0.25-0.53-0.57-0.53c-0.3 0-0.56 0.24-0.56 0.53c0 0.3 0.25 0.53 0.56 0.53z"/>
+    <path
+        android:fillColor="#000"
+        android:pathData="M10.38 14.18h1.06v-2.09h2.06v-0.88h-2.06v-1.2h2.28V9.13h-3.34v5.05z"/>
+    <path
+        android:fillColor="#000"
+        android:pathData="M14.41 14.18h1.05v-3.79h-1.05v3.79zm0.53-4.28c0.32 0 0.57-0.23 0.57-0.53c0-0.29-0.25-0.53-0.57-0.53c-0.3 0-0.56 0.24-0.56 0.53c0 0.3 0.25 0.53 0.56 0.53z"/>
+</vector>
