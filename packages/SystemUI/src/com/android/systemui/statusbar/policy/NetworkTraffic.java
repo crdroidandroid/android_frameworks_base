@@ -218,7 +218,7 @@ public class NetworkTraffic extends TextView {
 
             updateVisibility();
 
-            if (mVisible && !mHideArrows) {
+            if (mVisible) {
                 setTrafficDrawable();
             }
 
@@ -498,16 +498,18 @@ public class NetworkTraffic extends TextView {
         int drawableResId = 0;
         final Drawable drawable;
 
-        if (mTrafficActive) {
-            if (mSubMode == MODE_UPSTREAM_ONLY) {
-                drawableResId = R.drawable.stat_sys_network_traffic_up;
-            } else if (mSubMode == MODE_DOWNSTREAM_ONLY) {
-                drawableResId = R.drawable.stat_sys_network_traffic_down;
+        if (!mHideArrows) {
+            if (mTrafficActive) {
+                if (mSubMode == MODE_UPSTREAM_ONLY) {
+                    drawableResId = R.drawable.stat_sys_network_traffic_up;
+                } else if (mSubMode == MODE_DOWNSTREAM_ONLY) {
+                    drawableResId = R.drawable.stat_sys_network_traffic_down;
+                } else {
+                    drawableResId = R.drawable.stat_sys_network_traffic_updown;
+                }
             } else {
-                drawableResId = R.drawable.stat_sys_network_traffic_updown;
+                drawableResId = R.drawable.stat_sys_network_traffic;
             }
-        } else {
-            drawableResId = R.drawable.stat_sys_network_traffic;
         }
 
         drawable = drawableResId != 0 ? getResources().getDrawable(drawableResId) : null;
