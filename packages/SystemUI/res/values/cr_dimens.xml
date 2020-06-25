@@ -136,4 +136,7 @@
 
     <!-- Volume panel -->
     <dimen name="volume_dialog_panel_land_margin">68dp</dimen>
+
+    <!-- Network traffic monitor -->
+    <dimen name="net_traffic_txt_img_padding">2dp</dimen>
 </resources>

@@ -84,6 +84,7 @@ public class NetworkTraffic extends TextView {
     private int mMode = MODE_UPSTREAM_AND_DOWNSTREAM;
     private int mSubMode = MODE_UPSTREAM_AND_DOWNSTREAM;
     protected boolean mIsActive;
+    private boolean mTrafficActive = false;
     private long mLastTxBytes;
     private long mLastRxBytes;
     private long mLastUpdateTime;
@@ -92,6 +93,7 @@ public class NetworkTraffic extends TextView {
     private int mUnits;
     protected int mIconTint = 0;
     protected int newTint = Color.WHITE;
+    private int txtImgPadding;
 
     private SettingsObserver mObserver;
     private Drawable mDrawable;
@@ -108,8 +110,8 @@ public class NetworkTraffic extends TextView {
 
     private ConnectivityManager mConnectivityManager;
 
-    private RelativeSizeSpan mSpeedRelativeSizeSpan = new RelativeSizeSpan(0.70f);
-    private RelativeSizeSpan mUnitRelativeSizeSpan = new RelativeSizeSpan(0.65f);
+    private RelativeSizeSpan mSpeedRelativeSizeSpan = new RelativeSizeSpan(1.00f);
+    private RelativeSizeSpan mUnitRelativeSizeSpan = new RelativeSizeSpan(1.00f);
 
     public NetworkTraffic(Context context) {
         this(context, null);
@@ -181,9 +183,10 @@ public class NetworkTraffic extends TextView {
 
             final boolean enabled = mLocation != LOCATION_DISABLED && mScreenOn;
             final boolean aboveThreshold = isAboveThreshold(rxBytes, txBytes);
-            int submode = MODE_DOWNSTREAM_ONLY;
 
+            mSubMode = MODE_DOWNSTREAM_ONLY;
             mIsActive = enabled && mAttached && (!mAutoHide || aboveThreshold);
+            mTrafficActive = (txBytes > 0 || rxBytes > 0);
 
             clearHandlerCallbacks();
 
@@ -193,12 +196,12 @@ public class NetworkTraffic extends TextView {
                 if (mMode != MODE_DOWNSTREAM_ONLY) {
                     if (txBytes > rxBytes || mMode == MODE_UPSTREAM_ONLY) {
                         output = formatOutput(txBytes);
-                        submode = MODE_UPSTREAM_ONLY;
+                        mSubMode = MODE_UPSTREAM_ONLY;
                     } else {
                         output = formatOutput(rxBytes);
 
                         if (txBytes == rxBytes) {
-                            submode = mMode;
+                            mSubMode = mMode;
                         }
                     }
                 } else {
@@ -215,8 +218,7 @@ public class NetworkTraffic extends TextView {
 
             updateVisibility();
 
-            if (mVisible && mSubMode != submode) {
-                mSubMode = submode;
+            if (mVisible && !mHideArrows) {
                 setTrafficDrawable();
             }
 
@@ -250,27 +252,27 @@ public class NetworkTraffic extends TextView {
             if (speed >= Giga) {
                 unit = gunit;
                 decimalFormat = new DecimalFormat("0.00");
-                formatSpeed =  decimalFormat.format(speed / (float)Giga);
+                formatSpeed = decimalFormat.format(speed / (float)Giga);
             } else if (speed >= 100 * Mega) {
                 decimalFormat = new DecimalFormat("##0");
                 unit = munit;
-                formatSpeed =  decimalFormat.format(speed / (float)Mega);
+                formatSpeed = decimalFormat.format(speed / (float)Mega);
             } else if (speed >= 10 * Mega) {
                 decimalFormat = new DecimalFormat("#0.0");
                 unit = munit;
-                formatSpeed =  decimalFormat.format(speed / (float)Mega);
+                formatSpeed = decimalFormat.format(speed / (float)Mega);
             } else if (speed >= Mega) {
                 decimalFormat = new DecimalFormat("0.00");
                 unit = munit;
-                formatSpeed =  decimalFormat.format(speed / (float)Mega);
+                formatSpeed = decimalFormat.format(speed / (float)Mega);
             } else if (speed >= 100 * Kilo) {
                 decimalFormat = new DecimalFormat("##0");
                 unit = kunit;
-                formatSpeed =  decimalFormat.format(speed / (float)Kilo);
+                formatSpeed = decimalFormat.format(speed / (float)Kilo);
             } else if (speed >= 10 * Kilo) {
                 decimalFormat = new DecimalFormat("#0.0");
                 unit = kunit;
-                formatSpeed =  decimalFormat.format(speed / (float)Kilo);
+                formatSpeed = decimalFormat.format(speed / (float)Kilo);
             } else {
                 decimalFormat = new DecimalFormat("0.##");
                 unit = kunit;
@@ -283,7 +285,7 @@ public class NetworkTraffic extends TextView {
             spanUnitString = new SpannableString(unit);
             spanUnitString.setSpan(mUnitRelativeSizeSpan, 0, (unit).length(),
                     Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            return TextUtils.concat(spanSpeedString, "\n", spanUnitString);
+            return TextUtils.concat(spanSpeedString, spanUnitString);
         }
 
         private boolean isAboveThreshold(long rxBytes, long txBytes) {
@@ -438,6 +440,7 @@ public class NetworkTraffic extends TextView {
 
     private void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
+        final Resources resources = getResources();
 
         mLocation = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.NETWORK_TRAFFIC_LOCATION, 0, UserHandle.USER_CURRENT);
@@ -456,15 +459,16 @@ public class NetworkTraffic extends TextView {
         mHideArrows = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.NETWORK_TRAFFIC_HIDEARROW, 0, UserHandle.USER_CURRENT) == 1;
 
-        if (!mHideArrows) {
-            setGravity(Gravity.END|Gravity.CENTER_VERTICAL);
-        } else {
+        if (mHideArrows) {
             setGravity(Gravity.CENTER);
+        } else {
+            setGravity(Gravity.END|Gravity.CENTER_VERTICAL);
         }
-        setLines(2);
-        String txtFont = getResources().getString(com.android.internal.R.string.config_bodyFontFamily);
-        setTypeface(Typeface.create(txtFont, Typeface.BOLD));
-        setLineSpacing(0.80f, 0.80f);
+        setMaxLines(2);
+        String txtFont = resources.getString(com.android.internal.R.string.config_headlineFontFamilyMedium);
+        txtImgPadding = resources.getDimensionPixelSize(R.dimen.net_traffic_txt_img_padding);
+        setTypeface(Typeface.create(txtFont, Typeface.NORMAL));
+        setLineSpacing(0.75f, 0.75f);
         setStaticHeight(true);
 
         setTrafficDrawable();
@@ -492,10 +496,9 @@ public class NetworkTraffic extends TextView {
 
     protected void setTrafficDrawable() {
         int drawableResId = 0;
-        final Resources resources = getResources();
         final Drawable drawable;
 
-        if (!mHideArrows) {
+        if (mTrafficActive) {
             if (mSubMode == MODE_UPSTREAM_ONLY) {
                 drawableResId = R.drawable.stat_sys_network_traffic_up;
             } else if (mSubMode == MODE_DOWNSTREAM_ONLY) {
@@ -503,11 +506,15 @@ public class NetworkTraffic extends TextView {
             } else {
                 drawableResId = R.drawable.stat_sys_network_traffic_updown;
             }
+        } else {
+            drawableResId = R.drawable.stat_sys_network_traffic;
         }
-        drawable = drawableResId != 0 ? resources.getDrawable(drawableResId) : null;
+
+        drawable = drawableResId != 0 ? getResources().getDrawable(drawableResId) : null;
         if (mDrawable != drawable || mIconTint != newTint) {
             mDrawable = drawable;
             mIconTint = newTint;
+            setCompoundDrawablePadding(txtImgPadding);
             setCompoundDrawablesWithIntrinsicBounds(null, null, mDrawable, null);
             updateTrafficDrawable();
         }
