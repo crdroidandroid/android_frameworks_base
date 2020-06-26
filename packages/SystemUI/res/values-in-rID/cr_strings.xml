@@ -229,6 +229,13 @@ Sembilan</string>
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Roaming</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/d</string>
+    <string name="megabitspersecond_short">Mb/d</string>
+    <string name="gigabitspersecond_short">Gb/d</string>
+    <string name="kilobytespersecond_short">kB/d</string>
+    <string name="megabytespersecond_short">MB/d</string>
+    <string name="gigabytespersecond_short">GB/d</string>
     <!-- Omnijaws Weather -->
     <string name="omnijaws_service_error">Kesalahan</string>
     <string name="omnijaws_service_unkown">Tidak ada data cuaca</string>
@@ -239,11 +246,4 @@ Sembilan</string>
     <string name="omnijaws_current_text">Sekarang</string>
     <string name="omnijaws_package_not_available">OmniJaws tidak tersedia</string>
     <string name="omnijaws_service_last_update">Pembaruan terakhir:</string>
-    <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb/d</string>
-    <string name="megabitspersecond_short">Mb/d</string>
-    <string name="gigabitspersecond_short">Gb/d</string>
-    <string name="kilobytespersecond_short">kB/d</string>
-    <string name="megabytespersecond_short">MB/d</string>
-    <string name="gigabytespersecond_short">GB/d</string>
 </resources>
