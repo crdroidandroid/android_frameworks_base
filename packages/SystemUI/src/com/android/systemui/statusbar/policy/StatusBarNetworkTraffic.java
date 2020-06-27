@@ -79,7 +79,7 @@ public class StatusBarNetworkTraffic extends NetworkTraffic implements DarkRecei
 
     @Override
     public boolean isIconVisible() {
-        return mLocation == 1;
+        return mLocation == LOCATION_STATUSBAR;
     }
 
     @Override
@@ -104,7 +104,6 @@ public class StatusBarNetworkTraffic extends NetworkTraffic implements DarkRecei
                 mSystemIconVisible = false;
                 break;
         }
-        updateVisibility();
     }
 
     @Override
