@@ -49,7 +49,6 @@ public class StatusBarNetworkTraffic extends NetworkTraffic implements DarkRecei
 
     public StatusBarNetworkTraffic(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        setVisibleState(STATE_ICON);
     }
 
     @Override
@@ -79,7 +78,7 @@ public class StatusBarNetworkTraffic extends NetworkTraffic implements DarkRecei
 
     @Override
     public boolean isIconVisible() {
-        return mLocation == 1;
+        return mLocation == 1; // LOCATION_DISABLED = 0, LOCATION_STATUSBAR = 1, LOCATION_QUICK_STATUSBAR = 2
     }
 
     @Override
