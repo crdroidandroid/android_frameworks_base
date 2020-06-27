@@ -197,7 +197,7 @@ public class MobileSignalController extends SignalController<
             case VOLTE_ICON_STYLE:
                 mVoLTEicon =
                     TunerService.parseInteger(newValue, 0);
-                updateTelephony();
+                notifyListeners();
                 break;
             case ROAMING_INDICATOR_ICON:
                 mRoamingIconAllowed =
