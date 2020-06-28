@@ -209,6 +209,13 @@
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Роўмінг</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">кбіт/с</string>
+    <string name="megabitspersecond_short">Мб/с</string>
+    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="kilobytespersecond_short">кБ/с</string>
+    <string name="megabytespersecond_short">МБ/с</string>
+    <string name="gigabytespersecond_short">Гб/с</string>
     <!-- Omnijaws Weather -->
     <string name="omnijaws_service_error">Памылка</string>
     <string name="omnijaws_service_unkown">Няма дадзеных аб надвор\'і</string>
@@ -219,11 +226,4 @@
     <string name="omnijaws_current_text">Зараз</string>
     <string name="omnijaws_package_not_available">OmniJaws недаступны</string>
     <string name="omnijaws_service_last_update">Апошняе абнаўленне:</string>
-    <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">кбіт/с</string>
-    <string name="megabitspersecond_short">Мб/с</string>
-    <string name="gigabitspersecond_short">Гб/с</string>
-    <string name="kilobytespersecond_short">кБ/с</string>
-    <string name="megabytespersecond_short">МБ/с</string>
-    <string name="gigabytespersecond_short">Гб/с</string>
 </resources>
