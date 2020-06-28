@@ -4891,6 +4891,12 @@ public final class Settings {
         public static final String VOWIFI_ICON_STYLE = "vowifi_icon_style";
 
         /**
+         * Whether VoWiFi icon should override VoLTE icon
+         * @hide
+         */
+        public static final String VOLTE_VOWIFI_OVERRIDE = "volte_vowifi_override";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
