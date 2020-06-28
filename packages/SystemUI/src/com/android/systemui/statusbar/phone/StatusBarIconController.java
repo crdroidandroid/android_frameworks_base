@@ -213,9 +213,12 @@ public interface StatusBarIconController {
         protected final boolean mConfigUseOldMobileType;
 
         private boolean mOldStyleType;
+        private boolean mAirplaneMode;
 
         private static final String USE_OLD_MOBILETYPE =
             "system:" + Settings.System.USE_OLD_MOBILETYPE;
+        private static final String AIRPLANE_MODE_ON =
+            "global:" + Settings.Global.AIRPLANE_MODE_ON;
 
         public IconManager(ViewGroup group) {
             mGroup = group;
@@ -312,6 +315,7 @@ public interface StatusBarIconController {
             }
 
             Dependency.get(TunerService.class).addTunable(this, USE_OLD_MOBILETYPE);
+            Dependency.get(TunerService.class).addTunable(this, AIRPLANE_MODE_ON);
 
             return view;
         }
@@ -459,6 +463,11 @@ public interface StatusBarIconController {
                         TunerService.parseIntegerSwitch(newValue, mConfigUseOldMobileType);
                     updateOldStyleMobileDataIcons();
                     break;
+                case AIRPLANE_MODE_ON:
+                    mAirplaneMode =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                    updateOldStyleMobileDataIcons();
+                    break;
                 default:
                     break;
             }
@@ -468,7 +477,7 @@ public interface StatusBarIconController {
             for (int i = 0; i < mGroup.getChildCount(); i++) {
                 View child = mGroup.getChildAt(i);
                 if (child instanceof StatusBarMobileView) {
-                    ((StatusBarMobileView) child).updateDisplayType(mOldStyleType);
+                    ((StatusBarMobileView) child).updateDisplayType(mOldStyleType && !mAirplaneMode);
                 }
             }
         }
