@@ -126,6 +126,8 @@ public class MobileSignalController extends SignalController<
             "system:" + Settings.System.VOWIFI_ICON_STYLE;
     public static final String VOLTE_VOWIFI_OVERRIDE =
             "system:" + Settings.System.VOLTE_VOWIFI_OVERRIDE;
+    public static final String AIRPLANE_MODE_ON =
+            "global:" + Settings.Global.AIRPLANE_MODE_ON;
 
     // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
     // need listener lists anymore.
@@ -200,6 +202,7 @@ public class MobileSignalController extends SignalController<
         Dependency.get(TunerService.class).addTunable(this, USE_OLD_MOBILETYPE);
         Dependency.get(TunerService.class).addTunable(this, VOWIFI_ICON_STYLE);
         Dependency.get(TunerService.class).addTunable(this, VOLTE_VOWIFI_OVERRIDE);
+        Dependency.get(TunerService.class).addTunable(this, AIRPLANE_MODE_ON);
     }
 
     @Override
@@ -224,7 +227,8 @@ public class MobileSignalController extends SignalController<
                 mDataDisabledIcon = 
                     TunerService.parseIntegerSwitch(newValue, true);
                 updateTelephony();                
-                break; 
+                break;
+            case AIRPLANE_MODE_ON:
             case USE_OLD_MOBILETYPE:
                 notifyListeners();
                 break;

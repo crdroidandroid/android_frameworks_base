@@ -442,9 +442,13 @@ public interface StatusBarIconController {
         }
 
         private boolean useOldStyleMobileDataIcons() {
-            return Settings.System.getIntForUser(mContext.getContentResolver(),
+            boolean useOldStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.USE_OLD_MOBILETYPE, mConfigUseOldMobileType,
                     UserHandle.USER_CURRENT) != 0;
+            boolean isAirplaneMode = Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+
+            return useOldStyle && !isAirplaneMode;
         }
     }
 }
