@@ -88,7 +88,6 @@ public class TunerServiceImpl extends TunerService {
             MobileSignalController.ROAMING_INDICATOR_ICON,
             MobileSignalController.SHOW_FOURG_ICON,
             MobileSignalController.DATA_DISABLED_ICON,
-            MobileSignalController.USE_OLD_MOBILETYPE,
             NotificationPanelView.NOTIFICATION_MATERIAL_DISMISS,
             QSTileHost.TILES_SETTING,
             Settings.Secure.DOZE_ALWAYS_ON,

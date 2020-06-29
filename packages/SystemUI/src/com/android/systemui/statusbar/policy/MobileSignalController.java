@@ -120,8 +120,6 @@ public class MobileSignalController extends SignalController<
             "system:" + Settings.System.SHOW_FOURG_ICON;
     public static final String DATA_DISABLED_ICON =
             "system:" + Settings.System.DATA_DISABLED_ICON;
-    public static final String USE_OLD_MOBILETYPE =
-            "system:" + Settings.System.USE_OLD_MOBILETYPE;
     public static final String VOWIFI_ICON_STYLE =
             "system:" + Settings.System.VOWIFI_ICON_STYLE;
     public static final String VOLTE_VOWIFI_OVERRIDE =
@@ -197,7 +195,6 @@ public class MobileSignalController extends SignalController<
         Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
         Dependency.get(TunerService.class).addTunable(this, SHOW_FOURG_ICON);
         Dependency.get(TunerService.class).addTunable(this, DATA_DISABLED_ICON);
-        Dependency.get(TunerService.class).addTunable(this, USE_OLD_MOBILETYPE);
         Dependency.get(TunerService.class).addTunable(this, VOWIFI_ICON_STYLE);
         Dependency.get(TunerService.class).addTunable(this, VOLTE_VOWIFI_OVERRIDE);
     }
@@ -225,9 +222,6 @@ public class MobileSignalController extends SignalController<
                     TunerService.parseIntegerSwitch(newValue, true);
                 updateTelephony();                
                 break; 
-            case USE_OLD_MOBILETYPE:
-                notifyListeners();
-                break;
             case VOWIFI_ICON_STYLE:
                 mVoWIFIicon =
                     TunerService.parseInteger(newValue, 0);
