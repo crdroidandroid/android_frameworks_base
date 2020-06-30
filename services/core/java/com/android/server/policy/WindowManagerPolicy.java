@@ -53,6 +53,8 @@ import static android.view.WindowManager.LayoutParams.TYPE_STATUS_BAR_SUB_PANEL;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_FINGERPRINT;
+import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_FINGERPRINT_HIGH_LIGHT;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
 import static android.view.WindowManager.LayoutParams.TYPE_TOAST;
 import static android.view.WindowManager.LayoutParams.TYPE_VOICE_INTERACTION;
@@ -894,6 +896,10 @@ public interface WindowManagerPolicy extends WindowManagerPolicyConstants {
             case TYPE_POINTER:
                 // the (mouse) pointer layer
                 return  33;
+            case TYPE_SYSTEM_FINGERPRINT:
+                return  34;
+            case TYPE_SYSTEM_FINGERPRINT_HIGH_LIGHT:
+                return  35;
             default:
                 Slog.e("WindowManager", "Unknown window type: " + type);
                 return APPLICATION_LAYER;
