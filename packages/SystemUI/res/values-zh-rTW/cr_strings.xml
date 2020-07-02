@@ -16,10 +16,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 快速充電中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash 閃充中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash 閃充中</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 快速充電中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp 閃充中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp 閃充中</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
@@ -27,7 +27,7 @@
     <string name="quick_settings_smart_pixels">智慧像素</string>
     <string name="quick_settings_smart_pixels_on_power_save">自動啟用智慧像素</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">螢幕快照</string>
+    <string name="quick_settings_screenshot_label">螢幕截圖</string>
     <string name="quick_settings_region_screenshot_label">部分截圖</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU 資訊</string>
@@ -60,29 +60,29 @@
     <!--Google sound search tile -->
     <string name="quick_settings_sound_search">語音搜尋</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">聲音</string>
+    <string name="quick_settings_sound_label">音效</string>
     <string name="quick_settings_sound_ring">鈴聲</string>
-    <string name="quick_settings_sound_vibrate">振動</string>
+    <string name="quick_settings_sound_vibrate">震動</string>
     <string name="quick_settings_sound_dnd">請勿打擾</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
     <string name="quick_settings_reboot_label">重新啟動</string>
-    <string name="quick_settings_reboot_recovery_label">恢復模式</string>
+    <string name="quick_settings_reboot_recovery_label">Recovery 模式</string>
     <string name="quick_settings_poweroff_label">關閉電源</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">遊戲模式已在設定關閉</string>
+    <string name="gaming_mode_not_enabled">遊戲模式已在設定中被停用</string>
     <string name="quick_settings_gaming_mode_label">遊戲模式</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">遊戲模式已關閉.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">遊戲模式已關閉。</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">遊戲模式已開啟.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">遊戲模式已開啟。</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">切換數據卡</string>
-    <string name="qs_data_switch_toast_0">當前未插入SIM卡</string>
-    <string name="qs_data_switch_toast_1">目前僅插入一張SIM卡</string>
-    <string name="qs_data_switch_changed_1">使用SIM 1移動數據</string>
-    <string name="qs_data_switch_changed_2">使用SIM 2移動數據</string>
+    <string name="qs_data_switch_label">切換上網 SIM 卡</string>
+    <string name="qs_data_switch_toast_0">目前未插入 SIM 卡</string>
+    <string name="qs_data_switch_toast_1">目前僅插入一張 SIM 卡</string>
+    <string name="qs_data_switch_changed_1">使用 SIM 1 的行動數據</string>
+    <string name="qs_data_switch_changed_2">使用 SIM 2 的行動數據</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">強制停止？</string>
+    <string name="force_stop_dlg_title">您要強制停止嗎？</string>
     <string name="force_stop_dlg_text">如果您強制停止應用程式，應用程式可能無法正常運作。</string>
     <string name="guts_force_close_app">關閉應用程式</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
