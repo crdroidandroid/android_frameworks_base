@@ -30,7 +30,7 @@
     <string name="quick_settings_screenshot_label">螢幕截圖</string>
     <string name="quick_settings_region_screenshot_label">部分截圖</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU 資訊</string>
+    <string name="quick_settings_cpuinfo_label">處理器資訊</string>
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">FPS 資訊</string>
     <string name="accessibility_quick_settings_fpsinfo_off">FPS 資訊關閉</string>
