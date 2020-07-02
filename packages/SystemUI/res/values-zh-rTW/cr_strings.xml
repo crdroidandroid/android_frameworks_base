@@ -119,7 +119,7 @@
     <string name="text_clock_h_eleven">十一點</string>
     <string name="text_clock_h_twelve">十二點</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">點整</string>
+    <string name="text_clock_m_zero">整</string>
     <string name="text_clock_m_one">零一分</string>
     <string name="text_clock_m_two">零二分</string>
     <string name="text_clock_m_three">零三分</string>
@@ -190,7 +190,7 @@
     <string name="stabilization_position_friction">移動位置</string>
     <!-- Screen record -->
     <string name="screenrecord_dialog_title">開始錄製?</string>
-    <string name="screenrecord_dialog_summary">錄製時，Android系統可以取得螢幕上可見或設備上顯示的任何敏感信息。 這包括密碼，付款訊息，照片，消息和音訊。</string>
+    <string name="screenrecord_dialog_summary">錄製時，Android 系統可以取得螢幕上可見或裝置上顯示的任何個人資訊。 這包括密碼、付款資訊、照片、訊息和音訊。</string>
     <string name="screenrecord_dialog_start">開始</string>
     <string name="screenrecord_dialog_cancel">取消</string>
     <string name="screenrecord_audio_recording_title">音訊來源</string>
