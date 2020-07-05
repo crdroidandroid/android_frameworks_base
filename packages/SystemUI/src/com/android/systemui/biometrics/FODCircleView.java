@@ -60,6 +60,7 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardSecurityModel.SecurityMode;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
+import com.android.settingslib.utils.ThreadUtils;
 import com.android.systemui.R;
 import com.android.systemui.Dependency;
 import com.android.systemui.statusbar.policy.ConfigurationController;
@@ -508,7 +509,9 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         }
 
         setDim(true);
-        dispatchPress();
+        ThreadUtils.postOnBackgroundThread(() -> {
+            dispatchPress();
+        });
 
         updatePosition();
         updateIconDim();
@@ -522,7 +525,9 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         updateIconDim();
         invalidate();
 
-        dispatchRelease();
+        ThreadUtils.postOnBackgroundThread(() -> {
+            dispatchRelease();
+        });
         setDim(false);
 
         setKeepScreenOn(false);
@@ -594,7 +599,9 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
 
         updatePosition();
 
-        dispatchShow();
+        ThreadUtils.postOnBackgroundThread(() -> {
+            dispatchShow();
+        });
         setVisibility(View.VISIBLE);
     }
 
@@ -602,7 +609,9 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         mIsShowing = false;
         setVisibility(View.GONE);
         hideCircle();
-        dispatchHide();
+        ThreadUtils.postOnBackgroundThread(() -> {
+            dispatchHide();
+        });
     }
 
     private void updateAlpha() {
