@@ -123,11 +123,13 @@
         <item>Usar la esbilla del sistema (por defeutu)</item>
         <item>Monu</item>
         <item>Estéreu</item>
+        <item>Dual Channel</item>
     </string-array>
     <string-array name="bluetooth_a2dp_codec_channel_mode_summaries">
         <item>Usar la esbilla del sistema (por defeutu)</item>
         <item>Monu</item>
         <item>Estéreu</item>
+        <item>Dual Channel</item>
     </string-array>
     <string-array name="bluetooth_a2dp_codec_ldac_playback_quality_titles">
         <item>Optimización pa la calidá del audiu (330kbps/303kbps)</item>
