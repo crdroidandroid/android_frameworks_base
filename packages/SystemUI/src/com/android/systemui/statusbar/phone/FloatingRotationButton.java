@@ -46,6 +46,7 @@ public class FloatingRotationButton implements RotationButton {
     private KeyButtonDrawable mKeyButtonDrawable;
     private boolean mIsShowing;
     private boolean mCanShow = true;
+    private boolean mShow;
 
     private RotationButtonController mRotationButtonController;
 
@@ -60,6 +61,9 @@ public class FloatingRotationButton implements RotationButton {
         mDiameter = res.getDimensionPixelSize(R.dimen.floating_rotation_button_diameter);
         mMargin = Math.max(res.getDimensionPixelSize(R.dimen.floating_rotation_button_min_margin),
                 res.getDimensionPixelSize(R.dimen.rounded_corner_content_padding));
+
+        mShow = Settings.Global.getInt(
+                        mContext.getContentResolver(), Settings.Global.SHOW_ROTATION_BUTTON, 1) != 0;
     }
 
     @Override
@@ -74,7 +78,7 @@ public class FloatingRotationButton implements RotationButton {
 
     @Override
     public boolean show() {
-        if (!mCanShow || mIsShowing) {
+        if ((!mCanShow || mIsShowing) && !mShow) {
             return false;
         }
         mIsShowing = true;
