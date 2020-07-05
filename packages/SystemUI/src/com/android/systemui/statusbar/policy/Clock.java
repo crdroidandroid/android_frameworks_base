@@ -115,6 +115,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     private int mAmPmStyle = AM_PM_STYLE_GONE;
     private final boolean mShowDark;
     private boolean mShowSeconds;
+    private Handler mHandler;
     private Handler mSecondsHandler;
     private int mClockDateDisplay = CLOCK_DATE_DISPLAY_GONE;
     private int mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
@@ -253,6 +254,8 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             }
             mCurrentUserTracker.startTracking();
             mCurrentUserId = mCurrentUserTracker.getCurrentUserId();
+
+            mHandler = new Handler();
         }
 
         // NOTE: It's safe to do these after registering the receiver since the receiver always runs
@@ -263,10 +266,11 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
 
         // Make sure we update to the current time
         mClockFormatString = ""; // force refresh
-        updateClock();
-        updateClockVisibility();
-        updateShowSeconds();
-        updateClockVisibility();
+        if (mHandler != null) mHandler.post(() -> {
+                updateClock();
+                updateShowSeconds();
+                updateClockVisibility();
+            });
     }
 
     @Override
@@ -289,8 +293,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            Handler handler = getHandler();
-            if (handler == null) {
+            if (mHandler == null) {
                 Log.e(TAG,
                         "Received intent, but handler is null - still attached to window? Window "
                                 + "token: "
@@ -300,7 +303,7 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
 
             if (action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
                 String tz = intent.getStringExtra("time-zone");
-                handler.post(() -> {
+                mHandler.post(() -> {
                     mCalendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
                     if (mClockFormat != null) {
                         mClockFormat.setTimeZone(mCalendar.getTimeZone());
@@ -308,23 +311,32 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                 });
             } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 final Locale newLocale = getResources().getConfiguration().locale;
-                handler.post(() -> {
+                mHandler.post(() -> {
                     if (!newLocale.equals(mLocale)) {
                         mLocale = newLocale;
                     }
                     mClockFormatString = ""; // force refresh
                     updateClockVisibility();
-                    updateShowSeconds();
                     updateClock();
+                    updateShowSeconds();
                     return;
                 });
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 mScreenOn = true;
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
+                if (mShowSeconds && mSecondsHandler != null) {
+                    mSecondsHandler.removeCallbacks(mSecondTick);
+                }
             }
             if (mScreenOn) {
-                handler.post(() -> updateClock());
+                mHandler.post(() -> {
+                    updateClock();
+                    if (mShowSeconds && mSecondsHandler != null) {
+                        mSecondsHandler.postAtTime(mSecondTick,
+                                SystemClock.uptimeMillis() / 1000 * 1000 + 1000);
+                    }
+                });
                 if (mClockAutoHide) autoHideHandler.post(() -> updateClockVisibility());
             }
         }
@@ -389,7 +401,6 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             case STATUS_BAR_CLOCK_SECONDS:
                 mShowSeconds =
                         TunerService.parseIntegerSwitch(newValue, false);
-                updateShowSeconds();
                 break;
             case STATUS_BAR_AM_PM:
                 mAmPmStyle =
@@ -426,8 +437,11 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                 break;
         }
         mClockFormatString = ""; // force refresh
-        updateClock();
-        updateClockVisibility();
+        if (mHandler != null) mHandler.post(() -> {
+                updateClock();
+                updateShowSeconds();
+                updateClockVisibility();
+            });
     }
 
     @Override
@@ -489,13 +503,9 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                     mSecondsHandler.postAtTime(mSecondTick,
                             SystemClock.uptimeMillis() / 1000 * 1000 + 1000);
                 }
-                IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
-                filter.addAction(Intent.ACTION_SCREEN_ON);
-                mContext.registerReceiver(mScreenReceiver, filter);
             }
         } else {
             if (mSecondsHandler != null) {
-                mContext.unregisterReceiver(mScreenReceiver);
                 mSecondsHandler.removeCallbacks(mSecondTick);
                 mSecondsHandler = null;
             }
@@ -653,29 +663,9 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
         }
     }
 
-    private final BroadcastReceiver mScreenReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-                if (mSecondsHandler != null) {
-                    mSecondsHandler.removeCallbacks(mSecondTick);
-                }
-            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                if (mSecondsHandler != null) {
-                    mSecondsHandler.postAtTime(mSecondTick,
-                            SystemClock.uptimeMillis() / 1000 * 1000 + 1000);
-                }
-            }
-        }
-    };
-
     private final Runnable mSecondTick = new Runnable() {
         @Override
         public void run() {
-            if (mCalendar != null) {
-                updateClock();
-            }
             mSecondsHandler.postAtTime(this, SystemClock.uptimeMillis() / 1000 * 1000 + 1000);
         }
     };
