@@ -547,8 +547,12 @@ public class NotificationIconAreaController implements
         if (colorize) {
             color = DarkIconDispatcher.getTint(mTintArea, v, tint);
         }
-        v.setStaticDrawableColor(color);
-        v.setDecorColor(tint);
+        if (v.getStatusBarIcon().pkg.contains("systemui")) {
+            v.setStaticDrawableColor(color);
+            v.setDecorColor(tint);
+        } else {
+            return;
+        }
     }
 
     /**

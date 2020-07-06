@@ -123,6 +123,7 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
     };
 
     private boolean mAlwaysScaleIcon;
+    private static boolean mIsSystemUI;
     private int mStatusBarIconDrawingSizeIncreased = 1;
     private int mStatusBarIconDrawingSize = 1;
     private int mStatusBarIconSize = 1;
@@ -439,7 +440,15 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
             userId = UserHandle.USER_SYSTEM;
         }
 
-        Drawable icon = statusBarIcon.icon.loadDrawableAsUser(context, userId);
+        Drawable icon;
+        String pkgName = statusBarIcon.pkg;
+        mIsSystemUI = pkgName.contains("systemui");
+        try {
+            icon = mIsSystemUI ? statusBarIcon.icon.loadDrawableAsUser(context, userId)
+                               : context.getPackageManager().getApplicationIcon(pkgName);
+        } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+            icon = statusBarIcon.icon.loadDrawableAsUser(context, userId);
+        }
 
         TypedValue typedValue = new TypedValue();
         sysuiContext.getResources().getValue(R.dimen.status_bar_icon_scale_factor,
@@ -612,9 +621,11 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
 
     private void initializeDecorColor() {
         if (mNotification != null) {
-            setDecorColor(getContext().getColor(mNightMode
-                    ? com.android.internal.R.color.notification_default_color_dark
-                    : com.android.internal.R.color.notification_default_color_light));
+            if (mNotification.getPackageName().contains("systemui")) {
+                setDecorColor(getContext().getColor(mNightMode
+                        ? com.android.internal.R.color.notification_default_color_dark
+                        : com.android.internal.R.color.notification_default_color_light));
+            }
         }
     }
 
@@ -634,16 +645,22 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
      * transitioning this also immediately sets the color.
      */
     public void setStaticDrawableColor(int color) {
-        mDrawableColor = color;
-        setColorInternal(color);
-        updateContrastedStaticColor();
-        mIconColor = color;
-        mDozer.setColor(color);
+        if (mNotification == null) return;
+        if (mNotification.getPackageName().contains("systemui")) { //if (mIsSystemUI) {
+            mDrawableColor = color;
+            setColorInternal(color);
+            updateContrastedStaticColor();
+            mIconColor = color;
+            mDozer.setColor(color);
+        }
     }
 
     private void setColorInternal(int color) {
-        mCurrentSetColor = color;
-        updateIconColor();
+        if (mNotification == null) return;
+        if (mNotification.getPackageName().contains("systemui")) { //if (mIsSystemUI) {
+            mCurrentSetColor = color;
+            updateIconColor();
+        }
     }
 
     private void updateIconColor() {
@@ -652,19 +669,22 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
             return;
         }
 
-        if (mCurrentSetColor != NO_COLOR) {
-            if (mMatrixColorFilter == null) {
-                mMatrix = new float[4 * 5];
-                mMatrixColorFilter = new ColorMatrixColorFilter(mMatrix);
+        if (mNotification == null) return;
+        if (mNotification.getPackageName().contains("systemui")) { //if (mIsSystemUI) {
+            if (mCurrentSetColor != NO_COLOR) {
+                if (mMatrixColorFilter == null) {
+                    mMatrix = new float[4 * 5];
+                    mMatrixColorFilter = new ColorMatrixColorFilter(mMatrix);
+                }
+                int color = NotificationUtils.interpolateColors(
+                        mCurrentSetColor, Color.WHITE, mDozeAmount);
+                updateTintMatrix(mMatrix, color, DARK_ALPHA_BOOST * mDozeAmount);
+                mMatrixColorFilter.setColorMatrixArray(mMatrix);
+                setColorFilter(null);  // setColorFilter only invalidates if the instance changed.
+                setColorFilter(mMatrixColorFilter);
+            } else {
+                mDozer.updateGrayscale(this, mDozeAmount);
             }
-            int color = NotificationUtils.interpolateColors(
-                    mCurrentSetColor, Color.WHITE, mDozeAmount);
-            updateTintMatrix(mMatrix, color, DARK_ALPHA_BOOST * mDozeAmount);
-            mMatrixColorFilter.setColorMatrixArray(mMatrix);
-            setColorFilter(null);  // setColorFilter only invalidates if the instance changed.
-            setColorFilter(mMatrixColorFilter);
-        } else {
-            mDozer.updateGrayscale(this, mDozeAmount);
         }
     }
 
@@ -681,36 +701,40 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
     }
 
     public void setIconColor(int iconColor, boolean animate) {
-        if (mIconColor != iconColor) {
-            mIconColor = iconColor;
-            if (mColorAnimator != null) {
-                mColorAnimator.cancel();
-            }
-            if (mCurrentSetColor == iconColor) {
-                return;
-            }
-            if (animate && mCurrentSetColor != NO_COLOR) {
-                mAnimationStartColor = mCurrentSetColor;
-                mColorAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
-                mColorAnimator.setInterpolator(Interpolators.FAST_OUT_SLOW_IN);
-                mColorAnimator.setDuration(ANIMATION_DURATION_FAST);
-                mColorAnimator.addUpdateListener(mColorUpdater);
-                mColorAnimator.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mColorAnimator = null;
-                        mAnimationStartColor = NO_COLOR;
-                    }
-                });
-                mColorAnimator.start();
-            } else {
-                setColorInternal(iconColor);
+        if (mNotification == null) return;
+        if (mNotification.getPackageName().contains("systemui")) { //if (mIsSystemUI) {
+            if (mIconColor != iconColor) {
+                mIconColor = iconColor;
+                if (mColorAnimator != null) {
+                    mColorAnimator.cancel();
+                }
+                if (mCurrentSetColor == iconColor) {
+                    return;
+                }
+                if (animate && mCurrentSetColor != NO_COLOR) {
+                    mAnimationStartColor = mCurrentSetColor;
+                    mColorAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
+                    mColorAnimator.setInterpolator(Interpolators.FAST_OUT_SLOW_IN);
+                    mColorAnimator.setDuration(ANIMATION_DURATION_FAST);
+                    mColorAnimator.addUpdateListener(mColorUpdater);
+                    mColorAnimator.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mColorAnimator = null;
+                            mAnimationStartColor = NO_COLOR;
+                        }
+                    });
+                    mColorAnimator.start();
+                } else {
+                    setColorInternal(iconColor);
+                }
             }
         }
     }
 
     public int getStaticDrawableColor() {
-        return mDrawableColor;
+        if (mNotification == null) return mDrawableColor;
+        return mNotification.getPackageName().contains("systemui") /*mIsSystemUI*/ ? mDrawableColor : 0;
     }
 
     /**
@@ -729,26 +753,29 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
     }
 
     private void updateContrastedStaticColor() {
-        if (Color.alpha(mCachedContrastBackgroundColor) != 255) {
-            mContrastedDrawableColor = mDrawableColor;
-            return;
-        }
-        // We'll modify the color if it doesn't pass GAR
-        int contrastedColor = mDrawableColor;
-        if (!ContrastColorUtil.satisfiesTextContrast(mCachedContrastBackgroundColor,
-                contrastedColor)) {
-            float[] hsl = new float[3];
-            ColorUtils.colorToHSL(mDrawableColor, hsl);
-            // This is basically a light grey, pushing the color will only distort it.
-            // Best thing to do in here is to fallback to the default color.
-            if (hsl[1] < 0.2f) {
-                contrastedColor = Notification.COLOR_DEFAULT;
+        if (mNotification == null) return;
+        if (mNotification.getPackageName().contains("systemui")) { //if (mIsSystemUI) {
+            if (Color.alpha(mCachedContrastBackgroundColor) != 255) {
+                mContrastedDrawableColor = mDrawableColor;
+                return;
             }
-            boolean isDark = !ContrastColorUtil.isColorLight(mCachedContrastBackgroundColor);
-            contrastedColor = ContrastColorUtil.resolveContrastColor(mContext,
-                    contrastedColor, mCachedContrastBackgroundColor, isDark);
+            // We'll modify the color if it doesn't pass GAR
+            int contrastedColor = mDrawableColor;
+            if (!ContrastColorUtil.satisfiesTextContrast(mCachedContrastBackgroundColor,
+                    contrastedColor)) {
+                float[] hsl = new float[3];
+                ColorUtils.colorToHSL(mDrawableColor, hsl);
+                // This is basically a light grey, pushing the color will only distort it.
+                // Best thing to do in here is to fallback to the default color.
+                if (hsl[1] < 0.2f) {
+                    contrastedColor = Notification.COLOR_DEFAULT;
+                }
+                boolean isDark = !ContrastColorUtil.isColorLight(mCachedContrastBackgroundColor);
+                contrastedColor = ContrastColorUtil.resolveContrastColor(mContext,
+                        contrastedColor, mCachedContrastBackgroundColor, isDark);
+            }
+            mContrastedDrawableColor = contrastedColor;
         }
-        mContrastedDrawableColor = contrastedColor;
     }
 
     @Override
