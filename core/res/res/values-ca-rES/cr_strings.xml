@@ -25,26 +25,26 @@
     <string name="animation_slide_down">Lliscar cap a dalt</string>
     <string name="animation_default">Per defecte</string>
     <string name="animation_translucent">Translúcid</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_grow_shrink">Expandeix (Dalt)</string>
+    <string name="animation_grow_shrink_center">Expandeix (Centre)</string>
+    <string name="animation_grow_shrink_bottom">Expandeix (Inferior)</string>
+    <string name="animation_grow_shrink_left">Expandeix (Esquerra)</string>
+    <string name="animation_grow_shrink_right">Expandeix (Dreta)</string>
+    <string name="animation_random">Aleatori</string>
+    <string name="action_null">En blanc</string>
     <string name="animation_ethans">Ethans</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">Copiar URL del registre d\'errors</string>
+    <string name="url_copy_success">URL copiada amb èxit</string>
+    <string name="url_copy_failed">Hi ha hagut un error mentre es carregava el registre a dogbin</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">Prem i mantén el botó d’encesa per desbloquejar</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">Mode Gaming</string>
+    <string name="gaming_mode_notification_title">Mode Gaming activat</string>
+    <string name="gaming_mode_notification_content">Toca per desactivar el mode Gaming</string>
+    <string name="gaming_mode_enabled_toast">S\'ha activat el mode Gaming</string>
+    <string name="gaming_mode_disabled_toast">S\'ha desactivat el mode Gaming</string>
     <!-- MicroG -->
     <string name="permlab_fakePackageSignature">Spoof package signature</string>
     <!-- Description of an application permission, listed so the user can choose whether
