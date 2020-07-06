@@ -20,6 +20,8 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Trace
+import android.os.UserHandle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -60,6 +62,8 @@ import com.android.systemui.statusbar.phone.NotificationIconAreaController
 import com.android.systemui.statusbar.phone.NotificationIconContainer
 import com.android.systemui.statusbar.phone.ScreenOffAnimationController
 import com.android.systemui.statusbar.window.StatusBarWindowController
+import com.android.systemui.tuner.TunerService
+import com.android.systemui.tuner.TunerService.Tunable
 import com.android.wm.shell.bubbles.Bubbles
 import java.util.Optional
 import java.util.function.Function
@@ -94,6 +98,7 @@ constructor(
     private val shelfIconsViewModel: NotificationIconContainerShelfViewModel,
     private val statusBarIconsViewModel: NotificationIconContainerStatusBarViewModel,
     private val aodIconsViewModel: NotificationIconContainerAlwaysOnDisplayViewModel,
+    private val tunerService: TunerService,
 ) :
     NotificationIconAreaController,
     DarkIconDispatcher.DarkReceiver,
@@ -121,6 +126,9 @@ constructor(
     private var aodIconsVisible = false
     private var showLowPriority = true
 
+    private var newIconStyle = Settings.System.getIntForUser(
+             context.contentResolver, Settings.System.STATUSBAR_COLORED_ICONS, 0, UserHandle.USER_CURRENT) != 0
+
     @VisibleForTesting
     val settingsListener: NotificationListener.NotificationSettingsListener =
         object : NotificationListener.NotificationSettingsListener {
@@ -138,6 +146,16 @@ constructor(
         initializeNotificationAreaViews(context)
         reloadAodColor()
         darkIconDispatcher.addDarkReceiver(this)
+
+        tunerService.addTunable(object : TunerService.Tunable {
+            override fun onTuningChanged(key: String?, value: String?) {
+                val isNewIconStyle = TunerService.parseIntegerSwitch(value, false)
+                if (newIconStyle != isNewIconStyle) {
+                    newIconStyle = isNewIconStyle
+                    updateNotificationIcons()
+                }
+            }
+        }, STATUSBAR_COLORED_ICONS)
     }
 
     @VisibleForTesting
@@ -206,6 +224,9 @@ constructor(
     }
 
     private fun updateStatusBarIcons() {
+        if (notificationIcons == null) {
+            return
+        }
         updateIconsForLayout(
             { entry: NotificationEntry -> entry.icons.statusBarIcon },
             notificationIcons,
@@ -547,6 +568,8 @@ constructor(
                     v.setOnDismissListener(updateStatusBarIcons)
                 }
                 hostLayout.addView(v, i, params)
+                v.setIconStyle(newIconStyle)
+                v.updateDrawable()
             }
         }
         hostLayout.setChangingViewPositions(true)
@@ -563,6 +586,7 @@ constructor(
         }
         hostLayout.setChangingViewPositions(false)
         hostLayout.setReplacingIcons(null)
+        hostLayout.updateState()
     }
 
     /** Applies [.mIconTint] to the notification icons. */
@@ -585,8 +609,13 @@ constructor(
         if (colorize) {
             color = DarkIconDispatcher.getTint(tintAreas, v, tint)
         }
-        v.staticDrawableColor = color
-        v.setDecorColor(tint)
+        if (!newIconStyle || v.getStatusBarIcon().pkg.contains("systemui")) {
+            v.staticDrawableColor = color
+            v.setDecorColor(tint)
+        } else {
+            v.setStaticDrawableColor(StatusBarIconView.NO_COLOR)
+            v.setDecorColor(Color.WHITE)
+        }
     }
 
     private fun updateAnimations() {
@@ -680,5 +709,8 @@ constructor(
         private const val AOD_ICONS_APPEAR_DURATION: Long = 200
 
         @ColorInt private val DEFAULT_AOD_ICON_COLOR = -0x1
+
+        internal val STATUSBAR_COLORED_ICONS =
+            "system:" + Settings.System.STATUSBAR_COLORED_ICONS
     }
 }
