@@ -41,6 +41,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.os.Trace;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 import android.util.FloatProperty;
@@ -190,6 +191,7 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
     private boolean mShowsConversation;
     private float mDozeAmount;
     private final NotificationDozeHelper mDozer;
+    private boolean mNewIconStyle;
 
     public StatusBarIconView(Context context, String slot, StatusBarNotification sbn) {
         this(context, slot, sbn, false);
@@ -401,6 +403,11 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
                 return false;
         }
     }
+
+    public void setIconStyle(boolean iconStyle) {
+        mNewIconStyle = iconStyle;
+    }
+
     /**
      * Returns whether the set succeeded.
      */
@@ -488,6 +495,16 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
         return getIcon(getContext(), notifContext != null ? notifContext : getContext(), icon);
     }
 
+    private Drawable getIcon(Context context, StatusBarIcon statusBarIcon, int userId) {
+        // Try to load the monochrome app icon if applicable
+        Drawable icon = maybeGetMonochromeAppIcon(context, statusBarIcon);
+        // Otherwise, just use the icon normally
+        if (icon == null) {
+            icon = statusBarIcon.icon.loadDrawableAsUser(context, userId);
+        }
+        return icon;
+    }
+
     /**
      * Returns the right icon to use for this item
      *
@@ -503,11 +520,14 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
             userId = UserHandle.USER_SYSTEM;
         }
 
-        // Try to load the monochrome app icon if applicable
-        Drawable icon = maybeGetMonochromeAppIcon(context, statusBarIcon);
-        // Otherwise, just use the icon normally
-        if (icon == null) {
-            icon = statusBarIcon.icon.loadDrawableAsUser(context, userId);
+        Drawable icon;
+        String pkgName = statusBarIcon.pkg;
+        try {
+            icon = pkgName.contains("systemui") || !mNewIconStyle ?
+                                getIcon(context, statusBarIcon, userId)
+                               : context.getPackageManager().getApplicationIcon(pkgName);
+        } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+            icon = getIcon(context, statusBarIcon, userId);
         }
 
         TypedValue typedValue = new TypedValue();
