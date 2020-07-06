@@ -23,6 +23,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Trace;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -36,6 +37,7 @@ import com.android.app.animation.Interpolators;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.util.ContrastColorUtil;
 import com.android.settingslib.Utils;
+import com.android.systemui.Dependency;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.demomode.DemoMode;
 import com.android.systemui.demomode.DemoModeController;
@@ -56,6 +58,7 @@ import com.android.systemui.statusbar.notification.collection.ListEntry;
 import com.android.systemui.statusbar.notification.collection.NotificationEntry;
 import com.android.systemui.statusbar.notification.collection.provider.SectionStyleProvider;
 import com.android.systemui.statusbar.window.StatusBarWindowController;
+import com.android.systemui.tuner.TunerService;
 import com.android.wm.shell.bubbles.Bubbles;
 
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +80,10 @@ public class LegacyNotificationIconAreaControllerImpl implements
         DarkReceiver,
         StatusBarStateController.StateListener,
         NotificationWakeUpCoordinator.WakeUpListener,
-        DemoMode {
+        DemoMode, TunerService.Tunable {
+
+    public static final String STATUSBAR_COLORED_ICONS =
+            "system:" + Settings.System.STATUSBAR_COLORED_ICONS;
 
     private static final long AOD_ICONS_APPEAR_DURATION = 200;
     @ColorInt
@@ -112,6 +118,7 @@ public class LegacyNotificationIconAreaControllerImpl implements
     private int mAodIconTint;
     private boolean mAodIconsVisible;
     private boolean mShowLowPriority = true;
+    private boolean mNewIconStyle = false;
 
     @VisibleForTesting
     final NotificationListener.NotificationSettingsListener mSettingsListener =
@@ -157,6 +164,25 @@ public class LegacyNotificationIconAreaControllerImpl implements
         initializeNotificationAreaViews(context);
         reloadAodColor();
         darkIconDispatcher.addDarkReceiver(this);
+
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, STATUSBAR_COLORED_ICONS);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case STATUSBAR_COLORED_ICONS:
+                boolean newIconStyle =
+                    TunerService.parseIntegerSwitch(newValue, false);
+                if (mNewIconStyle != newIconStyle) {
+                    mNewIconStyle = newIconStyle;
+                    updateNotificationIcons();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     protected View inflateIconArea(LayoutInflater inflater) {
@@ -327,6 +353,9 @@ public class LegacyNotificationIconAreaControllerImpl implements
     }
 
     public void updateStatusBarIcons() {
+        if (mNotificationIcons == null) {
+            return;
+        }
         updateIconsForLayout(entry -> entry.getIcons().getStatusBarIcon(), mNotificationIcons,
                 false /* showAmbient */,
                 mShowLowPriority,
@@ -449,6 +478,8 @@ public class LegacyNotificationIconAreaControllerImpl implements
                 }
                 hostLayout.addView(v, i, params);
             }
+            v.setIconStyle(mNewIconStyle);
+            v.updateDrawable();
         }
 
         hostLayout.setChangingViewPositions(true);
@@ -465,6 +496,7 @@ public class LegacyNotificationIconAreaControllerImpl implements
         }
         hostLayout.setChangingViewPositions(false);
         hostLayout.setReplacingIconsLegacy(null);
+        hostLayout.updateState();
     }
 
     /**
@@ -490,8 +522,13 @@ public class LegacyNotificationIconAreaControllerImpl implements
         if (colorize) {
             color = DarkIconDispatcher.getTint(mTintAreas, v, tint);
         }
-        v.setStaticDrawableColor(color);
-        v.setDecorColor(tint);
+        if (!mNewIconStyle || v.getStatusBarIcon().pkg.contains("systemui")) {
+            v.setStaticDrawableColor(color);
+            v.setDecorColor(tint);
+        } else {
+            v.setStaticDrawableColor(StatusBarIconView.NO_COLOR);
+            v.setDecorColor(Color.WHITE);
+        }
     }
 
     public void showIconIsolated(StatusBarIconView icon, boolean animated) {
