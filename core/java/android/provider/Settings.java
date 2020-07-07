@@ -5563,6 +5563,18 @@ public final class Settings {
         public static final String SCREEN_OFF_ANIMATION = "screen_off_animation";
 
         /**
+         * Control how to handle the display cutout
+         * @hide
+         */
+        public static final String DISPLAY_CUTOUT_MODE = "display_cutout_mode";
+
+        /**
+         * Control how to handle the display cutout
+         * @hide
+         */
+        public static final String STOCK_STATUSBAR_IN_HIDE = "stock_statusbar_in_hide";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
