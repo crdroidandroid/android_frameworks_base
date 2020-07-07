@@ -5310,6 +5310,12 @@ public final class Settings {
         public static final String A2DP_SOURCE_CODEC_PRIORITY = "a2dp_source_codec_priority";
 
         /**
+         * SBC HD priority - whether to use dual channel for SBC by default
+         * @hide
+         */
+        public static final String SBC_HD_PRIORITY = "sbc_hd_priority";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
