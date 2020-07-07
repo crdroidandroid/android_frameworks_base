@@ -23,18 +23,24 @@ import static com.android.systemui.statusbar.phone.BarTransitions.MODE_LIGHTS_OU
 import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSPARENT;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.provider.Settings;
 import android.view.InsetsFlags;
 import android.view.ViewDebug;
 import android.view.WindowInsetsController.Appearance;
 
 import com.android.internal.colorextraction.ColorExtractor.GradientColors;
 import com.android.internal.view.AppearanceRegion;
+import com.android.systemui.Dependency;
 import com.android.systemui.Dumpable;
 import com.android.systemui.R;
 import com.android.systemui.plugins.DarkIconDispatcher;
 import com.android.systemui.shared.system.QuickStepContract;
 import com.android.systemui.statusbar.policy.BatteryController;
+import com.android.systemui.statusbar.policy.ConfigurationController;
+import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
+import com.android.systemui.tuner.TunerService;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -46,9 +52,13 @@ import javax.inject.Singleton;
  * Controls how light status bar flag applies to the icons.
  */
 @Singleton
-public class LightBarController implements BatteryController.BatteryStateChangeCallback, Dumpable {
+public class LightBarController implements
+        BatteryController.BatteryStateChangeCallback, Dumpable, ConfigurationListener, TunerService.Tunable {
 
     private static final float NAV_BAR_INVERSION_SCRIM_ALPHA_THRESHOLD = 0.1f;
+
+    private static final String DISPLAY_CUTOUT_MODE =
+            "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
 
     private final SysuiDarkIconDispatcher mStatusBarIconController;
     private final BatteryController mBatteryController;
@@ -83,6 +93,8 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
 
     private boolean mDirectReplying;
     private boolean mNavbarColorManagedByIme;
+    private boolean mForceDarkIcons;
+    private boolean mLandscape;
 
     @Inject
     public LightBarController(Context ctx, DarkIconDispatcher darkIconDispatcher,
@@ -94,6 +106,27 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
         mNavigationMode = navModeController.addListener((mode) -> {
             mNavigationMode = mode;
         });
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, DISPLAY_CUTOUT_MODE);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case DISPLAY_CUTOUT_MODE:
+                mForceDarkIcons =
+                        TunerService.parseInteger(newValue, 0) == 1;
+                updateStatus();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onConfigChanged(Configuration newConfig) {
+        mLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+        updateStatus();
     }
 
     public void setNavigationBar(LightBarTransitionsController navigationBar) {
@@ -205,6 +238,7 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
     private void updateStatus() {
         final int numStacks = mAppearanceRegions.length;
         int numLightStacks = 0;
+        boolean iconsDark = !mForceDarkIcons || mLandscape;
 
         // We can only have maximum one light stack.
         int indexLightStack = -1;
@@ -220,7 +254,7 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
         // If all stacks are light, all icons get dark.
         if (numLightStacks == numStacks) {
             mStatusBarIconController.setIconsDarkArea(null);
-            mStatusBarIconController.getTransitionsController().setIconsDark(true, animateChange());
+            mStatusBarIconController.getTransitionsController().setIconsDark(iconsDark, animateChange());
 
         }
 
@@ -234,7 +268,7 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
         else {
             mStatusBarIconController.setIconsDarkArea(
                     mAppearanceRegions[indexLightStack].getBounds());
-            mStatusBarIconController.getTransitionsController().setIconsDark(true, animateChange());
+            mStatusBarIconController.getTransitionsController().setIconsDark(iconsDark, animateChange());
         }
     }
 
