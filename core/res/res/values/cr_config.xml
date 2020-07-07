@@ -139,5 +139,5 @@
     <bool name="config_targetUsesInKernelDimming">true</bool>
 
     <!-- SBC Dual Channel (SBC HD Audio) -->
-    <bool name="config_enableSBCDualChannelAudio">true</bool>
+    <bool name="config_enableSBCDualChannelAudio">false</bool>
 </resources>
