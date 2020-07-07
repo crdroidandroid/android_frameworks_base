@@ -69,22 +69,22 @@
     <string name="quick_settings_reboot_recovery_label">Recuperació</string>
     <string name="quick_settings_poweroff_label">Apaga</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Mode Gaming está desactivat a la configuració</string>
+    <string name="quick_settings_gaming_mode_label">Mode Gaming</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">S\'ha desactivat el mode Gaming.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">S\'ha activat el mode Gaming.</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_toast_0">Currently no SIM card is inserted</string>
-    <string name="qs_data_switch_toast_1">Currently only one SIM card is inserted</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">Cambiar tarjeta de dades</string>
+    <string name="qs_data_switch_toast_0">No hi ha cap targeta SIM instal•lada</string>
+    <string name="qs_data_switch_toast_1">Hi ha només una targeta SIM instal•lada</string>
+    <string name="qs_data_switch_changed_1">Utilitzant SIM 1 per a dades mòbils</string>
+    <string name="qs_data_switch_changed_2">Utilitzant SIM 2 per a dades mòbils</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="force_stop_dlg_title">Vols forçar l\'aturada?</string>
+    <string name="force_stop_dlg_text">Si es força l\'aturada d\'una app, pot tenir un mal comportament.</string>
+    <string name="guts_force_close_app">Tanca l\'aplicació</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">SystemUI</string>
     <!-- Binary clock -->
