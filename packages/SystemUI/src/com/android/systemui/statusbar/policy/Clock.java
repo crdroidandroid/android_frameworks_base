@@ -229,6 +229,9 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
+        if (mHandler == null)
+            mHandler = new Handler();
+
         if (!mAttached) {
             mAttached = true;
             IntentFilter filter = new IntentFilter();
@@ -259,8 +262,6 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             }
             mCurrentUserTracker.startTracking();
             mCurrentUserId = mCurrentUserTracker.getCurrentUserId();
-
-            mHandler = new Handler();
 
             mDreamManager = IDreamManager.Stub.asInterface(
                     ServiceManager.checkService(DreamService.DREAM_SERVICE));
@@ -301,6 +302,10 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+
+            if (mHandler == null)
+                mHandler = new Handler();
+
             if (mHandler == null) {
                 Log.e(TAG,
                         "Received intent, but handler is null - still attached to window? Window "
