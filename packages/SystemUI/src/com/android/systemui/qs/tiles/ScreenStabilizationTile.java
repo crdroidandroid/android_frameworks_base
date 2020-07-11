@@ -281,19 +281,19 @@ public class ScreenStabilizationTile extends QSTileImpl<BooleanState> {
     private void updateValuesInt(int progress) {
         switch (progress) {
             case 1:
-                Settings.System.putFloatForUser(mResolver, Settings.System.STABILIZATION_VELOCITY_AMPLITUDE, 4000, UserHandle.USER_CURRENT);
+                Settings.System.putIntForUser(mResolver, Settings.System.STABILIZATION_VELOCITY_AMPLITUDE, 4000, UserHandle.USER_CURRENT);
                 break;
             case 2:
-                Settings.System.putFloatForUser(mResolver, Settings.System.STABILIZATION_VELOCITY_AMPLITUDE, 6000, UserHandle.USER_CURRENT);
+                Settings.System.putIntForUser(mResolver, Settings.System.STABILIZATION_VELOCITY_AMPLITUDE, 6000, UserHandle.USER_CURRENT);
                 break;
             case 3:
-                Settings.System.putFloatForUser(mResolver, Settings.System.STABILIZATION_VELOCITY_AMPLITUDE, 8000, UserHandle.USER_CURRENT);
+                Settings.System.putIntForUser(mResolver, Settings.System.STABILIZATION_VELOCITY_AMPLITUDE, 8000, UserHandle.USER_CURRENT);
                 break;
             case 4:
-                Settings.System.putFloatForUser(mResolver, Settings.System.STABILIZATION_VELOCITY_AMPLITUDE, 10000, UserHandle.USER_CURRENT);
+                Settings.System.putIntForUser(mResolver, Settings.System.STABILIZATION_VELOCITY_AMPLITUDE, 10000, UserHandle.USER_CURRENT);
                 break;
             case 5:
-                Settings.System.putFloatForUser(mResolver, Settings.System.STABILIZATION_VELOCITY_AMPLITUDE, 12000, UserHandle.USER_CURRENT);
+                Settings.System.putIntForUser(mResolver, Settings.System.STABILIZATION_VELOCITY_AMPLITUDE, 12000, UserHandle.USER_CURRENT);
                 break;
         }
     }
