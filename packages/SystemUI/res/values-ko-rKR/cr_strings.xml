@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 급속 충전 중 (완전 충전까지 <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> 남음)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> • 고속 충전 중</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 급속 충전 중 (완전 충전까지 <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 남음)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • 급속 충전 중</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">스마트 픽셀</string>
+    <string name="quick_settings_smart_pixels_on_power_save">스마트 픽셀 자동으로 켜기</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">스크린샷</string>
+    <string name="quick_settings_region_screenshot_label">부분 스크린 샷</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">CPU 정보</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">FPS 정보</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS 정보 끄기</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS 정보 껴기</string>
+    <!-- HW Keys Tile -->
+    <string name="quick_settings_hw_keys_label">하드웨어 버튼</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">나침반</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">초기화 중\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">나침반 끄기</string>
+    <string name="accessibility_quick_settings_compass_on">나침반 켜기</string>
+    <string name="quick_settings_compass_N">북</string>
+    <string name="quick_settings_compass_NE">북동</string>
+    <string name="quick_settings_compass_E">동</string>
+    <string name="quick_settings_compass_SE">남동</string>
+    <string name="quick_settings_compass_S">남</string>
+    <string name="quick_settings_compass_SW">남서</string>
+    <string name="quick_settings_compass_W">서</string>
+    <string name="quick_settings_compass_NW">북서</string>
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">음악</string>
+    <string name="quick_settings_music_play">재생</string>
+    <string name="quick_settings_music_pause">일시중지</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <!--Google sound search tile -->
+    <string name="quick_settings_sound_search">사운드 검색</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">소리</string>
+    <string name="quick_settings_sound_ring">벨소리</string>
+    <string name="quick_settings_sound_vibrate">진동</string>
+    <string name="quick_settings_sound_dnd">응답 거부</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">다시 시작</string>
+    <string name="quick_settings_reboot_recovery_label">리커버리</string>
+    <string name="quick_settings_poweroff_label">전원 끄기</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">게임 모드가 설정에서 사용 중지되었습니다.</string>
+    <string name="quick_settings_gaming_mode_label">게임 모드</string>
+    <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_disabled">게임 모드가 꺼졌습니다.</string>
+    <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_enabled">게임 모드가 켜져 있습니다.</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">데이터 카드 전환</string>
+    <string name="qs_data_switch_toast_0">현재 SIM 카드가 삽입되어 있지 않습니다</string>
+    <string name="qs_data_switch_toast_1">현재 하나의 SIM 카드 만 삽입되었습니다</string>
+    <string name="qs_data_switch_changed_1">모바일 데이터에 SIM 1 사용</string>
+    <string name="qs_data_switch_changed_2">모바일 데이터에 SIM 2 사용</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">강제로 종료하시겠습니까?</string>
+    <string name="force_stop_dlg_text">강제로 앱을 종료하면 예기치 않은 오류가 발생할 수 있습니다.</string>
+    <string name="guts_force_close_app">어플리케이션 닫기</string>
+    <!-- Restart SystemUI via Advanced Power Menu -->
+    <string name="global_action_restart_systemui">시스템UI</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">1</string>
+    <string name="text_clock_h_two">2</string>
+    <string name="text_clock_h_three">3</string>
+    <string name="text_clock_h_four">4</string>
+    <string name="text_clock_h_five">5</string>
+    <string name="text_clock_h_six">6</string>
+    <string name="text_clock_h_seven">7</string>
+    <string name="text_clock_h_eight">8</string>
+    <string name="text_clock_h_nine">9</string>
+    <string name="text_clock_h_ten">10</string>
+    <string name="text_clock_h_eleven">11</string>
+    <string name="text_clock_h_twelve">12</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">정각</string>
+    <string name="text_clock_m_one">일 분</string>
+    <string name="text_clock_m_two">이 분</string>
+    <string name="text_clock_m_three">삼 분</string>
+    <string name="text_clock_m_four">사 분</string>
+    <string name="text_clock_m_five">오 분</string>
+    <string name="text_clock_m_six">육 분</string>
+    <string name="text_clock_m_seven">칠 분</string>
+    <string name="text_clock_m_eight">팔 분</string>
+    <string name="text_clock_m_nine">구 분</string>
+    <string name="text_clock_m_ten">십 분</string>
+    <string name="text_clock_m_eleven">Eleven</string>
+    <string name="text_clock_m_twelve">Twelve</string>
+    <string name="text_clock_m_thirteen">Thirteen</string>
+    <string name="text_clock_m_fourteen">Fourteen</string>
+    <string name="text_clock_m_fifteen">Fifteen</string>
+    <string name="text_clock_m_sixteen">십육 분</string>
+    <string name="text_clock_m_seventeen">십칠 분</string>
+    <string name="text_clock_m_eighteen">18</string>
+    <string name="text_clock_m_nineteen">19</string>
+    <string name="text_clock_m_twenty">20</string>
+    <string name="text_clock_m_twenty_one">이십
+일 분</string>
+    <string name="text_clock_m_twenty_two">이십
+이 분</string>
+    <string name="text_clock_m_twenty_three">23</string>
+    <string name="text_clock_m_twenty_four">24</string>
+    <string name="text_clock_m_twenty_five">이십
+오 분</string>
+    <string name="text_clock_m_twenty_six">이십
+육 분</string>
+    <string name="text_clock_m_twenty_seven">이십
+칠 분</string>
+    <string name="text_clock_m_twenty_eight">이십
+팔 분</string>
+    <string name="text_clock_m_twenty_nine">이십
+구 분</string>
+    <string name="text_clock_m_thirty">삼십 분</string>
+    <string name="text_clock_m_thirty_one">삼십
+일 분</string>
+    <string name="text_clock_m_thirty_two">삼십
+이 분</string>
+    <string name="text_clock_m_thirty_three">삼십
+삼 분</string>
+    <string name="text_clock_m_thirty_four">삼십
+사분</string>
+    <string name="text_clock_m_thirty_five">삼십
+오 분</string>
+    <string name="text_clock_m_thirty_six">삼십
+육 분</string>
+    <string name="text_clock_m_thirty_seven">삼십
+칠 분</string>
+    <string name="text_clock_m_thirty_eight">삼십
+팔 분</string>
+    <string name="text_clock_m_thirty_nine">삼십
+구 분</string>
+    <string name="text_clock_m_forty">사십 분</string>
+    <string name="text_clock_m_forty_one">사십
+일 분</string>
+    <string name="text_clock_m_forty_two">사십
+이 분</string>
+    <string name="text_clock_m_forty_three">사십
+삼 분</string>
+    <string name="text_clock_m_forty_four">사십
+사 분</string>
+    <string name="text_clock_m_forty_five">사십
+오 분</string>
+    <string name="text_clock_m_forty_six">사십
+육분</string>
+    <string name="text_clock_m_forty_seven">사십
+칠 분</string>
+    <string name="text_clock_m_forty_eight">사십
+팔 분</string>
+    <string name="text_clock_m_forty_nine">사십
+구 분</string>
+    <string name="text_clock_m_fifty">오십 분</string>
+    <string name="text_clock_m_fifty_one">오십
+일 분</string>
+    <string name="text_clock_m_fifty_two">오십
+이 분</string>
+    <string name="text_clock_m_fifty_three">오십
+삼 분</string>
+    <string name="text_clock_m_fifty_four">사십
+사 분</string>
+    <string name="text_clock_m_fifty_five">오십
+오 분</string>
+    <string name="text_clock_m_fifty_six">오십
+육 분</string>
+    <string name="text_clock_m_fifty_seven">오십
+칠 분</string>
+    <string name="text_clock_m_fifty_eight">오십팔분</string>
+    <string name="text_clock_m_fifty_nine">오십
+구 분</string>
+    <!-- Screen Stabilization -->
+    <string name="quick_settings_stabilization_label">화면 안정화</string>
+    <string name="quick_settings_stabilization_off">안정화 비활성화</string>
+    <string name="quick_settings_stabilization_on">안정화가 활성화되었습니다</string>
+    <string name="low_label">낮음</string>
+    <string name="high_label">높게</string>
+    <string name="stabilization_velocity_friction">속도 마찰</string>
+    <string name="stabilization_velocity_amplitude">속도 진폭</string>
+    <string name="stabilization_position_friction">위치 마찰</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">녹화 시작?</string>
+    <string name="screenrecord_dialog_summary">녹화 중에는 화면에 보이는 비밀번호, 결제 정보, 사진, 메세지, 소리 등의 민감한 정보가 녹화될 수 있습니다.</string>
+    <string name="screenrecord_dialog_start">시작</string>
+    <string name="screenrecord_dialog_cancel">취소</string>
+    <string name="screenrecord_audio_recording_title">오디오 소스</string>
+    <string name="screenrecord_audio_recording_internal">내부</string>
+    <string name="screenrecord_audio_recording_microphone">마이크로폰</string>
+    <string name="screenrecord_audio_recording_off">비활성화</string>
+    <string name="screenrecord_taps_title">화면에 터치 표시</string>
+    <string name="screenrecord_stopdot_title">정지 버튼 표시</string>
+    <string name="screenrecord_video_bitrate_title">비디오 비트레이트</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">데이터 절약 모드</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">데이터 로밍</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/초</string>
+    <string name="megabitspersecond_short">Mb/초</string>
+    <string name="gigabitspersecond_short">Gb/초</string>
+    <string name="kilobytespersecond_short">kB/초</string>
+    <string name="megabytespersecond_short">MB/초</string>
+    <string name="gigabytespersecond_short">GB/초</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">오류</string>
+    <string name="omnijaws_service_unkown">날씨 정보 없음</string>
+    <string name="omnijaws_service_error_long">날씨 정보 불러오기 오류</string>
+    <string name="omnijaws_service_disabled">서비스 사용 중지됨</string>
+    <string name="omnijaws_detail_header">날씨</string>
+    <string name="omnijaws_label_default">날씨</string>
+    <string name="omnijaws_current_text">현재</string>
+    <string name="omnijaws_package_not_available">OmniJaws를 사용할 수 없음</string>
+    <string name="omnijaws_service_last_update">최근 업데이트:</string>
+</resources>
