@@ -1005,23 +1005,22 @@ class GlobalScreenshot {
             @Override
             public void run() {
                 if (Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) == 0) {
-                    return;
-                }
-                switch (mAudioManager.getRingerMode()) {
-                    case AudioManager.RINGER_MODE_SILENT:
-                        // do nothing
-                        break;
-                    case AudioManager.RINGER_MODE_VIBRATE:
-                        if (mVibrator != null && mVibrator.hasVibrator()) {
-                            mVibrator.vibrate(VibrationEffect.createOneShot(50,
-                                    VibrationEffect.DEFAULT_AMPLITUDE));
-                        }
-                        break;
-                    case AudioManager.RINGER_MODE_NORMAL:
-                        // Play the shutter sound to notify that we've taken a screenshot
-                        mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
-                        break;
+                        Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) != 0) {
+                    switch (mAudioManager.getRingerMode()) {
+                        case AudioManager.RINGER_MODE_SILENT:
+                            // do nothing
+                            break;
+                        case AudioManager.RINGER_MODE_VIBRATE:
+                            if (mVibrator != null && mVibrator.hasVibrator()) {
+                                mVibrator.vibrate(VibrationEffect.createOneShot(50,
+                                        VibrationEffect.DEFAULT_AMPLITUDE));
+                            }
+                            break;
+                        case AudioManager.RINGER_MODE_NORMAL:
+                            // Play the shutter sound to notify that we've taken a screenshot
+                            mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
+                            break;
+                    }
                 }
 
                 mScreenshotView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
