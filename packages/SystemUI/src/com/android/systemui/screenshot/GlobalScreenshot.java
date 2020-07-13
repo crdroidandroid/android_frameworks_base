@@ -978,10 +978,6 @@ class GlobalScreenshot {
         mScreenshotLayout.post(new Runnable() {
             @Override
             public void run() {
-                if (Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) == 0) {
-                    return;
-                }
                 switch (mAudioManager.getRingerMode()) {
                     case AudioManager.RINGER_MODE_SILENT:
                         // do nothing
@@ -994,7 +990,10 @@ class GlobalScreenshot {
                         break;
                     case AudioManager.RINGER_MODE_NORMAL:
                         // Play the shutter sound to notify that we've taken a screenshot
-                        mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
+                        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                                Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) == 1) {
+                            mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
+                        }
                         break;
                 }
 
