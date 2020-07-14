@@ -222,7 +222,6 @@ import com.android.systemui.statusbar.notification.stack.NotificationListContain
 import com.android.systemui.statusbar.phone.dagger.StatusBarComponent;
 import com.android.systemui.statusbar.phone.dagger.StatusBarPhoneModule;
 import com.android.systemui.statusbar.policy.BatteryController;
-import com.android.systemui.statusbar.policy.BatteryController.BatteryStateChangeCallback;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
@@ -2607,18 +2606,31 @@ public class StatusBar extends SystemUI implements DemoMode,
                     new WirelessChargingAnimation.Callback() {
                         @Override
                         public void onAnimationStarting() {
+                            mNotificationShadeWindowController.setRequestTopUi(true, TAG);
                             CrossFadeHelper.fadeOut(mNotificationPanelViewController.getView(), 1);
                         }
 
                         @Override
                         public void onAnimationEnded() {
                             CrossFadeHelper.fadeIn(mNotificationPanelViewController.getView());
+                            mNotificationShadeWindowController.setRequestTopUi(false, TAG);
                         }
                     }, mDozing).show(animationDelay);
         } else {
             // workspace
             WirelessChargingAnimation.makeWirelessChargingAnimation(mContext, null,
-                    transmittingBatteryLevel, batteryLevel, null, false).show(animationDelay);
+                    transmittingBatteryLevel, batteryLevel,
+                    new WirelessChargingAnimation.Callback() {
+                        @Override
+                        public void onAnimationStarting() {
+                            mNotificationShadeWindowController.setRequestTopUi(true, TAG);
+                        }
+
+                        @Override
+                        public void onAnimationEnded() {
+                            mNotificationShadeWindowController.setRequestTopUi(false, TAG);
+                        }
+                    }, false).show(animationDelay);
         }
     }
 
