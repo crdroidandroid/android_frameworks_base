@@ -51,7 +51,7 @@ public class StatusBarIconList {
         }
         // Auto insert new items behind network traffic.
         mSlots.add(1, new Slot(slot, null));
-        return 0;
+        return 1;
     }
 
     protected ArrayList<Slot> getSlots() {
