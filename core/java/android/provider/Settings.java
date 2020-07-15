@@ -4595,7 +4595,7 @@ public final class Settings {
          */
         public static final String STATUS_BAR_CLOCK_DATE_FORMAT = "status_bar_clock_date_format";
 
-        /*
+        /**
          * Whether to auto hide clock
          * @hide
          */
