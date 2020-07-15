@@ -202,4 +202,7 @@
     <string name="clock_title_samsung" translatable="false">Samsung</string>
     <string name="clock_title_samsung_bold" translatable="false">Samsung (bold)</string>
     <string name="clock_title_samsung_accent" translatable="false">Samsung (colored)</string>
+
+    <!-- Tux clock -->
+    <string name="clock_title_tux" translatable="false">Tux</string>
 </resources>
