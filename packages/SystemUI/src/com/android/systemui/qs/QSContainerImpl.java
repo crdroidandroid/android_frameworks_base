@@ -48,8 +48,6 @@ public class QSContainerImpl extends FrameLayout implements
             "system:" + Settings.System.QS_PANEL_BG_ALPHA;
     private static final String STATUS_BAR_CUSTOM_HEADER_SHADOW =
             "system:" + Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW;
-    private static final String DISPLAY_CUTOUT_MODE =
-            "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
 
     private final Point mSizePoint = new Point();
 
@@ -75,8 +73,6 @@ public class QSContainerImpl extends FrameLayout implements
     private boolean mLandscape;
     private int mQsBackgroundAlpha = 255;
     private int mHeaderShadow = 0;
-
-    private boolean mImmerseMode;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -109,7 +105,6 @@ public class QSContainerImpl extends FrameLayout implements
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, QS_PANEL_BG_ALPHA);
         tunerService.addTunable(this, STATUS_BAR_CUSTOM_HEADER_SHADOW);
-        tunerService.addTunable(this, DISPLAY_CUTOUT_MODE);
 
         mStatusBarHeaderMachine.addObserver(this);
         mStatusBarHeaderMachine.updateEnablement();
@@ -143,11 +138,6 @@ public class QSContainerImpl extends FrameLayout implements
                 mHeaderShadow =
                         TunerService.parseInteger(newValue, 0);
                 applyHeaderBackgroundShadow();
-                break;
-            case DISPLAY_CUTOUT_MODE:
-                mImmerseMode =
-                        TunerService.parseInteger(newValue, 0) == 1;
-                updateStatusbarVisibility();
                 break;
             default:
                 break;
@@ -364,7 +354,7 @@ public class QSContainerImpl extends FrameLayout implements
     }
 
     private void updateStatusbarVisibility() {
-        boolean hideGradient = mLandscape || mHeaderImageEnabled || mImmerseMode;
+        boolean hideGradient = mLandscape || mHeaderImageEnabled;
         boolean hideStatusbar = mLandscape && !mHeaderImageEnabled;
 
         mBackgroundGradient.setVisibility(hideGradient ? View.INVISIBLE : View.VISIBLE);
