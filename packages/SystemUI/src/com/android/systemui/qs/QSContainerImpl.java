@@ -21,14 +21,10 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.database.ContentObserver;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.graphics.Color;
-import android.graphics.PorterDuff.Mode;
-import android.os.Handler;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
@@ -36,15 +32,22 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.crdroid.header.StatusBarHeaderMachine;
 import com.android.systemui.qs.customize.QSCustomizer;
+import com.android.systemui.tuner.TunerService;
 
 /**
  * Wrapper view with background which contains {@link QSPanel} and {@link BaseStatusBarHeader}
  */
 public class QSContainerImpl extends FrameLayout implements
-        StatusBarHeaderMachine.IStatusBarHeaderMachineObserver {
+        StatusBarHeaderMachine.IStatusBarHeaderMachineObserver, TunerService.Tunable {
+
+    private static final String QS_PANEL_BG_ALPHA =
+            "system:" + Settings.System.QS_PANEL_BG_ALPHA;
+    private static final String STATUS_BAR_CUSTOM_HEADER_SHADOW =
+            "system:" + Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW;
 
     private final Point mSizePoint = new Point();
 
@@ -69,12 +72,10 @@ public class QSContainerImpl extends FrameLayout implements
     private Drawable mCurrentBackground;
     private boolean mLandscape;
     private int mQsBackgroundAlpha = 255;
+    private int mHeaderShadow = 0;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Handler mHandler = new Handler();
-        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
-        settingsObserver.observe();
         mStatusBarHeaderMachine = new StatusBarHeaderMachine(context);
     }
 
@@ -101,6 +102,10 @@ public class QSContainerImpl extends FrameLayout implements
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, QS_PANEL_BG_ALPHA);
+        tunerService.addTunable(this, STATUS_BAR_CUSTOM_HEADER_SHADOW);
+
         mStatusBarHeaderMachine.addObserver(this);
         mStatusBarHeaderMachine.updateEnablement();
     }
@@ -109,6 +114,7 @@ public class QSContainerImpl extends FrameLayout implements
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mStatusBarHeaderMachine.removeObserver(this);
+        Dependency.get(TunerService.class).removeTunable(this);
     }
 
     @Override
@@ -120,36 +126,28 @@ public class QSContainerImpl extends FrameLayout implements
         mSizePoint.set(0, 0); // Will be retrieved on next measure pass.
     }
 
-    private class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            getContext().getContentResolver().registerContentObserver(Settings.System
-                            .getUriFor(Settings.System.QS_PANEL_BG_ALPHA), false,
-                    this, UserHandle.USER_ALL);
-            getContext().getContentResolver().registerContentObserver(Settings.System
-                            .getUriFor(Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW), false,
-                    this, UserHandle.USER_ALL);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateAlpha();
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QS_PANEL_BG_ALPHA:
+                mQsBackgroundAlpha =
+                        TunerService.parseInteger(newValue, 255);
+                updateAlpha();
+                break;
+            case STATUS_BAR_CUSTOM_HEADER_SHADOW:
+                mHeaderShadow =
+                        TunerService.parseInteger(newValue, 0);
+                applyHeaderBackgroundShadow();
+                break;
+            default:
+                break;
         }
     }
 
     private void updateAlpha() {
-        mQsBackgroundAlpha = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.QS_PANEL_BG_ALPHA, 255,
-                UserHandle.USER_CURRENT);
-
         mBackground.getBackground().setAlpha(mQsBackgroundAlpha);
         mStatusBarBackground.getBackground().setAlpha(mQsBackgroundAlpha);
         mBackgroundGradient.getBackground().setAlpha(mQsBackgroundAlpha);
-
-        applyHeaderBackgroundShadow();
     }
 
     @Override
@@ -350,13 +348,8 @@ public class QSContainerImpl extends FrameLayout implements
     }
 
     private void applyHeaderBackgroundShadow() {
-        final int headerShadow = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW, 0,
-                UserHandle.USER_CURRENT);
-
-        if (mCurrentBackground != null) {
-            float shadow = headerShadow;
-            mBackgroundImage.setImageAlpha(255-headerShadow);
+        if (mCurrentBackground != null && mBackgroundImage.getDrawable() != null) {
+            mBackgroundImage.setImageAlpha(255 - mHeaderShadow);
         }
     }
 
@@ -369,5 +362,6 @@ public class QSContainerImpl extends FrameLayout implements
         mStatusBarBackground.setVisibility(hideStatusbar ? View.INVISIBLE : View.VISIBLE);
 
         updateAlpha();
+        applyHeaderBackgroundShadow();
     }
 }
