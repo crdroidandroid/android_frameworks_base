@@ -343,8 +343,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
     private static final String STOCK_STATUSBAR_IN_HIDE =
             "system:" + Settings.System.STOCK_STATUSBAR_IN_HIDE;
-    private static final String SYSUI_ROUNDED_SIZE =
-            "sysui_rounded_size";
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -684,7 +682,6 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private int mImmerseMode;
     private boolean mStockStatusBar = true;
-    private int mRoundedSize = -1;
 
     // Notifies StatusBarKeyguardViewManager every time the keyguard transition is over,
     // this animation is tied to the scrim for historic reasons.
@@ -973,7 +970,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         tunerService.addTunable(this, BERRY_SWITCH_STYLE);
         tunerService.addTunable(this, DISPLAY_CUTOUT_MODE);
         tunerService.addTunable(this, STOCK_STATUSBAR_IN_HIDE);
-        tunerService.addTunable(this, SYSUI_ROUNDED_SIZE);
     }
 
     // ================================================================================
@@ -5425,14 +5421,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     handleCutout(null);
                 }
                 break;
-            case SYSUI_ROUNDED_SIZE:
-                int roundedSize =
-                        TunerService.parseInteger(newValue, -1);
-                if (mRoundedSize != roundedSize) {
-                    mRoundedSize = roundedSize;
-                    handleCutout(null);
-                }
-                break;
             default:
                 break;
         }
@@ -5461,22 +5449,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     }
 
-    private void setNotificationPanelPadding(boolean enable) {
-        if (mNotificationPanel == null) return;
-        if (enable) {
-            int size = (int) (mRoundedSize * getDisplayDensity());
-            // Choose a sane safe size in immerse, often
-            // defaults are too large
-            if (size < 0) {
-                size = (int) (20 * getDisplayDensity());
-            }
-            mNotificationPanel.setPadding(size, 0, size, 0);
-        } else {
-            mNotificationPanel.setPadding(0, 0, 0, 0);
-        }
-
-    }
-
     private void handleCutout(Configuration newConfig) {
         boolean immerseMode;
         if (newConfig == null) newConfig = mContext.getResources().getConfiguration();
@@ -5486,7 +5458,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             immerseMode = false;
         }
         setBlackStatusBar(immerseMode);
-        setNotificationPanelPadding(immerseMode);
 
         final boolean hideCutoutMode = mImmerseMode == 2;
         mUiOffloadThread.submit(() -> {
