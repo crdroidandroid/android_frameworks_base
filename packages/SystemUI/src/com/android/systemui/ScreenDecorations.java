@@ -150,6 +150,8 @@ public class ScreenDecorations extends SystemUI implements Tunable,
     private Handler mHandler;
     private boolean mPendingRotationChange;
     private boolean mIsRoundedCornerMultipleRadius;
+    private int mRoundedSize = -1;
+
     private final SysuiStatusBarStateController mStatusBarStateController =
             (SysuiStatusBarStateController) Dependency.get(StatusBarStateController.class);
     private boolean mFullscreenMode = false;
@@ -726,11 +728,11 @@ public class ScreenDecorations extends SystemUI implements Tunable,
         }
     }
     private boolean hasRoundedCorners() {
-        //return mRoundedDefault.x > 0
-        //        || mRoundedDefaultBottom.x > 0
-        //        || mRoundedDefaultTop.x > 0
-        //        || mIsRoundedCornerMultipleRadius;
-        return true;
+        return mRoundedDefault.x > 0
+                || mRoundedDefaultBottom.x > 0
+                || mRoundedDefaultTop.x > 0
+                || mIsRoundedCornerMultipleRadius
+                || mRoundedSize > 0;
     }
 
     private boolean shouldShowRoundedCorner(@BoundsPosition int pos) {
@@ -785,47 +787,19 @@ public class ScreenDecorations extends SystemUI implements Tunable,
                 Point size = mRoundedDefault;
                 Point sizeTop = mRoundedDefaultTop;
                 Point sizeBottom = mRoundedDefaultBottom;
-                boolean sizeSet = true;
                 if (newValue != null) {
-                    try {
-                        int s = (int) (Integer.parseInt(newValue) * mDensity);
-                        size = new Point(s, s);
-                        sizeSet = true;
-                    } catch (Exception e) {
-                    }
-                } else {
-                    int s = (int) (Secure.getIntForUser(mContext.getContentResolver(), SIZE,
-                            -1, UserHandle.USER_CURRENT) * mDensity);
-                    size = new Point(s, s);
-                }
-
-                // Special case, default behavaiour (framework values)
-                if ((size.x == (int) (-1 * mDensity)) || (size.y == (int) (-1 * mDensity))) {
-                    sizeSet = false; // Assume no sizes were set
-                }
-
-                // Choose a sane safe size in immerse, often
-                // defaults are too large
-                if (!sizeSet && mImmerseMode) {
-                    int s = (int) (20 * mDensity);
-                    size = new Point(s ,s);
-                    sizeSet = true;
-                }
-                // If we set a runtime size, let's ignore the
-                // bottom and top resources
-                if (size.x < 0 || size.y < 0) size = new Point(0, 0);
-                if (sizeSet) {
-                    sizeTop = size;
-                    sizeBottom = size;
-                } else {
-                    if (sizeTop.x == 0 && sizeTop.y == 0) {
-                        sizeTop = size;
-                    }
-                    if (sizeBottom.x == 0 && sizeBottom.y == 0) {
-                        sizeBottom = size;
+                    // Save user defined value
+                    mRoundedSize =
+                        TunerService.parseInteger(newValue, -1);
+                    // Calculate new size if user defined value available
+                    if (mRoundedSize >= 0) {
+                        try {
+                            int s = (int) (mRoundedSize * mDensity);
+                            size = new Point(s, s);
+                        } catch (Exception e) {
+                        }
                     }
                 }
-
                 updateRoundedCornerSize(size, sizeTop, sizeBottom);
             }
         });
