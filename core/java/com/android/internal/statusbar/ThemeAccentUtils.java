@@ -201,4 +201,11 @@ public class ThemeAccentUtils {
         } catch (RemoteException e) {
         }
     }
+
+    public static void setImmersiveOverlay(IOverlayManager om, int userId, boolean enable) {
+        try {
+            om.setEnabled("com.android.overlay.immersive", enable, userId);
+        } catch (RemoteException e) {
+        }
+    }
 }
