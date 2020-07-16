@@ -5466,6 +5466,8 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         final boolean hideCutoutMode = mImmerseMode == 2;
         mUiOffloadThread.submit(() -> {
+            ThemeAccentUtils.setImmersiveOverlay(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
+                immerseMode || hideCutoutMode);
             ThemeAccentUtils.setCutoutOverlay(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
                 hideCutoutMode);
             ThemeAccentUtils.setStatusBarStockOverlay(mOverlayManager, mLockscreenUserManager.getCurrentUserId(),
