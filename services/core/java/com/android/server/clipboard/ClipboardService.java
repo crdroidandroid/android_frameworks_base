@@ -753,22 +753,26 @@ public class ClipboardService extends SystemService {
 
         boolean allowed = false;
 
-        // Create toast that app has tried to access clipboard
-        final PackageManager pm = getContext().getPackageManager();
-        ApplicationInfo ai;
-        try {
-            ai = pm.getApplicationInfo(callingPackage, 0);
-        } catch (final NameNotFoundException e) {
-            ai = null;
-        }
-        final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getContext(), applicationName + " tried to access the clipboard", Toast.LENGTH_SHORT).show();
+        final String prefName = "show_clipboard_toast";
+        boolean shouldToast = Settings.System.getInt(getContext().getContentResolver(), prefName, 0) == 1;
+        if (shouldToast) {
+            // Create toast that app has tried to access clipboard
+            final PackageManager pm = getContext().getPackageManager();
+            ApplicationInfo ai;
+            try {
+                ai = pm.getApplicationInfo(callingPackage, 0);
+            } catch (final NameNotFoundException e) {
+                ai = null;
             }
-        });
+            final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), applicationName + " tried to access the clipboard", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         // First, verify package ownership to ensure use below is safe.
         mAppOps.checkPackage(uid, callingPackage);
