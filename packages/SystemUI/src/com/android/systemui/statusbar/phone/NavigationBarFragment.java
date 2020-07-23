@@ -114,6 +114,7 @@ import com.android.systemui.stackdivider.Divider;
 import com.android.systemui.statusbar.AutoHideUiElement;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.CommandQueue.Callbacks;
+import com.android.systemui.statusbar.NavigationBarController;
 import com.android.systemui.statusbar.NotificationRemoteInputManager;
 import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.notification.stack.StackStateAnimator;
@@ -125,6 +126,7 @@ import com.android.systemui.util.LifecycleFragment;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -513,6 +515,8 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
         }
         mOverviewProxyService.removeCallback(mOverviewProxyListener);
         mBroadcastDispatcher.unregisterReceiver(mBroadcastReceiver);
+        mHandler.removeCallbacks(mAutoDim);
+        mNavigationBarView = null;
     }
 
     @Override
@@ -1263,11 +1267,11 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
         if (DEBUG) Log.v(TAG, "addNavigationBar: about to add " + navigationBarView);
         if (navigationBarView == null) return null;
 
-        final NavigationBarFragment fragment = FragmentHostManager.get(navigationBarView)
-                .create(NavigationBarFragment.class);
         navigationBarView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
+                final NavigationBarFragment fragment =
+                        FragmentHostManager.get(v).create(NavigationBarFragment.class);
                 final FragmentHostManager fragmentHost = FragmentHostManager.get(v);
                 fragmentHost.getFragmentManager().beginTransaction()
                         .replace(R.id.navigation_bar_frame, fragment, TAG)
@@ -1277,6 +1281,8 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
 
             @Override
             public void onViewDetachedFromWindow(View v) {
+                final FragmentHostManager fragmentHost = FragmentHostManager.get(v);
+                fragmentHost.removeTagListener(TAG, listener);
                 FragmentHostManager.removeAndDestroy(v);
                 navigationBarView.removeOnAttachStateChangeListener(this);
             }
