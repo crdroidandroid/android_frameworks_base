@@ -265,4 +265,9 @@
     <string name="applock_locked">&#160;is Locked.</string>
     <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
     <string name="applock_locked_notification">App is locked</string>
+
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
+    <string name="quick_settings_dc_full_auto">Auto mode</string>
 </resources>
