@@ -195,4 +195,7 @@
   <!-- Clipboard access toast -->
   <java-symbol type="string" name="app_clipboard_access_denied" />
   <java-symbol type="string" name="app_clipboard_access_granted" />
+
+   <!-- DC Dimming -->
+   <java-symbol type="string" name="config_deviceDcDimmingSysfsNode" />
 </resources>
