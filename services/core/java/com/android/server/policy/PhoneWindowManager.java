@@ -1104,6 +1104,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
+        final boolean handledByPowerManager = mPowerManagerInternal.interceptPowerKeyDown(event);
+
         GestureLauncherService gestureService = LocalServices.getService(
                 GestureLauncherService.class);
         boolean gesturedServiceIntercepted = false;
@@ -1123,7 +1125,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // If the power key has still not yet been handled, then detect short
         // press, long press, or multi press and decide what to do.
         mPowerKeyHandled = hungUp || mScreenshotChordVolumeDownKeyTriggered
-                || mA11yShortcutChordVolumeUpKeyTriggered || gesturedServiceIntercepted;
+                || mA11yShortcutChordVolumeUpKeyTriggered || gesturedServiceIntercepted
+                || handledByPowerManager;
         if (!mPowerKeyHandled) {
             if (interactive) {
                 // When interactive, we're already awake.

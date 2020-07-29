@@ -2567,8 +2567,7 @@ public final class DisplayManagerService extends SystemService {
         public boolean requestPowerState(DisplayPowerRequest request,
                 boolean waitForNegativeProximity) {
             synchronized (mSyncRoot) {
-                return mDisplayPowerController.requestPowerState(request,
-                        waitForNegativeProximity);
+                return mDisplayPowerController.requestPowerState(request, waitForNegativeProximity);
             }
         }
 
@@ -2696,6 +2695,10 @@ public final class DisplayManagerService extends SystemService {
             return getDisplayedContentSampleInternal(displayId, maxFrames, timestamp);
         }
 
+        @Override
+        public void ignoreProximitySensorUntilChanged() {
+            mDisplayPowerController.ignoreProximitySensorUntilChanged();
+        }
     }
 
     class DesiredDisplayModeSpecsObserver
