@@ -9969,7 +9969,13 @@ public final class Settings {
         public static final String NAVBAR_PULSE_ENABLED = "navbar_pulse_enabled";
 
         /**
-         * Pulse navbar music visualizer color type
+         * Pulse lockscreen music visualizer
+         * @hide
+         */
+        public static final String LOCKSCREEN_PULSE_ENABLED = "lockscreen_pulse_enabled";
+
+        /**
+         * Pulse music visualizer color type
          * @hide
          */
         public static final String PULSE_COLOR_MODE = "pulse_color_mode";
