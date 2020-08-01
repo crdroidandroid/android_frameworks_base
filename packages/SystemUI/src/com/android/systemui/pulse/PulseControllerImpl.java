@@ -62,7 +62,6 @@ import com.android.systemui.SysUiServiceProvider;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.CommandQueue.Callbacks;
 import com.android.systemui.statusbar.policy.ConfigurationController;
-import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.PulseController;
 import com.android.systemui.statusbar.policy.PulseController.PulseStateListener;
 
@@ -72,7 +71,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class PulseControllerImpl
-        implements PulseController, CommandQueue.Callbacks, KeyguardMonitor.Callback,
+        implements PulseController, CommandQueue.Callbacks,
         ConfigurationController.ConfigurationListener {
 
     public static final boolean DEBUG = false;
@@ -89,13 +88,10 @@ public class PulseControllerImpl
     private ColorController mColorController;
     private final List<PulseStateListener> mStateListeners = new ArrayList<>();
     private SettingsObserver mSettingsObserver;
-    private KeyguardMonitor mKeyguardMonitor;
     private PulseView mPulseView;
     private int mPulseStyle;
 
     // Pulse state
-    private boolean mPulseEnabled;
-    private boolean mKeyguardShowing;
     private boolean mLinked;
     private boolean mPowerSaveModeEnabled;
     private boolean mScreenOn = true; // MUST initialize as true
@@ -118,12 +114,7 @@ public class PulseControllerImpl
             } else if (PowerManager.ACTION_POWER_SAVE_MODE_CHANGING.equals(intent.getAction())) {
                 mPowerSaveModeEnabled = intent.getBooleanExtra(PowerManager.EXTRA_POWER_SAVE_MODE,
                         false);
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        doLinkage();
-                    }
-                });
+                doLinkage();
             } else if (AudioManager.STREAM_MUTE_CHANGED_ACTION.equals(intent.getAction())
                     || (AudioManager.VOLUME_CHANGED_ACTION.equals(intent.getAction()))) {
                 int streamType = intent.getIntExtra(AudioManager.EXTRA_VOLUME_STREAM_TYPE, -1);
@@ -131,12 +122,7 @@ public class PulseControllerImpl
                     boolean muted = isMusicMuted(streamType);
                     if (mMusicStreamMuted != muted) {
                         mMusicStreamMuted = muted;
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                doLinkage();
-                            }
-                        });
+                        doLinkage();
                     }
                 }
             }
@@ -179,32 +165,20 @@ public class PulseControllerImpl
 
         void register() {
             mContext.getContentResolver().registerContentObserver(
-                    Settings.Secure.getUriFor(Settings.Secure.NAVBAR_PULSE_ENABLED), false, this,
-                    UserHandle.USER_ALL);
-            mContext.getContentResolver().registerContentObserver(
                     Settings.Secure.getUriFor(Settings.Secure.PULSE_RENDER_STYLE), false, this,
                     UserHandle.USER_ALL);
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            if (uri.equals(Settings.Secure.getUriFor(Settings.Secure.NAVBAR_PULSE_ENABLED))) {
-                updateEnabled();
-                doLinkage();
-            } else if (uri.equals(Settings.Secure.getUriFor(Settings.Secure.PULSE_RENDER_STYLE))) {
+            if (uri.equals(Settings.Secure.getUriFor(Settings.Secure.PULSE_RENDER_STYLE))) {
                 updateRenderMode();
                 loadRenderer();
             }
         }
 
         void updateSettings() {
-            updateEnabled();
             updateRenderMode();
-        }
-
-        void updateEnabled() {
-            mPulseEnabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                    Settings.Secure.NAVBAR_PULSE_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
         }
 
         void updateRenderMode() {
@@ -229,8 +203,6 @@ public class PulseControllerImpl
         mColorController = new ColorController(mContext, mHandler);
         loadRenderer();
         SysUiServiceProvider.getComponent(context, CommandQueue.class).addCallback(this);
-        mKeyguardMonitor = Dependency.get(KeyguardMonitor.class);
-        mKeyguardMonitor.addCallback(this);
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGING);
@@ -311,12 +283,6 @@ public class PulseControllerImpl
     }
 
     @Override
-    public void onKeyguardShowingChanged() {
-        mKeyguardShowing = mKeyguardMonitor.isShowing();
-        doLinkage();
-    }
-
-    @Override
     public void leftInLandscapeChanged(boolean isLeft) {
         if (mLeftInLandscape != isLeft) {
             mLeftInLandscape = isLeft;
@@ -336,13 +302,13 @@ public class PulseControllerImpl
     }
 
     public void onDraw(Canvas canvas) {
-        if (mPulseEnabled && shouldDrawPulse()) {
+        if (shouldDrawPulse()) {
             mRenderer.draw(canvas);
         }
     }
 
     private void turnOnPulse() {
-        if (mPulseEnabled && shouldDrawPulse()) {
+        if (shouldDrawPulse()) {
             mStreamHandler.resume(); // let bytes hit visualizer
         }
     }
@@ -386,9 +352,7 @@ public class PulseControllerImpl
      * @return true if unlink is required, false if unlinking is not mandatory
      */
     private boolean isUnlinkRequired() {
-        return mKeyguardShowing
-                || !mScreenOn
-                || !mPulseEnabled
+        return !mScreenOn
                 || mPowerSaveModeEnabled
                 || mMusicStreamMuted
                 || mScreenPinningEnabled
@@ -401,12 +365,9 @@ public class PulseControllerImpl
      * @return true if all conditions are met to allow link, false if and conditions are not met
      */
     private boolean isAbleToLink() {
-        return mPulseEnabled
-                && mScreenOn
+        return mScreenOn
                 && mIsMediaPlaying
-                && !mLinked
                 && !mPowerSaveModeEnabled
-                && !mKeyguardShowing
                 && !mMusicStreamMuted
                 && !mScreenPinningEnabled
                 && mAttached;
@@ -427,29 +388,38 @@ public class PulseControllerImpl
         }
     }
 
-    /**
-     * Incoming event in which we need to
-     * toggle our link state.
-     */
-    private void doLinkage() {
-        if (isUnlinkRequired()) {
-            if (mLinked) {
-                // explicitly unlink
-                doUnlinkVisualizer();
-            }
-        } else {
-            if (isAbleToLink()) {
-                doLinkVisualizer();
-            } else if (mLinked) {
-                doUnlinkVisualizer();
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (isUnlinkRequired()) {
+                if (mLinked) {
+                    // explicitly unlink
+                    doUnlinkVisualizer();
+                }
+            } else {
+                if (isAbleToLink()) {
+                    doLinkVisualizer();
+                } else if (mLinked) {
+                    doUnlinkVisualizer();
+                }
             }
         }
+    };
+
+    /**
+     * Incoming event in which we need to
+     * toggle our link state. Use runnable to
+     * handle multiple events at same time.
+     */
+    private void doLinkage() {
+        mHandler.removeCallbacks(mRunnable);
+        mHandler.postDelayed(mRunnable, 500);
     }
 
     /**
      * Invalid media event not providing
      * a data stream to visualizer. Unlink
-     * without calling into navbar. Like it
+     * without calling into view. Like it
      * never happened
      */
     private void doSilentUnlinkVisualizer() {
@@ -499,18 +469,16 @@ public class PulseControllerImpl
     }
 
     private String getState() {
-        return "isPulseEnabled() = " + mPulseEnabled + " "
-                + "isAbleToLink() = " + isAbleToLink() + " "
-                + "isUnlinkRequired() = " + isUnlinkRequired() + " "
+        return "isAbleToLink() = " + isAbleToLink() + " "
                 + "shouldDrawPulse() = " + shouldDrawPulse() + " "
                 + "mScreenOn = " + mScreenOn + " "
                 + "mIsMediaPlaying = " + mIsMediaPlaying + " "
                 + "mLinked = " + mLinked + " "
                 + "mPowerSaveModeEnabled = " + mPowerSaveModeEnabled + " "
-                + "mKeyguardShowing = " + mKeyguardShowing + " "
                 + "mMusicStreamMuted = " + mMusicStreamMuted + " "
                 + "mScreenPinningEnabled = " + mScreenPinningEnabled + " "
-                + "mAttached = " + mAttached + " ";
+                + "mAttached = " + mAttached + " "
+                + "mStreamHandler.isValidStream() = " + mStreamHandler.isValidStream() + " ";
     }
 
     private void log(String msg) {
