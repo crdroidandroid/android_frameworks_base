@@ -46,7 +46,7 @@ public class SolidLineRenderer extends Renderer {
     private byte rfk, ifk;
     private int dbValue;
     private float magnitude;
-    private float mDbFuzzFactor;
+    private int mDbFuzzFactor;
     private boolean mVertical;
     private boolean mLeftInLandscape;
     private int mWidth, mHeight, mUnits;
@@ -61,7 +61,7 @@ public class SolidLineRenderer extends Renderer {
         mPaint.setAntiAlias(true);
         mFadePaint = new Paint();
         mFadePaint.setXfermode(new PorterDuffXfermode(Mode.MULTIPLY));
-        mDbFuzzFactor = 5f;
+        mDbFuzzFactor = 5;
         mObserver = new CMRendererObserver(handler);
         mObserver.updateSettings();
         loadValueAnimators();
@@ -133,7 +133,7 @@ public class SolidLineRenderer extends Renderer {
         if (mView.getWidth() > 0 && mView.getHeight() > 0) {
             mWidth = mView.getWidth();
             mHeight = mView.getHeight();
-            mVertical = mHeight > mWidth;
+            mVertical = mKeyguardShowing ? mHeight < mWidth : mHeight > mWidth;
             loadValueAnimators();
             if (mVertical) {
                 setVerticalPoints();
@@ -154,6 +154,7 @@ public class SolidLineRenderer extends Renderer {
 
     @Override
     public void onFFTUpdate(byte[] fft) {
+        int fudgeFactor = mKeyguardShowing ? mDbFuzzFactor * 4 : mDbFuzzFactor;
         for (int i = 0; i < mUnits; i++) {
             mValueAnimators[i].cancel();
             rfk = fft[i * 2 + 2];
@@ -166,14 +167,14 @@ public class SolidLineRenderer extends Renderer {
             if (mVertical) {
                 if (mLeftInLandscape) {
                     mValueAnimators[i].setFloatValues(mFFTPoints[i * 4],
-                            dbValue * mDbFuzzFactor);
+                            dbValue * fudgeFactor);
                 } else {
                     mValueAnimators[i].setFloatValues(mFFTPoints[i * 4],
-                            mFFTPoints[2] - (dbValue * mDbFuzzFactor));
+                            mFFTPoints[2] - (dbValue * fudgeFactor));
                 }
             } else {
                 mValueAnimators[i].setFloatValues(mFFTPoints[i * 4 + 1],
-                        mFFTPoints[3] - (dbValue * mDbFuzzFactor));
+                        mFFTPoints[3] - (dbValue * fudgeFactor));
             }
             mValueAnimators[i].start();
         }
@@ -236,14 +237,14 @@ public class SolidLineRenderer extends Renderer {
 
             // putFloat, getFloat is better. catch it next time
             mDbFuzzFactor = Settings.Secure.getIntForUser(
-                    resolver, Settings.Secure.PULSE_SOLID_FUDGE_FACTOR, 5,
+                    resolver, Settings.Secure.PULSE_SOLID_FUDGE_FACTOR, 4,
                     UserHandle.USER_CURRENT);
             mSmoothingEnabled = Settings.Secure.getIntForUser(resolver,
                     Settings.Secure.PULSE_SMOOTHING_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
 
             int oldUnits = mUnits;
             mUnits = Settings.Secure.getIntForUser(
-                    resolver, Settings.Secure.PULSE_SOLID_UNITS_COUNT, 64,
+                    resolver, Settings.Secure.PULSE_SOLID_UNITS_COUNT, 32,
                     UserHandle.USER_CURRENT);
             if (mUnits != oldUnits) {
                 mFFTPoints = new float[mUnits * 4];
