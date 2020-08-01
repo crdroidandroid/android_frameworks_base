@@ -85,6 +85,7 @@ public class FadingBlockRenderer extends Renderer {
 
     @Override
     public void onFFTUpdate(byte[] bytes) {
+        int fudgeFactor = mKeyguardShowing ? mDbFuzzFactor * 4 : mDbFuzzFactor;
         mFFTBytes = bytes;
         if (mFFTBytes != null) {
             if (mFFTPoints == null || mFFTPoints.length < mFFTBytes.length * 4) {
@@ -115,11 +116,11 @@ public class FadingBlockRenderer extends Renderer {
                 }
                 if (mVertical) {
                     mFFTPoints[i * 4] = mLeftInLandscape ? 0 : mWidth;
-                    mFFTPoints[i * 4 + 2] = mLeftInLandscape ? (dbValue * mDbFuzzFactor + DBFUZZ)
-                            : (mWidth - (dbValue * mDbFuzzFactor + DBFUZZ));
+                    mFFTPoints[i * 4 + 2] = mLeftInLandscape ? (dbValue * fudgeFactor + DBFUZZ)
+                            : (mWidth - (dbValue * fudgeFactor + DBFUZZ));
                 } else {
                     mFFTPoints[i * 4 + 1] = mHeight;
-                    mFFTPoints[i * 4 + 3] = mHeight - (dbValue * mDbFuzzFactor + DBFUZZ);
+                    mFFTPoints[i * 4 + 3] = mHeight - (dbValue * fudgeFactor + DBFUZZ);
                 }
             }
         }
@@ -140,7 +141,7 @@ public class FadingBlockRenderer extends Renderer {
         if (mView.getWidth() > 0 && mView.getHeight() > 0) {
             mWidth = mView.getWidth();
             mHeight = mView.getHeight();
-            mVertical = mHeight > mWidth;
+            mVertical = mKeyguardShowing ? mHeight < mWidth : mHeight > mWidth;
             mCanvasBitmap = Bitmap.createBitmap(mWidth, mHeight, Config.ARGB_8888);
             mCanvas = new Canvas(mCanvasBitmap);
         }
