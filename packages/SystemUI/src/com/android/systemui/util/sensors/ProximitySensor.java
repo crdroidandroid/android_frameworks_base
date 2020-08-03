@@ -268,7 +268,7 @@ public class ProximitySensor {
         @Override
         public void run() {
             unregister();
-            mSensor.alertListeners();
+            onProximityEvent(null);
         }
 
         /**
