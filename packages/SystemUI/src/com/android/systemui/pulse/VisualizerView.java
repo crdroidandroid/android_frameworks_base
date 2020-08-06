@@ -12,51 +12,30 @@
  * permissions and limitations under the License.
  */
 
-package com.android.systemui.statusbar.phone;
-
-import static android.view.MotionEvent.ACTION_OUTSIDE;
+package com.android.systemui.pulse;
 
 import android.annotation.AttrRes;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
-import com.android.systemui.statusbar.policy.DeadZone;
-
-public class NavigationBarFrame extends FrameLayout {
-
-    private DeadZone mDeadZone = null;
+public class VisualizerView extends FrameLayout {
 
     private boolean mAttached;
 
-    public NavigationBarFrame(@NonNull Context context) {
+    public VisualizerView(@NonNull Context context) {
         super(context);
     }
 
-    public NavigationBarFrame(@NonNull Context context, AttributeSet attrs) {
+    public VisualizerView(@NonNull Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public NavigationBarFrame(@NonNull Context context, @Nullable AttributeSet attrs,
+    public VisualizerView(@NonNull Context context, @Nullable AttributeSet attrs,
             @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    public void setDeadZone(@NonNull DeadZone deadZone) {
-        mDeadZone = deadZone;
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == ACTION_OUTSIDE) {
-            if (mDeadZone != null) {
-                return mDeadZone.onTouchEvent(event);
-            }
-        }
-        return super.dispatchTouchEvent(event);
     }
 
     @Override
