@@ -25,10 +25,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
 
-import com.android.systemui.Dependency;
-import com.android.systemui.statusbar.policy.KeyguardMonitor;
-
-public abstract class Renderer implements VisualizerStreamHandler.Listener, KeyguardMonitor.Callback {
+public abstract class Renderer implements VisualizerStreamHandler.Listener {
     protected Context mContext;
     protected Handler mHandler;
     protected PulseView mView;
@@ -41,8 +38,6 @@ public abstract class Renderer implements VisualizerStreamHandler.Listener, Keyg
     private long mRenderCounter;
     private long mCurrentCounter;
 
-    private KeyguardMonitor mKeyguardMonitor;
-
     protected boolean mKeyguardShowing;
 
     public Renderer(Context context, Handler handler, PulseView view, ColorController colorController) {
@@ -51,8 +46,6 @@ public abstract class Renderer implements VisualizerStreamHandler.Listener, Keyg
         mView = view;
         mColorController = colorController;
         mRenderCounter = System.currentTimeMillis();
-        mKeyguardMonitor = Dependency.get(KeyguardMonitor.class);
-        mKeyguardMonitor.addCallback(this);
     }
 
     protected final void postInvalidate() {
@@ -84,9 +77,8 @@ public abstract class Renderer implements VisualizerStreamHandler.Listener, Keyg
 
     public boolean isValidStream() { return mIsValidStream; }
 
-    @Override
-    public void onKeyguardShowingChanged() {
-        mKeyguardShowing = mKeyguardMonitor.isShowing();
+    public void setKeyguardShowing(boolean showing) {
+        mKeyguardShowing = showing;
         onSizeChanged(0, 0, 0, 0);
     }
 }
