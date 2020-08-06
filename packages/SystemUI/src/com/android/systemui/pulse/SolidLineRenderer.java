@@ -183,7 +183,7 @@ public class SolidLineRenderer extends Renderer {
     @Override
     public void draw(Canvas canvas) {
         canvas.drawLines(mFFTPoints, mPaint);
-        canvas.drawPaint(mFadePaint);
+        if (!mKeyguardShowing) canvas.drawPaint(mFadePaint);
     }
 
     @Override
