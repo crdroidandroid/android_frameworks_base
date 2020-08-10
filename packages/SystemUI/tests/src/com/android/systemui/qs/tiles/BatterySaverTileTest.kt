@@ -34,7 +34,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 
 @RunWith(AndroidTestingRunner::class)
-@RunWithLooper
+@RunWithLooper(setAsMainLooper = true)
 @SmallTest
 class BatterySaverTileTest : SysuiTestCase() {
 
