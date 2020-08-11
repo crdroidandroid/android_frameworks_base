@@ -4981,6 +4981,12 @@ public final class Settings {
         public static final String SCREENSHOT_TYPE = "screenshot_type";
 
         /**
+         * Screen delay for screenshot when using volume keys
+         * @hide
+         */
+        public static final String SCREENSHOT_DELAY = "screenshot_delay";
+
+        /**
          * Whether to show status bar on lockscreen
          * @hide
          */
