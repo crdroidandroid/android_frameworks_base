@@ -646,7 +646,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Time to volume and power must be pressed within this interval of each other.
     private static final long SCREENSHOT_CHORD_DEBOUNCE_DELAY_MILLIS = 150;
     // Increase the chord delay when taking a screenshot from the keyguard
-    private static final float KEYGUARD_SCREENSHOT_CHORD_DELAY_MULTIPLIER = 2.5f;
+    private static final int KEYGUARD_SCREENSHOT_CHORD_DELAY_MULTIPLIER = 2;
     private boolean mScreenshotChordEnabled;
     private boolean mScreenshotChordVolumeDownKeyTriggered;
     private long mScreenshotChordVolumeDownKeyTime;
@@ -711,6 +711,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private LineageButtons mLineageButtons;
 
     private int mVolButtonScreenshotType;
+    private int mScreenshotDelay;
 
     private PocketManager mPocketManager;
     private PocketLock mPocketLock;
@@ -1011,6 +1012,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREENSHOT_TYPE), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SCREENSHOT_DELAY), false, this,
                     UserHandle.USER_ALL);
             updateSettings();
         }
@@ -1695,13 +1699,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 : config.getAccessibilityShortcutKeyTimeoutAfterConfirmation();
     }
 
-    private long getScreenshotChordLongPressDelay() {
+    private int getScreenshotChordLongPressDelay() {
         if (mKeyguardDelegate.isShowing()) {
             // Double the time it takes to take a screenshot from the keyguard
-            return (long) (KEYGUARD_SCREENSHOT_CHORD_DELAY_MULTIPLIER *
-                    ViewConfiguration.get(mContext).getScreenshotChordKeyTimeout());
+            return (KEYGUARD_SCREENSHOT_CHORD_DELAY_MULTIPLIER *
+                    mScreenshotDelay);
         }
-        return ViewConfiguration.get(mContext).getScreenshotChordKeyTimeout();
+        return mScreenshotDelay;
     }
 
     private long getRingerToggleChordDelay() {
@@ -2662,6 +2666,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             com.android.internal.R.integer.config_veryLongPressOnPowerBehavior));
             mVolButtonScreenshotType = Settings.System.getIntForUser(resolver,
                     Settings.System.SCREENSHOT_TYPE, 0, UserHandle.USER_CURRENT);
+            mScreenshotDelay = Settings.System.getIntForUser(resolver,
+                    Settings.System.SCREENSHOT_DELAY,
+                    (int) ViewConfiguration.get(mContext).getScreenshotChordKeyTimeout(), UserHandle.USER_CURRENT);
 
         }
         if (updateRotation) {
