@@ -319,6 +319,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mBatteryRemainingIcon.setIgnoreTunerUpdates(true);
         mBatteryRemainingIcon.setOnClickListener(this);
         mBatteryIcon.setIgnoreTunerUpdates(true);
+        mBatteryIcon.setOnClickListener(this);
         mRingerModeTextView.setSelected(true);
         mNextAlarmTextView.setSelected(true);
 
@@ -745,6 +746,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
                     Settings.ACTION_SOUND_SETTINGS), 0);
         } else if (v == mBatteryRemainingIcon) {
+            mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
+                    Intent.ACTION_POWER_USAGE_SUMMARY), 0);
+        } else if (v == mBatteryIcon) {
             mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
                     Intent.ACTION_POWER_USAGE_SUMMARY), 0);
         }
