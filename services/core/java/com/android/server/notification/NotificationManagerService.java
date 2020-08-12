@@ -821,8 +821,8 @@ public class NotificationManagerService extends SystemService {
                 NotificationRecord r = findNotificationLocked(pkg, tag, id, userId);
                 fgService = r != null && (r.getNotification().flags & FLAG_FOREGROUND_SERVICE) != 0;
             }
-            cancelNotification(callingUid, callingPid, pkg, tag, id, 0, 0,
-                    false, userId, REASON_ERROR, null);
+            cancelNotification(callingUid, callingPid, pkg, tag, id, 0, 0, false, userId,
+                    REASON_ERROR, null);
             if (fgService) {
                 // Still crash for foreground services, preventing the not-crash behaviour abused
                 // by apps to give us a garbage notification and silently start a fg service.
@@ -830,7 +830,7 @@ public class NotificationManagerService extends SystemService {
                         () -> mAm.crashApplication(uid, initialPid, pkg, -1,
                             "Bad notification(tag=" + tag + ", id=" + id + ") posted from package "
                                 + pkg + ", crashing app(uid=" + uid + ", pid=" + initialPid + "): "
-                                + message));
+                                + message, true /* force */));
             }
         }
 
