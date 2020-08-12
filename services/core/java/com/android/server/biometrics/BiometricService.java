@@ -1435,6 +1435,9 @@ public class BiometricService extends SystemService {
 
     private void handleOnReadyForAuthentication(int cookie, boolean requireConfirmation,
             int userId) {
+        if (mPendingAuthSession == null) {
+            return;
+        }
         Iterator it = mPendingAuthSession.mModalitiesWaiting.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<Integer, Integer> pair = (Map.Entry) it.next();
