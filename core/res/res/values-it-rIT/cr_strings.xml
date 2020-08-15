@@ -52,4 +52,7 @@
     <string name="permdesc_fakePackageSignature">Consente all\'applicazione di fingere di essere un\'app diversa. Le applicazioni dannose potrebbero essere in grado di utilizzarlo per accedere ai dati delle applicazioni private. Gli usi legittimi includono un emulatore che finge di essere ciò che emula. Concedi questo permesso con molta cautela!</string>
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">Registra schermo</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s tried to access the clipboard and was denied</string>
+    <string name="app_clipboard_access_granted">%1$s tried to access the clipboard and was granted</string>
 </resources>

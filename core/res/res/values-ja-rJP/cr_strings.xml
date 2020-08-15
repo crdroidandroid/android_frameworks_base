@@ -52,4 +52,7 @@
     <string name="permdesc_fakePackageSignature">アプリが別のアプリのふりをすることを許可します。悪意のあるアプリがこの機能を使ってプライベートなアプリデータにアクセスする可能性があります。正しい使い方は、エミュレーターがエミュレートする目的での使用などです。注意してこの権限を許可して下さい!</string>
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">画面の録画</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s tried to access the clipboard and was denied</string>
+    <string name="app_clipboard_access_granted">%1$s tried to access the clipboard and was granted</string>
 </resources>

@@ -52,4 +52,7 @@
     <string name="permdesc_fakePackageSignature">允许应用假装成为一个不同的应用。恶意应用可能能够使用它来访问私人应用数据。 合法的使用包括假装仿真的仿真器。请谨慎地授予此权限！</string>
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">屏幕录制</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s tried to access the clipboard and was denied</string>
+    <string name="app_clipboard_access_granted">%1$s tried to access the clipboard and was granted</string>
 </resources>
