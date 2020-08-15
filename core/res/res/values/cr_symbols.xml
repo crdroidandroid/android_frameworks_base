@@ -103,4 +103,8 @@
 
     <!-- Enable face auth only when swiping security view -->
     <java-symbol type="bool" name="config_faceAuthOnlyOnSecurityView" />
+
+  <!-- Clipboard access toast -->
+  <java-symbol type="string" name="app_clipboard_access_denied" />
+  <java-symbol type="string" name="app_clipboard_access_granted" />
 </resources>
