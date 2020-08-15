@@ -52,4 +52,7 @@
     <string name="permdesc_fakePackageSignature">Επιτρέπει στην εφαρμογή να προσποιείται ότι είναι μια διαφορετική εφαρμογή. Κακόβουλες εφαρμογές μπορεί να είναι σε θέση να χρησιμοποιήσουν αυτή τη λειτουργία για να έχουν πρόσβαση σε προσωπικά σας δεδομένα. Εκχωρήσετε το δικαίωμα αυτό με ιδιαίτερη προσοχή!</string>
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">Καταγραφή Οθόνης</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s tried to access the clipboard and was denied</string>
+    <string name="app_clipboard_access_granted">%1$s tried to access the clipboard and was granted</string>
 </resources>
