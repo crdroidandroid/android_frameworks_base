@@ -52,4 +52,7 @@
     <string name="permdesc_fakePackageSignature">앱이 다른 앱인 것처럼 흉내내는 것을 허용합니다. 악성 앱들이 이 권한을 사용하여 사적인 앱 정보에 접근할 수 있으니 주의하세요.</string>
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">화면녹화</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s tried to access the clipboard and was denied</string>
+    <string name="app_clipboard_access_granted">%1$s tried to access the clipboard and was granted</string>
 </resources>
