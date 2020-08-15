@@ -53,6 +53,6 @@
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">Enregistrement d\'écran</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">%1$s tried to access the clipboard and was denied</string>
-    <string name="app_clipboard_access_granted">%1$s tried to access the clipboard and was granted</string>
+    <string name="app_clipboard_access_denied">Accès refusé au presse-papiers pour %1$s</string>
+    <string name="app_clipboard_access_granted">Accès autorisé au presse-papiers pour %1$s</string>
 </resources>
