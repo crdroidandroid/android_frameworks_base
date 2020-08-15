@@ -42,4 +42,8 @@
     <string name="aerr_copy">Copy crash log URL</string>
     <string name="url_copy_success">URL copied successfully</string>
     <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
 </resources>
