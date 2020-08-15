@@ -191,4 +191,8 @@
   <java-symbol type="bool" name="config_deviceRingtoneFocusMode" />
 
   <java-symbol type="array" name="config_blockPackagesSensorDrain" />
+
+  <!-- Clipboard access toast -->
+  <java-symbol type="string" name="app_clipboard_access_denied" />
+  <java-symbol type="string" name="app_clipboard_access_granted" />
 </resources>
