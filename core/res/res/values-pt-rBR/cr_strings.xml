@@ -53,6 +53,6 @@
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">Gravador de tela</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">%1$s tentou acessar a área de transferência e foi negado</string>
-    <string name="app_clipboard_access_granted">%1$s tentou acessar a área de transferência e foi concedido</string>
+    <string name="app_clipboard_access_denied">%1$s teve acesso negado à área de transferência</string>
+    <string name="app_clipboard_access_granted">%1$s recebeu acesso à área de transferência</string>
 </resources>

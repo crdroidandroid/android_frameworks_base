@@ -53,6 +53,6 @@
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">Záznam obrazovky</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">Aplikace %1$s se pokusila přistoupit ke schránce. Přístup jí byl odepřen</string>
-    <string name="app_clipboard_access_granted">Aplikace %1$s se pokusila přistoupit ke schránce. Přístup jí byl povolen</string>
+    <string name="app_clipboard_access_denied">Aplikaci %1$s byl odepřen přístup ke schránce</string>
+    <string name="app_clipboard_access_granted">Aplikaci %1$s byl udělen přístup ke schránce</string>
 </resources>
