@@ -64,7 +64,6 @@ import com.android.systemui.R;
 import com.android.systemui.Dependency;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
-import com.android.systemui.tuner.TunerService;
 
 import vendor.lineage.biometrics.fingerprint.inscreen.V1_0.IFingerprintInscreen;
 import vendor.lineage.biometrics.fingerprint.inscreen.V1_0.IFingerprintInscreenCallback;
@@ -73,7 +72,7 @@ import java.util.NoSuchElementException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FODCircleView extends ImageView implements ConfigurationListener, TunerService.Tunable {
+public class FODCircleView extends ImageView implements ConfigurationListener {
     private final String SCREEN_BRIGHTNESS = "system:" + Settings.System.SCREEN_BRIGHTNESS;
     private final int[][] BRIGHTNESS_ALPHA_ARRAY = {
         new int[]{0, 255},
@@ -328,6 +327,9 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.FOD_ANIM),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SCREEN_BRIGHTNESS),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -338,18 +340,16 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.FOD_ANIM))) {
                 updateStyle();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.SCREEN_BRIGHTNESS))) {
+                updateIconDim();
             }
         }
 
         public void update() {
             updateStyle();
+            updateIconDim();
         }
-    }
-
-    @Override
-    public void onTuningChanged(String key, String newValue) {
-        mCurrentBrightness = newValue != null ? Integer.parseInt(newValue) : 0;
-        updateIconDim();
     }
 
     private int interpolate(int i, int i2, int i3, int i4, int i5) {
@@ -379,6 +379,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
     }
 
     public void updateIconDim() {
+        mCurrentBrightness = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SCREEN_BRIGHTNESS, 100, UserHandle.USER_CURRENT);
         if (!mIsCircleShowing && mTargetUsesInKernelDimming) {
             setColorFilter(Color.argb(getDimAlpha(), 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
         } else {
@@ -593,13 +595,11 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
         updatePosition();
 
         dispatchShow();
-        Dependency.get(TunerService.class).addTunable(this, SCREEN_BRIGHTNESS);
         setVisibility(View.VISIBLE);
     }
 
     public void hide() {
         mIsShowing = false;
-        Dependency.get(TunerService.class).removeTunable(this);
         setVisibility(View.GONE);
         hideCircle();
         dispatchHide();
@@ -675,13 +675,11 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
 
     private void setDim(boolean dim) {
         if (dim) {
-            int curBrightness = Settings.System.getInt(getContext().getContentResolver(),
-                    Settings.System.SCREEN_BRIGHTNESS, 100);
             int dimAmount = 0;
 
             IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
             try {
-                dimAmount = daemon.getDimAmount(curBrightness);
+                dimAmount = daemon.getDimAmount(mCurrentBrightness);
             } catch (RemoteException e) {
                 // do nothing
             }
