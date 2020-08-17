@@ -1,0 +1,42 @@
+commit a517a6aa65ba3c5525ae3a539ae1651e44b114b3
+Author: TheScarastic <warabhishek@gmail.com>
+Date:   Fri Jul 24 12:25:37 2020 +0000
+
+    Revert "FODCircleView: disable touch detection on screen off"
+    
+    This reverts commit 99264bd8b5829d3dbd785a896b8559db14aba5f0.
+    
+    Change-Id: I737935f7fbcdb0b0d3795cc3cc53b6babea36a62
+
+diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/FODCircleView.java b/packages/SystemUI/src/com/android/systemui/biometrics/FODCircleView.java
+index 3a25dfc613c..c2b54083fdf 100644
+--- a/packages/SystemUI/src/com/android/systemui/biometrics/FODCircleView.java
++++ b/packages/SystemUI/src/com/android/systemui/biometrics/FODCircleView.java
+@@ -198,14 +198,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
+ 
+         @Override
+         public void onScreenTurnedOff() {
+-            hide();
+-        }
+-
+-        @Override
+-        public void onScreenTurnedOn() {
+-            if (mUpdateMonitor.isFingerprintDetectionRunning()) {
+-                show();
+-            }
++            hideCircle();
+         }
+ 
+         @Override
+@@ -577,11 +570,6 @@ public class FODCircleView extends ImageView implements ConfigurationListener, T
+     }
+ 
+     public void show() {
+-        if (!mUpdateMonitor.isScreenOn()) {
+-            // Keyguard is shown just after screen turning off
+-            return;
+-        }
+-
+         if (mIsBouncer && !isPinOrPattern(mUpdateMonitor.getCurrentUser())) {
+             // Ignore show calls when Keyguard password screen is being shown
+             return;

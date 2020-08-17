@@ -7570,20 +7570,6 @@ public class WindowManagerService extends IWindowManager.Stub
                         .removeNonHighRefreshRatePackage(packageName));
             }
         }
-
-        @Override
-        public boolean isMinimizedDock() {
-            boolean isMinimizedDock;
-            synchronized (mWindowMap) {
-                try {
-                    boostPriorityForLockedSection();
-                    isMinimizedDock = getDefaultDisplayContentLocked().getDockedDividerController().isMinimizedDock();
-                } finally {
-                    resetPriorityAfterLockedSection();
-                }
-            }
-            return isMinimizedDock;
-        }
     }
 
     void registerAppFreezeListener(AppFreezeListener listener) {
@@ -7864,15 +7850,5 @@ public class WindowManagerService extends IWindowManager.Stub
     @Override
     public void sendCustomAction(Intent intent) {
         mPolicy.sendCustomAction(intent);
-    }
-
-    @Override
-    public void stopLongshotConnection() {
-        mPolicy.stopLongshotConnection();
-    }
-
-    @Override
-    public void takeScreenshot(int type) {
-        mPolicy.takeScreenshot(type);
     }
 }
