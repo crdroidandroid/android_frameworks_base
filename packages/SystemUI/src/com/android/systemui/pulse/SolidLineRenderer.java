@@ -29,16 +29,17 @@ import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
 
+import androidx.core.graphics.ColorUtils;
+
 public class SolidLineRenderer extends Renderer {
     private Paint mPaint;
-    private Paint mFadePaint;
+    private int mUnitsOpacity = 200;
+    private int mColor = Color.WHITE;
     private ValueAnimator[] mValueAnimators;
     private FFTAverage[] mFFTAverage;
     private float[] mFFTPoints;
@@ -59,8 +60,6 @@ public class SolidLineRenderer extends Renderer {
         super(context, handler, view, colorController);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mFadePaint = new Paint();
-        mFadePaint.setXfermode(new PorterDuffXfermode(Mode.MULTIPLY));
         mDbFuzzFactor = 5;
         mObserver = new CMRendererObserver(handler);
         mObserver.updateSettings();
@@ -183,7 +182,6 @@ public class SolidLineRenderer extends Renderer {
     @Override
     public void draw(Canvas canvas) {
         canvas.drawLines(mFFTPoints, mPaint);
-        if (!mKeyguardShowing) canvas.drawPaint(mFadePaint);
     }
 
     @Override
@@ -201,7 +199,8 @@ public class SolidLineRenderer extends Renderer {
 
     @Override
     public void onUpdateColor(int color) {
-        mPaint.setColor(color);
+        mColor = color;
+        mPaint.setColor(ColorUtils.setAlphaComponent(mColor, mUnitsOpacity));
     }
 
     private class CMRendererObserver extends ContentObserver {
@@ -262,10 +261,11 @@ public class SolidLineRenderer extends Renderer {
                 mFFTAverage = null;
             }
 
-            int solidUnitsColor = Settings.Secure.getIntForUser(
+            mUnitsOpacity= Settings.Secure.getIntForUser(
                     resolver, Settings.Secure.PULSE_SOLID_UNITS_OPACITY, 200,
                     UserHandle.USER_CURRENT);
-            mFadePaint.setColor(Color.argb(solidUnitsColor, 255, 255, 255));
+
+            mPaint.setColor(ColorUtils.setAlphaComponent(mColor, mUnitsOpacity));
         }
 
         private void setupFFTAverage() {
