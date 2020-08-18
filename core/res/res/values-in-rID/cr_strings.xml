@@ -54,6 +54,6 @@ Aplikasi jahat mungkin dapat menggunakan ini untuk mengakses data aplikasi priba
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">Rekam layar</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
-    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
+    <string name="app_clipboard_access_denied">%1$s ditolak akses ke clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s diberi akses ke papan klip</string>
 </resources>
