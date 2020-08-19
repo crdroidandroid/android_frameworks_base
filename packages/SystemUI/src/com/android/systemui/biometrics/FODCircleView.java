@@ -123,6 +123,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     private boolean mIsCircleShowing;
     private boolean mIsShowing;
     private boolean mPressedViewDisplayed = false;
+    private boolean mUseWallpaperColor;
 
     private Handler mHandler;
 
@@ -335,6 +336,9 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.FOD_PRESSED_STATE),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.FOD_ICON_WALLPAPER_COLOR),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -351,6 +355,9 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.FOD_PRESSED_STATE))) {
                 setFODPressedState();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.FOD_ICON_WALLPAPER_COLOR))) {
+                useWallpaperColor();
             }
         }
 
@@ -358,6 +365,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             updateStyle();
             updateIconDim();
             setFODPressedState();
+            useWallpaperColor();
         }
     }
 
@@ -524,13 +532,13 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         setKeepScreenOn(false);
     }
 
-    private boolean useWallpaperColor() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.FOD_ICON_WALLPAPER_COLOR, 0) != 0;
+    private void useWallpaperColor() {
+        mUseWallpaperColor = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.FOD_ICON_WALLPAPER_COLOR, 0) == 1;
     }
 
     private void setFODIcon() {
-        if (useWallpaperColor()) {
+        if (mUseWallpaperColor) {
             try {
                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(mContext);
                 Drawable wallpaperDrawable = wallpaperManager.getDrawable();
