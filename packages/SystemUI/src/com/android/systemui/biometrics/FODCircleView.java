@@ -115,6 +115,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     private int mDreamingOffsetY;
 
     private int mCurrentBrightness;
+    private int mPressedState;
 
     private boolean mIsBouncer;
     private boolean mIsDreaming;
@@ -277,12 +278,12 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             @Override
             protected void onDraw(Canvas canvas) {
                 if (mIsCircleShowing) {
-                    int fodstate = getFODPressedState();
-                    if (fodstate == 0) {
-                        setImageResource(R.drawable.fod_icon_pressed);
-                    } else if (fodstate == 1) {
-                        setImageResource(R.drawable.fod_icon_pressed_white);
-                    } else if (fodstate == 2) {
+                    if (mPressedState == 0) {
+                        mPressedView.setImageResource(R.drawable.fod_icon_pressed);
+                    } else if (mPressedState == 1) {
+                        mPressedView.setImageResource(R.drawable.fod_icon_pressed_white);
+                    } else if (mPressedState == 2) {
+                        mPressedView.setImageDrawable(null);
                         canvas.drawCircle(mSize / 2, mSize / 2, mSize / 2.0f, mPaintFingerprint);
                     }
                 }
@@ -330,6 +331,9 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREEN_BRIGHTNESS),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.FOD_PRESSED_STATE),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -343,12 +347,16 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.SCREEN_BRIGHTNESS))) {
                 updateIconDim();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.FOD_PRESSED_STATE))) {
+                setFODPressedState();
             }
         }
 
         public void update() {
             updateStyle();
             updateIconDim();
+            setFODPressedState();
         }
     }
 
@@ -396,21 +404,9 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         super.onDraw(canvas);
     }
 
-    private int getFODPressedState() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.FOD_PRESSED_STATE, 0);
-    }
-
     private void setFODPressedState() {
-        int fodpressed = getFODPressedState();
-
-        if (fodpressed == 0) {
-            setImageResource(R.drawable.fod_icon_pressed);
-        } else if (fodpressed == 1) {
-            setImageResource(R.drawable.fod_icon_pressed_white);
-        } else if (fodpressed == 2) {
-            setImageDrawable(null);
-        }
+        mPressedState = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.FOD_PRESSED_STATE, 0);
     }
 
     @Override
@@ -509,7 +505,6 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         setDim(true);
         dispatchPress();
 
-        setFODPressedState();
         updatePosition();
         updateIconDim();
         invalidate();
