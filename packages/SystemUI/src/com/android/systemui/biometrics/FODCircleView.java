@@ -109,6 +109,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     private final WindowManager mWindowManager;
 
     private IFingerprintInscreen mFingerprintInscreenDaemon;
+    private IFingerprintInscreen mDaemon = null;
 
     private Bitmap mIconBitmap;
 
@@ -227,16 +228,16 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     public FODCircleView(Context context) {
         super(context);
 
-        IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
-        if (daemon == null) {
+        mDaemon = getFingerprintInScreenDaemon();
+        if (mDaemon == null) {
             throw new RuntimeException("Unable to get IFingerprintInscreen");
         }
 
         try {
-            mShouldBoostBrightness = daemon.shouldBoostBrightness();
-            mPositionX = daemon.getPositionX();
-            mPositionY = daemon.getPositionY();
-            mSize = daemon.getSize();
+            mShouldBoostBrightness = mDaemon.shouldBoostBrightness();
+            mPositionX = mDaemon.getPositionX();
+            mPositionY = mDaemon.getPositionY();
+            mSize = mDaemon.getSize();
         } catch (RemoteException e) {
             throw new RuntimeException("Failed to retrieve FOD circle position or size");
         }
@@ -466,36 +467,32 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     }
 
     public void dispatchPress() {
-        IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
         try {
-            daemon.onPress();
+            mDaemon.onPress();
         } catch (RemoteException e) {
             // do nothing
         }
     }
 
     public void dispatchRelease() {
-        IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
         try {
-            daemon.onRelease();
+            mDaemon.onRelease();
         } catch (RemoteException e) {
             // do nothing
         }
     }
 
     public void dispatchShow() {
-        IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
         try {
-            daemon.onShowFODView();
+            mDaemon.onShowFODView();
         } catch (RemoteException e) {
             // do nothing
         }
     }
 
     public void dispatchHide() {
-        IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
         try {
-            daemon.onHideFODView();
+            mDaemon.onHideFODView();
         } catch (RemoteException e) {
             // do nothing
         }
@@ -680,9 +677,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         if (dim) {
             int dimAmount = 0;
 
-            IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
             try {
-                dimAmount = daemon.getDimAmount(mCurrentBrightness);
+                dimAmount = mDaemon.getDimAmount(mCurrentBrightness);
             } catch (RemoteException e) {
                 // do nothing
             }
