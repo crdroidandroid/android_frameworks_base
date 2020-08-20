@@ -1,9 +1,10 @@
 package android.media.audiofx;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import java.util.UUID;
 
-/** @hide */
+@SuppressLint("all")
 public class MiSound extends AudioEffect {
 
     public static final int MISOUND_HEADSET_EM001 = 15;
