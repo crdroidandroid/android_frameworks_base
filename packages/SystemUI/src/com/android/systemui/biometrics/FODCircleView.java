@@ -117,6 +117,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     private int mDreamingOffsetY;
 
     private int mCurrentBrightness;
+    private int mDefaultScreenBrightness;
     private int mPressedState;
 
     private boolean mIsBouncer;
@@ -315,6 +316,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         mPowerManager = context.getSystemService(PowerManager.class);
         mWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 FODCircleView.class.getSimpleName());
+        mDefaultScreenBrightness = mPowerManager.getDefaultScreenBrightnessSetting();
 
         mFODAnimation = new FODAnimation(context, mPositionX, mPositionY);
     }
@@ -401,7 +403,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
 
     public void updateIconDim() {
         mCurrentBrightness = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SCREEN_BRIGHTNESS, 100, UserHandle.USER_CURRENT);
+                Settings.System.SCREEN_BRIGHTNESS, mDefaultScreenBrightness, UserHandle.USER_CURRENT);
         if (!mIsCircleShowing && mTargetUsesInKernelDimming) {
             mHandler.post(() -> setColorFilter(Color.argb(getDimAlpha(), 0, 0, 0), PorterDuff.Mode.SRC_ATOP));
         } else {
