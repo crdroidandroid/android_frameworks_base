@@ -532,7 +532,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     MetricsLogger mLogger;
 
     private boolean mHandleVolumeKeysInWM;
-
+    
+    boolean mKillAppLongpressBack;
     int mKillTimeout;
 
     int mDeviceHardwareKeys;
@@ -943,6 +944,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.POWER_BUTTON_SUPPRESSION_DELAY_AFTER_GESTURE_WAKE), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
+                    LineageSettings.Secure.KILL_APP_LONGPRESS_BACK), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.TORCH_LONG_PRESS_POWER_GESTURE), false, this,
@@ -2669,7 +2673,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mScreenshotDelay = Settings.System.getIntForUser(resolver,
                     Settings.System.SCREENSHOT_DELAY,
                     (int) ViewConfiguration.get(mContext).getScreenshotChordKeyTimeout(), UserHandle.USER_CURRENT);
-
+            mKillAppLongpressBack = LineageSettings.Secure.getInt(resolver,
+                    LineageSettings.Secure.KILL_APP_LONGPRESS_BACK, 0) == 1;
         }
         if (updateRotation) {
             updateRotation(true);
@@ -3591,6 +3596,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if (mKillAppLongpressBack || unpinActivity(true)) {
+                if (down && repeatCount == 0) {
+                    mHandler.postDelayed(mCloseApp, mKillTimeout);		  
+                }
+            }
             if (down) {
                 if (repeatCount == 0 && unpinActivity(true)) {
                      closeApp();
