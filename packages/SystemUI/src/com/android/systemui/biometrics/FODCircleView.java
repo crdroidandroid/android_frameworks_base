@@ -283,15 +283,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         mPressedView = new ImageView(context)  {
             @Override
             protected void onDraw(Canvas canvas) {
-                if (mIsCircleShowing) {
-                    if (mPressedState == 0) {
-                        mPressedView.setImageResource(R.drawable.fod_icon_pressed);
-                    } else if (mPressedState == 1) {
-                        mPressedView.setImageResource(R.drawable.fod_icon_pressed_white);
-                    } else if (mPressedState == 2) {
-                        mPressedView.setImageDrawable(null);
-                        canvas.drawCircle(mSize / 2, mSize / 2, mSize / 2.0f, mPaintFingerprint);
-                    }
+                if (mIsCircleShowing && mPressedState == 2) {
+		    canvas.drawCircle(mSize / 2, mSize / 2, mSize / 2.0f, mPaintFingerprint);
                 }
                 super.onDraw(canvas);
             }
@@ -421,6 +414,14 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     private void setFODPressedState() {
         mPressedState = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.FOD_PRESSED_STATE, 0);
+
+        if (mPressedState == 0) {
+            mPressedView.setImageResource(R.drawable.fod_icon_pressed);
+        } else if (mPressedState == 1) {
+            mPressedView.setImageResource(R.drawable.fod_icon_pressed_white);
+        } else if (mPressedState == 2) {
+            mPressedView.setImageDrawable(null);
+        }
     }
 
     @Override
