@@ -312,20 +312,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static final int MULTI_PRESS_POWER_THEATER_MODE = 1;
     static final int MULTI_PRESS_POWER_BRIGHTNESS_BOOST = 2;
 
-    // must match: config_longPressOnBackBehavior in config.xml
-    static final int LONG_PRESS_BACK_NOTHING = 0;
-    static final int LONG_PRESS_BACK_GO_TO_VOICE_ASSIST = 1;
-
-    // must match: config_longPressOnHomeBehavior in config.xml
-    static final int LONG_PRESS_HOME_NOTHING = 0;
-    static final int LONG_PRESS_HOME_ALL_APPS = 1;
-    static final int LONG_PRESS_HOME_ASSIST = 2;
-    static final int LAST_LONG_PRESS_HOME_BEHAVIOR = LONG_PRESS_HOME_ASSIST;
-
-    // must match: config_doubleTapOnHomeBehavior in config.xml
-    static final int DOUBLE_TAP_HOME_NOTHING = 0;
-    static final int DOUBLE_TAP_HOME_RECENT_SYSTEM_UI = 1;
-
     static final int SHORT_PRESS_WINDOW_NOTHING = 0;
     static final int SHORT_PRESS_WINDOW_PICTURE_IN_PICTURE = 1;
 
@@ -6513,9 +6499,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 pw.print(" mLidNavigationAccessibility="); pw.print(mLidNavigationAccessibility);
                 pw.print(" getLidBehavior="); pw.println(lidBehaviorToString(getLidBehavior()));
         pw.print(prefix);
-                pw.print("mLongPressOnBackBehavior=");
-                pw.println(longPressOnBackBehaviorToString(mLongPressOnBackBehavior));
-        pw.print(prefix);
                 pw.print("mShortPressOnPowerBehavior=");
                 pw.println(shortPressOnPowerBehaviorToString(mShortPressOnPowerBehavior));
         pw.print(prefix);
@@ -6699,41 +6682,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return "hangup";
         } else {
             return "<nothing>";
-        }
-    }
-
-    private static String longPressOnBackBehaviorToString(int behavior) {
-        switch (behavior) {
-            case LONG_PRESS_BACK_NOTHING:
-                return "LONG_PRESS_BACK_NOTHING";
-            case LONG_PRESS_BACK_GO_TO_VOICE_ASSIST:
-                return "LONG_PRESS_BACK_GO_TO_VOICE_ASSIST";
-            default:
-                return Integer.toString(behavior);
-        }
-    }
-
-    private static String longPressOnHomeBehaviorToString(int behavior) {
-        switch (behavior) {
-            case LONG_PRESS_HOME_NOTHING:
-                return "LONG_PRESS_HOME_NOTHING";
-            case LONG_PRESS_HOME_ALL_APPS:
-                return "LONG_PRESS_HOME_ALL_APPS";
-            case LONG_PRESS_HOME_ASSIST:
-                return "LONG_PRESS_HOME_ASSIST";
-            default:
-                return Integer.toString(behavior);
-        }
-    }
-
-    private static String doubleTapOnHomeBehaviorToString(int behavior) {
-        switch (behavior) {
-            case DOUBLE_TAP_HOME_NOTHING:
-                return "DOUBLE_TAP_HOME_NOTHING";
-            case DOUBLE_TAP_HOME_RECENT_SYSTEM_UI:
-                return "DOUBLE_TAP_HOME_RECENT_SYSTEM_UI";
-            default:
-                return Integer.toString(behavior);
         }
     }
 
