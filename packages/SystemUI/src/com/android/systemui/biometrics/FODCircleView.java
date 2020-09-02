@@ -397,10 +397,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     public void updateIconDim() {
         mCurrentBrightness = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.SCREEN_BRIGHTNESS, mDefaultScreenBrightness, UserHandle.USER_CURRENT);
-        if (!mIsCircleShowing && mTargetUsesInKernelDimming) {
+        if (mTargetUsesInKernelDimming) {
             mHandler.post(() -> setColorFilter(Color.argb(getDimAlpha(), 0, 0, 0), PorterDuff.Mode.SRC_ATOP));
-        } else {
-            mHandler.post(() -> setColorFilter(Color.argb(0, 0, 0, 0), PorterDuff.Mode.SRC_ATOP));
         }
     }
 
@@ -520,7 +518,6 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         });
 
         updatePosition();
-        updateIconDim();
         invalidate();
     }
 
@@ -528,7 +525,6 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         mIsCircleShowing = false;
 
         setFODIcon();
-        updateIconDim();
         invalidate();
 
         ThreadUtils.postOnBackgroundThread(() -> {
