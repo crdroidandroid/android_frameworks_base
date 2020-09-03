@@ -1095,8 +1095,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             msg.setAsynchronous(true);
             mHandler.sendMessageDelayed(msg,
                     ViewConfiguration.get(mContext).getDeviceGlobalActionKeyTimeout());
-            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, false,
-                          "Back - Long Press");
         }
     }
 
@@ -1756,8 +1754,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             if (ActionUtils.killForegroundApp(mContext, mCurrentUserId)) {
-                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, false,
-                        "Back - Long Press");
                 Toast.makeText(mContext,
                         org.lineageos.platform.internal.R.string.app_killed_message,
                         Toast.LENGTH_SHORT).show();
@@ -3573,9 +3569,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (unpinActivity(true)) {
-                if (down && repeatCount == 0) {
-                    closeApp();
+            if (down) {
+                if (repeatCount == 0) {
+                    if (unpinActivity(true)) {
+                        closeApp();
+                    }
+                } else if (longPress) {
+                    if (!keyguardOn && mBackLongPressAction != Action.NOTHING) {
+                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, false,
+                                "Back - Long Press");
+                    }
                 }
             }
         }
@@ -4551,7 +4554,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
 
                 if (down) {
-                    useHapticFeedback = false;
                     interceptBackKeyDown(event);
                 } else {
                     boolean handled = interceptBackKeyUp(event);
