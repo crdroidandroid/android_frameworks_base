@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Încărcare DASH (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> până la finalizare)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Încărcare DASH</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Încărcare Warp (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> până la finalizare)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Încărcare Warp</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Pixeli inteligenți</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Auto-activare pixeli inteligenți</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Captură ecran</string>
+    <string name="quick_settings_region_screenshot_label">Captură parțială de ecran</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Info procesor</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Info FPS</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">Info FPS oprit</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">Info FPS pornit</string>
+    <!-- HW Keys Tile -->
+    <string name="quick_settings_hw_keys_label">Taste fizice</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Busolă</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Initializare\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Busolă oprită.</string>
+    <string name="accessibility_quick_settings_compass_on">Busolă pornită.</string>
+    <string name="quick_settings_compass_N">N</string>
+    <string name="quick_settings_compass_NE">NE</string>
+    <string name="quick_settings_compass_E">E</string>
+    <string name="quick_settings_compass_SE">SE</string>
+    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_SW">SV</string>
+    <string name="quick_settings_compass_W">W</string>
+    <string name="quick_settings_compass_NW">NV</string>
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">Muzica</string>
+    <string name="quick_settings_music_play">Redare</string>
+    <string name="quick_settings_music_pause">Pauză</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Afișaj permanent</string>
+    <!--Google sound search tile -->
+    <string name="quick_settings_sound_search">Căutare sonoră</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">Sunet</string>
+    <string name="quick_settings_sound_ring">Sonerie</string>
+    <string name="quick_settings_sound_vibrate">Vibrează</string>
+    <string name="quick_settings_sound_dnd">Nu deranjaţi</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">Repornire</string>
+    <string name="quick_settings_reboot_recovery_label">Recuperare</string>
+    <string name="quick_settings_poweroff_label">Oprire</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Mod pentru jocuri este dezactivat din setari</string>
+    <string name="quick_settings_gaming_mode_label">Mod pentru jocuri</string>
+    <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Mod pentru jocuri oprit.</string>
+    <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Mod pentru jocuri pornit.</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Comutați SIM-ul de date mobile</string>
+    <string name="qs_data_switch_toast_0">În prezent nu este introdusă nicio cartelă SIM</string>
+    <string name="qs_data_switch_toast_1">În prezent este introdusă o singură cartelă SIM</string>
+    <string name="qs_data_switch_changed_1">Utilizare SIM 1 pentru date mobile</string>
+    <string name="qs_data_switch_changed_2">Utilizare SIM 2 pentru date mobile</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Opriți forțat?</string>
+    <string name="force_stop_dlg_text">Dacă forțați oprirea unei aplicații, aceasta se poate comporta necorespunzător.</string>
+    <string name="guts_force_close_app">Închide aplicația</string>
+    <!-- Restart SystemUI via Advanced Power Menu -->
+    <string name="global_action_restart_systemui">Interfata sistem</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Este</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Este</annotation>\n^1\n^2</item>
+        <item quantity="few"><annotation name="color">Este</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">Unu</string>
+    <string name="text_clock_h_two">Două</string>
+    <string name="text_clock_h_three">Trei</string>
+    <string name="text_clock_h_four">Patru</string>
+    <string name="text_clock_h_five">Cinci</string>
+    <string name="text_clock_h_six">Șase</string>
+    <string name="text_clock_h_seven">Șapte</string>
+    <string name="text_clock_h_eight">Opt</string>
+    <string name="text_clock_h_nine">Nouă</string>
+    <string name="text_clock_h_ten">Zece</string>
+    <string name="text_clock_h_eleven">Unsprezece</string>
+    <string name="text_clock_h_twelve">Doisprezece</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">fix</string>
+    <string name="text_clock_m_one">și Unu</string>
+    <string name="text_clock_m_two">și Două</string>
+    <string name="text_clock_m_three">și Trei</string>
+    <string name="text_clock_m_four">și Patru</string>
+    <string name="text_clock_m_five">și Cinci</string>
+    <string name="text_clock_m_six">și Şase</string>
+    <string name="text_clock_m_seven">și Şapte</string>
+    <string name="text_clock_m_eight">și Opt</string>
+    <string name="text_clock_m_nine">și Nouă</string>
+    <string name="text_clock_m_ten">și Zece</string>
+    <string name="text_clock_m_eleven">și Unsprezece</string>
+    <string name="text_clock_m_twelve">și Doisprezece</string>
+    <string name="text_clock_m_thirteen">și Treisprezece</string>
+    <string name="text_clock_m_fourteen">și Paisprezece</string>
+    <string name="text_clock_m_fifteen">și Cincisprezece</string>
+    <string name="text_clock_m_sixteen">și Șaisprezece</string>
+    <string name="text_clock_m_seventeen">și Șaptesprezece</string>
+    <string name="text_clock_m_eighteen">și Optsprezece</string>
+    <string name="text_clock_m_nineteen">și Nouăsprezece</string>
+    <string name="text_clock_m_twenty">și Douăzeci</string>
+    <string name="text_clock_m_twenty_one">Douăzeci și Unu</string>
+    <string name="text_clock_m_twenty_two">Douăzeci și Doi</string>
+    <string name="text_clock_m_twenty_three">Douăzeci și Trei</string>
+    <string name="text_clock_m_twenty_four">Douăzeci și Patru</string>
+    <string name="text_clock_m_twenty_five">Douăzeci și Cinci</string>
+    <string name="text_clock_m_twenty_six">Douăzeci și Şase</string>
+    <string name="text_clock_m_twenty_seven">Douăzeci și Şapte</string>
+    <string name="text_clock_m_twenty_eight">Douăzeci și Opt</string>
+    <string name="text_clock_m_twenty_nine">Douăzeci și Nouă</string>
+    <string name="text_clock_m_thirty">și Treizeci</string>
+    <string name="text_clock_m_thirty_one">Treizeci și Unu</string>
+    <string name="text_clock_m_thirty_two">Treizeci și Doi</string>
+    <string name="text_clock_m_thirty_three">Treizeci și Trei</string>
+    <string name="text_clock_m_thirty_four">Treizeci și Patru</string>
+    <string name="text_clock_m_thirty_five">Treizeci și Cinci</string>
+    <string name="text_clock_m_thirty_six">Treizeci și Şase</string>
+    <string name="text_clock_m_thirty_seven">Treizeci și Şapte</string>
+    <string name="text_clock_m_thirty_eight">Treizeci și Opt</string>
+    <string name="text_clock_m_thirty_nine">Treizeci și Nouă</string>
+    <string name="text_clock_m_forty">și Patruzeci</string>
+    <string name="text_clock_m_forty_one">Patruzeci și Unu</string>
+    <string name="text_clock_m_forty_two">Patruzeci și Doi</string>
+    <string name="text_clock_m_forty_three">Patruzeci și Trei</string>
+    <string name="text_clock_m_forty_four">Patruzeci și Patru</string>
+    <string name="text_clock_m_forty_five">Patruzeci și Cinci</string>
+    <string name="text_clock_m_forty_six">Patruzeci și Şase</string>
+    <string name="text_clock_m_forty_seven">Patruzeci și Şapte</string>
+    <string name="text_clock_m_forty_eight">Patruzeci și Opt</string>
+    <string name="text_clock_m_forty_nine">Patruzeci și Nouă</string>
+    <string name="text_clock_m_fifty">și Cincizeci</string>
+    <string name="text_clock_m_fifty_one">Cincizeci și Unu</string>
+    <string name="text_clock_m_fifty_two">Cincizeci și Doi</string>
+    <string name="text_clock_m_fifty_three">Cincizeci și Trei</string>
+    <string name="text_clock_m_fifty_four">Cincizeci și Patru</string>
+    <string name="text_clock_m_fifty_five">Cincizeci și Cinci</string>
+    <string name="text_clock_m_fifty_six">Cincizeci și Şase</string>
+    <string name="text_clock_m_fifty_seven">Cincizeci și Şapte</string>
+    <string name="text_clock_m_fifty_eight">Cincizeci și Opt</string>
+    <string name="text_clock_m_fifty_nine">Cincizeci și Nouă</string>
+    <!-- Screen Stabilization -->
+    <string name="quick_settings_stabilization_label">Stabilizare ecran</string>
+    <string name="quick_settings_stabilization_off">Stabilizarea este dezactivată</string>
+    <string name="quick_settings_stabilization_on">Stabilizarea este activată</string>
+    <string name="low_label">Scăzut</string>
+    <string name="high_label">Ridicat</string>
+    <string name="stabilization_velocity_friction">Fricțiune de velocitate</string>
+    <string name="stabilization_velocity_amplitude">Amplitudine Velocitate</string>
+    <string name="stabilization_position_friction">Fricțiune poziție</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">Începeți înregistrarea?</string>
+    <string name="screenrecord_dialog_summary">În timpul înregistrării, sistemul Android poate captura orice informație sensibilă care este vizibilă pe ecran sau redată pe dispozitivul dvs. Aceasta include parole, informații despre plată, fotografii, mesaje și mesaje audio.</string>
+    <string name="screenrecord_dialog_start">Incepe</string>
+    <string name="screenrecord_dialog_cancel">Anulare</string>
+    <string name="screenrecord_audio_recording_title">Sursa audio</string>
+    <string name="screenrecord_audio_recording_internal">Intern</string>
+    <string name="screenrecord_audio_recording_microphone">Microfon</string>
+    <string name="screenrecord_audio_recording_off">Dezactivat</string>
+    <string name="screenrecord_taps_title">Arată atingerile pe ecran</string>
+    <string name="screenrecord_stopdot_title">Arată punctul stop</string>
+    <string name="screenrecord_video_bitrate_title">Bitrate video</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Economizor date</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Roaming</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Eroare</string>
+    <string name="omnijaws_service_unkown">Fară informatii vreme</string>
+    <string name="omnijaws_service_error_long">Eroare la incărcare data vreme</string>
+    <string name="omnijaws_service_disabled">Serviciul este dezactivat</string>
+    <string name="omnijaws_detail_header">Vremea</string>
+    <string name="omnijaws_label_default">Vremea</string>
+    <string name="omnijaws_current_text">Acum</string>
+    <string name="omnijaws_package_not_available">OmniJaws nu este disponibil</string>
+    <string name="omnijaws_service_last_update">Ultima actualizare:</string>
+</resources>

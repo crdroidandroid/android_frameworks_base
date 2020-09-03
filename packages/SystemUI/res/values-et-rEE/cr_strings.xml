@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash-laadimine (täitumiseni <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g>)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash-laadimine</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp-laadimine (täitumiseni <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g>)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp-laadimine</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Targad pikslid</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Targad pikslid automaatselt lubatud</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Ekraanipilt</string>
+    <string name="quick_settings_region_screenshot_label">Osaline ekraanipilt</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Protsessori info</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">K/S info</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">K/S info väljas</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">K/S info sees</string>
+    <!-- HW Keys Tile -->
+    <string name="quick_settings_hw_keys_label">Füüsilised nupud</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Kompass</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Käivitamine\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Kompass väljas.</string>
+    <string name="accessibility_quick_settings_compass_on">Kompass sees.</string>
+    <string name="quick_settings_compass_N">Põhi</string>
+    <string name="quick_settings_compass_NE">Kirre</string>
+    <string name="quick_settings_compass_E">Ida</string>
+    <string name="quick_settings_compass_SE">Kagu</string>
+    <string name="quick_settings_compass_S">Lõuna</string>
+    <string name="quick_settings_compass_SW">Edel</string>
+    <string name="quick_settings_compass_W">Lääs</string>
+    <string name="quick_settings_compass_NW">Loe</string>
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">Muusika</string>
+    <string name="quick_settings_music_play">Esita</string>
+    <string name="quick_settings_music_pause">Paus</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Alati sees ekraan</string>
+    <!--Google sound search tile -->
+    <string name="quick_settings_sound_search">Heliotsing</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">Heli</string>
+    <string name="quick_settings_sound_ring">Helin</string>
+    <string name="quick_settings_sound_vibrate">Vibreeri</string>
+    <string name="quick_settings_sound_dnd">Mitte segada</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">Taaskäivita</string>
+    <string name="quick_settings_reboot_recovery_label">Taastus</string>
+    <string name="quick_settings_poweroff_label">Lülita välja</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Mängimisrežiim on seadetes keelatud</string>
+    <string name="quick_settings_gaming_mode_label">Mängimisrežiim</string>
+    <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Mängimisrežiim välja lülitatud.</string>
+    <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Mängimisrežiim sisselülitatud.</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Vaheta andmeside SIMi</string>
+    <string name="qs_data_switch_toast_0">Hetkel pole SIM-kaarti sisestatud</string>
+    <string name="qs_data_switch_toast_1">Hetkel on vaid üks SIM-kaart sisestatud</string>
+    <string name="qs_data_switch_changed_1">Kasutad andmesideks SIM 1-te</string>
+    <string name="qs_data_switch_changed_2">Kasutad andmesideks SIM 2-te</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Sunnid peatuma?</string>
+    <string name="force_stop_dlg_text">Kui sunnite rakenduse peatuma, võib see valesti käituda.</string>
+    <string name="guts_force_close_app">Sulge rakendus</string>
+    <!-- Restart SystemUI via Advanced Power Menu -->
+    <string name="global_action_restart_systemui">Süsteemiliides</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Kell on</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Kell on</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">Üks</string>
+    <string name="text_clock_h_two">Kaks</string>
+    <string name="text_clock_h_three">Kolm</string>
+    <string name="text_clock_h_four">Neli</string>
+    <string name="text_clock_h_five">Viis</string>
+    <string name="text_clock_h_six">Kuus</string>
+    <string name="text_clock_h_seven">Seitse</string>
+    <string name="text_clock_h_eight">Kaheksa</string>
+    <string name="text_clock_h_nine">Üheksa</string>
+    <string name="text_clock_h_ten">Kümme</string>
+    <string name="text_clock_h_eleven">Üksteist</string>
+    <string name="text_clock_h_twelve">Kaksteist</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">Null null</string>
+    <string name="text_clock_m_one">Null üks</string>
+    <string name="text_clock_m_two">Null kaks</string>
+    <string name="text_clock_m_three">Null kolm</string>
+    <string name="text_clock_m_four">Null neli</string>
+    <string name="text_clock_m_five">Null viis</string>
+    <string name="text_clock_m_six">Null kuus</string>
+    <string name="text_clock_m_seven">Null seitse</string>
+    <string name="text_clock_m_eight">Null kaheksa</string>
+    <string name="text_clock_m_nine">Null üheksa</string>
+    <string name="text_clock_m_ten">Kümme</string>
+    <string name="text_clock_m_eleven">Üksteist</string>
+    <string name="text_clock_m_twelve">Kaksteist</string>
+    <string name="text_clock_m_thirteen">Kolmteist</string>
+    <string name="text_clock_m_fourteen">Neliteist</string>
+    <string name="text_clock_m_fifteen">Viisteist</string>
+    <string name="text_clock_m_sixteen">Kuusteist</string>
+    <string name="text_clock_m_seventeen">Seitseteist</string>
+    <string name="text_clock_m_eighteen">Kaheksateist</string>
+    <string name="text_clock_m_nineteen">Üheksateist</string>
+    <string name="text_clock_m_twenty">Kakskümmend</string>
+    <string name="text_clock_m_twenty_one">Kakskümmend üks</string>
+    <string name="text_clock_m_twenty_two">Kakskümmend kaks</string>
+    <string name="text_clock_m_twenty_three">Kakskümmend kolm</string>
+    <string name="text_clock_m_twenty_four">Kakskümmend neli</string>
+    <string name="text_clock_m_twenty_five">Kakskümmend viis</string>
+    <string name="text_clock_m_twenty_six">Kakskümmend kuus</string>
+    <string name="text_clock_m_twenty_seven">Kakskümmend seitse</string>
+    <string name="text_clock_m_twenty_eight">Kakskümmend kaheksa</string>
+    <string name="text_clock_m_twenty_nine">Kakskümmend üheksa</string>
+    <string name="text_clock_m_thirty">Kolmkümmend</string>
+    <string name="text_clock_m_thirty_one">Kolmkümmend üks</string>
+    <string name="text_clock_m_thirty_two">Kolmkümmend kaks</string>
+    <string name="text_clock_m_thirty_three">Kolmkümmend kolm</string>
+    <string name="text_clock_m_thirty_four">Kolmkümmend neli</string>
+    <string name="text_clock_m_thirty_five">Kolmkümmend viis</string>
+    <string name="text_clock_m_thirty_six">Kolmkümmend kuus</string>
+    <string name="text_clock_m_thirty_seven">Kolmkümmend seitse</string>
+    <string name="text_clock_m_thirty_eight">Kolmkümmend kaheksa</string>
+    <string name="text_clock_m_thirty_nine">Kolmkümmend üheksa</string>
+    <string name="text_clock_m_forty">Nelikümmend</string>
+    <string name="text_clock_m_forty_one">Nelikümmend üks</string>
+    <string name="text_clock_m_forty_two">Nelikümmend kaks</string>
+    <string name="text_clock_m_forty_three">Nelikümmend kolm</string>
+    <string name="text_clock_m_forty_four">Nelikümmend neli</string>
+    <string name="text_clock_m_forty_five">Nelikümmend viis</string>
+    <string name="text_clock_m_forty_six">Nelikümmend kuus</string>
+    <string name="text_clock_m_forty_seven">Nelikümmend seitse</string>
+    <string name="text_clock_m_forty_eight">Nelikümmend kaheksa</string>
+    <string name="text_clock_m_forty_nine">Nelikümmend üheksa</string>
+    <string name="text_clock_m_fifty">Viiskümmend</string>
+    <string name="text_clock_m_fifty_one">Viiskümmend üks</string>
+    <string name="text_clock_m_fifty_two">Viiskümmend kaks</string>
+    <string name="text_clock_m_fifty_three">Viiskümmend kolm</string>
+    <string name="text_clock_m_fifty_four">Viiskümmend neli</string>
+    <string name="text_clock_m_fifty_five">Viiskümmend viis</string>
+    <string name="text_clock_m_fifty_six">Viiskümmend kuus</string>
+    <string name="text_clock_m_fifty_seven">Viiskümmend seitse</string>
+    <string name="text_clock_m_fifty_eight">Viiskümmend kaheksa</string>
+    <string name="text_clock_m_fifty_nine">Viiskümmend üheksa</string>
+    <!-- Screen Stabilization -->
+    <string name="quick_settings_stabilization_label">Ekraani stabiliseerimine</string>
+    <string name="quick_settings_stabilization_off">Stabiliseerimine on keelatud</string>
+    <string name="quick_settings_stabilization_on">Stabiliseerimine on lubatud</string>
+    <string name="low_label">Madal</string>
+    <string name="high_label">Kõrge</string>
+    <string name="stabilization_velocity_friction">Hõõrdekiirus</string>
+    <string name="stabilization_velocity_amplitude">Amplituudikiirus</string>
+    <string name="stabilization_position_friction">Hõõrdeasend</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">Alusta salvestust?</string>
+    <string name="screenrecord_dialog_summary">Salvestamise ajal saab Androidi süsteem koguda tundlikku teavet, mis on ekraanil nähtav või mida teie seadmes esitatakse. See hõlmab paroole, makseteavet, fotosid, sõnumeid ja heli.</string>
+    <string name="screenrecord_dialog_start">Käivita</string>
+    <string name="screenrecord_dialog_cancel">Tühista</string>
+    <string name="screenrecord_audio_recording_title">Heli allikas</string>
+    <string name="screenrecord_audio_recording_internal">Sisemine</string>
+    <string name="screenrecord_audio_recording_microphone">Mikrofon</string>
+    <string name="screenrecord_audio_recording_off">Keelatud</string>
+    <string name="screenrecord_taps_title">Kuva puudutusi ekraanil</string>
+    <string name="screenrecord_stopdot_title">Kuva peatamispunkti</string>
+    <string name="screenrecord_video_bitrate_title">Video bitikiirus</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Andmesäästja</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Rändlus</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Viga</string>
+    <string name="omnijaws_service_unkown">Ilmaandmed puuduvad</string>
+    <string name="omnijaws_service_error_long">Tõrge ilmaandmete laadimisel</string>
+    <string name="omnijaws_service_disabled">Teenus on keelatud</string>
+    <string name="omnijaws_detail_header">Ilm</string>
+    <string name="omnijaws_label_default">Ilm</string>
+    <string name="omnijaws_current_text">Nüüd</string>
+    <string name="omnijaws_package_not_available">OmniJaws ei ole kättesaadav</string>
+    <string name="omnijaws_service_last_update">Viimane värskendus:</string>
+</resources>
