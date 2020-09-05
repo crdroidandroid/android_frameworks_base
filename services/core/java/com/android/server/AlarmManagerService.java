@@ -4170,6 +4170,7 @@ class AlarmManagerService extends SystemService {
         public static final int CHARGING_STATUS_CHANGED = 6;
         public static final int REMOVE_FOR_STOPPED = 7;
         public static final int REMOVE_FOR_CANCELED = 8;
+        public static final int PENDINGINTENT_TIMEOUT = 9;
 
         AlarmHandler() {
             super(Looper.myLooper());
@@ -4218,7 +4219,9 @@ class AlarmManagerService extends SystemService {
                 case LISTENER_TIMEOUT:
                     mDeliveryTracker.alarmTimedOut((IBinder) msg.obj);
                     break;
-
+                case PENDINGINTENT_TIMEOUT:
+                    mDeliveryTracker.pendingIntentTimedOut((PendingIntent) msg.obj);
+                    break;
                 case REPORT_ALARMS_ACTIVE:
                     if (mLocalDeviceIdleController != null) {
                         mLocalDeviceIdleController.setAlarmsActive(msg.arg1 != 0);
@@ -4690,8 +4693,12 @@ class AlarmManagerService extends SystemService {
         public void onSendFinished(PendingIntent pi, Intent intent, int resultCode,
                 String resultData, Bundle resultExtras) {
             synchronized (mLock) {
-                mSendFinishCount++;
-                updateTrackingLocked(removeLocked(pi, intent));
+                mHandler.removeMessages(AlarmHandler.PENDINGINTENT_TIMEOUT, pi);
+                InFlight inflight = removeLocked(pi, intent);
+                if (inflight != null) {
+                    mSendFinishCount++;
+                    updateTrackingLocked(inflight);
+                }
             }
         }
 
@@ -4718,6 +4725,28 @@ class AlarmManagerService extends SystemService {
         }
 
         /**
+         * Timeout of a pendingIntent alarm delivery
+         */
+        public void pendingIntentTimedOut(PendingIntent p) {
+            synchronized (mLock) {
+                InFlight inflight = removeLocked(p, null);
+                if (inflight != null) {
+                    // TODO: implement ANR policy for the target
+                    if (DEBUG_LISTENER_CALLBACK) {
+                        Slog.i(TAG, "Alarm pendingIntent " + p + " timed out in delivery");
+                    }
+                    updateTrackingLocked(inflight);
+                    mSendFinishCount++;
+                } else {
+                    if (DEBUG_LISTENER_CALLBACK) {
+                        Slog.i(TAG, "Spurious timeout of pendingIntent " + p);
+                    }
+                    mLog.w("Spurious timeout of pendingIntent " + p);
+                }
+            }
+        }
+
+        /**
          * Deliver an alarm and set up the post-delivery handling appropriately
          */
         @GuardedBy("mLock")
@@ -4735,6 +4764,9 @@ class AlarmManagerService extends SystemService {
                                         Intent.EXTRA_ALARM_COUNT, alarm.count),
                                 mDeliveryTracker, mHandler, null,
                                 allowWhileIdle ? mIdleOptions : null);
+                        mHandler.sendMessageDelayed(
+                                mHandler.obtainMessage(AlarmHandler.PENDINGINTENT_TIMEOUT,
+                                         alarm.operation), mConstants.LISTENER_TIMEOUT * 2);
                     } catch (PendingIntent.CanceledException e) {
                         if (alarm.repeatInterval > 0) {
                             // This IntentSender is no longer valid, but this
