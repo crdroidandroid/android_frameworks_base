@@ -285,7 +285,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             @Override
             protected void onDraw(Canvas canvas) {
                 if (mIsCircleShowing && mPressedState == 2) {
-		    canvas.drawCircle(mSize / 2, mSize / 2, mSize / 2.0f, mPaintFingerprint);
+                    canvas.drawCircle(mSize / 2, mSize / 2, mSize / 2.0f, mPaintFingerprint);
                 }
                 super.onDraw(canvas);
             }
@@ -432,13 +432,9 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
 
         if (event.getAction() == MotionEvent.ACTION_DOWN && newIsInside) {
             showCircle();
-            if (mIsRecognizingAnimEnabled) {
-                mHandler.post(() -> mFODAnimation.showFODanimation());
-            }
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             hideCircle();
-            mHandler.post(() -> mFODAnimation.hideFODanimation());
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             return true;
@@ -517,6 +513,10 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             dispatchPress();
         });
 
+        if (mIsRecognizingAnimEnabled) {
+            mHandler.post(() -> mFODAnimation.showFODanimation());
+        }
+
         updatePosition();
         invalidate();
     }
@@ -531,6 +531,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             dispatchRelease();
         });
         setDim(false);
+
+        mHandler.post(() -> mFODAnimation.hideFODanimation());
 
         setKeepScreenOn(false);
     }
