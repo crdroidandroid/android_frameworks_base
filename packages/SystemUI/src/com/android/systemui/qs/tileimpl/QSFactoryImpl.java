@@ -31,6 +31,7 @@ import com.android.systemui.qs.tiles.AODTile;
 import com.android.systemui.qs.tiles.AdbOverNetworkTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
 import com.android.systemui.qs.tiles.AmbientDisplayTile;
+import com.android.systemui.qs.tiles.AntiFlickerTile;
 import com.android.systemui.qs.tiles.BatterySaverTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.CPUInfoTile;
@@ -136,6 +137,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<WeatherTile> mWeatherTileProvider;
     private final Provider<DcDimmingTile> mDcDimmingTileProvider;
     private final Provider<LocaleTile> mLocaleTileProvider;
+    private final Provider<AntiFlickerTile> mAntiFlickerTileProvider;
 
     private QSTileHost mHost;
 
@@ -172,6 +174,7 @@ public class QSFactoryImpl implements QSFactory {
             Provider<VolumeTile> volumeTileProvider,
             Provider<VpnTile> vpnTileProvider,
             Provider<AODTile> aodTileProvider,
+			 Provider<AntiFlickerTile> antiFlickerTileProvider,
             Provider<SmartPixelsTile> smartPixelsTileProvider,
             Provider<ScreenshotTile> screenshotTileProvider,
             Provider<CPUInfoTile> CPUInfoTileProvider,
@@ -221,6 +224,7 @@ public class QSFactoryImpl implements QSFactory {
         mUsbTetherTileProvider = usbTetherTileProvider;
         mVolumeTileProvider = volumeTileProvider;
         mVpnTileProvider = vpnTileProvider;
+        mAntiFlickerTileProvider = antiFlickerTileProvider;
         mSmartPixelsTileProvider = smartPixelsTileProvider;
         mScreenshotTileProvider = screenshotTileProvider;
         mCPUInfoTileProvider = CPUInfoTileProvider;
@@ -318,6 +322,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mVolumeTileProvider.get();
             case "vpn":
                 return mVpnTileProvider.get();
+            case "anti_flicker":
+                return mAntiFlickerTileProvider.get();
             case "smartpixels":
                 return mSmartPixelsTileProvider.get();
             case "screenshot":
