@@ -3738,6 +3738,12 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     public static final int SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR = 0x00000010;
 
     /**
+     * @hide
+     * Pocket lock
+     */
+    public static final int SYSTEM_UI_FLAG_POCKET_LOCK = 0x00000020;
+
+    /**
      * @deprecated Use {@link #SYSTEM_UI_FLAG_LOW_PROFILE} instead.
      */
     @Deprecated
