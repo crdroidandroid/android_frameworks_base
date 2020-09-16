@@ -113,6 +113,7 @@ import com.android.internal.messages.nano.SystemMessageProto.SystemMessage;
 import com.android.internal.notification.SystemNotificationChannels;
 import com.android.internal.util.DumpUtils;
 import com.android.internal.util.IndentingPrintWriter;
+import com.android.internal.util.Preconditions;
 import com.android.internal.widget.ICheckCredentialProgressCallback;
 import com.android.internal.widget.ILockSettings;
 import com.android.internal.widget.LockPatternUtils;
@@ -2674,6 +2675,10 @@ public class LockSettingsService extends ILockSettings.Stub {
     protected AuthenticationToken initializeSyntheticPasswordLocked(byte[] credentialHash,
             LockscreenCredential credential, int userId) {
         Slog.i(TAG, "Initialize SyntheticPassword for user: " + userId);
+        Preconditions.checkState(
+                getSyntheticPasswordHandleLocked(userId) == SyntheticPasswordManager.DEFAULT_HANDLE,
+                "Cannot reinitialize SP");
+
         final AuthenticationToken auth = mSpManager.newSyntheticPasswordAndSid(
                 getGateKeeperService(), credentialHash, credential, userId);
         onAuthTokenKnownForUser(userId, auth);
@@ -2734,7 +2739,7 @@ public class LockSettingsService extends ILockSettings.Stub {
 
     @VisibleForTesting
     protected boolean shouldMigrateToSyntheticPasswordLocked(int userId) {
-        return true;
+        return getSyntheticPasswordHandleLocked(userId) == SyntheticPasswordManager.DEFAULT_HANDLE;
     }
 
     private VerifyCredentialResponse spBasedDoVerifyCredential(LockscreenCredential userCredential,
