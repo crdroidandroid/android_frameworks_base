@@ -512,9 +512,6 @@ public class ApkSignatureVerifier {
      * {@code targetSdk}.
      */
     public static int getMinimumSignatureSchemeVersionForTargetSdk(int targetSdk) {
-        if (targetSdk >= Build.VERSION_CODES.R) {
-            return SignatureSchemeVersion.SIGNING_BLOCK_V2;
-        }
         return SignatureSchemeVersion.JAR;
     }
 
