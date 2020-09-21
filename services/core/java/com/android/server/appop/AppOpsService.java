@@ -1795,9 +1795,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                     }
                 }
             }
-
-            mHistoricalRegistry.clearHistory(uid, packageName);
         }
+
+        mHistoricalRegistry.clearHistory(uid, packageName);
     }
 
     public void uidRemoved(int uid) {
