@@ -226,4 +226,8 @@
     <string name="omnijaws_current_text">Сейчас</string>
     <string name="omnijaws_package_not_available">OmniJaws недоступен</string>
     <string name="omnijaws_service_last_update">Последнее обновление:</string>
+    <!-- App lock -->
+    <string name="applock_locked">&#160;заблокировано.</string>
+    <string name="applock_fingerprint">&#160;или отпечаток пальца для разблокировки.</string>
+    <string name="applock_locked_notification">Приложение заблокировано</string>
 </resources>

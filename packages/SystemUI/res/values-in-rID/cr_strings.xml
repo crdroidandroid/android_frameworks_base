@@ -246,4 +246,8 @@ Sembilan</string>
     <string name="omnijaws_current_text">Sekarang</string>
     <string name="omnijaws_package_not_available">OmniJaws tidak tersedia</string>
     <string name="omnijaws_service_last_update">Pembaruan terakhir:</string>
+    <!-- App lock -->
+    <string name="applock_locked">&#160;is Locked.</string>
+    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
+    <string name="applock_locked_notification">App is locked</string>
 </resources>
