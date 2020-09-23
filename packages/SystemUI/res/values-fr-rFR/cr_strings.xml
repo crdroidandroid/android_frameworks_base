@@ -225,7 +225,7 @@
     <string name="omnijaws_package_not_available">OmniJaws indisponible</string>
     <string name="omnijaws_service_last_update">Dernière mise à jour :</string>
     <!-- App lock -->
-    <string name="applock_locked">&#160;is Locked.</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_locked">&#160;est Verrouillé.</string>
+    <string name="applock_fingerprint">&#160;ou votre empreinte digitale pour déverrouiller.</string>
+    <string name="applock_locked_notification">L’App est verrouillée</string>
 </resources>
