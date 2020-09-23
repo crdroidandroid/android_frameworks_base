@@ -227,7 +227,7 @@
     <string name="omnijaws_package_not_available">OmniJaws není k\u00a0dispozici</string>
     <string name="omnijaws_service_last_update">Poslední aktualizace:</string>
     <!-- App lock -->
-    <string name="applock_locked">&#160;is Locked.</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_locked">&#160;je uzamknuta.</string>
+    <string name="applock_fingerprint">&#160;nebo odemkněte otiskem prstu.</string>
+    <string name="applock_locked_notification">Aplikace je uzamknuta</string>
 </resources>
