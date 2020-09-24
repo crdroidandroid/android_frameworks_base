@@ -86,8 +86,6 @@ import com.android.systemui.statusbar.policy.PreviewInflater;
 import com.android.systemui.tuner.LockscreenFragment.LockButtonFactory;
 import com.android.systemui.tuner.TunerService;
 
-import java.util.concurrent.Executor;
-
 import lineageos.app.LineageContextConstants;
 
 /**
@@ -585,7 +583,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             }
         };
         if (!mKeyguardStateController.canDismissLockScreen()) {
-            Dependency.get(Executor.class).execute(runnable);
+            Dependency.get(Dependency.BACKGROUND_EXECUTOR).execute(runnable);
         } else {
             boolean dismissShade = !TextUtils.isEmpty(mRightButtonStr)
                     && Dependency.get(TunerService.class).getValue(LOCKSCREEN_RIGHT_UNLOCK, 1) != 0;
