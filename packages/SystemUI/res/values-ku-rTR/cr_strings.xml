@@ -16,16 +16,16 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • خێرا بارگاویدەبێتەوە (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> بۆ پڕبوون)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • بەخێرایی بارگاوی دەبێتەوە</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • بارگاویبوونەوەی داش (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> بۆ پڕبوون)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • بارگاویبوونەوەی داش</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • خێرا بارگاوی دەبێتەوە (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> بۆ پڕبوون)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • خێرا بارگاوی دەبێتەوە</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • بارگاویبوونەوەی وارپ (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> بۆ پڕبوون)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • بارگاویبوونەوەی وارپ</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">پیکسڵی زیرەک</string>
-    <string name="quick_settings_smart_pixels_on_power_save">کارکردنی-خۆکاری پیکسڵی زیرەک</string>
+    <string name="quick_settings_smart_pixels">پیکسڵە ژیرەکان</string>
+    <string name="quick_settings_smart_pixels_on_power_save">کارکردنی-خۆکاری پیکسڵی ژیرەکان</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">چرکاندنی ڕوونما</string>
     <string name="quick_settings_region_screenshot_label">چرکاندنی ڕوونمای پارچەیی</string>
@@ -33,14 +33,14 @@
     <string name="quick_settings_cpuinfo_label">CPU زانیاری</string>
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">FPS زانیاری</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">زانیاری FPS ناچالاکە</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">زانیاری FPS چالاکە</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">زانیاری FPS ناکارا</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">زانیاری FPS کارا</string>
     <!-- HW Keys Tile -->
     <string name="quick_settings_hw_keys_label">HW Keys</string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">قیبلەنما</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">ئامادە دەکرێ\u2026</string>
+    <string name="quick_settings_compass_init">بەرایی دەکرێ\u2026</string>
     <string name="accessibility_quick_settings_compass_off">قیبلەنما ناکارایە.</string>
     <string name="accessibility_quick_settings_compass_on">قیبلەنما کارایە.</string>
     <string name="quick_settings_compass_N">باکور</string>
@@ -54,7 +54,7 @@
     <!-- Music tile -->
     <string name="quick_settings_music_label">میوزیک</string>
     <string name="quick_settings_music_play">لێدان</string>
-    <string name="quick_settings_music_pause">ڕاگرتن</string>
+    <string name="quick_settings_music_pause">وەستان</string>
     <!-- Always on Display tile -->
     <string name="quick_settings_always_on_display_label">هەمیشە لەسەر ڕوونما</string>
     <!--Google sound search tile -->
@@ -63,18 +63,18 @@
     <string name="quick_settings_sound_label">دەنگ</string>
     <string name="quick_settings_sound_ring">زەنگ</string>
     <string name="quick_settings_sound_vibrate">لەرزین</string>
-    <string name="quick_settings_sound_dnd">بێزارم مەکە</string>
+    <string name="quick_settings_sound_dnd">هەراسانم مەکە</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">هەڵکردنەوە</string>
+    <string name="quick_settings_reboot_label">داگیرساندنه‌وه‌</string>
     <string name="quick_settings_reboot_recovery_label">ڕیکەڤەری</string>
-    <string name="quick_settings_poweroff_label">کوژاندنه‌وه‌</string>
+    <string name="quick_settings_poweroff_label">کوژانه‌وه‌</string>
     <!-- Gaming mode -->
     <string name="gaming_mode_not_enabled">دۆخی یاریکردن لە ڕێکخستنەکانەوە ناکارایە</string>
     <string name="quick_settings_gaming_mode_label">دۆخی یاریکردن</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_disabled">دۆخی یاریکردن ناکاراکرا.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">دۆخی یاریکردن ندکاراکرا.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">دۆخی یاریکردن کاراکرا.</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">گۆڕینی کارتی داتا</string>
     <string name="qs_data_switch_toast_0">هیچ سیمکارتێک بەردەست نییە</string>
@@ -82,8 +82,8 @@
     <string name="qs_data_switch_changed_1">بەکارهێنانی سیمکارتی 1 بۆ داتای مۆبایل</string>
     <string name="qs_data_switch_changed_2">بەکارهێنانی سیمکارتی 2 بۆ داتای مۆبایل</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">بەتەواوی ڕابگیرێ؟</string>
-    <string name="force_stop_dlg_text">گەر بەتەواوی ئەپێک ڕاگری، ڕەنگە کێشەی بۆ دروسکات.</string>
+    <string name="force_stop_dlg_title">بەتینی ڕابگیرێ؟</string>
+    <string name="force_stop_dlg_text">گەر بەتینی ئەپێک ڕاگری، ڕەنگە کێشەی بۆ دروسکات.</string>
     <string name="guts_force_close_app">داخستنی ئەپ</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">ڕووکاری سیستەم</string>
@@ -181,9 +181,9 @@
     <string name="text_clock_m_fifty_eight">پەنجا و هەشت</string>
     <string name="text_clock_m_fifty_nine">پەنجا و نۆ</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">باشترکردنی ڕوونما</string>
-    <string name="quick_settings_stabilization_off">باشترکردن ناکاراکراوە</string>
-    <string name="quick_settings_stabilization_on">باشترکردن کاراکرا</string>
+    <string name="quick_settings_stabilization_label">جێگیرکەری ڕوونما</string>
+    <string name="quick_settings_stabilization_off">جێگیرکەری ناچالاککراوە</string>
+    <string name="quick_settings_stabilization_on">جێگیرکەری چالاککراوە</string>
     <string name="low_label">نزم</string>
     <string name="high_label">به‌رز</string>
     <string name="stabilization_velocity_friction">Velocity Friction</string>
@@ -193,11 +193,11 @@
     <string name="screenrecord_dialog_title">دەسپێکردنی تۆمارکردن؟</string>
     <string name="screenrecord_dialog_summary">لەکاتی تۆمارکردندا، سیستەمی ئەندرۆید ئەتوانێ سەرجەم ئەو زانیارییانە بچرکێنێ کەلەسەر ئامێرەکەت دەردەکەون. لەنێویاندا تێپەڕەوشەکان، وێنەکان، نامەکان، دەنگەکان.</string>
     <string name="screenrecord_dialog_start">دەسپێک</string>
-    <string name="screenrecord_dialog_cancel">لابردن</string>
+    <string name="screenrecord_dialog_cancel">پاشگەز</string>
     <string name="screenrecord_audio_recording_title">سەرچاوەی دەنگ</string>
     <string name="screenrecord_audio_recording_internal">ناوەکی</string>
     <string name="screenrecord_audio_recording_microphone">مایکرۆفۆن</string>
-    <string name="screenrecord_audio_recording_off">لەکارخرا</string>
+    <string name="screenrecord_audio_recording_off">ناچالاک</string>
     <string name="screenrecord_taps_title">پیشاندانی سەر پەنجەکان</string>
     <string name="screenrecord_stopdot_title">پیشاندانی خاڵی ڕاگرتن</string>
     <string name="screenrecord_video_bitrate_title">بیتڕه‌یتی ڤیدیۆ</string>
@@ -215,17 +215,17 @@
     <string name="megabytespersecond_short">MB/s</string>
     <string name="gigabytespersecond_short">GB/s</string>
     <!-- Omnijaws Weather -->
-    <string name="omnijaws_service_error">هه‌ڵه‌</string>
+    <string name="omnijaws_service_error">کێشە</string>
     <string name="omnijaws_service_unkown">زانیاری لەسەر کەش نییە</string>
-    <string name="omnijaws_service_error_long">کێشە لە بارکردنی کەش</string>
+    <string name="omnijaws_service_error_long">کێشە لە بارکردنی کەش هەیە</string>
     <string name="omnijaws_service_disabled">خزمەتگوزاری ناکارایە</string>
-    <string name="omnijaws_detail_header">کەش و هەوا</string>
-    <string name="omnijaws_label_default">کەش و هەوا</string>
+    <string name="omnijaws_detail_header">کەش</string>
+    <string name="omnijaws_label_default">کەش</string>
     <string name="omnijaws_current_text">ئێستا</string>
     <string name="omnijaws_package_not_available">OmniJaws بەردەست نییە</string>
     <string name="omnijaws_service_last_update">دواین نوێکردنەوە:</string>
     <!-- App lock -->
-    <string name="applock_locked">&#160;is Locked.</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_locked">&#160;قوفڵکراوە.</string>
+    <string name="applock_fingerprint">&#160;یاخوود بە پەنجەمۆرت بیکەوە.</string>
+    <string name="applock_locked_notification">ئەپ قوفڵکراوە</string>
 </resources>
