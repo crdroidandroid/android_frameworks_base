@@ -227,5 +227,5 @@
     <!-- App lock -->
     <string name="applock_locked">&#160;lezárásra került.</string>
     <string name="applock_fingerprint">&#160;vagy ujjlenyomat a feloldáshoz.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_locked_notification">Az alkalmazás lezárásra került</string>
 </resources>
