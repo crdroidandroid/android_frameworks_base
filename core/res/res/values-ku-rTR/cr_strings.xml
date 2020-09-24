@@ -24,7 +24,7 @@
     <string name="animation_slide_up">خزان لە خوارەوە</string>
     <string name="animation_slide_down">خزان لە سەرەوە</string>
     <string name="animation_default">بنەڕەتی</string>
-    <string name="animation_translucent">ڕوونی</string>
+    <string name="animation_translucent">ڕوونێتی</string>
     <string name="animation_grow_shrink">گەشبوون (سەرەوە)</string>
     <string name="animation_grow_shrink_center">گەشبوون (ناوەند)</string>
     <string name="animation_grow_shrink_bottom">گەشبوون (خوارەوە)</string>
