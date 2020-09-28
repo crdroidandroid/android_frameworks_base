@@ -15056,6 +15056,12 @@ public final class Settings {
         public static final String ONE_HANDED_KEYGUARD_SIDE = "one_handed_keyguard_side";
 
         /**
+         * Google Hybrid Battery Warnings
+         * @hide
+         */
+        public static final String HYBRID_SYSUI_BATTERY_WARNING_FLAGS = "hybrid_sysui_battery_warning_flags";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
