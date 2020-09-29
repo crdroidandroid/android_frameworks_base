@@ -273,6 +273,6 @@ Dokuz</string>
     <string name="omnijaws_service_last_update">Son güncelleme:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160; kilitli.</string>
-    <string name="applock_fingerprint">&#160;veya parmak izinizin kilidini açmak için.</string>
+    <string name="applock_fingerprint">Kilidi açmak için &#160;veya parmak izini kullanın.</string>
     <string name="applock_locked_notification">Uygulama kilitli</string>
 </resources>
