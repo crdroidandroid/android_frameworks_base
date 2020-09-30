@@ -21,6 +21,8 @@
 #include <binder/BinderService.h>
 #include <binder/Nullable.h>
 
+#include <string>
+
 #include "android/os/BnIdmap2.h"
 
 namespace android::os {
