@@ -4615,7 +4615,11 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_CLOCK_AUTO_HIDE = "status_bar_clock_auto_hide";
+
+        /** @hide */
         public static final String STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION = "status_bar_clock_auto_hide_hduration";
+
+        /** @hide */
         public static final String STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION = "status_bar_clock_auto_hide_sduration";
 
         /**
@@ -4884,6 +4888,8 @@ public final class Settings {
          * @hide
          */
         public static final String GAMING_MODE_VALUES = "gaming_mode_values";
+
+        /** @hide */
         public static final String GAMING_MODE_DUMMY = "gaming_mode_dummy";
 
         /**
@@ -5201,12 +5207,16 @@ public final class Settings {
          */
         public static final String STABILIZATION_ENABLE = "stabilization_enable";
 
+        /** @hide */
         public static final String STABILIZATION_VELOCITY_FRICTION = "stabilization_velocity_friction";
 
+        /** @hide */
         public static final String STABILIZATION_POSITION_FRICTION = "stabilization_position_friction";
 
+        /** @hide */
         public static final String STABILIZATION_LOWPASS_ALPHA = "stabilization_lowpass_alpha";
 
+        /** @hide */
         public static final String STABILIZATION_VELOCITY_AMPLITUDE = "stabilization_velocity_amplitude";
 
         /**
@@ -5306,6 +5316,8 @@ public final class Settings {
          * @hide
          */
         public static final String SENSOR_BLOCKED_APP = "sensor_blocked_app";
+
+        /** @hide */
         public static final String SENSOR_BLOCKED_APP_DUMMY = "sensor_blocked_app_dummy";
 
         /**
@@ -9961,7 +9973,11 @@ public final class Settings {
          * @hide
          */
         public static final String SYSUI_ROUNDED_SIZE = "sysui_rounded_size";
+
+        /** @hide */
         public static final String SYSUI_ROUNDED_CONTENT_PADDING = "sysui_rounded_content_padding";
+
+        /** @hide */
         public static final String SYSUI_STATUS_BAR_PADDING = "sysui_status_bar_padding";
 
         /**
@@ -15018,6 +15034,8 @@ public final class Settings {
                 "wallpaper_intra_close",
                 "task_open_behind",
         };  
+
+        /** @hide */
         public static final String ANIMATION_CONTROLS_DURATION = "animation_controls_duration";
 
         /**
