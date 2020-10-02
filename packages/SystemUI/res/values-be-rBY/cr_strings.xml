@@ -227,7 +227,7 @@
     <string name="omnijaws_package_not_available">OmniJaws недаступны</string>
     <string name="omnijaws_service_last_update">Апошняе абнаўленне:</string>
     <!-- App lock -->
-    <string name="applock_locked">&#160;is Locked.</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_locked">&#160; заблакавана.</string>
+    <string name="applock_fingerprint">&#160;або адбітак пальца для разблакоўкі.</string>
+    <string name="applock_locked_notification">Праграма заблакавана</string>
 </resources>
