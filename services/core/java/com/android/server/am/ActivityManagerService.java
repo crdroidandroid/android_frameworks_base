@@ -19963,4 +19963,9 @@ public class ActivityManagerService extends IActivityManager.Stub
     public void setThreeGestureStateActive(boolean active) {
         mThreeFingerGestureActive = active;
     }
+
+    @Override
+    public boolean shouldForceCutoutFullscreen(String packageName) {
+        return mActivityTaskManager.shouldForceCutoutFullscreen(packageName);
+    }
 }
