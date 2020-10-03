@@ -19103,4 +19103,9 @@ public class ActivityManagerService extends IActivityManager.Stub
     public void setThreeFingersSwipeActive(boolean active) {
         mThreeFingersSwipeEnabled = active;
     }
+
+    @Override
+    public boolean shouldForceCutoutFullscreen(String packageName) {
+        return mActivityTaskManager.shouldForceCutoutFullscreen(packageName);
+    }
 }

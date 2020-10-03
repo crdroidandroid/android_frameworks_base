@@ -10506,4 +10506,8 @@ final class ActivityRecord extends WindowToken implements WindowManagerService.A
     public boolean shouldForceLongScreen() {
         return mAtmService.shouldForceLongScreen(packageName);
     }
+
+    public boolean shouldForceCutoutFullscreen() {
+        return mAtmService.shouldForceCutoutFullscreen(packageName);
+    }
 }
