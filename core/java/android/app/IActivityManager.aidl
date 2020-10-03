@@ -966,4 +966,9 @@ interface IActivityManager {
      */
     oneway void frozenBinderTransactionDetected(int debugPid, int code, int flags, int err);
     int getBindingUidProcessState(int uid, in String callingPackage);
+
+    /**
+     *  Force full screen for devices with cutout
+     */
+    boolean shouldForceCutoutFullscreen(in String packageName);
 }
