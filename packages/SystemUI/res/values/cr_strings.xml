@@ -263,4 +263,7 @@
     <string name="quick_settings_monotoggle_tile">Audio mode</string>
     <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
     <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
 </resources>
