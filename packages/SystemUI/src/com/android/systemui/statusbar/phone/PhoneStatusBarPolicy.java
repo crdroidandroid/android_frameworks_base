@@ -29,6 +29,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.AudioManager;
+import android.nfc.NfcAdapter;
 import android.os.Handler;
 import android.os.RemoteException;
 import android.os.UserHandle;
@@ -123,6 +124,7 @@ public class PhoneStatusBarPolicy
     private final String mSlotCamera;
     private final String mSlotSensorsOff;
     private final String mSlotScreenRecord;
+    private final String mSlotNfc;
     private final int mDisplayId;
     private final SharedPreferences mSharedPreferences;
     private final DateFormatUtil mDateFormatUtil;
@@ -163,13 +165,16 @@ public class PhoneStatusBarPolicy
     private BluetoothController mBluetooth;
     private AlarmManager.AlarmClockInfo mNextAlarm;
 
+    private NfcAdapter mAdapter;
+    private final Context mContext;
+
     private boolean mShowBluetoothBattery;
 
     private static final String BLUETOOTH_SHOW_BATTERY =
             "system:" + Settings.System.BLUETOOTH_SHOW_BATTERY;
 
     @Inject
-    public PhoneStatusBarPolicy(StatusBarIconController iconController,
+    public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController,
             CommandQueue commandQueue, BroadcastDispatcher broadcastDispatcher,
             @UiBackground Executor uiBgExecutor, @Main Resources resources,
             CastController castController, HotspotController hotspotController,
@@ -187,6 +192,7 @@ public class PhoneStatusBarPolicy
             RingerModeTracker ringerModeTracker,
             PrivacyItemController privacyItemController,
             PrivacyLogger privacyLogger) {
+        mContext = context;
         mIconController = iconController;
         mCommandQueue = commandQueue;
         mBroadcastDispatcher = broadcastDispatcher;
@@ -232,6 +238,7 @@ public class PhoneStatusBarPolicy
         mSlotSensorsOff = resources.getString(com.android.internal.R.string.status_bar_sensors_off);
         mSlotScreenRecord = resources.getString(
                 com.android.internal.R.string.status_bar_screen_record);
+        mSlotNfc = resources.getString(com.android.internal.R.string.status_bar_nfc);
 
         mDisplayId = displayId;
         mSharedPreferences = sharedPreferences;
@@ -265,6 +272,7 @@ public class PhoneStatusBarPolicy
         filter.addAction(Intent.ACTION_MANAGED_PROFILE_AVAILABLE);
         filter.addAction(Intent.ACTION_MANAGED_PROFILE_UNAVAILABLE);
         filter.addAction(Intent.ACTION_MANAGED_PROFILE_REMOVED);
+        filter.addAction(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED);
         mBroadcastDispatcher.registerReceiverWithHandler(mIntentReceiver, filter, mHandler);
         Observer<Integer> observer = ringer -> mHandler.post(this::updateVolumeZen);
 
@@ -351,6 +359,12 @@ public class PhoneStatusBarPolicy
         mIconController.setIcon(mSlotScreenRecord, R.drawable.stat_sys_screen_record, null);
         mIconController.setIconVisibility(mSlotScreenRecord, false);
 
+        mIconController.setIcon(mSlotNfc, R.drawable.stat_sys_nfc,
+                mResources.getString(R.string.accessibility_status_bar_nfc));
+
+        mIconController.setIconVisibility(mSlotNfc, false);
+        updateNfc();
+
         mRotationLockController.addCallback(this);
         mBluetooth.addCallback(this);
         mProvisionedController.addCallback(this);
@@ -401,6 +415,21 @@ public class PhoneStatusBarPolicy
         String dateString = DateFormat.format(pattern, mNextAlarm.getTriggerTime()).toString();
 
         return mResources.getString(R.string.accessibility_quick_settings_alarm, dateString);
+    }
+
+    private NfcAdapter getAdapter() {
+        if (mAdapter == null) {
+            try {
+                mAdapter = NfcAdapter.getNfcAdapter(mContext);
+            } catch (UnsupportedOperationException e) {
+                mAdapter = null;
+            }
+        }
+        return mAdapter;
+    }
+
+    private final void updateNfc() {
+        mIconController.setIconVisibility(mSlotNfc, getAdapter() != null && getAdapter().isEnabled());
     }
 
     private final void updateVolumeZen() {
@@ -773,6 +802,9 @@ public class PhoneStatusBarPolicy
                     break;
                 case AudioManager.ACTION_HEADSET_PLUG:
                     updateHeadsetPlug(intent);
+                    break;
+                case NfcAdapter.ACTION_ADAPTER_STATE_CHANGED:
+                    updateNfc();
                     break;
             }
         }
