@@ -116,12 +116,15 @@ import com.android.systemui.statusbar.notification.row.ActivatableNotificationVi
 import com.android.systemui.statusbar.notification.row.ExpandableNotificationRow;
 import com.android.systemui.statusbar.notification.row.ExpandableView;
 import com.android.systemui.statusbar.notification.row.StackScrollerDecorView;
+import com.android.systemui.statusbar.phone.CentralSurfaces;
 import com.android.systemui.statusbar.phone.HeadsUpAppearanceController;
 import com.android.systemui.statusbar.phone.HeadsUpTouchHelper;
 import com.android.systemui.statusbar.phone.ScreenOffAnimationController;
+import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
 import com.android.systemui.statusbar.policy.HeadsUpUtil;
 import com.android.systemui.statusbar.policy.ScrollAdapter;
 import com.android.systemui.statusbar.policy.SplitShadeStateController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.Assert;
 import com.android.systemui.util.DumpUtilsKt;
 
@@ -141,7 +144,8 @@ import java.util.function.Consumer;
 /**
  * A layout which handles a dynamic amount of notifications and presents them in a scrollable stack.
  */
-public class NotificationStackScrollLayout extends ViewGroup implements Dumpable {
+public class NotificationStackScrollLayout extends ViewGroup implements Dumpable,
+        ConfigurationListener {
 
     public static final float BACKGROUND_ALPHA_DIMMED = 0.7f;
     private static final String TAG = "StackScroller";
@@ -165,6 +169,9 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
      */
     private static final int DISTANCE_BETWEEN_ADJACENT_SECTIONS_PX = 1;
     private boolean mKeyguardBypassEnabled;
+
+    private static final String NOTIFICATION_MATERIAL_DISMISS =
+            "system:" + Settings.System.NOTIFICATION_MATERIAL_DISMISS;
 
     private final ExpandHelper mExpandHelper;
     private NotificationSwipeHelper mSwipeHelper;
@@ -320,6 +327,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         }
     };
     private NotificationStackScrollLogger mLogger;
+    private CentralSurfaces mCentralSurfaces;
     private NotificationsController mNotificationsController;
     private ActivityStarter mActivityStarter;
     private final int[] mTempInt2 = new int[2];
@@ -571,6 +579,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
     private boolean mHasFilteredOutSeenNotifications;
     @Nullable private SplitShadeStateController mSplitShadeStateController = null;
     private boolean mIsSmallLandscapeLockscreenEnabled = false;
+    private boolean mShowDimissButton;
 
     /** Pass splitShadeStateController to view and update split shade */
     public void passSplitShadeStateController(SplitShadeStateController splitShadeStateController) {
@@ -677,6 +686,13 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         if (mAnimatedInsets.isEnabled()) {
             setWindowInsetsAnimationCallback(mInsetsCallback);
         }
+        TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable((key, newValue) -> {
+            if (key.equals(NOTIFICATION_MATERIAL_DISMISS)) {
+                mShowDimissButton = TunerService.parseIntegerSwitch(newValue, false);
+                updateFooter();
+            }
+        },  NOTIFICATION_MATERIAL_DISMISS);
     }
 
     /**
@@ -736,6 +752,9 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         }
         inflateEmptyShadeView();
         mSectionsManager.reinflateViews();
+        if (mCentralSurfaces != null) {
+            mCentralSurfaces.updateDismissAllButton();
+        }
     }
 
     public void setIsRemoteInputActive(boolean isActive) {
@@ -790,6 +809,13 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
             if (child instanceof ActivatableNotificationView) {
                 ((ActivatableNotificationView) child).updateBackgroundColors();
             }
+        }
+    }
+
+    @Override
+    public void onUiModeChanged() {
+        if (mCentralSurfaces != null) {
+            mCentralSurfaces.updateDismissAllButton();
         }
     }
 
@@ -4625,6 +4651,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         }
         if (!FooterViewRefactor.isEnabled()) {
             mFooterView.setClearAllButtonClickListener(v -> {
+                if (mShowDimissButton) return;
                 if (mFooterClearAllListener != null) {
                     mFooterClearAllListener.onClearAll();
                 }
@@ -4706,7 +4733,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         mFooterView.setVisible(visible, animate);
         mFooterView.showHistory(showHistory);
         if (!FooterViewRefactor.isEnabled()) {
-            mFooterView.setClearAllButtonVisible(showDismissView, animate);
+            mFooterView.setClearAllButtonVisible(!mShowDimissButton && showDismissView, animate);
             mFooterView.setFooterLabelVisible(mHasFilteredOutSeenNotifications);
         }
     }
@@ -4752,6 +4779,10 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
 
     public void setNotificationsController(NotificationsController notificationsController) {
         this.mNotificationsController = notificationsController;
+    }
+
+    public void setCentralSurfaces(CentralSurfaces centralSurfaces) {
+        this.mCentralSurfaces = centralSurfaces;
     }
 
     public void setActivityStarter(ActivityStarter activityStarter) {
@@ -5445,6 +5476,13 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         FooterView footerView = (FooterView) LayoutInflater.from(mContext).inflate(
                 R.layout.status_bar_notification_footer, this, false);
         setFooterView(footerView);
+        if (mCentralSurfaces != null && mCentralSurfaces.getDismissAllButton() != null) {
+            mCentralSurfaces.getDismissAllButton().setOnClickListener(v -> {
+                if (mShowDimissButton) {
+                    clearNotifications(ROWS_ALL, true /* closeShade */);
+                }
+            });
+        }
     }
 
     private void inflateEmptyShadeView() {
