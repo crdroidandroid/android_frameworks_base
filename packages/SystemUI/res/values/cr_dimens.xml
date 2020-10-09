@@ -18,7 +18,7 @@
 
     <!-- Screen Record -->
     <dimen name="screenrecord_dot_size">48dp</dimen>
-    
+
     <!-- Height of the landscape battery icon in the status bar. -->
     <dimen name="status_bar_battery_icon_height_landscape">10.5dp</dimen>
 
@@ -40,6 +40,7 @@
     <dimen name="dismiss_all_button_height">55dp</dimen>
     <dimen name="dismiss_all_button_width">55dp</dimen>
     <dimen name="dismiss_all_button_margin_bottom">48dp</dimen>
+    <dimen name="dismiss_all_fab_src_size">24dp</dimen>
 
     <!-- Udfps fingerprint animation -->
     <dimen name="udfps_animation_size">280dp</dimen>

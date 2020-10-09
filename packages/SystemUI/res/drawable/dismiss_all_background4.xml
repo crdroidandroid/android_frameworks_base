@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?android:attr/colorControlHighlight">
+    <item android:id="@android:id/mask">
+        <layer-list>
+            <item android:bottom="3dp">
+                <shape android:shape="rectangle">
+                    <corner android:topLeftRadius="20dp" android:topRightRadius="20dp"/>
+                    <solid android:color="#ffffffff" />
+                </shape>
+            </item>
+            <item android:left="-2dp" android:top="-2dp" android:right="-2dp">
+                <shape>
+                    <solid android:color="@android:color/transparent"/>
+                    <stroke android:width="2dp" android:color="#ffffffff" android:dashWidth="10px" android:dashGap="10px"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item android:id="@android:id/background">
+        <layer-list>
+            <item android:bottom="3dp">
+                <shape android:shape="rectangle">
+                    <corner android:topLeftRadius="20dp" android:topRightRadius="20dp"/>
+                    <solid android:color="?androidprv:attr/colorSurface"/>
+                </shape>
+            </item>
+            <item android:left="-2dp" android:top="-2dp" android:right="-2dp">
+                <shape>
+                    <solid android:color="@android:color/transparent"/>
+                    <stroke android:width="2dp" android:color="?androidprv:attr/colorSurface" android:dashWidth="10px" android:dashGap="10px"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</ripple>
