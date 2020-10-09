@@ -21,6 +21,7 @@
 <com.android.systemui.statusbar.phone.NotificationPanelView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/notification_panel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -168,6 +169,22 @@
         <include
             layout="@layout/keyguard_status_bar"
             android:visibility="invisible" />
+
+        <ImageButton
+          android:layout_gravity="bottom|center_vertical|center_horizontal|center"
+          android:id="@+id/clear_notifications"
+          android:background="@drawable/dismiss_all_background"
+          android:visibility="gone"
+          android:layout_width="@dimen/dismiss_all_button_width"
+          android:layout_height="@dimen/dismiss_all_button_height"
+          android:layout_marginBottom="@dimen/dismiss_all_button_margin_bottom"
+          android:src="@drawable/dismiss_all_icon"
+          android:scaleType="centerInside"
+          android:elevation="@dimen/dismiss_all_button_elevation"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+        />
 
         <Button
             android:id="@+id/report_rejected_touch"
