@@ -16,4 +16,11 @@
 -->
 <resources>
     <color name="reticker_background_color">@android:color/system_neutral1_900</color>
+
+    <!-- Clear all notifications button -->
+    <color name="dismiss_all_background_color">@android:color/system_neutral1_900</color>
+    <color name="dismiss_all_background_color_ripple">#555555</color>
+    <color name="dismiss_all_icon_color">@android:color/white</color>
+
+    <color name="qs_black_white">#ffffffff</color>
 </resources>

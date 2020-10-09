@@ -25,4 +25,10 @@
     <color name="edge_light_yellow">#fffbbc06</color>
 
     <color name="reticker_background_color">@android:color/system_neutral1_50</color>
+
+    <!-- Clear all notifications button -->
+    <color name="dismiss_all_background_color">@android:color/system_neutral1_0</color>
+    <color name="dismiss_all_background_color_ripple">#a8a8a8</color>
+    <color name="dismiss_all_icon_color">#8a000000</color>
+    <color name="qs_black_white">#ff000000</color>
 </resources>

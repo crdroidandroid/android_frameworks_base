@@ -49,6 +49,7 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.MathUtils;
+import com.android.internal.logging.MetricsLogger;
 import android.util.Pair;
 import android.view.DisplayCutout;
 import android.view.InputDevice;
@@ -67,7 +68,9 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.OverScroller;
 import android.widget.ScrollView;
-
+import com.android.systemui.Dependency;
+import com.android.systemui.tuner.TunerService;
+import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.graphics.ColorUtils;
 import com.android.internal.jank.InteractionJankMonitor;
@@ -157,6 +160,9 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
      */
     private static final int DISTANCE_BETWEEN_ADJACENT_SECTIONS_PX = 1;
     private boolean mKeyguardBypassEnabled;
+
+    private static final String NOTIFICATION_MATERIAL_DISMISS =
+            "system:" + Settings.System.NOTIFICATION_MATERIAL_DISMISS;
 
     private ExpandHelper mExpandHelper;
     private NotificationSwipeHelper mSwipeHelper;
@@ -331,6 +337,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
     private boolean mAnimateNextBackgroundBottom;
     private boolean mAnimateNextSectionBoundsChange;
     private int mBgColor;
+    private int mIconColor;
     private float mDimAmount;
     private ValueAnimator mDimAnimator;
     private ArrayList<ExpandableView> mTmpSortedChildren = new ArrayList<>();
@@ -425,6 +432,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
     private Runnable mReflingAndAnimateScroll = () -> {
         animateScroll();
     };
+    protected final MetricsLogger mMetricsLogger = Dependency.get(MetricsLogger.class);
     private int mCornerRadius;
     private int mMinimumPaddings;
     private int mQsTilePadding;
@@ -531,14 +539,13 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
     private NotificationStackScrollLayoutController.TouchHandler mTouchHandler;
     private final UnlockedScreenOffAnimationController mUnlockedScreenOffAnimationController;
     private boolean mShouldUseSplitNotificationShade;
-
+    private boolean mShowDimissButton;
     private final ExpandableView.OnHeightChangedListener mOnChildHeightChangedListener =
             new ExpandableView.OnHeightChangedListener() {
                 @Override
                 public void onHeightChanged(ExpandableView view, boolean needsAnimation) {
                     onChildHeightChanged(view, needsAnimation);
                 }
-
                 @Override
                 public void onReset(ExpandableView view) {
                     onChildHeightReset(view);
@@ -605,6 +612,15 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         mGroupMembershipManager = Dependency.get(GroupMembershipManager.class);
         mGroupExpansionManager = Dependency.get(GroupExpansionManager.class);
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
+        TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable((key, newValue) -> {
+
+        if (key.equals(NOTIFICATION_MATERIAL_DISMISS)) {
+                mShowDimissButton = TunerService.parseIntegerSwitch(newValue, false);
+                updateFooter();
+            }
+        },  NOTIFICATION_MATERIAL_DISMISS);
+
     }
 
     void initializeForegroundServiceSection(ForegroundServiceDungeonView fgsSectionView) {
@@ -664,7 +680,9 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         inflateFooterView();
         inflateEmptyShadeView();
         updateFooter();
+        mIconColor = mContext.getColor(R.color.dismiss_all_icon_color);
         mSectionsManager.reinflateViews(LayoutInflater.from(mContext));
+        mStatusBar.updateDismissAllButton(mIconColor);
     }
 
     public void setIsRemoteInputActive(boolean isActive) {
@@ -681,6 +699,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         // TODO: move this logic to controller, which will invoke updateFooterView directly
         boolean showDismissView = mClearAllEnabled &&
                 mController.hasActiveClearableNotifications(ROWS_ALL);
+        mStatusBar.setHasClearableNotifs(hasActiveClearableNotifications(ROWS_ALL));
         boolean showFooterView = (showDismissView || getVisibleNotificationCount() > 0)
                 && mIsCurrentUserSetup  // see: b/193149550
                 && mStatusBarState != StatusBarState.KEYGUARD
@@ -709,6 +728,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
     void updateBgColor() {
         mBgColor = Utils.getColorAttr(mContext, android.R.attr.colorBackgroundFloating)
                 .getDefaultColor();
+        mIconColor = mContext.getColor(R.color.dismiss_all_icon_color);
         updateBackgroundDimming();
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
@@ -716,6 +736,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
                 ((ActivatableNotificationView) child).updateBackgroundColors();
             }
         }
+        mStatusBar.updateDismissAllButton(mIconColor);
     }
 
     @ShadeViewRefactor(RefactorComponent.DECORATOR)
@@ -4462,7 +4483,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         }
         boolean animate = mIsExpanded && mAnimationsEnabled;
         mFooterView.setVisible(visible, animate);
-        mFooterView.setSecondaryVisible(showDismissView, animate);
+        mFooterView.setSecondaryVisible(!mShowDimissButton && showDismissView, animate);
         mFooterView.showHistory(showHistory);
     }
 
@@ -5181,6 +5202,22 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
             clearNotifications(ROWS_ALL, true /* closeShade */);
             footerView.setSecondaryVisible(false /* visible */, true /* animate */);
         });
+        footerView.setDismissButtonClickListener(v -> {
+            if (!mShowDimissButton) {
+                mMetricsLogger.action(MetricsEvent.ACTION_DISMISS_ALL_NOTES);
+                clearNotifications(ROWS_ALL, true /* closeShade */);
+           }
+        });
+        if (mStatusBar != null) {
+            if (mStatusBar.getDismissAllButton() != null) {
+                mStatusBar.getDismissAllButton().setOnClickListener(v -> {
+                    if (mShowDimissButton) {
+                    mMetricsLogger.action(MetricsEvent.ACTION_DISMISS_ALL_NOTES);
+                    clearNotifications(ROWS_ALL, true /* closeShade */);
+                    }
+                });
+            }
+        }
         setFooterView(footerView);
     }
 
