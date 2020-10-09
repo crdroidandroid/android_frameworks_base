@@ -418,4 +418,10 @@ public interface CentralSurfaces extends Dumpable, LifecycleOwner {
     void wakeUpDeviceifDozing();
 
     NotificationShadeWindowView getNotificationShadeWindowView();
+
+    View getDismissAllButton();
+
+    void updateDismissAllVisibility(boolean visible);
+
+    void updateDismissAllButton();
 }
