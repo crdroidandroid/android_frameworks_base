@@ -753,4 +753,8 @@ public class NotificationShadeWindowViewController implements Dumpable {
             mShadeViewController.fling(vel, expand, expandBecauseOfFalsing);
         }
     }
+
+    public float getExpandedFraction() {
+        return mShadeViewController != null ? mShadeViewController.getExpandedFraction() : 0;
+    }
 }

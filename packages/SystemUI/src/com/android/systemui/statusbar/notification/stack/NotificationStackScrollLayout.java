@@ -118,12 +118,15 @@ import com.android.systemui.statusbar.notification.shared.NotificationsLiveDataS
 import com.android.systemui.statusbar.notification.stack.shared.model.ShadeScrimBounds;
 import com.android.systemui.statusbar.notification.stack.shared.model.ShadeScrimShape;
 import com.android.systemui.statusbar.notification.stack.ui.view.NotificationScrollView;
+import com.android.systemui.statusbar.phone.CentralSurfaces;
 import com.android.systemui.statusbar.phone.HeadsUpAppearanceController;
 import com.android.systemui.statusbar.phone.HeadsUpTouchHelper;
 import com.android.systemui.statusbar.phone.ScreenOffAnimationController;
+import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
 import com.android.systemui.statusbar.policy.HeadsUpUtil;
 import com.android.systemui.statusbar.policy.ScrollAdapter;
 import com.android.systemui.statusbar.policy.SplitShadeStateController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.Assert;
 import com.android.systemui.util.ColorUtilKt;
 import com.android.systemui.util.DumpUtilsKt;
@@ -151,7 +154,7 @@ import java.util.function.Consumer;
  */
 public class NotificationStackScrollLayout
         extends ViewGroup
-        implements Dumpable, NotificationScrollView {
+        implements Dumpable, NotificationScrollView, ConfigurationListener {
     public static final float BACKGROUND_ALPHA_DIMMED = 0.7f;
     private static final String TAG = "StackScroller";
     private static final boolean SPEW = Log.isLoggable(TAG, Log.VERBOSE);
@@ -167,6 +170,9 @@ public class NotificationStackScrollLayout
      */
     private static final int INVALID_POINTER = -1;
     private boolean mKeyguardBypassEnabled;
+
+    private static final String NOTIFICATION_MATERIAL_DISMISS =
+            "system:" + Settings.System.NOTIFICATION_MATERIAL_DISMISS;
 
     private final ExpandHelper mExpandHelper;
     private NotificationSwipeHelper mSwipeHelper;
@@ -330,6 +336,7 @@ public class NotificationStackScrollLayout
         }
     };
     private NotificationStackScrollLogger mLogger;
+    private CentralSurfaces mCentralSurfaces;
     private Runnable mResetUserExpandedStatesRunnable;
     private ActivityStarter mActivityStarter;
     private final int[] mTempInt2 = new int[2];
@@ -563,6 +570,7 @@ public class NotificationStackScrollLayout
     private boolean mHasFilteredOutSeenNotifications;
     @Nullable private SplitShadeStateController mSplitShadeStateController = null;
     private boolean mIsSmallLandscapeLockscreenEnabled = false;
+    private boolean mShowDimissButton;
 
     /** Pass splitShadeStateController to view and update split shade */
     public void passSplitShadeStateController(SplitShadeStateController splitShadeStateController) {
@@ -666,6 +674,13 @@ public class NotificationStackScrollLayout
         mGroupExpansionManager = Dependency.get(GroupExpansionManager.class);
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
         setWindowInsetsAnimationCallback(mInsetsCallback);
+        TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable((key, newValue) -> {
+            if (key.equals(NOTIFICATION_MATERIAL_DISMISS)) {
+                mShowDimissButton = TunerService.parseIntegerSwitch(newValue, false);
+                updateFooter();
+            }
+        },  NOTIFICATION_MATERIAL_DISMISS);
     }
 
     /**
@@ -728,6 +743,9 @@ public class NotificationStackScrollLayout
         }
         inflateEmptyShadeView();
         mSectionsManager.reinflateViews();
+        if (mCentralSurfaces != null) {
+            mCentralSurfaces.updateDismissAllButton();
+        }
     }
 
     public void setIsRemoteInputActive(boolean isActive) {
@@ -793,6 +811,13 @@ public class NotificationStackScrollLayout
                 updateChildren();
                 mChildrenUpdateRequested = false;
             }
+        }
+    }
+
+    @Override
+    public void onUiModeChanged() {
+        if (mCentralSurfaces != null) {
+            mCentralSurfaces.updateDismissAllButton();
         }
     }
 
@@ -4574,6 +4599,7 @@ public class NotificationStackScrollLayout
                 mFooterView.setManageButtonClickListener(mManageButtonClickListener);
             }
             mFooterView.setClearAllButtonClickListener(v -> {
+                if (mShowDimissButton) return;
                 if (mFooterClearAllListener != null) {
                     mFooterClearAllListener.onClearAll();
                 }
@@ -4652,7 +4678,7 @@ public class NotificationStackScrollLayout
         boolean animate = mIsExpanded && mAnimationsEnabled;
         mFooterView.setVisible(visible, animate);
         mFooterView.showHistory(showHistory);
-        mFooterView.setClearAllButtonVisible(showDismissView, animate);
+        mFooterView.setClearAllButtonVisible(!mShowDimissButton && showDismissView, animate);
         mFooterView.setFooterLabelVisible(mHasFilteredOutSeenNotifications);
     }
 
@@ -4697,6 +4723,10 @@ public class NotificationStackScrollLayout
 
     public void setResetUserExpandedStatesRunnable(Runnable runnable) {
         this.mResetUserExpandedStatesRunnable = runnable;
+    }
+
+    public void setCentralSurfaces(CentralSurfaces centralSurfaces) {
+        this.mCentralSurfaces = centralSurfaces;
     }
 
     public void setActivityStarter(ActivityStarter activityStarter) {
@@ -5443,6 +5473,13 @@ public class NotificationStackScrollLayout
         FooterView footerView = (FooterView) LayoutInflater.from(mContext).inflate(
                 R.layout.status_bar_notification_footer, this, false);
         setFooterView(footerView);
+        if (mCentralSurfaces != null && mCentralSurfaces.getDismissAllButton() != null) {
+            mCentralSurfaces.getDismissAllButton().setOnClickListener(v -> {
+                if (mShowDimissButton) {
+                    clearNotifications(ROWS_ALL, true /* closeShade */);
+                }
+            });
+        }
     }
 
     private void inflateEmptyShadeView() {

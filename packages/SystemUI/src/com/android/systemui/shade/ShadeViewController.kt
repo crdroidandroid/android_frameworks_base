@@ -77,6 +77,8 @@ interface ShadeViewController {
 
     fun fling(vel: Float, expand: Boolean, expandBecauseOfFalsing: Boolean)
 
+    fun getExpandedFraction(): Float
+
     /**
      * Triggered when an input focus transfer gesture has started.
      *
