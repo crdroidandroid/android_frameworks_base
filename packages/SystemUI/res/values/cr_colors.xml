@@ -25,4 +25,9 @@
     <color name="binary_clock_empty_dot_color">#ffffff</color>
     <color name="binary_clock_ambient_dot_color">#ffffff</color>
     <color name="binary_clock_ambient_empty_dot_color">#ffffff</color>
+
+    <!-- Clear all notifications button -->
+    <color name="dismiss_all_background_color">@*android:color/notification_material_background_color</color>
+    <color name="dismiss_all_background_color_ripple">#a8a8a8</color>
+    <color name="dismiss_all_icon_color">@*android:color/accent_device_default_light</color>
 </resources>
