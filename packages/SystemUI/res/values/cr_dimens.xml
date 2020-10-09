@@ -82,4 +82,11 @@
     <!-- Additional gesture navbar lengths -->
     <dimen name="navigation_home_handle_width_medium">110dp</dimen>
     <dimen name="navigation_home_handle_width_long">140dp</dimen>
+
+    <!-- Clear all notifications button -->
+    <dimen name="dismiss_all_button_elevation">10dp</dimen>
+    <dimen name="dismiss_all_button_height">55dp</dimen>
+    <dimen name="dismiss_all_button_width">55dp</dimen>
+    <dimen name="dismiss_all_button_margin_bottom">48dp</dimen>
+    <dimen name="dismiss_all_fab_src_size">24dp</dimen>
 </resources>
