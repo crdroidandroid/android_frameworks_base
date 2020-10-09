@@ -586,4 +586,10 @@ public interface CentralSurfaces extends Dumpable, ActivityStarter, LifecycleOwn
             mDeviceId = deviceId;
         }
     }
+
+    View getDismissAllButton();
+
+    void updateDismissAllVisibility(boolean visible);
+
+    void updateDismissAllButton();
 }
