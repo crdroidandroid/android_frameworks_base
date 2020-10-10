@@ -91,6 +91,9 @@ public class FODAnimation extends ImageView {
 
         setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         update();
+        setVisibility(View.GONE);
+
+        mWindowManager.addView(this, mAnimParams);
     }
 
     public void update() {
@@ -108,6 +111,7 @@ public class FODAnimation extends ImageView {
 
     public void updateParams(int positionY) {
         mAnimParams.y = positionY - (mAnimationSize / 2) + mAnimationOffset;
+        mWindowManager.updateViewLayout(this, mAnimParams);
     }
 
     public void setAnimationKeyguard(boolean state) {
@@ -117,10 +121,7 @@ public class FODAnimation extends ImageView {
     public void showFODanimation() {
         if (mAnimParams != null && !mShowing && mIsKeyguard && !mIsDreaming) {
             mShowing = true;
-            if (this.getWindowToken() == null) {
-                mWindowManager.addView(this, mAnimParams);
-                mWindowManager.updateViewLayout(this, mAnimParams);
-            }
+            setVisibility(View.VISIBLE);
             recognizingAnim.start();
         }
     }
@@ -133,9 +134,7 @@ public class FODAnimation extends ImageView {
                 recognizingAnim.stop();
                 recognizingAnim.selectDrawable(0);
             }
-            if (this.getWindowToken() != null) {
-                mWindowManager.removeViewImmediate(this);
-            }
+            setVisibility(View.GONE);
         }
     }
 }
