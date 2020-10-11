@@ -47,6 +47,7 @@ LOCAL_REQUIRED_MODULES := \
 	IconShapeTeardropOverlay \
 	IconShapeVesselOverlay \
 	IconShapeHeartOverlay \
+	IconShapeLeafOverlay \
 	IconShapeSquareOverlay \
 	NavigationBarMode3ButtonOverlay \
 	NavigationBarMode2ButtonOverlay \
