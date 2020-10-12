@@ -191,7 +191,7 @@
     <string name="stabilization_position_friction">Position Friction</string>
     <!-- Screen record -->
     <string name="screenrecord_dialog_title">Vol començar la gravació?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
+    <string name="screenrecord_dialog_summary">Durant la gravació, Android pot capturar informació sensible que és visible a la seva pantalla o reproduïda al seu dispositiu. Això inclou contrasenyes, informació de pagament, fotos, missatges i àudio.</string>
     <string name="screenrecord_dialog_start">Comença</string>
     <string name="screenrecord_dialog_cancel">Cancel·la</string>
     <string name="screenrecord_audio_recording_title">Font d\'àudio</string>
@@ -216,14 +216,14 @@
     <string name="gigabytespersecond_short">GB/s</string>
     <!-- Omnijaws Weather -->
     <string name="omnijaws_service_error">Error</string>
-    <string name="omnijaws_service_unkown">No weather data</string>
-    <string name="omnijaws_service_error_long">Error loading weather data</string>
-    <string name="omnijaws_service_disabled">Service is disabled</string>
-    <string name="omnijaws_detail_header">Weather</string>
-    <string name="omnijaws_label_default">Weather</string>
-    <string name="omnijaws_current_text">Now</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
-    <string name="omnijaws_service_last_update">Last update:</string>
+    <string name="omnijaws_service_unkown">No hi ha informació de l\'oratge</string>
+    <string name="omnijaws_service_error_long">Error carregant la informació de l\'oratge</string>
+    <string name="omnijaws_service_disabled">Servei deshabilitat</string>
+    <string name="omnijaws_detail_header">Oratge</string>
+    <string name="omnijaws_label_default">Oratge</string>
+    <string name="omnijaws_current_text">Ara</string>
+    <string name="omnijaws_package_not_available">OmniJaws no disponible</string>
+    <string name="omnijaws_service_last_update">Darrera actualització:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;is Locked.</string>
     <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
