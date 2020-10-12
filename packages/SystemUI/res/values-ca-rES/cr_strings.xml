@@ -107,20 +107,20 @@
         <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">Una</string>
+    <string name="text_clock_h_two">Dues</string>
+    <string name="text_clock_h_three">Tres</string>
+    <string name="text_clock_h_four">Quatre</string>
+    <string name="text_clock_h_five">Cinc</string>
+    <string name="text_clock_h_six">Sis</string>
+    <string name="text_clock_h_seven">Set</string>
+    <string name="text_clock_h_eight">Vuit</string>
+    <string name="text_clock_h_nine">Nou</string>
+    <string name="text_clock_h_ten">Deu</string>
+    <string name="text_clock_h_eleven">Onze</string>
+    <string name="text_clock_h_twelve">Dotze</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
+    <string name="text_clock_m_zero">En punt</string>
     <string name="text_clock_m_one">O’One</string>
     <string name="text_clock_m_two">O’Two</string>
     <string name="text_clock_m_three">O’Three</string>
@@ -130,8 +130,8 @@
     <string name="text_clock_m_seven">O’Seven</string>
     <string name="text_clock_m_eight">O’Eight</string>
     <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
+    <string name="text_clock_m_ten">Deu</string>
+    <string name="text_clock_m_eleven">Onze</string>
     <string name="text_clock_m_twelve">Twelve</string>
     <string name="text_clock_m_thirteen">Thirteen</string>
     <string name="text_clock_m_fourteen">Fourteen</string>
