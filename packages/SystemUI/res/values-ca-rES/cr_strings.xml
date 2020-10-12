@@ -190,7 +190,7 @@
     <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
     <string name="stabilization_position_friction">Position Friction</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
+    <string name="screenrecord_dialog_title">Vol començar la gravació?</string>
     <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
     <string name="screenrecord_dialog_start">Comença</string>
     <string name="screenrecord_dialog_cancel">Cancel·la</string>
