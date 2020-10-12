@@ -53,6 +53,6 @@
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">Gravació de pantalla</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
-    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
+    <string name="app_clipboard_access_denied">%1$s se li ha denegat accés al porta-retalls</string>
+    <string name="app_clipboard_access_granted">%1$s se li ha concedit accés al porta-retalls</string>
 </resources>
