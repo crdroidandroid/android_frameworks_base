@@ -86,7 +86,7 @@
     <string name="force_stop_dlg_text">Si es força l\'aturada d\'una app, pot tenir un mal comportament.</string>
     <string name="guts_force_close_app">Tanca l\'aplicació</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Interfície del sistema</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
