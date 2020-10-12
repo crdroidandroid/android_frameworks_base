@@ -192,17 +192,17 @@
     <!-- Screen record -->
     <string name="screenrecord_dialog_title">Start recording?</string>
     <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_dialog_start">Comença</string>
+    <string name="screenrecord_dialog_cancel">Cancel·la</string>
+    <string name="screenrecord_audio_recording_title">Font d\'àudio</string>
+    <string name="screenrecord_audio_recording_internal">Intern</string>
+    <string name="screenrecord_audio_recording_microphone">Micròfon</string>
+    <string name="screenrecord_audio_recording_off">Deshabilitat</string>
+    <string name="screenrecord_taps_title">Mostra tocs en pantalla</string>
+    <string name="screenrecord_stopdot_title">Mostra punt de parada</string>
+    <string name="screenrecord_video_bitrate_title">Taxa de bits del vídeo</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Estalvi de dades</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
