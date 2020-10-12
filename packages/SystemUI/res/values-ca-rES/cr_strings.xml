@@ -132,8 +132,8 @@
     <string name="text_clock_m_nine">O’Nine</string>
     <string name="text_clock_m_ten">Deu</string>
     <string name="text_clock_m_eleven">Onze</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
+    <string name="text_clock_m_twelve">Dotze</string>
+    <string name="text_clock_m_thirteen">Tretze</string>
     <string name="text_clock_m_fourteen">Fourteen</string>
     <string name="text_clock_m_fifteen">Fifteen</string>
     <string name="text_clock_m_sixteen">Sixteen</string>
@@ -181,7 +181,7 @@
     <string name="text_clock_m_fifty_eight">Fifty Eight</string>
     <string name="text_clock_m_fifty_nine">Fifty Nine</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
+    <string name="quick_settings_stabilization_label">Estabilització de pantalla</string>
     <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
     <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
     <string name="low_label">Low</string>
