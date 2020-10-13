@@ -285,7 +285,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             @Override
             protected void onDraw(Canvas canvas) {
                 if (mIsCircleShowing && mPressedState == 2) {
-		    canvas.drawCircle(mSize / 2, mSize / 2, mSize / 2.0f, mPaintFingerprint);
+                    canvas.drawCircle(mSize / 2, mSize / 2, mSize / 2.0f, mPaintFingerprint);
                 }
                 super.onDraw(canvas);
             }
@@ -397,10 +397,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
     public void updateIconDim() {
         mCurrentBrightness = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.SCREEN_BRIGHTNESS, mDefaultScreenBrightness, UserHandle.USER_CURRENT);
-        if (!mIsCircleShowing && mTargetUsesInKernelDimming) {
+        if (mTargetUsesInKernelDimming) {
             mHandler.post(() -> setColorFilter(Color.argb(getDimAlpha(), 0, 0, 0), PorterDuff.Mode.SRC_ATOP));
-        } else {
-            mHandler.post(() -> setColorFilter(Color.argb(0, 0, 0, 0), PorterDuff.Mode.SRC_ATOP));
         }
     }
 
@@ -434,13 +432,9 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
 
         if (event.getAction() == MotionEvent.ACTION_DOWN && newIsInside) {
             showCircle();
-            if (mIsRecognizingAnimEnabled) {
-                mHandler.post(() -> mFODAnimation.showFODanimation());
-            }
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             hideCircle();
-            mHandler.post(() -> mFODAnimation.hideFODanimation());
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             return true;
@@ -519,8 +513,11 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             dispatchPress();
         });
 
+        if (mIsRecognizingAnimEnabled) {
+            mHandler.post(() -> mFODAnimation.showFODanimation());
+        }
+
         updatePosition();
-        updateIconDim();
         invalidate();
     }
 
@@ -528,13 +525,14 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         mIsCircleShowing = false;
 
         setFODIcon();
-        updateIconDim();
         invalidate();
 
         ThreadUtils.postOnBackgroundThread(() -> {
             dispatchRelease();
         });
         setDim(false);
+
+        mHandler.post(() -> mFODAnimation.hideFODanimation());
 
         setKeepScreenOn(false);
     }
