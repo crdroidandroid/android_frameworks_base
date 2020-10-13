@@ -17,7 +17,7 @@
  */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Pebble icon overlay -->
-    <string name="icon_shape_pebble_overlay" translatable="false">Pebble</string>
+    <!-- Heart icon overlay -->
+    <string name="icon_shape_heart_overlay" translatable="false">Heart</string>
 
 </resources>
