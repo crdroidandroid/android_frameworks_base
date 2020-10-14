@@ -321,6 +321,13 @@ public final class DisplayManagerService extends SystemService {
     // Receives notifications about changes to Settings.
     private SettingsObserver mSettingsObserver;
 
+    // The synchronization root for the display dumpsys.
+    private final SyncRoot mSyncDump = new SyncRoot();
+
+    // Whether dump is inprogress or not.
+    @GuardedBy("mSyncDump")
+    private boolean mDumpInProgress;
+
     public DisplayManagerService(Context context) {
         this(context, new Injector());
     }
@@ -354,6 +361,7 @@ public final class DisplayManagerService extends SystemService {
         mWideColorSpace = colorSpaces[1];
 
         mSystemReady = false;
+        mDumpInProgress = false;
     }
 
     public void setupSchedulerPolicies() {
@@ -1682,6 +1690,14 @@ public final class DisplayManagerService extends SystemService {
     }
 
     private void dumpInternal(PrintWriter pw) {
+        synchronized (mSyncDump) {
+            if (mDumpInProgress) {
+                pw.println("One dump is in service already.");
+                return;
+            }
+            mDumpInProgress = true;
+        }
+
         pw.println("DISPLAY MANAGER (dumpsys display)");
 
         synchronized (mSyncRoot) {
@@ -1742,6 +1758,9 @@ public final class DisplayManagerService extends SystemService {
 
             pw.println();
             mPersistentDataStore.dump(pw);
+        }
+        synchronized (mSyncDump) {
+            mDumpInProgress = false;
         }
     }
 
