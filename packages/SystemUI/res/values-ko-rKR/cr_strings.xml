@@ -257,7 +257,7 @@
     <string name="omnijaws_package_not_available">OmniJaws를 사용할 수 없음</string>
     <string name="omnijaws_service_last_update">최근 업데이트:</string>
     <!-- App lock -->
-    <string name="applock_locked">&#160;is Locked.</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_locked">&#160;is 잠김</string>
+    <string name="applock_fingerprint">&#160;또는 지문으로 잠금해제</string>
+    <string name="applock_locked_notification">앱 잠김</string>
 </resources>
