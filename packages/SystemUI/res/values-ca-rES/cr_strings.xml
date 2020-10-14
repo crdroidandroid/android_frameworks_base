@@ -86,7 +86,7 @@
     <string name="force_stop_dlg_text">Si es força l\'aturada d\'una app, pot tenir un mal comportament.</string>
     <string name="guts_force_close_app">Tanca l\'aplicació</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Interfície del sistema</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
@@ -107,20 +107,20 @@
         <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">Una</string>
+    <string name="text_clock_h_two">Dues</string>
+    <string name="text_clock_h_three">Tres</string>
+    <string name="text_clock_h_four">Quatre</string>
+    <string name="text_clock_h_five">Cinc</string>
+    <string name="text_clock_h_six">Sis</string>
+    <string name="text_clock_h_seven">Set</string>
+    <string name="text_clock_h_eight">Vuit</string>
+    <string name="text_clock_h_nine">Nou</string>
+    <string name="text_clock_h_ten">Deu</string>
+    <string name="text_clock_h_eleven">Onze</string>
+    <string name="text_clock_h_twelve">Dotze</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
+    <string name="text_clock_m_zero">En punt</string>
     <string name="text_clock_m_one">O’One</string>
     <string name="text_clock_m_two">O’Two</string>
     <string name="text_clock_m_three">O’Three</string>
@@ -130,10 +130,10 @@
     <string name="text_clock_m_seven">O’Seven</string>
     <string name="text_clock_m_eight">O’Eight</string>
     <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
+    <string name="text_clock_m_ten">Deu</string>
+    <string name="text_clock_m_eleven">Onze</string>
+    <string name="text_clock_m_twelve">Dotze</string>
+    <string name="text_clock_m_thirteen">Tretze</string>
     <string name="text_clock_m_fourteen">Fourteen</string>
     <string name="text_clock_m_fifteen">Fifteen</string>
     <string name="text_clock_m_sixteen">Sixteen</string>
@@ -181,32 +181,32 @@
     <string name="text_clock_m_fifty_eight">Fifty Eight</string>
     <string name="text_clock_m_fifty_nine">Fifty Nine</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Screen Stabilization</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
+    <string name="quick_settings_stabilization_label">Estabilització de pantalla</string>
+    <string name="quick_settings_stabilization_off">L\'estabilització està deshabilitada</string>
+    <string name="quick_settings_stabilization_on">L\'estabilització està habilitada</string>
+    <string name="low_label">Baix</string>
+    <string name="high_label">Alt</string>
     <string name="stabilization_velocity_friction">Velocity Friction</string>
     <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
     <string name="stabilization_position_friction">Position Friction</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_dialog_title">Vol començar la gravació?</string>
+    <string name="screenrecord_dialog_summary">Durant la gravació, Android pot capturar informació sensible que és visible a la seva pantalla o reproduïda al seu dispositiu. Això inclou contrasenyes, informació de pagament, fotos, missatges i àudio.</string>
+    <string name="screenrecord_dialog_start">Comença</string>
+    <string name="screenrecord_dialog_cancel">Cancel·la</string>
+    <string name="screenrecord_audio_recording_title">Font d\'àudio</string>
+    <string name="screenrecord_audio_recording_internal">Intern</string>
+    <string name="screenrecord_audio_recording_microphone">Micròfon</string>
+    <string name="screenrecord_audio_recording_off">Deshabilitat</string>
+    <string name="screenrecord_taps_title">Mostra tocs en pantalla</string>
+    <string name="screenrecord_stopdot_title">Mostra punt de parada</string>
+    <string name="screenrecord_video_bitrate_title">Taxa de bits del vídeo</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Estalvi de dades</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming</string>
+    <string name="status_bar_roaming">Itinerància</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
@@ -216,16 +216,16 @@
     <string name="gigabytespersecond_short">GB/s</string>
     <!-- Omnijaws Weather -->
     <string name="omnijaws_service_error">Error</string>
-    <string name="omnijaws_service_unkown">No weather data</string>
-    <string name="omnijaws_service_error_long">Error loading weather data</string>
-    <string name="omnijaws_service_disabled">Service is disabled</string>
-    <string name="omnijaws_detail_header">Weather</string>
-    <string name="omnijaws_label_default">Weather</string>
-    <string name="omnijaws_current_text">Now</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
-    <string name="omnijaws_service_last_update">Last update:</string>
+    <string name="omnijaws_service_unkown">No hi ha informació de l\'oratge</string>
+    <string name="omnijaws_service_error_long">Error carregant la informació de l\'oratge</string>
+    <string name="omnijaws_service_disabled">Servei deshabilitat</string>
+    <string name="omnijaws_detail_header">Oratge</string>
+    <string name="omnijaws_label_default">Oratge</string>
+    <string name="omnijaws_current_text">Ara</string>
+    <string name="omnijaws_package_not_available">OmniJaws no disponible</string>
+    <string name="omnijaws_service_last_update">Darrera actualització:</string>
     <!-- App lock -->
-    <string name="applock_locked">&#160;is Locked.</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_locked">&#160;està bloquejat.</string>
+    <string name="applock_fingerprint">&#160;o la teva empremta per a desbloquejar.</string>
+    <string name="applock_locked_notification">L\'aplicació està bloquejada</string>
 </resources>

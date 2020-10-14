@@ -53,6 +53,6 @@
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">화면녹화</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
-    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
+    <string name="app_clipboard_access_denied">%1$s의 클립 보드에 대한 액세스가 거부되었습니다.</string>
+    <string name="app_clipboard_access_granted">%1$s 에 클립 보드 액세스 권한이 부여되었습니다.</string>
 </resources>
