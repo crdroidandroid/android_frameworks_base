@@ -20,9 +20,9 @@
     <!-- Flag indicating whether round icons should be parsed from the application manifest. -->
     <bool name="config_useRoundIcon">false</bool>
     <!-- Corner radius of system dialogs -->
-    <dimen name="config_dialogCornerRadius">0dp</dimen>
+    <dimen name="config_dialogCornerRadius">2dp</dimen>
     <!-- Corner radius for bottom sheet system dialogs -->
-    <dimen name="config_bottomDialogCornerRadius">0dp</dimen>
+    <dimen name="config_bottomDialogCornerRadius">2dp</dimen>
     <!-- Tile stroke width -->
     <dimen name="config_qsTileStrokeWidthInactive">1dp</dimen>
 </resources>
