@@ -11772,11 +11772,11 @@ public class BatteryStatsImpl extends BatteryStats {
                 // This could happen if the isolated uid mapping was removed before that process
                 // was actually killed.
                 mCpuUidUserSysTimeReader.removeUid(uid);
-                Slog.d(TAG, "Got readings for an isolated uid with no mapping: " + uid);
+                if (DEBUG) Slog.d(TAG, "Got readings for an isolated uid: " + uid);
                 return;
             }
             if (!mUserInfoProvider.exists(UserHandle.getUserId(uid))) {
-                Slog.d(TAG, "Got readings for an invalid user's uid " + uid);
+                if (DEBUG) Slog.d(TAG, "Got readings for an invalid user's uid " + uid);
                 mCpuUidUserSysTimeReader.removeUid(uid);
                 return;
             }
@@ -11880,11 +11880,11 @@ public class BatteryStatsImpl extends BatteryStats {
             uid = mapUid(uid);
             if (Process.isIsolated(uid)) {
                 mCpuUidFreqTimeReader.removeUid(uid);
-                Slog.d(TAG, "Got freq readings for an isolated uid with no mapping: " + uid);
+                if (DEBUG) Slog.d(TAG, "Got freq readings for an isolated uid: " + uid);
                 return;
             }
             if (!mUserInfoProvider.exists(UserHandle.getUserId(uid))) {
-                Slog.d(TAG, "Got freq readings for an invalid user's uid " + uid);
+                if (DEBUG) Slog.d(TAG, "Got freq readings for an invalid user's uid " + uid);
                 mCpuUidFreqTimeReader.removeUid(uid);
                 return;
             }
@@ -11993,11 +11993,11 @@ public class BatteryStatsImpl extends BatteryStats {
             uid = mapUid(uid);
             if (Process.isIsolated(uid)) {
                 mCpuUidActiveTimeReader.removeUid(uid);
-                Slog.w(TAG, "Got active times for an isolated uid with no mapping: " + uid);
+                if (DEBUG) Slog.w(TAG, "Got active times for an isolated uid: " + uid);
                 return;
             }
             if (!mUserInfoProvider.exists(UserHandle.getUserId(uid))) {
-                Slog.w(TAG, "Got active times for an invalid user's uid " + uid);
+                if (DEBUG) Slog.w(TAG, "Got active times for an invalid user's uid " + uid);
                 mCpuUidActiveTimeReader.removeUid(uid);
                 return;
             }
@@ -12022,11 +12022,11 @@ public class BatteryStatsImpl extends BatteryStats {
             uid = mapUid(uid);
             if (Process.isIsolated(uid)) {
                 mCpuUidClusterTimeReader.removeUid(uid);
-                Slog.w(TAG, "Got cluster times for an isolated uid with no mapping: " + uid);
+                if (DEBUG) Slog.w(TAG, "Got cluster times for an isolated uid: " + uid);
                 return;
             }
             if (!mUserInfoProvider.exists(UserHandle.getUserId(uid))) {
-                Slog.w(TAG, "Got cluster times for an invalid user's uid " + uid);
+                if (DEBUG) Slog.w(TAG, "Got cluster times for an invalid user's uid " + uid);
                 mCpuUidClusterTimeReader.removeUid(uid);
                 return;
             }
