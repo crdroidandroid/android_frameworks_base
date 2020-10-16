@@ -31,8 +31,8 @@
     android:background="@drawable/control_background">
         <ImageView
             android:id="@*android:id/icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginBottom="14dp"
             android:scaleType="centerInside"
             android:tint="@color/control_primary_text" />
