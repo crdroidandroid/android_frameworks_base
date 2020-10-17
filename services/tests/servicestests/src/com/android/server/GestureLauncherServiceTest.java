@@ -374,7 +374,7 @@ public class GestureLauncherServiceTest {
     @Test
     public void testInterceptPowerKeyDown_longpress() {
         withCameraDoubleTapPowerEnableConfigValue(true);
-        withCameraDoubleTapPowerDisableSettingValue(0);
+        withCameraDoubleTapPowerDisableSettingValue(1);
         mGestureLauncherService.updateCameraDoubleTapPowerEnabled();
         withUserSetupCompleteValue(true);
 
