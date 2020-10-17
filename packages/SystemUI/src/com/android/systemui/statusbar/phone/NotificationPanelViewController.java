@@ -3030,7 +3030,12 @@ public class NotificationPanelViewController extends PanelViewController {
         boolean activeNotif = mNotificationStackScroller.hasActiveClearableNotifications(ROWS_HIGH_PRIORITY);
         int pulseReason = Settings.System.getIntForUser(mView.getContext().getContentResolver(),
                 Settings.System.PULSE_TRIGGER_REASON, DozeLog.PULSE_REASON_NONE, UserHandle.USER_CURRENT);
-        boolean pulseReasonNotification = pulseReason == DozeLog.AOD_NOTIFICATION_PULSE_CLEAR;
+        boolean pulseReasonNotification = pulseReason == DozeLog.PULSE_REASON_NOTIFICATION;
+        boolean ambientLightsHideAod = Settings.System.getIntForUser(
+                mView.getContext().getContentResolver(), Settings.System.AOD_NOTIFICATION_PULSE_CLEAR,
+                0, UserHandle.USER_CURRENT) != 0;
+        int ambientLightsTimeout = Settings.System.getIntForUser(mView.getContext().getContentResolver(),
+                Settings.System.AOD_NOTIFICATION_PULSE_TIMEOUT, 0, UserHandle.USER_CURRENT);
         if (animatePulse) {
             mAnimateNextPositionUpdate = true;
         }
@@ -3070,7 +3075,10 @@ public class NotificationPanelViewController extends PanelViewController {
                 // continue to pulse - if not screen was turned on in the meantime
                 if (activeNotif && ambientLights && mDozing && !mPulseLightHandled) {
                     // no-op if pulseLights is also enabled
-                    mPulseLightsView.animateNotification(true);
+                    if (ambientLightsHideAod) {
+                        showAodContent(false);
+                    }
+                    mPulseLightsView.animateNotification();
                     mPulseLightsView.setVisibility(View.VISIBLE);
                 } else {
                     // no active notifications or just pulse without aod - so no reason to continue
@@ -3083,6 +3091,15 @@ public class NotificationPanelViewController extends PanelViewController {
         }
         mNotificationStackScroller.setPulsing(pulsing, animatePulse);
         mKeyguardStatusView.setPulsing(pulsing);
+    }
+
+    private void showAodContent(boolean show) {
+        if (DEBUG_PULSE_LIGHT) {
+            Log.d(TAG, "showAodContent show = " + show);
+        }
+        mKeyguardStatusView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+        mKeyguardStatusBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+        mKeyguardBottomArea.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void setAmbientIndicationBottomPadding(int ambientIndicationBottomPadding) {
