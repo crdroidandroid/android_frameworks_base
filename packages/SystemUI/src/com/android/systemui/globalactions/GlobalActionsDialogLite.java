@@ -59,6 +59,8 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.os.UserHandle;
@@ -176,6 +178,10 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     private static final long TOAST_FADE_TIME = 333;
     // See NotificationManagerService.LONG_DELAY
     private static final int TOAST_VISIBLE_TIME = 3500;
+
+    private static final int RESTART_RECOVERY_BUTTON = 1;
+    private static final int RESTART_BOOTLOADER_BUTTON = 2;
+    private static final int RESTART_UI_BUTTON = 3;
 
     private final Context mContext;
     private final GlobalActionsManager mWindowManagerFuncs;
@@ -535,7 +541,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
 
     @VisibleForTesting
     protected String[] getDefaultActions() {
-        return mResources.getStringArray(R.array.config_globalActionsList);
+        return mResources.getStringArray(R.array.custom_config_globalActionsList);
     }
 
     private void addIfShouldShowAction(List<Action> actions, Action action) {
@@ -562,6 +568,52 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
 
         ShutDownAction shutdownAction = new ShutDownAction();
         RestartAction restartAction = new RestartAction();
+
+        AdvancedAction restartRecoveryAction = new AdvancedAction(
+                RESTART_RECOVERY_BUTTON,
+                com.android.systemui.R.drawable.ic_restart_recovery,
+                com.android.systemui.R.string.global_action_restart_recovery,
+                mWindowManagerFuncs, mHandler) {
+
+            public boolean showDuringKeyguard() {
+                return true;
+            }
+
+            public boolean showBeforeProvisioning() {
+                return true;
+            }
+        };
+
+        AdvancedAction restartBootloaderAction = new AdvancedAction(
+                RESTART_BOOTLOADER_BUTTON,
+                com.android.systemui.R.drawable.ic_restart_bootloader,
+                com.android.systemui.R.string.global_action_restart_bootloader,
+                mWindowManagerFuncs, mHandler) {
+
+            public boolean showDuringKeyguard() {
+                return true;
+            }
+
+            public boolean showBeforeProvisioning() {
+                return true;
+            }
+        };
+
+        AdvancedAction restartSystemUiAction = new AdvancedAction(
+                RESTART_UI_BUTTON,
+                com.android.systemui.R.drawable.ic_restart_ui,
+                com.android.systemui.R.string.global_action_restart_ui,
+                mWindowManagerFuncs, mHandler) {
+
+            public boolean showDuringKeyguard() {
+                return true;
+            }
+
+            public boolean showBeforeProvisioning() {
+                return true;
+            }
+        };
+
         ArraySet<String> addedKeys = new ArraySet<>();
         List<Action> tempActions = new ArrayList<>();
         CurrentUserProvider currentUser = new CurrentUserProvider();
@@ -606,6 +658,10 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                 addIfShouldShowAction(tempActions, getAssistAction());
             } else if (GLOBAL_ACTION_KEY_RESTART.equals(actionKey)) {
                 addIfShouldShowAction(tempActions, restartAction);
+                // if Restart action is available, add advanced restart actions too
+                addIfShouldShowAction(tempActions, restartBootloaderAction);
+                addIfShouldShowAction(tempActions, restartRecoveryAction);
+                addIfShouldShowAction(tempActions, restartSystemUiAction);
             } else if (GLOBAL_ACTION_KEY_SCREENSHOT.equals(actionKey)) {
                 addIfShouldShowAction(tempActions, new ScreenshotAction());
             } else if (GLOBAL_ACTION_KEY_LOGOUT.equals(actionKey)) {
@@ -623,19 +679,32 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
             addedKeys.add(actionKey);
         }
 
-        // replace power and restart with a single power options action, if needed
-        if (tempActions.contains(shutdownAction) && tempActions.contains(restartAction)
-                && tempActions.size() > getMaxShownPowerItems()) {
-            // transfer shutdown and restart to their own list of power actions
-            int powerOptionsIndex = Math.min(tempActions.indexOf(restartAction),
-                    tempActions.indexOf(shutdownAction));
-            tempActions.remove(shutdownAction);
+        if (tempActions.contains(restartAction)) {
+            // transfer restart and advanced restart to their own list of power actions
+            // and position it where Reset button was supposed to be
+            int powerOptionsIndex = tempActions.indexOf(restartAction);
             tempActions.remove(restartAction);
-            mPowerItems.add(shutdownAction);
+            tempActions.remove(restartBootloaderAction);
+            tempActions.remove(restartRecoveryAction);
+            tempActions.remove(restartSystemUiAction);
+            if (tempActions.contains(shutdownAction)) {
+                mPowerItems.add(shutdownAction); // will be removed later if needed
+            }
             mPowerItems.add(restartAction);
+            mPowerItems.add(restartBootloaderAction);
+            mPowerItems.add(restartRecoveryAction);
+            mPowerItems.add(restartSystemUiAction);
 
-            // add the PowerOptionsAction after Emergency, if present
+            // add the PowerOptionsAction after Emergency and Shutdown action, if present
             tempActions.add(powerOptionsIndex, new PowerOptionsAction());
+        }
+        // Add also Power to power actions list, if needed
+        if (tempActions.contains(shutdownAction) && mPowerItems.size() > 1
+                /*tempActions.size gets in count already PowerOptionsAction if added*/
+                && tempActions.size() > getMaxShownPowerItems()) {
+            tempActions.remove(shutdownAction);
+        } else {
+            mPowerItems.remove(shutdownAction);
         }
         for (Action action : tempActions) {
             addActionItem(action);
@@ -728,8 +797,8 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     @VisibleForTesting
     protected final class PowerOptionsAction extends SinglePressAction {
         private PowerOptionsAction() {
-            super(com.android.systemui.R.drawable.ic_settings_power,
-                    R.string.global_action_power_options);
+            super(com.android.systemui.R.drawable.ic_restart_advanced,
+                    com.android.systemui.R.string.global_action_restart_advanced);
         }
 
         @Override
@@ -1850,6 +1919,110 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         }
     }
 
+    /**
+     * A toggle action knows whether it is on or off, and displays an icon
+     * and status message accordingly.
+     */
+    private static abstract class AdvancedAction implements Action, LongPressAction {
+
+        protected int mActionType;
+        protected int mIconResid;
+        protected int mMessageResId;
+        protected Handler mRefresh;
+        protected GlobalActionsManager mWmFuncs;
+        private Context mContext;
+
+        public AdvancedAction(
+                int actionType,
+                int iconResid,
+                int messageResid,
+                GlobalActionsManager funcs,
+                Handler handler) {
+            mActionType = actionType;
+            mIconResid = iconResid;
+            mMessageResId = messageResid;
+            mRefresh = handler;
+            mWmFuncs = funcs;
+        }
+
+        @Override
+        public View create(
+                Context context, View convertView, ViewGroup parent, LayoutInflater inflater) {
+            mContext = context;
+            View v = inflater.inflate(com.android.systemui.R.layout.global_actions_item, parent,
+                    false);
+
+            TextView messageView = (TextView) v.findViewById(R.id.message);
+            if (messageView != null) {
+                messageView.setText(mMessageResId);
+            }
+            ImageView icon = (ImageView) v.findViewById(R.id.icon);
+            if (icon != null) {
+                icon.setImageDrawable(mContext.getDrawable((mIconResid)));
+            }
+
+            return v;
+        }
+
+        @Override
+        public final void onPress() {
+            triggerAction(mActionType, mRefresh, mWmFuncs, mContext);
+        }
+
+        @Override
+        public boolean onLongPress() {
+            return true;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+
+        @Override
+        public CharSequence getLabelForAccessibility(Context context) {
+            return context.getString(mMessageResId);
+        }
+
+        @Override
+        public int getMessageResId() {
+            return mMessageResId;
+        }
+
+        @Override
+        public CharSequence getMessage() {
+            return null;
+        }
+
+        @Override
+        public Drawable getIcon(Context context) {
+            return context.getDrawable(mIconResid);
+        }
+    }
+
+    private static void triggerAction(int type, Handler h, GlobalActionsManager funcs, Context ctx) {
+        switch (type) {
+            case RESTART_RECOVERY_BUTTON:
+                h.sendEmptyMessage(MESSAGE_DISMISS);
+                funcs.advancedReboot(PowerManager.REBOOT_RECOVERY);
+                break;
+            case RESTART_BOOTLOADER_BUTTON:
+                h.sendEmptyMessage(MESSAGE_DISMISS);
+                funcs.advancedReboot(PowerManager.REBOOT_BOOTLOADER);
+                break;
+            case RESTART_UI_BUTTON:
+                /* no time and need to dismiss the dialog here, just kill systemui straight after telling to
+                policy/GlobalActions that we hid the dialog within the kill action itself so its onStatusBarConnectedChanged
+                won't show the LegacyGlobalActions after systemui restart
+                */
+                funcs.onGlobalActionsHidden();
+                restartSystemUI(ctx);
+                break;
+            default:
+                break;
+        }
+    }
+
     private class AirplaneModeAction extends ToggleAction {
         AirplaneModeAction() {
             super(
@@ -2590,5 +2763,9 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                 refreshDialog();
             }
         }
+    }
+
+    public static void restartSystemUI(Context ctx) {
+        Process.killProcess(Process.myPid());
     }
 }

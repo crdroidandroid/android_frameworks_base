@@ -28,4 +28,12 @@
     <!-- The list of components which should be forced to be enabled. -->
     <string-array name="config_forceEnabledComponents" translatable="false">
     </string-array>
+
+    <!-- Global Actions prefs list -->
+    <string-array translatable="false" name="custom_config_globalActionsList">
+        <item>emergency</item>
+        <item>power</item>
+        <item>restart</item>
+        <item>logout</item>
+    </string-array>
 </resources>
