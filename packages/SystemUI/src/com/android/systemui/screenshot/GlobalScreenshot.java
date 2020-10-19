@@ -1083,6 +1083,18 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
         mActionsView.addView(editChip);
         chips.add(editChip);
 
+        ScreenshotActionChip deleteChip = (ScreenshotActionChip) inflater.inflate(
+                R.layout.global_screenshot_action_chip, mActionsView, false);
+        deleteChip.setText(imageData.deleteAction.title);
+        deleteChip.setIcon(imageData.deleteAction.getIcon(), true);
+        deleteChip.setPendingIntent(imageData.deleteAction.actionIntent, () -> {
+            mUiEventLogger.log(ScreenshotEvent.SCREENSHOT_DELETE_TAPPED);
+            dismissScreenshot("chip tapped", false);
+            mOnCompleteRunnable.run();
+        });
+        mActionsView.addView(deleteChip);
+        chips.add(deleteChip);
+
         mScreenshotPreview.setOnClickListener(v -> {
             try {
                 imageData.editAction.actionIntent.send();
