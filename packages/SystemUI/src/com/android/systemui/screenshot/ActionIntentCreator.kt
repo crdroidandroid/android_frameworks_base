@@ -16,6 +16,7 @@
 
 package com.android.systemui.screenshot
 
+import android.app.PendingIntent
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.ComponentName
@@ -31,6 +32,7 @@ import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.dagger.qualifiers.Background
 import com.android.systemui.res.R
 import com.android.systemui.screenshot.scroll.LongScreenshotActivity
+import com.android.systemui.screenshot.DeleteScreenshotReceiver.EXTRA_SCREENSHOT_URI_ID
 import com.android.systemui.shared.Flags.usePreferredImageEditor
 import java.util.function.Consumer
 import javax.inject.Inject
@@ -130,6 +132,16 @@ constructor(
             .addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+    }
+
+    fun createDelete(rawUri: Uri, context: Context): PendingIntent {
+        return PendingIntent.getBroadcast(context, rawUri.toString().hashCode(),
+                Intent(context, DeleteScreenshotReceiver::class.java)
+                        .putExtra(EXTRA_SCREENSHOT_URI_ID, rawUri.toString())
+                        .addFlags(Intent.FLAG_RECEIVER_FOREGROUND),
+                        (PendingIntent.FLAG_CANCEL_CURRENT
+                        or PendingIntent.FLAG_ONE_SHOT
+                        or PendingIntent.FLAG_IMMUTABLE))
     }
 
     /** @return an Intent to start the LongScreenshotActivity */
