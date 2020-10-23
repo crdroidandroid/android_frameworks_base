@@ -141,7 +141,7 @@ public final class AutoFillUI {
                 return;
             }
             hideAllUiThread(callback);
-            if (!TextUtils.isEmpty(message)) {
+            if (!TextUtils.isEmpty(message) && !message.toString().equals("null")) {
                 Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
             }
         });
