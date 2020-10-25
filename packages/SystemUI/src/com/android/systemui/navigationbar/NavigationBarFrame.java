@@ -26,11 +26,15 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
+import com.android.systemui.Dependency;
 import com.android.systemui.navigationbar.buttons.DeadZone;
+import com.android.systemui.statusbar.policy.PulseController;
 
 public class NavigationBarFrame extends FrameLayout {
 
     private DeadZone mDeadZone = null;
+
+    private boolean mAttached;
 
     public NavigationBarFrame(@NonNull Context context) {
         super(context);
@@ -57,5 +61,21 @@ public class NavigationBarFrame extends FrameLayout {
             }
         }
         return super.dispatchTouchEvent(event);
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        mAttached = true;
+        super.onAttachedToWindow();
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        mAttached = false;
+        super.onDetachedFromWindow();
+    }
+
+    public boolean isAttached() {
+        return mAttached;
     }
 }
