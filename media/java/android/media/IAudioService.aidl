@@ -786,4 +786,12 @@ interface IAudioService {
     @EnforcePermission("QUERY_AUDIO_STATE")
     @JavaPassthrough(annotation="@android.annotation.RequiresPermission(android.Manifest.permission.QUERY_AUDIO_STATE)")
     boolean shouldNotificationSoundPlay(in AudioAttributes aa);
+
+    /**
+     * Internal api to protect Pulse
+     * @hide
+     */
+    void setVisualizerLocked(boolean doLock);
+    /* @hide */
+    boolean isVisualizerLocked(String callingPackage);
 }

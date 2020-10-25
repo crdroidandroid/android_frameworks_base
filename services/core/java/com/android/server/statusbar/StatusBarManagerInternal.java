@@ -271,4 +271,9 @@ public interface StatusBarManagerInternal {
      * Called when requested to enter desktop from a focused app.
      */
     void moveFocusedTaskToDesktop(int displayId);
+
+    /**
+     * Window manager notifies SystemUI of navigation bar "left in landscape" changes
+     */
+    void leftInLandscapeChanged(boolean isLeft);
 }
