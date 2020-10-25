@@ -137,4 +137,9 @@ public interface StatusBarManagerInternal {
 
     /** @see com.android.internal.statusbar.IStatusBar#hideToast(String, IBinder)  */
     void hideToast(String packageName, IBinder token);
+
+    /**
+     * Window manager notifies SystemUI of navigation bar "left in landscape" changes
+     */
+    void leftInLandscapeChanged(boolean isLeft);
 }
