@@ -521,4 +521,11 @@ interface IAudioService {
             boolean handlesvolumeAdjustment);
 
     String getHalVersion();
+
+    /**
+     * Internal api to protect Pulse
+     * @hide
+     */
+    void setVisualizerLocked(boolean doLock);
+    boolean isVisualizerLocked(String callingPackage);
 }
