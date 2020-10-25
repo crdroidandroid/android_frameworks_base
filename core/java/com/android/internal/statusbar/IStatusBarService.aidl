@@ -165,4 +165,6 @@ interface IStatusBarService
     void setBlockedGesturalNavigation(boolean blocked);
 
     void toggleCameraFlash();
+
+    void screenPinningStateChanged(boolean enabled);
 }
