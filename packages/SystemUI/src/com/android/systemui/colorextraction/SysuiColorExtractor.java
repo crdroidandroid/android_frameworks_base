@@ -48,6 +48,7 @@ public class SysuiColorExtractor extends ColorExtractor implements Dumpable,
     private final Tonal mTonal;
     private final GradientColors mNeutralColorsLock;
     private Lazy<SelectedUserInteractor> mUserInteractor;
+    private int mMediaBackgroundColor = 0;
 
     @Inject
     public SysuiColorExtractor(
@@ -143,5 +144,13 @@ public class SysuiColorExtractor extends ColorExtractor implements Dumpable,
         pw.println("    system: " + Arrays.toString(system));
         pw.println("    lock: " + Arrays.toString(lock));
         pw.println("  Neutral colors: " + mNeutralColorsLock);
+    }
+
+    public void setMediaBackgroundColor(int color) {
+        mMediaBackgroundColor = color;
+    }
+
+    public int getMediaBackgroundColor() {
+        return mMediaBackgroundColor;
     }
 }
