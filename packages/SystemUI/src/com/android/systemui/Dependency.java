@@ -120,6 +120,7 @@ import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.NextAlarmController;
+import com.android.systemui.statusbar.policy.PulseController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
 import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.SecurityController;
@@ -370,6 +371,7 @@ public class Dependency {
     @Inject Lazy<AmbientState> mAmbientStateLazy;
     @Inject Lazy<GroupMembershipManager> mGroupMembershipManagerLazy;
     @Inject Lazy<GroupExpansionManager> mGroupExpansionManagerLazy;
+    @Inject Lazy<PulseController> mPulseController;
 
     @Inject
     public Dependency() {
@@ -590,6 +592,7 @@ public class Dependency {
         mProviders.put(AmbientState.class, mAmbientStateLazy::get);
         mProviders.put(GroupMembershipManager.class, mGroupMembershipManagerLazy::get);
         mProviders.put(GroupExpansionManager.class, mGroupExpansionManagerLazy::get);
+        mProviders.put(PulseController.class, mPulseController::get);
 
         Dependency.setInstance(this);
     }
