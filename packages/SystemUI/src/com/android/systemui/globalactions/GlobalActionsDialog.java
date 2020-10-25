@@ -2658,6 +2658,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
             fixNavBarClipping();
             mControlsView = findViewById(com.android.systemui.R.id.global_actions_controls);
             mGlobalActionsLayout = findViewById(com.android.systemui.R.id.global_actions_view);
+            mGlobalActionsLayout.setOutsideTouchListener(view -> dismiss());
             mGlobalActionsLayout.setListViewAccessibilityDelegate(new View.AccessibilityDelegate() {
                 @Override
                 public boolean dispatchPopulateAccessibilityEvent(
@@ -2694,6 +2695,16 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
             }
 
             initializeWalletView();
+
+            View globalActionsParent = (View) mGlobalActionsLayout.getParent();
+            globalActionsParent.setOnClickListener(v -> dismiss());
+
+            // add fall-through dismiss handling to root view
+            View rootView = findViewById(com.android.systemui.R.id.global_actions_grid_root);
+            if (rootView != null) {
+                rootView.setOnClickListener(v -> dismiss());
+            }
+
             if (mBackgroundDrawable == null) {
                 mBackgroundDrawable = new ScrimDrawable();
                 mScrimAlpha = 1.0f;
