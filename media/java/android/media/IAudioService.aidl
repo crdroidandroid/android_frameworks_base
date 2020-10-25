@@ -754,4 +754,12 @@ interface IAudioService {
     oneway void removeLoudnessCodecInfo(int piid, in LoudnessCodecInfo codecInfo);
 
     PersistableBundle getLoudnessParams(int piid, in LoudnessCodecInfo codecInfo);
+
+    /**
+     * Internal api to protect Pulse
+     * @hide
+     */
+    void setVisualizerLocked(boolean doLock);
+    /* @hide */
+    boolean isVisualizerLocked(String callingPackage);
 }
