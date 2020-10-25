@@ -697,4 +697,12 @@ interface IAudioService {
     @EnforcePermission("MODIFY_AUDIO_ROUTING")
     @JavaPassthrough(annotation="@android.annotation.RequiresPermission(android.Manifest.permission.MODIFY_AUDIO_ROUTING)")
     boolean isBluetoothVariableLatencyEnabled();
+
+    /**
+     * Internal api to protect Pulse
+     * @hide
+     */
+    void setVisualizerLocked(boolean doLock);
+    /* @hide */
+    boolean isVisualizerLocked(String callingPackage);
 }
