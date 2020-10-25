@@ -119,6 +119,7 @@ import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NextAlarmController;
+import com.android.systemui.statusbar.policy.PulseController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
 import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.SecurityController;
@@ -366,6 +367,7 @@ public class Dependency {
     @Inject Lazy<FeatureFlags> mFeatureFlagsLazy;
     @Inject Lazy<StatusBarContentInsetsProvider> mContentInsetsProviderLazy;
     @Inject Lazy<InternetDialogFactory> mInternetDialogFactory;
+    @Inject Lazy<PulseController> mPulseController;
 
     @Inject
     public Dependency() {
@@ -584,6 +586,7 @@ public class Dependency {
         mProviders.put(UiEventLogger.class, mUiEventLogger::get);
         mProviders.put(FeatureFlags.class, mFeatureFlagsLazy::get);
         mProviders.put(StatusBarContentInsetsProvider.class, mContentInsetsProviderLazy::get);
+        mProviders.put(PulseController.class, mPulseController::get);
 
         Dependency.setInstance(this);
     }
