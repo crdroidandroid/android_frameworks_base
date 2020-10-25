@@ -608,6 +608,7 @@ public class LockTaskController {
                 final IStatusBarService statusBarService = getStatusBarService();
                 if (statusBarService != null) {
                     statusBarService.showPinningEnterExitToast(false /* entering */);
+                    statusBarService.screenPinningStateChanged(false);
                 }
             }
             mWindowManager.onLockTaskStateChanged(mLockTaskModeState);
@@ -740,6 +741,7 @@ public class LockTaskController {
                 final IStatusBarService statusBarService = getStatusBarService();
                 if (statusBarService != null) {
                     statusBarService.showPinningEnterExitToast(true /* entering */);
+                    statusBarService.screenPinningStateChanged(true);
                 }
             }
             mWindowManager.onLockTaskStateChanged(lockTaskModeState);
