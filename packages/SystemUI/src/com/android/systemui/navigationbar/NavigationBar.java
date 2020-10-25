@@ -365,7 +365,9 @@ public class NavigationBar implements View.OnAttachStateChangeListener,
 
             ButtonDispatcher buttonDispatcher = null;
             boolean forceVisible = false;
-            if (QuickStepContract.isGesturalMode(mNavBarMode)) {
+            boolean isGesturalMode = QuickStepContract.isGesturalMode(mNavBarMode);
+            boolean forceHideHomeHandle = isGesturalMode && mNavigationBarView.isHomeHandleForceHidden();
+            if (isGesturalMode) {
                 // Disallow home handle animations when in gestural
                 animate = false;
                 forceVisible = mAllowForceNavBarHandleOpaque && mForceNavBarHandleOpaque;
@@ -378,8 +380,12 @@ public class NavigationBar implements View.OnAttachStateChangeListener,
             }
             if (buttonDispatcher != null) {
                 buttonDispatcher.setVisibility(
-                        (forceVisible || alpha > 0) ? View.VISIBLE : View.INVISIBLE);
-                buttonDispatcher.setAlpha(forceVisible ? 1f : alpha, animate);
+                        (!forceHideHomeHandle && (forceVisible || alpha > 0))
+                        ? View.VISIBLE
+                        : View.INVISIBLE);
+                buttonDispatcher.setAlpha(forceVisible ? 1f : alpha,
+                        forceHideHomeHandle ? false : animate);
+
             }
         }
 
