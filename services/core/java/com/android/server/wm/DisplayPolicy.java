@@ -1640,7 +1640,13 @@ public class DisplayPolicy {
             // Keep mNavigationBarPosition updated to make sure the transient detection and bar
             // color control is working correctly.
             final DisplayFrames displayFrames = mDisplayContent.mDisplayFrames;
+            final int lastNavbarPosition = mNavigationBarPosition;
             mNavigationBarPosition = navigationBarPosition(displayFrames.mRotation);
+            if (lastNavbarPosition == NAV_BAR_LEFT && mNavigationBarPosition != NAV_BAR_LEFT) {
+                notifyLeftInLandscapeChanged(false);
+            } else if (lastNavbarPosition != NAV_BAR_LEFT && mNavigationBarPosition == NAV_BAR_LEFT) {
+                notifyLeftInLandscapeChanged(true);
+            }
         }
         final boolean affectsSystemUi = win.canAffectSystemUiFlags();
         if (DEBUG_LAYOUT) Slog.i(TAG, "Win " + win + ": affectsSystemUi=" + affectsSystemUi);
@@ -2207,6 +2213,15 @@ public class DisplayPolicy {
             outInsets.right += displayCutout.getSafeInsetRight();
             outInsets.bottom += displayCutout.getSafeInsetBottom();
         }
+    }
+
+    private void notifyLeftInLandscapeChanged(boolean isOnLeft) {
+        mHandler.post(() -> {
+            StatusBarManagerInternal statusBar = getStatusBarManagerInternal();
+            if (statusBar != null) {
+                statusBar.leftInLandscapeChanged(isOnLeft);
+            }
+        });
     }
 
     @NavigationBarPosition
