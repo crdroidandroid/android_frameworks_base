@@ -240,4 +240,7 @@ oneway interface IStatusBar
     void setBlockedGesturalNavigation(boolean blocked);
 
     void toggleCameraFlash();
+
+    void screenPinningStateChanged(boolean enabled);
+    void leftInLandscapeChanged(boolean isLeft);
 }
