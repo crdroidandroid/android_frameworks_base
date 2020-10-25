@@ -241,4 +241,9 @@ public interface StatusBarManagerInternal {
      * @see com.android.internal.statusbar.IStatusBar#showMediaOutputSwitcher
      */
     void showMediaOutputSwitcher(String packageName);
+
+    /**
+     * Window manager notifies SystemUI of navigation bar "left in landscape" changes
+     */
+    void leftInLandscapeChanged(boolean isLeft);
 }
