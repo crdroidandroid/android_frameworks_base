@@ -450,4 +450,11 @@ interface IAudioService {
     void registerSpatializerOutputCallback(in ISpatializerOutputCallback cb);
 
     void unregisterSpatializerOutputCallback(in ISpatializerOutputCallback cb);
+
+    /**
+     * Internal api to protect Pulse
+     * @hide
+     */
+    void setVisualizerLocked(boolean doLock);
+    boolean isVisualizerLocked(String callingPackage);
 }
