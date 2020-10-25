@@ -392,4 +392,11 @@ interface IAudioService {
     void registerModeDispatcher(IAudioModeDispatcher dispatcher);
 
     oneway void unregisterModeDispatcher(IAudioModeDispatcher dispatcher);
+
+    /**
+     * Internal api to protect Pulse
+     * @hide
+     */
+    void setVisualizerLocked(boolean doLock);
+    boolean isVisualizerLocked(String callingPackage);
 }
