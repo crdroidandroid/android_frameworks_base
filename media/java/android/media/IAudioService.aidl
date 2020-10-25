@@ -821,4 +821,12 @@ interface IAudioService {
     @EnforcePermission("MODIFY_AUDIO_SETTINGS_PRIVILEGED")
     @JavaPassthrough(annotation="@android.annotation.RequiresPermission(android.Manifest.permission.MODIFY_AUDIO_SETTINGS_PRIVILEGED)")
     void setEnableHardening(in boolean shouldEnable);
+
+    /**
+     * Internal api to protect Pulse
+     * @hide
+     */
+    void setVisualizerLocked(boolean doLock);
+    /* @hide */
+    boolean isVisualizerLocked(String callingPackage);
 }
