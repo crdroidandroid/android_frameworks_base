@@ -412,4 +412,6 @@ oneway interface IStatusBar
     void moveFocusedTaskToDesktop(int displayId);
 
     void restartSystemUI();
+
+    void screenPinningStateChanged(boolean enabled);
 }
