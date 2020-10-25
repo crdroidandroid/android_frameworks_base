@@ -58,6 +58,7 @@ public class SuperStatusBarViewFactory {
      * Gets the inflated {@link NotificationShadeWindowView} from
      * {@link R.layout#super_notification_shade}.
      * Returns a cached instance, if it has already been inflated.
+     * This will inflate also Pulse VisualizerView
      */
     public NotificationShadeWindowView getNotificationShadeWindowView() {
         if (mNotificationShadeWindowView != null) {
