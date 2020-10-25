@@ -251,4 +251,6 @@ interface IStatusBarService
     void startAssist(in Bundle args);
 
     void restartSystemUI();
+
+    void screenPinningStateChanged(boolean enabled);
 }
