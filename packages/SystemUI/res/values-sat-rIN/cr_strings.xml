@@ -54,7 +54,7 @@
     <!-- Music tile -->
     <string name="quick_settings_music_label">Music</string>
     <string name="quick_settings_music_play">Play</string>
-    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_pause">ᱛᱷᱩᱠᱩᱢ</string>
     <!-- Always on Display tile -->
     <string name="quick_settings_always_on_display_label">Always on display</string>
     <!--Google sound search tile -->
@@ -70,7 +70,7 @@
     <string name="quick_settings_poweroff_label">Power off</string>
     <!-- Gaming mode -->
     <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="quick_settings_gaming_mode_label">ᱜᱮᱢᱤᱝ ᱚᱵᱚᱥᱛᱟ</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -84,7 +84,7 @@
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Force stop?</string>
     <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Close App</string>
+    <string name="guts_force_close_app">ᱮᱯᱯ ᱵᱚᱸᱫᱚᱭ ᱢᱮ</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
     <string name="global_action_restart_systemui">SystemUI</string>
     <!-- Binary clock -->
@@ -192,21 +192,21 @@
     <!-- Screen record -->
     <string name="screenrecord_dialog_title">Start recording?</string>
     <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
+    <string name="screenrecord_dialog_start">ᱮᱦᱚᱵ ᱢᱮ</string>
     <string name="screenrecord_dialog_cancel">Cancel</string>
     <string name="screenrecord_audio_recording_title">Audio source</string>
     <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
+    <string name="screenrecord_audio_recording_microphone">ᱢᱟᱭᱠᱨᱚᱯᱷᱚᱱ</string>
     <string name="screenrecord_audio_recording_off">Disabled</string>
     <string name="screenrecord_taps_title">Show touches on screen</string>
     <string name="screenrecord_stopdot_title">Show stop dot</string>
     <string name="screenrecord_video_bitrate_title">Video bitrate</string>
     <!-- Name of the data saver status bar icon. -->
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">ᱰᱟᱴᱟ ᱵᱟᱸᱪᱟᱣ ᱨᱮᱭᱟᱜ</string>
     <!-- Name of the vpn status bar icon. -->
     <string name="status_bar_vpn">VPN</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming</string>
+    <string name="status_bar_roaming">ᱨᱚᱢᱤᱝ</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
