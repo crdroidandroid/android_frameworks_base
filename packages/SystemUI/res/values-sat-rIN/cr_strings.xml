@@ -27,7 +27,7 @@
     <string name="quick_settings_smart_pixels">Smart pixels</string>
     <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Screenshot</string>
+    <string name="quick_settings_screenshot_label">ᱥᱠᱨᱤᱱᱥᱷᱚᱴ</string>
     <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU Info</string>
@@ -86,7 +86,7 @@
     <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
     <string name="guts_force_close_app">ᱮᱯᱯ ᱵᱚᱸᱫᱚᱭ ᱢᱮ</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">ᱥᱤᱥᱴᱮᱢ UI</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
@@ -190,7 +190,7 @@
     <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
     <string name="stabilization_position_friction">Position Friction</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
+    <string name="screenrecord_dialog_title">ᱨᱮᱠᱚᱰᱤᱝ ᱮᱦᱚᱵ ᱢᱮ?</string>
     <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
     <string name="screenrecord_dialog_start">ᱮᱦᱚᱵ ᱢᱮ</string>
     <string name="screenrecord_dialog_cancel">Cancel</string>
@@ -215,17 +215,17 @@
     <string name="megabytespersecond_short">MB/s</string>
     <string name="gigabytespersecond_short">GB/s</string>
     <!-- Omnijaws Weather -->
-    <string name="omnijaws_service_error">Error</string>
+    <string name="omnijaws_service_error">ᱵᱷᱩᱞ</string>
     <string name="omnijaws_service_unkown">No weather data</string>
     <string name="omnijaws_service_error_long">Error loading weather data</string>
     <string name="omnijaws_service_disabled">Service is disabled</string>
     <string name="omnijaws_detail_header">Weather</string>
     <string name="omnijaws_label_default">Weather</string>
-    <string name="omnijaws_current_text">Now</string>
+    <string name="omnijaws_current_text">ᱱᱤᱛᱟᱹᱜ</string>
     <string name="omnijaws_package_not_available">OmniJaws not available</string>
     <string name="omnijaws_service_last_update">Last update:</string>
     <!-- App lock -->
-    <string name="applock_locked">&#160;is Locked.</string>
+    <string name="applock_locked">&#160;ᱠᱩᱞᱩᱯ ᱢᱮᱱᱟᱜ-ᱟ᱾</string>
     <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_locked_notification">ᱮᱯᱯ ᱠᱩᱞᱩᱯ ᱢᱮᱱᱟᱜ-ᱟ</string>
 </resources>
