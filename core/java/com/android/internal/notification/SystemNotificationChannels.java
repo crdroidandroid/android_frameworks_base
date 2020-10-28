@@ -140,6 +140,7 @@ public class SystemNotificationChannels {
                 VPN,
                 context.getString(R.string.notification_channel_vpn),
                 NotificationManager.IMPORTANCE_LOW);
+        vpn.setBlockable(true);
         channelsList.add(vpn);
 
         final NotificationChannel deviceAdmin = new NotificationChannel(
