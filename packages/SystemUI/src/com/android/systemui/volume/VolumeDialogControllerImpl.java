@@ -54,6 +54,7 @@ import android.service.notification.ZenModeConfig;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.util.Slog;
+import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.CaptioningManager;
 
@@ -100,6 +101,7 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
                     .build();
+    private static final Object ADAPTIVE_PLAYBACK_TOKEN = new Object();
 
     static final ArrayMap<Integer, Integer> STREAMS = new ArrayMap<>();
     static {
@@ -140,6 +142,11 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
     private boolean mShowA11yStream;
     private boolean mShowVolumeDialog;
     private boolean mShowSafetyWarning;
+
+    private boolean mAdaptivePlaybackEnabled;
+    private int mAdaptivePlaybackTimeout;
+    private boolean mAdaptivePlaybackResumable;
+
     private long mLastToggledRingerOn;
     private boolean mDeviceInteractive = true;
 
@@ -208,6 +215,11 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         mKeyguardManager = keyguardManager;
         mActivityManager = activityManager;
 
+
+        mAdaptivePlaybackEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.ADAPTIVE_PLAYBACK_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+        mAdaptivePlaybackTimeout = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.ADAPTIVE_PLAYBACK_TIMEOUT, 30000, UserHandle.USER_CURRENT);
 
         boolean accessibilityVolumeStreamActive = accessibilityManager
                 .isAccessibilityVolumeStreamActive();
@@ -525,6 +537,25 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         final StreamState ss = streamStateW(stream);
         if (ss.level == level) return false;
         ss.level = level;
+        if (mAdaptivePlaybackEnabled && stream == AudioSystem.STREAM_MUSIC && level == 0
+                && mAudio.isMusicActive()) {
+            mAudio.dispatchMediaKeyEvent(
+                    new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PAUSE));
+            mAudio.dispatchMediaKeyEvent(
+                    new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE));
+            mAdaptivePlaybackResumable = true;
+            mWorker.removeCallbacksAndMessages(ADAPTIVE_PLAYBACK_TOKEN);
+            mWorker.postDelayed(() -> mAdaptivePlaybackResumable = false, ADAPTIVE_PLAYBACK_TOKEN,
+                    mAdaptivePlaybackTimeout);
+        }
+        if (stream == AudioSystem.STREAM_MUSIC && level > 0 && mAdaptivePlaybackResumable) {
+            mWorker.removeCallbacksAndMessages(ADAPTIVE_PLAYBACK_TOKEN);
+            mAudio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
+                    KeyEvent.KEYCODE_MEDIA_PLAY));
+            mAudio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
+                    KeyEvent.KEYCODE_MEDIA_PLAY));
+            mAdaptivePlaybackResumable = false;
+        }
         if (isLogWorthy(stream)) {
             Events.writeEvent(Events.EVENT_LEVEL_CHANGED, stream, level);
         }
@@ -1034,6 +1065,10 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
                 Settings.Global.getUriFor(Settings.Global.ZEN_MODE_CONFIG_ETAG);
         private final Uri VOLUME_LINK_NOTIFICATION_URI =
                 Settings.Secure.getUriFor(Settings.Secure.VOLUME_LINK_NOTIFICATION);
+        private final Uri ADAPTIVE_PLAYBACK_ENABLED_URI =
+                Settings.System.getUriFor(Settings.System.ADAPTIVE_PLAYBACK_ENABLED);
+        private final Uri ADAPTIVE_PLAYBACK_TIMEOUT_URI =
+                Settings.System.getUriFor(Settings.System.ADAPTIVE_PLAYBACK_TIMEOUT);
 
         public SettingObserver(Handler handler) {
             super(handler);
@@ -1044,6 +1079,10 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
             mContext.getContentResolver().registerContentObserver(ZEN_MODE_CONFIG_URI, false, this);
             mContext.getContentResolver().registerContentObserver(VOLUME_LINK_NOTIFICATION_URI,
                     false, this);
+            mContext.getContentResolver().registerContentObserver(ADAPTIVE_PLAYBACK_ENABLED_URI,
+                    false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(ADAPTIVE_PLAYBACK_TIMEOUT_URI,
+                    false, this, UserHandle.USER_ALL);
         }
 
         public void destroy() {
@@ -1061,6 +1100,16 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
             }
             if (VOLUME_LINK_NOTIFICATION_URI.equals(uri)) {
                 changed = updateLinkNotificationConfigW();
+            }
+            if (ADAPTIVE_PLAYBACK_ENABLED_URI.equals(uri)) {
+                mAdaptivePlaybackEnabled = Settings.System.getIntForUser(
+                        mContext.getContentResolver(), Settings.System.ADAPTIVE_PLAYBACK_ENABLED, 0,
+                        UserHandle.USER_CURRENT) == 1;
+            }
+            if (ADAPTIVE_PLAYBACK_TIMEOUT_URI.equals(uri)) {
+                mAdaptivePlaybackTimeout = Settings.System.getIntForUser(
+                        mContext.getContentResolver(), Settings.System.ADAPTIVE_PLAYBACK_TIMEOUT,
+                        30000, UserHandle.USER_CURRENT);
             }
 
             if (changed) {
