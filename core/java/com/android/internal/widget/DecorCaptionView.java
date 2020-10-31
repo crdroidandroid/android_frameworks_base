@@ -16,6 +16,7 @@
 
 package com.android.internal.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -140,6 +141,9 @@ public class DecorCaptionView extends ViewGroup implements View.OnTouchListener,
         // background without removing the shadow.
         mOwner.getDecorView().setOutlineProvider(ViewOutlineProvider.BOUNDS);
         mPip = findViewById(R.id.pip_window);
+        if (mPip != null && !supportPip()) {
+            mPip.setVisibility(View.GONE);
+        }
         mMinimize = findViewById(R.id.minimize_window);
         mMaximize = findViewById(R.id.maximize_window);
         mClose = findViewById(R.id.close_window);
@@ -342,6 +346,15 @@ public class DecorCaptionView extends ViewGroup implements View.OnTouchListener,
         if (callback != null) {
             callback.toggleFreeformWindowingMode();
         }
+    }
+
+    private boolean supportPip() {
+        Window.WindowControllerCallback callback = mOwner.getWindowControllerCallback();
+        if (callback instanceof Activity) {
+            Activity activity = (Activity) callback;
+            return activity.supportPictureInPictureMode();
+        }
+        return false;
     }
 
     private void minimizeWindow() {
