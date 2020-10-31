@@ -4153,6 +4153,15 @@ public class Activity extends ContextThemeWrapper
     }
 
     /**
+     * Check whether the activity supports pip.
+     * @see android.R.attr#supportsPictureInPicture
+     * @hide
+     */
+    public boolean supportPictureInPictureMode() {
+        return mActivityInfo != null && mActivityInfo.supportsPictureInPicture();
+    }
+
+    /**
      * Called when a touch screen event was not handled by any of the views
      * inside of the activity.  This is most useful to process touch events that happen
      * outside of your window bounds, where there is no view to receive it.
