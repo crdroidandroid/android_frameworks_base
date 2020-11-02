@@ -22,6 +22,7 @@ import static com.android.systemui.util.InjectionInflationController.VIEW_CONTEX
 import android.annotation.ColorInt;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -30,8 +31,10 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.CalendarContract;
 import android.provider.AlarmClock;
 import android.provider.Settings;
 import android.service.notification.ZenModeConfig;
@@ -316,6 +319,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mClockView.setOnClickListener(this);
         mClockView.setQsHeader();
         mDateView = findViewById(R.id.date);
+        if (mDateView != null) 
+            mDateView.setOnClickListener(this);
         mSpace = findViewById(R.id.space);
 
         // Tint for the battery icons are handled in setupHost()
@@ -762,6 +767,12 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         } else if (v == mBatteryIcon) {
             mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
                     Intent.ACTION_POWER_USAGE_SUMMARY), 0);
+        } else if (v == mDateView) {
+            Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+            builder.appendPath("time");
+            ContentUris.appendId(builder, System.currentTimeMillis());
+            Intent intent = new Intent(Intent.ACTION_VIEW).setData(builder.build());
+            mActivityStarter.startActivity(intent, true /* dismissShade */);
         }
     }
 
