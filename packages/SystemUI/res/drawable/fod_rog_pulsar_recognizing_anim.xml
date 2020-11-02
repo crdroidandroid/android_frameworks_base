@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2019-2020 The ShapeShiftOS Project
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<animation-list android:oneshot="false"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/asus_fod_anim_2_00" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_01" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_02" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_03" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_04" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_05" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_06" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_07" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_08" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_09" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_10" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_11" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_12" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_13" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_14" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_15" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_16" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_17" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_18" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_19" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_20" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_21" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_22" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_23" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_24" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_25" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_26" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_27" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_28" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_29" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_30" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_31" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_32" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_33" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_34" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_35" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_36" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_37" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_38" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_39" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_40" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_41" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_42" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_43" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_44" android:duration="6" />
+    <item android:drawable="@drawable/asus_fod_anim_2_45" android:duration="6" />
+</animation-list>
