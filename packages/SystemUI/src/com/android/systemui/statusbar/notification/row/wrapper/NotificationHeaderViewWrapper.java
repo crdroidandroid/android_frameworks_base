@@ -189,6 +189,8 @@ public class NotificationHeaderViewWrapper extends NotificationViewWrapper {
     }
 
     public void applyConversationSkin() {
+        //since we don't want this anymore...
+        /*
         if (mAppNameText != null) {
             mAppNameText.setTextAppearance(
                     com.android.internal.R.style
@@ -212,7 +214,7 @@ public class NotificationHeaderViewWrapper extends NotificationViewWrapper {
             ViewGroup.MarginLayoutParams layoutParams =
                     (ViewGroup.MarginLayoutParams) mIcon.getLayoutParams();
             layoutParams.setMarginEnd(0);
-        }
+        }*/
     }
 
     public void clearConversationSkin() {
