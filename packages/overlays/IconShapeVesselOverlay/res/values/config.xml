@@ -20,8 +20,9 @@
     <!-- Flag indicating whether round icons should be parsed from the application manifest. -->
     <bool name="config_useRoundIcon">false</bool>
     <!-- Corner radius of system dialogs -->
-    <dimen name="config_dialogCornerRadius">8dp</dimen>
+    <dimen name="config_dialogCornerRadius">12dp</dimen>
     <!-- Corner radius for bottom sheet system dialogs -->
-    <dimen name="config_bottomDialogCornerRadius">16dp</dimen>
-
+    <dimen name="config_bottomDialogCornerRadius">24dp</dimen>
+    <!-- Corner radius of search bars and cards -->
+    <dimen name="config_cardCornerRadius">12dp</dimen>
 </resources>

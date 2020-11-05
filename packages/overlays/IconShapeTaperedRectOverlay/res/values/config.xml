@@ -22,7 +22,9 @@
     <!-- Corner radius of system dialogs -->
     <dimen name="config_dialogCornerRadius">2dp</dimen>
     <!-- Corner radius for bottom sheet system dialogs -->
-    <dimen name="config_bottomDialogCornerRadius">2dp</dimen>
+    <dimen name="config_bottomDialogCornerRadius">4dp</dimen>
     <!-- Tile stroke width -->
     <dimen name="config_qsTileStrokeWidthInactive">1dp</dimen>
+    <!-- Corner radius of search bars and cards -->
+    <dimen name="config_cardCornerRadius">1dp</dimen>
 </resources>
