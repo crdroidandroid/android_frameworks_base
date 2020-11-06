@@ -16,7 +16,7 @@
 <com.android.systemui.globalactions.GlobalActionsItem
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/global_actions_power_dialog_item_width"
-    android:layout_height="@dimen/global_actions_power_dialog_item_height"
+    android:layout_height="98dp"
     android:gravity="bottom|center_horizontal"
     android:orientation="vertical"
     android:paddingTop="12dp"
@@ -24,9 +24,9 @@
     android:stateListAnimator="@anim/control_state_list_animator">
     <ImageView
         android:id="@*android:id/icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginBottom="@dimen/global_actions_power_dialog_item_bottom_margin"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginBottom="14dp"
         android:scaleType="centerInside"
         android:tint="@color/control_primary_text" />
     <TextView
@@ -35,8 +35,7 @@
         android:layout_height="wrap_content"
         android:marqueeRepeatLimit="marquee_forever"
         android:ellipsize="marquee"
-        android:layout_marginBottom="16dp"
-        android:maxLines="1"
+        android:maxLines="2"
         android:textSize="12sp"
         android:gravity="center"
         android:textColor="@color/control_primary_text"
