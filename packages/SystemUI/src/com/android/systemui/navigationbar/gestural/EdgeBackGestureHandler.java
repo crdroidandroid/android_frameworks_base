@@ -38,7 +38,9 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.provider.DeviceConfig;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.MathUtils;
@@ -110,6 +112,8 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
 
     private static final String KEY_EDGE_LONG_SWIPE_ACTION =
             "lineagesystem:" + LineageSettings.System.KEY_EDGE_LONG_SWIPE_ACTION;
+    private static final String BACK_GESTURE_HEIGHT =
+            "system:" + Settings.System.BACK_GESTURE_HEIGHT;
 
     private static final int MAX_NUM_LOGGED_PREDICTIONS = 10;
     private static final int MAX_NUM_LOGGED_GESTURES = 10;
@@ -252,6 +256,9 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
     private int mSysUiFlags;
     private float mLongSwipeWidth;
 
+    private int mEdgeHeight;
+    private int mEdgeHeightSetting = 0;
+
     // For Tf-Lite model.
     private BackGestureTfClassifierProvider mBackGestureTfClassifierProvider;
     private Map<String, Integer> mVocab;
@@ -361,6 +368,26 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
         updateCurrentUserResources();
     }
 
+    private void updateEdgeHeightValue() {
+        if (mDisplaySize == null) {
+            return;
+        }
+        // mEdgeHeightSetting cant be range 0 - 3
+        // 0 means full height
+        // 1 measns half of the screen
+        // 2 means lower third of the screen
+        // 3 means lower sicth of the screen
+        if (mEdgeHeightSetting == 0) {
+            mEdgeHeight = mDisplaySize.y;
+        } else if (mEdgeHeightSetting == 1) {
+            mEdgeHeight = mDisplaySize.y / 2;
+        } else if (mEdgeHeightSetting == 2) {
+            mEdgeHeight = mDisplaySize.y / 3;
+        } else {
+            mEdgeHeight = mDisplaySize.y / 6;
+        }
+    }
+
     public void setStateChangeCallback(Runnable callback) {
         mStateChangeCallback = callback;
     }
@@ -388,6 +415,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
 
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, KEY_EDGE_LONG_SWIPE_ACTION);
+        tunerService.addTunable(this, BACK_GESTURE_HEIGHT);
 
         // Reduce the default touch slop to ensure that we can intercept the gesture
         // before the app starts to react to it.
@@ -671,6 +699,11 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
         if (y >= (mDisplaySize.y - mBottomGestureHeight)) {
             return false;
         }
+        if (mEdgeHeight != 0) {
+            if (y < (mDisplaySize.y - mBottomGestureHeight - mEdgeHeight)) {
+                return false;
+            }
+        }
         // If the point is way too far (twice the margin), it is
         // not interesting to us for logging purposes, nor we
         // should process it.  Simply return false and keep
@@ -902,6 +935,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
             mEdgeBackPlugin.setDisplaySize(mDisplaySize);
         }
         updateLongSwipeWidth();
+        updateEdgeHeightValue();
     }
 
     @Override
@@ -910,6 +944,9 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
             mIsLongSwipeEnabled = Action.fromIntSafe(TunerService.parseInteger(
                     newValue, 0)) != Action.NOTHING;
             updateLongSwipeWidth();
+        } else if (BACK_GESTURE_HEIGHT.equals(key)) {
+            mEdgeHeightSetting = TunerService.parseInteger(newValue, 0);
+            updateEdgeHeightValue();
         }
     }
 
