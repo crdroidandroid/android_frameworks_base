@@ -27,4 +27,15 @@
         <item>@string/quick_settings_compass_W</item>  <!-- West -->
         <item>@string/quick_settings_compass_NW</item> <!-- North west -->
     </string-array>
+
+    <string-array name="app_exceptions" translatable="false">
+        <item>org.kde.kdeconnect_tp</item>
+        <item>#FF808080</item>
+        <item>com.instagram.android</item>
+        <item>#FF833AB4</item>
+        <item>com.google.android.dialer</item>
+        <item>#FF2162D7</item>
+        <item>com.google.android.youtube</item>
+        <item>#FFDE4B4B</item>
+    </string-array>
 </resources>
