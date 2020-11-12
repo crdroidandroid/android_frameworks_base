@@ -2353,8 +2353,8 @@ public final class CameraManager {
         private String[] extractCameraIdListLocked(int deviceId, int devicePolicy) {
             List<String> cameraIds = new ArrayList<>();
             boolean exposeAuxCamera = Camera.shouldExposeAuxCamera();
-            for (int i = 0; i < mDeviceStatus.size(); i++) {
-                if (!exposeAuxCamera && i == 2) break;
+            int size = exposeAuxCamera ? mDeviceStatus.size() : 2;
+            for (int i = 0; i < size; i++) {
                 int status = mDeviceStatus.valueAt(i);
                 DeviceCameraInfo info = mDeviceStatus.keyAt(i);
                 if (status == ICameraServiceListener.STATUS_NOT_PRESENT
