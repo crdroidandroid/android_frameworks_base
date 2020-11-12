@@ -51,15 +51,19 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Color;
 import android.graphics.Insets;
 import android.graphics.Rect;
 import android.graphics.Region;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -68,6 +72,8 @@ import android.os.Trace;
 import android.os.UserManager;
 import android.os.VibrationEffect;
 import android.provider.Settings;
+import android.service.notification.StatusBarNotification;
+import android.text.TextUtils;
 import android.util.IndentingPrintWriter;
 import android.util.Log;
 import android.util.MathUtils;
@@ -83,12 +89,17 @@ import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewStub;
 import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.InternalInsetsInfo;
+import android.view.ViewTreeObserver.OnComputeInternalInsetsListener;
 import android.view.WindowInsets;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.app.animation.Interpolators;
 import com.android.internal.annotations.VisibleForTesting;
@@ -113,6 +124,7 @@ import com.android.systemui.DejankUtils;
 import com.android.systemui.Dumpable;
 import com.android.systemui.Gefingerpoken;
 import com.android.systemui.R;
+import com.android.systemui.RetickerAnimations;
 import com.android.systemui.animation.ActivityLaunchAnimator;
 import com.android.systemui.animation.LaunchAnimator;
 import com.android.systemui.biometrics.AuthController;
@@ -211,6 +223,7 @@ import com.android.systemui.statusbar.phone.UnlockedScreenOffAnimationController
 import com.android.systemui.statusbar.phone.dagger.CentralSurfacesComponent;
 import com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment;
 import com.android.systemui.statusbar.policy.ConfigurationController;
+import com.android.systemui.statusbar.policy.GameSpaceManager;
 import com.android.systemui.statusbar.policy.KeyguardQsUserSwitchController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcherController;
@@ -282,6 +295,10 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
              "system:" + Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN;
     private static final String NOTIFICATION_MATERIAL_DISMISS =
             "system:" + Settings.System.NOTIFICATION_MATERIAL_DISMISS;
+    private static final String RETICKER_STATUS =
+            "system:" + Settings.System.RETICKER_STATUS;
+    private static final String RETICKER_COLORED =
+            "system:" + Settings.System.RETICKER_COLORED;
 
     private static final Rect M_DUMMY_DIRTY_RECT = new Rect(0, 0, 1, 1);
     private static final Rect EMPTY_RECT = new Rect();
@@ -630,6 +647,17 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
 
     private boolean mBlockedGesturalNavigation = false;
 
+    private final String[] mAppExceptions;
+
+    /*Reticker*/
+    private LinearLayout mReTickerComeback;
+    private ImageView mReTickerComebackIcon;
+    private TextView mReTickerContentTV;
+    private NotificationStackScrollLayout mNotificationStackScroller;
+    private boolean mReTickerStatus;
+    private boolean mReTickerColored;
+    private boolean mReTickerVisible;
+
     private final Runnable mFlingCollapseRunnable = () -> fling(0, false /* expand */,
             mNextCollapseSpeedUpFactor, false /* expandBecauseOfFalsing */);
     private final Runnable mAnimateKeyguardBottomAreaInvisibleEndRunnable =
@@ -920,6 +948,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         mUnlockedScreenOffAnimationController = unlockedScreenOffAnimationController;
         mLastDownEvents = new NPVCDownEventState.Buffer(MAX_DOWN_EVENT_BUFFER_SIZE);
         mKeyguardFaceAuthInteractor = keyguardFaceAuthInteractor;
+        mAppExceptions = mResources.getStringArray(R.array.app_exceptions);
 
         int currentMode = navigationModeController.addListener(
                 mode -> mIsGestureNavigation = QuickStepContract.isGesturalMode(mode));
@@ -1068,6 +1097,11 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         mShadeHeadsUpTracker.addTrackingHeadsUpListener(
                 mNotificationStackScrollLayoutController::setTrackingHeadsUp);
         setKeyguardBottomArea(mView.findViewById(R.id.keyguard_bottom_area));
+
+        mReTickerComeback = mView.findViewById(R.id.ticker_comeback);
+        mReTickerComebackIcon = mView.findViewById(R.id.ticker_comeback_icon);
+        mReTickerContentTV = mView.findViewById(R.id.ticker_content);
+        mNotificationStackScroller = mView.findViewById(R.id.notification_stack_scroller);
 
         initBottomArea();
 
@@ -4491,6 +4525,8 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_GESTURE);
             mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_LOCKSCREEN);
             mTunerService.addTunable(this, NOTIFICATION_MATERIAL_DISMISS);
+            mTunerService.addTunable(this, RETICKER_STATUS);
+            mTunerService.addTunable(this, RETICKER_COLORED);
             // Theme might have changed between inflating this view and attaching it to the
             // window, so
             // force a call to onThemeChanged
@@ -4526,6 +4562,14 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                     mShowDimissButton =
                             TunerService.parseIntegerSwitch(newValue, false);
                     updateDismissAllVisibility();
+                    break;
+                case RETICKER_STATUS:
+                    mReTickerStatus =
+                            TunerService.parseIntegerSwitch(newValue, false);
+                    break;
+                case RETICKER_COLORED:
+                    mReTickerColored =
+                            TunerService.parseIntegerSwitch(newValue, false);
                     break;
                 default:
                     break;
@@ -5143,7 +5187,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         if (mCentralSurfaces == null) return;
 
         if (mShowDimissButton && mBarState != StatusBarState.KEYGUARD && !isFullyCollapsed()
-                && !isPanelVisibleBecauseOfHeadsUp()) {
+                && !isPanelVisibleBecauseOfHeadsUp() && !mReTickerVisible) {
             mCentralSurfaces.updateDismissAllVisibility(true);
         } else {
             mCentralSurfaces.updateDismissAllVisibility(false);
@@ -5184,5 +5228,108 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         /** Called when the shade starts opening. */
         void onOpenStarted();
     }
+    
+    /* reTicker */
+    @Override
+    public void reTickerView(boolean visibility) {
+        if (!mReTickerStatus) return;
+        if (visibility && mReTickerComeback.getVisibility() == View.VISIBLE) {
+            reTickerDismissal();
+        }
+        String reTickerContent;
+        if (visibility && getExpandedFraction() != 1) {
+            mReTickerVisible = true;
+            mNotificationStackScroller.setVisibility(View.GONE);
+            StatusBarNotification sbn = mHeadsUpManager.getTopEntry().getRow().getEntry().getSbn();
+            Notification notification = sbn.getNotification();
+            String pkgname = sbn.getPackageName();
+            Drawable icon = null;
+            try {
+                if (pkgname.equals("com.android.systemui")) {
+                    icon = mView.getContext().getDrawable(notification.icon);
+                } else {
+                    icon = mView.getContext().getPackageManager().getApplicationIcon(pkgname);
+                }
+            } catch (NameNotFoundException e) {
+                return;
+            }
+            String content = String.valueOf(notification.extras.get("android.text"));
+            if (TextUtils.isEmpty(content)) return;
+            reTickerContent = content;
+            String reTickerAppName = String.valueOf(notification.extras.get("android.title"));
+            PendingIntent reTickerIntent = notification.contentIntent;
+            String mergedContentText = reTickerAppName + " " + reTickerContent;
+            mReTickerComebackIcon.setImageDrawable(icon);
+            Drawable dw = mView.getContext().getDrawable(R.drawable.reticker_background);
+            if (mReTickerColored) {
+                int col = notification.color;
+                // check if we need to override the color
+                if ((mAppExceptions.length & 1) == 0) {
+                    for (int i = 0; i < mAppExceptions.length; i += 2) {
+                        if (mAppExceptions[i].equals(pkgname)) {
+                            col = Color.parseColor(mAppExceptions[i + 1]);
+                            break;
+                        }
+                    }
+                }
+                dw.setTint(col);
+            } else {
+                dw.setTintList(null);
+            }
+            mReTickerComeback.setBackground(dw);
+            mReTickerContentTV.setText(mergedContentText);
+            mReTickerContentTV.setTextAppearance(mView.getContext(), R.style.TextAppearance_Notifications_reTicker);
+            mReTickerContentTV.setSelected(true);
+            RetickerAnimations.revealAnimation(mReTickerComeback);
+            if (reTickerIntent != null) {
+                mReTickerComeback.setOnClickListener(v -> {
+                    final GameSpaceManager gameSpace = mCentralSurfaces.getGameSpaceManager();
+                    if (gameSpace == null || !gameSpace.isGameActive()) {
+                        try {
+                            reTickerIntent.send();
+                        } catch (PendingIntent.CanceledException e) {
+                        }
+                    }
+                    RetickerAnimations.revealAnimationHide(mReTickerComeback, mNotificationStackScroller);
+                    reTickerViewVisibility();
+                });
+            }
+        } else {
+            reTickerDismissal();
+        }
+    }
+
+    protected void reTickerViewVisibility() {
+        if (!mReTickerStatus) {
+            reTickerDismissal();
+            return;
+        }
+        mNotificationStackScroller.setVisibility(getExpandedFraction() == 0 ? View.GONE : View.VISIBLE);
+        if (getExpandedFraction() > 0) mReTickerComeback.setVisibility(View.GONE);
+        if (mReTickerComeback.getVisibility() == View.VISIBLE) {
+            mReTickerComeback.getViewTreeObserver().addOnComputeInternalInsetsListener(mInsetsListener);
+        } else {
+            mReTickerComeback.getViewTreeObserver().removeOnComputeInternalInsetsListener(mInsetsListener);
+        }
+    }
+
+    public void reTickerDismissal() {
+        RetickerAnimations.revealAnimationHide(mReTickerComeback, mNotificationStackScroller);
+        mReTickerComeback.getViewTreeObserver().removeOnComputeInternalInsetsListener(mInsetsListener);
+        mReTickerVisible = false;
+    }
+
+    private final OnComputeInternalInsetsListener mInsetsListener = internalInsetsInfo -> {
+        internalInsetsInfo.touchableRegion.setEmpty();
+        internalInsetsInfo.setTouchableInsets(InternalInsetsInfo.TOUCHABLE_INSETS_REGION);
+        int[] mainLocation = new int[2];
+        mReTickerComeback.getLocationOnScreen(mainLocation);
+        internalInsetsInfo.touchableRegion.set(new Region(
+            mainLocation[0],
+            mainLocation[1],
+            mainLocation[0] + mReTickerComeback.getWidth(),
+            mainLocation[1] + mReTickerComeback.getHeight()
+        ));
+    };
 }
 
