@@ -477,6 +477,8 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
 
     @Override
     public void onRotationProposal(final int rotation, boolean isValid) {
+        if (mNavigationBarView == null) return;
+
         final int winRotation = mNavigationBarView.getDisplay().getRotation();
         final boolean rotateSuggestionsDisabled = RotationButtonController
                 .hasDisable2RotateSuggestionFlag(mDisabledFlags2);
@@ -532,7 +534,7 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
                     ? -1 : computeBarMode(oldVal, newVal);
             nbModeChanged = nbMode != -1;
             if (nbModeChanged) {
-                if (mNavigationBarMode != nbMode) {
+                if (mNavigationBarMode != nbMode && mNavigationBarView != null) {
                     if (mNavigationBarMode == MODE_TRANSPARENT
                             || mNavigationBarMode == MODE_LIGHTS_OUT_TRANSPARENT) {
                         mNavigationBarView.hideRecentsOnboarding();
@@ -1005,6 +1007,10 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
     @Override
     public void onNavigationModeChanged(int mode) {
         mNavBarMode = mode;
+
+        if (mNavigationBarView == null)
+            return;
+
         updateScreenPinningGestures();
 
         // Workaround for b/132825155, for secondary users, we currently don't receive configuration
@@ -1020,6 +1026,7 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
     }
 
     public void disableAnimationsDuringHide(long delay) {
+        if (mNavigationBarView == null) return;
         mNavigationBarView.setLayoutTransitionsEnabled(false);
         mNavigationBarView.postDelayed(() -> mNavigationBarView.setLayoutTransitionsEnabled(true),
                 delay + StackStateAnimator.ANIMATION_DURATION_GO_TO_FULL_SHADE);
