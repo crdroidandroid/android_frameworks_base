@@ -69,6 +69,11 @@ public class DetailedWeatherView extends FrameLayout {
     private ImageView mForecastImage2;
     private ImageView mForecastImage3;
     private ImageView mForecastImage4;
+    private TextView mForecastTemp0;
+    private TextView mForecastTemp1;
+    private TextView mForecastTemp2;
+    private TextView mForecastTemp3;
+    private TextView mForecastTemp4;
     private TextView mForecastText0;
     private TextView mForecastText1;
     private TextView mForecastText2;
@@ -79,6 +84,7 @@ public class DetailedWeatherView extends FrameLayout {
     private boolean mWithBackgroundColor;
     private boolean mShowCurrent = true;
     private View mCurrentView;
+    private TextView mCurrentTemp;
     private TextView mCurrentText;
     private View mProgressContainer;
     private TextView mStatusMsg;
@@ -125,6 +131,11 @@ public class DetailedWeatherView extends FrameLayout {
         mForecastImage2  = (ImageView) findViewById(R.id.forecast_image_2);
         mForecastImage3  = (ImageView) findViewById(R.id.forecast_image_3);
         mForecastImage4  = (ImageView) findViewById(R.id.forecast_image_4);
+        mForecastTemp0 = (TextView) findViewById(R.id.forecast_temp_0);
+        mForecastTemp1 = (TextView) findViewById(R.id.forecast_temp_1);
+        mForecastTemp2 = (TextView) findViewById(R.id.forecast_temp_2);
+        mForecastTemp3 = (TextView) findViewById(R.id.forecast_temp_3);
+        mForecastTemp4 = (TextView) findViewById(R.id.forecast_temp_4);
         mForecastText0 = (TextView) findViewById(R.id.forecast_text_0);
         mForecastText1 = (TextView) findViewById(R.id.forecast_text_1);
         mForecastText2 = (TextView) findViewById(R.id.forecast_text_2);
@@ -132,6 +143,7 @@ public class DetailedWeatherView extends FrameLayout {
         mForecastText4 = (TextView) findViewById(R.id.forecast_text_4);
         mCurrentView = findViewById(R.id.current);
         mCurrentImage  = (ImageView) findViewById(R.id.current_image);
+        mCurrentTemp = (TextView) findViewById(R.id.current_temp);
         mCurrentText = (TextView) findViewById(R.id.current_text);
         mStatusMsg = (TextView) findViewById(R.id.status_msg);
         mEmptyView = findViewById(android.R.id.empty);
@@ -203,52 +215,58 @@ public class DetailedWeatherView extends FrameLayout {
         Calendar cal = Calendar.getInstance();
         String dayShort = sdf.format(new Date(cal.getTimeInMillis()));
 
-        Drawable d = mWeatherClient.getWeatherConditionImage(weatherData.forecasts.get(0).conditionCode);
-        d = overlay(mContext.getResources(), d, weatherData.forecasts.get(0).low, weatherData.forecasts.get(0).high,
-                weatherData.tempUnits);
+        Drawable d = overlay(mContext.getResources(), mWeatherClient.getWeatherConditionImage(
+                weatherData.forecasts.get(0).conditionCode));
         mForecastImage0.setImageDrawable(d);
+        mForecastTemp0.setText(formatTempString(weatherData.forecasts.get(0).low,
+                weatherData.forecasts.get(0).high, weatherData.tempUnits));
         mForecastText0.setText(dayShort);
 
         cal.add(Calendar.DATE, 1);
         dayShort = sdf.format(new Date(cal.getTimeInMillis()));
 
-        d = mWeatherClient.getWeatherConditionImage(weatherData.forecasts.get(1).conditionCode);
-        d = overlay(mContext.getResources(), d, weatherData.forecasts.get(1).low, weatherData.forecasts.get(1).high,
-                weatherData.tempUnits);
+        d = overlay(mContext.getResources(), mWeatherClient.getWeatherConditionImage(
+                weatherData.forecasts.get(1).conditionCode));
         mForecastImage1.setImageDrawable(d);
+        mForecastTemp1.setText(formatTempString(weatherData.forecasts.get(1).low,
+                weatherData.forecasts.get(1).high, weatherData.tempUnits));
         mForecastText1.setText(dayShort);
 
         cal.add(Calendar.DATE, 1);
         dayShort = sdf.format(new Date(cal.getTimeInMillis()));
 
-        d = mWeatherClient.getWeatherConditionImage(weatherData.forecasts.get(2).conditionCode);
-        d = overlay(mContext.getResources(), d, weatherData.forecasts.get(2).low, weatherData.forecasts.get(2).high,
-                weatherData.tempUnits);
+        d = overlay(mContext.getResources(), mWeatherClient.getWeatherConditionImage(
+                weatherData.forecasts.get(2).conditionCode));
         mForecastImage2.setImageDrawable(d);
+        mForecastTemp2.setText(formatTempString(weatherData.forecasts.get(2).low,
+                weatherData.forecasts.get(2).high, weatherData.tempUnits));
         mForecastText2.setText(dayShort);
 
         cal.add(Calendar.DATE, 1);
         dayShort = sdf.format(new Date(cal.getTimeInMillis()));
 
-        d = mWeatherClient.getWeatherConditionImage(weatherData.forecasts.get(3).conditionCode);
-        d = overlay(mContext.getResources(), d, weatherData.forecasts.get(3).low, weatherData.forecasts.get(3).high,
-                weatherData.tempUnits);
+        d = overlay(mContext.getResources(), mWeatherClient.getWeatherConditionImage(
+                weatherData.forecasts.get(3).conditionCode));
         mForecastImage3.setImageDrawable(d);
+        mForecastTemp3.setText(formatTempString(weatherData.forecasts.get(3).low,
+                weatherData.forecasts.get(3).high, weatherData.tempUnits));
         mForecastText3.setText(dayShort);
 
         cal.add(Calendar.DATE, 1);
         dayShort = sdf.format(new Date(cal.getTimeInMillis()));
 
-        d = mWeatherClient.getWeatherConditionImage(weatherData.forecasts.get(4).conditionCode);
-        d = overlay(mContext.getResources(), d, weatherData.forecasts.get(4).low, weatherData.forecasts.get(4).high,
-                weatherData.tempUnits);
+        d = overlay(mContext.getResources(), mWeatherClient.getWeatherConditionImage(
+                weatherData.forecasts.get(4).conditionCode));
         mForecastImage4.setImageDrawable(d);
+        mForecastTemp4.setText(formatTempString(weatherData.forecasts.get(4).low,
+                weatherData.forecasts.get(4).high, weatherData.tempUnits));
         mForecastText4.setText(dayShort);
 
         if (mShowCurrent) {
-            d = mWeatherClient.getWeatherConditionImage(weatherData.conditionCode);
-            d = overlay(mContext.getResources(), d, weatherData.temp, null, weatherData.tempUnits);
+            d = overlay(mContext.getResources(), mWeatherClient.getWeatherConditionImage(
+                    weatherData.conditionCode));
             mCurrentImage.setImageDrawable(d);
+            mCurrentTemp.setText(formatTempString(weatherData.temp, null, weatherData.tempUnits));
             mCurrentText.setText(mContext.getResources().getText(R.string.omnijaws_current_text));
         }
 
@@ -257,41 +275,20 @@ public class DetailedWeatherView extends FrameLayout {
         }
     }
 
-    private Drawable overlay(Resources resources, Drawable image, String min, String max, String tempUnits) {
+    private Drawable overlay(Resources resources, Drawable image) {
         if (image instanceof VectorDrawable) {
             image = applyTint(image);
         }
         final Canvas canvas = new Canvas();
         canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG,
                 Paint.FILTER_BITMAP_FLAG));
-        final float density = resources.getDisplayMetrics().density;
-        final int footerHeight = Math.round(18 * density);
-        final int imageWidth = image.getIntrinsicWidth();
-        final int imageHeight = image.getIntrinsicHeight();
-        final TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        Typeface font = Typeface.create("sans-serif-condensed", Typeface.NORMAL);
-        textPaint.setTypeface(font);
-        textPaint.setColor(getTintColor());
-        textPaint.setTextAlign(Paint.Align.LEFT);
-        final int textSize= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, resources.getDisplayMetrics());
-        textPaint.setTextSize(textSize);
-        final int height = imageHeight + footerHeight;
-        final int width = imageWidth;
+        final int height = image.getIntrinsicHeight();
+        final int width = image.getIntrinsicWidth();
 
         final Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         canvas.setBitmap(bmp);
-        image.setBounds(0, 0, imageWidth, imageHeight);
+        image.setBounds(0, 0, width, height);
         image.draw(canvas);
-
-        String str = null;
-        if (max != null) {
-            str = min +"/"+max + tempUnits;
-        } else {
-            str = min + tempUnits;
-        }
-        Rect bounds = new Rect();
-        textPaint.getTextBounds(str, 0, str.length(), bounds);
-        canvas.drawText(str, width / 2 - bounds.width() / 2, height - textSize / 2, textPaint);
 
         return new BitmapDrawable(resources, bmp);
     }
@@ -345,5 +342,15 @@ public class DetailedWeatherView extends FrameLayout {
 
     public void stopProgress() {
         mProgressContainer.setVisibility(View.GONE);
+    }
+
+    private static String formatTempString(String min, String max, String tempUnits) {
+        String str = null;
+        if (max != null) {
+            str = min + "/" + max + tempUnits;
+        } else {
+            str = min + tempUnits;
+        }
+        return str;
     }
 }
