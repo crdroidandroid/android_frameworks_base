@@ -33,4 +33,7 @@
     <dimen name="quick_qs_brightness_margin_top">24dp</dimen>
 
     <dimen name="fps_info_text_padding">4dp</dimen>
+
+    <!-- Screen Record -->
+    <dimen name="screenrecord_dot_size">48dp</dimen>
 </resources>

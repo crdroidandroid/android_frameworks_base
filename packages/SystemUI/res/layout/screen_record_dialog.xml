@@ -129,6 +129,48 @@
                         android:contentDescription="@string/screenrecord_taps_label"
                         style="@style/ScreenRecord.Switch"/>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="@dimen/screenrecord_logo_size"
+                        android:layout_height="@dimen/screenrecord_logo_size"
+                        android:src="@drawable/ic_sr_stopdot"
+                        android:tint="@color/GM2_grey_700"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="@dimen/screenrecord_option_padding"/>
+                    <Switch
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:id="@+id/screenrecord_stopdot_switch"
+                        android:text="@string/screenrecord_stopdot_label"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="@dimen/screenrecord_logo_size"
+                        android:layout_height="@dimen/screenrecord_logo_size"
+                        android:src="@drawable/ic_sr_quality"
+                        android:tint="@color/GM2_grey_700"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="@dimen/screenrecord_option_padding"/>
+                    <Switch
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:id="@+id/screenrecord_lowquality_switch"
+                        android:text="@string/screenrecord_lowquality_label"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Buttons -->
