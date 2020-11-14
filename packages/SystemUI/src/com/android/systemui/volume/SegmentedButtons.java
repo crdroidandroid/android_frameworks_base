@@ -71,7 +71,7 @@ public class SegmentedButtons extends LinearLayout {
     }
 
     protected void setSelectedStyle(TextView textView, boolean selected) {
-        textView.setTypeface(selected ? MEDIUM : REGULAR);
+        // textView.setTypeface(selected ? MEDIUM : REGULAR);
     }
 
     public Button inflateButton() {
