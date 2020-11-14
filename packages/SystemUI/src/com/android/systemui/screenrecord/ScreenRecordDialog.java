@@ -53,6 +53,8 @@ public class ScreenRecordDialog extends Activity {
     private final RecordingController mController;
     private final UserContextProvider mUserContextProvider;
     private Switch mTapsSwitch;
+    private Switch mStopDotSwitch;
+    private Switch mLowQualitySwitch;
     private Switch mAudioSwitch;
     private Spinner mOptions;
     private List<ScreenRecordingAudioSource> mModes;
@@ -96,6 +98,8 @@ public class ScreenRecordDialog extends Activity {
 
         mAudioSwitch = findViewById(R.id.screenrecord_audio_switch);
         mTapsSwitch = findViewById(R.id.screenrecord_taps_switch);
+        mStopDotSwitch = findViewById(R.id.screenrecord_stopdot_switch);
+        mLowQualitySwitch = findViewById(R.id.screenrecord_lowquality_switch);
         mOptions = findViewById(R.id.screen_recording_options);
         ArrayAdapter a = new ScreenRecordingAdapter(getApplicationContext(),
                 android.R.layout.simple_spinner_dropdown_item,
@@ -110,6 +114,8 @@ public class ScreenRecordDialog extends Activity {
     private void requestScreenCapture() {
         Context userContext = mUserContextProvider.getUserContext();
         boolean showTaps = mTapsSwitch.isChecked();
+        boolean showStopDot = mStopDotSwitch.isChecked();
+        boolean lowQuality = mLowQualitySwitch.isChecked();
         ScreenRecordingAudioSource audioMode = mAudioSwitch.isChecked()
                 ? (ScreenRecordingAudioSource) mOptions.getSelectedItem()
                 : NONE;
@@ -117,7 +123,7 @@ public class ScreenRecordDialog extends Activity {
                 RecordingService.REQUEST_CODE,
                 RecordingService.getStartIntent(
                         userContext, RESULT_OK,
-                        audioMode.ordinal(), showTaps),
+                        audioMode.ordinal(), showTaps, showStopDot, lowQuality),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         PendingIntent stopIntent = PendingIntent.getService(userContext,
                 RecordingService.REQUEST_CODE,
