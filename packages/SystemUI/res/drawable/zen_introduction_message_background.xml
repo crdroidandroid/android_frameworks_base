@@ -15,7 +15,7 @@
 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
-      <corners android:radius="@dimen/borderless_button_radius" />
+      <corners android:radius="?android:attr/dialogCornerRadius" />
 
       <solid android:color="?android:attr/colorAccent" />
 
