@@ -382,11 +382,18 @@ public class OmniJawsClient {
     }
 
     public Drawable getWeatherConditionImage(int conditionCode) {
+        /* Wrapper function allowing to load icon from default package defined as ICON_PACKAGE_DEFAULT,
+           for instance in the weather QS tile where a colored icon rendered improperly */
+
+        return getWeatherConditionImagefromPack(conditionCode, /* Don't force default pack*/ false);
+    }
+
+    public Drawable getWeatherConditionImagefromPack(int conditionCode, boolean defaultPack) {
         if (!isOmniJawsEnabled()) {
             Log.w(TAG, "Requesting condition image while disabled");
             return null;
         }
-        if (!isAvailableApp(mPackageName)) {
+        if (!isAvailableApp(mPackageName) || defaultPack) {
             Log.w(TAG, "Icon pack no longer available - loading default " + mPackageName);
             loadDefaultIconsPackage();
         }
