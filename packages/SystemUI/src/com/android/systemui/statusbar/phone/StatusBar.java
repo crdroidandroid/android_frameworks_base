@@ -298,6 +298,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.GAMING_MODE_HEADSUP_TOGGLE;
     private static final String LESS_BORING_HEADS_UP =
             "system:" + Settings.System.LESS_BORING_HEADS_UP;
+    private static final String NAVBAR_STYLE =
+            "system:" + Settings.System.NAVBAR_STYLE;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -718,6 +720,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private ActivityIntentHelper mActivityIntentHelper;
 
     private int mDarkStyle;
+    private int mNavbarStyle;
     private boolean mUseDarkTheme;
     private OverlayManager mOverlayManager;
     private final UiOffloadThread mUiOffloadThread = Dependency.get(UiOffloadThread.class);
@@ -923,6 +926,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, GAMING_MODE_ACTIVE);
         mTunerService.addTunable(this, GAMING_MODE_HEADSUP_TOGGLE);
         mTunerService.addTunable(this, LESS_BORING_HEADS_UP);
+        mTunerService.addTunable(this, NAVBAR_STYLE);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -3696,6 +3700,12 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     }
 
+    private void updateNavbarStyle() {
+        mUiOffloadThread.execute(() -> {
+            ThemeAccentUtils.setNavbarStyle(mOverlayManager, mNavbarStyle);
+        });
+    }
+
     private void updateDozingState() {
         Trace.traceCounter(Trace.TRACE_TAG_APP, "dozing", mDozing ? 1 : 0);
         Trace.beginSection("StatusBar#updateDozingState");
@@ -4718,6 +4728,14 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mlessBoringHeadsUp = 
                         TunerService.parseIntegerSwitch(newValue, false);
                 mNotificationInterruptStateProvider.setUseLessBoringHeadsUp(mlessBoringHeadsUp);
+                break;
+            case NAVBAR_STYLE:
+                int navbarStyle =
+                        TunerService.parseInteger(newValue, 0);
+                if (mNavbarStyle != navbarStyle) {
+                    mNavbarStyle = navbarStyle;
+                    updateNavbarStyle();
+                }
                 break;
             default:
                 break;
