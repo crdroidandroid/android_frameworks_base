@@ -188,7 +188,25 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
                 mContext.getString(activeSIMZero
                         ? R.string.qs_data_switch_changed_1
                         : R.string.qs_data_switch_changed_2);
-        state.label = mContext.getString(R.string.qs_data_switch_label);
+        state.label = mContext.getString(R.string.qs_data_switch_label) +
+                      " " + getOppositeSlotCarrierName();
+    }
+
+    private String getOppositeSlotCarrierName() {
+        CharSequence result = "";
+        // Get opposite slot 2 ^ 3 = 1, 1 ^ 3 = 2
+        int subId = mSubscriptionManager.getDefaultDataSubscriptionId() ^ 3;
+        List<SubscriptionInfo> subInfoList =
+                mSubscriptionManager.getActiveSubscriptionInfoList(true);
+        if (subInfoList != null) {
+            for (SubscriptionInfo subInfo : subInfoList) {
+                if (subId == subInfo.getSubscriptionId()) {
+                    result = subInfo.getDisplayName();
+                    break;
+                }
+            }
+        }
+        return result.toString();
     }
 
     @Override
