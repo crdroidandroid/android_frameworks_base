@@ -930,6 +930,10 @@ public final class DefaultPermissionGrantPolicy {
 
         // Google Markup
         grantSystemFixedPermissionsToSystemPackage(pm, "com.google.android.markup", userId, STORAGE_PERMISSIONS);
+
+        // Google Chrome
+        grantSystemFixedPermissionsToSystemPackage(pm, "com.android.chrome", userId, CONTACTS_PERMISSIONS,
+                STORAGE_PERMISSIONS);
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(PackageManagerWrapper pm,
