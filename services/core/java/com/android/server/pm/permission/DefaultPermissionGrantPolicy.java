@@ -837,6 +837,10 @@ public final class DefaultPermissionGrantPolicy {
 
         // OmniJaws
         grantSystemFixedPermissionsToSystemPackage("org.omnirom.omnijaws", userId, ALWAYS_LOCATION_PERMISSIONS);
+
+        // Google Chrome
+        grantSystemFixedPermissionsToSystemPackage("com.android.chrome", userId, CONTACTS_PERMISSIONS,
+                STORAGE_PERMISSIONS);
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(String category, int userId) {
