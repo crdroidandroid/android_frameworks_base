@@ -228,4 +228,8 @@
     <string name="applock_locked">&#160;قوفڵکراوە.</string>
     <string name="applock_fingerprint">&#160;یاخوود بە پەنجەمۆرت بیکەوە.</string>
     <string name="applock_locked_notification">ئەپ قوفڵکراوە</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
+    <string name="quick_settings_dc_full_auto">Auto mode</string>
 </resources>
