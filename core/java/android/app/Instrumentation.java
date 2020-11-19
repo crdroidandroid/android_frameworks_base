@@ -72,6 +72,8 @@ import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.concurrent.TimeoutException;
 
+import com.android.internal.util.crdroid.PixelPropsUtils;
+
 /**
  * Base class for implementing application instrumentation code.  When running
  * with instrumentation turned on, this class will be instantiated for you
@@ -1353,6 +1355,7 @@ public class Instrumentation {
         Application app = getFactory(context.getPackageName())
                 .instantiateApplication(cl, className);
         app.attach(context);
+        PixelPropsUtils.setProps(context);
         return app;
     }
     
@@ -1370,6 +1373,7 @@ public class Instrumentation {
             ClassNotFoundException {
         Application app = (Application)clazz.newInstance();
         app.attach(context);
+        PixelPropsUtils.setProps(context);
         return app;
     }
 
