@@ -228,4 +228,8 @@
     <string name="applock_locked">&#160;est verrouillée.</string>
     <string name="applock_fingerprint">&#160;ou votre empreinte digitale pour déverrouiller.</string>
     <string name="applock_locked_notification">L’application est verrouillée</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
+    <string name="quick_settings_dc_full_auto">Auto mode</string>
 </resources>
