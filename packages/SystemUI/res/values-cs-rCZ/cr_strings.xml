@@ -232,6 +232,6 @@
     <string name="applock_locked_notification">Aplikace je uzamknuta</string>
     <!-- DC Dimming -->
     <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_brightness_mode">Režim jasu</string>
+    <string name="quick_settings_dc_full_auto">Automatický režim</string>
 </resources>
