@@ -35,6 +35,8 @@ import android.system.ErrnoException;
 import android.system.Os;
 import android.util.Log;
 
+import com.android.internal.util.crdroid.PixelPropsUtils;
+
 import dalvik.annotation.optimization.FastNative;
 import dalvik.system.ZygoteHooks;
 
@@ -794,6 +796,9 @@ public final class Zygote {
         } else {
             Log.w(loggingTag, "Unable to set package name.");
         }
+
+        // Set pixel props
+        PixelPropsUtils.setProps(args.mPackageName);
     }
 
     private static final String USAP_ERROR_PREFIX = "Invalid command to USAP: ";
