@@ -260,9 +260,11 @@ import java.io.StringWriter;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -566,6 +568,17 @@ public final class ActiveServices {
     @ChangeId
     @EnabledAfter(targetSdkVersion = VERSION_CODES.TIRAMISU)
     static final long FGS_TYPE_CHECK_FOR_INSTANT_APPS = 261055255L;
+
+    // Whitelist of package names to bypass FGS type validation
+    static final Set<String> whitelistPackages = new HashSet<>(Arrays.asList(
+        "com.google.android.as",         // Google Device Personalization services
+        "com.google.android.gms",        // Google Play Services
+        "com.android.vending",           // Google Play Store
+        "com.google.android.gsf",        // Google Services Framework
+        "com.google.android.apps.maps",  // Google Maps
+        "com.google.android.youtube",    // YouTube
+        "com.google.android.apps.photos" // Google Photos
+    ));
 
     final Runnable mLastAnrDumpClearer = new Runnable() {
         @Override public void run() {
@@ -2905,6 +2918,14 @@ public final class ActiveServices {
         final ForegroundServiceTypePolicy policy = ForegroundServiceTypePolicy.getDefaultPolicy();
         final ForegroundServiceTypePolicyInfo policyInfo =
                 policy.getForegroundServiceTypePolicyInfo(type, defaultToType);
+
+        // Check if the app is whitelisted
+        if (whitelistPackages.contains(r.packageName)) {
+            Slog.i(TAG, "Bypassing FGS type validation for whitelisted app: " + r.packageName);
+            return Pair.create(FGS_TYPE_POLICY_CHECK_OK, null);
+        }
+
+        // Perform the regular policy check
         final @ForegroundServicePolicyCheckCode int code = policy.checkForegroundServiceTypePolicy(
                 mAm.mContext, r.packageName, r.app.uid, r.app.getPid(),
                 r.isFgsAllowedWiu_forStart(), policyInfo);
