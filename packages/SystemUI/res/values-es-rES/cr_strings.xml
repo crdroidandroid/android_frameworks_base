@@ -255,4 +255,8 @@ Y Nueve</string>
     <string name="applock_locked">&#160;está bloqueado.</string>
     <string name="applock_fingerprint">&#160;o tu huella dactilar para desbloquear.</string>
     <string name="applock_locked_notification">Aplicación bloqueada</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
+    <string name="quick_settings_dc_full_auto">Auto mode</string>
 </resources>
