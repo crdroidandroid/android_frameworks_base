@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017-2020 Paranoid Android
+ * Copyright (C) 2020 Paranoid Android
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,25 @@
  * limitations under the License.
  */
 
-package android.app;
+package android.hardware.display;
 
 /** @hide */
-oneway interface IAppLockCallback {
+interface IDcDimmingManager {
+    void setAutoMode(in int mode);
 
-    void onAppStateChanged(String packageName);
+    int getAutoMode();
+
+    boolean isAvailable();
+
+    void setDcDimming(in boolean enable);
+
+    boolean isDcDimmingOn();
+
+    void setBrightnessThreshold(in int thresh);
+
+    int getBrightnessThreshold();
+
+    boolean isForcing();
+
+    void restoreAutoMode();
 }
