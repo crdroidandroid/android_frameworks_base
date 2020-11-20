@@ -251,7 +251,7 @@ Sembilan</string>
     <string name="applock_fingerprint">&#160;atau sidik jari Anda untuk membuka kunci.</string>
     <string name="applock_locked_notification">Aplikasi terkunci</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_dimming_label">Peredupan DC</string>
+    <string name="quick_settings_dc_brightness_mode">Mode kecerahan</string>
+    <string name="quick_settings_dc_full_auto">Mode Otomatis</string>
 </resources>
