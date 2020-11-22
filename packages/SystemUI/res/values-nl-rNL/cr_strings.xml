@@ -228,4 +228,8 @@
     <string name="applock_locked">&#160;is vergrendeld.</string>
     <string name="applock_fingerprint">&#160;of je vingerafdruk om te ontgrendelen.</string>
     <string name="applock_locked_notification">App is vergrendeld</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Helderheid modus</string>
+    <string name="quick_settings_dc_full_auto">Auto modus</string>
 </resources>
