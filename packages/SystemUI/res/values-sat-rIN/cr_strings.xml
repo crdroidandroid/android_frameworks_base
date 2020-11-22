@@ -17,9 +17,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • ᱰᱮᱥ ᱪᱟᱨᱡᱤᱝ</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • ᱣᱨᱟᱯ ᱪᱟᱨᱡᱤᱝ(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> ᱯᱩᱨᱟᱹᱣ ᱦᱟᱹᱵᱤᱡᱽ)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • ᱣᱨᱟᱯ ᱪᱟᱨᱡᱤᱝ</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
@@ -140,26 +140,26 @@
     <string name="text_clock_m_seventeen">ᱜᱮᱞ ᱮᱭᱟᱭ</string>
     <string name="text_clock_m_eighteen">ᱜᱮᱞ ᱤᱨᱟᱹᱞ</string>
     <string name="text_clock_m_nineteen">ᱜᱮᱞ ᱟᱨᱮᱞ</string>
-    <string name="text_clock_m_twenty">Twenty</string>
-    <string name="text_clock_m_twenty_one">Twenty One</string>
-    <string name="text_clock_m_twenty_two">Twenty Two</string>
-    <string name="text_clock_m_twenty_three">Twenty Three</string>
-    <string name="text_clock_m_twenty_four">Twenty Four</string>
-    <string name="text_clock_m_twenty_five">Twenty Five</string>
-    <string name="text_clock_m_twenty_six">Twenty Six</string>
-    <string name="text_clock_m_twenty_seven">Twenty Seven</string>
-    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
+    <string name="text_clock_m_twenty">ᱵᱟᱨ ᱜᱮᱞ</string>
+    <string name="text_clock_m_twenty_one">ᱵᱟᱨ ᱜᱮᱞ‌ ᱢᱤᱫᱽ</string>
+    <string name="text_clock_m_twenty_two">ᱵᱟᱨ ᱜᱮᱞ‌ ᱵᱟᱨ</string>
+    <string name="text_clock_m_twenty_three">ᱵᱟᱨ ᱜᱮᱞ‌ ᱯᱮ</string>
+    <string name="text_clock_m_twenty_four">ᱵᱟᱨ ᱜᱮᱞ‌ ᱯᱩᱱ</string>
+    <string name="text_clock_m_twenty_five">ᱵᱟᱨ ᱜᱮᱞ‌ ᱢᱚᱬᱮ</string>
+    <string name="text_clock_m_twenty_six">ᱵᱟᱨ ᱜᱮᱞ‌ ᱛᱩᱨᱩᱭ</string>
+    <string name="text_clock_m_twenty_seven">ᱵᱟᱨ ᱜᱮᱞ‌ ᱮᱭᱟᱭ</string>
+    <string name="text_clock_m_twenty_eight">ᱵᱟᱨ ᱜᱮᱞ‌ ᱤᱨᱟᱹᱞ</string>
+    <string name="text_clock_m_twenty_nine">ᱵᱟᱨ ᱜᱮᱞ‌ ᱟᱨᱮᱞ</string>
+    <string name="text_clock_m_thirty">ᱯᱮ ᱜᱮᱞ</string>
+    <string name="text_clock_m_thirty_one">ᱯᱮ ᱜᱮᱞ ᱢᱤᱫᱽ</string>
+    <string name="text_clock_m_thirty_two">ᱯᱮ ᱜᱮᱞ ᱵᱟᱨ</string>
+    <string name="text_clock_m_thirty_three">ᱯᱮ ᱜᱮᱞ ᱯᱮ</string>
+    <string name="text_clock_m_thirty_four">ᱯᱮ ᱜᱮᱞ ᱯᱩᱱ</string>
+    <string name="text_clock_m_thirty_five">ᱯᱮ ᱜᱮᱞ ᱢᱚᱲᱮ</string>
+    <string name="text_clock_m_thirty_six">ᱯᱮ ᱜᱮᱞ ᱛᱩᱨᱩᱭ</string>
+    <string name="text_clock_m_thirty_seven">ᱯᱮ ᱜᱮᱞ ᱮᱭᱥᱭ</string>
+    <string name="text_clock_m_thirty_eight">ᱯᱮ ᱜᱮᱞ ᱤᱨᱟᱹᱞ</string>
+    <string name="text_clock_m_thirty_nine">ᱯᱮ ᱜᱮᱞ ᱤᱨᱟᱹᱞ</string>
     <string name="text_clock_m_forty">Forty</string>
     <string name="text_clock_m_forty_one">Forty One</string>
     <string name="text_clock_m_forty_two">Forty Two</string>
