@@ -28,23 +28,23 @@
     <string name="animation_grow_shrink">(ᱪᱮᱛᱟᱱ) ᱨᱮ ᱦᱟᱨᱟ</string>
     <string name="animation_grow_shrink_center">(ᱛᱟᱞᱟ) ᱨᱮ ᱦᱟᱨᱟ</string>
     <string name="animation_grow_shrink_bottom">(ᱞᱟᱛᱟᱨ) ᱨᱮ ᱦᱟᱨᱟ</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
+    <string name="animation_grow_shrink_left">ᱨᱮ ᱢᱟᱨᱟᱝᱚᱜᱽ (ᱞᱮᱸᱜᱟ)</string>
+    <string name="animation_grow_shrink_right">ᱨᱮ ᱢᱟᱨᱟᱝᱚᱜᱽ (ᱡᱚᱡᱚᱢ)</string>
+    <string name="animation_random">ᱨᱮᱱᱰᱚᱢ</string>
     <string name="action_null">ᱠᱷᱟᱹᱞᱤ</string>
-    <string name="animation_ethans">Ethans</string>
+    <string name="animation_ethans">ᱤᱛᱷᱟᱸᱥ</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
+    <string name="aerr_copy">ᱠᱨᱟᱥ ᱞᱚᱜᱽ URL ᱱᱚᱠᱚᱞ ᱢᱮᱸ</string>
     <string name="url_copy_success">URL ᱨᱟᱥ ᱞᱮᱠᱟᱛᱮ ᱱᱚᱠᱚᱞᱮᱱᱟ</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="url_copy_failed">ᱰᱚᱜᱵᱤᱱ ᱛᱮ ᱞᱚᱜᱽ ᱠᱚ ᱞᱟᱫᱮ ᱡᱷᱚᱜᱽ ᱵᱷᱩᱞ ᱦᱩᱭᱮᱱᱟ</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">ᱯᱟᱣᱟᱹᱨ ᱢᱳᱰ ᱚᱛᱟ ᱛᱷᱤᱨ ᱢᱮᱸ ᱵᱚᱸᱫᱽ ᱞᱟᱹᱜᱤᱫᱽ</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">ᱜᱮᱢᱤᱝ ᱚᱵᱚᱥᱛᱟ</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="gaming_mode_notification_title">ᱠᱷᱮᱞ ᱢᱳᱰ ᱮᱢ ᱪᱷᱚᱮᱱᱟ</string>
+    <string name="gaming_mode_notification_content">ᱠᱷᱮᱞ ᱢᱳᱰ ᱵᱚᱸᱫ ᱞᱟᱹᱜᱤᱫᱽ ᱚᱛᱟᱭ ᱢᱮᱸ</string>
+    <string name="gaming_mode_enabled_toast">ᱠᱷᱮᱞ ᱢᱳᱰ ᱮᱢ ᱪᱚ</string>
+    <string name="gaming_mode_disabled_toast">ᱠᱷᱮᱞ ᱢᱳᱰ ᱵᱚᱸᱫᱽ</string>
     <!-- MicroG -->
     <string name="permlab_fakePackageSignature">Spoof package signature</string>
     <!-- Description of an application permission, listed so the user can choose whether
