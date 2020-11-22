@@ -272,6 +272,6 @@
     <string name="quick_settings_dc_brightness_mode">Режим яскравості</string>
     <string name="quick_settings_dc_full_auto">Автоматичний режим</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Мова</string>
+    <string name="quick_settings_locale_more_locales_toast">Будь ласка, налаштуйте кілька мов, щоб увімкнути функцію перемикання</string>
 </resources>
