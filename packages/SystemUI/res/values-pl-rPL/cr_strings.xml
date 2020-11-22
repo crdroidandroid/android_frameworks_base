@@ -265,4 +265,8 @@ dziewięć</string>
     <string name="applock_locked">&#160;jest zablokowany.</string>
     <string name="applock_fingerprint">Lub użyj odcisku palca by odblokować.</string>
     <string name="applock_locked_notification">Aplikacja jest zablokowana</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Tryb jasności</string>
+    <string name="quick_settings_dc_full_auto">Tryb automatyczny</string>
 </resources>
