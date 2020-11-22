@@ -232,4 +232,7 @@
     <string name="quick_settings_dc_dimming_label">DC Dimming</string>
     <string name="quick_settings_dc_brightness_mode">Heleduse režiim</string>
     <string name="quick_settings_dc_full_auto">Automaatrežiim</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Language</string>
+    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
 </resources>
