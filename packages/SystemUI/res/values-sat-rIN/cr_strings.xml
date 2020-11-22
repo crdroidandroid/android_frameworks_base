@@ -20,28 +20,28 @@
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • ᱣᱨᱟᱯ ᱪᱟᱨᱡᱤᱝ</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">ᱥᱢᱟᱨᱴ ᱯᱤᱠᱥᱟᱹᱞᱥ</string>
+    <string name="quick_settings_smart_pixels_on_power_save">ᱟᱡᱽ ᱛᱮ ᱨᱴᱮᱢ ᱟᱠᱟᱱ ᱥᱢᱟᱨᱴ ᱯᱤᱠᱥᱟᱹᱞᱥ</string>
     <!-- Screenshot -->
     <string name="quick_settings_screenshot_label">ᱥᱠᱨᱤᱱᱥᱷᱚᱴ</string>
-    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <string name="quick_settings_region_screenshot_label">ᱚᱫᱷᱟ ᱥᱠᱨᱤᱻᱱᱥᱚᱨᱴ</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <string name="quick_settings_cpuinfo_label">CPU ᱵᱤᱵᱨᱚᱬ</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">FPS ᱵᱤᱵᱨᱚᱬ</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS ᱵᱤᱵᱨᱚᱬ ᱵᱚᱸᱫ</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS ᱵᱤᱵᱨᱚᱬ ᱮᱢ ᱪᱷᱚ</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">HW ᱪᱟᱹᱵᱤᱠᱚ</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">ᱠᱚᱢᱯᱟᱥ</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
+    <string name="quick_settings_compass_init">ᱮᱦᱚᱵᱽᱚᱜ ᱠᱟᱱᱟ\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">ᱠᱚᱢᱯᱟᱥ ᱵᱚᱸᱫᱽ ᱾</string>
     <string name="accessibility_quick_settings_compass_on">Compass on.</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">NE</string>
