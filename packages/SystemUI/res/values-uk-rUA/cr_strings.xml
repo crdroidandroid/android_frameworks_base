@@ -267,4 +267,8 @@
     <string name="applock_locked">&#160;заблоковано.</string>
     <string name="applock_fingerprint">&#160;або відбиток пальця для розблокування.</string>
     <string name="applock_locked_notification">Додаток заблоковано</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Режим яскравості</string>
+    <string name="quick_settings_dc_full_auto">Автоматичний режим</string>
 </resources>
