@@ -230,7 +230,7 @@
     <string name="applock_fingerprint">&#160;sau amprenta pentru deblocare.</string>
     <string name="applock_locked_notification">Aplicația este blocată</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_dimming_label">Mod întunecare DC</string>
     <string name="quick_settings_dc_brightness_mode">Mod luminozitate</string>
     <string name="quick_settings_dc_full_auto">Mod automat</string>
 </resources>
