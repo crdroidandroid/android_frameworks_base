@@ -236,5 +236,5 @@
     <string name="quick_settings_dc_full_auto">Automatický režim</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Jazyk</string>
-    <string name="quick_settings_locale_more_locales_toast">Chcete-li povolit funkci přepínání, nastavte více jazyků</string>
+    <string name="quick_settings_locale_more_locales_toast">Pro zapnutí funkce přepínání nastavte více jazyků</string>
 </resources>
