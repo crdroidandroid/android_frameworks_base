@@ -279,4 +279,7 @@ Dokuz</string>
     <string name="quick_settings_dc_dimming_label">DC Karartma</string>
     <string name="quick_settings_dc_brightness_mode">Parlaklık modu</string>
     <string name="quick_settings_dc_full_auto">Otomatik mod</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Language</string>
+    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
 </resources>
