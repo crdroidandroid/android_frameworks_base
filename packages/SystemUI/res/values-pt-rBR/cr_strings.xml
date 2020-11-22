@@ -228,4 +228,11 @@
     <string name="applock_locked">&#160; está bloqueado.</string>
     <string name="applock_fingerprint">&#160; ou use sua digital impressão digital para desbloquear.</string>
     <string name="applock_locked_notification">O aplicativo está bloqueado</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">Escurecimento DC</string>
+    <string name="quick_settings_dc_brightness_mode">Modo de brilho</string>
+    <string name="quick_settings_dc_full_auto">Modo automático</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Language</string>
+    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
 </resources>

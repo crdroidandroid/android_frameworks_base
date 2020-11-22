@@ -230,4 +230,11 @@
     <string name="applock_locked">&#160; заблакавана.</string>
     <string name="applock_fingerprint">&#160;або адбітак пальца для разблакоўкі.</string>
     <string name="applock_locked_notification">Праграма заблакавана</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Рэжым яркасці</string>
+    <string name="quick_settings_dc_full_auto">Аўтаматычны рэжым</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Language</string>
+    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
 </resources>

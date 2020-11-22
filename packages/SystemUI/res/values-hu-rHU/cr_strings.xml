@@ -228,4 +228,11 @@
     <string name="applock_locked">&#160;lezárásra került.</string>
     <string name="applock_fingerprint">&#160;vagy ujjlenyomat a feloldáshoz.</string>
     <string name="applock_locked_notification">Az alkalmazás lezárásra került</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC-kiegyenlítés</string>
+    <string name="quick_settings_dc_brightness_mode">Fényerő-mód</string>
+    <string name="quick_settings_dc_full_auto">Automatikus mód</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Language</string>
+    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
 </resources>

@@ -230,4 +230,11 @@
     <string name="applock_locked">&#160;je uzamknuta.</string>
     <string name="applock_fingerprint">&#160;nebo odemkněte otiskem prstu.</string>
     <string name="applock_locked_notification">Aplikace je uzamknuta</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Režim jasu</string>
+    <string name="quick_settings_dc_full_auto">Automatický režim</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Language</string>
+    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
 </resources>
