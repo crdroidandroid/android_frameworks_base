@@ -275,4 +275,8 @@ Dokuz</string>
     <string name="applock_locked">&#160; kilitli.</string>
     <string name="applock_fingerprint">Kilidi açmak için &#160;veya parmak izini kullanın.</string>
     <string name="applock_locked_notification">Uygulama kilitli</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Karartma</string>
+    <string name="quick_settings_dc_brightness_mode">Parlaklık modu</string>
+    <string name="quick_settings_dc_full_auto">Otomatik mod</string>
 </resources>
