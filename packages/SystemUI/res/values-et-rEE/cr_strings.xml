@@ -228,4 +228,8 @@
     <string name="applock_locked">&#160;plokeeritud.</string>
     <string name="applock_fingerprint">&#160;või sõrmejälg deplokeerimiseks.</string>
     <string name="applock_locked_notification">Rakendus on lukustatud</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Heleduse režiim</string>
+    <string name="quick_settings_dc_full_auto">Automaatrežiim</string>
 </resources>
