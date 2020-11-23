@@ -191,16 +191,16 @@
     <string name="stabilization_position_friction">ᱡᱟᱭᱜᱟ ᱯᱷᱨᱤᱠᱥᱚᱱ</string>
     <!-- Screen record -->
     <string name="screenrecord_dialog_title">ᱨᱮᱠᱚᱰᱤᱝ ᱮᱦᱚᱵ ᱢᱮ?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
+    <string name="screenrecord_dialog_summary">ᱨᱮᱠᱚᱰᱤᱝ ᱡᱷᱚᱜ, ᱡᱚᱦᱟᱭ ᱵᱮ ᱥᱮᱱᱥᱤᱴᱤᱵᱷ ᱡᱤᱱᱤᱥ ᱠᱚ ᱮᱢᱟᱱ ᱟᱢᱟᱜ ᱥᱠᱨᱤᱻᱱ ᱨᱮ ᱧᱮᱞᱚᱜᱼᱟ ᱟᱨ ᱵᱟᱝ ᱥᱟᱫᱷᱚᱱ ᱨᱮ ᱯᱞᱮᱜ-ᱟ ᱚᱱᱟ ᱠᱚ ᱮᱱᱰᱨᱚᱭᱮᱰ ᱥᱭᱥᱴᱟᱹᱢ ᱫᱚ ᱠᱮᱯᱪᱟᱹᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱭ ᱾ ᱱᱚᱶᱟ ᱠᱚ ᱵᱷᱤᱛᱨᱭ ᱨᱮ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ, ᱯᱮᱭᱢᱮᱸᱴ ᱵᱤᱵᱨᱚᱬ, ᱪᱤᱛᱟᱹᱨ, ᱥᱚᱱᱫᱮᱥ, ᱟᱨ ᱥᱟᱲᱮ ᱠᱚ ᱮᱢᱟᱱ ᱛᱟᱦᱮᱸᱱᱟ ᱾</string>
     <string name="screenrecord_dialog_start">ᱮᱦᱚᱵ ᱢᱮ</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
+    <string name="screenrecord_dialog_cancel">ᱵᱹᱟᱰᱨᱟᱹ</string>
+    <string name="screenrecord_audio_recording_title">ᱥᱟᱲᱮ ᱥᱨᱚᱛ</string>
+    <string name="screenrecord_audio_recording_internal">ᱵᱷᱤᱛᱨᱭ</string>
     <string name="screenrecord_audio_recording_microphone">ᱢᱟᱭᱠᱨᱚᱯᱷᱚᱱ</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
-    <string name="screenrecord_video_bitrate_title">Video bitrate</string>
+    <string name="screenrecord_audio_recording_off">ᱵᱚᱸᱫ</string>
+    <string name="screenrecord_taps_title">ᱥᱠᱨᱤᱻᱱ ᱨᱮ ᱚᱛᱟ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮᱸ</string>
+    <string name="screenrecord_stopdot_title">ᱛᱤᱸᱜᱩ ᱰᱚᱴ ᱠᱚ ᱫᱮᱠᱷᱟᱣᱢᱮᱸ</string>
+    <string name="screenrecord_video_bitrate_title">ᱣᱤᱰᱤᱭᱚ ᱵᱤᱴᱨᱮᱴ</string>
     <!-- Name of the data saver status bar icon. -->
     <string name="status_bar_data_saver">ᱰᱟᱴᱟ ᱵᱟᱸᱪᱟᱣ ᱨᱮᱭᱟᱜ</string>
     <!-- Name of the vpn status bar icon. -->
@@ -216,14 +216,14 @@
     <string name="gigabytespersecond_short">GB/s</string>
     <!-- Omnijaws Weather -->
     <string name="omnijaws_service_error">ᱵᱷᱩᱞ</string>
-    <string name="omnijaws_service_unkown">No weather data</string>
-    <string name="omnijaws_service_error_long">Error loading weather data</string>
-    <string name="omnijaws_service_disabled">Service is disabled</string>
-    <string name="omnijaws_detail_header">Weather</string>
-    <string name="omnijaws_label_default">Weather</string>
+    <string name="omnijaws_service_unkown">ᱚᱠᱟ ᱯᱟᱜᱚ ᱰᱟᱴᱟ ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
+    <string name="omnijaws_service_error_long">ᱯᱚᱜᱚ ᱰᱟᱴᱟ ᱞᱟᱫᱮ ᱰᱤᱜᱟᱹᱣ</string>
+    <string name="omnijaws_service_disabled">ᱥᱟᱹᱨᱣᱤᱥ ᱵᱚᱸᱫᱚ ᱮᱱᱟ</string>
+    <string name="omnijaws_detail_header">ᱯᱟᱜᱚ</string>
+    <string name="omnijaws_label_default">ᱯᱟᱜᱚ</string>
     <string name="omnijaws_current_text">ᱱᱤᱛᱟᱹᱜ</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
-    <string name="omnijaws_service_last_update">Last update:</string>
+    <string name="omnijaws_package_not_available">OmniJaws ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
+    <string name="omnijaws_service_last_update">ᱢᱟᱲᱟᱝ ᱟᱹᱯᱰᱮᱴ:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;ᱠᱩᱞᱩᱯ ᱢᱮᱱᱟᱜ-ᱟ᱾</string>
     <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
