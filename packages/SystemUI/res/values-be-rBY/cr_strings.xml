@@ -235,6 +235,6 @@
     <string name="quick_settings_dc_brightness_mode">Рэжым яркасці</string>
     <string name="quick_settings_dc_full_auto">Аўтаматычны рэжым</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Мова</string>
+    <string name="quick_settings_locale_more_locales_toast">Калі ласка, наладзьце некалькі моў, каб актываваць функцыю</string>
 </resources>
