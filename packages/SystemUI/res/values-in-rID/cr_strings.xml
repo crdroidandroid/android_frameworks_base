@@ -255,6 +255,6 @@ Sembilan</string>
     <string name="quick_settings_dc_brightness_mode">Mode kecerahan</string>
     <string name="quick_settings_dc_full_auto">Mode Otomatis</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
+    <string name="quick_settings_locale_label">Bahasa</string>
     <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
 </resources>
