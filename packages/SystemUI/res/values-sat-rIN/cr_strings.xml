@@ -63,7 +63,7 @@
     <string name="quick_settings_sound_label">ᱥᱟᱲᱮ</string>
     <string name="quick_settings_sound_ring">ᱨᱤᱝ</string>
     <string name="quick_settings_sound_vibrate">ᱛᱷᱟᱨᱼᱛᱷᱟᱨᱟᱣ</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_dnd">ᱟᱞᱚ ᱦᱟᱨᱠᱮᱛᱟ</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
     <string name="quick_settings_reboot_label">ᱨᱤᱵᱩᱻᱴ</string>
     <string name="quick_settings_reboot_recovery_label">ᱨᱤᱠᱟᱹᱣᱨᱤ</string>
@@ -182,13 +182,13 @@
     <string name="text_clock_m_fifty_nine">ᱢᱚᱬᱮ ᱜᱮᱞ ᱟᱨᱮᱞ</string>
     <!-- Screen Stabilization -->
     <string name="quick_settings_stabilization_label">ᱥᱠᱨᱤᱻᱱ ᱥᱴᱮᱵᱤᱞᱟᱭᱡᱮᱥᱚᱱ</string>
-    <string name="quick_settings_stabilization_off">Stabilization is disabled</string>
-    <string name="quick_settings_stabilization_on">Stabilization is enabled</string>
-    <string name="low_label">Low</string>
-    <string name="high_label">High</string>
-    <string name="stabilization_velocity_friction">Velocity Friction</string>
-    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
-    <string name="stabilization_position_friction">Position Friction</string>
+    <string name="quick_settings_stabilization_off">ᱥᱴᱮᱵᱤᱞᱟᱭᱡᱮᱥᱚᱱ ᱵᱚᱸᱫᱽ</string>
+    <string name="quick_settings_stabilization_on">ᱥᱴᱮᱵᱤᱞᱟᱭᱡᱮᱥᱚᱱ ᱮᱢ ᱪᱷᱚ</string>
+    <string name="low_label">ᱠᱚᱢ</string>
+    <string name="high_label">ᱡᱟᱹᱥᱛᱤ</string>
+    <string name="stabilization_velocity_friction">ᱣᱮᱞᱚᱥᱤᱴᱭ ᱯᱷᱨᱤᱠᱥᱚᱱ</string>
+    <string name="stabilization_velocity_amplitude">ᱣᱮᱞᱚᱥᱤᱴᱭ ᱟᱢᱯᱞᱤᱴᱭᱩᱰ</string>
+    <string name="stabilization_position_friction">ᱡᱟᱭᱜᱟ ᱯᱷᱨᱤᱠᱥᱚᱱ</string>
     <!-- Screen record -->
     <string name="screenrecord_dialog_title">ᱨᱮᱠᱚᱰᱤᱝ ᱮᱦᱚᱵ ᱢᱮ?</string>
     <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
