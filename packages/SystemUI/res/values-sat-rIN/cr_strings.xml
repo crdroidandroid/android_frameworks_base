@@ -16,7 +16,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • ᱰᱮᱥ ᱪᱟᱨᱡᱤᱝ (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> ᱯᱩᱨᱟᱹᱣ ᱦᱟᱹᱵᱤᱡᱽ)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • ᱰᱮᱥ ᱪᱟᱨᱡᱤᱝ</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • ᱣᱨᱟᱯ ᱪᱟᱨᱡᱤᱝ(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> ᱯᱩᱨᱟᱹᱣ ᱦᱟᱹᱵᱤᱡᱽ)</string>
@@ -226,12 +226,12 @@
     <string name="omnijaws_service_last_update">ᱢᱟᱲᱟᱝ ᱟᱹᱯᱰᱮᱴ:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;ᱠᱩᱞᱩᱯ ᱢᱮᱱᱟᱜ-ᱟ᱾</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
+    <string name="applock_fingerprint">&#160; ᱟᱨ ᱵᱟᱝ ᱠᱷᱩᱞᱟᱹ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱟᱜᱽ ᱛᱤᱠᱟᱹᱴᱩᱵᱽᱪᱷᱟᱯᱟ ᱾</string>
     <string name="applock_locked_notification">ᱮᱯᱯ ᱠᱩᱞᱩᱯ ᱢᱮᱱᱟᱜ-ᱟ</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_dimming_label">DC ᱰᱤᱢᱤᱝ</string>
+    <string name="quick_settings_dc_brightness_mode">ᱡᱷᱟᱞᱠᱟᱣ ᱢᱳᱰ</string>
+    <string name="quick_settings_dc_full_auto">ᱟᱡᱽ ᱛᱮ ᱢᱳᱰ</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">ᱯᱟᱹᱨᱥᱤ</string>
     <string name="quick_settings_locale_more_locales_toast">ᱴᱚᱜᱟᱹ ᱯᱷᱟᱸᱥᱚᱱᱟᱞᱤᱴᱭ ᱮᱢ ᱪᱷᱚ ᱞᱟᱹᱜᱤᱫᱽ ᱫᱚᱭᱟᱠᱟᱛᱮ ᱟᱢᱟ ᱯᱟᱹᱨᱥᱤ ᱠᱚ ᱴᱷᱤᱠ ᱢᱮᱸ</string>
