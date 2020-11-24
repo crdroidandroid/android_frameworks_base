@@ -228,10 +228,10 @@
     <string name="applock_fingerprint">&#160;hoặc sử dụng vân tay để mở khóa.</string>
     <string name="applock_locked_notification">Đã khóa ứng dụng</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_dimming_label">Giảm độ sáng</string>
+    <string name="quick_settings_dc_brightness_mode">Chế độ sáng</string>
+    <string name="quick_settings_dc_full_auto">Chế độ tự động</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Ngôn ngữ</string>
+    <string name="quick_settings_locale_more_locales_toast">Vui lòng thiết lập nhiều ngôn ngữ để kích hoạt chức năng chuyển đổi</string>
 </resources>

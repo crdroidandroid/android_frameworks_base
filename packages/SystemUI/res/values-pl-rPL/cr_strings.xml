@@ -270,6 +270,6 @@ dziewięć</string>
     <string name="quick_settings_dc_brightness_mode">Tryb jasności</string>
     <string name="quick_settings_dc_full_auto">Tryb automatyczny</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Język</string>
+    <string name="quick_settings_locale_more_locales_toast">Należy skonfigurować wiele języków, aby włączyć funkcję przełączania</string>
 </resources>

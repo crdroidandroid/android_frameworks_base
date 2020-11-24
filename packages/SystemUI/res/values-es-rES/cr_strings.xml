@@ -256,10 +256,10 @@ Y Nueve</string>
     <string name="applock_fingerprint">&#160;o tu huella dactilar para desbloquear.</string>
     <string name="applock_locked_notification">Aplicación bloqueada</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_dimming_label">Atenuación DC</string>
+    <string name="quick_settings_dc_brightness_mode">Modo de brillo</string>
+    <string name="quick_settings_dc_full_auto">Modo automático</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Idioma</string>
+    <string name="quick_settings_locale_more_locales_toast">Por favor configure varios idiomas para habilitar la función de alternancia</string>
 </resources>
