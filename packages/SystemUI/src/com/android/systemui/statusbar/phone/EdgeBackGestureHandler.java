@@ -36,7 +36,9 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.provider.DeviceConfig;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.MathUtils;
@@ -188,6 +190,8 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
     // between apps of different orientations
     private boolean mDisabledForQuickstep;
 
+    private final int mNavBarHeight;
+
     private final PointF mDownPoint = new PointF();
     private final PointF mEndPoint = new PointF();
     private boolean mThresholdCrossed = false;
@@ -216,6 +220,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
     private boolean mIsBackGestureArrowEnabled;
 
     private boolean mBlockedGesturalNavigation;
+    private int mEdgeHeight;
 
     // For Tf-Lite model.
     private BackGestureTfClassifierProvider mBackGestureTfClassifierProvider;
@@ -260,6 +265,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
             SysUiState sysUiFlagContainer, PluginManager pluginManager,
             Runnable stateChangeCallback) {
         super(Dependency.get(BroadcastDispatcher.class));
+        final Resources res = context.getResources();
         mContext = context;
         mDisplayId = context.getDisplayId();
         mMainExecutor = context.getMainExecutor();
@@ -294,6 +300,8 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
 
         mGestureNavigationSettingsObserver = new GestureNavigationSettingsObserver(
                 mContext.getMainThreadHandler(), mContext, this::onNavigationSettingsChanged);
+
+        mNavBarHeight = res.getDimensionPixelSize(R.dimen.navigation_bar_frame_height);
 
         updateCurrentUserResources();
         sysUiFlagContainer.addCallback(sysUiFlags -> mSysUiFlags = sysUiFlags);
@@ -347,6 +355,28 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
         updateCurrentUserResources();
     }
 
+    private void updateEdgeHeightValue() {
+        if (mDisplaySize == null) {
+            return;
+        }
+        int edgeHeightSetting = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.BACK_GESTURE_HEIGHT, 0, UserHandle.USER_CURRENT);
+        // edgeHeigthSettings cant be range 0 - 3
+        // 0 means full height
+        // 1 measns half of the screen
+        // 2 means lower third of the screen
+        // 3 means lower sicth of the screen
+        if (edgeHeightSetting == 0) {
+            mEdgeHeight = mDisplaySize.y;
+        } else if (edgeHeightSetting == 1) {
+            mEdgeHeight = mDisplaySize.y / 2;
+        } else if (edgeHeightSetting == 2) {
+            mEdgeHeight = mDisplaySize.y / 3;
+        } else {
+            mEdgeHeight = mDisplaySize.y / 6;
+        }
+    }
+
     /**
      * @see NavigationBarView#onAttachedToWindow()
      */
@@ -380,6 +410,10 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
 
     public void onNavBarTransientStateChanged(boolean isTransient) {
         mIsNavBarShownTransiently = isTransient;
+    }
+
+    public void onSettingsChanged() {
+        updateEdgeHeightValue();
     }
 
     private void disposeInputChannel() {
@@ -566,6 +600,10 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
     }
 
     private boolean isWithinTouchRegion(int x, int y) {
+        if (mEdgeHeight > 0 && y < mDisplaySize.y - mNavBarHeight - mEdgeHeight) {
+                return false;
+        }
+
         // Disallow if we are in the bottom gesture area
         if (y >= (mDisplaySize.y - mBottomGestureHeight)) {
             return false;
@@ -774,6 +812,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
             mEdgeBackPlugin.setDisplaySize(mDisplaySize);
         }
         updateLongSwipeWidth();
+        updateEdgeHeightValue();
     }
 
     @Override
