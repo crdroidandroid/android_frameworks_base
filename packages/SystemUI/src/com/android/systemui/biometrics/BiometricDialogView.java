@@ -382,7 +382,7 @@ public abstract class BiometricDialogView extends LinearLayout {
             if (mAppLockDialog) {
                 final CharSequence negText = mBundle.getCharSequence(BiometricPrompt.KEY_NEGATIVE_TEXT);
                 descriptionText += getResources().getString(R.string.applock_locked) + "\n"
-                        + negText + getResources().getString(R.string.applock_fingerprint);
+                        + negText + getResources().getString(getDescriptionTextId());
             }
             mDescriptionText.setText(descriptionText);
         }
@@ -410,8 +410,18 @@ public abstract class BiometricDialogView extends LinearLayout {
         mSkipIntro = false;
     }
 
+    private int getDescriptionTextId() {
+        if (mIsFingerprint && mIsFace) {
+            return R.string.applock_fingerprint_face;
+        } else if (mIsFace) {
+            return R.string.applock_face;
+        } else {
+            return R.string.applock_fingerprint;
+        }
+    }
+
     protected int getAnimatingAwayDuration() {
-        return ANIMATION_DURATION_AWAY;
+        return (int) ((mAppLockDialog ? 1.3f : 1f ) * (float) ANIMATION_DURATION_AWAY);
     }
 
     public void setFaceAndFingerprint(boolean isFace, boolean isFingerprint) {
