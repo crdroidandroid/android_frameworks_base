@@ -17,6 +17,7 @@
 package com.android.systemui.biometrics;
 
 import static android.view.accessibility.AccessibilityEvent.CONTENT_CHANGE_TYPE_SUBTREE;
+import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL;
 import static android.view.Gravity.CENTER;
 import static android.view.Gravity.START;
 
@@ -24,6 +25,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -33,7 +35,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -53,6 +57,8 @@ import android.widget.TextView;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.util.leak.RotationUtils;
+
+import lineageos.app.LineageContextConstants;
 
 /**
  * Abstract base class. Shows a dialog for BiometricPrompt.
@@ -115,8 +121,11 @@ public abstract class BiometricDialogView extends LinearLayout {
     private boolean mWasForceRemoved;
     private boolean mSkipIntro;
     protected boolean mAppLockDialog;
+    private boolean mIsFingerprint;
+    private boolean mIsFace;
     protected boolean mRequireConfirmation;
     private int mUserId; // used to determine if we should show work background
+    private final boolean mHasFod;
 
     private boolean mCompletedAnimatingIn;
     private boolean mPendingDismissDialog;
@@ -174,6 +183,7 @@ public abstract class BiometricDialogView extends LinearLayout {
                 .getDimension(R.dimen.biometric_dialog_animation_translation_offset);
         mErrorColor = getResources().getColor(R.color.biometric_dialog_error);
         mTextColor = getResources().getColor(R.color.biometric_dialog_gray);
+        mHasFod = mPackageManager.hasSystemFeature(LineageContextConstants.Features.FOD);
 
         DisplayMetrics metrics = new DisplayMetrics();
         mWindowManager.getDefaultDisplay().getMetrics(metrics);
@@ -372,7 +382,7 @@ public abstract class BiometricDialogView extends LinearLayout {
             if (mAppLockDialog) {
                 final CharSequence negText = mBundle.getCharSequence(BiometricPrompt.KEY_NEGATIVE_TEXT);
                 descriptionText += getResources().getString(R.string.applock_locked) + "\n"
-                        + negText + getResources().getString(R.string.applock_fingerprint);
+                        + negText + getResources().getString(getDescriptionTextId());
             }
             mDescriptionText.setText(descriptionText);
         }
@@ -389,7 +399,7 @@ public abstract class BiometricDialogView extends LinearLayout {
             mDialog.setAlpha(1.0f);
             mDialog.setTranslationY(0);
             mLayout.setAlpha(1.0f);
-            mCompletedAnimatingIn = true;
+            onDialogAnimatedIn();
         } else {
             // Dim the background and slide the dialog up
             mDialog.setTranslationY(mAnimationTranslationOffset);
@@ -398,6 +408,53 @@ public abstract class BiometricDialogView extends LinearLayout {
         }
         mWasForceRemoved = false;
         mSkipIntro = false;
+    }
+
+    private int getDescriptionTextId() {
+        if (mIsFingerprint && mIsFace) {
+            return R.string.applock_fingerprint_face;
+        } else if (mIsFace) {
+            return R.string.applock_face;
+        } else {
+            return R.string.applock_fingerprint;
+        }
+    }
+
+    protected int getAnimatingAwayDuration() {
+        return (int) ((mAppLockDialog ? 1.3f : 1f ) * (float) ANIMATION_DURATION_AWAY);
+    }
+
+    public void setFaceAndFingerprint(boolean isFace, boolean isFingerprint) {
+        mIsFace = isFace;
+        mIsFingerprint = isFingerprint;
+        if (mIsFingerprint) {
+            mBiometricIcon.setVisibility(mHasFod ? View.INVISIBLE : View.VISIBLE);
+            boolean isPortrait = (getResources().getConfiguration().orientation
+                    == Configuration.ORIENTATION_PORTRAIT);
+            if (mHasFod && isPortrait) {
+                boolean isGesturalNav= Integer.parseInt(Settings.Secure.getStringForUser(
+                        mContext.getContentResolver(), Settings.Secure.NAVIGATION_MODE,
+                        UserHandle.USER_CURRENT)) == NAV_BAR_MODE_GESTURAL;
+
+                final int navbarHeight = getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_height);
+                final int fodMargin = getResources().getDimensionPixelSize(
+                        R.dimen.biometric_dialog_fod_margin);
+
+                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mBiometricIcon.getLayoutParams();
+                lp.topMargin = isGesturalNav ? fodMargin : (fodMargin > navbarHeight)
+                        ? (fodMargin - navbarHeight) : 0;
+
+                // Add Errortext above the biometric icon
+                mDialog.removeView(mErrorText);
+                mDialog.addView(mErrorText, mDialog.indexOfChild(mBiometricIcon));
+                lp = (LinearLayout.LayoutParams) mDescriptionText.getLayoutParams();
+                lp.bottomMargin = mErrorText.getPaddingTop();
+                mErrorText.setPadding(0, 0, 0, 0);
+            }
+        } else if (mIsFace) {
+            mBiometricIcon.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setDismissesDialog(View v) {
@@ -436,13 +493,13 @@ public abstract class BiometricDialogView extends LinearLayout {
             public void run() {
                 mLayout.animate()
                         .alpha(0f)
-                        .setDuration(ANIMATION_DURATION_AWAY)
+                        .setDuration(getAnimatingAwayDuration())
                         .setInterpolator(mLinearOutSlowIn)
                         .withLayer()
                         .start();
                 mDialog.animate()
                         .translationY(mAnimationTranslationOffset)
-                        .setDuration(ANIMATION_DURATION_AWAY)
+                        .setDuration(getAnimatingAwayDuration())
                         .setInterpolator(mLinearOutSlowIn)
                         .withEndAction(endActionRunnable)
                         .start();
