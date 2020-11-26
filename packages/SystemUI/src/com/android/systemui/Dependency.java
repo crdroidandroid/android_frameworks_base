@@ -129,6 +129,8 @@ import com.android.systemui.wm.DisplayController;
 import com.android.systemui.wm.DisplayImeController;
 import com.android.systemui.wm.SystemWindows;
 
+import com.google.android.systemui.assist.AssistManagerGoogle;
+
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
@@ -235,7 +237,7 @@ public class Dependency {
     @Inject Lazy<AccessibilityController> mAccessibilityController;
     @Inject Lazy<DeviceProvisionedController> mDeviceProvisionedController;
     @Inject Lazy<PluginManager> mPluginManager;
-    @Inject Lazy<AssistManager> mAssistManager;
+    @Inject Lazy<AssistManagerGoogle> mAssistManager;
     @Inject Lazy<SecurityController> mSecurityController;
     @Inject Lazy<LeakDetector> mLeakDetector;
     @Inject Lazy<LeakReporter> mLeakReporter;
