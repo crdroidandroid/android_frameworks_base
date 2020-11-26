@@ -226,8 +226,8 @@
     <string name="omnijaws_service_last_update">Viimane värskendus:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;plokeeritud.</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock.</string>
-    <string name="applock_face">&#160;or your face to unlock.</string>
+    <string name="applock_fingerprint_face">, avamiseks sõrmejälg või nägu.</string>
+    <string name="applock_face">&#160;või oma nägu avamiseks.</string>
     <string name="applock_fingerprint">&#160;või sõrmejälg deplokeerimiseks.</string>
     <string name="applock_locked_notification">Rakendus on lukustatud</string>
     <!-- DC Dimming -->
