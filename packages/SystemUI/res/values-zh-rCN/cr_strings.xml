@@ -225,14 +225,14 @@
     <string name="omnijaws_service_last_update">最后更新</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;已被锁定。</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock.</string>
-    <string name="applock_face">&#160;or your face to unlock.</string>
+    <string name="applock_fingerprint_face">, 指纹或者您的面部以解锁.</string>
+    <string name="applock_face">&#160;或您的面部以解锁.</string>
     <string name="applock_fingerprint">&#160;或您的指纹来解锁</string>
     <string name="applock_locked_notification">程序已锁定</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_dimming_label">DC调光</string>
+    <string name="quick_settings_dc_brightness_mode">亮度模式</string>
+    <string name="quick_settings_dc_full_auto">自动模式</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">语言</string>
     <string name="quick_settings_locale_more_locales_toast">请配置多种语言以启用切换功能</string>
