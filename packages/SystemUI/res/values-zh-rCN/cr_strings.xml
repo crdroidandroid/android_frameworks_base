@@ -225,8 +225,8 @@
     <string name="omnijaws_service_last_update">最后更新</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;已被锁定。</string>
-    <string name="applock_fingerprint_face">, 指纹或者您的面部以解锁.</string>
-    <string name="applock_face">&#160;或您的面部以解锁.</string>
+    <string name="applock_fingerprint_face">指纹或者您的面部以解锁</string>
+    <string name="applock_face">&#160;或您的面部以解锁</string>
     <string name="applock_fingerprint">&#160;或您的指纹来解锁</string>
     <string name="applock_locked_notification">程序已锁定</string>
     <!-- DC Dimming -->
