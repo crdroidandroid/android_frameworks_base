@@ -225,6 +225,8 @@
     <string name="omnijaws_service_last_update">Cập nhật lần cuối:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;đã khóa.</string>
+    <string name="applock_fingerprint_face">, vân tay hoặc khuôn mặt để mở khóa.</string>
+    <string name="applock_face">&#160;hoặc sử dụng khuôn mặt để mở khóa.</string>
     <string name="applock_fingerprint">&#160;hoặc sử dụng vân tay để mở khóa.</string>
     <string name="applock_locked_notification">Đã khóa ứng dụng</string>
     <!-- DC Dimming -->

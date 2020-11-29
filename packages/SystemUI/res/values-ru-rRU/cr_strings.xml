@@ -228,6 +228,8 @@
     <string name="omnijaws_service_last_update">Последнее обновление:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;заблокировано.</string>
+    <string name="applock_fingerprint_face">, отпечаток пальца или лицо для разблокировки.</string>
+    <string name="applock_face">&#160;или лицо для разблокировки.</string>
     <string name="applock_fingerprint">&#160;или отпечаток пальца для разблокировки.</string>
     <string name="applock_locked_notification">Приложение заблокировано</string>
     <!-- DC Dimming -->
@@ -235,6 +237,6 @@
     <string name="quick_settings_dc_brightness_mode">Режим яркости</string>
     <string name="quick_settings_dc_full_auto">Автоматический режим</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Язык</string>
+    <string name="quick_settings_locale_more_locales_toast">Пожалуйста, настройте несколько языков, чтобы активировать функцию</string>
 </resources>

@@ -226,13 +226,15 @@
     <string name="omnijaws_service_last_update">Letzte Aktualisierung:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;ist gesperrt.</string>
+    <string name="applock_fingerprint_face">, Fingerabdruck oder Ihr Gesicht zum Entsperren.</string>
+    <string name="applock_face">&#160;oder Ihr Gesicht zum Entsperren.</string>
     <string name="applock_fingerprint">&#160;oder Fingerabdruck zum Entsperren.</string>
     <string name="applock_locked_notification">App ist gesperrt</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_dimming_label">DC-Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Helligkeitsmodus</string>
+    <string name="quick_settings_dc_full_auto">Automatikmodus</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Sprache</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_more_locales_toast">Bitte fügen Sie mehr als eine Sprache hinzu, um die Umschaltfunktion zu aktivieren</string>
 </resources>
