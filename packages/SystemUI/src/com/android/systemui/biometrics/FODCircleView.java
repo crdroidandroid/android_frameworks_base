@@ -521,6 +521,11 @@ public class FODCircleView extends ImageView implements TunerService.Tunable {
     }
 
     public void show() {
+        if (mUpdateMonitor.userNeedsStrongAuth()) {
+            // Keyguard requires strong authentication (not biometrics)
+            return;
+        }
+
         if (!mUpdateMonitor.isScreenOn() && !mFodGestureEnable) {
             // Keyguard is shown just after screen turning off
             return;
