@@ -495,6 +495,9 @@ public interface RILConstants {
     int RIL_REQUEST_GET_BARRING_INFO = 211;
     int RIL_REQUEST_ENTER_SIM_DEPERSONALIZATION = 212;
 
+    /* RIL Request to get newly supported radio
+       capabilities include 5G SA*/
+    int RIL_REQUEST_GET_ENHANCED_RADIO_CAPABILITY = 600;
     /* Responses begin */
     int RIL_RESPONSE_ACKNOWLEDGEMENT = 800;
 
