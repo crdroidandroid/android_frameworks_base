@@ -226,15 +226,15 @@
     <string name="omnijaws_service_last_update">Ultimo aggiornamento:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;è bloccato.</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock.</string>
-    <string name="applock_face">&#160;or your face to unlock.</string>
+    <string name="applock_fingerprint_face">, impronta digitale o sblocco con il volto.</string>
+    <string name="applock_face">&#160;o sblocco con il volto.</string>
     <string name="applock_fingerprint">&#160;oppure usa la tua impronta digitale per sbloccare.</string>
     <string name="applock_locked_notification">L\'app è bloccata</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_dimming_label">Attenuazione DC</string>
+    <string name="quick_settings_dc_brightness_mode">Livello luminosità</string>
+    <string name="quick_settings_dc_full_auto">Modalità automatica</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Lingua</string>
+    <string name="quick_settings_locale_more_locales_toast">Configura più lingue per abilitare la funzionalità toggle</string>
 </resources>
