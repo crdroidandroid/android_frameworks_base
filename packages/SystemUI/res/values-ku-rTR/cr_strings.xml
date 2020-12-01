@@ -226,15 +226,15 @@
     <string name="omnijaws_service_last_update">دواین نوێکردنەوە:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;قوفڵکراوە.</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock.</string>
-    <string name="applock_face">&#160;or your face to unlock.</string>
+    <string name="applock_fingerprint_face">، پەنجەمۆر یاخود ڕووخسارت بۆ کردنەوە.</string>
+    <string name="applock_face">&#160; یاخود ڕووخسارت بۆ کردنەوە.</string>
     <string name="applock_fingerprint">&#160;یاخوود بە پەنجەمۆرت بیکەوە.</string>
     <string name="applock_locked_notification">ئەپ قوفڵکراوە</string>
     <!-- DC Dimming -->
     <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_brightness_mode">دۆخی ڕۆشنایی</string>
+    <string name="quick_settings_dc_full_auto">دۆخی خۆکاری</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">زمان</string>
+    <string name="quick_settings_locale_more_locales_toast">تکایە زمانی زیاتر پێکبهێنە بۆ چەسپاندنی فرەکرداری</string>
 </resources>
