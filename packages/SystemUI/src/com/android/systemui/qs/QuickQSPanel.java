@@ -112,6 +112,11 @@ public class QuickQSPanel extends QSPanel {
     }
 
     @Override
+    protected boolean needsDynamicRowsAndColumns() {
+        return false; // QQS always have the same layout
+    }
+
+    @Override
     protected boolean displayMediaMarginsOnMedia() {
         // Margins should be on the container to visually center the view
         return false;
