@@ -227,7 +227,7 @@
     <!-- App lock -->
     <string name="applock_locked">&#160;lezárásra került.</string>
     <string name="applock_fingerprint_face">Feloldáshoz használja az ujjlenyomat érzékelőt, vagy az arcfelismerést.</string>
-    <string name="applock_face">&#160; vagy arcával oldja fel.</string>
+    <string name="applock_face">&#160;vagy az Ön arca a feloldáshoz.</string>
     <string name="applock_fingerprint">&#160;vagy ujjlenyomat a feloldáshoz.</string>
     <string name="applock_locked_notification">Az alkalmazás lezárásra került</string>
     <!-- DC Dimming -->
