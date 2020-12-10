@@ -89,7 +89,7 @@ public class DeviceProvisionedControllerImpl extends CurrentUserTracker implemen
     @Override
     public void addCallback(DeviceProvisionedListener listener) {
         mListeners.add(listener);
-        if (mListeners.size() == 1) {
+        if (mListeners.size() != 0) {
             startListening(getCurrentUser());
         }
         listener.onUserSetupChanged();
