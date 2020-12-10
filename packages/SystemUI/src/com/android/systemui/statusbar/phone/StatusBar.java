@@ -531,7 +531,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                 Log.d(TAG, String.format("User setup changed: userSetup=%s mUserSetup=%s",
                         userSetup, mUserSetup));
             }
-
+            if (mNotificationPanelViewController != null) {
+                mNotificationPanelViewController.setUserSetupComplete(userSetup);
+            }
             if (userSetup != mUserSetup) {
                 mUserSetup = userSetup;
                 if (!mUserSetup && mStatusBarView != null)
