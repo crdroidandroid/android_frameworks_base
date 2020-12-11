@@ -258,8 +258,8 @@
     <string name="omnijaws_service_last_update">최근 업데이트:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;is 잠김</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock.</string>
-    <string name="applock_face">&#160;or your face to unlock.</string>
+    <string name="applock_fingerprint_face">, 지문 또는 얼굴 잠금 해제</string>
+    <string name="applock_face">&#160;또는 얼굴로 잠금해제</string>
     <string name="applock_fingerprint">&#160;또는 지문으로 잠금해제</string>
     <string name="applock_locked_notification">앱 잠김</string>
     <!-- DC Dimming -->
