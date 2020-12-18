@@ -86,7 +86,7 @@
     <string name="force_stop_dlg_text">اگر برنامه‌ای را به اجبار متوقف کنید، ممکن است درست کار نکند.</string>
     <string name="guts_force_close_app">بستن برنامه</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">رابط کاربری</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
@@ -107,18 +107,18 @@
         <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">یک</string>
+    <string name="text_clock_h_two">دو</string>
+    <string name="text_clock_h_three">سه</string>
+    <string name="text_clock_h_four">چهار</string>
+    <string name="text_clock_h_five">پنج</string>
+    <string name="text_clock_h_six">شیش</string>
+    <string name="text_clock_h_seven">هفت</string>
+    <string name="text_clock_h_eight">هشت</string>
+    <string name="text_clock_h_nine">نه</string>
+    <string name="text_clock_h_ten">ده</string>
+    <string name="text_clock_h_eleven">یازده</string>
+    <string name="text_clock_h_twelve">دوازده</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
     <string name="text_clock_m_zero">O’Clock</string>
     <string name="text_clock_m_one">O’One</string>
@@ -130,12 +130,12 @@
     <string name="text_clock_m_seven">O’Seven</string>
     <string name="text_clock_m_eight">O’Eight</string>
     <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
-    <string name="text_clock_m_fourteen">Fourteen</string>
-    <string name="text_clock_m_fifteen">Fifteen</string>
+    <string name="text_clock_m_ten">ده</string>
+    <string name="text_clock_m_eleven">یازده</string>
+    <string name="text_clock_m_twelve">دوازده</string>
+    <string name="text_clock_m_thirteen">سیزده</string>
+    <string name="text_clock_m_fourteen">چهارده</string>
+    <string name="text_clock_m_fifteen">پانزده</string>
     <string name="text_clock_m_sixteen">Sixteen</string>
     <string name="text_clock_m_seventeen">Seventeen</string>
     <string name="text_clock_m_eighteen">Eighteen</string>
