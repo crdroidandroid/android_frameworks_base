@@ -120,16 +120,16 @@
     <string name="text_clock_h_eleven">یازده</string>
     <string name="text_clock_h_twelve">دوازده</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
+    <string name="text_clock_m_zero">O’ساعت</string>
+    <string name="text_clock_m_one">O’یک</string>
+    <string name="text_clock_m_two">O’دو</string>
+    <string name="text_clock_m_three">O’سه</string>
+    <string name="text_clock_m_four">O’چهار</string>
+    <string name="text_clock_m_five">O’پنج</string>
+    <string name="text_clock_m_six">O’شیش</string>
+    <string name="text_clock_m_seven">O’هفت</string>
+    <string name="text_clock_m_eight">O’هشت</string>
+    <string name="text_clock_m_nine">O’نه</string>
     <string name="text_clock_m_ten">ده</string>
     <string name="text_clock_m_eleven">یازده</string>
     <string name="text_clock_m_twelve">دوازده</string>
@@ -227,14 +227,14 @@
     <!-- App lock -->
     <string name="applock_locked">&#160;قفل شده.</string>
     <string name="applock_fingerprint_face">اثر انگشت یا صورتتان برای بازگشایی.</string>
-    <string name="applock_face">&#160;or your face to unlock.</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_face">&#160;یا صورتتان برای بازگشایی.</string>
+    <string name="applock_fingerprint">&#160;یا اثرانگشتتان برای بازگشایی.</string>
+    <string name="applock_locked_notification">برنامه قفل شده است</string>
     <!-- DC Dimming -->
     <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_brightness_mode">حالت روشنایی</string>
+    <string name="quick_settings_dc_full_auto">حالت خودکار</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">زبان</string>
+    <string name="quick_settings_locale_more_locales_toast">لطفا چندین زبان را برای فعال کردن قابلیت تغییر وضعیت پیکربندی کنید</string>
 </resources>
