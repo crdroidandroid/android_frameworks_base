@@ -49,7 +49,7 @@
     <string name="permlab_fakePackageSignature">امضای بسته جعلی است</string>
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">به برنامه اجازه داده شده است تا به عنوان یک برنامه دیگر تظاهر کند. برنامه های مخرب ممکن است از این قابلیت استفاده کنند تا به دیتای شخصی شما دسترسی پیدا کنند. لطفا با احتیاط این اجازه را دهید!</string>
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">ضبط صفحه نمایش</string>
     <!-- Clipboard access toast -->
