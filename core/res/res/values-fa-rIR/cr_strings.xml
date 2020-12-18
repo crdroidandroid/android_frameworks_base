@@ -24,17 +24,17 @@
     <string name="animation_slide_up">اسلاید از پایین</string>
     <string name="animation_slide_down">اسلاید از بالا</string>
     <string name="animation_default">پيشفرض</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
-    <string name="animation_grow_shrink_right">Grow in (Right)</string>
+    <string name="animation_translucent">شفافیت</string>
+    <string name="animation_grow_shrink">بزرگ شدن (از بالا)</string>
+    <string name="animation_grow_shrink_center">بزرگ شدن (از مرکز صفحه)</string>
+    <string name="animation_grow_shrink_bottom">بزرگ شدن (از پایین)</string>
+    <string name="animation_grow_shrink_left">بزرگ شدن (از چپ)</string>
+    <string name="animation_grow_shrink_right">بزرگ شدن (از راست)</string>
     <string name="animation_random">تصادفی</string>
     <string name="action_null">خالی</string>
     <string name="animation_ethans">Ethans</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
+    <string name="aerr_copy">کپی کردن آدرس گزارش خرابی</string>
     <string name="url_copy_success">آدرس URL با موفقیت کپی شد</string>
     <string name="url_copy_failed">مشکلی در حین آپلود کردن گزارش به dogbin رخ داد</string>
     <!-- Pocket Lock -->
