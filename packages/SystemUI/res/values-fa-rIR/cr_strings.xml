@@ -190,16 +190,16 @@
     <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
     <string name="stabilization_position_friction">Position Friction</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Start recording?</string>
-    <string name="screenrecord_dialog_summary">While recording, Android system can capture any sensitive information that\'s visible on your screen or played on your device. This includes passwords, payment info, photos, messages, and audio.</string>
-    <string name="screenrecord_dialog_start">Start</string>
-    <string name="screenrecord_dialog_cancel">Cancel</string>
-    <string name="screenrecord_audio_recording_title">Audio source</string>
-    <string name="screenrecord_audio_recording_internal">Internal</string>
-    <string name="screenrecord_audio_recording_microphone">Microphone</string>
-    <string name="screenrecord_audio_recording_off">Disabled</string>
-    <string name="screenrecord_taps_title">Show touches on screen</string>
-    <string name="screenrecord_stopdot_title">Show stop dot</string>
+    <string name="screenrecord_dialog_title">ظبط کردن آغاز شود?</string>
+    <string name="screenrecord_dialog_summary">وقتی که درحال ظبط کردن هستید، سیستم اندروید میتواند هر چیزی را که روی صفحه نمایش شما وجود دارد و یا در حال پخش است را ظبط کند. این شامل اطلاعات حساس شما مثل پسورد ها، اطلاعات کارت خریدتان، پیام ها، عکس‌ها و فیلم های شخصی نیز می‌شود.</string>
+    <string name="screenrecord_dialog_start">شروع</string>
+    <string name="screenrecord_dialog_cancel">انصراف</string>
+    <string name="screenrecord_audio_recording_title">منبع صدا</string>
+    <string name="screenrecord_audio_recording_internal">داخلی</string>
+    <string name="screenrecord_audio_recording_microphone">میکروفون</string>
+    <string name="screenrecord_audio_recording_off">غیرفعال</string>
+    <string name="screenrecord_taps_title">نشان دادن محل لمس روی صفحه نمایش</string>
+    <string name="screenrecord_stopdot_title">نشان دادن نقطه توقف</string>
     <string name="screenrecord_video_bitrate_title">Video bitrate</string>
     <!-- Name of the data saver status bar icon. -->
     <string name="status_bar_data_saver">Data saver</string>
