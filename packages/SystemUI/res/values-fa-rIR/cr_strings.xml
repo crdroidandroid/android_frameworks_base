@@ -27,62 +27,62 @@
     <string name="quick_settings_smart_pixels">Smart pixels</string>
     <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Screenshot</string>
-    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <string name="quick_settings_screenshot_label">عکس گرفتن از صفحه</string>
+    <string name="quick_settings_region_screenshot_label">عکس گرفتن از بخشی از صفحه</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">اطلاعات پردازنده</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">اطلاعات FPS</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">نمایش اطلاعات FPS خاموش</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">نمایش اطلاعات FPS روشن</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">کلید‌های سخت افزاری</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">قطب‌نما</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
-    <string name="quick_settings_compass_SE">SE</string>
-    <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="accessibility_quick_settings_compass_off">قطب‌نما خاموش.</string>
+    <string name="accessibility_quick_settings_compass_on">قطب‌نما روشن.</string>
+    <string name="quick_settings_compass_N">شمال</string>
+    <string name="quick_settings_compass_NE">شمال شرقی</string>
+    <string name="quick_settings_compass_E">شرق</string>
+    <string name="quick_settings_compass_SE">جنوب شرقی</string>
+    <string name="quick_settings_compass_S">جنوب</string>
+    <string name="quick_settings_compass_SW">جنوب غربی</string>
+    <string name="quick_settings_compass_W">غرب</string>
+    <string name="quick_settings_compass_NW">شمال غربی</string>
     <!-- Music tile -->
-    <string name="quick_settings_music_label">Music</string>
-    <string name="quick_settings_music_play">Play</string>
-    <string name="quick_settings_music_pause">Pause</string>
+    <string name="quick_settings_music_label">موسیقی</string>
+    <string name="quick_settings_music_play">پخش</string>
+    <string name="quick_settings_music_pause">توقف</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">همیشه روی صفحه نمایش</string>
     <!--Google sound search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">جستجو صدا</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">صدا</string>
+    <string name="quick_settings_sound_ring">زنگ</string>
+    <string name="quick_settings_sound_vibrate">لرزش</string>
+    <string name="quick_settings_sound_dnd">مزاحم نشوید</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
+    <string name="quick_settings_reboot_label">راه اندازی مجدد</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_poweroff_label">خاموش کردن</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">حالت بازی در تنظیمات غیرفعال شده است</string>
+    <string name="quick_settings_gaming_mode_label">حالت بازی</string>
     <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_disabled">Gaming mode turned off.</string>
+    <string name="accessibility_quick_settings_gaming_mode_disabled">حالت بازی خاموش شد.</string>
     <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_quick_settings_gaming_mode_enabled">Gaming mode turned on.</string>
+    <string name="accessibility_quick_settings_gaming_mode_enabled">حالت بازی روشن شد.</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_toast_0">Currently no SIM card is inserted</string>
-    <string name="qs_data_switch_toast_1">Currently only one SIM card is inserted</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">تعویض سیم کارت دیتا</string>
+    <string name="qs_data_switch_toast_0">درحال حاضر هیچ سیم‌کارتی وارد نشده</string>
+    <string name="qs_data_switch_toast_1">درحال حاضر فقط یک سیم‌کارت وارد شده</string>
+    <string name="qs_data_switch_changed_1">استفاده از سیم‌کارت ۱ برای دیتا گوشی</string>
+    <string name="qs_data_switch_changed_2">استفاده از سیم‌کارت ۲ برای دیتا گوشی</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
+    <string name="force_stop_dlg_title">به اجبار متوقف شود?</string>
     <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
     <string name="guts_force_close_app">Close App</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
