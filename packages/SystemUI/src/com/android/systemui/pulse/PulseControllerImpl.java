@@ -56,6 +56,7 @@ import android.view.animation.Animation;
 import android.widget.FrameLayout;
 
 import com.android.systemui.Dependency;
+import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.CommandQueue.Callbacks;
@@ -64,6 +65,8 @@ import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.PulseController;
 import com.android.systemui.statusbar.policy.PulseController.PulseStateListener;
+
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -267,7 +270,7 @@ public class PulseControllerImpl
     }
 
     @Inject
-    public PulseControllerImpl(Context context, @Main Handler mainHandler) {
+    public PulseControllerImpl(Context context, @Main Handler mainHandler, @Background Executor backgroundExecutor) {
         mContext = context;
         mStatusbar = Dependency.get(StatusBar.class);
         mHandler = mainHandler;
@@ -278,7 +281,7 @@ public class PulseControllerImpl
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mPowerSaveModeEnabled = pm.isPowerSaveMode();
         mSettingsObserver.register();
-        mStreamHandler = new VisualizerStreamHandler(mContext, this, mStreamListener);
+        mStreamHandler = new VisualizerStreamHandler(mContext, this, mStreamListener, backgroundExecutor);
         mPulseView = new PulseView(context, this);
         mColorController = new ColorController(mContext, mHandler);
         loadRenderer();
