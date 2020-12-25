@@ -240,5 +240,5 @@
     <string name="quick_settings_dc_full_auto">الوضع التلقائي</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">اللغة</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_more_locales_toast">الرجاء إعداد اللغات المتعددة لتمكين وظيفة مفتاح التبديل</string>
 </resources>
