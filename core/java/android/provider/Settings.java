@@ -5231,6 +5231,12 @@ public final class Settings {
         public static final String GAMING_MODE_ENABLED = "gaming_mode_enabled";
 
         /**
+         * Screen off fod
+         * @hide
+         */
+        public static final String FOD_GESTURE = "fod_gesture";
+
+        /**
          * Gaming mode active state - to disable via notification / tile
          * @hide
          */
