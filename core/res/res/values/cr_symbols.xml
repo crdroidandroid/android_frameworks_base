@@ -75,4 +75,7 @@
 
   <!-- Whether to show a custom view for FOD -->
   <java-symbol type="bool" name="config_needCustomFODView" />
+
+  <!-- Default fod pressed icon -->
+  <java-symbol type="integer" name="config_fod_pressed_color" />
 </resources>
