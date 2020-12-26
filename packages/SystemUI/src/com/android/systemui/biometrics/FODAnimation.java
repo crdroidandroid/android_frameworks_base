@@ -18,6 +18,7 @@ package com.android.systemui.biometrics;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.PixelFormat;
 import android.provider.Settings;
@@ -25,6 +26,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.util.Log;
 
 import com.android.systemui.R;
 
@@ -42,32 +44,37 @@ public class FODAnimation extends ImageView {
     private boolean mIsRecognizingAnimEnabled;
 
     private int mSelectedAnim;
-    private final int[] ANIMATION_STYLES = {
-        R.drawable.fod_miui_normal_recognizing_anim,
-        R.drawable.fod_miui_aod_recognizing_anim,
-        R.drawable.fod_miui_aurora_recognizing_anim,
-        R.drawable.fod_miui_aurora_cas_recognizing_anim,
-        R.drawable.fod_miui_light_recognizing_anim,
-        R.drawable.fod_miui_pop_recognizing_anim,
-        R.drawable.fod_miui_pulse_recognizing_anim,
-        R.drawable.fod_miui_pulse_recognizing_white_anim,
-        R.drawable.fod_miui_rhythm_recognizing_anim,
-        R.drawable.fod_miui_star_cas_recognizing_anim,
-        R.drawable.fod_op_cosmos_recognizing_anim,
-        R.drawable.fod_op_energy_recognizing_anim,
-        R.drawable.fod_op_mclaren_recognizing_anim,
-        R.drawable.fod_op_ripple_recognizing_anim,
-        R.drawable.fod_op_scanning_recognizing_anim,
-        R.drawable.fod_op_stripe_recognizing_anim,
-        R.drawable.fod_op_wave_recognizing_anim,
-        R.drawable.fod_pureview_dna_recognizing_anim,
-        R.drawable.fod_pureview_future_recognizing_anim,
-        R.drawable.fod_pureview_halo_ring_recognizing_anim,
-        R.drawable.fod_pureview_molecular_recognizing_anim,
-        R.drawable.fod_rog_fusion_recognizing_anim,
-        R.drawable.fod_rog_pulsar_recognizing_anim,
-        R.drawable.fod_rog_supernova_recognizing_anim,
+    private String[] ANIMATION_STYLES_NAMES = {
+        "fod_miui_normal_recognizing_anim",
+        "fod_miui_aod_recognizing_anim",
+        "fod_miui_aurora_recognizing_anim",
+        "fod_miui_aurora_cas_recognizing_anim",
+        "fod_miui_light_recognizing_anim",
+        "fod_miui_pop_recognizing_anim",
+        "fod_miui_pulse_recognizing_anim",
+        "fod_miui_pulse_recognizing_white_anim",
+        "fod_miui_rhythm_recognizing_anim",
+        "fod_miui_star_cas_recognizing_anim",
+        "fod_op_cosmos_recognizing_anim",
+        "fod_op_energy_recognizing_anim",
+        "fod_op_mclaren_recognizing_anim",
+        "fod_op_ripple_recognizing_anim",
+        "fod_op_scanning_recognizing_anim",
+        "fod_op_stripe_recognizing_anim",
+        "fod_op_wave_recognizing_anim",
+        "fod_pureview_dna_recognizing_anim",
+        "fod_pureview_future_recognizing_anim",
+        "fod_pureview_halo_ring_recognizing_anim",
+        "fod_pureview_molecular_recognizing_anim",
+        "fod_rog_fusion_recognizing_anim",
+        "fod_rog_pulsar_recognizing_anim",
+        "fod_rog_supernova_recognizing_anim",
     };
+
+    private final String FOD_ANIMATIONS_PACKAGE = "com.crdroid.fod.animations";
+
+    private static final boolean DEBUG = true;
+    private static final String LOG_TAG = "FODAnimations";
 
     public FODAnimation(Context context, int mPositionX, int mPositionY) {
         super(context);
@@ -95,6 +102,22 @@ public class FODAnimation extends ImageView {
         update(mIsRecognizingAnimEnabled);
     }
 
+    private void updateAnimationStyle(String drawableName) {
+        if (DEBUG) Log.i(LOG_TAG, "Updating animation style to:" + drawableName);
+        int resId = 0;
+        try {
+            PackageManager pm = mContext.getPackageManager();
+            Resources mApkResources = pm.getResourcesForApplication(FOD_ANIMATIONS_PACKAGE);
+            resId = mApkResources.getIdentifier(drawableName, "drawable", FOD_ANIMATIONS_PACKAGE);
+            if (DEBUG) Log.i(LOG_TAG, "Got resource id: "+ resId +" from package" );
+            setBackgroundDrawable(mApkResources.getDrawable(resId));
+            recognizingAnim = (AnimationDrawable) getBackground();
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void update(boolean isEnabled) {
         mSelectedAnim = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.FOD_ANIM, 0);
@@ -104,8 +127,7 @@ public class FODAnimation extends ImageView {
         else
             setAlpha(0.0f);
 
-        setBackgroundResource(ANIMATION_STYLES[mSelectedAnim]);
-        recognizingAnim = (AnimationDrawable) getBackground();
+        updateAnimationStyle(ANIMATION_STYLES_NAMES[mSelectedAnim]);
     }
 
     public void updateParams(int mDreamingOffsetY) {
