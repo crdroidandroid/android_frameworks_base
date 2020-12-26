@@ -329,18 +329,18 @@ public class FODCircleView extends ImageView {
         if (event.getAction() == MotionEvent.ACTION_DOWN && newIsInside) {
             showCircle();
             if (mIsRecognizingAnimEnabled) {
-                mFODAnimation.showFODanimation();
+                mHandler.post(() -> mFODAnimation.showFODanimation());
             }
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             hideCircle();
-            mFODAnimation.hideFODanimation();
+            mHandler.post(() -> mFODAnimation.hideFODanimation());
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             return true;
         }
 
-        mFODAnimation.hideFODanimation();
+        mHandler.post(() -> mFODAnimation.hideFODanimation());
         return false;
     }
 
@@ -610,97 +610,4 @@ public class FODCircleView extends ImageView {
             mHandler.post(() -> updatePosition());
         }
     };
-}
-
-class FODAnimation extends ImageView {
-
-    private Context mContext;
-    private int mAnimationPositionY;
-    private LayoutInflater mInflater;
-    private WindowManager mWindowManager;
-    private boolean mShowing = false;
-    private boolean mIsKeyguard;
-    private AnimationDrawable recognizingAnim;
-    private final WindowManager.LayoutParams mAnimParams = new WindowManager.LayoutParams();
-
-    private int mSelectedAnim;
-    private final int[] ANIMATION_STYLES = {
-        R.drawable.fod_miui_normal_recognizing_anim,
-        R.drawable.fod_miui_aod_recognizing_anim,
-        R.drawable.fod_miui_light_recognizing_anim,
-        R.drawable.fod_miui_pop_recognizing_anim,
-        R.drawable.fod_miui_pulse_recognizing_anim,
-        R.drawable.fod_miui_pulse_recognizing_white_anim,
-        R.drawable.fod_miui_rhythm_recognizing_anim,
-        R.drawable.fod_op_cosmos_recognizing_anim,
-        R.drawable.fod_op_mclaren_recognizing_anim,
-        R.drawable.fod_op_stripe_recognizing_anim,
-        R.drawable.fod_op_wave_recognizing_anim,
-        R.drawable.fod_pureview_dna_recognizing_anim,
-        R.drawable.fod_pureview_future_recognizing_anim,
-        R.drawable.fod_pureview_halo_ring_recognizing_anim,
-        R.drawable.fod_pureview_molecular_recognizing_anim
-    };
-
-    public FODAnimation(Context context, int mPositionX, int mPositionY) {
-        super(context);
-
-        mContext = context;
-        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mWindowManager = mContext.getSystemService(WindowManager.class);
-
-        mAnimParams.height = mContext.getResources().getDimensionPixelSize(R.dimen.fod_animation_size);
-        mAnimParams.width = mContext.getResources().getDimensionPixelSize(R.dimen.fod_animation_size);
-
-        mAnimationPositionY = (int) Math.round(mPositionY - (mContext.getResources().getDimensionPixelSize(R.dimen.fod_animation_size) / 2));
-
-        mAnimParams.format = PixelFormat.TRANSLUCENT;
-        mAnimParams.type = WindowManager.LayoutParams.TYPE_VOLUME_OVERLAY; // it must be behind FOD icon
-        mAnimParams.flags =  WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-        mAnimParams.gravity = Gravity.TOP | Gravity.CENTER;
-        mAnimParams.y = mAnimationPositionY;
-
-        this.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        update();
-    }
-
-    public void update() {
-        mSelectedAnim = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.FOD_ANIM, 0);
-
-        this.setBackgroundResource(ANIMATION_STYLES[mSelectedAnim]);
-        recognizingAnim = (AnimationDrawable) this.getBackground();
-    }
-
-    public void updateParams(int mDreamingOffsetY) {
-        mAnimationPositionY = (int) Math.round(mDreamingOffsetY - (mContext.getResources().getDimensionPixelSize(R.dimen.fod_animation_size) / 2));
-        mAnimParams.y = mAnimationPositionY;
-    }
-
-    public void setAnimationKeyguard(boolean state) {
-        mIsKeyguard = state;
-    }
-
-    public void showFODanimation() {
-        if (mAnimParams != null && !mShowing && mIsKeyguard) {
-            mShowing = true;
-            mWindowManager.addView(this, mAnimParams);
-            recognizingAnim.start();
-        }
-    }
-
-    public void hideFODanimation() {
-        if (mShowing) {
-            mShowing = false;
-            if (recognizingAnim != null) {
-                this.clearAnimation();
-                recognizingAnim.stop();
-                recognizingAnim.selectDrawable(0);
-            }
-            if (this.getWindowToken() != null) {
-                mWindowManager.removeView(this);
-            }
-        }
-    }
 }
