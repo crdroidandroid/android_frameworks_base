@@ -64,4 +64,5 @@
 
     <!-- Recognizing fingerprint animation -->
     <dimen name="fod_animation_size">280dp</dimen>
+    <dimen name="fod_animation_offset">0dp</dimen>
 </resources>
