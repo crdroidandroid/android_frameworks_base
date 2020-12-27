@@ -69,4 +69,7 @@
 
     <!-- Default fod pressed color -->
     <integer name="config_fod_pressed_color">1</integer>
+
+    <!-- Default value for FOD animation package resources -->
+    <string name="config_fodAnimationPackage" translatable="false">com.crdroid.fod.animations</string>
 </resources>
