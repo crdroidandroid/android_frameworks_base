@@ -377,7 +377,7 @@ class NotificationShadeDepthController @Inject constructor(
 
     private fun updateShadeBlur() {
         var newBlur = 0
-        if (isOnKeyguardNotDismissing()) {
+        if (isOnKeyguardNotDismissing() || isOnKeyguardDismissingAndSecure()) {
             newBlur = blurUtils.blurRadiusOfRatio(shadeExpansion)
         }
         shadeSpring.animateTo(newBlur)
@@ -396,6 +396,10 @@ class NotificationShadeDepthController @Inject constructor(
         val state = statusBarStateController.state
         return (state == StatusBarState.SHADE || state == StatusBarState.SHADE_LOCKED) &&
                 !keyguardStateController.isKeyguardFadingAway
+    }
+
+    private fun isOnKeyguardDismissingAndSecure(): Boolean {
+        return keyguardStateController.isKeyguardFadingAway && keyguardStateController.isMethodSecure()
     }
 
     fun updateGlobalDialogVisibility(visibility: Float, dialogView: View?) {
