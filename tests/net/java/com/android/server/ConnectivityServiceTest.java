@@ -4465,7 +4465,7 @@ public class ConnectivityServiceTest {
     @Test
     public void testGetCaptivePortalServerUrl() throws Exception {
         String url = mCm.getCaptivePortalServerUrl();
-        assertEquals("http://connectivitycheck.gstatic.com/generate_204", url);
+        assertEquals("http://connectivitycheck.grapheneos.network/generate_204", url);
     }
 
     private static class TestNetworkPinner extends NetworkPinner {
