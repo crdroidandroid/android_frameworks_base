@@ -234,6 +234,7 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
     private final Runnable mFailsafeRunnable = this::onFailsafe;
 
     private boolean mIsLongSwipeEnabled;
+    private boolean mBackArrowVisibility;
 
     private DynamicAnimation.OnAnimationEndListener mSetGoneEndListener
             = new DynamicAnimation.OnAnimationEndListener() {
@@ -442,6 +443,11 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
     }
 
     @Override
+    public void setBackArrowVisibility(boolean backArrowVisibility) {
+        mBackArrowVisibility = backArrowVisibility;
+    }
+
+    @Override
     public void setLongSwipeEnabled(boolean enabled) {
         mLongSwipeThreshold = enabled ? MathUtils.min(
                 mDisplaySize.x * 0.5f, mLayoutParams.width * 2.5f) : 0.0f;
@@ -495,7 +501,7 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
                 resetOnDown();
                 mStartX = event.getX();
                 mStartY = event.getY();
-                setVisibility(VISIBLE);
+                setVisibility(mBackArrowVisibility ? VISIBLE : INVISIBLE);
                 updatePosition(event.getY());
                 mRegionSamplingHelper.start(mSamplingRect);
                 mWindowManager.updateViewLayout(this, mLayoutParams);
