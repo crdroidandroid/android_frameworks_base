@@ -163,6 +163,8 @@ constructor(
     private var triggerLongSwipe = false
     private var isLongSwipeEnabled = false
 
+    private var backArrowVisibility = true
+
     internal enum class GestureState {
         /* Arrow is off the screen and invisible */
         GONE,
@@ -663,6 +665,10 @@ constructor(
         setTriggerLongSwipe(isLongSwipeEnabled && triggerLongSwipe)
     }
 
+    override fun setBackArrowVisibility(enabled: Boolean) {
+        backArrowVisibility = enabled
+    }
+
     private fun setTriggerLongSwipe(enabled: Boolean) {
         if (triggerLongSwipe != enabled) {
             triggerLongSwipe = enabled
@@ -938,7 +944,7 @@ constructor(
                 mView.isVisible = false
             }
             GestureState.ENTRY -> {
-                mView.isVisible = true
+                mView.isVisible = backArrowVisibility
 
                 updateRestingArrowDimens()
                 gestureEntryTime = systemClock.uptimeMillis()
