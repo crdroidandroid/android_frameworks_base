@@ -188,6 +188,7 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
      * The current translation of the arrow
      */
     private float mCurrentTranslation;
+    private boolean mBackArrowVisibility;
     /**
      * Where the arrow will be in the resting position.
      */
@@ -407,6 +408,11 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
     }
 
     @Override
+    public void setBackArrowVisibility(boolean backArrowVisibility) {
+        mBackArrowVisibility = backArrowVisibility;
+    }
+
+    @Override
     public void setLongSwipeEnabled(boolean enabled) {
         mLongSwipeThreshold = enabled ? MathUtils.min(
                 mDisplaySize.x * 0.5f, mLayoutParams.width * 2.5f) : 0.0f;
@@ -460,7 +466,7 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
                 resetOnDown();
                 mStartX = event.getX();
                 mStartY = event.getY();
-                setVisibility(VISIBLE);
+                setVisibility(mBackArrowVisibility ? VISIBLE : INVISIBLE);
                 updatePosition(event.getY());
                 mRegionSamplingHelper.start(mSamplingRect);
                 mWindowManager.updateViewLayout(this, mLayoutParams);
