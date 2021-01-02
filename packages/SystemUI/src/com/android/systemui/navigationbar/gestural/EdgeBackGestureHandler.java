@@ -343,6 +343,8 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
     private final NotificationShadeWindowController mNotificationShadeWindowController;
     private final TopUiController mTopUiController;
 
+    private boolean mIsBackGestureArrowEnabled;
+
     private final NavigationEdgeBackPlugin.BackCallback mBackCallback =
             new NavigationEdgeBackPlugin.BackCallback() {
                 @Override
@@ -605,6 +607,7 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
         final boolean previousForcedVisible = mIsButtonForcedVisible;
         mIsButtonForcedVisible =
                 mGestureNavigationSettingsObserver.areNavigationButtonForcedVisible();
+        mIsBackGestureArrowEnabled = mGestureNavigationSettingsObserver.getBackArrowGesture();
         // Update this before calling mButtonForcedVisibleCallback since NavigationBar will relayout
         // and query isHandlingGestures() as a part of the callback
         mIsBackGestureAllowed = !mIsButtonForcedVisible;
@@ -1312,6 +1315,7 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
                     mLastDownEventDisplayId = ev.getDisplayId();
                 } else {
                     mEdgeBackPlugin.setIsLeftPanel(mIsOnLeftEdge);
+                    mEdgeBackPlugin.setBackArrowVisibility(mIsBackGestureArrowEnabled);
                     mEdgeBackPlugin.onMotionEvent(ev);
                 }
                 dispatchToBackAnimation(ev);
