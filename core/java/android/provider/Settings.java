@@ -9499,6 +9499,12 @@ public final class Settings {
         public static final String GESTURE_NAVBAR_LENGTH = "gesture_navbar_length";
 
         /**
+         * Whether to show or hide the arrow for back gesture
+         * @hide
+         */
+        public static final String SHOW_BACK_ARROW_GESTURE = "show_back_arrow_gesture";
+
+        /**
          * Current provider of proximity-based sharing services.
          * Default value in @string/config_defaultNearbySharingComponent.
          * No VALIDATOR as this setting will not be backed up.
