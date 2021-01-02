@@ -48,6 +48,9 @@ public interface NavigationEdgeBackPlugin extends Plugin {
     /** Specifies if the long swipe should be enabled or not. */
     void setLongSwipeEnabled(boolean enabled);
 
+    /** Specifies if the arrow animation is shown for back gesture. */
+    void setBackArrowVisibility(boolean backArrowVisibility);
+
     /** Sets the base LayoutParams for the UI. */
     void setLayoutParams(WindowManager.LayoutParams layoutParams);
 
