@@ -185,6 +185,8 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
     private int mSysUiFlags;
     private float mLongSwipeWidth;
 
+    private boolean mIsBackGestureArrowEnabled;
+
     private boolean mBlockedGesturalNavigation;
 
     private final GestureNavigationSettingsObserver mGestureNavigationSettingsObserver;
@@ -264,6 +266,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
         mEdgeWidthRight = mGestureNavigationSettingsObserver.getRightSensitivity(res);
         mIsBackGestureAllowed =
                 !mGestureNavigationSettingsObserver.areNavigationButtonForcedVisible();
+        mIsBackGestureArrowEnabled = mGestureNavigationSettingsObserver.getBackArrowGesture();
 
         final DisplayMetrics dm = res.getDisplayMetrics();
         final float defaultGestureHeight = res.getDimension(
@@ -537,6 +540,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
                     && isWithinTouchRegion((int) ev.getX(), (int) ev.getY());
             if (mAllowGesture) {
                 mEdgeBackPlugin.setIsLeftPanel(mIsOnLeftEdge);
+                mEdgeBackPlugin.setBackArrowVisibility(mIsBackGestureArrowEnabled);
                 mEdgeBackPlugin.onMotionEvent(ev);
             }
             if (mLogGesture) {
