@@ -175,6 +175,7 @@
     <!-- App name -->
     <TextView
         android:id="@+id/app_name"
+        android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Notification.Info"
         android:textColor="@color/media_primary_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
