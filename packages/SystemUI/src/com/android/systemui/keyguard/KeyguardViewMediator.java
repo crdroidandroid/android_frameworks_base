@@ -38,7 +38,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
 import android.hardware.biometrics.BiometricSourceType;
 import android.media.AudioAttributes;
@@ -76,6 +75,7 @@ import com.android.internal.policy.IKeyguardDrawnCallback;
 import com.android.internal.policy.IKeyguardExitCallback;
 import com.android.internal.policy.IKeyguardStateCallback;
 import com.android.internal.util.LatencyTracker;
+import com.android.internal.util.crdroid.FodUtils;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardConstants;
 import com.android.keyguard.KeyguardDisplayManager;
@@ -102,7 +102,6 @@ import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.util.DeviceConfigProxy;
 import com.android.systemui.util.InjectionInflationController;
 
-import lineageos.app.LineageContextConstants;
 import lineageos.app.Profile;
 import lineageos.app.ProfileManager;
 
@@ -757,8 +756,7 @@ public class KeyguardViewMediator extends SystemUI implements Dumpable {
                 QuickStepContract.isGesturalMode(navigationModeController.addListener(mode -> {
                     mInGestureNavigationMode = QuickStepContract.isGesturalMode(mode);
                 }));
-        PackageManager packageManager = context.getPackageManager();
-        mHasFod = packageManager.hasSystemFeature(LineageContextConstants.Features.FOD);
+        mHasFod = FodUtils.hasFodSupport(context);
     }
 
     public void userActivity() {
