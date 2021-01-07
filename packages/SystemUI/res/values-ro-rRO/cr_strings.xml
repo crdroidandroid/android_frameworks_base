@@ -227,8 +227,8 @@
     <string name="omnijaws_service_last_update">Ultima actualizare:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;este blocat.</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock.</string>
-    <string name="applock_face">&#160;or your face to unlock.</string>
+    <string name="applock_fingerprint_face">, amprentă sau față pentru deblocare.</string>
+    <string name="applock_face">&#160;sau fața dvs. de deblocat.</string>
     <string name="applock_fingerprint">&#160;sau amprenta pentru deblocare.</string>
     <string name="applock_locked_notification">Aplicația este blocată</string>
     <!-- DC Dimming -->

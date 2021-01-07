@@ -230,7 +230,7 @@
     <string name="applock_fingerprint">&#160;或您的指纹来解锁</string>
     <string name="applock_locked_notification">程序已锁定</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC调光</string>
+    <string name="quick_settings_dc_dimming_label">DC 调光</string>
     <string name="quick_settings_dc_brightness_mode">亮度模式</string>
     <string name="quick_settings_dc_full_auto">自动模式</string>
     <!-- Language toggle tile -->
