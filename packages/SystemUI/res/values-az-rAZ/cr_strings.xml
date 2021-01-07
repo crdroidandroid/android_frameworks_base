@@ -229,12 +229,12 @@
     <string name="applock_fingerprint_face">, barmaq izi və ya üz kilidi ile kilidi açmaq.</string>
     <string name="applock_face">&#160;və ya kilidi açmaq üçün sənin üzün.</string>
     <string name="applock_fingerprint">Kilidi açmaq üçün &#160;və ya sənin barmaq izin.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_locked_notification">Proqram kilidləndi</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_dimming_label">DC Qaraltması</string>
+    <string name="quick_settings_dc_brightness_mode">Parlaqlıq rejimi</string>
+    <string name="quick_settings_dc_full_auto">Avtomatik mod</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Dil</string>
+    <string name="quick_settings_locale_more_locales_toast">Keçid funksionallığını aktivləşdirmək üçün xahiş edirik birdən çox dil quraşdırın</string>
 </resources>
