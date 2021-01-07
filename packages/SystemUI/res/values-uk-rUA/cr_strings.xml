@@ -16,73 +16,73 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb/s</string>
-    <string name="megabitspersecond_short">Mb/s</string>
-    <string name="gigabitspersecond_short">Gb/s</string>
-    <string name="kilobytespersecond_short">kB/s</string>
-    <string name="megabytespersecond_short">MB/s</string>
-    <string name="gigabytespersecond_short">GB/s</string>
+    <string name="kilobitspersecond_short">кб/с</string>
+    <string name="megabitspersecond_short">Мб/с</string>
+    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="kilobytespersecond_short">кБ/с</string>
+    <string name="megabytespersecond_short">МБ/с</string>
+    <string name="gigabytespersecond_short">ГБ/с</string>
     <!-- Omnijaws Weather -->
-    <string name="omnijaws_service_error">Error</string>
-    <string name="omnijaws_service_unkown">No weather data</string>
-    <string name="omnijaws_service_error_long">Error loading weather data</string>
-    <string name="omnijaws_service_disabled">Service is disabled</string>
-    <string name="omnijaws_detail_header">Weather</string>
-    <string name="omnijaws_label_default">Weather</string>
-    <string name="omnijaws_current_text">Now</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
-    <string name="omnijaws_service_last_update">Last update:</string>
+    <string name="omnijaws_service_error">Помилка</string>
+    <string name="omnijaws_service_unkown">Немає даних про погоду</string>
+    <string name="omnijaws_service_error_long">Помилка завантаження даних про погоду</string>
+    <string name="omnijaws_service_disabled">Службу вимкнено</string>
+    <string name="omnijaws_detail_header">Погода</string>
+    <string name="omnijaws_label_default">Погода</string>
+    <string name="omnijaws_current_text">Зараз</string>
+    <string name="omnijaws_package_not_available">OmniJaws недоступний</string>
+    <string name="omnijaws_service_last_update">Останнє оновлення:</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">Постійно активний дисплей</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">Змінити картку для передачі даних</string>
+    <string name="qs_data_switch_changed_1">Використання SIM 1 для передачі даних</string>
+    <string name="qs_data_switch_changed_2">Використання SIM 2 для передачі даних</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Швидке заряджання (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> до кінця зарядки)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • Швидке заряджання</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Швидке заряджання (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> до закінчення зарядки)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="Percentage">%s</xliff:g> • Швидке заряджання</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <string name="quick_settings_cpuinfo_label">Інформація про процесор</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
+    <string name="quick_settings_fpsinfo_label">Інформація про FPS</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Ігровий режим відключено в налаштуваннях</string>
+    <string name="quick_settings_gaming_mode_label">Ігровий режим</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">Розумні пікселі</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Автоматичне увімкнення розумних пікселів</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">Перезавантаження</string>
+    <string name="quick_settings_reboot_recovery_label">Режим відновлення</string>
+    <string name="quick_settings_poweroff_label">Вимкнути</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">Мелодії</string>
+    <string name="quick_settings_sound_ring">Кільце</string>
+    <string name="quick_settings_sound_vibrate">Вібрація</string>
+    <string name="quick_settings_sound_dnd">Не турбувати</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">Компас</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
-    <string name="quick_settings_compass_SE">SE</string>
-    <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="quick_settings_compass_init">Ініціалізація\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Компас вимк.</string>
+    <string name="accessibility_quick_settings_compass_on">Компас увімк.</string>
+    <string name="quick_settings_compass_N">Пн.</string>
+    <string name="quick_settings_compass_NE">Пн. Сх.</string>
+    <string name="quick_settings_compass_E">Сх.</string>
+    <string name="quick_settings_compass_SE">Пд. Сх.</string>
+    <string name="quick_settings_compass_S">Пд.</string>
+    <string name="quick_settings_compass_SW">Пд. Зх.</string>
+    <string name="quick_settings_compass_W">Зх.</string>
+    <string name="quick_settings_compass_NW">Пн. Зх.</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Мова</string>
+    <string name="quick_settings_locale_more_locales_toast">Будь ласка, налаштуйте кілька мов, щоб увімкнути функцію перемикання</string>
     <!-- Time displayed on typographic clock face, which displays the time in words.
              Example:
 
@@ -97,85 +97,122 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="few"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="many"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
+        <item quantity="few"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
+        <item quantity="many"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
-    <string name="text_clock_h_one">One</string>
-    <string name="text_clock_h_two">Two</string>
-    <string name="text_clock_h_three">Three</string>
-    <string name="text_clock_h_four">Four</string>
-    <string name="text_clock_h_five">Five</string>
-    <string name="text_clock_h_six">Six</string>
-    <string name="text_clock_h_seven">Seven</string>
-    <string name="text_clock_h_eight">Eight</string>
-    <string name="text_clock_h_nine">Nine</string>
-    <string name="text_clock_h_ten">Ten</string>
-    <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_one">Перша</string>
+    <string name="text_clock_h_two">Друга</string>
+    <string name="text_clock_h_three">Третя</string>
+    <string name="text_clock_h_four">Четверта</string>
+    <string name="text_clock_h_five">П’ята</string>
+    <string name="text_clock_h_six">Шоста</string>
+    <string name="text_clock_h_seven">Сьома</string>
+    <string name="text_clock_h_eight">Восьма</string>
+    <string name="text_clock_h_nine">Дев’ята</string>
+    <string name="text_clock_h_ten">Десята</string>
+    <string name="text_clock_h_eleven">Одинадцята</string>
+    <string name="text_clock_h_twelve">Дванадцята</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
-    <string name="text_clock_m_ten">Ten</string>
-    <string name="text_clock_m_eleven">Eleven</string>
-    <string name="text_clock_m_twelve">Twelve</string>
-    <string name="text_clock_m_thirteen">Thirteen</string>
-    <string name="text_clock_m_fourteen">Fourteen</string>
-    <string name="text_clock_m_fifteen">Fifteen</string>
-    <string name="text_clock_m_sixteen">Sixteen</string>
-    <string name="text_clock_m_seventeen">Seventeen</string>
-    <string name="text_clock_m_eighteen">Eighteen</string>
-    <string name="text_clock_m_nineteen">Nineteen</string>
-    <string name="text_clock_m_twenty">Twenty</string>
-    <string name="text_clock_m_twenty_one">Twenty One</string>
-    <string name="text_clock_m_twenty_two">Twenty Two</string>
-    <string name="text_clock_m_twenty_three">Twenty Three</string>
-    <string name="text_clock_m_twenty_four">Twenty Four</string>
-    <string name="text_clock_m_twenty_five">Twenty Five</string>
-    <string name="text_clock_m_twenty_six">Twenty Six</string>
-    <string name="text_clock_m_twenty_seven">Twenty Seven</string>
-    <string name="text_clock_m_twenty_eight">Twenty Eight</string>
-    <string name="text_clock_m_twenty_nine">Twenty Nine</string>
-    <string name="text_clock_m_thirty">Thirty</string>
-    <string name="text_clock_m_thirty_one">Thirty One</string>
-    <string name="text_clock_m_thirty_two">Thirty Two</string>
-    <string name="text_clock_m_thirty_three">Thirty Three</string>
-    <string name="text_clock_m_thirty_four">Thirty Four</string>
-    <string name="text_clock_m_thirty_five">Thirty Five</string>
-    <string name="text_clock_m_thirty_six">Thirty Six</string>
-    <string name="text_clock_m_thirty_seven">Thirty Seven</string>
-    <string name="text_clock_m_thirty_eight">Thirty Eight</string>
-    <string name="text_clock_m_thirty_nine">Thirty Nine</string>
-    <string name="text_clock_m_forty">Forty</string>
-    <string name="text_clock_m_forty_one">Forty One</string>
-    <string name="text_clock_m_forty_two">Forty Two</string>
-    <string name="text_clock_m_forty_three">Forty Three</string>
-    <string name="text_clock_m_forty_four">Forty Four</string>
-    <string name="text_clock_m_forty_five">Forty Five</string>
-    <string name="text_clock_m_forty_six">Forty Six</string>
-    <string name="text_clock_m_forty_seven">Forty Seven</string>
-    <string name="text_clock_m_forty_eight">Forty Eight</string>
-    <string name="text_clock_m_forty_nine">Forty Nine</string>
-    <string name="text_clock_m_fifty">Fifty</string>
-    <string name="text_clock_m_fifty_one">Fifty One</string>
-    <string name="text_clock_m_fifty_two">Fifty Two</string>
-    <string name="text_clock_m_fifty_three">Fifty Three</string>
-    <string name="text_clock_m_fifty_four">Fifty Four</string>
-    <string name="text_clock_m_fifty_five">Fifty Five</string>
-    <string name="text_clock_m_fifty_six">Fifty Six</string>
-    <string name="text_clock_m_fifty_seven">Fifty Seven</string>
-    <string name="text_clock_m_fifty_eight">Fifty Eight</string>
-    <string name="text_clock_m_fifty_nine">Fifty Nine</string>
+    <string name="text_clock_m_zero">година
+рівно</string>
+    <string name="text_clock_m_one">Одна</string>
+    <string name="text_clock_m_two">Дві</string>
+    <string name="text_clock_m_three">Три</string>
+    <string name="text_clock_m_four">Чотири</string>
+    <string name="text_clock_m_five">П\'ять</string>
+    <string name="text_clock_m_six">Шість</string>
+    <string name="text_clock_m_seven">Сім</string>
+    <string name="text_clock_m_eight">Вісім</string>
+    <string name="text_clock_m_nine">Дев\'ять</string>
+    <string name="text_clock_m_ten">Десять</string>
+    <string name="text_clock_m_eleven">Одинадцять</string>
+    <string name="text_clock_m_twelve">Дванадцять</string>
+    <string name="text_clock_m_thirteen">Тринадцять</string>
+    <string name="text_clock_m_fourteen">Чотирнадцять</string>
+    <string name="text_clock_m_fifteen">П\'ятнадцять</string>
+    <string name="text_clock_m_sixteen">Шістнадцять</string>
+    <string name="text_clock_m_seventeen">Сімнадцять</string>
+    <string name="text_clock_m_eighteen">Вісімнадцять</string>
+    <string name="text_clock_m_nineteen">Дев\'ятнадцять</string>
+    <string name="text_clock_m_twenty">Двадцять</string>
+    <string name="text_clock_m_twenty_one">Двадцять
+одна</string>
+    <string name="text_clock_m_twenty_two">Двадцять
+дві</string>
+    <string name="text_clock_m_twenty_three">Двадцять
+три</string>
+    <string name="text_clock_m_twenty_four">Двадцять
+чотири</string>
+    <string name="text_clock_m_twenty_five">Двадцять
+п\'ять</string>
+    <string name="text_clock_m_twenty_six">Двадцять
+шість</string>
+    <string name="text_clock_m_twenty_seven">Двадцять
+сім</string>
+    <string name="text_clock_m_twenty_eight">Двадцять
+вісім</string>
+    <string name="text_clock_m_twenty_nine">Двадцять
+дев\'ять</string>
+    <string name="text_clock_m_thirty">Тридцять</string>
+    <string name="text_clock_m_thirty_one">Тридцять
+одна</string>
+    <string name="text_clock_m_thirty_two">Тридцять
+дві</string>
+    <string name="text_clock_m_thirty_three">Тридцять
+три</string>
+    <string name="text_clock_m_thirty_four">Тридцять
+чотири</string>
+    <string name="text_clock_m_thirty_five">Тридцять
+п\'ять</string>
+    <string name="text_clock_m_thirty_six">Тридцять
+шість</string>
+    <string name="text_clock_m_thirty_seven">Тридцять
+сім</string>
+    <string name="text_clock_m_thirty_eight">Тридцять
+вісім</string>
+    <string name="text_clock_m_thirty_nine">Тридцять
+дев\'ять</string>
+    <string name="text_clock_m_forty">Сорок</string>
+    <string name="text_clock_m_forty_one">Сорок
+одна</string>
+    <string name="text_clock_m_forty_two">Сорок
+дві</string>
+    <string name="text_clock_m_forty_three">Сорок
+три</string>
+    <string name="text_clock_m_forty_four">Сорок
+чотири</string>
+    <string name="text_clock_m_forty_five">Сорок
+п\'ять</string>
+    <string name="text_clock_m_forty_six">Сорок
+шість</string>
+    <string name="text_clock_m_forty_seven">Сорок
+сім</string>
+    <string name="text_clock_m_forty_eight">Сорок
+вісім</string>
+    <string name="text_clock_m_forty_nine">Сорок
+дев\'ять</string>
+    <string name="text_clock_m_fifty">П\'ятдесят</string>
+    <string name="text_clock_m_fifty_one">П\'ятдесят
+одна</string>
+    <string name="text_clock_m_fifty_two">П\'ятдесят
+дві</string>
+    <string name="text_clock_m_fifty_three">П\'ятдесят
+три</string>
+    <string name="text_clock_m_fifty_four">П\'ятдесят
+чотири</string>
+    <string name="text_clock_m_fifty_five">П\'ятдесят
+п\'ять</string>
+    <string name="text_clock_m_fifty_six">П\'ятдесят
+шість</string>
+    <string name="text_clock_m_fifty_seven">П\'ятдесят
+сім</string>
+    <string name="text_clock_m_fifty_eight">П\'ятдесят
+вісім</string>
+    <string name="text_clock_m_fifty_nine">П\'ятдесят
+дев\'ять</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Tux clock -->
