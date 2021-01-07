@@ -16,10 +16,11 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Memalsukan tanda tangan paket</string>
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">Izinkan aplikasi untuk menyamar menjadi aplikasi lain.
+Aplikasi jahat mungkin dapat menggunakan ini untuk mengakses data aplikasi pribadi. Penggunaan yang sah termasuk emulator menyamar menjadi apa yang di samar. Berikan izin ini dengan hati-hati!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_fake_package_signature">Spoof package signature</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
@@ -30,11 +31,11 @@
     <!-- Long-press kill application -->
     <string name="app_killed_message">Application killed</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">Mode permainan</string>
+    <string name="gaming_mode_notification_title">Mode permainan diaktifkan</string>
+    <string name="gaming_mode_notification_content">Tekan untuk mematikan mode permainan</string>
+    <string name="gaming_mode_enabled_toast">Mode permainan dihidupkan</string>
+    <string name="gaming_mode_disabled_toast">Mode permainan dimatikan</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">Tekan dan tahan tombol power untuk membuka kunci</string>
 </resources>
