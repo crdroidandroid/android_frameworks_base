@@ -16,10 +16,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">ᱥᱯᱩᱯᱷ ᱯᱮᱠᱮᱡᱽ ᱥᱩᱦᱤ</string>
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">ᱚᱞᱜᱟ ᱮᱯᱯ ᱞᱮᱠᱷᱟ ᱛᱮ ᱱᱚᱶᱟ ᱮᱯᱯ ᱵᱩᱡᱷᱟᱹᱣᱜ ᱯᱨᱚᱛᱤᱛ ᱚᱜᱼᱟ ᱾ ᱢᱤᱥᱥᱮᱞᱟᱱᱤᱭᱟᱹᱥ ᱮᱯᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱚ ᱟᱢᱟᱜᱽ ᱯᱨᱭᱣᱮᱴ ᱰᱟᱴᱟ ᱠᱚ ᱟᱫᱮᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾ ᱞᱮᱞᱡᱤᱴᱤᱢᱮᱴ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱠᱚ ᱫᱚ ᱮᱢᱭᱩᱞᱮᱴᱚᱨ ᱠᱚ ᱮᱢᱟᱱ ᱛᱟᱦᱮᱸᱱᱟ ᱾ ᱥᱟᱵᱫᱷᱟᱱ ᱛᱮ ᱱᱚᱶᱟ ᱦᱚᱠ ᱮᱢᱚᱜᱽ ᱢᱮᱸ ᱾</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_fake_package_signature">Spoof package signature</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
@@ -30,11 +30,11 @@
     <!-- Long-press kill application -->
     <string name="app_killed_message">Application killed</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">ᱜᱮᱢᱤᱝ ᱚᱵᱚᱥᱛᱟ</string>
+    <string name="gaming_mode_notification_title">ᱠᱷᱮᱞ ᱢᱳᱰ ᱮᱢ ᱪᱷᱚᱮᱱᱟ</string>
+    <string name="gaming_mode_notification_content">ᱠᱷᱮᱞ ᱢᱳᱰ ᱵᱚᱸᱫ ᱞᱟᱹᱜᱤᱫᱽ ᱚᱛᱟᱭ ᱢᱮᱸ</string>
+    <string name="gaming_mode_enabled_toast">ᱠᱷᱮᱞ ᱢᱳᱰ ᱮᱢ ᱪᱚ</string>
+    <string name="gaming_mode_disabled_toast">ᱠᱷᱮᱞ ᱢᱳᱰ ᱵᱚᱸᱫᱽ</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">ᱯᱟᱣᱟᱹᱨ ᱢᱳᱰ ᱚᱛᱟ ᱛᱷᱤᱨ ᱢᱮᱸ ᱵᱚᱸᱫᱽ ᱞᱟᱹᱜᱤᱫᱽ</string>
 </resources>
