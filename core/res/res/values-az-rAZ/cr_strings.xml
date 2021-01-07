@@ -30,28 +30,28 @@
     <string name="animation_grow_shrink_bottom">Böyüt (Aşağı)</string>
     <string name="animation_grow_shrink_left">Böyüt (Sol)</string>
     <string name="animation_grow_shrink_right">Böyüt (Sağ)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_random">Təsadüfi</string>
+    <string name="action_null">Boş</string>
     <string name="animation_ethans">Ethans</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">Çökmə jurnal URL-sini kopyala</string>
+    <string name="url_copy_success">URL uğurla kopyalandı</string>
+    <string name="url_copy_failed">Jurnalı dogbin-ə yükləyərkən xəta baş verdi</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">Kilidi açmaq üçün güc düyməsinə basıb saxlayın</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">Oyun rejimi</string>
+    <string name="gaming_mode_notification_title">Oyun rejimi aktivdir</string>
+    <string name="gaming_mode_notification_content">Oyun rejimini bağlamaq üçün toxunun</string>
+    <string name="gaming_mode_enabled_toast">Oyun rejimi açıldı</string>
+    <string name="gaming_mode_disabled_toast">Oyun rejimi bağlanıldı</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Saxta paket imzası</string>
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">Proqrama başqa bir proqram kimi görünməyə və davranmağa icazə verir. Zərərli proqramlar bunu istifadə edərək şəxsi məlumatlarınızı əldə edə bilərlər. Bu icazəni verərkən ehtiyatlı olun!</string>
     <!-- Screen recorder -->
-    <string name="global_action_screenrecord">Screenrecord</string>
+    <string name="global_action_screenrecord">Ekran qeydi</string>
     <!-- Clipboard access toast -->
     <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
     <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
