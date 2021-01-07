@@ -45,8 +45,8 @@
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Φόρτιση (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> μέχρι την πλήρη φόρτιση)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Φόρτιση</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Εξαιρετικά Γρήγορη Φόρτιση (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> μέχρι την πλήρη φόρτιση)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Εξαιρετικά Γρήγορη Φόρτιση</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Πληροφορίες CPU</string>
     <!-- FPS Info tile -->
@@ -55,7 +55,7 @@
     <string name="gaming_mode_not_enabled">Το Gaming mode είναι ανενεργό στις ρυθμίσεις</string>
     <string name="quick_settings_gaming_mode_label">Gaming mode</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
+    <string name="quick_settings_smart_pixels">Έξυπνα Πίξελ</string>
     <string name="quick_settings_smart_pixels_on_power_save">Αυτόματη ενεργοποίηση smart pixels</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
     <string name="quick_settings_reboot_label">Επανεκκίνηση</string>
