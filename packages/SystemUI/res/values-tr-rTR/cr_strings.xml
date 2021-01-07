@@ -116,7 +116,7 @@ Bir</string>
     <string name="text_clock_h_twelve">On
 İki</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
+    <string name="text_clock_m_zero">Saat</string>
     <string name="text_clock_m_one">Bir</string>
     <string name="text_clock_m_two">İki</string>
     <string name="text_clock_m_three">Üç</string>
