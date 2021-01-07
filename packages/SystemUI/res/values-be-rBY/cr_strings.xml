@@ -39,10 +39,10 @@
     <string name="qs_data_switch_changed_1">Выкарыстанне SIM 1 для перадачы дадзеных</string>
     <string name="qs_data_switch_changed_2">Выкарыстанне SIM 2 для перадачы дадзеных</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Хуткая зарадкаа (<xliff:g id="charging_time_left" example="4 гадзінны і 2 хвіліны">%s</xliff:g> да поўнай зарадкі)</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Хуткая зарадкаа (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> да поўнай зарадкі)</string>
     <string name="keyguard_plugged_in_dash_charging">Ідзе зарадка (<xliff:g id="Percentage">%s</xliff:g>)</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp зарадка • (<xliff:g id="charging_time_left" example="4 гадзінны і 2 хвіліны">%1$s</xliff:g> да поўнай зарадкі)</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp зарадка • (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> да поўнай зарадкі)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp зарадка</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
