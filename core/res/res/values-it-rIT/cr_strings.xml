@@ -16,10 +16,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Spoofing della firma del pacchetto</string>
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">Consente all\'applicazione di fingere di essere un\'app diversa. Le applicazioni dannose potrebbero essere in grado di utilizzarlo per accedere ai dati delle applicazioni private. Gli usi legittimi includono un emulatore che finge di essere ciò che emula. Concedi questo permesso con molta cautela!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_fake_package_signature">Spoof package signature</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
@@ -30,11 +30,11 @@
     <!-- Long-press kill application -->
     <string name="app_killed_message">Application killed</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">Modalità di gioco</string>
+    <string name="gaming_mode_notification_title">Modalità di gioco abilitata</string>
+    <string name="gaming_mode_notification_content">Tocca per disabilitare la modalità di gioco</string>
+    <string name="gaming_mode_enabled_toast">Modalità di gioco abilitata</string>
+    <string name="gaming_mode_disabled_toast">Modalità di gioco disabilitata</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">Tieni premuto e mantieni il tasto di accensione per sbloccare</string>
 </resources>
