@@ -19,7 +19,7 @@
     <string name="permlab_fakePackageSignature">Napodobit podpis balíčku</string>
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Umožňuje aplikaci předstírat, že je jinou aplikací. Škodlivé aplikace by mohly použít tuto možnost k přístupu k datům soukromých aplikací. Legitimně používá emulátor, který předstírá, že je to, co napodobuje. Udělujte toto oprávnění s opatrností!</string>
+    <string name="permdesc_fakePackageSignature">Umožňuje aplikaci předstírat, že je jinou aplikací. Škodlivé aplikace by mohly použít tuto možnost k\u00a0přístupu k\u00a0soukromým datům aplikací. Legitimní použití zahrnuje emulátor, který předstírá, že je to, co napodobuje. Udělujte toto oprávnění s\u00a0opatrností!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_fake_package_signature">Napodobit podpis balíčku</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
