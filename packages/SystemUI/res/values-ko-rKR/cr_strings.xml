@@ -263,10 +263,10 @@
     <string name="applock_fingerprint">&#160;또는 지문으로 잠금해제</string>
     <string name="applock_locked_notification">앱 잠김</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_dimming_label">DC 디밍</string>
+    <string name="quick_settings_dc_brightness_mode">밝기 모드</string>
+    <string name="quick_settings_dc_full_auto">자동 모드</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">언어</string>
+    <string name="quick_settings_locale_more_locales_toast">토글 기능을 활성화 하려면 다중 언어를 설정하시기 바랍니다</string>
 </resources>
