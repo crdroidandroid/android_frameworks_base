@@ -28,7 +28,7 @@
     <string name="permgrouprequest_fake_package_signature">Allow
         &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; to spoof package signature?</string>
     <!-- Long-press kill application -->
-    <string name="app_killed_message">Application killed</string>
+    <string name="app_killed_message">Applicazione terminata</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Modalità di gioco</string>
     <string name="gaming_mode_notification_title">Modalità di gioco abilitata</string>
