@@ -45,8 +45,8 @@
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp зарядка (<xliff:g id="charging_time_left" example="4 часа и 2 минуты">%1$s</xliff:g> до полной)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp зарядка</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Быстрая зарядка (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до конца)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Быстрая зарядка</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Информация о процессоре</string>
     <!-- FPS Info tile -->

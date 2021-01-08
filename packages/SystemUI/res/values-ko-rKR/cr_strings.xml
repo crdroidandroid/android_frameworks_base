@@ -45,8 +45,8 @@
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 급속 충전 중 (완전 충전까지 <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 남음)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • 급속 충전 중</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 급속 충전 중 (완전 충전까지 <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 남음)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • 급속 충전 중</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU 정보</string>
     <!-- FPS Info tile -->
@@ -81,8 +81,8 @@
     <string name="quick_settings_compass_W">서</string>
     <string name="quick_settings_compass_NW">북서</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">언어</string>
+    <string name="quick_settings_locale_more_locales_toast">토글 기능을 활성화 하려면 다중 언어를 설정하시기 바랍니다</string>
     <!-- Time displayed on typographic clock face, which displays the time in words.
              Example:
 
