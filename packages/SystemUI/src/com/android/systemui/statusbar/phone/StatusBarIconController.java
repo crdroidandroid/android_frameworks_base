@@ -138,6 +138,7 @@ public interface StatusBarIconController {
                 mDarkIconDispatcher.removeDarkReceiver((DarkReceiver) mGroup.getChildAt(i));
             }
             mGroup.removeAllViews();
+            Dependency.get(TunerService.class).removeTunable(this);
         }
 
         @Override
@@ -238,8 +239,6 @@ public interface StatusBarIconController {
                 // In case we miss the first onAttachedToWindow event
                 tracker.onViewAttachedToWindow(mGroup);
             }
-
-            Dependency.get(TunerService.class).addTunable(this, USE_OLD_MOBILETYPE);
         }
 
         public boolean isDemoable() {
@@ -314,6 +313,7 @@ public interface StatusBarIconController {
             StatusBarMobileView view = onCreateStatusBarMobileView(slot);
             view.applyMobileState(state);
             mGroup.addView(view, index, onCreateLayoutParams());
+            Dependency.get(TunerService.class).addTunable(this, USE_OLD_MOBILETYPE);
 
             if (mIsInDemoMode) {
                 mDemoStatusIcons.addMobileView(state);
@@ -346,6 +346,7 @@ public interface StatusBarIconController {
 
         protected void destroy() {
             mGroup.removeAllViews();
+            Dependency.get(TunerService.class).removeTunable(this);
         }
 
         protected void onIconExternal(int viewIndex, int height) {
