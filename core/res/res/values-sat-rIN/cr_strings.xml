@@ -21,14 +21,13 @@
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">ᱚᱞᱜᱟ ᱮᱯᱯ ᱞᱮᱠᱷᱟ ᱛᱮ ᱱᱚᱶᱟ ᱮᱯᱯ ᱵᱩᱡᱷᱟᱹᱣᱜ ᱯᱨᱚᱛᱤᱛ ᱚᱜᱼᱟ ᱾ ᱢᱤᱥᱥᱮᱞᱟᱱᱤᱭᱟᱹᱥ ᱮᱯᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱚ ᱟᱢᱟᱜᱽ ᱯᱨᱭᱣᱮᱴ ᱰᱟᱴᱟ ᱠᱚ ᱟᱫᱮᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾ ᱞᱮᱞᱡᱤᱴᱤᱢᱮᱴ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱠᱚ ᱫᱚ ᱮᱢᱭᱩᱞᱮᱴᱚᱨ ᱠᱚ ᱮᱢᱟᱱ ᱛᱟᱦᱮᱸᱱᱟ ᱾ ᱥᱟᱵᱫᱷᱟᱱ ᱛᱮ ᱱᱚᱶᱟ ᱦᱚᱠ ᱮᱢᱚᱜᱽ ᱢᱮᱸ ᱾</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgrouplab_fake_package_signature">Spoof package signature</string>
+    <string name="permgrouplab_fake_package_signature">ᱥᱯᱩᱯᱷ ᱯᱮᱠᱮᱡᱽ ᱥᱩᱦᱤ</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgroupdesc_fake_package_signature">allow to spoof package signature</string>
+    <string name="permgroupdesc_fake_package_signature">ᱥᱯᱩᱯᱷ ᱯᱮᱠᱮᱡᱽ ᱥᱩᱦᱤ ᱮᱢ ᱪᱷᱚ</string>
     <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
-    <string name="permgrouprequest_fake_package_signature">Allow
-        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; to spoof package signature?</string>
+    <string name="permgrouprequest_fake_package_signature">        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; ᱥᱯᱩᱯᱷ ᱯᱮᱠᱮᱡᱽ ᱥᱩᱦᱤ ᱛᱮ ᱮᱢ ᱪᱷᱚᱭᱟ ᱥᱮ?</string>
     <!-- Long-press kill application -->
-    <string name="app_killed_message">Application killed</string>
+    <string name="app_killed_message">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱜᱚᱡᱽ ᱦᱩᱭ</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">ᱜᱮᱢᱤᱝ ᱚᱵᱚᱥᱛᱟ</string>
     <string name="gaming_mode_notification_title">ᱠᱷᱮᱞ ᱢᱳᱰ ᱮᱢ ᱪᱷᱚᱮᱱᱟ</string>
