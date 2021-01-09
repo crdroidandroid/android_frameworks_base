@@ -82,7 +82,7 @@
     <string name="quick_settings_compass_NW">SZ</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Jazyk</string>
-    <string name="quick_settings_locale_more_locales_toast">Pro zapnutí funkce přepínání nastavte více jazyků</string>
+    <string name="quick_settings_locale_more_locales_toast">Chcete‑li povolit funkci přepínání, nakonfigurujte prosím více jazyků</string>
     <!-- Time displayed on typographic clock face, which displays the time in words.
              Example:
 
