@@ -21,13 +21,14 @@
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Дозволити додатку видавати себе за інший додаток. Шкідливі програми можуть використовувати це для доступу до приватних даних програми. Законне використання включає емулятор, яке видає себе за те що емулює. Дозволяйте це з обережністю!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgrouplab_fake_package_signature">Підробити підпис пакета</string>
+    <string name="permgrouplab_fake_package_signature">Підміна підпису додатка</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgroupdesc_fake_package_signature">дозволити підміняти підпис пакету</string>
+    <string name="permgroupdesc_fake_package_signature">дозволити підробити підпис пакета</string>
     <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
-    <string name="permgrouprequest_fake_package_signature">Дозволити підмінити підпис пакету?</string>
+    <string name="permgrouprequest_fake_package_signature">Дозволити
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; псувати підпис пакету?</string>
     <!-- Long-press kill application -->
-    <string name="app_killed_message">Додаток зупинено</string>
+    <string name="app_killed_message">Додаток закрито</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Ігровий режим</string>
     <string name="gaming_mode_notification_title">Ігровий режим увімкнено</string>
