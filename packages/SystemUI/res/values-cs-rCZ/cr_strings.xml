@@ -50,7 +50,7 @@
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Informace o\u00a0CPU</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">Informace o\u00aFPS</string>
+    <string name="quick_settings_fpsinfo_label">Informace o\u00a0FPS</string>
     <!-- Gaming mode -->
     <string name="gaming_mode_not_enabled">Herní režim je vypnutý v\u00a0Nastavení</string>
     <string name="quick_settings_gaming_mode_label">Herní režim</string>
