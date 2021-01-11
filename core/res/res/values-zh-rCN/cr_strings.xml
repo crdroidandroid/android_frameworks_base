@@ -21,14 +21,14 @@
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">允许应用假装成为一个不同的应用。恶意应用可能能够使用它来访问私人应用数据。 合法的使用包括假装仿真的仿真器。请谨慎地授予此权限！</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgrouplab_fake_package_signature">Spoof package signature</string>
+    <string name="permgrouplab_fake_package_signature">允许软件包签名欺骗</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgroupdesc_fake_package_signature">allow to spoof package signature</string>
+    <string name="permgroupdesc_fake_package_signature">允许应用签名伪装</string>
     <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
-    <string name="permgrouprequest_fake_package_signature">Allow
-        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; to spoof package signature?</string>
+    <string name="permgrouprequest_fake_package_signature">是否允许
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; 伪装软件包签名？</string>
     <!-- Long-press kill application -->
-    <string name="app_killed_message">Application killed</string>
+    <string name="app_killed_message">应用已被终止</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">游戏模式</string>
     <string name="gaming_mode_notification_title">游戏模式已启用</string>
