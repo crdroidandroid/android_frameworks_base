@@ -28,7 +28,7 @@
     <string name="permgrouprequest_fake_package_signature">Povoliť aplikácii
         &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; napodobniť podpis balíčku?</string>
     <!-- Long-press kill application -->
-    <string name="app_killed_message">Application killed</string>
+    <string name="app_killed_message">Aplikácia ukončená</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Herný režim</string>
     <string name="gaming_mode_notification_title">Herný režim povolený</string>
