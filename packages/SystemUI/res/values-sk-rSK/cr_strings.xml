@@ -81,8 +81,8 @@
     <string name="quick_settings_compass_W">Z</string>
     <string name="quick_settings_compass_NW">SZ</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Jazyk</string>
+    <string name="quick_settings_locale_more_locales_toast">Konfiguráciou viacerých jazykov povolíte funkciu prepínania</string>
     <!-- Time displayed on typographic clock face, which displays the time in words.
              Example:
 
