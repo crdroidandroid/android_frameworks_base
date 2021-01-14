@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">ᱯᱷᱮᱰ</string>
+    <string name="animation_slide_right">ᱡᱚᱡᱚᱢ ᱛᱮ ᱠᱷᱚᱥᱨᱚᱫᱽ</string>
+    <string name="animation_slide_left">ᱞᱮᱸᱜᱟ ᱛᱮ ᱠᱷᱚᱥᱨᱚᱫᱽ</string>
+    <string name="animation_slide_right_no_fade">ᱡᱚᱡᱚᱢ ᱛᱮ ᱠᱷᱚᱥᱨᱚᱫᱽ ᱢᱮᱸ (ᱯᱷᱮᱰ ᱵᱟᱝᱟ)</string>
+    <string name="animation_slide_left_no_fade">ᱞᱮᱸᱜᱟ ᱛᱮ ᱠᱷᱚᱥᱨᱚᱫᱽ ᱢᱮᱸ (ᱯᱷᱮᱰ ᱵᱟᱝᱟ)</string>
+    <string name="animation_slide_up">ᱞᱟᱛᱟᱨ ᱛᱮ ᱠᱷᱚᱥᱨᱚᱫᱽ ᱢᱮᱸ</string>
+    <string name="animation_slide_down">ᱪᱮᱛᱟᱱ ᱛᱮ ᱠᱷᱚᱥᱨᱚᱫᱽ ᱢᱮᱸ</string>
+    <string name="animation_default">ᱢᱩᱞ ᱯᱷᱮᱲᱟᱛ</string>
+    <string name="animation_translucent">ᱴᱨᱟᱱᱥᱞᱭᱩᱥᱮᱸᱴ</string>
+    <string name="animation_grow_shrink">(ᱪᱮᱛᱟᱱ) ᱨᱮ ᱦᱟᱨᱟ</string>
+    <string name="animation_grow_shrink_center">(ᱛᱟᱞᱟ) ᱨᱮ ᱦᱟᱨᱟ</string>
+    <string name="animation_grow_shrink_bottom">(ᱞᱟᱛᱟᱨ) ᱨᱮ ᱦᱟᱨᱟ</string>
+    <string name="animation_grow_shrink_left">ᱨᱮ ᱢᱟᱨᱟᱝᱚᱜᱽ (ᱞᱮᱸᱜᱟ)</string>
+    <string name="animation_grow_shrink_right">ᱨᱮ ᱢᱟᱨᱟᱝᱚᱜᱽ (ᱡᱚᱡᱚᱢ)</string>
+    <string name="animation_random">ᱨᱮᱱᱰᱚᱢ</string>
+    <string name="action_null">ᱠᱷᱟᱹᱞᱤ</string>
+    <string name="animation_ethans">ᱤᱛᱷᱟᱸᱥ</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">ᱠᱨᱟᱥ ᱞᱚᱜᱽ URL ᱱᱚᱠᱚᱞ ᱢᱮᱸ</string>
+    <string name="url_copy_success">URL ᱨᱟᱥ ᱞᱮᱠᱟᱛᱮ ᱱᱚᱠᱚᱞᱮᱱᱟ</string>
+    <string name="url_copy_failed">ᱰᱚᱜᱵᱤᱱ ᱛᱮ ᱞᱚᱜᱽ ᱠᱚ ᱞᱟᱫᱮ ᱡᱷᱚᱜᱽ ᱵᱷᱩᱞ ᱦᱩᱭᱮᱱᱟ</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">ᱯᱟᱣᱟᱹᱨ ᱢᱳᱰ ᱚᱛᱟ ᱛᱷᱤᱨ ᱢᱮᱸ ᱵᱚᱸᱫᱽ ᱞᱟᱹᱜᱤᱫᱽ</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">ᱜᱮᱢᱤᱝ ᱚᱵᱚᱥᱛᱟ</string>
+    <string name="gaming_mode_notification_title">ᱠᱷᱮᱞ ᱢᱳᱰ ᱮᱢ ᱪᱷᱚᱮᱱᱟ</string>
+    <string name="gaming_mode_notification_content">ᱠᱷᱮᱞ ᱢᱳᱰ ᱵᱚᱸᱫ ᱞᱟᱹᱜᱤᱫᱽ ᱚᱛᱟᱭ ᱢᱮᱸ</string>
+    <string name="gaming_mode_enabled_toast">ᱠᱷᱮᱞ ᱢᱳᱰ ᱮᱢ ᱪᱚ</string>
+    <string name="gaming_mode_disabled_toast">ᱠᱷᱮᱞ ᱢᱳᱰ ᱵᱚᱸᱫᱽ</string>
+    <!-- MicroG -->
+    <string name="permlab_fakePackageSignature">ᱥᱯᱩᱯᱷ ᱯᱮᱠᱮᱡᱽ ᱥᱩᱦᱤ</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">ᱚᱞᱜᱟ ᱮᱯᱯ ᱞᱮᱠᱷᱟ ᱛᱮ ᱱᱚᱶᱟ ᱮᱯᱯ ᱵᱩᱡᱷᱟᱹᱣᱜ ᱯᱨᱚᱛᱤᱛ ᱚᱜᱼᱟ ᱾ ᱢᱤᱥᱥᱮᱞᱟᱱᱤᱭᱟᱹᱥ ᱮᱯᱯᱞᱤᱠᱮᱥᱚᱱ ᱠᱚ ᱟᱢᱟᱜᱽ ᱯᱨᱭᱣᱮᱴ ᱰᱟᱴᱟ ᱠᱚ ᱟᱫᱮᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾ ᱞᱮᱞᱡᱤᱴᱤᱢᱮᱴ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱠᱚ ᱫᱚ ᱮᱢᱭᱩᱞᱮᱴᱚᱨ ᱠᱚ ᱮᱢᱟᱱ ᱛᱟᱦᱮᱸᱱᱟ ᱾ ᱥᱟᱵᱫᱷᱟᱱ ᱛᱮ ᱱᱚᱶᱟ ᱦᱚᱠ ᱮᱢᱚᱜᱽ ᱢᱮᱸ ᱾</string>
+    <!-- Screen recorder -->
+    <string name="global_action_screenrecord">ᱥᱠᱨᱤᱻᱱᱨᱮᱠᱚᱰ</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">ᱠᱞᱤᱯᱵᱚᱰ ᱛᱮ %1$sᱟᱜ ᱟᱫᱮᱨ ᱠᱚ ᱵᱚᱸᱫ ᱞᱮᱜᱼᱟ</string>
+    <string name="app_clipboard_access_granted">ᱠᱞᱤᱯᱵᱚᱰ ᱛᱮ %1$sᱟᱜ ᱟᱫᱮᱨ ᱮᱢ ᱪᱷᱚ ᱮᱱᱟ</string>
+</resources>

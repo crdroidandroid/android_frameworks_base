@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">Затухание</string>
+    <string name="animation_slide_right">Сдвиг вправо</string>
+    <string name="animation_slide_left">Сдвиг влево</string>
+    <string name="animation_slide_right_no_fade">Сдвиг вправо (без затухания)</string>
+    <string name="animation_slide_left_no_fade">Сдвиг влево (без затухания)</string>
+    <string name="animation_slide_up">Сдвиг вниз</string>
+    <string name="animation_slide_down">Сдвиг вверх</string>
+    <string name="animation_default">По умолчанию</string>
+    <string name="animation_translucent">Полупрозрачный</string>
+    <string name="animation_grow_shrink">Увеличение (вверх)</string>
+    <string name="animation_grow_shrink_center">Увеличение (по центру)</string>
+    <string name="animation_grow_shrink_bottom">Увеличение (вниз)</string>
+    <string name="animation_grow_shrink_left">Увеличение (влево)</string>
+    <string name="animation_grow_shrink_right">Увеличение (вправо)</string>
+    <string name="animation_random">Случайно</string>
+    <string name="action_null">Пусто</string>
+    <string name="animation_ethans">Ethans</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Скопировать ссылку лога ошибки</string>
+    <string name="url_copy_success">Ссылка скопирована успешно</string>
+    <string name="url_copy_failed">Произошла ошибка во время загрузки лога на dogbin</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Нажмите и удерживайте кнопку питания, чтобы разблокировать</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Игровой режим</string>
+    <string name="gaming_mode_notification_title">Игровой режим включен</string>
+    <string name="gaming_mode_notification_content">Нажмите, чтобы отключить игровой режим</string>
+    <string name="gaming_mode_enabled_toast">Игровой режим включен</string>
+    <string name="gaming_mode_disabled_toast">Игровой режим выключен</string>
+    <!-- MicroG -->
+    <string name="permlab_fakePackageSignature">Подмена подписи приложения</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Разрешить приложению выдавать себя за другое. Вредоносное приложение может получить доступ к вашим данным. Легитимное использовение включает в себя эмулятор, притворяющийся тем, что он эмулирует. Используйте только на свой страх и риск!</string>
+    <!-- Screen recorder -->
+    <string name="global_action_screenrecord">Запись экрана</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s отказано в доступе к буферу обмена</string>
+    <string name="app_clipboard_access_granted">%1$s предоставлен доступ к буферу обмена</string>
+</resources>
