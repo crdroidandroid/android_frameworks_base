@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">Diminuează</string>
+    <string name="animation_slide_right">Glisați la dreapta</string>
+    <string name="animation_slide_left">Glisați la stânga</string>
+    <string name="animation_slide_right_no_fade">Glisează spre dreapta (Fără estompare)</string>
+    <string name="animation_slide_left_no_fade">Glisează spre stânga (Fără estompare)</string>
+    <string name="animation_slide_up">Glisează în jos</string>
+    <string name="animation_slide_down">Glisează în sus</string>
+    <string name="animation_default">Prestabilit</string>
+    <string name="animation_translucent">Translucent</string>
+    <string name="animation_grow_shrink">Crește în (Sus)</string>
+    <string name="animation_grow_shrink_center">Crește în (Centru)</string>
+    <string name="animation_grow_shrink_bottom">Crește în (Jos)</string>
+    <string name="animation_grow_shrink_left">Crește în (Stânga)</string>
+    <string name="animation_grow_shrink_right">Crește în (Dreapta)</string>
+    <string name="animation_random">Aleatoriu</string>
+    <string name="action_null">Gol</string>
+    <string name="animation_ethans">Ethans</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Copiază URL-ul jurnalului de eroare</string>
+    <string name="url_copy_success">URL-ul a fost copiat cu succes</string>
+    <string name="url_copy_failed">A apărut o eroare la încărcarea registrului în dogbin</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Apăsați și țineți apăsat butonul de alimentare pentru a debloca</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Mod pentru jocuri</string>
+    <string name="gaming_mode_notification_title">Mod pentru jocuri activat</string>
+    <string name="gaming_mode_notification_content">Apasa pentru a opri mod pentru jocuri</string>
+    <string name="gaming_mode_enabled_toast">Mod pentru jocuri pornit</string>
+    <string name="gaming_mode_disabled_toast">Mod pentru jocuri oprit</string>
+    <!-- MicroG -->
+    <string name="permlab_fakePackageSignature">Falsifică semnătura pachetului</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Permite aplicației să pretindă că este o aplicație diferită. Aplicațiile rău-intenționate ar putea să utilizeze aceasta pentru a accesa datele aplicațiilor private. Acordați această permisiune numai cu prudență!</string>
+    <!-- Screen recorder -->
+    <string name="global_action_screenrecord">Înregistrare Ecran</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s nu are acces la clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s a primit acces la clipboard</string>
+</resources>

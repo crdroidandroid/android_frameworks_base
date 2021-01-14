@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash зарядка (<xliff:g id="charging_time_left" example="4 часа и 2 минуты">%1$s</xliff:g> до полной)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash зарядка</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp зарядка (<xliff:g id="charging_time_left" example="4 часа и 2 минуты">%1$s</xliff:g> до полной)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp зарядка</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">Модуль NFC</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Умные пиксели</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Автоматическое включение умных пикселей</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Скриншот</string>
+    <string name="quick_settings_region_screenshot_label">Скриншот части экрана</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Информация о процессоре</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Информация о FPS</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">Информация о FPS выключена</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">Информация о FPS включена</string>
+    <!-- HW Keys Tile -->
+    <string name="quick_settings_hw_keys_label">Аппаратные кнопки</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Компас</string>
+    <string name="quick_settings_compass_value"><xliff:g id="градусы">%1$.0f</xliff:g>\u00b0 <xliff:g id="направление">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Инициализация\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Компас выкл.</string>
+    <string name="accessibility_quick_settings_compass_on">Компас вкл.</string>
+    <string name="quick_settings_compass_N">C</string>
+    <string name="quick_settings_compass_NE">СВ</string>
+    <string name="quick_settings_compass_E">В</string>
+    <string name="quick_settings_compass_SE">ЮВ</string>
+    <string name="quick_settings_compass_S">Юг</string>
+    <string name="quick_settings_compass_SW">ЮВ</string>
+    <string name="quick_settings_compass_W">З</string>
+    <string name="quick_settings_compass_NW">СЗ</string>
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">Музыка</string>
+    <string name="quick_settings_music_play">Воспроизвести</string>
+    <string name="quick_settings_music_pause">Пауза</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Постоянно активный дисплей</string>
+    <!--Google sound search tile -->
+    <string name="quick_settings_sound_search">Поиск музыки</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">Звук</string>
+    <string name="quick_settings_sound_ring">Звонок</string>
+    <string name="quick_settings_sound_vibrate">Вибрация</string>
+    <string name="quick_settings_sound_dnd">Не беспокоить</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">Перезагрузка</string>
+    <string name="quick_settings_reboot_recovery_label">Режим восстановления</string>
+    <string name="quick_settings_poweroff_label">Выключение</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Игровой режим отключен в настройках</string>
+    <string name="quick_settings_gaming_mode_label">Игровой режим</string>
+    <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_disabled">Игровой режим выключен.</string>
+    <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_enabled">Игровой режим включен.</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Поменять SIM для передачи данных</string>
+    <string name="qs_data_switch_toast_0">Нет SIM карт</string>
+    <string name="qs_data_switch_toast_1">Установлена только одна SIM карта</string>
+    <string name="qs_data_switch_changed_1">Используется SIM 1 для передачи данных</string>
+    <string name="qs_data_switch_changed_2">Используется SIM 2 для передачи данных</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Остановить принудительно?</string>
+    <string name="force_stop_dlg_text">Если вы принудительно остановите приложение, оно может работать неправильно.</string>
+    <string name="guts_force_close_app">Закрыть приложение</string>
+    <!-- Restart SystemUI via Advanced Power Menu -->
+    <string name="global_action_restart_systemui">Интерфейс системы</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Сейчас</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Сейчас</annotation>\n^1\n^2</item>
+        <item quantity="few"><annotation name="color">Сейчас</annotation>\n^1\n^2</item>
+        <item quantity="many"><annotation name="color">Сейчас</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">Час</string>
+    <string name="text_clock_h_two">Два</string>
+    <string name="text_clock_h_three">Три</string>
+    <string name="text_clock_h_four">Четыре</string>
+    <string name="text_clock_h_five">Пять</string>
+    <string name="text_clock_h_six">Шесть</string>
+    <string name="text_clock_h_seven">Семь</string>
+    <string name="text_clock_h_eight">Восемь</string>
+    <string name="text_clock_h_nine">Девять</string>
+    <string name="text_clock_h_ten">Десять</string>
+    <string name="text_clock_h_eleven">Одиннадцать</string>
+    <string name="text_clock_h_twelve">Двенадцать</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">Ровно</string>
+    <string name="text_clock_m_one">Ноль одна</string>
+    <string name="text_clock_m_two">Ноль две</string>
+    <string name="text_clock_m_three">Ноль три</string>
+    <string name="text_clock_m_four">Ноль четыре</string>
+    <string name="text_clock_m_five">Ноль пять</string>
+    <string name="text_clock_m_six">Ноль шесть</string>
+    <string name="text_clock_m_seven">Ноль семь</string>
+    <string name="text_clock_m_eight">Ноль восемь</string>
+    <string name="text_clock_m_nine">Ноль девять</string>
+    <string name="text_clock_m_ten">Десять</string>
+    <string name="text_clock_m_eleven">Одиннадцать</string>
+    <string name="text_clock_m_twelve">Двенадцать</string>
+    <string name="text_clock_m_thirteen">Тринадцать</string>
+    <string name="text_clock_m_fourteen">Четырнадцать</string>
+    <string name="text_clock_m_fifteen">Пятнадцать</string>
+    <string name="text_clock_m_sixteen">Шестнадцать</string>
+    <string name="text_clock_m_seventeen">Семнадцать</string>
+    <string name="text_clock_m_eighteen">Восемнадцать</string>
+    <string name="text_clock_m_nineteen">Девятнадцать</string>
+    <string name="text_clock_m_twenty">Двадцать</string>
+    <string name="text_clock_m_twenty_one">Двадцать одна</string>
+    <string name="text_clock_m_twenty_two">Двадцать две</string>
+    <string name="text_clock_m_twenty_three">Двадцать три</string>
+    <string name="text_clock_m_twenty_four">Двадцать четыре</string>
+    <string name="text_clock_m_twenty_five">Двадцать пять</string>
+    <string name="text_clock_m_twenty_six">Двадцать шесть</string>
+    <string name="text_clock_m_twenty_seven">Двадцать семь</string>
+    <string name="text_clock_m_twenty_eight">Двадцать восемь</string>
+    <string name="text_clock_m_twenty_nine">Двадцать девять</string>
+    <string name="text_clock_m_thirty">Тридцать</string>
+    <string name="text_clock_m_thirty_one">Тридцать одна</string>
+    <string name="text_clock_m_thirty_two">Тридцать две</string>
+    <string name="text_clock_m_thirty_three">Тридцать три</string>
+    <string name="text_clock_m_thirty_four">Тридцать четыре</string>
+    <string name="text_clock_m_thirty_five">Тридцать пять</string>
+    <string name="text_clock_m_thirty_six">Тридцать шесть</string>
+    <string name="text_clock_m_thirty_seven">Тридцать семь</string>
+    <string name="text_clock_m_thirty_eight">Тридцать восемь</string>
+    <string name="text_clock_m_thirty_nine">Тридцать девять</string>
+    <string name="text_clock_m_forty">Сорок</string>
+    <string name="text_clock_m_forty_one">Сорок одна</string>
+    <string name="text_clock_m_forty_two">Сорок две</string>
+    <string name="text_clock_m_forty_three">Сорок три</string>
+    <string name="text_clock_m_forty_four">Сорок четыре</string>
+    <string name="text_clock_m_forty_five">Сорок пять</string>
+    <string name="text_clock_m_forty_six">Сорок шесть</string>
+    <string name="text_clock_m_forty_seven">Сорок семь</string>
+    <string name="text_clock_m_forty_eight">Сорок восемь</string>
+    <string name="text_clock_m_forty_nine">Сорок девять</string>
+    <string name="text_clock_m_fifty">Пятьдесят</string>
+    <string name="text_clock_m_fifty_one">Пятьдесят одна</string>
+    <string name="text_clock_m_fifty_two">Пятьдесят две</string>
+    <string name="text_clock_m_fifty_three">Пятьдесят три</string>
+    <string name="text_clock_m_fifty_four">Пятьдесят четыре</string>
+    <string name="text_clock_m_fifty_five">Пятьдесят пять</string>
+    <string name="text_clock_m_fifty_six">Пятьдесят шесть</string>
+    <string name="text_clock_m_fifty_seven">Пятьдесят семь</string>
+    <string name="text_clock_m_fifty_eight">Пятьдесят восемь</string>
+    <string name="text_clock_m_fifty_nine">Пятьдесят девять</string>
+    <!-- Screen Stabilization -->
+    <string name="quick_settings_stabilization_label">Стабилизация экрана</string>
+    <string name="quick_settings_stabilization_off">Стабилизация отключена</string>
+    <string name="quick_settings_stabilization_on">Стабилизация включена</string>
+    <string name="low_label">Низкий</string>
+    <string name="high_label">Высокий</string>
+    <string name="stabilization_velocity_friction">Скорость трения</string>
+    <string name="stabilization_velocity_amplitude">Скорость амплитуды</string>
+    <string name="stabilization_position_friction">Положение трения</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">Начать запись?</string>
+    <string name="screenrecord_dialog_summary">Во время записи система Android может захватить любую важную информацию, которая видна на вашем экране или воспроизведена на вашем устройстве. Сюда входят пароли, платежные данные, фотографии, сообщения и аудио.</string>
+    <string name="screenrecord_dialog_start">Старт</string>
+    <string name="screenrecord_dialog_cancel">Отмена</string>
+    <string name="screenrecord_audio_recording_title">Источник звука</string>
+    <string name="screenrecord_audio_recording_internal">Внутренняя</string>
+    <string name="screenrecord_audio_recording_microphone">Микрофон</string>
+    <string name="screenrecord_audio_recording_off">Отключено</string>
+    <string name="screenrecord_taps_title">Показывать касания на экране</string>
+    <string name="screenrecord_stopdot_title">Показать кнопку остановки</string>
+    <string name="screenrecord_video_bitrate_title">Битрейт видео</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Экономия трафика</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">ВПН</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Роуминг</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">кбит/с</string>
+    <string name="megabitspersecond_short">Мбит/с</string>
+    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="kilobytespersecond_short">кБ/с</string>
+    <string name="megabytespersecond_short">МБ/с</string>
+    <string name="gigabytespersecond_short">ГБ/с</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Ошибка</string>
+    <string name="omnijaws_service_unkown">Нет данных о погоде</string>
+    <string name="omnijaws_service_error_long">Ошибка при загрузке данных о погоде</string>
+    <string name="omnijaws_service_disabled">Служба отключена</string>
+    <string name="omnijaws_detail_header">Погода</string>
+    <string name="omnijaws_label_default">Погода</string>
+    <string name="omnijaws_current_text">Сейчас</string>
+    <string name="omnijaws_package_not_available">OmniJaws недоступен</string>
+    <string name="omnijaws_service_last_update">Последнее обновление:</string>
+    <!-- App lock -->
+    <string name="applock_locked">&#160;заблокировано.</string>
+    <string name="applock_fingerprint_face">, отпечаток пальца или лицо для разблокировки.</string>
+    <string name="applock_face">&#160;или лицо для разблокировки.</string>
+    <string name="applock_fingerprint">&#160;или отпечаток пальца для разблокировки.</string>
+    <string name="applock_locked_notification">Приложение заблокировано</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">Режим яркости</string>
+    <string name="quick_settings_dc_full_auto">Автоматический режим</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Язык</string>
+    <string name="quick_settings_locale_more_locales_toast">Пожалуйста, настройте несколько языков, чтобы активировать функцию</string>
+</resources>
