@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">Dissolvenza</string>
+    <string name="animation_slide_right">Scorri a destra</string>
+    <string name="animation_slide_left">Scorri a sinistra</string>
+    <string name="animation_slide_right_no_fade">Scorri a destra (senza dissolvenza)</string>
+    <string name="animation_slide_left_no_fade">Scorri a sinistra (senza dissolvenza)</string>
+    <string name="animation_slide_up">Scorri in basso</string>
+    <string name="animation_slide_down">Scorri in alto</string>
+    <string name="animation_default">Predefinito</string>
+    <string name="animation_translucent">Traslucido</string>
+    <string name="animation_grow_shrink">Espandi (in alto)</string>
+    <string name="animation_grow_shrink_center">Espandi (al centro)</string>
+    <string name="animation_grow_shrink_bottom">Espandi (basso)</string>
+    <string name="animation_grow_shrink_left">Espandi (a sinistra)</string>
+    <string name="animation_grow_shrink_right">Espandi (a destra)</string>
+    <string name="animation_random">Casuale</string>
+    <string name="action_null">Vuoto</string>
+    <string name="animation_ethans">Ethans</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Copia l\' URL del log di crash</string>
+    <string name="url_copy_success">URL copiato con successo</string>
+    <string name="url_copy_failed">È stato riscontrato un errore durante il caricamento del log su dogbin</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Tieni premuto e mantieni il tasto di accensione per sbloccare</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Modalità di gioco</string>
+    <string name="gaming_mode_notification_title">Modalità di gioco abilitata</string>
+    <string name="gaming_mode_notification_content">Tocca per disabilitare la modalità di gioco</string>
+    <string name="gaming_mode_enabled_toast">Modalità di gioco abilitata</string>
+    <string name="gaming_mode_disabled_toast">Modalità di gioco disabilitata</string>
+    <!-- MicroG -->
+    <string name="permlab_fakePackageSignature">Spoofing della firma del pacchetto</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Consente all\'applicazione di fingere di essere un\'app diversa. Le applicazioni dannose potrebbero essere in grado di utilizzarlo per accedere ai dati delle applicazioni private. Gli usi legittimi includono un emulatore che finge di essere ciò che emula. Concedi questo permesso con molta cautela!</string>
+    <!-- Screen recorder -->
+    <string name="global_action_screenrecord">Registra schermo</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">A %1$s è stato negato l\'accesso agli Appunti</string>
+    <string name="app_clipboard_access_granted">A %1$s è stato concesso l\'accesso agli Appunti</string>
+</resources>
