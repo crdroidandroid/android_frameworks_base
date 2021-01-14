@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Smart pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">عکس گرفتن از صفحه</string>
+    <string name="quick_settings_region_screenshot_label">عکس گرفتن از بخشی از صفحه</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">اطلاعات پردازنده</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">اطلاعات FPS</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">نمایش اطلاعات FPS خاموش</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">نمایش اطلاعات FPS روشن</string>
+    <!-- HW Keys Tile -->
+    <string name="quick_settings_hw_keys_label">کلید‌های سخت افزاری</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">قطب‌نما</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Initializing\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">قطب‌نما خاموش.</string>
+    <string name="accessibility_quick_settings_compass_on">قطب‌نما روشن.</string>
+    <string name="quick_settings_compass_N">شمال</string>
+    <string name="quick_settings_compass_NE">شمال شرقی</string>
+    <string name="quick_settings_compass_E">شرق</string>
+    <string name="quick_settings_compass_SE">جنوب شرقی</string>
+    <string name="quick_settings_compass_S">جنوب</string>
+    <string name="quick_settings_compass_SW">جنوب غربی</string>
+    <string name="quick_settings_compass_W">غرب</string>
+    <string name="quick_settings_compass_NW">شمال غربی</string>
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">موسیقی</string>
+    <string name="quick_settings_music_play">پخش</string>
+    <string name="quick_settings_music_pause">توقف</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">همیشه روی صفحه نمایش</string>
+    <!--Google sound search tile -->
+    <string name="quick_settings_sound_search">جستجو صدا</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">صدا</string>
+    <string name="quick_settings_sound_ring">زنگ</string>
+    <string name="quick_settings_sound_vibrate">لرزش</string>
+    <string name="quick_settings_sound_dnd">مزاحم نشوید</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">راه اندازی مجدد</string>
+    <string name="quick_settings_reboot_recovery_label">Recovery</string>
+    <string name="quick_settings_poweroff_label">خاموش کردن</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">حالت بازی در تنظیمات غیرفعال شده است</string>
+    <string name="quick_settings_gaming_mode_label">حالت بازی</string>
+    <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_disabled">حالت بازی خاموش شد.</string>
+    <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_enabled">حالت بازی روشن شد.</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">تعویض سیم کارت دیتا</string>
+    <string name="qs_data_switch_toast_0">درحال حاضر هیچ سیم‌کارتی وارد نشده</string>
+    <string name="qs_data_switch_toast_1">درحال حاضر فقط یک سیم‌کارت وارد شده</string>
+    <string name="qs_data_switch_changed_1">استفاده از سیم‌کارت ۱ برای دیتا گوشی</string>
+    <string name="qs_data_switch_changed_2">استفاده از سیم‌کارت ۲ برای دیتا گوشی</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">به اجبار متوقف شود?</string>
+    <string name="force_stop_dlg_text">اگر برنامه‌ای را به اجبار متوقف کنید، ممکن است درست کار نکند.</string>
+    <string name="guts_force_close_app">بستن برنامه</string>
+    <!-- Restart SystemUI via Advanced Power Menu -->
+    <string name="global_action_restart_systemui">رابط کاربری</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">یک</string>
+    <string name="text_clock_h_two">دو</string>
+    <string name="text_clock_h_three">سه</string>
+    <string name="text_clock_h_four">چهار</string>
+    <string name="text_clock_h_five">پنج</string>
+    <string name="text_clock_h_six">شیش</string>
+    <string name="text_clock_h_seven">هفت</string>
+    <string name="text_clock_h_eight">هشت</string>
+    <string name="text_clock_h_nine">نه</string>
+    <string name="text_clock_h_ten">ده</string>
+    <string name="text_clock_h_eleven">یازده</string>
+    <string name="text_clock_h_twelve">دوازده</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">O’ساعت</string>
+    <string name="text_clock_m_one">O’یک</string>
+    <string name="text_clock_m_two">O’دو</string>
+    <string name="text_clock_m_three">O’سه</string>
+    <string name="text_clock_m_four">O’چهار</string>
+    <string name="text_clock_m_five">O’پنج</string>
+    <string name="text_clock_m_six">O’شیش</string>
+    <string name="text_clock_m_seven">O’هفت</string>
+    <string name="text_clock_m_eight">O’هشت</string>
+    <string name="text_clock_m_nine">O’نه</string>
+    <string name="text_clock_m_ten">ده</string>
+    <string name="text_clock_m_eleven">یازده</string>
+    <string name="text_clock_m_twelve">دوازده</string>
+    <string name="text_clock_m_thirteen">سیزده</string>
+    <string name="text_clock_m_fourteen">چهارده</string>
+    <string name="text_clock_m_fifteen">پانزده</string>
+    <string name="text_clock_m_sixteen">شانزده</string>
+    <string name="text_clock_m_seventeen">هیفده</string>
+    <string name="text_clock_m_eighteen">هیژده</string>
+    <string name="text_clock_m_nineteen">نوزده</string>
+    <string name="text_clock_m_twenty">بیست</string>
+    <string name="text_clock_m_twenty_one">بیست و یک</string>
+    <string name="text_clock_m_twenty_two">بیست و دو</string>
+    <string name="text_clock_m_twenty_three">بیست و سه</string>
+    <string name="text_clock_m_twenty_four">بیست و چهار</string>
+    <string name="text_clock_m_twenty_five">بیست و پنج</string>
+    <string name="text_clock_m_twenty_six">بیست و شیش</string>
+    <string name="text_clock_m_twenty_seven">بیست و هفت</string>
+    <string name="text_clock_m_twenty_eight">بیست و هشت</string>
+    <string name="text_clock_m_twenty_nine">بیست و نه</string>
+    <string name="text_clock_m_thirty">سی</string>
+    <string name="text_clock_m_thirty_one">سی و یک</string>
+    <string name="text_clock_m_thirty_two">سی و دو</string>
+    <string name="text_clock_m_thirty_three">سی و سه</string>
+    <string name="text_clock_m_thirty_four">سی و چهار</string>
+    <string name="text_clock_m_thirty_five">سی و پنج</string>
+    <string name="text_clock_m_thirty_six">سی و شیش</string>
+    <string name="text_clock_m_thirty_seven">سی و هفت</string>
+    <string name="text_clock_m_thirty_eight">سی و هشت</string>
+    <string name="text_clock_m_thirty_nine">سی و نه</string>
+    <string name="text_clock_m_forty">چهل</string>
+    <string name="text_clock_m_forty_one">چهل و یک</string>
+    <string name="text_clock_m_forty_two">چهل و دو</string>
+    <string name="text_clock_m_forty_three">چهل و سه</string>
+    <string name="text_clock_m_forty_four">چهل و چهار</string>
+    <string name="text_clock_m_forty_five">چهل و پنج</string>
+    <string name="text_clock_m_forty_six">چهل و شیش</string>
+    <string name="text_clock_m_forty_seven">چهل و هفت</string>
+    <string name="text_clock_m_forty_eight">چهل و هشت</string>
+    <string name="text_clock_m_forty_nine">چهل و نه</string>
+    <string name="text_clock_m_fifty">پنجاه</string>
+    <string name="text_clock_m_fifty_one">پنجاه و یک</string>
+    <string name="text_clock_m_fifty_two">پنجاه و دو</string>
+    <string name="text_clock_m_fifty_three">پنجاه و سه</string>
+    <string name="text_clock_m_fifty_four">پنجاه و چهار</string>
+    <string name="text_clock_m_fifty_five">پنجاه و پنج</string>
+    <string name="text_clock_m_fifty_six">پنجاه و شیش</string>
+    <string name="text_clock_m_fifty_seven">پنجاه و هفت</string>
+    <string name="text_clock_m_fifty_eight">پنجاه و هشت</string>
+    <string name="text_clock_m_fifty_nine">پنجاه و نه</string>
+    <!-- Screen Stabilization -->
+    <string name="quick_settings_stabilization_label">تثبیت کننده تصویر</string>
+    <string name="quick_settings_stabilization_off">تثبیت کننده تصویر غیرفعال</string>
+    <string name="quick_settings_stabilization_on">تثبیت کننده تصویر فعال</string>
+    <string name="low_label">کم</string>
+    <string name="high_label">زیاد</string>
+    <string name="stabilization_velocity_friction">Velocity Friction</string>
+    <string name="stabilization_velocity_amplitude">Velocity Amplitude</string>
+    <string name="stabilization_position_friction">Position Friction</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">ظبط کردن آغاز شود?</string>
+    <string name="screenrecord_dialog_summary">وقتی که درحال ظبط کردن هستید، سیستم اندروید میتواند هر چیزی را که روی صفحه نمایش شما وجود دارد و یا در حال پخش است را ظبط کند. این شامل اطلاعات حساس شما مثل پسورد ها، اطلاعات کارت خریدتان، پیام ها، عکس‌ها و فیلم های شخصی نیز می‌شود.</string>
+    <string name="screenrecord_dialog_start">شروع</string>
+    <string name="screenrecord_dialog_cancel">انصراف</string>
+    <string name="screenrecord_audio_recording_title">منبع صدا</string>
+    <string name="screenrecord_audio_recording_internal">داخلی</string>
+    <string name="screenrecord_audio_recording_microphone">میکروفون</string>
+    <string name="screenrecord_audio_recording_off">غیرفعال</string>
+    <string name="screenrecord_taps_title">نشان دادن محل لمس روی صفحه نمایش</string>
+    <string name="screenrecord_stopdot_title">نشان دادن نقطه توقف</string>
+    <string name="screenrecord_video_bitrate_title">نرخ بیت ویدئو</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">ذخیره‌کننده داده</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">رومینگ</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">خطا</string>
+    <string name="omnijaws_service_unkown">بدون اطلاعات آب و هوا</string>
+    <string name="omnijaws_service_error_long">خطا در بارگیری اطلاعات آب و هوا</string>
+    <string name="omnijaws_service_disabled">سرویس غیرفعال شده است</string>
+    <string name="omnijaws_detail_header">آب و هوا</string>
+    <string name="omnijaws_label_default">آب و هوا</string>
+    <string name="omnijaws_current_text">اکنون</string>
+    <string name="omnijaws_package_not_available">OmniJaws در دسترس نیست</string>
+    <string name="omnijaws_service_last_update">آخرین به‌روز رسانی:</string>
+    <!-- App lock -->
+    <string name="applock_locked">&#160;قفل شده.</string>
+    <string name="applock_fingerprint_face">اثر انگشت یا صورتتان برای بازگشایی.</string>
+    <string name="applock_face">&#160;یا صورتتان برای بازگشایی.</string>
+    <string name="applock_fingerprint">&#160;یا اثرانگشتتان برای بازگشایی.</string>
+    <string name="applock_locked_notification">برنامه قفل شده است</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
+    <string name="quick_settings_dc_brightness_mode">حالت روشنایی</string>
+    <string name="quick_settings_dc_full_auto">حالت خودکار</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">زبان</string>
+    <string name="quick_settings_locale_more_locales_toast">لطفا چندین زبان را برای فعال کردن قابلیت تغییر وضعیت پیکربندی کنید</string>
+</resources>

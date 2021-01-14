@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash 閃充中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash 閃充中</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp 閃充中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp 閃充中</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">智慧像素</string>
+    <string name="quick_settings_smart_pixels_on_power_save">自動啟用智慧像素</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">螢幕截圖</string>
+    <string name="quick_settings_region_screenshot_label">部分截圖</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">處理器資訊</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">FPS 資訊</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS 資訊關閉</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS 資訊開啟</string>
+    <!-- HW Keys Tile -->
+    <string name="quick_settings_hw_keys_label">實體按鍵</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">指南針</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">正在初始化\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">指南針關閉。</string>
+    <string name="accessibility_quick_settings_compass_on">指南針開啟。</string>
+    <string name="quick_settings_compass_N">北</string>
+    <string name="quick_settings_compass_NE">東北</string>
+    <string name="quick_settings_compass_E">東</string>
+    <string name="quick_settings_compass_SE">東南</string>
+    <string name="quick_settings_compass_S">南</string>
+    <string name="quick_settings_compass_SW">西南</string>
+    <string name="quick_settings_compass_W">西</string>
+    <string name="quick_settings_compass_NW">西北</string>
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">音樂</string>
+    <string name="quick_settings_music_play">播放</string>
+    <string name="quick_settings_music_pause">暫停</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Always On Display</string>
+    <!--Google sound search tile -->
+    <string name="quick_settings_sound_search">語音搜尋</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">音效</string>
+    <string name="quick_settings_sound_ring">鈴聲</string>
+    <string name="quick_settings_sound_vibrate">震動</string>
+    <string name="quick_settings_sound_dnd">請勿打擾</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">重新啟動</string>
+    <string name="quick_settings_reboot_recovery_label">Recovery 模式</string>
+    <string name="quick_settings_poweroff_label">關閉電源</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">遊戲模式已在設定中被停用</string>
+    <string name="quick_settings_gaming_mode_label">遊戲模式</string>
+    <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_disabled">遊戲模式已關閉。</string>
+    <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_enabled">遊戲模式已開啟。</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">切換上網 SIM 卡</string>
+    <string name="qs_data_switch_toast_0">目前未插入 SIM 卡</string>
+    <string name="qs_data_switch_toast_1">目前僅插入一張 SIM 卡</string>
+    <string name="qs_data_switch_changed_1">使用 SIM 1 的行動數據</string>
+    <string name="qs_data_switch_changed_2">使用 SIM 2 的行動數據</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">您要強制停止嗎？</string>
+    <string name="force_stop_dlg_text">如果您強制停止應用程式，應用程式可能無法正常運作。</string>
+    <string name="guts_force_close_app">關閉應用程式</string>
+    <!-- Restart SystemUI via Advanced Power Menu -->
+    <string name="global_action_restart_systemui">系統使用者介面</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">現在是</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">一點</string>
+    <string name="text_clock_h_two">二點</string>
+    <string name="text_clock_h_three">三點</string>
+    <string name="text_clock_h_four">四點</string>
+    <string name="text_clock_h_five">五點</string>
+    <string name="text_clock_h_six">六點</string>
+    <string name="text_clock_h_seven">七點</string>
+    <string name="text_clock_h_eight">八點</string>
+    <string name="text_clock_h_nine">九點</string>
+    <string name="text_clock_h_ten">十點</string>
+    <string name="text_clock_h_eleven">十一點</string>
+    <string name="text_clock_h_twelve">十二點</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">整</string>
+    <string name="text_clock_m_one">零一分</string>
+    <string name="text_clock_m_two">零二分</string>
+    <string name="text_clock_m_three">零三分</string>
+    <string name="text_clock_m_four">零四分</string>
+    <string name="text_clock_m_five">零五分</string>
+    <string name="text_clock_m_six">零六分</string>
+    <string name="text_clock_m_seven">零七分</string>
+    <string name="text_clock_m_eight">零八分</string>
+    <string name="text_clock_m_nine">零九分</string>
+    <string name="text_clock_m_ten">十分</string>
+    <string name="text_clock_m_eleven">十一分</string>
+    <string name="text_clock_m_twelve">十二分</string>
+    <string name="text_clock_m_thirteen">十三分</string>
+    <string name="text_clock_m_fourteen">十四分</string>
+    <string name="text_clock_m_fifteen">十五分</string>
+    <string name="text_clock_m_sixteen">十六分</string>
+    <string name="text_clock_m_seventeen">十七分</string>
+    <string name="text_clock_m_eighteen">十八分</string>
+    <string name="text_clock_m_nineteen">十九分</string>
+    <string name="text_clock_m_twenty">二十分</string>
+    <string name="text_clock_m_twenty_one">二十一分</string>
+    <string name="text_clock_m_twenty_two">二十二分</string>
+    <string name="text_clock_m_twenty_three">二十三分</string>
+    <string name="text_clock_m_twenty_four">二十四分</string>
+    <string name="text_clock_m_twenty_five">二十五分</string>
+    <string name="text_clock_m_twenty_six">二十六分</string>
+    <string name="text_clock_m_twenty_seven">二十七分</string>
+    <string name="text_clock_m_twenty_eight">二十八分</string>
+    <string name="text_clock_m_twenty_nine">二十九分</string>
+    <string name="text_clock_m_thirty">三十分</string>
+    <string name="text_clock_m_thirty_one">三十一分</string>
+    <string name="text_clock_m_thirty_two">三十二分</string>
+    <string name="text_clock_m_thirty_three">三十三分</string>
+    <string name="text_clock_m_thirty_four">三十四分</string>
+    <string name="text_clock_m_thirty_five">三十五分</string>
+    <string name="text_clock_m_thirty_six">三十六分</string>
+    <string name="text_clock_m_thirty_seven">三十七分</string>
+    <string name="text_clock_m_thirty_eight">三十八分</string>
+    <string name="text_clock_m_thirty_nine">三十九分</string>
+    <string name="text_clock_m_forty">四十分</string>
+    <string name="text_clock_m_forty_one">四十一分</string>
+    <string name="text_clock_m_forty_two">四十二分</string>
+    <string name="text_clock_m_forty_three">四十三分</string>
+    <string name="text_clock_m_forty_four">四十四分</string>
+    <string name="text_clock_m_forty_five">四十五分</string>
+    <string name="text_clock_m_forty_six">四十六分</string>
+    <string name="text_clock_m_forty_seven">四十七分</string>
+    <string name="text_clock_m_forty_eight">四十八分</string>
+    <string name="text_clock_m_forty_nine">四十九分</string>
+    <string name="text_clock_m_fifty">五十分</string>
+    <string name="text_clock_m_fifty_one">五十一分</string>
+    <string name="text_clock_m_fifty_two">五十二分</string>
+    <string name="text_clock_m_fifty_three">五十三分</string>
+    <string name="text_clock_m_fifty_four">五十四分</string>
+    <string name="text_clock_m_fifty_five">五十五分</string>
+    <string name="text_clock_m_fifty_six">五十六分</string>
+    <string name="text_clock_m_fifty_seven">五十七分</string>
+    <string name="text_clock_m_fifty_eight">五十八分</string>
+    <string name="text_clock_m_fifty_nine">五十九分</string>
+    <!-- Screen Stabilization -->
+    <string name="quick_settings_stabilization_label">螢幕穩定</string>
+    <string name="quick_settings_stabilization_off">穩定已停用</string>
+    <string name="quick_settings_stabilization_on">穩定已啟用</string>
+    <string name="low_label">低</string>
+    <string name="high_label">高</string>
+    <string name="stabilization_velocity_friction">移動速度</string>
+    <string name="stabilization_velocity_amplitude">移動幅度</string>
+    <string name="stabilization_position_friction">移動位置</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">開始錄製?</string>
+    <string name="screenrecord_dialog_summary">錄製時，Android 系統可以取得螢幕上可見或裝置上顯示的任何個人資訊。 這包括密碼、付款資訊、照片、訊息和音訊。</string>
+    <string name="screenrecord_dialog_start">開始</string>
+    <string name="screenrecord_dialog_cancel">取消</string>
+    <string name="screenrecord_audio_recording_title">音訊來源</string>
+    <string name="screenrecord_audio_recording_internal">內置</string>
+    <string name="screenrecord_audio_recording_microphone">麥克風</string>
+    <string name="screenrecord_audio_recording_off">停用</string>
+    <string name="screenrecord_taps_title">在螢幕上顯示觸碰點</string>
+    <string name="screenrecord_stopdot_title">顯示停止鍵</string>
+    <string name="screenrecord_video_bitrate_title">視訊位元率</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">數據節省模式</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">漫遊</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">錯誤</string>
+    <string name="omnijaws_service_unkown">沒有天氣資訊</string>
+    <string name="omnijaws_service_error_long">載入天氣資訊時發生錯誤</string>
+    <string name="omnijaws_service_disabled">服務已停用</string>
+    <string name="omnijaws_detail_header">天氣</string>
+    <string name="omnijaws_label_default">天氣</string>
+    <string name="omnijaws_current_text">現在</string>
+    <string name="omnijaws_package_not_available">OmniJaws 不可用</string>
+    <string name="omnijaws_service_last_update">最後更新：</string>
+    <!-- App lock -->
+    <string name="applock_locked">&#160;已被鎖定。</string>
+    <string name="applock_fingerprint_face">, 指紋 或 臉部辨識 來解鎖</string>
+    <string name="applock_face">&#160;或使用您的臉部解鎖。</string>
+    <string name="applock_fingerprint">&#160;或使用您的指紋解鎖。</string>
+    <string name="applock_locked_notification">應用程式已被鎖定</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC 調光</string>
+    <string name="quick_settings_dc_brightness_mode">亮度模式</string>
+    <string name="quick_settings_dc_full_auto">自動模式</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">語言</string>
+    <string name="quick_settings_locale_more_locales_toast">請配置多種語言以啟用切換功能</string>
+</resources>
