@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Erőteljes töltés (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> a teljes töltésig)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Erőteljes töltés</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Lánctöltés (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> a teljes töltöttségig)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Lánctöltés</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Intelligens pixelek</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Automatikusan engedélyezett intelligens pixelek</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Képernyőmentés</string>
+    <string name="quick_settings_region_screenshot_label">Részleges képernyőmentés</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">CPU-adatok</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">FPS-adatok</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">FPS-adatok ki</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">FPS-adatok be</string>
+    <!-- HW Keys Tile -->
+    <string name="quick_settings_hw_keys_label">Hardvergombok</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Iránytű</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Előkészítés\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Iránytű kikapcsolás.</string>
+    <string name="accessibility_quick_settings_compass_on">Iránytű bekapcsolás.</string>
+    <string name="quick_settings_compass_N">É</string>
+    <string name="quick_settings_compass_NE">ÉK</string>
+    <string name="quick_settings_compass_E">K</string>
+    <string name="quick_settings_compass_SE">DK</string>
+    <string name="quick_settings_compass_S">D</string>
+    <string name="quick_settings_compass_SW">DNy</string>
+    <string name="quick_settings_compass_W">Ny</string>
+    <string name="quick_settings_compass_NW">ÉNy</string>
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">Zene</string>
+    <string name="quick_settings_music_play">Lejátszás</string>
+    <string name="quick_settings_music_pause">Szüneteltetés</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">\"Mindig bekapcsolva\" (AOD)</string>
+    <!--Google sound search tile -->
+    <string name="quick_settings_sound_search">Hangalapú keresés</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">Hang</string>
+    <string name="quick_settings_sound_ring">Csengés</string>
+    <string name="quick_settings_sound_vibrate">Rezgés</string>
+    <string name="quick_settings_sound_dnd">Ne zavarjanak (DND)</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">Újraindítás</string>
+    <string name="quick_settings_reboot_recovery_label">Recovery</string>
+    <string name="quick_settings_poweroff_label">Kikapcsolás</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">A Játékmód a beállításokban van letiltva</string>
+    <string name="quick_settings_gaming_mode_label">Játékmód</string>
+    <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_disabled">A Játékmód kikapcsolásra került.</string>
+    <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_enabled">A Játékmód bekapcsolásra került.</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">SIM-kártya váltása</string>
+    <string name="qs_data_switch_toast_0">Jelenleg nincs SIM-kártya beillesztve</string>
+    <string name="qs_data_switch_toast_1">Jelenleg csak egy SIM-kártya van beillesztve</string>
+    <string name="qs_data_switch_changed_1">A SIM1 használata mobiladat-forgalomhoz</string>
+    <string name="qs_data_switch_changed_2">A SIM2 használata mobiladat-forgalomhoz</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Leállítja erőltetetten?</string>
+    <string name="force_stop_dlg_text">Ha egy alkalmazást leállásra kényszerít, lehetséges, hogy az hibásan fog működni.</string>
+    <string name="guts_force_close_app">Az alkalmazás bezárása</string>
+    <!-- Restart SystemUI via Advanced Power Menu -->
+    <string name="global_action_restart_systemui">Rendszerfelület</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Az idő</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Az idő</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">Egy</string>
+    <string name="text_clock_h_two">Kettő</string>
+    <string name="text_clock_h_three">Három</string>
+    <string name="text_clock_h_four">Négy</string>
+    <string name="text_clock_h_five">Öt</string>
+    <string name="text_clock_h_six">Hat</string>
+    <string name="text_clock_h_seven">Hét</string>
+    <string name="text_clock_h_eight">Nyolc</string>
+    <string name="text_clock_h_nine">Kilenc</string>
+    <string name="text_clock_h_ten">Tíz</string>
+    <string name="text_clock_h_eleven">Tizenegy</string>
+    <string name="text_clock_h_twelve">Tizenkettő</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">óra</string>
+    <string name="text_clock_m_one">óra egy</string>
+    <string name="text_clock_m_two">óra kettő</string>
+    <string name="text_clock_m_three">óra három</string>
+    <string name="text_clock_m_four">óra négy</string>
+    <string name="text_clock_m_five">óra öt</string>
+    <string name="text_clock_m_six">óra hat</string>
+    <string name="text_clock_m_seven">óra hét</string>
+    <string name="text_clock_m_eight">óra nyolc</string>
+    <string name="text_clock_m_nine">óra kilenc</string>
+    <string name="text_clock_m_ten">Tíz</string>
+    <string name="text_clock_m_eleven">Tizenegy</string>
+    <string name="text_clock_m_twelve">Tizenkettő</string>
+    <string name="text_clock_m_thirteen">Tizenhárom</string>
+    <string name="text_clock_m_fourteen">Tizennégy</string>
+    <string name="text_clock_m_fifteen">Tizenöt</string>
+    <string name="text_clock_m_sixteen">Tizenhat</string>
+    <string name="text_clock_m_seventeen">Tizenhét</string>
+    <string name="text_clock_m_eighteen">Tizennyolc</string>
+    <string name="text_clock_m_nineteen">Tizenkilenc</string>
+    <string name="text_clock_m_twenty">Húsz</string>
+    <string name="text_clock_m_twenty_one">Huszonegy</string>
+    <string name="text_clock_m_twenty_two">Huszonkettő</string>
+    <string name="text_clock_m_twenty_three">Huszonhárom</string>
+    <string name="text_clock_m_twenty_four">Huszonnégy</string>
+    <string name="text_clock_m_twenty_five">Huszonöt</string>
+    <string name="text_clock_m_twenty_six">Huszonhat</string>
+    <string name="text_clock_m_twenty_seven">Huszonhét</string>
+    <string name="text_clock_m_twenty_eight">Huszonnyolc</string>
+    <string name="text_clock_m_twenty_nine">Huszonkilenc</string>
+    <string name="text_clock_m_thirty">Harminc</string>
+    <string name="text_clock_m_thirty_one">Harmicegy</string>
+    <string name="text_clock_m_thirty_two">Harminckettő</string>
+    <string name="text_clock_m_thirty_three">Harminchárom</string>
+    <string name="text_clock_m_thirty_four">Harmincnégy</string>
+    <string name="text_clock_m_thirty_five">Harmincöt</string>
+    <string name="text_clock_m_thirty_six">Harminchat</string>
+    <string name="text_clock_m_thirty_seven">Harminchét</string>
+    <string name="text_clock_m_thirty_eight">Harmincnyolc</string>
+    <string name="text_clock_m_thirty_nine">Harminckilenc</string>
+    <string name="text_clock_m_forty">Negyven</string>
+    <string name="text_clock_m_forty_one">Negyvenegy</string>
+    <string name="text_clock_m_forty_two">Negyvenkettő</string>
+    <string name="text_clock_m_forty_three">Negyvenhárom</string>
+    <string name="text_clock_m_forty_four">Negyvennégy</string>
+    <string name="text_clock_m_forty_five">Negyvenöt</string>
+    <string name="text_clock_m_forty_six">Negyvenhat</string>
+    <string name="text_clock_m_forty_seven">Negyvenhét</string>
+    <string name="text_clock_m_forty_eight">Negyvennyolc</string>
+    <string name="text_clock_m_forty_nine">Negyvenkilenc</string>
+    <string name="text_clock_m_fifty">Ötven</string>
+    <string name="text_clock_m_fifty_one">Ötvenegy</string>
+    <string name="text_clock_m_fifty_two">Ötvenkettő</string>
+    <string name="text_clock_m_fifty_three">Ötvenhárom</string>
+    <string name="text_clock_m_fifty_four">Ötvennégy</string>
+    <string name="text_clock_m_fifty_five">Ötvenöt</string>
+    <string name="text_clock_m_fifty_six">Ötvenhat</string>
+    <string name="text_clock_m_fifty_seven">Ötvenhét</string>
+    <string name="text_clock_m_fifty_eight">Ötvennyolc</string>
+    <string name="text_clock_m_fifty_nine">Ötvenkilenc</string>
+    <!-- Screen Stabilization -->
+    <string name="quick_settings_stabilization_label">Képstabilizáció</string>
+    <string name="quick_settings_stabilization_off">Stabilizáció kikapcsolva</string>
+    <string name="quick_settings_stabilization_on">Stabilizáció bekapcsolva</string>
+    <string name="low_label">Alacsony</string>
+    <string name="high_label">Magas</string>
+    <string name="stabilization_velocity_friction">VF (surlódási sebesség)</string>
+    <string name="stabilization_velocity_amplitude">VA (kilengési sebesség)</string>
+    <string name="stabilization_position_friction">PF (surlódási pozíció)</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">Elindítja a felvételt?</string>
+    <string name="screenrecord_dialog_summary">Felvétel közben az Android rendszer bármilyen érzékeny információt rögzíthet, amely a képernyőn látható vagy az eszközön lejátszódik. Ide tartoznak a jelszavak, a fizetési információk, a fényképek, az üzenetek és a hang.</string>
+    <string name="screenrecord_dialog_start">Elindítás</string>
+    <string name="screenrecord_dialog_cancel">Mégse</string>
+    <string name="screenrecord_audio_recording_title">A hang forrása</string>
+    <string name="screenrecord_audio_recording_internal">Belső</string>
+    <string name="screenrecord_audio_recording_microphone">Mikrofon</string>
+    <string name="screenrecord_audio_recording_off">Letiltva</string>
+    <string name="screenrecord_taps_title">Érintésmegjelenítés a képernyőn</string>
+    <string name="screenrecord_stopdot_title">Megállítógomb-megjelenítés</string>
+    <string name="screenrecord_video_bitrate_title">Videó-bitráta</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Adatforgalom-csökkentő</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Barangolás</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Hiba</string>
+    <string name="omnijaws_service_unkown">Nincsenek időjárásadatok</string>
+    <string name="omnijaws_service_error_long">Hiba az időjárásadatok betöltésekor</string>
+    <string name="omnijaws_service_disabled">A szolgáltatás ki van kapcsolva</string>
+    <string name="omnijaws_detail_header">Időjárás</string>
+    <string name="omnijaws_label_default">Időjárás</string>
+    <string name="omnijaws_current_text">Most</string>
+    <string name="omnijaws_package_not_available">Az OmniJaws nem elérhető</string>
+    <string name="omnijaws_service_last_update">Utoljára frissítve:</string>
+    <!-- App lock -->
+    <string name="applock_locked">&#160;lezárásra került.</string>
+    <string name="applock_fingerprint_face">Feloldáshoz használja az ujjlenyomat érzékelőt, vagy az arcfelismerést.</string>
+    <string name="applock_face">Használja az arcfelismerést, vagy &#160; feloldáshoz.</string>
+    <string name="applock_fingerprint">&#160;vagy ujjlenyomat a feloldáshoz.</string>
+    <string name="applock_locked_notification">Az alkalmazás lezárásra került</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">DC-kiegyenlítés</string>
+    <string name="quick_settings_dc_brightness_mode">Fényerő-mód</string>
+    <string name="quick_settings_dc_full_auto">Automatikus mód</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Nyelv</string>
+    <string name="quick_settings_locale_more_locales_toast">Kérjük, állítson be több nyelvet a váltókapcsoló működésének engedélyezéséhez</string>
+</resources>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Dash (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%s</xliff:g> até a carga completa)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> • Carregando rapidamente</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Rapido (<xliff:g id="charging_time_left" example="4 horas e 2 minutos">%1$s</xliff:g> até conclusão)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Carregando Rapidamente</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Píxeis Inteligentes</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Auto-habilitar píxeis inteligentes</string>
+    <!-- Screenshot -->
+    <string name="quick_settings_screenshot_label">Captura de tela</string>
+    <string name="quick_settings_region_screenshot_label">Captura parcial da tela</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Informações da CPU</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Informação de FPS</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">Informações da CPU desligada</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">Informações da CPU ligada</string>
+    <!-- HW Keys Tile -->
+    <string name="quick_settings_hw_keys_label">Teclas físicas</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Bússola</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Inicializando\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Bússola desligada.</string>
+    <string name="accessibility_quick_settings_compass_on">Bússola ligada.</string>
+    <string name="quick_settings_compass_N">N</string>
+    <string name="quick_settings_compass_NE">NE</string>
+    <string name="quick_settings_compass_E">E</string>
+    <string name="quick_settings_compass_SE">SE</string>
+    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_SW">SW</string>
+    <string name="quick_settings_compass_W">W</string>
+    <string name="quick_settings_compass_NW">NW</string>
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">Música</string>
+    <string name="quick_settings_music_play">Reproduzir</string>
+    <string name="quick_settings_music_pause">Pausar</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Tela sempre ativa</string>
+    <!--Google sound search tile -->
+    <string name="quick_settings_sound_search">Pesquisa de som</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">Som</string>
+    <string name="quick_settings_sound_ring">Campainha</string>
+    <string name="quick_settings_sound_vibrate">Vibração</string>
+    <string name="quick_settings_sound_dnd">Não pertube</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">Reiniciar</string>
+    <string name="quick_settings_reboot_recovery_label">Recuperação</string>
+    <string name="quick_settings_poweroff_label">Desligar</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Modo de jogo está desativado nas configurações</string>
+    <string name="quick_settings_gaming_mode_label">Modo de jogo</string>
+    <!-- Content description of the Gaming mode tile in quick settings when disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_disabled">O modo de jogo está desativado.</string>
+    <!-- Content description of the Gaming mode tile in quick settings when enabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_gaming_mode_enabled">O modo de jogo está ativado.</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Trocar cartão de dados</string>
+    <string name="qs_data_switch_toast_0">Atualmente nenhum cartão SIM está inserido</string>
+    <string name="qs_data_switch_toast_1">Atualmente, apenas um cartão SIM está inserido</string>
+    <string name="qs_data_switch_changed_1">Usando o SIM 1 para dados móveis</string>
+    <string name="qs_data_switch_changed_2">Usando o SIM 2 para dados móveis</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Forçar parada?</string>
+    <string name="force_stop_dlg_text">Se você forçar a parada de um app, ele pode apresentar mau funcionamento.</string>
+    <string name="guts_force_close_app">Fechar aplicativo</string>
+    <!-- Restart SystemUI via Advanced Power Menu -->
+    <string name="global_action_restart_systemui">Interface de usuário</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">São</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">São</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">Uma</string>
+    <string name="text_clock_h_two">Duas</string>
+    <string name="text_clock_h_three">Três</string>
+    <string name="text_clock_h_four">Quatro</string>
+    <string name="text_clock_h_five">Cinco</string>
+    <string name="text_clock_h_six">Seis</string>
+    <string name="text_clock_h_seven">Sete</string>
+    <string name="text_clock_h_eight">Oito</string>
+    <string name="text_clock_h_nine">Nove</string>
+    <string name="text_clock_h_ten">Dez</string>
+    <string name="text_clock_h_eleven">Onze</string>
+    <string name="text_clock_h_twelve">Doze</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">Em Ponto</string>
+    <string name="text_clock_m_one">E uma</string>
+    <string name="text_clock_m_two">E duas</string>
+    <string name="text_clock_m_three">E três</string>
+    <string name="text_clock_m_four">E quatro</string>
+    <string name="text_clock_m_five">E cinco</string>
+    <string name="text_clock_m_six">E seis</string>
+    <string name="text_clock_m_seven">E sete</string>
+    <string name="text_clock_m_eight">E oito</string>
+    <string name="text_clock_m_nine">E nove</string>
+    <string name="text_clock_m_ten">Dez</string>
+    <string name="text_clock_m_eleven">Onze</string>
+    <string name="text_clock_m_twelve">Doze</string>
+    <string name="text_clock_m_thirteen">Treze</string>
+    <string name="text_clock_m_fourteen">Quatorze</string>
+    <string name="text_clock_m_fifteen">Quinze</string>
+    <string name="text_clock_m_sixteen">Dezesseis</string>
+    <string name="text_clock_m_seventeen">Dezessete</string>
+    <string name="text_clock_m_eighteen">Dezoito</string>
+    <string name="text_clock_m_nineteen">Dezenove</string>
+    <string name="text_clock_m_twenty">Vinte</string>
+    <string name="text_clock_m_twenty_one">Vinte e uma</string>
+    <string name="text_clock_m_twenty_two">Vinte e duas</string>
+    <string name="text_clock_m_twenty_three">Vinte e três</string>
+    <string name="text_clock_m_twenty_four">Vinte e quatro</string>
+    <string name="text_clock_m_twenty_five">Vinte e cinco</string>
+    <string name="text_clock_m_twenty_six">Vinte e seis</string>
+    <string name="text_clock_m_twenty_seven">Vinte e sete</string>
+    <string name="text_clock_m_twenty_eight">Vinte e oito</string>
+    <string name="text_clock_m_twenty_nine">Vinte e nove</string>
+    <string name="text_clock_m_thirty">Trinta</string>
+    <string name="text_clock_m_thirty_one">Trinta e um</string>
+    <string name="text_clock_m_thirty_two">Trinta e dois</string>
+    <string name="text_clock_m_thirty_three">Trinta e três</string>
+    <string name="text_clock_m_thirty_four">Trinta e quatro</string>
+    <string name="text_clock_m_thirty_five">Trinta e cinco</string>
+    <string name="text_clock_m_thirty_six">Trinta e seis</string>
+    <string name="text_clock_m_thirty_seven">Trinta e sete</string>
+    <string name="text_clock_m_thirty_eight">Trinta e oito</string>
+    <string name="text_clock_m_thirty_nine">Trinta e nove</string>
+    <string name="text_clock_m_forty">Quarenta</string>
+    <string name="text_clock_m_forty_one">Quarenta e um</string>
+    <string name="text_clock_m_forty_two">Quarenta e dois</string>
+    <string name="text_clock_m_forty_three">Quarenta e três</string>
+    <string name="text_clock_m_forty_four">Quarenta e quatro</string>
+    <string name="text_clock_m_forty_five">Quarenta e cinco</string>
+    <string name="text_clock_m_forty_six">Quarenta e seis</string>
+    <string name="text_clock_m_forty_seven">Quarenta e sete</string>
+    <string name="text_clock_m_forty_eight">Quarenta e oito</string>
+    <string name="text_clock_m_forty_nine">Quarenta e nove</string>
+    <string name="text_clock_m_fifty">Cinquenta</string>
+    <string name="text_clock_m_fifty_one">Cinquenta e um</string>
+    <string name="text_clock_m_fifty_two">Cinquenta e dois</string>
+    <string name="text_clock_m_fifty_three">Cinquenta e três</string>
+    <string name="text_clock_m_fifty_four">Cinquenta e quatro</string>
+    <string name="text_clock_m_fifty_five">Cinquenta e cinco</string>
+    <string name="text_clock_m_fifty_six">Cinquenta e seis</string>
+    <string name="text_clock_m_fifty_seven">Cinquenta e sete</string>
+    <string name="text_clock_m_fifty_eight">Cinquenta e oito</string>
+    <string name="text_clock_m_fifty_nine">Cinquenta e nove</string>
+    <!-- Screen Stabilization -->
+    <string name="quick_settings_stabilization_label">Estabilização de tela</string>
+    <string name="quick_settings_stabilization_off">A estabilização está desativada</string>
+    <string name="quick_settings_stabilization_on">A estabilização está ativada</string>
+    <string name="low_label">Baixo</string>
+    <string name="high_label">Alta</string>
+    <string name="stabilization_velocity_friction">Velocidade de atrito</string>
+    <string name="stabilization_velocity_amplitude">Velocidade de Amplitude</string>
+    <string name="stabilization_position_friction">Posição de atrito</string>
+    <!-- Screen record -->
+    <string name="screenrecord_dialog_title">Começar a gravar?</string>
+    <string name="screenrecord_dialog_summary">Durante a gravação, o Android pode capturar informações sensíveis que são visíveis na sua tela ou reproduzidas em seu dispositivo. Isso inclui senhas, dados de pagamento, fotos, imagens e áudio.</string>
+    <string name="screenrecord_dialog_start">Começar</string>
+    <string name="screenrecord_dialog_cancel">Cancelar</string>
+    <string name="screenrecord_audio_recording_title">Origem do áudio</string>
+    <string name="screenrecord_audio_recording_internal">Interno</string>
+    <string name="screenrecord_audio_recording_microphone">Microfone</string>
+    <string name="screenrecord_audio_recording_off">Desabilitado</string>
+    <string name="screenrecord_taps_title">Mostrar toques na tela</string>
+    <string name="screenrecord_stopdot_title">Mostrar ponto final</string>
+    <string name="screenrecord_video_bitrate_title">Taxa de bits de vídeo</string>
+    <!-- Name of the data saver status bar icon. -->
+    <string name="status_bar_data_saver">Economizar dados</string>
+    <!-- Name of the vpn status bar icon. -->
+    <string name="status_bar_vpn">VPN</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Roaming</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Erro</string>
+    <string name="omnijaws_service_unkown">Sem informações do clima</string>
+    <string name="omnijaws_service_error_long">Erro ao carregar as informações do clima</string>
+    <string name="omnijaws_service_disabled">Serviço desativado</string>
+    <string name="omnijaws_detail_header">Clima</string>
+    <string name="omnijaws_label_default">Tempo</string>
+    <string name="omnijaws_current_text">Agora</string>
+    <string name="omnijaws_package_not_available">OmniJaws não disponível</string>
+    <string name="omnijaws_service_last_update">Última atualização:</string>
+    <!-- App lock -->
+    <string name="applock_locked">&#160; está bloqueado.</string>
+    <string name="applock_fingerprint_face">, impressão digital ou seu rosto para desbloquear.</string>
+    <string name="applock_face">&#160;ou seu rosto para desbloquear.</string>
+    <string name="applock_fingerprint">&#160; ou use sua digital impressão digital para desbloquear.</string>
+    <string name="applock_locked_notification">O aplicativo está bloqueado</string>
+    <!-- DC Dimming -->
+    <string name="quick_settings_dc_dimming_label">Escurecimento DC</string>
+    <string name="quick_settings_dc_brightness_mode">Modo de brilho</string>
+    <string name="quick_settings_dc_full_auto">Modo automático</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Idioma</string>
+    <string name="quick_settings_locale_more_locales_toast">Por favor, configure vários idiomas para usar essa função</string>
+</resources>
