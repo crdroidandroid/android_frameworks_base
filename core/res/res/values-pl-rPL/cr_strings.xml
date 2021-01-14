@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">Zanikanie</string>
+    <string name="animation_slide_right">Przesuń w prawo</string>
+    <string name="animation_slide_left">Przesuń w lewo</string>
+    <string name="animation_slide_right_no_fade">Przesuń w prawo (Bez zanikania)</string>
+    <string name="animation_slide_left_no_fade">Przesuń w lewo (Bez zanikania)</string>
+    <string name="animation_slide_up">Przesuń w dół</string>
+    <string name="animation_slide_down">Przesuń w górę</string>
+    <string name="animation_default">Domyślnie</string>
+    <string name="animation_translucent">Przeźroczysty</string>
+    <string name="animation_grow_shrink">Powiększenie (od góry)</string>
+    <string name="animation_grow_shrink_center">Powiększenie (ze środka)</string>
+    <string name="animation_grow_shrink_bottom">Powiększenie (z dołu)</string>
+    <string name="animation_grow_shrink_left">Powiększenie (z lewej)</string>
+    <string name="animation_grow_shrink_right">Powiększenie (z prawej)</string>
+    <string name="animation_random">Losowo</string>
+    <string name="action_null">Pusto</string>
+    <string name="animation_ethans">Ethans</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Skopiuj logi awarii</string>
+    <string name="url_copy_success">URL skopiowany pomyślnie</string>
+    <string name="url_copy_failed">Wystąpił błąd podczas przesyłania logów do serwisu dogbin</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Naciśnij i przytrzymaj przycisk zasilania aby odblokować</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Tryb grania</string>
+    <string name="gaming_mode_notification_title">Tryb gry włączony</string>
+    <string name="gaming_mode_notification_content">Naciśnij, aby wyłączyć tryb gry</string>
+    <string name="gaming_mode_enabled_toast">Tryb gry włączony</string>
+    <string name="gaming_mode_disabled_toast">Tryb gry wyłączony</string>
+    <!-- MicroG -->
+    <string name="permlab_fakePackageSignature">Sfałszowany podpis pakietu</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Pozwala aplikacji na udawanie innej aplikacji. Złośliwe aplikacje mogą wykorzystać to w celu uzyskania dostępu do prywatnych danych. Zachowaj ostrożność udzielając to uprawnienie!</string>
+    <!-- Screen recorder -->
+    <string name="global_action_screenrecord">Nagrywanie ekranu</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s został/a pozbawiony/a dostępu do schowka</string>
+    <string name="app_clipboard_access_granted">%1$s uzyskał dostęp do schowka</string>
+</resources>
