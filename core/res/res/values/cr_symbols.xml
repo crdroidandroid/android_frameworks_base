@@ -84,4 +84,9 @@
 
   <!-- Default value for FOD animation package resources -->
   <java-symbol type="string" name="config_fodAnimationPackage" />
+
+  <!-- App error dialog -->
+  <java-symbol type="id" name="aerr_copy" />
+  <java-symbol type="string" name="url_copy_success" />
+  <java-symbol type="string" name="url_copy_failed" />
 </resources>
