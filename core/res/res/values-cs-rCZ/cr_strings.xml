@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">Slábnutí</string>
+    <string name="animation_slide_right">Přejetí vpravo</string>
+    <string name="animation_slide_left">Přejetí vlevo</string>
+    <string name="animation_slide_right_no_fade">Přejetí vpravo (bez slábnutí)</string>
+    <string name="animation_slide_left_no_fade">Přejetí vlevo (bez slábnutí)</string>
+    <string name="animation_slide_up">Přejetí dolů</string>
+    <string name="animation_slide_down">Přejetí nahoru</string>
+    <string name="animation_default">Výchozí</string>
+    <string name="animation_translucent">Průsvitnost</string>
+    <string name="animation_grow_shrink">Růst (nahoře)</string>
+    <string name="animation_grow_shrink_center">Růst (uprostřed)</string>
+    <string name="animation_grow_shrink_bottom">Růst (dole)</string>
+    <string name="animation_grow_shrink_left">Růst (vlevo)</string>
+    <string name="animation_grow_shrink_right">Růst (vpravo)</string>
+    <string name="animation_random">Náhodně</string>
+    <string name="action_null">Prázdné</string>
+    <string name="animation_ethans">Ethans</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Kopírovat URL protokolu o selhání</string>
+    <string name="url_copy_success">URL úspěšně zkopírována</string>
+    <string name="url_copy_failed">Při nahrávání protokolu o selhání na dogbin došlo k chybě</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Stisknutím a podržením tlačítka napájení zapnout obrazovku</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Herní režim</string>
+    <string name="gaming_mode_notification_title">Herní režim povolen</string>
+    <string name="gaming_mode_notification_content">Klepněte sem pro vypnutí Herního režimu</string>
+    <string name="gaming_mode_enabled_toast">Herní režim je zapnutý</string>
+    <string name="gaming_mode_disabled_toast">Herní režim je vypnutý</string>
+    <!-- MicroG -->
+    <string name="permlab_fakePackageSignature">Napodobit podpis balíčku</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Umožňuje aplikaci předstírat, že je jinou aplikací. Škodlivé aplikace by mohly použít tuto možnost k přístupu k datům soukromých aplikací. Legitimně používá emulátor, který předstírá, že je to, co napodobuje. Udělujte toto oprávnění s opatrností!</string>
+    <!-- Screen recorder -->
+    <string name="global_action_screenrecord">Záznam obrazovky</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">Aplikaci %1$s byl odepřen přístup ke schránce</string>
+    <string name="app_clipboard_access_granted">Aplikaci %1$s byl udělen přístup ke schránce</string>
+</resources>
