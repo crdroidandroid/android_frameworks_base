@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2020 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- AOKP custom system animations -->
+    <string name="animation_fade">Qaralt</string>
+    <string name="animation_slide_right">Sağa sürüşdür</string>
+    <string name="animation_slide_left">Sola sürüşdür</string>
+    <string name="animation_slide_right_no_fade">Sağa sürüşdür (Qaraltmadan)</string>
+    <string name="animation_slide_left_no_fade">Sola sürüşdür(qaraltmadan)</string>
+    <string name="animation_slide_up">Aşağı sürüşdür</string>
+    <string name="animation_slide_down">Yuxarı sürüşdür</string>
+    <string name="animation_default">Susmaya görə</string>
+    <string name="animation_translucent">Yarı şəffaf</string>
+    <string name="animation_grow_shrink">Böyüt (Yuxarı)</string>
+    <string name="animation_grow_shrink_center">Böyüt (Mərkəz)</string>
+    <string name="animation_grow_shrink_bottom">Böyüt (Aşağı)</string>
+    <string name="animation_grow_shrink_left">Böyüt (Sol)</string>
+    <string name="animation_grow_shrink_right">Böyüt (Sağ)</string>
+    <string name="animation_random">Təsadüfi</string>
+    <string name="action_null">Boş</string>
+    <string name="animation_ethans">Ethans</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Çökmə jurnal URL-sini kopyala</string>
+    <string name="url_copy_success">URL uğurla kopyalandı</string>
+    <string name="url_copy_failed">Jurnalı dogbin-ə yükləyərkən xəta baş verdi</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Kilidi açmaq üçün güc düyməsinə basıb saxlayın</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Oyun rejimi</string>
+    <string name="gaming_mode_notification_title">Oyun rejimi aktivdir</string>
+    <string name="gaming_mode_notification_content">Oyun rejimini bağlamaq üçün toxunun</string>
+    <string name="gaming_mode_enabled_toast">Oyun rejimi açıldı</string>
+    <string name="gaming_mode_disabled_toast">Oyun rejimi bağlanıldı</string>
+    <!-- MicroG -->
+    <string name="permlab_fakePackageSignature">Saxta paket imzası</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Proqrama başqa bir proqram kimi görünməyə və davranmağa icazə verir. Zərərli proqramlar bunu istifadə edərək şəxsi məlumatlarınızı əldə edə bilərlər. Bu icazəni verərkən ehtiyatlı olun!</string>
+    <!-- Screen recorder -->
+    <string name="global_action_screenrecord">Ekran rekordu</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s panoya keçidə icazə rədd edildi</string>
+    <string name="app_clipboard_access_granted">%1$s panoya keçidə icazə verildi</string>
+</resources>
