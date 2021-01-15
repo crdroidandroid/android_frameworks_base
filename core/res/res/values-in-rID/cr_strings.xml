@@ -38,7 +38,7 @@ Aplikasi jahat mungkin dapat menggunakan ini untuk mengakses data aplikasi priba
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Tekan dan tahan tombol power untuk membuka kunci</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">Salin URL log kerusakan</string>
+    <string name="url_copy_success">URL berhasil disalin</string>
+    <string name="url_copy_failed">Terjadi kesalahan saat mengunggah log ke dogbin</string>
 </resources>
