@@ -37,7 +37,7 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">전원 버튼을 길게 눌러 잠금 해제</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">비정상 종료 로그 URL 복사</string>
+    <string name="url_copy_success">링크가 성공적으로 복사되었습니다</string>
+    <string name="url_copy_failed">로그를 dogbin에 업로드하는 중 오류가 발생했습니다.</string>
 </resources>
