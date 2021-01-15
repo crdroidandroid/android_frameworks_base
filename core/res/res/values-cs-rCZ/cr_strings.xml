@@ -38,7 +38,7 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Stisknutím a\u00a0podržením tlačítka napájení zapnout obrazovku</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">Kopírovat URL protokolu o\u00a0selhání</string>
+    <string name="url_copy_success">URL byla úspěšně zkopírována</string>
+    <string name="url_copy_failed">Při nahrávání protokolu o\u00a0selhání na dogbin došlo k\u00a0chybě</string>
 </resources>
