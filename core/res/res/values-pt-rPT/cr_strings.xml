@@ -21,14 +21,14 @@
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Permite que a aplicação finja ser uma aplicação diferente. Aplicações maliciosas podem ser capazes de usar isto para aceder a dados das aplicações. Conceda essa permissão com cautela!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgrouplab_fake_package_signature">Spoof package signature</string>
+    <string name="permgrouplab_fake_package_signature">Falsificar a assinatura do pacote</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgroupdesc_fake_package_signature">allow to spoof package signature</string>
+    <string name="permgroupdesc_fake_package_signature">permitir a falsificação da assinatura do pacote</string>
     <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
-    <string name="permgrouprequest_fake_package_signature">Allow
-        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; to spoof package signature?</string>
+    <string name="permgrouprequest_fake_package_signature">Permitir que
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; falsifique a assinatura do pacote?</string>
     <!-- Long-press kill application -->
-    <string name="app_killed_message">Application killed</string>
+    <string name="app_killed_message">Aplicação terminada</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Modo de jogo</string>
     <string name="gaming_mode_notification_title">Modo de jogo ativado</string>
@@ -37,4 +37,8 @@
     <string name="gaming_mode_disabled_toast">O modo de jogo foi desativado</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Para desbloquear pressione e mantenha pressionado o botão de ligar</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Copy crash log URL</string>
+    <string name="url_copy_success">URL copied successfully</string>
+    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
 </resources>

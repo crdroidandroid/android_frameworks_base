@@ -37,4 +37,8 @@
     <string name="gaming_mode_disabled_toast">Game-modus uitgeschakeld</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Houd de aan/uit- knop ingedrukt om te ontgrendelen</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Kopieer crash log URL</string>
+    <string name="url_copy_success">URL succesvol gekopieerd</string>
+    <string name="url_copy_failed">Er is een fout opgetreden tijdens het uploaden van de log naar dogbin</string>
 </resources>
