@@ -50,6 +50,7 @@ import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.LocaleTile;
 import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.LiveDisplayTile;
+import com.android.systemui.qs.tiles.LteTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
 import com.android.systemui.qs.tiles.PowerShareTile;
@@ -125,6 +126,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<SoundTile> mSoundTileProvider;
     private final Provider<CompassTile> mCompassTileProvider;
     private final Provider<LocaleTile> mLocaleTileProvider;
+    private final Provider<LteTile> mLteTileProvider;
 
     private final Lazy<QSHost> mQsHostLazy;
 
@@ -172,7 +174,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<RebootTile> rebootTileProvider,
             Provider<SoundTile> soundTileProvider,
             Provider<CompassTile> compassTileProvider,
-            Provider<LocaleTile> localeTileProvider) {
+            Provider<LocaleTile> localeTileProvider,
+            Provider<LteTile> lteTileProvider) {
         mQsHostLazy = qsHostLazy;
         mWifiTileProvider = wifiTileProvider;
         mBluetoothTileProvider = bluetoothTileProvider;
@@ -217,6 +220,7 @@ public class QSFactoryImpl implements QSFactory {
         mSoundTileProvider = soundTileProvider;
         mCompassTileProvider = compassTileProvider;
         mLocaleTileProvider = localeTileProvider;
+        mLteTileProvider = lteTileProvider;
     }
 
     public QSTile createTile(String tileSpec) {
@@ -315,6 +319,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mCompassTileProvider.get();
             case "locale":
                 return mLocaleTileProvider.get();
+            case "lte":
+                return mLteTileProvider.get();
         }
 
         // Custom tiles
