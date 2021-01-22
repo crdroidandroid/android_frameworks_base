@@ -78,6 +78,5 @@
     <string name="config_fodAnimationPackage" translatable="false">com.crdroid.fod.animations</string>
 
     <!-- Default value for Ambiant Pulse light color -->
-    <integer name="config_AmbiantPulseLightColor" >0x3980FF</integer>
-    <integer name="pulse_ambient_light_color">0x3980FF</integer>
+    <integer name="config_ambientNotificationDefaultColor">0xFF3980FF</integer>
 </resources>
