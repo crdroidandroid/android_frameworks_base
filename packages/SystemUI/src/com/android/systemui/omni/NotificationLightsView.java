@@ -86,7 +86,7 @@ public class NotificationLightsView extends RelativeLayout {
     public void animateNotification(boolean mNotification) {
         int defaultColor = Color.parseColor("#3980FF");
         boolean useAccent = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.AMBIENT_NOTIFICATION_LIGHT_ACCENT,
+                Settings.System.NOTIFICATION_PULSE_ACCENT,
                 0, UserHandle.USER_CURRENT) != 0;
         int color = useAccent ?
                 Utils.getColorAccentDefaultColor(getContext()) : defaultColor;
