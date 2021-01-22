@@ -323,6 +323,7 @@ interface INetworkManagementService
     void setFirewallInterfaceRule(String iface, boolean allow);
     void setFirewallUidRule(int chain, int uid, int rule);
     void setFirewallUidRules(int chain, in int[] uids, in int[] rules);
+    void setFirewallMACAddressRule(String macAddr, boolean allow);
     void setFirewallChainEnabled(int chain, boolean enable);
 
     /**

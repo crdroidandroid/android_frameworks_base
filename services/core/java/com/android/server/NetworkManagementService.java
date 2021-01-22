@@ -1812,6 +1812,17 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
         }
     }
 
+    @Override
+    public void setFirewallMACAddressRule(String macAddr, boolean allow) {
+        enforceSystemUid();
+        try {
+            mNetdService.firewallSetMACAddressRule(macAddr,
+                    allow ? INetd.FIREWALL_RULE_ALLOW : INetd.FIREWALL_RULE_DENY);
+        } catch (RemoteException | ServiceSpecificException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     private void closeSocketsForFirewallChainLocked(int chain, String chainName) {
         // UID ranges to close sockets on.
         UidRangeParcel[] ranges;
