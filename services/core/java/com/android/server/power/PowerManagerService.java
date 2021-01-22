@@ -1948,11 +1948,17 @@ public final class PowerManagerService extends SystemService
         }
 
         if (eventTime < mLastWakeTime
-                || getWakefulnessLocked() == WAKEFULNESS_ASLEEP
-                || getWakefulnessLocked() == WAKEFULNESS_DOZING
                 || !mSystemReady
                 || !mBootCompleted) {
             return false;
+        }
+
+        // dont check current state
+        if ((flags & PowerManager.GO_TO_SLEEP_FLAG_FORCE) == 0) {
+            if (getWakefulnessLocked() == WAKEFULNESS_ASLEEP
+                    || getWakefulnessLocked() == WAKEFULNESS_DOZING) {
+                return false;
+            }
         }
 
         Trace.traceBegin(Trace.TRACE_TAG_POWER, "goToSleep");

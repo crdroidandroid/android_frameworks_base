@@ -455,6 +455,13 @@ public final class PowerManager {
     public static final int GO_TO_SLEEP_FLAG_NO_DOZE = 1 << 0;
 
     /**
+     * Force sleep flag: Skip current state check
+     * that allows e.g. to go from aod (doze) to sleep without wake up
+     * @hide
+     */
+    public static final int GO_TO_SLEEP_FLAG_FORCE = 1 << 1;
+
+    /**
      * @hide
      */
     @IntDef(prefix = { "BRIGHTNESS_CONSTRAINT_TYPE" }, value = {
