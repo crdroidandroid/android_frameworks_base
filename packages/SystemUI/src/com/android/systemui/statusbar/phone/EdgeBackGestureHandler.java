@@ -498,6 +498,11 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
         if (y >= (mDisplaySize.y - mBottomGestureHeight)) {
             return false;
         }
+        if (mEdgeHeight != 0) {
+            if (y < (mDisplaySize.y - mBottomGestureHeight - mEdgeHeight)) {
+                return false;
+            }
+        }
 
         // If the point is way too far (twice the margin), it is
         // not interesting to us for logging purposes, nor we
