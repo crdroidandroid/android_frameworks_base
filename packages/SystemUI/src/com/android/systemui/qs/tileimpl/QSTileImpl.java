@@ -45,6 +45,7 @@ import android.text.format.DateUtils;
 import android.util.ArraySet;
 import android.util.Log;
 import android.util.SparseArray;
+import android.os.UserHandle;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
@@ -538,6 +539,8 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
     public abstract CharSequence getTileLabel();
 
     public static int getColorForState(Context context, int state) {
+        boolean setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.QS_PANEL_BG_USE_NEW_TINT, 0, UserHandle.USER_CURRENT) == 1;
         switch (state) {
             case Tile.STATE_UNAVAILABLE:
                 return Utils.getDisabled(context,
@@ -545,7 +548,11 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
             case Tile.STATE_INACTIVE:
                 return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorSecondary);
             case Tile.STATE_ACTIVE:
-                return context.getResources().getColor(com.android.systemui.R.color.qs_icon_active_color);
+                if (setQsUseNewTint) {
+                    return Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
+                } else {
+                    return context.getResources().getColor(com.android.systemui.R.color.qs_icon_active_color);
+                }
             default:
                 Log.e("QSTile", "Invalid state " + state);
                 return 0;
