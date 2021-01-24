@@ -305,6 +305,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.LESS_BORING_HEADS_UP;
     private static final String NAVBAR_STYLE =
             "system:" + Settings.System.NAVBAR_STYLE;
+    private static final String QS_PANEL_BG_USE_NEW_TINT =
+            "system:" + Settings.System.QS_PANEL_BG_USE_NEW_TINT;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -969,6 +971,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, GAMING_MODE_HEADSUP_TOGGLE);
         mTunerService.addTunable(this, LESS_BORING_HEADS_UP);
         mTunerService.addTunable(this, NAVBAR_STYLE);
+        mTunerService.addTunable(this, QS_PANEL_BG_USE_NEW_TINT);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -4769,6 +4772,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             case QS_ROWS_LANDSCAPE:
             case QS_COLUMNS_PORTRAIT:
             case QS_COLUMNS_LANDSCAPE:
+            case QS_PANEL_BG_USE_NEW_TINT:
             case QS_TILE_TITLE_VISIBILITY:
                 if (mQSPanel != null) {
                     mQSPanel.updateResources();
