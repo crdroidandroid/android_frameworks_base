@@ -1601,9 +1601,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             + SCREENSHOT_CHORD_DEBOUNCE_DELAY_MILLIS) {
                 mScreenshotChordVolumeDownKeyConsumed = true;
                 cancelPendingPowerKeyAction();
-                mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_FULLSCREEN);
-                mScreenshotRunnable.setScreenshotSource(SCREENSHOT_KEY_CHORD);
-                mHandler.postDelayed(mScreenshotRunnable, getScreenshotChordLongPressDelay());
+                takeScreenshot(TAKE_SCREENSHOT_FULLSCREEN, getScreenshotChordLongPressDelay(), SCREENSHOT_KEY_CHORD);
             }
         }
     }
@@ -1710,13 +1708,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private final ScreenshotRunnable mScreenshotRunnable = new ScreenshotRunnable();
 
-    private void takeScreenshot(int screenshotType) {
-        takeScreenshotDelayed(screenshotType, 0);
-    }
-
-    private void takeScreenshotDelayed(int screenshotType, long delay) {
+    private void takeScreenshot(int screenshotType, long delay, int screenshotSource) {
         mHandler.removeCallbacks(mScreenshotRunnable);
         mScreenshotRunnable.setScreenshotType(screenshotType);
+        mScreenshotRunnable.setScreenshotSource(screenshotSource);
         mHandler.postDelayed(mScreenshotRunnable, delay);
     }
 
@@ -1920,7 +1915,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 Utils.toggleCameraFlash();
                 break;
             case SCREENSHOT:
-                takeScreenshot(TAKE_SCREENSHOT_FULLSCREEN);
+                takeScreenshot(TAKE_SCREENSHOT_FULLSCREEN, 0, SCREENSHOT_KEY_OTHER);
                 break;
             case VOLUME_PANEL:
                 Utils.toggleVolumePanel(mContext);
@@ -3347,11 +3342,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (down && repeatCount == 0) {
                 int type = event.isShiftPressed() ? TAKE_SCREENSHOT_SELECTED_REGION
                         : TAKE_SCREENSHOT_FULLSCREEN;
-                mScreenshotRunnable.setScreenshotType(type);
-                mScreenshotRunnable.setScreenshotSource(SCREENSHOT_KEY_OTHER);
-                mHandler.post(mScreenshotRunnable);
-                return -1;
+                takeScreenshot(type, 0, SCREENSHOT_KEY_OTHER);
             }
+            return -1;
         } else if (keyCode == KeyEvent.KEYCODE_SLASH && event.isMetaPressed()) {
             if (down && repeatCount == 0 && !isKeyguardLocked()) {
                 toggleKeyboardShortcutsMenu(event.getDeviceId());
@@ -3364,9 +3357,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_SYSRQ) {
             if (down && repeatCount == 0) {
-                mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_FULLSCREEN);
-                mScreenshotRunnable.setScreenshotSource(SCREENSHOT_KEY_OTHER);
-                mHandler.post(mScreenshotRunnable);
+                takeScreenshot(TAKE_SCREENSHOT_FULLSCREEN, 0, SCREENSHOT_KEY_OTHER);
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BRIGHTNESS_UP
@@ -4474,8 +4465,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         cancelPendingAccessibilityShortcutAction();
 
                         if (mClickPartialScreenshot && mScreenshotChordVolumeDownKeyConsumed) {
-                            mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_SELECTED_REGION);
-                            mHandler.post(mScreenshotRunnable);
+                           takeScreenshot(TAKE_SCREENSHOT_SELECTED_REGION, 0, SCREENSHOT_KEY_CHORD);
                         }
                     }
                 } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
