@@ -32,6 +32,7 @@ import android.util.SparseArray;
 import android.view.ViewTreeObserver.OnPreDrawListener;
 
 import com.android.internal.graphics.ColorUtils;
+import com.android.systemui.SystemUIAnimations;
 import com.android.systemui.R;
 import com.android.systemui.animation.Interpolators;
 import com.android.systemui.statusbar.KeyguardAffordanceView;
@@ -54,6 +55,7 @@ public class LockIcon extends KeyguardAffordanceView {
     private int mState;
     private boolean mDozing;
     private boolean mKeyguardJustShown;
+    private boolean mIsFaceUnlock;
     private boolean mPredrawRegistered;
     private final SparseArray<Drawable> mDrawableCache = new SparseArray<>();
 
@@ -65,12 +67,16 @@ public class LockIcon extends KeyguardAffordanceView {
 
             int newState = mState;
             Drawable icon = getIcon(newState);
-            setImageDrawable(icon, false);
+            mIsFaceUnlock = newState == STATE_SCANNING_FACE;
 
-            if (newState == STATE_SCANNING_FACE) {
+            if (mIsFaceUnlock) {
+                icon = mContext.getDrawable(getIconForState(newState));
                 announceForAccessibility(getResources().getString(
                         R.string.accessibility_scanning_face));
             }
+
+            setImageDrawable(icon, false);
+            shakeFace();
 
             if (icon instanceof AnimatedVectorDrawable) {
                 final AnimatedVectorDrawable animation = (AnimatedVectorDrawable) icon;
@@ -180,11 +186,12 @@ public class LockIcon extends KeyguardAffordanceView {
     private static int getIconForState(int state) {
         int iconRes;
         switch (state) {
+            case STATE_SCANNING_FACE:
+                iconRes = com.android.systemui.R.drawable.ic_lock_face;
+                break;
             case STATE_LOCKED:
             // Scanning animation is a pulsing padlock. This means that the resting state is
             // just a padlock.
-            case STATE_SCANNING_FACE:
-            // Error animation also starts and ands on the padlock.
             case STATE_BIOMETRICS_ERROR:
                 iconRes = com.android.internal.R.drawable.ic_lock;
                 break;
@@ -261,5 +268,9 @@ public class LockIcon extends KeyguardAffordanceView {
             return LOCK_ANIM_RES_IDS[3][lockAnimIndex];
         }
         return LOCK_ANIM_RES_IDS[0][lockAnimIndex];
+    }
+
+    public void shakeFace() {
+        SystemUIAnimations.faceLockShake(this, mIsFaceUnlock ? false :true);
     }
 }
