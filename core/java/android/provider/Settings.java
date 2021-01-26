@@ -10589,6 +10589,12 @@ public final class Settings {
         public static final String NAVBAR_PULSE_ENABLED = "navbar_pulse_enabled";
 
         /**
+         * Pulse ambient music visualizer
+         * @hide
+         */
+        public static final String AMBIENT_PULSE_ENABLED = "ambient_pulse_enabled";
+
+        /**
          * Pulse lockscreen music visualizer
          * @hide
          */
