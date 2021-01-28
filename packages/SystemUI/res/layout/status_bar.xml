@@ -137,6 +137,8 @@
             android:textAppearance="@style/TextAppearance.StatusBar.Clock"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingStart="@dimen/status_bar_center_clock_padding_start"
+            android:paddingEnd="@dimen/status_bar_center_clock_padding_end"
             android:paddingTop="@dimen/status_bar_padding_top"
             android:singleLine="true"
             android:gravity="center"
