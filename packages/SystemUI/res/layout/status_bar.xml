@@ -136,6 +136,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:singleLine="true"
+            android:paddingStart="@dimen/status_bar_center_clock_padding_start"
+            android:paddingEnd="@dimen/status_bar_center_clock_padding_end"
             android:gravity="center"
             android:visibility="gone"
         />
