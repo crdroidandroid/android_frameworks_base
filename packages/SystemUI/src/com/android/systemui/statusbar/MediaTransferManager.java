@@ -175,38 +175,40 @@ public class MediaTransferManager {
 
     private void updateChip(View view) {
         ExpandableNotificationRow enr = getRowForParent(view.getParent());
-        int fgColor = enr.getNotificationHeader().getOriginalIconColor();
-        ColorStateList fgTintList = ColorStateList.valueOf(fgColor);
-        int bgColor = enr.getCurrentBackgroundTint();
+        if (enr != null) {
+            int fgColor = enr.getNotificationHeader().getOriginalIconColor();
+            ColorStateList fgTintList = ColorStateList.valueOf(fgColor);
+            int bgColor = enr.getCurrentBackgroundTint();
 
-        // Update outline color
-        LinearLayout viewLayout = (LinearLayout) view;
-        RippleDrawable bkgDrawable = (RippleDrawable) viewLayout.getBackground();
-        GradientDrawable rect = (GradientDrawable) bkgDrawable.getDrawable(0);
-        rect.setStroke(2, fgColor);
-        rect.setColor(bgColor);
+            // Update outline color
+            LinearLayout viewLayout = (LinearLayout) view;
+            RippleDrawable bkgDrawable = (RippleDrawable) viewLayout.getBackground();
+            GradientDrawable rect = (GradientDrawable) bkgDrawable.getDrawable(0);
+            rect.setStroke(2, fgColor);
+            rect.setColor(bgColor);
 
-        ImageView iconView = view.findViewById(com.android.internal.R.id.media_seamless_image);
-        TextView deviceName = view.findViewById(com.android.internal.R.id.media_seamless_text);
-        deviceName.setTextColor(fgTintList);
+            ImageView iconView = view.findViewById(com.android.internal.R.id.media_seamless_image);
+            TextView deviceName = view.findViewById(com.android.internal.R.id.media_seamless_text);
+            deviceName.setTextColor(fgTintList);
 
-        if (mDevice != null) {
-            Drawable icon = mDevice.getIcon();
-            iconView.setVisibility(View.VISIBLE);
-            iconView.setImageTintList(fgTintList);
+            if (mDevice != null) {
+                Drawable icon = mDevice.getIcon();
+                iconView.setVisibility(View.VISIBLE);
+                iconView.setImageTintList(fgTintList);
 
-            if (icon instanceof AdaptiveIcon) {
-                AdaptiveIcon aIcon = (AdaptiveIcon) icon;
-                aIcon.setBackgroundColor(bgColor);
-                iconView.setImageDrawable(aIcon);
+                if (icon instanceof AdaptiveIcon) {
+                    AdaptiveIcon aIcon = (AdaptiveIcon) icon;
+                    aIcon.setBackgroundColor(bgColor);
+                    iconView.setImageDrawable(aIcon);
+                } else {
+                    iconView.setImageDrawable(icon);
+                }
+                deviceName.setText(mDevice.getName());
             } else {
-                iconView.setImageDrawable(icon);
+                // Reset to default
+                iconView.setVisibility(View.GONE);
+                deviceName.setText(com.android.internal.R.string.ext_media_seamless_action);
             }
-            deviceName.setText(mDevice.getName());
-        } else {
-            // Reset to default
-            iconView.setVisibility(View.GONE);
-            deviceName.setText(com.android.internal.R.string.ext_media_seamless_action);
         }
     }
 }
