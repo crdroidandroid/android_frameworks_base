@@ -21,8 +21,6 @@ import static android.net.ConnectivityManager.PRIVATE_DNS_MODE_OFF;
 import static android.net.ConnectivityManager.PRIVATE_DNS_MODE_CLOUDFLARE;
 import static android.net.ConnectivityManager.PRIVATE_DNS_MODE_PROVIDER_HOSTNAME;
 import static android.net.ConnectivityManager.PRIVATE_DNS_SPECIFIER_CLOUDFLARE;
-import static android.net.ConnectivityManager.DNS_CLOUDFLARE_IP1;
-import static android.net.ConnectivityManager.DNS_CLOUDFLARE_IP2;
 import static android.provider.Settings.Global.DNS_RESOLVER_MAX_SAMPLES;
 import static android.provider.Settings.Global.DNS_RESOLVER_MIN_SAMPLES;
 import static android.provider.Settings.Global.DNS_RESOLVER_SAMPLE_VALIDITY_SECONDS;
@@ -145,9 +143,7 @@ public class DnsManager {
         }
 
         if (PRIVATE_DNS_MODE_CLOUDFLARE.equals(mode)) {
-            InetAddress[] ips = new InetAddress[]{
-                    IpAddress(DNS_CLOUDFLARE_IP1), IpAddress(DNS_CLOUDFLARE_IP2)};
-            return new PrivateDnsConfig(PRIVATE_DNS_SPECIFIER_CLOUDFLARE, ips);
+            return new PrivateDnsConfig(PRIVATE_DNS_SPECIFIER_CLOUDFLARE, null);
         }
 
         return new PrivateDnsConfig(useTls);
