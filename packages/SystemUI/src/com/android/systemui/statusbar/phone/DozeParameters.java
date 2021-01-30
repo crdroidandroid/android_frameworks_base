@@ -73,7 +73,6 @@ public class DozeParameters implements TunerService.Tunable,
 
         tunerService.addTunable(
                 this,
-                Settings.Secure.DOZE_ALWAYS_ON,
                 Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED);
     }
 
@@ -164,7 +163,17 @@ public class DozeParameters implements TunerService.Tunable,
      * @return {@code true} if enabled and available.
      */
     public boolean getAlwaysOn() {
-        return mDozeAlwaysOn;
+        return mAmbientDisplayConfiguration.alwaysOnEnabled(UserHandle.USER_CURRENT) ? true : false;
+    }
+
+    /**
+     * Checks if always on is available and enabled for the current user
+     * without notification pulse - used to check what to do if aod notification pulse stops
+     * @return {@code true} if enabled and available.
+     * @hide
+     */
+    public boolean getAlwaysOnAfterAmbientLight() {
+        return mAmbientDisplayConfiguration.alwaysOnEnabledSetting(UserHandle.USER_CURRENT);
     }
 
     /**
@@ -209,10 +218,10 @@ public class DozeParameters implements TunerService.Tunable,
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        mDozeAlwaysOn = mAmbientDisplayConfiguration.alwaysOnEnabled(UserHandle.USER_CURRENT);
     }
 
     public AlwaysOnDisplayPolicy getPolicy() {
         return mAlwaysOnPolicy;
     }
+
 }
