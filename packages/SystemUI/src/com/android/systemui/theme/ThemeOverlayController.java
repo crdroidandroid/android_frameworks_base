@@ -20,12 +20,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.om.IOverlayManager;
 import android.content.om.OverlayManager;
+import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
@@ -111,6 +115,30 @@ public class ThemeOverlayController extends SystemUI {
                     }
                 },
                 UserHandle.USER_ALL);
+
+        ContentObserver observer = new ContentObserver(mBgHandler) {
+            @Override
+            public void onChange(boolean selfChange, Uri uri) {
+                if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_MODE))) {
+                    reloadAssets("com.android.launcher3");
+                    String homeApp = getDefaultHomeApp(mContext);
+                    if (!homeApp.equals("com.android.launcher3")) {
+                        reloadAssets(homeApp);
+                    }
+                }
+            }
+            private void reloadAssets(String packageName) {
+                try {
+                    IOverlayManager.Stub.asInterface(ServiceManager.getService("overlay"))
+                            .reloadAssets(packageName, UserHandle.USER_CURRENT);
+                } catch (RemoteException e) {
+                    Log.i(TAG, "Unable to reload resources for " + packageName);
+                }
+            }
+        };
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_MODE),
+                false, observer, UserHandle.USER_ALL);
     }
 
     private void updateThemeOverlays() {
@@ -139,5 +167,12 @@ public class ThemeOverlayController extends SystemUI {
             }
         }
         mThemeManager.applyCurrentUserOverlays(categoryToPackage, userHandles);
+    }
+
+    private static String getDefaultHomeApp(Context context) {
+        PackageManager pm = context.getPackageManager();
+        Intent intent = new Intent("android.intent.action.MAIN");
+        intent.addCategory("android.intent.category.HOME");
+        return pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo.packageName;
     }
 }
