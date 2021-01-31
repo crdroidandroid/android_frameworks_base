@@ -163,4 +163,6 @@ interface IOverlayManager {
      * @param packageName The name of the overlay package whose idmap should be deleted.
      */
     void invalidateCachesForOverlay(in String packageName, in int userIs);
+
+    void reloadAssets(in String packageName, in int userId);
 }
