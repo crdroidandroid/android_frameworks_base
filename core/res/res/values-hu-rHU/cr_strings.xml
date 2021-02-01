@@ -37,7 +37,7 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Tartsa lenyomva a bekapcsológombot a feloldáshoz</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">Az összeomlási napló URL-jének másolása</string>
+    <string name="url_copy_success">Az URL sikeresen másolva</string>
+    <string name="url_copy_failed">Hiba történt a napló dogbin-re való feltöltése során</string>
 </resources>
