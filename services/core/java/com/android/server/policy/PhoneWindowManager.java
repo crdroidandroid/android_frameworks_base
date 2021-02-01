@@ -571,6 +571,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     // User defined hw key config
     boolean mHardwareKeysDisable = false;
+    boolean mSwapCapacitiveKeys = false;
 
     // Tracks user-customisable behavior for certain key events
     private Action mBackLongPressAction;
@@ -974,6 +975,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HARDWARE_KEYS_DISABLE), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SWAP_CAPACITIVE_KEYS), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ANBI_ENABLED), false, this,
@@ -2606,6 +2610,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         Settings.System.HARDWARE_KEYS_DISABLE, 0,
                         UserHandle.USER_CURRENT) == 1;
                 mLineageHardware.set(LineageHardwareManager.FEATURE_KEY_DISABLE, mHardwareKeysDisable);
+            }
+
+            if (mLineageHardware.isSupported(LineageHardwareManager.FEATURE_KEY_SWAP)) {
+                mSwapCapacitiveKeys = Settings.System.getIntForUser(resolver,
+                        Settings.System.SWAP_CAPACITIVE_KEYS, 0,
+                        UserHandle.USER_CURRENT) == 1;
+                mLineageHardware.set(LineageHardwareManager.FEATURE_KEY_SWAP, mSwapCapacitiveKeys);
             }
 
             updateKeyAssignments();
