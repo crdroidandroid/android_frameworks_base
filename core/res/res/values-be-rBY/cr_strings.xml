@@ -21,7 +21,7 @@
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Дазволіць праграмам выдаваць сябе за іншыя. Шкоднасная праграма можа атрымаць доступ да вашых дадзеных. Легітымнае выкарыстанне ўключае ў сябе эмулятар, той, хто прыкідваецца тым, што ён эмулюе. Выкарыстоўвайце толькі на свой страх і рызыка!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgrouplab_fake_package_signature">Дазволіць падмену подпісу</string>
+    <string name="permgrouplab_fake_package_signature">Падмяніць подпіс дадатка</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgroupdesc_fake_package_signature">дазволіць падмену подпісу</string>
     <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
