@@ -150,7 +150,9 @@ public interface WakeLock {
                 if (logger != null) {
                     logger.logRelease(inner, why, count);
                 }
-                inner.release();
+                if (inner.isHeld()) {
+                    inner.release();
+                }
             }
 
             /** @see PowerManager.WakeLock#wrap(Runnable) */
