@@ -53,6 +53,7 @@ public class SolidLineRenderer extends Renderer {
     private int mWidth, mHeight, mUnits;
 
     private boolean mSmoothingEnabled;
+    private boolean mRounded;
     private CMRendererObserver mObserver;
 
     public SolidLineRenderer(Context context, Handler handler, PulseView view,
@@ -115,6 +116,7 @@ public class SolidLineRenderer extends Renderer {
         float barWidth = barUnit * 8f / 9f;
         barUnit = barWidth + (barUnit - barWidth) * units / (units - 1);
         mPaint.setStrokeWidth(barWidth);
+        mPaint.setStrokeCap(mRounded ? Paint.Cap.ROUND : Paint.Cap.BUTT);
         for (int i = 0; i < mUnits; i++) {
             mFFTPoints[i * 4] = mFFTPoints[i * 4 + 2] = i * barUnit + (barWidth / 2);
             mFFTPoints[i * 4 + 1] = mHeight;
@@ -128,6 +130,7 @@ public class SolidLineRenderer extends Renderer {
         float barHeight = barUnit * 8f / 9f;
         barUnit = barHeight + (barUnit - barHeight) * units / (units - 1);
         mPaint.setStrokeWidth(barHeight);
+        mPaint.setStrokeCap(mRounded ? Paint.Cap.ROUND : Paint.Cap.BUTT);
         for (int i = 0; i < mUnits; i++) {
             mFFTPoints[i * 4 + 1] = mFFTPoints[i * 4 + 3] = i * barUnit + (barHeight / 2);
             mFFTPoints[i * 4] = mLeftInLandscape ? 0 : mWidth;
@@ -233,8 +236,10 @@ public class SolidLineRenderer extends Renderer {
                     Settings.Secure.getUriFor(Settings.Secure.PULSE_SOLID_UNITS_OPACITY), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(
-                    Settings.Secure.getUriFor(Settings.Secure.PULSE_SMOOTHING_ENABLED), false,
-                    this,
+                    Settings.Secure.getUriFor(Settings.Secure.PULSE_SMOOTHING_ENABLED), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(
+                    Settings.Secure.getUriFor(Settings.Secure.PULSE_SOLID_UNITS_ROUNDED), false, this,
                     UserHandle.USER_ALL);
         }
 
@@ -252,6 +257,8 @@ public class SolidLineRenderer extends Renderer {
                     UserHandle.USER_CURRENT);
             mSmoothingEnabled = Settings.Secure.getIntForUser(resolver,
                     Settings.Secure.PULSE_SMOOTHING_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+            mRounded = Settings.Secure.getIntForUser(resolver, 
+                    Settings.Secure.PULSE_SOLID_UNITS_ROUNDED, 0, UserHandle.USER_CURRENT) == 1;
 
             int units = Settings.Secure.getIntForUser(
                     resolver, Settings.Secure.PULSE_SOLID_UNITS_COUNT, 32,
