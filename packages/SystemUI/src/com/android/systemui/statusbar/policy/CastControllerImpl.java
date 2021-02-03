@@ -177,6 +177,10 @@ public class CastControllerImpl implements CastController {
         }
 
         synchronized (mProjectionLock) {
+            if (mProjection != null && mProjection.getPackageName().equals(
+                    "com.asus.stitchimage")){
+                mProjection = null;
+            }
             if (mProjection != null) {
                 final CastDevice device = new CastDevice();
                 device.id = mProjection.getPackageName();
