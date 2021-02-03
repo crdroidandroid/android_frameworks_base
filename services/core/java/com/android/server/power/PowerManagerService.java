@@ -608,9 +608,6 @@ public final class PowerManagerService extends SystemService
     // True if theater mode is enabled
     private boolean mTheaterModeEnabled;
 
-    // True if always on display is enabled
-    private boolean mAlwaysOnEnabled;
-
     // True if double tap to wake is enabled
     private boolean mDoubleTapWakeEnabled;
 
@@ -625,7 +622,9 @@ public final class PowerManagerService extends SystemService
     private boolean mDozeStartInProgress;
 
     // doze on charge
+    private boolean mAODAvailable;
     private boolean mDozeOnChargeEnabled;
+    private boolean mDozeOnChargeNow;
 
     private final class ForegroundProfileObserver extends SynchronousUserSwitchObserver {
         @Override
@@ -1118,10 +1117,6 @@ public final class PowerManagerService extends SystemService
     }
 
     public void systemReady(IAppOpsService appOps) {
-        // set initial value
-        Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                Settings.Secure.DOZE_ON_CHARGE_NOW, 0, UserHandle.USER_CURRENT);
-
         synchronized (mLock) {
             mSystemReady = true;
             mAppOps = appOps;
@@ -1265,9 +1260,6 @@ public final class PowerManagerService extends SystemService
                 Settings.System.SMART_CHARGING_RESET_STATS),
                 false, mSettingsObserver, UserHandle.USER_ALL);
         resolver.registerContentObserver(Settings.Secure.getUriFor(
-                Settings.Secure.DOZE_ON_CHARGE_NOW),
-                false, mSettingsObserver, UserHandle.USER_ALL);
-        resolver.registerContentObserver(Settings.Secure.getUriFor(
                 Settings.Secure.DOZE_ON_CHARGE),
                 false, mSettingsObserver, UserHandle.USER_ALL);
 
@@ -1367,6 +1359,9 @@ public final class PowerManagerService extends SystemService
                 com.android.internal.R.string.config_smartChargingSuspendValue);
         mPowerInputResumeValue = resources.getString(
                 com.android.internal.R.string.config_smartChargingResumeValue);
+
+        // doze on charge
+        mAODAvailable = mAmbientDisplayConfiguration.alwaysOnAvailable();
     }
 
     private void updateSettingsLocked() {
@@ -1400,7 +1395,6 @@ public final class PowerManagerService extends SystemService
         mWakeUpWhenPluggedOrUnpluggedSetting = LineageSettings.Global.getInt(resolver,
                 LineageSettings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED,
                 (mWakeUpWhenPluggedOrUnpluggedConfig ? 1 : 0)) == 1;
-        mAlwaysOnEnabled = mAmbientDisplayConfiguration.alwaysOnEnabled(UserHandle.USER_CURRENT);
         mSmartChargingEnabled = Settings.System.getIntForUser(resolver,
                 Settings.System.SMART_CHARGING, 0, UserHandle.USER_CURRENT) == 1;
         mSmartChargingLevel = Settings.System.getIntForUser(resolver,
@@ -1412,10 +1406,7 @@ public final class PowerManagerService extends SystemService
         mSmartChargingResetStats = Settings.System.getIntForUser(resolver,
                 Settings.System.SMART_CHARGING_RESET_STATS, 0, UserHandle.USER_CURRENT) == 1;
         mDozeOnChargeEnabled = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.DOZE_ON_CHARGE, 0, UserHandle.USER_CURRENT) != 0;
-        Settings.Secure.putIntForUser(resolver,
-                Settings.Secure.DOZE_ON_CHARGE_NOW, mDozeOnChargeEnabled && mIsPowered ? 1 : 0,
-                UserHandle.USER_CURRENT);
+                Settings.Secure.DOZE_ON_CHARGE, 0, UserHandle.USER_CURRENT) == 1;
 
         if (mSupportsDoubleTapWakeConfig) {
             boolean doubleTapWakeEnabled = Settings.Secure.getIntForUser(resolver,
@@ -1466,6 +1457,7 @@ public final class PowerManagerService extends SystemService
         updateSettingsLocked();
         updatePowerStateLocked();
         updateSmartChargingStatus();
+        updateDozeOnChargeStatus();
     }
 
     private void acquireWakeLockInternal(IBinder lock, int flags, String tag, String packageName,
@@ -2213,12 +2205,6 @@ public final class PowerManagerService extends SystemService
                 final boolean dockedOnWirelessCharger = mWirelessChargerDetector.update(
                         mIsPowered, mPlugType);
 
-                if (mDozeOnChargeEnabled) {
-                    Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                            Settings.Secure.DOZE_ON_CHARGE_NOW, mIsPowered ? 1 : 0,
-                            UserHandle.USER_CURRENT);
-                }
-
                 // Treat plugging and unplugging the devices as a user activity.
                 // Users find it disconcerting when they plug or unplug the device
                 // and it shuts off right away.
@@ -2250,6 +2236,7 @@ public final class PowerManagerService extends SystemService
 
             mBatterySaverStateMachine.setBatteryStatus(mIsPowered, mBatteryLevel, mBatteryLevelLow);
             updateSmartChargingStatus();
+            updateDozeOnChargeStatus();
         }
     }
 
@@ -2285,6 +2272,14 @@ public final class PowerManagerService extends SystemService
         }
     }
 
+    private void updateDozeOnChargeStatus() {
+        if (!mAODAvailable) return;
+        mDozeOnChargeNow = mDozeOnChargeEnabled && mIsPowered;
+        Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                Settings.Secure.DOZE_ON_CHARGE_NOW, mDozeOnChargeNow ? 1 : 0,
+                UserHandle.USER_CURRENT);
+    }
+
     private boolean shouldWakeUpWhenPluggedOrUnpluggedLocked(
             boolean wasPowered, int oldPlugType, boolean dockedOnWirelessCharger) {
         // Don't wake when powered unless configured to do so.
@@ -2318,10 +2313,9 @@ public final class PowerManagerService extends SystemService
         }
 
         // On Always On Display, SystemUI shows the charging indicator
-        if (mAlwaysOnEnabled && getWakefulnessLocked() == WAKEFULNESS_DOZING) {
-            if (!mDozeOnChargeEnabled) {
-                return false;
-            }
+        if (mAODAvailable && mAmbientDisplayConfiguration.alwaysOnEnabled(UserHandle.USER_CURRENT)
+                && getWakefulnessLocked() == WAKEFULNESS_DOZING && !mDozeOnChargeNow) {
+            return false;
         }
 
         // Otherwise wake up!
