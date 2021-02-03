@@ -1354,8 +1354,6 @@ public final class PowerManagerService extends SystemService
                 com.android.internal.R.string.config_smartChargingSuspendValue);
         mPowerInputResumeValue = resources.getString(
                 com.android.internal.R.string.config_smartChargingResumeValue);
-        mSmartChargingResetStats = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SMART_CHARGING_RESET_STATS, 0, UserHandle.USER_CURRENT) == 1;
     }
 
     private void updateSettingsLocked() {
