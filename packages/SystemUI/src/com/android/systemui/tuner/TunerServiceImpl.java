@@ -80,6 +80,7 @@ public class TunerServiceImpl extends TunerService {
             Clock.STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION,
             QSTileHost.TILES_SETTING,
             Settings.Secure.DOZE_ALWAYS_ON,
+            Settings.Secure.DOZE_ON_CHARGE_NOW,
             Settings.Secure.MEDIA_CONTROLS_RESUME,
             StatusBar.SCREEN_BRIGHTNESS_MODE,
     };
