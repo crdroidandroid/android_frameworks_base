@@ -51,6 +51,8 @@ public enum ScreenshotEvent implements UiEventLogger.UiEventEnum {
     SCREENSHOT_SHARE_TAPPED(309),
     @UiEvent(doc = "screenshot delete button tapped")
     SCREENSHOT_DELETE_TAPPED(369),
+    @UiEvent(doc = "screenshot long ss button tapped")
+    SCREENSHOT_SCROLLSS_TAPPED(420),
     @UiEvent(doc = "screenshot smart action chip tapped")
     SCREENSHOT_SMART_ACTION_TAPPED(374),
     @UiEvent(doc = "screenshot scroll tapped")
