@@ -69,6 +69,10 @@ public class FODAnimation extends ImageView {
         "fod_rog_fusion_recognizing_anim",
         "fod_rog_pulsar_recognizing_anim",
         "fod_rog_supernova_recognizing_anim",
+        "fod_recog_animation_shine",
+        "fod_recog_animation_smoke",
+        "fod_recog_animation_strings",
+        "fod_recog_animation_quantum",
     };
 
     private final String mFodAnimationPackage;
