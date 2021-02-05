@@ -5451,6 +5451,76 @@ public final class Settings {
         public static final String VIBRATE_ON_DISCONNECT = "vibrate_on_disconnect";
 
         /**
+         * Whether to enable PULSE Edge lights
+         * @hide
+         */
+        public static final String NOTIFICATION_PULSE = "pulse_ambient_light";
+
+         /**
+         * Whether to enable Ambient Edge lights
+         * @hide
+         */
+        public static final String AOD_NOTIFICATION_PULSE = "ambient_notification_light_enabled";
+
+         /**
+         * Whether hide everything on aod when  ambient lights are enabled
+         * @hide
+         */
+        public static final String AOD_NOTIFICATION_PULSE_CLEAR  = "ambient_notification_light_hide_aod";
+
+         /**
+         * Whether to change aod pulse state
+         * @hide
+         */
+        public static final String AOD_NOTIFICATION_PULSE_TRIGGER = "ambient_notification_light";
+
+        /**
+         * Whether Ambient Edge lights are activated
+         * @hide
+         */
+        public static final String AOD_NOTIFICATION_PULSE_ACTIVATED = "ambient_notification_light_activated";
+
+        /**
+         * helper setting to contain the current pulse reason so we can check
+         * if it has been triggered from a notification or a gesture
+         * @hide
+         */
+        public static final String PULSE_TRIGGER_REASON = "pulse_trigger_reason";
+
+        /**
+         * Timeout for ambient pulse in seconds - 0 is no timeout
+         * @hide
+         */
+        public static final String AOD_NOTIFICATION_PULSE_TIMEOUT = "ambient_notification_light_timeout";
+
+         /**
+         * Whether to use accent color for pulse
+         * @hide
+         */
+        public static final String NOTIFICATION_PULSE_ACCENT = "ambient_notification_light_accent";
+
+         /**
+         * Pulse Ambient lights color
+         * @hide
+         */
+        public static final String NOTIFICATION_PULSE_COLOR = "ambient_notification_light_color";
+
+         /**
+         * @hide
+         */
+        public static final String NOTIFICATION_PULSE_COLOR_AUTOMATIC = "ambient_notification_light_color_automatic";
+
+        /**
+         * @hide
+         */
+        public static final String AMBIENT_LIGHT_DURATION = "ambient_light_duration";
+
+        /**
+         * @hide
+         */
+        public static final String AMBIENT_LIGHT_REPEAT_COUNT = "ambient_light_repeat_count";
+
+        /**
          * Whether to use new QS panel bg tint or not
          * @hide
          */

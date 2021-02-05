@@ -2343,4 +2343,24 @@ public class NotificationManager {
             default: return defValue;
         }
     }
+
+    /** @hide */
+    public void forceShowLedLight(int color) {
+        final INotificationManager service = getService();
+        try {
+            service.forceShowLedLight(color);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /** @hide */
+    public void forcePulseLedLight(int color, int onTime, int offTime) {
+        final INotificationManager service = getService();
+        try {
+            service.forcePulseLedLight(color, onTime, offTime);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
 }
