@@ -347,6 +347,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         mMultiUserSwitch.setClickable(mMultiUserSwitch.getVisibility() == View.VISIBLE);
         mEdit.setClickable(mEdit.getVisibility() == View.VISIBLE);
         mSettingsButton.setClickable(mSettingsButton.getVisibility() == View.VISIBLE);
+        mRunningServicesButton.setClickable(mSettingsButton.getVisibility() == View.VISIBLE);
     }
 
     private void updateVisibilities() {
