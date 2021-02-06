@@ -472,10 +472,10 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
                         break;
                 }
                 if (mTriStateMode != -1) {
-                    if (mTriStateIcon != null) {
+                    if (mTriStateIcon != null && iconId != 0) {
                         mTriStateIcon.setImageResource(iconId);
                     }
-                    if (mTriStateText != null) {
+                    if (mTriStateText != null && textId != 0) {
                         String inputText = res.getString(textId);
                         if (inputText != null && mTriStateText.length() == inputText.length()) {
                             StringBuilder sb = new StringBuilder();
@@ -485,7 +485,7 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
                         }
                         mTriStateText.setText(inputText);
                     }
-                    if (mDialogView != null) {
+                    if (mDialogView != null && bg != 0) {
                         mDialogView.setBackgroundDrawable(res.getDrawable(bg));
                     }
                     mDialogPosition = positionY2;
