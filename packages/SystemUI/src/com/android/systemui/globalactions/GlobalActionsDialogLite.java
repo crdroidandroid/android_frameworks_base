@@ -22,7 +22,6 @@ import static android.view.WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
 import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
 import static android.view.WindowManager.ScreenshotSource.SCREENSHOT_GLOBAL_ACTIONS;
 import static android.view.WindowManager.TAKE_SCREENSHOT_FULLSCREEN;
-import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_2BUTTON;
 
 import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.SOME_AUTH_REQUIRED_AFTER_USER_REQUEST;
 import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.STRONG_AUTH_NOT_REQUIRED;
@@ -520,7 +519,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         if (!mDeviceProvisioned && !action.showBeforeProvisioning()) {
             return false;
         }
-        return action.shouldShow();
+        return true;
     }
 
     /**
@@ -1026,18 +1025,6 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         @Override
         public boolean showBeforeProvisioning() {
             return false;
-        }
-
-        @Override
-        public boolean shouldShow() {
-            // Include screenshot in power menu for legacy nav because it is not accessible
-            // through Recents in that mode
-            return is2ButtonNavigationEnabled();
-        }
-
-        boolean is2ButtonNavigationEnabled() {
-            return NAV_BAR_MODE_2BUTTON == mContext.getResources().getInteger(
-                    com.android.internal.R.integer.config_navBarInteractionMode);
         }
     }
 
@@ -1710,13 +1697,6 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
          * @return
          */
         CharSequence getMessage();
-
-        /**
-         * @return whether the action should be visible
-         */
-        default boolean shouldShow() {
-            return true;
-        }
     }
 
     /**
