@@ -17,6 +17,6 @@
 */
 -->
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
-    android:insetLeft="3dp"
-    android:insetRight="3dp"
+    android:insetLeft="0.5dp"
+    android:insetRight="0.5dp"
     android:drawable="@drawable/ic_camera" />
