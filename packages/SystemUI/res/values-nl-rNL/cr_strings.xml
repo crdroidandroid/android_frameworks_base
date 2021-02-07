@@ -185,14 +185,14 @@
     <string name="volume_ringer_priority_only">Prioriteit</string>
     <string name="volume_ringer_alarms_only">Alarmen</string>
     <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="tristate_flashlight_on">Zaklamp aan</string>
+    <string name="tristate_flashlight_off">Zaklamp uit</string>
+    <string name="tristate_flashlight_blink">Zaklamp knipperen</string>
+    <string name="tristate_brightness_bright">Maximale helderheid</string>
+    <string name="tristate_brightness_dark">Minimale helderheid</string>
+    <string name="tristate_brightness_auto">Automatische helderheid</string>
+    <string name="tristate_rotation_auto">Automatisch draaien</string>
+    <string name="tristate_rotation_0">Staand</string>
+    <string name="tristate_rotation_90">Liggend (90°)</string>
+    <string name="tristate_rotation_270">Liggend (270°)</string>
 </resources>
