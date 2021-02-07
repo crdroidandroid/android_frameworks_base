@@ -74,6 +74,10 @@ public class TriStateUiControllerImpl implements TriStateUiController,
     private static final int MSG_RESET_SCHEDULE = 3;
     private static final int MSG_STATE_CHANGE = 4;
 
+    private static final int RINGER_MODE_NORMAL = AudioManager.RINGER_MODE_NORMAL;
+    private static final int RINGER_MODE_SILENT = AudioManager.RINGER_MODE_SILENT;
+    private static final int RINGER_MODE_VIBRATE = AudioManager.RINGER_MODE_VIBRATE;
+
     private static final int POSITION_TOP = 0;
     private static final int POSITION_MIDDLE = 1;
     private static final int POSITION_BOTTOM = 2;
@@ -167,6 +171,7 @@ public class TriStateUiControllerImpl implements TriStateUiController,
     private int mWindowType;
     private String mIntentAction;
     private boolean mIntentActionSupported;
+    private boolean mRingModeChanged;
     private boolean mSliderPositionChanged;
     private boolean mAlertSliderNotification;
 
@@ -174,12 +179,13 @@ public class TriStateUiControllerImpl implements TriStateUiController,
         @Override
         public void onReceive(Context context, Intent intent) {
             if (!mAlertSliderNotification) {
+                mRingModeChanged = false;
                 mSliderPositionChanged = false;
                 return;
             }
 
             String action = intent.getAction();
-            if (action.equals(mIntentAction)) {
+            if (mIntentActionSupported && action.equals(mIntentAction)) {
                 Bundle extras = intent.getExtras();
                 mPosition = extras.getInt(EXTRA_SLIDER_POSITION);
                 mPositionValue = extras.getInt(EXTRA_SLIDER_POSITION_VALUE);
@@ -188,10 +194,14 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                 mSliderPositionChanged = true;
                 Log.d(TAG, "received slider position " + mPosition
                                     + " with value " + mPositionValue);
+            } else if (!mIntentActionSupported && action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION)) {
+                mHandler.sendEmptyMessage(MSG_DIALOG_DISMISS);
+                mHandler.sendEmptyMessage(MSG_STATE_CHANGE);
+                mRingModeChanged = true;
             }
 
-            if (mAlertSliderNotification &&
-                        (mSliderPositionChanged || !mIntentActionSupported)) {
+            if (mRingModeChanged || mSliderPositionChanged) {
+                mRingModeChanged = false;
                 mSliderPositionChanged = false;
                 if (mTriStateMode != -1) {
                     mHandler.sendEmptyMessageDelayed(MSG_DIALOG_SHOW, (long) DIALOG_DELAY);
@@ -243,8 +253,11 @@ public class TriStateUiControllerImpl implements TriStateUiController,
         mIntentActionSupported = mIntentAction != null && !mIntentAction.isEmpty();
 
         IntentFilter filter = new IntentFilter();
-        if (mIntentActionSupported)
+        if (mIntentActionSupported) {
             filter.addAction(mIntentAction);
+        } else {
+            filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
+        }
         mContext.registerReceiver(mSliderStateReceiver, filter);
 
         final TunerService tunerService = Dependency.get(TunerService.class);
@@ -351,14 +364,17 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                 switch (mTriStateMode) {
                     case MODE_RING:
                     case MODE_NONE:
+                    case RINGER_MODE_NORMAL:
                         iconId = R.drawable.ic_volume_ringer;
                         textId = R.string.volume_ringer_status_normal;
                         break;
                     case MODE_VIBRATE:
+                    case RINGER_MODE_VIBRATE:
                         iconId = R.drawable.ic_volume_ringer_vibrate;
                         textId = R.string.volume_ringer_status_vibrate;
                         break;
                     case MODE_SILENT:
+                    case RINGER_MODE_SILENT:
                         iconId = R.drawable.ic_volume_ringer_mute;
                         textId = R.string.volume_ringer_status_silent;
                         break;
@@ -440,6 +456,12 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                             positionX = res.getDimensionPixelSize(R.dimen.tri_state_middle_dialog_position_l);
                         } else if (mPosition == POSITION_BOTTOM) {
                             positionX = res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position_l);
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_SILENT) {
+                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position_l);
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_VIBRATE) {
+                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_middle_dialog_position_l);
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_NORMAL) {
+                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position_l);
                         }
                         bg = R.drawable.dialog_tri_state_middle_bg;
                         break;
@@ -458,6 +480,15 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                             positionY += res.getDimensionPixelSize(R.dimen.tri_state_middle_dialog_position);
                             bg = R.drawable.dialog_tri_state_middle_bg;
                         } else if (mPosition == POSITION_BOTTOM) {
+                            positionY += res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position);
+                            bg = !isTsKeyRight ? R.drawable.right_dialog_tri_state_up_bg : R.drawable.left_dialog_tri_state_up_bg;
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_SILENT) {
+                            positionY += res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position);
+                            bg = !isTsKeyRight ? R.drawable.right_dialog_tri_state_down_bg : R.drawable.left_dialog_tri_state_down_bg;
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_VIBRATE) {
+                            positionY += res.getDimensionPixelSize(R.dimen.tri_state_middle_dialog_position);
+                            bg = R.drawable.dialog_tri_state_middle_bg;
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_NORMAL) {
                             positionY += res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position);
                             bg = !isTsKeyRight ? R.drawable.right_dialog_tri_state_up_bg : R.drawable.left_dialog_tri_state_up_bg;
                         }
@@ -479,6 +510,12 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                             positionX = res.getDimensionPixelSize(R.dimen.tri_state_middle_dialog_position_l);
                         } else if (mPosition == POSITION_BOTTOM) {
                             positionX = res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position_l);
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_SILENT) {
+                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position_l);
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_VIBRATE) {
+                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_middle_dialog_position_l);
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_NORMAL) {
+                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position_l);
                         }
                         bg = R.drawable.dialog_tri_state_middle_bg;
                         break;
@@ -496,6 +533,15 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                             positionY2 = res.getDimensionPixelSize(R.dimen.tri_state_middle_dialog_position);
                             bg = R.drawable.dialog_tri_state_middle_bg;
                         } else if (mPosition == POSITION_BOTTOM) {
+                            positionY2 = res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position);
+                            bg = isTsKeyRight ? R.drawable.right_dialog_tri_state_down_bg : R.drawable.left_dialog_tri_state_down_bg;
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_SILENT) {
+                            positionY2 = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position);
+                            bg = isTsKeyRight ? R.drawable.right_dialog_tri_state_up_bg : R.drawable.left_dialog_tri_state_up_bg;
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_VIBRATE) {
+                            positionY2 = res.getDimensionPixelSize(R.dimen.tri_state_middle_dialog_position);
+                            bg = R.drawable.dialog_tri_state_middle_bg;
+                        } else if (!mIntentActionSupported && mTriStateMode == RINGER_MODE_NORMAL) {
                             positionY2 = res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position);
                             bg = isTsKeyRight ? R.drawable.right_dialog_tri_state_down_bg : R.drawable.left_dialog_tri_state_down_bg;
                         }
@@ -558,11 +604,21 @@ public class TriStateUiControllerImpl implements TriStateUiController,
 
     private void handleStateChanged() {
         mHandler.removeMessages(MSG_STATE_CHANGE);
-        if (mPositionValue != mTriStateMode) {
+        if (mIntentActionSupported && mPositionValue != mTriStateMode) {
             mTriStateMode = mPositionValue;
             updateTriStateLayout();
             if (mListener != null) {
                 mListener.onTriStateUserActivity();
+            }
+        } else if (!mIntentActionSupported) {
+            AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            int ringerMode = am.getRingerModeInternal();
+            if (ringerMode != mTriStateMode) {
+                mTriStateMode = ringerMode;
+                updateTriStateLayout();
+                if (mListener != null) {
+                    mListener.onTriStateUserActivity();
+                }
             }
         }
     }
