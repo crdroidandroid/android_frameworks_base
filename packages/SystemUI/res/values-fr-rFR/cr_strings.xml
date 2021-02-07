@@ -187,12 +187,12 @@
     <string name="volume_ringer_dnd">NPD</string>
     <string name="tristate_flashlight_on">Lampe torche allumée</string>
     <string name="tristate_flashlight_off">Lampe torche éteinte</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
+    <string name="tristate_flashlight_blink">Clignotement lampe torche</string>
+    <string name="tristate_brightness_bright">Luminosité maxi</string>
+    <string name="tristate_brightness_dark">Luminosité mini</string>
+    <string name="tristate_brightness_auto">Luminosité automatique</string>
+    <string name="tristate_rotation_auto">Rotation automatique</string>
     <string name="tristate_rotation_0">Portrait</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="tristate_rotation_90">Paysage (90°)</string>
+    <string name="tristate_rotation_270">Paysage (270°)</string>
 </resources>
