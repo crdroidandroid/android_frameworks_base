@@ -60,6 +60,7 @@ import android.util.Slog;
 import com.android.internal.R;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.logging.MetricsLogger;
+import com.android.internal.os.BackgroundThread;
 import com.android.internal.util.DumpUtils;
 import com.android.server.SystemServerInitThreadPool;
 import com.android.server.biometrics.AuthenticationClient;
@@ -226,7 +227,7 @@ public class FaceService extends BiometricServiceBase {
 
         @Override
         public boolean shouldFrameworkHandleLockout() {
-            return false;
+            return mCustomFaceService.isSupported();
         }
 
         @Override
@@ -379,7 +380,7 @@ public class FaceService extends BiometricServiceBase {
         public void enroll(int userId, final IBinder token, final byte[] cryptoToken,
                 final IFaceServiceReceiver receiver, final String opPackageName,
                 final int[] disabledFeatures) {
-            checkPermission(MANAGE_BIOMETRIC);
+            checkPermission(MANAGE_BIOMETRIC, opPackageName);
             updateActiveGroup(userId, opPackageName);
 
             mHandler.post(() -> {
@@ -419,7 +420,7 @@ public class FaceService extends BiometricServiceBase {
 
         @Override // Binder call
         public void cancelEnrollment(final IBinder token) {
-            checkPermission(MANAGE_BIOMETRIC);
+            checkPermission(MANAGE_BIOMETRIC, mCustomFaceService.getServicePackageName());
             cancelEnrollmentInternal(token);
         }
 
@@ -559,6 +560,10 @@ public class FaceService extends BiometricServiceBase {
                 return false;
             }
 
+            if (mCustomFaceService.isSupported()) {
+                return mCustomFaceService.isDetected();
+            }
+
             final long token = Binder.clearCallingIdentity();
             try {
                 IBiometricsFace daemon = getFaceDaemon();
@@ -585,7 +590,7 @@ public class FaceService extends BiometricServiceBase {
 
         @Override // Binder call
         public List<Face> getEnrolledFaces(int userId, String opPackageName) {
-            checkPermission(MANAGE_BIOMETRIC);
+            checkPermission(MANAGE_BIOMETRIC, opPackageName);
             if (!canUseBiometric(opPackageName, false /* foregroundOnly */,
                     Binder.getCallingUid(), Binder.getCallingPid(),
                     UserHandle.getCallingUserId())) {
@@ -597,7 +602,7 @@ public class FaceService extends BiometricServiceBase {
 
         @Override // Binder call
         public boolean hasEnrolledFaces(int userId, String opPackageName) {
-            checkPermission(USE_BIOMETRIC_INTERNAL);
+            checkPermission(USE_BIOMETRIC_INTERNAL, opPackageName);
             if (!canUseBiometric(opPackageName, false /* foregroundOnly */,
                     Binder.getCallingUid(), Binder.getCallingPid(),
                     UserHandle.getCallingUserId())) {
@@ -845,8 +850,9 @@ public class FaceService extends BiometricServiceBase {
     private UsageStats mUsageStats;
     private boolean mRevokeChallengePending = false;
     // One of the AuthenticationClient constants
-    private int mCurrentUserLockoutMode;
+    protected int mCurrentUserLockoutMode;
 
+    private CustomFaceService mCustomFaceService;
     private NotificationManager mNotificationManager;
 
     private int[] mBiometricPromptIgnoreList;
@@ -916,6 +922,7 @@ public class FaceService extends BiometricServiceBase {
                         mDaemon = null;
                         mHalDeviceId = 0;
                         mCurrentUserId = UserHandle.USER_NULL;
+                        mCustomFaceService.setCurrentUserId(mCurrentUserId);
                     }
                 }
             });
@@ -985,6 +992,9 @@ public class FaceService extends BiometricServiceBase {
     private final DaemonWrapper mDaemonWrapper = new DaemonWrapper() {
         @Override
         public int authenticate(long operationId, int groupId) throws RemoteException {
+            if (mCustomFaceService.isSupported()) {
+                return mCustomFaceService.authenticate(operationId);
+            }
             IBiometricsFace daemon = getFaceDaemon();
             if (daemon == null) {
                 Slog.w(TAG, "authenticate(): no face HAL!");
@@ -995,6 +1005,9 @@ public class FaceService extends BiometricServiceBase {
 
         @Override
         public int cancel() throws RemoteException {
+            if (mCustomFaceService.isSupported()) {
+                return mCustomFaceService.cancel();
+            }
             IBiometricsFace daemon = getFaceDaemon();
             if (daemon == null) {
                 Slog.w(TAG, "cancel(): no face HAL!");
@@ -1005,6 +1018,9 @@ public class FaceService extends BiometricServiceBase {
 
         @Override
         public int remove(int groupId, int biometricId) throws RemoteException {
+            if (mCustomFaceService.isSupported()) {
+                return mCustomFaceService.remove(biometricId);
+            }
             IBiometricsFace daemon = getFaceDaemon();
             if (daemon == null) {
                 Slog.w(TAG, "remove(): no face HAL!");
@@ -1015,6 +1031,9 @@ public class FaceService extends BiometricServiceBase {
 
         @Override
         public int enumerate() throws RemoteException {
+            if (mCustomFaceService.isSupported()) {
+                return mCustomFaceService.enumerate();
+            }
             IBiometricsFace daemon = getFaceDaemon();
             if (daemon == null) {
                 Slog.w(TAG, "enumerate(): no face HAL!");
@@ -1026,6 +1045,16 @@ public class FaceService extends BiometricServiceBase {
         @Override
         public int enroll(byte[] cryptoToken, int groupId, int timeout,
                 ArrayList<Integer> disabledFeatures) throws RemoteException {
+            if (mCustomFaceService.isSupported()) {
+                int[] dfs = new int[0];
+                if (disabledFeatures != null && disabledFeatures.size() > 0) {
+                    dfs = new int[disabledFeatures.size()];
+                    for (int i = 0; i < disabledFeatures.size(); i++) {
+                        dfs[i] = disabledFeatures.get(i).intValue();
+                    }
+                }
+                return mCustomFaceService.enroll(cryptoToken, timeout, dfs);
+            }
             IBiometricsFace daemon = getFaceDaemon();
             if (daemon == null) {
                 Slog.w(TAG, "enroll(): no face HAL!");
@@ -1040,6 +1069,10 @@ public class FaceService extends BiometricServiceBase {
 
         @Override
         public void resetLockout(byte[] cryptoToken) throws RemoteException {
+            if (mCustomFaceService.isSupported()) {
+                mCustomFaceService.resetLockout(cryptoToken);
+                return;
+            }
             IBiometricsFace daemon = getFaceDaemon();
             if (daemon == null) {
                 Slog.w(TAG, "resetLockout(): no face HAL!");
@@ -1077,6 +1110,8 @@ public class FaceService extends BiometricServiceBase {
                 .getIntArray(R.array.config_face_acquire_enroll_ignorelist);
         mEnrollIgnoreListVendor = getContext().getResources()
                 .getIntArray(R.array.config_face_acquire_vendor_enroll_ignorelist);
+
+        mCustomFaceService = new CustomFaceService(getContext(), this, mHandler);
     }
 
     @Override
@@ -1092,6 +1127,11 @@ public class FaceService extends BiometricServiceBase {
     public void onStart() {
         super.onStart();
         publishBinderService(Context.FACE_SERVICE, new FaceServiceWrapper());
+        if (mCustomFaceService.isSupported()) {
+            mCustomFaceService.setServiceHandler(BackgroundThread.getHandler());
+            mHalDeviceId = CustomFaceService.HAL_DEVICE_ID;
+            return;
+        }
         // Get the face daemon on FaceService's on thread so SystemServerInitThreadPool isn't
         // blocked
         SystemServerInitThreadPool.submit(() -> mHandler.post(this::getFaceDaemon),
@@ -1136,10 +1176,27 @@ public class FaceService extends BiometricServiceBase {
         mDaemon = null;
 
         mCurrentUserId = UserHandle.USER_NULL; // Force updateActiveGroup() to re-evaluate
+        mCustomFaceService.setCurrentUserId(mCurrentUserId);
     }
 
     @Override
     protected void updateActiveGroup(int userId, String clientPackage) {
+        if (mCustomFaceService.isSupported()) {
+            mCurrentUserId = userId;
+            mCustomFaceService.setCurrentUserId(mCurrentUserId);
+            if (mCustomFaceService.getService(mCurrentUserId) != null) {
+                long authId = 0;
+                if (hasEnrolledBiometrics(mCurrentUserId)) {
+                    authId = (long) mCustomFaceService.getAuthenticatorId();
+                }
+                mAuthenticatorIds.put(userId, authId);
+            } else {
+                mCustomFaceService.callForBind(userId);
+                Slog.w(TAG, "updateActiveGroup(): Face service not started!");
+            }
+            return;
+        }
+
         IBiometricsFace daemon = getFaceDaemon();
 
         if (daemon != null) {
@@ -1164,6 +1221,7 @@ public class FaceService extends BiometricServiceBase {
 
                     daemon.setActiveUser(userId, faceDir.getAbsolutePath());
                     mCurrentUserId = userId;
+                    mCustomFaceService.setCurrentUserId(mCurrentUserId);
                     mAuthenticatorIds.put(userId,
                             hasEnrolledBiometrics(userId) ? daemon.getAuthenticatorId().value : 0L);
                 }
@@ -1190,7 +1248,16 @@ public class FaceService extends BiometricServiceBase {
 
     @Override
     protected void handleUserSwitching(int userId) {
-        super.handleUserSwitching(userId);
+        if (mCustomFaceService.isSupported()) {
+            updateActiveGroup(userId, null);
+            if (mCustomFaceService.getService(userId) != null) {
+                doTemplateCleanupForUser(userId);
+            } else {
+                mCustomFaceService.callForBind(userId);
+            }
+        } else {
+            super.handleUserSwitching(userId);
+        }
         // Will be updated when we get the callback from HAL
         mCurrentUserLockoutMode = AuthenticationClient.LOCKOUT_NONE;
     }
@@ -1279,6 +1346,9 @@ public class FaceService extends BiometricServiceBase {
     }
 
     private long startGenerateChallenge(IBinder token) {
+        if (mCustomFaceService.isSupported()) {
+            return mCustomFaceService.generateChallenge(CHALLENGE_TIMEOUT_SEC);
+        }
         IBiometricsFace daemon = getFaceDaemon();
         if (daemon == null) {
             Slog.w(TAG, "startGenerateChallenge: no face HAL!");
@@ -1293,6 +1363,9 @@ public class FaceService extends BiometricServiceBase {
     }
 
     private int startRevokeChallenge(IBinder token) {
+        if (mCustomFaceService.isSupported()) {
+            return mCustomFaceService.revokeChallenge();
+        }
         IBiometricsFace daemon = getFaceDaemon();
         if (daemon == null) {
             Slog.w(TAG, "startRevokeChallenge: no face HAL!");
@@ -1308,6 +1381,12 @@ public class FaceService extends BiometricServiceBase {
             Slog.e(TAG, "startRevokeChallenge failed", e);
         }
         return 0;
+    }
+
+    private void checkPermission(String permission, String packageName) {
+        if (!mCustomFaceService.isSupported() || !mCustomFaceService.getServicePackageName().equals(packageName)) {
+            checkPermission(permission);
+        }
     }
 
     private void dumpInternal(PrintWriter pw) {
@@ -1370,6 +1449,9 @@ public class FaceService extends BiometricServiceBase {
                 || SystemProperties.getBoolean("persist.face.disable_debug_data", false)) {
             return;
         }
+
+        // Disable if custom face unlock service is in use
+        if (mCustomFaceService.isSupported()) return;
 
         // The debug method takes two file descriptors. The first is for text
         // output, which we will drop.  The second is for binary data, which
