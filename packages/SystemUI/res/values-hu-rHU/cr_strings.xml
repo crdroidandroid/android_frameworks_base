@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2020 crDroid Android Project
+     Copyright (C) 2016-2021 crDroid Android Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -178,7 +178,21 @@
     <!-- Samsung clock -->
     <!-- Tux clock -->
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Delete</string>
+    <string name="screenrecord_delete_label">Törlés</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Screen recording deleted</string>
+    <string name="screenrecord_delete_description">A képernyővideó törölve</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Fontosak</string>
+    <string name="volume_ringer_alarms_only">Ébresztők</string>
+    <string name="volume_ringer_dnd">Ne zavarjanak</string>
+    <string name="tristate_flashlight_on">Zseblámpa be</string>
+    <string name="tristate_flashlight_off">Zseblámpa ki</string>
+    <string name="tristate_flashlight_blink">Zseblámps villogás</string>
+    <string name="tristate_brightness_bright">Teljes fényerő</string>
+    <string name="tristate_brightness_dark">Alacsony fényerő</string>
+    <string name="tristate_brightness_auto">Automatikus fényerő</string>
+    <string name="tristate_rotation_auto">Automatikus elforgatás</string>
+    <string name="tristate_rotation_0">Állókép-mód</string>
+    <string name="tristate_rotation_90">Fekvőkép-mód</string>
+    <string name="tristate_rotation_270">Fejreállított fekvőkép-mód</string>
 </resources>

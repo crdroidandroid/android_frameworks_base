@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2020 crDroid Android Project
+     Copyright (C) 2016-2021 crDroid Android Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -181,4 +181,18 @@
     <string name="screenrecord_delete_label">Supprimer</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Enregistrement d\'écran supprimé</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Prioritaire</string>
+    <string name="volume_ringer_alarms_only">Alarmes</string>
+    <string name="volume_ringer_dnd">NPD</string>
+    <string name="tristate_flashlight_on">Lampe torche allumée</string>
+    <string name="tristate_flashlight_off">Lampe torche éteinte</string>
+    <string name="tristate_flashlight_blink">Clignotement lampe torche</string>
+    <string name="tristate_brightness_bright">Luminosité maxi</string>
+    <string name="tristate_brightness_dark">Luminosité mini</string>
+    <string name="tristate_brightness_auto">Luminosité automatique</string>
+    <string name="tristate_rotation_auto">Rotation automatique</string>
+    <string name="tristate_rotation_0">Portrait</string>
+    <string name="tristate_rotation_90">Paysage (90°)</string>
+    <string name="tristate_rotation_270">Paysage (270°)</string>
 </resources>
