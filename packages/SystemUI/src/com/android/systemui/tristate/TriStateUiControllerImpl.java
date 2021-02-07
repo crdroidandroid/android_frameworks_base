@@ -80,7 +80,16 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
     private static final int MODE_RING = 605;
     // AICP additions: arbitrary value which hopefully doesn't conflict with upstream anytime soon
     private static final int MODE_SILENT = 620;
-    private static final int MODE_FLASHLIGHT = 621;
+    private static final int MODE_FLASHLIGHT_ON = 621;
+    private static final int MODE_FLASHLIGHT_OFF = 622;
+    private static final int MODE_FLASHLIGHT_BLINK = 623;
+    private static final int MODE_BRIGHTNESS_BRIGHT = 630;
+    private static final int MODE_BRIGHTNESS_DARK = 631;
+    private static final int MODE_BRIGHTNESS_AUTO = 632;
+    private static final int MODE_ROTATION_AUTO = 640;
+    private static final int MODE_ROTATION_0 = 641;
+    private static final int MODE_ROTATION_90 = 642;
+    private static final int MODE_ROTATION_270 = 643;
 
     private static final String EXTRA_SLIDER_POSITION = "position";
     private static final String EXTRA_SLIDER_POSITION_VALUE = "position_value";
@@ -334,9 +343,45 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
                         iconId = R.drawable.ic_qs_dnd_on;
                         textId = R.string.volume_ringer_dnd;
                         break;
-                    case MODE_FLASHLIGHT:
+                    case MODE_FLASHLIGHT_ON:
                         iconId = R.drawable.ic_tristate_flashlight;
-                        textId = R.string.tristate_flashlight;
+                        textId = R.string.tristate_flashlight_on;
+                        break;
+                    case MODE_FLASHLIGHT_OFF:
+                        iconId = R.drawable.ic_tristate_flashlight_off;
+                        textId = R.string.tristate_flashlight_off;
+                        break;
+                    case MODE_FLASHLIGHT_BLINK:
+                        iconId = R.drawable.ic_tristate_flashlight;
+                        textId = R.string.tristate_flashlight_blink;
+                        break;
+                    case MODE_BRIGHTNESS_BRIGHT:
+                        iconId = R.drawable.ic_tristate_brightness_bright;
+                        textId = R.string.tristate_brightness_bright;
+                        break;
+                    case MODE_BRIGHTNESS_DARK:
+                        iconId = R.drawable.ic_tristate_brightness_dark;
+                        textId = R.string.tristate_brightness_dark;
+                        break;
+                    case MODE_BRIGHTNESS_AUTO:
+                        iconId = R.drawable.ic_tristate_brightness_auto;
+                        textId = R.string.tristate_brightness_auto;
+                        break;
+                    case MODE_ROTATION_AUTO:
+                        iconId = R.drawable.ic_tristate_rotate_auto;
+                        textId = R.string.tristate_rotation_auto;
+                        break;
+                    case MODE_ROTATION_0:
+                        iconId = R.drawable.ic_tristate_rotate_portrait;
+                        textId = R.string.tristate_rotation_0;
+                        break;
+                    case MODE_ROTATION_90:
+                        iconId = R.drawable.ic_tristate_rotate_landscape;
+                        textId = R.string.tristate_rotation_90;
+                        break;
+                    case MODE_ROTATION_270:
+                        iconId = R.drawable.ic_tristate_rotate_landscape;
+                        textId = R.string.tristate_rotation_270;
                         break;
                 }
 
