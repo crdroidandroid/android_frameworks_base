@@ -219,17 +219,17 @@ dziewięć</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Usunięto nagranie ekranu</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Priority</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
-    <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="volume_ringer_priority_only">Priorytet</string>
+    <string name="volume_ringer_alarms_only">Alarmy</string>
+    <string name="volume_ringer_dnd">Nie przeszkadzać</string>
+    <string name="tristate_flashlight_on">Latarka włączona</string>
+    <string name="tristate_flashlight_off">Latarka wyłączona</string>
+    <string name="tristate_flashlight_blink">Miganie latarki</string>
+    <string name="tristate_brightness_bright">Maksymalna jasność</string>
+    <string name="tristate_brightness_dark">Minimalna jasność</string>
+    <string name="tristate_brightness_auto">Automatyczna jasność</string>
+    <string name="tristate_rotation_auto">Autoobracanie</string>
+    <string name="tristate_rotation_0">Pionowo</string>
+    <string name="tristate_rotation_90">Poziomo (90°)</string>
+    <string name="tristate_rotation_270">Poziomo (270°)</string>
 </resources>
