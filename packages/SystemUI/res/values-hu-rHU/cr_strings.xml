@@ -178,19 +178,19 @@
     <!-- Samsung clock -->
     <!-- Tux clock -->
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Delete</string>
+    <string name="screenrecord_delete_label">Törlés</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Screen recording deleted</string>
+    <string name="screenrecord_delete_description">A képernyővideó törölve</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Priority</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
-    <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
+    <string name="volume_ringer_priority_only">Fontosak</string>
+    <string name="volume_ringer_alarms_only">Ébresztők</string>
+    <string name="volume_ringer_dnd">Ne zavarjanak</string>
+    <string name="tristate_flashlight_on">Zseblámpa be</string>
+    <string name="tristate_flashlight_off">Zseblámpa ki</string>
+    <string name="tristate_flashlight_blink">Zseblámps villogás</string>
+    <string name="tristate_brightness_bright">Teljes fényerő</string>
+    <string name="tristate_brightness_dark">Alacsony fényerő</string>
+    <string name="tristate_brightness_auto">Automatikus fényerő</string>
     <string name="tristate_rotation_auto">Auto-rotate</string>
     <string name="tristate_rotation_0">Portrait</string>
     <string name="tristate_rotation_90">Landscape (90°)</string>
