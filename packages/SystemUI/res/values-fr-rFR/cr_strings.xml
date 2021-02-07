@@ -182,11 +182,11 @@
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Enregistrement d\'écran supprimé</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Priority</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
-    <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
+    <string name="volume_ringer_priority_only">Prioritaire</string>
+    <string name="volume_ringer_alarms_only">Alarmes</string>
+    <string name="volume_ringer_dnd">NPD</string>
+    <string name="tristate_flashlight_on">Lampe torche allumée</string>
+    <string name="tristate_flashlight_off">Lampe torche éteinte</string>
     <string name="tristate_flashlight_blink">Torch blink</string>
     <string name="tristate_brightness_bright">Max-brightness</string>
     <string name="tristate_brightness_dark">Min-brightness</string>
