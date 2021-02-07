@@ -191,8 +191,8 @@
     <string name="tristate_brightness_bright">Teljes fényerő</string>
     <string name="tristate_brightness_dark">Alacsony fényerő</string>
     <string name="tristate_brightness_auto">Automatikus fényerő</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="tristate_rotation_auto">Automatikus elforgatás</string>
+    <string name="tristate_rotation_0">Állókép-mód</string>
+    <string name="tristate_rotation_90">Fekvőkép-mód</string>
+    <string name="tristate_rotation_270">Fejreállított fekvőkép-mód</string>
 </resources>
