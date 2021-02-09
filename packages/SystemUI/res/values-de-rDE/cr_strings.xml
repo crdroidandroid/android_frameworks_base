@@ -178,21 +178,21 @@
     <!-- Samsung clock -->
     <!-- Tux clock -->
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Delete</string>
+    <string name="screenrecord_delete_label">Löschen</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Screen recording deleted</string>
+    <string name="screenrecord_delete_description">Bildschirmaufnahme gelöscht</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Priority</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
-    <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="volume_ringer_priority_only">Wichtig</string>
+    <string name="volume_ringer_alarms_only">Wecker</string>
+    <string name="volume_ringer_dnd">Bitte nicht stören</string>
+    <string name="tristate_flashlight_on">Taschenlampe ein</string>
+    <string name="tristate_flashlight_off">Taschenlampe aus</string>
+    <string name="tristate_flashlight_blink">Taschenlampe blinken</string>
+    <string name="tristate_brightness_bright">Maximale Helligkeit</string>
+    <string name="tristate_brightness_dark">Minimale Helligkeit</string>
+    <string name="tristate_brightness_auto">Automatische Helligkeit</string>
+    <string name="tristate_rotation_auto">Autom. drehen</string>
+    <string name="tristate_rotation_0">Hochformat</string>
+    <string name="tristate_rotation_90">Querformat (90°)</string>
+    <string name="tristate_rotation_270">Querformat (270°)</string>
 </resources>
