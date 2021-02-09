@@ -185,11 +185,11 @@
     <string name="screenrecord_delete_description">Запись экрана удалена</string>
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Приоритет</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
-    <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
+    <string name="volume_ringer_alarms_only">Будильник</string>
+    <string name="volume_ringer_dnd">Не беспокоить</string>
+    <string name="tristate_flashlight_on">Фонарик включен</string>
+    <string name="tristate_flashlight_off">Фонарик отключен</string>
+    <string name="tristate_flashlight_blink">Мигание фонарика</string>
     <string name="tristate_brightness_bright">Максимальная яркость</string>
     <string name="tristate_brightness_dark">Минимальная яркость</string>
     <string name="tristate_brightness_auto">Автоматическая яркость</string>
