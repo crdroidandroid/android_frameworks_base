@@ -232,10 +232,12 @@ public class PulseControllerImpl
 
     private void updatePulseVisibility() {
         if (mStatusbar == null) return;
-        VisualizerView vv = mStatusbar.getLsVisualizer();
+
         NavigationBarFrame nv = mStatusbar.getNavigationBarView() != null ?
                 mStatusbar.getNavigationBarView().getNavbarFrame() : null;
-        boolean allowAmbPulse = allowAmbPulse(vv);
+        VisualizerView vv = mStatusbar.getLsVisualizer();
+        boolean allowAmbPulse = vv != null && vv.isAttached()
+                && mAmbPulseEnabled && mKeyguardShowing && mDozing;
         boolean allowLsPulse = vv != null && vv.isAttached()
                 && mLsPulseEnabled && mKeyguardShowing && !mDozing;
         boolean allowNavPulse = nv!= null && nv.isAttached()
@@ -246,7 +248,7 @@ public class PulseControllerImpl
             return;
         }
         if (!allowNavPulse) {
-            detachPulseFrom(nv, allowLsPulse/*keep linked*/);
+            detachPulseFrom(nv, allowLsPulse || allowAmbPulse/*keep linked*/);
         }
         if (!allowLsPulse && !allowAmbPulse) {
             detachPulseFrom(vv, allowNavPulse/*keep linked*/);
@@ -274,11 +276,6 @@ public class PulseControllerImpl
             }
             updatePulseVisibility();
         }
-    }
-
-    private boolean allowAmbPulse(VisualizerView v) {
-        if (v == null) return false;
-        return v.isAttached() && mAmbPulseEnabled && mKeyguardShowing && mDozing;
     }
 
     @Inject
@@ -449,14 +446,11 @@ public class PulseControllerImpl
      * @return true if unlink is required, false if unlinking is not mandatory
      */
     private boolean isUnlinkRequired() {
-        boolean result = mPowerSaveModeEnabled
+        return (!mScreenOn && !mAmbPulseEnabled)
+                || mPowerSaveModeEnabled
                 || mMusicStreamMuted
                 || mScreenPinningEnabled
                 || !mAttached;
-        if (!mAmbPulseEnabled) {
-            result = result || !mScreenOn;
-        }
-        return result;
     }
 
     /**
@@ -465,15 +459,12 @@ public class PulseControllerImpl
      * @return true if all conditions are met to allow link, false if and conditions are not met
      */
     private boolean isAbleToLink() {
-        boolean result = mIsMediaPlaying
+        return (mScreenOn || mAmbPulseEnabled)
+                && mIsMediaPlaying
                 && !mPowerSaveModeEnabled
                 && !mMusicStreamMuted
                 && !mScreenPinningEnabled
                 && mAttached;
-        if (!mAmbPulseEnabled) {
-            result = result || mScreenOn;
-        }
-        return result;
     }
 
     private void doUnlinkVisualizer() {
