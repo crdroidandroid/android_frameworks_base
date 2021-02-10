@@ -156,41 +156,24 @@
     <string name="text_clock_m_thirty_nine">Otuz dokuz</string>
     <string name="text_clock_m_forty">Kırk</string>
     <string name="text_clock_m_forty_one">Kırk bir</string>
-    <string name="text_clock_m_forty_two">Kırk
-İki</string>
-    <string name="text_clock_m_forty_three">Kırk
-Üç</string>
-    <string name="text_clock_m_forty_four">Kırk
-Dört</string>
-    <string name="text_clock_m_forty_five">Kırk
-Beş</string>
-    <string name="text_clock_m_forty_six">Kırk
-Altı</string>
-    <string name="text_clock_m_forty_seven">Kırk
-Yedi</string>
-    <string name="text_clock_m_forty_eight">Kırk
-Sekiz</string>
-    <string name="text_clock_m_forty_nine">Kırk
-Dokuz</string>
+    <string name="text_clock_m_forty_two">Kırk iki</string>
+    <string name="text_clock_m_forty_three">Kırk üç</string>
+    <string name="text_clock_m_forty_four">Kırk dört</string>
+    <string name="text_clock_m_forty_five">Kırk beş</string>
+    <string name="text_clock_m_forty_six">Kırk altı</string>
+    <string name="text_clock_m_forty_seven">Kırk yedi</string>
+    <string name="text_clock_m_forty_eight">Kırk sekiz</string>
+    <string name="text_clock_m_forty_nine">Kırk dokuz</string>
     <string name="text_clock_m_fifty">Elli</string>
-    <string name="text_clock_m_fifty_one">Elli
-Bir</string>
-    <string name="text_clock_m_fifty_two">Elli
-İki</string>
-    <string name="text_clock_m_fifty_three">Elli
-Üç</string>
-    <string name="text_clock_m_fifty_four">Elli
-Dört</string>
-    <string name="text_clock_m_fifty_five">Elli
-Beş</string>
-    <string name="text_clock_m_fifty_six">Elli
-Altı</string>
-    <string name="text_clock_m_fifty_seven">Elli
-Yedi</string>
-    <string name="text_clock_m_fifty_eight">Elli
-Sekiz</string>
-    <string name="text_clock_m_fifty_nine">Elli
-Dokuz</string>
+    <string name="text_clock_m_fifty_one">Elli bir</string>
+    <string name="text_clock_m_fifty_two">Elli iki</string>
+    <string name="text_clock_m_fifty_three">Elli üç</string>
+    <string name="text_clock_m_fifty_four">Elli dört</string>
+    <string name="text_clock_m_fifty_five">Elli beş</string>
+    <string name="text_clock_m_fifty_six">Elli altı</string>
+    <string name="text_clock_m_fifty_seven">Elli yedi</string>
+    <string name="text_clock_m_fifty_eight">Elli sekiz</string>
+    <string name="text_clock_m_fifty_nine">Elli dokuz</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Tux clock -->
