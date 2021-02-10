@@ -64,8 +64,7 @@ public class ScreenMediaRecorder {
     private static final int TOTAL_NUM_TRACKS = 1;
     private static final int VIDEO_FRAME_RATE = 30;
     private static final int VIDEO_FRAME_RATE_TO_RESOLUTION_RATIO = 6;
-    private static final int LOW_VIDEO_FRAME_RATE = 25;
-    private static final int LOW_VIDEO_BIT_RATE = 1750000;
+    private static final int LOW_VIDEO_BIT_RATE = 3000000;
     private static final int AUDIO_BIT_RATE = 196000;
     private static final int AUDIO_SAMPLE_RATE = 44100;
     private static final int MAX_DURATION_MS = 60 * 60 * 1000;
@@ -139,7 +138,7 @@ public class ScreenMediaRecorder {
         wm.getDefaultDisplay().getRealMetrics(metrics);
         int screenWidth = metrics.widthPixels;
         int screenHeight = metrics.heightPixels;
-        int refereshRate = mLowQuality? LOW_VIDEO_FRAME_RATE : (int) wm.getDefaultDisplay().getRefreshRate();
+        int refereshRate = mLowQuality? VIDEO_FRAME_RATE : (int) wm.getDefaultDisplay().getRefreshRate();
         if (mMaxRefreshRate != 0 && refereshRate > mMaxRefreshRate) refereshRate = mMaxRefreshRate;
         // TODO: make low quality bitrate scalable per device, like the default one
         int vidBitRate = mLowQuality ? LOW_VIDEO_BIT_RATE :
