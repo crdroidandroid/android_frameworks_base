@@ -33,7 +33,7 @@
     <string name="omnijaws_package_not_available">OmniJaws mevcut değil</string>
     <string name="omnijaws_service_last_update">Son güncelleme:</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Her zaman ekranda</string>
+    <string name="quick_settings_always_on_display_label">Her zaman açık ekran</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Veri kartını değiştir</string>
     <string name="qs_data_switch_changed_1">Mobil veri için SIM 1 kullanılıyor</string>
@@ -111,81 +111,51 @@
     <string name="text_clock_h_eight">Sekiz</string>
     <string name="text_clock_h_nine">Dokuz</string>
     <string name="text_clock_h_ten">On</string>
-    <string name="text_clock_h_eleven">On
-Bir</string>
-    <string name="text_clock_h_twelve">On
-İki</string>
+    <string name="text_clock_h_eleven">On bir</string>
+    <string name="text_clock_h_twelve">On iki</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">Saat</string>
-    <string name="text_clock_m_one">Bir</string>
-    <string name="text_clock_m_two">İki</string>
-    <string name="text_clock_m_three">Üç</string>
-    <string name="text_clock_m_four">Dört</string>
-    <string name="text_clock_m_five">Beş</string>
-    <string name="text_clock_m_six">Altı</string>
-    <string name="text_clock_m_seven">Yedi</string>
-    <string name="text_clock_m_eight">Sekiz</string>
-    <string name="text_clock_m_nine">Dokuz</string>
+    <string name="text_clock_m_zero">O’Saat</string>
+    <string name="text_clock_m_one">O’Bir</string>
+    <string name="text_clock_m_two">O’İki</string>
+    <string name="text_clock_m_three">O’Üç</string>
+    <string name="text_clock_m_four">O’Dört</string>
+    <string name="text_clock_m_five">O’Beş</string>
+    <string name="text_clock_m_six">O’Altı</string>
+    <string name="text_clock_m_seven">O’Yedi</string>
+    <string name="text_clock_m_eight">O’Sekiz</string>
+    <string name="text_clock_m_nine">O’Dokuz</string>
     <string name="text_clock_m_ten">On</string>
-    <string name="text_clock_m_eleven">On
-Bir</string>
-    <string name="text_clock_m_twelve">On
-İki</string>
-    <string name="text_clock_m_thirteen">On
-Üç</string>
-    <string name="text_clock_m_fourteen">On
-Dört</string>
-    <string name="text_clock_m_fifteen">On
-Beş</string>
-    <string name="text_clock_m_sixteen">On
-Altı</string>
-    <string name="text_clock_m_seventeen">On
-Yedi</string>
-    <string name="text_clock_m_eighteen">On
-Sekiz</string>
-    <string name="text_clock_m_nineteen">On
-Dokuz</string>
+    <string name="text_clock_m_eleven">On bir</string>
+    <string name="text_clock_m_twelve">On iki</string>
+    <string name="text_clock_m_thirteen">On üç</string>
+    <string name="text_clock_m_fourteen">On dört</string>
+    <string name="text_clock_m_fifteen">On beş</string>
+    <string name="text_clock_m_sixteen">On altı</string>
+    <string name="text_clock_m_seventeen">On yedi</string>
+    <string name="text_clock_m_eighteen">On sekiz</string>
+    <string name="text_clock_m_nineteen">On dokuz</string>
     <string name="text_clock_m_twenty">Yirmi</string>
-    <string name="text_clock_m_twenty_one">Yirmi
-Bir</string>
-    <string name="text_clock_m_twenty_two">Yirmi
-İki</string>
-    <string name="text_clock_m_twenty_three">Yirmi
-Üç</string>
-    <string name="text_clock_m_twenty_four">Yirmi
-Dört</string>
-    <string name="text_clock_m_twenty_five">Yirmi
-Beş</string>
-    <string name="text_clock_m_twenty_six">Yirmi
-Altı</string>
-    <string name="text_clock_m_twenty_seven">Yirmi
-Yedi</string>
-    <string name="text_clock_m_twenty_eight">Yirmi
-Sekiz</string>
-    <string name="text_clock_m_twenty_nine">Yirmi
-Dokuz</string>
+    <string name="text_clock_m_twenty_one">Yirmi bir</string>
+    <string name="text_clock_m_twenty_two">Yirmi iki</string>
+    <string name="text_clock_m_twenty_three">Yirmi üç</string>
+    <string name="text_clock_m_twenty_four">Yirmi dört</string>
+    <string name="text_clock_m_twenty_five">Yirmi beş</string>
+    <string name="text_clock_m_twenty_six">Yirmi altı</string>
+    <string name="text_clock_m_twenty_seven">Yirmi yedi</string>
+    <string name="text_clock_m_twenty_eight">Yirmi sekiz</string>
+    <string name="text_clock_m_twenty_nine">Yirmi dokuz</string>
     <string name="text_clock_m_thirty">Otuz</string>
-    <string name="text_clock_m_thirty_one">Otuz
-Bir</string>
-    <string name="text_clock_m_thirty_two">Otuz
-İki</string>
-    <string name="text_clock_m_thirty_three">Otuz
-Üç</string>
-    <string name="text_clock_m_thirty_four">Otuz
-Dört</string>
-    <string name="text_clock_m_thirty_five">Otuz
-Beş</string>
-    <string name="text_clock_m_thirty_six">Otuz
-Altı</string>
-    <string name="text_clock_m_thirty_seven">Otuz
-Yedi</string>
-    <string name="text_clock_m_thirty_eight">Otuz
-Sekiz</string>
-    <string name="text_clock_m_thirty_nine">Otuz
-Dokuz</string>
+    <string name="text_clock_m_thirty_one">Otuz bir</string>
+    <string name="text_clock_m_thirty_two">Otuz iki</string>
+    <string name="text_clock_m_thirty_three">Otuz üç</string>
+    <string name="text_clock_m_thirty_four">Otuz dört</string>
+    <string name="text_clock_m_thirty_five">Otuz beş</string>
+    <string name="text_clock_m_thirty_six">Otuz altı</string>
+    <string name="text_clock_m_thirty_seven">Otuz yedi</string>
+    <string name="text_clock_m_thirty_eight">Otuz sekiz</string>
+    <string name="text_clock_m_thirty_nine">Otuz dokuz</string>
     <string name="text_clock_m_forty">Kırk</string>
-    <string name="text_clock_m_forty_one">Kırk
-Bir</string>
+    <string name="text_clock_m_forty_one">Kırk bir</string>
     <string name="text_clock_m_forty_two">Kırk
 İki</string>
     <string name="text_clock_m_forty_three">Kırk
