@@ -243,6 +243,6 @@ Dokuz</string>
     <string name="tristate_rotation_90">Yatay (90°)</string>
     <string name="tristate_rotation_270">Yatay (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot\nLongpress to move it</string>
-    <string name="screenrecord_lowquality_label">Lower quality for smaller file size</string>
+    <string name="screenrecord_stopdot_label">Durma noktasını göster\nTaşımak için uzun basın</string>
+    <string name="screenrecord_lowquality_label">Daha küçük dosya boyutu için daha düşük kalite</string>
 </resources>
