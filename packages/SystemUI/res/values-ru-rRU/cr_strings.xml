@@ -188,7 +188,7 @@
     <string name="volume_ringer_alarms_only">Будильник</string>
     <string name="volume_ringer_dnd">Не беспокоить</string>
     <string name="tristate_flashlight_on">Фонарик включен</string>
-    <string name="tristate_flashlight_off">Фонарик отключен</string>
+    <string name="tristate_flashlight_off">Фонарик выключен</string>
     <string name="tristate_flashlight_blink">Мигание фонарика</string>
     <string name="tristate_brightness_bright">Максимальная яркость</string>
     <string name="tristate_brightness_dark">Минимальная яркость</string>
