@@ -19,7 +19,7 @@
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Şarj Oluyor (tam dolmasına <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> kaldı)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash şarj oluyor</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Warp şarj oluyor(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> sonra dolacak)</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Warp Şarj Oluyor (tam dolmasına <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> kaldı)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g>Warp şarj oluyor</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
@@ -56,7 +56,7 @@
     <string name="quick_settings_music_play">Oynat</string>
     <string name="quick_settings_music_pause">Duraklat</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Her zaman ekranda</string>
+    <string name="quick_settings_always_on_display_label">Her zaman açık ekran</string>
     <!--Google sound search tile -->
     <string name="quick_settings_sound_search">Sesli arama</string>
     <!-- Sound QS tile -->
@@ -86,7 +86,7 @@
     <string name="force_stop_dlg_text">Uygulamayı zorla durdurursanız, hatalı davranabilir.</string>
     <string name="guts_force_close_app">Uygulamayı kapat</string>
     <!-- Restart SystemUI via Advanced Power Menu -->
-    <string name="global_action_restart_systemui">Sistem Arayüzü</string>
+    <string name="global_action_restart_systemui">Sistem arayüzü</string>
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Time displayed on typographic clock face, which displays the time in words.
@@ -117,136 +117,89 @@
     <string name="text_clock_h_eight">Sekiz</string>
     <string name="text_clock_h_nine">Dokuz</string>
     <string name="text_clock_h_ten">On</string>
-    <string name="text_clock_h_eleven">On
-Bir</string>
-    <string name="text_clock_h_twelve">On
-İki</string>
+    <string name="text_clock_h_eleven">On bir</string>
+    <string name="text_clock_h_twelve">On iki</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero"></string>
-    <string name="text_clock_m_one">Bir</string>
-    <string name="text_clock_m_two">İki</string>
-    <string name="text_clock_m_three">Üç</string>
-    <string name="text_clock_m_four">Dört</string>
-    <string name="text_clock_m_five">Beş</string>
-    <string name="text_clock_m_six">Altı</string>
-    <string name="text_clock_m_seven">Yedi</string>
-    <string name="text_clock_m_eight">Sekiz</string>
-    <string name="text_clock_m_nine">Dokuz</string>
+    <string name="text_clock_m_zero">O’Saat</string>
+    <string name="text_clock_m_one">O’Bir</string>
+    <string name="text_clock_m_two">O’İki</string>
+    <string name="text_clock_m_three">O’Üç</string>
+    <string name="text_clock_m_four">O’Dört</string>
+    <string name="text_clock_m_five">O’Beş</string>
+    <string name="text_clock_m_six">O’Altı</string>
+    <string name="text_clock_m_seven">O’Yedi</string>
+    <string name="text_clock_m_eight">O’Sekiz</string>
+    <string name="text_clock_m_nine">O’Dokuz</string>
     <string name="text_clock_m_ten">On</string>
-    <string name="text_clock_m_eleven">On
-Bir</string>
-    <string name="text_clock_m_twelve">On
-İki</string>
-    <string name="text_clock_m_thirteen">On
-Üç</string>
-    <string name="text_clock_m_fourteen">On
-Dört</string>
-    <string name="text_clock_m_fifteen">On
-Beş</string>
-    <string name="text_clock_m_sixteen">On
-Altı</string>
-    <string name="text_clock_m_seventeen">On
-Yedi</string>
-    <string name="text_clock_m_eighteen">On
-Sekiz</string>
-    <string name="text_clock_m_nineteen">On
-Dokuz</string>
+    <string name="text_clock_m_eleven">On bir</string>
+    <string name="text_clock_m_twelve">On iki</string>
+    <string name="text_clock_m_thirteen">On üç</string>
+    <string name="text_clock_m_fourteen">On dört</string>
+    <string name="text_clock_m_fifteen">On beş</string>
+    <string name="text_clock_m_sixteen">On altı</string>
+    <string name="text_clock_m_seventeen">On yedi</string>
+    <string name="text_clock_m_eighteen">On sekiz</string>
+    <string name="text_clock_m_nineteen">On dokuz</string>
     <string name="text_clock_m_twenty">Yirmi</string>
-    <string name="text_clock_m_twenty_one">Yirmi
-Bir</string>
-    <string name="text_clock_m_twenty_two">Yirmi
-İki</string>
-    <string name="text_clock_m_twenty_three">Yirmi
-Üç</string>
-    <string name="text_clock_m_twenty_four">Yirmi
-Dört</string>
-    <string name="text_clock_m_twenty_five">Yirmi
-Beş</string>
-    <string name="text_clock_m_twenty_six">Yirmi
-Altı</string>
-    <string name="text_clock_m_twenty_seven">Yirmi
-Yedi</string>
-    <string name="text_clock_m_twenty_eight">Yirmi
-Sekiz</string>
-    <string name="text_clock_m_twenty_nine">Yirmi
-Dokuz</string>
+    <string name="text_clock_m_twenty_one">Yirmi bir</string>
+    <string name="text_clock_m_twenty_two">Yirmi iki</string>
+    <string name="text_clock_m_twenty_three">Yirmi üç</string>
+    <string name="text_clock_m_twenty_four">Yirmi dört</string>
+    <string name="text_clock_m_twenty_five">Yirmi beş</string>
+    <string name="text_clock_m_twenty_six">Yirmi altı</string>
+    <string name="text_clock_m_twenty_seven">Yirmi yedi</string>
+    <string name="text_clock_m_twenty_eight">Yirmi sekiz</string>
+    <string name="text_clock_m_twenty_nine">Yirmi dokuz</string>
     <string name="text_clock_m_thirty">Otuz</string>
-    <string name="text_clock_m_thirty_one">Otuz
-Bir</string>
-    <string name="text_clock_m_thirty_two">Otuz
-İki</string>
-    <string name="text_clock_m_thirty_three">Otuz
-Üç</string>
-    <string name="text_clock_m_thirty_four">Otuz
-Dört</string>
-    <string name="text_clock_m_thirty_five">Otuz
-Beş</string>
-    <string name="text_clock_m_thirty_six">Otuz
-Altı</string>
-    <string name="text_clock_m_thirty_seven">Otuz
-Yedi</string>
-    <string name="text_clock_m_thirty_eight">Otuz
-Sekiz</string>
-    <string name="text_clock_m_thirty_nine">Otuz
-Dokuz</string>
+    <string name="text_clock_m_thirty_one">Otuz bir</string>
+    <string name="text_clock_m_thirty_two">Otuz iki</string>
+    <string name="text_clock_m_thirty_three">Otuz üç</string>
+    <string name="text_clock_m_thirty_four">Otuz dört</string>
+    <string name="text_clock_m_thirty_five">Otuz beş</string>
+    <string name="text_clock_m_thirty_six">Otuz altı</string>
+    <string name="text_clock_m_thirty_seven">Otuz yedi</string>
+    <string name="text_clock_m_thirty_eight">Otuz sekiz</string>
+    <string name="text_clock_m_thirty_nine">Otuz dokuz</string>
     <string name="text_clock_m_forty">Kırk</string>
-    <string name="text_clock_m_forty_one">Kırk
-Bir</string>
-    <string name="text_clock_m_forty_two">Kırk
-İki</string>
-    <string name="text_clock_m_forty_three">Kırk
-Üç</string>
-    <string name="text_clock_m_forty_four">Kırk
-Dört</string>
-    <string name="text_clock_m_forty_five">Kırk
-Beş</string>
-    <string name="text_clock_m_forty_six">Kırk
-Altı</string>
-    <string name="text_clock_m_forty_seven">Kırk
-Yedi</string>
-    <string name="text_clock_m_forty_eight">Kırk
-Sekiz</string>
-    <string name="text_clock_m_forty_nine">Kırk
-Dokuz</string>
+    <string name="text_clock_m_forty_one">Kırk bir</string>
+    <string name="text_clock_m_forty_two">Kırk iki</string>
+    <string name="text_clock_m_forty_three">Kırk üç</string>
+    <string name="text_clock_m_forty_four">Kırk dört</string>
+    <string name="text_clock_m_forty_five">Kırk beş</string>
+    <string name="text_clock_m_forty_six">Kırk altı</string>
+    <string name="text_clock_m_forty_seven">Kırk yedi</string>
+    <string name="text_clock_m_forty_eight">Kırk sekiz</string>
+    <string name="text_clock_m_forty_nine">Kırk dokuz</string>
     <string name="text_clock_m_fifty">Elli</string>
-    <string name="text_clock_m_fifty_one">Elli
-Bir</string>
-    <string name="text_clock_m_fifty_two">Elli
-İki</string>
-    <string name="text_clock_m_fifty_three">Elli
-Üç</string>
-    <string name="text_clock_m_fifty_four">Elli
-Dört</string>
-    <string name="text_clock_m_fifty_five">Elli
-Beş</string>
-    <string name="text_clock_m_fifty_six">Elli
-Altı</string>
-    <string name="text_clock_m_fifty_seven">Elli
-Yedi</string>
-    <string name="text_clock_m_fifty_eight">Elli
-Sekiz</string>
-    <string name="text_clock_m_fifty_nine">Elli
-Dokuz</string>
+    <string name="text_clock_m_fifty_one">Elli bir</string>
+    <string name="text_clock_m_fifty_two">Elli iki</string>
+    <string name="text_clock_m_fifty_three">Elli üç</string>
+    <string name="text_clock_m_fifty_four">Elli dört</string>
+    <string name="text_clock_m_fifty_five">Elli beş</string>
+    <string name="text_clock_m_fifty_six">Elli altı</string>
+    <string name="text_clock_m_fifty_seven">Elli yedi</string>
+    <string name="text_clock_m_fifty_eight">Elli sekiz</string>
+    <string name="text_clock_m_fifty_nine">Elli dokuz</string>
     <!-- Screen Stabilization -->
-    <string name="quick_settings_stabilization_label">Ekran Sabitleme</string>
-    <string name="quick_settings_stabilization_off">Sabitleme kapatıldı</string>
-    <string name="quick_settings_stabilization_on">Sabitleme açıldı</string>
+    <string name="quick_settings_stabilization_label">Ekran sabitleme</string>
+    <string name="quick_settings_stabilization_off">Sabitleme devre dışı bırakıldı</string>
+    <string name="quick_settings_stabilization_on">Sabitleme etkinleştirildi</string>
     <string name="low_label">Düşük</string>
     <string name="high_label">Yüksek</string>
-    <string name="stabilization_velocity_friction">Sürtünme Hızı</string>
-    <string name="stabilization_velocity_amplitude">Hız Genliği</string>
-    <string name="stabilization_position_friction">Sürtünme Konumu</string>
+    <string name="stabilization_velocity_friction">Sürtünme hızı</string>
+    <string name="stabilization_velocity_amplitude">Hız genliği</string>
+    <string name="stabilization_position_friction">Sürtünme konumu</string>
     <!-- Screen record -->
-    <string name="screenrecord_dialog_title">Kayda başlansın mı?</string>
-    <string name="screenrecord_dialog_summary">Kayıt sırasında Android sistemi, ekranınızda görünen veya cihazınızda oynatılan tüm hassas bilgileri yakalayabilir.  Buna şifreler, ödeme bilgileri, fotoğraflar, mesajlar ve ses dahildir.</string>
+    <string name="screenrecord_dialog_title">Kayıt başlasın mı?</string>
+    <string name="screenrecord_dialog_summary">Kayıt sırasında Android sistemi, ekranınızda görünen veya cihazınızda oynatılan tüm hassas bilgileri yakalayabilir. Buna şifreler, ödeme bilgileri, fotoğraflar, mesajlar ve ses dahildir.</string>
     <string name="screenrecord_dialog_start">Başlat</string>
     <string name="screenrecord_dialog_cancel">İptal</string>
     <string name="screenrecord_audio_recording_title">Ses kaynağı</string>
-    <string name="screenrecord_audio_recording_internal">İç</string>
+    <string name="screenrecord_audio_recording_internal">Dahili</string>
     <string name="screenrecord_audio_recording_microphone">Mikrofon</string>
     <string name="screenrecord_audio_recording_off">Devre dışı</string>
     <string name="screenrecord_taps_title">Ekranda dokunmaları göster</string>
-    <string name="screenrecord_stopdot_title">Durdurma butonunu göster</string>
+    <string name="screenrecord_stopdot_title">Durdurma noktasını göster</string>
     <string name="screenrecord_video_bitrate_title">Video bit hızı</string>
     <!-- Name of the data saver status bar icon. -->
     <string name="status_bar_data_saver">Veri tasarrufu</string>
