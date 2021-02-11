@@ -196,4 +196,7 @@
     <string name="tristate_rotation_0">Portret</string>
     <string name="tristate_rotation_90">Peisaj (90°)</string>
     <string name="tristate_rotation_270">Peisaj (270°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Arată punctul stop\nApăsați lung pentru a-l muta</string>
+    <string name="screenrecord_lowquality_label">Calitate scăzută pentru dimensiunea mai mică a fișierului</string>
 </resources>

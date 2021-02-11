@@ -195,4 +195,7 @@
     <string name="tristate_rotation_0">Állókép-mód</string>
     <string name="tristate_rotation_90">Fekvőkép-mód</string>
     <string name="tristate_rotation_270">Fejreállított fekvőkép-mód</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Látható megállítógomb\nHosszan nyomva áthelyezhető</string>
+    <string name="screenrecord_lowquality_label">Gyengébb minőség, hogy kisebbek legyenek a fájlok</string>
 </resources>

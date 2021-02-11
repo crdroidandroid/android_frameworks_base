@@ -191,8 +191,11 @@
     <string name="tristate_brightness_bright">Maximale Helligkeit</string>
     <string name="tristate_brightness_dark">Minimale Helligkeit</string>
     <string name="tristate_brightness_auto">Automatische Helligkeit</string>
-    <string name="tristate_rotation_auto">Autom. drehen</string>
+    <string name="tristate_rotation_auto">Automatisch drehen</string>
     <string name="tristate_rotation_0">Hochformat</string>
     <string name="tristate_rotation_90">Querformat (90°)</string>
     <string name="tristate_rotation_270">Querformat (270°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Stopppunkt anzeigen,\nlanges Drücken, um ihn zu verschieben</string>
+    <string name="screenrecord_lowquality_label">Qualität verringern für kleinere Dateigröße</string>
 </resources>

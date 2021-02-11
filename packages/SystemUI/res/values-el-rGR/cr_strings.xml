@@ -231,4 +231,7 @@
     <string name="tristate_rotation_0">Κατακόρυφα</string>
     <string name="tristate_rotation_90">Οριζόντια (90°)</string>
     <string name="tristate_rotation_270">Οριζόντια (270°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Εμφάνιση κουκίδας παύσης\nΠαρατεταμέο πάτημα για να την μετακινήσεις</string>
+    <string name="screenrecord_lowquality_label">Μείωση της ποιότητας για μικρότερο μέγεθος αρχείου</string>
 </resources>

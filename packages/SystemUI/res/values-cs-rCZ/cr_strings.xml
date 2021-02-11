@@ -197,4 +197,7 @@
     <string name="tristate_rotation_0">Na výšku</string>
     <string name="tristate_rotation_90">Na šířku (90°)</string>
     <string name="tristate_rotation_270">Na šířku (270°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Zobrazit tečku pro zastavení nahrávání\nDlouhým stiskem ji přesunete</string>
+    <string name="screenrecord_lowquality_label">Nižší kvalita pro zajištění menší velikosti souboru</string>
 </resources>

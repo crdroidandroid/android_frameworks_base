@@ -217,4 +217,7 @@ Sembilan</string>
     <string name="tristate_rotation_0">Potret</string>
     <string name="tristate_rotation_90">Lanskap (90°)</string>
     <string name="tristate_rotation_270">Lanskap (270°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Tampilkan titik berhenti\nTekan lama untuk memindahkannya</string>
+    <string name="screenrecord_lowquality_label">Kualitas lebih rendah untuk ukuran file yang lebih kecil</string>
 </resources>

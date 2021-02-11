@@ -210,21 +210,24 @@
     <!-- Samsung clock -->
     <!-- Tux clock -->
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Delete</string>
+    <string name="screenrecord_delete_label">삭제</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Screen recording deleted</string>
+    <string name="screenrecord_delete_description">화면 녹화 영상이 삭제되었습니다.</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Priority</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
-    <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="volume_ringer_priority_only">우선순위</string>
+    <string name="volume_ringer_alarms_only">알람</string>
+    <string name="volume_ringer_dnd">방해금지</string>
+    <string name="tristate_flashlight_on">손전등 켜기</string>
+    <string name="tristate_flashlight_off">손전등 끄기</string>
+    <string name="tristate_flashlight_blink">손전등 깜빡임</string>
+    <string name="tristate_brightness_bright">최대 밝기</string>
+    <string name="tristate_brightness_dark">최소 밝기</string>
+    <string name="tristate_brightness_auto">자동 밝기</string>
+    <string name="tristate_rotation_auto">자동 회전</string>
+    <string name="tristate_rotation_0">세로</string>
+    <string name="tristate_rotation_90">가로 (90°)</string>
+    <string name="tristate_rotation_270">가로 (270°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">정지 버튼 표시\n길게 눌러서 이동하기</string>
+    <string name="screenrecord_lowquality_label">보다 작은 파일 크기를 위한 낮은 음질</string>
 </resources>

@@ -195,4 +195,7 @@
     <string name="tristate_rotation_0">Portrait</string>
     <string name="tristate_rotation_90">Paysage (90°)</string>
     <string name="tristate_rotation_270">Paysage (270°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Afficher le bouton stop\nAppui long pour le déplacer</string>
+    <string name="screenrecord_lowquality_label">Diminuer la qualité de l\'image pour une taille de fichier plus petite</string>
 </resources>
