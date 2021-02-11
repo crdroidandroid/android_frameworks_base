@@ -3437,7 +3437,7 @@ public final class Settings {
         public static final String FONT_SCALE = "font_scale";
 
         private static final Validator FONT_SCALE_VALIDATOR =
-                new SettingsValidators.InclusiveFloatRangeValidator(0.85f, 1.3f);
+                new SettingsValidators.InclusiveFloatRangeValidator(0.80f, 1.3f);
 
         /**
          * The serialized system locale value.
