@@ -229,5 +229,5 @@
     <string name="tristate_rotation_270">가로 (270°)</string>
     <!-- Screenrecorder -->
     <string name="screenrecord_stopdot_label">정지 버튼 표시\n길게 눌러서 이동하기</string>
-    <string name="screenrecord_lowquality_label">Lower quality for smaller file size</string>
+    <string name="screenrecord_lowquality_label">보다 작은 파일 크기를 위한 낮은 음질</string>
 </resources>
