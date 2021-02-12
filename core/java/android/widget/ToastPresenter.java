@@ -204,22 +204,24 @@ public class ToastPresenter {
         mView = view;
         mToken = token;
 
-        Context context = mView.getContext().getApplicationContext();
-        if (context == null) {
-            context = mView.getContext();
-        }
-
-        if ((Settings.System.getInt(context.getContentResolver(), Settings.System.TOAST_ICON, 1) == 1)) {
-            ImageView appIcon = (ImageView) mView.findViewById(android.R.id.icon);
-            if (appIcon != null) {
+        ImageView appIcon = (ImageView) mView.findViewById(android.R.id.icon);
+        if (appIcon != null) {
+            Context context = mView.getContext().getApplicationContext();
+            if (context == null) {
+                context = mView.getContext();
+            }
+            if ((Settings.System.getInt(context.getContentResolver(), Settings.System.TOAST_ICON, 1) == 1)) {
                 PackageManager pm = context.getPackageManager();
                 Drawable icon = null;
                 try {
                     icon = pm.getApplicationIcon(mPackageName);
                 } catch (PackageManager.NameNotFoundException e) {
-                        // nothing to do
+                    // nothing to do
                 }
+                appIcon.setVisibility(View.VISIBLE);
                 appIcon.setImageDrawable(icon);
+            } else  {
+                appIcon.setVisibility(View.GONE);
             }
         }
 
