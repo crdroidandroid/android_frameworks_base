@@ -201,7 +201,7 @@
     <!-- Name of the camera status bar icon. -->
     <string name="status_bar_camera">Camera</string>
     <!-- Name of the location status bar icon. -->
-    <string name="status_bar_location">Location</string>
+    <string name="status_bar_location">Plaats</string>
     <!-- Name of the microphone status bar icon. -->
-    <string name="status_bar_microphone">Microphone</string>
+    <string name="status_bar_microphone">Microfoon</string>
 </resources>
