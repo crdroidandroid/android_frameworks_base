@@ -199,9 +199,9 @@
     <string name="screenrecord_stopdot_label">Látható megállítógomb\nHosszan nyomva áthelyezhető</string>
     <string name="screenrecord_lowquality_label">Gyengébb minőség, hogy kisebbek legyenek a fájlok</string>
     <!-- Name of the camera status bar icon. -->
-    <string name="status_bar_camera">Camera</string>
+    <string name="status_bar_camera">Kamera</string>
     <!-- Name of the location status bar icon. -->
-    <string name="status_bar_location">Location</string>
+    <string name="status_bar_location">Tartózkodási hely</string>
     <!-- Name of the microphone status bar icon. -->
-    <string name="status_bar_microphone">Microphone</string>
+    <string name="status_bar_microphone">Mikrofon</string>
 </resources>
