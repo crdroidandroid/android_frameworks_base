@@ -29,6 +29,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -203,22 +204,24 @@ public class ToastPresenter {
         mView = view;
         mToken = token;
 
-                Context context = mView.getContext().getApplicationContext();
-                if (context == null) {
-                    context = mView.getContext();
-                }
+        Context context = mView.getContext().getApplicationContext();
+        if (context == null) {
+            context = mView.getContext();
+        }
 
-                ImageView appIcon = (ImageView) mView.findViewById(android.R.id.icon);
-                if (appIcon != null) {
-                    PackageManager pm = context.getPackageManager();
-                    Drawable icon = null;
-                    try {
-                        icon = pm.getApplicationIcon(mPackageName);
-                    } catch (PackageManager.NameNotFoundException e) {
+        if ((Settings.System.getInt(context.getContentResolver(), Settings.System.TOAST_ICON, 1) == 1)) {
+            ImageView appIcon = (ImageView) mView.findViewById(android.R.id.icon);
+            if (appIcon != null) {
+                PackageManager pm = context.getPackageManager();
+                Drawable icon = null;
+                try {
+                    icon = pm.getApplicationIcon(mPackageName);
+                } catch (PackageManager.NameNotFoundException e) {
                         // nothing to do
-                    }
-                    appIcon.setImageDrawable(icon);
                 }
+                appIcon.setImageDrawable(icon);
+            }
+        }
 
         adjustLayoutParams(mParams, windowToken, duration, gravity, xOffset, yOffset,
                 horizontalMargin, verticalMargin);
