@@ -198,4 +198,10 @@
     <!-- Screenrecorder -->
     <string name="screenrecord_stopdot_label">Toon stop punt\nLang indrukken om te verplaatsen</string>
     <string name="screenrecord_lowquality_label">Lagere kwaliteit voor kleinere bestandsgrootte</string>
+    <!-- Name of the camera status bar icon. -->
+    <string name="status_bar_camera">Camera</string>
+    <!-- Name of the location status bar icon. -->
+    <string name="status_bar_location">Location</string>
+    <!-- Name of the microphone status bar icon. -->
+    <string name="status_bar_microphone">Microphone</string>
 </resources>
