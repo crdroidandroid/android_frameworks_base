@@ -501,8 +501,8 @@ public class Toast {
             Toast result = new Toast(context, looper);
             View v = ToastPresenter.getTextToastView(context, text);
             ImageView appIcon = (ImageView) v.findViewById(android.R.id.icon);
-            if ((Settings.System.getInt(context.getContentResolver(), Settings.System.TOAST_ICON, 1) == 1)) {
-                if (appIcon != null) {
+            if (appIcon != null) {
+                if ((Settings.System.getInt(context.getContentResolver(), Settings.System.TOAST_ICON, 1) == 1)) {
                     PackageManager pm = context.getPackageManager();
                     Drawable icon = null;
                     try {
@@ -510,7 +510,10 @@ public class Toast {
                     } catch (PackageManager.NameNotFoundException e) {
                         // nothing to do
                     }
+                    appIcon.setVisibility(View.VISIBLE);
                     appIcon.setImageDrawable(icon);
+                } else  {
+                    appIcon.setVisibility(View.GONE);
                 }
             }
             result.mNextView = v;
