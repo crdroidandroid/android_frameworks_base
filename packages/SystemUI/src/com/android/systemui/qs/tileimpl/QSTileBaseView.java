@@ -134,7 +134,8 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
         mColorActiveAlpha = adjustAlpha(mColorActive, 0.2f);
         boolean setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
                 Settings.System.QS_PANEL_BG_USE_NEW_TINT, 0, UserHandle.USER_CURRENT) == 1;
-        if (setQsUseNewTint) {
+        boolean themeQsUseNewTint = context.getResources().getBoolean(R.bool.config_enable_qs_tile_tinting);
+        if (setQsUseNewTint || themeQsUseNewTint) {
             mColorActive = mColorActiveAlpha;
         }
         mColorInactive = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorSecondary);

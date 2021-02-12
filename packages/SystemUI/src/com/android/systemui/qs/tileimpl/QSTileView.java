@@ -134,7 +134,8 @@ public class QSTileView extends QSTileBaseView {
         }
         boolean setQsUseNewTint = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.QS_PANEL_BG_USE_NEW_TINT, 0, UserHandle.USER_CURRENT) == 1;
-        if (setQsUseNewTint) {
+        boolean themeQsUseNewTint = getContext().getResources().getBoolean(R.bool.config_enable_qs_tile_tinting);
+        if (setQsUseNewTint || themeQsUseNewTint) {
             if (state.state == Tile.STATE_ACTIVE) {
                 mLabel.setTextColor(mColorLabelActive);
             } else if (state.state == Tile.STATE_INACTIVE) {
