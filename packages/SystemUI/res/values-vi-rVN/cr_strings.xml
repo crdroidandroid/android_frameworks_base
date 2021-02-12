@@ -198,9 +198,9 @@
     <string name="screenrecord_stopdot_label">Hiện chấm dừng\nNhấn giữ để di chuyển nó</string>
     <string name="screenrecord_lowquality_label">Chất lượng thấp cho dung lượng nhỏ hơn</string>
     <!-- Name of the camera status bar icon. -->
-    <string name="status_bar_camera">Camera</string>
+    <string name="status_bar_camera">Máy ảnh</string>
     <!-- Name of the location status bar icon. -->
-    <string name="status_bar_location">Location</string>
+    <string name="status_bar_location">Vị trí</string>
     <!-- Name of the microphone status bar icon. -->
-    <string name="status_bar_microphone">Microphone</string>
+    <string name="status_bar_microphone">Micrô</string>
 </resources>
