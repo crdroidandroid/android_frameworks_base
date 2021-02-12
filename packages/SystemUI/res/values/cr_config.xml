@@ -39,4 +39,7 @@
 
     <!-- Whether to use the mask for the quicksettings icons-->
     <bool name="config_useMaskForQs">true</bool>
+
+    <!-- Config to enable/disable qs tile tinting -->
+    <bool name="config_enable_qs_tile_tinting">false</bool>
 </resources>
