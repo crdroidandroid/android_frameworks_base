@@ -70,6 +70,17 @@ public class ThemeAccentUtils {
         "com.android.systemui.qstile.oos", //25
     };
 
+    // Switch themes
+    private static final String[] SWITCH_STYLES = {
+        "com.android.system.switch.stock", // 0
+        "com.android.system.switch.md2", // 1
+        "com.android.system.switch.oneplus", // 2
+        "com.android.system.switch.narrow", // 3
+        "com.android.system.switch.contained", // 4
+        "com.android.system.switch.retro", // 5
+        "com.android.system.switch.telegram", // 6
+    };
+
     // Check for the dark system theme
     public static int getDarkStyle(OverlayManager om) {
         OverlayInfo themeInfo = null;
@@ -159,6 +170,31 @@ public class ThemeAccentUtils {
 
         try {
             om.setEnabled(QS_TILE_STYLES[qsTileStyle], true, userId);
+        } catch (Exception e) {
+        }
+    }
+
+    // Unloads the switch styles
+    private static void unloadSwitchStyle(OverlayManager om, UserHandle userId) {
+        for (String style : SWITCH_STYLES) {
+            try {
+                om.setEnabled(style, false, userId);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    // Set switch style
+    public static void setSwitchStyle(OverlayManager om, int switchStyle) {
+        UserHandle userId = UserHandle.of(ActivityManager.getCurrentUser());
+
+        // Always unload switch styles
+        unloadSwitchStyle(om, userId);
+
+        if (switchStyle == 0) return;
+
+        try {
+            om.setEnabled(SWITCH_STYLES[switchStyle], true, userId);
         } catch (Exception e) {
         }
     }
