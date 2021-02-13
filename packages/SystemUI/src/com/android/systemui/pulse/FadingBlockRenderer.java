@@ -1,7 +1,7 @@
 /**
  * Copyright 2011, Felix Palmer
  * Copyright (C) 2014 The TeamEos Project
- * Copyright (C) 2016-2020 crDroid Android Project
+ * Copyright (C) 2016-2021 crDroid Android Project
  *
  * AOSP Navigation implementation by
  * @author: Randall Rushing <randall.rushing@gmail.com>
@@ -124,8 +124,10 @@ public class FadingBlockRenderer extends Renderer {
                 }
             }
         }
-        mCanvas.drawLines(mFFTPoints, mPaint);
-        mCanvas.drawPaint(mFadePaint);
+        if (mCanvas != null) {
+            mCanvas.drawLines(mFFTPoints, mPaint);
+            mCanvas.drawPaint(mFadePaint);
+        }
         postInvalidate();
     }
 
