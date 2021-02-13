@@ -5272,6 +5272,13 @@ public final class Settings {
         public static final String POWERMENU_RESTART = "powermenu_restart";
 
          /**
+         * Whether to display reboot in the power menu
+         *
+         * @hide
+         */
+        public static final String POWERMENU_ADVANCED = "powermenu_advanced";
+
+         /**
          * Whether to display power in the power menu
          *
          * @hide
