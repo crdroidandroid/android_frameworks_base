@@ -34,6 +34,7 @@
         <item>emergency</item>
         <item>power</item>
         <item>restart</item>
+        <item>advanced</item>
         <item>logout</item>
         <item>users</item>
         <item>silent</item>
