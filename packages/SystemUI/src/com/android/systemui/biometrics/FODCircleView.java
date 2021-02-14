@@ -167,7 +167,7 @@ public class FODCircleView extends ImageView implements TunerService.Tunable, Co
         R.drawable.fod_icon_pressed_cyan,
         R.drawable.fod_icon_pressed_green,
         R.drawable.fod_icon_pressed_yellow,
-        R.drawable.fod_icon_pressed_ffffe6
+        R.drawable.fod_icon_pressed_light_yellow
     };
 
     private IFingerprintInscreenCallback mFingerprintInscreenCallback =
