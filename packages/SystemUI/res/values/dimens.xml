@@ -1410,4 +1410,6 @@
     <dimen name="config_rounded_mask_size">@*android:dimen/rounded_corner_radius</dimen>
     <dimen name="config_rounded_mask_size_top">@*android:dimen/rounded_corner_radius_top</dimen>
     <dimen name="config_rounded_mask_size_bottom">@*android:dimen/rounded_corner_radius_bottom</dimen>
+    <!-- Helps to reduce area of Notification icons in status bar -->
+    <dimen name="notification_icon_area_padding_end">0px</dimen>
 </resources>
