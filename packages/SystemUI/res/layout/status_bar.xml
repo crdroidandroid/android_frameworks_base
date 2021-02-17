@@ -92,7 +92,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="horizontal"
-                    android:clipChildren="false"/>
+                    android:clipChildren="false"
+                    android:paddingEnd="@dimen/notification_icon_area_padding_end"/>
 
             </LinearLayout>
         </FrameLayout>
