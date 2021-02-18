@@ -1408,14 +1408,20 @@ public class RingtoneManager {
             // Skip if we've already defined it at least once, so we don't
             // overwrite the user changing to null
             final String setting = getDefaultRingtoneSetting(type);
+            String defaultRingtone2 = Settings.System.getString(context.getContentResolver(), Settings.System.RINGTONE2);
             if (Settings.System.getInt(context.getContentResolver(), setting, 0) != 0) {
-                continue;
+                if (!TextUtils.isEmpty(defaultRingtone2)) {
+                    continue;
+                }
             }
 
             // Try finding the scanned ringtone
             Uri ringtoneUri = computeDefaultRingtoneUri(context, type);
             if (ringtoneUri != null) {
                 RingtoneManager.setActualDefaultRingtoneUri(context, type, ringtoneUri);
+                if (TextUtils.isEmpty(defaultRingtone2)) {
+                    RingtoneManager.setActualDefaultRingtoneUriBySlot(context, TYPE_RINGTONE, ringtoneUri, 1);
+                }
                 Settings.System.putInt(context.getContentResolver(), setting, 1);
             }
         }
