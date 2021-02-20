@@ -45,8 +45,8 @@
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carica Rapida(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Carica Rapida</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Ricarica VOOC (<xliff:g id="charging_time_left" example="2 ore e 2 minuti">%1$s</xliff:g> fino al completamento della carica)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Carica VOOC</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Informazioni sulla CPU</string>
     <!-- FPS Info tile -->
@@ -178,24 +178,30 @@
     <!-- Samsung clock -->
     <!-- Tux clock -->
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Delete</string>
+    <string name="screenrecord_delete_label">Elimina</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Screen recording deleted</string>
+    <string name="screenrecord_delete_description">Registrazione schermo eliminata</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Priority</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
+    <string name="volume_ringer_priority_only">Priorità</string>
+    <string name="volume_ringer_alarms_only">Sveglie</string>
     <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="tristate_flashlight_on">Torcia accesa</string>
+    <string name="tristate_flashlight_off">Torcia spenta</string>
+    <string name="tristate_flashlight_blink">Torcia lampeggiante</string>
+    <string name="tristate_brightness_bright">Luminosità max</string>
+    <string name="tristate_brightness_dark">Luminosità min</string>
+    <string name="tristate_brightness_auto">Luminosità automatica</string>
+    <string name="tristate_rotation_auto">Rotazione automatica</string>
+    <string name="tristate_rotation_0">Verticale</string>
+    <string name="tristate_rotation_90">Orizzontale (90°)</string>
+    <string name="tristate_rotation_270">Orizzontale (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot\nLongpress to move it</string>
-    <string name="screenrecord_lowquality_label">Lower quality for smaller file size</string>
+    <string name="screenrecord_stopdot_label">Mostra punto per fermare\nPressione prolungata per spostarlo</string>
+    <string name="screenrecord_lowquality_label">Qualità inferiore per dimensioni più piccole del file</string>
+    <!-- Name of the camera status bar icon. -->
+    <string name="status_bar_camera">Fotocamera</string>
+    <!-- Name of the location status bar icon. -->
+    <string name="status_bar_location">Posizione</string>
+    <!-- Name of the microphone status bar icon. -->
+    <string name="status_bar_microphone">Microfono</string>
 </resources>

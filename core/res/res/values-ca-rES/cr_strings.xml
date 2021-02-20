@@ -21,14 +21,14 @@
          they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Permet que l\'aplicació s\'executi com una aplicació diferent. Les aplicacions malicioses poden utilitzar això per accedir a dades personals. Hi han usos legítims, com un emulador pretenent ser el que emula. Concediu aquest permís amb compte!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgrouplab_fake_package_signature">Spoof package signature</string>
+    <string name="permgrouplab_fake_package_signature">Falsificar la signatura del paquet</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgroupdesc_fake_package_signature">allow to spoof package signature</string>
+    <string name="permgroupdesc_fake_package_signature">permetre falsificar la signatura del paquet</string>
     <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
-    <string name="permgrouprequest_fake_package_signature">Allow
-        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; to spoof package signature?</string>
+    <string name="permgrouprequest_fake_package_signature">Voleu permetre que
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; falsifiqui la signatura del paquet?</string>
     <!-- Long-press kill application -->
-    <string name="app_killed_message">Application killed</string>
+    <string name="app_killed_message">Aplicació tancada</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Mode Gaming</string>
     <string name="gaming_mode_notification_title">Mode Gaming activat</string>
@@ -38,7 +38,7 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Prem i mantén el botó d’encesa per desbloquejar</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">Copiar URL del registre d\'errors</string>
+    <string name="url_copy_success">URL copiada amb èxit</string>
+    <string name="url_copy_failed">Hi ha hagut un error mentre es carregava el registre a dogbin</string>
 </resources>
