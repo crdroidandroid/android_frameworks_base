@@ -1892,7 +1892,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                         ensureActiveCarrierPolicyAL(subId, subscriberId);
                         maybeUpdateCarrierPolicyCycleAL(subId, subscriberId);
                     } else {
-                        Slog.wtf(TAG, "Missing subscriberId for subId " + subId);
+                        Slog.w(TAG, "Missing subscriberId for subId " + subId);
                     }
 
                     // update network and notification rules, as the data cycle changed and it's
@@ -2041,7 +2041,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             if (!TextUtils.isEmpty(subscriberId)) {
                 subIdToSubscriberId.put(tmSub.getSubscriptionId(), subscriberId);
             } else {
-                Slog.wtf(TAG, "Missing subscriberId for subId " + tmSub.getSubscriptionId());
+                Slog.w(TAG, "Missing subscriberId for subId " + tmSub.getSubscriptionId());
             }
 
             final String[] mergedSubscriberId = ArrayUtils.defeatNullable(
