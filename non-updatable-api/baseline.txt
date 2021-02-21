@@ -1,0 +1,95 @@
+// Baseline format: 1.0
+BannedThrow: android.media.audiofx.DiracSound#getHeadsetType():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getHifiMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getLevel(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getMovie():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getMovieMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getMusic():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getSpeakerStereoMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setHeadsetType(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setHifiMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setLevel(int, float):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setMovie(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setMovieMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setMusic(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setSpeakerStereoMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getHeadsetType():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getHifiMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getLevel(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getMovie():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getMovieMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getMusic():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getSpeakerStereoMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setHeadsetType(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setHifiMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setLevel(int, float):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setMovie(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setMovieMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setMusic(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setSpeakerStereoMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+
+
+IllegalStateException: android.media.audiofx.DiracSound#getHeadsetType():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getHifiMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getMovie():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getMovieMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getMusic():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getSpeakerStereoMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getHeadsetType():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getHifiMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getMovie():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getMovieMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getMusic():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getSpeakerStereoMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
