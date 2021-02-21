@@ -16,15 +16,81 @@ ArrayReturn: android.app.Notification.MessagingStyle.Message#getMessagesFromBund
 ArrayReturn: android.content.ContentProviderOperation#resolveExtrasBackReferences(android.content.ContentProviderResult[], int) parameter #0:
     
 ArrayReturn: android.location.GnssAntennaInfo.SphericalCorrections#SphericalCorrections(double[][], double[][]) parameter #0:
-    Method parameter should be Collection<> (or subclass) instead of raw array; was `double[][]`
+    
 ArrayReturn: android.location.GnssAntennaInfo.SphericalCorrections#SphericalCorrections(double[][], double[][]) parameter #1:
-    Method parameter should be Collection<> (or subclass) instead of raw array; was `double[][]`
+    
 ArrayReturn: android.location.GnssAntennaInfo.SphericalCorrections#getCorrectionUncertaintiesArray():
-    Method should return Collection<> (or subclass) instead of raw array; was `double[][]`
+    
 ArrayReturn: android.location.GnssAntennaInfo.SphericalCorrections#getCorrectionsArray():
-    Method should return Collection<> (or subclass) instead of raw array; was `double[][]`
+    
 ArrayReturn: android.service.autofill.FillResponse.Builder#setAuthentication(android.view.autofill.AutofillId[], android.content.IntentSender, android.widget.RemoteViews, android.service.autofill.InlinePresentation) parameter #0:
-    Method parameter should be Collection<AutofillId> (or subclass) instead of raw array; was `android.view.autofill.AutofillId[]`
+    
+
+
+BannedThrow: android.media.audiofx.DiracSound#getHeadsetType():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getHifiMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getLevel(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getMovie():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getMovieMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getMusic():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#getSpeakerStereoMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setHeadsetType(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setHifiMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setLevel(int, float):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setMovie(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setMovieMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setMusic(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.DiracSound#setSpeakerStereoMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getHeadsetType():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getHifiMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getLevel(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getMovie():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getMovieMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getMusic():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#getSpeakerStereoMode():
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setHeadsetType(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setHifiMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setLevel(int, float):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setMovie(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setMovieMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setMusic(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
+BannedThrow: android.media.audiofx.MiSound#setSpeakerStereoMode(int):
+    Methods must not mention RuntimeException subclasses in throws clauses (was `java.lang.IllegalArgumentException`)
 
 
 BroadcastBehavior: android.app.AlarmManager#ACTION_NEXT_ALARM_CLOCK_CHANGED:
@@ -464,7 +530,7 @@ DeprecationMismatch: javax.microedition.khronos.egl.EGL10#eglCreatePixmapSurface
 
 
 ExecutorRegistration: android.media.MediaRouter2#setOnGetControllerHintsListener(android.media.MediaRouter2.OnGetControllerHintsListener):
-    Registration methods should have overload that accepts delivery Executor: `setOnGetControllerHintsListener`
+    
 
 
 GenericException: android.content.res.loader.ResourcesProvider#finalize():
@@ -513,28 +579,58 @@ HiddenSuperclass: android.util.StatsLog:
     
 
 
+IllegalStateException: android.media.audiofx.DiracSound#getHeadsetType():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getHifiMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getMovie():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getMovieMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getMusic():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.DiracSound#getSpeakerStereoMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getHeadsetType():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getHifiMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getMovie():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getMovieMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getMusic():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+IllegalStateException: android.media.audiofx.MiSound#getSpeakerStereoMode():
+    Methods taking no arguments should throw `IllegalStateException` instead of `java.lang.IllegalArgumentException`
+
+
 IntentBuilderName: android.net.VpnManager#provisionVpnProfile(android.net.PlatformVpnProfile):
-    Methods creating an Intent should be named `create<Foo>Intent()`, was `provisionVpnProfile`
+    
 
 
 KotlinOperator: android.media.AudioMetadata.Map#set(android.media.AudioMetadata.Key<T>, T):
-    Method can be invoked with an indexing operator from Kotlin: `set` (this is usually desirable; just make sure it makes sense for this type of object)
+    
 KotlinOperator: android.media.AudioMetadata.ReadMap#get(android.media.AudioMetadata.Key<T>):
-    Method can be invoked with an indexing operator from Kotlin: `get` (this is usually desirable; just make sure it makes sense for this type of object)
+    
 
 
 MethodNameUnits: android.media.MediaParser.SeekMap#getDurationMicros():
-    Returned time values are strongly encouraged to be in milliseconds unless you need the extra precision, was `getDurationMicros`
+    
 
 
 MinMaxConstant: android.telephony.DataFailCause#MAX_ACCESS_PROBE:
-    If min/max could change in future, make them dynamic methods: android.telephony.DataFailCause#MAX_ACCESS_PROBE
+    
 MinMaxConstant: android.telephony.DataFailCause#MAX_IPV4_CONNECTIONS:
-    If min/max could change in future, make them dynamic methods: android.telephony.DataFailCause#MAX_IPV4_CONNECTIONS
+    
 MinMaxConstant: android.telephony.DataFailCause#MAX_IPV6_CONNECTIONS:
-    If min/max could change in future, make them dynamic methods: android.telephony.DataFailCause#MAX_IPV6_CONNECTIONS
+    
 MinMaxConstant: android.telephony.DataFailCause#MAX_PPP_INACTIVITY_TIMER_EXPIRED:
-    If min/max could change in future, make them dynamic methods: android.telephony.DataFailCause#MAX_PPP_INACTIVITY_TIMER_EXPIRED
+    
 
 
 MissingNullability: android.app.AsyncNotedAppOp#equals(Object) parameter #0:
@@ -604,29 +700,29 @@ MissingNullability: java.time.chrono.JapaneseEra#REIWA:
 
 
 NotCloseable: android.media.MediaCodec.GraphicBlock:
-    Classes that release resources (finalize()) should implement AutoClosable and CloseGuard: class android.media.MediaCodec.GraphicBlock
+    
 NotCloseable: android.media.MediaCodec.LinearBlock:
-    Classes that release resources (finalize()) should implement AutoClosable and CloseGuard: class android.media.MediaCodec.LinearBlock
+    
 NotCloseable: android.media.MediaParser:
-    Classes that release resources (release()) should implement AutoClosable and CloseGuard: class android.media.MediaParser
+    
 NotCloseable: android.media.MediaRouter2.RoutingController:
-    Classes that release resources (release()) should implement AutoClosable and CloseGuard: class android.media.MediaRouter2.RoutingController
+    
 NotCloseable: android.util.CloseGuard:
-    Classes that release resources (close()) should implement AutoClosable and CloseGuard: class android.util.CloseGuard
+    
 NotCloseable: android.view.SurfaceControlViewHost:
-    Classes that release resources (release()) should implement AutoClosable and CloseGuard: class android.view.SurfaceControlViewHost
+    
 
 
 OnNameExpected: android.app.admin.DevicePolicyKeyguardService#dismiss():
-    If implemented by developer, should follow the on<Something> style; otherwise consider marking final
+    
 OnNameExpected: android.service.controls.ControlsProviderService#createPublisherFor(java.util.List<java.lang.String>):
-    Methods implemented by developers should follow the on<Something> style, was `createPublisherFor`
+    
 OnNameExpected: android.service.controls.ControlsProviderService#createPublisherForAllAvailable():
-    Methods implemented by developers should follow the on<Something> style, was `createPublisherForAllAvailable`
+    
 OnNameExpected: android.service.controls.ControlsProviderService#createPublisherForSuggested():
-    If implemented by developer, should follow the on<Something> style; otherwise consider marking final
+    
 OnNameExpected: android.service.controls.ControlsProviderService#performControlAction(String, android.service.controls.actions.ControlAction, java.util.function.Consumer<java.lang.Integer>):
-    Methods implemented by developers should follow the on<Something> style, was `performControlAction`
+    
 
 
 RequiresPermission: android.accounts.AccountManager#getAccountsByTypeAndFeatures(String, String[], android.accounts.AccountManagerCallback<android.accounts.Account[]>, android.os.Handler):
@@ -1256,7 +1352,7 @@ SamShouldBeLast: android.location.LocationManager#requestLocationUpdates(long, f
 
 
 StreamFiles: android.content.res.loader.DirectoryAssetsProvider#DirectoryAssetsProvider(java.io.File):
-    Methods accepting `File` should also accept `FileDescriptor` or streams: constructor android.content.res.loader.DirectoryAssetsProvider(java.io.File)
+    
 StreamFiles: android.content.res.loader.DirectoryResourceLoader#DirectoryResourceLoader(java.io.File):
     
 
