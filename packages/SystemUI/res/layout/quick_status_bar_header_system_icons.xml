@@ -41,7 +41,7 @@
         android:layout_height="match_parent"
         android:minWidth="48dp"
         android:gravity="center_vertical|start"
-        android:paddingStart="@dimen/status_bar_left_clock_starting_padding"
+        android:paddingStart="@dimen/status_bar_padding_start"
         android:paddingEnd="@dimen/status_bar_left_clock_end_padding"
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.StatusBar.Clock"
