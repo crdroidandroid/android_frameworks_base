@@ -1,10 +1,8 @@
 package android.media.audiofx;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 import java.util.UUID;
 
-@SuppressLint("all")
 public class DiracSound extends AudioEffect {
 
     public static final int DIRACSOUND_HEADSET_EM001 = 15;

@@ -142,6 +142,7 @@ droidstubs {
         api_lint: {
             enabled: true,
             new_since: ":android-non-updatable.api.public.latest",
+            baseline_file: "non-updatable-api/baseline.txt"
         },
     },
 }
