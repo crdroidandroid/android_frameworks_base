@@ -103,8 +103,8 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">Son les</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">Són les</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">És la</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
     <string name="text_clock_h_one">Una</string>
@@ -226,8 +226,8 @@
     <string name="omnijaws_service_last_update">Darrera actualització:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;està bloquejat.</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock.</string>
-    <string name="applock_face">&#160;or your face to unlock.</string>
+    <string name="applock_fingerprint_face">, empremta o la cara per a desbloquejar.</string>
+    <string name="applock_face">&#160;o la cara per a desbloquejar.</string>
     <string name="applock_fingerprint">&#160;o la teva empremta per a desbloquejar.</string>
     <string name="applock_locked_notification">L\'aplicació està bloquejada</string>
     <!-- DC Dimming -->
