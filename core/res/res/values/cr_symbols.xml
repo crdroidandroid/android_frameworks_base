@@ -143,4 +143,7 @@
 
     <!-- Assisted GPS -->
     <java-symbol type="string" name="location_agps_access_summary" />
+
+    <!-- Location indicator -->
+    <java-symbol type="drawable" name="stat_sys_location" />
 </resources>
