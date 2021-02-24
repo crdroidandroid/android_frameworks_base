@@ -1249,7 +1249,7 @@
 
     <!-- Used for permissions that allow accessing the device location. -->
     <permission-group android:name="android.permission-group.LOCATION"
-        android:icon="@drawable/perm_group_location"
+        android:icon="@drawable/stat_sys_location"
         android:label="@string/permgrouplab_location"
         android:description="@string/permgroupdesc_location"
         android:priority="400" />
