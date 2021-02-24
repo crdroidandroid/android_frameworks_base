@@ -52,6 +52,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.hardware.camera2.CameraManager;
 import android.media.AudioManager;
 import android.media.MediaActionSound;
 import android.net.Uri;
@@ -60,6 +61,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -233,6 +235,9 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
     private AudioManager mAudioManager;
     private Vibrator mVibrator;
 
+    private CameraManager mCameraManager;
+    private int mCamsInUse = 0;
+
     private int mNavMode;
     private int mLeftInset;
     private int mRightInset;
@@ -335,6 +340,9 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
         // Grab system services needed for screenshot sound
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+        mCameraManager.registerAvailabilityCallback(mCamCallback,
+                new Handler(Looper.getMainLooper()));
 
         // Store UI background executor
         mUiBgExecutor = uiBgExecutor;
@@ -780,21 +788,7 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
         if (Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) != 0) {
             mScreenshotHandler.post(() -> {
-                switch (mAudioManager.getRingerMode()) {
-                    case AudioManager.RINGER_MODE_SILENT:
-                        // do nothing
-                        break;
-                    case AudioManager.RINGER_MODE_VIBRATE:
-                        if (mVibrator != null && mVibrator.hasVibrator()) {
-                            mVibrator.vibrate(VibrationEffect.createOneShot(50,
-                                    VibrationEffect.DEFAULT_AMPLITUDE));
-                        }
-                        break;
-                    case AudioManager.RINGER_MODE_NORMAL:
-                        // Play the shutter sound to notify that we've taken a screenshot
-                        mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
-                        break;
-                }
+                playShutterSound();
             });
         }
 
@@ -852,21 +846,7 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
 
                 if (Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.SCREENSHOT_SOUND, 1, UserHandle.USER_CURRENT) != 0) {
-                    switch (mAudioManager.getRingerMode()) {
-                        case AudioManager.RINGER_MODE_SILENT:
-                            // do nothing
-                            break;
-                        case AudioManager.RINGER_MODE_VIBRATE:
-                            if (mVibrator != null && mVibrator.hasVibrator()) {
-                                mVibrator.vibrate(VibrationEffect.createOneShot(50,
-                                        VibrationEffect.DEFAULT_AMPLITUDE));
-                            }
-                            break;
-                        case AudioManager.RINGER_MODE_NORMAL:
-                            // Play the shutter sound to notify that we've taken a screenshot
-                            mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
-                            break;
-                    }
+                    playShutterSound();
                 }
 
                 mScreenshotPreview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -1326,5 +1306,50 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
         } else {
             return insetDrawable;
         }
+    }
+
+    private void playShutterSound() {
+        boolean playSound = readCameraSoundForced() && mCamsInUse > 0;
+
+        switch (mAudioManager.getRingerMode()) {
+            case AudioManager.RINGER_MODE_SILENT:
+                // do nothing
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                if (mVibrator != null && mVibrator.hasVibrator()) {
+                    mVibrator.vibrate(VibrationEffect.createOneShot(50,
+                            VibrationEffect.DEFAULT_AMPLITUDE));
+                }
+                break;
+            case AudioManager.RINGER_MODE_NORMAL:
+                // in this case we want to play sound even if not forced on
+                playSound = true;
+                break;
+        }
+
+        // We want to play the shutter sound when it's either forced or
+        // when we use normal ringer mode
+        if (playSound) {
+            mCameraSound.play(MediaActionSound.SHUTTER_CLICK);
+        }
+    }
+
+    private CameraManager.AvailabilityCallback mCamCallback =
+            new CameraManager.AvailabilityCallback() {
+        @Override
+        public void onCameraOpened(String cameraId, String packageId) {
+            mCamsInUse++;
+        }
+
+        @Override
+        public void onCameraClosed(String cameraId) {
+            mCamsInUse--;
+        }
+    };
+
+    private boolean readCameraSoundForced() {
+        return SystemProperties.getBoolean("audio.camerasound.force", false) ||
+                mContext.getResources().getBoolean(
+                        com.android.internal.R.bool.config_camera_sound_forced);
     }
 }
