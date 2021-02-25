@@ -1057,5 +1057,12 @@
             <meta-data android:name="androidx.emoji2.text.EmojiCompatInitializer"
                 tools:node="remove" />
         </provider>
+
+        <receiver android:name="com.android.settingslib.wifi.WifiTimeoutReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.wifi.intent.TIMEOUT" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
