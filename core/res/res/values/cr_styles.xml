@@ -16,4 +16,20 @@
 -->
 <resources>
 
+    <!-- Pocket Mode -->
+    <style name="pocket_view_title">
+        <item name="android:textSize">@dimen/pocket_view_title_size</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:alpha">0.87</item>
+    </style>
+    <style name="pocket_view_title_cancel">
+        <item name="android:textSize">@dimen/pocket_view_title_cancel_size</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:alpha">0.54</item>
+    </style>
+    <style name="pocket_view_top_tag">
+        <item name="android:textSize">@dimen/pocket_view_top_tag_size</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:alpha">0.54</item>
+    </style>
 </resources>
