@@ -119,15 +119,19 @@ public class IDEClockController implements ClockPlugin {
     private void createViews() {
         mView = (ClockLayout) mLayoutInflater
                 .inflate(R.layout.p404_ide_clock, null);
-        mTime = mView.findViewById(R.id.clockTime);
-        mDate = mView.findViewById(R.id.clockDate);
-        mDay = mView.findViewById(R.id.clockDay);
-        mMonth = mView.findViewById(R.id.clockMonth);
-        mtextInclude = mView.findViewById(R.id.textInclude);
-        mtextStd = mView.findViewById(R.id.textStd);
-        mtextUsingNamespace = mView.findViewById(R.id.textUsingNamespace);
-        mtextIntMain = mView.findViewById(R.id.textIntMain);
-        mtextTimeDateDayMonth = mView.findViewById(R.id.textTimeDateDayMonth);
+        setViews(mView);
+    }
+
+    private void setViews(View view) {
+        mTime = view.findViewById(R.id.clockTime);
+        mDate = view.findViewById(R.id.clockDate);
+        mDay = view.findViewById(R.id.clockDay);
+        mMonth = view.findViewById(R.id.clockMonth);
+        mtextInclude = view.findViewById(R.id.textInclude);
+        mtextStd = view.findViewById(R.id.textStd);
+        mtextUsingNamespace = view.findViewById(R.id.textUsingNamespace);
+        mtextIntMain = view.findViewById(R.id.textIntMain);
+        mtextTimeDateDayMonth = view.findViewById(R.id.textTimeDateDayMonth);
     }
 
     @Override
@@ -158,16 +162,8 @@ public class IDEClockController implements ClockPlugin {
     public Bitmap getPreview(int width, int height) {
 
         View previewView = mLayoutInflater.inflate(R.layout.p404_ide_clock_preview, null);
-        TextClock previewTime = previewView.findViewById(R.id.clockTime);
-        TextClock previewDate = previewView.findViewById(R.id.clockDate);
-        TextClock previewDay = previewView.findViewById(R.id.clockDay);
-        TextClock previewMonth = previewView.findViewById(R.id.clockMonth);
+        setViews(previewView);
 
-        // Initialize state of plugin before generating preview.
-        previewTime.setTextColor(Color.WHITE);
-        previewDate.setTextColor(Color.WHITE);
-        previewDay.setTextColor(Color.WHITE);
-        previewMonth.setTextColor(Color.WHITE);
         ColorExtractor.GradientColors colors = mColorExtractor.getColors(
                 WallpaperManager.FLAG_LOCK);
         setColorPalette(colors.supportsDarkText(), colors.getColorPalette());
