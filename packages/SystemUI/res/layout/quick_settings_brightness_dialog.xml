@@ -17,8 +17,6 @@
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="28dp"
     android:layout_gravity="center_vertical"
     style="@style/BrightnessDialogContainer">
 
@@ -28,6 +26,8 @@
         android:layout_height="48dp"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:contentDescription="@string/accessibility_brightness"
         android:importantForAccessibility="no"
         systemui:text="@string/status_bar_settings_auto_brightness_label" />
@@ -37,7 +37,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="-8dp"
+        android:layout_marginStart="-17dp"
+        android:paddingRight="29dp"
         android:src="@drawable/ic_qs_brightness_auto_off"
         android:contentDescription="@null"
         android:visibility="gone" />
