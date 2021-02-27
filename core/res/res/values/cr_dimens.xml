@@ -18,4 +18,18 @@
 
     <!-- Default line spacing multiplier between hours and minutes of the keyguard clock -->
     <item name="keyguard_clock_line_spacing_scale" type="dimen" format="float">.7</item>
+
+    <!-- Pocket Mode -->
+    <dimen name="pocket_view_cancel_margin_horizontal">27dp</dimen>
+    <dimen name="pocket_view_img_height">352dp</dimen>
+    <dimen name="pocket_view_img_margin_top">60dp</dimen>
+    <dimen name="pocket_view_img_width">175dp</dimen>
+    <dimen name="pocket_view_inner_view_margin_top">65dp</dimen>
+    <dimen name="pocket_view_title_cancel_margin_top">50dp</dimen>
+    <dimen name="pocket_view_title_cancel_size">18sp</dimen>
+    <dimen name="pocket_view_title_margin_horizontal">63dp</dimen>
+    <dimen name="pocket_view_title_size">19sp</dimen>
+    <dimen name="pocket_view_top_tag_size">13sp</dimen>
+    <dimen name="pocket_view_top_tag_view1_margin_top">9dp</dimen>
+    <dimen name="pocket_view_top_tag_view2_margin_top">9dp</dimen>
 </resources>
