@@ -553,7 +553,7 @@ public final class SystemServer {
             initZygoteChildHeapProfiling();
 
             // Debug builds - spawn a thread to monitor for fd leaks.
-            if (Build.IS_DEBUGGABLE) {
+            if (Build.IS_ENG) {
                 spawnFdLeakCheckThread();
             }
 
