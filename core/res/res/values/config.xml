@@ -328,7 +328,7 @@
     </string-array>
 
     <!-- The maximum duration (in milliseconds) we expect a network transition to take -->
-    <integer name="config_networkTransitionTimeout">60000</integer>
+    <integer name="config_networkTransitionTimeout">40000</integer>
 
     <!-- Whether/how to notify the user on network switches. See LingerMonitor.java. -->
     <integer translatable="false" name="config_networkNotifySwitchType">0</integer>
