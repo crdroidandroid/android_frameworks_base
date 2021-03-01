@@ -172,18 +172,6 @@
         android:progressBackgroundTint="@color/media_disabled"
         android:splitTrack="false" />
 
-    <!-- App name -->
-    <TextView
-        android:id="@+id/app_name"
-        android:textAppearance="@*android:style/TextAppearance.DeviceDefault.Notification.Info"
-        android:textColor="@color/media_primary_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:fontFamily="@*android:string/config_headlineFontFamily"
-        android:textDirection="locale"
-        android:textSize="14sp" />
-
     <!-- Song name -->
     <TextView
         android:id="@+id/header_title"
