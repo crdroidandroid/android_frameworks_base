@@ -32,10 +32,6 @@ class DungeonRow(context: Context, attrs: AttributeSet) : LinearLayout(context, 
         }
 
     private fun update() {
-        (findViewById(R.id.app_name) as TextView).apply {
-            text = entry?.row?.appName
-        }
-
         (findViewById(R.id.icon) as StatusBarIconView).apply {
             set(entry?.icons?.statusBarIcon?.statusBarIcon)
         }
