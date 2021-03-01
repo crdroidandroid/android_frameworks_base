@@ -35,7 +35,6 @@ class PlayerViewHolder private constructor(itemView: View) {
 
     // Player information
     val appIcon = itemView.requireViewById<ImageView>(R.id.icon)
-    val appName = itemView.requireViewById<TextView>(R.id.app_name)
     val albumView = itemView.requireViewById<ImageView>(R.id.album_art)
     val titleText = itemView.requireViewById<TextView>(R.id.header_title)
     val artistText = itemView.requireViewById<TextView>(R.id.header_artist)
@@ -115,7 +114,6 @@ class PlayerViewHolder private constructor(itemView: View) {
 
         val controlsIds = setOf(
                 R.id.icon,
-                R.id.app_name,
                 R.id.album_art,
                 R.id.header_title,
                 R.id.header_artist,
