@@ -202,5 +202,5 @@
     <!-- Name of the location status bar icon. -->
     <string name="status_bar_location">Vị trí</string>
     <!-- Name of the microphone status bar icon. -->
-    <string name="status_bar_microphone">Micrô</string>
+    <string name="status_bar_microphone">Mic thoại</string>
 </resources>
