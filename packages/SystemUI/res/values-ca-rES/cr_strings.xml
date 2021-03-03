@@ -45,8 +45,8 @@
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Càrrega Warp (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> per càrrega completa)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Càrrega Warp</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Càrrega VOOC (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> per a completar)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Càrrega VOOC</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Informació de CPU</string>
     <!-- FPS Info tile -->
@@ -97,7 +97,7 @@
 
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
-        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="other"><annotation name="color">i </annotation>\n^1\n^2</item>
         <item quantity="one"><annotation name="color">Son les</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
@@ -184,20 +184,20 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Prioritat</string>
     <string name="volume_ringer_alarms_only">Alarmes</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">No molestar</string>
     <string name="tristate_flashlight_on">Llanterna encesa</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
+    <string name="tristate_flashlight_off">Llanterna apagada</string>
+    <string name="tristate_flashlight_blink">Llanterna parpadejant</string>
+    <string name="tristate_brightness_bright">Brillantor màxima</string>
+    <string name="tristate_brightness_dark">Brillantor màxima</string>
+    <string name="tristate_brightness_auto">Brillantor automàtica</string>
+    <string name="tristate_rotation_auto">Gira automàticament</string>
     <string name="tristate_rotation_0">Vertical</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="tristate_rotation_90">Horitzontal (90º)</string>
+    <string name="tristate_rotation_270">Horitzontal (270º)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot\nLongpress to move it</string>
-    <string name="screenrecord_lowquality_label">Lower quality for smaller file size</string>
+    <string name="screenrecord_stopdot_label">Mostra el punt per a aturar\nFeu una pulsació llarga per a moure</string>
+    <string name="screenrecord_lowquality_label">Menys qualitat per a un fitxer de menor mida</string>
     <!-- Name of the camera status bar icon. -->
     <string name="status_bar_camera">Càmera</string>
     <!-- Name of the location status bar icon. -->
