@@ -5532,6 +5532,12 @@ public final class Settings {
         public static final String BATTERY_FULLY_CHARGED_SOUND_ENABLED = "battery_fully_charged_sound_enabled";
 
         /**
+         * Whether to vibrate when charger power is connected/disconnected
+         * @hide
+         */
+        public static final String BATTERY_FULLY_CHARGED_VIBRATE = "battery_fully_charged_vibrate";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
