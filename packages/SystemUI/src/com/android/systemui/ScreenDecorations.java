@@ -988,6 +988,12 @@ public class ScreenDecorations implements CoreStartable, Tunable , Dumpable {
             updateConfiguration();
             if (DEBUG) Log.i(TAG, "onConfigChanged from rot " + oldRotation + " to " + mRotation);
             setupDecorations();
+            for (int id: DISPLAY_CUTOUT_IDS) {
+                final View view = getOverlayView(id);
+                if (view instanceof DisplayCutoutView) {
+                    ((DisplayCutoutView) view).updateCutout();
+                }
+            }
             if (mOverlays != null) {
                 // Updating the layout params ensures that ViewRootImpl will call relayoutWindow(),
                 // which ensures that the forced seamless rotation will end, even if we updated
