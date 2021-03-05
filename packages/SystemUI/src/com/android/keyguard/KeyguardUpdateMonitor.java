@@ -947,7 +947,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
     }
 
     private void handleFaceLockoutReset() {
-        mHandler.postDelayed(this::updateFaceListeningState, 1000);
+        updateFaceListeningState();
     }
 
     private void setFaceRunningState(int faceRunningState) {
