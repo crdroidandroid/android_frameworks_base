@@ -165,6 +165,19 @@ public class AuthController extends SystemUI implements CommandQueue.Callbacks,
     }
 
     @Override
+    public void onUseFacePressed() {
+        if (mReceiver == null) {
+            Log.e(TAG, "onUseFacePressed: Receiver is null");
+            return;
+        }
+        try {
+            mReceiver.onUseFacePressed();
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException when handling credential button", e);
+        }
+    }
+
+    @Override
     public void onSystemEvent(int event) {
         if (mReceiver == null) {
             Log.e(TAG, "onSystemEvent(" + event + "): Receiver is null");
