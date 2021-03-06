@@ -60,6 +60,11 @@ public interface AuthDialogCallback {
     void onDeviceCredentialPressed();
 
     /**
+     * Invoked when the "use face" button is clicked
+     */
+    void onUseFacePressed();
+
+    /**
      * See {@link android.hardware.biometrics.BiometricPrompt.Builder
      * #setReceiveSystemEvents(boolean)}
      * @param event
