@@ -23,8 +23,10 @@ import android.annotation.IntDef;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.hardware.biometrics.BiometricPrompt;
+import android.hardware.face.FaceManager;
 import android.os.Bundle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
@@ -34,6 +36,8 @@ import com.android.internal.widget.LockPatternUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import com.android.internal.util.custom.faceunlock.FaceUnlockUtils;
 
 public class Utils {
 
@@ -75,6 +79,20 @@ public class Utils {
     static boolean isBiometricAllowed(Bundle biometricPromptBundle) {
         final int authenticators = getAuthenticators(biometricPromptBundle);
         return (authenticators & Authenticators.BIOMETRIC_WEAK) != 0;
+    }
+
+    static boolean canAuthenticateWithFace(Context context, int userId) {
+        if (!FaceUnlockUtils.isFaceUnlockSupported()){
+            return false;
+        }
+        boolean enabledForApps = Settings.Secure.getIntForUser(
+                context.getContentResolver(),
+                Settings.Secure.FACE_UNLOCK_APP_ENABLED, 1, userId) != 0;
+        if (!enabledForApps){
+            return false;
+        }
+        FaceManager faceManager = (FaceManager) context.getSystemService(FaceManager.class);
+        return faceManager != null && faceManager.hasEnrolledTemplates(userId);
     }
 
     static int getAuthenticators(Bundle biometricPromptBundle) {

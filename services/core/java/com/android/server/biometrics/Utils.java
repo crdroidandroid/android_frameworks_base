@@ -43,7 +43,11 @@ import android.util.Slog;
 import com.android.internal.R;
 import com.android.internal.widget.LockPatternUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import com.android.server.biometrics.face.CustomFaceService;
 
 public class Utils {
     private static final String TAG = "BiometricUtils";
@@ -319,5 +323,15 @@ public class Utils {
                 || containsFlag(strongAuth, STRONG_AUTH_REQUIRED_AFTER_USER_LOCKDOWN);
         Slog.d(TAG, "isEncrypted: " + isEncrypted + " isLockdown: " + isLockDown);
         return isEncrypted || isLockDown;
+    }
+
+    public static String[] getConfiguration(Context context) {
+        ArrayList<String> sensors = new ArrayList();
+        Collections.addAll(sensors, context.getResources().getStringArray(
+            R.array.config_biometric_sensors));
+        if (CustomFaceService.isSupported()){
+            Collections.addAll(sensors, CustomFaceService.getConfiguration());
+        }
+        return sensors.toArray(new String[0]);
     }
 }
