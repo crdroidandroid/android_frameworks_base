@@ -28,6 +28,8 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.hardware.biometrics.BiometricAuthenticator;
+import android.hardware.biometrics.BiometricManager.Authenticators;
 import android.hardware.face.Face;
 import android.os.Binder;
 import android.os.Handler;
@@ -384,7 +386,11 @@ public class CustomFaceService {
         return info != null && info.serviceInfo.isEnabled();
     }
 
-    public boolean isSupported() {
+    public static String getConfiguration() {
+        return HAL_DEVICE_ID + ":" + BiometricAuthenticator.TYPE_FACE + ":" + Authenticators.BIOMETRIC_STRONG;
+    }
+
+    public static boolean isSupported() {
         return FaceUnlockUtils.isFaceUnlockSupported();
     }
 
