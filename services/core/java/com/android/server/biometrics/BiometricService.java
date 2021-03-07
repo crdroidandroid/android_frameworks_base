@@ -1684,7 +1684,7 @@ public class BiometricService extends SystemService {
             for (AuthenticatorWrapper authenticator : mAuthenticators) {
                 // TODO(b/141025588): use ids instead of modalities to avoid ambiguity.
                 if (authenticator.modality == TYPE_FACE) {
-                    authenticator.impl.prepareForAuthentication(requireConfirmation,
+                    authenticator.impl.prepareForAuthentication(true,
                             authSession.mToken, authSession.mSessionId, authSession.mUserId,
                             mInternalReceiver, authSession.mOpPackageName, cookie,
                             authSession.mCallingUid, authSession.mCallingPid,
