@@ -1185,11 +1185,7 @@ public class FaceService extends BiometricServiceBase {
             mCurrentUserId = userId;
             mCustomFaceService.setCurrentUserId(mCurrentUserId);
             if (mCustomFaceService.getService(mCurrentUserId) != null) {
-                long authId = 0;
-                if (hasEnrolledBiometrics(mCurrentUserId)) {
-                    authId = (long) mCustomFaceService.getAuthenticatorId();
-                }
-                mAuthenticatorIds.put(userId, authId);
+                mAuthenticatorIds.put(userId, (long) 1);
             } else {
                 mCustomFaceService.callForBind(userId);
                 Slog.w(TAG, "updateActiveGroup(): Face service not started!");
