@@ -17,10 +17,13 @@
 package org.pixelexperience.systemui.assist;
 
 import android.content.Context;
+import android.database.ContentObserver;
 import android.metrics.LogMaker;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.IWindowManager;
@@ -79,6 +82,9 @@ public class AssistManagerGoogle extends AssistManager {
         }
     };
 
+    private SettingsObserver mSettingsObserver;
+    private boolean mAllowAnimation = true;
+
     @Inject
     public AssistManagerGoogle(DeviceProvisionedController deviceProvisionedController, Context context, AssistUtils assistUtils, NgaUiController ngaUiController, CommandQueue commandQueue, OpaEnabledReceiver opaEnabledReceiver, PhoneStateMonitor phoneStateMonitor, OverviewProxyService overviewProxyService, OpaEnabledDispatcher opaEnabledDispatcher, KeyguardUpdateMonitor keyguardUpdateMonitor, NavigationModeController navigationModeController, AssistantPresenceHandler assistantPresenceHandler, NgaMessageHandler ngaMessageHandler, Lazy<SysUiState> lazy, Handler handler, DefaultUiController defaultUiController, GoogleDefaultUiController googleDefaultUiController, IWindowManager iWindowManager, AssistLogger assistLogger) {
         super(deviceProvisionedController, context, assistUtils, commandQueue, phoneStateMonitor, overviewProxyService, lazy, defaultUiController, assistLogger, handler);
@@ -117,10 +123,12 @@ public class AssistManagerGoogle extends AssistManager {
         });
         mNgaMessageHandler = ngaMessageHandler;
         mWindowManagerService = iWindowManager;
+        mSettingsObserver = new SettingsObserver(mUiHandler);
+        mSettingsObserver.observe();
     }
 
     public boolean shouldUseHomeButtonAnimations() {
-        return !QuickStepContract.isGesturalMode(mNavigationMode);
+        return mAllowAnimation && !QuickStepContract.isGesturalMode(mNavigationMode);
     }
 
     @Override
@@ -180,6 +188,30 @@ public class AssistManagerGoogle extends AssistManager {
     @Override
     protected void logStartAssistLegacy(int i, int i2) {
         MetricsLogger.action(new LogMaker(1716).setType(1).setSubtype(((mAssistantPresenceHandler.isNgaAssistant() ? 1 : 0) << 8) | toLoggingSubType(i, i2)));
+    }
+
+    private class SettingsObserver extends ContentObserver {
+
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.PIXEL_NAV_ANIMATION),
+                    false, this, UserHandle.USER_ALL);
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
+
+        public void update() {
+            mAllowAnimation = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PIXEL_NAV_ANIMATION, 1, UserHandle.USER_CURRENT) == 1;
+        }
     }
 
     public void addOpaEnabledListener(OpaEnabledListener opaEnabledListener) {
