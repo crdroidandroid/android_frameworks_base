@@ -50,20 +50,6 @@
     </RelativeLayout>
     <ImageView
         android:layout_gravity="center"
-        android:id="@+id/halo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="center"
-        android:importantForAccessibility="no"/>
-    <ImageView
-        android:layout_gravity="center"
-        android:id="@+id/white_cutout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="center"
-        android:importantForAccessibility="no"/>
-    <ImageView
-        android:layout_gravity="center"
         android:id="@+id/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
