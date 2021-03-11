@@ -88,11 +88,6 @@ public final class OpaUtils {
         return (float) resources.getDimensionPixelOffset(i);
     }
 
-    static boolean isAGSACurrentAssistant(Context context) {
-        ComponentName assistComponentForUser = new AssistUtils(context).getAssistComponentForUser(-2);
-        return assistComponentForUser != null && "com.google.android.googlequicksearchbox/com.google.android.voiceinteraction.GsaVoiceInteractionService".equals(assistComponentForUser.flattenToString());
-    }
-
     static float getDeltaDiamondPositionTopY(Resources resources) {
         return -getPxVal(resources, R.dimen.opa_diamond_translation);
     }

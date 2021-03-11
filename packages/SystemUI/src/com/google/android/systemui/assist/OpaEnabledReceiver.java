@@ -55,26 +55,10 @@ public class OpaEnabledReceiver {
         registerEnabledReceiver(i);
     }
 
-    private boolean isOpaEligible(Context context) {
-        if (Settings.Secure.getIntForUser(context.getContentResolver(), "systemui.google.opa_enabled", 0, -2) != 0) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isOpaEnabled(Context context) {
-        try {
-            return mLockSettings.getBoolean("systemui.google.opa_user_enabled", false, -2);
-        } catch (RemoteException e) {
-            Log.e("OpaEnabledReceiver", "isOpaEnabled RemoteException", e);
-            return false;
-        }
-    }
-
     private void updateOpaEnabledState(Context context) {
-        mIsOpaEligible = isOpaEligible(context);
-        mIsAGSAAssistant = OpaUtils.isAGSACurrentAssistant(context);
-        mIsOpaEnabled = isOpaEnabled(context);
+        mIsOpaEligible = true;
+        mIsAGSAAssistant = true;
+        mIsOpaEnabled = true;
     }
 
     public void dispatchOpaEnabledState() {
