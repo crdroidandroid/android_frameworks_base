@@ -237,5 +237,5 @@
     <!-- Name of the microphone status bar icon. -->
     <string name="status_bar_microphone">마이크</string>
     <!-- Biometric Dialog - Use Face -->
-    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <string name="biometric_dialog_button_use_face">Face ID 사용하기</string>
 </resources>
