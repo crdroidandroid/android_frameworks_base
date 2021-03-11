@@ -310,8 +310,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
     private static final int HAL_ERROR_RETRY_TIMEOUT = 500; // ms
     private static final int HAL_ERROR_RETRY_MAX = 10;
 
-    private boolean mKeyguardReset = false;
-
     private final Runnable mCancelNotReceived = new Runnable() {
         @Override
         public void run() {
@@ -2018,10 +2016,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
      * If face auth is allows to scan on this exact moment.
      */
     public boolean shouldListenForFace() {
-        if (mFaceAuthOnlyOnSecurityView && mKeyguardReset){
-            mKeyguardReset = false;
-            return false;
-        }
         final boolean statusBarShadeLocked =
                 mStatusBarStateController.getState() == StatusBarState.SHADE_LOCKED;
         final boolean awakeKeyguard = mKeyguardIsVisible && mDeviceInteractive && !mGoingToSleep
@@ -2564,9 +2558,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         if (DEBUG) Log.d(TAG, "handleKeyguardReset");
         updateBiometricListeningState();
         mNeedsSlowUnlockTransition = resolveNeedsSlowUnlockTransition();
-        if (mFaceAuthOnlyOnSecurityView){
-            mKeyguardReset = true;
-        }
     }
 
     private boolean resolveNeedsSlowUnlockTransition() {
