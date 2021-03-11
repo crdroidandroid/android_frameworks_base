@@ -310,7 +310,7 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
 
         public void update() {
             mAllowAnimation = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.PIXEL_NAV_ANIMATION, 0, UserHandle.USER_CURRENT) == 1;
+                Settings.System.PIXEL_NAV_ANIMATION, 1, UserHandle.USER_CURRENT) == 1;
         }
     }
 
