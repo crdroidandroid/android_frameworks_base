@@ -188,8 +188,8 @@
     <string name="tristate_flashlight_on">Torcia accesa</string>
     <string name="tristate_flashlight_off">Torcia spenta</string>
     <string name="tristate_flashlight_blink">Torcia lampeggiante</string>
-    <string name="tristate_brightness_bright">Luminosità max</string>
-    <string name="tristate_brightness_dark">Luminosità min</string>
+    <string name="tristate_brightness_bright">Luminosità massima</string>
+    <string name="tristate_brightness_dark">Luminosità minima</string>
     <string name="tristate_brightness_auto">Luminosità automatica</string>
     <string name="tristate_rotation_auto">Rotazione automatica</string>
     <string name="tristate_rotation_0">Verticale</string>
@@ -205,5 +205,5 @@
     <!-- Name of the microphone status bar icon. -->
     <string name="status_bar_microphone">Microfono</string>
     <!-- Biometric Dialog - Use Face -->
-    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <string name="biometric_dialog_button_use_face">Usa il viso</string>
 </resources>
