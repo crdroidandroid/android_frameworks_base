@@ -126,7 +126,7 @@ public class FODCircleView extends ImageView implements TunerService.Tunable {
         R.drawable.fod_icon_cpt_america_flat,
         R.drawable.fod_icon_cpt_america_flat_gray,
         R.drawable.fod_icon_dragon_black_flat,
-        R.drawable.fod_icon_evo1,
+        R.drawable.fod_icon_cr1,
         R.drawable.fod_icon_glow_circle,
         R.drawable.fod_icon_neon_arc,
         R.drawable.fod_icon_neon_arc_gray,
