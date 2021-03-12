@@ -204,4 +204,6 @@
     <string name="status_bar_location">Localização</string>
     <!-- Name of the microphone status bar icon. -->
     <string name="status_bar_microphone">Microfone</string>
+    <!-- Biometric Dialog - Use Face -->
+    <string name="biometric_dialog_button_use_face">Usar Rosto</string>
 </resources>
