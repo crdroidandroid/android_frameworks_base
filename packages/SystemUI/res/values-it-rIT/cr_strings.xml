@@ -33,7 +33,7 @@
     <string name="omnijaws_package_not_available">OmniJaws non disponibile</string>
     <string name="omnijaws_service_last_update">Ultimo aggiornamento:</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">Schermo sempre attivo (AOD)</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Switcha scheda dati</string>
     <string name="qs_data_switch_changed_1">Usando SIM 1 per dati mobili</string>
