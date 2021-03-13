@@ -205,7 +205,7 @@
     <!-- Name of the microphone status bar icon. -->
     <string name="status_bar_microphone">Mikrofon</string>
     <!-- Biometric Dialog - Use Face -->
-    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <string name="biometric_dialog_button_use_face">Gesichtserkennung</string>
     <!-- Daily data usage -->
-    <string name="daily_data_usage_title">Today\'s usage</string>
+    <string name="daily_data_usage_title">Heutiger Verbrauch</string>
 </resources>
