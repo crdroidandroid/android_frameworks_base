@@ -22,50 +22,44 @@ public class DataUsageView extends TextView {
 
     private Context mContext;
     private NetworkController mNetworkController;
-    private static boolean shouldUpdateData;
-    private String formatedinfo;
+    private ConnectivityManager mConnectivityManager;
+    private int mQSDataUsage = 0;
+    private DataUsageController mDataUsageController;
 
     public DataUsageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         mContext = context;
         mNetworkController = Dependency.get(NetworkController.class);
-    }
-
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        if ((isDataUsageEnabled() == 0) && this.getText().toString() != "") {
-            setText("");
-        } else if (isDataUsageEnabled() != 0 && shouldUpdateData) {
-            shouldUpdateData = false;
-            updateUsageData();
-            setText(formatedinfo);
-        }
-    }
-
-    private void updateUsageData() {
-        DataUsageController mobileDataController = new DataUsageController(mContext);
-        mobileDataController.setSubscriptionId(
+        mDataUsageController = new DataUsageController(mContext);
+        mDataUsageController.setSubscriptionId(
             SubscriptionManager.getDefaultDataSubscriptionId());
-        final DataUsageController.DataUsageInfo info = isDataUsageEnabled() == 1 ?
-                (isWiFiConnected() ?
-                        mobileDataController.getDailyWifiDataUsageInfo()
-                        : mobileDataController.getDailyDataUsageInfo())
-                : (isWiFiConnected() ?
-                        mobileDataController.getWifiDataUsageInfo()
-                        : mobileDataController.getDataUsageInfo());
-
-        formatedinfo = formatDataUsage(info.usageLevel);
+        mConnectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
-    public int isDataUsageEnabled() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.QS_DATAUSAGE, 0);
-    }
+    public void updateUsageData(int usage) {
+        DataUsageController.DataUsageInfo info;
 
-    public void updateUsage() {
-        shouldUpdateData = true;
+        switch (usage) {
+            default:
+            case 0:
+                return;
+            case 1:
+                if (isWiFiConnected()) {
+                    info = mDataUsageController.getDailyWifiDataUsageInfo();
+                } else {
+                    info = mDataUsageController.getDailyDataUsageInfo();
+                }
+                break;
+            case 2:
+                if (isWiFiConnected()) {
+                    info = mDataUsageController.getWifiDataUsageInfo();
+                } else {
+                    info = mDataUsageController.getDataUsageInfo();
+                }
+                break;
+        }
+
+        setText(formatDataUsage(info.usageLevel));
     }
 
     private String formatDataUsage(long byteValue) {
@@ -76,20 +70,18 @@ public class DataUsageView extends TextView {
 
     // Check if device is connected to Wi-Fi
     public boolean isWiFiConnected() {
-        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm == null) return false;
+        if (mConnectivityManager == null) return false;
 
-        NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo wifi = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return wifi.isConnected();
     }
 
     // Check if device is connected to the internet
     public boolean isConnected() {
-        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm == null) return false;
+        if (mConnectivityManager == null) return false;
 
-        NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        NetworkInfo wifi = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobile = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         return wifi.isConnected() || mobile.isConnected();
     }
 }
