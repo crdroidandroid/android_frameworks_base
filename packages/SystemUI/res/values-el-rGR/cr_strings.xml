@@ -242,4 +242,6 @@
     <string name="status_bar_microphone">Μικρόφωνο</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Χρήση Προσώπου</string>
+    <!-- Daily data usage -->
+    <string name="daily_data_usage_title">Today\'s usage</string>
 </resources>
