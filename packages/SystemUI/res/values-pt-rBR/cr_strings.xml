@@ -206,4 +206,6 @@
     <string name="status_bar_microphone">Microfone</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Usar Rosto</string>
+    <!-- Daily data usage -->
+    <string name="daily_data_usage_title">Uso de hoje</string>
 </resources>
