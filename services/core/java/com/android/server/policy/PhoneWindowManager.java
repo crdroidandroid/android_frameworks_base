@@ -2164,7 +2164,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             @Override
             public void onSwipeThreeFinger() {
                 if (!mPocketLockShowing) {
-                    mHandler.post(mScreenshotRunnable);
+                    takeScreenshot(TAKE_SCREENSHOT_FULLSCREEN, 0, SCREENSHOT_KEY_OTHER);
                 }
             }
         });
