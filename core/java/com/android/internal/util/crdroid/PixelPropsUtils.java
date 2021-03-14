@@ -34,6 +34,18 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangePixel3;
 
     private static final String[] packagesToChange = {
+        "com.breel.wallpapers20",
+        "com.google.android.apps.customization.pixel",
+        "com.google.android.apps.fitness",
+        "com.google.android.apps.photos",
+        "com.google.android.apps.recorder",
+        "com.google.android.apps.subscriptions.red",
+        "com.google.android.apps.tachyon",
+        "com.google.android.apps.turboadapter",
+        "com.google.android.apps.wallpaper.pixel",
+        "com.google.android.as",
+        "com.google.pixel.dynamicwallpapers",
+        "com.google.pixel.livewallpaper",
         "com.google.android.apps.safetyhub",
         "com.google.android.apps.turbo",
         "com.google.android.apps.wallpaper",
