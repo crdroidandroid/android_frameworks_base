@@ -196,7 +196,7 @@
     <string name="tristate_rotation_90">Orizzontale (90°)</string>
     <string name="tristate_rotation_270">Orizzontale (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Mostra punto per fermare\nPressione prolungata per spostarlo</string>
+    <string name="screenrecord_stopdot_label">Mostra punto per terminare\nPremi a lungo per spostarlo</string>
     <string name="screenrecord_lowquality_label">Qualità inferiore per dimensioni più piccole del file</string>
     <!-- Name of the camera status bar icon. -->
     <string name="status_bar_camera">Fotocamera</string>
