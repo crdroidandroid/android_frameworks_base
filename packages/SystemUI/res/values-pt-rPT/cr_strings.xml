@@ -187,7 +187,7 @@
     <string name="volume_ringer_dnd">DnD</string>
     <string name="tristate_flashlight_on">Lanterna ligada</string>
     <string name="tristate_flashlight_off">Lanterna desligada</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
+    <string name="tristate_flashlight_blink">Lanterna a piscar</string>
     <string name="tristate_brightness_bright">Brilho máximo</string>
     <string name="tristate_brightness_dark">Brilho mínimo</string>
     <string name="tristate_brightness_auto">Brilho automático</string>
@@ -196,7 +196,7 @@
     <string name="tristate_rotation_90">Paisagem (90°)</string>
     <string name="tristate_rotation_270">Paisagem (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot\nLongpress to move it</string>
+    <string name="screenrecord_stopdot_label">Mostrar botão de paragem\nPressione longamente para o mover</string>
     <string name="screenrecord_lowquality_label">Qualidade inferior para arquivos menores</string>
     <!-- Name of the camera status bar icon. -->
     <string name="status_bar_camera">Câmera</string>
