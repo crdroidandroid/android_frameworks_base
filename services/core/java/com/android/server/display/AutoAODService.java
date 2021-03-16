@@ -36,6 +36,7 @@ import com.android.server.twilight.TwilightListener;
 import com.android.server.twilight.TwilightManager;
 import com.android.server.twilight.TwilightState;
 
+import java.lang.IllegalArgumentException;
 import java.util.Calendar;
 
 public class AutoAODService extends SystemService {
@@ -56,6 +57,14 @@ public class AutoAODService extends SystemService {
      * Active at a user set time
      */
     private static final int MODE_TIME = 2;
+    /**
+     * Active from sunset till a time
+     */
+    private static final int MODE_MIXED_SUNSET = 3;
+    /**
+     * Active from a time till sunrise
+     */
+    private static final int MODE_MIXED_SUNRISE = 4;
 
     private final AlarmManager mAlarmManager;
     private final Context mContext;
@@ -80,24 +89,25 @@ public class AutoAODService extends SystemService {
     private final TwilightListener mTwilightListener = new TwilightListener() {
         @Override
         public void onTwilightStateChanged(@Nullable TwilightState state) {
-            if (mMode != MODE_NIGHT) {
+            if (mMode != MODE_NIGHT && mMode < MODE_MIXED_SUNSET) {
                 // just incase
-                mTwilightManager.unregisterListener(mTwilightListener);
+                setTwilightListener(false);
                 return;
             }
             Slog.v(TAG, "onTwilightStateChanged state: " + state);
             if (state == null) return;
             mTwilightState = state;
-            mHandler.post(() -> maybeActivateAOD());
+            if (mMode < MODE_MIXED_SUNSET) mHandler.post(() -> maybeActivateAOD());
+            else mHandler.post(() -> maybeActivateTime());
         }
     };
 
     private final BroadcastReceiver mTimeChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mMode != MODE_TIME) {
+            if (mMode != MODE_TIME && mMode < MODE_MIXED_SUNSET) {
                 // just incase
-                mContext.unregisterReceiver(mTimeChangedReceiver);
+                setTimeReciever(false);
                 return;
             }
             Slog.v(TAG, "mTimeChangedReceiver onReceive");
@@ -113,8 +123,10 @@ public class AutoAODService extends SystemService {
         public void onAlarm() {
             Slog.v(TAG, "onAlarm");
             mHandler.post(() -> setAutoAODActive(mIsNextActivate));
-            if (mMode == MODE_TIME) mHandler.post(() -> maybeActivateTime(false));
-            else maybeActivateNight(false);
+            if (mMode == MODE_TIME || mMode >= MODE_MIXED_SUNSET)
+                mHandler.post(() -> maybeActivateTime(false));
+            else
+                maybeActivateNight(false);
         }
 
         /**
@@ -193,6 +205,45 @@ public class AutoAODService extends SystemService {
     }
 
     /**
+     * Registers or unregisters {@link mTimeChangedReceiver}
+     * @param register Register when true, unregister when false
+     */
+    private void setTimeReciever(boolean register) {
+        if (register) {
+            Slog.v(TAG, "Registering mTimeChangedReceiver");
+            final IntentFilter intentFilter = new IntentFilter(Intent.ACTION_TIME_CHANGED);
+            intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+            mContext.registerReceiver(mTimeChangedReceiver, intentFilter);
+            return;
+        }
+        try {
+            mContext.unregisterReceiver(mTimeChangedReceiver);
+            Slog.v(TAG, "Unregistered mTimeChangedReceiver");
+        } catch (IllegalArgumentException e) {
+            // nothing to do. Already unregistered
+        }
+    }
+
+    /**
+     * Registers or unregisters {@link mTwilightListener}
+     * @param register Register when true, unregister when false
+     */
+    private void setTwilightListener(boolean register) {
+        if (register) {
+            Slog.v(TAG, "Registering mTwilightListener");
+            mTwilightManager.registerListener(mTwilightListener, mHandler);
+            mTwilightState = mTwilightManager.getLastTwilightState();
+            return;
+        }
+        try {
+            mTwilightManager.unregisterListener(mTwilightListener);
+            Slog.v(TAG, "Unregistered mTwilightListener");
+        } catch (IllegalArgumentException e) {
+            // nothing to do. Already unregistered
+        }
+    }
+
+    /**
      * Initiates the state according to user settings
      * Registers or unregisters listeners and calls {@link maybeActivateAOD()}
      */
@@ -202,27 +253,46 @@ public class AutoAODService extends SystemService {
                 Settings.Secure.DOZE_ALWAYS_ON_AUTO_MODE, MODE_DISABLED,
                 UserHandle.USER_CURRENT);
         mAlarm.cancel(); // cancelling set alarm
-        // shifting to MODE_DISABLED
-        if (mMode == MODE_DISABLED && pMode != MODE_DISABLED)
-            setAutoAODActive(false);
-        // we are still disabled
-        if (mMode == MODE_DISABLED) return;
-        if (mMode == MODE_TIME && pMode != MODE_TIME) {
-            // shifting to MODE_TIME
-            final IntentFilter intentFilter = new IntentFilter(Intent.ACTION_TIME_CHANGED);
-            intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
-            mContext.registerReceiver(mTimeChangedReceiver, intentFilter);
-        } else if (pMode == MODE_TIME && mMode != MODE_TIME) {
-            // shifting out of MODE_TIME
-            mContext.unregisterReceiver(mTimeChangedReceiver);
+        switch (mMode) {
+            default:
+            case MODE_DISABLED:
+                // shifting to MODE_DISABLED
+                if (pMode != MODE_DISABLED) setAutoAODActive(false);
+                return;
+            case MODE_TIME:
+                if (pMode == MODE_TIME) break;
+                // shifting to MODE_TIME
+                setTimeReciever(true);
+                break;
+            case MODE_NIGHT:
+                if (pMode == MODE_NIGHT) break;
+                // shifting to MODE_NIGHT
+                setTwilightListener(true);
+                break;
+            case MODE_MIXED_SUNSET:
+            case MODE_MIXED_SUNRISE:
+                if (pMode >= MODE_MIXED_SUNSET) break;
+                // shifting to MODE_MIXED_SUNSET / MODE_MIXED_SUNRISE
+                if (pMode != MODE_NIGHT) setTwilightListener(true);
+                if (pMode != MODE_TIME) setTimeReciever(true);
+                break;
         }
-        if (mMode == MODE_NIGHT && pMode != MODE_NIGHT) {
-            // shifting to MODE_NIGHT
-            mTwilightManager.registerListener(mTwilightListener, mHandler);
-            mTwilightState = mTwilightManager.getLastTwilightState();
-        } else if (pMode == MODE_NIGHT && mMode != MODE_NIGHT) {
-            // shifting out of MODE_NIGHT
-            mTwilightManager.unregisterListener(mTwilightListener);
+        switch (pMode) {
+            case MODE_TIME:
+                if (mMode == MODE_TIME || mMode >= MODE_MIXED_SUNSET) break;
+                // shifting out of MODE_TIME
+                setTimeReciever(false);
+                break;
+            case MODE_NIGHT:
+            case MODE_MIXED_SUNSET:
+            case MODE_MIXED_SUNRISE:
+                if (mMode == MODE_NIGHT || mMode >= MODE_MIXED_SUNSET) break;
+                // shifting out of MODE_NIGHT
+                setTwilightListener(false);
+                if (pMode < MODE_MIXED_SUNSET) break;
+                // shifting out of MODE_MIXED_SUNSET / MODE_MIXED_SUNRISE
+                setTimeReciever(false);
+                break;
         }
         maybeActivateAOD();
     }
@@ -239,6 +309,8 @@ public class AutoAODService extends SystemService {
                 maybeActivateNight();
                 break;
             case MODE_TIME:
+            case MODE_MIXED_SUNSET:
+            case MODE_MIXED_SUNRISE:
                 maybeActivateTime();
                 break;
         }
@@ -275,7 +347,8 @@ public class AutoAODService extends SystemService {
     }
 
     /**
-     * Sets the next alarm for {@link MODE_TIME}
+     * Sets the next alarm for {@link MODE_TIME}, {@link MODE_MIXED_SUNSET} and
+     *                         {@link MODE_MIXED_SUNRISE}
      * @param setActive Whether to set activation state
      *                  When false only updates the alarm
      */
@@ -295,6 +368,22 @@ public class AutoAODService extends SystemService {
         till.set(Calendar.HOUR_OF_DAY, Integer.valueOf(tillValues[0]));
         till.set(Calendar.MINUTE, Integer.valueOf(tillValues[1]));
         till.set(Calendar.SECOND, 0);
+
+        // handle mixed modes
+        if (mMode >= MODE_MIXED_SUNSET) {
+            if (mTwilightState == null) {
+                Slog.e(TAG, "aborting maybeActivateTime(). mTwilightState is null");
+                return;
+            }
+            boolean isNight = mTwilightState.isNight();
+            if (mMode == MODE_MIXED_SUNSET) {
+                since.setTimeInMillis(mTwilightState.sunsetTimeMillis());
+            } else { // MODE_MIXED_SUNRISE
+                till.setTimeInMillis(mTwilightState.sunriseTimeMillis());
+                if (!mTwilightState.isNight()) till.roll(Calendar.DATE, true);
+            }
+        }
+
         // roll to the next day if needed be
         if (since.after(till)) till.roll(Calendar.DATE, true);
         if (currentTime.after(since) && currentTime.compareTo(till) >= 0) {
