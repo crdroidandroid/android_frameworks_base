@@ -96,6 +96,7 @@ android_library {
         "jsr330",
         "lottie",
         "org.lineageos.platform.internal",
+        "tensorflowlite_java",
     ],
     manifest: "AndroidManifest.xml",
     additional_manifests: ["LineageManifest.xml"],
@@ -209,6 +210,8 @@ android_app {
     static_libs: [
         "SystemUI-core",
     ],
+    jni_libs: ["libtensorflowlite_jni"],
+    use_embedded_native_libs: true,
     resource_dirs: [],
 
     platform_apis: true,
