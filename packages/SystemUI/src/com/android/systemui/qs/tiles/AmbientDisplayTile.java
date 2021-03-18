@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015 The CyanogenMod Project
- * Copyright (C) 2017 The LineageOS Project
+ * Copyright (C) 2017-2021 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.SystemProperties;
@@ -39,21 +40,25 @@ import javax.inject.Inject;
 public class AmbientDisplayTile extends QSTileImpl<BooleanState> {
 
     private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_ambient_display);
-
-    private static final Intent DISPLAY_SETTINGS = new Intent("android.settings.DISPLAY_SETTINGS");
-
     private final SecureSetting mSetting;
 
     @Inject
     public AmbientDisplayTile(QSHost host) {
         super(host);
 
-        mSetting = new SecureSetting(mContext, mHandler, Secure.DOZE_ENABLED) {
+        mSetting = new SecureSetting(mContext, mHandler, Secure.DOZE_ENABLED,
+                ActivityManager.getCurrentUser(), 1) {
             @Override
             protected void handleValueChanged(int value, boolean observedChange) {
                 handleRefreshState(value);
             }
         };
+    }
+
+    @Override
+    protected void handleDestroy() {
+        super.handleDestroy();
+        mSetting.setListening(false);
     }
 
     @Override
@@ -71,20 +76,25 @@ public class AmbientDisplayTile extends QSTileImpl<BooleanState> {
     }
 
     @Override
+    public void handleSetListening(boolean listening) {
+        super.handleSetListening(listening);
+        mSetting.setListening(listening);
+    }
+
+    @Override
+    protected void handleUserSwitch(int newUserId) {
+        mSetting.setUserId(newUserId);
+        handleRefreshState(mSetting.getValue());
+    }
+
+    @Override
     protected void handleClick() {
-        setEnabled(!mState.value);
-        refreshState();
+        mSetting.setValue(mState.value ? 0 : 1);
     }
 
     @Override
     public Intent getLongClickIntent() {
-        return DISPLAY_SETTINGS;
-    }
-
-    private void setEnabled(boolean enabled) {
-        Settings.Secure.putInt(mContext.getContentResolver(),
-                Settings.Secure.DOZE_ENABLED,
-                enabled ? 1 : 0);
+        return new Intent(Settings.ACTION_DISPLAY_SETTINGS);
     }
 
     @Override
@@ -124,10 +134,5 @@ public class AmbientDisplayTile extends QSTileImpl<BooleanState> {
             return mContext.getString(
                     R.string.accessibility_quick_settings_ambient_display_changed_off);
         }
-    }
-
-    @Override
-    public void handleSetListening(boolean listening) {
-        // Do nothing
     }
 }
