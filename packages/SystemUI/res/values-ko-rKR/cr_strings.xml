@@ -240,4 +240,11 @@
     <string name="biometric_dialog_button_use_face">Face ID 사용하기</string>
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">오늘의 사용량</string>
+    <!-- App Lock -->
+    <string name="applock_locked">&#160;잠김</string>
+    <string name="applock_fingerprint_face">, 지문 또는 페이스언락</string>
+    <string name="applock_face">&#160;또는 페이스언락</string>
+    <string name="applock_fingerprint">&#160;또는 지문으로 잠금해제</string>
+    <string name="applock_credential">&#160;잠금해제</string>
+    <string name="applock_unlock">잠금해제</string>
 </resources>

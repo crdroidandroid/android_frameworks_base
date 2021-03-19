@@ -208,4 +208,11 @@
     <string name="biometric_dialog_button_use_face">Usar Rosto</string>
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Uso de hoje</string>
+    <!-- App Lock -->
+    <string name="applock_locked">&#160; está bloqueado</string>
+    <string name="applock_fingerprint_face">, impressão digital ou seu rosto para desbloquear</string>
+    <string name="applock_face">&#160;ou seu rosto para desbloquear</string>
+    <string name="applock_fingerprint">&#160;ou sua impressão digital para desbloquear</string>
+    <string name="applock_credential">&#160;para desbloquear</string>
+    <string name="applock_unlock">Desbloquear</string>
 </resources>
