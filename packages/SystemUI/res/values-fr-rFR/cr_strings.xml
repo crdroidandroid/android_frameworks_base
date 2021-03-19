@@ -209,10 +209,10 @@
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Utilisation du jour</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;est verrouillée</string>
+    <string name="applock_fingerprint_face">, empreinte digitale ou visage pour déverrouiller</string>
+    <string name="applock_face">&#160;ou votre visage pour déverrouiller</string>
+    <string name="applock_fingerprint">&#160;ou votre empreinte digitale pour déverrouiller</string>
+    <string name="applock_credential">&#160;pour déverrouiller</string>
+    <string name="applock_unlock">Déverrouiller</string>
 </resources>
