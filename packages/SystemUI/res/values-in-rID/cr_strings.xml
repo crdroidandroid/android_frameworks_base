@@ -231,10 +231,10 @@ Sembilan</string>
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Penggunaan hari ini</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;terkunci</string>
+    <string name="applock_fingerprint_face">, sidik jari atau wajah Anda untuk membuka kunci</string>
+    <string name="applock_face">&#160;atau wajah Anda untuk membuka kunci</string>
+    <string name="applock_fingerprint">&#160;atau sidik jari Anda untuk membuka kunci</string>
+    <string name="applock_credential">&#160;untuk membuka</string>
+    <string name="applock_unlock">Membuka kunci</string>
 </resources>
