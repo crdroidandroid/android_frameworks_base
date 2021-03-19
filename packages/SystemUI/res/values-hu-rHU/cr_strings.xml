@@ -209,10 +209,10 @@
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">A mai napi használat</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;lezárásra került</string>
+    <string name="applock_fingerprint_face">, feloldáshoz használja az ujjlenyomat érzékelőt, vagy az arcfelismerést</string>
+    <string name="applock_face">&#160;vagy az arcát a feloldáshoz</string>
+    <string name="applock_fingerprint">&#160;vagy az ujjlenyomatát a feloldáshoz</string>
+    <string name="applock_credential">&#160;a feloldáshoz</string>
+    <string name="applock_unlock">Feloldás</string>
 </resources>
