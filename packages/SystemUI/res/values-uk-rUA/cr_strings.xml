@@ -248,10 +248,10 @@
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Сьогоднішнє використання</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;заблоковано</string>
+    <string name="applock_fingerprint_face">, відбиток пальця або обличчя для розблокування</string>
+    <string name="applock_face">&#160;або обличчя для розблокування</string>
+    <string name="applock_fingerprint">&#160;або ваш відбиток пальця для розблокування</string>
+    <string name="applock_credential">&#160;для розблокування</string>
+    <string name="applock_unlock">Розблокувати</string>
 </resources>
