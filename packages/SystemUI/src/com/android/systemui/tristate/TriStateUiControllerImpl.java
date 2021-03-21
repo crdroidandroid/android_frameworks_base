@@ -249,6 +249,7 @@ public class TriStateUiControllerImpl implements TriStateUiController,
     @Override
     public void onUiModeChanged() {
         mContext.getTheme().applyStyle(mContext.getThemeResId(), true);
+        initDialog();
     }
 
     private void checkOrientationType() {
