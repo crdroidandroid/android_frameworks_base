@@ -516,11 +516,11 @@
     <!-- Flag indicating whether we should enable smart battery. -->
     <bool name="config_smart_battery_available">false</bool>
 
-    <!-- Fast brightness animation ramp rate in brightness units per second-->
-    <integer translatable="false" name="config_brightness_ramp_rate_fast">180</integer>
+    <!-- Slow brightness animation ramp rate in float. -->
+    <item name="config_brightnessRampRateSlowFloat" format="float" type="dimen">0.2352941</item>
 
-    <!-- Slow brightness animation ramp rate in brightness units per second-->
-    <integer translatable="false" name="config_brightness_ramp_rate_slow">60</integer>
+    <!-- Fast brightness animation ramp rate in float. -->
+    <item name="config_brightnessRampRateFastFloat" format="float" type="dimen">0.7058823</item>
 
     <!-- Don't name config resources like this.  It should look like config_annoyDianne -->
     <bool name="config_annoy_dianne">true</bool>
