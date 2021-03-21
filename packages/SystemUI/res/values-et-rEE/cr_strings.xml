@@ -205,14 +205,14 @@
     <!-- Name of the microphone status bar icon. -->
     <string name="status_bar_microphone">Mikrofon</string>
     <!-- Biometric Dialog - Use Face -->
-    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <string name="biometric_dialog_button_use_face">Kasuta näotuvastust</string>
     <!-- Daily data usage -->
-    <string name="daily_data_usage_title">Today\'s usage</string>
+    <string name="daily_data_usage_title">Tänane kasutus</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;plokeeritud</string>
+    <string name="applock_fingerprint_face">, avamiseks sõrmejälg või nägu</string>
+    <string name="applock_face">&#160;või oma nägu avamiseks</string>
+    <string name="applock_fingerprint">&#160;või sõrmejälg deplokeerimiseks</string>
+    <string name="applock_credential">&#160;avamiseks</string>
+    <string name="applock_unlock">Eemalda blokeering</string>
 </resources>
