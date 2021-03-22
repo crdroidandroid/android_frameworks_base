@@ -52,6 +52,7 @@ import android.service.notification.SnoozeCriterion;
 import android.service.notification.StatusBarNotification;
 import android.util.ArraySet;
 import android.view.ContentInfo;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -431,6 +432,10 @@ public final class NotificationEntry extends ListEntry {
 
     public void setRowController(ExpandableNotificationRowController controller) {
         mRowController = controller;
+    }
+
+    public View getContentView() {
+        return getRow().getPrivateLayout().getContractedChild();
     }
 
     /**
