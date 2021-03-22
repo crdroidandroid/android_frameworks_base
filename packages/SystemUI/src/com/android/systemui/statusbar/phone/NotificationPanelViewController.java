@@ -208,6 +208,8 @@ public class NotificationPanelViewController extends PanelViewController {
             "system:" + Settings.System.LOCKSCREEN_STATUS_BAR;
     private static final String LOCKSCREEN_ENABLE_QS =
             "system:" + Settings.System.LOCKSCREEN_ENABLE_QS;
+    private static final String QS_SMART_PULLDOWN =
+            "system:" + Settings.System.QS_SMART_PULLDOWN;
 
     private static final Rect M_DUMMY_DIRTY_RECT = new Rect(0, 0, 1, 1);
     private static final Rect EMPTY_RECT = new Rect();
@@ -505,6 +507,7 @@ public class NotificationPanelViewController extends PanelViewController {
     };
 
     private int mOneFingerQuickSettingsIntercept;
+    private int mQsSmartPullDown;
 
     @Inject
     public NotificationPanelViewController(NotificationPanelView view,
@@ -1415,6 +1418,14 @@ public class NotificationPanelViewController extends PanelViewController {
                 showQsOverride = true;
                 break;
         }
+
+        if (mQsSmartPullDown == 1 && !hasActiveClearableNotifications()
+                || mQsSmartPullDown == 2 &&
+                !mEntryManager.hasActiveOngoingNotifications()
+                || mQsSmartPullDown == 3 && !mEntryManager.hasActiveVisibleNotifications()) {
+                showQsOverride = true;
+        }
+
         showQsOverride &= mBarState == StatusBarState.SHADE;
 
         return !isQSEventBlocked() && (twoFingerDrag || showQsOverride
@@ -3744,6 +3755,7 @@ public class NotificationPanelViewController extends PanelViewController {
             mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_LOCKSCREEN);
             mTunerService.addTunable(this, LOCKSCREEN_STATUS_BAR);
             mTunerService.addTunable(this, LOCKSCREEN_ENABLE_QS);
+            mTunerService.addTunable(this, QS_SMART_PULLDOWN);
             mUpdateMonitor.registerCallback(mKeyguardUpdateCallback);
             // Theme might have changed between inflating this view and attaching it to the
             // window, so
@@ -3784,6 +3796,10 @@ public class NotificationPanelViewController extends PanelViewController {
                     mStatusBarShownOnSecureKeyguard =
                             TunerService.parseIntegerSwitch(newValue, true);
                     mStatusBar.updateQsExpansionEnabled();
+                    break;
+                case QS_SMART_PULLDOWN:
+                    mQsSmartPullDown =
+                            TunerService.parseInteger(newValue, 0);
                     break;
                 default:
                     break;
