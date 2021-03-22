@@ -46,6 +46,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.util.crdroid.FodUtils;
 import com.android.systemui.R;
 
 import java.lang.annotation.Retention;
@@ -200,7 +201,8 @@ public abstract class AuthBiometricView extends LinearLayout {
     protected Bundle mSavedState;
 
     protected final PackageManager mPackageManager;
-
+    protected boolean mHasFod;
+    
     /**
      * Delay after authentication is confirmed, before the dialog should be animated away.
      */
@@ -268,6 +270,7 @@ public abstract class AuthBiometricView extends LinearLayout {
         mInjector.mBiometricView = this;
 
         mPackageManager = context.getPackageManager();
+        mHasFod = FodUtils.hasFodSupport(context);
 
         mAccessibilityManager = context.getSystemService(AccessibilityManager.class);
 
@@ -565,6 +568,10 @@ public abstract class AuthBiometricView extends LinearLayout {
         mSavedState = savedState;
     }
 
+    public boolean getHasFod() {
+        return mHasFod;
+    }
+    
     private void setTextOrHide(TextView view, String string) {
         if (TextUtils.isEmpty(string)) {
             view.setVisibility(View.GONE);
@@ -659,6 +666,28 @@ public abstract class AuthBiometricView extends LinearLayout {
             }
         } else if (this instanceof AuthBiometricFaceView) {
             mUseFaceButton.setVisibility(View.GONE);
+        }
+        
+        if (this instanceof AuthBiometricFingerprintView) {
+            if (mHasFod) {
+                final int navbarHeight = getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_height);
+                final int fodMargin = getResources().getDimensionPixelSize(
+                        R.dimen.biometric_dialog_fod_margin);
+
+                mIconView.setVisibility(View.INVISIBLE);
+                // The view is invisible, so it still takes space and
+                // we use that to adjust for the FOD
+                mIconView.setPadding(0, 0, 0, fodMargin - navbarHeight);
+
+                // Add Errortext above the biometric icon
+                this.removeView(mIndicatorView);
+                this.addView(mIndicatorView, this.indexOfChild(mIconView));
+            } else {
+                mIconView.setVisibility(View.VISIBLE);
+            }
+        } else if (this instanceof AuthBiometricFaceView) {
+            mIconView.setVisibility(View.VISIBLE);
         }
     }
 
