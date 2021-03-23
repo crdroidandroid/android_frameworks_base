@@ -30,6 +30,7 @@ import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.display.DisplayManagerGlobal;
 import android.media.AudioManager;
@@ -40,6 +41,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.OrientationEventListener;
 import android.view.ViewGroup;
@@ -141,7 +143,6 @@ public class TriStateUiControllerImpl implements TriStateUiController,
 
         @Override
         public void onConfigurationChanged() {
-            updateTheme();
             updateTriStateLayout();
         }
     };
@@ -156,9 +157,6 @@ public class TriStateUiControllerImpl implements TriStateUiController,
     private int mOrientationType = 0;
     private boolean mShowing = false;
     private int mBackgroundColor = 0;
-    private int mThemeMode = 0;
-    private int mIconColor = 0;
-    private int mTextColor = 0;
     private ImageView mTriStateIcon;
     private TextView mTriStateText;
     private int mTriStateMode = -1;
@@ -231,7 +229,8 @@ public class TriStateUiControllerImpl implements TriStateUiController,
     }
 
     public TriStateUiControllerImpl(Context context) {
-        mContext = context;
+        mContext =
+                new ContextThemeWrapper(context, R.style.qs_theme);
         mHandler = new H(this);
         mOrientationListener = new OrientationEventListener(mContext, 3) {
             @Override
@@ -265,6 +264,12 @@ public class TriStateUiControllerImpl implements TriStateUiController,
         }
     }
 
+    @Override
+    public void onUiModeChanged() {
+        mContext.getTheme().applyStyle(mContext.getThemeResId(), true);
+        initDialog();
+    }
+
     private void checkOrientationType() {
         Display display = DisplayManagerGlobal.getInstance().getRealDisplay(0);
         if (display != null) {
@@ -292,11 +297,11 @@ public class TriStateUiControllerImpl implements TriStateUiController,
     }
 
     private void initDialog() {
-        mDialog = new Dialog(mContext);
+        mDialog = new Dialog(mContext, R.style.qs_theme);
         mShowing = false;
         mWindow = mDialog.getWindow();
         mWindow.requestFeature(Window.FEATURE_NO_TITLE);
-        mWindow.setBackgroundDrawable(new ColorDrawable(0));
+        mWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mWindow.clearFlags(LayoutParams.FLAG_DIM_BEHIND
                 | LayoutParams.FLAG_LAYOUT_INSET_DECOR);
         mWindow.addFlags(LayoutParams.FLAG_NOT_FOCUSABLE
@@ -320,7 +325,6 @@ public class TriStateUiControllerImpl implements TriStateUiController,
         mDialogView = (ViewGroup) mDialog.findViewById(R.id.tri_state_layout);
         mTriStateIcon = (ImageView) mDialog.findViewById(R.id.tri_state_icon);
         mTriStateText = (TextView) mDialog.findViewById(R.id.tri_state_text);
-        updateTheme();
     }
 
     private void registerOrientationListener(boolean enable) {
@@ -524,10 +528,11 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                     }
                     if (mDialogView != null && bg != 0) {
                         mDialogView.setBackgroundDrawable(res.getDrawable(bg));
+                        mBackgroundColor = getAttrColor(android.R.attr.colorPrimary);
+                        mDialogView.setBackgroundTintList(ColorStateList.valueOf(mBackgroundColor));
                     }
                     mDialogPosition = positionY2;
                 }
-
                 positionY = res.getDimensionPixelSize(R.dimen.tri_state_dialog_padding);
                 mWindowLayoutParams.gravity = gravity;
                 mWindowLayoutParams.y = positionY2 - positionY;
@@ -541,7 +546,6 @@ public class TriStateUiControllerImpl implements TriStateUiController,
     private void handleShow() {
         mHandler.removeMessages(MSG_DIALOG_SHOW);
         if (!mShowing) {
-            updateTheme();
             registerOrientationListener(true);
             checkOrientationType();
             mShowing = true;
@@ -586,16 +590,6 @@ public class TriStateUiControllerImpl implements TriStateUiController,
         mHandler.sendEmptyMessage(MSG_DIALOG_DISMISS);
         initDialog();
         updateTriStateLayout();
-    }
-
-    private void updateTheme() {
-        // Todo: Add some logic to update the theme only when a new theme is applied
-        mIconColor = getAttrColor(android.R.attr.colorAccent);
-        mTextColor = getAttrColor(android.R.attr.textColorPrimary);
-        mBackgroundColor = getAttrColor(android.R.attr.colorPrimary);
-        mDialogView.setBackgroundTintList(ColorStateList.valueOf(mBackgroundColor));
-        mTriStateIcon.setColorFilter(mIconColor);
-        mTriStateText.setTextColor(mTextColor);
     }
 
     public int getAttrColor(int attr) {
