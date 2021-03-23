@@ -571,10 +571,6 @@ public abstract class AuthBiometricView extends LinearLayout {
         mSavedState = savedState;
     }
 
-    public boolean getHasFod() {
-        return mHasFod;
-    }
-
     private void setTextOrHide(TextView view, String string) {
         if (TextUtils.isEmpty(string)) {
             view.setVisibility(View.GONE);
