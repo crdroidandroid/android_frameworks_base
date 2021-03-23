@@ -507,7 +507,7 @@ public class TtsEngines {
         for (String value : prefValues) {
             final int delimiter = value.indexOf(':');
             if (delimiter > 0) {
-                if (engineName.equals(value.substring(0, delimiter))) {
+                if ((value.substring(0, delimiter)).equals(engineName)) {
                     return value.substring(delimiter + 1);
                 }
             }
