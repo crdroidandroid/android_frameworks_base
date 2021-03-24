@@ -232,9 +232,9 @@ Y Nueve</string>
     <!-- Name of the microphone status bar icon. -->
     <string name="status_bar_microphone">Micrófono</string>
     <!-- Biometric Dialog - Use Face -->
-    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <string name="biometric_dialog_button_use_face">Usar la cara</string>
     <!-- Daily data usage -->
-    <string name="daily_data_usage_title">Today\'s usage</string>
+    <string name="daily_data_usage_title">Uso de hoy</string>
     <!-- App Lock -->
     <string name="applock_locked">&#160;is locked</string>
     <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
