@@ -15,7 +15,7 @@
     limitations under the License.
 -->
 
-<com.android.keyguard.clock.ClockLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -25,8 +25,7 @@
         android:id="@+id/clock_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:foregroundGravity="center"
+        android:layout_centerInParent="true"
         android:orientation="vertical">
 
         <LinearLayout
@@ -42,8 +41,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:format12Hour="4:20"
-                android:format24Hour="16:20"
+                android:format12Hour="h:mm"
+                android:format24Hour="kk:mm"
                 android:letterSpacing="0.02"
                 android:paddingBottom="@*com.android.systemui:dimen/title_clock_padding"
                 android:textColor="?attr/wallpaperTextColor"
@@ -55,8 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:format12Hour="69"
-                android:format24Hour="69"
+                android:format12Hour="ss"
+                android:format24Hour="ss"
                 android:letterSpacing="0.02"
                 android:paddingLeft="2dp"
                 android:paddingBottom="@*com.android.systemui:dimen/title_clock_padding"
@@ -102,4 +101,4 @@
                 android:textSize="16dp" />
         </LinearLayout>
     </LinearLayout>
-</com.android.keyguard.clock.ClockLayout>
+</RelativeLayout>
