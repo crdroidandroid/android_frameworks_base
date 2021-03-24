@@ -126,10 +126,11 @@ public class Utils {
 
     /**
      * Allow the media player to be shown in the QS area, controlled by 2 flags.
-     * Off by default, but can be disabled by setting to 0
+     * On by default, but can be disabled by setting to 0
      */
     public static boolean useQsMediaPlayer(Context context) {
-        return true;
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.QS_MEDIA_PLAYER, 1) == 1;
     }
 
     /**
