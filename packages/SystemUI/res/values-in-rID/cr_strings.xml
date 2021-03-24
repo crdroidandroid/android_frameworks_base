@@ -133,9 +133,10 @@
     <string name="text_clock_m_seventeen">Tujuh belas</string>
     <string name="text_clock_m_eighteen">Delapan belas</string>
     <string name="text_clock_m_nineteen">Sembilan belas</string>
-    <string name="text_clock_m_twenty">Dua puluh</string>
-    <string name="text_clock_m_twenty_one">Dua puluh satu</string>
-    <string name="text_clock_m_twenty_two">Dua puluh dua</string>
+    <string name="text_clock_m_twenty">Dua Puluh</string>
+    <string name="text_clock_m_twenty_one">Dua Puluh Satu</string>
+    <string name="text_clock_m_twenty_two">Dua Puluh
+Dua</string>
     <string name="text_clock_m_twenty_three">Dua Puluh Tiga</string>
     <string name="text_clock_m_twenty_four">Dua Puluh
 Empat</string>
