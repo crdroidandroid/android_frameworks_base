@@ -93,11 +93,15 @@ public class FluidClockController implements ClockPlugin {
     private void createViews() {
         mView = (ClockLayout) mLayoutInflater
                 .inflate(R.layout.digital_clock_fluid, null);
-        mTimeClock = mView.findViewById(R.id.time_clock);
-        mSecondsClock = mView.findViewById(R.id.seconds_clock);
-        mDay = mView.findViewById(R.id.clock_day);
-        mDate = mView.findViewById(R.id.clock_date);
-        mYear = mView.findViewById(R.id.clock_year);
+        setViews(mView);
+    }
+
+    private void setViews(View view) {
+        mTimeClock = view.findViewById(R.id.time_clock);
+        mSecondsClock = view.findViewById(R.id.seconds_clock);
+        mDay = view.findViewById(R.id.clock_day);
+        mDate = view.findViewById(R.id.clock_date);
+        mYear = view.findViewById(R.id.clock_year);
     }
 
     @Override
@@ -129,25 +133,12 @@ public class FluidClockController implements ClockPlugin {
     public Bitmap getPreview(int width, int height) {
 
         View previewView = mLayoutInflater.inflate(R.layout.digital_fluid_preview, null);
-        TextClock previewTime = previewView.findViewById(R.id.time_clock);
-        TextClock previewSeconds = previewView.findViewById(R.id.seconds_clock);
-        TextClock previewDay = previewView.findViewById(R.id.clock_day);
-        TextClock previewDate = previewView.findViewById(R.id.clock_date);
-        TextClock previewYear = previewView.findViewById(R.id.clock_year);
 
-        // Initialize state of plugin before generating preview.
-        previewTime.setTextColor(Color.WHITE);
-        previewDay.setTextColor(Color.WHITE);
-        previewYear.setTextColor(Color.WHITE);
+        setViews(previewView);
+
         ColorExtractor.GradientColors colors = mColorExtractor.getColors(
                 WallpaperManager.FLAG_LOCK);
-        int[] colorPalette = colors.getColorPalette();
-        int accentColor = mResources.getColor(R.color.typeClockAccentColor, null);
-        if (colorPalette != null) {
-            accentColor = colorPalette[Math.max(0, colorPalette.length - 5)];
-        }
-        previewSeconds.setTextColor(accentColor);
-        previewDate.setTextColor(accentColor);
+        setColorPalette(colors.supportsDarkText(), colors.getColorPalette());
         onTimeTick();
 
         return mRenderer.createPreview(previewView, width, height);
@@ -193,7 +184,8 @@ public class FluidClockController implements ClockPlugin {
 
     @Override
     public void onTimeTick() {
-        mView.onTimeChanged();
+        if (mView != null)
+            mView.onTimeChanged();
         mTimeClock.refresh();
         mSecondsClock.refresh();
         mDay.refresh();
@@ -203,7 +195,8 @@ public class FluidClockController implements ClockPlugin {
 
     @Override
     public void setDarkAmount(float darkAmount) {
-        mView.setDarkAmount(darkAmount);
+        if (mView != null)
+            mView.setDarkAmount(darkAmount);
     }
 
     @Override
