@@ -27,6 +27,7 @@ import android.util.ArrayMap;
 import android.util.LongSparseArray;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 /**
  * Data structure used for caching data against themes.
@@ -37,7 +38,7 @@ import java.lang.ref.WeakReference;
 abstract class ThemedResourceCache<T> {
     public static final int UNDEFINED_GENERATION = -1;
     @UnsupportedAppUsage
-    private ArrayMap<ThemeKey, LongSparseArray<WeakReference<T>>> mThemedEntries;
+    private HashMap<ThemeKey, LongSparseArray<WeakReference<T>>> mThemedEntries;
     private LongSparseArray<WeakReference<T>> mUnthemedEntries;
     private LongSparseArray<WeakReference<T>> mNullThemedEntries;
 
@@ -176,7 +177,7 @@ abstract class ThemedResourceCache<T> {
 
         if (mThemedEntries == null) {
             if (create) {
-                mThemedEntries = new ArrayMap<>(1);
+                mThemedEntries = new HashMap<>(1);
             } else {
                 return null;
             }
@@ -220,11 +221,8 @@ abstract class ThemedResourceCache<T> {
      */
     private boolean pruneLocked(@Config int configChanges) {
         if (mThemedEntries != null) {
-            for (int i = mThemedEntries.size() - 1; i >= 0; i--) {
-                if (pruneEntriesLocked(mThemedEntries.valueAt(i), configChanges)) {
-                    mThemedEntries.removeAt(i);
-                }
-            }
+	    mThemedEntries.entrySet()
+		.removeIf(entry -> pruneEntriesLocked(entry.getValue(), configChanges));
         }
 
         pruneEntriesLocked(mNullThemedEntries, configChanges);
