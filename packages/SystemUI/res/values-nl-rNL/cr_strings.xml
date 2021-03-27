@@ -216,5 +216,5 @@
     <string name="applock_credential">&#160;om te ontgrendelen</string>
     <string name="applock_unlock">Ontgrendelen</string>
     <!-- Oroño clock -->
-    <string name="date_long_title_today">Today is %s</string>
+    <string name="date_long_title_today">Vandaag is %s</string>
 </resources>
