@@ -254,4 +254,6 @@
     <string name="applock_fingerprint">&#160;або ваш відбиток пальця для розблокування</string>
     <string name="applock_credential">&#160;для розблокування</string>
     <string name="applock_unlock">Розблокувати</string>
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Today is %s</string>
 </resources>
