@@ -204,14 +204,16 @@
     <!-- Name of the microphone status bar icon. -->
     <string name="status_bar_microphone">麦克风</string>
     <!-- Biometric Dialog - Use Face -->
-    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <string name="biometric_dialog_button_use_face">刷脸</string>
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">今日使用情况</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;已被锁定</string>
+    <string name="applock_fingerprint_face">，指纹或您的脸部以解锁</string>
+    <string name="applock_face">&#160;或您的脸以解锁</string>
+    <string name="applock_fingerprint">&#160;或您的指纹以解锁</string>
+    <string name="applock_credential">&#160;以解锁</string>
+    <string name="applock_unlock">解锁​​​​</string>
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">今天是 %s</string>
 </resources>

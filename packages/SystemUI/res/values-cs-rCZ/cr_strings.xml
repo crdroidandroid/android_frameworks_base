@@ -211,10 +211,12 @@
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Dnešní využití</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;je uzamknuta</string>
+    <string name="applock_fingerprint_face">, odemkněte otiskem prstu nebo obličejem</string>
+    <string name="applock_face">&#160;nebo odemkněte obličejem</string>
+    <string name="applock_fingerprint">&#160;nebo odemkněte otiskem prstu</string>
+    <string name="applock_credential">&#160;odemknout</string>
+    <string name="applock_unlock">Odemknout</string>
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Dnes je %s</string>
 </resources>

@@ -209,10 +209,12 @@
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Bugünün kullanımı</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;kilitli</string>
+    <string name="applock_fingerprint_face">, kilidi açmak için parmak izi yada yüz kilidini kullanın</string>
+    <string name="applock_face">Kilidi açmak için &#160;veya yüz kilidini kullanın</string>
+    <string name="applock_fingerprint">Kilidi açmak için &#160;veya parmak izini kullanın</string>
+    <string name="applock_credential">&#160;kilidini aç</string>
+    <string name="applock_unlock">Kilidi aç</string>
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Today is %s</string>
 </resources>
