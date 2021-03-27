@@ -44,13 +44,18 @@ public class PixelPropsUtils {
         "com.google.android.apps.turboadapter",
         "com.google.android.apps.wallpaper.pixel",
         "com.google.android.as",
+        "com.google.android.dialer",
+        "com.google.android.gms.location.history",
+        "com.google.android.inputmethod.latin",
+        "com.google.android.soundpicker",
         "com.google.pixel.dynamicwallpapers",
         "com.google.pixel.livewallpaper",
         "com.google.android.apps.safetyhub",
         "com.google.android.apps.turbo",
         "com.google.android.apps.wallpaper",
         "com.google.android.apps.maps",
-        "com.google.android.gms"
+        "com.google.android.gms",
+        "com.google.android.apps.nexuslauncher"
     };
 
     private static final String[] packagesToChangePixel3 = {
