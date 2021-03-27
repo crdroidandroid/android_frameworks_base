@@ -236,12 +236,12 @@ Y Nueve</string>
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Uso de hoy</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;está bloqueada</string>
+    <string name="applock_locked">&#160;está bloqueado</string>
     <string name="applock_fingerprint_face">, huella dactilar o tu rostro para desbloquear</string>
     <string name="applock_face">&#160;o tu rostro para desbloquear</string>
     <string name="applock_fingerprint">&#160;o tu huella para desbloquear</string>
     <string name="applock_credential">&#160;para desbloquear</string>
     <string name="applock_unlock">Desbloquear</string>
     <!-- Oroño clock -->
-    <string name="date_long_title_today">Today is %s</string>
+    <string name="date_long_title_today">Hoy es %s</string>
 </resources>
