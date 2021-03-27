@@ -214,4 +214,6 @@
     <string name="applock_fingerprint">&#160;hoặc sử dụng vân tay để mở khóa</string>
     <string name="applock_credential">&#160;để mở khóa</string>
     <string name="applock_unlock">Mở khóa</string>
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Today is %s</string>
 </resources>
