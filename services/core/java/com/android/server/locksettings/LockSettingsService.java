@@ -168,6 +168,8 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
+import com.android.internal.util.custom.faceunlock.FaceUnlockUtils;
+
 /**
  * Keeps the lock pattern/password data and related settings for each user. Used by
  * LockPatternUtils. Needs to be a service because Settings app also needs to be able to save
@@ -2951,6 +2953,9 @@ public class LockSettingsService extends ILockSettings.Stub {
                 mFaceManager.setActiveUser(userId);
                 CountDownLatch latch = new CountDownLatch(1);
                 Face face = new Face(null, 0, 0);
+                if (FaceUnlockUtils.isFaceUnlockSupported()){
+                    face = mFaceManager.getEnrolledFaces(userId).get(0);
+                }
                 mFaceManager.remove(face, userId, faceManagerRemovalCallback(latch));
                 try {
                     latch.await(10000, TimeUnit.MILLISECONDS);
