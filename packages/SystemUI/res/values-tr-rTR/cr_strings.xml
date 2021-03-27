@@ -215,4 +215,6 @@
     <string name="applock_fingerprint">Kilidi açmak için &#160;veya parmak izini kullanın</string>
     <string name="applock_credential">&#160;kilidini aç</string>
     <string name="applock_unlock">Kilidi aç</string>
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Today is %s</string>
 </resources>
