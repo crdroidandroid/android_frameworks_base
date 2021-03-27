@@ -217,4 +217,6 @@
     <string name="applock_fingerprint">&#160;nebo odemkněte otiskem prstu</string>
     <string name="applock_credential">&#160;odemknout</string>
     <string name="applock_unlock">Odemknout</string>
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Today is %s</string>
 </resources>
