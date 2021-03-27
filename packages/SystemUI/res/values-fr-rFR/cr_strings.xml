@@ -215,4 +215,6 @@
     <string name="applock_fingerprint">&#160;ou votre empreinte digitale pour déverrouiller</string>
     <string name="applock_credential">&#160;pour déverrouiller</string>
     <string name="applock_unlock">Déverrouiller</string>
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Today is %s</string>
 </resources>
