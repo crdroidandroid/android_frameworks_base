@@ -242,4 +242,6 @@ Y Nueve</string>
     <string name="applock_fingerprint">&#160;o tu huella para desbloquear</string>
     <string name="applock_credential">&#160;para desbloquear</string>
     <string name="applock_unlock">Desbloquear</string>
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Today is %s</string>
 </resources>
