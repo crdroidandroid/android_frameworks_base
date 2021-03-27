@@ -216,5 +216,5 @@
     <string name="applock_credential">&#160;kilidini aç</string>
     <string name="applock_unlock">Kilidi aç</string>
     <!-- Oroño clock -->
-    <string name="date_long_title_today">Today is %s</string>
+    <string name="date_long_title_today">Bugün %s</string>
 </resources>
