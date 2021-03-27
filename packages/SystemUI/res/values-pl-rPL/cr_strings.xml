@@ -252,4 +252,6 @@ dziewięć</string>
     <string name="applock_fingerprint">&#160;lub odcisk palca, aby odblokować</string>
     <string name="applock_credential">&#160;odblokować</string>
     <string name="applock_unlock">Odblokuj</string>
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Today is %s</string>
 </resources>
