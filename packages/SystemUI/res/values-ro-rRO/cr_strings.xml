@@ -206,16 +206,16 @@
     <!-- Name of the microphone status bar icon. -->
     <string name="status_bar_microphone">Microfon</string>
     <!-- Biometric Dialog - Use Face -->
-    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <string name="biometric_dialog_button_use_face">Utilizare față</string>
     <!-- Daily data usage -->
-    <string name="daily_data_usage_title">Today\'s usage</string>
+    <string name="daily_data_usage_title">Utilizare astăzi</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;este blocat</string>
+    <string name="applock_fingerprint_face">, amprentă sau faţă pentru deblocare</string>
+    <string name="applock_face">&#160;sau fața pentru deblocare</string>
+    <string name="applock_fingerprint">&#160;sau amprenta pentru deblocare</string>
+    <string name="applock_credential">&#160;pentru a debloca</string>
+    <string name="applock_unlock">Deblocare</string>
     <!-- Oroño clock -->
-    <string name="date_long_title_today">Today is %s</string>
+    <string name="date_long_title_today">Astăzi este %s</string>
 </resources>
