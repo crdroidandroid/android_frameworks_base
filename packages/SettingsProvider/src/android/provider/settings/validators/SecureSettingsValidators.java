@@ -145,6 +145,28 @@ public class SecureSettingsValidators {
         VALIDATORS.put(Secure.POWER_MENU_LOCKED_SHOW_CONTENT, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Secure.DOZE_ENABLED, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Secure.DOZE_ALWAYS_ON, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(Secure.DOZE_ALWAYS_ON_AUTO_MODE, new DiscreteValueValidator(new String[] {"0", "1", "2"}));
+        VALIDATORS.put(Secure.DOZE_ALWAYS_ON_AUTO_TIME, new Validator() {
+                @Override
+                public boolean validate(String value) {
+                    String[] values = value.split(",", 0);
+                    if (values.length != 2) return false;
+                    for (String str : values) {
+                        String[] time = str.split(":", 0);
+                        if (time.length != 2) return false;
+                        int hour, minute;
+                        try {
+                            hour = Integer.valueOf(time[0]);
+                            minute = Integer.valueOf(time[1]);
+                        } catch (NumberFormatException e) {
+                            return false;
+                        }
+                        if (hour < 0 || hour > 23 || minute < 0 || minute > 59)
+                            return false;
+                    }
+                    return true;
+                }
+        });
         VALIDATORS.put(Secure.DOZE_PICK_UP_GESTURE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Secure.DOZE_DOUBLE_TAP_GESTURE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Secure.DOZE_TAP_SCREEN_GESTURE, BOOLEAN_VALIDATOR);
