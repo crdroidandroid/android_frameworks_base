@@ -24,8 +24,8 @@
     <string name="gigabytespersecond_short">GB/s</string>
     <!-- Omnijaws Weather -->
     <string name="omnijaws_service_error">Error</string>
-    <string name="omnijaws_service_unkown">No hay datos de clima</string>
-    <string name="omnijaws_service_error_long">Error al cargar datos de clima</string>
+    <string name="omnijaws_service_unkown">No hay datos del clima</string>
+    <string name="omnijaws_service_error_long">Error al cargar datos del clima</string>
     <string name="omnijaws_service_disabled">Servicio deshabilitado</string>
     <string name="omnijaws_detail_header">Clima</string>
     <string name="omnijaws_label_default">Clima</string>
@@ -35,9 +35,9 @@
     <!-- Always on Display tile -->
     <string name="quick_settings_always_on_display_label">AOD</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Cambiar tarjeta de datos</string>
-    <string name="qs_data_switch_changed_1">Utilizando SIM 1 para datos móviles</string>
-    <string name="qs_data_switch_changed_2">Utilizando SIM 2 para datos móviles</string>
+    <string name="qs_data_switch_label">Cambiar tarjeta SIM</string>
+    <string name="qs_data_switch_changed_1">Usando SIM 1 para datos móviles</string>
+    <string name="qs_data_switch_changed_2">Usando SIM 2 para datos móviles</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga rápida Dash (<xliff:g id="charging_time_left" example="4 horas y 2 minutos">%1$s</xliff:g> hasta que esté llena)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Carga rápida Dash</string>
@@ -48,7 +48,7 @@
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga VOOC (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> hasta carga completa)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Carga VOOC</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">Información de la CPU</string>
+    <string name="quick_settings_cpuinfo_label">Información de CPU</string>
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">Información de FPS</string>
     <!-- Gaming mode -->
@@ -56,7 +56,7 @@
     <string name="quick_settings_gaming_mode_label">Modo Gaming</string>
     <!-- Smart pixels QS tile -->
     <string name="quick_settings_smart_pixels">Píxeles inteligentes</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Habilitar píxeles inteligentes automáticamente</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Píxeles inteligentes habilitados automáticamente</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
     <string name="quick_settings_reboot_label">Reiniciar</string>
     <string name="quick_settings_reboot_recovery_label">Recuperación</string>
