@@ -218,5 +218,5 @@
     <string name="applock_credential">&#160;для разблакоўкі</string>
     <string name="applock_unlock">Разблакаваць</string>
     <!-- Oroño clock -->
-    <string name="date_long_title_today">Today is %s</string>
+    <string name="date_long_title_today">Сёння %s</string>
 </resources>
