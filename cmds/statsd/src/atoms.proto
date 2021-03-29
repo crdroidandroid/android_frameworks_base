@@ -3877,12 +3877,18 @@ message LmkKillOccurred {
     enum Reason {
         UNKNOWN = 0;
         PRESSURE_AFTER_KILL = 1;
-        NOT_RESPONDING = 2;
-        LOW_SWAP_AND_THRASHING = 3;
-        LOW_MEM_AND_SWAP = 4;
-        LOW_MEM_AND_THRASHING = 5;
-        DIRECT_RECL_AND_THRASHING = 6;
-        LOW_MEM_AND_SWAP_UTIL = 7;
+        CRITICAL_KILL = 2;
+        NOT_RESPONDING = 3;
+        LOW_SWAP_AND_THRASHING = 4;
+        LOW_MEM_AND_SWAP = 5;
+        LOW_MEM_AND_THRASHING = 6;
+        DIRECT_RECL_AND_THRASHING = 7;
+        DIRECT_RECL_AND_THROT = 8;
+        DIRECT_RECL_AND_LOW_MEM = 9;
+        COMPACTION = 10;
+        LOW_MEM_AND_SWAP_UTIL = 11;
+        KILL_REASON_COUNT = 12;
+
     }
 
     // The uid if available. -1 means not available.
