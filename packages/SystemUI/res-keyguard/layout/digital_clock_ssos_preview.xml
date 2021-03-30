@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2021 ShapeShiftOS
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal|top">
+
+    <LinearLayout
+        android:id="@+id/clock_view"
+        android:layout_width="match_parent"
+        android:paddingLeft="20dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextClock
+            android:id="@+id/clock_day"
+            android:layout_width="match_parent"
+            android:textSize="44.5sp"
+            android:ellipsize="none"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:format12Hour="EEEE"
+            android:textColor="?android:textColorPrimary" />
+
+        <LinearLayout
+            android:id="@+id/clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-4dp"
+            android:layout_gravity="left"
+            android:orientation="horizontal">
+
+            <TextClock
+                android:id="@+id/time_clock_accented"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:ellipsize="none"
+                android:format12Hour="h"
+                android:textColor="?android:attr/colorAccent"
+                android:textSize="45.5sp" />
+
+            <TextClock
+                android:id="@+id/time_clock"
+                android:textSize="45.5sp"
+                android:layout_width="wrap_content"
+                android:ellipsize="none"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:format12Hour=":mm"
+                android:textColor="?android:textColorPrimary"/>
+
+        </LinearLayout>
+
+        <TextClock
+            android:id="@+id/timedate"
+            android:layout_width="wrap_content"
+            android:textSize="15sp"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:layout_gravity="left|bottom"
+            android:format12Hour=" MMMM  dd"
+            android:paddingBottom="@dimen/title_clock_padding"
+            android:textColor="?android:textColorPrimary" />
+
+    </LinearLayout>
+
+</FrameLayout>
