@@ -202,11 +202,11 @@
     <!-- Name of the location status bar icon. -->
     <string name="status_bar_location">Vị trí</string>
     <!-- Name of the microphone status bar icon. -->
-    <string name="status_bar_microphone">Mic thoại</string>
+    <string name="status_bar_microphone">Micro</string>
     <!-- Biometric Dialog - Use Face -->
-    <string name="biometric_dialog_button_use_face">Sử dụng khuôn mặt</string>
+    <string name="biometric_dialog_button_use_face">Dùng khuôn mặt</string>
     <!-- Daily data usage -->
-    <string name="daily_data_usage_title">Hôm nay sử dụng</string>
+    <string name="daily_data_usage_title">Dùng hôm nay</string>
     <!-- App Lock -->
     <string name="applock_locked">&#160;đã khóa</string>
     <string name="applock_fingerprint_face">, vân tay hoặc khuôn mặt để mở khóa</string>
