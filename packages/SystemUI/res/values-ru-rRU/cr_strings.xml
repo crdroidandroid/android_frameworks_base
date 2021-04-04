@@ -30,7 +30,7 @@
     <string name="quick_settings_screenshot_label">Скриншот</string>
     <string name="quick_settings_region_screenshot_label">Скриншот части экрана</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">Информация о процессоре</string>
+    <string name="quick_settings_cpuinfo_label">Информация о CPU</string>
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">Информация о FPS</string>
     <string name="accessibility_quick_settings_fpsinfo_off">Информация о FPS выключена</string>
