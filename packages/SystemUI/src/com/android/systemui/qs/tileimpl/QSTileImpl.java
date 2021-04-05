@@ -543,6 +543,8 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
         boolean setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
                 Settings.System.QS_PANEL_BG_USE_NEW_TINT, 0, UserHandle.USER_CURRENT) == 1;
         boolean themeQsUseNewTint = context.getResources().getBoolean(R.bool.config_enable_qs_tile_tinting);
+        boolean themeQsUseDarkIcons = Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.QS_PANEL_ICONS_PRIMARY_COLOR, 0, UserHandle.USER_CURRENT) == 1;
         switch (state) {
             case Tile.STATE_UNAVAILABLE:
                 return Utils.getDisabled(context,
@@ -552,6 +554,8 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
             case Tile.STATE_ACTIVE:
                 if (setQsUseNewTint || themeQsUseNewTint) {
                     return Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
+                } else if (themeQsUseDarkIcons) {
+                	return Utils.getColorAttrDefaultColor(context, android.R.attr.colorPrimary);
                 } else {
                     return context.getResources().getColor(com.android.systemui.R.color.qs_icon_active_color);
                 }
