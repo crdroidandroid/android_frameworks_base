@@ -325,6 +325,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
     private static final String STOCK_STATUSBAR_IN_HIDE =
             "system:" + Settings.System.STOCK_STATUSBAR_IN_HIDE;
+    private static final String QS_PANEL_ICONS_PRIMARY_COLOR =
+            "system:" + Settings.System.QS_PANEL_ICONS_PRIMARY_COLOR;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -1006,6 +1008,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, BERRY_SWITCH_STYLE);
         mTunerService.addTunable(this, DISPLAY_CUTOUT_MODE);
         mTunerService.addTunable(this, STOCK_STATUSBAR_IN_HIDE);
+        mTunerService.addTunable(this, QS_PANEL_ICONS_PRIMARY_COLOR);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -4935,6 +4938,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mStockStatusBar != stockStatusBar) {
                     mStockStatusBar = stockStatusBar;
                     handleCutout();
+                }
+                break;
+            case QS_PANEL_ICONS_PRIMARY_COLOR:
+                if (mQSPanel != null) {
+                    mQSPanel.getHost().reloadAllTiles();
                 }
                 break;
             default:
