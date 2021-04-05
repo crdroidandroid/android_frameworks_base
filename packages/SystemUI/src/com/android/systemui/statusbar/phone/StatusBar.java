@@ -307,6 +307,10 @@ public class StatusBar extends SystemUI implements DemoMode,
             "lineagesystem:" + LineageSettings.System.STATUS_BAR_BRIGHTNESS_CONTROL;
     private static final String LESS_BORING_HEADS_UP =
             "system:" + Settings.System.LESS_BORING_HEADS_UP;
+    private static final String GAMING_MODE_ACTIVE =
+            "system:" + Settings.System.GAMING_MODE_ACTIVE;
+    private static final String GAMING_MODE_DISABLE_NOTIFICATION_ALERT =
+            "system:" + Settings.System.GAMING_MODE_DISABLE_NOTIFICATION_ALERT;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -993,7 +997,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                 PULSE_ON_NEW_TRACKS,
                 SCREEN_BRIGHTNESS_MODE,
                 STATUS_BAR_BRIGHTNESS_CONTROL,
-                LESS_BORING_HEADS_UP);
+                LESS_BORING_HEADS_UP,
+                GAMING_MODE_ACTIVE,
+                GAMING_MODE_DISABLE_NOTIFICATION_ALERT);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -5188,6 +5194,20 @@ public class StatusBar extends SystemUI implements DemoMode,
                 boolean lessBoringHeadsUp = 
                         TunerService.parseIntegerSwitch(newValue, false);
                 mNotificationInterruptStateProvider.setUseLessBoringHeadsUp(lessBoringHeadsUp);
+                break;
+            case GAMING_MODE_ACTIVE:
+                boolean gamingModeActive = 
+                        TunerService.parseIntegerSwitch(newValue, false);
+                if (mPresenter != null) {
+                    mPresenter.setGamingModeActive(gamingModeActive);
+                }
+                break;
+            case GAMING_MODE_DISABLE_NOTIFICATION_ALERT:
+                boolean gamingModeNoAlert = 
+                        TunerService.parseIntegerSwitch(newValue, true);
+                if (mPresenter != null) {
+                    mPresenter.setGamingModeNoAlert(gamingModeNoAlert);
+                }
                 break;
             default:
                 break;
