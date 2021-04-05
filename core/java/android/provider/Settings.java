@@ -5458,6 +5458,12 @@ public final class Settings {
         public static final String QS_PANEL_BG_USE_NEW_TINT = "qs_panel_bg_use_new_tint";
 
         /**
+         * Whether to use dark icons for QS tiles
+         * @hide
+         */
+        public static final String QS_PANEL_ICONS_PRIMARY_COLOR = "qs_panel_icons_primary_color";
+
+        /**
          * Show Settings icon in QS Footer
          * @hide
          */
