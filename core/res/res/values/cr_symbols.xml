@@ -45,4 +45,7 @@
 
     <!-- Enable face auth only when swiping security view -->
     <java-symbol type="bool" name="config_faceAuthOnlyOnSecurityView" />
+
+    <!-- Wheter device supports an gaming mode profiles -->
+    <java-symbol type="bool" name="config_gamingmode_performance" />
 </resources>
