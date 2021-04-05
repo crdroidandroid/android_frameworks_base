@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:format12Hour="EEEE"
+            android:format24Hour="EEEE"
             android:textColor="?android:textColorPrimary" />
 
         <LinearLayout
@@ -51,6 +52,7 @@
                 android:layout_gravity="center_horizontal"
                 android:ellipsize="none"
                 android:format12Hour="h"
+                android:format24Hour="kk"
                 android:textColor="?android:attr/colorAccent"
                 android:textSize="45.5sp" />
 
@@ -62,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
                 android:format12Hour=":mm"
+                android:format24Hour=":mm"
                 android:textColor="?android:textColorPrimary"/>
 
         </LinearLayout>
@@ -74,6 +77,7 @@
             android:ellipsize="none"
             android:layout_gravity="left|bottom"
             android:format12Hour=" MMMM  dd"
+            android:format24Hour=" MMMM  dd"
             android:paddingBottom="@dimen/title_clock_padding"
             android:textColor="?android:textColorPrimary" />
 
