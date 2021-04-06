@@ -217,4 +217,6 @@
     <string name="applock_unlock">Feloldás</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Ma %s van</string>
+    <!-- Scrolling Screenshot string -->
+    <string name="scrollss">Scroll</string>
 </resources>
