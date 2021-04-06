@@ -216,4 +216,6 @@
     <string name="applock_unlock">Mở khóa</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Hôm nay là %s</string>
+    <!-- Scrolling Screenshot string -->
+    <string name="scrollss">Scroll</string>
 </resources>
