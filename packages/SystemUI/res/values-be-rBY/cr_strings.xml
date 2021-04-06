@@ -219,4 +219,6 @@
     <string name="applock_unlock">Разблакаваць</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Сёння %s</string>
+    <!-- Scrolling Screenshot string -->
+    <string name="scrollss">Scroll</string>
 </resources>
