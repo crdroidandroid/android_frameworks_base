@@ -254,5 +254,5 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">Σήμερα είναι %s</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">Κύλιση</string>
 </resources>
