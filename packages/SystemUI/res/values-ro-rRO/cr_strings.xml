@@ -218,4 +218,6 @@
     <string name="applock_unlock">Deblocare</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Astăzi este %s</string>
+    <!-- Scrolling Screenshot string -->
+    <string name="scrollss">Scroll</string>
 </resources>
