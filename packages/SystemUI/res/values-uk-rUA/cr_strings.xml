@@ -257,5 +257,5 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">Сьогодні є</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">Прокрутка</string>
 </resources>
