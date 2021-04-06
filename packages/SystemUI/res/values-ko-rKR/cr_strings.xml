@@ -249,4 +249,6 @@
     <string name="applock_unlock">잠금해제</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">오늘은 %s이다</string>
+    <!-- Scrolling Screenshot string -->
+    <string name="scrollss">Scroll</string>
 </resources>
