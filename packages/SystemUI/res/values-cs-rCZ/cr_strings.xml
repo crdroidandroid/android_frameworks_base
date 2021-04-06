@@ -220,5 +220,5 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">Dnes je %s</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">Rolování</string>
 </resources>
