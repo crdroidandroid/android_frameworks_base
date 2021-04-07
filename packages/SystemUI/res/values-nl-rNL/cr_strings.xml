@@ -218,5 +218,5 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">Vandaag is %s</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">Scrollen</string>
 </resources>
