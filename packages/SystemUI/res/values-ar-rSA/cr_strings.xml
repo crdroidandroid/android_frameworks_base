@@ -209,18 +209,18 @@
     <!-- Name of the microphone status bar icon. -->
     <string name="status_bar_microphone">الميكروفون</string>
     <!-- Biometric Dialog - Use Face -->
-    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <string name="biometric_dialog_button_use_face">استخدام الوجه</string>
     <!-- Daily data usage -->
-    <string name="daily_data_usage_title">Today\'s usage</string>
+    <string name="daily_data_usage_title">الاستخدام اليومي</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160; مقفل</string>
+    <string name="applock_fingerprint_face">, بصمة الأصبع أو الوجه مطلوب لفتح الجهاز</string>
+    <string name="applock_face">&#160; أو قم باستخدام وجهك لفتح الجهاز</string>
+    <string name="applock_fingerprint">&#160; أو قم باستخدام بصمة إصبعك لفتح الجهاز</string>
+    <string name="applock_credential">&#160;لفتح</string>
+    <string name="applock_unlock">إلغاء تأمين</string>
     <!-- Oroño clock -->
-    <string name="date_long_title_today">Today is %s</string>
+    <string name="date_long_title_today">اليوم %s</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">تمرير</string>
 </resources>
