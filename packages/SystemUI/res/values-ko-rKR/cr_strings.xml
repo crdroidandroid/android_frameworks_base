@@ -250,5 +250,5 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">오늘은 %s이다</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">스크롤</string>
 </resources>
