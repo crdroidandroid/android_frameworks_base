@@ -1898,6 +1898,9 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
             Trace.traceBegin(TRACE_TAG_WINDOW_MANAGER, "activityStopped");
             r = ActivityRecord.isInStackLocked(token);
             if (r != null) {
+                if (isAppLocked(r.packageName)) {
+                    mAppLockService.activityStopped(r.packageName, r.intent);
+                }
                 if (r.attachedToProcess()
                         && r.isState(ActivityStack.ActivityState.RESTARTING_PROCESS)) {
                     // The activity was requested to restart from
