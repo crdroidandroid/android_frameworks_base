@@ -241,5 +241,5 @@ Sembilan</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Hari ini %s</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">Gulir</string>
 </resources>
