@@ -29,9 +29,9 @@ interface IAppLockService {
 
     boolean isAppOpen(String packageName);
 
-    void setShowOnlyOnWake(boolean showOnce);
+    void setLockTimeout(int lockTimeout);
 
-    boolean getShowOnlyOnWake();
+    int getLockTimeout();
 
     int getLockedAppsCount();
 
