@@ -72,17 +72,17 @@ public class AppLockManager {
         }
     }
 
-    public void setShowOnlyOnWake(boolean showOnce) {
+    public void setLockTimeout(int lockTimeout) {
         try {
-            mService.setShowOnlyOnWake(showOnce);
+            mService.setLockTimeout(lockTimeout);
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
     }
 
-    public boolean getShowOnlyOnWake() {
+    public int getLockTimeout() {
         try {
-            return mService.getShowOnlyOnWake();
+            return mService.getLockTimeout();
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
