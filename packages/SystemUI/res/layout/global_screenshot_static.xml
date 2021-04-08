@@ -26,7 +26,6 @@
         android:layout_height="0dp"
         android:layout_width="0dp"
         android:elevation="1dp"
-        android:background="@drawable/action_chip_container_background"
         android:layout_marginStart="@dimen/screenshot_action_container_margin_horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/global_screenshot_actions_container"
         app:layout_constraintStart_toStartOf="parent"

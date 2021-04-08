@@ -61,7 +61,6 @@ public class ScreenshotActionChip extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         mIcon = findViewById(R.id.screenshot_action_chip_icon);
-        mText = findViewById(R.id.screenshot_action_chip_text);
     }
 
     void setIcon(Icon icon, boolean tint) {
