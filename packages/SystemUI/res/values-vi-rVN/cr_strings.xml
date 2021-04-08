@@ -217,5 +217,5 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">Hôm nay là %s</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">Cuộn</string>
 </resources>
