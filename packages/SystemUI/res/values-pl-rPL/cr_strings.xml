@@ -255,5 +255,5 @@ dziewięć</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Dzisiaj jest %s</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">Przewijanie</string>
 </resources>
