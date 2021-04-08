@@ -218,5 +218,5 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">Hoje é %s</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">Rolagem</string>
 </resources>
