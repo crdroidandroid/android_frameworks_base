@@ -217,5 +217,5 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">今天是 %s</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">滚动</string>
 </resources>
