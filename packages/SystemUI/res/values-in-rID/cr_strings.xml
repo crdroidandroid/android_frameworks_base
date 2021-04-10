@@ -242,4 +242,6 @@ Sembilan</string>
     <string name="date_long_title_today">Hari ini %s</string>
     <!-- Scrolling Screenshot string -->
     <string name="scrollss">Gulir</string>
+    <!-- Power menu QS tile -->
+    <string name="quick_settings_power_menu_label">Power menu</string>
 </resources>
