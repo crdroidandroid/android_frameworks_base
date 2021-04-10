@@ -220,7 +220,7 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">Dnes je %s</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Rolování</string>
+    <string name="scrollss">Dlouhý snímek obrazovky</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Menu napájení</string>
 </resources>
