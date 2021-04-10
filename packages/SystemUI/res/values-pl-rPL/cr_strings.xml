@@ -256,4 +256,6 @@ dziewięć</string>
     <string name="date_long_title_today">Dzisiaj jest %s</string>
     <!-- Scrolling Screenshot string -->
     <string name="scrollss">Przewijanie</string>
+    <!-- Power menu QS tile -->
+    <string name="quick_settings_power_menu_label">Power menu</string>
 </resources>
