@@ -2500,7 +2500,7 @@ public class ActivityStackSupervisor implements RecentTasks.Callbacks {
                         "startActivityFromRecents: Task " + taskId + " not found.");
             }
 
-            if (windowingMode != WINDOWING_MODE_SPLIT_SCREEN_PRIMARY) {
+            if (windowingMode != WINDOWING_MODE_SPLIT_SCREEN_PRIMARY && windowingMode != WINDOWING_MODE_FREEFORM) {
                 // We always want to return to the home activity instead of the recents activity
                 // from whatever is started from the recents activity, so move the home stack
                 // forward.
