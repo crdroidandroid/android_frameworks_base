@@ -15,10 +15,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- MicroG -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_fakePackageSignature">Spoofing della firma del pacchetto</string>
-    <!-- Description of an application permission, listed so the user can choose whether
-         they want to allow the application to do this. -->
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Consente all\'applicazione di fingere di essere un\'app diversa. Le applicazioni dannose potrebbero essere in grado di utilizzarlo per accedere ai dati delle applicazioni private. Gli usi legittimi includono un emulatore che finge di essere ciò che emula. Concedi questo permesso con molta cautela!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_fake_package_signature">Imita la firma del pacchetto</string>
