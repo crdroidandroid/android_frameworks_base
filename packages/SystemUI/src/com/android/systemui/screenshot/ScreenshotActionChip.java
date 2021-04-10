@@ -36,7 +36,6 @@ public class ScreenshotActionChip extends FrameLayout {
     private static final String TAG = "ScreenshotActionChip";
 
     private ImageView mIcon;
-    private TextView mText;
     private @ColorInt int mIconColor;
 
     public ScreenshotActionChip(Context context) {
@@ -68,10 +67,6 @@ public class ScreenshotActionChip extends FrameLayout {
         if (!tint) {
             mIcon.setImageTintList(null);
         }
-    }
-
-    void setText(CharSequence text) {
-        mText.setText(text);
     }
 
     void setPendingIntent(PendingIntent intent, Runnable finisher) {
