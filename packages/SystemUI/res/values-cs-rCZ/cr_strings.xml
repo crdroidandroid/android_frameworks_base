@@ -222,5 +222,5 @@
     <!-- Scrolling Screenshot string -->
     <string name="scrollss">Rolování</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">Menu napájení</string>
 </resources>
