@@ -219,4 +219,6 @@
     <string name="date_long_title_today">Bugün %s</string>
     <!-- Scrolling Screenshot string -->
     <string name="scrollss">Kaydır</string>
+    <!-- Power menu QS tile -->
+    <string name="quick_settings_power_menu_label">Power menu</string>
 </resources>
