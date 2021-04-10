@@ -219,4 +219,6 @@
     <string name="date_long_title_today">Ma %s van</string>
     <!-- Scrolling Screenshot string -->
     <string name="scrollss">Görgetés</string>
+    <!-- Power menu QS tile -->
+    <string name="quick_settings_power_menu_label">Power menu</string>
 </resources>
