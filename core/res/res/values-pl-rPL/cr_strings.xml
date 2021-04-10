@@ -15,10 +15,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- MicroG -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_fakePackageSignature">Sfałszowany podpis pakietu</string>
-    <!-- Description of an application permission, listed so the user can choose whether
-         they want to allow the application to do this. -->
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Pozwala aplikacji na udawanie innej aplikacji. Złośliwe aplikacje mogą wykorzystać to w celu uzyskania dostępu do prywatnych danych. Zachowaj ostrożność udzielając to uprawnienie!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_fake_package_signature">Podpis pakietu</string>
