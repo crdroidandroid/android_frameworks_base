@@ -12,18 +12,18 @@
     limitations under the License.
 -->
 
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal|top">
+    android:layout_gravity="center">
 
     <LinearLayout
         android:id="@+id/clock_view"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:paddingLeft="20dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerInParent="true"
         android:orientation="vertical">
 
         <TextClock
@@ -83,4 +83,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>
