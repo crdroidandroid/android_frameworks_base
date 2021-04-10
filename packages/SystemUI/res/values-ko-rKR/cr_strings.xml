@@ -252,5 +252,5 @@
     <!-- Scrolling Screenshot string -->
     <string name="scrollss">스크롤</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">전원 메뉴</string>
 </resources>
