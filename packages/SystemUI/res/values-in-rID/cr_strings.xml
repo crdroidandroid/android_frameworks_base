@@ -243,5 +243,5 @@ Sembilan</string>
     <!-- Scrolling Screenshot string -->
     <string name="scrollss">Gulir</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">Menu daya</string>
 </resources>
