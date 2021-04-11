@@ -26,6 +26,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.InterruptedException;
+import java.lang.Thread;
+
 import com.android.systemui.R;
 
 /**
@@ -34,6 +37,8 @@ import com.android.systemui.R;
 public class ScreenshotActionChip extends FrameLayout {
 
     private static final String TAG = "ScreenshotActionChip";
+
+	public PendingIntent intent;
 
     private ImageView mIcon;
     private @ColorInt int mIconColor;
@@ -69,8 +74,15 @@ public class ScreenshotActionChip extends FrameLayout {
         }
     }
 
-    void setPendingIntent(PendingIntent intent, Runnable finisher) {
+    void setPendingIntent(Runnable finisher) {
         setOnClickListener(v -> {
+            while (GlobalScreenshot.mImageData == null){
+                try {
+                    Thread.sleep(15);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             try {
                 intent.send();
                 finisher.run();
