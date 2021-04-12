@@ -760,7 +760,7 @@ public class ScreenDecorations extends SystemUI implements Tunable,
     static boolean shouldDrawCutout(Context context) {
         ContentResolver cr = context.getContentResolver();
         boolean newImmerseMode = cr != null && System.getIntForUser(cr,
-                        System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
+                        System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) != 0;
         return !newImmerseMode && context.getResources().getBoolean(
                 com.android.internal.R.bool.config_fillMainBuiltInDisplayCutout);
     }
