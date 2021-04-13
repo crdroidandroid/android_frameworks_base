@@ -259,5 +259,5 @@
     <!-- Scrolling Screenshot string -->
     <string name="scrollss">Прокрутка</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">Меню кнопки живлення</string>
 </resources>
