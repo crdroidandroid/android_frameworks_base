@@ -40,6 +40,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Insets;
 import android.graphics.Outline;
@@ -100,6 +101,9 @@ import com.android.systemui.dagger.qualifiers.UiBackground;
 import com.android.systemui.shared.system.ActivityManagerWrapper;
 import com.android.systemui.shared.system.QuickStepContract;
 import com.android.systemui.shared.system.TaskStackChangeListener;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,6 +198,7 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
     private static final float ROUNDED_CORNER_RADIUS = .05f;
     private static final int SCREENSHOT_CORNER_DEFAULT_TIMEOUT_MILLIS = 3000;
     private static final int MESSAGE_CORNER_TIMEOUT = 2;
+    private static final String SCREENSHOT_COMPRESSION ="system:" + Settings.System.SCREENSHOT_COMPRESSION;
 
     private final Interpolator mAccelerateInterpolator = new AccelerateInterpolator();
 
@@ -749,6 +754,13 @@ public class GlobalScreenshot implements ViewTreeObserver.OnComputeInternalInset
         }
 
         mScreenBitmap = screenshot;
+
+        int imageCompression = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.SCREENSHOT_COMPRESSION, 100, UserHandle.USER_CURRENT);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        mScreenBitmap.compress(Bitmap.CompressFormat.JPEG, imageCompression, out);
+        mScreenBitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
 
         if (mScreenBitmap == null) {
             mNotificationsController.notifyScreenshotError(
