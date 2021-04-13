@@ -5225,6 +5225,12 @@ public final class Settings {
          */
         public static final String SCREENSHOT_SOUND = "screenshot_sound";
 
+        /**
+         * Screenshot image compression
+         * @hide
+         */
+        public static final String SCREENSHOT_COMPRESSION = "screenshot_compression";
+
         /** @hide */
         public static final String AUDIO_PANEL_VIEW_TIMEOUT = "audio_panel_view_timeout";
 
