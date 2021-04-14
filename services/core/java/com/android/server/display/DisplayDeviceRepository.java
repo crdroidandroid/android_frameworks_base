@@ -170,11 +170,14 @@ class DisplayDeviceRepository implements DisplayAdapter.Listener {
                 Trace.beginSection("handleDisplayDeviceChanged");
             }
             int diff = device.mDebugLastLoggedDeviceInfo.diff(info);
-            if (diff == DisplayDeviceInfo.DIFF_STATE) {
-                Slog.i(TAG, "Display device changed state: \"" + info.name
-                        + "\", " + Display.stateToString(info.state));
-            } else if (diff != 0) {
-                Slog.i(TAG, "Display device changed: " + info);
+
+            if (DEBUG) {
+                if (diff == DisplayDeviceInfo.DIFF_STATE) {
+                     Slog.i(TAG, "Display device changed state: \"" + info.name
+                            + "\", " + Display.stateToString(info.state));
+                } else if (diff != 0) {
+                    Slog.i(TAG, "Display device changed: " + info);
+                }
             }
 
             if ((diff & DisplayDeviceInfo.DIFF_COLOR_MODE) != 0) {
