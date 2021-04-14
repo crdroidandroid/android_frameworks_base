@@ -271,13 +271,36 @@ public class NotificationHistoryDatabase {
         }
     }
 
+    /**
+     * Remove the first entry from the list of history files whose file matches the given file path.
+     *
+     * This method is necessary for anything that only has an absolute file path rather than an
+     * AtomicFile object from the list of history files.
+     *
+     * filePath should be an absolute path.
+     */
+    void removeFilePathFromHistory(String filePath) {
+        if (filePath == null) {
+            return;
+        }
+
+        Iterator<AtomicFile> historyFileItr = mHistoryFiles.iterator();
+        while (historyFileItr.hasNext()) {
+            final AtomicFile af = historyFileItr.next();
+            if (af != null && filePath.equals(af.getBaseFile().getAbsolutePath())) {
+                historyFileItr.remove();
+                return;
+            }
+        }
+    }
+
     private void deleteFile(AtomicFile file) {
         if (DEBUG) {
             Slog.d(TAG, "Removed " + file.getBaseFile().getName());
         }
         file.delete();
         // TODO: delete all relevant bitmaps, once they exist
-        mHistoryFiles.remove(file);
+        removeFilePathFromHistory(file.getBaseFile().getAbsolutePath());
     }
 
     private void scheduleDeletion(File file, long creationTime, int retentionDays) {
@@ -362,7 +385,7 @@ public class NotificationHistoryDatabase {
                             Slog.d(TAG, "Removed " + fileToDelete.getBaseFile().getName());
                         }
                         fileToDelete.delete();
-                        mHistoryFiles.remove(fileToDelete);
+                        removeFilePathFromHistory(filePath);
                     }
                 } catch (Exception e) {
                     Slog.e(TAG, "Failed to delete notification history file", e);
