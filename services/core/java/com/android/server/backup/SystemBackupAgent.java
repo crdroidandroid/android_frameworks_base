@@ -67,6 +67,7 @@ public class SystemBackupAgent extends BackupAgentHelper {
     private static final String APP_GENDER_HELPER = "app_gender";
     private static final String COMPANION_HELPER = "companion";
     private static final String SYSTEM_GENDER_HELPER = "system_gender";
+    private static final String NETWORK_POLICY_HELPER = "network_policy";
     private static final String DISPLAY_HELPER = "display";
     private static final String INPUT_HELPER = "input";
     private static final String WEAR_BACKUP_HELPER = "wear";
@@ -108,6 +109,7 @@ public class SystemBackupAgent extends BackupAgentHelper {
                     COMPANION_HELPER,
                     APP_GENDER_HELPER,
                     SYSTEM_GENDER_HELPER,
+                    NETWORK_POLICY_HELPER,
                     DISPLAY_HELPER);
 
     /** Helpers that are enabled for full, non-system users. */
@@ -150,6 +152,7 @@ public class SystemBackupAgent extends BackupAgentHelper {
         addHelperIfEligibleForUser(COMPANION_HELPER, new CompanionBackupHelper(mUserId));
         addHelperIfEligibleForUser(SYSTEM_GENDER_HELPER,
                 new SystemGrammaticalGenderBackupHelper(mUserId));
+        addHelperIfEligibleForUser(NETWORK_POLICY_HELPER, new NetworkPolicyBackupHelper(mUserId));
         addHelperIfEligibleForUser(DISPLAY_HELPER, new DisplayBackupHelper(mUserId));
         if (com.android.hardware.input.Flags.enableBackupAndRestoreForInputGestures()) {
             addHelperIfEligibleForUser(INPUT_HELPER, new InputBackupHelper(mUserId));
