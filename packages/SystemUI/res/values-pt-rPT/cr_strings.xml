@@ -218,7 +218,7 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">Hoje é %s</string>
     <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scroll</string>
+    <string name="scrollss">Rolar</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">Menu de energia</string>
 </resources>
