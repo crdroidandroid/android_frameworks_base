@@ -446,10 +446,6 @@
         <receiver android:name=".screenshot.DeleteScreenshotReceiver"
             android:exported="false" />
 
-        <!-- Callback for scrolling screenshot notification -->
-        <receiver android:name=".screenshot.ScrollScreenshotReceiver"
-            android:exported="false" />
-
         <!-- Callback for invoking a smart action from the screenshot notification. -->
         <receiver android:name=".screenshot.SmartActionsReceiver"
                   android:exported="false"/>
