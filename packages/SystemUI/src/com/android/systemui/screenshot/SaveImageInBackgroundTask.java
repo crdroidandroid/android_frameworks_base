@@ -224,7 +224,6 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
             mImageData.shareAction = createShareAction(mContext, mContext.getResources(), uri);
             mImageData.editAction = createEditAction(mContext, mContext.getResources(), uri);
             mImageData.deleteAction = createDeleteAction(mContext, mContext.getResources(), uri);
-            mImageData.scrollAction = createScrollAction(mContext, mContext.getResources(), uri);
 
             mParams.mActionsReadyListener.onActionsReady(mImageData);
             mParams.finisher.accept(mImageData.uri);
@@ -381,28 +380,6 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
 
         return deleteActionBuilder.build();
     }
-
-    Notification.Action createScrollAction(Context context, Resources r, Uri uri) {
-        // Make sure pending intents for the system user are still unique across users
-        // by setting the (otherwise unused) request code to the current user id.
-        int requestCode = mContext.getUserId();
-
-        // Create a scroll action for the notification
-        PendingIntent scrollAction = PendingIntent.getBroadcast(context, requestCode,
-                new Intent(context, ScrollScreenshotReceiver.class)
-                        .putExtra(GlobalScreenshot.SCREENSHOT_URI_ID, uri.toString())
-                        .putExtra(GlobalScreenshot.EXTRA_ID, mScreenshotId)
-                        .putExtra(GlobalScreenshot.EXTRA_SMART_ACTIONS_ENABLED,
-                                mSmartActionsEnabled)
-                        .addFlags(Intent.FLAG_RECEIVER_FOREGROUND),
-                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-        Notification.Action.Builder scrollActionBuilder = new Notification.Action.Builder(
-                Icon.createWithResource(r, R.drawable.ic_screenshot_scrollss),
-                r.getString(R.string.scrollss), scrollAction);
-
-        return scrollActionBuilder.build();
-    }
-
 
     private int getUserHandleOfForegroundApplication(Context context) {
         // This logic matches
