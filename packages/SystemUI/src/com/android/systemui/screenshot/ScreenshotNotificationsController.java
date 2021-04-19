@@ -236,6 +236,7 @@ public class ScreenshotNotificationsController {
             GlobalScreenshot.SavedImageData actionData) {
         mNotificationBuilder.addAction(actionData.shareAction);
         mNotificationBuilder.addAction(actionData.editAction);
+        mNotificationBuilder.addAction(actionData.deleteAction);
         for (Notification.Action smartAction : actionData.smartActions) {
             mNotificationBuilder.addAction(smartAction);
         }

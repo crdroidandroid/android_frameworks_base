@@ -21,7 +21,6 @@ import android.content.BroadcastReceiver;
 import com.android.systemui.media.dialog.MediaOutputDialogReceiver;
 import com.android.systemui.screenshot.ActionProxyReceiver;
 import com.android.systemui.screenshot.DeleteScreenshotReceiver;
-import com.android.systemui.screenshot.ScrollScreenshotReceiver;
 import com.android.systemui.screenshot.SmartActionsReceiver;
 
 import dagger.Binds;
@@ -51,15 +50,6 @@ public abstract class DefaultBroadcastReceiverBinder {
     @ClassKey(DeleteScreenshotReceiver.class)
     public abstract BroadcastReceiver bindDeleteScreenshotReceiver(
             DeleteScreenshotReceiver broadcastReceiver);
-
-    /**
-     *
-     */
-    @Binds
-    @IntoMap
-    @ClassKey(ScrollScreenshotReceiver.class)
-    public abstract BroadcastReceiver bindScrollScreenshotReceiver(
-            ScrollScreenshotReceiver broadcastReceiver);
 
     /**
      *
