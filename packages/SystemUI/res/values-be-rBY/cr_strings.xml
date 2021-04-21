@@ -219,8 +219,6 @@
     <string name="applock_unlock">Разблакаваць</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Сёння %s</string>
-    <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Прагортка</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Меню кнопкі сілкавання</string>
 </resources>
