@@ -256,8 +256,6 @@
     <string name="applock_unlock">Розблокувати</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Сьогодні є</string>
-    <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Прокрутка</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Меню кнопки живлення</string>
 </resources>
