@@ -216,8 +216,6 @@
     <string name="applock_unlock">解锁​​​​</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">今天是 %s</string>
-    <!-- Scrolling Screenshot string -->
-    <string name="scrollss">滚动</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">电源菜单</string>
 </resources>
