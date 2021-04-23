@@ -217,8 +217,6 @@
     <string name="applock_unlock">Ontgrendelen</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Vandaag is %s</string>
-    <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Scrollen</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Power Menu</string>
 </resources>

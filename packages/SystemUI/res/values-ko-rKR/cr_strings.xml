@@ -249,8 +249,6 @@
     <string name="applock_unlock">잠금해제</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">오늘은 %s이다</string>
-    <!-- Scrolling Screenshot string -->
-    <string name="scrollss">스크롤</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">전원 메뉴</string>
 </resources>

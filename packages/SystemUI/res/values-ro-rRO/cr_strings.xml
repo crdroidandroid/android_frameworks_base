@@ -218,8 +218,6 @@
     <string name="applock_unlock">Deblocare</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Astăzi este %s</string>
-    <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Derulează</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Meniu pornire</string>
 </resources>

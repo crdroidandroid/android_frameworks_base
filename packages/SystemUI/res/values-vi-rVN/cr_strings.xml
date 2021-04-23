@@ -216,8 +216,6 @@
     <string name="applock_unlock">Mở khóa</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Hôm nay là %s</string>
-    <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Cuộn</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Menu nguồn</string>
 </resources>

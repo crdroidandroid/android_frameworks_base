@@ -253,8 +253,6 @@
     <string name="applock_unlock">Ξεκλείδωμα</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Σήμερα είναι %s</string>
-    <!-- Scrolling Screenshot string -->
-    <string name="scrollss">Κύλιση</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Μενού Ισχύος</string>
 </resources>
