@@ -209,14 +209,14 @@
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Utilizzo di oggi</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;è bloccato</string>
+    <string name="applock_fingerprint_face">, impronta digitale o il tuo volto per sbloccare</string>
+    <string name="applock_face">&#160;o il tuo volto per sbloccare</string>
+    <string name="applock_fingerprint">&#160;o la tua impronta digitale per sbloccare</string>
+    <string name="applock_credential">&#160;per sbloccare</string>
+    <string name="applock_unlock">Sblocca</string>
     <!-- Oroño clock -->
-    <string name="date_long_title_today">Today is %s</string>
+    <string name="date_long_title_today">Oggi è %s</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Power menu</string>
 </resources>
