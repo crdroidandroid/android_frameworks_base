@@ -218,5 +218,5 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">Oggi è %s</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">Menu di spegnimento</string>
 </resources>
