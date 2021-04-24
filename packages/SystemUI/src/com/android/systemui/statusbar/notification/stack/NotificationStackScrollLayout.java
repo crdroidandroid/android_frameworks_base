@@ -189,6 +189,8 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
     private static final float RUBBER_BAND_FACTOR_NORMAL = 0.35f;
     private static final float RUBBER_BAND_FACTOR_AFTER_EXPAND = 0.15f;
     private static final float RUBBER_BAND_FACTOR_ON_PANEL_EXPAND = 0.21f;
+    private static final String NOTIFICATION_BG_ALPHA =
+            "system:" + Settings.System.NOTIFICATION_BG_ALPHA;
     /**
      * Sentinel value for no current active pointer. Used by {@link #mActivePointerId}.
      */
@@ -484,6 +486,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
     private int mMaxDisplayedNotifications = -1;
     private int mStatusBarHeight;
     private int mMinInteractionHeight;
+    private int mNotificationBackgroundAlpha;
     private boolean mNoAmbient;
     private final Rect mClipRect = new Rect();
     private boolean mIsClipped;
@@ -653,6 +656,8 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
             } else if (key.equals(NOTIFICATION_MATERIAL_DISMISS)) {
                 mShowDimissButton = TunerService.parseIntegerSwitch(newValue, false);
                 updateFooter();
+            } else if (key.equals(NOTIFICATION_BG_ALPHA)) {
+                mNotificationBackgroundAlpha = (int) (TunerService.parseInteger(newValue, 100) * 2.55f);
             }
         }, HIGH_PRIORITY, Settings.Secure.NOTIFICATION_DISMISS_RTL,
                 Settings.Secure.NOTIFICATION_HISTORY_ENABLED,
@@ -1058,6 +1063,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
         if (mCachedBackgroundColor != color) {
             mCachedBackgroundColor = color;
             mBackgroundPaint.setColor(color);
+            mBackgroundPaint.setAlpha(mNotificationBackgroundAlpha);
             invalidate();
         }
     }
