@@ -335,6 +335,10 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.BERRY_SWITCH_STYLE;
     private static final String BERRY_ROUNDED_STYLE =
             "system:" + Settings.System.BERRY_ROUNDED_STYLE;
+    private static final String BERRY_SIGNAL_STYLE =
+            "system:" + Settings.System.BERRY_SIGNAL_STYLE;
+    private static final String BERRY_WIFI_STYLE =
+            "system:" + Settings.System.BERRY_WIFI_STYLE;
     private static final String DISPLAY_CUTOUT_MODE =
             "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
     private static final String STOCK_STATUSBAR_IN_HIDE =
@@ -827,6 +831,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     private int mQSTileStyle;
     private int mSwitchStyle;
     private int mRoundedStyle;
+    private int mSignalStyle;
+    private int mWifiStyle;
     private boolean mUseDarkTheme;
     private OverlayManager mOverlayManager;
     private final UiOffloadThread mUiOffloadThread = Dependency.get(UiOffloadThread.class);
@@ -1049,6 +1055,8 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, NOTIFICATION_MATERIAL_DISMISS);
         mTunerService.addTunable(this, BERRY_SWITCH_STYLE);
         mTunerService.addTunable(this, BERRY_ROUNDED_STYLE);
+        mTunerService.addTunable(this, BERRY_SIGNAL_STYLE);
+        mTunerService.addTunable(this, BERRY_WIFI_STYLE);
         mTunerService.addTunable(this, DISPLAY_CUTOUT_MODE);
         mTunerService.addTunable(this, STOCK_STATUSBAR_IN_HIDE);
         mTunerService.addTunable(this, DISPLAY_KILL_NOTCH);
@@ -4128,6 +4136,18 @@ public class StatusBar extends SystemUI implements DemoMode,
         });
     }
 
+    private void updateSignalStyle() {
+        mUiOffloadThread.execute(() -> {
+            ThemeAccentUtils.setSignalStyle(mOverlayManager, mSignalStyle);
+        });
+    }
+
+    private void updateWifiStyle() {
+        mUiOffloadThread.execute(() -> {
+            ThemeAccentUtils.setWifiStyle(mOverlayManager, mWifiStyle);
+        });
+    }
+
     private void updateDozingState() {
         Trace.traceCounter(Trace.TRACE_TAG_APP, "dozing", mDozing ? 1 : 0);
         Trace.beginSection("StatusBar#updateDozingState");
@@ -5225,6 +5245,22 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mRoundedStyle != roundedStyle) {
                     mRoundedStyle = roundedStyle;
                     updateRoundedStyle();
+                }
+                break;
+            case BERRY_SIGNAL_STYLE:
+                int signalStyle =
+                        TunerService.parseInteger(newValue, 0);
+                if (mSignalStyle != signalStyle) {
+                    mSignalStyle = signalStyle;
+                    updateSignalStyle();
+                }
+                break;
+            case BERRY_WIFI_STYLE:
+                int wifiStyle =
+                        TunerService.parseInteger(newValue, 0);
+                if (mWifiStyle != wifiStyle) {
+                    mWifiStyle = wifiStyle;
+                    updateWifiStyle();
                 }
                 break;
             case DISPLAY_CUTOUT_MODE:
