@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.android.systemui.Prefs;
 import com.android.systemui.R;
 import com.android.systemui.settings.UserContextProvider;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
@@ -50,6 +51,12 @@ public class ScreenRecordDialog extends SystemUIDialog {
             MIC_AND_INTERNAL);
     private static final long DELAY_MS = 3000;
     private static final long INTERVAL_MS = 1000;
+    private static final String TAG = "ScreenRecordDialog";
+    private static final String PREFS = "screenrecord_";
+    private static final String PREF_DOT = "show_dot";
+    private static final String PREF_LOW = "use_low_quality";
+    private static final String PREF_AUDIO = "use_audio";
+    private static final String PREF_AUDIO_SOURCE = "audio_source";
 
     private final RecordingController mController;
     private final UserContextProvider mUserContextProvider;
@@ -108,10 +115,13 @@ public class ScreenRecordDialog extends SystemUIDialog {
         mOptions.setOnItemClickListenerInt((parent, view, position, id) -> {
             mAudioSwitch.setChecked(true);
         });
+
+        loadPrefs();
     }
 
     private void requestScreenCapture() {
         Context userContext = mUserContextProvider.getUserContext();
+        savePrefs();
         boolean showStopDot = mStopDotSwitch.isChecked();
         boolean lowQuality = mLowQualitySwitch.isChecked();
         ScreenRecordingAudioSource audioMode = mAudioSwitch.isChecked()
@@ -128,5 +138,21 @@ public class ScreenRecordDialog extends SystemUIDialog {
                 RecordingService.getStopIntent(userContext),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         mController.startCountdown(DELAY_MS, INTERVAL_MS, startIntent, stopIntent);
+    }
+
+    private void savePrefs() {
+        Context userContext = mUserContextProvider.getUserContext();
+        Prefs.putInt(userContext, PREFS + PREF_DOT, mStopDotSwitch.isChecked() ? 1 : 0);
+        Prefs.putInt(userContext, PREFS + PREF_LOW, mLowQualitySwitch.isChecked() ? 1 : 0);
+        Prefs.putInt(userContext, PREFS + PREF_AUDIO, mAudioSwitch.isChecked() ? 1 : 0);
+        Prefs.putInt(userContext, PREFS + PREF_AUDIO_SOURCE, mOptions.getSelectedItemPosition());
+    }
+
+    private void loadPrefs() {
+        Context userContext = mUserContextProvider.getUserContext();
+        mStopDotSwitch.setChecked(Prefs.getInt(userContext, PREFS + PREF_DOT, 0) == 1);
+        mLowQualitySwitch.setChecked(Prefs.getInt(userContext, PREFS + PREF_LOW, 0) == 1);
+        mAudioSwitch.setChecked(Prefs.getInt(userContext, PREFS + PREF_AUDIO, 0) == 1);
+        mOptions.setSelection(Prefs.getInt(userContext, PREFS + PREF_AUDIO_SOURCE, 0));
     }
 }
