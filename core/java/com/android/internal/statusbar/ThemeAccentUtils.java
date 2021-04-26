@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 crDroid Android Project
+ * Copyright (C) 2018-2022 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,6 +89,32 @@ public class ThemeAccentUtils {
         "com.android.system.rounded.medium", // 3
         "com.android.system.rounded.high", // 4
         "com.android.system.rounded.extreme", // 5
+    };
+
+    // Signal bar styles
+    private static final String[] SIGNAL_STYLES = {
+        "com.android.systemui.signalbar", // 0
+        "com.android.systemui.signalbar_h", // 1
+        "com.android.systemui.signalbar_g", // 2
+        "com.android.systemui.signalbar_f", // 3
+        "com.android.systemui.signalbar_b", // 4
+        "com.android.systemui.signalbar_a", // 5
+        "com.crdroid.systemui.signalbar_e", // 5
+        "com.android.systemui.signalbar_c", // 5
+        "com.android.systemui.signalbar_d", // 5
+    };
+
+    // Wifi bar styles
+    private static final String[] WIFI_STYLES = {
+        "com.android.systemui.wifibar", // 0
+        "com.android.systemui.wifibar_h", // 1
+        "com.android.systemui.wifibar_g", // 2
+        "com.android.systemui.wifibar_f", // 3
+        "com.android.systemui.wifibar_b", // 4
+        "com.android.systemui.wifibar_a", // 5
+        "com.crdroid.systemui.wifibar_e", // 5
+        "com.android.systemui.wifibar_c", // 5
+        "com.android.systemui.wifibar_d", // 5
     };
 
     // Check for the dark system theme
@@ -265,6 +291,56 @@ public class ThemeAccentUtils {
 
         try {
             om.setEnabled(ROUNDED_STYLES[roundedStyle], true, userId);
+        } catch (Exception e) {
+        }
+    }
+
+    // Unloads the signal bar styles
+    private static void unloadSignalStyle(OverlayManager om, UserHandle userId) {
+        for (String style : SIGNAL_STYLES) {
+            try {
+                om.setEnabled(style, false, userId);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    // Set signal bar style
+    public static void setSignalStyle(OverlayManager om, int signalStyle) {
+        UserHandle userId = UserHandle.of(ActivityManager.getCurrentUser());
+
+        // Always unload rounded styles
+        unloadSignalStyle(om, userId);
+
+        if (signalStyle == 0) return;
+
+        try {
+            om.setEnabled(SIGNAL_STYLES[signalStyle], true, userId);
+        } catch (Exception e) {
+        }
+    }
+
+    // Unloads the wifi bar styles
+    private static void unloadWifiStyle(OverlayManager om, UserHandle userId) {
+        for (String style : WIFI_STYLES) {
+            try {
+                om.setEnabled(style, false, userId);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    // Set wifi bar style
+    public static void setWifiStyle(OverlayManager om, int wifiStyle) {
+        UserHandle userId = UserHandle.of(ActivityManager.getCurrentUser());
+
+        // Always unload rounded styles
+        unloadWifiStyle(om, userId);
+
+        if (wifiStyle == 0) return;
+
+        try {
+            om.setEnabled(WIFI_STYLES[wifiStyle], true, userId);
         } catch (Exception e) {
         }
     }
