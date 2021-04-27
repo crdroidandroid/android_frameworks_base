@@ -41,7 +41,6 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.util.ArraySet;
 import android.util.AttributeSet;
@@ -101,7 +100,6 @@ import com.android.systemui.statusbar.phone.NotificationGroupManager;
 import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.InflatedSmartReplies.SmartRepliesAndActions;
-import com.android.systemui.tuner.TunerService;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -118,7 +116,7 @@ import java.util.function.Consumer;
  */
 public class ExpandableNotificationRow extends ActivatableNotificationView
         implements PluginListener<NotificationMenuRowPlugin>, SwipeableView,
-        NotificationListItem, TunerService.Tunable {
+        NotificationListItem {
 
     private static final boolean DEBUG = false;
     private static final int DEFAULT_DIVIDER_ALPHA = 0x29;
@@ -127,8 +125,6 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
     private static final String TAG = "ExpandableNotifRow";
     public static final float DEFAULT_HEADER_VISIBLE_AMOUNT = 1.0f;
     private static final long RECENTLY_ALERTED_THRESHOLD_MS = TimeUnit.SECONDS.toMillis(30);
-    private static final String NOTIFICATION_BG_ALPHA =
-            "system:" + Settings.System.NOTIFICATION_BG_ALPHA;
 
     private boolean mUpdateBackgroundOnUpdate;
     private boolean mNotificationTranslationFinished = false;
@@ -163,7 +159,6 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
     private int mNotificationMaxHeight;
     private int mIncreasedPaddingBetweenElements;
     private int mNotificationLaunchHeight;
-    private float mNotificationBackgroundAlpha;
     private boolean mMustStayOnScreen;
 
     /** Does this row contain layouts that can adapt to row expansion */
@@ -1601,30 +1596,6 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         initDimens();
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-            final TunerService tunerService = Dependency.get(TunerService.class);
-            tunerService.addTunable(this, NOTIFICATION_BG_ALPHA);
-    }
-
-    @Override
-    public void onTuningChanged(String key, String newValue) {
-        switch (key) {
-            case NOTIFICATION_BG_ALPHA:
-                mNotificationBackgroundAlpha =
-                        TunerService.parseInteger(newValue, 255) / 255f;
-                if (mMenuRow != null) {
-                    onNotificationRankingUpdated();
-                    updateBackgroundAlpha(mNotificationBackgroundAlpha);
-                    updateBackground();
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
     /**
      * Initialize row.
      */
@@ -2879,17 +2850,6 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
                 child.updateBackgroundForGroupState();
             }
         }
-    }
-
-    @Override
-    protected void updateBackgroundAlpha(float transformationAmount) {
-        super.updateBackgroundAlpha(transformationAmount);
-        mBackgroundDimmed.setAlpha(transformationAmount);
-    }
-
-    @Override
-    protected void updateBackground() {
-        mBackgroundNormal.setAlpha(mNotificationBackgroundAlpha);
     }
 
     /**
