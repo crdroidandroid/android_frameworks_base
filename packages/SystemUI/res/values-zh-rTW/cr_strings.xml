@@ -215,7 +215,7 @@
     <string name="applock_credential">&#160;以解鎖</string>
     <string name="applock_unlock">解鎖</string>
     <!-- Oroño clock -->
-    <string name="date_long_title_today">Today is %s</string>
+    <string name="date_long_title_today">今天是%s</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">電源選單</string>
 </resources>
