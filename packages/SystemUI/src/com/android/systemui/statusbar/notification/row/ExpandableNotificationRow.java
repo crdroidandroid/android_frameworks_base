@@ -1860,10 +1860,12 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
 
     void onGutsOpened() {
         resetTranslation();
+        mPrivateLayout.setVisibility(GONE);
         updateContentAccessibilityImportanceForGuts(false /* isEnabled */);
     }
 
     void onGutsClosed() {
+        mPrivateLayout.setVisibility(VISIBLE);
         updateContentAccessibilityImportanceForGuts(true /* isEnabled */);
     }
 
