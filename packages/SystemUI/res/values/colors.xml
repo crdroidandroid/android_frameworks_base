@@ -113,8 +113,8 @@
     <color name="notification_alert_color">#FFF87B2B</color>
     <color name="notification_guts_priority_button_content_color">@color/GM2_grey_700</color>
     <color name="notification_guts_priority_button_bg_fill_color">@color/transparent</color>
-    <color name="notification_guts_priority_button_bg_fill_color_selected">#FFFFFF</color>
-    <color name="notification_guts_priority_button_bg_stroke_color">@color/GM2_grey_300</color>
+    <color name="notification_guts_priority_button_bg_fill_color_selected">#22000000</color>
+    <color name="notification_guts_priority_button_bg_stroke_color">#22000000</color>
 
     <color name="notification_section_header_label_color">@color/GM2_grey_900</color>
     <color name="notification_section_clear_all_btn_color">@color/GM2_grey_700</color>
