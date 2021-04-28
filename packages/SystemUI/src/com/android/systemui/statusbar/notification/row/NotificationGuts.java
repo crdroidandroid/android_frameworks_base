@@ -214,6 +214,7 @@ public class NotificationGuts extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mBackground = mContext.getDrawable(R.drawable.notification_guts_bg);
+        mBackground.setAlpha(0);
         if (mBackground != null) {
             mBackground.setCallback(this);
         }
@@ -366,7 +367,7 @@ public class NotificationGuts extends FrameLayout {
                 float r = (float) Math.hypot(horz, vert);
                 Animator a = ViewAnimationUtils.createCircularReveal(this,
                         x, y, r, 0);
-                a.setDuration(StackStateAnimator.ANIMATION_DURATION_STANDARD);
+                a.setDuration(0);
                 a.setInterpolator(Interpolators.FAST_OUT_LINEAR_IN);
                 a.addListener(new AnimateCloseListener(this /* view */, mGutsContent));
                 a.start();
