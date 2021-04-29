@@ -18,6 +18,7 @@ package android.hardware.hdmi;
 
 import static com.android.internal.os.RoSystemProperties.PROPERTY_HDMI_IS_DEVICE_HDMI_CEC_SWITCH;
 
+import android.annotation.CallbackExecutor;
 import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
@@ -30,6 +31,7 @@ import android.annotation.SystemApi;
 import android.annotation.SystemService;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Binder;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.util.ArrayMap;
@@ -38,6 +40,7 @@ import android.util.Log;
 import com.android.internal.util.Preconditions;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 /**
  * The {@link HdmiControlManager} class is used to send HDMI control messages
@@ -593,6 +596,68 @@ public final class HdmiControlManager {
     }
 
     /**
+     * Controls whether volume control commands via HDMI CEC are enabled.
+     *
+     * <p>When disabled:
+     * <ul>
+     *     <li>the device will not send any HDMI CEC audio messages
+     *     <li>received HDMI CEC audio messages are responded to with {@code <Feature Abort>}
+     * </ul>
+     *
+     * <p>Effects on different device types:
+     * <table>
+     *     <tr><th>HDMI CEC device type</th><th>enabled</th><th>disabled</th></tr>
+     *     <tr>
+     *         <td>TV (type: 0)</td>
+     *         <td>Per CEC specification.</td>
+     *         <td>TV changes system volume. TV no longer reacts to incoming volume changes via
+     *         {@code <User Control Pressed>}. TV no longer handles {@code <Report Audio Status>}
+     *         .</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Playback device (type: 4)</td>
+     *         <td>Device sends volume commands to TV/Audio system via {@code <User Control
+     *         Pressed>}</td><td>Device does not send volume commands via {@code <User Control
+     *         Pressed>}.</td>
+     *     </tr>
+     *     <tr>
+     *         <td>Audio device (type: 5)</td>
+     *         <td>Full "System Audio Control" capabilities.</td>
+     *         <td>Audio device no longer reacts to incoming {@code <User Control Pressed>}
+     *         volume commands. Audio device no longer reports volume changes via {@code <Report
+     *         Audio Status>}.</td>
+     *     </tr>
+     * </table>
+     *
+     * <p> Due to the resulting behavior, usage on TV and Audio devices is discouraged.
+     *
+     * @param isHdmiCecVolumeControlEnabled target state of HDMI CEC volume control.
+     * @see Settings.Global.HDMI_CONTROL_VOLUME_CONTROL_ENABLED
+     * @hide
+     */
+    @RequiresPermission(android.Manifest.permission.HDMI_CEC)
+    public void setHdmiCecVolumeControlEnabled(boolean isHdmiCecVolumeControlEnabled) {
+        try {
+            mService.setHdmiCecVolumeControlEnabled(isHdmiCecVolumeControlEnabled);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Returns whether volume changes via HDMI CEC are enabled.
+     * @hide
+     */
+    @RequiresPermission(android.Manifest.permission.HDMI_CEC)
+    public boolean isHdmiCecVolumeControlEnabled() {
+        try {
+            return mService.isHdmiCecVolumeControlEnabled();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
      * Gets whether the system is in system audio mode.
      *
      * @hide
@@ -685,6 +750,46 @@ public final class HdmiControlManager {
             mHotplugEventListeners = new ArrayMap<>();
 
     /**
+     * Listener used to get HDMI Control (CEC) status (enabled/disabled) and the connected display
+     * status.
+     * @hide
+     */
+    public interface HdmiControlStatusChangeListener {
+        /**
+         * Called when HDMI Control (CEC) is enabled/disabled.
+         *
+         * @param isCecEnabled status of HDMI Control
+         * {@link android.provider.Settings.Global#HDMI_CONTROL_ENABLED}: {@code true} if enabled.
+         * @param isCecAvailable status of CEC support of the connected display (the TV).
+         * {@code true} if supported.
+         *
+         * Note: Value of isCecAvailable is only valid when isCecEnabled is true.
+         **/
+        void onStatusChange(boolean isCecEnabled, boolean isCecAvailable);
+    }
+
+    private final ArrayMap<HdmiControlStatusChangeListener, IHdmiControlStatusChangeListener>
+            mHdmiControlStatusChangeListeners = new ArrayMap<>();
+
+    /**
+     * Listener used to get the status of the HDMI CEC volume control feature (enabled/disabled).
+     * @hide
+     */
+    public interface HdmiCecVolumeControlFeatureListener {
+        /**
+         * Called when the HDMI Control (CEC) volume control feature is enabled/disabled.
+         *
+         * @param enabled status of HDMI CEC volume control feature
+         * @see {@link HdmiControlManager#setHdmiCecVolumeControlEnabled(boolean)} ()}
+         **/
+        void onHdmiCecVolumeControlFeature(boolean enabled);
+    }
+
+    private final ArrayMap<HdmiCecVolumeControlFeatureListener,
+            IHdmiCecVolumeControlFeatureListener>
+            mHdmiCecVolumeControlFeatureListeners = new ArrayMap<>();
+
+    /**
      * Listener used to get vendor-specific commands.
      */
     public interface VendorCommandListener {
@@ -774,6 +879,147 @@ public final class HdmiControlManager {
             @Override
             public void onReceived(HdmiHotplugEvent event) {
                 listener.onReceived(event);;
+            }
+        };
+    }
+
+    /**
+     * Adds a listener to get informed of {@link HdmiControlStatusChange}.
+     *
+     * <p>To stop getting the notification,
+     * use {@link #removeHdmiControlStatusChangeListener(HdmiControlStatusChangeListener)}.
+     *
+     * @param listener {@link HdmiControlStatusChangeListener} instance
+     * @see HdmiControlManager#removeHdmiControlStatusChangeListener(
+     * HdmiControlStatusChangeListener)
+     *
+     * @hide
+     */
+    @RequiresPermission(android.Manifest.permission.HDMI_CEC)
+    public void addHdmiControlStatusChangeListener(HdmiControlStatusChangeListener listener) {
+        if (mService == null) {
+            Log.e(TAG, "HdmiControlService is not available");
+            return;
+        }
+        if (mHdmiControlStatusChangeListeners.containsKey(listener)) {
+            Log.e(TAG, "listener is already registered");
+            return;
+        }
+        IHdmiControlStatusChangeListener wrappedListener =
+                getHdmiControlStatusChangeListenerWrapper(listener);
+        mHdmiControlStatusChangeListeners.put(listener, wrappedListener);
+        try {
+            mService.addHdmiControlStatusChangeListener(wrappedListener);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Removes a listener to stop getting informed of {@link HdmiControlStatusChange}.
+     *
+     * @param listener {@link HdmiControlStatusChangeListener} instance to be removed
+     *
+     * @hide
+     */
+    @RequiresPermission(android.Manifest.permission.HDMI_CEC)
+    public void removeHdmiControlStatusChangeListener(HdmiControlStatusChangeListener listener) {
+        if (mService == null) {
+            Log.e(TAG, "HdmiControlService is not available");
+            return;
+        }
+        IHdmiControlStatusChangeListener wrappedListener =
+                mHdmiControlStatusChangeListeners.remove(listener);
+        if (wrappedListener == null) {
+            Log.e(TAG, "tried to remove not-registered listener");
+            return;
+        }
+        try {
+            mService.removeHdmiControlStatusChangeListener(wrappedListener);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    private IHdmiControlStatusChangeListener getHdmiControlStatusChangeListenerWrapper(
+            final HdmiControlStatusChangeListener listener) {
+        return new IHdmiControlStatusChangeListener.Stub() {
+            @Override
+            public void onStatusChange(boolean isCecEnabled, boolean isCecAvailable) {
+                listener.onStatusChange(isCecEnabled, isCecAvailable);
+            }
+        };
+    }
+
+    /**
+     * Adds a listener to get informed of changes to the state of the HDMI CEC volume control
+     * feature.
+     *
+     * Upon adding a listener, the current state of the HDMI CEC volume control feature will be
+     * sent immediately.
+     *
+     * <p>To stop getting the notification,
+     * use {@link #removeHdmiCecVolumeControlFeatureListener(HdmiCecVolumeControlFeatureListener)}.
+     *
+     * @param listener {@link HdmiCecVolumeControlFeatureListener} instance
+     * @hide
+     * @see #removeHdmiCecVolumeControlFeatureListener(HdmiCecVolumeControlFeatureListener)
+     */
+    @RequiresPermission(android.Manifest.permission.HDMI_CEC)
+    public void addHdmiCecVolumeControlFeatureListener(@NonNull @CallbackExecutor Executor executor,
+            @NonNull HdmiCecVolumeControlFeatureListener listener) {
+        if (mService == null) {
+            Log.e(TAG, "HdmiControlService is not available");
+            return;
+        }
+        if (mHdmiCecVolumeControlFeatureListeners.containsKey(listener)) {
+            Log.e(TAG, "listener is already registered");
+            return;
+        }
+        IHdmiCecVolumeControlFeatureListener wrappedListener =
+                createHdmiCecVolumeControlFeatureListenerWrapper(executor, listener);
+        mHdmiCecVolumeControlFeatureListeners.put(listener, wrappedListener);
+        try {
+            mService.addHdmiCecVolumeControlFeatureListener(wrappedListener);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Removes a listener to stop getting informed of changes to the state of the HDMI CEC volume
+     * control feature.
+     *
+     * @param listener {@link HdmiCecVolumeControlFeatureListener} instance to be removed
+     * @hide
+     */
+    @RequiresPermission(android.Manifest.permission.HDMI_CEC)
+    public void removeHdmiCecVolumeControlFeatureListener(
+            HdmiCecVolumeControlFeatureListener listener) {
+        if (mService == null) {
+            Log.e(TAG, "HdmiControlService is not available");
+            return;
+        }
+        IHdmiCecVolumeControlFeatureListener wrappedListener =
+                mHdmiCecVolumeControlFeatureListeners.remove(listener);
+        if (wrappedListener == null) {
+            Log.e(TAG, "tried to remove not-registered listener");
+            return;
+        }
+        try {
+            mService.removeHdmiCecVolumeControlFeatureListener(wrappedListener);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    private IHdmiCecVolumeControlFeatureListener createHdmiCecVolumeControlFeatureListenerWrapper(
+            Executor executor, final HdmiCecVolumeControlFeatureListener listener) {
+        return new android.hardware.hdmi.IHdmiCecVolumeControlFeatureListener.Stub() {
+            @Override
+            public void onHdmiCecVolumeControlFeature(boolean enabled) {
+                Binder.clearCallingIdentity();
+                executor.execute(() -> listener.onHdmiCecVolumeControlFeature(enabled));
             }
         };
     }

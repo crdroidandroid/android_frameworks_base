@@ -70,6 +70,9 @@ public class HdmiCecLocalDeviceAudioSystem extends HdmiCecLocalDeviceSource {
 
     private static final String TAG = "HdmiCecLocalDeviceAudioSystem";
 
+    private static final boolean WAKE_ON_HOTPLUG =
+            SystemProperties.getBoolean(Constants.PROPERTY_WAKE_ON_HOTPLUG, false);
+
     // Whether the System Audio Control feature is enabled or not. True by default.
     @GuardedBy("mLock")
     private boolean mSystemAudioControlFeatureEnabled;
@@ -299,7 +302,7 @@ public class HdmiCecLocalDeviceAudioSystem extends HdmiCecLocalDeviceSource {
     @ServiceThreadOnly
     void onHotplug(int portId, boolean connected) {
         assertRunOnServiceThread();
-        if (connected) {
+        if (WAKE_ON_HOTPLUG && connected) {
             mService.wakeUp();
         }
         if (mService.getPortInfo(portId).getType() == HdmiPortInfo.PORT_OUTPUT) {
@@ -502,7 +505,7 @@ public class HdmiCecLocalDeviceAudioSystem extends HdmiCecLocalDeviceSource {
     @ServiceThreadOnly
     protected boolean handleGiveAudioStatus(HdmiCecMessage message) {
         assertRunOnServiceThread();
-        if (isSystemAudioControlFeatureEnabled()) {
+        if (isSystemAudioControlFeatureEnabled() && mService.isHdmiCecVolumeControlEnabled()) {
             reportAudioStatus(message.getSource());
         } else {
             mService.maySendFeatureAbortCommand(message, Constants.ABORT_REFUSED);
@@ -835,6 +838,9 @@ public class HdmiCecLocalDeviceAudioSystem extends HdmiCecLocalDeviceSource {
 
     void reportAudioStatus(int source) {
         assertRunOnServiceThread();
+        if (!mService.isHdmiCecVolumeControlEnabled()) {
+            return;
+        }
 
         int volume = mService.getAudioManager().getStreamVolume(AudioManager.STREAM_MUSIC);
         boolean mute = mService.getAudioManager().isStreamMute(AudioManager.STREAM_MUSIC);

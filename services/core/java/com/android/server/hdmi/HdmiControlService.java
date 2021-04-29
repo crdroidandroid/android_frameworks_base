@@ -40,8 +40,10 @@ import android.hardware.hdmi.HdmiControlManager;
 import android.hardware.hdmi.HdmiDeviceInfo;
 import android.hardware.hdmi.HdmiHotplugEvent;
 import android.hardware.hdmi.HdmiPortInfo;
+import android.hardware.hdmi.IHdmiCecVolumeControlFeatureListener;
 import android.hardware.hdmi.IHdmiControlCallback;
 import android.hardware.hdmi.IHdmiControlService;
+import android.hardware.hdmi.IHdmiControlStatusChangeListener;
 import android.hardware.hdmi.IHdmiDeviceEventListener;
 import android.hardware.hdmi.IHdmiHotplugEventListener;
 import android.hardware.hdmi.IHdmiInputChangeListener;
@@ -61,6 +63,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
@@ -146,6 +149,10 @@ public class HdmiControlService extends SystemService {
     // Logical address of the active source.
     @GuardedBy("mLock")
     protected final ActiveSource mActiveSource = new ActiveSource();
+
+    // Whether HDMI CEC volume control is enabled or not.
+    @GuardedBy("mLock")
+    private boolean mHdmiCecVolumeControlEnabled;
 
     // Whether System Audio Mode is activated or not.
     @GuardedBy("mLock")
@@ -250,6 +257,16 @@ public class HdmiControlService extends SystemService {
 
     // Type of logical devices hosted in the system. Stored in the unmodifiable list.
     private final List<Integer> mLocalDevices;
+
+    // List of records for HDMI control status change listener for death monitoring.
+    @GuardedBy("mLock")
+    private final ArrayList<HdmiControlStatusChangeListenerRecord>
+            mHdmiControlStatusChangeListenerRecords = new ArrayList<>();
+
+    // List of records for HDMI control volume control status change listener for death monitoring.
+    @GuardedBy("mLock")
+    private final RemoteCallbackList<IHdmiCecVolumeControlFeatureListener>
+            mHdmiCecVolumeControlFeatureListenerRecords = new RemoteCallbackList<>();
 
     // List of records for hotplug event listener to handle the the caller killed in action.
     @GuardedBy("mLock")
@@ -453,9 +470,11 @@ public class HdmiControlService extends SystemService {
             mIoThread.start();
             mIoLooper = mIoThread.getLooper();
         }
-        mPowerStatus = HdmiControlManager.POWER_STATUS_TRANSIENT_TO_ON;
+        mPowerStatus = getInitialPowerStatus();
         mProhibitMode = false;
         mHdmiControlEnabled = readBooleanSetting(Global.HDMI_CONTROL_ENABLED, true);
+        mHdmiCecVolumeControlEnabled = readBooleanSetting(
+                Global.HDMI_CONTROL_VOLUME_CONTROL_ENABLED, true);
         mMhlInputChangeEnabled = readBooleanSetting(Global.MHL_INPUT_SWITCHING_ENABLED, true);
 
         if (mCecController == null) {
@@ -500,6 +519,28 @@ public class HdmiControlService extends SystemService {
         mMhlController.setOption(OPTION_MHL_SERVICE_CONTROL, ENABLED);
     }
 
+    private void bootCompleted() {
+        // on boot, if device is interactive, set HDMI CEC state as powered on as well
+        if (mPowerManager.isInteractive() && isPowerStandbyOrTransient()) {
+            onWakeUp();
+        }
+    }
+
+    /**
+     * Returns the initial power status used when the HdmiControlService starts.
+     */
+    @VisibleForTesting
+    int getInitialPowerStatus() {
+        // The initial power status is POWER_STATUS_TRANSIENT_TO_STANDBY.
+        // Once boot completes the service transitions to POWER_STATUS_ON if the device is
+        // interactive.
+        // Quiescent boot is a special boot mode, in which the screen stays off during boot
+        // and the device goes to sleep after boot has finished.
+        // We don't transition to POWER_STATUS_ON initially, as we might be booting in quiescent
+        // mode, during which we don't want to appear powered on to avoid being made active source.
+        return HdmiControlManager.POWER_STATUS_TRANSIENT_TO_STANDBY;
+    }
+
     @VisibleForTesting
     void setCecController(HdmiCecController cecController) {
         mCecController = cecController;
@@ -515,7 +556,9 @@ public class HdmiControlService extends SystemService {
         if (phase == SystemService.PHASE_SYSTEM_SERVICES_READY) {
             mTvInputManager = (TvInputManager) getContext().getSystemService(
                     Context.TV_INPUT_SERVICE);
-            mPowerManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+            mPowerManager = getContext().getSystemService(PowerManager.class);
+        } else if (phase == SystemService.PHASE_BOOT_COMPLETED) {
+            runOnServiceThread(this::bootCompleted);
         }
     }
 
@@ -541,9 +584,7 @@ public class HdmiControlService extends SystemService {
      * Called when the initialization of local devices is complete.
      */
     private void onInitializeCecComplete(int initiatedBy) {
-        if (mPowerStatus == HdmiControlManager.POWER_STATUS_TRANSIENT_TO_ON) {
-            mPowerStatus = HdmiControlManager.POWER_STATUS_ON;
-        }
+        updatePowerStatusOnInitializeCecComplete();
         mWakeUpMessageReceived = false;
 
         if (isTvDeviceEnabled()) {
@@ -564,6 +605,18 @@ public class HdmiControlService extends SystemService {
         }
         if (reason != -1) {
             invokeVendorCommandListenersOnControlStateChanged(true, reason);
+            announceHdmiControlStatusChange(true);
+        }
+    }
+
+    /**
+     * Updates the power status once the initialization of local devices is complete.
+     */
+    private void updatePowerStatusOnInitializeCecComplete() {
+        if (mPowerStatus == HdmiControlManager.POWER_STATUS_TRANSIENT_TO_ON) {
+            mPowerStatus = HdmiControlManager.POWER_STATUS_ON;
+        } else if (mPowerStatus == HdmiControlManager.POWER_STATUS_TRANSIENT_TO_STANDBY) {
+            mPowerStatus = HdmiControlManager.POWER_STATUS_STANDBY;
         }
     }
 
@@ -571,6 +624,7 @@ public class HdmiControlService extends SystemService {
         ContentResolver resolver = getContext().getContentResolver();
         String[] settings = new String[] {
                 Global.HDMI_CONTROL_ENABLED,
+                Global.HDMI_CONTROL_VOLUME_CONTROL_ENABLED,
                 Global.HDMI_CONTROL_AUTO_WAKEUP_ENABLED,
                 Global.HDMI_CONTROL_AUTO_DEVICE_OFF_ENABLED,
                 Global.HDMI_SYSTEM_AUDIO_CONTROL_ENABLED,
@@ -598,6 +652,9 @@ public class HdmiControlService extends SystemService {
             switch (option) {
                 case Global.HDMI_CONTROL_ENABLED:
                     setControlEnabled(enabled);
+                    break;
+                case Global.HDMI_CONTROL_VOLUME_CONTROL_ENABLED:
+                    setHdmiCecVolumeControlEnabled(enabled);
                     break;
                 case Global.HDMI_CONTROL_AUTO_WAKEUP_ENABLED:
                     if (isTvDeviceEnabled()) {
@@ -1158,7 +1215,9 @@ public class HdmiControlService extends SystemService {
     }
 
     void setAudioStatus(boolean mute, int volume) {
-        if (!isTvDeviceEnabled() || !tv().isSystemAudioActivated()) {
+        if (!isTvDeviceEnabled()
+                || !tv().isSystemAudioActivated()
+                || !isHdmiCecVolumeControlEnabled()) {
             return;
         }
         AudioManager audioManager = getAudioManager();
@@ -1312,6 +1371,37 @@ public class HdmiControlService extends SystemService {
         @Override
         public void binderDied() {
             mMhlVendorCommandListenerRecords.remove(this);
+        }
+    }
+
+    // Record class that monitors the event of the caller of being killed. Used to clean up
+    // the listener list and record list accordingly.
+    private final class HdmiControlStatusChangeListenerRecord implements IBinder.DeathRecipient {
+        private final IHdmiControlStatusChangeListener mListener;
+
+        HdmiControlStatusChangeListenerRecord(IHdmiControlStatusChangeListener listener) {
+            mListener = listener;
+        }
+
+        @Override
+        public void binderDied() {
+            synchronized (mLock) {
+                mHdmiControlStatusChangeListenerRecords.remove(this);
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof HdmiControlStatusChangeListenerRecord)) return false;
+            if (obj == this) return true;
+            HdmiControlStatusChangeListenerRecord other =
+                    (HdmiControlStatusChangeListenerRecord) obj;
+            return other.mListener == this.mListener;
+        }
+
+        @Override
+        public int hashCode() {
+            return mListener.hashCode();
         }
     }
 
@@ -1619,6 +1709,35 @@ public class HdmiControlService extends SystemService {
                 }
             });
         }
+
+        @Override
+        public void addHdmiControlStatusChangeListener(
+                final IHdmiControlStatusChangeListener listener) {
+            enforceAccessPermission();
+            HdmiControlService.this.addHdmiControlStatusChangeListener(listener);
+        }
+
+        @Override
+        public void removeHdmiControlStatusChangeListener(
+                final IHdmiControlStatusChangeListener listener) {
+            enforceAccessPermission();
+            HdmiControlService.this.removeHdmiControlStatusChangeListener(listener);
+        }
+
+        @Override
+        public void addHdmiCecVolumeControlFeatureListener(
+                final IHdmiCecVolumeControlFeatureListener listener) {
+            enforceAccessPermission();
+            HdmiControlService.this.addHdmiCecVolumeControlFeatureListener(listener);
+        }
+
+        @Override
+        public void removeHdmiCecVolumeControlFeatureListener(
+                final IHdmiCecVolumeControlFeatureListener listener) {
+            enforceAccessPermission();
+            HdmiControlService.this.removeHdmiControlVolumeControlStatusChangeListener(listener);
+        }
+
 
         @Override
         public void addHotplugEventListener(final IHdmiHotplugEventListener listener) {
@@ -2004,6 +2123,24 @@ public class HdmiControlService extends SystemService {
         }
 
         @Override
+        public boolean isHdmiCecVolumeControlEnabled() {
+            enforceAccessPermission();
+            return HdmiControlService.this.isHdmiCecVolumeControlEnabled();
+        }
+
+        @Override
+        public void setHdmiCecVolumeControlEnabled(final boolean isHdmiCecVolumeControlEnabled) {
+            enforceAccessPermission();
+            runOnServiceThread(new Runnable() {
+                @Override
+                public void run() {
+                    HdmiControlService.this.setHdmiCecVolumeControlEnabled(
+                            isHdmiCecVolumeControlEnabled);
+                }
+            });
+        }
+
+        @Override
         public void reportAudioStatus(final int deviceType, final int volume, final int maxVolume,
                 final boolean isMute) {
             enforceAccessPermission();
@@ -2067,6 +2204,7 @@ public class HdmiControlService extends SystemService {
             pw.println("mHdmiControlEnabled: " + mHdmiControlEnabled);
             pw.println("mMhlInputChangeEnabled: " + mMhlInputChangeEnabled);
             pw.println("mSystemAudioActivated: " + isSystemAudioActivated());
+            pw.println("mHdmiCecVolumeControlEnabled " + mHdmiCecVolumeControlEnabled);
             pw.decreaseIndent();
 
             pw.println("mMhlController: ");
@@ -2133,6 +2271,78 @@ public class HdmiControlService extends SystemService {
             return;
         }
         source.queryDisplayStatus(callback);
+    }
+
+    private void addHdmiControlStatusChangeListener(
+            final IHdmiControlStatusChangeListener listener) {
+        final HdmiControlStatusChangeListenerRecord record =
+                new HdmiControlStatusChangeListenerRecord(listener);
+        try {
+            listener.asBinder().linkToDeath(record, 0);
+        } catch (RemoteException e) {
+            Slog.w(TAG, "Listener already died");
+            return;
+        }
+        synchronized (mLock) {
+            mHdmiControlStatusChangeListenerRecords.add(record);
+        }
+
+        // Inform the listener of the initial state of each HDMI port by generating
+        // hotplug events.
+        runOnServiceThread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mLock) {
+                    if (!mHdmiControlStatusChangeListenerRecords.contains(record)) return;
+                }
+
+                // Return the current status of mHdmiControlEnabled;
+                synchronized (mLock) {
+                    invokeHdmiControlStatusChangeListenerLocked(listener, mHdmiControlEnabled);
+                }
+            }
+        });
+    }
+
+    private void removeHdmiControlStatusChangeListener(
+            final IHdmiControlStatusChangeListener listener) {
+        synchronized (mLock) {
+            for (HdmiControlStatusChangeListenerRecord record :
+                    mHdmiControlStatusChangeListenerRecords) {
+                if (record.mListener.asBinder() == listener.asBinder()) {
+                    listener.asBinder().unlinkToDeath(record, 0);
+                    mHdmiControlStatusChangeListenerRecords.remove(record);
+                    break;
+                }
+            }
+        }
+    }
+
+    @VisibleForTesting
+    void addHdmiCecVolumeControlFeatureListener(
+            final IHdmiCecVolumeControlFeatureListener listener) {
+        mHdmiCecVolumeControlFeatureListenerRecords.register(listener);
+
+        runOnServiceThread(new Runnable() {
+            @Override
+            public void run() {
+                // Return the current status of mHdmiCecVolumeControlEnabled;
+                synchronized (mLock) {
+                    try {
+                        listener.onHdmiCecVolumeControlFeature(mHdmiCecVolumeControlEnabled);
+                    } catch (RemoteException e) {
+                        Slog.e(TAG, "Failed to report HdmiControlVolumeControlStatusChange: "
+                                + mHdmiCecVolumeControlEnabled, e);
+                    }
+                }
+            }
+        });
+    }
+
+    @VisibleForTesting
+    void removeHdmiControlVolumeControlStatusChangeListener(
+            final IHdmiCecVolumeControlFeatureListener listener) {
+        mHdmiCecVolumeControlFeatureListenerRecords.unregister(listener);
     }
 
     private void addHotplugEventListener(final IHdmiHotplugEventListener listener) {
@@ -2367,6 +2577,60 @@ public class HdmiControlService extends SystemService {
         }
     }
 
+    private void announceHdmiControlStatusChange(boolean isEnabled) {
+        assertRunOnServiceThread();
+        synchronized (mLock) {
+            for (HdmiControlStatusChangeListenerRecord record :
+                    mHdmiControlStatusChangeListenerRecords) {
+                invokeHdmiControlStatusChangeListenerLocked(record.mListener, isEnabled);
+            }
+        }
+    }
+
+    private void invokeHdmiControlStatusChangeListenerLocked(
+            IHdmiControlStatusChangeListener listener, boolean isEnabled) {
+        if (isEnabled) {
+            queryDisplayStatus(new IHdmiControlCallback.Stub() {
+                public void onComplete(int status) {
+                    boolean isAvailable = true;
+                    if (status == HdmiControlManager.POWER_STATUS_UNKNOWN
+                            || status == HdmiControlManager.RESULT_EXCEPTION
+                            || status == HdmiControlManager.RESULT_SOURCE_NOT_AVAILABLE) {
+                        isAvailable = false;
+                    }
+
+                    try {
+                        listener.onStatusChange(isEnabled, isAvailable);
+                    } catch (RemoteException e) {
+                        Slog.e(TAG, "Failed to report HdmiControlStatusChange: " + isEnabled
+                                + " isAvailable: " + isAvailable, e);
+                    }
+                }
+            });
+            return;
+        }
+
+        try {
+            listener.onStatusChange(isEnabled, false);
+        } catch (RemoteException e) {
+            Slog.e(TAG, "Failed to report HdmiControlStatusChange: " + isEnabled
+                    + " isAvailable: " + false, e);
+        }
+    }
+
+    private void announceHdmiCecVolumeControlFeatureChange(boolean isEnabled) {
+        assertRunOnServiceThread();
+        mHdmiCecVolumeControlFeatureListenerRecords.broadcast(listener -> {
+            try {
+                listener.onHdmiCecVolumeControlFeature(isEnabled);
+            } catch (RemoteException e) {
+                Slog.e(TAG,
+                        "Failed to report HdmiControlVolumeControlStatusChange: "
+                                + isEnabled);
+            }
+        });
+    }
+
     public HdmiCecLocalDeviceTv tv() {
         return (HdmiCecLocalDeviceTv) mCecController.getLocalDevice(HdmiDeviceInfo.DEVICE_TV);
     }
@@ -2416,6 +2680,13 @@ public class HdmiControlService extends SystemService {
     int getPowerStatus() {
         assertRunOnServiceThread();
         return mPowerStatus;
+    }
+
+    @ServiceThreadOnly
+    @VisibleForTesting
+    void setPowerStatus(int powerStatus) {
+        assertRunOnServiceThread();
+        mPowerStatus = powerStatus;
     }
 
     @ServiceThreadOnly
@@ -2683,6 +2954,30 @@ public class HdmiControlService extends SystemService {
         }
     }
 
+    void setHdmiCecVolumeControlEnabled(boolean isHdmiCecVolumeControlEnabled) {
+        assertRunOnServiceThread();
+        synchronized (mLock) {
+            mHdmiCecVolumeControlEnabled = isHdmiCecVolumeControlEnabled;
+
+            boolean storedValue = readBooleanSetting(Global.HDMI_CONTROL_VOLUME_CONTROL_ENABLED,
+                    true);
+            if (storedValue != isHdmiCecVolumeControlEnabled) {
+                HdmiLogger.debug("Changing HDMI CEC volume control feature state: %s",
+                        isHdmiCecVolumeControlEnabled);
+                writeBooleanSetting(Global.HDMI_CONTROL_VOLUME_CONTROL_ENABLED,
+                        isHdmiCecVolumeControlEnabled);
+            }
+        }
+        announceHdmiCecVolumeControlFeatureChange(isHdmiCecVolumeControlEnabled);
+    }
+
+    boolean isHdmiCecVolumeControlEnabled() {
+        assertRunOnServiceThread();
+        synchronized (mLock) {
+            return mHdmiCecVolumeControlEnabled;
+        }
+    }
+
     boolean isProhibitMode() {
         synchronized (mLock) {
             return mProhibitMode;
@@ -2723,8 +3018,12 @@ public class HdmiControlService extends SystemService {
 
         if (enabled) {
             enableHdmiControlService();
+            setHdmiCecVolumeControlEnabled(
+                    readBooleanSetting(Global.HDMI_CONTROL_VOLUME_CONTROL_ENABLED, true));
             return;
         }
+
+        mHdmiCecVolumeControlEnabled = false;
         // Call the vendor handler before the service is disabled.
         invokeVendorCommandListenersOnControlStateChanged(false,
                 HdmiControlManager.CONTROL_STATE_CHANGED_REASON_SETTING);
@@ -2736,6 +3035,8 @@ public class HdmiControlService extends SystemService {
                 disableHdmiControlService();
             }
         });
+        announceHdmiControlStatusChange(enabled);
+
         return;
     }
 
