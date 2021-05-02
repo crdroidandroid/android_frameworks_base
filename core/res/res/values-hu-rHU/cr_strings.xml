@@ -39,4 +39,7 @@
     <string name="aerr_copy">Az összeomlási napló URL-jének másolása</string>
     <string name="url_copy_success">Az URL sikeresen másolva</string>
     <string name="url_copy_failed">Hiba történt a napló dogbin-re való feltöltése során</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
 </resources>
