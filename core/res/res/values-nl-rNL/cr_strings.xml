@@ -40,4 +40,7 @@
     <string name="aerr_copy">Kopieer crash log URL</string>
     <string name="url_copy_success">URL succesvol gekopieerd</string>
     <string name="url_copy_failed">Er is een fout opgetreden tijdens het uploaden van de log naar dogbin</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
 </resources>
