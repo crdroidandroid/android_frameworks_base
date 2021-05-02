@@ -355,20 +355,21 @@ public class AuthController extends SystemUI implements CommandQueue.Callbacks,
         // TODO(b/141025588): Create separate methods for handling hard and soft errors.
         final boolean isSoftError = (error == BiometricConstants.BIOMETRIC_PAUSED_REJECTED
                 || error == BiometricConstants.BIOMETRIC_ERROR_TIMEOUT);
-
-        if (mCurrentDialog.isAllowDeviceCredentials() && isLockout) {
-            if (DEBUG) Log.d(TAG, "onBiometricError, lockout");
-            mCurrentDialog.animateToCredentialUI();
-        } else if (isSoftError) {
-            final String errorMessage = (error == BiometricConstants.BIOMETRIC_PAUSED_REJECTED)
-                    ? mContext.getString(R.string.biometric_not_recognized)
-                    : getErrorString(modality, error, vendorCode);
-            if (DEBUG) Log.d(TAG, "onBiometricError, soft error: " + errorMessage);
-            mCurrentDialog.onAuthenticationFailed(errorMessage);
-        } else {
-            final String errorMessage = getErrorString(modality, error, vendorCode);
-            if (DEBUG) Log.d(TAG, "onBiometricError, hard error: " + errorMessage);
-            mCurrentDialog.onError(errorMessage);
+        if (mCurrentDialog != null) {
+            if (mCurrentDialog.isAllowDeviceCredentials() && isLockout) {
+                if (DEBUG) Log.d(TAG, "onBiometricError, lockout");
+                mCurrentDialog.animateToCredentialUI();
+            } else if (isSoftError) {
+                final String errorMessage = (error == BiometricConstants.BIOMETRIC_PAUSED_REJECTED)
+                        ? mContext.getString(R.string.biometric_not_recognized)
+                        : getErrorString(modality, error, vendorCode);
+                if (DEBUG) Log.d(TAG, "onBiometricError, soft error: " + errorMessage);
+                mCurrentDialog.onAuthenticationFailed(errorMessage);
+            } else {
+                final String errorMessage = getErrorString(modality, error, vendorCode);
+                if (DEBUG) Log.d(TAG, "onBiometricError, hard error: " + errorMessage);
+                mCurrentDialog.onError(errorMessage);
+            }
         }
     }
 
