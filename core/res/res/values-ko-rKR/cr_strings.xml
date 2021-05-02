@@ -39,4 +39,7 @@
     <string name="aerr_copy">비정상 종료 로그 URL 복사</string>
     <string name="url_copy_success">링크가 성공적으로 복사되었습니다</string>
     <string name="url_copy_failed">로그를 dogbin에 업로드하는 중 오류가 발생했습니다.</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
 </resources>
