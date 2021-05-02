@@ -218,7 +218,7 @@
     <string name="applock_credential">&#160;to unlock</string>
     <string name="applock_unlock">Unlock</string>
     <!-- Oroño clock -->
-    <string name="date_long_title_today">Today is %s</string>
+    <string name="date_long_title_today">Dnes je %s</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">Ponuka napájania</string>
 </resources>
