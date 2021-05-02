@@ -39,4 +39,7 @@
     <string name="aerr_copy">نسخ رابط سجل العُطل</string>
     <string name="url_copy_success">تم نسخ الرابط بنجاح</string>
     <string name="url_copy_failed">حدث خطأ أثناء رفع السجل إلى dogbin</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
 </resources>
