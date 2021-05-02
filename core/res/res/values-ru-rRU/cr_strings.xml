@@ -41,6 +41,6 @@
     <string name="url_copy_success">Ссылка успешно скопирована</string>
     <string name="url_copy_failed">Произошла ошибка при загрузке журнала в dogbin</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
-    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
+    <string name="app_clipboard_access_denied">%1$s отказано в доступе к буферу обмена</string>
+    <string name="app_clipboard_access_granted">%1$s предоставлен доступ к буферу обмена</string>
 </resources>
