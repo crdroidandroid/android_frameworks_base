@@ -39,4 +39,7 @@
     <string name="aerr_copy">Skopiuj log URL awarii</string>
     <string name="url_copy_success">URL skopiowany pomyślnie</string>
     <string name="url_copy_failed">Wystąpił błąd podczas przesyłania logów do serwisu dogbin</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
 </resources>
