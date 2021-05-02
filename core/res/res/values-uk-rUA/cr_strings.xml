@@ -40,4 +40,7 @@
     <string name="aerr_copy">Копіювати URL звіту про помилку</string>
     <string name="url_copy_success">URL успішно скопійовано</string>
     <string name="url_copy_failed">Помилка під час завантаження файлу звіту до dogbin</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
 </resources>
