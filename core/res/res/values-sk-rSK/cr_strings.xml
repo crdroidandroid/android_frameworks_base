@@ -41,6 +41,6 @@
     <string name="url_copy_success">URL úspešne skopírované</string>
     <string name="url_copy_failed">Vyskytla sa chyba pri nahrávaní log súboru na dogbin</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
+    <string name="app_clipboard_access_denied">%1$s bol odmietnutý prístup do schránky</string>
     <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
 </resources>
