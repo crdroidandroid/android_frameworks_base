@@ -228,23 +228,29 @@ public abstract class Ticker implements DarkReceiver {
         int initialCount = mSegments.size();
         ContentResolver resolver = mContext.getContentResolver();
 
-        if (isMusic) {
+        if (isMusic && mediaMetaData != null) {
             CharSequence artist = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ARTIST);
             CharSequence album = mediaMetaData.getText(MediaMetadata.METADATA_KEY_ALBUM);
             CharSequence title = mediaMetaData.getText(MediaMetadata.METADATA_KEY_TITLE);
-            if (artist != null && album != null && title != null) {
-                if (mShowingMediaMetadata != null &&
-                        artist.equals(mShowingMediaMetadata.getText(
-                                MediaMetadata.METADATA_KEY_ARTIST)) &&
-                        album.equals(mShowingMediaMetadata.getText(
-                                MediaMetadata.METADATA_KEY_ALBUM)) &&
-                        title.equals(mShowingMediaMetadata.getText(
-                                MediaMetadata.METADATA_KEY_TITLE))) {
+            if (artist != null || album != null || title != null) {
+                if (mShowingMediaMetadata == mediaMetaData) {
                     // Already shown
                     return;
                 }
                 mShowingMediaMetadata = mediaMetaData;
-                n.getNotification().tickerText = artist.toString() + " - " + album.toString() + " - " + title.toString();
+                String builder = "";
+                if (artist != null)
+                    builder = artist.toString();
+                if (artist != null && album != null)
+                    builder = builder + " - ";
+                if (album != null)
+                    builder = builder + album.toString();
+                if ((artist != null || album != null) && title != null)
+                    builder = builder + " - ";
+                if (title != null)
+                    builder = builder + title.toString();
+
+                n.getNotification().tickerText = builder;
             } else if (notificationText != null) {
                 if (mShowingNotificationText != null && notificationText.equals(mShowingNotificationText)) {
                     // Already shown
