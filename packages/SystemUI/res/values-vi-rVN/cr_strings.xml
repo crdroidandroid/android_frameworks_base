@@ -217,5 +217,5 @@
     <!-- Oroño clock -->
     <string name="date_long_title_today">Hôm nay là %s</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Menu nguồn</string>
+    <string name="quick_settings_power_menu_label">Danh sách nguồn</string>
 </resources>
