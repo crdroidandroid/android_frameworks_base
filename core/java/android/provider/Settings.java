@@ -5191,6 +5191,12 @@ public final class Settings {
                 "lockscreen_quick_unlock_control";
 
         /**
+         * Whether to enable or disable lockscreen background blur
+         * @hide
+         */
+		public static final String LOCKSCREEN_BLUR = "lockscreen_blur";
+
+        /**
          * Whether to enable or disable vibration on succesful fingerprint auth
          * @hide
          */

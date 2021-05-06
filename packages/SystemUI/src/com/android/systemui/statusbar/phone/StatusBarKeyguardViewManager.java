@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
@@ -50,11 +51,13 @@ import com.android.systemui.DejankUtils;
 import com.android.systemui.Dependency;
 import com.android.systemui.SystemUIFactory;
 import com.android.systemui.dock.DockManager;
+import com.android.systemui.dump.DumpManager;
 import com.android.systemui.keyguard.DismissCallbackRegistry;
 import com.android.systemui.plugins.FalsingManager;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.shared.system.QuickStepContract;
 import com.android.systemui.shared.system.SysUiStatsLog;
+import com.android.systemui.statusbar.BlurUtils;
 import com.android.systemui.statusbar.CrossFadeHelper;
 import com.android.systemui.statusbar.NotificationMediaManager;
 import com.android.systemui.statusbar.RemoteInputController;
@@ -195,6 +198,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
     private final DockManager mDockManager;
     private final KeyguardUpdateMonitor mKeyguardUpdateManager;
     private KeyguardBypassController mBypassController;
+    private final BlurUtils mBlurUtils;
 
     private final KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
             new KeyguardUpdateMonitorCallback() {
@@ -233,6 +237,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
         mKeyguardUpdateManager = keyguardUpdateMonitor;
         mStatusBarStateController = sysuiStatusBarStateController;
         mDockManager = dockManager;
+        mBlurUtils = new BlurUtils(mContext.getResources(), new DumpManager());
     }
 
     @Override
@@ -839,6 +844,20 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
         boolean bouncerInTransit = mBouncer.inTransit();
         boolean bouncerDismissible = !mBouncer.isFullscreenBouncer();
         boolean remoteInputActive = mRemoteInputActive;
+
+        boolean mBackgroundBlur = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_BLUR, 0,
+                UserHandle.USER_CURRENT) != 0;
+
+        if (mBackgroundBlur) {
+            if (showing)
+            mBlurUtils.applyBlur(getViewRootImpl(),
+                    mBlurUtils.blurRadiusOfRatio(1));
+            else
+            mBlurUtils.applyBlur(getViewRootImpl(),
+                    mBlurUtils.blurRadiusOfRatio(0));
+        }
 
         if ((bouncerDismissible || !showing || remoteInputActive) !=
                 (mLastBouncerDismissible || !mLastShowing || mLastRemoteInputActive)
