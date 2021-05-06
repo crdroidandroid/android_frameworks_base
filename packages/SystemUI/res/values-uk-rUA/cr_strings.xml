@@ -259,7 +259,7 @@
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Меню кнопки живлення</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Force stop</string>
+    <string name="force_stop_dlg_title">Примусово припинити?</string>
+    <string name="force_stop_dlg_text">Примусове закриття додатку може призвести до збою в його роботі.</string>
+    <string name="guts_force_close_app">Примусово зупинити</string>
 </resources>
