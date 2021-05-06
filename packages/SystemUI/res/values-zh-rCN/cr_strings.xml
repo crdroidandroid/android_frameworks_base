@@ -219,7 +219,7 @@
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">电源菜单</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Force stop</string>
+    <string name="force_stop_dlg_title">要强行停止吗？</string>
+    <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
+    <string name="guts_force_close_app">强行停止</string>
 </resources>
