@@ -255,4 +255,8 @@
     <string name="date_long_title_today">Σήμερα είναι %s</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Μενού Ισχύος</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Αναγκαστική διακοπή;</string>
+    <string name="force_stop_dlg_text">Αν επιβάλετε τη διακοπή μιας εφαρμογής, ενδέχεται να μην λειτουργήσει σωστά.</string>
+    <string name="guts_force_close_app">Αναγκαστική διακοπή</string>
 </resources>

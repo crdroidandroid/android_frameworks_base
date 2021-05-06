@@ -219,4 +219,8 @@
     <string name="date_long_title_today">Ma %s van</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Kikapcsolómenü</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Kényszeríti a leállítást?</string>
+    <string name="force_stop_dlg_text">Ha egy alkalmazást leállásra kényszerít, lehetséges, hogy az hibásan fog működni.</string>
+    <string name="guts_force_close_app">Kényszerített leállítás</string>
 </resources>

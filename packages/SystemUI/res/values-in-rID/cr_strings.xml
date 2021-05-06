@@ -242,4 +242,8 @@ Sembilan</string>
     <string name="date_long_title_today">Hari ini %s</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Menu daya</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Paksa berhenti?</string>
+    <string name="force_stop_dlg_text">Jika Anda menghentikan paksa aplikasi, kemungkinan akan terjadi gagal fungsi.</string>
+    <string name="guts_force_close_app">Paksa berhenti</string>
 </resources>

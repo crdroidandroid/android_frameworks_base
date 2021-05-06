@@ -219,4 +219,8 @@
     <string name="date_long_title_today">Nous sommes aujourd\'hui le %s</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Menu Marche/Arrêt</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Forcer l\'arrêt ?</string>
+    <string name="force_stop_dlg_text">Forcer l\'arrêt d\'une application peut provoquer des dysfonctionnements.</string>
+    <string name="guts_force_close_app">Forcer l\'arrêt</string>
 </resources>

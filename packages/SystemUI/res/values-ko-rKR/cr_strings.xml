@@ -251,4 +251,8 @@
     <string name="date_long_title_today">오늘은 %s이다</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">전원 메뉴</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">강제로 중지하시겠습니까?</string>
+    <string name="force_stop_dlg_text">강제로 앱을 종료하면 예기치 않은 오류가 발생할 수 있습니다.</string>
+    <string name="guts_force_close_app">강제 종료</string>
 </resources>

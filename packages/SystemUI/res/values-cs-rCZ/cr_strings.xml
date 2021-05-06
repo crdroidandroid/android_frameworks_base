@@ -221,4 +221,8 @@
     <string name="date_long_title_today">Dnes je %s</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Menu napájení</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Vynutit ukončení?</string>
+    <string name="force_stop_dlg_text">Vynucené ukončení může způsobit nepředvídatelné chování aplikace.</string>
+    <string name="guts_force_close_app">Vynutit ukončení</string>
 </resources>

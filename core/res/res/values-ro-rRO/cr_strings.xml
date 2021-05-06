@@ -40,4 +40,7 @@
     <string name="aerr_copy">Copiază URL-ul jurnalului de eroare</string>
     <string name="url_copy_success">URL-ul a fost copiat cu succes</string>
     <string name="url_copy_failed">A apărut o eroare la încărcarea registrului în dogbin</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s nu are acces la clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s a primit acces la clipboard</string>
 </resources>

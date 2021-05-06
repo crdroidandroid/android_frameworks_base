@@ -218,4 +218,8 @@
     <string name="date_long_title_today">今天是%s</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">電源選單</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">是否強制停止？</string>
+    <string name="force_stop_dlg_text">如果您強制停止應用程式，應用程式可能會無法正常運作。</string>
+    <string name="guts_force_close_app">強制停止</string>
 </resources>

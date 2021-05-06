@@ -219,4 +219,8 @@
     <string name="date_long_title_today">Bugün %s</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Güç menüsü</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Durmaya zorlansın mı?</string>
+    <string name="force_stop_dlg_text">Uygulamayı durmaya zorlamak, daha sonra hata almanıza neden olabilir.</string>
+    <string name="guts_force_close_app">Durmaya zorla</string>
 </resources>

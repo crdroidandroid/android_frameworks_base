@@ -40,4 +40,7 @@
     <string name="aerr_copy">Kopírovat URL protokolu o\u00a0selhání</string>
     <string name="url_copy_success">URL byla úspěšně zkopírována</string>
     <string name="url_copy_failed">Při nahrávání protokolu o\u00a0selhání na dogbin došlo k\u00a0chybě</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">Aplikaci %1$s byl odepřen přístup ke schránce</string>
+    <string name="app_clipboard_access_granted">Aplikaci %1$s byl udělen přístup ke schránce</string>
 </resources>

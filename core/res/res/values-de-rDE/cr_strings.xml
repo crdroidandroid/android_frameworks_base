@@ -39,4 +39,7 @@
     <string name="aerr_copy">URL des Absturzberichts kopieren</string>
     <string name="url_copy_success">URL erfolgreich kopiert</string>
     <string name="url_copy_failed">Beim Upload des Protokolls ist ein Fehler aufgetreten</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s wurde der Zugriff auf die Zwischenablage verweigert</string>
+    <string name="app_clipboard_access_granted">%1$s wurde Zugriff auf die Zwischenablage gewährt</string>
 </resources>
