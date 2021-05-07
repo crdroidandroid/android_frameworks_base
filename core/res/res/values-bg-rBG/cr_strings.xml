@@ -22,12 +22,12 @@
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_fake_package_signature">Мним подпис на пакета</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgroupdesc_fake_package_signature">allow to spoof package signature</string>
+    <string name="permgroupdesc_fake_package_signature">позволяване на фалшифициране на подписа на пакета</string>
     <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
-    <string name="permgrouprequest_fake_package_signature">Allow
-        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; to spoof package signature?</string>
+    <string name="permgrouprequest_fake_package_signature">Позволи
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; да фалшифицира подписа на пакета?</string>
     <!-- Long-press kill application -->
-    <string name="app_killed_message">Application killed</string>
+    <string name="app_killed_message">Приложението е спряно</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Режим на игра</string>
     <string name="gaming_mode_notification_title">Режим на игра е разрешен</string>
@@ -37,8 +37,8 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Натиснете и задръжте бутона за включване, за да отключите</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
+    <string name="aerr_copy">Копиране на URL адреса на регистъра за сривове</string>
+    <string name="url_copy_success">URL aдресът е копиран успешно</string>
     <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
     <!-- Clipboard access toast -->
     <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
