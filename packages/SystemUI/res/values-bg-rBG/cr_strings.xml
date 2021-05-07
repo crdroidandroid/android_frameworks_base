@@ -16,12 +16,12 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb/s</string>
-    <string name="megabitspersecond_short">Mb/s</string>
-    <string name="gigabitspersecond_short">Gb/s</string>
-    <string name="kilobytespersecond_short">kB/s</string>
-    <string name="megabytespersecond_short">MB/s</string>
-    <string name="gigabytespersecond_short">GB/s</string>
+    <string name="kilobitspersecond_short">kб/с</string>
+    <string name="megabitspersecond_short">Mб/с</string>
+    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="kilobytespersecond_short">kб/с</string>
+    <string name="megabytespersecond_short">MБ/с</string>
+    <string name="gigabytespersecond_short">Гб/с</string>
     <!-- Omnijaws Weather -->
     <string name="omnijaws_service_error">Грешка</string>
     <string name="omnijaws_service_unkown">Няма данни за времето</string>
@@ -45,8 +45,8 @@
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp зареждане (<xliff:g id="charging_time_left" example="4 часа и 2 минути">%1$s</xliff:g> до пълно зареждане)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp зареждане</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC зареждане (<xliff:g id="charging_time_left" example="4 часа и 2 минути">%1$s</xliff:g> до пълно зареждане)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC зареждане</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Информация за CPU</string>
     <!-- FPS Info tile -->
@@ -81,8 +81,8 @@
     <string name="quick_settings_compass_W">Запад</string>
     <string name="quick_settings_compass_NW">Северозапад</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Език</string>
+    <string name="quick_settings_locale_more_locales_toast">Моля, конфигурирате няколко езика за да разрешите функцията за превключване</string>
     <!-- Time displayed on typographic clock face, which displays the time in words.
              Example:
 
@@ -114,16 +114,16 @@
     <string name="text_clock_h_eleven">Единадесет</string>
     <string name="text_clock_h_twelve">Дванадесет</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
-    <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
-    <string name="text_clock_m_two">O’Two</string>
-    <string name="text_clock_m_three">O’Three</string>
-    <string name="text_clock_m_four">O’Four</string>
-    <string name="text_clock_m_five">O’Five</string>
-    <string name="text_clock_m_six">O’Six</string>
-    <string name="text_clock_m_seven">O’Seven</string>
-    <string name="text_clock_m_eight">O’Eight</string>
-    <string name="text_clock_m_nine">O’Nine</string>
+    <string name="text_clock_m_zero">Нула нула</string>
+    <string name="text_clock_m_one">Нула една</string>
+    <string name="text_clock_m_two">Нула две</string>
+    <string name="text_clock_m_three">Нула три</string>
+    <string name="text_clock_m_four">Нула четири</string>
+    <string name="text_clock_m_five">Нула пет</string>
+    <string name="text_clock_m_six">Нула шест</string>
+    <string name="text_clock_m_seven">Нула седем</string>
+    <string name="text_clock_m_eight">Нула осем</string>
+    <string name="text_clock_m_nine">Нула девет</string>
     <string name="text_clock_m_ten">Десет</string>
     <string name="text_clock_m_eleven">Единадесет</string>
     <string name="text_clock_m_twelve">Дванадесет</string>
@@ -178,20 +178,20 @@
     <!-- Samsung clock -->
     <!-- Tux clock -->
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Delete</string>
+    <string name="screenrecord_delete_label">Изтриване</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Screen recording deleted</string>
+    <string name="screenrecord_delete_description">Запис на екрана е изтрит</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Priority</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
+    <string name="volume_ringer_priority_only">Приоритет</string>
+    <string name="volume_ringer_alarms_only">Будилници</string>
     <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
+    <string name="tristate_flashlight_on">Фенерчето е включено</string>
+    <string name="tristate_flashlight_off">Фенерчето е изключено</string>
+    <string name="tristate_flashlight_blink">Мигане на фенерче</string>
+    <string name="tristate_brightness_bright">Максимална яркост</string>
+    <string name="tristate_brightness_dark">Минимална яркост</string>
+    <string name="tristate_brightness_auto">Автоматична яркост</string>
+    <string name="tristate_rotation_auto">Автоматично завъртане</string>
     <string name="tristate_rotation_0">Portrait</string>
     <string name="tristate_rotation_90">Landscape (90°)</string>
     <string name="tristate_rotation_270">Landscape (270°)</string>
