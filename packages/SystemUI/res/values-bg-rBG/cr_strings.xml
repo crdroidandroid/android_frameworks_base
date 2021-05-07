@@ -214,13 +214,13 @@
     <string name="applock_face">&#160;или лицето ви, за да отключите</string>
     <string name="applock_fingerprint">&#160;или пръстов отпечатък за отключване</string>
     <string name="applock_credential">&#160;за отключване</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_unlock">Отключване</string>
     <!-- Oroño clock -->
-    <string name="date_long_title_today">Today is %s</string>
+    <string name="date_long_title_today">Днес е %s</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">Меню за захранване</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Force stop</string>
+    <string name="force_stop_dlg_title">Принудително спиране?</string>
+    <string name="force_stop_dlg_text">Ако изключите програмата принудително, това може да се отрази зле на нейната функционалност.</string>
+    <string name="guts_force_close_app">Принудително спиране</string>
 </resources>
