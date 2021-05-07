@@ -424,7 +424,8 @@ class MediaDataManager(
                         artWorkIcon.type == Icon.TYPE_ADAPTIVE_BITMAP) {
                     artworkBitmap = artWorkIcon.bitmap
                 } else {
-                    val drawable: Drawable = artWorkIcon.loadDrawable(context)
+                    val drawable: Drawable = artWorkIcon.loadDrawableAsUser(context,
+                            sbn.user.identifier)
                     artworkBitmap = Bitmap.createBitmap(
                             drawable.intrinsicWidth,
                             drawable.intrinsicHeight,
