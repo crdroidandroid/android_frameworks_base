@@ -226,15 +226,15 @@
     <string name="omnijaws_service_last_update">Последно обновяване:</string>
     <!-- App lock -->
     <string name="applock_locked">&#160;Е заключено.</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock.</string>
-    <string name="applock_face">&#160;or your face to unlock.</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_fingerprint_face">, пръстов отпечатък или лицето ви, за да отключите.</string>
+    <string name="applock_face">&#160;или лицето ви, за да отключите.</string>
+    <string name="applock_fingerprint">&#160;или пръстов отпечатък за отключване.</string>
+    <string name="applock_locked_notification">Приложението е заключено</string>
     <!-- DC Dimming -->
     <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_brightness_mode">Режим яркост</string>
+    <string name="quick_settings_dc_full_auto">Автоматичен режим</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">Език</string>
+    <string name="quick_settings_locale_more_locales_toast">Моля, конфигурирате няколко езика за да разрешите функцията за превключване</string>
 </resources>
