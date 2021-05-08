@@ -25,8 +25,6 @@
     <string name="permgroupdesc_fake_package_signature">permetti di imitare la firma del pacchetto</string>
     <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
     <string name="permgrouprequest_fake_package_signature">Consentire all\'app &lt;b&gt;<xliff:g id="App_NAME">%1$s</xliff:g>&lt;/b&gt; di falsificare la firma del pacchetto?</string>
-    <!-- Long-press kill application -->
-    <string name="app_killed_message">Applicazione terminata</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Modalità di gioco</string>
     <string name="gaming_mode_notification_title">Modalità di gioco abilitata</string>
