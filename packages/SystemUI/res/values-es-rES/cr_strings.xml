@@ -247,7 +247,7 @@ Y Nueve</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Power menu</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Force stop</string>
+    <string name="force_stop_dlg_title">¿Forzar detención?</string>
+    <string name="force_stop_dlg_text">Si se detiene una aplicación, es posible que no funcione correctamente.</string>
+    <string name="guts_force_close_app">Forzar detención</string>
 </resources>
