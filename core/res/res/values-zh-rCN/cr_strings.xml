@@ -26,8 +26,6 @@
     <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
     <string name="permgrouprequest_fake_package_signature">是否允许
         &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; 伪装软件包签名？</string>
-    <!-- Long-press kill application -->
-    <string name="app_killed_message">应用已被终止</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">游戏模式</string>
     <string name="gaming_mode_notification_title">游戏模式已启用</string>
