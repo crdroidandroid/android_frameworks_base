@@ -53,6 +53,6 @@
     <!-- Screen recorder -->
     <string name="global_action_screenrecord">Запис на екрана</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
-    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
+    <string name="app_clipboard_access_denied">На %1$s бе отказан достъп до клипборда</string>
+    <string name="app_clipboard_access_granted">На %1$s бе разрешен достъп до клипборда</string>
 </resources>
