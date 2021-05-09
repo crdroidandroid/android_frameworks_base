@@ -249,5 +249,5 @@ Y Nueve</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">¿Forzar Finalización?</string>
     <string name="force_stop_dlg_text">Si se finaliza una aplicación, es posible que no funcione correctamente.</string>
-    <string name="guts_force_close_app">Forzar Finalización</string>
+    <string name="guts_force_close_app">Finalizar</string>
 </resources>
