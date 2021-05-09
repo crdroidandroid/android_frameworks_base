@@ -245,9 +245,9 @@ Y Nueve</string>
     <!-- Oroño clock -->
     <string name="date_long_title_today">Hoy es %s</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">Menú de apagado</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">¿Forzar detención?</string>
-    <string name="force_stop_dlg_text">Si se detiene una aplicación, es posible que no funcione correctamente.</string>
-    <string name="guts_force_close_app">Forzar detención</string>
+    <string name="force_stop_dlg_title">¿Forzar Finalización?</string>
+    <string name="force_stop_dlg_text">Si se finaliza una aplicación, es posible que no funcione correctamente.</string>
+    <string name="guts_force_close_app">Forzar Finalización</string>
 </resources>
