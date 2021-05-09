@@ -25,8 +25,6 @@
     <string name="permgroupdesc_fake_package_signature">permitir la falsificación de la firma del paquete</string>
     <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
     <string name="permgrouprequest_fake_package_signature">¿Permitir a &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; falsificar la firma del paquete?</string>
-    <!-- Long-press kill application -->
-    <string name="app_killed_message">Aplicación finalizada</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Modo Gaming</string>
     <string name="gaming_mode_notification_title">Modo Gaming activado</string>
@@ -40,6 +38,6 @@
     <string name="url_copy_success">URL copiada satisfactoriamente</string>
     <string name="url_copy_failed">Se ha producido un error al cargar el registro a dogbin</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
-    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
+    <string name="app_clipboard_access_denied">%1$s se le denegó acceso al portapapeles</string>
+    <string name="app_clipboard_access_granted">%1$s se le concedió acceso al portapapeles</string>
 </resources>

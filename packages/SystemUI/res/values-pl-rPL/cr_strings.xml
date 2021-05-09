@@ -257,7 +257,7 @@ dziewięć</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Menu zasilania</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Force stop</string>
+    <string name="force_stop_dlg_title">Wymusić zatrzymanie?</string>
+    <string name="force_stop_dlg_text">Wymuszenie zatrzymania aplikacji może spowodować jej nieprawidłowe działanie.</string>
+    <string name="guts_force_close_app">Wymuś zatrzymanie</string>
 </resources>
