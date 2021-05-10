@@ -221,7 +221,7 @@
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Meniu pornire</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Force stop</string>
+    <string name="force_stop_dlg_title">Oprire forțată?</string>
+    <string name="force_stop_dlg_text">Dacă forțați oprirea unei aplicații, aceasta se poate comporta necorespunzător.</string>
+    <string name="guts_force_close_app">Oprire forțată</string>
 </resources>
