@@ -1071,6 +1071,10 @@ public class KeyStore {
      * Notify keystore about the latest user locked state. This is to support keyguard-bound key.
      */
     public void onUserLockedStateChanged(int userHandle, boolean locked) {
+        if (mBinder == null) {
+            Log.e(TAG, "Keystore not ready. Binder is null.");
+            return;
+        }
         try {
             mBinder.onKeyguardVisibilityChanged(locked, userHandle);
         } catch (RemoteException e) {
