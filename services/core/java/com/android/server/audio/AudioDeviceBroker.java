@@ -335,7 +335,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
                 return true;
             }
             if (o instanceof BtDeviceConnectionInfo) {
-                return mDevice.equals(((BtDeviceConnectionInfo) o).mDevice);
+                return mDevice.equals(((BtDeviceConnectionInfo) o).mDevice) &&
+                       mProfile == (((BtDeviceConnectionInfo) o).mProfile);
             }
             return false;
         }
@@ -368,7 +369,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
             // when receiving a request to change the connection state of a device, this last
             // request is the source of truth, so cancel all previous requests that are already in
             // the handler
-            removeScheduledA2dpEvents(device);
+            removeScheduledA2dpEvents(device, profile);
 
             sendLMsgNoDelay(
                     state == BluetoothProfile.STATE_CONNECTED
@@ -380,14 +381,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
     /** remove all previously scheduled connection and state change events for the given device */
     @GuardedBy("mDeviceStateLock")
-    private void removeScheduledA2dpEvents(@NonNull BluetoothDevice device) {
+    private void removeScheduledA2dpEvents(@NonNull BluetoothDevice device, int profile) {
         mBrokerHandler.removeEqualMessages(MSG_L_A2DP_DEVICE_CONFIG_CHANGE, device);
 
         final BtDeviceConnectionInfo connectionInfoToRemove = new BtDeviceConnectionInfo(device,
                 // the next parameters of the constructor will be ignored when finding the message
                 // to remove as the equality of the message's object is tested on the device itself
                 // (see BtDeviceConnectionInfo.equals() method override)
-                BluetoothProfile.STATE_CONNECTED, 0, false, -1);
+                BluetoothProfile.STATE_CONNECTED, profile, false, -1);
         mBrokerHandler.removeEqualMessages(MSG_L_A2DP_DEVICE_CONNECTION_CHANGE_EXT_DISCONNECTION,
                 connectionInfoToRemove);
         mBrokerHandler.removeEqualMessages(MSG_L_A2DP_DEVICE_CONNECTION_CHANGE_EXT_CONNECTION,
