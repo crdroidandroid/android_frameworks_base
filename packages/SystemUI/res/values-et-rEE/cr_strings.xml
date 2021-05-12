@@ -220,7 +220,7 @@
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Toitemenüü</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Force stop</string>
+    <string name="force_stop_dlg_title">Sundpeatad?</string>
+    <string name="force_stop_dlg_text">Kui sunnite rakenduse peatuma, võib see valesti käituda.</string>
+    <string name="guts_force_close_app">Sundpeata</string>
 </resources>
