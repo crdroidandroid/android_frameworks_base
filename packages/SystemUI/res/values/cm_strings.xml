@@ -115,6 +115,8 @@
     <!-- Screen record -->
     <string name="screenrecord_lowquality_label">Lower quality</string>
     <string name="screenrecord_lowquality_summary">For smaller file size</string>
+    <string name="screenrecord_longer_timeout_switch_label">Larger file size limit</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Limit recording size to 15 GB</string>
 
     <!-- Channel name for Battery notifications -->
     <string name="battery_notification_channel_tv">Battery warning</string>
