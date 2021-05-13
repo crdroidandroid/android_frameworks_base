@@ -77,6 +77,8 @@ class ScreenRecordPermissionDialogDelegate(
     private lateinit var stopDotSwitchContainer: ViewGroup
     private lateinit var lowQualitySwitch: Switch
     private lateinit var lowQualitySwitchContainer: ViewGroup
+    private lateinit var longerDurationSwitch: Switch
+    private lateinit var longerDurationSwitchContainer: ViewGroup
 
     override fun createDialog(): SystemUIDialog {
         return systemUIDialogFactory.create(this)
@@ -139,11 +141,14 @@ class ScreenRecordPermissionDialogDelegate(
         options = dialog.requireViewById(R.id.screen_recording_options)
         stopDotSwitch = dialog.requireViewById(R.id.screenrecord_stopdot_switch)
         lowQualitySwitch = dialog.requireViewById(R.id.screenrecord_lowquality_switch)
+        longerDurationSwitch = dialog.requireViewById(R.id.screenrecord_longer_timeout_switch)
         stopDotSwitchContainer = dialog.requireViewById(R.id.screenrecord_stopdot_switch_container)
         lowQualitySwitchContainer = dialog.requireViewById(R.id.screenrecord_lowquality_switch_container)
+        longerDurationSwitchContainer = dialog.requireViewById(R.id.screenrecord_longer_timeout_switch_container)
 
         stopDotSwitchContainer.setOnClickListener { stopDotSwitch.toggle() }
         lowQualitySwitchContainer.setOnClickListener { lowQualitySwitch.toggle() }
+        longerDurationSwitchContainer.setOnClickListener { longerDurationSwitch.toggle() }
 
         val a: ArrayAdapter<*> =
             ScreenRecordingAdapter(
@@ -194,6 +199,7 @@ class ScreenRecordPermissionDialogDelegate(
             else ScreenRecordingAudioSource.NONE
         val showStopDot = stopDotSwitch.isChecked
         val lowQuality = lowQualitySwitch.isChecked
+        val longerDuration = longerDurationSwitch.isChecked
         val startIntent =
             PendingIntent.getForegroundService(
                 userContext,
@@ -205,7 +211,8 @@ class ScreenRecordPermissionDialogDelegate(
                     showTaps,
                     captureTarget,
                     showStopDot,
-                    lowQuality
+                    lowQuality,
+                    longerDuration
                 ),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
