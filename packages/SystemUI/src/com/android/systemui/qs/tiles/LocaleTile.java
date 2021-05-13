@@ -152,7 +152,8 @@ public class LocaleTile extends QSTileImpl<State> {
                 currentLocaleBackup == null || currentLocaleBackup.equals(mLocaleList.get(0)) ?
                         R.drawable.ic_qs_locale :
                         R.drawable.ic_qs_locale_pending);
-        state.label = mLocaleList.get(0).getDisplayLanguage();
+        state.label = mContext.getString(R.string.quick_settings_locale_label);
+        state.secondaryLabel = mLocaleList.get(0).getDisplayLanguage();
     }
 
     @Override
