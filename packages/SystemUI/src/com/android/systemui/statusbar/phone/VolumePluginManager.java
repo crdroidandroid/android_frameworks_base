@@ -2,6 +2,7 @@
  * Copyright (C) 2018 The Android Open Source Project
  * Copyright (C) 2019 ArrowOS
  * Copyright (C) 2020 Potato Open Source Project
+ * Copyright (C) 2021 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +49,6 @@ import com.android.systemui.shared.plugins.PluginInstanceManager;
 import com.android.systemui.shared.plugins.PluginManager;
 import com.android.systemui.shared.plugins.PluginPrefs;
 
-import java.lang.Runnable;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -67,7 +67,7 @@ public class VolumePluginManager extends BroadcastReceiver {
     private static final Uri SETTING_URI = Settings.System.getUriFor(
         Settings.System.SYSTEMUI_PLUGIN_VOLUME);
 
-    static final String DEFAULT_VOLUME_PLUGIN = "com.android.plugin.volume.aosp";
+    static final String DEFAULT_VOLUME_PLUGIN = "com.android.systemui.volume";
     static final String VOLUME_PLUGIN_ACTION = "com.android.systemui.action.PLUGIN_VOLUME";
 
     static final String[] ALLOWED_PLUGINS = {
@@ -83,7 +83,7 @@ public class VolumePluginManager extends BroadcastReceiver {
     private PackageManager mPackageManager;
     private Handler mHandler;
     private CustomSettingsObserver mCustomSettingsObserver;
-    private String mCurrentPlugin = DEFAULT_VOLUME_PLUGIN;
+    private String mCurrentPlugin;
     private Context mContext;
     private ContentResolver mResolver;
 
@@ -112,19 +112,11 @@ public class VolumePluginManager extends BroadcastReceiver {
     }
 
     private void setPlugin(String packageName) {
-        if (mCurrentPlugin.equals(packageName)) {
+        if (mCurrentPlugin !=null && mCurrentPlugin.equals(packageName)) {
             // Already set.
             return;
         }
-
-        Handler handler = new Handler(mContext.getMainLooper());
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                togglePlugins(packageName);
-            }
-        };
-        handler.post(runnable);
+        togglePlugins(packageName);
     }
 
     private Boolean togglePlugins(String currentPackageName) {
