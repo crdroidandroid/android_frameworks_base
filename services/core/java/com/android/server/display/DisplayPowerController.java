@@ -103,6 +103,8 @@ import com.android.server.display.whitebalance.DisplayWhiteBalanceFactory;
 import com.android.server.display.whitebalance.DisplayWhiteBalanceSettings;
 import com.android.server.policy.WindowManagerPolicy;
 
+import lineageos.providers.LineageSettings;
+
 import java.io.PrintWriter;
 
 /**
@@ -1048,6 +1050,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                     Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS_FOR_ALS),
                     /* notifyForDescendants= */ false, mSettingsObserver, UserHandle.USER_ALL);
         }
+        mContext.getContentResolver().registerContentObserver(
+                LineageSettings.System.getUriFor(LineageSettings.System.AUTO_BRIGHTNESS_ONE_SHOT),
+                false /*notifyForDescendants*/, mSettingsObserver, UserHandle.USER_ALL);
         handleBrightnessModeChange();
     }
 
@@ -2492,6 +2497,8 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 .setPendingScreenBrightness(mDisplayBrightnessController
                         .getScreenBrightnessSetting());
         mAutomaticBrightnessStrategy.updatePendingAutoBrightnessAdjustments();
+        mAutomaticBrightnessStrategy.setAutoBrightnessOneShotEnabled(
+                getAutoBrightnessOneShotSetting());
         sendUpdatePowerState();
     }
 
@@ -2507,6 +2514,12 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             // In manual mode, all brightness changes should be saved immediately.
             mDisplayBrightnessController.saveBrightnessIfNeeded();
         }
+    }
+
+    private boolean getAutoBrightnessOneShotSetting() {
+        return LineageSettings.System.getIntForUser(
+                mContext.getContentResolver(), LineageSettings.System.AUTO_BRIGHTNESS_ONE_SHOT,
+                0, UserHandle.USER_CURRENT) == 1;
     }
 
     public float getScreenBrightnessSetting() {
