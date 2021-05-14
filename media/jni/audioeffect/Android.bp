@@ -28,9 +28,4 @@ cc_library_shared {
         "-Wunused",
         "-Wunreachable-code",
     ],
-
-    // Workaround Clang LTO crash.
-    lto: {
-        never: true,
-    },
 }
