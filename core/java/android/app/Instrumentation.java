@@ -1159,8 +1159,11 @@ public class Instrumentation {
         Application app = getFactory(context.getPackageName())
                 .instantiateApplication(cl, className);
         app.attach(context);
-        String packageName = app.getPackageName();
-        PixelPropsUtils.setProps(packageName);
+        String patchCrDroid = Build.VERSION.SECURITY_PATCH_CRDROID;
+        if ("".equals(patchCrDroid)) {
+            String packageName = app.getPackageName();
+            PixelPropsUtils.setProps(packageName);
+        }
         return app;
     }
     
@@ -1178,8 +1181,11 @@ public class Instrumentation {
             ClassNotFoundException {
         Application app = (Application)clazz.newInstance();
         app.attach(context);
-        String packageName = app.getPackageName();
-        PixelPropsUtils.setProps(packageName);
+        String patchCrDroid = Build.VERSION.SECURITY_PATCH_CRDROID;
+        if ("".equals(patchCrDroid)) {
+            String packageName = app.getPackageName();
+            PixelPropsUtils.setProps(packageName);
+        }
         return app;
     }
 
