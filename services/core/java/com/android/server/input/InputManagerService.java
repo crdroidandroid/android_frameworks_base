@@ -2079,8 +2079,7 @@ public class InputManagerService extends IInputManager.Stub
         };
         for (File baseDir: baseDirs) {
             File confFile = new File(baseDir, EXCLUDED_DEVICES_PATH);
-            try {
-                InputStream stream = new FileInputStream(confFile);
+            try (InputStream stream = new FileInputStream(confFile)) {
                 names.addAll(ConfigurationProcessor.processExcludedDeviceNames(stream));
             } catch (FileNotFoundException e) {
                 // It's ok if the file does not exist.
@@ -2113,8 +2112,7 @@ public class InputManagerService extends IInputManager.Stub
         final File baseDir = Environment.getVendorDirectory();
         final File confFile = new File(baseDir, PORT_ASSOCIATIONS_PATH);
 
-        try {
-            final InputStream stream = new FileInputStream(confFile);
+        try (final InputStream stream = new FileInputStream(confFile)) {
             return ConfigurationProcessor.processInputPortAssociations(stream);
         } catch (FileNotFoundException e) {
             // Most of the time, file will not exist, which is expected.
@@ -2226,10 +2224,10 @@ public class InputManagerService extends IInputManager.Stub
             @Override
             public void visitKeyboardLayout(Resources resources,
                     int keyboardLayoutResId, KeyboardLayout layout) {
-                try {
+                try (final InputStreamReader stream = new InputStreamReader(
+                               resources.openRawResource(keyboardLayoutResId))) {
                     result[0] = layout.getDescriptor();
-                    result[1] = Streams.readFully(new InputStreamReader(
-                            resources.openRawResource(keyboardLayoutResId)));
+                    result[1] = Streams.readFully(stream);
                 } catch (IOException ex) {
                 } catch (NotFoundException ex) {
                 }
