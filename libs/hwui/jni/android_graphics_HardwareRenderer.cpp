@@ -838,6 +838,14 @@ static void android_view_ThreadedRenderer_initDisplayInfo(JNIEnv*, jclass, jint 
     DeviceInfo::setPresentationDeadlineNanos(presentationDeadlineNanos);
 }
 
+static void android_view_ThreadedRenderer_setDrawingEnabled(JNIEnv*, jclass, jboolean enabled) {
+    Properties::setDrawingEnabled(enabled);
+}
+
+static jboolean android_view_ThreadedRenderer_isDrawingEnabled(JNIEnv*, jclass) {
+    return Properties::isDrawingEnabled();
+}
+
 // ----------------------------------------------------------------------------
 // HardwareRendererObserver
 // ----------------------------------------------------------------------------
@@ -976,6 +984,9 @@ static const JNINativeMethod gMethods[] = {
         {"preload", "()V", (void*)android_view_ThreadedRenderer_preload},
         {"isWebViewOverlaysEnabled", "()Z",
          (void*)android_view_ThreadedRenderer_isWebViewOverlaysEnabled},
+        {"nSetDrawingEnabled", "(Z)V", (void*)android_view_ThreadedRenderer_setDrawingEnabled},
+        {"nIsDrawingEnabled", "()Z", (void*)android_view_ThreadedRenderer_isDrawingEnabled},
+
 };
 
 static JavaVM* mJvm = nullptr;
