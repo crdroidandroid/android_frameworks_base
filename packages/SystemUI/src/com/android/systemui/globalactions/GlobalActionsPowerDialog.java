@@ -19,7 +19,6 @@ import android.annotation.NonNull;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +30,6 @@ import android.widget.ListAdapter;
  * Creates a customized Dialog for displaying the Shut Down and Restart actions.
  */
 public class GlobalActionsPowerDialog {
-
-    public static int mNotificationBackgroundAlpha;
 
     /**
      * Create a dialog for displaying Shut Down and Restart actions.
@@ -55,11 +52,8 @@ public class GlobalActionsPowerDialog {
         Window window = dialog.getWindow();
         window.setType(WindowManager.LayoutParams.TYPE_VOLUME_OVERLAY);
         window.setTitle(""); // prevent Talkback from speaking first item name twice
-
-        Drawable drawable = res.getDrawable(com.android.systemui.R.drawable.control_background);
-        drawable.setAlpha(mNotificationBackgroundAlpha);
-        window.setBackgroundDrawable(drawable);
-
+        window.setBackgroundDrawable(res.getDrawable(
+                com.android.systemui.R.drawable.control_background, context.getTheme()));
         window.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
         return dialog;
