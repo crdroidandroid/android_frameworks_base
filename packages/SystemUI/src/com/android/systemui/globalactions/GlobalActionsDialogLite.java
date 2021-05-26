@@ -163,6 +163,7 @@ import lineageos.providers.LineageSettings;
 import org.lineageos.internal.util.PowerMenuUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -651,7 +652,10 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         CurrentUserProvider currentUser = new CurrentUserProvider();
 
         // make sure emergency affordance action is first, if needed
-        if (mEmergencyAffordanceManager.needsEmergencyAffordance()) {
+        boolean showEmergencyAffordance = Arrays.stream(mActions)
+                .anyMatch(GLOBAL_ACTION_KEY_EMERGENCY::equals);
+        if (showEmergencyAffordance &&
+                mEmergencyAffordanceManager.needsEmergencyAffordance()) {
             addIfShouldShowAction(tempActions, new EmergencyAffordanceAction());
             addedKeys.add(GLOBAL_ACTION_KEY_EMERGENCY);
         }
