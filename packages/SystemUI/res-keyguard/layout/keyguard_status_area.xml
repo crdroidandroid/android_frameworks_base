@@ -27,6 +27,7 @@
     android:layout_gravity="center_horizontal"
     android:clipToPadding="false"
     android:orientation="vertical"
+    android:animateLayoutChanges="true"
     android:layout_centerHorizontal="true">
     <TextView
               android:id="@+id/title"
@@ -45,4 +46,14 @@
               android:orientation="horizontal"
               android:gravity="center"
     />
+
+    <TextView
+        android:id="@+id/change_clock_face"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:layout_above="@+id/row"
+        android:text="@string/change_clock_face"/>
+
 </com.android.keyguard.KeyguardSliceView>

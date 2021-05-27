@@ -238,8 +238,11 @@
     <!-- Name of the microphone status bar icon. -->
     <string name="status_bar_microphone">Microphone</string>
 
-     <!-- Biometric Dialog - Use Face -->
+    <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Use Face</string>
+
+    <!-- Change clockface -->
+    <string name="change_clock_face">Swipe to change the clock face</string>
 
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Today\'s usage</string>

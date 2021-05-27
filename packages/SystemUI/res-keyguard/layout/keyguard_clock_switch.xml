@@ -24,43 +24,58 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal|top">
-    <FrameLayout
-         android:id="@+id/clock_view"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_gravity="center_horizontal"
-         android:layout_alignParentTop="true">
-        <TextClock
-             android:id="@+id/default_clock_view"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_gravity="center_horizontal"
-             android:gravity="center_horizontal"
-             android:paddingBottom="@dimen/title_clock_padding"
-             android:letterSpacing="0.02"
-             android:textColor="?attr/wallpaperTextColor"
-             android:singleLine="true"
-             style="@style/widget_big"
-             android:format12Hour="@string/keyguard_widget_12_hours_format"
-             android:format24Hour="@string/keyguard_widget_24_hours_format"
-             android:elegantTextHeight="false"
-        />
-        <TextClock
-             android:id="@+id/default_clock_view_bold"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_gravity="bottom|center_horizontal"
-             android:gravity="center_horizontal"
-             android:letterSpacing="0.03"
-             android:textColor="?attr/wallpaperTextColor"
-             android:singleLine="true"
-             style="@style/widget_title_bold"
-             android:format12Hour="@string/keyguard_widget_12_hours_format"
-             android:format24Hour="@string/keyguard_widget_24_hours_format"
-             android:elegantTextHeight="false"
-             android:visibility="invisible"
-             />
-    </FrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/whole_clock_container"
+        android:animateLayoutChanges="true"
+        android:layout_centerInParent="true">
+
+        <FrameLayout
+            android:id="@+id/clock_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentTop="true">
+            <TextClock
+                android:id="@+id/default_clock_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/title_clock_padding"
+                android:letterSpacing="0.02"
+                android:textColor="?attr/wallpaperTextColor"
+                android:singleLine="true"
+                style="@style/widget_big"
+                android:format12Hour="@string/keyguard_widget_12_hours_format"
+                android:format24Hour="@string/keyguard_widget_24_hours_format"
+                android:elegantTextHeight="false"
+            />
+            <TextClock
+                android:id="@+id/default_clock_view_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:gravity="center_horizontal"
+                android:letterSpacing="0.03"
+                android:textColor="?attr/wallpaperTextColor"
+                android:singleLine="true"
+                style="@style/widget_title_bold"
+                android:format12Hour="@string/keyguard_widget_12_hours_format"
+                android:format24Hour="@string/keyguard_widget_24_hours_format"
+                android:elegantTextHeight="false"
+                android:visibility="invisible"
+                />
+        </FrameLayout>
+
+        <include layout="@layout/keyguard_status_area"
+            android:id="@+id/keyguard_status_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/clock_view" />
+
+    </RelativeLayout>
 
     <include layout="@layout/current_weather_view"
         android:id="@+id/weather_container"
@@ -72,9 +87,4 @@
         android:layout_marginTop="@dimen/date_owner_info_margin"
         android:layout_below="@id/keyguard_status_area"/>
 
-    <include layout="@layout/keyguard_status_area"
-        android:id="@+id/keyguard_status_area"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/clock_view" />
 </com.android.keyguard.KeyguardClockSwitch>
