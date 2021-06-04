@@ -862,6 +862,20 @@ public final class OverlayManagerService extends SystemService {
         }
 
         @Override
+        public void reloadAndroidAssets(int userId) {
+            userId = handleIncomingUser(userId, "reloadAndroidAssets");
+            final long ident = Binder.clearCallingIdentity();
+            try {
+                synchronized (mLock) {
+                    mImpl.reloadAssets("android", userId);
+                    updateAssets(userId, "android");
+                }
+            } finally {
+                Binder.restoreCallingIdentity(ident);
+            }
+        }
+
+        @Override
         public void reloadAssets(String packageName, int userId) {
             final long ident = Binder.clearCallingIdentity();
             userId = handleIncomingUser(userId, "reloadAssets");

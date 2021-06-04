@@ -164,5 +164,6 @@ interface IOverlayManager {
      */
     void invalidateCachesForOverlay(in String packageName, in int userIs);
 
+    void reloadAndroidAssets(in int userId);
     void reloadAssets(in String packageName, in int userId);
 }
