@@ -216,6 +216,8 @@
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Tux clock -->
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Сьогодні є</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">Видалити</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
@@ -254,8 +256,6 @@
     <string name="applock_fingerprint">&#160;або ваш відбиток пальця для розблокування</string>
     <string name="applock_credential">&#160;для розблокування</string>
     <string name="applock_unlock">Розблокувати</string>
-    <!-- Oroño clock -->
-    <string name="date_long_title_today">Сьогодні є</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Меню кнопки живлення</string>
     <!-- Kill button in notification guts -->
