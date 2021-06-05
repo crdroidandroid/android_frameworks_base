@@ -177,6 +177,8 @@
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Tux clock -->
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Nous sommes aujourd\'hui le %s</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">Supprimer</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
@@ -215,8 +217,6 @@
     <string name="applock_fingerprint">&#160;ou votre empreinte digitale pour déverrouiller</string>
     <string name="applock_credential">&#160;pour déverrouiller</string>
     <string name="applock_unlock">Déverrouiller</string>
-    <!-- Oroño clock -->
-    <string name="date_long_title_today">Nous sommes aujourd\'hui le %s</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Menu Marche/Arrêt</string>
     <!-- Kill button in notification guts -->

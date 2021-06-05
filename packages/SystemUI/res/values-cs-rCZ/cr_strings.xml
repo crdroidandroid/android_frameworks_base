@@ -179,6 +179,8 @@
     <!-- Binary clock -->
     <!-- Samsung clock -->
     <!-- Tux clock -->
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Dnes je %s</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">Odstranit</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
@@ -217,8 +219,6 @@
     <string name="applock_fingerprint">&#160;nebo odemkněte otiskem prstu</string>
     <string name="applock_credential">&#160;odemknout</string>
     <string name="applock_unlock">Odemknout</string>
-    <!-- Oroño clock -->
-    <string name="date_long_title_today">Dnes je %s</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Menu napájení</string>
     <!-- Kill button in notification guts -->
