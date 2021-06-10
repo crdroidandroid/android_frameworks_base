@@ -262,4 +262,9 @@
     <string name="force_stop_dlg_title">Force stop?</string>
     <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
     <string name="guts_force_close_app">Force stop</string>
+     
+    <!-- Mono audio QS tile -->
+    <string name="quick_settings_monotoggle_tile">Audio mode</string>
+    <string name="quick_settings_monotoggle_tile_mono">Mono</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Stereo</string>
 </resources>
