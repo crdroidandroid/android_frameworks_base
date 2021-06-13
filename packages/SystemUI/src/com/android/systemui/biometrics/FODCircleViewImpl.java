@@ -94,7 +94,7 @@ public class FODCircleViewImpl extends SystemUI implements CommandQueue.Callback
                 }
             }
             mIsFODVisible = true;
-            if (isNightLightEnabled()) {
+            if (mDisableNightMode && isNightLightEnabled()) {
                 disableNightMode();
             }
             mFodCircleView.show();
@@ -103,22 +103,22 @@ public class FODCircleViewImpl extends SystemUI implements CommandQueue.Callback
 
     private boolean isNightLightEnabled() {
        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.FOD_NIGHT_LIGHT, mDisableNightMode ? 1 : 0) == 1;
+                Settings.System.FOD_NIGHT_LIGHT, 1) == 1;
     }
     
     @Override
     public void hideInDisplayFingerprintView() {
         if (mFodCircleView != null) {
-             if (isNightLightEnabled()) {
-            for (int i = 0; i < mCallbacks.size(); i++) {
-                FODCircleViewImplCallback cb = mCallbacks.get(i).get();
-                if (cb != null) {
-                    cb.onFODStatusChange(false);
+            if (!mDisableNightMode) {
+                for (int i = 0; i < mCallbacks.size(); i++) {
+                    FODCircleViewImplCallback cb = mCallbacks.get(i).get();
+                    if (cb != null) {
+                        cb.onFODStatusChange(false);
+                    }
                 }
             }
-        }
             mIsFODVisible = false;
-            if (isNightLightEnabled()) {
+            if (mDisableNightMode && isNightLightEnabled()) {
                 setNightMode(mNightModeActive, mAutoModeState);
             }
             mFodCircleView.hide();
