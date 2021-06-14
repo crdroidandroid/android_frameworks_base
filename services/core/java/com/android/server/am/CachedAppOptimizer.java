@@ -60,6 +60,7 @@ public final class CachedAppOptimizer {
 
     // Flags stored in the DeviceConfig API.
     @VisibleForTesting static final String KEY_USE_COMPACTION = "use_compaction";
+    @VisibleForTesting static final String KEY_COMPACTION_PRIORITY = "compaction_priority";
     @VisibleForTesting static final String KEY_USE_FREEZER = "use_freezer";
     @VisibleForTesting static final String KEY_COMPACT_ACTION_1 = "compact_action_1";
     @VisibleForTesting static final String KEY_COMPACT_ACTION_2 = "compact_action_2";
@@ -183,7 +184,8 @@ public final class CachedAppOptimizer {
                 public void onPropertiesChanged(Properties properties) {
                     synchronized (mPhenotypeFlagLock) {
                         for (String name : properties.getKeyset()) {
-                            if (KEY_USE_COMPACTION.equals(name)) {
+                            if (KEY_USE_COMPACTION.equals(name) ||
+                                KEY_COMPACTION_PRIORITY.equals(name)) {
                                 updateUseCompaction();
                             } else if (KEY_COMPACT_ACTION_1.equals(name)
                                     || KEY_COMPACT_ACTION_2.equals(name)) {
@@ -282,6 +284,7 @@ public final class CachedAppOptimizer {
     private volatile boolean mUseFreezer = false; // set to DEFAULT in init()
     @GuardedBy("this")
     private int mFreezerDisableCount = 1; // Freezer is initially disabled, until enabled
+    public volatile int  mCompactionPriority = Process.THREAD_GROUP_BACKGROUND;
     private final Random mRandom = new Random();
     @GuardedBy("mPhenotypeFlagLock")
     @VisibleForTesting volatile float mCompactStatsdSampleRate = DEFAULT_STATSD_SAMPLE_RATE;
@@ -335,7 +338,7 @@ public final class CachedAppOptimizer {
         mAm = am;
         mProcLock = am.mProcLock;
         mCachedAppOptimizerThread = new ServiceThread("CachedAppOptimizerThread",
-            Process.THREAD_GROUP_SYSTEM, true);
+            mCompactionPriority, true);
         mProcStateThrottle = new HashSet<>();
         mProcessDependencies = processDependencies;
         mTestCallback = callback;
@@ -395,6 +398,7 @@ public final class CachedAppOptimizer {
         pw.println("CachedAppOptimizer settings");
         synchronized (mPhenotypeFlagLock) {
             pw.println("  " + KEY_USE_COMPACTION + "=" + mUseCompaction);
+            pw.println("  " + KEY_COMPACTION_PRIORITY  + "=" + mCompactionPriority);
             pw.println("  " + KEY_COMPACT_ACTION_1 + "=" + mCompactActionSome);
             pw.println("  " + KEY_COMPACT_ACTION_2 + "=" + mCompactActionFull);
             pw.println("  " + KEY_COMPACT_THROTTLE_1 + "=" + mCompactThrottleSomeSome);
@@ -534,16 +538,19 @@ public final class CachedAppOptimizer {
         mUseCompaction = DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_ACTIVITY_MANAGER,
                     KEY_USE_COMPACTION, DEFAULT_USE_COMPACTION);
 
+        mCompactionPriority = DeviceConfig.getInt(DeviceConfig.NAMESPACE_ACTIVITY_MANAGER,
+                    KEY_COMPACTION_PRIORITY, Process.THREAD_GROUP_BACKGROUND);
+
         if (mUseCompaction && mCompactionHandler == null) {
             if (!mCachedAppOptimizerThread.isAlive()) {
                 mCachedAppOptimizerThread.start();
             }
 
             mCompactionHandler = new MemCompactionHandler();
-
-            Process.setThreadGroupAndCpuset(mCachedAppOptimizerThread.getThreadId(),
-                    Process.THREAD_GROUP_SYSTEM);
         }
+
+        Process.setThreadGroupAndCpuset(mCachedAppOptimizerThread.getThreadId(),
+                mCompactionPriority);
     }
 
     /**
@@ -704,7 +711,8 @@ public final class CachedAppOptimizer {
                 }
 
                 Process.setThreadGroupAndCpuset(mCachedAppOptimizerThread.getThreadId(),
-                        Process.THREAD_GROUP_SYSTEM);
+                    mCompactionPriority);
+
             } else {
                 Slog.d(TAG_AM, "Freezer disabled");
                 enableFreezer(false);
