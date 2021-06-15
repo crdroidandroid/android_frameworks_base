@@ -25,6 +25,8 @@ import static com.android.server.wm.WindowManagerDebugConfig.TAG_WM;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.ActivityManager.TaskSnapshot;
+import android.app.AppLockManager;
+import android.app.AppLockManager.AppLockCallback;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.GraphicBuffer;
@@ -56,6 +58,9 @@ import com.android.server.wm.utils.InsetUtils;
 import com.google.android.collect.Sets;
 
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * When an app token becomes invisible, we take a snapshot (bitmap) of the corresponding task and
@@ -120,6 +125,30 @@ class TaskSnapshotController {
      */
     private final boolean mIsRunningOnWear;
 
+    // AppLock
+    AppLockManager mAppLockManager;
+
+    private final AppLockCallback mAppLockCallback = new AppLockCallback() {
+        @Override
+        public void onAppStateChanged(String pkg) {
+            if (isAppLocked(pkg) && !isAppOpened(pkg)){
+                updateTaskSnapshot(pkg);
+            }
+        }
+    };
+
+    void updateTaskSnapshot(String packageName) {
+        final Iterator<Map.Entry<Integer, TaskSnapshotCache.CacheEntry>> it = mCache.getRunningCache().entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Integer, TaskSnapshotCache.CacheEntry> entry = it.next();
+            int taskId = entry.getKey();
+            Task task = entry.getValue().task;
+            if (task.mPackageName != null && task.mPackageName.equals(packageName)){
+                snapshotTasks(new ArraySet<>(Arrays.asList(task)));
+            }
+        }
+    }
+
     TaskSnapshotController(WindowManagerService service) {
         mService = service;
         mPersister = new TaskSnapshotPersister(mService, Environment::getDataSystemCeDirectory);
@@ -135,8 +164,20 @@ class TaskSnapshotController {
                 com.android.internal.R.dimen.config_highResTaskSnapshotScale);
     }
 
+    boolean isAppLocked(String packageName) {
+        if (mAppLockManager == null || packageName == null) return false;
+        return mAppLockManager.isAppLocked(packageName);
+    }
+
+    boolean isAppOpened(String packageName) {
+        if (mAppLockManager == null || packageName == null) return true;
+        return mAppLockManager.isAppOpen(packageName);
+    }
+
     void systemReady() {
         mPersister.start();
+        mAppLockManager = mService.mContext.getSystemService(AppLockManager.class);
+        mAppLockManager.addAppLockCallback(mAppLockCallback);
     }
 
     void onTransitionStarting(DisplayContent displayContent) {
@@ -183,7 +224,9 @@ class TaskSnapshotController {
             final Task task = tasks.valueAt(i);
             final TaskSnapshot snapshot;
             final boolean snapshotHome = allowSnapshotHome && task.isActivityTypeHome();
-            if (snapshotHome) {
+            if (task.mPackageName != null && isAppLocked(task.mPackageName) && !isAppOpened(task.mPackageName)){
+                snapshot = drawAppThemeSnapshot(task);
+            }else if (snapshotHome) {
                 snapshot = snapshotTask(task);
             } else {
                 switch (getSnapshotMode(task)) {
