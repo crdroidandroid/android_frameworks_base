@@ -222,4 +222,6 @@
     <string name="force_stop_dlg_title">是否強制停止？</string>
     <string name="force_stop_dlg_text">如果您強制停止應用程式，應用程式可能會無法正常運作。</string>
     <string name="guts_force_close_app">強制停止</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Play media to</string>
 </resources>
