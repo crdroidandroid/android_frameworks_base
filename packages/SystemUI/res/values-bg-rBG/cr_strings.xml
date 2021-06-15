@@ -223,4 +223,6 @@
     <string name="force_stop_dlg_title">Принудително спиране?</string>
     <string name="force_stop_dlg_text">Ако изключите програмата принудително, това може да се отрази зле на нейната функционалност.</string>
     <string name="guts_force_close_app">Принудително спиране</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Play media to</string>
 </resources>
