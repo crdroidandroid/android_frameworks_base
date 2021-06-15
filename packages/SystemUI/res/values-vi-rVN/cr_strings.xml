@@ -222,4 +222,6 @@
     <string name="force_stop_dlg_title">Buộc dừng?</string>
     <string name="force_stop_dlg_text">Nếu bạn buộc dừng một ứng dụng, ứng dụng đó có thể hoạt động sai.</string>
     <string name="guts_force_close_app">Buộc dừng</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Phát phương tiện tới</string>
 </resources>
