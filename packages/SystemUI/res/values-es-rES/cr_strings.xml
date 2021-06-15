@@ -250,4 +250,6 @@ Y Nueve</string>
     <string name="force_stop_dlg_title">¿Forzar Finalización?</string>
     <string name="force_stop_dlg_text">Si se finaliza una aplicación, es posible que no funcione correctamente.</string>
     <string name="guts_force_close_app">Finalizar</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Play media to</string>
 </resources>
