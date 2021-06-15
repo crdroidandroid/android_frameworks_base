@@ -225,4 +225,6 @@
     <string name="force_stop_dlg_title">Остановить принудительно?</string>
     <string name="force_stop_dlg_text">Принудительное закрытие приложения может негативно отразиться на его функциональности.</string>
     <string name="guts_force_close_app">Остановить принудительно</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Play media to</string>
 </resources>
