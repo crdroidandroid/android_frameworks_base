@@ -39,6 +39,10 @@ class TaskSnapshotCache {
         mLoader = loader;
     }
 
+    ArrayMap<Integer, CacheEntry> getRunningCache() {
+        return mRunningCache;
+    }
+
     void clearRunningCache() {
         mRunningCache.clear();
     }
@@ -50,7 +54,7 @@ class TaskSnapshotCache {
         }
         final ActivityRecord top = task.getTopMostActivity();
         mAppTaskMap.put(top, task.mTaskId);
-        mRunningCache.put(task.mTaskId, new CacheEntry(snapshot, top));
+        mRunningCache.put(task.mTaskId, new CacheEntry(snapshot, top, task));
     }
 
     /**
@@ -129,7 +133,7 @@ class TaskSnapshotCache {
         }
     }
 
-    private static final class CacheEntry {
+    protected static final class CacheEntry {
 
         /** The snapshot. */
         final TaskSnapshot snapshot;
@@ -137,9 +141,13 @@ class TaskSnapshotCache {
         /** The app token that was on top of the task when the snapshot was taken */
         final ActivityRecord topApp;
 
-        CacheEntry(TaskSnapshot snapshot, ActivityRecord topApp) {
+        /** The task */
+        final Task task;
+
+        CacheEntry(TaskSnapshot snapshot, ActivityRecord topApp, Task task) {
             this.snapshot = snapshot;
             this.topApp = topApp;
+            this.task = task;
         }
     }
 }
