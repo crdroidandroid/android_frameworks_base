@@ -223,4 +223,6 @@
     <string name="force_stop_dlg_title">Forcer l\'arrêt ?</string>
     <string name="force_stop_dlg_text">Forcer l\'arrêt d\'une application peut provoquer des dysfonctionnements.</string>
     <string name="guts_force_close_app">Forcer l\'arrêt</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Play media to</string>
 </resources>
