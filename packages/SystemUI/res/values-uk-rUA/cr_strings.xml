@@ -262,4 +262,6 @@
     <string name="force_stop_dlg_title">Примусово припинити?</string>
     <string name="force_stop_dlg_text">Примусове закриття додатку може призвести до збою в його роботі.</string>
     <string name="guts_force_close_app">Примусово зупинити</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Play media to</string>
 </resources>

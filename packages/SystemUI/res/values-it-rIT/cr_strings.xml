@@ -223,4 +223,6 @@
     <string name="force_stop_dlg_title">Forzare la chiusura?</string>
     <string name="force_stop_dlg_text">Se forzi la chiusura di un\'applicazione, potrebbe comportarsi in modo anomalo.</string>
     <string name="guts_force_close_app">Chiusura forzata</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Riproduci contenuti multimediali su</string>
 </resources>

@@ -255,4 +255,6 @@
     <string name="force_stop_dlg_title">강제로 중지하시겠습니까?</string>
     <string name="force_stop_dlg_text">강제로 앱을 종료하면 예기치 않은 오류가 발생할 수 있습니다.</string>
     <string name="guts_force_close_app">강제 종료</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Play media to</string>
 </resources>

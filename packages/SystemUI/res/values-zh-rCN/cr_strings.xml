@@ -222,4 +222,6 @@
     <string name="force_stop_dlg_title">要强行停止吗？</string>
     <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
     <string name="guts_force_close_app">强行停止</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Play media to</string>
 </resources>

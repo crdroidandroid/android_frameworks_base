@@ -224,4 +224,6 @@
     <string name="force_stop_dlg_title">Oprire forțată?</string>
     <string name="force_stop_dlg_text">Dacă forțați oprirea unei aplicații, aceasta se poate comporta necorespunzător.</string>
     <string name="guts_force_close_app">Oprire forțată</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Play media to</string>
 </resources>

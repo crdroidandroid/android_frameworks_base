@@ -223,4 +223,6 @@
     <string name="force_stop_dlg_title">Kényszeríti a leállítást?</string>
     <string name="force_stop_dlg_text">Ha egy alkalmazást leállásra kényszerít, lehetséges, hogy az hibásan fog működni.</string>
     <string name="guts_force_close_app">Kényszerített leállítás</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Lejátszás a következővel</string>
 </resources>
