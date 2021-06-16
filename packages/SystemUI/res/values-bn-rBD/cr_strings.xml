@@ -32,18 +32,18 @@
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">সিপিইউ সম্পর্কিত তথ্য</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
-    <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
-    <string name="accessibility_quick_settings_fpsinfo_on">FPS Info on</string>
+    <string name="quick_settings_fpsinfo_label">ফ্রেম পার সেকেন্ড তথ্য</string>
+    <string name="accessibility_quick_settings_fpsinfo_off">ফ্রেম পার সেকেন্ড তথ্য বন্ধ করুন</string>
+    <string name="accessibility_quick_settings_fpsinfo_on">ফ্রেম পার সেকেন্ড তথ্য চালু করুন</string>
     <!-- HW Keys Tile -->
-    <string name="quick_settings_hw_keys_label">HW Keys</string>
+    <string name="quick_settings_hw_keys_label">হার্ডওয়ার বাটনগুলো</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">কম্পাস</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="quick_settings_compass_N">N</string>
+    <string name="quick_settings_compass_init">আরম্ভ হচ্ছে\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">কম্পাস বন্ধ।</string>
+    <string name="accessibility_quick_settings_compass_on">কম্পাস চালু আছে ।</string>
+    <string name="quick_settings_compass_N">উ:</string>
     <string name="quick_settings_compass_NE">NE</string>
     <string name="quick_settings_compass_E">E</string>
     <string name="quick_settings_compass_SE">SE</string>
@@ -118,10 +118,10 @@
     <string name="text_clock_h_nine">Nine</string>
     <string name="text_clock_h_ten">Ten</string>
     <string name="text_clock_h_eleven">Eleven</string>
-    <string name="text_clock_h_twelve">Twelve</string>
+    <string name="text_clock_h_twelve">বারো</string>
     <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
     <string name="text_clock_m_zero">O’Clock</string>
-    <string name="text_clock_m_one">O’One</string>
+    <string name="text_clock_m_one">০,এক</string>
     <string name="text_clock_m_two">O’Two</string>
     <string name="text_clock_m_three">O’Three</string>
     <string name="text_clock_m_four">O’Four</string>
