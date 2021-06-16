@@ -22,15 +22,15 @@
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
     <!-- Name of the nfc status bar icon. -->
-    <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_nfc">এনএফসি</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">স্মার্ট পিক্সেল</string>
+    <string name="quick_settings_smart_pixels_on_power_save">স্বয়ংক্রিয়ভাবে স্মর্টপিক্সেল চালু করুন</string>
     <!-- Screenshot -->
-    <string name="quick_settings_screenshot_label">Screenshot</string>
-    <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
+    <string name="quick_settings_screenshot_label">স্ক্রীনশট</string>
+    <string name="quick_settings_region_screenshot_label">আংশিক স্ক্রীনশট</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <string name="quick_settings_cpuinfo_label">সিপিইউ সম্পর্কিত তথ্য</string>
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">FPS Info</string>
     <string name="accessibility_quick_settings_fpsinfo_off">FPS Info off</string>
