@@ -10747,6 +10747,12 @@ public final class Settings {
         public static final String PULSE_SMOOTHING_ENABLED = "pulse_smoothing_enabled";
 
         /**
+         * Face Unlock Method
+         * @hide
+         */
+        public static final String FACE_UNLOCK_METHOD = "face_unlock_method";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
