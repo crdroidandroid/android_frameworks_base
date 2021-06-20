@@ -34,6 +34,7 @@ final class RampAnimator<T> {
     private float mCurrentValue;
     private float mTargetValue;
     private float mRate;
+    private float mTempRate;
 
     private boolean mAnimating;
     private float mAnimatedValue; // higher precision copy of mCurrentValue
@@ -102,6 +103,17 @@ final class RampAnimator<T> {
         if (!mAnimating && target != mCurrentValue) {
             mAnimating = true;
             mAnimatedValue = mCurrentValue;
+            if (mRate < 0.1f) {
+                // To mimic a smooth brightness change, the ramp rate is kept very small.
+                // However, since the brightness curve is not linear, at higher brightness
+                // targets, a slow ramp rate can take much much longer (> 15s). We kind of
+                // make the ramp rate non linear too to counter this issue
+                final float denom = 1.5f - 1.5f*Math.abs(mTargetValue - mCurrentValue)
+                        - 1.5f*Math.max(mTargetValue, mCurrentValue);
+                mTempRate = mRate / (denom < 0.25f ? 0.25f : denom);
+            } else {
+                mTempRate = mRate;
+            }
             mLastFrameTimeNanos = System.nanoTime();
             postAnimationCallback();
         }
@@ -148,15 +160,14 @@ final class RampAnimator<T> {
                 // Animation off.
                 mAnimatedValue = mTargetValue;
             } else {
-                final float amount = timeDelta * mRate / scale;
+                final float amount = timeDelta * mTempRate / scale;
                 if (mTargetValue > mCurrentValue) {
                     mAnimatedValue = Math.min(mAnimatedValue + amount, mTargetValue);
                 } else {
                     mAnimatedValue = Math.max(mAnimatedValue - amount, mTargetValue);
                 }
             }
-            final float oldCurrentValue = mCurrentValue;
-            if (!BrightnessSynchronizer.floatEquals(oldCurrentValue, mAnimatedValue)
+            if (!BrightnessSynchronizer.floatEquals(mCurrentValue, mAnimatedValue)
                     || BrightnessSynchronizer.floatEquals(mTargetValue, mAnimatedValue)) {
                 mCurrentValue = mAnimatedValue;
                 mProperty.setValue(mObject, mCurrentValue);
