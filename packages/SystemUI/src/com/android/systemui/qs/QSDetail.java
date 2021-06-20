@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Animatable;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
@@ -43,11 +44,15 @@ import com.android.systemui.R;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.qs.DetailAdapter;
 import com.android.systemui.statusbar.CommandQueue;
+import com.android.systemui.tuner.TunerService;
 
-public class QSDetail extends LinearLayout {
+public class QSDetail extends LinearLayout implements TunerService.Tunable {
 
     private static final String TAG = "QSDetail";
     private static final long FADE_DURATION = 300;
+
+    public static final String STATUS_BAR_CUSTOM_HEADER =
+            "system:" + Settings.System.STATUS_BAR_CUSTOM_HEADER;
 
     private final SparseArray<View> mDetailViews = new SparseArray<>();
     private final UiEventLogger mUiEventLogger = QSEvents.INSTANCE.getQsUiEventsLogger();
@@ -79,6 +84,8 @@ public class QSDetail extends LinearLayout {
     private boolean mSwitchState;
     private View mFooter;
 
+    private boolean mHeaderImageEnabled;
+
     public QSDetail(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
@@ -94,10 +101,7 @@ public class QSDetail extends LinearLayout {
         }
 
         // Update top space height in orientation change
-        mQsDetailTopSpace.getLayoutParams().height =
-                mContext.getResources().getDimensionPixelSize(
-                        com.android.internal.R.dimen.quick_qs_offset_height);
-        mQsDetailTopSpace.setLayoutParams(mQsDetailTopSpace.getLayoutParams());
+        updateResources();
     }
 
     @Override
@@ -126,6 +130,22 @@ public class QSDetail extends LinearLayout {
             }
         };
         mDetailDoneButton.setOnClickListener(doneListener);
+
+        Dependency.get(TunerService.class).addTunable(this,
+                STATUS_BAR_CUSTOM_HEADER);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case STATUS_BAR_CUSTOM_HEADER:
+                mHeaderImageEnabled =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                updateResources();
+                break;
+            default:
+                break;
+        }
     }
 
     public void setQsPanel(QSPanel panel, QuickStatusBarHeader header, View footer) {
@@ -159,6 +179,12 @@ public class QSDetail extends LinearLayout {
     }
 
     public void updateResources() {
+        mQsDetailTopSpace.getLayoutParams().height =
+                mContext.getResources().getDimensionPixelSize(
+                com.android.internal.R.dimen.quick_qs_offset_height) + (mHeaderImageEnabled ?
+                mContext.getResources().getDimensionPixelSize(R.dimen.qs_header_image_offset) : 0);
+        mQsDetailTopSpace.setLayoutParams(mQsDetailTopSpace.getLayoutParams());
+
         updateDetailText();
     }
 
