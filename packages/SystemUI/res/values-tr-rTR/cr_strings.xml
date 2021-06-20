@@ -224,5 +224,5 @@
     <string name="force_stop_dlg_text">Uygulamayı zorla durdurursanız, hatalı davranabilir.</string>
     <string name="guts_force_close_app">Durmaya zorla</string>
     <!-- Title for media output settings -->
-    <string name="media_output_title">Play media to</string>
+    <string name="media_output_title">Medyayı şuraya oynat</string>
 </resources>

@@ -224,5 +224,5 @@
     <string name="force_stop_dlg_text">Kui sunnite rakenduse peatuma, võib see valesti käituda.</string>
     <string name="guts_force_close_app">Sundpeata</string>
     <!-- Title for media output settings -->
-    <string name="media_output_title">Play media to</string>
+    <string name="media_output_title">Meedia esitamine</string>
 </resources>
