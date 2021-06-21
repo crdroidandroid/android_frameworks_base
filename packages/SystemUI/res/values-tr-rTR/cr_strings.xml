@@ -226,7 +226,7 @@
     <!-- Title for media output settings -->
     <string name="media_output_title">Medyayı şuraya oynat</string>
     <!-- Mono audio tile -->
-    <string name="quick_settings_monotoggle_tile">Audio mode</string>
-    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
-    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <string name="quick_settings_monotoggle_tile">Ses modu</string>
+    <string name="quick_settings_monotoggle_tile_mono">Mono ses</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Stereo ses</string>
 </resources>
