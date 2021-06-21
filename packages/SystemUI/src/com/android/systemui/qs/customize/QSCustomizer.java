@@ -41,6 +41,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.internal.logging.UiEventLogger;
 import com.android.internal.logging.UiEventLoggerImpl;
+import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.keyguard.ScreenLifecycle;
 import com.android.systemui.plugins.qs.QS;
@@ -52,6 +53,7 @@ import com.android.systemui.statusbar.phone.LightBarController;
 import com.android.systemui.statusbar.phone.NotificationsQuickSettingsContainer;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.KeyguardStateController.Callback;
+import com.android.systemui.tuner.TunerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,11 +66,14 @@ import javax.inject.Inject;
  * This adds itself to the status bar window, so it can appear on top of quick settings and
  * *someday* do fancy animations to get into/out of it.
  */
-public class QSCustomizer extends LinearLayout implements OnMenuItemClickListener {
+public class QSCustomizer extends LinearLayout implements OnMenuItemClickListener, TunerService.Tunable {
 
     private static final int MENU_RESET = Menu.FIRST;
     private static final String EXTRA_QS_CUSTOMIZING = "qs_customizing";
     private static final String TAG = "QSCustomizer";
+
+    public static final String STATUS_BAR_CUSTOM_HEADER =
+            "system:" + Settings.System.STATUS_BAR_CUSTOM_HEADER;
 
     private final QSDetailClipper mClipper;
     private final LightBarController mLightBarController;
@@ -146,14 +151,27 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         mScreenLifecycle = screenLifecycle;
         updateNavBackDrop(getResources().getConfiguration());
 
-        updateSettings();
+        Dependency.get(TunerService.class).addTunable(this,
+                STATUS_BAR_CUSTOM_HEADER);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case STATUS_BAR_CUSTOM_HEADER:
+                mHeaderImageEnabled =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                updateResources();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateNavBackDrop(newConfig);
-        updateResources();
     }
 
     public void updateResources() {
@@ -190,7 +208,7 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
             navBackdrop.setVisibility(mIsShowingNavBackdrop ? View.VISIBLE : View.GONE);
         }
         updateNavColors();
-        updateSettings();
+        updateResources();
     }
 
     private void updateNavColors() {
@@ -396,10 +414,4 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
             mNotifQsContainer.setCustomizerAnimating(false);
         }
     };
-
-    private void updateSettings() {
-        mHeaderImageEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
-                UserHandle.USER_CURRENT) == 1;
-    }
 }
