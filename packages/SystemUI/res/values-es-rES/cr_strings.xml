@@ -253,7 +253,7 @@ Y Nueve</string>
     <!-- Title for media output settings -->
     <string name="media_output_title">Reproducir multimedia en</string>
     <!-- Mono audio tile -->
-    <string name="quick_settings_monotoggle_tile">Audio mode</string>
-    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
-    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <string name="quick_settings_monotoggle_tile">Modo de audio</string>
+    <string name="quick_settings_monotoggle_tile_mono">Audio en mono</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Audio en estéreo</string>
 </resources>
