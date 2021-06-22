@@ -229,6 +229,6 @@
     <string name="media_output_title">Воспроизвести медиа на</string>
     <!-- Mono audio tile -->
     <string name="quick_settings_monotoggle_tile">Аудио режим</string>
-    <string name="quick_settings_monotoggle_tile_mono">Монозвук</string>
-    <string name="quick_settings_monotoggle_tile_stereo">Стереозвук</string>
+    <string name="quick_settings_monotoggle_tile_mono">Моно режим</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Стерео режим</string>
 </resources>
