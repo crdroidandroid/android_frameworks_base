@@ -225,7 +225,7 @@
     <!-- Title for media output settings -->
     <string name="media_output_title">播放媒体到</string>
     <!-- Mono audio tile -->
-    <string name="quick_settings_monotoggle_tile">Audio mode</string>
-    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
-    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <string name="quick_settings_monotoggle_tile">音频模式</string>
+    <string name="quick_settings_monotoggle_tile_mono">单声道</string>
+    <string name="quick_settings_monotoggle_tile_stereo">立体声</string>
 </resources>
