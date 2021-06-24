@@ -227,4 +227,8 @@
     <string name="guts_force_close_app">Vynutit ukončení</string>
     <!-- Title for media output settings -->
     <string name="media_output_title">Přehrávat média\u00a0v</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">Režim zvuku</string>
+    <string name="quick_settings_monotoggle_tile_mono">Mono zvuk</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Stereo zvuk</string>
 </resources>

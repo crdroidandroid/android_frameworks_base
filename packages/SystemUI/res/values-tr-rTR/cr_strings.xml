@@ -225,4 +225,8 @@
     <string name="guts_force_close_app">Durmaya zorla</string>
     <!-- Title for media output settings -->
     <string name="media_output_title">Medyayı şuraya oynat</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">Ses modu</string>
+    <string name="quick_settings_monotoggle_tile_mono">Mono ses</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Stereo ses</string>
 </resources>

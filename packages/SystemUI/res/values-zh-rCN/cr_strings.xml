@@ -224,4 +224,8 @@
     <string name="guts_force_close_app">强行停止</string>
     <!-- Title for media output settings -->
     <string name="media_output_title">播放媒体到</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">音频模式</string>
+    <string name="quick_settings_monotoggle_tile_mono">单声道</string>
+    <string name="quick_settings_monotoggle_tile_stereo">立体声</string>
 </resources>

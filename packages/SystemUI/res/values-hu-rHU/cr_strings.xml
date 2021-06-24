@@ -225,4 +225,8 @@
     <string name="guts_force_close_app">Kényszerített leállítás</string>
     <!-- Title for media output settings -->
     <string name="media_output_title">Lejátszás a következővel</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">Audióformátum</string>
+    <string name="quick_settings_monotoggle_tile_mono">Monó hang</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Sztereó hang</string>
 </resources>

@@ -261,4 +261,8 @@
     <string name="guts_force_close_app">Αναγκαστική διακοπή</string>
     <!-- Title for media output settings -->
     <string name="media_output_title">Αναπαραγωγή πολυμέσων σε</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">Λειτουργία ήχου</string>
+    <string name="quick_settings_monotoggle_tile_mono">Μονοφωνικός ήχος</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Στερεοφωνικός ήχος</string>
 </resources>
