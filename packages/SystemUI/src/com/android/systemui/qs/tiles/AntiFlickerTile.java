@@ -109,7 +109,11 @@ public class AntiFlickerTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        state.value = mLiveDisplay.isAntiFlickerEnabled();
+        try {
+            state.value = mLiveDisplay.isAntiFlickerEnabled();
+        } catch (NullPointerException e) {
+            state.value = false;
+        }
         state.icon = mIcon;
         state.contentDescription = mContext.getString(R.string.quick_settings_anti_flicker);
         state.state = (state.value ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
@@ -133,6 +137,7 @@ public class AntiFlickerTile extends QSTileImpl<BooleanState> {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateConfig();
+            refreshState();
             unregisterReceiver();
         }
     };
