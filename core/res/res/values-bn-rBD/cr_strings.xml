@@ -16,43 +16,43 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- AOKP custom system animations -->
-    <string name="animation_fade">Fade</string>
-    <string name="animation_slide_right">Slide in right</string>
-    <string name="animation_slide_left">Slide in left</string>
-    <string name="animation_slide_right_no_fade">Slide in right (No fade)</string>
-    <string name="animation_slide_left_no_fade">Slide in left (No fade)</string>
-    <string name="animation_slide_up">Slide in bottom</string>
-    <string name="animation_slide_down">Slide in top</string>
-    <string name="animation_default">Default</string>
-    <string name="animation_translucent">Translucent</string>
-    <string name="animation_grow_shrink">Grow in (Top)</string>
-    <string name="animation_grow_shrink_center">Grow in (Center)</string>
-    <string name="animation_grow_shrink_bottom">Grow in (Bottom)</string>
-    <string name="animation_grow_shrink_left">Grow in (Left)</string>
+    <string name="animation_fade">অনুজ্জ্বল</string>
+    <string name="animation_slide_right">ডানদিক থেকে স্লাইড</string>
+    <string name="animation_slide_left">বামদিক থেকে স্লাইড</string>
+    <string name="animation_slide_right_no_fade">ডান দিক থেকে স্লাইড (ফেড ছাড়া)</string>
+    <string name="animation_slide_left_no_fade">বাম দিক থেকে স্লাইড (ফেড ছাড়া)</string>
+    <string name="animation_slide_up">নিচের দিক থেকে স্লাইড</string>
+    <string name="animation_slide_down">উপরের দিক থেকে স্লাইড</string>
+    <string name="animation_default">পূর্ব-নির্ধারিত</string>
+    <string name="animation_translucent">স্বচ্ছ</string>
+    <string name="animation_grow_shrink">উপরের দিক থেকে গজানো</string>
+    <string name="animation_grow_shrink_center">মাঝখান থেকে গজানো</string>
+    <string name="animation_grow_shrink_bottom">নিচের দিক থেকে গজানো</string>
+    <string name="animation_grow_shrink_left">বাম দিক থেকে গজানো</string>
     <string name="animation_grow_shrink_right">Grow in (Right)</string>
-    <string name="animation_random">Random</string>
-    <string name="action_null">Blank</string>
+    <string name="animation_random">যেকোনো</string>
+    <string name="action_null">খালি</string>
     <string name="animation_ethans">Ethans</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to dogbin</string>
+    <string name="aerr_copy">ক্রাশ লগের ইউআরএল কপি করুন</string>
+    <string name="url_copy_success">সফলভাবে URL কপি করা হয়েছে</string>
+    <string name="url_copy_failed">লগ ফাইলকে ডগবিনে আপলোড করার সময় ত্রুটি ঘটেছে</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">আনলক করতে পাওয়ার বাটন টিপে ধরে রাখুন</string>
     <!-- Gaming mode -->
-    <string name="notification_channel_gaming">Gaming mode</string>
-    <string name="gaming_mode_notification_title">Gaming mode enabled</string>
-    <string name="gaming_mode_notification_content">Tap to turn off Gaming mode</string>
-    <string name="gaming_mode_enabled_toast">Gaming mode turned on</string>
-    <string name="gaming_mode_disabled_toast">Gaming mode turned off</string>
+    <string name="notification_channel_gaming">গেমিং মোড</string>
+    <string name="gaming_mode_notification_title">গেমিং মোড চালু হয়েছে</string>
+    <string name="gaming_mode_notification_content">গেমিং মোডটি বন্ধ করতে এখানে চাপুন</string>
+    <string name="gaming_mode_enabled_toast">গেমিং মোড চালু রয়েছে</string>
+    <string name="gaming_mode_disabled_toast">গেমিং মোড বন্ধ রয়েছে</string>
     <!-- MicroG -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">প্যাকেজ স্বাক্ষর স্পুফ করুন</string>
     <!-- Description of an application permission, listed so the user can choose whether
          they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">অ্যাপ্লিকেশনটিকে অন্য অ্যাপের ভান করার অনুমতি দেয়। ক্ষতিকারক অ্যাপ্লিকেশন এই অপশন টি ব্যবহার করে ব্যক্তিগত ও গোপন তথ্য হাতিয়ে নিতে পারে। অত্যন্ত সাবধানতার সাথে অপশনটি ব্যবহার করার অনুমতি দিন!</string>
     <!-- Screen recorder -->
-    <string name="global_action_screenrecord">Screenrecord</string>
+    <string name="global_action_screenrecord">স্ক্রিনরেকর্ড</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
-    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
+    <string name="app_clipboard_access_denied">%1$s কে ক্লিপবোর্ড এর অ্যাক্সেস দেওয়া হয়নি</string>
+    <string name="app_clipboard_access_granted">%1$s কে ক্লিপবোর্ড এর অ্যাক্সেস দেওয়া হয়েছে</string>
 </resources>
