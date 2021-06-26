@@ -104,6 +104,7 @@ class MediaSessionStack {
             // media session might be a fake which isn't able to handle the media key events.
             // TODO(b/154456172): Make this decision unaltered by non-media app's playback.
             updateMediaButtonSession(null);
+            updateMediaButtonSessionIfNeeded();
         }
         clearCache(record.getUserId());
     }
@@ -215,6 +216,14 @@ class MediaSessionStack {
                     updateMediaButtonSession(mediaButtonSession);
                 }
                 return;
+            }
+        }
+
+        // If the media button session is null, update it with the session last added in list
+        if (mMediaButtonSession == null) {
+            int size = mSessions.size();
+            if (size > 0) {
+                updateMediaButtonSession(mSessions.get(size - 1));
             }
         }
     }
