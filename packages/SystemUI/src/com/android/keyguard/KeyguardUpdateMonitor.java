@@ -2551,7 +2551,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         // Take a guess at initial SIM state, battery status and PLMN until we get an update
         mBatteryStatus = new BatteryStatus(BATTERY_STATUS_UNKNOWN, /* level= */ 100, /* plugged= */
                 0, CHARGING_POLICY_DEFAULT, /* maxChargingWattage= */0.0f, /* present= */true,
-                0.0f, 0.0f, 0.0f);
+                0.0f, 0.0f, 0.0f, false);
         // Watch for interesting updates
         final IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
@@ -4006,6 +4006,11 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
               (current.maxChargingWattage != old.maxChargingWattage ||
                current.maxChargingCurrent != old.maxChargingCurrent ||
                current.maxChargingVoltage != old.maxChargingVoltage)) {
+            return true;
+        }
+
+        // change in OEM charging while plugged in
+        if (nowPluggedIn && current.oemChargeStatus != old.oemChargeStatus) {
             return true;
         }
 
