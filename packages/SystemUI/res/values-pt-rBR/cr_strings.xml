@@ -224,9 +224,9 @@
     <string name="force_stop_dlg_text">Se você forçar a parada de um app, ele pode apresentar mau funcionamento.</string>
     <string name="guts_force_close_app">Forçar parada</string>
     <!-- Title for media output settings -->
-    <string name="media_output_title">Play media to</string>
+    <string name="media_output_title">Tocar mídia para</string>
     <!-- Mono audio tile -->
-    <string name="quick_settings_monotoggle_tile">Audio mode</string>
-    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
-    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <string name="quick_settings_monotoggle_tile">Modo de áudio</string>
+    <string name="quick_settings_monotoggle_tile_mono">Áudio mono</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Áudio estéreo</string>
 </resources>
