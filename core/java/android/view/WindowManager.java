@@ -1225,6 +1225,18 @@ public interface WindowManager extends ViewManager {
         public static final int TYPE_TRUSTED_APPLICATION_OVERLAY = FIRST_SYSTEM_WINDOW + 42;
 
         /**
+         * Window type: Fingerprint overlay
+         * @hide
+         */
+        public static final int TYPE_SYSTEM_FINGERPRINT = FIRST_SYSTEM_WINDOW + 43;
+
+        /**
+         * Window type: Fingerprint high light overlay
+         * @hide
+         */
+        public static final int TYPE_SYSTEM_FINGERPRINT_HIGH_LIGHT = FIRST_SYSTEM_WINDOW + 44;
+
+        /**
          * End of types of system windows.
          */
         public static final int LAST_SYSTEM_WINDOW      = 2999;
