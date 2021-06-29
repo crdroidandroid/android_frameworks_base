@@ -97,6 +97,8 @@ import static android.view.WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL;
 import static android.view.WindowManager.LayoutParams.TYPE_STATUS_BAR_SUB_PANEL;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_FINGERPRINT;
+import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_FINGERPRINT_HIGH_LIGHT;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
 import static android.view.WindowManager.LayoutParams.TYPE_TOAST;
 import static android.view.WindowManager.LayoutParams.TYPE_TRUSTED_APPLICATION_OVERLAY;
@@ -1732,6 +1734,7 @@ public class DisplayPolicy {
         // For purposes of putting out fake window up to steal focus, we will
         // drive nav being hidden only by whether it is requested.
         final int sysui = mLastSystemUiFlags;
+        boolean fodState = true;
         final int behavior = mLastBehavior;
         final InsetsSourceProvider provider =
                 mDisplayContent.getInsetsStateController().peekSourceProvider(ITYPE_NAVIGATION_BAR);
@@ -1760,7 +1763,12 @@ public class DisplayPolicy {
         // be hidden (because of the screen aspect ratio), then take that into account.
         navVisible |= !canHideNavigationBar();
 
-        boolean updateSysUiVisibility = layoutNavigationBar(displayFrames, uiMode, navVisible,
+        if (mFocusedWindow != null && mFocusedWindow.getAttrs().type == TYPE_SYSTEM_FINGERPRINT
+                && !mService.mPowerManager.isInteractive()) {
+            fodState = false;
+        }
+
+        boolean updateSysUiVisibility = layoutNavigationBar(displayFrames, uiMode, navVisible & fodState,
                 navTranslucent, navAllowedHidden, notificationShadeForcesShowingNavigation,
                 null /* simulatedContentFrame */);
         if (DEBUG_LAYOUT) Slog.i(TAG, "mDock rect:" + displayFrames.mDock);
@@ -2500,7 +2508,8 @@ public class DisplayPolicy {
                     df.set(displayFrames.mUnrestricted);
                     pf.set(displayFrames.mUnrestricted);
                     if (DEBUG_LAYOUT) Slog.v(TAG, "Laying out navigation bar window: " + pf);
-                } else if ((type == TYPE_SECURE_SYSTEM_OVERLAY || type == TYPE_SCREENSHOT)
+                } else if ((type == TYPE_SECURE_SYSTEM_OVERLAY || type == TYPE_SCREENSHOT
+                        || type == TYPE_SYSTEM_FINGERPRINT || type == TYPE_SYSTEM_FINGERPRINT_HIGH_LIGHT)
                         && ((fl & FLAG_FULLSCREEN) != 0)) {
                     // Fullscreen secure system overlays get what they ask for. Screenshot region
                     // selection overlay should also expand to full screen.
