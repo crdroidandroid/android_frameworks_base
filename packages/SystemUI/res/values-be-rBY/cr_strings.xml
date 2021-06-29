@@ -226,9 +226,9 @@
     <string name="force_stop_dlg_text">Прымусовае закрыццё праграмы можа адбіцца на яе функцыянальнасці.</string>
     <string name="guts_force_close_app">Спынiць прымусова</string>
     <!-- Title for media output settings -->
-    <string name="media_output_title">Play media to</string>
+    <string name="media_output_title">Прайграваць медыя ў праграме</string>
     <!-- Mono audio tile -->
-    <string name="quick_settings_monotoggle_tile">Audio mode</string>
-    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
-    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <string name="quick_settings_monotoggle_tile">Рэжым аўдыя</string>
+    <string name="quick_settings_monotoggle_tile_mono">Мона рэжым</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Стэрэа рэжым</string>
 </resources>
