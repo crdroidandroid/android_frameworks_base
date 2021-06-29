@@ -16,10 +16,9 @@
 
 package com.android.internal.util;
 
-import android.util.JsonReader;
 import android.os.Handler;
 import android.os.HandlerThread;
-
+import android.util.JsonReader;
 
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -28,21 +27,21 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Helper functions for uploading to del.dog
+ * Helper functions for uploading to pasty
  */
-public final class DogbinUtils {
-    private static final String TAG = "DogbinUtils";
-    private static final String BASE_URL = "https://del.dog";
+public final class PastyUtils {
+    private static final String TAG = "PastyUtils";
+    private static final String BASE_URL = "https://paste.crdroid.net";
     private static final String API_URL = String.format("%s/documents", BASE_URL);
     private static Handler handler;
 
-    private DogbinUtils() {
+    private PastyUtils() {
     }
 
     /**
-     * Uploads {@code content} to dogbin
-     * 
-     * @param content the content to upload to dogbin
+     * Uploads {@code content} to pasty
+     *
+     * @param content the content to upload to pasty
      * @param callback the callback to call on success / failure
      */
     public static void upload(String content, UploadResultCallback callback) {
@@ -76,14 +75,14 @@ public final class DogbinUtils {
                         if (!key.isEmpty()) {
                             callback.onSuccess(getUrl(key));
                         } else {
-                            String msg = "Failed to upload to dogbin: No key retrieved";
-                            callback.onFail(msg, new DogbinException(msg));
+                            String msg = "Failed to upload to pasty: No key retrieved";
+                            callback.onFail(msg, new PastyException(msg));
                         }
                     } finally {
                         urlConnection.disconnect();
                     }
                 } catch (Exception e) {
-                    callback.onFail("Failed to upload to dogbin", e);
+                    callback.onFail("Failed to upload to pasty", e);
                 }
             }
         });
@@ -98,7 +97,7 @@ public final class DogbinUtils {
 
     private static Handler getHandler() {
         if (handler == null) {
-            HandlerThread handlerThread = new HandlerThread("dogbinThread");
+            HandlerThread handlerThread = new HandlerThread("pastyThread");
             if (!handlerThread.isAlive())
                 handlerThread.start();
             handler = new Handler(handlerThread.getLooper());
