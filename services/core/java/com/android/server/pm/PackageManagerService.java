@@ -3105,17 +3105,8 @@ public class PackageManagerService implements PackageSender, TestUtilityService 
 
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.SUSPEND_APPS,
                 callingMethod);
-
-        final int packageUid = snapshot.getPackageUid(callingPackage, 0, userId);
-        final boolean allowedPackageUid = packageUid == callingUid;
-        // TODO(b/139383163): remove special casing for shell and enforce INTERACT_ACROSS_USERS_FULL
-        final boolean allowedShell = callingUid == SHELL_UID
-                && UserHandle.isSameApp(packageUid, callingUid);
-
-        if (!allowedShell && !allowedPackageUid) {
-            throw new SecurityException("Calling package " + callingPackage + " in user "
-                    + userId + " does not belong to calling uid " + callingUid);
-        }
+        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.INTERACT_ACROSS_USERS,
+                callingMethod);
     }
 
     void unsuspendForSuspendingPackage(@NonNull Computer computer, String suspendingPackage,
