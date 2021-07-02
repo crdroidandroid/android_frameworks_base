@@ -3265,15 +3265,24 @@ public class PackageManagerService implements PackageSender, TestUtilityService 
                 callingMethod);
 
         final int packageUid = snapshot.getPackageUid(callingPackage, 0, userId);
-        final boolean allowedPackageUid = packageUid == callingUid;
-        // TODO(b/139383163): remove special casing for shell and enforce INTERACT_ACROSS_USERS_FULL
-        final boolean allowedShell = callingUid == SHELL_UID
-                && UserHandle.isSameApp(packageUid, callingUid);
-
-        if (!allowedShell && !allowedPackageUid) {
-            throw new SecurityException("Calling package " + callingPackage + " in user "
-                    + userId + " does not belong to calling uid " + callingUid);
+        if (packageUid == callingUid) {
+            return;
         }
+
+        final String callerMismatchMessage = "Calling package " + callingPackage + " in user "
+                + userId + " does not belong to calling uid " + callingUid;
+        if (!UserHandle.isSameApp(packageUid, callingUid)) {
+            throw new SecurityException(callerMismatchMessage);
+        }
+
+        final UserManagerService ums = UserManagerService.getInstance();
+        final UserInfo parent = ums != null ? ums.getProfileParent(userId) : null;
+
+        // If calling from a parent, we only need INTERACT_ACROSS_USERS, not full.
+        final boolean requireFullPermission = parent == null
+                || callingUid != snapshot.getPackageUid(callingPackage, 0, parent.id);
+        snapshot.enforceCrossUserPermission(callingUid, userId, requireFullPermission,
+                false /* checkShell */, callerMismatchMessage);
     }
 
     void unsuspendForSuspendingPackage(@NonNull Computer computer, String suspendingPackage,
