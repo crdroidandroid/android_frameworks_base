@@ -496,6 +496,9 @@ public class MobileSignalController extends SignalController<
                     case 6:
                         resId = R.drawable.ic_vowifi_oneplus_compact;
                         break;
+                    case 7:
+                        resId = R.drawable.ic_vowifi_vivo;
+                        break;
                 }
             }
         } else if (mImsManager != null && mConfig.showVolteIcon && mVoLTEicon > 0 && isVolteAvailable()) {
@@ -886,6 +889,9 @@ public class MobileSignalController extends SignalController<
                 // Oneplus Compact
                 case 6:
                     return TelephonyIcons.VOWIFI_ONEPLUS_COMPACT;
+                // Vivo
+                case 7:
+                    return TelephonyIcons.VOWIFI_VIVO;
             }
         } else {
             return null;
