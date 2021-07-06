@@ -1614,7 +1614,7 @@ public class ComputerEngine implements Computer {
             if (p.getMetaData() != null &&
                     p.getTargetSdkVersion() > Build.VERSION_CODES.LOLLIPOP_MR1) {
                 String sig = p.getMetaData().getString("fake-signature");
-                if (sig != null &&
+                if (sig != null && pi != null &&
                         permissions.contains("android.permission.FAKE_PACKAGE_SIGNATURE")) {
                     pi.signatures = new Signature[] {new Signature(sig)};
                 }
