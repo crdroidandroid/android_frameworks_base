@@ -367,7 +367,6 @@ public class FODCircleView extends ImageView implements TunerService.Tunable {
 
         mWindowManager.addView(this, mParams);
 
-        updatePosition();
         hide();
 
         mLockPatternUtils = new LockPatternUtils(mContext);
