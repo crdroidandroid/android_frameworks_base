@@ -132,7 +132,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
             dismiss();
         });
 
-        if (mFlags.isEnabled(Flags.WM_ENABLE_PARTIAL_SCREEN_SHARING)) {
+        if (mFlags != null && mFlags.isEnabled(Flags.WM_ENABLE_PARTIAL_SCREEN_SHARING)) {
             TextView appBtn = findViewById(R.id.button_app);
 
             appBtn.setVisibility(View.VISIBLE);

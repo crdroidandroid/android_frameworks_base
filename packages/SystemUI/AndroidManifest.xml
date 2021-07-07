@@ -204,6 +204,9 @@
     <permission android:name="android.permission.CUSTOMIZE_SYSTEM_UI"
         android:protectionLevel="signature|privileged" />
 
+    <permission android:name="com.android.systemui.permission.SCREEN_RECORDING"
+            android:protectionLevel="signature" />
+
     <!-- Adding Quick Settings tiles -->
     <uses-permission android:name="android.permission.BIND_QUICK_SETTINGS_TILE" />
 
@@ -461,7 +464,13 @@
             android:permission="android.permission.LAUNCH_CAPTURE_CONTENT_ACTIVITY_FOR_NOTE" />
 
         <service android:name=".screenrecord.RecordingService"
-                 android:foregroundServiceType="systemExempted"/>
+            android:foregroundServiceType="systemExempted"
+            android:exported="true"
+            android:permission="com.android.systemui.permission.SCREEN_RECORDING">
+            <intent-filter>
+                <action android:name="com.android.systemui.screenrecord.RecordingService" />
+            </intent-filter>
+        </service>
 
         <receiver android:name=".SysuiRestartReceiver"
             android:exported="false">
