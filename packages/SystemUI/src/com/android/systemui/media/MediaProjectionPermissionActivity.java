@@ -368,6 +368,6 @@ public class MediaProjectionPermissionActivity extends Activity
     }
 
     private boolean isPartialScreenSharingEnabled() {
-        return mFeatureFlags.isEnabled(Flags.WM_ENABLE_PARTIAL_SCREEN_SHARING);
+        return mFeatureFlags != null && mFeatureFlags.isEnabled(Flags.WM_ENABLE_PARTIAL_SCREEN_SHARING);
     }
 }
