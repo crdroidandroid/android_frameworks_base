@@ -62,6 +62,10 @@ public class DisplayTransformManager {
      * Color transform level used by A11y services to invert the display colors.
      */
     public static final int LEVEL_COLOR_MATRIX_INVERT_COLOR = 300;
+    /**
+     * Color transform level used to adjust the color balance of the display.
+     */
+    public static final int LEVEL_COLOR_MATRIX_COLOR_BALANCE = 400;
 
     private static final int SURFACE_FLINGER_TRANSACTION_COLOR_MATRIX = 1015;
     private static final int SURFACE_FLINGER_TRANSACTION_DALTONIZER = 1014;
