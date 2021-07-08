@@ -110,7 +110,7 @@ public final class ColorDisplayService extends SystemService {
     /**
      * The transition time, in milliseconds, for Night Display to turn on/off.
      */
-    private static final long TRANSITION_DURATION = 3000L;
+    private static final long TRANSITION_DURATION = 10000L;
 
     private static final int MSG_USER_CHANGED = 0;
     private static final int MSG_SET_UP = 1;
