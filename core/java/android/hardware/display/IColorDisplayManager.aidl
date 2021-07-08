@@ -43,6 +43,9 @@ interface IColorDisplayManager {
     int getColorMode();
     void setColorMode(int colorMode);
 
+    int getColorBalanceChannel(int channel);
+    boolean setColorBalanceChannel(int channel, int value);
+
     boolean isDisplayWhiteBalanceEnabled();
     boolean setDisplayWhiteBalanceEnabled(boolean enabled);
 }
