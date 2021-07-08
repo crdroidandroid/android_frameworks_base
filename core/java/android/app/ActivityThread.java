@@ -85,6 +85,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.HardwareRenderer;
 import android.graphics.ImageDecoder;
+import android.graphics.Typeface;
 import android.hardware.display.DisplayManagerGlobal;
 import android.inputmethodservice.InputMethodService;
 import android.net.ConnectivityManager;
@@ -5776,6 +5777,7 @@ public final class ActivityThread extends ClientTransactionHandler {
                     + config);
 
             final Resources appResources = mInitialApplication.getResources();
+            Typeface.updateDefaultFont(appResources);
             if (appResources.hasOverrideDisplayAdjustments()) {
                 // The value of Display#getRealSize will be adjusted by FixedRotationAdjustments,
                 // but Display#getSize refers to DisplayAdjustments#mConfiguration. So the rotated
