@@ -181,7 +181,7 @@ final class DisplayWhiteBalanceTintController extends TintController {
             mCurrentColorTemperatureXYZ = ColorSpace.cctToXyz(cct);
 
             mChromaticAdaptationMatrix =
-                    ColorSpace.chromaticAdaptation(ColorSpace.Adaptation.BRADFORD,
+                    ColorSpace.chromaticAdaptation(ColorSpace.Adaptation.CAT16,
                             mDisplayNominalWhiteXYZ, mCurrentColorTemperatureXYZ);
 
             // Convert the adaptation matrix to RGB space
