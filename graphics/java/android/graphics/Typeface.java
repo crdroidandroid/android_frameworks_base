@@ -27,6 +27,7 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.graphics.fonts.Font;
 import android.graphics.fonts.FontFamily;
 import android.graphics.fonts.FontStyle;
@@ -38,6 +39,7 @@ import android.provider.FontRequest;
 import android.provider.FontsContract;
 import android.text.FontConfig;
 import android.util.Base64;
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.LruCache;
 import android.util.SparseArray;
@@ -56,6 +58,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -125,6 +128,8 @@ public class Typeface {
     private static final Object sDynamicCacheLock = new Object();
 
     static Typeface sDefaultTypeface;
+    // For dynamic default font styles
+    private static final HashMap<String, Typeface> sSystemFontOverrides = new HashMap<>();
 
     // Following two fields are not used but left for hiddenapi private list
     /**
@@ -807,7 +812,7 @@ public class Typeface {
      * @return The best matching typeface.
      */
     public static Typeface create(String familyName, @Style int style) {
-        return create(getSystemDefaultTypeface(familyName), style);
+        return create(getSystemOverrideTypeface(familyName), style);
     }
 
     /**
@@ -1098,6 +1103,11 @@ public class Typeface {
         mWeight = nativeGetWeight(ni);
     }
 
+    private static Typeface getSystemOverrideTypeface(@NonNull String familyName) {
+        Typeface tf = sSystemFontOverrides.get(familyName);
+        return tf == null ? getSystemDefaultTypeface(familyName) : tf;
+    }
+
     private static Typeface getSystemDefaultTypeface(@NonNull String familyName) {
         Typeface tf = sSystemFontMap.get(familyName);
         return tf == null ? Typeface.DEFAULT : tf;
@@ -1136,6 +1146,48 @@ public class Typeface {
         }
     }
 
+    private static void setPublicDefaults(String familyName) {
+        sDefaults = new Typeface[] {
+            DEFAULT,
+            DEFAULT_BOLD,
+            create(getSystemDefaultTypeface(familyName), Typeface.ITALIC),
+            create(getSystemDefaultTypeface(familyName), Typeface.BOLD_ITALIC),
+        };
+    }
+
+    private static void setFinalField(String fieldName, Typeface value) {
+        try {
+            Field field = Typeface.class.getDeclaredField(fieldName);
+            // isAccessible bypasses final on ART
+            field.setAccessible(true);
+            field.set(null, value);
+            field.setAccessible(false);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Log.e(TAG, "Failed to set Typeface." + fieldName, e);
+        }
+    }
+
+    /** @hide */
+    public static void updateDefaultFont(Resources res) {
+        String familyName = res.getString(com.android.internal.R.string.config_bodyFontFamily);
+        Typeface typeface = sSystemFontMap.get(familyName);
+        setDefault(typeface);
+
+        // Static typefaces in public API
+        setFinalField("DEFAULT", create(getSystemDefaultTypeface(familyName), 0));
+        setFinalField("DEFAULT_BOLD", create(getSystemDefaultTypeface(familyName), Typeface.BOLD));
+        setFinalField("SANS_SERIF", DEFAULT);
+
+        // For default aliases used in framework styles
+        sSystemFontOverrides.put("sans-serif", typeface);
+        sSystemFontOverrides.put("sans-serif-thin", create(typeface, 100, false));
+        sSystemFontOverrides.put("sans-serif-light", create(typeface, 300, false));
+        sSystemFontOverrides.put("sans-serif-medium", create(typeface, 500, false));
+        sSystemFontOverrides.put("sans-serif-black", create(typeface, 900, false));
+
+        setPublicDefaults(familyName);
+    }
+
     static {
         final HashMap<String, Typeface> systemFontMap = new HashMap<>();
         initSystemDefaultTypefaces(systemFontMap, SystemFonts.getRawSystemFallbackMap(),
@@ -1154,12 +1206,7 @@ public class Typeface {
         SERIF           = create("serif", 0);
         MONOSPACE       = create("monospace", 0);
 
-        sDefaults = new Typeface[] {
-            DEFAULT,
-            DEFAULT_BOLD,
-            create((String) null, Typeface.ITALIC),
-            create((String) null, Typeface.BOLD_ITALIC),
-        };
+        setPublicDefaults(null);
 
         // A list of generic families to be registered in native.
         // https://www.w3.org/TR/css-fonts-4/#generic-font-families
