@@ -218,15 +218,15 @@
     <string name="applock_credential">&#160;açmaq üçün</string>
     <string name="applock_unlock">Kilidi aç</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">Güc menyusu</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Force stop</string>
+    <string name="force_stop_dlg_title">Məcburi dayandırılsın?</string>
+    <string name="force_stop_dlg_text">Tətbiqi məcburi dayandırsanız, xətalı davrana bilər.</string>
+    <string name="guts_force_close_app">Məcburi dayandırılsın</string>
     <!-- Title for media output settings -->
-    <string name="media_output_title">Play media to</string>
+    <string name="media_output_title">Medianı burada oynat</string>
     <!-- Mono audio tile -->
-    <string name="quick_settings_monotoggle_tile">Audio mode</string>
-    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
-    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <string name="quick_settings_monotoggle_tile">Səs rejimi</string>
+    <string name="quick_settings_monotoggle_tile_mono">Mono səs</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Stereo səs</string>
 </resources>
