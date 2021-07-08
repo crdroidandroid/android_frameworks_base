@@ -809,6 +809,18 @@ public abstract class ColorSpace {
                  0.7328f, -0.7036f,  0.0030f,
                  0.4296f,  1.6975f,  0.0136f,
                 -0.1624f,  0.0061f,  0.9834f
+        }),
+        /**
+         * CAT16 chromatic adaptation transform, as defined in the
+         * CAM16 color appearance model.
+         *
+         * @see <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/col.22131">Comprehensive color solutions: CAM16, CAT16, and CAM16-UCS</a>
+         * @hide
+        */
+        CAT16(new float[] {
+                 0.401288f, -0.250268f, -0.002079f,
+                 0.650173f,  1.204414f,  0.048952f,
+                -0.051461f,  0.045854f,  0.953127f,
         });
 
         final float[] mTransform;
