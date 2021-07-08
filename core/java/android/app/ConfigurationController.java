@@ -28,6 +28,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.HardwareRenderer;
+import android.graphics.Typeface;
 import android.os.LocaleList;
 import android.os.Trace;
 import android.util.DisplayMetrics;
@@ -185,6 +186,7 @@ class ConfigurationController {
 
             final Application app = mActivityThread.getApplication();
             final Resources appResources = app.getResources();
+            Typeface.updateDefaultFont(appResources);
             if (appResources.hasOverrideDisplayAdjustments()) {
                 // The value of Display#getRealSize will be adjusted by FixedRotationAdjustments,
                 // but Display#getSize refers to DisplayAdjustments#mConfiguration. So the rotated
