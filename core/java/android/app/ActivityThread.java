@@ -7715,6 +7715,7 @@ public final class ActivityThread extends ClientTransactionHandler
 
         // Preload fonts resources
         FontsContract.setApplicationContextForResources(appContext);
+        Typeface.updateDefaultFont(data.info.getResources());
         if (!Process.isIsolated()) {
             try {
                 final ApplicationInfo info =
