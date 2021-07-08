@@ -406,6 +406,30 @@ public final class ColorDisplayManager {
     }
 
     /**
+     * Set the global color balance for a specific RGB channel.
+     *
+     * @param channel RGB (0,1,2) channel to change
+     * @param value 0-255 (inclusive), where 255 is default balance
+     * @return whether the change was successful
+     * @hide
+     */
+    @RequiresPermission(android.Manifest.permission.CONTROL_DISPLAY_COLOR_TRANSFORMS)
+    public boolean setColorBalanceChannel(int channel, int value) {
+        return mManager.setColorBalanceChannel(channel, value);
+    }
+
+    /**
+     * Get the current global color balance for a specific RGB channel.
+     *
+     * @param channel RGB (0,1,2) channel to get the balance of
+     * @return weight of the channel, 0-255 (inclusive) where 255 is the default
+     * @hide
+     */
+    public int getColorBalanceChannel(int channel) {
+        return mManager.getColorBalanceChannel(channel);
+    }
+
+    /**
      * Enables or disables display white balance.
      *
      * @hide
@@ -645,6 +669,22 @@ public final class ColorDisplayManager {
         boolean setAppSaturationLevel(String packageName, int saturationLevel) {
             try {
                 return mCdm.setAppSaturationLevel(packageName, saturationLevel);
+            } catch (RemoteException e) {
+                throw e.rethrowFromSystemServer();
+            }
+        }
+
+        boolean setColorBalanceChannel(int channel, int value) {
+            try {
+                return mCdm.setColorBalanceChannel(channel, value);
+            } catch (RemoteException e) {
+                throw e.rethrowFromSystemServer();
+            }
+        }
+
+        int getColorBalanceChannel(int channel) {
+            try {
+                return mCdm.getColorBalanceChannel(channel);
             } catch (RemoteException e) {
                 throw e.rethrowFromSystemServer();
             }
