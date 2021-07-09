@@ -47,6 +47,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManagerInternal;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.graphics.ColorSpace;
 import android.hardware.display.ColorDisplayManager;
 import android.hardware.display.ColorDisplayManager.AutoMode;
 import android.hardware.display.ColorDisplayManager.ColorMode;
@@ -1285,46 +1286,54 @@ public final class ColorDisplayService extends SystemService {
         }
     }
 
-    private final class NightDisplayTintController extends TintController {
+    private final class NightDisplayTintController extends ChromaticAdaptationTintController {
 
-        private final float[] mMatrix = new float[16];
-        private final float[] mColorTempCoefficients = new float[9];
+        private final float[] mNativeTempCoefficients = new float[9];
 
         private Boolean mIsAvailable;
         private Integer mColorTemp;
+        private boolean mNeedsLinear;
 
         /**
          * Set coefficients based on whether the color matrix is linear or not.
          */
         @Override
-        public void setUp(Context context, boolean needsLinear) {
-            final String[] coefficients = context.getResources().getStringArray(needsLinear
-                    ? R.array.config_nightDisplayColorTemperatureCoefficients
-                    : R.array.config_nightDisplayColorTemperatureCoefficientsNative);
-            for (int i = 0; i < 9 && i < coefficients.length; i++) {
-                mColorTempCoefficients[i] = Float.parseFloat(coefficients[i]);
+        protected void setUpLocked(Context context, boolean needsLinear) {
+            mNeedsLinear = needsLinear;
+            if (!needsLinear) {
+                final String[] coefficients = context.getResources().getStringArray(
+                        R.array.config_nightDisplayColorTemperatureCoefficientsNative);
+                for (int i = 0; i < 9 && i < coefficients.length; i++) {
+                    mNativeTempCoefficients[i] = Float.parseFloat(coefficients[i]);
+                }
             }
         }
 
         @Override
         public void setMatrix(int cct) {
-            if (mMatrix.length != 16) {
-                Slog.d(TAG, "The display transformation matrix must be 4x4");
-                return;
+            Slog.d(ColorDisplayService.TAG, "setNightDisplayTemperatureMatrix: cct = " + cct);
+
+            if (mNeedsLinear) {
+                // Use full-fledged chromatic adaptation if possible
+                synchronized (mLock) {
+                    setMatrixLocked(ColorSpace.cctToXyz(cct));
+                }
+            } else {
+                // Chromatic adaptation path can't handle non-linear (native) color spaces, so
+                // fall back to the legacy CCT-based tint path
+                Matrix.setIdentityM(mMatrix, 0);
+
+                final float squareTemperature = cct * cct;
+                final float red = squareTemperature * mNativeTempCoefficients[0]
+                        + cct * mNativeTempCoefficients[1] + mNativeTempCoefficients[2];
+                final float green = squareTemperature * mNativeTempCoefficients[3]
+                        + cct * mNativeTempCoefficients[4] + mNativeTempCoefficients[5];
+                final float blue = squareTemperature * mNativeTempCoefficients[6]
+                        + cct * mNativeTempCoefficients[7] + mNativeTempCoefficients[8];
+                mMatrix[0] = red;
+                mMatrix[5] = green;
+                mMatrix[10] = blue;
             }
-
-            Matrix.setIdentityM(mMatrix, 0);
-
-            final float squareTemperature = cct * cct;
-            final float red = squareTemperature * mColorTempCoefficients[0]
-                    + cct * mColorTempCoefficients[1] + mColorTempCoefficients[2];
-            final float green = squareTemperature * mColorTempCoefficients[3]
-                    + cct * mColorTempCoefficients[4] + mColorTempCoefficients[5];
-            final float blue = squareTemperature * mColorTempCoefficients[6]
-                    + cct * mColorTempCoefficients[7] + mColorTempCoefficients[8];
-            mMatrix[0] = red;
-            mMatrix[5] = green;
-            mMatrix[10] = blue;
         }
 
         @Override
