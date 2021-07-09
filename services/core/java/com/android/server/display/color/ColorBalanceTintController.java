@@ -30,9 +30,11 @@ import java.util.Arrays;
 final class ColorBalanceTintController extends TintController {
 
     private final float[] mMatrix = new float[16];
+    private boolean mNeedsLinear;
 
     @Override
     public void setUp(Context context, boolean needsLinear) {
+        mNeedsLinear = needsLinear;
     }
 
     @Override
@@ -43,9 +45,21 @@ final class ColorBalanceTintController extends TintController {
     @Override
     public void setMatrix(int rgb) {
         Matrix.setIdentityM(mMatrix, 0);
-        mMatrix[0] = ((float) Color.red(rgb)) / 255.0f;
-        mMatrix[5] = ((float) Color.green(rgb)) / 255.0f;
-        mMatrix[10] = ((float) Color.blue(rgb)) / 255.0f;
+
+        float red = ((float) Color.red(rgb)) / 255.0f;
+        float green = ((float) Color.green(rgb)) / 255.0f;
+        float blue = ((float) Color.blue(rgb)) / 255.0f;
+
+        if (!mNeedsLinear) {
+            // Convert to non-linear sRGB as the assumed native color space
+            red = linearToSrgb(red);
+            green = linearToSrgb(green);
+            blue = linearToSrgb(blue);
+        }
+
+        mMatrix[0] = red;
+        mMatrix[5] = green;
+        mMatrix[10] = blue;
     }
 
     @Override
@@ -80,6 +94,14 @@ final class ColorBalanceTintController extends TintController {
                 return Settings.Secure.DISPLAY_COLOR_BALANCE_BLUE;
             default:
                 throw new IllegalArgumentException("Unknown channel: " + channel);
+        }
+    }
+
+    private static float linearToSrgb(float x) {
+        if (x >= 0.0031308) {
+            return (1.055f) * ((float) Math.pow(x, 1.0f / 2.4f)) - 0.055f;
+        } else {
+            return 12.92f * x;
         }
     }
 }
