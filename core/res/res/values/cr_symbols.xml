@@ -29,9 +29,6 @@
   <!-- Whether device has VOOC charging support -->
   <java-symbol type="bool" name="config_hasVoocCharger" />
 
-  <!-- Device has OnePlus haptic motor -->
-  <java-symbol type="bool" name="config_hasOnePlusHapticMotor" />
-
   <!-- Gaming mode -->
   <java-symbol type="drawable" name="ic_gaming_notif" />
   <java-symbol type="string" name="notification_channel_gaming" />
