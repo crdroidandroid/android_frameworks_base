@@ -270,4 +270,9 @@
     <string name="quick_settings_monotoggle_tile">Audio mode</string>
     <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
     <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+
+    <!-- LTE QS Tile -->
+    <string name="qs_lte_label">LTE</string>
+    <string name="lte_on">LTE ON</string>
+    <string name="lte_off">LTE OFF</string>
 </resources>

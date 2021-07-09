@@ -292,6 +292,9 @@
     <!-- Asus Long screenshot -->
     <uses-permission android:name="com.asus.stitchimage.permission.EXPORTED_FOR_ASUS_APPS"/>
 
+    <!-- LTE Tile -->
+    <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
+
     <protected-broadcast android:name="com.android.settingslib.action.REGISTER_SLICE_RECEIVER" />
     <protected-broadcast android:name="com.android.settingslib.action.UNREGISTER_SLICE_RECEIVER" />
     <protected-broadcast android:name="com.android.settings.flashlight.action.FLASHLIGHT_CHANGED" />
