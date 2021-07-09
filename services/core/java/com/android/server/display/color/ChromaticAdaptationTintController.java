@@ -131,6 +131,7 @@ abstract class ChromaticAdaptationTintController extends TintController {
         // Adapt the display's nominal white point to match the requested CCT value
         mCurrentTargetXYZ = targetXyz;
 
+        // XYZ -> LMS -> [CAT] -> LMS -> XYZ
         mChromaticAdaptationMatrix =
                 ColorSpace.chromaticAdaptation(ColorSpace.Adaptation.CAT16,
                         mDisplayNominalWhiteXYZ, mCurrentTargetXYZ);
@@ -161,7 +162,7 @@ abstract class ChromaticAdaptationTintController extends TintController {
 
         String xyzString = "[" + targetXyz[0] + "," + targetXyz[1] + "," + targetXyz[2] + "]";
         Slog.d(ColorDisplayService.TAG, "setChromaticAdaptationMatrix: xyz = " + xyzString
-                + " matrix = " + matrixToString(mMatrix, 16));
+                + " matrix = " + matrixToString(mMatrix, 4));
     }
 
     @Override
