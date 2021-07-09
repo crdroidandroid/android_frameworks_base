@@ -116,7 +116,7 @@ abstract class TintController {
             if (i % columns == 0) {
                 sb.append("\n      ");
             }
-            sb.append(String.format("%9.6f", matrix[i]));
+            sb.append(String.format("%9.6f, ", matrix[i]));
         }
         return sb.toString();
     }
