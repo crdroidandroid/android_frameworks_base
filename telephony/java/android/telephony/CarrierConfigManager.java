@@ -6118,7 +6118,7 @@ public class CarrierConfigManager {
                 return;
             }
             loader.updateConfigForPhoneId(phoneId, simState);
-        } catch (RemoteException ex) {
+        } catch (RemoteException | IllegalArgumentException ex) {
             Rlog.e(TAG, "Error updating config for phoneId=" + phoneId + ": " + ex.toString());
         }
     }
