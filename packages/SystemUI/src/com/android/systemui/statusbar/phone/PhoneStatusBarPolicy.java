@@ -490,15 +490,11 @@ public class PhoneStatusBarPolicy
                 mResources.getString(R.string.accessibility_quick_settings_bluetooth_on);
         boolean bluetoothVisible = false;
         int batteryLevel = -1;
-        if (mBluetooth != null) {
-            if (mBluetooth.isBluetoothConnected()
-                    && (mBluetooth.isBluetoothAudioActive()
-                    || !mBluetooth.isBluetoothAudioProfileOnly())) {
-                bluetoothVisible = mBluetooth.isBluetoothEnabled();
-                batteryLevel = mBluetooth.getBatteryLevel();
-                contentDescription = mResources.getString(
-                        R.string.accessibility_bluetooth_connected);
-            }
+        if (mBluetooth != null && mBluetooth.isBluetoothConnected()) {
+            bluetoothVisible = mBluetooth.isBluetoothEnabled();
+            batteryLevel = mBluetooth.getBatteryLevel();
+            contentDescription = mResources.getString(
+                    R.string.accessibility_bluetooth_connected);
         }
 
         mIconController.setBluetoothIcon(mSlotBluetooth,
