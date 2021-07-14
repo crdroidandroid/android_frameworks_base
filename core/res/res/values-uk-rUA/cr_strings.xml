@@ -37,7 +37,7 @@
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">Копіювати URL звіту про помилку</string>
     <string name="url_copy_success">URL успішно скопійовано</string>
-    <string name="url_copy_failed">Помилка під час завантаження файлу звіту до dogbin</string>
+    <string name="url_copy_failed">An error occured while uploading the log to pasty</string>
     <!-- Clipboard access toast -->
     <string name="app_clipboard_access_denied">%1$s був відмовлений в доступі до буфера обміну</string>
     <string name="app_clipboard_access_granted">%1$s був наданий доступ до буфера обміну</string>
