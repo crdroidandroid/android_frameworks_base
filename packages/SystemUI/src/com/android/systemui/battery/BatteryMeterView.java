@@ -358,7 +358,7 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
     void updateShowPercent() {
         boolean drawPercentInside = mShowBatteryPercent == 1
                                     && !mCharging && !mBatteryStateUnknown;
-        boolean showPercent = mShowBatteryPercent == 2
+        boolean showPercent = mShowBatteryPercent >= 2
                                     || mBatteryStyle == BATTERY_STYLE_TEXT
                                     || mShowPercentMode == MODE_ON;
         showPercent = showPercent && !mBatteryStateUnknown
@@ -390,6 +390,7 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
                 Resources res = getContext().getResources();
                 mBatteryPercentView.setPaddingRelative(
                         res.getDimensionPixelSize(R.dimen.battery_level_padding_start), 0, 0, 0);
+                setLayoutDirection(mShowBatteryPercent > 2 ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
             }
 
         } else {
