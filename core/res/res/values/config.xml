@@ -4481,6 +4481,37 @@
     <string name="config_batterymeterPowersavePath" translatable="false">
         M9,10l-2,0l0,-2l-2,0l0,2l-2,0l0,2l2,0l0,2l2,0l0,-2l2,0z
     </string>
+    <!-- Landscape Battery -->
+    <string name="config_batterymeterLandPerimeterPath" translatable="false">
+	M3.77,0.80L21.85,0.80A1.97 1.97 0 0 1 23.82,2.77L23.82,9.31A1.97 1.97 0 0 1 21.85,11.27L3.77,11.27A1.97 1.97 0 0 1 1.81,9.31L1.81,2.77A1.97 1.97 0 0 1 3.77,0.80zM2.85,3.00L2.85,9.02A1.48 1.48 0 0 0 4.33,10.50L21.30,10.50A1.48 1.48 0 0 0 22.78,9.02L22.78,3.00A1.48 1.48 0 0 0 21.30,1.52L4.33,1.52A1.48 1.48 0 0 0 2.85,3.00zM1.26,7.97Q-1.14,5.86,1.29,3.81z
+    </string>
+    <string name="config_batterymeterLandFillMask" translatable="false">
+        M2.82,1.39L2.82,10.63A0.00 0.00 0 0 0 2.82,10.63L22.88,10.63A0.00 0.00 0 0 0 22.88,10.63L22.88,1.39A0.00 0.00 0 0 0 22.88,1.39L2.82,1.39A0.00 0.00 0 0 0 2.82,1.39z
+    </string>
+    <string name="config_batterymeterLandBoltPath" translatable="false">
+        M10.81,10.30L12.84,6.06L9.76,6.13L14.43,1.90L12.86,5.07L15.85,5.00z
+    </string>
+    <string name="config_batterymeterLandPowersavePath" translatable="false">
+        M8.90,5.05L12.19,5.21L11.90,2.95L13.67,3.07L13.48,5.16L16.28,5.01L16.51,6.68L13.53,6.60L13.64,9.13L11.73,9.00L12.05,6.68L8.92,6.76z
+    </string>
+    <string name="config_batterymeterLandErrorPerimeterPath" translatable="false">@string/config_batterymeterLandPerimeterPath</string>
+    <string name="config_batterymeterRLandPerimeterPath" translatable="false">
+	M2.44,0.64L19.70,0.64A2.21 2.21 0 0 1 21.91,2.85L21.91,9.21A2.21 2.21 0 0 1 19.70,11.42L2.44,11.42A2.21 2.21 0 0 1 0.23,9.21L0.23,2.85A2.21 2.21 0 0 1 2.44,0.64zM0.87,3.59L0.87,8.41A2.28 2.28 0 0 0 3.15,10.69L18.98,10.69A2.28 2.28 0 0 0 21.26,8.41L21.26,3.59A2.28 2.28 0 0 0 18.98,1.31L3.15,1.31A2.28 2.28 0 0 0 0.87,3.59zM22.45,8.32Q25.10,5.95,22.42,3.62
+    </string>
+    <string name="config_batterymeterRLandFillMask" translatable="false">
+        M0.87,1.30L0.87,10.69A0.00 0.00 0 0 0 0.87,10.69L21.26,10.69A0.00 0.00 0 0 0 21.26,10.69L21.26,1.30A0.00 0.00 0 0 0 21.26,1.30L0.87,1.30A0.00 0.00 0 0 0 0.87,1.30z
+    </string>
+    <string name="config_batterymeterRLandBoltPath" translatable="false">
+        M8.92,10.42L10.91,6.05L7.88,6.12L12.48,1.77L10.93,5.03L13.88,4.96z
+    </string>
+    <string name="config_batterymeterRLandPowersavePath" translatable="false">
+        M14.92,5.01L11.69,5.18L11.97,2.85L10.23,2.97L10.41,5.12L7.65,4.97L7.43,6.69L10.37,6.61L10.26,9.22L12.14,9.08L11.82,6.69L14.91,6.78z
+    </string>
+    <string name="config_batterymeterRLandErrorPerimeterPath" translatable="false">@string/config_batterymeterRLandPerimeterPath</string>
+    <!-- X path for SignalDrawable as defined on a 24x24 canvas. -->
+    <string name="config_signalXPath" translatable="false">
+        M22,16.41L20.59,15l-2.09,2.09L16.41,15L15,16.41l2.09,2.09L15,20.59L16.41,22l2.09-2.08L20.59,22L22,20.59l-2.08-2.09   L22,16.41z
+    </string>
 
     <!-- Attribution path for SignalDrawable as defined on a 24x24 canvas. -->
     <string name="config_signalAttributionPath" translatable="false">
