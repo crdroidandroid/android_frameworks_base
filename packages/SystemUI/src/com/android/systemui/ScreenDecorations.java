@@ -764,6 +764,10 @@ public class ScreenDecorations extends SystemUI implements Tunable,
 
     static boolean shouldDrawCutout(Context context) {
         ContentResolver cr = context.getContentResolver();
+        boolean hideNotch = cr != null && System.getIntForUser(cr,
+                        System.DISPLAY_HIDE_NOTCH, 0, UserHandle.USER_CURRENT) != 0;
+        if (hideNotch)
+            return false;
         boolean newImmerseMode = cr != null && System.getIntForUser(cr,
                         System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) != 0;
         return !newImmerseMode && context.getResources().getBoolean(
@@ -1252,13 +1256,13 @@ public class ScreenDecorations extends SystemUI implements Tunable,
                 ContentResolver resolver = mContext.getContentResolver();
                 resolver.registerContentObserver(System.getUriFor(
                         System.DISPLAY_CUTOUT_MODE), false, this);
+                resolver.registerContentObserver(System.getUriFor(
+                        System.DISPLAY_HIDE_NOTCH), false, this);
             }
 
             @Override
             public void onChange(boolean selfChange, Uri uri) {
-                if (uri.equals(System.getUriFor(System.DISPLAY_CUTOUT_MODE))) {
-                    update();
-                }
+                update();
             }
 
             @Override
