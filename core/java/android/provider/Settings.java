@@ -5563,6 +5563,12 @@ public final class Settings {
         public static final String BERRY_SWITCH_STYLE = "berry_switch_style";
 
         /**
+         * Switch between different rounded styles
+         * @hide
+         */
+        public static final String BERRY_ROUNDED_STYLE = "berry_rounded_style";
+
+        /**
          * Whether to play a battery fully charged sound.
          * @hide
          */
