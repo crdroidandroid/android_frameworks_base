@@ -332,6 +332,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.NOTIFICATION_MATERIAL_DISMISS;
     private static final String BERRY_SWITCH_STYLE =
             "system:" + Settings.System.BERRY_SWITCH_STYLE;
+    private static final String BERRY_ROUNDED_STYLE =
+            "system:" + Settings.System.BERRY_ROUNDED_STYLE;
     private static final String DISPLAY_CUTOUT_MODE =
             "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
     private static final String STOCK_STATUSBAR_IN_HIDE =
@@ -820,6 +822,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private int mNavbarStyle;
     private int mQSTileStyle;
     private int mSwitchStyle;
+    private int mRoundedStyle;
     private boolean mUseDarkTheme;
     private OverlayManager mOverlayManager;
     private final UiOffloadThread mUiOffloadThread = Dependency.get(UiOffloadThread.class);
@@ -1040,6 +1043,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, BERRY_QS_TILE_STYLE);
         mTunerService.addTunable(this, NOTIFICATION_MATERIAL_DISMISS);
         mTunerService.addTunable(this, BERRY_SWITCH_STYLE);
+        mTunerService.addTunable(this, BERRY_ROUNDED_STYLE);
         mTunerService.addTunable(this, DISPLAY_CUTOUT_MODE);
         mTunerService.addTunable(this, STOCK_STATUSBAR_IN_HIDE);
         mTunerService.addTunable(this, QS_PANEL_ICONS_PRIMARY_COLOR);
@@ -4106,6 +4110,12 @@ public class StatusBar extends SystemUI implements DemoMode,
         });
     }
 
+    private void updateRoundedStyle() {
+        mUiOffloadThread.execute(() -> {
+            ThemeAccentUtils.setRoundedStyle(mOverlayManager, mRoundedStyle);
+        });
+    }
+
     private void updateDozingState() {
         Trace.traceCounter(Trace.TRACE_TAG_APP, "dozing", mDozing ? 1 : 0);
         Trace.beginSection("StatusBar#updateDozingState");
@@ -5184,6 +5194,14 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mSwitchStyle != switchStyle) {
                     mSwitchStyle = switchStyle;
                     updateSwitchStyle();
+                }
+                break;
+            case BERRY_ROUNDED_STYLE:
+                int roundedStyle =
+                        TunerService.parseInteger(newValue, 0);
+                if (mRoundedStyle != roundedStyle) {
+                    mRoundedStyle = roundedStyle;
+                    updateRoundedStyle();
                 }
                 break;
             case DISPLAY_CUTOUT_MODE:
