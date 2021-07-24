@@ -499,6 +499,9 @@ public class MobileSignalController extends SignalController<
                     case 7:
                         resId = R.drawable.ic_vowifi_vivo;
                         break;
+                    case 8:
+                        resId = R.drawable.ic_vowifi_margaritov;
+                        break;
                 }
             }
         } else if (mImsManager != null && mConfig.showVolteIcon && mVoLTEicon > 0 && isVolteAvailable()) {
@@ -892,6 +895,9 @@ public class MobileSignalController extends SignalController<
                 // Vivo
                 case 7:
                     return TelephonyIcons.VOWIFI_VIVO;
+                // Margaritov
+                case 8:
+                    return TelephonyIcons.VOWIFI_Margaritov;
             }
         } else {
             return null;
