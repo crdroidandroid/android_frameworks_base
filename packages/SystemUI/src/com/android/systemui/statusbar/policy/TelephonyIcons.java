@@ -47,6 +47,7 @@ class TelephonyIcons {
     static final int ICON_VOWIFI_EMUI = R.drawable.ic_vowifi_emui;
     static final int ICON_VOWIFI_ONEPLUS_COMPACT = R.drawable.ic_vowifi_oneplus_compact;
     static final int ICON_VOWIFI_VIVO = R.drawable.ic_vowifi_vivo;
+    static final int ICON_VOWIFI_Margaritov = R.drawable.ic_vowifi_margaritov;
 
     static final MobileIconGroup CARRIER_NETWORK_CHANGE = new MobileIconGroup(
             "CARRIER_NETWORK_CHANGE",
@@ -387,6 +388,18 @@ class TelephonyIcons {
             TelephonyIcons.ICON_VOWIFI_VIVO,
             false);
 
+    static final MobileIconGroup VOWIFI_Margaritov = new MobileIconGroup(
+            "VoWIFI_Margaritov",
+            null,
+            null,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
+            0, 0,
+            0,
+            0,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
+            0,
+            TelephonyIcons.ICON_VOWIFI_Margaritov,
+            false);
 
     /** Mapping icon name(lower case) to the icon object. */
     static final Map<String, MobileIconGroup> ICON_NAME_TO_ICON;
