@@ -81,6 +81,16 @@ public class ThemeAccentUtils {
         "com.android.system.switch.telegram", // 6
     };
 
+    // Rounded corner styles
+    private static final String[] ROUNDED_STYLES = {
+        "com.android.system.rounded.stock", // 0
+        "com.android.system.rounded.none", // 1
+        "com.android.system.rounded.slight", // 2
+        "com.android.system.rounded.medium", // 3
+        "com.android.system.rounded.high", // 4
+        "com.android.system.rounded.extreme", // 5
+    };
+
     // Check for the dark system theme
     public static int getDarkStyle(OverlayManager om) {
         OverlayInfo themeInfo = null;
@@ -220,6 +230,31 @@ public class ThemeAccentUtils {
         UserHandle userId = UserHandle.of(ActivityManager.getCurrentUser());
         try {
             om.setEnabled("com.android.overlay.immersive", enable, userId);
+        } catch (Exception e) {
+        }
+    }
+
+    // Unloads the rounded styles
+    private static void unloadRoundedStyle(OverlayManager om, UserHandle userId) {
+        for (String style : ROUNDED_STYLES) {
+            try {
+                om.setEnabled(style, false, userId);
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    // Set rounded style
+    public static void setRoundedStyle(OverlayManager om, int roundedStyle) {
+        UserHandle userId = UserHandle.of(ActivityManager.getCurrentUser());
+
+        // Always unload rounded styles
+        unloadRoundedStyle(om, userId);
+
+        if (roundedStyle == 0) return;
+
+        try {
+            om.setEnabled(ROUNDED_STYLES[roundedStyle], true, userId);
         } catch (Exception e) {
         }
     }
