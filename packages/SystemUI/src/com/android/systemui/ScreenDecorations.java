@@ -765,13 +765,16 @@ public class ScreenDecorations extends SystemUI implements Tunable,
 
     static boolean shouldDrawCutout(Context context) {
         ContentResolver cr = context.getContentResolver();
-        boolean hideNotch = cr != null && System.getIntForUser(cr,
+        Resources res = context.getResources();
+        boolean hideNotch = res.getBoolean(
+                        com.android.internal.R.bool.config_showHideNotchSettings)
+                        && cr != null && System.getIntForUser(cr,
                         System.DISPLAY_HIDE_NOTCH, 0, UserHandle.USER_CURRENT) != 0;
         if (hideNotch)
             return false;
         boolean newImmerseMode = cr != null && System.getIntForUser(cr,
                         System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) != 0;
-        return !newImmerseMode && context.getResources().getBoolean(
+        return !newImmerseMode && res.getBoolean(
                 com.android.internal.R.bool.config_fillMainBuiltInDisplayCutout);
     }
 
