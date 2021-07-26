@@ -226,7 +226,7 @@
     <string name="force_stop_dlg_text">Принудительное закрытие приложения может негативно отразиться на его функциональности.</string>
     <string name="guts_force_close_app">Остановить принудительно</string>
     <!-- Title for media output settings -->
-    <string name="media_output_title">Прервать обучение</string>
+    <string name="media_output_title">Воспроизвести медиа на</string>
     <!-- Mono audio tile -->
     <string name="quick_settings_monotoggle_tile">Аудио режим</string>
     <string name="quick_settings_monotoggle_tile_mono">Моно режим</string>
