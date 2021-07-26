@@ -36,7 +36,7 @@
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">비정상 종료 로그 URL 복사</string>
     <string name="url_copy_success">링크가 성공적으로 복사되었습니다</string>
-    <string name="url_copy_failed">An error occured while uploading the log to pasty</string>
+    <string name="url_copy_failed">로그를 업로드 중에 에러가 발생하였습니다.</string>
     <!-- Clipboard access toast -->
     <string name="app_clipboard_access_denied">%1$s의 클립 보드에 대한 액세스가 거부되었습니다.</string>
     <string name="app_clipboard_access_granted">%1$s 에 클립 보드 액세스 권한이 부여되었습니다.</string>

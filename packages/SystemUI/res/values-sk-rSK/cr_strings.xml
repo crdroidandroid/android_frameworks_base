@@ -213,22 +213,22 @@
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Dnešné využitie</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
+    <string name="applock_locked">&#160;je uzamknutá</string>
     <string name="applock_fingerprint_face">, odomknúť odtlačkom prsta alebo tvárou</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
+    <string name="applock_face">&#160;alebo odomknite tvárou</string>
+    <string name="applock_fingerprint">&#160;alebo odomknite odtlačkom prsta</string>
+    <string name="applock_credential">&#160;odomknúť</string>
     <string name="applock_unlock">Odomknúť</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Ponuka napájania</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Force stop</string>
+    <string name="force_stop_dlg_title">Vynútiť zastavenie?</string>
+    <string name="force_stop_dlg_text">Vynútené ukončenie môže spôsobiť nepredvídateľné správanie aplikácie.</string>
+    <string name="guts_force_close_app">Vynútiť zastavenie</string>
     <!-- Title for media output settings -->
-    <string name="media_output_title">Play media to</string>
+    <string name="media_output_title">Prehrať médiá do</string>
     <!-- Mono audio tile -->
-    <string name="quick_settings_monotoggle_tile">Audio mode</string>
-    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
-    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <string name="quick_settings_monotoggle_tile">Zvukový režim</string>
+    <string name="quick_settings_monotoggle_tile_mono">Mono zvuk</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Stereo zvuk</string>
 </resources>

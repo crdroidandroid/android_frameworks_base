@@ -256,9 +256,9 @@
     <string name="force_stop_dlg_text">강제로 앱을 종료하면 예기치 않은 오류가 발생할 수 있습니다.</string>
     <string name="guts_force_close_app">강제 종료</string>
     <!-- Title for media output settings -->
-    <string name="media_output_title">Play media to</string>
+    <string name="media_output_title">미디어 재생</string>
     <!-- Mono audio tile -->
-    <string name="quick_settings_monotoggle_tile">Audio mode</string>
-    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
-    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <string name="quick_settings_monotoggle_tile">오디오 모드</string>
+    <string name="quick_settings_monotoggle_tile_mono">모노 오디오</string>
+    <string name="quick_settings_monotoggle_tile_stereo">스테레오 오디오</string>
 </resources>
