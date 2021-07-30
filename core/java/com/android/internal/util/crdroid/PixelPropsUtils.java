@@ -63,7 +63,15 @@ public class PixelPropsUtils {
     };
 
     private static final String[] packagesToChangeOGPixelXL = {
-        "com.google.android.apps.photos"
+        "com.google.android.apps.photos",
+        "com.samsung.accessory.fridaymgr",
+        "com.samsung.accessory.berrymgr",
+        "com.samsung.accessory.neobeanmgr",
+        "com.samsung.android.app.watchmanager",
+        "com.samsung.android.geargplugin",
+        "com.samsung.android.gearnplugin",
+        "com.samsung.android.modenplugin",
+        "com.samsung.android.neatplugin"
     };
 
     static {
