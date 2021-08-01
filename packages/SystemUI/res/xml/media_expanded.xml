@@ -124,7 +124,6 @@
         android:id="@+id/action0"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="5dp"
         android:layout_marginStart="@dimen/qs_media_panel_outer_padding"
         android:layout_marginBottom="@dimen/qs_media_panel_outer_padding"
         app:layout_constraintHorizontal_chainStyle="packed"
