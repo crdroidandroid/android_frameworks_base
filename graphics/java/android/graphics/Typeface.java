@@ -1171,6 +1171,12 @@ public class Typeface {
     public static void updateDefaultFont(Resources res) {
         String familyName = res.getString(com.android.internal.R.string.config_bodyFontFamily);
         Typeface typeface = sSystemFontMap.get(familyName);
+        if (typeface == null) {
+            // This should never happen, but if the system font family name is invalid, just return
+            // instead of crashing the app.
+            return;
+        }
+
         setDefault(typeface);
 
         // Static typefaces in public API
