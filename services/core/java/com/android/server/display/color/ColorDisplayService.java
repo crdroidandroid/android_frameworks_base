@@ -1241,7 +1241,7 @@ public final class ColorDisplayService extends SystemService {
         @Override
         protected void setUpLocked(Context context, boolean needsLinear) {
             mNeedsLinear = needsLinear;
-            if (needsLinear) {
+            if (!needsLinear) {
                 final String[] coefficients = context.getResources().getStringArray(
                         R.array.config_nightDisplayColorTemperatureCoefficientsNative);
                 for (int i = 0; i < 9 && i < coefficients.length; i++) {
