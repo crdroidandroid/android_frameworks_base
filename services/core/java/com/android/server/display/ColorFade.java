@@ -106,7 +106,7 @@ final class ColorFade implements ScreenStateAnimator {
     private final float mProjMatrix[] = new float[16];
     private final int[] mGLBuffers = new int[2];
     private int mTexCoordLoc, mVertexLoc, mTexUnitLoc, mProjMatrixLoc, mTexMatrixLoc;
-    private int mOpacityLoc, mGammaLoc;
+    private int mOpacityLoc;
     private int mProgram;
 
     // Vertex and corresponding texture coordinates.
@@ -253,7 +253,6 @@ final class ColorFade implements ScreenStateAnimator {
         mTexMatrixLoc = GLES20.glGetUniformLocation(mProgram, "tex_matrix");
 
         mOpacityLoc = GLES20.glGetUniformLocation(mProgram, "opacity");
-        mGammaLoc = GLES20.glGetUniformLocation(mProgram, "gamma");
         mTexUnitLoc = GLES20.glGetUniformLocation(mProgram, "texUnit");
 
         GLES20.glUseProgram(mProgram);
@@ -397,12 +396,7 @@ final class ColorFade implements ScreenStateAnimator {
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
             // Draw the frame.
-            double one_minus_level = 1 - level;
-            double cos = Math.cos(Math.PI * one_minus_level);
-            double sign = cos < 0 ? -1 : 1;
-            float opacity = (float) -Math.pow(one_minus_level, 2) + 1;
-            float gamma = (float) ((0.5d * sign * Math.pow(cos, 2) + 0.5d) * 0.9d + 0.1d);
-            drawFaded(opacity, 1.f / gamma);
+            drawFaded(level);
             if (checkGlErrors("drawFrame")) {
                 return false;
             }
@@ -414,9 +408,9 @@ final class ColorFade implements ScreenStateAnimator {
         return showSurface(1.0f);
     }
 
-    private void drawFaded(float opacity, float gamma) {
+    private void drawFaded(float opacity) {
         if (DEBUG) {
-            Slog.d(TAG, "drawFaded: opacity=" + opacity + ", gamma=" + gamma);
+            Slog.d(TAG, "drawFaded: opacity=" + opacity);
         }
         // Use shaders
         GLES20.glUseProgram(mProgram);
@@ -425,7 +419,6 @@ final class ColorFade implements ScreenStateAnimator {
         GLES20.glUniformMatrix4fv(mProjMatrixLoc, 1, false, mProjMatrix, 0);
         GLES20.glUniformMatrix4fv(mTexMatrixLoc, 1, false, mTexMatrix, 0);
         GLES20.glUniform1f(mOpacityLoc, opacity);
-        GLES20.glUniform1f(mGammaLoc, gamma);
 
         // Use textures
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
