@@ -803,6 +803,10 @@ public class ConnectivityManager {
     /**
      * @hide
      */
+    public static final String PRIVATE_DNS_MODE_ADGUARD = "adguard";
+    /**
+     * @hide
+     */
     public static final String PRIVATE_DNS_MODE_OPPORTUNISTIC = "opportunistic";
     /**
      * @hide
@@ -813,6 +817,11 @@ public class ConnectivityManager {
      * Alternative: 1dot1dot1dot1.cloudflare-dns.com
      */
     public static final String PRIVATE_DNS_SPECIFIER_CLOUDFLARE = "one.one.one.one";
+    /**
+     * @hide
+     * Use dns-family.adguard.com for more strict filtering
+     */
+    public static final String PRIVATE_DNS_SPECIFIER_ADGUARD = "dns.adguard.com";
     /**
      * The default Private DNS mode.
      *
