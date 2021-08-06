@@ -1214,7 +1214,7 @@ public class CarrierConfigManager {
             "carrier_vvm_package_name_string_array";
 
     /**
-     * Flag specifying whether ICCID is showed in SIM Status screen, default to false.
+     * Flag specifying whether ICCID is showed in SIM Status screen, default to true.
      */
     public static final String KEY_SHOW_ICCID_IN_SIM_STATUS_BOOL = "show_iccid_in_sim_status_bool";
 
@@ -5373,7 +5373,7 @@ public class CarrierConfigManager {
         sDefaults.putBoolean(KEY_VVM_PREFETCH_BOOL, true);
         sDefaults.putString(KEY_CARRIER_VVM_PACKAGE_NAME_STRING, "");
         sDefaults.putStringArray(KEY_CARRIER_VVM_PACKAGE_NAME_STRING_ARRAY, null);
-        sDefaults.putBoolean(KEY_SHOW_ICCID_IN_SIM_STATUS_BOOL, false);
+        sDefaults.putBoolean(KEY_SHOW_ICCID_IN_SIM_STATUS_BOOL, true);
         sDefaults.putBoolean(KEY_SHOW_SIGNAL_STRENGTH_IN_SIM_STATUS_BOOL, true);
         sDefaults.putBoolean(KEY_INFLATE_SIGNAL_STRENGTH_BOOL, false);
         sDefaults.putBoolean(KEY_CI_ACTION_ON_SYS_UPDATE_BOOL, false);
