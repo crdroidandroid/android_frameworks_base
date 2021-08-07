@@ -224,16 +224,16 @@
     <string name="omnijaws_package_not_available">OmniJaws は使用できません</string>
     <string name="omnijaws_service_last_update">最終更新:</string>
     <!-- App lock -->
-    <string name="applock_locked">&#160;is Locked.</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock.</string>
-    <string name="applock_face">&#160;or your face to unlock.</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock.</string>
-    <string name="applock_locked_notification">App is locked</string>
+    <string name="applock_locked">&#160;はロック中です</string>
+    <string name="applock_fingerprint_face">、指紋または顔認証でロック解除</string>
+    <string name="applock_face">&#160;または顔認証でロック解除</string>
+    <string name="applock_fingerprint">&#160;または指紋認証でロック解除</string>
+    <string name="applock_locked_notification">アプリはロックされています。</string>
     <!-- DC Dimming -->
-    <string name="quick_settings_dc_dimming_label">DC Dimming</string>
-    <string name="quick_settings_dc_brightness_mode">Brightness mode</string>
-    <string name="quick_settings_dc_full_auto">Auto mode</string>
+    <string name="quick_settings_dc_dimming_label">DC 調光</string>
+    <string name="quick_settings_dc_brightness_mode">明るさモード</string>
+    <string name="quick_settings_dc_full_auto">自動モード</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Please configure multiple languages to enable toggle functionality</string>
+    <string name="quick_settings_locale_label">言語</string>
+    <string name="quick_settings_locale_more_locales_toast">切り替え機能を有効にするには複数の言語を設定してください</string>
 </resources>
