@@ -65,9 +65,12 @@ import android.graphics.Color;
 import android.hardware.biometrics.BiometricSourceType;
 import android.os.BatteryManager;
 import android.os.Handler;
+import android.os.IBatteryPropertiesRegistrar;
 import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
@@ -249,6 +252,8 @@ public class KeyguardIndicationController {
     private boolean mHasDashCharger;
     private boolean mHasWarpCharger;
     private boolean mHasVoocCharger;
+
+    private IBatteryPropertiesRegistrar mBatteryPropertiesRegistrar;
 
     private KeyguardUpdateMonitorCallback mUpdateMonitorCallback;
 
@@ -441,6 +446,10 @@ public class KeyguardIndicationController {
         mStatusBarStateListener.onDozingChanged(mStatusBarStateController.isDozing());
 
         mCurrentDivider = mContext.getResources().getInteger(R.integer.config_currentInfoDivider);
+
+        mBatteryPropertiesRegistrar =
+                    IBatteryPropertiesRegistrar.Stub.asInterface(
+                    ServiceManager.getService("batteryproperties"));
     }
 
     @Nullable
@@ -1467,6 +1476,20 @@ public class KeyguardIndicationController {
         mInitialTextColorState = color;
     }
 
+    private final Runnable mUpdateInfo = new Runnable() {
+        public void run() {
+            long now = SystemClock.uptimeMillis();
+            long next = now + (1000 - now % 1000);
+            try {
+                mBatteryPropertiesRegistrar.scheduleUpdate();
+            } catch (RemoteException e) {
+            }
+            if (mHandler != null) {
+                mHandler.postAtTime(mUpdateInfo, next);
+            }
+        }
+    };
+
     protected class BaseKeyguardCallback extends KeyguardUpdateMonitorCallback {
         @Override
         public void onTimeChanged() {
@@ -1510,6 +1533,13 @@ public class KeyguardIndicationController {
             } catch (RemoteException e) {
                 mKeyguardLogger.log(TAG, ERROR, "Error calling IBatteryStats", e);
                 mChargingTimeRemaining = -1;
+            }
+            if (wasPluggedIn != mPowerPluggedIn) {
+                if (mPowerPluggedIn) {
+                    mUpdateInfo.run();
+                } else {
+                    mHandler.removeCallbacks(mUpdateInfo);
+                }
             }
 
             mKeyguardLogger.logRefreshBatteryInfo(isChargingOrFull, mPowerPluggedIn, mBatteryLevel,
