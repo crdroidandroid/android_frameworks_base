@@ -37,7 +37,7 @@ public class GpsNetInitiatedHandler {
 
     private static final String TAG = "GpsNetInitiatedHandler";
 
-    private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean DEBUG = false;
 
     private final Context mContext;
     private final TelephonyManager mTelephonyManager;
