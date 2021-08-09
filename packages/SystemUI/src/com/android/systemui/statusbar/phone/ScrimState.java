@@ -20,7 +20,6 @@ import static com.android.systemui.statusbar.phone.ScrimController.BUSY_SCRIM_AL
 
 import android.graphics.Color;
 
-import com.android.app.tracing.coroutines.TrackTracer;
 import com.android.systemui.Flags;
 import com.android.systemui.dock.DockManager;
 import com.android.systemui.res.R;
@@ -491,14 +490,6 @@ public enum ScrimState {
             tint = scrim == mScrimInFront ? ScrimController.DEBUG_FRONT_TINT
                     : ScrimController.DEBUG_BEHIND_TINT;
         }
-        TrackTracer.instantForGroup("scrim",
-                scrim == mScrimInFront ? "front_scrim_alpha" : "back_scrim_alpha",
-                (int) (alpha * 255));
-
-        TrackTracer.instantForGroup("scrim",
-                scrim == mScrimInFront ? "front_scrim_tint" : "back_scrim_tint",
-                Color.alpha(tint));
-
         scrim.setTint(tint);
         scrim.setViewAlpha(alpha);
     }
