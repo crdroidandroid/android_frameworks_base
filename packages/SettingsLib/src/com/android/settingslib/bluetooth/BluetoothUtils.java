@@ -39,7 +39,7 @@ public class BluetoothUtils {
     private static final String TAG = "BluetoothUtils";
 
     public static final boolean V = false; // verbose logging
-    public static final boolean D = true;  // regular logging
+    public static final boolean D = false; // regular logging
 
     public static final int META_INT_ERROR = -1;
     public static final String BT_ADVANCED_HEADER_ENABLED = "bt_advanced_header_enabled";
