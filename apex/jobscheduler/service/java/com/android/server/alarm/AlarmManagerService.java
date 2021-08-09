@@ -5739,7 +5739,7 @@ public class AlarmManagerService extends SystemService {
             }
         }
         if (oldCount < decrement) {
-            Slog.wtf(TAG, "Attempt to decrement existing alarm count " + oldCount + " by "
+            Slog.w(TAG, "Attempt to decrement existing alarm count " + oldCount + " by "
                     + decrement + " for uid " + uid);
         }
     }
