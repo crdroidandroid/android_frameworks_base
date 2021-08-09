@@ -52,6 +52,7 @@ public final class PastyUtils {
                     HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(API_URL).openConnection();
                     try {
                         urlConnection.setRequestProperty("Accept-Charset", "UTF-8");
+                        urlConnection.setRequestProperty("Content-Type", "text/plain");
                         urlConnection.setDoOutput(true);
 
                         try (OutputStream output = urlConnection.getOutputStream()) {
