@@ -28,6 +28,6 @@ public class KeyguardConstants {
      * be used temporarily for debugging.
      */
     public static final boolean DEBUG = Log.isLoggable("Keyguard", Log.DEBUG);
-    public static final boolean DEBUG_SIM_STATES = true;
-    public static final boolean DEBUG_BIOMETRIC_WAKELOCK = true;
+    public static final boolean DEBUG_SIM_STATES = false;
+    public static final boolean DEBUG_BIOMETRIC_WAKELOCK = false;
 }
