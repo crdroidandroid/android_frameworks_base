@@ -5706,6 +5706,12 @@ public final class Settings {
         public static final String PULSE_TRIGGER_REASON = "pulse_trigger_reason";
 
         /**
+         * Enable\Disable swipe up or down gesture on ambient display like OOS
+         * @hide
+         */
+        public static final String AMBIENT_SWIPE = "ambient_swipe";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
@@ -5823,6 +5829,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LOCK_TO_APP_ENABLED);
             PRIVATE_SETTINGS.add(EGG_MODE);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
+            PRIVATE_SETTINGS.add(AMBIENT_SWIPE);
         }
 
         /**
