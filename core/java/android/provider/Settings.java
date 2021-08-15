@@ -5001,6 +5001,12 @@ public final class Settings {
         public static final String STATUSBAR_BATTERY_BAR_STYLE = "statusbar_battery_bar_style";
 
         /**
+         * Whether to disable ADB in gaming mode
+         * @hide
+         */
+        public static final String GAMING_MODE_ADB_TOGGLE = "gaming_mode_adb_toggle";
+
+        /**
          * @hide
          */
         public static final String STATUSBAR_BATTERY_BAR_ANIMATE = "statusbar_battery_bar_animate";
