@@ -75,6 +75,7 @@ public class GamingModeController {
     private static int mZenState;
     private static int mHwKeysState;
     private static int mAdaptiveBrightness;
+    private static int mAdbState;
 
     public static final String GAMING_MODE_TURN_OFF = "android.intent.action.GAMING_MODE_TURN_OFF";
     public static final String GAMING_MODE_TURN_ON = "android.intent.action.GAMING_MODE_TURN_ON";
@@ -259,6 +260,15 @@ public class GamingModeController {
             Settings.System.putInt(mContext.getContentResolver(),
                 Settings.System.HARDWARE_KEYS_DISABLE, 1);
         }
+        // ADB
+        boolean disableAdb = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.GAMING_MODE_ADB_TOGGLE, 0) == 1;
+        if (disableAdb) {
+            mAdbState = Settings.Global.getInt(mContext.getContentResolver(),
+                              Settings.Global.ADB_ENABLED, 0);
+            Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.ADB_ENABLED, 0);
+        }
 
         // Ringer mode (0: Off, 1: Vibrate, 2:DND: 3:Silent)
         int ringerMode = Settings.System.getInt(mContext.getContentResolver(),
@@ -301,6 +311,12 @@ public class GamingModeController {
         if (disableHwKeys) {
             Settings.System.putInt(mContext.getContentResolver(),
                 Settings.System.HARDWARE_KEYS_DISABLE, mHwKeysState);
+        }
+        boolean disableAdb = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.GAMING_MODE_ADB_TOGGLE, 0) == 1;
+        if (disableAdb) {
+            Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.ADB_ENABLED, mAdbState);
         }
         int ringerMode = Settings.System.getInt(mContext.getContentResolver(),
                  Settings.System.GAMING_MODE_RINGER_MODE, 0);
