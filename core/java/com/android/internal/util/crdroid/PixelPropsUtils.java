@@ -36,26 +36,34 @@ public class PixelPropsUtils {
 
     private static final String[] packagesToChange = {
         "com.breel.wallpapers20",
+        "com.google.android.configupdater",
         "com.google.android.apps.customization.pixel",
         "com.google.android.apps.fitness",
+        "com.google.android.apps.gcs",
+        "com.google.android.apps.maps",
+        "com.google.android.apps.messaging",
+        "com.google.android.apps.nexuslauncher",
+        "com.google.android.apps.pixelmigrate",
         "com.google.android.apps.recorder",
+        "com.google.android.apps.safetyhub",
         "com.google.android.apps.subscriptions.red",
         "com.google.android.apps.tachyon",
+        "com.google.android.apps.turbo",
         "com.google.android.apps.turboadapter",
+        "com.google.android.apps.wallpaper",
         "com.google.android.apps.wallpaper.pixel",
+        "com.google.android.apps.wellbeing",
         "com.google.android.as",
         "com.google.android.dialer",
+        "com.google.android.ext.services",
+        "com.google.android.gms",
         "com.google.android.gms.location.history",
+        "com.google.android.gsf",
         "com.google.android.inputmethod.latin",
         "com.google.android.soundpicker",
+        "com.google.intelligence.sense",
         "com.google.pixel.dynamicwallpapers",
-        "com.google.pixel.livewallpaper",
-        "com.google.android.apps.safetyhub",
-        "com.google.android.apps.turbo",
-        "com.google.android.apps.wallpaper",
-        "com.google.android.apps.maps",
-        "com.google.android.gms",
-        "com.google.android.apps.nexuslauncher"
+        "com.google.pixel.livewallpaper"
     };
 
     private static final String[] packagesToChangePixel3XL = {
@@ -82,6 +90,11 @@ public class PixelPropsUtils {
         propsToChange.put("PRODUCT", "redfin");
         propsToChange.put("MODEL", "Pixel 5");
         propsToChange.put("FINGERPRINT", "google/redfin/redfin:11/RQ3A.210805.001.A1/7474174:user/release-keys");
+        propsToChange.put("IS_DEBUGGABLE", false);
+        propsToChange.put("IS_ENG", false);
+        propsToChange.put("IS_USERDEBUG", false);
+        propsToChange.put("IS_USER", true);
+        propsToChange.put("TYPE", "user");
         propsToChangePixel3XL = new HashMap<>();
         propsToChangePixel3XL.put("BRAND", "google");
         propsToChangePixel3XL.put("MANUFACTURER", "Google");
@@ -89,6 +102,11 @@ public class PixelPropsUtils {
         propsToChangePixel3XL.put("PRODUCT", "crosshatch");
         propsToChangePixel3XL.put("MODEL", "Pixel 3 XL");
         propsToChangePixel3XL.put("FINGERPRINT", "google/crosshatch/crosshatch:11/RQ3A.210805.001.A1/7474174:user/release-keys");
+        propsToChangePixel3XL.put("IS_DEBUGGABLE", false);
+        propsToChangePixel3XL.put("IS_ENG", false);
+        propsToChangePixel3XL.put("IS_USERDEBUG", false);
+        propsToChangePixel3XL.put("IS_USER", true);
+        propsToChangePixel3XL.put("TYPE", "user");
         propsToChangeOGPixelXL = new HashMap<>();
         propsToChangeOGPixelXL.put("BRAND", "google");
         propsToChangeOGPixelXL.put("MANUFACTURER", "Google");
@@ -96,6 +114,11 @@ public class PixelPropsUtils {
         propsToChangeOGPixelXL.put("PRODUCT", "marlin");
         propsToChangeOGPixelXL.put("MODEL", "Pixel XL");
         propsToChangeOGPixelXL.put("FINGERPRINT", "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys");
+        propsToChangeOGPixelXL.put("IS_DEBUGGABLE", false);
+        propsToChangeOGPixelXL.put("IS_ENG", false);
+        propsToChangeOGPixelXL.put("IS_USERDEBUG", false);
+        propsToChangeOGPixelXL.put("IS_USER", true);
+        propsToChangeOGPixelXL.put("TYPE", "user");
     }
 
     public static void setProps(String packageName) {
