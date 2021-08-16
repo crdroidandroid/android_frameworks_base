@@ -47,6 +47,8 @@ public class DozeScrimController implements StateListener {
     private int mPulseReason;
     private boolean mFullyPulsing;
 
+    private long mLastPulseOutFailTime;
+
     private final ScrimController.Callback mScrimCallback = new ScrimController.Callback() {
         @Override
         public void onDisplayBlanked() {
@@ -80,6 +82,10 @@ public class DozeScrimController implements StateListener {
                         mDozeParameters.getPulseVisibleDurationExtended());
             }
             mFullyPulsing = true;
+            if (mLastPulseOutFailTime > 0 &&
+                    System.currentTimeMillis() - mLastPulseOutFailTime <= 500)
+                pulseOutNow();
+            mLastPulseOutFailTime = 0;
         }
 
         /**
@@ -133,6 +139,8 @@ public class DozeScrimController implements StateListener {
     public void pulseOutNow() {
         if (mPulseCallback != null && mFullyPulsing) {
             mPulseOut.run();
+        } else {
+            mLastPulseOutFailTime = System.currentTimeMillis();
         }
     }
 
