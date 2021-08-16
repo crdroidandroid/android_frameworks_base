@@ -1641,6 +1641,13 @@ public final class BluetoothDevice implements Parcelable, Attributable {
             Log.w(TAG, "BT not enabled, createBondOutOfBand failed");
             return false;
         }
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter != null && (transport == TRANSPORT_LE && !adapter.isLeEnabled())
+                || (transport == TRANSPORT_BREDR && !isBluetoothEnabled())) {
+            Log.w(TAG, "creatBond() initiated in improper adapter state : " + adapter.getState()
+                    + " transport = " + transport);
+            return false;
+        }
         try {
             return service.createBond(
                     this, transport, remoteP192Data, remoteP256Data, mAttributionSource);
@@ -1733,6 +1740,13 @@ public final class BluetoothDevice implements Parcelable, Attributable {
             Log.e(TAG, "BT not enabled. Cannot remove Remote Device bond");
             return false;
         }
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter != null && !adapter.isLeEnabled()) {
+            Log.w(TAG, "removeBond() initiated in improper adapter state : "
+                    + adapter.getState());
+            return false;
+        }
+
         try {
             Log.i(TAG, "removeBond() for device " + getAddress()
                     + " called by pid: " + Process.myPid()
