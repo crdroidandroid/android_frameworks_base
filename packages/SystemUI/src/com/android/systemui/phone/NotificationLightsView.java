@@ -55,13 +55,13 @@ public class NotificationLightsView extends RelativeLayout {
 
     public NotificationLightsView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        Log.e("NotificationLightsView", "new");
+        Log.d("NotificationLightsView", "new");
     }
 
     private Runnable mLightUpdate = new Runnable() {
         @Override
         public void run() {
-            Log.e("NotificationLightsView", "run");
+            Log.d("NotificationLightsView", "run");
             animateNotification();
         }
     };
@@ -76,7 +76,7 @@ public class NotificationLightsView extends RelativeLayout {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        Log.e("NotificationLightsView", "draw");
+        Log.d("NotificationLightsView", "draw");
     }
 
     public void animateNotification() {
@@ -92,7 +92,7 @@ public class NotificationLightsView extends RelativeLayout {
         StringBuilder sb = new StringBuilder();
         sb.append("animateNotification color ");
         sb.append(Integer.toHexString(color));
-        Log.e("NotificationLightsView", sb.toString());
+        Log.d("NotificationLightsView", sb.toString());
         ImageView leftViewSolid = (ImageView) findViewById(R.id.notification_animation_left_solid);
         ImageView leftViewFaded = (ImageView) findViewById(R.id.notification_animation_left_faded);
         leftViewSolid.setColorFilter(color);
@@ -109,7 +109,7 @@ public class NotificationLightsView extends RelativeLayout {
         mLightAnimator.setDuration(duration);
         mLightAnimator.addUpdateListener(new AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
-                Log.e("NotificationLightsView", "onAnimationUpdate");
+                Log.d("NotificationLightsView", "onAnimationUpdate");
                 float progress = ((Float) animation.getAnimatedValue()).floatValue();
                 leftViewSolid.setScaleY(progress);
                 leftViewFaded.setScaleY(progress);
@@ -127,7 +127,7 @@ public class NotificationLightsView extends RelativeLayout {
                 rightViewFaded.setAlpha(alpha);
             }
         });
-        Log.e("NotificationLightsView", "start");
+        Log.d("NotificationLightsView", "start");
         mLightAnimator.start();
     }
 }
