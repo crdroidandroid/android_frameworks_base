@@ -1421,11 +1421,17 @@ public class Process {
 
             while ((line = br.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(line);
+                boolean isWaiting = false;
 
-                for (int i = 0; i < 5 && st.hasMoreTokens(); i++) {
+                for (int i = 0; i < 6 && st.hasMoreTokens(); i++) {
                     String str = st.nextToken();
                     try {
-                        if (i == 4 && Integer.parseInt(str) == pid) {
+                        if (i == 1 && str.equals("->")) {
+                            isWaiting = true;
+                            continue;
+                        }
+
+                        if (i == (isWaiting ? 5 : 4) && Integer.parseInt(str) == pid) {
                             return true;
                         }
                     } catch (NumberFormatException nfe) {
