@@ -2242,8 +2242,8 @@ public final class PowerManagerService extends SystemService
 
     private void updateSmartChargingStatus() {
         if (!mSmartChargingAvailable) return;
-        if (mPowerInputSuspended && (mBatteryLevel <= mSmartChargingResumeLevel) ||
-            (mPowerInputSuspended && !mSmartChargingEnabled)) {
+        if (mPowerInputSuspended && ((mSmartChargingResumeLevel < mSmartChargingLevel &&
+            mBatteryLevel <= mSmartChargingResumeLevel) || !mSmartChargingEnabled)) {
             try {
                 FileUtils.stringToFile(mPowerInputSuspendSysfsNode, mPowerInputResumeValue);
                 mPowerInputSuspended = false;
