@@ -200,12 +200,6 @@
     <!-- Screenrecorder -->
     <string name="screenrecord_stopdot_label">ᱵᱚᱸᱫᱽ ᱰᱚᱴ ᱫᱮᱠᱷᱟᱣ\nᱩᱪᱟᱹᱲ ᱞᱟᱹᱜᱤᱫᱹᱽ ᱡᱩᱨ ᱚᱛᱟᱭ ᱢᱮ</string>
     <string name="screenrecord_lowquality_label">ᱠᱟᱹᱴᱤᱡ ᱨᱮᱫ ᱢᱟᱯ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱢ ᱠᱣᱟᱞᱤᱴᱭ</string>
-    <!-- Name of the camera status bar icon. -->
-    <string name="status_bar_camera">ᱠᱮᱢᱮᱨᱟ</string>
-    <!-- Name of the location status bar icon. -->
-    <string name="status_bar_location">ᱡᱟᱭᱜᱟ</string>
-    <!-- Name of the microphone status bar icon. -->
-    <string name="status_bar_microphone">ᱢᱟᱭᱠᱨᱚᱯᱷᱚᱱ</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Use Face</string>
     <!-- Daily data usage -->
