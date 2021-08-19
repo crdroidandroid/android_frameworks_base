@@ -199,12 +199,6 @@
     <!-- Screenrecorder -->
     <string name="screenrecord_stopdot_label">停止ドットを表示\n長押しして移動</string>
     <string name="screenrecord_lowquality_label">低品質にしてファイルサイズ縮小</string>
-    <!-- Name of the camera status bar icon. -->
-    <string name="status_bar_camera">カメラ</string>
-    <!-- Name of the location status bar icon. -->
-    <string name="status_bar_location">位置情報</string>
-    <!-- Name of the microphone status bar icon. -->
-    <string name="status_bar_microphone">マイク</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">顔認証を使用</string>
     <!-- Daily data usage -->
