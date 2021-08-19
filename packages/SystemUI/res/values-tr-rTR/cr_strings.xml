@@ -200,12 +200,6 @@
     <!-- Screenrecorder -->
     <string name="screenrecord_stopdot_label">Durma noktasını göster\nTaşımak için uzun basın</string>
     <string name="screenrecord_lowquality_label">Daha küçük dosya boyutu için daha düşük kalite</string>
-    <!-- Name of the camera status bar icon. -->
-    <string name="status_bar_camera">Kamera</string>
-    <!-- Name of the location status bar icon. -->
-    <string name="status_bar_location">Konum</string>
-    <!-- Name of the microphone status bar icon. -->
-    <string name="status_bar_microphone">Mikrofon</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Bir yüz kullan</string>
     <!-- Daily data usage -->
