@@ -201,12 +201,6 @@
     <!-- Screenrecorder -->
     <string name="screenrecord_stopdot_label">Arată punctul stop\nApăsați lung pentru a-l muta</string>
     <string name="screenrecord_lowquality_label">Calitate scăzută pentru dimensiunea mai mică a fișierului</string>
-    <!-- Name of the camera status bar icon. -->
-    <string name="status_bar_camera">Cameră</string>
-    <!-- Name of the location status bar icon. -->
-    <string name="status_bar_location">Locaţie</string>
-    <!-- Name of the microphone status bar icon. -->
-    <string name="status_bar_microphone">Microfon</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Utilizare față</string>
     <!-- Daily data usage -->

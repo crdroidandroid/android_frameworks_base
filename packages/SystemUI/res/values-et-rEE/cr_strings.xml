@@ -200,12 +200,6 @@
     <!-- Screenrecorder -->
     <string name="screenrecord_stopdot_label">Stoppnupu kuvamine\nHoidke liikumiseks</string>
     <string name="screenrecord_lowquality_label">Madal kvaliteet väiksema failisuuruse jaoks</string>
-    <!-- Name of the camera status bar icon. -->
-    <string name="status_bar_camera">Kaamera</string>
-    <!-- Name of the location status bar icon. -->
-    <string name="status_bar_location">Asukoht</string>
-    <!-- Name of the microphone status bar icon. -->
-    <string name="status_bar_microphone">Mikrofon</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Kasuta näotuvastust</string>
     <!-- Daily data usage -->
