@@ -132,6 +132,9 @@ public class PixelPropsUtils {
             for (Map.Entry<String, Object> prop : propsToChange.entrySet()) {
                 String key = prop.getKey();
                 Object value = prop.getValue();
+                if (packageName.equals("com.google.android.gms") && key.equals("MODEL")) {
+                    value = value + "\u200b";
+                }
                 setPropValue(key, value);
             }
         }
