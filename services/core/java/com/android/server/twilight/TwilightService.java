@@ -23,11 +23,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -36,9 +38,11 @@ import android.util.Slog;
 
 import com.android.internal.annotations.GuardedBy;
 import com.android.server.SystemService;
+import com.android.server.SystemService.TargetUser;
 
 import com.ibm.icu.impl.CalendarAstronomer;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -52,6 +56,9 @@ public final class TwilightService extends SystemService
 
     private static final String TAG = "TwilightService";
     private static final String ATTRIBUTION_TAG = "TwilightService";
+    private static final String PREF_FILE_NAME = TAG + "_preferences.xml";
+    private static final String LONG_PREF_KEY = TAG + "_LONGITUDE";
+    private static final String LATI_PREF_KEY = TAG + "_LATITUDE";
     private static final boolean DEBUG = false;
 
     private static final int MSG_START_LISTENING = 1;
@@ -73,6 +80,8 @@ public final class TwilightService extends SystemService
 
     @GuardedBy("mListeners")
     protected TwilightState mLastTwilightState;
+
+    private SharedPreferences mSharedPreferences;
 
     public TwilightService(Context context) {
         super(context.createAttributionContext(ATTRIBUTION_TAG));
@@ -211,8 +220,30 @@ public final class TwilightService extends SystemService
     private void updateTwilightState() {
         // Calculate the twilight state based on the current time and location.
         final long currentTimeMillis = System.currentTimeMillis();
-        final Location location = mLastLocation != null ? mLastLocation
+        Location location = mLastLocation != null ? mLastLocation
                 : mLocationManager.getLastLocation();
+
+        if (location == null && mSharedPreferences != null) {
+            // try using last fetched location
+            final Long spLong = mSharedPreferences.getLong(LONG_PREF_KEY, 0);
+            final Long spLati = mSharedPreferences.getLong(LATI_PREF_KEY, 0);
+            if (spLong != 0 && spLati != 0) {
+                location = new Location("");
+                location.setLongitude(Double.longBitsToDouble(spLong));
+                location.setLatitude(Double.longBitsToDouble(spLati));
+                if (DEBUG) Slog.i(TAG, "Fetched saved location: "
+                        + location.getLongitude() + " : " + location.getLatitude());
+            }
+        } else if (mSharedPreferences != null) {
+            // save last fetched location for offline usage
+            mSharedPreferences.edit().putLong(LONG_PREF_KEY,
+                    Double.doubleToRawLongBits(location.getLongitude())).apply();
+            mSharedPreferences.edit().putLong(LATI_PREF_KEY,
+                    Double.doubleToRawLongBits(location.getLatitude())).apply();
+            if (DEBUG) Slog.i(TAG, "Saved location: "
+                    + location.getLongitude() + " : " + location.getLatitude());
+        }
+
         final TwilightState state = calculateTwilightState(location, currentTimeMillis);
         if (DEBUG) {
             Slog.d(TAG, "updateTwilightState: " + state);
@@ -267,6 +298,14 @@ public final class TwilightService extends SystemService
 
     @Override
     public void onProviderDisabled(String provider) {
+    }
+
+    @Override
+    public void onUserUnlocked(@NonNull TargetUser user) {
+        mSharedPreferences = getContext().getSharedPreferences(
+                new File(Environment.getUserSystemDirectory(user.getUserIdentifier()),
+                        PREF_FILE_NAME), Context.MODE_PRIVATE);
+        updateTwilightState();
     }
 
     /**
