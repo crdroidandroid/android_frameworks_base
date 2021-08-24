@@ -69,7 +69,7 @@ public class PowerUI implements
         CommandQueue.Callbacks {
 
     static final String TAG = "PowerUI";
-    static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
+    static final boolean DEBUG = false;
     private static final long TEMPERATURE_INTERVAL = 30 * DateUtils.SECOND_IN_MILLIS;
     private static final long TEMPERATURE_LOGGING_INTERVAL = DateUtils.HOUR_IN_MILLIS;
     private static final int MAX_RECENT_TEMPS = 125; // TEMPERATURE_LOGGING_INTERVAL plus a buffer
@@ -474,9 +474,11 @@ public class PowerUI implements
     boolean shouldShowHybridWarning(BatteryStateSnapshot snapshot) {
         if (snapshot.getPlugged()
                 || snapshot.getBatteryStatus() == BatteryManager.BATTERY_STATUS_UNKNOWN) {
-            Slog.d(TAG, "can't show warning due to - plugged: " + snapshot.getPlugged()
-                    + " status unknown: "
-                    + (snapshot.getBatteryStatus() == BatteryManager.BATTERY_STATUS_UNKNOWN));
+            if (DEBUG) {
+                Slog.d(TAG, "can't show warning due to - plugged: " + snapshot.getPlugged()
+                        + " status unknown: "
+                        + (snapshot.getBatteryStatus() == BatteryManager.BATTERY_STATUS_UNKNOWN));
+            }
             return false;
         }
 
