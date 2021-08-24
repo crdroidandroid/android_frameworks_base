@@ -2008,8 +2008,9 @@ public final class BluetoothAdapter {
 
         return false;
     }
+
     /** @hide */
-    @RequiresPermission(Manifest.permission.BLUETOOTH)
+    @RequiresPermission(android.Manifest.permission.BLUETOOTH)
     public boolean isBroadcastActive() {
         try {
             mServiceLock.readLock().lock();
