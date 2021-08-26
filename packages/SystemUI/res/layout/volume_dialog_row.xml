@@ -51,6 +51,20 @@
 
             <com.android.systemui.statusbar.AlphaOptimizedImageView
                 android:id="@+id/volume_row_icon"
+                android:visibility="gone"
+                android:layout_width="@dimen/volume_dialog_row_icon_size"
+                android:layout_height="@dimen/volume_dialog_tap_target_size"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="-12dp"
+                android:clickable="false"
+                android:layoutDirection="ltr"
+                android:scaleType="fitCenter"
+                android:soundEffectsEnabled="false"
+                android:tint="?android:attr/colorAccent" />
+
+            <com.android.systemui.statusbar.AlphaOptimizedImageView
+                android:id="@+id/volume_row_app_icon"
+                android:visibility="gone"
                 android:layout_width="@dimen/volume_dialog_row_icon_size"
                 android:layout_height="@dimen/volume_dialog_tap_target_size"
                 android:layout_gravity="center_horizontal"
@@ -75,6 +89,7 @@
                 android:textAppearance="@style/TextAppearance.Volume.Header"
                 android:textColor="?android:attr/colorAccent"
                 android:textStyle="bold" />
+            
         </LinearLayout>
     </FrameLayout>
 
