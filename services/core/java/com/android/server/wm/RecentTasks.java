@@ -69,6 +69,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.IntArray;
@@ -768,8 +769,15 @@ class RecentTasks {
 
     void removeAllVisibleTasks(int userId) {
         Set<Integer> profileIds = getProfileIds(userId);
+        String lockedTasks = Settings.System.getStringForUser(
+                    mService.mContext.getContentResolver(),
+                    Settings.System.RECENTS_LOCKED_TASKS,
+                    userId);
         for (int i = mTasks.size() - 1; i >= 0; --i) {
             final Task task = mTasks.get(i);
+            ComponentName cn = task.intent != null ? task.intent.getComponent() : null;
+            if (lockedTasks != null && !lockedTasks.isEmpty() &&
+                    cn != null && lockedTasks.contains(cn.getPackageName())) continue;
             if (!profileIds.contains(task.mUserId)) continue;
             if (isVisibleRecentTask(task)) {
                 mTasks.remove(i);
