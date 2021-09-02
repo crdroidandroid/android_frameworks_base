@@ -328,6 +328,12 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
             new Handler(Looper.getMainLooper())) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
+            // TODO(b/198002034): Content observers currently can still be called back after being
+            // unregistered, and in this case we can ignore the change if the nav bar has been
+            // destroyed already
+            if (mNavigationBarView == null) {
+                return;
+            }
             boolean available = mAssistManager
                     .getAssistInfoForUser(UserHandle.USER_CURRENT) != null;
             if (mAssistantAvailable != available) {
@@ -483,7 +489,7 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
         if (mIsOnDefaultDisplay) {
             final RotationButtonController rotationButtonController =
                     mNavigationBarView.getRotationButtonController();
-            rotationButtonController.addRotationCallback(mRotationWatcher);
+            rotationButtonController.setRotationCallback(mRotationWatcher);
 
             // Reset user rotation pref to match that of the WindowManager if starting in locked
             // mode. This will automatically happen when switching from auto-rotate to locked mode.
@@ -506,6 +512,9 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
         super.onDestroyView();
         if (mNavigationBarView != null) {
             if (mIsOnDefaultDisplay) {
+                final RotationButtonController rotationButtonController =
+                        mNavigationBarView.getRotationButtonController();
+                rotationButtonController.setRotationCallback(null);
                 mNavigationBarView.getBarTransitions()
                         .removeDarkIntensityListener(mAssistHandlerViewController);
                 mAssistHandlerViewController = null;

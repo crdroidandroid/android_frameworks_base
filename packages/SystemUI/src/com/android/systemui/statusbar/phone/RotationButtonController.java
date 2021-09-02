@@ -168,7 +168,7 @@ public class RotationButtonController {
         ActivityManagerWrapper.getInstance().unregisterTaskStackListener(mTaskStackListener);
     }
 
-    void addRotationCallback(Consumer<Integer> watcher) {
+    void setRotationCallback(Consumer<Integer> watcher) {
         mRotWatcherListener = watcher;
     }
 
