@@ -313,7 +313,7 @@ public class InputManagerService extends IInputManager.Stub
     /** Switch code: Housed stylus. When set, stylus is inserted.
     * {@hide}
     */
-    public static final int SW_HOUSED_STYLUS = 0x0f;* 
+    public static final int SW_HOUSED_STYLUS = 0x0f;
     
     public static final int SW_LID_BIT = 1 << SW_LID;
     public static final int SW_TABLET_MODE_BIT = 1 << SW_TABLET_MODE;
