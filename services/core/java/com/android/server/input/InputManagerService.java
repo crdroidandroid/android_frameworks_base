@@ -306,8 +306,11 @@ public class InputManagerService extends IInputManager.Stub
 
     /** Switch code: Camera lens cover. When set the lens is covered. */
     public static final int SW_CAMERA_LENS_COVER = 0x09;
-
-    /** Switch code: Microphone. When set it is off. */
+    
+    /*  /** Switch code: Housed stylus. When set, stylus is inserted.
+    * {@hide}
+    */
+    public static final int SW_HOUSED_STYLUS = 0x0f;* Switch code: Microphone. When set it is off. */
     public static final int SW_MUTE_DEVICE = 0x0e;
 
     public static final int SW_LID_BIT = 1 << SW_LID;
@@ -321,6 +324,16 @@ public class InputManagerService extends IInputManager.Stub
             SW_HEADPHONE_INSERT_BIT | SW_MICROPHONE_INSERT_BIT | SW_JACK_PHYSICAL_INSERT_BIT | SW_LINEOUT_INSERT_BIT;
     public static final int SW_CAMERA_LENS_COVER_BIT = 1 << SW_CAMERA_LENS_COVER;
     public static final int SW_MUTE_DEVICE_BIT = 1 << SW_MUTE_DEVICE;
+    
+     /**
+    * {@hide}
+    */
+    public static final int SW_HOUSED_STYLUS_BIT = 1 << SW_HOUSED_STYLUS;
+
+    /**
+    * {@hide}
+    */
+    public static final String SETTINGS_HOUSED_STYLUS_STATE = "pen_insert_state";
 
     /** Whether to use the dev/input/event or uevent subsystem for the audio jack. */
     final boolean mUseDevInputEventForAudioJack;
@@ -1969,6 +1982,11 @@ public class InputManagerService extends IInputManager.Stub
             final boolean micMute = ((switchValues & SW_MUTE_DEVICE_BIT) != 0);
             AudioManager audioManager = mContext.getSystemService(AudioManager.class);
             audioManager.setMicrophoneMuteFromSwitch(micMute);
+        }
+         if ((switchMask & SW_HOUSED_STYLUS_BIT) != 0) {
+            int mPenState = (SW_HOUSED_STYLUS_BIT & switchValues) == 0 ? 0 : 1;
+            Settings.Global.putInt(mContext.getContentResolver(),
+                    SETTINGS_HOUSED_STYLUS_STATE, mPenState);
         }
     }
 
