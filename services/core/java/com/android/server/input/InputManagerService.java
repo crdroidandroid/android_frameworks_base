@@ -305,9 +305,9 @@ public class InputManagerService extends IInputManager.Stub
     public static final int SW_JACK_PHYSICAL_INSERT = 0x07;
 
     /** Switch code: Camera lens cover. When set the lens is covered. */
-    public static final int SW_CAMERA_LENS_COVER = 0x09;
+    public static final int SW_CAMERA_LENS_COVER = 0x09; 
     
-    /*  /** Switch code: Housed stylus. When set, stylus is inserted.
+    /** Switch code: Housed stylus. When set, stylus is inserted.
     * {@hide}
     */
     public static final int SW_HOUSED_STYLUS = 0x0f;* Switch code: Microphone. When set it is off. */
@@ -325,7 +325,7 @@ public class InputManagerService extends IInputManager.Stub
     public static final int SW_CAMERA_LENS_COVER_BIT = 1 << SW_CAMERA_LENS_COVER;
     public static final int SW_MUTE_DEVICE_BIT = 1 << SW_MUTE_DEVICE;
     
-     /**
+    /**
     * {@hide}
     */
     public static final int SW_HOUSED_STYLUS_BIT = 1 << SW_HOUSED_STYLUS;
