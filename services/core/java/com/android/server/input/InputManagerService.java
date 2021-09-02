@@ -305,14 +305,16 @@ public class InputManagerService extends IInputManager.Stub
     public static final int SW_JACK_PHYSICAL_INSERT = 0x07;
 
     /** Switch code: Camera lens cover. When set the lens is covered. */
-    public static final int SW_CAMERA_LENS_COVER = 0x09; 
+    public static final int SW_CAMERA_LENS_COVER = 0x09;
+    
+    /** Switch code: Microphone. When set it is off. */
+    public static final int SW_MUTE_DEVICE = 0x0e;
     
     /** Switch code: Housed stylus. When set, stylus is inserted.
     * {@hide}
     */
-    public static final int SW_HOUSED_STYLUS = 0x0f;* Switch code: Microphone. When set it is off. */
-    public static final int SW_MUTE_DEVICE = 0x0e;
-
+    public static final int SW_HOUSED_STYLUS = 0x0f;* 
+    
     public static final int SW_LID_BIT = 1 << SW_LID;
     public static final int SW_TABLET_MODE_BIT = 1 << SW_TABLET_MODE;
     public static final int SW_KEYPAD_SLIDE_BIT = 1 << SW_KEYPAD_SLIDE;
