@@ -135,4 +135,8 @@
     <dimen name="ticker_top_padding">2dp</dimen>
     <dimen name="ticker_icon_end_margin">4dp</dimen>
     <dimen name="ticker_text_end_padding">10dp</dimen>
+
+    <!-- Burn-in protection -->
+    <dimen name="horizontal_max_swift">3.0dp</dimen>
+    <dimen name="vertical_max_swift">1.0dp</dimen>
 </resources>
