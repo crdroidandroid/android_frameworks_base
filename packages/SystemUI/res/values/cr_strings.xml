@@ -175,4 +175,9 @@
 
     <!-- 5G toggle in Internet Dialog -->
     <string name="enable_fiveg">Enable 5G</string>
+
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">used today</string>
+    <string name="usage_data_default_suffix">Data</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
 </resources>
