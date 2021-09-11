@@ -111,6 +111,8 @@ public class Notifier {
     private static final VibrationEffect CHARGING_VIBRATION_EFFECT =
             VibrationEffect.createWaveform(CHARGING_VIBRATION_TIME, CHARGING_VIBRATION_AMPLITUDE,
                     -1);
+    private static final VibrationEffect CHARGING_VIBRATION_DOUBLE_CLICK_EFFECT =
+            VibrationEffect.createPredefined(VibrationEffect.EFFECT_DOUBLE_CLICK);
     private static final AudioAttributes VIBRATION_ATTRIBUTES = new AudioAttributes.Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build();
@@ -828,7 +830,8 @@ public class Notifier {
         final boolean vibrate = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                 Settings.Secure.CHARGING_VIBRATION_ENABLED, 1, userId) != 0;
         if (vibrate) {
-            mVibrator.vibrate(CHARGING_VIBRATION_EFFECT, VIBRATION_ATTRIBUTES);
+            mVibrator.vibrate(mVibrator.hasAmplitudeControl() ? CHARGING_VIBRATION_EFFECT :
+                CHARGING_VIBRATION_DOUBLE_CLICK_EFFECT, VIBRATION_ATTRIBUTES);
         }
 
         // play sound
