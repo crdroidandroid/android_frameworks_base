@@ -30,6 +30,7 @@ import com.android.systemui.qs.tiles.OnTheGoTile
 import com.android.systemui.qs.tiles.PowerShareTile
 import com.android.systemui.qs.tiles.ProfilesTile
 import com.android.systemui.qs.tiles.ReadingModeTile
+import com.android.systemui.qs.tiles.RefreshRateTile
 import com.android.systemui.qs.tiles.SmartPixelsTile
 import com.android.systemui.qs.tiles.SoundTile
 import com.android.systemui.qs.tiles.SyncTile
@@ -123,6 +124,12 @@ interface LineageModule {
     @IntoMap
     @StringKey(ReadingModeTile.TILE_SPEC)
     fun bindReadingModeTile(readingModeTile: ReadingModeTile): QSTileImpl<*>
+
+    /** Inject RefreshRateTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(RefreshRateTile.TILE_SPEC)
+    fun bindRefreshRateTile(refreshRateTile: RefreshRateTile): QSTileImpl<*>
 
     /** Inject SmartPixelsTile into tileMap in QSModule */
     @Binds
