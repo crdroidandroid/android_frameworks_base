@@ -64,6 +64,7 @@ import com.android.systemui.qs.tiles.QRCodeScannerTile;
 import com.android.systemui.qs.tiles.QuickAccessWalletTile;
 import com.android.systemui.qs.tiles.ReadingModeTile;
 import com.android.systemui.qs.tiles.ReduceBrightColorsTile;
+import com.android.systemui.qs.tiles.RefreshRateTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenRecordTile;
 import com.android.systemui.qs.tiles.SmartPixelsTile;
@@ -137,6 +138,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<VolumeTile> mVolumeTileProvider;
     private final Provider<SmartPixelsTile> mSmartPixelsTileProvider;
     private final Provider<WeatherTile> mWeatherTileProvider;
+    private final Provider<RefreshRateTile> mRefreshRateTileProvider;
 
     private final Lazy<QSHost> mQsHostLazy;
     private final Provider<CustomTile.Builder> mCustomTileBuilderProvider;
@@ -193,7 +195,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<DataSwitchTile> dataSwitchTileProvider,
             Provider<VolumeTile> volumeTileProvider,
             Provider<SmartPixelsTile> smartPixelsTileProvider,
-            Provider<WeatherTile> weatherTileProvider) {
+            Provider<WeatherTile> weatherTileProvider,
+            Provider<RefreshRateTile> refreshRateTileProvider) {
         mQsHostLazy = qsHostLazy;
         mCustomTileBuilderProvider = customTileBuilderProvider;
 
@@ -246,6 +249,7 @@ public class QSFactoryImpl implements QSFactory {
         mVolumeTileProvider = volumeTileProvider;
         mSmartPixelsTileProvider = smartPixelsTileProvider;
         mWeatherTileProvider = weatherTileProvider;
+        mRefreshRateTileProvider = refreshRateTileProvider;
     }
 
     /** Creates a tile with a type based on {@code tileSpec} */
@@ -360,6 +364,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mSmartPixelsTileProvider.get();
             case "weather":
                 return mWeatherTileProvider.get();
+            case "refresh_rate":
+                return mRefreshRateTileProvider.get();
         }
 
         // Custom tiles
