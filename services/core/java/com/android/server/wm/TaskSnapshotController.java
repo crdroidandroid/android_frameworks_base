@@ -137,16 +137,22 @@ class TaskSnapshotController {
         }
     };
 
-    void updateTaskSnapshot(String packageName) {
+    synchronized void updateTaskSnapshot(String packageName) {
         final Iterator<Map.Entry<Integer, TaskSnapshotCache.CacheEntry>> it = mCache.getRunningCache().entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<Integer, TaskSnapshotCache.CacheEntry> entry = it.next();
-            int taskId = entry.getKey();
-            Task task = entry.getValue().task;
-            if (task.mPackageName != null && task.mPackageName.equals(packageName)){
-                snapshotTasks(new ArraySet<>(Arrays.asList(task)));
+	synchronized (mCache) {
+            while (it.hasNext()) {
+                Map.Entry<Integer, TaskSnapshotCache.CacheEntry> entry = it.next();
+		Integer taskIdI = entry.getKey();
+		if (taskIdI == null) {
+		    continue;
+		}
+                int taskId = taskIdI.intValue();
+                Task task = entry.getValue().task;
+                if (task.mPackageName != null && task.mPackageName.equals(packageName)){
+                    snapshotTasks(new ArraySet<>(Arrays.asList(task)));
+                }
             }
-        }
+	}
     }
 
     TaskSnapshotController(WindowManagerService service) {
