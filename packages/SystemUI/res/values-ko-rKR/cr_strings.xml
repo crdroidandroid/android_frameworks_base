@@ -255,4 +255,6 @@
     <string name="quick_settings_monotoggle_tile">오디오 모드</string>
     <string name="quick_settings_monotoggle_tile_mono">모노 오디오</string>
     <string name="quick_settings_monotoggle_tile_stereo">스테레오 오디오</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
 </resources>
