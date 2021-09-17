@@ -223,4 +223,6 @@
     <string name="quick_settings_monotoggle_tile">Audióformátum</string>
     <string name="quick_settings_monotoggle_tile_mono">Monó hang</string>
     <string name="quick_settings_monotoggle_tile_stereo">Sztereó hang</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
 </resources>

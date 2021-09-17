@@ -260,4 +260,6 @@ dziewięć</string>
     <string name="quick_settings_monotoggle_tile">Tryb Audio</string>
     <string name="quick_settings_monotoggle_tile_mono">Dźwięk mono</string>
     <string name="quick_settings_monotoggle_tile_stereo">Dźwięk stereo</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
 </resources>

@@ -250,4 +250,6 @@ Y Nueve</string>
     <string name="quick_settings_monotoggle_tile">Modo de audio</string>
     <string name="quick_settings_monotoggle_tile_mono">Audio en mono</string>
     <string name="quick_settings_monotoggle_tile_stereo">Audio en estéreo</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
 </resources>

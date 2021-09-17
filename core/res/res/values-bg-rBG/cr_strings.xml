@@ -37,7 +37,7 @@
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">Копиране на URL адреса на регистъра за сривове</string>
     <string name="url_copy_success">URL aдресът е копиран успешно</string>
-    <string name="url_copy_failed">An error occured while uploading the log to pasty</string>
+    <string name="url_copy_failed">Възникна грешка при качването на лога в pasty</string>
     <!-- Clipboard access toast -->
     <string name="app_clipboard_access_denied">На %1$s бе отказан достъп до клипборда</string>
     <string name="app_clipboard_access_granted">На %1$s бе разрешен достъп до клипборда</string>
