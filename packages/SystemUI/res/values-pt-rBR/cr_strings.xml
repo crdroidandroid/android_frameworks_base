@@ -62,7 +62,7 @@
     <string name="quick_settings_reboot_recovery_label">Recuperação</string>
     <string name="quick_settings_poweroff_label">Desligar</string>
     <!-- Sound Search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Busca de som</string>
     <!-- Sound QS tile -->
     <string name="quick_settings_sound_label">Som</string>
     <string name="quick_settings_sound_ring">Campainha</string>
