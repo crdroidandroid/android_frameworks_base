@@ -62,7 +62,7 @@
     <string name="quick_settings_reboot_recovery_label">리커버리</string>
     <string name="quick_settings_poweroff_label">전원 끄기</string>
     <!-- Sound Search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">사운드 검색</string>
     <!-- Sound QS tile -->
     <string name="quick_settings_sound_label">소리</string>
     <string name="quick_settings_sound_ring">벨소리</string>
