@@ -60,6 +60,7 @@ import com.android.systemui.qs.tiles.ReadingModeTile;
 import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenRecordTile;
+import com.android.systemui.qs.tiles.SoundSearchTile;
 import com.android.systemui.qs.tiles.SmartPixelsTile;
 import com.android.systemui.qs.tiles.SoundTile;
 import com.android.systemui.qs.tiles.SyncTile;
@@ -125,6 +126,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<GamingModeTile> mGamingModeTileProvider;
     private final Provider<SmartPixelsTile> mSmartPixelsTileProvider;
     private final Provider<RebootTile> mRebootTileProvider;
+    private final Provider<SoundSearchTile> mSoundSearchTileProvider;
     private final Provider<SoundTile> mSoundTileProvider;
     private final Provider<CompassTile> mCompassTileProvider;
     private final Provider<LocaleTile> mLocaleTileProvider;
@@ -175,6 +177,7 @@ public class QSFactoryImpl implements QSFactory {
             Provider<GamingModeTile> gamingModeTileProvider,
             Provider<SmartPixelsTile> smartPixelsTileProvider,
             Provider<RebootTile> rebootTileProvider,
+            Provider<SoundSearchTile> soundSearchTileProvider,
             Provider<SoundTile> soundTileProvider,
             Provider<CompassTile> compassTileProvider,
             Provider<LocaleTile> localeTileProvider,
@@ -221,6 +224,7 @@ public class QSFactoryImpl implements QSFactory {
         mGamingModeTileProvider = gamingModeTileProvider;
         mSmartPixelsTileProvider = smartPixelsTileProvider;
         mRebootTileProvider = rebootTileProvider;
+        mSoundSearchTileProvider = soundSearchTileProvider;
         mSoundTileProvider = soundTileProvider;
         mCompassTileProvider = compassTileProvider;
         mLocaleTileProvider = localeTileProvider;
@@ -319,6 +323,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mSmartPixelsTileProvider.get();
             case "reboot":
                 return mRebootTileProvider.get();
+            case "soundsearch":
+                return mSoundSearchTileProvider.get();
             case "sound":
                 return mSoundTileProvider.get();
             case "compass":
