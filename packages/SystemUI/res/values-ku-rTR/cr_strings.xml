@@ -61,6 +61,8 @@
     <string name="quick_settings_reboot_label">داگیرساندنه‌وه‌</string>
     <string name="quick_settings_reboot_recovery_label">ڕیکەڤەری</string>
     <string name="quick_settings_poweroff_label">کوژانه‌وه‌</string>
+    <!-- Sound Search tile -->
+    <string name="quick_settings_sound_search">Sound search</string>
     <!-- Sound QS tile -->
     <string name="quick_settings_sound_label">دەنگ</string>
     <string name="quick_settings_sound_ring">زەنگ</string>
