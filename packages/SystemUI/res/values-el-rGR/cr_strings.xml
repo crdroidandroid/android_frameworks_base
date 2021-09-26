@@ -61,6 +61,8 @@
     <string name="quick_settings_reboot_label">Επανεκκίνηση</string>
     <string name="quick_settings_reboot_recovery_label">Recovery</string>
     <string name="quick_settings_poweroff_label">Απενεργοποίηση</string>
+    <!-- Sound Search tile -->
+    <string name="quick_settings_sound_search">Sound search</string>
     <!-- Sound QS tile -->
     <string name="quick_settings_sound_label">Ήχος</string>
     <string name="quick_settings_sound_ring">Κουδούνισμα</string>
