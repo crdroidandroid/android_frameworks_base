@@ -62,7 +62,7 @@
     <string name="quick_settings_reboot_recovery_label">Режим восстановления</string>
     <string name="quick_settings_poweroff_label">Выключение</string>
     <!-- Sound Search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Поиск музыки</string>
     <!-- Sound QS tile -->
     <string name="quick_settings_sound_label">Звук</string>
     <string name="quick_settings_sound_ring">Звонок</string>
