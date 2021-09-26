@@ -62,7 +62,7 @@
     <string name="quick_settings_reboot_recovery_label">リカバリー</string>
     <string name="quick_settings_poweroff_label">電源を切る</string>
     <!-- Sound Search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">音声検索</string>
     <!-- Sound QS tile -->
     <string name="quick_settings_sound_label">サウンド</string>
     <string name="quick_settings_sound_ring">着信音</string>
