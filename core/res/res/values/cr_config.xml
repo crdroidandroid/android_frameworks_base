@@ -147,4 +147,7 @@
 
     <!-- Whether to show settings for hiding notch fill -->
     <bool name="config_showHideNotchSettings">false</bool>
+
+	<!-- Whether device has fingerprint on power button -->
+    <bool name="config_powerButtonFingerprint">false</bool>
 </resources>

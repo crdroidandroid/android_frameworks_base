@@ -122,4 +122,7 @@
 
   <!-- Whether to show settings for hiding notch fill -->
   <java-symbol type="bool" name="config_showHideNotchSettings" />
+
+  <!-- Power button fingerprint -->
+    <java-symbol type="bool" name="config_powerButtonFingerprint" />
 </resources>
