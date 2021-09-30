@@ -769,6 +769,35 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                     break;
                 }
             }
+
+            int appCount = mBleApps.size();
+            if (DBG) {
+                Slog.d(TAG, appCount + "Binder is dead,registered Ble Apps");
+            }
+
+            if (appCount == 0 && mEnable) {
+                disableBleScanMode();
+            }
+
+            if (appCount == 0) {
+                int st = BluetoothAdapter.STATE_OFF;
+                try {
+                    mBluetoothLock.readLock().lock();
+                    if (mBluetooth != null) {
+                        st = mBluetooth.getState();
+                    }
+                    if (!mEnableExternal || (st == BluetoothAdapter.STATE_BLE_ON)) {
+                        if (DBG) {
+                            Slog.d(TAG, "Move to BT state OFF");
+                        }
+                        sendBrEdrDownCallback(mContext.getAttributionSource());
+                    }
+                } catch (RemoteException e) {
+                    Slog.e(TAG, "", e);
+                } finally {
+                    mBluetoothLock.readLock().unlock();
+                }
+            }
         }
 
         public String getPackageName() {
@@ -2031,16 +2060,32 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                 }
 
                 case MESSAGE_RESTORE_USER_SETTING:
-                    if ((msg.arg1 == RESTORE_SETTING_TO_OFF) && mEnable) {
+                    if (msg.arg1 == RESTORE_SETTING_TO_OFF) {
                         if (DBG) {
                             Slog.d(TAG, "Restore Bluetooth state to disabled");
                         }
                         persistBluetoothSetting(BLUETOOTH_OFF);
                         mEnableExternal = false;
-                        sendDisableMsg(
-                                BluetoothProtoEnums.ENABLE_DISABLE_REASON_RESTORE_USER_SETTING,
-                                mContext.getPackageName());
-                    } else if ((msg.arg1 == RESTORE_SETTING_TO_ON) && !mEnable) {
+                        clearBleApps();
+                        try {
+                            mBluetoothLock.readLock().lock();
+                            mEnableExternal = false;
+                            if (mBluetooth != null) {
+                                if (mBluetooth.getState() == BluetoothAdapter.STATE_BLE_ON) {
+                                    mEnable = false;
+                                    mBluetooth.onBrEdrDown(mContext.getAttributionSource());
+                                } else {
+                                    sendDisableMsg(
+                                    BluetoothProtoEnums.ENABLE_DISABLE_REASON_RESTORE_USER_SETTING,
+                                    mContext.getPackageName());
+                                }
+                            }
+                        } catch (RemoteException e) {
+                            Slog.e(TAG, "Unable to initiate disable", e);
+                        } finally {
+                            mBluetoothLock.readLock().unlock();
+                        }
+                    } else if (msg.arg1 == RESTORE_SETTING_TO_ON) {
                         if (DBG) {
                             Slog.d(TAG, "Restore Bluetooth state to enabled");
                         }
