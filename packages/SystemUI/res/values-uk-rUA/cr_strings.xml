@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2021 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">кб/с</string>
+    <string name="megabitspersecond_short">Мб/с</string>
+    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="kilobytespersecond_short">кБ/с</string>
+    <string name="megabytespersecond_short">МБ/с</string>
+    <string name="gigabytespersecond_short">ГБ/с</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Помилка</string>
+    <string name="omnijaws_service_unkown">Немає даних про погоду</string>
+    <string name="omnijaws_service_error_long">Помилка завантаження даних про погоду</string>
+    <string name="omnijaws_service_disabled">Службу вимкнено</string>
+    <string name="omnijaws_detail_header">Погода</string>
+    <string name="omnijaws_label_default">Погода</string>
+    <string name="omnijaws_current_text">Зараз</string>
+    <string name="omnijaws_package_not_available">OmniJaws недоступний</string>
+    <string name="omnijaws_service_last_update">Останнє оновлення:</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Постійно активний дисплей</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Змінити картку для передачі даних</string>
+    <string name="qs_data_switch_changed_1">Використання SIM 1 для передачі даних</string>
+    <string name="qs_data_switch_changed_2">Використання SIM 2 для передачі даних</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Швидке заряджання (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до кінця зарядки)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • Швидке заряджання</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Швидке заряджання (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до закінчення зарядки)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="Percentage">%s</xliff:g> • Швидке заряджання</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Заряджання VOOC(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до повної зарядки)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Заряджання VOOC</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Інформація про процесор</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Інформація про FPS</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Ігровий режим відключено в налаштуваннях</string>
+    <string name="quick_settings_gaming_mode_label">Ігровий режим</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Розумні пікселі</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Автоматичне увімкнення розумних пікселів</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">Перезавантаження</string>
+    <string name="quick_settings_reboot_recovery_label">Режим відновлення</string>
+    <string name="quick_settings_poweroff_label">Вимкнути</string>
+    <!-- Sound Search tile -->
+    <string name="quick_settings_sound_search">Пошук музики</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">Мелодії</string>
+    <string name="quick_settings_sound_ring">Кільце</string>
+    <string name="quick_settings_sound_vibrate">Вібрація</string>
+    <string name="quick_settings_sound_dnd">Не турбувати</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Компас</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Ініціалізація\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Компас вимк.</string>
+    <string name="accessibility_quick_settings_compass_on">Компас увімк.</string>
+    <string name="quick_settings_compass_N">Пн.</string>
+    <string name="quick_settings_compass_NE">Пн. Сх.</string>
+    <string name="quick_settings_compass_E">Сх.</string>
+    <string name="quick_settings_compass_SE">Пд. Сх.</string>
+    <string name="quick_settings_compass_S">Пд.</string>
+    <string name="quick_settings_compass_SW">Пд. Зх.</string>
+    <string name="quick_settings_compass_W">Зх.</string>
+    <string name="quick_settings_compass_NW">Пн. Зх.</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Мова</string>
+    <string name="quick_settings_locale_more_locales_toast">Будь ласка, налаштуйте кілька мов, щоб увімкнути функцію перемикання</string>
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
+        <item quantity="few"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
+        <item quantity="many"><annotation name="color">Зараз</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">Перша</string>
+    <string name="text_clock_h_two">Друга</string>
+    <string name="text_clock_h_three">Третя</string>
+    <string name="text_clock_h_four">Четверта</string>
+    <string name="text_clock_h_five">П’ята</string>
+    <string name="text_clock_h_six">Шоста</string>
+    <string name="text_clock_h_seven">Сьома</string>
+    <string name="text_clock_h_eight">Восьма</string>
+    <string name="text_clock_h_nine">Дев’ята</string>
+    <string name="text_clock_h_ten">Десята</string>
+    <string name="text_clock_h_eleven">Одинадцята</string>
+    <string name="text_clock_h_twelve">Дванадцята</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">година
+рівно</string>
+    <string name="text_clock_m_one">Одна</string>
+    <string name="text_clock_m_two">Дві</string>
+    <string name="text_clock_m_three">Три</string>
+    <string name="text_clock_m_four">Чотири</string>
+    <string name="text_clock_m_five">П\'ять</string>
+    <string name="text_clock_m_six">Шість</string>
+    <string name="text_clock_m_seven">Сім</string>
+    <string name="text_clock_m_eight">Вісім</string>
+    <string name="text_clock_m_nine">Дев\'ять</string>
+    <string name="text_clock_m_ten">Десять</string>
+    <string name="text_clock_m_eleven">Одинадцять</string>
+    <string name="text_clock_m_twelve">Дванадцять</string>
+    <string name="text_clock_m_thirteen">Тринадцять</string>
+    <string name="text_clock_m_fourteen">Чотирнадцять</string>
+    <string name="text_clock_m_fifteen">П\'ятнадцять</string>
+    <string name="text_clock_m_sixteen">Шістнадцять</string>
+    <string name="text_clock_m_seventeen">Сімнадцять</string>
+    <string name="text_clock_m_eighteen">Вісімнадцять</string>
+    <string name="text_clock_m_nineteen">Дев\'ятнадцять</string>
+    <string name="text_clock_m_twenty">Двадцять</string>
+    <string name="text_clock_m_twenty_one">Двадцять
+одна</string>
+    <string name="text_clock_m_twenty_two">Двадцять
+дві</string>
+    <string name="text_clock_m_twenty_three">Двадцять
+три</string>
+    <string name="text_clock_m_twenty_four">Двадцять
+чотири</string>
+    <string name="text_clock_m_twenty_five">Двадцять
+п\'ять</string>
+    <string name="text_clock_m_twenty_six">Двадцять
+шість</string>
+    <string name="text_clock_m_twenty_seven">Двадцять
+сім</string>
+    <string name="text_clock_m_twenty_eight">Двадцять
+вісім</string>
+    <string name="text_clock_m_twenty_nine">Двадцять
+дев\'ять</string>
+    <string name="text_clock_m_thirty">Тридцять</string>
+    <string name="text_clock_m_thirty_one">Тридцять
+одна</string>
+    <string name="text_clock_m_thirty_two">Тридцять
+дві</string>
+    <string name="text_clock_m_thirty_three">Тридцять
+три</string>
+    <string name="text_clock_m_thirty_four">Тридцять
+чотири</string>
+    <string name="text_clock_m_thirty_five">Тридцять
+п\'ять</string>
+    <string name="text_clock_m_thirty_six">Тридцять
+шість</string>
+    <string name="text_clock_m_thirty_seven">Тридцять
+сім</string>
+    <string name="text_clock_m_thirty_eight">Тридцять
+вісім</string>
+    <string name="text_clock_m_thirty_nine">Тридцять
+дев\'ять</string>
+    <string name="text_clock_m_forty">Сорок</string>
+    <string name="text_clock_m_forty_one">Сорок
+одна</string>
+    <string name="text_clock_m_forty_two">Сорок
+дві</string>
+    <string name="text_clock_m_forty_three">Сорок
+три</string>
+    <string name="text_clock_m_forty_four">Сорок
+чотири</string>
+    <string name="text_clock_m_forty_five">Сорок
+п\'ять</string>
+    <string name="text_clock_m_forty_six">Сорок
+шість</string>
+    <string name="text_clock_m_forty_seven">Сорок
+сім</string>
+    <string name="text_clock_m_forty_eight">Сорок
+вісім</string>
+    <string name="text_clock_m_forty_nine">Сорок
+дев\'ять</string>
+    <string name="text_clock_m_fifty">П\'ятдесят</string>
+    <string name="text_clock_m_fifty_one">П\'ятдесят
+одна</string>
+    <string name="text_clock_m_fifty_two">П\'ятдесят
+дві</string>
+    <string name="text_clock_m_fifty_three">П\'ятдесят
+три</string>
+    <string name="text_clock_m_fifty_four">П\'ятдесят
+чотири</string>
+    <string name="text_clock_m_fifty_five">П\'ятдесят
+п\'ять</string>
+    <string name="text_clock_m_fifty_six">П\'ятдесят
+шість</string>
+    <string name="text_clock_m_fifty_seven">П\'ятдесят
+сім</string>
+    <string name="text_clock_m_fifty_eight">П\'ятдесят
+вісім</string>
+    <string name="text_clock_m_fifty_nine">П\'ятдесят
+дев\'ять</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Tux clock -->
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Сьогодні є</string>
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">Видалити</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">Запис з екрану видалено</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Пріоритет</string>
+    <string name="volume_ringer_alarms_only">Будильники</string>
+    <string name="volume_ringer_dnd">DnD</string>
+    <string name="tristate_flashlight_on">Ліхтарик увімкнено</string>
+    <string name="tristate_flashlight_off">Ліхтарик вимк</string>
+    <string name="tristate_flashlight_blink">Ліхтарик</string>
+    <string name="tristate_brightness_bright">Максимальна яскравість</string>
+    <string name="tristate_brightness_dark">Мінімальна яскравість</string>
+    <string name="tristate_brightness_auto">Автояскравість</string>
+    <string name="tristate_rotation_auto">Автоматичне обертання</string>
+    <string name="tristate_rotation_0">Портретна</string>
+    <string name="tristate_rotation_90">Ландшафт (90°)</string>
+    <string name="tristate_rotation_270">Ландшафт (270°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Показувати крапку припинення\nТривало натисніть її, щоб перемістити</string>
+    <string name="screenrecord_lowquality_label">Зменшити якість для зменшення розміру файлу</string>
+    <!-- Biometric Dialog - Use Face -->
+    <string name="biometric_dialog_button_use_face">Використати Обличчя</string>
+    <!-- Daily data usage -->
+    <string name="daily_data_usage_title">Сьогоднішнє використання</string>
+    <!-- App Lock -->
+    <string name="applock_locked">&#160;заблоковано</string>
+    <string name="applock_fingerprint_face">, відбиток пальця або обличчя для розблокування</string>
+    <string name="applock_face">&#160;або обличчя для розблокування</string>
+    <string name="applock_fingerprint">&#160;або ваш відбиток пальця для розблокування</string>
+    <string name="applock_credential">&#160;для розблокування</string>
+    <string name="applock_unlock">Розблокувати</string>
+    <!-- Power menu QS tile -->
+    <string name="quick_settings_power_menu_label">Меню кнопки живлення</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Примусово припинити?</string>
+    <string name="force_stop_dlg_text">Примусове закриття додатку може призвести до збою в його роботі.</string>
+    <string name="guts_force_close_app">Примусово зупинити</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Відтворювати медіа-вміст у додатку</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">Режим звуку</string>
+    <string name="quick_settings_monotoggle_tile_mono">Монофонічне аудіо</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Стереозвук</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+</resources>
