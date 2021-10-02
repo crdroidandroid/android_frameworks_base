@@ -61,6 +61,8 @@
     <string name="quick_settings_reboot_label">إعادة تشغيل</string>
     <string name="quick_settings_reboot_recovery_label">الإستعادة</string>
     <string name="quick_settings_poweroff_label">إيقاف التشغيل</string>
+    <!-- Sound Search tile -->
+    <string name="quick_settings_sound_search">Sound search</string>
     <!-- Sound QS tile -->
     <string name="quick_settings_sound_label">الصوت</string>
     <string name="quick_settings_sound_ring">نغمة الرنين</string>
