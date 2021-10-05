@@ -96,9 +96,9 @@ public final class WallpaperColors implements Parcelable {
     private static final float MIN_COLOR_OCCURRENCE = 0.05f;
 
     // Decides when dark theme is optimal for this wallpaper
-    private static final float DARK_THEME_MEAN_LUMINANCE = 0.3f;
+    private static final float DARK_THEME_MEAN_LUMINANCE = 30.0f;
     // Minimum mean luminosity that an image needs to have to support dark text
-    private static final float BRIGHT_IMAGE_MEAN_LUMINANCE = 0.7f;
+    private static final float BRIGHT_IMAGE_MEAN_LUMINANCE = 70.0f;
     // We also check if the image has dark pixels in it,
     // to avoid bright images with some dark spots.
     private static final float DARK_PIXEL_CONTRAST = 5.5f;
@@ -234,9 +234,9 @@ public final class WallpaperColors implements Parcelable {
         this(primaryColor, secondaryColor, tertiaryColor, 0);
 
         // Calculate dark theme support based on primary color.
-        final float[] tmpHsl = new float[3];
-        ColorUtils.colorToHSL(primaryColor.toArgb(), tmpHsl);
-        final float luminance = tmpHsl[2];
+        final double[] tmpLab = new double[3];
+        ColorUtils.colorToLAB(primaryColor.toArgb(), tmpLab);
+        final double luminance = tmpLab[0];
         if (luminance < DARK_THEME_MEAN_LUMINANCE) {
             mColorHints |= HINT_SUPPORTS_DARK_THEME;
         }
@@ -523,10 +523,10 @@ public final class WallpaperColors implements Parcelable {
 
         // This bitmap was already resized to fit the maximum allowed area.
         // Let's just loop through the pixels, no sweat!
-        float[] tmpHsl = new float[3];
+        double[] tmpLab = new double[3];
         for (int i = 0; i < pixels.length; i++) {
-            ColorUtils.colorToHSL(pixels[i], tmpHsl);
-            final float luminance = tmpHsl[2];
+            ColorUtils.colorToLAB(pixels[i], tmpLab);
+            final double luminance = tmpLab[0];
             final int alpha = Color.alpha(pixels[i]);
             // Make sure we don't have a dark pixel mass that will
             // make text illegible.
