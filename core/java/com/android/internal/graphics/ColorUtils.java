@@ -602,8 +602,59 @@ public final class ColorUtils {
                 : (XYZ_KAPPA * component + 16) / 116;
     }
 
+    private static float cube(float x) {
+        return x * x * x;
+    }
+
+    // Linear -> sRGB
+    private static float srgbTransfer(float x) {
+        if (x >= 0.0031308f) {
+            return 1.055f * (float) Math.pow(x, 1.0f / 2.4f) - 0.055f;
+        } else {
+            return 12.92f * x;
+        }
+    }
+
+    // sRGB -> linear
+    private static float srgbTransferInv(float x) {
+        if (x >= 0.04045f) {
+            return (float) Math.pow((x + 0.055f) / 1.055f, 2.4f);
+        } else {
+            return x / 12.92f;
+        }
+    }
+
+    private static float srgbRed(@ColorInt int color) {
+        return srgbTransferInv(((float) Color.red(color)) / 255.0f);
+    }
+
+    private static float srgbGreen(@ColorInt int color) {
+        return srgbTransferInv(((float) Color.green(color)) / 255.0f);
+    }
+
+    private static float srgbBlue(@ColorInt int color) {
+        return srgbTransferInv(((float) Color.blue(color)) / 255.0f);
+    }
+
+    private static int srgbTransferToInt(float c) {
+        return Math.round(srgbTransfer(c) * 255.0f);
+    }
+
+    private static float rgbToOklabLp(float r, float g, float b) {
+        return (float) Math.cbrt(0.4122214708f * r + 0.5363325363f * g + 0.0514459929f * b);
+    }
+
+    private static float rgbToOklabMp(float r, float g, float b) {
+        return (float) Math.cbrt(0.2119034982f * r + 0.6806995451f * g + 0.1073969566f * b);
+    }
+
+    private static float rgbToOklabSp(float r, float g, float b) {
+        return (float) Math.cbrt(0.0883024619f * r + 0.2817188376f * g + 0.6299787005f * b);
+    }
+
     /**
      * Blend between two ARGB colors using the given ratio.
+     * This uses Oklab internally in order to perform a perceptually-uniform blend.
      *
      * <p>A blend ratio of 0.0 will result in {@code color1}, 0.5 will give an even blend,
      * 1.0 will result in {@code color2}.</p>
@@ -617,10 +668,29 @@ public final class ColorUtils {
             @FloatRange(from = 0.0, to = 1.0) float ratio) {
         final float inverseRatio = 1 - ratio;
         float a = Color.alpha(color1) * inverseRatio + Color.alpha(color2) * ratio;
-        float r = Color.red(color1) * inverseRatio + Color.red(color2) * ratio;
-        float g = Color.green(color1) * inverseRatio + Color.green(color2) * ratio;
-        float b = Color.blue(color1) * inverseRatio + Color.blue(color2) * ratio;
-        return Color.argb((int) a, (int) r, (int) g, (int) b);
+
+        float r1 = srgbRed(color1);
+        float g1 = srgbGreen(color1);
+        float b1 = srgbBlue(color1);
+        float lp1 = rgbToOklabLp(r1, g1, b1);
+        float mp1 = rgbToOklabMp(r1, g1, b1);
+        float sp1 = rgbToOklabSp(r1, g1, b1);
+
+        float r2 = srgbRed(color2);
+        float g2 = srgbGreen(color2);
+        float b2 = srgbBlue(color2);
+        float lp2 = rgbToOklabLp(r2, g2, b2);
+        float mp2 = rgbToOklabMp(r2, g2, b2);
+        float sp2 = rgbToOklabSp(r2, g2, b2);
+
+        float l = cube(lp1 * inverseRatio + lp2 * ratio);
+        float m = cube(mp1 * inverseRatio + mp2 * ratio);
+        float s = cube(sp1 * inverseRatio + sp2 * ratio);
+        int r = srgbTransferToInt(+4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s);
+        int g = srgbTransferToInt(-1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s);
+        int b = srgbTransferToInt(-0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s);
+
+        return Color.argb((int) a, r, g, b);
     }
 
     /**
