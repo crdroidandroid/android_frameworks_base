@@ -98,6 +98,8 @@ android_library {
         "org.lineageos.platform.internal",
         "vendor.lineage.powershare-V1.0-java",
         "tensorflowlite_java",
+        "colorkt",
+        "themelib",
     ],
     manifest: "AndroidManifest.xml",
     additional_manifests: ["LineageManifest.xml"],
