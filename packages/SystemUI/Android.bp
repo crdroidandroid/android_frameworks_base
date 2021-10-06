@@ -126,6 +126,8 @@ android_library {
         "SystemUIGoogle-lib",
         "android.frameworks.stats-V1-java",
         "vendor-pixelatoms-java",
+        "colorkt",
+        "themelib",
     ],
     manifest: "AndroidManifest.xml",
     additional_manifests: [
