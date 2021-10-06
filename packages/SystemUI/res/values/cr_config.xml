@@ -23,4 +23,8 @@
             1 - LOCAL HBM
     -->
     <integer name="config_udfps_hbm_type">1</integer>
+
+    <!-- Udfps vendor code -->
+    <integer name="config_udfps_vendor_code">22</integer>
+
 </resources>
