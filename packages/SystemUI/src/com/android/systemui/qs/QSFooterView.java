@@ -85,20 +85,9 @@ public class QSFooterView extends FrameLayout {
 
     private void setBuildText() {
         if (mBuildText == null) return;
-        if (DevelopmentSettingsEnabler.isDevelopmentSettingsEnabled(mContext)) {
-            mBuildText.setText(mContext.getString(
-                    com.android.internal.R.string.bugreport_status,
-                    Build.VERSION.RELEASE_OR_CODENAME,
-                    Build.ID));
-            // Set as selected for marquee before its made visible, then it won't be announced when
-            // it's made visible.
-            mBuildText.setSelected(true);
-            mShouldShowBuildText = true;
-        } else {
-            mBuildText.setText(null);
-            mShouldShowBuildText = false;
-            mBuildText.setSelected(false);
-        }
+        mBuildText.setText(null);
+        mShouldShowBuildText = false;
+        mBuildText.setSelected(false);
     }
 
     void updateExpansion() {
