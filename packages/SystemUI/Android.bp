@@ -97,6 +97,8 @@ android_library {
         "lottie",
         "org.lineageos.platform.internal",
         "tensorflowlite_java",
+        "colorkt",
+        "themelib",
     ],
     manifest: "AndroidManifest.xml",
     additional_manifests: ["LineageManifest.xml"],
