@@ -47,6 +47,7 @@ import com.android.systemui.statusbar.notification.fsi.FsiChromeViewBinder
 import com.android.systemui.statusbar.phone.KeyguardLiftController
 import com.android.systemui.stylus.StylusUsiPowerStartable
 import com.android.systemui.temporarydisplay.chipbar.ChipbarCoordinator
+import com.android.systemui.theme.CustomThemeOverlayController
 import com.android.systemui.theme.ThemeOverlayController
 import com.android.systemui.toast.ToastUI
 import com.android.systemui.usb.StorageNotification
@@ -209,7 +210,7 @@ abstract class SystemUICoreStartableModule {
     @Binds
     @IntoMap
     @ClassKey(ThemeOverlayController::class)
-    abstract fun bindThemeOverlayController(sysui: ThemeOverlayController): CoreStartable
+    abstract fun bindThemeOverlayController(sysui: CustomThemeOverlayController): CoreStartable
 
     /** Inject into ToastUI.  */
     @Binds
