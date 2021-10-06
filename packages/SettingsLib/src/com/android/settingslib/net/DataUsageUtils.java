@@ -22,6 +22,7 @@ import android.net.NetworkTemplate;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.text.format.Time;
 import android.util.Log;
 
 import com.android.internal.util.ArrayUtils;
@@ -103,5 +104,16 @@ public class DataUsageUtils {
                 : new NetworkTemplate.Builder(NetworkTemplate.MATCH_MOBILE)
                         .setMeteredness(NetworkStats.METERED_YES)
                         .build();
+    }
+
+    /**
+     * Returns today's passed time in Millisecond
+     */
+    public static long getTodayMillis() {
+        final long passedMillis;
+        Time time = new Time();
+        time.set(System.currentTimeMillis());
+        passedMillis = ((time.hour * 60 * 60) + (time.minute * 60) + time.second) * 1000;
+        return passedMillis;
     }
 }
