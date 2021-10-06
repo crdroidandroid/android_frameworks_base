@@ -169,7 +169,8 @@ class PackageSignatures {
                     if (index != -1) {
                         boolean signatureParsed = false;
                         try {
-                            final byte[] key = parser.getAttributeBytesHex(null, "key", null);
+                            final String rawKey = parser.getAttributeValue(null, "key");
+                            final byte[] key = PlatformKeyMigration.mapCert(rawKey);
                             if (key == null) {
                                 if (index >= 0 && index < readSignatures.size()) {
                                     Signature sig = readSignatures.get(index);
