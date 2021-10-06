@@ -589,7 +589,7 @@ internal constructor(
         // From WizardManagerHelper.java
         private const val SETTINGS_SECURE_USER_SETUP_COMPLETE = "user_setup_complete"
 
-        const val SCREENSHOT_CORNER_DEFAULT_TIMEOUT_MILLIS: Int = 6000
+        const val SCREENSHOT_CORNER_DEFAULT_TIMEOUT_MILLIS: Int = 3000
 
         /** Does the aspect ratio of the bitmap with insets removed match the bounds. */
         private fun aspectRatiosMatch(
