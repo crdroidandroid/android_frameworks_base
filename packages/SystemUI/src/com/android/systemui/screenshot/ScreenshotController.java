@@ -198,7 +198,7 @@ public class ScreenshotController implements ScreenshotHandler {
     // From WizardManagerHelper.java
     private static final String SETTINGS_SECURE_USER_SETUP_COMPLETE = "user_setup_complete";
 
-    static final int SCREENSHOT_CORNER_DEFAULT_TIMEOUT_MILLIS = 6000;
+    static final int SCREENSHOT_CORNER_DEFAULT_TIMEOUT_MILLIS = 3000;
 
     private final WindowContext mContext;
     private final FeatureFlags mFlags;
