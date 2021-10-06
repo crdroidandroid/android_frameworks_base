@@ -164,6 +164,7 @@ public class UdfpsController implements DozeReceiver {
     private Runnable mAodInterruptRunnable;
     private boolean mOnFingerDown;
     private boolean mAttemptedToDismissKeyguard;
+    private final int mUdfpsVendorCode;
     private Set<Callback> mCallbacks = new HashSet<>();
 
     private UdfpsAnimation mUdfpsAnimation;
@@ -320,6 +321,19 @@ public class UdfpsController implements DozeReceiver {
                     return;
                 }
                 mView.setDebugMessage(message);
+            });
+        }
+
+        @Override
+        public void onAcquired(int sensorId, int acquiredInfo, int vendorCode) {
+            mFgExecutor.execute(() -> {
+                if (acquiredInfo == 6 && (mStatusBarStateController.isDozing() || !mScreenOn)) {
+                    if (vendorCode == mUdfpsVendorCode) {
+                        mPowerManager.wakeUp(mSystemClock.uptimeMillis(),
+                                PowerManager.WAKE_REASON_GESTURE, TAG);
+                        onAodInterrupt(0, 0, 0, 0); // To-Do pass proper values
+                    }
+                }
             });
         }
     }
@@ -647,6 +661,8 @@ public class UdfpsController implements DozeReceiver {
         context.registerReceiver(mBroadcastReceiver, filter);
 
         udfpsHapticsSimulator.setUdfpsController(this);
+
+        mUdfpsVendorCode = mContext.getResources().getInteger(R.integer.config_udfps_vendor_code);
 
         if (com.android.internal.util.crdroid.Utils.isPackageInstalled(mContext, "com.crdroid.udfps.animations")) {
             mUdfpsAnimation = new UdfpsAnimation(mContext, mWindowManager, mSensorProps);
