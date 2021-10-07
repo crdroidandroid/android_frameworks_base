@@ -534,7 +534,7 @@ public class FODCircleView extends ImageView implements TunerService.Tunable, Co
     }
 
     public void showCircle() {
-        if (mFading || mTouchedOutside) return;
+        if (mFading || mTouchedOutside || mIsCircleShowing) return;
         mIsCircleShowing = true;
 
         setKeepScreenOn(true);
