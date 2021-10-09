@@ -70,4 +70,8 @@
     <dimen name="pagination_arrow_margin_outer">4dp</dimen>
     <dimen name="pagination_arrow_margin_inner">2dp</dimen>
     <dimen name="pager_dots_min_touch_target">48dp</dimen>
+
+    <!-- StatusBar burn-in protection -->
+    <dimen name="horizontal_max_shift">4dp</dimen>
+    <dimen name="vertical_max_shift">4dp</dimen>
 </resources>
