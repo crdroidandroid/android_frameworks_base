@@ -362,6 +362,10 @@ private constructor(
         darkIconDispatcher.removeDarkReceiver(clockRight)
     }
 
+    fun getPhoneStatusBarView(): PhoneStatusBarView {
+        return mView
+    }
+
     inner class PhoneStatusBarViewTouchHandler : Gefingerpoken {
         private val touchSlop = ViewConfiguration.get(mView.context).scaledTouchSlop
         private var initialTouchX = 0f
