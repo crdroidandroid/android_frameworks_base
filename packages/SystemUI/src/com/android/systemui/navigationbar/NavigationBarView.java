@@ -74,6 +74,7 @@ import com.android.systemui.navigationbar.buttons.KeyButtonDrawable;
 import com.android.systemui.navigationbar.buttons.NearestTouchFrame;
 import com.android.systemui.navigationbar.buttons.RotationContextButton;
 import com.android.systemui.navigationbar.gestural.EdgeBackGestureHandler;
+import com.android.systemui.navigationbar.gestural.NavigationHandle;
 import com.android.systemui.recents.Recents;
 import com.android.systemui.settings.DisplayTracker;
 import com.android.systemui.shade.ShadeViewController;
@@ -85,6 +86,7 @@ import com.android.systemui.statusbar.phone.AutoHideController;
 import com.android.systemui.statusbar.phone.CentralSurfaces;
 import com.android.systemui.statusbar.phone.LightBarTransitionsController;
 import com.android.systemui.tuner.TunerService;
+import com.android.systemui.statusbar.policy.Offset;
 import com.android.wm.shell.back.BackAnimation;
 import com.android.wm.shell.pip.Pip;
 
@@ -193,6 +195,9 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
     private boolean mImeVisible;
 
     private boolean mBlockedGesturalNavigation;
+
+    @Nullable
+    private ViewGroup mNavigationBarContents = null;
 
     private class NavTransitionListener implements TransitionListener {
         private boolean mBackTransitioning;
@@ -905,11 +910,30 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
         mContextualButtonGroup.setButtonVisibility(R.id.accessibility_button, visible);
     }
 
+    public void offsetNavBar(Offset offset) {
+        if (isGesturalMode(mNavBarMode)) {
+            final NavigationHandle handle = (NavigationHandle) getHomeHandle().getCurrentView();
+            if (handle != null) {
+                handle.setTranslationY(offset.getY());
+                handle.invalidate();
+            }
+            return;
+        }
+        if (mNavigationBarContents == null) {
+            return;
+        }
+        mNavigationBarContents.setTranslationX(offset.getX());
+        mNavigationBarContents.setTranslationY(offset.getY());
+        invalidate();
+    }
+
     @Override
     public void onFinishInflate() {
         super.onFinishInflate();
         mNavigationInflaterView = findViewById(R.id.navigation_inflater);
         mNavigationInflaterView.setButtonDispatchers(mButtonDispatchers);
+
+        mNavigationBarContents = (ViewGroup) findViewById(R.id.nav_buttons);
 
         updateOrientationViews();
         reloadNavIcons();
