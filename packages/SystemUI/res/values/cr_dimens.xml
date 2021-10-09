@@ -61,4 +61,7 @@
     <dimen name="weather_dream_complication_text_descent_extra_padding">1.0dp</dimen>
     <dimen name="weather_dream_overlay_complication_line_height">52.0dp</dimen>
     <dimen name="weather_dream_overlay_complication_text_size">45.0dp</dimen>
+
+    <!-- Maximum vertical offset of statusbar for burn-in protection -->
+    <dimen name="status_bar_offset_max_y">4dp</dimen>
 </resources>
