@@ -230,6 +230,7 @@ import com.android.systemui.statusbar.notification.stack.NotificationStackScroll
 import com.android.systemui.statusbar.phone.dagger.StatusBarPhoneModule;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
+import com.android.systemui.statusbar.policy.BurnInProtectionController;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
@@ -629,6 +630,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
     private final QuickAccessWalletController mWalletController;
 
+    private final BurnInProtectionController mBurnInProtectionController;
+
     private DisplayManager mDisplayManager;
 
     private float mMinimumBacklight;
@@ -759,7 +762,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             EmergencyGestureIntentFactory emergencyGestureIntentFactory,
             QuickAccessWalletController walletController,
             WindowManager windowManager,
-            WindowManagerProvider windowManagerProvider
+            WindowManagerProvider windowManagerProvider,
+            BurnInProtectionController burnInProtectionController
     ) {
         mContext = context;
         mNotificationsController = notificationsController;
@@ -870,6 +874,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             statusBarWindowStateController.addListener(this::onStatusBarWindowStateChanged);
         }
         mScreenOffAnimationController = screenOffAnimationController;
+        mBurnInProtectionController = burnInProtectionController;
 
         ShadeExpansionListener shadeExpansionListener = this::onPanelExpansionChanged;
         ShadeExpansionChangeEvent currentState =
@@ -1302,6 +1307,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                         setBouncerShowingForStatusBarComponents(mBouncerShowing);
                         checkBarModes();
                         mPhoneStatusBarViewController.setBrightnessControlEnabled(mBrightnessControl);
+                        mBurnInProtectionController.setPhoneStatusBarView(mPhoneStatusBarViewController.getPhoneStatusBarView());
                     });
         }
         if (!StatusBarRootModernization.isEnabled() && !StatusBarConnectedDisplays.isEnabled()) {
@@ -2718,6 +2724,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
             updateNotificationPanelTouchState();
             getNotificationShadeWindowViewController().cancelCurrentTouch();
+
+            mBurnInProtectionController.stopShiftTimer();
             if (mLaunchCameraOnFinishedGoingToSleep) {
                 mLaunchCameraOnFinishedGoingToSleep = false;
 
@@ -2857,6 +2865,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                 }
             }
             updateScrimController();
+            mBurnInProtectionController.startShiftTimer();
         }
     };
 
