@@ -254,6 +254,10 @@ private constructor(
         darkIconDispatcher.removeDarkReceiver(battery)
     }
 
+    fun getPhoneStatusBarView(): PhoneStatusBarView {
+        return mView
+    }
+
     inner class PhoneStatusBarViewTouchHandler : Gefingerpoken {
         override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
             return if (Flags.statusBarSwipeOverChip()) {
