@@ -72,7 +72,7 @@ fun getBurnInScale(): Float {
  * @param amplitude maximum value of the function
  * @return a value between 0 and amplitude
  */
-private fun zigzag(x: Float, amplitude: Float, period: Float): Float {
+fun zigzag(x: Float, amplitude: Float, period: Float): Float {
     val xprime = x % period / (period / 2)
     val interpolationAmount = if (xprime <= 1) xprime else 2 - xprime
     return MathUtils.lerp(0f, amplitude, interpolationAmount)
