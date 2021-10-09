@@ -20,6 +20,7 @@ package com.android.systemui.statusbar.phone;
 import android.annotation.Nullable;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
@@ -51,6 +52,7 @@ import com.android.systemui.shared.rotation.FloatingRotationButton;
 import com.android.systemui.shared.rotation.RotationButtonController;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.CommandQueue.Callbacks;
+import com.android.systemui.statusbar.policy.Offset;
 import com.android.systemui.util.leak.RotationUtils;
 
 import java.util.Objects;
@@ -72,6 +74,8 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
     private int mStatusBarHeight;
     @Nullable
     private TouchEventHandler mTouchEventHandler;
+    @Nullable
+    private ViewGroup mStatusBarContents = null;
 
     /**
      * Draw this many pixels into the left/right side of the cutout to optimally use the space
@@ -131,11 +135,21 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
         mTouchEventHandler = handler;
     }
 
+    public void offsetStatusBar(Offset offset) {
+        if (mStatusBarContents == null) {
+            return;
+        }
+        mStatusBarContents.setTranslationX(offset.getX());
+        mStatusBarContents.setTranslationY(offset.getY());
+        invalidate();
+    }
+
     @Override
     public void onFinishInflate() {
         super.onFinishInflate();
         mBattery = findViewById(R.id.battery);
         mCutoutSpace = findViewById(R.id.cutout_space_view);
+        mStatusBarContents = (ViewGroup) findViewById(R.id.status_bar_contents);
 
         updateResources();
     }
@@ -279,8 +293,7 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
         int statusBarPaddingEnd = getResources().getDimensionPixelSize(
                 R.dimen.status_bar_padding_end);
 
-        View sbContents = findViewById(R.id.status_bar_contents);
-        sbContents.setPaddingRelative(
+        mStatusBarContents.setPaddingRelative(
                 statusBarPaddingStart,
                 statusBarPaddingTop,
                 statusBarPaddingEnd,
