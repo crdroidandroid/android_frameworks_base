@@ -93,4 +93,7 @@
 
     <!-- FPS Info tile -->
     <dimen name="fps_info_text_padding">4dp</dimen>
+
+    <!-- Maximum vertical offset of statusbar for burn-in protection -->
+    <dimen name="status_bar_offset_max_y">4dp</dimen>
 </resources>
