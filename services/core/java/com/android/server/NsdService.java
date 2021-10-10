@@ -60,7 +60,7 @@ public class NsdService extends INsdManager.Stub {
     private static final String TAG = "NsdService";
     private static final String MDNS_TAG = "mDnsConnector";
 
-    private static final boolean DBG = true;
+    private static final boolean DBG = false;
     private static final long CLEANUP_DELAY_MS = 10000;
 
     private final Context mContext;

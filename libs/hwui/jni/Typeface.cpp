@@ -164,7 +164,7 @@ static void Typeface_registerGenericFamily(JNIEnv *env, jobject, jstring familyN
 static bool getVerity(const std::string& path) {
     struct statx out = {};
     if (statx(AT_FDCWD, path.c_str(), 0 /* flags */, STATX_ALL, &out) != 0) {
-        ALOGE("statx failed for %s, errno = %d", path.c_str(), errno);
+        //ALOGE("statx failed for %s, errno = %d", path.c_str(), errno);
         return false;
     }
 
