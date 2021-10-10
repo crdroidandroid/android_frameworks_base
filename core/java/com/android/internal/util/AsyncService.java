@@ -35,7 +35,7 @@ import android.util.Log;
 abstract public class AsyncService extends Service {
     private static final String TAG = "AsyncService";
 
-    protected static final boolean DBG = true;
+    protected static final boolean DBG = false;
 
     /** The command sent when a onStartCommand is invoked */
     public static final int CMD_ASYNC_SERVICE_ON_START_INTENT = IBinder.LAST_CALL_TRANSACTION;
