@@ -246,11 +246,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     private void initDialog() {
 
         // Gravitate various views left/right depending on panel placement setting.
-        int panelGravity =
-                mContext.getResources().getInteger(R.integer.volume_dialog_gravity);
-        if (!mShowActiveStreamOnly) {
-            panelGravity = mVolumePanelOnLeft ? Gravity.LEFT : Gravity.RIGHT;
-        }
+        final int panelGravity = mVolumePanelOnLeft ? Gravity.LEFT : Gravity.RIGHT;
 
         mConfigurableTexts = new ConfigurableTexts(mContext);
         mHovering = false;
@@ -297,8 +293,7 @@ public class VolumeDialogImpl implements VolumeDialog,
 
         FrameLayout.LayoutParams dialogViewLP =
                 (FrameLayout.LayoutParams) mDialogView.getLayoutParams();
-        dialogViewLP.gravity = mShowActiveStreamOnly ? panelGravity
-                : Gravity.CENTER_VERTICAL;
+        dialogViewLP.gravity = Gravity.CENTER_VERTICAL;
         mDialogView.setLayoutParams(dialogViewLP);
 
         mDialogMainView = mDialog.findViewById(R.id.main);
