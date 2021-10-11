@@ -101,7 +101,7 @@ public class PermissionUsageHelper implements AppOpsManager.OnOpActiveChangedLis
 
     private static boolean shouldShowLocationIndicator() {
         return DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_PRIVACY,
-                PROPERTY_LOCATION_INDICATORS_ENABLED, false);
+                PROPERTY_LOCATION_INDICATORS_ENABLED, true);
     }
 
     private static long getRecentThreshold(Long now) {
