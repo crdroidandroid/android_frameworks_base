@@ -73,7 +73,7 @@ class PrivacyItemController @Inject constructor(
         private const val MIC_CAMERA = SystemUiDeviceConfigFlags.PROPERTY_MIC_CAMERA_ENABLED
         private const val LOCATION = SystemUiDeviceConfigFlags.PROPERTY_LOCATION_INDICATORS_ENABLED
         private const val DEFAULT_MIC_CAMERA = true
-        private const val DEFAULT_LOCATION = false
+        private const val DEFAULT_LOCATION = true
         @VisibleForTesting const val TIME_TO_HOLD_INDICATORS = 5000L
     }
 
