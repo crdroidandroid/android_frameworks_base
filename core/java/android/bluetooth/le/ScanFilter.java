@@ -526,7 +526,8 @@ public final class ScanFilter implements Parcelable {
 
         // Group AD Type filter match
         if (mGroupBasedFiltering) {
-            if (scanRecord.getGroupIdentifierData().length != GROUP_DATA_LEN) {
+            byte [] groupIdData = scanRecord.getGroupIdentifierData();
+            if (groupIdData != null && groupIdData.length != GROUP_DATA_LEN) {
                 return false;
             }
         }
