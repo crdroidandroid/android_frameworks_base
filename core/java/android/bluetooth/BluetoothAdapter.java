@@ -1057,7 +1057,10 @@ public final class BluetoothAdapter {
                 @SuppressLint("AndroidFrameworkRequiresPermission")
                 protected Integer recompute(Void query) {
                     try {
-                        return mService.getState();
+                        if (mService != null) {
+                            return mService.getState();
+                        }
+                        return BluetoothAdapter.STATE_OFF;
                     } catch (RemoteException e) {
                         throw e.rethrowFromSystemServer();
                     }
