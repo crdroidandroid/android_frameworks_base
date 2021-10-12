@@ -19,7 +19,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
     <!-- The dark background color behind the shade -->
-    <color name="shade_scrim_background_dark">@androidprv:color/system_under_surface_dark</color>
+    <color name="shade_scrim_background_dark">@android:color/transparent</color>
 
     <!-- The main FG tint for shade header items -->
     <!-- Only applicable when com.android.systemui.shade_header_blur_font_color is enabled -->
