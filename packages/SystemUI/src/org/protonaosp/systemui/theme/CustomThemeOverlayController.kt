@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.om.FabricatedOverlay
 import android.os.Handler
 import android.os.UserManager
+import android.provider.Settings
 import android.util.Log
 import android.util.TypedValue
 import com.android.systemui.broadcast.BroadcastDispatcher
@@ -48,6 +49,8 @@ import dev.kdrag0n.monet.theme.DynamicColorScheme
 import dev.kdrag0n.monet.theme.MaterialYouTargets
 import java.util.concurrent.Executor
 import javax.inject.Inject
+import kotlin.math.log10
+import kotlin.math.pow
 
 @SysUISingleton
 class CustomThemeOverlayController @Inject constructor(
@@ -81,23 +84,38 @@ class CustomThemeOverlayController @Inject constructor(
     featureFlags,
     wakefulnessLifecycle,
 ) {
-    private val cond = Zcam.ViewingConditions(
-        surroundFactor = Zcam.ViewingConditions.SURROUND_AVERAGE,
-        // sRGB
-        adaptingLuminance = 0.4 * SRGB_WHITE_LUMINANCE,
-        // Gray world
-        backgroundLuminance = CieLab(
-            L = 50.0,
-            a = 0.0,
-            b = 0.0,
-        ).toXyz().y * SRGB_WHITE_LUMINANCE,
-        referenceWhite = Illuminants.D65.toAbs(SRGB_WHITE_LUMINANCE),
-    )
-    private val targets = MaterialYouTargets(
-        chromaFactor = 1.0,
-        useLinearLightness = false,
-        cond = cond,
-    )
+    private val cond: Zcam.ViewingConditions
+    private val targets: MaterialYouTargets
+
+    private val colorOverride = Settings.Secure.getString(mContext.contentResolver, PREF_COLOR_OVERRIDE)
+    private val chromaFactor = Settings.Secure.getFloat(mContext.contentResolver, PREF_CHROMA_FACTOR, 1.0f).toDouble()
+    private val accurateShades = Settings.Secure.getInt(mContext.contentResolver, PREF_ACCURATE_SHADES, 1) != 0
+
+    init {
+        val whiteLuminance = parseWhiteLuminanceUser(
+            Settings.Secure.getInt(mContext.contentResolver, PREF_WHITE_LUMINANCE, WHITE_LUMINANCE_USER_DEFAULT)
+        )
+        val linearLightness = Settings.Secure.getInt(mContext.contentResolver, PREF_LINEAR_LIGHTNESS, 0) != 0
+
+        cond = Zcam.ViewingConditions(
+            surroundFactor = Zcam.ViewingConditions.SURROUND_AVERAGE,
+            // sRGB
+            adaptingLuminance = 0.4 * whiteLuminance,
+            // Gray world
+            backgroundLuminance = CieLab(
+                L = 50.0,
+                a = 0.0,
+                b = 0.0,
+            ).toXyz().y * whiteLuminance,
+            referenceWhite = Illuminants.D65.toAbs(whiteLuminance),
+        )
+
+        targets = MaterialYouTargets(
+            chromaFactor = chromaFactor,
+            useLinearLightness = linearLightness,
+            cond = cond,
+        )
+    }
 
     // Seed colors
     override fun getNeutralColor(colors: WallpaperColors) = colors.primaryColor.toArgb()
@@ -107,10 +125,10 @@ class CustomThemeOverlayController @Inject constructor(
         // Generate color scheme
         val colorScheme = DynamicColorScheme(
             targets = targets,
-            seedColor = Srgb(primaryColor),
-            chromaFactor = 1.0,
+            seedColor = if (colorOverride != null) Srgb(colorOverride) else Srgb(primaryColor),
+            chromaFactor = chromaFactor,
             cond = cond,
-            accurateShades = true,
+            accurateShades = accurateShades,
         )
 
         val (groupKey, colorsList) = when (type) {
@@ -149,7 +167,24 @@ class CustomThemeOverlayController @Inject constructor(
     companion object {
         private const val TAG = "CustomThemeOverlayController"
 
-        private const val SRGB_WHITE_LUMINANCE = 200.0 // cd/m^2
+        private const val PREF_PREFIX = "monet_engine"
+        private const val PREF_COLOR_OVERRIDE = "${PREF_PREFIX}_color_override"
+        private const val PREF_CHROMA_FACTOR = "${PREF_PREFIX}_chroma_factor"
+        private const val PREF_ACCURATE_SHADES = "${PREF_PREFIX}_accurate_shades"
+        private const val PREF_LINEAR_LIGHTNESS = "${PREF_PREFIX}_linear_lightness"
+        private const val PREF_WHITE_LUMINANCE = "${PREF_PREFIX}_white_luminance_user"
+
+        private const val WHITE_LUMINANCE_MIN = 1.0
+        private const val WHITE_LUMINANCE_MAX = 10000.0
+        private const val WHITE_LUMINANCE_USER_MAX = 1000
+        private const val WHITE_LUMINANCE_USER_DEFAULT = 425 // ~200.0 divisible by step (decoded = 199.526)
+
+        private fun parseWhiteLuminanceUser(userValue: Int): Double {
+            val userSrc = userValue.toDouble() / WHITE_LUMINANCE_USER_MAX
+            val userInv = 1.0 - userSrc
+            return (10.0).pow(userInv * log10(WHITE_LUMINANCE_MAX))
+                    .coerceAtLeast(WHITE_LUMINANCE_MIN)
+        }
 
         private fun FabricatedOverlay.Builder.setColor(name: String, @ColorInt color: Int) =
             setResourceValue("android:color/$name", TypedValue.TYPE_INT_COLOR_ARGB8, color)
