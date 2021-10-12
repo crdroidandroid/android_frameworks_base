@@ -127,7 +127,7 @@ public enum ScrimState {
         @Override
         public void prepare(ScrimState previousState) {
             mBehindAlpha = mClipQsScrim ? 1 : mDefaultScrimAlpha;
-            mBehindTint = mClipQsScrim ? mBackgroundColor : mSurfaceColor;
+            mBehindTint = mSurfaceColor;
             mNotifAlpha = mClipQsScrim ? mDefaultScrimAlpha : 0;
             mNotifTint = Color.TRANSPARENT;
             mFrontAlpha = 0f;
@@ -159,7 +159,7 @@ public enum ScrimState {
             mBehindAlpha = mClipQsScrim ? 1 : mDefaultScrimAlpha;
             mNotifAlpha = 1f;
             mFrontAlpha = 0f;
-            mBehindTint = mClipQsScrim ? Color.TRANSPARENT : mBackgroundColor;
+            mBehindTint = Color.TRANSPARENT;
 
             if (mClipQsScrim) {
                 updateScrimColor(mScrimBehind, 1f /* alpha */, mBackgroundColor);
