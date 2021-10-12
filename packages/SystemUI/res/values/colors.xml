@@ -30,7 +30,7 @@
     <color name="status_bar_icons_hover_color_dark">#38000000</color> <!-- 22% black -->
 
     <!-- The dark background color behind the shade -->
-    <color name="shade_scrim_background_dark">@androidprv:color/system_under_surface_light</color>
+    <color name="shade_scrim_background_dark">@android:color/transparent</color>
 
     <!-- Base colors for notification shade/scrim, the alpha component is adjusted programmatically
     to match the spec -->
