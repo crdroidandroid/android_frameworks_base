@@ -14,7 +14,8 @@
      limitations under the License.
 -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
 
     <style name="Theme.SystemUI.DayNightDialog" parent="@android:style/Theme.DeviceDefault.Dialog"/>
 
@@ -22,6 +23,33 @@
 
     <style name="Theme.SystemUI.Dialog.GlobalActions" parent="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
         <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="Theme.SystemUI.QuickSettings" parent="@*android:style/Theme.DeviceDefault.SystemUI">
+        <item name="isQsTheme">true</item>
+        <item name="lightIconTheme">@style/QSIconTheme</item>
+        <item name="darkIconTheme">@style/QSIconTheme</item>
+        <item name="android:colorError">@*android:color/error_color_material_dark</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back</item>
+
+        <item name="surfaceBright">?androidprv:attr/materialColorSurfaceBright</item>
+        <item name="android:colorBackground">?attr/surfaceBright</item>
+        <item name="scHigh">?androidprv:attr/materialColorSurfaceContainerHigh</item>
+        <item name="primary">?androidprv:attr/materialColorPrimary</item>
+        <item name="tertiary">?androidprv:attr/materialColorTertiary</item>
+        <item name="onSurface">?androidprv:attr/materialColorOnSurface</item>
+        <item name="onSurfaceVariant">?androidprv:attr/materialColorOnSurfaceVariant</item>
+        <item name="outline">?androidprv:attr/materialColorOutline</item>
+        <item name="shadeActive">@color/material_dynamic_primary90</item>
+        <item name="onShadeActive">@color/material_dynamic_primary10</item>
+        <item name="onShadeActiveVariant">@color/material_dynamic_primary30</item>
+        <item name="shadeInactive">@color/material_dynamic_neutral20</item>
+        <item name="onShadeInactive">@color/material_dynamic_neutral90</item>
+        <item name="onShadeInactiveVariant">@color/material_dynamic_neutral_variant80</item>
+        <item name="shadeDisabled">@color/shade_disabled</item>
+        <item name="underSurface">@color/material_dynamic_neutral0</item>
+        <item name="android:itemTextAppearance">@style/Control.MenuItem</item>
     </style>
 
     <!-- Screenshots -->
