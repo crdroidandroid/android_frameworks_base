@@ -19,7 +19,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
     <!-- The dark background color behind the shade -->
-    <color name="shade_scrim_background_dark">@androidprv:color/system_under_surface_dark</color>
+    <color name="shade_scrim_background_dark">@android:color/transparent</color>
 
     <!-- The color of the legacy notifications with customs backgrounds (gingerbread and lollipop.)
     It's fine to override this color since at that point the shade was dark. -->
