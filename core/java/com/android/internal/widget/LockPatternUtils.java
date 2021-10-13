@@ -422,7 +422,6 @@ public class LockPatternUtils {
     @NonNull
     public VerifyCredentialResponse verifyCredential(@NonNull LockscreenCredential credential,
             int userId, @VerifyFlag int flags) {
-        throwIfCalledOnMainThread();
         try {
             final VerifyCredentialResponse response = getLockSettings().verifyCredential(
                     credential, userId, flags);
@@ -480,7 +479,6 @@ public class LockPatternUtils {
     public boolean checkCredential(@NonNull LockscreenCredential credential, int userId,
             @Nullable CheckCredentialProgressCallback progressCallback)
             throws RequestThrottledException {
-        throwIfCalledOnMainThread();
         try {
             VerifyCredentialResponse response = getLockSettings().checkCredential(
                     credential, userId, wrapCallback(progressCallback));
@@ -514,7 +512,6 @@ public class LockPatternUtils {
     @NonNull
     public VerifyCredentialResponse verifyTiedProfileChallenge(
             @NonNull LockscreenCredential credential, int userId, @VerifyFlag int flags) {
-        throwIfCalledOnMainThread();
         try {
             final VerifyCredentialResponse response = getLockSettings()
                     .verifyTiedProfileChallenge(credential, userId, flags);
@@ -1246,12 +1243,6 @@ public class LockPatternUtils {
         if (isDeviceEncryptionEnabled()){
             Settings.Global.putInt(mContext.getContentResolver(),
                Settings.Global.REQUIRE_PASSWORD_TO_DECRYPT, required ? 1 : 0);
-        }
-    }
-
-    private void throwIfCalledOnMainThread() {
-        if (Looper.getMainLooper().isCurrentThread()) {
-            throw new IllegalStateException("should not be called from the main thread.");
         }
     }
 
