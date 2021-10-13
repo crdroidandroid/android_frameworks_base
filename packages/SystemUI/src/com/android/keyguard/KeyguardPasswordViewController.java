@@ -17,7 +17,9 @@
 package com.android.keyguard;
 
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -36,6 +38,8 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.android.internal.util.LatencyTracker;
 import com.android.internal.widget.LockPatternUtils;
+import com.android.internal.widget.LockPatternUtils.RequestThrottledException;
+import com.android.internal.widget.LockscreenCredential;
 import com.android.keyguard.KeyguardSecurityModel.SecurityMode;
 import com.android.systemui.R;
 import com.android.systemui.classifier.FalsingCollector;
@@ -59,6 +63,10 @@ public class KeyguardPasswordViewController
     private ImageView mSwitchImeButton;
     private boolean mPaused;
 
+    private boolean mQuickUnlock;
+
+    private LockPatternUtils mLockPatternUtils;
+
     private final OnEditorActionListener mOnEditorActionListener = (v, actionId, event) -> {
         // Check if this was the result of hitting the enter key
         final boolean isSoftImeEvent = event == null
@@ -79,6 +87,8 @@ public class KeyguardPasswordViewController
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             mKeyguardSecurityCallback.userActivity();
+            mQuickUnlock = Settings.System.getIntForUser(getContext().getContentResolver(),
+                        Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0, UserHandle.USER_CURRENT) == 1;
         }
 
         @Override
@@ -89,6 +99,13 @@ public class KeyguardPasswordViewController
         public void afterTextChanged(Editable s) {
             if (!TextUtils.isEmpty(s)) {
                 onUserInput();
+                if (mQuickUnlock) {
+                    LockscreenCredential entry = mView.getEnteredCredential();
+                    int userId = KeyguardUpdateMonitor.getCurrentUser();
+                    if (entry.size() == keyguardPinPasswordLength(userId)) {
+                        validateQuickUnlock(mLockPatternUtils, entry, userId);
+                    }
+                }
             }
         }
     };
@@ -117,6 +134,7 @@ public class KeyguardPasswordViewController
         mShowImeAtScreenOn = resources.getBoolean(R.bool.kg_show_ime_at_screen_on);
         mPasswordEntry = mView.findViewById(mView.getPasswordTextViewId());
         mSwitchImeButton = mView.findViewById(R.id.switch_ime_button);
+        mLockPatternUtils = lockPatternUtils;
     }
 
     @Override
@@ -307,5 +325,46 @@ public class KeyguardPasswordViewController
     @Override
     protected int getInitialMessageResId() {
         return R.string.keyguard_enter_your_password;
+    }
+
+    private AsyncTask<?, ?, ?> validateQuickUnlock(final LockPatternUtils utils,
+            final LockscreenCredential password,
+            final int userId) {
+        AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Void... args) {
+                try {
+                    return utils.checkCredential(password, userId, null);
+                } catch (RequestThrottledException ex) {
+                    return false;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                runQuickUnlock(result, userId);
+            }
+        };
+        task.execute();
+        return task;
+    }
+
+    private void runQuickUnlock(Boolean matched, int userId) {
+        if (matched) {
+            mKeyguardSecurityCallback.reportUnlockAttempt(userId, true, 0);
+            mKeyguardSecurityCallback.dismiss(true, userId, SecurityMode.Password);
+            mView.resetPasswordText(true, true);
+        }
+    }
+
+    private int keyguardPinPasswordLength(int userId) {
+        int pinPasswordLength = -1;
+        try {
+            pinPasswordLength = (int) mLockPatternUtils.getLockSettings().getLong("lockscreen.pin_password_length", 0, userId);
+        } catch (Exception e) {
+            // do nothing
+        }
+        return pinPasswordLength >= 4 ? pinPasswordLength : -1;
     }
 }
