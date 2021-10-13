@@ -16,13 +16,19 @@
 
 package com.android.keyguard;
 
+import static com.android.keyguard.KeyguardAbsKeyInputView.MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT;
+
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.android.internal.util.LatencyTracker;
 import com.android.internal.widget.LockPatternUtils;
+import com.android.internal.widget.LockPatternUtils.RequestThrottledException;
+import com.android.internal.widget.LockscreenCredential;
+import com.android.keyguard.PasswordTextView.QuickUnlockListener;
 import com.android.keyguard.KeyguardSecurityModel.SecurityMode;
 import com.android.systemui.R;
 import com.android.systemui.classifier.FalsingCollector;
@@ -42,6 +48,10 @@ public class KeyguardPinViewController
     private final DevicePostureController.Callback mPostureCallback = posture ->
             mView.onDevicePostureChanged(posture);
 
+    private int userId = KeyguardUpdateMonitor.getCurrentUser();
+
+    private LockPatternUtils mLockPatternUtils;
+
     private static List<Integer> sNumbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 0);
 
     protected KeyguardPinViewController(KeyguardPINView view,
@@ -58,6 +68,7 @@ public class KeyguardPinViewController
                 emergencyButtonController, falsingCollector);
         mKeyguardUpdateMonitor = keyguardUpdateMonitor;
         mPostureController = postureController;
+        mLockPatternUtils = lockPatternUtils;
     }
 
     @Override
@@ -96,6 +107,19 @@ public class KeyguardPinViewController
             }
         }
 
+        boolean quickUnlock = (Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0, UserHandle.USER_CURRENT) == 1);
+
+        if (quickUnlock) {
+            mPasswordEntry.setQuickUnlockListener(new QuickUnlockListener() {
+                public void onValidateQuickUnlock(String password) {
+                    validateQuickUnlock(password);
+                }
+            });
+        } else {
+            mPasswordEntry.setQuickUnlockListener(null);
+        }
+
         mPostureController.addCallback(mPostureCallback);
     }
 
@@ -121,5 +145,26 @@ public class KeyguardPinViewController
     public boolean startDisappearAnimation(Runnable finishRunnable) {
         return mView.startDisappearAnimation(
                 mKeyguardUpdateMonitor.needsSlowUnlockTransition(), finishRunnable);
+    }
+
+    private void validateQuickUnlock(String password) {
+        if (password != null) {
+            if (password.length() > MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT
+                    && kpvCheckPassword(password)) {
+                mPasswordEntry.setEnabled(false);
+                getKeyguardSecurityCallback().reportUnlockAttempt(userId, true, 0);
+                getKeyguardSecurityCallback().dismiss(true, userId);
+                mView.resetPasswordText(true, true);
+            }
+        }
+    }
+
+    private boolean kpvCheckPassword(String password) {
+        try {
+            return mLockPatternUtils.checkCredential(
+                    LockscreenCredential.createPinOrNone(password), userId, null);
+        } catch (RequestThrottledException ex) {
+            return false;
+        }
     }
 }
