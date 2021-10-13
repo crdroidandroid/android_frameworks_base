@@ -105,9 +105,19 @@ public class PasswordTextView extends FrameLayout {
     private boolean mIsPinHinting;
     private PinShapeInput mPinShapeInput;
     private boolean mUsePinShapes = false;
+    private QuickUnlockListener mQuickUnlockListener;
 
     public interface UserActivityListener {
         void onUserActivity();
+    }
+
+    /* Quick unlock management for PIN view. */
+    public interface QuickUnlockListener {
+        /**
+         * Validate current password and prepare callback if verified.
+         * @param password The password string to be verified.
+         */
+        void onValidateQuickUnlock(String password);
     }
 
     public PasswordTextView(Context context) {
@@ -281,6 +291,9 @@ public class PasswordTextView extends FrameLayout {
         }
         userActivity();
         sendAccessibilityEventTypeViewTextChanged(textbefore, textbefore.length(), 0, 1);
+        if (mQuickUnlockListener != null) {
+            mQuickUnlockListener.onValidateQuickUnlock(mText);
+        }
     }
 
     public void setUserActivityListener(UserActivityListener userActivityListener) {
@@ -452,6 +465,10 @@ public class PasswordTextView extends FrameLayout {
         mShowPassword = enabled &&
                 Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.TEXT_SHOW_PASSWORD, 1) == 1;
+    }
+
+    public void setQuickUnlockListener(QuickUnlockListener listener) {
+        mQuickUnlockListener = listener;
     }
 
     private class CharState {
