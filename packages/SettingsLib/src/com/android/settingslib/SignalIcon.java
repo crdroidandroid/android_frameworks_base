@@ -169,6 +169,9 @@ public class SignalIcon {
         public boolean userSetup;
         public boolean roaming;
         public boolean defaultDataOff;  // Tracks the on/off state of the defaultDataSubscription
+        public boolean imsRegistered;
+        public boolean voiceCapable;
+        public boolean videoCapable;
 
         @Override
         public void copyFrom(State s) {
@@ -185,6 +188,9 @@ public class SignalIcon {
             userSetup = state.userSetup;
             roaming = state.roaming;
             defaultDataOff = state.defaultDataOff;
+            imsRegistered = state.imsRegistered;
+            voiceCapable = state.voiceCapable;
+            videoCapable = state.videoCapable;
         }
 
         @Override
@@ -202,7 +208,10 @@ public class SignalIcon {
             builder.append("carrierNetworkChangeMode=").append(carrierNetworkChangeMode)
                     .append(',');
             builder.append("userSetup=").append(userSetup).append(',');
-            builder.append("defaultDataOff=").append(defaultDataOff);
+            builder.append("defaultDataOff=").append(defaultDataOff).append(',');
+            builder.append("imsRegistered=").append(imsRegistered).append(',');
+            builder.append("voiceCapable=").append(voiceCapable).append(',');
+            builder.append("videoCapable=").append(videoCapable);
         }
 
         @Override
@@ -218,7 +227,10 @@ public class SignalIcon {
                 && ((MobileState) o).userSetup == userSetup
                 && ((MobileState) o).isDefault == isDefault
                 && ((MobileState) o).roaming == roaming
-                && ((MobileState) o).defaultDataOff == defaultDataOff;
+                && ((MobileState) o).defaultDataOff == defaultDataOff
+                && ((MobileState) o).imsRegistered == imsRegistered
+                && ((MobileState) o).voiceCapable == voiceCapable
+                && ((MobileState) o).videoCapable == videoCapable;
         }
     }
 }
