@@ -670,4 +670,8 @@
          1 - Override the setting to always bypass keyguard
          2 - Override the setting to never bypass keyguard -->
     <integer name="config_face_unlock_bypass_override">0</integer>
+
+    <!-- Whether to show VoLTE icon in the status bar -->
+    <bool name="config_display_volte">true</bool>
+
 </resources>
