@@ -109,12 +109,13 @@ public interface NetworkController extends CallbackController<SignalCallback>, D
         public boolean roaming;
         public boolean showTriangle;
         public boolean isDefault;
+        public int volteId;
 
         public MobileDataIndicators(IconState statusIcon, IconState qsIcon, int statusType,
                 int qsType, boolean activityIn, boolean activityOut,
                 CharSequence typeContentDescription, CharSequence typeContentDescriptionHtml,
                 CharSequence description, boolean isWide, int subId, boolean roaming,
-                boolean showTriangle, boolean isDefault) {
+                boolean showTriangle, boolean isDefault, int volteId) {
             this.statusIcon = statusIcon;
             this.qsIcon = qsIcon;
             this.statusType = statusType;
@@ -129,6 +130,7 @@ public interface NetworkController extends CallbackController<SignalCallback>, D
             this.roaming = roaming;
             this.showTriangle = showTriangle;
             this.isDefault = isDefault;
+            this.volteId = volteId;
         }
 
         @Override
@@ -148,6 +150,7 @@ public interface NetworkController extends CallbackController<SignalCallback>, D
                 .append(",roaming=").append(roaming)
                 .append(",showTriangle=").append(showTriangle)
                 .append(",isDefault=").append(isDefault)
+                .append(",volteId=").append(volteId)
                 .append(']').toString();
         }
     }
