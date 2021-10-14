@@ -154,7 +154,8 @@ data class MobileDataIndicators(
     @JvmField val subId: Int,
     @JvmField val roaming: Boolean,
     @JvmField val showTriangle: Boolean,
-    @JvmField val isDefault: Boolean
+    @JvmField val isDefault: Boolean,
+    @JvmField val volteId: Int
 ) {
     override fun toString(): String {
         return java.lang.StringBuilder("MobileDataIndicators[")
@@ -171,6 +172,7 @@ data class MobileDataIndicators(
                 .append(",roaming=").append(roaming)
                 .append(",showTriangle=").append(showTriangle)
                 .append(",isDefault=").append(isDefault)
+                .append(",volteId=").append(volteId)
                 .append(']').toString()
     }
 }
