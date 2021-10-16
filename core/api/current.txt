@@ -84,6 +84,7 @@ package android {
     field public static final String DUMP = "android.permission.DUMP";
     field public static final String EXPAND_STATUS_BAR = "android.permission.EXPAND_STATUS_BAR";
     field public static final String FACTORY_TEST = "android.permission.FACTORY_TEST";
+    field public static final String FAKE_PACKAGE_SIGNATURE = "android.permission.FAKE_PACKAGE_SIGNATURE";
     field public static final String FOREGROUND_SERVICE = "android.permission.FOREGROUND_SERVICE";
     field public static final String GET_ACCOUNTS = "android.permission.GET_ACCOUNTS";
     field public static final String GET_ACCOUNTS_PRIVILEGED = "android.permission.GET_ACCOUNTS_PRIVILEGED";
@@ -200,6 +201,7 @@ package android {
     field public static final String CALL_LOG = "android.permission-group.CALL_LOG";
     field public static final String CAMERA = "android.permission-group.CAMERA";
     field public static final String CONTACTS = "android.permission-group.CONTACTS";
+    field public static final String FAKE_PACKAGE = "android.permission-group.FAKE_PACKAGE";
     field public static final String LOCATION = "android.permission-group.LOCATION";
     field public static final String MICROPHONE = "android.permission-group.MICROPHONE";
     field public static final String NEARBY_DEVICES = "android.permission-group.NEARBY_DEVICES";
