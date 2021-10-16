@@ -1603,6 +1603,29 @@ public class ComputerEngine implements Computer {
         return result;
     }
 
+    private boolean requestsFakeSignature(AndroidPackage p) {
+        return p.getMetaData() != null &&
+                p.getMetaData().getString("fake-signature") != null;
+    }
+
+    private PackageInfo mayFakeSignature(AndroidPackage p, PackageInfo pi,
+            Set<String> permissions) {
+        try {
+            if (p.getMetaData() != null &&
+                    p.getTargetSdkVersion() > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                String sig = p.getMetaData().getString("fake-signature");
+                if (sig != null &&
+                        permissions.contains("android.permission.FAKE_PACKAGE_SIGNATURE")) {
+                    pi.signatures = new Signature[] {new Signature(sig)};
+                }
+            }
+        } catch (Throwable t) {
+            // We should never die because of any failures, this is system code!
+            Log.w("ComputerEngine.FAKE_PACKAGE_SIGNATURE", t);
+        }
+        return pi;
+    }
+
     public final PackageInfo generatePackageInfo(PackageStateInternal ps,
             @PackageManager.PackageInfoFlagsBits long flags, int userId) {
         if (!mUserManager.exists(userId)) return null;
@@ -1632,13 +1655,14 @@ public class ComputerEngine implements Computer {
             final int[] gids = (flags & PackageManager.GET_GIDS) == 0 ? EMPTY_INT_ARRAY
                     : mPermissionManager.getGidsForUid(UserHandle.getUid(userId, ps.getAppId()));
             // Compute granted permissions only if package has requested permissions
-            final Set<String> permissions = ((flags & PackageManager.GET_PERMISSIONS) == 0
+            final Set<String> permissions = (((flags & PackageManager.GET_PERMISSIONS) == 0
+                    && !requestsFakeSignature(p))
                     || ArrayUtils.isEmpty(p.getRequestedPermissions())) ? Collections.emptySet()
                     : mPermissionManager.getGrantedPermissions(ps.getPackageName(), userId);
 
-            PackageInfo packageInfo = PackageInfoUtils.generate(p, gids, flags,
-                    state.getFirstInstallTime(), ps.getLastUpdateTime(), permissions, state, userId,
-                    ps);
+            PackageInfo packageInfo = mayFakeSignature(p, PackageInfoUtils.generate(p, gids, flags,
+                    state.getFirstInstallTime(), ps.getLastUpdateTime(), permissions, state, userId, ps),
+                    permissions);
 
             if (packageInfo == null) {
                 return null;
