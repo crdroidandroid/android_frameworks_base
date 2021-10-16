@@ -105,4 +105,10 @@
 
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Lens</string>
+
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sound</string>
+    <string name="quick_settings_sound_ring">Ring</string>
+    <string name="quick_settings_sound_vibrate">Vibrate</string>
+    <string name="quick_settings_sound_mute">Mute</string>
 </resources>
