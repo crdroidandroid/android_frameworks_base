@@ -62,7 +62,7 @@
     <string name="quick_settings_reboot_recovery_label">Recuperare</string>
     <string name="quick_settings_poweroff_label">Oprire</string>
     <!-- Sound Search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Căutare sonoră</string>
     <!-- Sound QS tile -->
     <string name="quick_settings_sound_label">Sunet</string>
     <string name="quick_settings_sound_ring">Sonerie</string>
