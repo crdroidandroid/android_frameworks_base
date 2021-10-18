@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2021 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Дозволити підміну підпису</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Дозволити додатку видавати себе за інший додаток. Шкідливі програми можуть використовувати це для доступу до приватних даних програми. Законне використання включає емулятор, яке видає себе за те що емулює. Дозволяйте це з обережністю!</string>
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_fake_package_signature">Підміна підпису додатка</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_fake_package_signature">дозволити підробити підпис пакета</string>
+    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
+    <string name="permgrouprequest_fake_package_signature">Дозволити
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; підмінити підпис пакету?</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Ігровий режим</string>
+    <string name="gaming_mode_notification_title">Ігровий режим увімкнено</string>
+    <string name="gaming_mode_notification_content">Натисніть, щоб відключити ігровий режим</string>
+    <string name="gaming_mode_enabled_toast">Ігровий режим увімкнено</string>
+    <string name="gaming_mode_disabled_toast">Ігровий режим вимкнено</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Нажміть і утримуйте кнопку живлення, щоб розблокувати</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Копіювати URL звіту про помилку</string>
+    <string name="url_copy_success">URL успішно скопійовано</string>
+    <string name="url_copy_failed">Помилка під час завантаження файла звіту до pasty</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s був відмовлений в доступі до буфера обміну</string>
+    <string name="app_clipboard_access_granted">%1$s був наданий доступ до буфера обміну</string>
+</resources>

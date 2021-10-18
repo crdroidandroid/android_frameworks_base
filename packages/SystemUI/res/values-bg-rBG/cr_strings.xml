@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2021 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kб/с</string>
+    <string name="megabitspersecond_short">Mб/с</string>
+    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="kilobytespersecond_short">kб/с</string>
+    <string name="megabytespersecond_short">MБ/с</string>
+    <string name="gigabytespersecond_short">Гб/с</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Грешка</string>
+    <string name="omnijaws_service_unkown">Няма данни за времето</string>
+    <string name="omnijaws_service_error_long">Грешка при зареждане на данни за времето</string>
+    <string name="omnijaws_service_disabled">Услугата е забранена</string>
+    <string name="omnijaws_detail_header">Времето</string>
+    <string name="omnijaws_label_default">Времето</string>
+    <string name="omnijaws_current_text">Сега</string>
+    <string name="omnijaws_package_not_available">OmniJaws не е наличен</string>
+    <string name="omnijaws_service_last_update">Последно обновяване:</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Винаги се показва</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Смени картата с данни</string>
+    <string name="qs_data_switch_changed_1">Използване на СИМ 1 за мобилни данни</string>
+    <string name="qs_data_switch_changed_2">Използване на СИМ 2 за мобилни данни</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Бързо зареждане (<xliff:g id="charging_time_left" example="4 часа и 2 минути">%1$s</xliff:g> до пълно зареждане)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Бързо зареждане</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp зареждане (<xliff:g id="charging_time_left" example="4 часа и 2 минути">%1$s</xliff:g> до пълно зареждане)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp зареждане</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC зареждане (<xliff:g id="charging_time_left" example="4 часа и 2 минути">%1$s</xliff:g> до пълно зареждане)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC зареждане</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Информация за CPU</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Информация за FPS</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Режим на игра е изключен в настройките</string>
+    <string name="quick_settings_gaming_mode_label">Режим на игра</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Смарт пиксели</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Автоматично включване на смарт пиксели</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">Рестартиране</string>
+    <string name="quick_settings_reboot_recovery_label">Режим на Възстановяване</string>
+    <string name="quick_settings_poweroff_label">Изключване</string>
+    <!-- Sound Search tile -->
+    <string name="quick_settings_sound_search">Звуково търсене</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">Звук</string>
+    <string name="quick_settings_sound_ring">Звънене</string>
+    <string name="quick_settings_sound_vibrate">Вибрация</string>
+    <string name="quick_settings_sound_dnd">Не безпокойте</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Компас</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Подготвяне\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Компас изключен.</string>
+    <string name="accessibility_quick_settings_compass_on">Компас включен.</string>
+    <string name="quick_settings_compass_N">Север</string>
+    <string name="quick_settings_compass_NE">Североизток</string>
+    <string name="quick_settings_compass_E">Изток</string>
+    <string name="quick_settings_compass_SE">Югоизток</string>
+    <string name="quick_settings_compass_S">Юг</string>
+    <string name="quick_settings_compass_SW">Югозапад</string>
+    <string name="quick_settings_compass_W">Запад</string>
+    <string name="quick_settings_compass_NW">Северозапад</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Език</string>
+    <string name="quick_settings_locale_more_locales_toast">Моля, конфигурирате няколко езика за да разрешите функцията за превключване</string>
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Часът е</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Часът е</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">Един</string>
+    <string name="text_clock_h_two">Два</string>
+    <string name="text_clock_h_three">Три</string>
+    <string name="text_clock_h_four">Четири</string>
+    <string name="text_clock_h_five">Пет</string>
+    <string name="text_clock_h_six">Шест</string>
+    <string name="text_clock_h_seven">Седем</string>
+    <string name="text_clock_h_eight">Осем</string>
+    <string name="text_clock_h_nine">Девет</string>
+    <string name="text_clock_h_ten">Десет</string>
+    <string name="text_clock_h_eleven">Единадесет</string>
+    <string name="text_clock_h_twelve">Дванадесет</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">Нула нула</string>
+    <string name="text_clock_m_one">Нула една</string>
+    <string name="text_clock_m_two">Нула две</string>
+    <string name="text_clock_m_three">Нула три</string>
+    <string name="text_clock_m_four">Нула четири</string>
+    <string name="text_clock_m_five">Нула пет</string>
+    <string name="text_clock_m_six">Нула шест</string>
+    <string name="text_clock_m_seven">Нула седем</string>
+    <string name="text_clock_m_eight">Нула осем</string>
+    <string name="text_clock_m_nine">Нула девет</string>
+    <string name="text_clock_m_ten">Десет</string>
+    <string name="text_clock_m_eleven">Единадесет</string>
+    <string name="text_clock_m_twelve">Дванадесет</string>
+    <string name="text_clock_m_thirteen">Тринадесет</string>
+    <string name="text_clock_m_fourteen">Четиринадесет</string>
+    <string name="text_clock_m_fifteen">Петнадесет</string>
+    <string name="text_clock_m_sixteen">Шестнадесет</string>
+    <string name="text_clock_m_seventeen">Седемнадесет</string>
+    <string name="text_clock_m_eighteen">Осемнадесет</string>
+    <string name="text_clock_m_nineteen">Деветнадесет</string>
+    <string name="text_clock_m_twenty">Двадесет</string>
+    <string name="text_clock_m_twenty_one">Дватесет и една</string>
+    <string name="text_clock_m_twenty_two">Дватесет и две</string>
+    <string name="text_clock_m_twenty_three">Дватесет и три</string>
+    <string name="text_clock_m_twenty_four">Дватесет и четири</string>
+    <string name="text_clock_m_twenty_five">Двадесет и пет</string>
+    <string name="text_clock_m_twenty_six">Двадесет и шест</string>
+    <string name="text_clock_m_twenty_seven">Двадесет и седем</string>
+    <string name="text_clock_m_twenty_eight">Дватесет и осем</string>
+    <string name="text_clock_m_twenty_nine">Дватесет и девет</string>
+    <string name="text_clock_m_thirty">Тридесет</string>
+    <string name="text_clock_m_thirty_one">Тридесет и една</string>
+    <string name="text_clock_m_thirty_two">Тридесет и две</string>
+    <string name="text_clock_m_thirty_three">Тридесет и три</string>
+    <string name="text_clock_m_thirty_four">Тридесет и четири</string>
+    <string name="text_clock_m_thirty_five">Тридесет и пет</string>
+    <string name="text_clock_m_thirty_six">Тридесет и шест</string>
+    <string name="text_clock_m_thirty_seven">Тридесет и седем</string>
+    <string name="text_clock_m_thirty_eight">Тридесет и осем</string>
+    <string name="text_clock_m_thirty_nine">Тридесет и девет</string>
+    <string name="text_clock_m_forty">Четиридесет</string>
+    <string name="text_clock_m_forty_one">Четиридесет и една</string>
+    <string name="text_clock_m_forty_two">Четиридесет и две</string>
+    <string name="text_clock_m_forty_three">Четиридесет и три</string>
+    <string name="text_clock_m_forty_four">Четиридесет и четири</string>
+    <string name="text_clock_m_forty_five">Четиридесет и пет</string>
+    <string name="text_clock_m_forty_six">Четиридесет и шест</string>
+    <string name="text_clock_m_forty_seven">Четиридесет и седем</string>
+    <string name="text_clock_m_forty_eight">Четиридесет и осем</string>
+    <string name="text_clock_m_forty_nine">Четиридесет и девет</string>
+    <string name="text_clock_m_fifty">Петдесет</string>
+    <string name="text_clock_m_fifty_one">Петдесет и една</string>
+    <string name="text_clock_m_fifty_two">Петдесет и две</string>
+    <string name="text_clock_m_fifty_three">Петдесет и три</string>
+    <string name="text_clock_m_fifty_four">Петдесет и четири</string>
+    <string name="text_clock_m_fifty_five">Петдесет и пет</string>
+    <string name="text_clock_m_fifty_six">Петдесет и шест</string>
+    <string name="text_clock_m_fifty_seven">Петдесет и седем</string>
+    <string name="text_clock_m_fifty_eight">Петдесет и осем</string>
+    <string name="text_clock_m_fifty_nine">Петдесет и девет</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Tux clock -->
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Днес е %s</string>
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">Изтриване</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">Запис на екрана е изтрит</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Приоритет</string>
+    <string name="volume_ringer_alarms_only">Будилници</string>
+    <string name="volume_ringer_dnd">DnD</string>
+    <string name="tristate_flashlight_on">Фенерчето е включено</string>
+    <string name="tristate_flashlight_off">Фенерчето е изключено</string>
+    <string name="tristate_flashlight_blink">Мигане на фенерче</string>
+    <string name="tristate_brightness_bright">Максимална яркост</string>
+    <string name="tristate_brightness_dark">Минимална яркост</string>
+    <string name="tristate_brightness_auto">Автоматична яркост</string>
+    <string name="tristate_rotation_auto">Автоматично завъртане</string>
+    <string name="tristate_rotation_0">Портрет</string>
+    <string name="tristate_rotation_90">Пейзаж (90°)</string>
+    <string name="tristate_rotation_270">Пейзаж (270°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Показване на бутон за спиране на записа\nЗадръжте за да го преместите</string>
+    <string name="screenrecord_lowquality_label">Намалете качеството за по-малък размер на файла</string>
+    <!-- Biometric Dialog - Use Face -->
+    <string name="biometric_dialog_button_use_face">Използване на лицево разпознаване</string>
+    <!-- Daily data usage -->
+    <string name="daily_data_usage_title">Използване днес</string>
+    <!-- App Lock -->
+    <string name="applock_locked">&#160;е заключено</string>
+    <string name="applock_fingerprint_face">, пръстов отпечатък или лицето ви, за да отключите</string>
+    <string name="applock_face">&#160;или лицето ви, за да отключите</string>
+    <string name="applock_fingerprint">&#160;или пръстов отпечатък за отключване</string>
+    <string name="applock_credential">&#160;за отключване</string>
+    <string name="applock_unlock">Отключване</string>
+    <!-- Power menu QS tile -->
+    <string name="quick_settings_power_menu_label">Меню за захранване</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Принудително спиране?</string>
+    <string name="force_stop_dlg_text">Ако изключите програмата принудително, това може да се отрази зле на нейната функционалност.</string>
+    <string name="guts_force_close_app">Принудително спиране</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Възпроизвеждане на мултимедия към</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">Режим аудио</string>
+    <string name="quick_settings_monotoggle_tile_mono">Моно звук</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Стерео звук</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+</resources>

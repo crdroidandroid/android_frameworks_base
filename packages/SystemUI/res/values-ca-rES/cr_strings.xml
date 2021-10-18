@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2021 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Error</string>
+    <string name="omnijaws_service_unkown">No hi ha informació de l\'oratge</string>
+    <string name="omnijaws_service_error_long">Error carregant la informació de l\'oratge</string>
+    <string name="omnijaws_service_disabled">Servei deshabilitat</string>
+    <string name="omnijaws_detail_header">Oratge</string>
+    <string name="omnijaws_label_default">Oratge</string>
+    <string name="omnijaws_current_text">Ara</string>
+    <string name="omnijaws_package_not_available">OmniJaws no disponible</string>
+    <string name="omnijaws_service_last_update">Darrera actualització:</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Pantalla sempre encesa</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Cambiar tarjeta de dades</string>
+    <string name="qs_data_switch_changed_1">Utilitzant SIM 1 per a dades mòbils</string>
+    <string name="qs_data_switch_changed_2">Utilitzant SIM 2 per a dades mòbils</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Càrrega Dash (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> per càrrega completa)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Càrrega Dash</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Càrrega Warp (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> per càrrega completa)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Càrrega Warp</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Càrrega VOOC (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> per a completar)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Càrrega VOOC</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Informació de CPU</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Informació de FPS</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Mode Gaming está desactivat a la configuració</string>
+    <string name="quick_settings_gaming_mode_label">Mode Gaming</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Píxels intel·ligents</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Píxels intel·ligents auto habilitats</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">Reinicia</string>
+    <string name="quick_settings_reboot_recovery_label">Recuperació</string>
+    <string name="quick_settings_poweroff_label">Apaga</string>
+    <!-- Sound Search tile -->
+    <string name="quick_settings_sound_search">Sound search</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">So</string>
+    <string name="quick_settings_sound_ring">Timbre</string>
+    <string name="quick_settings_sound_vibrate">Vibrar</string>
+    <string name="quick_settings_sound_dnd">No molestar</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Brúixola</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Inicialitzant\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Brúixola deshabilitada.</string>
+    <string name="accessibility_quick_settings_compass_on">Brúixola habilitada.</string>
+    <string name="quick_settings_compass_N">N</string>
+    <string name="quick_settings_compass_NE">NE</string>
+    <string name="quick_settings_compass_E">E</string>
+    <string name="quick_settings_compass_SE">SE</string>
+    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_SW">SO</string>
+    <string name="quick_settings_compass_W">O</string>
+    <string name="quick_settings_compass_NW">NO</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Idioma</string>
+    <string name="quick_settings_locale_more_locales_toast">Per favor, configuri diversos idiomes per habilitar la funció d\'alternar entre ells</string>
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">i </annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Son les</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">Una</string>
+    <string name="text_clock_h_two">Dues</string>
+    <string name="text_clock_h_three">Tres</string>
+    <string name="text_clock_h_four">Quatre</string>
+    <string name="text_clock_h_five">Cinc</string>
+    <string name="text_clock_h_six">Sis</string>
+    <string name="text_clock_h_seven">Set</string>
+    <string name="text_clock_h_eight">Vuit</string>
+    <string name="text_clock_h_nine">Nou</string>
+    <string name="text_clock_h_ten">Deu</string>
+    <string name="text_clock_h_eleven">Onze</string>
+    <string name="text_clock_h_twelve">Dotze</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">En punt</string>
+    <string name="text_clock_m_one">Un</string>
+    <string name="text_clock_m_two">Dues</string>
+    <string name="text_clock_m_three">Tres</string>
+    <string name="text_clock_m_four">Quatre</string>
+    <string name="text_clock_m_five">Cinc</string>
+    <string name="text_clock_m_six">Sis</string>
+    <string name="text_clock_m_seven">Set</string>
+    <string name="text_clock_m_eight">Vuit</string>
+    <string name="text_clock_m_nine">Nou</string>
+    <string name="text_clock_m_ten">Deu</string>
+    <string name="text_clock_m_eleven">Onze</string>
+    <string name="text_clock_m_twelve">Dotze</string>
+    <string name="text_clock_m_thirteen">Tretze</string>
+    <string name="text_clock_m_fourteen">Catorze</string>
+    <string name="text_clock_m_fifteen">Quinze</string>
+    <string name="text_clock_m_sixteen">Setze</string>
+    <string name="text_clock_m_seventeen">Diset</string>
+    <string name="text_clock_m_eighteen">Divuit</string>
+    <string name="text_clock_m_nineteen">Dinou</string>
+    <string name="text_clock_m_twenty">Vint</string>
+    <string name="text_clock_m_twenty_one">Vint-i-u</string>
+    <string name="text_clock_m_twenty_two">Vint-i-dos</string>
+    <string name="text_clock_m_twenty_three">Vint-i-tres</string>
+    <string name="text_clock_m_twenty_four">Vint-i-quatre</string>
+    <string name="text_clock_m_twenty_five">Vint-i-cinc</string>
+    <string name="text_clock_m_twenty_six">Vint-i-sis</string>
+    <string name="text_clock_m_twenty_seven">Vint-i-set</string>
+    <string name="text_clock_m_twenty_eight">Vint-i-vuit</string>
+    <string name="text_clock_m_twenty_nine">Vint-i-nou</string>
+    <string name="text_clock_m_thirty">Trenta</string>
+    <string name="text_clock_m_thirty_one">Trenta-u</string>
+    <string name="text_clock_m_thirty_two">Trenta-dos</string>
+    <string name="text_clock_m_thirty_three">Trenta-tres</string>
+    <string name="text_clock_m_thirty_four">Trenta-quatre</string>
+    <string name="text_clock_m_thirty_five">Trenta-cinc</string>
+    <string name="text_clock_m_thirty_six">Trenta-sis</string>
+    <string name="text_clock_m_thirty_seven">Trenta-set</string>
+    <string name="text_clock_m_thirty_eight">Trenta-vuit</string>
+    <string name="text_clock_m_thirty_nine">Trenta-nou</string>
+    <string name="text_clock_m_forty">Quaranta</string>
+    <string name="text_clock_m_forty_one">Quaranta-u</string>
+    <string name="text_clock_m_forty_two">Quaranta-dos</string>
+    <string name="text_clock_m_forty_three">Quaranta-tres</string>
+    <string name="text_clock_m_forty_four">Quaranta-quatre</string>
+    <string name="text_clock_m_forty_five">Quaranta-cinc</string>
+    <string name="text_clock_m_forty_six">Quaranta-sis</string>
+    <string name="text_clock_m_forty_seven">Quaranta-set</string>
+    <string name="text_clock_m_forty_eight">Quaranta-vuit</string>
+    <string name="text_clock_m_forty_nine">Quaranta-nou</string>
+    <string name="text_clock_m_fifty">Cinquanta</string>
+    <string name="text_clock_m_fifty_one">Cinquanta-u</string>
+    <string name="text_clock_m_fifty_two">Cinquanta-dos</string>
+    <string name="text_clock_m_fifty_three">Cinquanta-tres</string>
+    <string name="text_clock_m_fifty_four">Cinquanta-quatre</string>
+    <string name="text_clock_m_fifty_five">Cinquanta-cinc</string>
+    <string name="text_clock_m_fifty_six">Cinquanta-sis</string>
+    <string name="text_clock_m_fifty_seven">Cinquanta-set</string>
+    <string name="text_clock_m_fifty_eight">Cinquanta-vuit</string>
+    <string name="text_clock_m_fifty_nine">Cinquanta-nou</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Tux clock -->
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Avui és %s</string>
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">Eliminar</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">S\'ha eliminat la gravació de pantalla</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Prioritat</string>
+    <string name="volume_ringer_alarms_only">Alarmes</string>
+    <string name="volume_ringer_dnd">No molestar</string>
+    <string name="tristate_flashlight_on">Llanterna encesa</string>
+    <string name="tristate_flashlight_off">Llanterna apagada</string>
+    <string name="tristate_flashlight_blink">Llanterna parpadejant</string>
+    <string name="tristate_brightness_bright">Brillantor màxima</string>
+    <string name="tristate_brightness_dark">Brillantor màxima</string>
+    <string name="tristate_brightness_auto">Brillantor automàtica</string>
+    <string name="tristate_rotation_auto">Gira automàticament</string>
+    <string name="tristate_rotation_0">Vertical</string>
+    <string name="tristate_rotation_90">Horitzontal (90º)</string>
+    <string name="tristate_rotation_270">Horitzontal (270º)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Mostra el punt per a aturar\nFeu una pulsació llarga per a moure</string>
+    <string name="screenrecord_lowquality_label">Menys qualitat per a un fitxer de menor mida</string>
+    <!-- Biometric Dialog - Use Face -->
+    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <!-- Daily data usage -->
+    <string name="daily_data_usage_title">Today\'s usage</string>
+    <!-- App Lock -->
+    <string name="applock_locked">&#160;is locked</string>
+    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
+    <string name="applock_face">&#160;or your face to unlock</string>
+    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
+    <string name="applock_credential">&#160;to unlock</string>
+    <string name="applock_unlock">Unlock</string>
+    <!-- Power menu QS tile -->
+    <string name="quick_settings_power_menu_label">Power menu</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Force stop?</string>
+    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="guts_force_close_app">Force stop</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Play media to</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">Audio mode</string>
+    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+</resources>

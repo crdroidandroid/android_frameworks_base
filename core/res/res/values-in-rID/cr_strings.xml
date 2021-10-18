@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2021 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Memalsukan tanda tangan paket</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Izinkan aplikasi untuk menyamar menjadi aplikasi lain.
+Aplikasi jahat mungkin dapat menggunakan ini untuk mengakses data aplikasi pribadi. Penggunaan yang sah termasuk emulator menyamar menjadi apa yang di samar. Berikan izin ini dengan hati-hati!</string>
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_fake_package_signature">Memalsukan tanda tangan paket</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_fake_package_signature">izinkan untuk memalsukan tanda tangan paket</string>
+    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
+    <string name="permgrouprequest_fake_package_signature">Izinkan &lt;b&gt;<xliff:g id="nama_aplikasi" example="Gmail">%1$s</xliff:g>&lt;/b&gt; untuk memalsukan paket?</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Mode permainan</string>
+    <string name="gaming_mode_notification_title">Mode permainan diaktifkan</string>
+    <string name="gaming_mode_notification_content">Tekan untuk mematikan mode permainan</string>
+    <string name="gaming_mode_enabled_toast">Mode permainan dihidupkan</string>
+    <string name="gaming_mode_disabled_toast">Mode permainan dimatikan</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Tekan dan tahan tombol power untuk membuka kunci</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Salin URL log kerusakan</string>
+    <string name="url_copy_success">URL berhasil disalin</string>
+    <string name="url_copy_failed">Terjadi kesalahan saat mengunggah log ke pasty</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s ditolak akses ke clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s diizinkan akses ke clipboard</string>
+</resources>

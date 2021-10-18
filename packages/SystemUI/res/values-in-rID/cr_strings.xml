@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2021 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/d</string>
+    <string name="megabitspersecond_short">Mb/d</string>
+    <string name="gigabitspersecond_short">Gb/d</string>
+    <string name="kilobytespersecond_short">kB/d</string>
+    <string name="megabytespersecond_short">MB/d</string>
+    <string name="gigabytespersecond_short">GB/d</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Kesalahan</string>
+    <string name="omnijaws_service_unkown">Tidak ada data cuaca</string>
+    <string name="omnijaws_service_error_long">Kesalahan ketika memuat data cuaca</string>
+    <string name="omnijaws_service_disabled">Layanan dimatikan</string>
+    <string name="omnijaws_detail_header">Cuaca</string>
+    <string name="omnijaws_label_default">Cuaca</string>
+    <string name="omnijaws_current_text">Sekarang</string>
+    <string name="omnijaws_package_not_available">OmniJaws tidak tersedia</string>
+    <string name="omnijaws_service_last_update">Pembaruan terakhir:</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Layar selalu hidup</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Ubah kartu data</string>
+    <string name="qs_data_switch_changed_1">Menggunakan SIM 1 untuk data seluler</string>
+    <string name="qs_data_switch_changed_2">Menggunakan SIM 2 untuk data seluler</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Pengisian Daya Cepat (<xliff:g id="charging_time_left" example="4 jam 2 menit">%1$s</xliff:g> hingga penuh)</string>
+    <string name="keyguard_plugged_in_dash_charging">Pengisian Daya Cepat</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Pengisian Daya Cepat (<xliff:g id="charging_time_left" example="4 jam 2 menit">%1$s</xliff:g> hingga penuh)</string>
+    <string name="keyguard_plugged_in_warp_charging">Pengisian Daya Cepat</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Pengisian VOOC (<xliff:g id="charging_time_left" example="4 jam 2 menit">%1$s</xliff:g> hingga penuh)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Pengisian VOOC</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Info CPU</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Info FPS</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Mode permainan dimatikan di setelan</string>
+    <string name="quick_settings_gaming_mode_label">Mode permainan</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Piksel pintar</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Aktifkan otomatis piksel pintar</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">Mulai ulang</string>
+    <string name="quick_settings_reboot_recovery_label">Pemulihan</string>
+    <string name="quick_settings_poweroff_label">Matikan daya</string>
+    <!-- Sound Search tile -->
+    <string name="quick_settings_sound_search">Pencarian suara</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">Suara</string>
+    <string name="quick_settings_sound_ring">Dering</string>
+    <string name="quick_settings_sound_vibrate">Getar</string>
+    <string name="quick_settings_sound_dnd">Jangan ganggu</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Kompas</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Memulai\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Kompas mati.</string>
+    <string name="accessibility_quick_settings_compass_on">Kompas hidup.</string>
+    <string name="quick_settings_compass_N">U</string>
+    <string name="quick_settings_compass_NE">TL</string>
+    <string name="quick_settings_compass_E">T</string>
+    <string name="quick_settings_compass_SE">TG</string>
+    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_SW">BD</string>
+    <string name="quick_settings_compass_W">B</string>
+    <string name="quick_settings_compass_NW">BL</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Bahasa</string>
+    <string name="quick_settings_locale_more_locales_toast">Harap konfigurasikan beberapa bahasa untuk mengaktifkan fungsi sakelar</string>
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Pukul</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">Satu</string>
+    <string name="text_clock_h_two">Dua</string>
+    <string name="text_clock_h_three">Tiga</string>
+    <string name="text_clock_h_four">Empat</string>
+    <string name="text_clock_h_five">Lima</string>
+    <string name="text_clock_h_six">Enam</string>
+    <string name="text_clock_h_seven">Tujuh</string>
+    <string name="text_clock_h_eight">Delapan</string>
+    <string name="text_clock_h_nine">Sembilan</string>
+    <string name="text_clock_h_ten">Sepuluh</string>
+    <string name="text_clock_h_eleven">Sebelas</string>
+    <string name="text_clock_h_twelve">Dua belas</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">Tepat</string>
+    <string name="text_clock_m_one">Satu Menit</string>
+    <string name="text_clock_m_two">Dua Menit</string>
+    <string name="text_clock_m_three">Tiga Menit</string>
+    <string name="text_clock_m_four">Empat Menit</string>
+    <string name="text_clock_m_five">Lima Menit</string>
+    <string name="text_clock_m_six">Enam Menit</string>
+    <string name="text_clock_m_seven">Tujuh Menit</string>
+    <string name="text_clock_m_eight">Delapan Menit</string>
+    <string name="text_clock_m_nine">Sembilan Menit</string>
+    <string name="text_clock_m_ten">Sepuluh</string>
+    <string name="text_clock_m_eleven">Sebelas</string>
+    <string name="text_clock_m_twelve">Dua belas</string>
+    <string name="text_clock_m_thirteen">Tiga belas</string>
+    <string name="text_clock_m_fourteen">Empat belas</string>
+    <string name="text_clock_m_fifteen">Lima belas</string>
+    <string name="text_clock_m_sixteen">Enam belas</string>
+    <string name="text_clock_m_seventeen">Tujuh belas</string>
+    <string name="text_clock_m_eighteen">Delapan belas</string>
+    <string name="text_clock_m_nineteen">Sembilan belas</string>
+    <string name="text_clock_m_twenty">Dua Puluh</string>
+    <string name="text_clock_m_twenty_one">Dua Puluh Satu</string>
+    <string name="text_clock_m_twenty_two">Dua Puluh
+Dua</string>
+    <string name="text_clock_m_twenty_three">Dua Puluh Tiga</string>
+    <string name="text_clock_m_twenty_four">Dua Puluh
+Empat</string>
+    <string name="text_clock_m_twenty_five">Dua Puluh
+Lima</string>
+    <string name="text_clock_m_twenty_six">Dua Puluh
+Enam</string>
+    <string name="text_clock_m_twenty_seven">Dua Puluh
+Tujuh</string>
+    <string name="text_clock_m_twenty_eight">Dua Puluh Delapan</string>
+    <string name="text_clock_m_twenty_nine">Dua Puluh Sembilan</string>
+    <string name="text_clock_m_thirty">Tiga Puluh</string>
+    <string name="text_clock_m_thirty_one">Tiga Puluh
+Satu</string>
+    <string name="text_clock_m_thirty_two">Tiga Puluh
+Dua</string>
+    <string name="text_clock_m_thirty_three">Tiga Puluh
+Tiga</string>
+    <string name="text_clock_m_thirty_four">Tiga Puluh Empat</string>
+    <string name="text_clock_m_thirty_five">Tiga Puluh
+Lima</string>
+    <string name="text_clock_m_thirty_six">Tiga Puluh
+Enam</string>
+    <string name="text_clock_m_thirty_seven">Tiga Puluh
+Tujuh</string>
+    <string name="text_clock_m_thirty_eight">Tiga Puluh Delapan</string>
+    <string name="text_clock_m_thirty_nine">Tiga Puluh Sembilan</string>
+    <string name="text_clock_m_forty">Empat Puluh</string>
+    <string name="text_clock_m_forty_one">Empat Puluh
+Satu</string>
+    <string name="text_clock_m_forty_two">Empat Puluh Dua</string>
+    <string name="text_clock_m_forty_three">Empat Puluh
+Tiga</string>
+    <string name="text_clock_m_forty_four">Empat Puluh
+Empat</string>
+    <string name="text_clock_m_forty_five">Empat Puluh
+Lima</string>
+    <string name="text_clock_m_forty_six">Empat Puluh
+Enam</string>
+    <string name="text_clock_m_forty_seven">Empat Puluh
+Tujuh</string>
+    <string name="text_clock_m_forty_eight">Empat Puluh
+Delapan</string>
+    <string name="text_clock_m_forty_nine">Empat Puluh Sembilan</string>
+    <string name="text_clock_m_fifty">Lima Puluh</string>
+    <string name="text_clock_m_fifty_one">Lima Puluh Satu</string>
+    <string name="text_clock_m_fifty_two">Lima Puluh Dua</string>
+    <string name="text_clock_m_fifty_three">Lima Puluh Tiga</string>
+    <string name="text_clock_m_fifty_four">Lima Puluh
+Empat</string>
+    <string name="text_clock_m_fifty_five">Lima Puluh
+Lima</string>
+    <string name="text_clock_m_fifty_six">Lima Puluh
+Enam</string>
+    <string name="text_clock_m_fifty_seven">Lima Puluh
+Tujuh</string>
+    <string name="text_clock_m_fifty_eight">Lima Puluh
+Delapan</string>
+    <string name="text_clock_m_fifty_nine">Lima Puluh
+Sembilan</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Tux clock -->
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Hari ini %s</string>
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">Hapus</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">Rekaman layar dihapus</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Prioritas</string>
+    <string name="volume_ringer_alarms_only">Alarm</string>
+    <string name="volume_ringer_dnd">DND</string>
+    <string name="tristate_flashlight_on">Senter hidup</string>
+    <string name="tristate_flashlight_off">Senter mati</string>
+    <string name="tristate_flashlight_blink">Senter berkedip</string>
+    <string name="tristate_brightness_bright">Cerah maksimum</string>
+    <string name="tristate_brightness_dark">Cerah minimum</string>
+    <string name="tristate_brightness_auto">Kecerahan Otomatis</string>
+    <string name="tristate_rotation_auto">Rotasi Otomatis</string>
+    <string name="tristate_rotation_0">Potret</string>
+    <string name="tristate_rotation_90">Lanskap (90°)</string>
+    <string name="tristate_rotation_270">Lanskap (270°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Tampilkan titik berhenti\nTekan lama untuk memindahkannya</string>
+    <string name="screenrecord_lowquality_label">Kualitas lebih rendah untuk ukuran file yang lebih kecil</string>
+    <!-- Biometric Dialog - Use Face -->
+    <string name="biometric_dialog_button_use_face">Gunakan Wajah</string>
+    <!-- Daily data usage -->
+    <string name="daily_data_usage_title">Penggunaan hari ini</string>
+    <!-- App Lock -->
+    <string name="applock_locked">&#160;terkunci</string>
+    <string name="applock_fingerprint_face">, sidik jari atau wajah Anda untuk membuka kunci</string>
+    <string name="applock_face">&#160;atau wajah Anda untuk membuka kunci</string>
+    <string name="applock_fingerprint">&#160;atau sidik jari Anda untuk membuka kunci</string>
+    <string name="applock_credential">&#160;untuk membuka</string>
+    <string name="applock_unlock">Membuka kunci</string>
+    <!-- Power menu QS tile -->
+    <string name="quick_settings_power_menu_label">Menu daya</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Paksa berhenti?</string>
+    <string name="force_stop_dlg_text">Jika Anda menghentikan paksa aplikasi, kemungkinan akan terjadi gagal fungsi.</string>
+    <string name="guts_force_close_app">Paksa berhenti</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Putar media ke</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">Mode Audio</string>
+    <string name="quick_settings_monotoggle_tile_mono">Audio Mono</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Audio Stereo</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+</resources>
