@@ -40,7 +40,7 @@ class QuickQSBrightnessController @VisibleForTesting constructor(
                     quickQSPanel)
             slider.init()
             quickQSPanel.setBrightnessView(slider.rootView)
-            brightnessControllerFactory.create(slider)
+            brightnessControllerFactory.create(slider.getIconView(), slider)
         })
 
     private var isListening = false
