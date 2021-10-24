@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 
 import androidx.annotation.Nullable;
@@ -52,6 +53,8 @@ public class BrightnessSlider extends ViewController<BrightnessSliderView> imple
     private boolean mTracking;
     private final FalsingManager mFalsingManager;
 
+    private ImageView mIconView;
+
     private final Gefingerpoken mOnInterceptListener = new Gefingerpoken() {
         @Override
         public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -71,8 +74,10 @@ public class BrightnessSlider extends ViewController<BrightnessSliderView> imple
 
     BrightnessSlider(
             BrightnessSliderView brightnessSliderView,
+            ImageView icon,
             FalsingManager falsingManager) {
         super(brightnessSliderView);
+        mIconView = icon;
         mFalsingManager = falsingManager;
     }
 
@@ -83,6 +88,9 @@ public class BrightnessSlider extends ViewController<BrightnessSliderView> imple
         return mView;
     }
 
+    public ImageView getIconView() {
+        return mIconView;
+    }
 
     @Override
     protected void onViewAttached() {
@@ -240,7 +248,8 @@ public class BrightnessSlider extends ViewController<BrightnessSliderView> imple
             int layout = getLayout();
             BrightnessSliderView root = (BrightnessSliderView) LayoutInflater.from(context)
                     .inflate(layout, viewRoot, false);
-            return new BrightnessSlider(root, mFalsingManager);
+            ImageView icon = (ImageView) root.findViewById(R.id.brightness_icon);
+            return new BrightnessSlider(root, icon, mFalsingManager);
         }
 
         /** Get the layout to inflate based on what slider to use */
