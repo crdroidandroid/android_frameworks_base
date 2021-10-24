@@ -82,4 +82,7 @@
     <!-- Additional gesture navbar lengths -->
     <dimen name="navigation_home_handle_width_medium">110dp</dimen>
     <dimen name="navigation_home_handle_width_long">140dp</dimen>
+
+    <!-- QQS Brightness slider -->
+    <dimen name="quick_qs_brightness_margin_top">24dp</dimen>
 </resources>
