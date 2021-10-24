@@ -37,6 +37,7 @@ import com.android.systemui.qs.customize.QSCustomizerController;
 import com.android.systemui.qs.external.CustomTile;
 import com.android.systemui.qs.logging.QSLogger;
 import com.android.systemui.statusbar.FeatureFlags;
+import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.util.Utils;
 import com.android.systemui.util.ViewController;
 import com.android.systemui.util.animation.DisappearParameters;
@@ -406,6 +407,9 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
      */
     public void setUsingHorizontalLayoutChangeListener(Runnable listener) {
         mUsingHorizontalLayoutChangedListener = listener;
+    }
+
+    void setBrightnessMirror(BrightnessMirrorController brightnessMirrorController) {
     }
 
     /** */
