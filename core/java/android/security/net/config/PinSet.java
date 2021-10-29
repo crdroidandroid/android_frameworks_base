@@ -17,16 +17,18 @@
 package android.security.net.config;
 
 import android.util.ArraySet;
+
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /** @hide */
 public final class PinSet {
-    private static Set<String> algorithms;
     public static final PinSet EMPTY_PINSET =
             new PinSet(Collections.<Pin>emptySet(), Long.MAX_VALUE);
     public final long expirationTime;
     public final Set<Pin> pins;
+    private final Set<String> algorithms;
 
     public PinSet(Set<Pin> pins, long expirationTime) {
         if (pins == null) {
@@ -34,15 +36,12 @@ public final class PinSet {
         }
         this.pins = pins;
         this.expirationTime = expirationTime;
+        this.algorithms = pins.stream()
+            .map(pin -> pin.digestAlgorithm)
+            .collect(Collectors.toCollection(ArraySet::new));
     }
 
     Set<String> getPinAlgorithms() {
-        if(algorithms == null){
-            algorithms = new ArraySet<String>();
-            for (Pin pin : pins) {
-                algorithms.add(pin.digestAlgorithm);
-            }
-        }
         return algorithms;
     }
 }
