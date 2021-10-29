@@ -264,8 +264,8 @@ public class ThemeOverlayController extends SystemUI implements Dumpable {
             @Background Handler bgHandler, @Main Executor mainExecutor,
             @Background Executor bgExecutor, ThemeOverlayApplier themeOverlayApplier,
             SecureSettings secureSettings, WallpaperManager wallpaperManager,
-            UserManager userManager, DeviceProvisionedController deviceProvisionedController,
-            UserTracker userTracker, DumpManager dumpManager, FeatureFlags featureFlags,
+            UserManager userManager, DumpManager dumpManager, DeviceProvisionedController deviceProvisionedController,
+            UserTracker userTracker, FeatureFlags featureFlags,
             WakefulnessLifecycle wakefulnessLifecycle) {
         super(context);
 
