@@ -86,6 +86,9 @@ public class NotificationLightsView extends RelativeLayout {
         int duration = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                 Settings.Secure.PULSE_AMBIENT_LIGHT_DURATION, 2,
                 UserHandle.USER_CURRENT) * 1000;
+        int repeat = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.PULSE_AMBIENT_LIGHT_REPEAT, 3,
+                UserHandle.USER_CURRENT);
         int layout = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                 Settings.Secure.PULSE_AMBIENT_LIGHT_LAYOUT, 0,
                 UserHandle.USER_CURRENT);
@@ -107,6 +110,7 @@ public class NotificationLightsView extends RelativeLayout {
         rightViewFaded.setVisibility(layout == 1 ? View.VISIBLE : View.GONE);
         mLightAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 2.0f});
         mLightAnimator.setDuration(duration);
+        mLightAnimator.setRepeatCount(repeat);
         mLightAnimator.addUpdateListener(new AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
                 Log.d("NotificationLightsView", "onAnimationUpdate");

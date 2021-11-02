@@ -10116,6 +10116,12 @@ public final class Settings {
         public static final String PULSE_AMBIENT_LIGHT_DURATION = "pulse_ambient_light_duration";
 
         /**
+         * Repetition of Ambient edge light
+         * @hide
+         */
+        public static final String PULSE_AMBIENT_LIGHT_REPEAT = "pulse_ambient_light_repeat";
+
+        /**
          * Ambient Edge Light Layout
          * @hide
          */
