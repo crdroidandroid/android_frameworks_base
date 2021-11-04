@@ -26,6 +26,7 @@ import android.os.UserManager
 import android.provider.Settings
 import android.util.Log
 import android.util.TypedValue
+import com.android.systemui.Dependency
 import com.android.systemui.broadcast.BroadcastDispatcher
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Background
@@ -70,7 +71,6 @@ class CustomThemeOverlayController @Inject constructor(
     userTracker: UserTracker,
     featureFlags: FeatureFlags,
     wakefulnessLifecycle: WakefulnessLifecycle,
-    private val tunerService: TunerService,
 ) : ThemeOverlayController(
     context,
     broadcastDispatcher,
@@ -96,9 +96,9 @@ class CustomThemeOverlayController @Inject constructor(
     private var whiteLuminance: Double = Double.MIN_VALUE
     private var linearLightness: Boolean = false
     private var customColor: Boolean = false
-
+    private val mTunerService: TunerService = Dependency.get(TunerService::class.java)
     override fun start() {
-        tunerService.addTunable(this, PREF_COLOR_OVERRIDE, PREF_WHITE_LUMINANCE,
+        mTunerService.addTunable(this, PREF_COLOR_OVERRIDE, PREF_WHITE_LUMINANCE,
                 PREF_CHROMA_FACTOR, PREF_ACCURATE_SHADES, PREF_LINEAR_LIGHTNESS, PREF_CUSTOM_COLOR)
         super.start()
     }
@@ -112,6 +112,7 @@ class CustomThemeOverlayController @Inject constructor(
                 chromaFactor = (Settings.Secure.getFloat(mContext.contentResolver,
                         PREF_CHROMA_FACTOR, 100.0f) / 100f).toDouble()
                 accurateShades = Settings.Secure.getInt(mContext.contentResolver, PREF_ACCURATE_SHADES, 1) != 0
+
                 whiteLuminance = parseWhiteLuminanceUser(
                     Settings.Secure.getInt(mContext.contentResolver,
                             PREF_WHITE_LUMINANCE, WHITE_LUMINANCE_USER_DEFAULT)
