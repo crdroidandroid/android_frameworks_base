@@ -1948,7 +1948,7 @@ public final class PowerManagerService extends SystemService
                     + ", groupId=" + groupId + ", uid=" + uid);
         }
 
-        if (eventTime < mLastSleepTime || mForceSuspendActive || !mSystemReady) {
+        if (eventTime < mLastSleepTime || !mSystemReady) {
             return false;
         }
 
@@ -4252,36 +4252,33 @@ public final class PowerManagerService extends SystemService
     }
 
     private boolean forceSuspendInternal(int uid) {
-        try {
-            synchronized (mLock) {
-                mForceSuspendActive = true;
-                // Place the system in an non-interactive state
-                boolean updatePowerState = false;
-                for (int id : mDisplayGroupPowerStateMapper.getDisplayGroupIdsLocked()) {
-                    updatePowerState |= sleepDisplayGroupNoUpdateLocked(id, mClock.uptimeMillis(),
-                            PowerManager.GO_TO_SLEEP_REASON_FORCE_SUSPEND,
-                            PowerManager.GO_TO_SLEEP_FLAG_NO_DOZE, uid);
-                }
-                if (updatePowerState) {
-                    updatePowerStateLocked();
-                }
-
-                // Disable all the partial wake locks as well
-                updateWakeLockDisabledStatesLocked();
+        synchronized (mLock) {
+            mForceSuspendActive = true;
+            // Place the system in an non-interactive state
+            boolean updatePowerState = false;
+            for (int id : mDisplayGroupPowerStateMapper.getDisplayGroupIdsLocked()) {
+                updatePowerState |= sleepDisplayGroupNoUpdateLocked(id, mClock.uptimeMillis(),
+                        PowerManager.GO_TO_SLEEP_REASON_FORCE_SUSPEND,
+                        PowerManager.GO_TO_SLEEP_FLAG_NO_DOZE, uid);
             }
+            if (updatePowerState) {
+                updatePowerStateLocked();
+            }
+
+            // Disable all the partial wake locks as well
+            updateWakeLockDisabledStatesLocked();
 
             Slog.i(TAG, "Force-Suspending (uid " + uid + ")...");
             boolean success = mNativeWrapper.nativeForceSuspend();
             if (!success) {
                 Slog.i(TAG, "Force-Suspending failed in native.");
             }
+
+            mForceSuspendActive = false;
+            // Re-enable wake locks once again.
+            updateWakeLockDisabledStatesLocked();
+
             return success;
-        } finally {
-            synchronized (mLock) {
-                mForceSuspendActive = false;
-                // Re-enable wake locks once again.
-                updateWakeLockDisabledStatesLocked();
-            }
         }
     }
 
