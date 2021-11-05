@@ -64,6 +64,12 @@ public class TestHal extends IBiometricsFingerprint.Stub {
     }
 
     @Override
+    public void onShowUdfpsOverlay() {}
+
+    @Override
+    public void onHideUdfpsOverlay() {}
+
+    @Override
     public long setNotify(IBiometricsFingerprintClientCallback clientCallback) {
         mCallback = clientCallback;
         return 0;
