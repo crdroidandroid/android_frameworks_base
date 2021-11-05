@@ -95,7 +95,7 @@ public class FingerprintEnrollClient extends EnrollClient<IBiometricsFingerprint
 
     @Override
     protected void startHalOperation() {
-        UdfpsHelper.showUdfpsOverlay(getSensorId(),
+        UdfpsHelper.showUdfpsOverlay(getFreshDaemon(), getSensorId(),
                 UdfpsHelper.getReasonFromEnrollReason(mEnrollReason),
                 mUdfpsOverlayController, this);
         SidefpsHelper.showOverlay(mSidefpsController);
@@ -107,7 +107,7 @@ public class FingerprintEnrollClient extends EnrollClient<IBiometricsFingerprint
             Slog.e(TAG, "Remote exception when requesting enroll", e);
             onError(BiometricFingerprintConstants.FINGERPRINT_ERROR_HW_UNAVAILABLE,
                     0 /* vendorCode */);
-            UdfpsHelper.hideUdfpsOverlay(getSensorId(), mUdfpsOverlayController);
+            UdfpsHelper.hideUdfpsOverlay(getFreshDaemon(), getSensorId(), mUdfpsOverlayController);
             SidefpsHelper.hideOverlay(mSidefpsController);
             mCallback.onClientFinished(this, false /* success */);
         }
@@ -115,7 +115,7 @@ public class FingerprintEnrollClient extends EnrollClient<IBiometricsFingerprint
 
     @Override
     protected void stopHalOperation() {
-        UdfpsHelper.hideUdfpsOverlay(getSensorId(), mUdfpsOverlayController);
+        UdfpsHelper.hideUdfpsOverlay(getFreshDaemon(), getSensorId(), mUdfpsOverlayController);
         SidefpsHelper.hideOverlay(mSidefpsController);
         try {
             getFreshDaemon().cancel();
@@ -134,7 +134,7 @@ public class FingerprintEnrollClient extends EnrollClient<IBiometricsFingerprint
         UdfpsHelper.onEnrollmentProgress(getSensorId(), remaining, mUdfpsOverlayController);
 
         if (remaining == 0) {
-            UdfpsHelper.hideUdfpsOverlay(getSensorId(), mUdfpsOverlayController);
+            UdfpsHelper.hideUdfpsOverlay(getFreshDaemon(), getSensorId(), mUdfpsOverlayController);
             SidefpsHelper.hideOverlay(mSidefpsController);
         }
     }
@@ -152,7 +152,7 @@ public class FingerprintEnrollClient extends EnrollClient<IBiometricsFingerprint
     public void onError(int errorCode, int vendorCode) {
         super.onError(errorCode, vendorCode);
 
-        UdfpsHelper.hideUdfpsOverlay(getSensorId(), mUdfpsOverlayController);
+        UdfpsHelper.hideUdfpsOverlay(getFreshDaemon(), getSensorId(), mUdfpsOverlayController);
         SidefpsHelper.hideOverlay(mSidefpsController);
     }
 
