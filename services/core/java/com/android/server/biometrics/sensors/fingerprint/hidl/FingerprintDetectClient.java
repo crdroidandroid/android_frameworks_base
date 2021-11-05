@@ -67,7 +67,7 @@ class FingerprintDetectClient extends AcquisitionClient<IBiometricsFingerprint>
 
     @Override
     protected void stopHalOperation() {
-        UdfpsHelper.hideUdfpsOverlay(getSensorId(), mUdfpsOverlayController);
+        UdfpsHelper.hideUdfpsOverlay(getFreshDaemon(), getSensorId(), mUdfpsOverlayController);
         try {
             getFreshDaemon().cancel();
         } catch (RemoteException e) {
@@ -86,7 +86,7 @@ class FingerprintDetectClient extends AcquisitionClient<IBiometricsFingerprint>
 
     @Override
     protected void startHalOperation() {
-        UdfpsHelper.showUdfpsOverlay(getSensorId(),
+        UdfpsHelper.showUdfpsOverlay(getFreshDaemon(), getSensorId(),
                 IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD,
                 mUdfpsOverlayController, this);
         try {
@@ -95,7 +95,7 @@ class FingerprintDetectClient extends AcquisitionClient<IBiometricsFingerprint>
             Slog.e(TAG, "Remote exception when requesting auth", e);
             onError(BiometricFingerprintConstants.FINGERPRINT_ERROR_HW_UNAVAILABLE,
                     0 /* vendorCode */);
-            UdfpsHelper.hideUdfpsOverlay(getSensorId(), mUdfpsOverlayController);
+            UdfpsHelper.hideUdfpsOverlay(getFreshDaemon(), getSensorId(), mUdfpsOverlayController);
             mCallback.onClientFinished(this, false /* success */);
         }
     }
