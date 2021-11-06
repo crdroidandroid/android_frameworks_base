@@ -470,13 +470,6 @@ public class Clock extends TextView implements
         setTextColor(mNonAdaptedColor);
     }
 
-    // Update text color based when shade scrim changes color.
-    public void onColorsChanged(boolean lightTheme) {
-        final Context context = new ContextThemeWrapper(mContext,
-                lightTheme ? R.style.Theme_SystemUI_LightWallpaper : R.style.Theme_SystemUI);
-        setTextColor(Utils.getColorAttrDefaultColor(context, R.attr.wallpaperTextColor));
-    }
-
     @Override
     public void onDensityOrFontScaleChanged() {
         FontSizeUtils.updateFontSize(this, R.dimen.status_bar_clock_size);
