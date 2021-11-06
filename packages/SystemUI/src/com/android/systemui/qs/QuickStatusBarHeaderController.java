@@ -22,10 +22,8 @@ import android.view.View.OnClickListener;
 
 import androidx.annotation.NonNull;
 
-import com.android.internal.colorextraction.ColorExtractor;
 import com.android.internal.logging.UiEventLogger;
 import com.android.systemui.R;
-import com.android.systemui.colorextraction.SysuiColorExtractor;
 import com.android.systemui.demomode.DemoMode;
 import com.android.systemui.demomode.DemoModeController;
 import com.android.systemui.plugins.ActivityStarter;
@@ -83,9 +81,6 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
     private final String mMicSlot;
     private final String mLocationSlot;
 
-    private SysuiColorExtractor mColorExtractor;
-    private ColorExtractor.OnColorsChangedListener mOnColorsChangedListener;
-
     private PrivacyItemController.Callback mPICCallback = new PrivacyItemController.Callback() {
         @Override
         public void onPrivacyItemsChanged(@NonNull List<PrivacyItem> privacyItems) {
@@ -135,7 +130,6 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
             QuickQSPanelController quickQSPanelController,
             QSCarrierGroupController.Builder qsCarrierGroupControllerBuilder,
             PrivacyLogger privacyLogger,
-            SysuiColorExtractor colorExtractor,
             PrivacyDialogController privacyDialogController,
             QSExpansionPathInterpolator qsExpansionPathInterpolator,
             FeatureFlags featureFlags,
@@ -168,12 +162,6 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
 
         mIconManager = new StatusBarIconController.TintedIconManager(mIconContainer, featureFlags);
         mDemoModeReceiver = new ClockDemoModeReceiver(mClockView);
-        mColorExtractor = colorExtractor;
-        mOnColorsChangedListener = (extractor, which) -> {
-            final boolean lightTheme = mColorExtractor.getNeutralColors().supportsDarkText();
-            mClockView.onColorsChanged(lightTheme);
-        };
-        mColorExtractor.addOnColorsChangedListener(mOnColorsChangedListener);
 
         mCameraSlot = getResources().getString(com.android.internal.R.string.status_bar_camera);
         mMicSlot = getResources().getString(com.android.internal.R.string.status_bar_microphone);
@@ -223,7 +211,6 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
 
     @Override
     protected void onViewDetached() {
-        mColorExtractor.removeOnColorsChangedListener(mOnColorsChangedListener);
         mPrivacyChip.setOnClickListener(null);
         mStatusBarIconController.removeIconGroup(mIconManager);
         mQSCarrierGroupController.setOnSingleCarrierChangedListener(null);
