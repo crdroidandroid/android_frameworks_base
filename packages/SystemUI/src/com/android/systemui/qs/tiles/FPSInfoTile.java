@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2020 crDroidAndroid Project
+ * Copyright (C) 2017-2021 crDroidAndroid Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,9 @@ import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.R;
 
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 import javax.inject.Inject;
 
@@ -114,5 +117,26 @@ public class FPSInfoTile extends QSTileImpl<BooleanState> {
     @Override
     public void handleSetListening(boolean listening) {
         // Do nothing
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return readOneLine(mContext.getResources().getString(R.string.config_fpsInfoSysNode));
+    }
+
+    private static boolean readOneLine(String fname) {
+        BufferedReader br;
+        String line = null;
+        try {
+            br = new BufferedReader(new FileReader(fname), 512);
+            try {
+                line = br.readLine();
+            } finally {
+                br.close();
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }
