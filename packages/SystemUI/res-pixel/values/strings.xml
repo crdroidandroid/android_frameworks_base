@@ -33,8 +33,8 @@
     <string name="columbus_target_request_dialog_title">Allow Quick Tap to open %1$s?</string>
     <string name="config_dockComponent"/>
     <string name="config_preferredEmergencySosPackage">com.google.android.apps.safetyhub</string>
-    <string name="config_systemUIFactoryComponent">com.google.android.systemui.SystemUIGoogleFactory</string>
-    <string name="config_systemUIVendorServiceComponent">com.google.android.systemui.GoogleServices</string>
+    <!--string name="config_systemUIFactoryComponent">com.google.android.systemui.SystemUIGoogleFactory</string>
+    <string name="config_systemUIVendorServiceComponent">com.google.android.systemui.GoogleServices</string-->
     <string name="copied_text_label">Copied text</string>
     <string name="copy_url_description">Text copied</string>
     <string name="defender_notify_des">Your phone is limiting charging to help preserve battery health</string>
