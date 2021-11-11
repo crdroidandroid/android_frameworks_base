@@ -218,9 +218,17 @@ public class AnimatableClockView extends TextView {
     }
 
     void animateDoze(boolean isDozing, boolean animate) {
+        final int color = isDozing ? mDozingColor : mLockScreenColor;
+        setTextStyle(-1 /* weight */,
+                -1,
+                color,
+                false,
+                0,
+                0 /* delay */,
+                null /* onAnimationEnd */);
         setTextStyle(isDozing ? mDozingWeight : mLockScreenWeight /* weight */,
                 -1,
-                isDozing ? mDozingColor : mLockScreenColor,
+                color,
                 animate,
                 DOZE_ANIM_DURATION,
                 0 /* delay */,
