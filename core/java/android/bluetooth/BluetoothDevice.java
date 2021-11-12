@@ -2011,7 +2011,7 @@ public final class BluetoothDevice implements Parcelable, Attributable {
              return false;
          }
          try {
-             return sService.isTwsPlusDevice(this);
+             return sService.isTwsPlusDevice(this, mAttributionSource);
          } catch (RemoteException e) {Log.e(TAG, "", e);}
          return false;
     }
@@ -2029,7 +2029,7 @@ public final class BluetoothDevice implements Parcelable, Attributable {
             return null;
         }
         try {
-            return sService.getTwsPlusPeerAddress(this);
+            return sService.getTwsPlusPeerAddress(this, mAttributionSource);
         } catch (RemoteException e) {Log.e(TAG, "", e);}
         return null;
     }
