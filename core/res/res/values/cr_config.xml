@@ -105,4 +105,7 @@
 
     <!-- Whether key handler sends intent when changing slider position -->
     <string name="config_alertSliderIntent"></string>
+
+    <!-- Whether devices suports in-display fingerprint when screen is off -->
+    <bool name="config_supportScreenOffUdfps">false</bool>
 </resources>

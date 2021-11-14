@@ -72,4 +72,7 @@
     <java-symbol type="id" name="aerr_copy" />
     <java-symbol type="string" name="url_copy_success" />
     <java-symbol type="string" name="url_copy_failed" />
+
+    <!-- Whether devices suports in-display fingerprint when screen is off -->
+    <java-symbol type="bool" name="config_supportScreenOffUdfps" />
 </resources>
