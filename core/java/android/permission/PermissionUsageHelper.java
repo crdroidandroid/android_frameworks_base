@@ -48,6 +48,7 @@ import android.media.AudioManager;
 import android.os.Process;
 import android.os.UserHandle;
 import android.provider.DeviceConfig;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.ArrayMap;
 import android.util.ArraySet;
@@ -99,9 +100,12 @@ public class PermissionUsageHelper implements AppOpsManager.OnOpActiveChangedLis
                 PROPERTY_CAMERA_MIC_ICONS_ENABLED, true) || shouldShowPermissionsHub();
     }
 
-    private static boolean shouldShowLocationIndicator() {
-        return DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_PRIVACY,
-                PROPERTY_LOCATION_INDICATORS_ENABLED, true);
+    private boolean shouldShowLocationIndicator() {
+        return Settings.Secure.getIntForUser(mContext.getContentResolver(),
+            Settings.Secure.ENABLE_LOCATION_PRIVACY_INDICATOR,
+            DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_PRIVACY,
+                PROPERTY_LOCATION_INDICATORS_ENABLED, true) ? 1 : 0,
+            UserHandle.USER_CURRENT) == 1;
     }
 
     private static long getRecentThreshold(Long now) {
