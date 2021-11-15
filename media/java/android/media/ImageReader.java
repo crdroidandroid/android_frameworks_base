@@ -902,9 +902,8 @@ public class ImageReader implements AutoCloseable {
             listener = ir.mListener;
         }
         final boolean isReaderValid;
-        synchronized (ir.mCloseLock) {
-            isReaderValid = ir.mIsReaderValid;
-        }
+
+        isReaderValid = ir.mIsReaderValid;
 
         // It's dangerous to fire onImageAvailable() callback when the ImageReader
         // is being closed, as application could acquire next image in the
@@ -1078,7 +1077,7 @@ public class ImageReader implements AutoCloseable {
 
     private final Object mListenerLock = new Object();
     private final Object mCloseLock = new Object();
-    private boolean mIsReaderValid = false;
+    private volatile boolean mIsReaderValid = false;
     private OnImageAvailableListener mListener;
     private Executor mListenerExecutor;
     private ListenerHandler mListenerHandler;
