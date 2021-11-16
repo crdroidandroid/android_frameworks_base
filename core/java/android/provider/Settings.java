@@ -5640,6 +5640,12 @@ public final class Settings {
         public static final String DISPLAY_HIDE_NOTCH = "display_hide_notch";
 
         /**
+         * Whether to kill notch completely
+         * @hide
+         */
+        public static final String DISPLAY_KILL_NOTCH = "display_kill_notch";
+
+        /**
          * SBC HD priority - whether to use dual channel for SBC by default
          * @hide
          */
