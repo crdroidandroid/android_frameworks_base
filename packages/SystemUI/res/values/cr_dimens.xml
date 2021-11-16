@@ -18,4 +18,8 @@
 
     <!-- Width of the battery icon in the status bar when set to circle style. -->
     <dimen name="status_bar_battery_icon_circle_width">14.5dp</dimen>
+
+    <!-- Screenshot drawables -->
+    <dimen name="screenshot_border_corner_radius">24dp</dimen>
+    <dimen name="screenshot_preview_corner_radius">20dp</dimen>
 </resources>
