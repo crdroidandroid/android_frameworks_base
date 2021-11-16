@@ -212,6 +212,7 @@ public class ThemeAccentUtils {
     public static void setCutoutOverlay(OverlayManager om, boolean enable) {
         UserHandle userId = UserHandle.of(ActivityManager.getCurrentUser());
         try {
+            if (enable) om.setEnabled("com.android.overlay.notchkiller", false, userId);
             om.setEnabled("com.android.overlay.hidecutout", enable, userId);
         } catch (Exception e) {
         }
@@ -229,7 +230,16 @@ public class ThemeAccentUtils {
     public static void setImmersiveOverlay(OverlayManager om, boolean enable) {
         UserHandle userId = UserHandle.of(ActivityManager.getCurrentUser());
         try {
+            if (enable) om.setEnabled("com.android.overlay.notchkiller", false, userId);
             om.setEnabled("com.android.overlay.immersive", enable, userId);
+        } catch (Exception e) {
+        }
+    }
+
+    public static void setKillNotchOverlay(OverlayManager om, boolean enable) {
+        UserHandle userId = UserHandle.of(ActivityManager.getCurrentUser());
+        try {
+            om.setEnabled("com.android.overlay.notchkiller", enable, userId);
         } catch (Exception e) {
         }
     }
