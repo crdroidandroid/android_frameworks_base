@@ -23,4 +23,8 @@
     <dimen name="status_bar_battery_icon_width_landscape">20dp</dimen>
 
     <dimen name="fps_info_text_padding">4dp</dimen>
+
+    <!-- Screenshot drawables -->
+    <dimen name="screenshot_border_corner_radius">24dp</dimen>
+    <dimen name="screenshot_preview_corner_radius">20dp</dimen>
 </resources>
