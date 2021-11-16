@@ -339,6 +339,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.DISPLAY_CUTOUT_MODE;
     private static final String STOCK_STATUSBAR_IN_HIDE =
             "system:" + Settings.System.STOCK_STATUSBAR_IN_HIDE;
+    private static final String DISPLAY_KILL_NOTCH =
+            "system:" + Settings.System.DISPLAY_KILL_NOTCH;
     private static final String QS_PANEL_ICONS_PRIMARY_COLOR =
             "system:" + Settings.System.QS_PANEL_ICONS_PRIMARY_COLOR;
     private static final String STATUS_BAR_SHOW_TICKER =
@@ -832,6 +834,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private int mImmerseMode;
     private boolean mStockStatusBar = true;
     private boolean mPortrait = true;
+    private boolean mKillNotch;
 
     /**
      * Public constructor for StatusBar.
@@ -1048,6 +1051,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, BERRY_ROUNDED_STYLE);
         mTunerService.addTunable(this, DISPLAY_CUTOUT_MODE);
         mTunerService.addTunable(this, STOCK_STATUSBAR_IN_HIDE);
+        mTunerService.addTunable(this, DISPLAY_KILL_NOTCH);
         mTunerService.addTunable(this, QS_PANEL_ICONS_PRIMARY_COLOR);
         mTunerService.addTunable(this, STATUS_BAR_SHOW_TICKER);
         mTunerService.addTunable(this, STATUS_BAR_TICKER_ANIMATION_MODE);
@@ -5234,6 +5238,14 @@ public class StatusBar extends SystemUI implements DemoMode,
                     handleCutout();
                 }
                 break;
+            case DISPLAY_KILL_NOTCH:
+                boolean killNotch =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                if (mKillNotch != killNotch) {
+                    mKillNotch = killNotch;
+                    handleCutout();
+                }
+                break;
             case QS_PANEL_ICONS_PRIMARY_COLOR:
                 if (mQSPanel != null) {
                     mQSPanel.getHost().reloadAllTiles();
@@ -5310,12 +5322,13 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     private void handleCutout() {
-        final boolean immerseMode = mImmerseMode == 1;
-        final boolean hideCutoutMode = mImmerseMode == 2;
+        final boolean immerseMode = !mKillNotch && (mImmerseMode == 1);
+        final boolean hideCutoutMode = !mKillNotch && (mImmerseMode == 2);
 
         setBlackStatusBar(mPortrait && immerseMode);
         ThemeAccentUtils.setImmersiveOverlay(mOverlayManager, immerseMode || hideCutoutMode);
         ThemeAccentUtils.setCutoutOverlay(mOverlayManager, hideCutoutMode);
         ThemeAccentUtils.setStatusBarStockOverlay(mOverlayManager, hideCutoutMode && mStockStatusBar);
+        ThemeAccentUtils.setKillNotchOverlay(mOverlayManager, mKillNotch);
     }
 }
