@@ -66,7 +66,7 @@ public class FeatureFlagReader {
         mResources = resources;
         mSystemPropertiesHelper = systemPropertiesHelper;
         mAreFlagsOverrideable =
-                build.isDebuggable() && mResources.getBoolean(R.bool.are_flags_overrideable);
+                mResources.getBoolean(R.bool.are_flags_overrideable);
     }
 
     /**
