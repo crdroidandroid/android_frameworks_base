@@ -19,7 +19,6 @@
     android:id="@+id/half_shelf_row"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
     android:clickable="true"
     android:orientation="vertical"
     android:foreground="?android:attr/selectableItemBackground"
@@ -28,6 +27,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:orientation="horizontal">
 
         <!-- This is where an icon would go *if we wanted one* **wink** -->
@@ -88,9 +89,9 @@
         />
     </LinearLayout>
     <!-- divider view -->
-    <View
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height=".5dp"
-        android:background="@*android:color/background_device_default_light"
+        android:layout_height="1dp"
+        android:background="@*android:drawable/list_divider_material"
     />
 </com.android.systemui.statusbar.notification.row.ChannelRow>

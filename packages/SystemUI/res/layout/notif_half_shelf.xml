@@ -79,10 +79,10 @@
                     android:padding="8dp" />
             </com.android.systemui.statusbar.notification.row.AppControlView>
             <!-- divider view -->
-            <View
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@*android:color/background_device_default_light"
+                android:layout_height="2dp"
+                android:background="@*android:drawable/list_divider_material"
             />
 
             <!-- ChannelRows get added dynamically -->
