@@ -68,6 +68,8 @@ public final class CategoryKey {
             "com.android.settings.category.ia.smart_battery_settings";
     public static final String CATEGORY_COMMUNAL_SETTINGS =
             "com.android.settings.category.ia.communal";
+    public static final String CATEGORY_CRDROID =
+            "com.android.settings.category.ia.crdroid";
 
     public static final Map<String, String> KEY_COMPAT_MAP;
 
