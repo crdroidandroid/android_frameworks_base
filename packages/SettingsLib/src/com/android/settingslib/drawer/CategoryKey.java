@@ -74,6 +74,8 @@ public final class CategoryKey {
             "com.android.settings.category.ia.more_security_privacy_settings";
     public static final String CATEGORY_SUPERVISION =
             "com.android.settings.category.ia.supervision";
+    public static final String CATEGORY_CRDROID =
+            "com.android.settings.category.ia.crdroid";
 
     public static final Map<String, String> KEY_COMPAT_MAP;
 
