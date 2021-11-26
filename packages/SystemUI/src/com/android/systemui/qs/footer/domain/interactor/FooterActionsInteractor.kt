@@ -89,6 +89,9 @@ interface FooterActionsInteractor {
     /** Show the settings. */
     fun showSettings(expandable: Expandable)
 
+    /** Show the custom settings */
+    fun showCustomSettings(expandable: Expandable)
+
     /** Show the user switcher. */
     fun showUserSwitcher(expandable: Expandable)
 }
@@ -177,6 +180,28 @@ constructor(
                 InteractionJankMonitor.CUJ_SHADE_APP_LAUNCH_FROM_SETTINGS_BUTTON
             ),
         )
+    }
+
+    override fun showCustomSettings(expandable: Expandable) {
+        if (!deviceProvisionedController.isCurrentUserSetup) {
+            // If user isn't setup just unlock the device and dump them back at SUW.
+            activityStarter.postQSRunnableDismissingKeyguard {}
+            return
+        }
+
+        metricsLogger.action(MetricsProto.MetricsEvent.ACTION_QS_EXPANDED_SETTINGS_LAUNCH)
+
+        val intent = Intent()
+        intent.setClassName("com.android.settings",
+                "com.android.settings.Settings\$crDroidSettingsLayoutActivity")
+        activityStarter.startActivity(
+            intent,
+            true /* dismissShade */,
+            expandable.activityTransitionController(
+                InteractionJankMonitor.CUJ_SHADE_APP_LAUNCH_FROM_SETTINGS_BUTTON
+            ),
+        )
+        return
     }
 
     override fun showUserSwitcher(expandable: Expandable) {
