@@ -153,6 +153,7 @@ class FooterActionsViewModel(
                 ),
             backgroundColor = R.attr.shadeInactive,
             this::onSettingsButtonClicked,
+            this::onSettingsButtonLongClicked
         )
 
     /** The model for the power button. */
@@ -171,6 +172,7 @@ class FooterActionsViewModel(
                     ),
                 backgroundColor = R.attr.shadeActive,
                 this::onPowerButtonClicked,
+                this::doNothingLongClick,
             )
         } else {
             null
@@ -246,6 +248,18 @@ class FooterActionsViewModel(
         footerActionsInteractor.showSettings(expandable)
     }
 
+    private fun onSettingsButtonLongClicked(expandable: Expandable): Boolean {
+        if (falsingManager.isFalseTap(FalsingManager.LOW_PENALTY)) {
+            return false
+        }
+
+        return footerActionsInteractor.showCustomSettings(expandable)
+    }
+
+    private fun doNothingLongClick(expandable: Expandable): Boolean {
+        return false
+    }
+
     private fun onPowerButtonClicked(expandable: Expandable) {
         if (falsingManager.isFalseTap(FalsingManager.LOW_PENALTY)) {
             return
@@ -271,6 +285,7 @@ class FooterActionsViewModel(
             iconTint = null,
             backgroundColor = R.attr.shadeInactive,
             onClick = this::onUserSwitcherClicked,
+            onLongClick = this::doNothingLongClick,
         )
     }
 
