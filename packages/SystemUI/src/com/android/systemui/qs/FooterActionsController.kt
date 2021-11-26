@@ -171,6 +171,23 @@ internal class FooterActionsController @Inject constructor(
         inSplitShade = LargeScreenUtils.shouldUseSplitNotificationShade(resources)
     }
 
+    private val onLongClickListener = View.OnLongClickListener { v ->
+        // Don't do anything if the tap looks suspicious.
+        if (!visible || falsingManager.isFalseTap(FalsingManager.LOW_PENALTY)) {
+            return@OnLongClickListener false
+        }
+        if (v === settingsButtonContainer) {
+            if (!deviceProvisionedController.isCurrentUserSetup) {
+                // If user isn't setup just unlock the device and dump them back at SUW.
+                activityStarter.postQSRunnableDismissingKeyguard {}
+                return@OnLongClickListener false
+            }
+            startSubSettingsActivity()
+            return@OnLongClickListener true
+        }
+        return@OnLongClickListener false
+    }
+
     override fun onInit() {
         multiUserSwitchController.init()
         securityFooterController.init()
@@ -193,6 +210,19 @@ internal class FooterActionsController @Inject constructor(
                 true /* dismissShade */, animationController)
     }
 
+    private fun startSubSettingsActivity() {
+        val intent = Intent()
+        intent.setClassName("com.android.settings",
+                "com.android.settings.Settings\$crDroidSettingsLayoutActivity")
+        val animationController = settingsButtonContainer?.let {
+            ActivityLaunchAnimator.Controller.fromView(
+                    it,
+                    InteractionJankMonitor.CUJ_SHADE_APP_LAUNCH_FROM_SETTINGS_BUTTON)
+            }
+        activityStarter.startActivity(intent,
+                true /* dismissShade */, animationController)
+    }
+
     @VisibleForTesting
     public override fun onViewAttached() {
         globalActionsDialog = globalActionsDialogProvider.get()
@@ -203,6 +233,7 @@ internal class FooterActionsController @Inject constructor(
             powerMenuLite.visibility = View.GONE
         }
         settingsButtonContainer.setOnClickListener(onClickListener)
+        settingsButtonContainer.setOnLongClickListener(onLongClickListener)
         multiUserSetting.isListening = true
 
         val securityFooter = securityFooterController.view
