@@ -254,6 +254,15 @@ fun createFooterActionsViewModel(
         footerActionsInteractor.showSettings(expandable)
     }
 
+    fun onSettingsButtonLongClicked(expandable: Expandable) {
+        if (falsingManager.isFalseTap(FalsingManager.LOW_PENALTY)) {
+            return
+        }
+
+        footerActionsInteractor.showCustomSettings(expandable)
+        return
+    }
+
     fun onPowerButtonClicked(expandable: Expandable) {
         if (keyguardStateController.isShowing() && keyguardStateController.isMethodSecure() 
                 && Settings.System.getIntForUser(appContext.getContentResolver(),
@@ -304,7 +313,7 @@ fun createFooterActionsViewModel(
     val settings =
         selectedUserInteractor.isCurrentUserHeadlessSystemUser
             .map { isHeadlessSystemUser ->
-                SettingsActionViewModel(qsThemedContext, ::onSettingsButtonClicked).takeUnless {
+                SettingsActionViewModel(qsThemedContext, ::onSettingsButtonClicked, ::onSettingsButtonLongClicked).takeUnless {
                     hsuQsChanges() && isHeadlessSystemUser
                 }
             }
