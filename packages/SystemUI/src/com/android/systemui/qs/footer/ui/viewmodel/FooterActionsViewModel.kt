@@ -156,6 +156,7 @@ class FooterActionsViewModel(
                 ),
             backgroundColor = R.attr.offStateColor,
             this::onSettingsButtonClicked,
+            this::onSettingsButtonLongClicked
         )
 
     /** The model for the power button. */
@@ -174,6 +175,7 @@ class FooterActionsViewModel(
                     ),
                 backgroundColor = com.android.internal.R.attr.colorAccent,
                 this::onPowerButtonClicked,
+                this::doNothingLongClick,
             )
         } else {
             null
@@ -249,6 +251,18 @@ class FooterActionsViewModel(
         footerActionsInteractor.showSettings(expandable)
     }
 
+    private fun onSettingsButtonLongClicked(expandable: Expandable): Boolean {
+        if (falsingManager.isFalseTap(FalsingManager.LOW_PENALTY)) {
+            return false
+        }
+
+        return footerActionsInteractor.showCustomSettings(expandable)
+    }
+
+    private fun doNothingLongClick(expandable: Expandable): Boolean {
+        return false
+    }
+
     private fun onPowerButtonClicked(expandable: Expandable) {
         val mKeyguard = Dependency.get(KeyguardStateController::class.java)
         if (mKeyguard.isShowing() && mKeyguard.isMethodSecure() 
@@ -280,6 +294,7 @@ class FooterActionsViewModel(
             iconTint = null,
             backgroundColor = R.attr.offStateColor,
             onClick = this::onUserSwitcherClicked,
+            onLongClick = this::doNothingLongClick,
         )
     }
 
