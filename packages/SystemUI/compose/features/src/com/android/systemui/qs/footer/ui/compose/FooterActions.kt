@@ -310,6 +310,7 @@ fun IconButton(
         color = colorAttr(model.backgroundColor),
         shape = CircleShape,
         onClick = model.onClick,
+        onLongClick = model.onLongClick,
         modifier =
             modifier.borderOnFocus(
                 color = MaterialTheme.colorScheme.secondary,
