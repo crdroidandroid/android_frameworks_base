@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.android.compose.animation
 
 import android.content.Context
@@ -21,8 +23,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroupOverlay
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -141,6 +145,7 @@ fun Expandable(
     borderStroke: BorderStroke? = null,
     onClick: ((Expandable) -> Unit)? = null,
     onClickLabel: String? = null,
+    onLongClick: ((Expandable) -> Unit)? = null,
     interactionSource: MutableInteractionSource? = null,
     useModifierBasedImplementation: Boolean = expandableUseModifierImplementation(),
     defaultMinSize: Boolean = true,
@@ -158,6 +163,7 @@ fun Expandable(
         modifier,
         onClick,
         onClickLabel,
+        onLongClick,
         interactionSource,
         useModifierBasedImplementation,
         defaultMinSize,
@@ -199,6 +205,7 @@ fun Expandable(
     modifier: Modifier = Modifier,
     onClick: ((Expandable) -> Unit)? = null,
     onClickLabel: String? = null,
+    onLongClick: ((Expandable) -> Unit)? = null,
     interactionSource: MutableInteractionSource? = null,
     // TODO(b/285250939): Default this to true then remove once the Compose QS expandables have
     // proven that the new implementation is robust.
@@ -220,7 +227,7 @@ fun Expandable(
     }
 
     if (useModifierBasedImplementation) {
-        Box(modifier.expandable(controller, onClick, onClickLabel, interactionSource)) {
+        Box(modifier.expandable(controller, onClick, onClickLabel, onLongClick, interactionSource)) {
             WrappedContent(
                 controller.expandable,
                 controller.contentColor,
@@ -263,7 +270,7 @@ fun Expandable(
     // If this expandable is expanded when it's being directly clicked on, let's ensure that it has
     // the minimum interactive size followed by all M3 components (48.dp).
     val minInteractiveSizeModifier =
-        if (onClick != null) {
+        if (onClick != null || onLongClick != null) {
             Modifier.minimumInteractiveComponentSize()
         } else {
             Modifier
@@ -308,7 +315,7 @@ fun Expandable(
                 modifier
                     .updateExpandableSize()
                     .then(minInteractiveSizeModifier)
-                    .then(clickModifier(controller, onClick, onClickLabel, interactionSource))
+                    .then(clickModifier(controller, onClick, onClickLabel, onLongClick, interactionSource))
                     .animatedBackground(color, shape = shape)
                     .border(controller)
                     .onGloballyPositioned {
@@ -362,6 +369,7 @@ private fun Modifier.expandable(
     controller: ExpandableController,
     onClick: ((Expandable) -> Unit)? = null,
     onClickLabel: String? = null,
+    onLongClick: ((Expandable) -> Unit)? = null,
     interactionSource: MutableInteractionSource? = null,
 ): Modifier {
     val controller = controller as ExpandableControllerImpl
@@ -378,7 +386,7 @@ private fun Modifier.expandable(
     return this.thenIf(onClick != null) { Modifier.minimumInteractiveComponentSize() }
         .thenIf(drawContent) {
             Modifier.border(controller)
-                .then(clickModifier(controller, onClick, onClickLabel, interactionSource))
+                .then(clickModifier(controller, onClick, onClickLabel, onLongClick, interactionSource))
                 .animatedBackground(controller.color, shape = controller.shape)
         }
         .onPlaced { coords ->
@@ -487,28 +495,45 @@ private fun clickModifier(
     controller: ExpandableControllerImpl,
     onClick: ((Expandable) -> Unit)?,
     onClickLabel: String? = null,
+    onLongClick: ((Expandable) -> Unit)?,
     interactionSource: MutableInteractionSource?,
 ): Modifier {
-    if (onClick == null) {
+    if (onClick == null && onLongClick == null) {
         return Modifier
     }
 
-    if (interactionSource != null) {
-        // If the caller provided an interaction source, then that means that they will draw the
-        // click indication themselves.
+    // If the caller provided an interaction source, then that means that they will draw the
+    // click indication themselves.
+    if (interactionSource != null && onLongClick != null) {
+        return Modifier.combinedClickable(
+            interactionSource,
+            indication = null,
+            onClickLabel = onClickLabel,
+            onLongClick = { onLongClick?.invoke(controller.expandable) },
+            onClick = { onClick?.invoke(controller.expandable) }
+        )
+    } else if (interactionSource != null) {
         return Modifier.clickable(
             interactionSource,
             indication = null,
             onClickLabel = onClickLabel,
         ) {
-            onClick(controller.expandable)
+            onClick?.invoke(controller.expandable)
         }
     }
 
     // If no interaction source is provided, we draw the default indication (a ripple) and make sure
     // it's clipped by the expandable shape.
-    return Modifier.clip(controller.shape).clickable(onClickLabel = onClickLabel) {
-        onClick(controller.expandable)
+    if (onLongClick != null) {
+        return Modifier.clip(controller.shape).combinedClickable(
+            onClickLabel = onClickLabel,
+            onLongClick = { onLongClick?.invoke(controller.expandable) },
+            onClick = { onClick?.invoke(controller.expandable) }
+        )
+    } else {
+        return Modifier.clip(controller.shape).clickable(onClickLabel = onClickLabel) {
+            onClick?.invoke(controller.expandable)
+        }
     }
 }
 
