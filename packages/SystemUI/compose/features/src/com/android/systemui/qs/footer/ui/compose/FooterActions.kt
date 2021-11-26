@@ -266,6 +266,7 @@ fun IconButton(model: FooterActionsButtonViewModel, modifier: Modifier = Modifie
         color = colorAttr(model.backgroundColor),
         shape = CircleShape,
         onClick = model.onClick,
+        onLongClick = model.onLongClick,
         modifier =
             modifier.borderOnFocus(
                 color = MaterialTheme.colorScheme.secondary,
