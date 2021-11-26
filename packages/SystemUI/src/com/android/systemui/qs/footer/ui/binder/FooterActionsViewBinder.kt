@@ -240,6 +240,7 @@ class FooterActionsViewBinder @Inject constructor() {
             }
         buttonView.setBackgroundResource(backgroundResource)
         buttonView.setOnClickListener { model.onClick(Expandable.fromView(buttonView)) }
+        buttonView.setOnLongClickListener { model.onLongClick(Expandable.fromView(buttonView)) }
 
         val icon = model.icon
         val iconView = button.icon
