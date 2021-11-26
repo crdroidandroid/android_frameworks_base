@@ -391,6 +391,7 @@ private fun IconButton(
     CircleExpandable(
         color = colors.background,
         onClick = model.onClick,
+        onLongClick = model.onLongClick,
         modifier = modifier,
         useModifierBasedImplementation = useModifierBasedExpandable,
     ) {
@@ -469,6 +470,7 @@ private fun CircleExpandable(
     contentColor: Color = contentColorFor(color),
     borderStroke: BorderStroke? = null,
     onClick: ((Expandable) -> Unit)? = null,
+    onLongClick: ((Expandable) -> Unit)? = null,
     interactionSource: MutableInteractionSource? = null,
     useModifierBasedImplementation: Boolean,
     content: @Composable (Expandable) -> Unit,
@@ -479,6 +481,7 @@ private fun CircleExpandable(
         borderStroke = borderStroke,
         shape = CircleShape,
         onClick = onClick,
+        onLongClick = onLongClick,
         interactionSource = interactionSource,
         modifier =
             modifier.borderOnFocus(

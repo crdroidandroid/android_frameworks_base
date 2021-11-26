@@ -37,6 +37,7 @@ sealed interface FooterActionsButtonViewModel {
     val iconTintFallback: Int?
     val backgroundColorFallback: Int
     val onClick: (Expandable) -> Unit
+    val onLongClick: ((Expandable) -> Unit)?
 
     data class UserSwitcherViewModel(
         override val icon: Icon,
@@ -45,11 +46,13 @@ sealed interface FooterActionsButtonViewModel {
         override val id: Int = R.id.multi_user_switch
         @ColorInt override val iconTintFallback: Int? = null
         @AttrRes override val backgroundColorFallback: Int = R.attr.shadeInactive
+        override val onLongClick: ((Expandable) -> Unit)? = null
     }
 
     data class SettingsActionViewModel(
         private val context: Context,
         override val onClick: (Expandable) -> Unit,
+        override val onLongClick: (Expandable) -> Unit,
     ) : FooterActionsButtonViewModel {
         override val id: Int = R.id.settings_button_container
         override val icon: Icon =
@@ -77,5 +80,6 @@ sealed interface FooterActionsButtonViewModel {
         override val iconTintFallback: Int =
             Utils.getColorAttrDefaultColor(context, R.attr.onShadeActive)
         @AttrRes override val backgroundColorFallback: Int = R.attr.shadeActive
+        override val onLongClick: ((Expandable) -> Unit)? = null
     }
 }
