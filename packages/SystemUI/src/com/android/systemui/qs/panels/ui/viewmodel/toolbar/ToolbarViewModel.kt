@@ -57,7 +57,7 @@ constructor(
     val powerButtonViewModel = powerButtonViewModel(qsThemedContext, ::onPowerButtonClicked)
 
     val settingsButtonViewModel =
-        settingsButtonViewModel(qsThemedContext, ::onSettingsButtonClicked)
+        settingsButtonViewModel(qsThemedContext, ::onSettingsButtonClicked, ::onSettingsButtonLongClicked)
 
     val userSwitcherViewModel: FooterActionsButtonViewModel? by
         hydrator.hydratedStateOf(
@@ -102,6 +102,10 @@ constructor(
 
     private fun onSettingsButtonClicked(expandable: Expandable) {
         falsingInteractor.runIfNotFalseTap { footerActionsInteractor.showSettings(expandable) }
+    }
+
+    private fun onSettingsButtonLongClicked(expandable: Expandable) {
+        falsingInteractor.runIfNotFalseTap { footerActionsInteractor.showCustomSettings(expandable) }
     }
 
     @AssistedFactory
