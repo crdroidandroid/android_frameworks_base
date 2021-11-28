@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2021 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">ᱵᱷᱩᱞ</string>
+    <string name="omnijaws_service_unkown">ᱚᱠᱟ ᱯᱟᱜᱚ ᱰᱟᱴᱟ ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
+    <string name="omnijaws_service_error_long">ᱯᱚᱜᱚ ᱰᱟᱴᱟ ᱞᱟᱫᱮ ᱰᱤᱜᱟᱹᱣ</string>
+    <string name="omnijaws_service_disabled">ᱥᱟᱹᱨᱣᱤᱥ ᱵᱚᱸᱫᱚ ᱮᱱᱟ</string>
+    <string name="omnijaws_detail_header">ᱯᱟᱜᱚ</string>
+    <string name="omnijaws_label_default">ᱯᱟᱜᱚ</string>
+    <string name="omnijaws_current_text">ᱱᱤᱛᱟᱹᱜ</string>
+    <string name="omnijaws_package_not_available">OmniJaws ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
+    <string name="omnijaws_service_last_update">ᱢᱟᱲᱟᱝ ᱟᱹᱯᱰᱮᱴ:</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">ᱡᱷᱚᱛᱚ ᱵᱮᱲᱟ ᱮᱢ ᱪᱷᱚ</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">ᱰᱟᱴᱟ ᱠᱟᱰ ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮᱸ</string>
+    <string name="qs_data_switch_changed_1">ᱢᱚᱵᱟᱭᱤᱞ ᱰᱟᱴᱟ ᱞᱲᱹᱜᱤᱫᱽ SIM ᱑ ᱵᱮᱵᱷᱟᱨᱚᱜ ᱠᱟᱱᱟ</string>
+    <string name="qs_data_switch_changed_2">ᱢᱚᱵᱟᱭᱤᱞ ᱰᱟᱴᱟ ᱞᱲᱹᱜᱤᱫᱽ SIM ᱒ ᱵᱮᱵᱷᱟᱨᱚᱜ ᱠᱟᱱᱟ</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • ᱰᱮᱥ ᱪᱟᱨᱡᱤᱝ (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> ᱯᱩᱨᱟᱹᱣ ᱦᱟᱹᱵᱤᱡᱽ)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • ᱰᱮᱥ ᱪᱟᱨᱡᱤᱝ</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • ᱣᱨᱟᱯ ᱪᱟᱨᱡᱤᱝ(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> ᱯᱩᱨᱟᱹᱣ ᱦᱟᱹᱵᱤᱡᱽ)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • ᱣᱨᱟᱯ ᱪᱟᱨᱡᱤᱝ</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC ᱪᱨᱡᱤᱝ (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> ᱯᱩᱨᱟᱹᱣ ᱦᱟᱹᱵᱤᱡᱽ)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC ᱪᱟᱨᱡᱤᱝ</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">CPU ᱵᱤᱵᱨᱚᱬ</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">FPS ᱵᱤᱵᱨᱚᱬ</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">ᱥᱟᱡᱟᱣ ᱨᱮ ᱠᱷᱮᱞ ᱢᱳᱰ ᱵᱚᱸᱫᱽ ᱢᱮᱸ</string>
+    <string name="quick_settings_gaming_mode_label">ᱜᱮᱢᱤᱝ ᱚᱵᱚᱥᱛᱟ</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">ᱥᱢᱟᱨᱴ ᱯᱤᱠᱥᱟᱹᱞᱥ</string>
+    <string name="quick_settings_smart_pixels_on_power_save">ᱟᱡᱽ ᱛᱮ ᱨᱴᱮᱢ ᱟᱠᱟᱱ ᱥᱢᱟᱨᱴ ᱯᱤᱠᱥᱟᱹᱞᱥ</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">ᱨᱤᱵᱩᱻᱴ</string>
+    <string name="quick_settings_reboot_recovery_label">ᱨᱤᱠᱟᱹᱣᱨᱤ</string>
+    <string name="quick_settings_poweroff_label">ᱯᱟᱣᱟᱹᱨ ᱵᱚᱸᱫᱽ</string>
+    <!-- Sound Search tile -->
+    <string name="quick_settings_sound_search">Sound search</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">ᱥᱟᱲᱮ</string>
+    <string name="quick_settings_sound_ring">ᱨᱤᱝ</string>
+    <string name="quick_settings_sound_vibrate">ᱛᱷᱟᱨᱼᱛᱷᱟᱨᱟᱣ</string>
+    <string name="quick_settings_sound_dnd">ᱟᱞᱚ ᱦᱟᱨᱠᱮᱛᱟ</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">ᱠᱚᱢᱯᱟᱥ</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">ᱮᱦᱚᱵᱽᱚᱜ ᱠᱟᱱᱟ\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">ᱠᱚᱢᱯᱟᱥ ᱵᱚᱸᱫᱽ ᱾</string>
+    <string name="accessibility_quick_settings_compass_on">ᱠᱚᱢᱯᱟᱥ ᱮᱢ ᱪᱷᱚ ᱾</string>
+    <string name="quick_settings_compass_N">N</string>
+    <string name="quick_settings_compass_NE">NE</string>
+    <string name="quick_settings_compass_E">E</string>
+    <string name="quick_settings_compass_SE">SE</string>
+    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_SW">SW</string>
+    <string name="quick_settings_compass_W">W</string>
+    <string name="quick_settings_compass_NW">NW</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">ᱯᱟᱹᱨᱥᱤ</string>
+    <string name="quick_settings_locale_more_locales_toast">ᱴᱚᱜᱟᱹ ᱯᱷᱟᱸᱥᱚᱱᱟᱞᱤᱴᱭ ᱮᱢ ᱪᱷᱚ ᱞᱟᱹᱜᱤᱫᱽ ᱫᱚᱭᱟᱠᱟᱛᱮ ᱟᱢᱟ ᱯᱟᱹᱨᱥᱤ ᱠᱚ ᱴᱷᱤᱠ ᱢᱮᱸ</string>
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">ᱱᱚᱶᱟ ᱫᱚ</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">ᱱᱚᱶᱟ ᱫᱚ</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">ᱢᱤᱫᱽᱴᱟᱹᱝ</string>
+    <string name="text_clock_h_two">ᱵᱟᱨᱭᱟ</string>
+    <string name="text_clock_h_three">ᱯᱮᱭᱟ</string>
+    <string name="text_clock_h_four">ᱯᱩᱱ</string>
+    <string name="text_clock_h_five">ᱢᱚᱲᱮ</string>
+    <string name="text_clock_h_six">ᱛᱩᱨᱩᱭ</string>
+    <string name="text_clock_h_seven">ᱮᱭᱟᱭ</string>
+    <string name="text_clock_h_eight">ᱤᱨᱟᱹᱞ</string>
+    <string name="text_clock_h_nine">ᱟᱨᱮᱞ</string>
+    <string name="text_clock_h_ten">ᱜᱮᱞ</string>
+    <string name="text_clock_h_eleven">ᱜᱮᱞ ᱢᱤᱫᱽ</string>
+    <string name="text_clock_h_twelve">ᱜᱮᱞ ᱵᱟᱨ</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">ᱴᱟ</string>
+    <string name="text_clock_m_one">ᱴᱟ ᱢᱤᱫᱽ</string>
+    <string name="text_clock_m_two">ᱴᱟ ᱵᱟᱨ</string>
+    <string name="text_clock_m_three">ᱴᱟ ᱯᱮ</string>
+    <string name="text_clock_m_four">ᱴᱟ ᱯᱩᱱ</string>
+    <string name="text_clock_m_five">ᱴᱟ ᱢᱚᱲᱮ</string>
+    <string name="text_clock_m_six">ᱴᱟ ᱛᱩᱨᱩᱭ</string>
+    <string name="text_clock_m_seven">ᱴᱟ ᱮᱭᱟᱭ</string>
+    <string name="text_clock_m_eight">ᱴᱟ ᱤᱨᱟᱹᱞ</string>
+    <string name="text_clock_m_nine">ᱴᱟ ᱟᱨᱮᱞ</string>
+    <string name="text_clock_m_ten">ᱜᱮᱞ</string>
+    <string name="text_clock_m_eleven">ᱜᱮᱞ ᱢᱤᱫᱽ</string>
+    <string name="text_clock_m_twelve">ᱜᱮᱞ ᱵᱟᱨ</string>
+    <string name="text_clock_m_thirteen">ᱜᱮᱞ ᱯᱮ</string>
+    <string name="text_clock_m_fourteen">ᱜᱮᱞ ᱯᱩᱱ</string>
+    <string name="text_clock_m_fifteen">ᱜᱮᱞ ᱢᱚᱬᱮ</string>
+    <string name="text_clock_m_sixteen">ᱜᱮᱞ ᱛᱩᱨᱩᱭ</string>
+    <string name="text_clock_m_seventeen">ᱜᱮᱞ ᱮᱭᱟᱭ</string>
+    <string name="text_clock_m_eighteen">ᱜᱮᱞ ᱤᱨᱟᱹᱞ</string>
+    <string name="text_clock_m_nineteen">ᱜᱮᱞ ᱟᱨᱮᱞ</string>
+    <string name="text_clock_m_twenty">ᱵᱟᱨ ᱜᱮᱞ</string>
+    <string name="text_clock_m_twenty_one">ᱵᱟᱨ ᱜᱮᱞ‌ ᱢᱤᱫᱽ</string>
+    <string name="text_clock_m_twenty_two">ᱵᱟᱨ ᱜᱮᱞ‌ ᱵᱟᱨ</string>
+    <string name="text_clock_m_twenty_three">ᱵᱟᱨ ᱜᱮᱞ‌ ᱯᱮ</string>
+    <string name="text_clock_m_twenty_four">ᱵᱟᱨ ᱜᱮᱞ‌ ᱯᱩᱱ</string>
+    <string name="text_clock_m_twenty_five">ᱵᱟᱨ ᱜᱮᱞ‌ ᱢᱚᱬᱮ</string>
+    <string name="text_clock_m_twenty_six">ᱵᱟᱨ ᱜᱮᱞ‌ ᱛᱩᱨᱩᱭ</string>
+    <string name="text_clock_m_twenty_seven">ᱵᱟᱨ ᱜᱮᱞ‌ ᱮᱭᱟᱭ</string>
+    <string name="text_clock_m_twenty_eight">ᱵᱟᱨ ᱜᱮᱞ‌ ᱤᱨᱟᱹᱞ</string>
+    <string name="text_clock_m_twenty_nine">ᱵᱟᱨ ᱜᱮᱞ‌ ᱟᱨᱮᱞ</string>
+    <string name="text_clock_m_thirty">ᱯᱮ ᱜᱮᱞ</string>
+    <string name="text_clock_m_thirty_one">ᱯᱮ ᱜᱮᱞ ᱢᱤᱫᱽ</string>
+    <string name="text_clock_m_thirty_two">ᱯᱮ ᱜᱮᱞ ᱵᱟᱨ</string>
+    <string name="text_clock_m_thirty_three">ᱯᱮ ᱜᱮᱞ ᱯᱮ</string>
+    <string name="text_clock_m_thirty_four">ᱯᱮ ᱜᱮᱞ ᱯᱩᱱ</string>
+    <string name="text_clock_m_thirty_five">ᱯᱮ ᱜᱮᱞ ᱢᱚᱲᱮ</string>
+    <string name="text_clock_m_thirty_six">ᱯᱮ ᱜᱮᱞ ᱛᱩᱨᱩᱭ</string>
+    <string name="text_clock_m_thirty_seven">ᱯᱮ ᱜᱮᱞ ᱮᱭᱥᱭ</string>
+    <string name="text_clock_m_thirty_eight">ᱯᱮ ᱜᱮᱞ ᱤᱨᱟᱹᱞ</string>
+    <string name="text_clock_m_thirty_nine">ᱯᱮ ᱜᱮᱞ ᱤᱨᱟᱹᱞ</string>
+    <string name="text_clock_m_forty">ᱯᱩᱱ ᱜᱮᱞ</string>
+    <string name="text_clock_m_forty_one">ᱯᱩᱱ ᱜᱮᱞ ᱢᱤᱫᱽ</string>
+    <string name="text_clock_m_forty_two">ᱯᱩᱱ ᱜᱮᱞ ᱵᱨ</string>
+    <string name="text_clock_m_forty_three">ᱯᱩᱱ ᱜᱮᱞ ᱯᱮ</string>
+    <string name="text_clock_m_forty_four">ᱯᱩᱱ ᱜᱮᱞ ᱯᱩᱱ</string>
+    <string name="text_clock_m_forty_five">ᱯᱩᱱ ᱜᱮᱞ ᱢᱚᱬᱮ</string>
+    <string name="text_clock_m_forty_six">ᱯᱩᱱ ᱜᱮᱞ ᱛᱩᱨᱩᱭ</string>
+    <string name="text_clock_m_forty_seven">ᱯᱩᱱ ᱜᱮᱞ ᱮᱭᱥᱭ</string>
+    <string name="text_clock_m_forty_eight">ᱯᱩᱱ ᱜᱮᱞ ᱤᱨᱟᱹᱞ</string>
+    <string name="text_clock_m_forty_nine">ᱯᱩᱱ ᱜᱮᱞ ᱟᱨᱮᱞ</string>
+    <string name="text_clock_m_fifty">ᱢᱚᱬᱮ ᱜᱮᱞ</string>
+    <string name="text_clock_m_fifty_one">ᱢᱚᱬᱮ ᱜᱮᱞ ᱢᱤᱫᱽ</string>
+    <string name="text_clock_m_fifty_two">ᱢᱚᱬᱮ ᱜᱮᱞ ᱵᱟᱨ</string>
+    <string name="text_clock_m_fifty_three">ᱢᱚᱬᱮ ᱜᱮᱞ ᱯᱮ</string>
+    <string name="text_clock_m_fifty_four">ᱢᱚᱬᱮ ᱜᱮᱞ ᱯᱩᱱ</string>
+    <string name="text_clock_m_fifty_five">ᱢᱚᱬᱮ ᱜᱮᱞ ᱢᱚᱬᱮ</string>
+    <string name="text_clock_m_fifty_six">ᱢᱚᱬᱮ ᱜᱮᱞ ᱛᱩᱨᱩᱭ</string>
+    <string name="text_clock_m_fifty_seven">ᱢᱚᱬᱮ ᱜᱮᱞ ᱮᱭᱟᱭ</string>
+    <string name="text_clock_m_fifty_eight">ᱢᱚᱬᱮ ᱜᱮᱞ ᱤᱨᱟᱹᱞ</string>
+    <string name="text_clock_m_fifty_nine">ᱢᱚᱬᱮ ᱜᱮᱞ ᱟᱨᱮᱞ</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Tux clock -->
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Today is %s</string>
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">ᱜᱮᱫ ᱜᱤᱰᱤ</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">ᱥᱠᱨᱤᱱ ᱨᱮᱠᱚᱰᱤᱝ ᱢᱮᱴᱟᱣ ᱮᱱᱟ</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">ᱯᱨᱟᱭᱚᱨᱤᱴᱭ</string>
+    <string name="volume_ringer_alarms_only">ᱟᱠᱟᱨᱟᱢᱠᱚ</string>
+    <string name="volume_ringer_dnd">DnD</string>
+    <string name="tristate_flashlight_on">ᱴᱚᱨᱪ ᱮᱢ ᱪᱷᱚ</string>
+    <string name="tristate_flashlight_off">ᱴᱚᱨᱪ ᱵᱚᱸᱫ</string>
+    <string name="tristate_flashlight_blink">ᱴᱚᱨᱪ ᱡᱤᱲᱤᱵ</string>
+    <string name="tristate_brightness_bright">ᱡᱟᱹᱥᱼᱡᱷᱟᱞᱠᱟᱣᱠᱚ</string>
+    <string name="tristate_brightness_dark">ᱢᱤᱱᱼᱡᱷᱟᱞᱠᱟᱣᱠᱚ</string>
+    <string name="tristate_brightness_auto">ᱟᱡᱼᱛᱮᱡᱷᱟᱞᱠᱟᱣ</string>
+    <string name="tristate_rotation_auto">ᱟᱡ ᱛᱮ ᱟᱹᱪᱩᱨ</string>
+    <string name="tristate_rotation_0">ᱯᱚᱴᱨᱮᱴ</string>
+    <string name="tristate_rotation_90">ᱞᱮᱸᱰᱥᱠᱮᱯ (᱙᱐°)</string>
+    <string name="tristate_rotation_270">ᱞᱮᱸᱰᱥᱠᱮᱯ (᱒᱗᱐°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">ᱵᱚᱸᱫᱽ ᱰᱚᱴ ᱫᱮᱠᱷᱟᱣ\nᱩᱪᱟᱹᱲ ᱞᱟᱹᱜᱤᱫᱹᱽ ᱡᱩᱨ ᱚᱛᱟᱭ ᱢᱮ</string>
+    <string name="screenrecord_lowquality_label">ᱠᱟᱹᱴᱤᱡ ᱨᱮᱫ ᱢᱟᱯ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱢ ᱠᱣᱟᱞᱤᱴᱭ</string>
+    <!-- Biometric Dialog - Use Face -->
+    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <!-- Daily data usage -->
+    <string name="daily_data_usage_title">Today\'s usage</string>
+    <!-- App Lock -->
+    <string name="applock_locked">&#160;is locked</string>
+    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
+    <string name="applock_face">&#160;or your face to unlock</string>
+    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
+    <string name="applock_credential">&#160;to unlock</string>
+    <string name="applock_unlock">Unlock</string>
+    <!-- Power menu QS tile -->
+    <string name="quick_settings_power_menu_label">Power menu</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Force stop?</string>
+    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="guts_force_close_app">Force stop</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Play media to</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">Audio mode</string>
+    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+</resources>

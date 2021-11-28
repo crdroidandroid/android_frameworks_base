@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2021 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">Chyba</string>
+    <string name="omnijaws_service_unkown">Žiadne údaje o počasí</string>
+    <string name="omnijaws_service_error_long">Chyba pri načítavaní údajov o počasí</string>
+    <string name="omnijaws_service_disabled">Služba je vypnutá</string>
+    <string name="omnijaws_detail_header">Počasie</string>
+    <string name="omnijaws_label_default">Počasie</string>
+    <string name="omnijaws_current_text">Teraz</string>
+    <string name="omnijaws_package_not_available">OmniJaws nie je k dispozícii</string>
+    <string name="omnijaws_service_last_update">Posledná aktualizácia:</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">Always-on displej</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Prepnúť SIM pre dáta</string>
+    <string name="qs_data_switch_changed_1">Mobilné dáta sú používané na SIM 1</string>
+    <string name="qs_data_switch_changed_2">Mobilné dáta sú používané na SIM 2</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • DASH nabíjanie (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> do plného nabitia)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • DASH nabíjanie</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percent">%2$s</xliff:g> • Warp Nabíjanie (<xliff:g id="charging_time_left" príklad="4 hodiny a 2 minúty">%1$s</xliff:g> do nabitia)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percent">%s</xliff:g> • Warp Nabíjanie</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC nabíjanie (zostáva <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> do úplného nabitia)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC nabíjanie</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Informácie o CPU</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">FPS Info</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Herný režim je vypnutý v Nastavení</string>
+    <string name="quick_settings_gaming_mode_label">Herný režim</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Smart Pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Automaticky zapnúť Smart Pixels</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">Reštartovať</string>
+    <string name="quick_settings_reboot_recovery_label">Recovery</string>
+    <string name="quick_settings_poweroff_label">Vypnúť</string>
+    <!-- Sound Search tile -->
+    <string name="quick_settings_sound_search">Zvukové vyhľadávanie</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">Zvuk</string>
+    <string name="quick_settings_sound_ring">Zvonenie</string>
+    <string name="quick_settings_sound_vibrate">Vibrácie</string>
+    <string name="quick_settings_sound_dnd">Nevyrušovať</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Kompas</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Inicializácia\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Kompas vypnutý.</string>
+    <string name="accessibility_quick_settings_compass_on">Kompas zapnutý.</string>
+    <string name="quick_settings_compass_N">S</string>
+    <string name="quick_settings_compass_NE">SV</string>
+    <string name="quick_settings_compass_E">V</string>
+    <string name="quick_settings_compass_SE">JV</string>
+    <string name="quick_settings_compass_S">J</string>
+    <string name="quick_settings_compass_SW">JZ</string>
+    <string name="quick_settings_compass_W">Z</string>
+    <string name="quick_settings_compass_NW">SZ</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Jazyk</string>
+    <string name="quick_settings_locale_more_locales_toast">Konfiguráciou viacerých jazykov povolíte funkciu prepínania</string>
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">Je</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">Je</annotation>\n^1\n^2</item>
+        <item quantity="few"><annotation name="color">Sú</annotation>\n^1\n^2</item>
+        <item quantity="many"><annotation name="color">Sú</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">Jedna</string>
+    <string name="text_clock_h_two">Dve</string>
+    <string name="text_clock_h_three">Tri</string>
+    <string name="text_clock_h_four">Štyri</string>
+    <string name="text_clock_h_five">Päť</string>
+    <string name="text_clock_h_six">Šesť</string>
+    <string name="text_clock_h_seven">Sedem</string>
+    <string name="text_clock_h_eight">Osem</string>
+    <string name="text_clock_h_nine">Deväť</string>
+    <string name="text_clock_h_ten">Desať</string>
+    <string name="text_clock_h_eleven">Jedenásť</string>
+    <string name="text_clock_h_twelve">Dvanásť</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">Hodiny</string>
+    <string name="text_clock_m_one"></string>
+    <string name="text_clock_m_two"></string>
+    <string name="text_clock_m_three"></string>
+    <string name="text_clock_m_four"></string>
+    <string name="text_clock_m_five"></string>
+    <string name="text_clock_m_six"></string>
+    <string name="text_clock_m_seven"></string>
+    <string name="text_clock_m_eight"></string>
+    <string name="text_clock_m_nine"></string>
+    <string name="text_clock_m_ten">Desať</string>
+    <string name="text_clock_m_eleven">Jedenásť</string>
+    <string name="text_clock_m_twelve">Dvanásť</string>
+    <string name="text_clock_m_thirteen">Trinásť</string>
+    <string name="text_clock_m_fourteen">Štrnásť</string>
+    <string name="text_clock_m_fifteen">Pätnásť</string>
+    <string name="text_clock_m_sixteen">Šestnásť</string>
+    <string name="text_clock_m_seventeen">Sedemnásť</string>
+    <string name="text_clock_m_eighteen">Osemnásť</string>
+    <string name="text_clock_m_nineteen">Devätnásť</string>
+    <string name="text_clock_m_twenty">Dvadsať</string>
+    <string name="text_clock_m_twenty_one">Dvadsať jedna</string>
+    <string name="text_clock_m_twenty_two">Dvadsať dva</string>
+    <string name="text_clock_m_twenty_three">Dvadsať tri</string>
+    <string name="text_clock_m_twenty_four">Dvadsať štyri</string>
+    <string name="text_clock_m_twenty_five">Dvadsať päť</string>
+    <string name="text_clock_m_twenty_six">Dvadsať šesť</string>
+    <string name="text_clock_m_twenty_seven">Dvadsať sedem</string>
+    <string name="text_clock_m_twenty_eight">Dvadsať osem</string>
+    <string name="text_clock_m_twenty_nine">Dvadsať deväť</string>
+    <string name="text_clock_m_thirty">Tridsať</string>
+    <string name="text_clock_m_thirty_one">Tridsať jedna</string>
+    <string name="text_clock_m_thirty_two">Tridsať dva</string>
+    <string name="text_clock_m_thirty_three">Tridsať tri</string>
+    <string name="text_clock_m_thirty_four">Tridsať štyri</string>
+    <string name="text_clock_m_thirty_five">Tridsať päť</string>
+    <string name="text_clock_m_thirty_six">Tridsať šesť</string>
+    <string name="text_clock_m_thirty_seven">Tridsať sedem</string>
+    <string name="text_clock_m_thirty_eight">Tridsať osem</string>
+    <string name="text_clock_m_thirty_nine">Tridsať deväť</string>
+    <string name="text_clock_m_forty">Štyridsať</string>
+    <string name="text_clock_m_forty_one">Štyridsať jedna</string>
+    <string name="text_clock_m_forty_two">Štyridsať dva</string>
+    <string name="text_clock_m_forty_three">Štyridsať tri</string>
+    <string name="text_clock_m_forty_four">Štyridsať štyri</string>
+    <string name="text_clock_m_forty_five">Štyridsať päť</string>
+    <string name="text_clock_m_forty_six">Štyridsať šesť</string>
+    <string name="text_clock_m_forty_seven">Štyridsať sedem</string>
+    <string name="text_clock_m_forty_eight">Štyridsať osem</string>
+    <string name="text_clock_m_forty_nine">Štyridsať deväť</string>
+    <string name="text_clock_m_fifty">Päťdesiat</string>
+    <string name="text_clock_m_fifty_one">Päťdesiat jedna</string>
+    <string name="text_clock_m_fifty_two">Päťdesiat dva</string>
+    <string name="text_clock_m_fifty_three">Päťdesiat tri</string>
+    <string name="text_clock_m_fifty_four">Päťdesiat štyri</string>
+    <string name="text_clock_m_fifty_five">Päťdesiat päť</string>
+    <string name="text_clock_m_fifty_six">Päťdesiat šesť</string>
+    <string name="text_clock_m_fifty_seven">Päťdesiat sedem</string>
+    <string name="text_clock_m_fifty_eight">Päťdesiat osem</string>
+    <string name="text_clock_m_fifty_nine">Päťdesiat deväť</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Tux clock -->
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">Dnes je %s</string>
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">Odstrániť</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">Záznam obrazovky bol odstránený</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Priorita</string>
+    <string name="volume_ringer_alarms_only">Budíky</string>
+    <string name="volume_ringer_dnd">Nerušiť</string>
+    <string name="tristate_flashlight_on">Svietidlo zapnuté</string>
+    <string name="tristate_flashlight_off">Svietidlo vypnuté</string>
+    <string name="tristate_flashlight_blink">Blikání svietidla</string>
+    <string name="tristate_brightness_bright">Maximálny jas</string>
+    <string name="tristate_brightness_dark">Minimálny jas</string>
+    <string name="tristate_brightness_auto">Automatický jas</string>
+    <string name="tristate_rotation_auto">Automatická rotácia</string>
+    <string name="tristate_rotation_0">Na výšku</string>
+    <string name="tristate_rotation_90">Na šírku (90°)</string>
+    <string name="tristate_rotation_270">Na šírku (270°)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">Zobraziť bodku pre zastavenie nahrávania\nDluhým stlačením ji presuniete</string>
+    <string name="screenrecord_lowquality_label">Nižšia kvalita pre zabezpečenie menšej veľkosti súboru</string>
+    <!-- Biometric Dialog - Use Face -->
+    <string name="biometric_dialog_button_use_face">Použiť tvár</string>
+    <!-- Daily data usage -->
+    <string name="daily_data_usage_title">Dnešné využitie</string>
+    <!-- App Lock -->
+    <string name="applock_locked">&#160;je uzamknutá</string>
+    <string name="applock_fingerprint_face">, odomknúť odtlačkom prsta alebo tvárou</string>
+    <string name="applock_face">&#160;alebo odomknite tvárou</string>
+    <string name="applock_fingerprint">&#160;alebo odomknite odtlačkom prsta</string>
+    <string name="applock_credential">&#160;odomknúť</string>
+    <string name="applock_unlock">Odomknúť</string>
+    <!-- Power menu QS tile -->
+    <string name="quick_settings_power_menu_label">Ponuka napájania</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Vynútiť zastavenie?</string>
+    <string name="force_stop_dlg_text">Vynútené ukončenie môže spôsobiť nepredvídateľné správanie aplikácie.</string>
+    <string name="guts_force_close_app">Vynútiť zastavenie</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">Prehrať médiá do</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">Zvukový režim</string>
+    <string name="quick_settings_monotoggle_tile_mono">Mono zvuk</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Stereo zvuk</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+</resources>

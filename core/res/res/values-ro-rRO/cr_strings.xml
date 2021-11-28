@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2021 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Falsifică semnătura pachetului</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Permite aplicației să pretindă că este o aplicație diferită. Aplicațiile rău-intenționate ar putea să utilizeze aceasta pentru a accesa datele aplicațiilor private. Acordați această permisiune numai cu prudență!</string>
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_fake_package_signature">Falsifică semnătura pachetului</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_fake_package_signature">permite falsificarea semnăturii pachetului</string>
+    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
+    <string name="permgrouprequest_fake_package_signature">Permiteți
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; să falsificați semnătura pachetului?</string>
+    <!-- Gaming mode -->
+    <string name="notification_channel_gaming">Mod pentru jocuri</string>
+    <string name="gaming_mode_notification_title">Mod pentru jocuri activat</string>
+    <string name="gaming_mode_notification_content">Apasa pentru a opri mod pentru jocuri</string>
+    <string name="gaming_mode_enabled_toast">Mod pentru jocuri pornit</string>
+    <string name="gaming_mode_disabled_toast">Mod pentru jocuri oprit</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Apăsați și țineți apăsat butonul de alimentare pentru a debloca</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Copiază URL-ul jurnalului de eroare</string>
+    <string name="url_copy_success">URL-ul a fost copiat cu succes</string>
+    <string name="url_copy_failed">A apărut o eroare la încărcarea registrului în pasty</string>
+    <!-- Clipboard access toast -->
+    <string name="app_clipboard_access_denied">%1$s nu are acces la clipboard</string>
+    <string name="app_clipboard_access_granted">%1$s a primit acces la clipboard</string>
+</resources>
