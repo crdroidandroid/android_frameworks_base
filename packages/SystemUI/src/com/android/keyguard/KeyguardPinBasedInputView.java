@@ -146,7 +146,6 @@ public abstract class KeyguardPinBasedInputView extends KeyguardAbsKeyInputView 
         mOkButton = findViewById(R.id.key_enter);
 
         mDeleteButton = findViewById(R.id.delete_button);
-        mDeleteButton.setVisibility(View.VISIBLE);
 
         mButtons[0] = findViewById(R.id.key0);
         mButtons[1] = findViewById(R.id.key1);

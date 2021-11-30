@@ -162,7 +162,9 @@
                 >
             <com.android.keyguard.NumPadButton
                     android:id="@+id/delete_button"
+                    android:visibility="invisible"
                     android:layout_width="@dimen/num_pad_key_width"
+                    android:translationX="@dimen/num_pad_key_width"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="@dimen/num_pad_key_margin_end"
                     android:contentDescription="@string/keyboardview_keycode_delete"
@@ -178,7 +180,9 @@
                     />
             <com.android.keyguard.NumPadButton
                     android:id="@+id/key_enter"
+                    android:visibility="invisible"
                     android:layout_width="@dimen/num_pad_key_width"
+                    android:translationX="@dimen/neg_num_pad_key_width"
                     android:layout_height="match_parent"
                     style="@style/NumPadKey.Enter"
                     android:contentDescription="@string/keyboardview_keycode_enter"

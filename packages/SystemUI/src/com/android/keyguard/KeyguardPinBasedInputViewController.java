@@ -67,14 +67,27 @@ public abstract class KeyguardPinBasedInputViewController<T extends KeyguardPinB
         mPasswordEntry = mView.findViewById(mView.getPasswordTextViewId());
     }
 
+    private void setVisibilityButton(View view, int visibility, boolean left) {
+        int length = /*getResources().getDimensionPixelSize(R.dimen.num_pad_key_width);*/ 72;
+        view.animate()
+            .alpha(visibility == View.VISIBLE ? 1f : 0f)
+            .translationX(visibility == View.VISIBLE ? 0 : (left ? length : -length))
+            .setDuration(500);
+        view.setVisibility(visibility);
+    }
+
     @Override
     protected void onViewAttached() {
         super.onViewAttached();
 
+        View okButton = mView.findViewById(R.id.key_enter);
+        View deleteButton = mView.findViewById(R.id.delete_button);
         for (NumPadKey button: mView.getButtons()) {
             button.setOnTouchListener((v, event) -> {
                 if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
                     mFalsingCollector.avoidGesture();
+                    setVisibilityButton(okButton, View.VISIBLE, false);
+                    setVisibilityButton(deleteButton, View.VISIBLE, true);
                 }
                 return false;
             });
@@ -82,12 +95,15 @@ public abstract class KeyguardPinBasedInputViewController<T extends KeyguardPinB
         mPasswordEntry.setOnKeyListener(mOnKeyListener);
         mPasswordEntry.setUserActivityListener(this::onUserInput);
 
-        View deleteButton = mView.findViewById(R.id.delete_button);
         deleteButton.setOnTouchListener(mActionButtonTouchListener);
         deleteButton.setOnClickListener(v -> {
             // check for time-based lockouts
             if (mPasswordEntry.isEnabled()) {
                 mPasswordEntry.deleteLastChar();
+            }
+            if (mPasswordEntry.getText().length() == 0) {
+                    setVisibilityButton(okButton, View.INVISIBLE, false);
+                    setVisibilityButton(deleteButton, View.INVISIBLE, true);
             }
         });
         deleteButton.setOnLongClickListener(v -> {
@@ -96,10 +112,12 @@ public abstract class KeyguardPinBasedInputViewController<T extends KeyguardPinB
                 mView.resetPasswordText(true /* animate */, true /* announce */);
             }
             mView.doHapticKeyClick();
+            setVisibilityButton(okButton, View.INVISIBLE, false);
+            setVisibilityButton(deleteButton, View.INVISIBLE, true);
+
             return true;
         });
 
-        View okButton = mView.findViewById(R.id.key_enter);
         if (okButton != null) {
             okButton.setOnTouchListener(mActionButtonTouchListener);
             okButton.setOnClickListener(new View.OnClickListener() {
