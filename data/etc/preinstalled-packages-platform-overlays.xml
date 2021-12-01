@@ -53,58 +53,6 @@
     <install-in-user-type package="com.android.internal.systemui.onehanded.gestural">
         <install-in user-type="FULL" />
     </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.amethyst">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.aquamarine">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.black">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.carbon">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.cinnamon">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.green">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.ocean">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.orchid">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.palette">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.purple">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.sand">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.space">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.color.tangerine">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
     <install-in-user-type package="com.android.theme.font.notoserifsource">
         <install-in user-type="FULL" />
         <install-in user-type="PROFILE" />
@@ -226,30 +174,6 @@
         <install-in user-type="PROFILE" />
     </install-in-user-type>
     <install-in-user-type package="com.android.theme.icon_pack.victor.themepicker">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.icon.pebble">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.icon.roundedrect">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.icon.squircle">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.icon.taperedrect">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.icon.teardrop">
-        <install-in user-type="FULL" />
-        <install-in user-type="PROFILE" />
-    </install-in-user-type>
-    <install-in-user-type package="com.android.theme.icon.vessel">
         <install-in user-type="FULL" />
         <install-in user-type="PROFILE" />
     </install-in-user-type>
