@@ -573,6 +573,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
 
         ShutDownAction shutdownAction = new ShutDownAction();
         RestartAction restartAction = new RestartAction();
+        RestartActionAdvanced restartActionAdvanced = new RestartActionAdvanced();
 
         AdvancedAction restartRecoveryAction = new AdvancedAction(
                 RESTART_RECOVERY_BUTTON,
@@ -637,10 +638,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                 continue;
             }
             if (GLOBAL_ACTION_KEY_POWER.equals(actionKey)) {
-                if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_POWER, 1) == 1) {
-                    addIfShouldShowAction(tempActions, shutdownAction);
-                }
+                addIfShouldShowAction(tempActions, shutdownAction);
             } else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
                         Settings.System.POWERMENU_AIRPLANE, 0) == 1) {
@@ -681,12 +679,13 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                 addIfShouldShowAction(tempActions, getAssistAction());
             } else if (GLOBAL_ACTION_KEY_RESTART.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_RESTART, 1) == 1) {
+                        Settings.System.POWERMENU_ADVANCED, 1) == 0) {
                     addIfShouldShowAction(tempActions, restartAction);
                 }
             } else if (GLOBAL_ACTION_KEY_ADVANCED_RESTART.equals(actionKey)) {
                 if (Settings.System.getInt(mContext.getContentResolver(),
                         Settings.System.POWERMENU_ADVANCED, 1) == 1) {
+                    mPowerItems.add(restartActionAdvanced);
                     mPowerItems.add(restartRecoveryAction);
                     mPowerItems.add(restartBootloaderAction);
                     mPowerItems.add(restartSystemUiAction);
@@ -807,8 +806,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     @VisibleForTesting
     protected final class PowerOptionsAction extends SinglePressAction {
         private PowerOptionsAction() {
-            super(com.android.systemui.R.drawable.ic_restart_advanced,
-                    com.android.systemui.R.string.global_action_restart_advanced);
+            super(R.drawable.ic_restart, R.string.global_action_restart);
         }
 
         @Override
@@ -965,6 +963,39 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     final class RestartAction extends SinglePressAction implements LongPressAction {
         RestartAction() {
             super(R.drawable.ic_restart, R.string.global_action_restart);
+        }
+
+        @Override
+        public boolean onLongPress() {
+            mUiEventLogger.log(GlobalActionsEvent.GA_REBOOT_LONG_PRESS);
+            if (!mUserManager.hasUserRestriction(UserManager.DISALLOW_SAFE_BOOT)) {
+                mWindowManagerFuncs.reboot(true);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean showDuringKeyguard() {
+            return true;
+        }
+
+        @Override
+        public boolean showBeforeProvisioning() {
+            return true;
+        }
+
+        @Override
+        public void onPress() {
+            mUiEventLogger.log(GlobalActionsEvent.GA_REBOOT_PRESS);
+            mWindowManagerFuncs.reboot(false);
+        }
+    }
+
+    @VisibleForTesting
+    final class RestartActionAdvanced extends SinglePressAction implements LongPressAction {
+        RestartActionAdvanced() {
+            super(R.drawable.ic_restart, com.android.systemui.R.string.global_action_restart_system);
         }
 
         @Override
