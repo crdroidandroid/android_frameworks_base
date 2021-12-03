@@ -486,4 +486,6 @@ public interface CentralSurfaces extends Dumpable, LifecycleOwner {
     void updateDismissAllVisibility(boolean visible);
 
     void updateDismissAllButton();
+
+    void setBlockedGesturalNavigation(boolean blocked);
 }

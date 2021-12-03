@@ -169,6 +169,7 @@ public class CommandQueue extends IStatusBar.Stub implements
     private static final int MSG_ENTER_STAGE_SPLIT_FROM_RUNNING_APP = 71 << MSG_SHIFT;
     private static final int MSG_SHOW_MEDIA_OUTPUT_SWITCHER = 72 << MSG_SHIFT;
     private static final int MSG_TOGGLE_TASKBAR = 73 << MSG_SHIFT;
+    private static final int MSG_SET_BLOCKED_GESTURAL_NAVIGATION = 74 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -500,6 +501,8 @@ public class CommandQueue extends IStatusBar.Stub implements
          * @see IStatusBar#showMediaOutputSwitcher
          */
         default void showMediaOutputSwitcher(String packageName) {}
+
+        default void setBlockedGesturalNavigation(boolean blocked) {}
     }
 
     @VisibleForTesting
@@ -1355,6 +1358,16 @@ public class CommandQueue extends IStatusBar.Stub implements
         mHandler.obtainMessage(MSG_GO_TO_FULLSCREEN_FROM_SPLIT).sendToTarget();
     }
 
+    @Override
+    public void setBlockedGesturalNavigation(boolean blocked) {
+        synchronized (mLock) {
+            if (mHandler.hasMessages(MSG_SET_BLOCKED_GESTURAL_NAVIGATION)) {
+                mHandler.removeMessages(MSG_SET_BLOCKED_GESTURAL_NAVIGATION);
+            }
+            mHandler.obtainMessage(MSG_SET_BLOCKED_GESTURAL_NAVIGATION, blocked).sendToTarget();
+        }
+    }
+
     private final class H extends Handler {
         private H(Looper l) {
             super(l);
@@ -1820,6 +1833,9 @@ public class CommandQueue extends IStatusBar.Stub implements
                     for (int i = 0; i < mCallbacks.size(); i++) {
                         mCallbacks.get(i).showMediaOutputSwitcher(clientPackageName);
                     }
+                    break;
+                case MSG_SET_BLOCKED_GESTURAL_NAVIGATION:
+                    mCallbacks.forEach(cb -> cb.setBlockedGesturalNavigation((Boolean) msg.obj));
                     break;
             }
         }
