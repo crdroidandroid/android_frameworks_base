@@ -399,4 +399,6 @@ public interface CentralSurfaces extends Dumpable, LifecycleOwner {
     void brightnessControl(MotionEvent event);
 
     void onBrightnessChanged(boolean upOrCancel);
+
+    void setBlockedGesturalNavigation(boolean blocked);
 }
