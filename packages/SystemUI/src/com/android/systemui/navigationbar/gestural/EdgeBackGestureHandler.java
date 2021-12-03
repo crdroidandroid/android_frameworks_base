@@ -322,6 +322,8 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
 
     private boolean mIsEdgeHapticEnabled;
 
+    private boolean mBlockedGesturalNavigation;
+
     EdgeBackGestureHandler(Context context, OverviewProxyService overviewProxyService,
             SysUiState sysUiState, PluginManager pluginManager, @Main Executor executor,
             BroadcastDispatcher broadcastDispatcher, ProtoTracer protoTracer,
@@ -492,6 +494,10 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
         mIsNavBarShownTransiently = isTransient;
     }
 
+    public void setBlockedGesturalNavigation(boolean blocked) {
+        mBlockedGesturalNavigation = blocked;
+    }
+
     private void disposeInputChannel() {
         if (mInputEventReceiver != null) {
             mInputEventReceiver.dispose();
@@ -554,7 +560,11 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
                     "edge-swipe", mDisplayId);
             mInputEventReceiver = new InputChannelCompat.InputEventReceiver(
                     mInputMonitor.getInputChannel(), Looper.getMainLooper(),
-                    Choreographer.getInstance(), this::onInputEvent);
+                    Choreographer.getInstance(), event -> {
+                        if (!mBlockedGesturalNavigation) {
+                            onInputEvent(event);
+                        }
+                    });
 
             // Add a nav bar panel window
             setEdgeBackPlugin(
