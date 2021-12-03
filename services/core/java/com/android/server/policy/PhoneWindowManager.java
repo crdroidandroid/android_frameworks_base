@@ -5619,7 +5619,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             Intent torchOff = new Intent(ACTION_TORCH_OFF);
             torchOff.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY
                     | Intent.FLAG_RECEIVER_FOREGROUND);
-            mTorchOffPendingIntent = PendingIntent.getBroadcast(mContext, 0, torchOff, 0);
+            mTorchOffPendingIntent = PendingIntent.getBroadcast(mContext, 0, torchOff,
+                    PendingIntent.FLAG_IMMUTABLE);
             mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + mTorchTimeout * 1000, mTorchOffPendingIntent);
         }
