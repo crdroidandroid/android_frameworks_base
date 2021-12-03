@@ -106,6 +106,9 @@ interface ShadeViewController {
     @Deprecated("This interface is deprecated in Scene Container")
     val shadeFoldAnimator: ShadeFoldAnimator
 
+    /** Blocks gestural navigation */
+    fun setBlockedGesturalNavigation(blocked: Boolean)
+
     companion object {
         /**
          * Returns a multiplicative factor to use when determining the falsing threshold for touches

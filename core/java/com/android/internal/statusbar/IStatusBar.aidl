@@ -396,4 +396,9 @@ oneway interface IStatusBar
     * @param displayId the id of the current display.
     */
     void moveFocusedTaskToDesktop(int displayId);
+
+    /**
+     * Used to block or unblock usage of gestural navigation
+     */
+    void setBlockedGesturalNavigation(boolean blocked);
 }
