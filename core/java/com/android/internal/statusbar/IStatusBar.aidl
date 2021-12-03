@@ -338,4 +338,9 @@ oneway interface IStatusBar
      * @param leftOrTop indicates where the stage split is.
      */
     void enterStageSplitFromRunningApp(boolean leftOrTop);
+
+    /**
+     * Used to block or unblock usage of gestural navigation
+     */
+    void setBlockedGesturalNavigation(boolean blocked);
 }
