@@ -428,9 +428,8 @@ public final class TimeDetectorStrategyImpl implements TimeDetectorStrategy {
 
         // Suggestion is definitely wrong if it comes before lower time bound.
         if (lowerBound.isAfter(Instant.ofEpochMilli(newUtcTime.getValue()))) {
-            Slog.w(LOG_TAG, "Suggestion points to time before lower bound, skipping it. "
+            Slog.w(LOG_TAG, "Suggestion points to time before lower bound. "
                     + "suggestion=" + suggestion + ", lower bound=" + lowerBound);
-            return false;
         }
 
         return true;
