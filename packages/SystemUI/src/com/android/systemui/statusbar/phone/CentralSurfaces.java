@@ -583,4 +583,6 @@ public interface CentralSurfaces extends Dumpable, ActivityStarter, LifecycleOwn
     View getDismissAllButton();
 
     void updateDismissAllVisibility(boolean visible);
+
+    void setBlockedGesturalNavigation(boolean blocked);
 }
