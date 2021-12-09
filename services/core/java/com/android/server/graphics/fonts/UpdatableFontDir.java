@@ -74,7 +74,7 @@ final class UpdatableFontDir {
     interface FsverityUtil {
         boolean hasFsverity(String path);
 
-        void setUpFsverity(String path, byte[] pkcs7Signature) throws IOException;
+        void setUpFsverity(String path) throws IOException;
 
         boolean rename(File src, File dest);
     }
@@ -189,7 +189,7 @@ final class UpdatableFontDir {
                     continue;
                 }
                 File[] files = dir.listFiles();
-                if (files == null || files.length != 1) {
+                if (files == null || files.length != 2) {
                     Slog.e(TAG, "Unexpected files in dir: " + dir);
                     return;
                 }
@@ -247,8 +247,7 @@ final class UpdatableFontDir {
             for (FontUpdateRequest request : requests) {
                 switch (request.getType()) {
                     case FontUpdateRequest.TYPE_UPDATE_FONT_FILE:
-                        installFontFile(
-                                request.getFd().getFileDescriptor(), request.getSignature());
+                        installFontFile(request.getFd().getFileDescriptor());
                         break;
                     case FontUpdateRequest.TYPE_UPDATE_FONT_FAMILY:
                         FontUpdateRequest.Family family = request.getFontFamily();
@@ -295,11 +294,9 @@ final class UpdatableFontDir {
      * because existing Zygote-forked processes have paths to old font files.
      *
      * @param fd             A file descriptor to the font file.
-     * @param pkcs7Signature A PKCS#7 detached signature to enable fs-verity for the font file.
      * @throws SystemFontException if error occurs.
      */
-    private void installFontFile(FileDescriptor fd, byte[] pkcs7Signature)
-            throws SystemFontException {
+    private void installFontFile(FileDescriptor fd) throws SystemFontException {
         File newDir = getRandomDir(mFilesDir);
         if (!newDir.mkdir()) {
             throw new SystemFontException(
@@ -327,8 +324,7 @@ final class UpdatableFontDir {
             try {
                 // Do not parse font file before setting up fs-verity.
                 // setUpFsverity throws IOException if failed.
-                mFsverityUtil.setUpFsverity(tempNewFontFile.getAbsolutePath(),
-                        pkcs7Signature);
+                mFsverityUtil.setUpFsverity(tempNewFontFile.getAbsolutePath());
             } catch (IOException e) {
                 throw new SystemFontException(
                         FontManager.RESULT_ERROR_VERIFICATION_FAILURE,
