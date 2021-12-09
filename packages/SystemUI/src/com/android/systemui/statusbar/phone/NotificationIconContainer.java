@@ -26,6 +26,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Icon;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Property;
 import android.view.ContextThemeWrapper;
@@ -790,9 +792,11 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
                     }
                 }
                 icon.setVisibleState(visibleState, animationsAllowed);
-                if (icon.getStatusBarIcon().pkg.contains("systemui"))
-                icon.setIconColor(mInNotificationIconShelf ? mThemedTextColorPrimary : iconColor,
-                        needsCannedAnimation && animationsAllowed);
+                boolean newIconStyle = Settings.System.getIntForUser(getContext().getContentResolver(),
+                            Settings.System.STATUSBAR_COLORED_ICONS, 0, UserHandle.USER_CURRENT) == 1;
+                if (icon.getStatusBarIcon().pkg.contains("systemui") || !newIconStyle)
+                    icon.setIconColor(mInNotificationIconShelf ? mThemedTextColorPrimary : iconColor,
+                            needsCannedAnimation && animationsAllowed);
                 if (animate) {
                     animateTo(icon, animationProperties);
                 } else {
@@ -812,7 +816,9 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
             super.initFrom(view);
             if (view instanceof StatusBarIconView) {
                 StatusBarIconView icon = (StatusBarIconView) view;
-                if (icon.getStatusBarIcon().pkg.contains("systemui"))
+                boolean newIconStyle = Settings.System.getIntForUser(getContext().getContentResolver(),
+                            Settings.System.STATUSBAR_COLORED_ICONS, 0, UserHandle.USER_CURRENT) == 1;
+                if (icon.getStatusBarIcon().pkg.contains("systemui") || !newIconStyle)
                     iconColor = ((StatusBarIconView) view).getStaticDrawableColor();
                 else
                     return;
