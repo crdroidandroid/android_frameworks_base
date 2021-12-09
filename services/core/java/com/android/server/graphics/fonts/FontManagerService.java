@@ -39,7 +39,6 @@ import android.util.Slog;
 
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.graphics.fonts.IFontManager;
-import com.android.internal.security.VerityUtils;
 import com.android.internal.util.DumpUtils;
 import com.android.internal.util.Preconditions;
 import com.android.server.LocalServices;
@@ -47,11 +46,16 @@ import com.android.server.SystemService;
 
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.DirectByteBuffer;
 import java.nio.NioUtils;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -154,20 +158,72 @@ public final class FontManagerService extends IFontManager.Stub {
     }
 
     private static class FsverityUtilImpl implements UpdatableFontDir.FsverityUtil {
+        private static final String HASH_ALGORITHM = "SHA-512";
+        private static final String HASH_FILE_EXT = ".sha512";
+
         @Override
         public boolean hasFsverity(String filePath) {
-            return VerityUtils.hasFsverity(filePath);
+            // Check for matching hashes instead of relying on fs verity feature.
+            // If both hash and font file has been tampered with (not corrupt file,
+            // but malicious modification) then we have way bigger problems.
+            final File fontFile = new File(filePath);
+            final File hashFile = new File(filePath + HASH_FILE_EXT);
+            return fontFile.isFile() && hashFile.isFile()
+                && checkHash(fontFile.toPath(), hashFile.toPath());
         }
 
         @Override
-        public void setUpFsverity(String filePath, byte[] pkcs7Signature) throws IOException {
-            VerityUtils.setUpFsverity(filePath, pkcs7Signature);
+        public void setUpFsverity(String filePath) throws IOException {
+            final File fontFile = new File(filePath);
+            if (!fontFile.isFile()) return;
+
+            createHashFile(fontFile.toPath(), new File(filePath + HASH_FILE_EXT));
         }
 
         @Override
         public boolean rename(File src, File dest) {
-            // rename system call preserves fs-verity bit.
-            return src.renameTo(dest);
+            if (!src.renameTo(dest)) return false;
+
+            final File srcHash = new File(src.getAbsolutePath() + HASH_FILE_EXT);
+            if (!srcHash.isFile()) return false;
+
+            final File destHash = new File(dest.getAbsolutePath() + HASH_FILE_EXT);
+            return srcHash.renameTo(destHash);
+        }
+
+        private static final boolean checkHash(Path filePath, Path hashPath) {
+            final byte[] fileBytes;
+            final byte[] hashBytes;
+            try {
+                 fileBytes = Files.readAllBytes(filePath);
+                 hashBytes = Files.readAllBytes(hashPath);
+            } catch (IOException e) {
+                Slog.e(TAG, "IOException while reading to buffer, " + e.getMessage());
+                return false;
+            }
+            final MessageDigest messageDigest;
+            try {
+                messageDigest = MessageDigest.getInstance(HASH_ALGORITHM);
+            } catch (NoSuchAlgorithmException ignored) {
+                return false;
+            }
+            return messageDigest.isEqual(messageDigest.digest(fileBytes), hashBytes);
+        }
+
+        private static final void createHashFile(Path filePath,
+                File hashFile) throws IOException {
+            final byte[] fileBytes = Files.readAllBytes(filePath);
+            final MessageDigest messageDigest;
+            try {
+                messageDigest = MessageDigest.getInstance(HASH_ALGORITHM);
+            } catch (NoSuchAlgorithmException ignored) {
+                return;
+            }
+            final byte[] hash = messageDigest.digest(fileBytes);
+            try (FileOutputStream fos = new FileOutputStream(hashFile)) {
+                fos.write(hash);
+                fos.flush();
+            }
         }
     }
 
@@ -202,8 +258,6 @@ public final class FontManagerService extends IFontManager.Stub {
     private static UpdatableFontDir createUpdatableFontDir(boolean safeMode) {
         // Never read updatable font files in safe mode.
         if (safeMode) return null;
-        // If apk verity is supported, fs-verity should be available.
-        if (!VerityUtils.isFsVeritySupported()) return null;
         return new UpdatableFontDir(new File(FONT_FILES_DIR), new OtfFontFileParser(),
                 new FsverityUtilImpl(), new File(CONFIG_XML_FILE));
     }
