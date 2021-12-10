@@ -31,6 +31,7 @@ import java.util.Map;
 public class PixelPropsUtils {
 
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
+    private static final String DEVICE = "ro.product.device";
     private static final boolean DEBUG = false;
 
     private static final Map<String, Object> propsToChange;
@@ -117,6 +118,20 @@ public class PixelPropsUtils {
             "com.mobile.legends"
     };
 
+    // Codenames for currently supported Pixels by Google
+    private static final String[] pixelCodenames = {
+            "oriole",
+            "raven",
+            "redfin",
+            "barbet",
+            "bramble",
+            "sunfish",
+            "coral",
+            "flame",
+            "bonito",
+            "sargo"
+    };
+
     private static volatile boolean sIsGms = false;
 
     static {
@@ -166,13 +181,17 @@ public class PixelPropsUtils {
         if (packageName.startsWith("com.google.")
                 || Arrays.asList(extraPackagesToChange).contains(packageName)) {
 
+            boolean isPixelDevice = Arrays.asList(pixelCodenames).contains(SystemProperties.get(DEVICE));
+
             if (packageName.equals("com.google.android.apps.photos")) {
                 if (SystemProperties.getBoolean("persist.sys.pixelprops.gphotos", true)) {
                     propsToChange.putAll(propsToChangePixelXL);
                 } else {
+                    if (isPixelDevice) return;
                     propsToChange.putAll(propsToChangePixel5);
                 }
             } else {
+                if (isPixelDevice) return;
                 if (Arrays.asList(packagesToChangePixel6).contains(packageName)) {
                     propsToChange.putAll(propsToChangePixel6);
                 } else if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
