@@ -168,7 +168,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mSystemIconArea = mStatusBar.findViewById(R.id.system_icon_area);
         mCustomIconArea = mStatusBar.findViewById(R.id.left_icon_area);
         mCenterClockLayout = mStatusBar.findViewById(R.id.centered_area);
-        mClockController = mStatusBar.getClockController();
+        mClockController = new ClockController(getContext(), mStatusBar);
         mOngoingCallChip = mStatusBar.findViewById(R.id.ongoing_call_chip);
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
@@ -371,19 +371,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     /** Displays the ongoing call chip. */
     public void showOngoingCallChip(boolean animate) {
         animateShow(mOngoingCallChip, animate);
-    }
-
-    /**
-     * If panel is expanded/expanding it usually means QS shade is opening, so
-     * don't set the clock GONE otherwise it'll mess up the animation.
-     */
-    private int clockHiddenMode() {
-        if (!mStatusBar.isClosed() && !mKeyguardStateController.isShowing()
-                && !mStatusBarStateController.isDozing()
-                && mClockController.getClock().shouldBeVisible()) {
-            return View.INVISIBLE;
-        }
-        return View.GONE;
     }
 
     public void hideNotificationIconArea(boolean animate) {

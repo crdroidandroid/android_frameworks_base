@@ -70,7 +70,6 @@ public class PhoneStatusBarView extends PanelBar {
         }
     };
     private DarkReceiver mBattery;
-    private ClockController mClockController;
     private int mRotationOrientation = -1;
     @Nullable
     private View mCenterIconSpace;
@@ -110,7 +109,6 @@ public class PhoneStatusBarView extends PanelBar {
     @Override
     public void onFinishInflate() {
         mBattery = findViewById(R.id.battery);
-        mClockController = new ClockController(getContext(), this);
         mCutoutSpace = findViewById(R.id.cutout_space_view);
         mCenterIconSpace = findViewById(R.id.centered_icon_area);
 
@@ -122,7 +120,6 @@ public class PhoneStatusBarView extends PanelBar {
         super.onAttachedToWindow();
         // Always have Battery meters in the status bar observe the dark/light modes.
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mBattery);
-        mClockController.addDarkReceiver();
         if (updateOrientationAndCutout()) {
             updateLayoutForCutout();
         }
@@ -132,7 +129,6 @@ public class PhoneStatusBarView extends PanelBar {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         Dependency.get(DarkIconDispatcher.class).removeDarkReceiver(mBattery);
-        mClockController.removeDarkReceiver();
         mDisplayCutout = null;
     }
 
@@ -398,9 +394,5 @@ public class PhoneStatusBarView extends PanelBar {
     @Override
     protected boolean shouldPanelBeVisible() {
         return mHeadsUpVisible || super.shouldPanelBeVisible();
-    }
-
-    public ClockController getClockController() {
-        return mClockController;
     }
 }
