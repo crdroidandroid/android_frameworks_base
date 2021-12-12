@@ -5351,6 +5351,12 @@ public final class Settings {
         public static final String SHOW_QS_CLOCK = "show_qs_clock";
 
         /**
+         * Whether to display QS date
+         * @hide
+         */
+        public static final String SHOW_QS_DATE = "show_qs_date";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
