@@ -59,6 +59,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
     private static final String SHOW_QS_CLOCK =
             "system:" + Settings.System.SHOW_QS_CLOCK;
+    private static final String SHOW_QS_DATE =
+            "system:" + Settings.System.SHOW_QS_DATE;
 
     private boolean mExpanded;
     private boolean mQsDisabled;
@@ -156,7 +158,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 .build();
 
         Dependency.get(TunerService.class).addTunable(this,
-                SHOW_QS_CLOCK);
+                SHOW_QS_CLOCK,
+                SHOW_QS_DATE);
     }
 
     void onAttach(TintedIconManager iconManager,
@@ -522,6 +525,11 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 boolean showClock =
                         TunerService.parseIntegerSwitch(newValue, true);
                 mClockView.setClockVisibleByUser(showClock);
+                break;
+            case SHOW_QS_DATE:
+                boolean value =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                mDateContainer.setVisibility(value ? View.VISIBLE : View.GONE);
                 break;
             default:
                 break;
