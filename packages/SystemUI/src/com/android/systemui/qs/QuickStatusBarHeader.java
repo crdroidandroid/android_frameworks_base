@@ -23,7 +23,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.os.UserHandle;
 import android.provider.AlarmClock;
 import android.util.AttributeSet;
 import android.util.Pair;
@@ -124,9 +123,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     private List<String> mRssiIgnoredSlots = List.of();
     private boolean mIsSingleCarrier;
 
-    private boolean mHasCenterCutout;
-    private boolean mConfigShowBatteryEstimate;
-
     private boolean mUseCombinedQSHeader;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
@@ -173,10 +169,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         updateResources();
         Configuration config = mContext.getResources().getConfiguration();
         setDatePrivacyContainersWidth(config.orientation == Configuration.ORIENTATION_LANDSCAPE);
-
-        // QS will always show the estimate, and BatteryMeterView handles the case where
-        // it's unavailable or charging
-        mBatteryRemainingIcon.setPercentShowMode(BatteryMeterView.MODE_ESTIMATE);
 
         mIconsAlphaAnimatorFixed = new TouchAnimator.Builder()
                 .addFloat(mIconContainer, "alpha", 0, 1)
@@ -252,14 +244,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         mPrivacyContainer.setLayoutParams(lp);
     }
 
-    private void updateBatteryMode() {
-        if (mConfigShowBatteryEstimate) {
-            mBatteryRemainingIcon.setPercentShowMode(BatteryMeterView.MODE_ESTIMATE);
-        } else {
-            mBatteryRemainingIcon.setPercentShowMode(BatteryMeterView.MODE_ON);
-        }
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // If using combined headers, only react to touches inside QuickQSPanel
@@ -278,8 +262,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         boolean gone = largeScreenHeaderActive || mUseCombinedQSHeader || mQsDisabled;
         mStatusIconsView.setVisibility(gone ? View.GONE : View.VISIBLE);
         mDatePrivacyView.setVisibility(gone ? View.GONE : View.VISIBLE);
-
-        mConfigShowBatteryEstimate = resources.getBoolean(R.bool.config_showBatteryEstimateQSBH);
 
         mRoundedCornerPadding = resources.getDimensionPixelSize(
                 R.dimen.rounded_corner_content_padding);
@@ -305,9 +287,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
         int textColor = Utils.getColorAttrDefaultColor(mContext, android.R.attr.textColorPrimary);
         if (textColor != mTextColorPrimary) {
-            int isCircleBattery = Settings.System.getIntForUser(
-                    mContext.getContentResolver(), Settings.System.STATUS_BAR_BATTERY_STYLE,
-                    0, UserHandle.USER_CURRENT);
+            int isCircleBattery = mBatteryRemainingIcon.getBatteryStyle();
             int textColorSecondary = Utils.getColorAttrDefaultColor(mContext,
                     (isCircleBattery == 1 || isCircleBattery == 2 || isCircleBattery == 3)
                     ? android.R.attr.textColorHint : android.R.attr.textColorSecondary);
@@ -332,7 +312,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         }
         mHeaderQsPanel.setLayoutParams(qqsLP);
 
-        updateBatteryMode();
         updateHeadersPadding();
         updateAnimators();
 
@@ -503,14 +482,12 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 mClockIconsSeparatorLayoutParams.width = 0;
                 setSeparatorVisibility(false);
                 mShowClockIconsSeparator = false;
-                mHasCenterCutout = false;
             } else {
                 datePrivacySeparatorLayoutParams.width = topCutout.width();
                 mDatePrivacySeparator.setVisibility(View.VISIBLE);
                 mClockIconsSeparatorLayoutParams.width = topCutout.width();
                 mShowClockIconsSeparator = true;
                 setSeparatorVisibility(mKeyguardExpansionFraction == 0f);
-                mHasCenterCutout = true;
             }
         }
         mDatePrivacySeparator.setLayoutParams(datePrivacySeparatorLayoutParams);
@@ -519,7 +496,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         mCutOutPaddingRight = sbInsets.second;
         mWaterfallTopInset = cutout == null ? 0 : cutout.getWaterfallInsets().top;
 
-        updateBatteryMode();
         updateHeadersPadding();
         return super.onApplyWindowInsets(insets);
     }
