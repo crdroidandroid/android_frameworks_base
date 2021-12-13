@@ -238,7 +238,7 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
         updatePercentView();
     }
 
-    protected void setBatteryPercent(int showBatteryPercent) {
+    public void setBatteryPercent(int showBatteryPercent) {
         if (showBatteryPercent == mShowBatteryPercent) return;
         mShowBatteryPercent = showBatteryPercent;
         updatePercentView();
