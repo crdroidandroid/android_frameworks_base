@@ -127,7 +127,6 @@ class ShadeHeaderControllerTest : SysuiTestCase() {
     @Mock private lateinit var largeScreenConstraints: ConstraintSet
 
     @Mock private lateinit var demoModeController: DemoModeController
-    @Mock private lateinit var qsBatteryModeController: QsBatteryModeController
     @Mock private lateinit var nextAlarmController: NextAlarmController
     @Mock private lateinit var activityStarter: ActivityStarter
     @Mock private lateinit var mStatusOverlayHoverListenerFactory: StatusOverlayHoverListenerFactory
@@ -203,7 +202,6 @@ class ShadeHeaderControllerTest : SysuiTestCase() {
                 mShadeCarrierGroupControllerBuilder,
                 combinedShadeHeadersConstraintManager,
                 demoModeController,
-                qsBatteryModeController,
                 nextAlarmController,
                 activityStarter,
                 mStatusOverlayHoverListenerFactory,
@@ -395,10 +393,6 @@ class ShadeHeaderControllerTest : SysuiTestCase() {
 
     @Test
     fun batteryModeControllerCalledWhenQsExpandedFractionChanges() {
-        whenever(qsBatteryModeController.getBatteryMode(Mockito.same(null), eq(0f)))
-            .thenReturn(BatteryMeterView.MODE_ON)
-        whenever(qsBatteryModeController.getBatteryMode(Mockito.same(null), eq(1f)))
-            .thenReturn(BatteryMeterView.MODE_ESTIMATE)
         shadeHeaderController.qsVisible = true
 
         val times = 10
