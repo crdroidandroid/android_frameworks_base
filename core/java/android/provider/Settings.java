@@ -5357,6 +5357,37 @@ public final class Settings {
         public static final String SHOW_QS_DATE = "show_qs_date";
 
         /**
+         * QS battery style
+         * @hide
+         */
+        public static final String QS_BATTERY_STYLE = "qs_battery_style";
+
+        /**
+         * QS battery location
+         * 0: QS Panel
+         * 1: Quick Statusbar
+         * @hide
+         */
+        public static final String QS_BATTERY_LOCATION = "qs_battery_location";
+
+        /**
+         * QS battery %
+         * 0: Hide the battery percentage
+         * 1: Display the battery percentage inside the icon
+         * 2: Display the battery percentage next to the icon
+         * @hide
+         */
+        public static final String QS_SHOW_BATTERY_PERCENT = "qs_show_battery_percent";
+
+        /**
+         * QS battery estimate
+         * 0: Hide the battery estimate
+         * 1: Display the battery estimate
+         * @hide
+         */
+        public static final String QS_SHOW_BATTERY_ESTIMATE = "qs_show_battery_estimate";
+
+        /**
          * Battery style
          * @hide
          */
