@@ -99,7 +99,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
     private final String mNetworkNameDefault;
     private final String mNetworkNameSeparator;
     private final ContentObserver mObserver;
-    private final boolean mProviderModelBehavior;
+    private boolean mProviderModelBehavior;
     private final boolean mProviderModelSetting;
     private final Handler mReceiverHandler;
     private int mImsType = IMS_TYPE_WWAN;
@@ -145,6 +145,8 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
             "system:" + Settings.System.SHOW_FOURG_ICON;
     private static final String DATA_DISABLED_ICON =
             "system:" + Settings.System.DATA_DISABLED_ICON;
+    private static final String COMBINED_STATUS_BAR_SIGNAL_ICONS =
+            "system:" + Settings.System.COMBINED_STATUS_BAR_SIGNAL_ICONS;
 
     private final MobileStatusTracker.Callback mMobileCallback =
             new MobileStatusTracker.Callback() {
@@ -314,6 +316,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
         Dependency.get(TunerService.class).addTunable(this, SHOW_FOURG_ICON);
         Dependency.get(TunerService.class).addTunable(this, DATA_DISABLED_ICON);
+        Dependency.get(TunerService.class).addTunable(this, COMBINED_STATUS_BAR_SIGNAL_ICONS);
     }
 
     @Override
@@ -349,9 +352,21 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
                     TunerService.parseIntegerSwitch(newValue, true);
                 updateTelephony();
                 break; 
+            case COMBINED_STATUS_BAR_SIGNAL_ICONS:
+                boolean value = 
+                    TunerService.parseIntegerSwitch(newValue, false);
+                if (mProviderModelBehavior != value) {
+                    mProviderModelBehavior = value;
+                    restartSystemUI();
+                }
+                break; 
             default:
                 break;
         }
+    }
+
+    private void restartSystemUI() {
+       android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     void setConfiguration(Config config) {
