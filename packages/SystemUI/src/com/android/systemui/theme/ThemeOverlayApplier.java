@@ -215,8 +215,12 @@ public class ThemeOverlayApplier implements Dumpable {
             HashSet<OverlayIdentifier> identifiersPending = new HashSet<>();
             if (pendingCreation != null) {
                 for (FabricatedOverlay overlay : pendingCreation) {
-                    identifiersPending.add(overlay.getIdentifier());
-                    transaction.registerFabricatedOverlay(overlay);
+                    try {
+                        identifiersPending.add(overlay.getIdentifier());
+                        transaction.registerFabricatedOverlay(overlay);
+                    } catch (NullPointerException e) {
+                        Log.e(TAG, "NPE for overlay.getIdentifier()", e);
+                    }
                 }
             }
 
