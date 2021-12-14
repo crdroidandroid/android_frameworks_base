@@ -580,11 +580,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         if (!vis && stream == mAllyStream) {
             return;
         }
-
-        VolumeRow streamRow = findRow(stream);
-        if (streamRow != null && streamRow.view != null) {
-            Util.setVisOrGone(streamRow.view, vis);
-        }
+        Util.setVisOrGone(findRow(stream).view, vis);
     }
 
     private void updateExpandedRows(boolean expand) {
