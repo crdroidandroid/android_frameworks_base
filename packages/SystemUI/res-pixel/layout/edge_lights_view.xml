@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.assist.uihints.edgelights.EdgeLightsView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="120.0dip"
+    android:layout_gravity="bottom"
+    android:visibility="gone" />

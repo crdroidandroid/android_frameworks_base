@@ -308,7 +308,7 @@
         android:name=".SystemUIApplication"
         android:persistent="true"
         android:allowClearUserData="false"
-        android:backupAgent=".backup.BackupHelper"
+        android:backupAgent="com.google.android.systemui.backup.BackupHelperGoogle"
         android:killAfterRestore="false"
         android:hardwareAccelerated="true"
         android:label="@string/app_label"
@@ -857,12 +857,6 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/fileprovider" />
-        </provider>
-
-        <provider android:name=".keyguard.KeyguardSliceProvider"
-                  android:authorities="com.android.systemui.keyguard"
-                  android:grantUriPermissions="true"
-                  android:exported="true">
         </provider>
 
         <!-- Provides list and realistic previews of clock faces for the picker app. -->

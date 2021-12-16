@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.assist.uihints.GlowView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="250.0dip"
+    android:clipChildren="false"
+    android:contentDescription="@string/assistant_scrim_label"
+    android:layout_gravity="bottom"
+    android:orientation="horizontal"
+    android:visibility="gone">
+
+    <ImageView
+        android:id="@id/blue_glow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:cropToPadding="true"
+        android:scaleType="matrix"
+        android:tint="@color/edge_light_blue" />
+
+    <ImageView
+        android:id="@id/yellow_glow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:cropToPadding="true"
+        android:scaleType="matrix"
+        android:tint="@color/edge_light_yellow" />
+
+    <ImageView
+        android:id="@id/red_glow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:cropToPadding="true"
+        android:scaleType="matrix"
+        android:tint="@color/edge_light_red" />
+
+    <ImageView
+        android:id="@id/green_glow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:cropToPadding="true"
+        android:scaleType="matrix"
+        android:tint="@color/edge_light_green" />
+
+</com.google.android.systemui.assist.uihints.GlowView>
