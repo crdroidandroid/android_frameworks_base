@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset android:drawable="@drawable/columbus_chip_background_raw" android:insetTop="@dimen/columbus_target_request_dialog_button_background_vertical_insets" android:insetBottom="@dimen/columbus_target_request_dialog_button_background_vertical_insets"
+  xmlns:android="http://schemas.android.com/apk/res/android" />
