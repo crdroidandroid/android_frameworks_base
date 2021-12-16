@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.smartspace.BcSmartspaceCardShoppingList
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_smartspace_card_secondary"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:padding="12.0dip"
+    android:paddingStart="16.0dip">
+
+    <ImageView
+        android:id="@id/card_prompt_icon"
+        android:layout_width="32.0dip"
+        android:layout_height="32.0dip"
+        android:layout_margin="3.0dip"
+        app:layout_constraintBottom_toTopOf="@id/card_prompt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@id/card_prompt"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_margin="3.0dip"
+        android:lineHeight="20.0dip"
+        android:maxLines="2"
+        android:textColor="?androidprv:attr/textColorOnAccent"
+        android:textSize="12.0sp"
+        style="@style/EnhancedSmartspaceTextSubtitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_prompt_icon" />
+
+    <ImageView
+        android:id="@id/list_icon"
+        android:layout_width="20.0dip"
+        android:layout_height="20.0dip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@id/empty_list_message"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:maxLines="4"
+        android:textColor="?androidprv:attr/textColorOnAccent"
+        android:textSize="14.0sp"
+        style="@style/EnhancedSmartspaceTextSubtitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/list_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@id/list_item_1"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:fontFamily="google-sans-medium"
+        android:maxLines="1"
+        android:textColor="?androidprv:attr/textColorOnAccent"
+        android:textSize="14.0sp"
+        style="@style/EnhancedSmartspaceTextSubtitle"
+        app:layout_constraintBottom_toTopOf="@id/list_item_2"
+        app:layout_constraintEnd_toStartOf="@id/list_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@id/list_item_2"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:fontFamily="google-sans-medium"
+        android:maxLines="1"
+        android:textColor="?androidprv:attr/textColorOnAccent"
+        android:textSize="14.0sp"
+        style="@style/EnhancedSmartspaceTextSubtitle"
+        app:layout_constraintBottom_toTopOf="@id/list_item_3"
+        app:layout_constraintEnd_toStartOf="@id/list_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/list_item_1" />
+
+    <TextView
+        android:id="@id/list_item_3"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:fontFamily="google-sans-medium"
+        android:maxLines="1"
+        android:textColor="?androidprv:attr/textColorOnAccent"
+        android:textSize="14.0sp"
+        style="@style/EnhancedSmartspaceTextSubtitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/list_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/list_item_2" />
+
+</com.google.android.systemui.smartspace.BcSmartspaceCardShoppingList>

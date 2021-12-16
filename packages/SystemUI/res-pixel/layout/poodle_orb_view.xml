@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.elmyra.feedback.PoodleOrbView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/elmyra_feedback_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentStart="true"
+    android:layout_gravity="bottom|center">
+
+    <ImageView
+        android:id="@id/elmyra_feedback_background"
+        android:src="@drawable/elmyra_opa_bg_white"
+        android:translationX="0.0dip"
+        android:translationY="65.0dip"
+        style="@style/ElmyraDotStyle" />
+
+    <ImageView
+        android:id="@id/elmyra_feedback_blue"
+        android:scaleX="2.6"
+        android:scaleY="2.6"
+        android:src="@drawable/ic_sysbar_opa_blue"
+        android:translationX="-13.0dip"
+        android:translationY="-34.0dip"
+        style="@style/ElmyraDotStyle" />
+
+    <ImageView
+        android:id="@id/elmyra_feedback_green"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:src="@drawable/ic_sysbar_opa_green"
+        android:translationX="16.5dip"
+        android:translationY="-33.5dip"
+        style="@style/ElmyraDotStyle" />
+
+    <ImageView
+        android:id="@id/elmyra_feedback_red"
+        android:scaleX="1.15"
+        android:scaleY="1.15"
+        android:src="@drawable/ic_sysbar_opa_red"
+        android:translationX="7.5dip"
+        android:translationY="-24.5dip"
+        style="@style/ElmyraDotStyle" />
+
+    <ImageView
+        android:id="@id/elmyra_feedback_yellow"
+        android:scaleX="1.325"
+        android:scaleY="1.325"
+        android:src="@drawable/ic_sysbar_opa_yellow"
+        android:translationX="7.5dip"
+        android:translationY="-10.0dip"
+        style="@style/ElmyraDotStyle" />
+
+</com.google.android.systemui.elmyra.feedback.PoodleOrbView>
