@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/game_menu_contents_width"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingHorizontal="16.0dip">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/game_menu_toggle_height"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:paddingEnd="16.0dip"
+        android:paddingStart="16.0dip">
+
+        <com.google.android.systemui.gamedashboard.GameDashboardButton
+            android:id="@id/game_menu_screenshot"
+            android:layout_width="60.0dip"
+            android:layout_height="60.0dip"
+            android:contentDescription="@string/accessibility_game_dashboard_screenshot_toggle"
+            android:padding="18.0dip"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_screenshot" />
+
+        <Space
+            android:layout_width="0.0dip"
+            android:layout_height="1.0dip"
+            android:layout_weight="1.0" />
+
+        <com.google.android.systemui.gamedashboard.GameDashboardButton
+            android:id="@id/game_menu_screen_record"
+            android:layout_width="60.0dip"
+            android:layout_height="60.0dip"
+            android:contentDescription="@string/accessibility_game_dashboard_screen_record_toggle"
+            android:padding="18.0dip"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_screen_record" />
+
+        <Space
+            android:layout_width="0.0dip"
+            android:layout_height="1.0dip"
+            android:layout_weight="1.0" />
+
+        <com.google.android.systemui.gamedashboard.GameDashboardButton
+            android:id="@id/game_menu_fps"
+            android:layout_width="60.0dip"
+            android:layout_height="60.0dip"
+            android:contentDescription="@string/accessibility_game_dashboard_fps_toggle"
+            android:padding="14.0dip"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_fps" />
+
+        <Space
+            android:layout_width="0.0dip"
+            android:layout_height="1.0dip"
+            android:layout_weight="1.0" />
+
+        <com.google.android.systemui.gamedashboard.GameDashboardButton
+            android:id="@id/game_menu_dnd"
+            android:layout_width="60.0dip"
+            android:layout_height="60.0dip"
+            android:contentDescription="@string/accessibility_game_dashboard_dnd_toggle"
+            android:padding="18.0dip"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_dnd" />
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/game_menu_widgets" />
+
+</LinearLayout>
