@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.gamedashboard.ShortcutBarView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <com.google.android.systemui.gamedashboard.RevealButton
+        android:id="@id/reveal"
+        android:layout_width="@dimen/game_dashboard_shortcut_bar_reveal_button_width"
+        android:layout_height="@dimen/game_dashboard_shortcut_bar_reveal_button_height"
+        android:contentDescription="@string/accessibility_game_dashboard_shortcut_bar_undock" />
+
+    <com.google.android.systemui.gamedashboard.ShortcutBarContainer
+        android:id="@id/expanded_bar"
+        android:layout_width="48.0dip"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <com.google.android.systemui.gamedashboard.ShortcutBarButton
+            android:id="@id/entry_point"
+            android:layout_width="40.0dip"
+            android:layout_height="40.0dip"
+            android:background="@drawable/game_dashboard_button_background"
+            android:backgroundTint="#99000000"
+            android:contentDescription="@string/accessibility_game_dashboard_entry"
+            android:layout_margin="4.0dip"
+            android:padding="8.0dip"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_game_mode_standard"
+            android:tint="#ffffffff"
+            android:visibility="gone" />
+
+        <com.google.android.systemui.gamedashboard.ShortcutBarButton
+            android:id="@id/screenshot"
+            android:layout_width="40.0dip"
+            android:layout_height="40.0dip"
+            android:background="@drawable/game_dashboard_button_background"
+            android:backgroundTint="#99000000"
+            android:contentDescription="@string/accessibility_game_dashboard_shortcut_bar_screenshot"
+            android:layout_margin="4.0dip"
+            android:padding="8.0dip"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_screenshot"
+            android:tint="#ffffffff"
+            android:visibility="gone" />
+
+        <com.google.android.systemui.gamedashboard.ShortcutBarButton
+            android:id="@id/record"
+            android:layout_width="40.0dip"
+            android:layout_height="40.0dip"
+            android:background="@drawable/game_dashboard_button_background"
+            android:backgroundTint="#99000000"
+            android:contentDescription="@string/accessibility_game_dashboard_shortcut_bar_start_recording"
+            android:layout_margin="4.0dip"
+            android:padding="8.0dip"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_screen_record"
+            android:tint="#ffffffff"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@id/fps"
+            android:layout_width="40.0dip"
+            android:layout_height="40.0dip"
+            android:background="@drawable/game_dashboard_button_background"
+            android:backgroundTint="#99000000"
+            android:contentDescription="@string/accessibility_game_dashboard_shortcut_bar_fps"
+            android:gravity="center"
+            android:layout_margin="4.0dip"
+            android:textColor="#ffffffff"
+            android:textSize="16.0sp"
+            android:visibility="gone" />
+
+    </com.google.android.systemui.gamedashboard.ShortcutBarContainer>
+
+</com.google.android.systemui.gamedashboard.ShortcutBarView>

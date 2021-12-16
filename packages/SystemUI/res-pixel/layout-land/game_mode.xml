@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/game_mode_max_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_rectangle_28dp"
+    android:backgroundTint="@color/game_dashboard_color_surface"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginBottom="32.0dip"
+    android:layout_marginHorizontal="16.0dip"
+    android:scrollbarStyle="outsideOverlay"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingVertical="16.0dip">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="google-sans-text-medium"
+            android:layout_marginHorizontal="56.0dip"
+            android:layout_marginVertical="8.0dip"
+            android:maxLines="2"
+            android:text="@string/game_mode_subtitle"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="12.0sp" />
+
+        <LinearLayout
+            android:id="@id/performance_mode"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/game_mode_entry_paddingBottom"
+            android:paddingTop="@dimen/game_mode_entry_paddingTop">
+
+            <ImageView
+                android:layout_width="@dimen/game_mode_icon_size"
+                android:layout_height="@dimen/game_mode_icon_size"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="16.0dip"
+                android:src="@drawable/ic_game_mode_performance"
+                android:tint="?android:textColorSecondary" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="google-sans"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/game_mode_text_marginBottom"
+                    android:singleLine="true"
+                    android:text="@string/game_mode_performance_title"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="@dimen/game_mode_title_text_size" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="google-sans"
+                    android:layout_gravity="center_horizontal"
+                    android:maxLines="2"
+                    android:text="@string/game_mode_performance_description"
+                    android:textColor="?android:textColorSecondary"
+                    android:textSize="@dimen/game_mode_description_text_size" />
+
+            </LinearLayout>
+
+            <RadioButton
+                android:id="@id/performance_mode_radio_button"
+                android:layout_width="24.0dip"
+                android:layout_height="24.0dip"
+                android:button="@drawable/game_mode_radio_button"
+                android:buttonTint="?android:textColorSecondary"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="16.0dip" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/standard_mode"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/game_mode_entry_paddingBottom"
+            android:paddingTop="@dimen/game_mode_entry_paddingTop">
+
+            <ImageView
+                android:layout_width="@dimen/game_mode_icon_size"
+                android:layout_height="@dimen/game_mode_icon_size"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="16.0dip"
+                android:src="@drawable/ic_game_mode_standard"
+                android:tint="?android:textColorPrimary" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="google-sans"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/game_mode_text_marginBottom"
+                    android:singleLine="true"
+                    android:text="@string/game_mode_standard_title"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="@dimen/game_mode_title_text_size" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="google-sans"
+                    android:layout_gravity="center_horizontal"
+                    android:maxLines="2"
+                    android:text="@string/game_mode_standard_description"
+                    android:textColor="?android:textColorSecondary"
+                    android:textSize="@dimen/game_mode_description_text_size" />
+
+            </LinearLayout>
+
+            <RadioButton
+                android:id="@id/standard_mode_radio_button"
+                android:layout_width="24.0dip"
+                android:layout_height="24.0dip"
+                android:button="@drawable/game_mode_radio_button"
+                android:buttonTint="?android:textColorSecondary"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="16.0dip" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/battery_mode"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/game_mode_entry_paddingBottom"
+            android:paddingTop="@dimen/game_mode_entry_paddingTop">
+
+            <ImageView
+                android:layout_width="@dimen/game_mode_icon_size"
+                android:layout_height="@dimen/game_mode_icon_size"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="16.0dip"
+                android:src="@drawable/ic_game_mode_battery"
+                android:tint="?android:textColorSecondary" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="google-sans"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/game_mode_text_marginBottom"
+                    android:singleLine="true"
+                    android:text="@string/game_mode_battery_title"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="@dimen/game_mode_title_text_size" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="google-sans"
+                    android:layout_gravity="center_horizontal"
+                    android:maxLines="2"
+                    android:text="@string/game_mode_battery_description"
+                    android:textColor="?android:textColorSecondary"
+                    android:textSize="@dimen/game_mode_description_text_size" />
+
+            </LinearLayout>
+
+            <RadioButton
+                android:id="@id/battery_mode_radio_button"
+                android:layout_width="24.0dip"
+                android:layout_height="24.0dip"
+                android:button="@drawable/game_mode_radio_button"
+                android:buttonTint="?android:textColorSecondary"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="16.0dip" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

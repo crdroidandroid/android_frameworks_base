@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@id/url_copy"
+        android:showAsAction="always"
+        android:title="@string/url_menu_copy" />
+
+    <item
+        android:id="@id/url_share"
+        android:showAsAction="always"
+        android:title="@string/url_menu_share" />
+
+</menu>

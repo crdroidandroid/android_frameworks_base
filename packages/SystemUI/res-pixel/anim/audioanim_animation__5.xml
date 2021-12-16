@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set android:ordering="together"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
+    <objectAnimator android:interpolator="@anim/audioanim_animation__5__0" android:duration="483" android:startOffset="0" android:valueFrom="70" android:valueTo="70" android:valueType="floatType" android:propertyName="rotation" />
+    <objectAnimator android:interpolator="@anim/audioanim_animation__5__1" android:duration="317" android:startOffset="483" android:valueFrom="70" android:valueTo="0" android:valueType="floatType" android:propertyName="rotation" />
+</set>

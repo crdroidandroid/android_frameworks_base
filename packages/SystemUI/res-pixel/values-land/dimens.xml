@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <dimen name="game_toast_margin">28.0dip</dimen>
+    <dimen name="global_actions_info_margin">24.0dip</dimen>
+    <dimen name="game_menu_contents_width">604.0dip</dimen>
+    <dimen name="game_mode_max_width">572.0dip</dimen>
+</resources>
