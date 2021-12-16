@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/voice_reply_cta_container"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@id/voice_reply_cta_icon"
+        android:layout_width="@dimen/voice_reply_cta_icon_size"
+        android:layout_height="@dimen/voice_reply_cta_icon_size"
+        android:src="@drawable/ic_assist_poodle" />
+
+    <TextView
+        android:id="@id/voice_reply_cta_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/voice_reply_cta_divider_size"
+        android:text="@string/voice_reply_cta_text"
+        android:textSize="@dimen/voice_reply_cta_text_size" />
+
+</LinearLayout>

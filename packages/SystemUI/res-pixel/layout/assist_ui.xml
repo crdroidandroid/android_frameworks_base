@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.assist.uihints.AssistUIView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <include
+        android:id="@id/scrim"
+        layout="@layout/scrim_view" />
+
+    <include
+        android:id="@id/glow"
+        layout="@layout/glow_view" />
+
+    <include
+        android:id="@id/invocation_lights"
+        layout="@layout/invocation_lights" />
+
+    <include
+        android:id="@id/edge_lights"
+        layout="@layout/edge_lights_view" />
+
+    <include
+        android:id="@id/transcription"
+        layout="@layout/assist_transcription" />
+
+    <include
+        android:id="@id/greeting"
+        layout="@layout/assist_greeting" />
+
+    <include
+        android:id="@id/chips"
+        layout="@layout/assist_chips_container" />
+
+    <include
+        android:id="@id/prompt"
+        layout="@layout/assist_prompt" />
+
+    <include
+        android:id="@id/keyboard"
+        layout="@layout/keyboard_icon" />
+
+    <include
+        android:id="@id/zerostate"
+        layout="@layout/zerostate_icon" />
+
+</com.google.android.systemui.assist.uihints.AssistUIView>

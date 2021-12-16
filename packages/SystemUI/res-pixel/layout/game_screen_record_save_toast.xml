@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@id/game_screen_record_save_toast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_rectangle_28dp"
+        android:backgroundTint="@color/game_dashboard_color_accent_primary"
+        android:orientation="vertical"
+        android:paddingHorizontal="16.0dip"
+        android:paddingVertical="12.0dip"
+        android:textColor="@color/game_dashboard_text_color_on_accent"
+        android:textSize="14.0sp" />
+
+</FrameLayout>
