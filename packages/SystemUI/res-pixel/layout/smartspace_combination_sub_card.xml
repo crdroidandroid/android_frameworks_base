@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@id/first_sub_card"
+    android:layout_width="0.0dip"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_smartspace_combination_sub_card"
+    android:padding="8.0dip">
+
+    <ImageView
+        android:id="@id/sub_card_icon"
+        android:layout_width="22.0dip"
+        android:layout_height="22.0dip"
+        android:layout_margin="2.0dip"
+        app:layout_constraintBottom_toTopOf="@id/sub_card_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@id/sub_card_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:layout_margin="2.0dip"
+        android:maxLines="2"
+        android:textColor="?androidprv:attr/textColorOnAccent"
+        android:textSize="14.0sp"
+        style="@style/EnhancedSmartspaceTextSubtitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sub_card_icon" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

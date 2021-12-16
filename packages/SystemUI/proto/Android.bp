@@ -1,0 +1,11 @@
+java_library {
+    name: "vendor-pixelatoms-java",
+    vendor: true,
+    proto: {
+        type: "lite",
+    },
+    srcs: [
+        "pixelatoms.proto",
+    ],
+    sdk_version: "current",
+}

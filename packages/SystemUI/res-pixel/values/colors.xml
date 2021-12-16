@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <color name="ambient_text_shadow_color">#40000000</color>
+    <color name="assist_chip_background_dark">#ff171717</color>
+    <color name="assist_chip_background_light">#ffffffff</color>
+    <color name="assist_chip_border_dark">#ff292a2d</color>
+    <color name="assist_chip_border_light">#ffe8eaed</color>
+    <color name="assist_chip_ripple_dark">#42ffffff</color>
+    <color name="assist_chip_ripple_light">#1f000000</color>
+    <color name="assist_chip_text_dark">#fff5f7fa</color>
+    <color name="assist_chip_text_light">#ff202124</color>
+    <color name="chip_hint_background_color2">#fff1f3f4</color>
+    <color name="chip_hint_foreground_color2">#ff3c4043</color>
+    <color name="default_gleam_background_color">#ff000000</color>
+    <color name="default_gleam_highlight_color">#ffffffff</color>
+    <color name="default_selection_highlight_color">#ff7baaf7</color>
+    <color name="default_selection_image_highlight_color">#ff7baaf7</color>
+    <color name="default_selection_stroke_color">#ff4285f4</color>
+    <color name="dock_photo_text">#ffffffff</color>
+    <color name="edge_light_blue">#ff4185f4</color>
+    <color name="edge_light_green">#ff3aa853</color>
+    <color name="edge_light_red">#ffea4234</color>
+    <color name="edge_light_yellow">#fffbbc06</color>
+    <color name="game_dashboard_screen_record_countdown">#ffd93025</color>
+    <color name="indicator_icon_color">#ff191c18</color>
+    <color name="key_text_shadow_color">#89000000</color>
+    <color name="transcription_icon_dark">#8affffff</color>
+    <color name="transcription_icon_light">#8a000000</color>
+    <color name="transcription_text_dark">#ffffffff</color>
+    <color name="transcription_text_light">#de000000</color>
+</resources>

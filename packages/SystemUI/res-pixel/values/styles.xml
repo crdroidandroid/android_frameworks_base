@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <style name="DotStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:alpha">0.0</item>
+    </style>
+    <style name="ElmyraDotStyle" parent="@style/DotStyle">
+        <item name="android:layout_gravity">bottom|center</item>
+    </style>
+    <style name="EnhancedSmartspaceTextSubtitle" parent="@style/EnhancedSmartspaceTextTitle">
+        <item name="android:textSize">@dimen/enhanced_smartspace_subtitle_size</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:fontFamily">google-sans-text</item>
+        <item name="android:letterSpacing">@dimen/smartspaceLetterSpacing</item>
+        <item name="android:lineHeight">20.0sp</item>
+    </style>
+    <style name="EnhancedSmartspaceTextTitle" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="android:textSize">@dimen/enhanced_smartspace_title_size</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:drawablePadding">@dimen/enhanced_smartspace_icon_margin</item>
+        <item name="android:fontFamily">google-sans</item>
+        <item name="android:lineHeight">24.0sp</item>
+    </style>
+    <style name="GameMenuTheme" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="android:windowBackground">?android:colorBackground</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:windowBlurBehindRadius">25.0dip</item>
+        <item name="android:windowBlurBehindEnabled">true</item>
+        <item name="android:windowBackgroundBlurRadius">50.0dip</item>
+    </style>
+    <style name="LockscreenDotStyle" parent="@style/DotStyle">
+        <item name="android:alpha">0.0</item>
+        <item name="android:scaleX">0.8</item>
+        <item name="android:scaleY">0.8</item>
+    </style>
+</resources>

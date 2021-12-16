@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.assist.uihints.KeyboardIconView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|center|right"
+    android:layout_marginBottom="@dimen/keyboard_icon_bottom_margin"
+    android:layout_marginRight="@dimen/keyboard_icon_right_margin"
+    android:visibility="gone">
+
+    <ImageView
+        android:id="@id/keyboard_icon_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/assistant_keyboard_icon_label"
+        android:focusable="true"
+        android:importantForAccessibility="yes"
+        android:layout_gravity="center"
+        android:scaleType="center"
+        android:src="@drawable/ic_keyboard" />
+
+</com.google.android.systemui.assist.uihints.KeyboardIconView>

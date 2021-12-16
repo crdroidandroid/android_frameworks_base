@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.smartspace.BcSmartspaceCardFlight
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_smartspace_card_secondary"
+    android:padding="8.0dip">
+
+    <ImageView
+        android:id="@id/card_prompt_logo"
+        android:layout_width="32.0dip"
+        android:layout_height="32.0dip"
+        android:layout_margin="4.0dip"
+        app:layout_constraintBottom_toTopOf="@id/card_prompt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@id/card_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_margin="4.0dip"
+        android:textColor="?androidprv:attr/textColorOnAccent"
+        android:textSize="12.0sp"
+        android:visibility="gone"
+        style="@style/EnhancedSmartspaceTextSubtitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_prompt_logo" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@id/boarding_pass_ui"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingEnd="8.0dip"
+        android:paddingStart="8.0dip">
+
+        <TextView
+            android:id="@id/gate_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:fontFamily="google-sans-text-medium"
+            android:letterSpacing="0.025"
+            android:lineHeight="20.0dip"
+            android:text="@string/smartspace_flight_card_gate_header"
+            android:textColor="?androidprv:attr/textColorOnAccent"
+            android:textSize="14.0sp"
+            style="@style/EnhancedSmartspaceTextTitle"
+            app:layout_constraintBottom_toTopOf="@id/seat_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@id/gate_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:fontFamily="google-sans-text-medium"
+            android:layout_marginEnd="10.0dip"
+            android:layout_marginStart="4.0dip"
+            android:letterSpacing="0.025"
+            android:lineHeight="20.0dip"
+            android:text="-"
+            android:textColor="?androidprv:attr/textColorOnAccent"
+            android:textSize="14.0sp"
+            style="@style/EnhancedSmartspaceTextSubtitle"
+            app:layout_constraintBottom_toBottomOf="@id/gate_title"
+            app:layout_constraintStart_toEndOf="@id/title_barrier"
+            app:layout_constraintTop_toTopOf="@id/gate_title" />
+
+        <TextView
+            android:id="@id/seat_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:fontFamily="google-sans-text-medium"
+            android:layout_marginTop="15.0dip"
+            android:letterSpacing="0.025"
+            android:lineHeight="20.0dip"
+            android:text="@string/smartspace_flight_card_seat_header"
+            android:textColor="?androidprv:attr/textColorOnAccent"
+            android:textSize="14.0sp"
+            style="@style/EnhancedSmartspaceTextTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gate_title" />
+
+        <TextView
+            android:id="@id/seat_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:fontFamily="google-sans-text-medium"
+            android:layout_marginEnd="10.0dip"
+            android:layout_marginStart="4.0dip"
+            android:letterSpacing="0.025"
+            android:lineHeight="20.0dip"
+            android:text="-"
+            android:textColor="?androidprv:attr/textColorOnAccent"
+            android:textSize="14.0sp"
+            style="@style/EnhancedSmartspaceTextSubtitle"
+            app:layout_constraintBottom_toBottomOf="@id/seat_title"
+            app:layout_constraintStart_toEndOf="@id/title_barrier"
+            app:layout_constraintTop_toTopOf="@id/seat_title" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@id/title_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="gate_title,seat_title" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@id/value_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="gate_value,seat_value" />
+
+        <ImageView
+            android:id="@id/flight_qr_code"
+            android:layout_width="60.0dip"
+            android:layout_height="60.0dip"
+            android:background="@drawable/bg_image_generic"
+            android:layout_marginStart="10.0dip"
+            android:padding="4.0dip"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/value_barrier"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.systemui.smartspace.BcSmartspaceCardFlight>
