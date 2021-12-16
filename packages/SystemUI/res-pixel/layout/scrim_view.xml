@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="256.0dip"
+    android:background="@drawable/scrim_strip"
+    android:contentDescription="@string/assistant_scrim_label"
+    android:layout_gravity="bottom"
+    android:visibility="gone" />

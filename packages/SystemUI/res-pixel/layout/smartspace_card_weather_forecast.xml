@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.smartspace.BcSmartspaceCardWeatherForecast
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_smartspace_card_secondary"
+    android:paddingEnd="12.0dip"
+    android:paddingStart="12.0dip" />

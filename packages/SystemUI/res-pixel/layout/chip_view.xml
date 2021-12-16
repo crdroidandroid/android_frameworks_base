@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/chip_hint_height"
+        android:background="@drawable/chip_hint_background_light2"
+        android:gravity="center_vertical"
+        android:layoutDirection="ltr"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="@dimen/chip_tap_target_horizontal_margin"
+        android:layout_marginVertical="@dimen/chip_tap_target_vertical_margin"
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/chip_hint_end_padding2"
+        android:paddingStart="@dimen/chip_hint_start_padding2">
+
+        <ImageView
+            android:id="@id/chip_icon"
+            android:layout_width="@dimen/chip_icon_size"
+            android:layout_height="@dimen/chip_icon_size"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@id/chip_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="google-sans-medium"
+            android:includeFontPadding="true"
+            android:maxLines="1"
+            android:maxWidth="126.0dip"
+            android:paddingStart="@dimen/chip_text_start_padding2"
+            android:textAlignment="textStart"
+            android:textColor="@color/chip_hint_foreground_color2"
+            android:textSize="@dimen/chip_text_size" />
+
+    </LinearLayout>
+
+</FrameLayout>

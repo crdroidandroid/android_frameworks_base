@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set android:ordering="together"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
+    <objectAnimator android:interpolator="@anim/audioanim_animation__6__0" android:duration="17" android:startOffset="0" android:valueFrom="33.575" android:valueTo="33.575" android:valueType="floatType" android:propertyName="translateY" />
+    <objectAnimator android:interpolator="@anim/audioanim_animation__6__1" android:duration="183" android:startOffset="17" android:valueFrom="33.575" android:valueTo="-13.175" android:valueType="floatType" android:propertyName="translateY" />
+    <objectAnimator android:interpolator="@anim/audioanim_animation__6__2" android:duration="250" android:startOffset="200" android:valueFrom="-13.175" android:valueTo="20.825" android:valueType="floatType" android:propertyName="translateY" />
+    <objectAnimator android:interpolator="@anim/audioanim_animation__6__3" android:duration="17" android:startOffset="450" android:valueFrom="20.825" android:valueTo="32.075" android:valueType="floatType" android:propertyName="translateY" />
+    <objectAnimator android:interpolator="@anim/audioanim_animation__6__4" android:duration="283" android:startOffset="467" android:valueFrom="32.075" android:valueTo="13.575" android:valueType="floatType" android:propertyName="translateY" />
+</set>

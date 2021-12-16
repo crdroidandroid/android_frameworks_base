@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set android:ordering="together"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
+    <objectAnimator android:interpolator="@anim/reverse_charging_animation__5__0" android:duration="101" android:startOffset="0" android:valueFrom="0.3" android:valueTo="0.3" android:valueType="floatType" android:propertyName="scaleX" />
+    <objectAnimator android:interpolator="@anim/reverse_charging_animation__5__1" android:duration="101" android:startOffset="0" android:valueFrom="0.3" android:valueTo="0.3" android:valueType="floatType" android:propertyName="scaleY" />
+    <objectAnimator android:interpolator="@anim/reverse_charging_animation__5__2" android:duration="316" android:startOffset="101" android:valueFrom="0.3" android:valueTo="1" android:valueType="floatType" android:propertyName="scaleX" />
+    <objectAnimator android:interpolator="@anim/reverse_charging_animation__5__3" android:duration="316" android:startOffset="101" android:valueFrom="0.3" android:valueTo="1" android:valueType="floatType" android:propertyName="scaleY" />
+</set>

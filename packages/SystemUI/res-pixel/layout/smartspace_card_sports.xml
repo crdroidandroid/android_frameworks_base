@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.smartspace.BcSmartspaceCardSports
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_smartspace_card_secondary"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingBottom="20.0dip"
+    android:paddingEnd="12.0dip"
+    android:paddingStart="12.0dip"
+    android:paddingTop="12.0dip">
+
+    <TextView
+        android:id="@id/match_time_summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?androidprv:attr/textColorOnAccent"
+        style="@style/EnhancedSmartspaceTextSubtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@id/first_competitor_logo"
+        android:layout_width="0.0dip"
+        android:layout_height="0.0dip"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@id/first_competitor_score"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/match_time_summary"
+        app:tint="?android:textColorPrimary" />
+
+    <ImageView
+        android:id="@id/second_competitor_logo"
+        android:layout_width="0.0dip"
+        android:layout_height="0.0dip"
+        app:layout_constraintBottom_toBottomOf="@id/first_competitor_logo"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/second_competitor_score"
+        app:layout_constraintTop_toTopOf="@id/first_competitor_logo"
+        app:tint="?android:textColorPrimary" />
+
+    <TextView
+        android:id="@id/first_competitor_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4.0dip"
+        android:textColor="?androidprv:attr/textColorOnAccent"
+        style="@style/EnhancedSmartspaceTextSubtitle"
+        app:layout_constraintBottom_toBottomOf="@id/first_competitor_logo"
+        app:layout_constraintEnd_toStartOf="@id/second_competitor_score"
+        app:layout_constraintStart_toEndOf="@id/first_competitor_logo"
+        app:layout_constraintTop_toTopOf="@id/first_competitor_logo" />
+
+    <TextView
+        android:id="@id/second_competitor_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4.0dip"
+        android:layout_marginStart="12.0dip"
+        android:textColor="?androidprv:attr/textColorOnAccent"
+        style="@style/EnhancedSmartspaceTextSubtitle"
+        app:layout_constraintBottom_toBottomOf="@id/second_competitor_logo"
+        app:layout_constraintEnd_toStartOf="@id/second_competitor_logo"
+        app:layout_constraintStart_toEndOf="@id/first_competitor_score"
+        app:layout_constraintTop_toTopOf="@id/second_competitor_logo" />
+
+</com.google.android.systemui.smartspace.BcSmartspaceCardSports>

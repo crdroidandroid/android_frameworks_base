@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@id/game_launch_toast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_rectangle_8dp"
+        android:backgroundTint="@color/game_dashboard_color_background"
+        android:minWidth="344.0dip"
+        android:orientation="horizontal"
+        android:padding="16.0dip">
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@id/game_launch_toast_dnd_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14.0sp" />
+
+            <TextView
+                android:id="@id/game_launch_toast_game_mode_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14.0sp" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="16.0dip"
+            android:layout_height="1.0dip" />
+
+        <TextView
+            android:id="@id/game_launch_toast_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingHorizontal="8.0dip"
+            android:text="@string/game_launch_change"
+            android:textColor="@color/game_dashboard_color_accent_primary_variant"
+            android:textSize="14.0sp" />
+
+    </LinearLayout>
+
+</FrameLayout>

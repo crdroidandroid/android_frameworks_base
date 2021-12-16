@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <integer name="biometric_dialog_text_gravity">1</integer>
+    <integer name="columbus_default_sensitivity_percent">77</integer>
+    <integer name="columbus_low_sensitivity_percent">0</integer>
+    <integer name="elmyra_charging_gate_duration">500</integer>
+    <integer name="elmyra_false_prime_window">50</integer>
+    <integer name="elmyra_gesture_cooldown_time">450</integer>
+    <integer name="elmyra_keyguard_proximity_threshold">5</integer>
+    <item type="integer" name="elmyra_progress_always_on_vibration">@null</item>
+    <item type="integer" name="elmyra_resolve_always_on_vibration">@null</item>
+    <integer name="elmyra_snapshot_gesture_delay_ms">100</integer>
+    <integer name="elmyra_snapshot_logger_gesture_size">10</integer>
+    <integer name="elmyra_snapshot_logger_incomplete_gesture_size">10</integer>
+    <integer name="elmyra_system_key_gate_duration">500</integer>
+    <integer name="elmyra_usb_gate_duration">500</integer>
+    <integer name="game_toast_fade_in_animation_duration">100</integer>
+    <integer name="game_toast_fade_out_animation_duration">100</integer>
+    <integer name="game_toast_translate_down_animation_duration">200</integer>
+    <integer name="game_toast_translate_up_animation_duration">250</integer>
+</resources>

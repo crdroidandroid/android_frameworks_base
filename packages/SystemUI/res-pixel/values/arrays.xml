@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string-array name="columbus_sumatra_cert_allow_list">
+        <item>⼜꫼ꇭバ듣衣뺠焟꓏禸≑骂姙婘</item>
+        <item>괥仙胛ύꚾ샍洞恧㗆꯷咝ㅾ뿣鄖數</item>
+        <item>᥵닱煷벉ꗟ鹤ꛊꔽ쇑햛ᴔ翡젪切</item>
+        <item>္㣮䔷軧鋶呐侸㑯욳䛐믄䅟쌹ﳼ軁</item>
+    </string-array>
+    <string-array name="columbus_sumatra_package_allow_list">
+        <item>com.snapchat.android</item>
+        <item>com.snapchat.android.alpha</item>
+        <item>com.snapchat.android.perf</item>
+        <item>com.snapchat.android.master</item>
+        <item>com.snapchat.android.dev</item>
+        <item>com.snapchat.android.catalina</item>
+        <item>com.google.android.GoogleCamera</item>
+        <item>com.google.columbustest</item>
+    </string-array>
+    <array name="config_nfc_conflict_with_usb_audio_productid"/>
+    <array name="config_nfc_conflict_with_usb_audio_vendorid"/>
+    <string-array name="config_quickSettingsAutoAdd">
+        <item>accessibility_display_inversion_enabled:inversion</item>
+        <item>wind_down_first_time_setup:custom(com.google.android.apps.wellbeing/.screen.ui.GrayscaleTileService)</item>
+        <item>focus_mode_first_time_setup:custom(com.google.android.apps.wellbeing/.focusmode.quicksettings.FocusModeTileService)</item>
+    </string-array>
+    <integer-array name="elmyra_blocking_system_keys">
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+    </integer-array>
+</resources>
