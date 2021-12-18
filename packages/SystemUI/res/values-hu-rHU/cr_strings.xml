@@ -228,20 +228,20 @@
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
-    <string name="global_action_onthego">On-The-Go</string>
+    <string name="onthego_notif_ticker">Menet közben (On-The-Go) aktiválva</string>
+    <string name="onthego_notif_title">A Menet közben (On-The-Go) aktív</string>
+    <string name="onthego_notif_stop">Leállítás</string>
+    <string name="onthego_notif_options">Beállítások</string>
+    <string name="onthego_notif_error">Nem lehet elindítani a Menet közben módot (On-The-Go)</string>
+    <string name="onthego_notif_restart">A Menet közben mód (On-The-Go) újraindítása</string>
+    <string name="onthego_notif_camera_changed">A Kameramód megváltoztatva</string>
+    <string name="onthego_transparency">Átlátszóság</string>
+    <string name="onthego_front_camera">Az előlapi kamera használata</string>
+    <string name="onthego_service_toggle">Automatikusan indítsa újra a szolgáltatást</string>
+    <string name="onthego_channel_name">Elsődleges</string>
+    <string name="global_action_onthego">Menet közben (On-The-Go)</string>
     <!-- OnTheGo Tile -->
-    <string name="quick_settings_onthego_label">On-The-Go</string>
-    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
-    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
+    <string name="quick_settings_onthego_label">Menet közben (On-The-Go)</string>
+    <string name="accessibility_quick_settings_onthego_off">Menet közben (On-The-Go) ki</string>
+    <string name="accessibility_quick_settings_onthego_on">Menet közben (On-The-Go) be</string>
 </resources>
