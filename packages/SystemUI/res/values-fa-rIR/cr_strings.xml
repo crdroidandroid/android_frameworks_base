@@ -16,12 +16,12 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb/s</string>
-    <string name="megabitspersecond_short">Mb/s</string>
-    <string name="gigabitspersecond_short">Gb/s</string>
-    <string name="kilobytespersecond_short">kB/s</string>
-    <string name="megabytespersecond_short">MB/s</string>
-    <string name="gigabytespersecond_short">GB/s</string>
+    <string name="kilobitspersecond_short">ک‌ب/ث</string>
+    <string name="megabitspersecond_short">م‌ب/ث</string>
+    <string name="gigabitspersecond_short">گ‌ب/ث</string>
+    <string name="kilobytespersecond_short">ک‌ب/ث</string>
+    <string name="megabytespersecond_short">م‌ب/ث</string>
+    <string name="gigabytespersecond_short">گ‌ب/ث</string>
     <!-- Omnijaws Weather -->
     <string name="omnijaws_service_error">خطا</string>
     <string name="omnijaws_service_unkown">بدون اطلاعات آب و هوا</string>
@@ -39,14 +39,14 @@
     <string name="qs_data_switch_changed_1">استفاده از سیم‌کارت ۱ برای دیتا گوشی</string>
     <string name="qs_data_switch_changed_2">استفاده از سیم‌کارت ۲ برای دیتا گوشی</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ سریع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> مانده تا کامل شود)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Wشارژ بی‌سیم</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ نامنظم (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> مانده تا کامل شود)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • شارژ نامنظم</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ فوق سریع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> مانده تا کامل شود)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • شارژ فوق سریع</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">اطلاعات پردازنده</string>
     <!-- FPS Info tile -->
@@ -55,14 +55,14 @@
     <string name="gaming_mode_not_enabled">حالت بازی در تنظیمات غیرفعال شده است</string>
     <string name="quick_settings_gaming_mode_label">حالت بازی</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">پیکسل هوشمند</string>
+    <string name="quick_settings_smart_pixels_on_power_save">فعال سازی خودکار پیکسل هوشمند</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
     <string name="quick_settings_reboot_label">راه اندازی مجدد</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
+    <string name="quick_settings_reboot_recovery_label">بازیابی</string>
     <string name="quick_settings_poweroff_label">خاموش کردن</string>
     <!-- Sound Search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">جستجوی صدا</string>
     <!-- Sound QS tile -->
     <string name="quick_settings_sound_label">صدا</string>
     <string name="quick_settings_sound_ring">زنگ</string>
@@ -71,7 +71,7 @@
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">قطب‌نما</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
+    <string name="quick_settings_compass_init">مقدار اولیه\u2026</string>
     <string name="accessibility_quick_settings_compass_off">قطب‌نما خاموش.</string>
     <string name="accessibility_quick_settings_compass_on">قطب‌نما روشن.</string>
     <string name="quick_settings_compass_N">شمال</string>
@@ -100,7 +100,7 @@
     [CHAR LIMIT=8] -->
     <plurals name="type_clock_header">
         <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
-        <item quantity="one"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">این هست</annotation>\n^1\n^2</item>
     </plurals>
     <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
     <string name="text_clock_h_one">یک</string>
@@ -180,51 +180,68 @@
     <!-- Samsung clock -->
     <!-- Tux clock -->
     <!-- Oroño clock -->
-    <string name="date_long_title_today">Today is %s</string>
+    <string name="date_long_title_today">امروز ساعت %s</string>
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Delete</string>
+    <string name="screenrecord_delete_label">حذف</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Screen recording deleted</string>
+    <string name="screenrecord_delete_description">فیلم ضبط صفحه حذف شد</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Priority</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
-    <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="volume_ringer_priority_only">اولویت</string>
+    <string name="volume_ringer_alarms_only">زنگ هشدار</string>
+    <string name="volume_ringer_dnd">مزاحم نشو</string>
+    <string name="tristate_flashlight_on">روشن کردن</string>
+    <string name="tristate_flashlight_off">خاموش کردن</string>
+    <string name="tristate_flashlight_blink">چشمک زدن</string>
+    <string name="tristate_brightness_bright">حداکثر روشنایی</string>
+    <string name="tristate_brightness_dark">حداقل روشنایی</string>
+    <string name="tristate_brightness_auto">روشنایی خودکار</string>
+    <string name="tristate_rotation_auto">چرخش خودکار</string>
+    <string name="tristate_rotation_0">عمودی</string>
+    <string name="tristate_rotation_90">افقی(90 درجه)</string>
+    <string name="tristate_rotation_270">افقی(270 درجه)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot\nLongpress to move it</string>
-    <string name="screenrecord_lowquality_label">Lower quality for smaller file size</string>
+    <string name="screenrecord_stopdot_label">نشان دادن نقطه توقف\nبرای جابجا کردن، مدتی نگه دارید</string>
+    <string name="screenrecord_lowquality_label">استفاده‌ از کیفیت پایین تر برای حجم کمتر</string>
     <!-- Biometric Dialog - Use Face -->
-    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <string name="biometric_dialog_button_use_face">استفاده از چهره</string>
     <!-- Daily data usage -->
-    <string name="daily_data_usage_title">Today\'s usage</string>
+    <string name="daily_data_usage_title">استفاده امروز</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;قفل شده</string>
+    <string name="applock_fingerprint_face">, اثر انگشت یا چهره شما برای بازگشایی</string>
+    <string name="applock_face">&#160;یا چهره شما برای بازگشایی</string>
+    <string name="applock_fingerprint">&#160;یا اثرانگشت شما برای بازگشایی</string>
+    <string name="applock_credential">&#160;برای بازگشایی</string>
+    <string name="applock_unlock">بازکردن</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">منوی پاور</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Force stop</string>
+    <string name="force_stop_dlg_title">به اجبار متوقف شود؟</string>
+    <string name="force_stop_dlg_text">اگر برنامه‌ای را به اجبار متوقف کنید، ممکن است درست کار نکند.</string>
+    <string name="guts_force_close_app">توقف اجباری</string>
     <!-- Title for media output settings -->
-    <string name="media_output_title">Play media to</string>
+    <string name="media_output_title">پخش رسانه با</string>
     <!-- Mono audio tile -->
-    <string name="quick_settings_monotoggle_tile">Audio mode</string>
-    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
-    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <string name="quick_settings_monotoggle_tile">حالت صدا</string>
+    <string name="quick_settings_monotoggle_tile_mono">صدای تک(مونو)</string>
+    <string name="quick_settings_monotoggle_tile_stereo">صدای سه بعدی(استریو)</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">On-The-Go activated</string>
+    <string name="onthego_notif_title">On-The-Go is active</string>
+    <string name="onthego_notif_stop">Stop</string>
+    <string name="onthego_notif_options">Options</string>
+    <string name="onthego_notif_error">Unable to start On-The-Go</string>
+    <string name="onthego_notif_restart">Restart On-The-Go</string>
+    <string name="onthego_notif_camera_changed">Camera mode changed</string>
+    <string name="onthego_transparency">Transparency</string>
+    <string name="onthego_front_camera">Use front camera</string>
+    <string name="onthego_service_toggle">Automatically restart service</string>
+    <string name="onthego_channel_name">Main</string>
+    <string name="global_action_onthego">On-The-Go</string>
+    <!-- OnTheGo Tile -->
+    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
+    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
 </resources>

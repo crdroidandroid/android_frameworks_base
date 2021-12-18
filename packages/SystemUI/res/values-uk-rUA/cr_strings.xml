@@ -266,4 +266,21 @@
     <string name="quick_settings_monotoggle_tile_stereo">Стереозвук</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">Режим «На ходу» активовано</string>
+    <string name="onthego_notif_title">Режим «На ходу» активний</string>
+    <string name="onthego_notif_stop">Зупинити</string>
+    <string name="onthego_notif_options">Параметри</string>
+    <string name="onthego_notif_error">Не вдається запустити режим «На ходу»</string>
+    <string name="onthego_notif_restart">Перезавантажити режим «На ходу»</string>
+    <string name="onthego_notif_camera_changed">Режим камери змінено</string>
+    <string name="onthego_transparency">Прозорість</string>
+    <string name="onthego_front_camera">Використовувати передню камеру</string>
+    <string name="onthego_service_toggle">Автоматично перезапустити службу</string>
+    <string name="onthego_channel_name">Основний</string>
+    <string name="global_action_onthego">Режим \"На ходу\"</string>
+    <!-- OnTheGo Tile -->
+    <string name="quick_settings_onthego_label">Режим \"На ходу\"</string>
+    <string name="accessibility_quick_settings_onthego_off">On-The-Go вимкнено</string>
+    <string name="accessibility_quick_settings_onthego_on">Режим \"На ходу\" ввімкнено</string>
 </resources>
