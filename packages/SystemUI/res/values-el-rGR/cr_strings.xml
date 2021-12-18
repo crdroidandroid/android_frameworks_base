@@ -268,16 +268,16 @@
     <string name="onthego_notif_title">Η λειτουργία On-The-Go είναι ενεργή</string>
     <string name="onthego_notif_stop">Διακοπή</string>
     <string name="onthego_notif_options">Επιλογές</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
+    <string name="onthego_notif_error">Αδυναμία εκκίνησης της λειτουργίας On-The-Go</string>
+    <string name="onthego_notif_restart">Επανεκκίνηση On-The-Go</string>
+    <string name="onthego_notif_camera_changed">Η λειτουργία κάμερας άλλαξε</string>
+    <string name="onthego_transparency">Διαφάνεια</string>
+    <string name="onthego_front_camera">Χρήση μπροστινής κάμερας</string>
+    <string name="onthego_service_toggle">Αυτόματη επανεκκίνηση υπηρεσίας</string>
+    <string name="onthego_channel_name">Κύρια</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- OnTheGo Tile -->
     <string name="quick_settings_onthego_label">On-The-Go</string>
-    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
-    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
+    <string name="accessibility_quick_settings_onthego_off">On-The-Go ανενεργό</string>
+    <string name="accessibility_quick_settings_onthego_on">On-The-Go ενεργό</string>
 </resources>
