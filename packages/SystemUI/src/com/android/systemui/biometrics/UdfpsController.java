@@ -315,7 +315,7 @@ public class UdfpsController implements DozeReceiver, UdfpsHbmProvider {
             mFgExecutor.execute(() -> {
                 if (acquiredInfo == 6 && (mStatusBarStateController.isDozing() || !mScreenOn)) {
                     if (vendorCode == mUdfpsVendorCode) {
-                        mPowerManager.wakeUp(SystemClock.uptimeMillis(),
+                        mPowerManager.wakeUp(mSystemClock.uptimeMillis(),
                                 PowerManager.WAKE_REASON_GESTURE, TAG);
                         onAodInterrupt(0, 0, 0, 0); // To-Do pass proper values
                     }
@@ -1049,7 +1049,7 @@ public class UdfpsController implements DozeReceiver, UdfpsHbmProvider {
             @Nullable Runnable onHbmEnabled) {
         // TO-DO send call to lineage biometric hal and/or add dummy jni that device could override
         if (onHbmEnabled != null) {
-            mMainHandler.post(onHbmEnabled);
+            onHbmEnabled.run();
         }
     }
 
@@ -1057,7 +1057,7 @@ public class UdfpsController implements DozeReceiver, UdfpsHbmProvider {
     public void disableHbm(@Nullable Runnable onHbmDisabled) {
         // TO-DO send call to lineage biometric hal and/or add dummy jni that device could override
         if (onHbmDisabled != null) {
-            mMainHandler.post(onHbmDisabled);
+            onHbmDisabled.run();
         }
     }
 }
