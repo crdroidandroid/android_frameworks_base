@@ -260,11 +260,11 @@ Sembilan</string>
     <string name="onthego_notif_camera_changed">Mode kamera berubah</string>
     <string name="onthego_transparency">Transparansi</string>
     <string name="onthego_front_camera">Gunakan kamera depan</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
+    <string name="onthego_service_toggle">Mulai ulang layanan secara otomatis</string>
+    <string name="onthego_channel_name">Utama</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- OnTheGo Tile -->
     <string name="quick_settings_onthego_label">On-The-Go</string>
-    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
-    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
+    <string name="accessibility_quick_settings_onthego_off">On-The-Go nonaktif</string>
+    <string name="accessibility_quick_settings_onthego_on">On-The-Go aktif</string>
 </resources>
