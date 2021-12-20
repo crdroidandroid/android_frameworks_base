@@ -255,12 +255,12 @@ Y Nueve</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
+    <string name="onthego_notif_ticker">On-The-Go activado</string>
+    <string name="onthego_notif_title">On-The-Go está activo</string>
     <string name="onthego_notif_stop">Detener</string>
     <string name="onthego_notif_options">Opciones</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
+    <string name="onthego_notif_error">No es posible iniciar el modo On-The-Go</string>
+    <string name="onthego_notif_restart">Reiniciar On-The-Go</string>
     <string name="onthego_notif_camera_changed">Modo de cámara cambiado</string>
     <string name="onthego_transparency">Transparencia</string>
     <string name="onthego_front_camera">Usar la cámara frontal</string>
@@ -269,6 +269,6 @@ Y Nueve</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- OnTheGo Tile -->
     <string name="quick_settings_onthego_label">On-The-Go</string>
-    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
-    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
+    <string name="accessibility_quick_settings_onthego_off">On-The-Go desactivado</string>
+    <string name="accessibility_quick_settings_onthego_on">On-The-Go activado</string>
 </resources>
