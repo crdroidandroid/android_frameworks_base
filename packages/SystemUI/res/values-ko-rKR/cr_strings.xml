@@ -260,20 +260,20 @@
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
+    <string name="onthego_notif_ticker">On-The-Go 활성화됨</string>
+    <string name="onthego_notif_title">On-The-Go가 활성화 되었습니다</string>
+    <string name="onthego_notif_stop">중지</string>
+    <string name="onthego_notif_options">옵션</string>
+    <string name="onthego_notif_error">On-The-Go 시작할 수 없습니다.</string>
+    <string name="onthego_notif_restart">On-The-Go 다시 시작</string>
+    <string name="onthego_notif_camera_changed">카메라 모드 변경됨</string>
+    <string name="onthego_transparency">투명도</string>
+    <string name="onthego_front_camera">전면 카메라 사용</string>
+    <string name="onthego_service_toggle">자동으로 서비스 다시 시작</string>
+    <string name="onthego_channel_name">메인</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- OnTheGo Tile -->
     <string name="quick_settings_onthego_label">On-The-Go</string>
-    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
-    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
+    <string name="accessibility_quick_settings_onthego_off">On-The-Go 꺼짐</string>
+    <string name="accessibility_quick_settings_onthego_on">On-The-Go 켜짐</string>
 </resources>
