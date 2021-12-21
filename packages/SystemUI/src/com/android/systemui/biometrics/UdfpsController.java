@@ -56,6 +56,7 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.util.crdroid.Utils;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.systemui.R;
 import com.android.systemui.biometrics.UdfpsHbmTypes.HbmType;
@@ -162,6 +163,8 @@ public class UdfpsController implements DozeReceiver, UdfpsHbmProvider {
     private boolean mAttemptedToDismissKeyguard;
     private final int mUdfpsVendorCode;
     private Set<Callback> mCallbacks = new HashSet<>();
+
+    private UdfpsAnimation mUdfpsAnimation;
 
     @VisibleForTesting
     public static final AudioAttributes VIBRATION_SONIFICATION_ATTRIBUTES =
@@ -612,6 +615,9 @@ public class UdfpsController implements DozeReceiver, UdfpsHbmProvider {
 
         mUdfpsVendorCode = mContext.getResources().getInteger(R.integer.config_udfps_vendor_code);
 
+        if (Utils.isPackageInstalled(mContext, "com.crdroid.udfps.resources")) {
+            mUdfpsAnimation = new UdfpsAnimation(mContext, mWindowManager, mSensorProps);
+        }
     }
 
     /**
@@ -770,6 +776,12 @@ public class UdfpsController implements DozeReceiver, UdfpsHbmProvider {
         mExecution.assertIsMainThread();
 
         final int reason = request.mRequestReason;
+
+        if (mUdfpsAnimation != null) {
+            mUdfpsAnimation.setIsKeyguard(reason ==
+                    IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD);
+        }
+
         if (mView == null) {
             try {
                 Log.v(TAG, "showUdfpsOverlay | adding window reason=" + reason);
@@ -993,6 +1005,9 @@ public class UdfpsController implements DozeReceiver, UdfpsHbmProvider {
         for (Callback cb : mCallbacks) {
             cb.onFingerDown();
         }
+        if (mUdfpsAnimation != null) {
+            mUdfpsAnimation.show();
+        }
     }
 
     private void onFingerUp() {
@@ -1008,6 +1023,9 @@ public class UdfpsController implements DozeReceiver, UdfpsHbmProvider {
             for (Callback cb : mCallbacks) {
                 cb.onFingerUp();
             }
+        }
+        if (mUdfpsAnimation != null) {
+            mUdfpsAnimation.hide();
         }
         mOnFingerDown = false;
         if (mView.isIlluminationRequested()) {

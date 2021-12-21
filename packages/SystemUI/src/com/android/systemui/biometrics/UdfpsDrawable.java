@@ -17,6 +17,8 @@
 package com.android.systemui.biometrics;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.pm.PackageManager;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -24,12 +26,17 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
+import android.provider.Settings;
 import android.util.PathParser;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.internal.util.crdroid.Utils;
+
+import com.android.systemui.Dependency;
 import com.android.systemui.R;
+import com.android.systemui.tuner.TunerService;
 
 /**
  * Abstract base class for drawable displayed when the finger is not touching the
@@ -38,12 +45,23 @@ import com.android.systemui.R;
 public abstract class UdfpsDrawable extends Drawable {
     static final float DEFAULT_STROKE_WIDTH = 3f;
 
+    static final String UDFPS_ICON = "system:" + Settings.System.UDFPS_ICON;
+
+    String udfpsResourcesPackage = "com.crdroid.udfps.resources";
+
     @NonNull final Context mContext;
     @NonNull final ShapeDrawable mFingerprintDrawable;
     private final Paint mPaint;
     private boolean mIlluminationShowing;
 
+    int mSelectedIcon = 0;
+
     int mAlpha = 255; // 0 - 255
+
+    Drawable mUdfpsDrawable;
+    Resources udfpsRes;
+    String[] mUdfpsIcons;
+
     public UdfpsDrawable(@NonNull Context context) {
         mContext = context;
         final String fpPath = context.getResources().getString(R.string.config_udfpsIcon);
@@ -55,6 +73,33 @@ public abstract class UdfpsDrawable extends Drawable {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         setStrokeWidth(DEFAULT_STROKE_WIDTH);
+
+        init();
+    }
+
+    void init() {
+        if (Utils.isPackageInstalled(mContext, udfpsResourcesPackage)) {
+            try {
+                PackageManager pm = mContext.getPackageManager();
+                udfpsRes = pm.getResourcesForApplication(udfpsResourcesPackage);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            int res = udfpsRes.getIdentifier("udfps_icons",
+                    "array", udfpsResourcesPackage);
+            mUdfpsIcons = udfpsRes.getStringArray(res);
+
+            TunerService.Tunable tunable = (key, newValue) -> {
+                if (UDFPS_ICON.equals(key)) {
+                    mSelectedIcon = newValue == null ? 0 : Integer.parseInt(newValue);
+                    mUdfpsDrawable = mSelectedIcon == 0 ? null :
+                            loadDrawable(udfpsRes,
+                                    mUdfpsIcons[mSelectedIcon]);
+                }
+            };
+            Dependency.get(TunerService.class).addTunable(tunable, UDFPS_ICON);
+        }
     }
 
     void setStrokeWidth(float strokeWidth) {
@@ -66,7 +111,7 @@ public abstract class UdfpsDrawable extends Drawable {
      * @param sensorRect the rect coordinates for the sensor area
      */
     public void onSensorRectUpdated(@NonNull RectF sensorRect) {
-        final int margin =  (int) sensorRect.height() / 8;
+        final int margin =  (int) sensorRect.height() / 16;
 
         final Rect bounds = new Rect((int) sensorRect.left + margin,
                 (int) sensorRect.top + margin,
@@ -80,6 +125,9 @@ public abstract class UdfpsDrawable extends Drawable {
      */
     protected void updateFingerprintIconBounds(@NonNull Rect bounds) {
         mFingerprintDrawable.setBounds(bounds);
+        if (mUdfpsDrawable != null) {
+            mUdfpsDrawable.setBounds(bounds);
+        }
         invalidateSelf();
     }
 
@@ -87,11 +135,24 @@ public abstract class UdfpsDrawable extends Drawable {
     public void setAlpha(int alpha) {
         mAlpha = alpha;
         mFingerprintDrawable.setAlpha(mAlpha);
+        if (mUdfpsDrawable != null) {
+            mUdfpsDrawable.setAlpha(mAlpha);
+        }
         invalidateSelf();
     }
 
     boolean isIlluminationShowing() {
         return mIlluminationShowing;
+    }
+
+    Drawable getUdfpsDrawable() {
+        return mUdfpsDrawable;
+    }
+
+    Drawable loadDrawable(Resources res, String resName) {
+        int resId = res.getIdentifier(resName,
+                "drawable", udfpsResourcesPackage);
+        return res.getDrawable(resId);
     }
 
     void setIlluminationShowing(boolean showing) {
