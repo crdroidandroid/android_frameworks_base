@@ -40,4 +40,8 @@
     <dimen name="dismiss_all_button_height">55dp</dimen>
     <dimen name="dismiss_all_button_width">55dp</dimen>
     <dimen name="dismiss_all_button_margin_bottom">48dp</dimen>
+
+    <!-- Udfps fingerprint animation -->
+    <dimen name="udfps_animation_size">280dp</dimen>
+    <dimen name="udfps_animation_offset">0dp</dimen>
 </resources>
