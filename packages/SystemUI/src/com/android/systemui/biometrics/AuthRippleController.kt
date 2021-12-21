@@ -356,13 +356,16 @@ constructor(
         object : UdfpsController.Callback {
             override fun onFingerDown() {
                 // only show dwell ripple for device entry
-                if (keyguardUpdateMonitor.isFingerprintDetectionRunning) {
+                if (keyguardUpdateMonitor.isFingerprintDetectionRunning &&
+                        udfpsController?.isAnimationEnabled() == false) {
                     showDwellRipple()
                 }
             }
 
             override fun onFingerUp() {
-                mView.retractDwellRipple()
+                if (udfpsController?.isAnimationEnabled() == false) {
+                    mView.retractDwellRipple()
+                }
             }
         }
 
