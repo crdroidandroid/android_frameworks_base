@@ -6643,6 +6643,11 @@ public final class Settings {
         /**
          * @hide
          */
+        public static final String UDFPS_ICON = "udfps_icon";
+
+        /**
+         * @hide
+         */
         public static final String NAVIGATION_BAR_IME_SPACE = "navigation_bar_ime_space";
 
         /**
