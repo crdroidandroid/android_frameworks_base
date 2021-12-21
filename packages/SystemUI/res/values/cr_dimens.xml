@@ -39,4 +39,8 @@
     <!-- Weather -->  
     <dimen name="weather_image_max_size">24dp</dimen>
     <dimen name="weather_humidity_margin_start">16dp</dimen>
+
+    <!-- Udfps fingerprint animation -->
+    <dimen name="udfps_animation_size">280dp</dimen>
+    <dimen name="udfps_animation_offset">0dp</dimen>
 </resources>
