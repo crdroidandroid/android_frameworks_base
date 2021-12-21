@@ -26,6 +26,6 @@ class UdfpsFpDrawable(context: Context) : UdfpsDrawable(context) {
         if (isDisplayConfigured) {
             return
         }
-        fingerprintDrawable.draw(canvas)
+        getUdfpsDrawable().draw(canvas)
     }
 }
