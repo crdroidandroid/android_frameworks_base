@@ -32,6 +32,7 @@ import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.graphics.Point;
 import android.hardware.biometrics.BiometricFingerprintConstants;
+import android.hardware.biometrics.BiometricOverlayConstants;
 import android.hardware.biometrics.SensorProperties;
 import android.hardware.display.DisplayManager;
 import android.hardware.fingerprint.FingerprintManager;
@@ -199,6 +200,8 @@ public class UdfpsController implements DozeReceiver, Dumpable {
     private final Set<Callback> mCallbacks = new HashSet<>();
     private final int mUdfpsVendorCode;
     private boolean mScreenOffFod;
+
+    private UdfpsAnimation mUdfpsAnimation;
 
     @VisibleForTesting
     public static final VibrationAttributes UDFPS_VIBRATION_ATTRIBUTES =
@@ -783,13 +786,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         mLatencyTracker = latencyTracker;
         mActivityLaunchAnimator = activityLaunchAnimator;
         mAlternateTouchProvider = alternateTouchProvider.map(Provider::get).orElse(null);
-        mSensorProps = new FingerprintSensorPropertiesInternal(
-                -1 /* sensorId */,
-                SensorProperties.STRENGTH_CONVENIENCE,
-                0 /* maxEnrollmentsPerUser */,
-                new ArrayList<>() /* componentInfo */,
-                FingerprintSensorProperties.TYPE_UNKNOWN,
-                false /* resetLockoutRequiresHardwareAuthToken */);
+        mSensorProps = findFirstUdfps();
 
         mBiometricExecutor = biometricsExecutor;
         mPrimaryBouncerInteractor = primaryBouncerInteractor;
@@ -841,6 +838,9 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                 }
             );
         }
+        if (com.android.internal.util.crdroid.Utils.isPackageInstalled(mContext, "com.crdroid.udfps.animations")) {
+            mUdfpsAnimation = new UdfpsAnimation(mContext, mWindowManager, mSensorProps);
+        }
     }
 
     /**
@@ -856,6 +856,17 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                     "udfps-onStart-click",
                     UDFPS_VIBRATION_ATTRIBUTES);
         }
+    }
+
+    @Nullable
+    private FingerprintSensorPropertiesInternal findFirstUdfps() {
+        for (FingerprintSensorPropertiesInternal props :
+                mFingerprintManager.getSensorPropertiesInternal()) {
+            if (props.isAnyUdfpsType()) {
+                return props;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -881,6 +892,12 @@ public class UdfpsController implements DozeReceiver, Dumpable {
 
         mOverlay = overlay;
         final int requestReason = overlay.getRequestReason();
+
+        if (mUdfpsAnimation != null) {
+            mUdfpsAnimation.setIsKeyguard(requestReason ==
+                    BiometricOverlayConstants.REASON_AUTH_KEYGUARD);
+        }
+
         if (requestReason == REASON_AUTH_KEYGUARD
                 && !mKeyguardUpdateMonitor.isFingerprintDetectionRunning()) {
             Log.d(TAG, "Attempting to showUdfpsOverlay when fingerprint detection"
@@ -1119,6 +1136,9 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         for (Callback cb : mCallbacks) {
             cb.onFingerDown();
         }
+        if (mUdfpsAnimation != null) {
+            mUdfpsAnimation.show();
+        }
     }
 
     private void onFingerUp(long requestId, @NonNull UdfpsView view) {
@@ -1172,6 +1192,9 @@ public class UdfpsController implements DozeReceiver, Dumpable {
             for (Callback cb : mCallbacks) {
                 cb.onFingerUp();
             }
+        }
+        if (mUdfpsAnimation != null) {
+            mUdfpsAnimation.hide();
         }
         mOnFingerDown = false;
         if (isOptical()) {
