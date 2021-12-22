@@ -228,7 +228,7 @@
     <string name="status_bar_nfc">NFC</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">行走模式已激活</string>
-    <string name="onthego_notif_title">行走模式已激活</string>
+    <string name="onthego_notif_title">行走模式处于活动状态</string>
     <string name="onthego_notif_stop">停止</string>
     <string name="onthego_notif_options">选项</string>
     <string name="onthego_notif_error">无法启动行走模式</string>
