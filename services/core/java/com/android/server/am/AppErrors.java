@@ -1076,7 +1076,10 @@ class AppErrors {
             boolean showBackground = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                     Settings.Secure.ANR_SHOW_BACKGROUND, 0,
                     mService.mUserController.getCurrentUserId()) != 0;
-            if (mService.mAtmInternal.canShowErrorDialogs() || showBackground) {
+            final boolean anrSilenced = mAppsNotReportingCrashes != null
+                    && mAppsNotReportingCrashes.contains(proc.info.packageName);
+            if (!anrSilenced &&
+                    (mService.mAtmInternal.canShowErrorDialogs() || showBackground)) {
                 AnrController anrController = errState.getDialogController().getAnrController();
                 if (anrController == null) {
                     errState.getDialogController().showAnrDialogs(data);
@@ -1101,7 +1104,7 @@ class AppErrors {
                 MetricsLogger.action(mContext, MetricsProto.MetricsEvent.ACTION_APP_ANR,
                         AppNotRespondingDialog.CANT_SHOW);
                 // Just kill the app if there is no dialog to be shown.
-                doKill = true;
+                doKill = !anrSilenced;
             }
         }
         if (doKill) {
