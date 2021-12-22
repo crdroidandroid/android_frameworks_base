@@ -24,6 +24,7 @@ import android.annotation.Nullable;
 import android.content.ComponentName;
 import android.content.res.Configuration;
 import android.metrics.LogMaker;
+import android.provider.Settings;
 import android.view.View;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -37,6 +38,7 @@ import com.android.systemui.plugins.qs.QSTileView;
 import com.android.systemui.qs.customize.QSCustomizerController;
 import com.android.systemui.qs.external.CustomTile;
 import com.android.systemui.qs.logging.QSLogger;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.Utils;
 import com.android.systemui.util.ViewController;
 import com.android.systemui.util.animation.DisappearParameters;
@@ -59,7 +61,17 @@ import kotlin.jvm.functions.Function1;
  * @param <T> Type of QSPanel.
  */
 public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewController<T>
-        implements Dumpable{
+        implements Dumpable, TunerService.Tunable {
+
+    private static final String QS_TILE_VERTICAL_LAYOUT =
+            "system:" + Settings.System.QS_TILE_VERTICAL_LAYOUT;
+    private static final String QS_LAYOUT_COLUMNS =
+            "system:" + Settings.System.QS_LAYOUT_COLUMNS;
+    private static final String QS_LAYOUT_COLUMNS_LANDSCAPE =
+            "system:" + Settings.System.QS_LAYOUT_COLUMNS_LANDSCAPE;
+    private static final String QS_TILE_LABEL_HIDE =
+            "system:" + Settings.System.QS_TILE_LABEL_HIDE;
+
     protected final QSTileHost mHost;
     private final QSCustomizerController mQsCustomizerController;
     private final boolean mUsingMediaPlayer;
@@ -68,6 +80,7 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
     private final UiEventLogger mUiEventLogger;
     private final QSLogger mQSLogger;
     private final DumpManager mDumpManager;
+    private final TunerService mTunerService;
     protected final ArrayList<TileRecord> mRecords = new ArrayList<>();
     protected boolean mShouldUseSplitNotificationShade;
 
@@ -91,6 +104,10 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
                     if (newConfig.orientation != mLastOrientation) {
                         mLastOrientation = newConfig.orientation;
                         switchTileLayout(false);
+                    }
+                    if (mView.getTileLayout() != null) {
+                        mView.getTileLayout().updateSettings();
+                        setTiles();
                     }
                 }
             };
@@ -119,7 +136,8 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
             MetricsLogger metricsLogger,
             UiEventLogger uiEventLogger,
             QSLogger qsLogger,
-            DumpManager dumpManager
+            DumpManager dumpManager,
+            TunerService tunerService
     ) {
         super(view);
         mHost = host;
@@ -130,6 +148,7 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
         mUiEventLogger = uiEventLogger;
         mQSLogger = qsLogger;
         mDumpManager = dumpManager;
+        mTunerService = tunerService;
         mShouldUseSplitNotificationShade =
                 Utils.shouldUseSplitNotificationShade(getResources());
     }
@@ -166,10 +185,17 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
         switchTileLayout(true);
 
         mDumpManager.registerDumpable(mView.getDumpableTag(), this);
+
+        mTunerService.addTunable(this, QS_TILE_VERTICAL_LAYOUT);
+        mTunerService.addTunable(this, QS_LAYOUT_COLUMNS);
+        mTunerService.addTunable(this, QS_LAYOUT_COLUMNS_LANDSCAPE);
+        mTunerService.addTunable(this, QS_TILE_LABEL_HIDE);
     }
 
     @Override
     protected void onViewDetached() {
+        mTunerService.removeTunable(mView);
+
         mView.removeOnConfigurationChangedListener(mOnConfigurationChangedListener);
         mHost.removeCallback(mQSHostCallback);
 
@@ -303,7 +329,6 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
         }
     }
 
-
     void setListening(boolean listening) {
         mView.setListening(listening);
 
@@ -414,6 +439,23 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
 
     public View getBrightnessView() {
         return mView.getBrightnessView();
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QS_TILE_VERTICAL_LAYOUT:
+            case QS_LAYOUT_COLUMNS:
+            case QS_LAYOUT_COLUMNS_LANDSCAPE:
+            case QS_TILE_LABEL_HIDE:
+                if (mView.getTileLayout() != null) {
+                    mView.getTileLayout().updateSettings();
+                    setTiles();
+                }
+                break;
+            default:
+                break;
+         }
     }
 
     /** */
