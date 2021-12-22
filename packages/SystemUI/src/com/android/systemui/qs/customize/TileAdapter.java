@@ -52,6 +52,7 @@ import com.android.systemui.res.R;
 import com.android.systemui.qs.QSEditEvent;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.TileLayout;
+import com.android.systemui.qs.TileUtils;
 import com.android.systemui.qs.customize.TileAdapter.Holder;
 import com.android.systemui.qs.customize.TileQueryHelper.TileInfo;
 import com.android.systemui.qs.customize.TileQueryHelper.TileStateListener;
@@ -86,8 +87,6 @@ public class TileAdapter extends RecyclerView.Adapter<Holder> implements TileSta
     private static final int ACTION_ADD = 1;
     private static final int ACTION_MOVE = 2;
 
-    private static final int NUM_COLUMNS_ID = R.integer.quick_settings_num_columns;
-
     private final Context mContext;
 
     private final Handler mHandler = new Handler();
@@ -121,7 +120,6 @@ public class TileAdapter extends RecyclerView.Adapter<Holder> implements TileSta
 
     private TextView mTempTextView;
     private int mMinTileViewHeight;
-    private final boolean mIsSmallLandscapeLockscreenEnabled;
 
     @Inject
     public TileAdapter(
@@ -136,12 +134,7 @@ public class TileAdapter extends RecyclerView.Adapter<Holder> implements TileSta
         mDecoration = new TileItemDecoration(context);
         mMarginDecoration = new MarginTileDecoration();
         mMinNumTiles = context.getResources().getInteger(R.integer.quick_settings_min_num_tiles);
-        mIsSmallLandscapeLockscreenEnabled =
-                featureFlags.isEnabled(Flags.LOCKSCREEN_ENABLE_LANDSCAPE);
-        mNumColumns = useSmallLandscapeLockscreenResources()
-                ? context.getResources().getInteger(
-                        R.integer.small_land_lockscreen_quick_settings_num_columns)
-                : context.getResources().getInteger(NUM_COLUMNS_ID);
+        mNumColumns = TileUtils.getQSColumnsCount(context);
         mAccessibilityDelegate = new TileAdapterDelegate();
         mSizeLookup.setSpanIndexCacheEnabled(true);
         mTempTextView = new TextView(context);
@@ -164,27 +157,13 @@ public class TileAdapter extends RecyclerView.Adapter<Holder> implements TileSta
      * @return {@code true} if the number of columns changed, {@code false} otherwise
      */
     public boolean updateNumColumns() {
-        int numColumns = useSmallLandscapeLockscreenResources()
-                ? mContext.getResources().getInteger(
-                        R.integer.small_land_lockscreen_quick_settings_num_columns)
-                : mContext.getResources().getInteger(NUM_COLUMNS_ID);
+        int numColumns = TileUtils.getQSColumnsCount(mContext);
         if (numColumns != mNumColumns) {
             mNumColumns = numColumns;
             return true;
         } else {
             return false;
         }
-    }
-
-    // TODO (b/293252410) remove condition here when flag is launched
-    //  Instead update quick_settings_num_columns and quick_settings_max_rows to be the same as
-    //  the small_land_lockscreen_quick_settings_num_columns or
-    //  small_land_lockscreen_quick_settings_max_rows respectively whenever
-    //  is_small_screen_landscape is true.
-    //  Then, only use quick_settings_num_columns and quick_settings_max_rows.
-    private boolean useSmallLandscapeLockscreenResources() {
-        return mIsSmallLandscapeLockscreenEnabled
-                && mContext.getResources().getBoolean(R.bool.is_small_screen_landscape);
     }
 
     public int getNumColumns() {
