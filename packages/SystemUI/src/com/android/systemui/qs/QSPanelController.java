@@ -92,7 +92,7 @@ public class QSPanelController extends QSPanelControllerBase<QSPanel> {
             SplitShadeStateController splitShadeStateController,
             SceneContainerFlags sceneContainerFlags) {
         super(view, qsHost, qsCustomizerController, usingMediaPlayer, mediaHost,
-                metricsLogger, uiEventLogger, qsLogger, dumpManager, splitShadeStateController);
+                metricsLogger, uiEventLogger, qsLogger, dumpManager, splitShadeStateController, tunerService);
         mTunerService = tunerService;
         mQsCustomizerController = qsCustomizerController;
         mQsTileRevealControllerFactory = qsTileRevealControllerFactory;
@@ -132,6 +132,8 @@ public class QSPanelController extends QSPanelControllerBase<QSPanel> {
         mTunerService.addTunable(mView, QSPanel.QS_TILE_ANIMATION_STYLE);
         mTunerService.addTunable(mView, QSPanel.QS_TILE_ANIMATION_DURATION);
         mTunerService.addTunable(mView, QSPanel.QS_TILE_ANIMATION_INTERPOLATOR);
+        mTunerService.addTunable(mView, QSPanel.QS_LAYOUT_COLUMNS);
+        mTunerService.addTunable(mView, QSPanel.QS_LAYOUT_COLUMNS_LANDSCAPE);
 
         mView.setBrightnessRunnable(() -> {
             mView.updateResources();

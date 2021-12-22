@@ -127,11 +127,12 @@
     <style name="TextAppearance.QS.TileLabel">
         <item name="android:textSize">@dimen/qs_tile_text_size</item>
         <item name="android:letterSpacing">0.01</item>
-        <item name="android:lineHeight">20sp</item>
+        <item name="android:lineHeight">16sp</item>
         <item name="android:fontFamily">@*android:string/config_bodyFontFamilyMedium</item>
     </style>
 
     <style name="TextAppearance.QS.TileLabel.Secondary">
+        <item name="android:lineHeight">@dimen/qs_tile_text_size</item>
         <item name="android:fontFamily">@*android:string/config_bodyFontFamily</item>
     </style>
 
