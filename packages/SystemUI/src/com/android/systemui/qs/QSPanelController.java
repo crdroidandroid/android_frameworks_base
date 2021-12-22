@@ -104,7 +104,7 @@ public class QSPanelController extends QSPanelControllerBase<QSPanel> {
             BrightnessSliderController.Factory brightnessSliderFactory,
             FalsingManager falsingManager, CommandQueue commandQueue) {
         super(view, qstileHost, qsCustomizerController, usingMediaPlayer, mediaHost,
-                metricsLogger, uiEventLogger, qsLogger, dumpManager);
+                metricsLogger, uiEventLogger, qsLogger, dumpManager, tunerService);
         mQsSecurityFooter = qsSecurityFooter;
         mTunerService = tunerService;
         mQsCustomizerController = qsCustomizerController;

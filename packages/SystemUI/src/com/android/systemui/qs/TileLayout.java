@@ -13,6 +13,7 @@ import com.android.internal.logging.UiEventLogger;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSPanel.QSTileLayout;
 import com.android.systemui.qs.QSPanelControllerBase.TileRecord;
+import com.android.systemui.qs.TileUtils;
 import com.android.systemui.qs.tileimpl.HeightOverrideable;
 
 import java.util.ArrayList;
@@ -41,7 +42,6 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     private final boolean mLessRows;
     private int mMinRows = 1;
     private int mMaxColumns = NO_MAX_COLUMNS;
-    protected int mResourceColumns;
     private float mSquishinessFraction = 1f;
     private int mLastTileBottom;
 
@@ -117,14 +117,12 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     }
 
     public boolean updateResources() {
-        final Resources res = mContext.getResources();
-        mResourceColumns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
-        updateColumns();
-        mMaxCellHeight = mContext.getResources().getDimensionPixelSize(mCellHeightResId);
+        final Resources res = getResources();
+        mMaxCellHeight = res.getDimensionPixelSize(mCellHeightResId);
         mCellMarginHorizontal = res.getDimensionPixelSize(R.dimen.qs_tile_margin_horizontal);
         mSidePadding = useSidePadding() ? mCellMarginHorizontal / 2 : 0;
         mCellMarginVertical= res.getDimensionPixelSize(R.dimen.qs_tile_margin_vertical);
-        mMaxAllowedRows = Math.max(1, getResources().getInteger(R.integer.quick_settings_max_rows));
+        mMaxAllowedRows = Math.max(1, res.getInteger(R.integer.quick_settings_max_rows));
         if (mLessRows) mMaxAllowedRows = Math.max(mMinRows, mMaxAllowedRows - 1);
         if (updateColumns()) {
             requestLayout();
@@ -139,7 +137,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     private boolean updateColumns() {
         int oldColumns = mColumns;
-        mColumns = Math.min(mResourceColumns, mMaxColumns);
+        mColumns = Math.min(getResourceColumns(), mMaxColumns);
         return oldColumns != mColumns;
     }
 
@@ -210,6 +208,9 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     }
 
     protected int getCellHeight() {
+        if (TileUtils.getQSTileLabelHide(mContext)) {
+            return getResources().getDimensionPixelSize(R.dimen.qs_quick_tile_size);
+        }
         return mMaxCellHeight;
     }
 
@@ -296,5 +297,16 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
                 ((HeightOverrideable) record.tileView).setSquishinessFraction(mSquishinessFraction);
             }
         }
+    }
+
+    public int getResourceColumns() {
+        int resourceColumns = Math.max(2, getResources().getInteger(R.integer.quick_settings_num_columns));
+        return TileUtils.getQSColumnsCount(mContext, resourceColumns);
+    }
+
+    @Override
+    public void updateSettings() {
+        setMaxColumns(getResourceColumns());
+        requestLayout();
     }
 }
