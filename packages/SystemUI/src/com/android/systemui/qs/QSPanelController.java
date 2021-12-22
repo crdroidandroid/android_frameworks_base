@@ -81,7 +81,7 @@ public class QSPanelController extends QSPanelControllerBase<QSPanel> {
             FalsingManager falsingManager,
             StatusBarKeyguardViewManager statusBarKeyguardViewManager) {
         super(view, qsHost, qsCustomizerController, usingMediaPlayer, mediaHost,
-                metricsLogger, uiEventLogger, qsLogger, dumpManager);
+                metricsLogger, uiEventLogger, qsLogger, dumpManager, tunerService);
         mTunerService = tunerService;
         mQsCustomizerController = qsCustomizerController;
         mQsTileRevealControllerFactory = qsTileRevealControllerFactory;
