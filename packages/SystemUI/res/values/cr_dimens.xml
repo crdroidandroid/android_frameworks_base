@@ -27,4 +27,5 @@
     <!-- Screenshot drawables -->
     <dimen name="screenshot_border_corner_radius">24dp</dimen>
     <dimen name="screenshot_preview_corner_radius">20dp</dimen>
+    <dimen name="screenshot_button_corner_radius">20dp</dimen>
 </resources>
