@@ -93,6 +93,7 @@ import com.android.systemui.flags.Flags;
 import com.android.systemui.flags.RefactorFlag;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper;
+import com.android.systemui.qs.TileUtils;
 import com.android.systemui.res.R;
 import com.android.systemui.shade.ShadeController;
 import com.android.systemui.shade.TouchLogger;
@@ -467,6 +468,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
     private int mCornerRadius;
     private int mMinimumPaddings;
     private int mQsTilePadding;
+    private int mQsTileColumns;
     private boolean mSkinnyNotifsInLandscape;
     private int mSidePaddings;
     private final Rect mBackgroundAnimationRect = new Rect();
@@ -1074,6 +1076,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         mBottomPadding = res.getDimensionPixelSize(R.dimen.notification_panel_padding_bottom);
         mMinimumPaddings = res.getDimensionPixelSize(R.dimen.notification_side_paddings);
         mQsTilePadding = res.getDimensionPixelOffset(R.dimen.qs_tile_margin_horizontal);
+        mQsTileColumns = TileUtils.getQSColumnsCount(mContext);
         mSidePaddings = mMinimumPaddings;  // Updated in onMeasure by updateSidePadding()
         mMinInteractionHeight = res.getDimensionPixelSize(
                 R.dimen.notification_min_interaction_height);
@@ -1094,7 +1097,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
             return;
         }
         final int innerWidth = viewWidth - mMinimumPaddings * 2;
-        final int qsTileWidth = (innerWidth - mQsTilePadding * 3) / 4;
+        final int qsTileWidth = (innerWidth - mQsTilePadding * (mQsTileColumns - 1)) / mQsTileColumns;
         mSidePaddings = mMinimumPaddings + qsTileWidth + mQsTilePadding;
     }
 
