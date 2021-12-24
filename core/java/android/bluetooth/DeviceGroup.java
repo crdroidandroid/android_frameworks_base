@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Provides Device Group details.
@@ -53,7 +54,8 @@ public final class DeviceGroup implements Parcelable {
     /** Size of the Device Group. */
     private int mSize;
     /** List of all group devices {@link BluetoothDevice} */
-    private List <BluetoothDevice> mGroupDevices = new ArrayList<BluetoothDevice>();
+    private CopyOnWriteArrayList <BluetoothDevice> mGroupDevices
+                                  = new CopyOnWriteArrayList<BluetoothDevice>();
     /** Primary Service UUID which has included required Device Group service*/
     private final ParcelUuid mIncludingSrvcUUID;
     /** Suggests whether exclusive access can be taken for this device group */
@@ -67,7 +69,7 @@ public final class DeviceGroup implements Parcelable {
             ParcelUuid includingSrvcUUID, boolean exclusiveAccessSupport) {
         mGroupId = groupId;
         mSize = size;
-        mGroupDevices = groupDevices;
+        mGroupDevices.addAll(groupDevices);
         mIncludingSrvcUUID = includingSrvcUUID;
         mExclusiveAccessSupport = exclusiveAccessSupport;
     }
