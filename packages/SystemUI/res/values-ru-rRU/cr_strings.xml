@@ -230,20 +230,20 @@
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
-    <string name="global_action_onthego">On-The-Go</string>
+    <string name="onthego_notif_ticker">Режим «На ходу» включен</string>
+    <string name="onthego_notif_title">Режим «На ходу» активен</string>
+    <string name="onthego_notif_stop">Остановить</string>
+    <string name="onthego_notif_options">Настройки</string>
+    <string name="onthego_notif_error">Не удается включить режим «На ходу»</string>
+    <string name="onthego_notif_restart">Перезапустить режим «На ходу»</string>
+    <string name="onthego_notif_camera_changed">Режим камеры изменен</string>
+    <string name="onthego_transparency">Прозрачность</string>
+    <string name="onthego_front_camera">Использовать переднюю камеру</string>
+    <string name="onthego_service_toggle">Автоматически перезапускать службу</string>
+    <string name="onthego_channel_name">Основной</string>
+    <string name="global_action_onthego">Режим \"На ходу\"</string>
     <!-- OnTheGo Tile -->
-    <string name="quick_settings_onthego_label">On-The-Go</string>
-    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
-    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
+    <string name="quick_settings_onthego_label">Режим \"На ходу\"</string>
+    <string name="accessibility_quick_settings_onthego_off">Режим \"На ходу\" выкл</string>
+    <string name="accessibility_quick_settings_onthego_on">Режим \"На ходу\" вкл</string>
 </resources>
