@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="horizontal" android:id="@+id/game_launch_toast" android:background="@drawable/rounded_rectangle_8dp" android:padding="16.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="344.0dip" android:backgroundTint="@color/game_dashboard_color_background">
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <TextView android:textSize="14.0sp" android:textColor="?android:textColorPrimary" android:ellipsize="end" android:id="@+id/game_launch_toast_dnd_message" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" />
+            <TextView android:textSize="14.0sp" android:textColor="?android:textColorPrimary" android:ellipsize="end" android:id="@+id/game_launch_toast_game_mode_message" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" />
+        </LinearLayout>
+        <Space android:layout_width="16.0dip" android:layout_height="1.0dip" />
+        <TextView android:textSize="14.0sp" android:textColor="@color/game_dashboard_color_accent_primary_variant" android:layout_gravity="center" android:id="@+id/game_launch_toast_change" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/game_launch_change" android:paddingHorizontal="8.0dip" />
+    </LinearLayout>
+</FrameLayout>

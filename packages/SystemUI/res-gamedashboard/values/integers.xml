@@ -1,0 +1,6 @@
+<resources>
+    <integer name="game_toast_fade_in_animation_duration">100</integer>
+    <integer name="game_toast_fade_out_animation_duration">100</integer>
+    <integer name="game_toast_translate_down_animation_duration">200</integer>
+    <integer name="game_toast_translate_up_animation_duration">250</integer>
+</resources>

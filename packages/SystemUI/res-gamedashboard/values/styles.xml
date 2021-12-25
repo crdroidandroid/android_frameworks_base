@@ -1,0 +1,12 @@
+<resources>
+    <style name="GameMenuTheme" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="android:windowBackground">?android:colorBackground</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:windowBlurBehindRadius">25.0dip</item>
+        <item name="android:windowBlurBehindEnabled">true</item>
+        <item name="android:windowBackgroundBlurRadius">50.0dip</item>
+    </style>
+</resources>

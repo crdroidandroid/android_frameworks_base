@@ -1,0 +1,7 @@
+<resources>
+    <color name="game_dashboard_screen_record_countdown">#ffd93025</color>
+    <color name="game_mode_battery_background">#fffdd663</color>
+    <color name="game_mode_battery_tint">#ff775901</color>
+    <color name="game_mode_performance_background">#ffa8dab5</color>
+    <color name="game_mode_performance_tint">#ff0d652d</color>
+</resources>

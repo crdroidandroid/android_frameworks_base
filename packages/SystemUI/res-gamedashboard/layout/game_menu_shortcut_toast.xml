@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:textSize="14.0sp" android:textColor="@color/game_dashboard_text_color_on_accent" android:orientation="vertical" android:id="@+id/game_menu_shortcut_toast_textview" android:background="@drawable/rounded_rectangle_28dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:backgroundTint="@color/game_dashboard_color_accent_primary" android:paddingHorizontal="16.0dip" android:paddingVertical="12.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

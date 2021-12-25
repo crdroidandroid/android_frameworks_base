@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_gravity="center_horizontal" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:paddingHorizontal="16.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/game_menu_toggles" android:layout_width="fill_parent" android:layout_height="@dimen/game_menu_toggle_height" android:paddingStart="16.0dip" android:paddingEnd="16.0dip">
+        <com.google.android.systemui.gamedashboard.GameDashboardButton android:id="@+id/game_menu_screenshot" android:padding="18.0dip" android:layout_width="60.0dip" android:layout_height="60.0dip" android:src="@drawable/ic_screenshot" android:scaleType="fitCenter" android:contentDescription="@string/accessibility_game_dashboard_screenshot_toggle" />
+        <Space android:layout_width="0.0dip" android:layout_height="1.0dip" android:layout_weight="1.0" />
+        <com.google.android.systemui.gamedashboard.GameDashboardButton android:id="@+id/game_menu_screen_record" android:padding="18.0dip" android:layout_width="60.0dip" android:layout_height="60.0dip" android:src="@drawable/ic_screen_record" android:scaleType="fitCenter" android:contentDescription="@string/accessibility_game_dashboard_screen_record_toggle" />
+        <Space android:layout_width="0.0dip" android:layout_height="1.0dip" android:layout_weight="1.0" />
+        <com.google.android.systemui.gamedashboard.GameDashboardButton android:id="@+id/game_menu_fps" android:padding="14.0dip" android:layout_width="60.0dip" android:layout_height="60.0dip" android:src="@drawable/ic_fps" android:scaleType="fitCenter" android:contentDescription="@string/accessibility_game_dashboard_fps_toggle" />
+        <Space android:layout_width="0.0dip" android:layout_height="1.0dip" android:layout_weight="1.0" />
+        <com.google.android.systemui.gamedashboard.GameDashboardButton android:id="@+id/game_menu_dnd" android:padding="18.0dip" android:layout_width="60.0dip" android:layout_height="60.0dip" android:src="@drawable/ic_dnd" android:scaleType="fitCenter" android:contentDescription="@string/accessibility_game_dashboard_dnd_toggle" />
+    </LinearLayout>
+    <include android:id="@+id/game_menu_widgets_scroll" layout="@layout/game_menu_widgets" />
+</LinearLayout>

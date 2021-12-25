@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.gamedashboard.WidgetView android:orientation="vertical" android:background="@drawable/rounded_rectangle_28dp" android:padding="@dimen/game_menu_widget_padding" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:backgroundTint="@color/game_dashboard_color_surface"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:id="@+id/content_view" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="16.0dip">
+            <ImageView android:id="@+id/icon" android:background="@drawable/game_dashboard_button_background" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_alignParentStart="true" android:backgroundTint="@color/game_dashboard_color_surface" />
+            <TextView android:textSize="14.0sp" android:textColor="?android:textColorSecondary" android:gravity="center_vertical" android:id="@+id/tip_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="google-sans" android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+        <TextView android:textSize="@dimen/game_menu_widget_title_text_size" android:textColor="?android:textColorPrimary" android:ellipsize="none" android:id="@+id/title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="12.0dip" android:maxLines="2" android:lines="2" android:fontFamily="google-sans" android:breakStrategy="balanced" android:hyphenationFrequency="none" />
+        <TextView android:textSize="@dimen/game_menu_widget_description_text_size" android:textColor="?android:textColorSecondary" android:ellipsize="end" android:id="@+id/description" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="2" android:lines="2" android:fontFamily="google-sans" android:breakStrategy="balanced" android:hyphenationFrequency="none" />
+    </LinearLayout>
+    <LinearLayout android:orientation="vertical" android:id="@+id/loading_view" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <ImageView android:background="@drawable/game_dashboard_button_background" android:layout_width="24.0dip" android:layout_height="24.0dip" android:layout_marginBottom="16.0dip" android:backgroundTint="@color/game_dashboard_color_surface_variant" />
+        <ImageView android:background="@drawable/rounded_rectangle_8dp" android:layout_width="128.0dip" android:layout_height="28.0dip" android:layout_marginBottom="40.0dip" android:backgroundTint="@color/game_dashboard_color_surface_variant" />
+        <ImageView android:background="@drawable/rounded_rectangle_8dp" android:layout_width="fill_parent" android:layout_height="16.0dip" android:layout_marginBottom="8.0dip" android:backgroundTint="@color/game_dashboard_color_surface_variant" />
+        <ImageView android:background="@drawable/rounded_rectangle_8dp" android:layout_width="108.0dip" android:layout_height="16.0dip" android:backgroundTint="@color/game_dashboard_color_surface_variant" />
+    </LinearLayout>
+</com.google.android.systemui.gamedashboard.WidgetView>

@@ -1,0 +1,31 @@
+<resources>
+    <dimen name="game_dashboard_back_button_touch_region_padding">16.0dip</dimen>
+    <dimen name="game_dashboard_floating_entry_point_height">56.0dip</dimen>
+    <dimen name="game_dashboard_floating_entry_point_margin">24.0dip</dimen>
+    <dimen name="game_dashboard_floating_entry_point_padding">12.0dip</dimen>
+    <dimen name="game_dashboard_shortcut_bar_margin_end">8.0dip</dimen>
+    <dimen name="game_dashboard_shortcut_bar_reveal_button_height">48.0dip</dimen>
+    <dimen name="game_dashboard_shortcut_bar_reveal_button_width">64.0dip</dimen>
+    <dimen name="game_dashboard_shortcut_bar_stashed_horizontal_padding">8.0dip</dimen>
+    <dimen name="game_dashboard_shortcut_bar_stashed_vertical_padding">16.0dip</dimen>
+    <dimen name="game_menu_close_button_touch_region_padding">14.0dip</dimen>
+    <dimen name="game_menu_title_bar_height">72.0dip</dimen>
+    <dimen name="game_menu_title_bar_horizontal_padding">10.0dip</dimen>
+    <dimen name="game_menu_toggle_height">80.0dip</dimen>
+    <dimen name="game_menu_toggle_horizontal_padding">20.0dip</dimen>
+    <dimen name="game_menu_vertical_margin">8.0dip</dimen>
+    <dimen name="game_menu_widget_description_text_size">14.0sp</dimen>
+    <dimen name="game_menu_widget_padding">16.0dip</dimen>
+    <dimen name="game_menu_widget_title_text_size">22.0sp</dimen>
+    <dimen name="game_menu_widgets_margin">16.0dip</dimen>
+    <dimen name="game_mode_description_text_size">14.0sp</dimen>
+    <dimen name="game_mode_dnd_config_text_size">20.0sp</dimen>
+    <dimen name="game_mode_entry_paddingBottom">16.0dip</dimen>
+    <dimen name="game_mode_entry_paddingTop">18.0dip</dimen>
+    <dimen name="game_mode_icon_size">24.0dip</dimen>
+    <dimen name="game_mode_text_marginBottom">2.0dip</dimen>
+    <dimen name="game_mode_text_width">230.0dip</dimen>
+    <dimen name="game_mode_title_text_size">16.0sp</dimen>
+    <dimen name="game_toast_margin">20.0dip</dimen>
+    <dimen name="navigation_bar_gesture_height">20dp</dimen>
+</resources>

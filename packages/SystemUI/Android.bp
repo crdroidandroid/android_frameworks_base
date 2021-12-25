@@ -87,6 +87,7 @@ android_library {
         "res-smartspace",
         "res-columbus",
         "res-assist",
+        "res-gamedashboard",
     ],
     static_libs: [
         "WindowManager-Shell",
@@ -133,6 +134,7 @@ android_library {
         "assistmanager-google",
         "columbus-sysui-google",
         "elmyra-sysui-google",
+        "gamedashboard-sysui-google",
         "vendor-pixelatoms-java",
     ],
     manifest: "AndroidManifest.xml",
