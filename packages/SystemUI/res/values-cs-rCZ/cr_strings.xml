@@ -234,7 +234,7 @@
     <string name="onthego_notif_title">On‑The‑Go je aktivní</string>
     <string name="onthego_notif_stop">Zastavit</string>
     <string name="onthego_notif_options">Možnosti</string>
-    <string name="onthego_notif_error">Nelze spustit On‑The‑Go</string>
+    <string name="onthego_notif_error">On‑The‑Go nelze spustit</string>
     <string name="onthego_notif_restart">Restartovat On‑The‑Go</string>
     <string name="onthego_notif_camera_changed">Režim fotoaparátu byl změněn</string>
     <string name="onthego_transparency">Průhlednost</string>
@@ -244,6 +244,6 @@
     <string name="global_action_onthego">On‑The‑Go</string>
     <!-- OnTheGo Tile -->
     <string name="quick_settings_onthego_label">On‑The‑Go</string>
-    <string name="accessibility_quick_settings_onthego_off">On-The-Go vyp.</string>
-    <string name="accessibility_quick_settings_onthego_on">On-The-Go zap.</string>
+    <string name="accessibility_quick_settings_onthego_off">On‑The‑Go vyp.</string>
+    <string name="accessibility_quick_settings_onthego_on">On‑The‑Go zap.</string>
 </resources>
