@@ -2038,9 +2038,9 @@ public class DisplayPolicy {
         final Rect dockFrame = displayFrames.mDock;
         final int lastNavbarPosition = mNavigationBarPosition;
         final int navBarPosition = navigationBarPosition(displayWidth, displayHeight, rotation);
-        if (lastNavbarPosition == NAV_BAR_LEFT && mNavigationBarPosition != NAV_BAR_LEFT) {
+        if (lastNavbarPosition == NAV_BAR_LEFT && navBarPosition != NAV_BAR_LEFT) {
             notifyLeftInLandscapeChanged(false);
-        } else if (lastNavbarPosition != NAV_BAR_LEFT && mNavigationBarPosition == NAV_BAR_LEFT) {
+        } else if (lastNavbarPosition != NAV_BAR_LEFT && navBarPosition == NAV_BAR_LEFT) {
             notifyLeftInLandscapeChanged(true);
         }
         final Rect cutoutSafeUnrestricted = sTmpRect;
