@@ -1706,9 +1706,9 @@ public class DisplayPolicy {
 
         getRotatedWindowBounds(displayFrames, mNavigationBar, navigationFrame);
 
-        if (lastNavbarPosition == NAV_BAR_LEFT && mNavigationBarPosition != NAV_BAR_LEFT) {
+        if (lastNavbarPosition == NAV_BAR_LEFT && navBarPosition != NAV_BAR_LEFT) {
             notifyLeftInLandscapeChanged(false);
-        } else if (lastNavbarPosition != NAV_BAR_LEFT && mNavigationBarPosition == NAV_BAR_LEFT) {
+        } else if (lastNavbarPosition != NAV_BAR_LEFT && navBarPosition == NAV_BAR_LEFT) {
             notifyLeftInLandscapeChanged(true);
         }
 
