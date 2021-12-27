@@ -46,6 +46,7 @@ import com.android.systemui.plugins.ActivityStarter.OnDismissAction;
 import com.android.systemui.qs.QSPanelController;
 import com.android.systemui.shared.statusbar.phone.BarTransitions;
 import com.android.systemui.statusbar.notification.row.ExpandableNotificationRow;
+import com.android.systemui.statusbar.policy.GameSpaceManager;
 import com.android.systemui.util.Compile;
 
 import java.io.PrintWriter;
@@ -351,4 +352,6 @@ public interface CentralSurfaces extends Dumpable, LifecycleOwner, CoreStartable
     void brightnessControl(MotionEvent event);
 
     void onBrightnessChanged(boolean upOrCancel);
+
+    GameSpaceManager getGameSpaceManager();
 }
