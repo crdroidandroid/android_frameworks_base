@@ -235,6 +235,7 @@ import com.android.systemui.statusbar.policy.ConfigurationController.Configurati
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController.DeviceProvisionedListener;
 import com.android.systemui.statusbar.policy.ExtensionController;
+import com.android.systemui.statusbar.policy.GameSpaceManager;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.UserInfoControllerImpl;
@@ -490,6 +491,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     private final Provider<FingerprintManager> mFingerprintManager;
     private final TunerService mTunerService;
     private final ActivityStarter mActivityStarter;
+
+    private GameSpaceManager mGameSpaceManager;
 
     private final DisplayMetrics mDisplayMetrics;
 
@@ -870,6 +873,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
         mActivityIntentHelper = new ActivityIntentHelper(mContext);
         mActivityTransitionAnimator = activityTransitionAnimator;
+
+        mGameSpaceManager = new GameSpaceManager(mContext, mKeyguardStateController);
 
         // TODO(b/190746471): Find a better home for this.
         DateTimeView.setReceiverHandler(timeTickHandler);
@@ -1484,6 +1489,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(lineageos.content.Intent.ACTION_SCREEN_CAMERA_GESTURE);
         mBroadcastDispatcher.registerReceiver(mBroadcastReceiver, filter, null, UserHandle.ALL);
+        mGameSpaceManager.observe();
     }
 
     @Override
@@ -1527,6 +1533,11 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         if (getNavigationBarView() != null) {
             getNavigationBarView().setBlockedGesturalNavigation(blocked, mSysUiState);
         }
+    }
+
+    @Override
+    public GameSpaceManager getGameSpaceManager() {
+        return mGameSpaceManager;
     }
 
     protected QS createDefaultQSFragment() {
