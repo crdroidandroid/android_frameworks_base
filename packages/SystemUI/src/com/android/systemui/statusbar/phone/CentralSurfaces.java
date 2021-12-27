@@ -46,6 +46,7 @@ import com.android.systemui.qs.QSPanelController;
 import com.android.systemui.shared.system.RemoteAnimationRunnerCompat;
 import com.android.systemui.statusbar.NotificationPresenter;
 import com.android.systemui.statusbar.notification.row.ExpandableNotificationRow;
+import com.android.systemui.statusbar.policy.GameSpaceManager;
 import com.android.systemui.util.Compile;
 
 import java.io.PrintWriter;
@@ -401,4 +402,6 @@ public interface CentralSurfaces extends Dumpable, LifecycleOwner {
     void onBrightnessChanged(boolean upOrCancel);
 
     void setBlockedGesturalNavigation(boolean blocked);
+
+    GameSpaceManager getGameSpaceManager();
 }
