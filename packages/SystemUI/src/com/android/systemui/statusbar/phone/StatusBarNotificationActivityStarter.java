@@ -83,6 +83,7 @@ import com.android.systemui.statusbar.notification.headsup.HeadsUpUtil;
 import com.android.systemui.statusbar.notification.row.ExpandableNotificationRow;
 import com.android.systemui.statusbar.notification.row.ExpandableNotificationRowDragController;
 import com.android.systemui.statusbar.notification.row.OnUserInteractionCallback;
+import com.android.systemui.statusbar.policy.GameSpaceManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.wmshell.BubblesManager;
 
@@ -144,6 +145,7 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
     private final MetricsLogger mMetricsLogger;
     private final StatusBarNotificationActivityStarterLogger mLogger;
 
+    private final CentralSurfaces mCentralSurfaces;
     private final NotificationPresenter mPresenter;
     private final PanelExpansionInteractor mPanelExpansionInteractor;
     private final NotificationShadeWindowController mNotificationShadeWindowController;
@@ -181,6 +183,7 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
             MetricsLogger metricsLogger,
             StatusBarNotificationActivityStarterLogger logger,
             OnUserInteractionCallback onUserInteractionCallback,
+            CentralSurfaces centralSurfaces,
             NotificationPresenter presenter,
             PanelExpansionInteractor panelExpansionInteractor,
             NotificationShadeWindowController notificationShadeWindowController,
@@ -216,6 +219,7 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
         mShadeAnimationInteractor = shadeAnimationInteractor;
         mMetricsLogger = metricsLogger;
         mLogger = logger;
+        mCentralSurfaces = centralSurfaces;
         mOnUserInteractionCallback = onUserInteractionCallback;
         mPresenter = presenter;
         mActivityTransitionAnimator = activityTransitionAnimator;
@@ -686,6 +690,11 @@ public class StatusBarNotificationActivityStarter implements NotificationActivit
 
     @VisibleForTesting
     void launchFullScreenIntent(NotificationEntry entry) {
+        GameSpaceManager gameSpace = mCentralSurfaces.getGameSpaceManager();
+        if (gameSpace != null && gameSpace.shouldSuppressFullScreenIntent()) {
+            return;
+        }
+
         // Skip if device is in VR mode.
         if (mPresenter.isDeviceInVrMode()) {
             mLogger.logFullScreenIntentSuppressedByVR(entry);
