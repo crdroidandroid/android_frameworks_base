@@ -92,4 +92,8 @@
 
     <!-- FPS view text placeholder -->
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+
+    <!-- VPN / Call strength icons in statusbar -->
+    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_call_strength">Call strength</string>
 </resources>
