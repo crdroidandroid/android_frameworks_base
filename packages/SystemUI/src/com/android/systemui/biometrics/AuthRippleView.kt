@@ -29,6 +29,7 @@ import android.view.animation.PathInterpolator
 import com.android.internal.graphics.ColorUtils
 import com.android.systemui.animation.Interpolators
 import com.android.systemui.statusbar.charging.RippleShader
+import com.android.systemui.R
 
 private const val RIPPLE_SPARKLE_STRENGTH: Float = 0.4f
 
@@ -291,9 +292,14 @@ class AuthRippleView(context: Context?, attrs: AttributeSet?) : View(context, at
             )
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator?) {
+                val showFpRipple = context.resources.getBoolean(R.bool.config_show_fp_ripple)
                     unlockedRippleInProgress = true
                     rippleShader.shouldFadeOutRipple = true
-                    visibility = VISIBLE
+                    if (showFpRipple) {
+                        visibility = VISIBLE
+                    } else {
+                        visibility = GONE
+                    }
                 }
 
                 override fun onAnimationEnd(animation: Animator?) {

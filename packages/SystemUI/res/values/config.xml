@@ -641,6 +641,9 @@
         280
     </integer>
 
+    <!-- Whether or not to show the ripple animation when unlocking the device using fringerprint. -->
+    <bool name="config_show_fp_ripple">true</bool>
+
     <!-- package name of a built-in camera app to use to restrict implicit intent resolution
          when the double-press power gesture is used. Ignored if empty. -->
     <string translatable="false" name="config_cameraGesturePackage"></string>
