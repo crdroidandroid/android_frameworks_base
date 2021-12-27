@@ -20,4 +20,5 @@
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_call_strength">Call strength</string>
 </resources>
