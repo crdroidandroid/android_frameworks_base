@@ -11,6 +11,8 @@ import android.os.PowerManager;
 
 import androidx.annotation.Nullable;
 
+import com.crdroid.android.systemui.theme.CrDroidThemeOverlayController;
+
 import com.google.android.systemui.smartspace.BcSmartspaceDataProvider;
 import com.google.android.systemui.smartspace.KeyguardMediaViewController;
 import com.google.android.systemui.smartspace.KeyguardZenAlarmViewController;
@@ -69,6 +71,7 @@ import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.SensorPrivacyController;
 import com.android.systemui.statusbar.policy.SensorPrivacyControllerImpl;
 import com.android.systemui.statusbar.policy.ZenModeController;
+import com.android.systemui.theme.ThemeOverlayController;
 import com.android.systemui.util.concurrency.DelayableExecutor;
 import com.android.systemui.volume.dagger.VolumeModule;
 
@@ -207,6 +210,9 @@ public abstract class CrDroidSystemUIModule {
 
     @Binds
     abstract DozeHost provideDozeHost(DozeServiceHost dozeServiceHost);
+
+    @Binds
+    abstract ThemeOverlayController provideThemeOverlayController(CrDroidThemeOverlayController themeOverlayController);
 
     // Google
     @Provides
