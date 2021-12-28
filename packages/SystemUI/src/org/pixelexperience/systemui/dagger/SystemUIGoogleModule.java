@@ -67,6 +67,7 @@ import com.android.systemui.statusbar.policy.IndividualSensorPrivacyController;
 import com.android.systemui.statusbar.policy.IndividualSensorPrivacyControllerImpl;
 import com.android.systemui.statusbar.policy.SensorPrivacyController;
 import com.android.systemui.statusbar.policy.SensorPrivacyControllerImpl;
+import com.android.systemui.theme.ThemeOverlayController;
 import com.android.systemui.volume.dagger.VolumeModule;
 
 import com.google.android.systemui.LiveWallpaperScrimController;
@@ -82,6 +83,7 @@ import org.pixelexperience.systemui.assist.AssistManagerGoogle;
 import org.pixelexperience.systemui.power.dagger.PowerModuleGoogle;
 import org.pixelexperience.systemui.qs.dagger.QSModuleGoogle;
 import org.pixelexperience.systemui.qs.tileimpl.QSFactoryImplGoogle;
+import org.pixelexperience.systemui.theme.CustomThemeOverlayController;
 
 import javax.inject.Named;
 
@@ -232,4 +234,7 @@ public abstract class SystemUIGoogleModule {
     @Binds
     @SysUISingleton
     abstract ScrimController bindScrimController(LiveWallpaperScrimController liveWallpaperScrimController);
+
+    @Binds
+    abstract ThemeOverlayController provideThemeOverlayController(CustomThemeOverlayController themeOverlayController);
 }
