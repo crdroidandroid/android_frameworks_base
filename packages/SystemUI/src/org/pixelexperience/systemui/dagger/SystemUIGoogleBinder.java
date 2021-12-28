@@ -44,12 +44,12 @@ import com.android.systemui.toast.ToastUI;
 import com.android.systemui.util.leak.GarbageMonitor;
 import com.android.systemui.volume.VolumeUI;
 import com.android.systemui.wmshell.WMShell;
-import com.google.android.systemui.theme.ThemeOverlayControllerGoogle;
 
 import org.pixelexperience.systemui.GoogleServices;
 import org.pixelexperience.systemui.columbus.ColumbusTargetRequestServiceWrapper;
 import org.pixelexperience.systemui.gamedashboard.GameMenuActivityWrapper;
 import org.pixelexperience.systemui.statusbar.dagger.StatusBarGoogleModule;
+import org.pixelexperience.systemui.theme.CustomThemeOverlayController;
 
 import dagger.Binds;
 import dagger.Module;
@@ -168,7 +168,7 @@ public abstract class SystemUIGoogleBinder {
     @Binds
     @IntoMap
     @ClassKey(ThemeOverlayController.class)
-    public abstract SystemUI bindThemeOverlayController(ThemeOverlayControllerGoogle sysui);
+    public abstract SystemUI bindThemeOverlayController(CustomThemeOverlayController sysui);
 
     /**
      * Inject into ToastUI.
