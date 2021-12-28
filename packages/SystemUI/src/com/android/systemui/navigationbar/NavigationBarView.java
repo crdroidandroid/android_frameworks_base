@@ -96,6 +96,8 @@ import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
+import static org.lineageos.internal.util.DeviceKeysConstants.*;
+
 /** */
 public class NavigationBarView extends FrameLayout implements TunerService.Tunable {
     final static boolean DEBUG = false;
@@ -103,6 +105,29 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
 
     private static final String NAVIGATION_BAR_MENU_ARROW_KEYS =
             "lineagesystem:" + LineageSettings.System.NAVIGATION_BAR_MENU_ARROW_KEYS;
+    public static final String KEY_APP_SWITCH_ACTION =
+            "lineagesystem:" + LineageSettings.System.KEY_APP_SWITCH_ACTION;
+
+    public static final int[] NAVBAR_ICON_RESOURCES = {
+        R.drawable.ic_sysbar_no_action,
+        R.drawable.ic_sysbar_menu,
+        R.drawable.ic_sysbar_recent,
+        R.drawable.ic_sysbar_search,
+        R.drawable.ic_sysbar_voice_search,
+        R.drawable.ic_sysbar_in_app_search,
+        R.drawable.ic_sysbar_camera,
+        R.drawable.ic_sysbar_screen_off,
+        R.drawable.ic_sysbar_last_app,
+        R.drawable.ic_sysbar_split_screen,
+        R.drawable.ic_sysbar_kill_app,
+        R.drawable.ic_sysbar_flashlight,
+        R.drawable.ic_sysbar_screenshot,
+        R.drawable.ic_sysbar_volume_panel,
+        R.drawable.ic_sysbar_clear_notifications,
+        R.drawable.ic_sysbar_notification_panel,
+        R.drawable.ic_sysbar_settings_panel,
+        R.drawable.ic_sysbar_ringer_modes,
+    };
 
     final static boolean ALTERNATE_CAR_MODE_UI = false;
 
@@ -484,7 +509,9 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
             mHomeDefaultIcon = getHomeDrawable();
         }
         if (densityChange || dirChange) {
-            mRecentIcon = getDrawable(R.drawable.ic_sysbar_recent);
+            Action action = Action.fromSettings(getContext().getContentResolver(),
+                    LineageSettings.System.KEY_APP_SWITCH_ACTION, Action.APP_SWITCH);
+            mRecentIcon = getDrawable(getNavbarIconRes(action));
             mCursorLeftIcon = getDrawable(R.drawable.ic_chevron_start);
             mCursorRightIcon = getDrawable(R.drawable.ic_chevron_end);
             mContextualButtonGroup.updateIcons(mLightIconColor, mDarkIconColor);
@@ -492,6 +519,10 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
         if (orientationChange || densityChange || dirChange) {
             mBackIcon = getBackDrawable();
         }
+    }
+
+    private int getNavbarIconRes(Action action) {
+        return NAVBAR_ICON_RESOURCES[action.ordinal()];
     }
 
     /**
@@ -1129,6 +1160,7 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
         reorient();
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, NAVIGATION_BAR_MENU_ARROW_KEYS);
+        tunerService.addTunable(this, KEY_APP_SWITCH_ACTION);
         if (mRotationButtonController != null) {
             mRotationButtonController.registerListeners();
         }
@@ -1152,9 +1184,15 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (NAVIGATION_BAR_MENU_ARROW_KEYS.equals(key)) {
-            mShowCursorKeys = TunerService.parseIntegerSwitch(newValue, false);
-            setNavigationIconHints(mNavigationIconHints);
+        switch (key) {
+            case NAVIGATION_BAR_MENU_ARROW_KEYS:
+                mShowCursorKeys = TunerService.parseIntegerSwitch(newValue, false);
+                setNavigationIconHints(mNavigationIconHints);
+                break;
+            case KEY_APP_SWITCH_ACTION:
+                reloadNavIcons();
+                updateNavButtonIcons();
+                break;
         }
     }
 
