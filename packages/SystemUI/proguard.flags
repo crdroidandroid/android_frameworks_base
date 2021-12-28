@@ -60,3 +60,7 @@
 
 # Custom rules
 -keep class com.android.systemui.custom.** { *; }
+
+# Google rules
+-keep class com.google.** { *; }
+-keep class vendor.** { *; }
