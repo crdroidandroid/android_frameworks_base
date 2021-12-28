@@ -347,7 +347,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         mMultiUserSwitch.setClickable(mMultiUserSwitch.getVisibility() == View.VISIBLE);
         mEdit.setClickable(mEdit.getVisibility() == View.VISIBLE);
         mSettingsButton.setClickable(mSettingsButton.getVisibility() == View.VISIBLE);
-        mRunningServicesButton.setClickable(mSettingsButton.getVisibility() == View.VISIBLE);
+        mRunningServicesButton.setClickable(mRunningServicesButton.getVisibility() == View.VISIBLE);
     }
 
     private void updateVisibilities() {
@@ -405,6 +405,12 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
                             : MetricsProto.MetricsEvent.ACTION_QS_COLLAPSED_SETTINGS_LAUNCH);
             startSettingsActivity();
         } else if (v == mRunningServicesButton) {
+            if (!mDeviceProvisionedController.isCurrentUserSetup()) {
+                // If user isn't setup just unlock the device and dump them back at SUW.
+                mActivityStarter.postQSRunnableDismissingKeyguard(() -> {
+                });
+                return;
+            }
             MetricsLogger.action(mContext,
                     mExpanded ? MetricsProto.MetricsEvent.ACTION_QS_EXPANDED_SETTINGS_LAUNCH
                             : MetricsProto.MetricsEvent.ACTION_QS_COLLAPSED_SETTINGS_LAUNCH);
