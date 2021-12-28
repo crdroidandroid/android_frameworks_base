@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
+    <dimen name="ambient_text_shadow_radius">1.5dip</dimen>
+    <dimen name="enhanced_smartspace_combination_card_padding">8.0dip</dimen>
+    <dimen name="enhanced_smartspace_combination_sub_card_corner_radius">20.0dip</dimen>
+    <dimen name="enhanced_smartspace_dismiss_margin">16.0dip</dimen>
+    <dimen name="enhanced_smartspace_height">104.0dip</dimen>
+    <dimen name="enhanced_smartspace_icon_margin">6.0dip</dimen>
+    <dimen name="enhanced_smartspace_icon_size">20.0dip</dimen>
+    <dimen name="enhanced_smartspace_margin_start_launcher">16.0dip</dimen>
+    <dimen name="enhanced_smartspace_padding_top">16.0dip</dimen>
+    <dimen name="enhanced_smartspace_secondary_card_corner_radius">28.0dip</dimen>
+    <dimen name="enhanced_smartspace_secondary_card_end_margin">1.0dip</dimen>
+    <dimen name="enhanced_smartspace_secondary_card_start_margin">8.0dip</dimen>
+    <dimen name="enhanced_smartspace_subtitle_size">16.0sp</dimen>
+    <dimen name="enhanced_smartspace_title_size">20.0sp</dimen>
+    <color name="key_text_shadow_color">#89000000</color>
+    <dimen name="key_text_shadow_dx">0.5dip</dimen>
+    <dimen name="key_text_shadow_dy">0.5dip</dimen>
+    <dimen name="key_text_shadow_radius">0.5dip</dimen>
+    <dimen name="page_indicator_dot_margin">3.0dip</dimen>
+    <dimen name="page_indicator_dot_size">6.0dip</dimen>
+    <dimen name="page_indicator_padding">8.0dip</dimen>
+    <dimen name="page_indicator_width">16.0dip</dimen>
+    <dimen name="smartspace_icon_shadow">1.0dip</dimen>
+    <dimen name="smartspaceLetterSpacing">0.02</dimen>
+    <dimen name="status_bar_header_height_keyguard">40.0dip</dimen>
+</resources>
