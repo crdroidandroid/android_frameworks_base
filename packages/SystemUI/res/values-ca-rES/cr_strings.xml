@@ -62,7 +62,7 @@
     <string name="quick_settings_reboot_recovery_label">Recuperació</string>
     <string name="quick_settings_poweroff_label">Apaga</string>
     <!-- Sound Search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">Cercar sons</string>
     <!-- Sound QS tile -->
     <string name="quick_settings_sound_label">So</string>
     <string name="quick_settings_sound_ring">Timbre</string>
@@ -203,45 +203,45 @@
     <string name="screenrecord_stopdot_label">Mostra el punt per a aturar\nFeu una pulsació llarga per a moure</string>
     <string name="screenrecord_lowquality_label">Menys qualitat per a un fitxer de menor mida</string>
     <!-- Biometric Dialog - Use Face -->
-    <string name="biometric_dialog_button_use_face">Use Face</string>
+    <string name="biometric_dialog_button_use_face">Utilitza la cara</string>
     <!-- Daily data usage -->
-    <string name="daily_data_usage_title">Today\'s usage</string>
+    <string name="daily_data_usage_title">Ús d\'avui</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;is locked</string>
-    <string name="applock_fingerprint_face">, fingerprint or your face to unlock</string>
-    <string name="applock_face">&#160;or your face to unlock</string>
-    <string name="applock_fingerprint">&#160;or your fingerprint to unlock</string>
-    <string name="applock_credential">&#160;to unlock</string>
-    <string name="applock_unlock">Unlock</string>
+    <string name="applock_locked">&#160;està bloquejat</string>
+    <string name="applock_fingerprint_face">, empremta o la cara per a desbloquejar</string>
+    <string name="applock_face">&#160;o la cara per a desbloquejar</string>
+    <string name="applock_fingerprint">&#160;o la teva empremta per a desbloquejar</string>
+    <string name="applock_credential">&#160;per desbloquejar</string>
+    <string name="applock_unlock">Desbloquejar</string>
     <!-- Power menu QS tile -->
-    <string name="quick_settings_power_menu_label">Power menu</string>
+    <string name="quick_settings_power_menu_label">Menú d\'apagat</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
-    <string name="guts_force_close_app">Force stop</string>
+    <string name="force_stop_dlg_title">Forçar l\'aturada?</string>
+    <string name="force_stop_dlg_text">Si es força l\'aturada d\'una app, és possible que no funcioni correctament.</string>
+    <string name="guts_force_close_app">Forçar aturada</string>
     <!-- Title for media output settings -->
-    <string name="media_output_title">Play media to</string>
+    <string name="media_output_title">Reprodueix multimèdia a</string>
     <!-- Mono audio tile -->
-    <string name="quick_settings_monotoggle_tile">Audio mode</string>
-    <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
-    <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
+    <string name="quick_settings_monotoggle_tile">Modalitat d\'àudio</string>
+    <string name="quick_settings_monotoggle_tile_mono">Àudio mono</string>
+    <string name="quick_settings_monotoggle_tile_stereo">Àudio stereo</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
+    <string name="onthego_notif_ticker">On-The-Go activat</string>
+    <string name="onthego_notif_title">On-The-Go està actiu</string>
+    <string name="onthego_notif_stop">Aturar</string>
+    <string name="onthego_notif_options">Opcions</string>
+    <string name="onthego_notif_error">No a sigut possible iniciar On-The-Go</string>
+    <string name="onthego_notif_restart">Reinicialitzar On-The-Go</string>
+    <string name="onthego_notif_camera_changed">Mode de càmera canviat</string>
+    <string name="onthego_transparency">Transparència</string>
+    <string name="onthego_front_camera">Utilitzar la càmera frontal</string>
+    <string name="onthego_service_toggle">Reinicia automàticament el servei</string>
+    <string name="onthego_channel_name">Principal</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- OnTheGo Tile -->
     <string name="quick_settings_onthego_label">On-The-Go</string>
-    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
-    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
+    <string name="accessibility_quick_settings_onthego_off">On-The-Go desactivat</string>
+    <string name="accessibility_quick_settings_onthego_on">On-The-Go activat</string>
 </resources>
