@@ -95,6 +95,10 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
 
     @Override
     public void applyTransaction(WindowContainerTransaction t) {
+        if (t == null) {
+            throw new IllegalArgumentException(
+                    "Null transaction passed to applyTransaction");
+        }
         applySyncTransaction(t, null /*callback*/);
     }
 
@@ -161,7 +165,7 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
                     for (int i = 0, n = hops.size(); i < n; ++i) {
                         final WindowContainerTransaction.HierarchyOp hop = hops.get(i);
                         final WindowContainer wc = WindowContainer.fromBinder(hop.getContainer());
-                        if (!wc.isAttached()) {
+                        if (wc == null || !wc.isAttached()) {
                             Slog.e(TAG, "Attempt to operate on detached container: " + wc);
                             continue;
                         }
@@ -176,7 +180,12 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
                     while (entries.hasNext()) {
                         final Map.Entry<IBinder, WindowContainerTransaction.Change> entry =
                                 entries.next();
-                        final Task task = WindowContainer.fromBinder(entry.getKey()).asTask();
+                        final WindowContainer wc = WindowContainer.fromBinder(entry.getKey());
+                        if (wc == null || !wc.isAttached()) {
+                            Slog.e(TAG, "Attempt to operate on detached container: " + wc);
+                            continue;
+                        }
+                        final Task task = wc.asTask();
                         final Rect surfaceBounds = entry.getValue().getBoundsChangeSurfaceBounds();
                         if (task == null || !task.isAttached() || surfaceBounds == null) {
                             continue;
@@ -308,8 +317,12 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
                     (task.isRootTask() && !task.mCreatedByOrganizer)
                             || task.getParent().asTask().mCreatedByOrganizer;
             if (isNonOrganizedRootableTask) {
-                Task newParent = hop.getNewParent() == null ? null
-                        : WindowContainer.fromBinder(hop.getNewParent()).asTask();
+                final WindowContainer wc = WindowContainer.fromBinder(hop.getNewParent());
+                if (wc == null) {
+                    Slog.e(TAG, "Can't resolve parent window from token");
+                    return 0;
+                }
+                Task newParent = hop.getNewParent() == null ? null : wc.asTask();
                 if (task.getParent() != newParent) {
                     if (newParent == null) {
                         // Re-parent task to display as a root task.
