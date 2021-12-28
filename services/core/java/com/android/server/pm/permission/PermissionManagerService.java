@@ -1112,15 +1112,16 @@ public class PermissionManagerService extends IPermissionManager.Stub {
                             resolvedAttributionSource, skipCurrentFinish);
                 }
 
-                if (next == null || next.getNext() == null) {
-                    return;
-                }
-
                 RegisteredAttribution registered =
                         sRunningAttributionSources.remove(current.getToken());
                 if (registered != null) {
                     registered.unregister();
                 }
+
+                if (next == null || next.getNext() == null) {
+                    return;
+                }
+
                 current = next;
             }
         }
