@@ -416,7 +416,11 @@ class TaskOrganizerController extends ITaskOrganizerController.Stub {
         final long origId = Binder.clearCallingIdentity();
         try {
             synchronized (mGlobalLock) {
-                final Task task = WindowContainer.fromBinder(token.asBinder()).asTask();
+                final WindowContainer wc = WindowContainer.fromBinder(token.asBinder());
+                if (wc == null) {
+                    throw new IllegalArgumentException("Can't resolve window from token");
+                }
+                final Task task = wc.asTask();
                 if (task == null) return false;
                 if (!task.mCreatedByOrganizer) {
                     throw new IllegalArgumentException(
@@ -528,8 +532,14 @@ class TaskOrganizerController extends ITaskOrganizerController.Stub {
                 if (defaultTaskDisplayArea == null) {
                     return;
                 }
-                Task task = token == null
-                        ? null : WindowContainer.fromBinder(token.asBinder()).asTask();
+                WindowContainer wc = null;
+                if (token != null) {
+                    wc = WindowContainer.fromBinder(token.asBinder());
+                    if (wc == null) {
+                        throw new IllegalArgumentException("Can't resolve window from token");
+                    }
+                }
+                final Task task = wc == null ? null : wc.asTask();
                 if (task == null) {
                     defaultTaskDisplayArea.mLaunchRootTask = null;
                     return;
