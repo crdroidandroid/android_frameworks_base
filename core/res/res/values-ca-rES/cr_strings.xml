@@ -37,8 +37,8 @@
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">Copiar URL del registre d\'errors</string>
     <string name="url_copy_success">URL copiada amb èxit</string>
-    <string name="url_copy_failed">An error occured while uploading the log to pasty</string>
+    <string name="url_copy_failed">Hi ha hagut un error mentre es carregava el registre a pasty</string>
     <!-- Clipboard access toast -->
-    <string name="app_clipboard_access_denied">%1$s was denied access to the clipboard</string>
-    <string name="app_clipboard_access_granted">%1$s was granted access to the clipboard</string>
+    <string name="app_clipboard_access_denied">%1$s se li ha denegat accés al porta-retalls</string>
+    <string name="app_clipboard_access_granted">%1$s se li ha concedit accés al porta-retalls</string>
 </resources>
