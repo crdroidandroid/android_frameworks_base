@@ -685,6 +685,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int MSG_HIDE_BOOT_MESSAGE = 11;
     private static final int MSG_LAUNCH_VOICE_ASSIST_WITH_WAKE_LOCK = 12;
     private static final int MSG_SHOW_PICTURE_IN_PICTURE_MENU = 15;
+    private static final int MSG_BACK_LONG_PRESS = 16;
     private static final int MSG_ACCESSIBILITY_SHORTCUT = 17;
     private static final int MSG_BUGREPORT_TV = 18;
     private static final int MSG_ACCESSIBILITY_TV = 19;
@@ -751,6 +752,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     break;
                 case MSG_SHOW_PICTURE_IN_PICTURE_MENU:
                     showPictureInPictureMenuInternal();
+                    break;
+                case MSG_BACK_LONG_PRESS:
+                    backLongPress((KeyEvent) msg.obj);
                     break;
                 case MSG_ACCESSIBILITY_SHORTCUT:
                     accessibilityShortcutActivated();
@@ -990,12 +994,27 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    private void interceptBackKeyDown(KeyEvent event) {
+        mLogger.count("key_back_down", 1);
+        // Reset back key state for long press
+        mBackKeyHandled = false;
+
+        if (hasLongPressOnBackBehavior() && !mHandler.hasMessages(MSG_BACK_LONG_PRESS)) {
+            Message msg = mHandler.obtainMessage(MSG_BACK_LONG_PRESS, event);
+            msg.setAsynchronous(true);
+            mHandler.sendMessageDelayed(msg,
+                    ViewConfiguration.get(mContext).getDeviceGlobalActionKeyTimeout());
+        }
+    }
 
     // returns true if the key was handled and should not be passed to the user
-    private boolean backKeyPress() {
-        mLogger.count("key_back_press", 1);
+    private boolean interceptBackKeyUp(KeyEvent event) {
+        mLogger.count("key_back_up", 1);
         // Cache handled state
         boolean handled = mBackKeyHandled;
+
+        // Reset back long press state
+        cancelPendingBackKeyAction();
 
         if (mHasFeatureWatch) {
             TelecomManager telecomManager = getTelecommService();
@@ -1018,9 +1037,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
-        if (mAutofillManagerInternal != null) {
+        if (mAutofillManagerInternal != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             mHandler.sendMessage(mHandler.obtainMessage(MSG_DISPATCH_BACK_KEY_TO_AUTOFILL));
         }
+
         return handled;
     }
 
@@ -1105,6 +1125,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mPowerKeyHandled = false;
         if (mPowerKeyWakeLock.isHeld()) {
             mPowerKeyWakeLock.release();
+        }
+    }
+
+    private void cancelPendingBackKeyAction() {
+        if (!mBackKeyHandled) {
+            mBackKeyHandled = true;
+            mHandler.removeMessages(MSG_BACK_LONG_PRESS);
         }
     }
 
@@ -1337,13 +1364,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    private void backLongPress() {
+    private void backLongPress(KeyEvent event) {
         mBackKeyHandled = true;
-
-        long now = SystemClock.uptimeMillis();
-        KeyEvent event = new KeyEvent(now, now, KeyEvent.ACTION_DOWN,
-                KEYCODE_BACK, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
-                KeyEvent.FLAG_FROM_SYSTEM, InputDevice.SOURCE_KEYBOARD);
 
         performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, false,
                 "Back - Long Press");
@@ -2358,27 +2380,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     /**
      * Rule for single back key gesture.
      */
-    private final class BackKeyRule extends SingleKeyGestureDetector.SingleKeyRule {
-        BackKeyRule(int gestures) {
-            super(mContext, KEYCODE_BACK, gestures);
-        }
-
-        @Override
-        int getMaxMultiPressCount() {
-            return 1;
-        }
-
-        @Override
-        void onPress(long downTime) {
-            mBackKeyHandled |= backKeyPress();
-        }
-
-        @Override
-        void onLongPress(long downTime) {
-            backLongPress();
-        }
-    }
-
     private void initSingleKeyGestureRules() {
         mSingleKeyGestureDetector = new SingleKeyGestureDetector();
 
@@ -2390,7 +2391,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             powerKeyGestures |= KEY_LONGPRESS;
         }
         mSingleKeyGestureDetector.addRule(new PowerKeyRule(powerKeyGestures));
-        mSingleKeyGestureDetector.addRule(new BackKeyRule(KEY_LONGPRESS));
     }
 
     private void updateKeyAssignments() {
@@ -4133,7 +4133,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
 
                 if (down) {
-                    mBackKeyHandled = false;
+                    interceptBackKeyDown(event);
 
                     // Don't pass repeated events to app if user has custom long press action
                     // set up in settings
@@ -4141,11 +4141,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         result &= ~ACTION_PASS_TO_USER;
                     }
                 } else {
-                    if (!hasLongPressOnBackBehavior()) {
-                        mBackKeyHandled |= backKeyPress();
-                    }
+                    boolean handled = interceptBackKeyUp(event);
+
                     // Don't pass back press to app if we've already handled it via long press
-                    if (mBackKeyHandled) {
+                    if (handled) {
                         result &= ~ACTION_PASS_TO_USER;
                     }
                 }
