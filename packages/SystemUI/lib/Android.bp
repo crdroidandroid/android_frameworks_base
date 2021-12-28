@@ -1,0 +1,11 @@
+java_import {
+    name: "backgesture-google",
+    jars: ["backgesture.jar"],
+    sdk_version: "current",
+}
+
+java_import {
+    name: "smartspace-google",
+    jars: ["smartspace.jar"],
+    sdk_version: "current",
+}

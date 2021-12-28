@@ -299,6 +299,13 @@
     <protected-broadcast android:name="com.android.settings.flashlight.action.FLASHLIGHT_CHANGED" />
     <protected-broadcast android:name="com.android.systemui.doze.pulse" />
 
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <permission android:name="com.android.systemui.permission.SEND_ALERT_BROADCASTS" android:protectionLevel="preinstalled|signature"/>
+    <uses-permission android:name="com.google.android.deskclock.permission.RECEIVE_ALERT_BROADCASTS"/>
+    <protected-broadcast android:name="com.google.android.systemui.smartspace.CLICK_EVENT"/>
+    <protected-broadcast android:name="com.google.android.systemui.smartspace.ENABLE_UPDATE"/>
+    <protected-broadcast android:name="com.google.android.systemui.smartspace.EXPIRE_EVENT"/>
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
@@ -854,7 +861,7 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <provider android:name=".keyguard.KeyguardSliceProvider"
+        <provider android:name="com.crdroid.android.systemui.keyguard.CrDroidKeyguardSliceProvider"
                   android:authorities="com.android.systemui.keyguard"
                   android:grantUriPermissions="true"
                   android:exported="true">
