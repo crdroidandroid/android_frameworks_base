@@ -8973,6 +8973,12 @@ public final class Settings {
         public static final String DOZE_POCKET_GESTURE = "doze_pocket_gesture";
 
         /**
+         * Wake up instead of pulsing notifications
+         * @hide
+         */
+        public static final String RAISE_TO_WAKE_GESTURE = "raise_to_wake_gesture";
+
+        /**
          * Vibrate when pulsing notifications on gesture
          * @hide
          */
