@@ -97,4 +97,7 @@
     <java-symbol type="string" name="config_smartChargingSysfsNode" />
     <java-symbol type="string" name="config_smartChargingSuspendValue" />
     <java-symbol type="string" name="config_smartChargingResumeValue" />
+
+    <!-- Whether to cancel fingerprint operation if not idle -->
+    <java-symbol type="bool" name="config_fpCancelIfNotIdle" />
 </resources>
