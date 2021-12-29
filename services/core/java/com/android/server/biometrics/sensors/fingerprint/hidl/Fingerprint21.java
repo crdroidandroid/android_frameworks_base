@@ -365,7 +365,7 @@ public class Fingerprint21 implements IHwBinder.DeathRecipient, ServiceProvider 
             @NonNull GestureAvailabilityDispatcher gestureAvailabilityDispatcher) {
         final Handler handler = new Handler(Looper.getMainLooper());
         final BiometricScheduler scheduler =
-                new BiometricScheduler(TAG,
+                new BiometricScheduler(context, TAG,
                         BiometricScheduler.sensorTypeFromFingerprintProperties(sensorProps),
                         gestureAvailabilityDispatcher);
         final HalResultController controller = new HalResultController(sensorProps.sensorId,

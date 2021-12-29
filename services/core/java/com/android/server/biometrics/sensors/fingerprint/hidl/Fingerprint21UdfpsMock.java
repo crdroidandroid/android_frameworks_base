@@ -138,9 +138,9 @@ public class Fingerprint21UdfpsMock extends Fingerprint21 implements TrustManage
         @NonNull private final TestableInternalCallback mInternalCallback;
         @NonNull private Fingerprint21UdfpsMock mFingerprint21;
 
-        TestableBiometricScheduler(@NonNull String tag,
+        TestableBiometricScheduler(Context context, @NonNull String tag,
                 @Nullable GestureAvailabilityDispatcher gestureAvailabilityDispatcher) {
-            super(tag, BiometricScheduler.SENSOR_TYPE_FP_OTHER,
+            super(context, tag, BiometricScheduler.SENSOR_TYPE_FP_OTHER,
                     gestureAvailabilityDispatcher);
             mInternalCallback = new TestableInternalCallback();
         }
@@ -280,7 +280,7 @@ public class Fingerprint21UdfpsMock extends Fingerprint21 implements TrustManage
 
         final Handler handler = new Handler(Looper.getMainLooper());
         final TestableBiometricScheduler scheduler =
-                new TestableBiometricScheduler(TAG, gestureAvailabilityDispatcher);
+                new TestableBiometricScheduler(context, TAG, gestureAvailabilityDispatcher);
         final MockHalResultController controller =
                 new MockHalResultController(sensorProps.sensorId, context, handler, scheduler);
         return new Fingerprint21UdfpsMock(context, fingerprintStateCallback, sensorProps, scheduler,
