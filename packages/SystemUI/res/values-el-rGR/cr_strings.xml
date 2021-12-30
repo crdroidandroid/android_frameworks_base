@@ -261,8 +261,10 @@
     <string name="quick_settings_monotoggle_tile">Λειτουργία ήχου</string>
     <string name="quick_settings_monotoggle_tile_mono">Μονοφωνικός ήχος</string>
     <string name="quick_settings_monotoggle_tile_stereo">Στερεοφωνικός ήχος</string>
-    <!-- Name of the nfc status bar icon. -->
+    <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Η λειτουργία On-The-Go ενεργοποιήθηκε</string>
     <string name="onthego_notif_title">Η λειτουργία On-The-Go είναι ενεργή</string>
