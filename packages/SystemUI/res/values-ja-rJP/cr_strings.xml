@@ -224,8 +224,10 @@
     <string name="quick_settings_monotoggle_tile">音声モード</string>
     <string name="quick_settings_monotoggle_tile_mono">モノラル</string>
     <string name="quick_settings_monotoggle_tile_stereo">ステレオ</string>
-    <!-- Name of the nfc status bar icon. -->
+    <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go モードを有効化しました</string>
     <string name="onthego_notif_title">On-The-Go モードが有効です</string>
