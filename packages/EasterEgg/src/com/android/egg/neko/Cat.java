@@ -258,7 +258,7 @@ public class Cat extends Drawable {
 
         Notification.BubbleMetadata bubbs = new Notification.BubbleMetadata.Builder()
                 .setIntent(
-                        PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE))
+                        PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE))
                 .setIcon(notificationIcon)
                 .setSuppressNotification(false)
                 .setDesiredHeight(context.getResources().getDisplayMetrics().heightPixels)
@@ -273,7 +273,7 @@ public class Cat extends Drawable {
                 .setCategory(Notification.CATEGORY_STATUS)
                 .setContentText(getName())
                 .setContentIntent(
-                        PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE))
+                        PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE))
                 .setAutoCancel(true)
                 .setStyle(new Notification.MessagingStyle(createPerson())
                         .addMessage(mFirstMessage, System.currentTimeMillis(), createPerson())
