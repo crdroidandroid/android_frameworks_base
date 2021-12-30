@@ -248,8 +248,10 @@ Sembilan</string>
     <string name="quick_settings_monotoggle_tile">Mode Audio</string>
     <string name="quick_settings_monotoggle_tile_mono">Audio Mono</string>
     <string name="quick_settings_monotoggle_tile_stereo">Audio Stereo</string>
-    <!-- Name of the nfc status bar icon. -->
+    <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go diaktifkan</string>
     <string name="onthego_notif_title">On-The-Go sedang aktif</string>
