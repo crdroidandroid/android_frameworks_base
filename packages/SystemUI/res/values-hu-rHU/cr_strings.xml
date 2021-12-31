@@ -225,8 +225,10 @@
     <string name="quick_settings_monotoggle_tile">Audióformátum</string>
     <string name="quick_settings_monotoggle_tile_mono">Monó hang</string>
     <string name="quick_settings_monotoggle_tile_stereo">Sztereó hang</string>
-    <!-- Name of the nfc status bar icon. -->
+    <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_data_saver">Adatforgalom-csökkentő</string>
+    <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Menet közben (On-The-Go) aktiválva</string>
     <string name="onthego_notif_title">A Menet közben (On-The-Go) aktív</string>

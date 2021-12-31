@@ -264,8 +264,10 @@
     <string name="quick_settings_monotoggle_tile">Режим звуку</string>
     <string name="quick_settings_monotoggle_tile_mono">Монофонічне аудіо</string>
     <string name="quick_settings_monotoggle_tile_stereo">Стереозвук</string>
-    <!-- Name of the nfc status bar icon. -->
+    <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_data_saver">Заощадження трафіку</string>
+    <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Режим «На ходу» активовано</string>
     <string name="onthego_notif_title">Режим «На ходу» активний</string>

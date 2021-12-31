@@ -224,8 +224,10 @@
     <string name="quick_settings_monotoggle_tile">音訊模式</string>
     <string name="quick_settings_monotoggle_tile_mono">單聲道音訊</string>
     <string name="quick_settings_monotoggle_tile_stereo">立體聲音訊</string>
-    <!-- Name of the nfc status bar icon. -->
+    <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go activated</string>
     <string name="onthego_notif_title">On-The-Go is active</string>

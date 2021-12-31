@@ -225,8 +225,10 @@
     <string name="quick_settings_monotoggle_tile">Ses modu</string>
     <string name="quick_settings_monotoggle_tile_mono">Mono ses</string>
     <string name="quick_settings_monotoggle_tile_stereo">Stereo ses</string>
-    <!-- Name of the nfc status bar icon. -->
+    <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_data_saver">Veri tasarrufu</string>
+    <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Yürüme modu etkinleştirildi</string>
     <string name="onthego_notif_title">Yürüme modu etkin</string>
