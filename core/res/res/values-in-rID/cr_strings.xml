@@ -34,10 +34,10 @@ Aplikasi jahat mungkin dapat menggunakan ini untuk mengakses data aplikasi priba
     <string name="gaming_mode_disabled_toast">Mode permainan dimatikan</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Tekan dan tahan tombol power untuk membuka kunci</string>
-    <string name="pocket_view_title">Pocket mode is on</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
+    <string name="pocket_view_title">Mode saku aktif</string>
+    <string name="pocket_view_title_cancel">Untuk mengaktifkan perangkat Anda:</string>
+    <string name="pocket_view_top_tag_cancel">Jangan menutupi area biru ponsel Anda, dan bersihkan kotoran atau debu.</string>
+    <string name="pocket_view_top_tag_cancel2">Tekan lama tombol daya untuk memaksa keluar dari mode saku.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
