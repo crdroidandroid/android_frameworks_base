@@ -153,7 +153,7 @@ final class InputMethodUtils {
         final int state;
         try {
             state = packageManagerForUser.getApplicationEnabledSetting(packageName);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             Slog.w(TAG, "getApplicationEnabledSetting failed. packageName=" + packageName
                     + " userId=" + packageManagerForUser.getUserId(), e);
             return;
@@ -167,7 +167,7 @@ final class InputMethodUtils {
                 packageManagerForUser.setApplicationEnabledSetting(packageName,
                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED,
                         0 /* newState */);
-            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
                 Slog.w(TAG, "setApplicationEnabledSetting failed. packageName=" + packageName
                         + " userId=" + packageManagerForUser.getUserId(), e);
                 return;
