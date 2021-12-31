@@ -34,9 +34,9 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">電源ボタンを押し続けてロック解除</string>
     <string name="pocket_view_title">ポケットモードが ON です</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
+    <string name="pocket_view_title_cancel">端末を使用するには</string>
+    <string name="pocket_view_top_tag_cancel">青い部分を覆っていないか確認して、汚れやほこりを落としてください。</string>
+    <string name="pocket_view_top_tag_cancel2">電源ボタンを長押しするとポケットモードを強制終了します</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
