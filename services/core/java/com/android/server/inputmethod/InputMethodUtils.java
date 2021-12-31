@@ -726,7 +726,7 @@ final class InputMethodUtils {
         final int state;
         try {
             state = packageManager.getApplicationEnabledSetting(packageName, userId);
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             Slog.w(TAG, "getApplicationEnabledSetting failed. packageName=" + packageName
                     + " userId=" + userId, e);
             return;
@@ -740,7 +740,7 @@ final class InputMethodUtils {
                 packageManager.setApplicationEnabledSetting(packageName,
                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED,
                         0 /* newState */, userId, callingPackage);
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 Slog.w(TAG, "setApplicationEnabledSetting failed. packageName=" + packageName
                         + " userId=" + userId + " callingPackage=" + callingPackage, e);
                 return;
