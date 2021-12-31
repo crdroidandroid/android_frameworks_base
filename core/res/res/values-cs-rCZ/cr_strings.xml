@@ -38,7 +38,7 @@
     <string name="url_copy_success">URL úspěšně zkopírována</string>
     <string name="url_copy_failed">Při nahrávání protokolu o selhání na dogbin došlo k chybě</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Stisknutím a podržením tlačítka napájení zapnout obrazovku</string>
+    <string name="pocket_lock_message_long_press">Stisknutím a\u00a0podržením tlačítka napájení zapnout obrazovku</string>
     <!-- Gaming mode -->
     <string name="notification_channel_gaming">Herní režim</string>
     <string name="gaming_mode_notification_title">Herní režim povolen</string>
