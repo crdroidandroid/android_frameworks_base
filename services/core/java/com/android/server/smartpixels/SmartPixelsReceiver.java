@@ -34,7 +34,7 @@ public class SmartPixelsReceiver extends BroadcastReceiver {
    private Context mContext;
    private Handler mHandler;
    private ContentResolver mResolver;
-   private final PowerManager mPowerManager;
+   private PowerManager mPowerManager;
    private SettingsObserver mSettingsObserver;
    private Intent mSmartPixelsService;
    private IntentFilter mFilter;
@@ -47,17 +47,21 @@ public class SmartPixelsReceiver extends BroadcastReceiver {
 
    public SmartPixelsReceiver(Context context) {
        mContext = context;
-       mHandler = new Handler();
-       mResolver = mContext.getContentResolver();
-       mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-       mSmartPixelsService = new Intent(mContext,
-               com.android.server.smartpixels.SmartPixelsService.class);
+       boolean isAvailable = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_supportSmartPixels);
+       if (isAvailable) {
+           mHandler = new Handler();
+           mResolver = mContext.getContentResolver();
+           mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+           mSmartPixelsService = new Intent(mContext,
+                   com.android.server.smartpixels.SmartPixelsService.class);
 
-       mFilter = new IntentFilter();
-       mFilter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED);
-       mFilter.addAction(Intent.ACTION_USER_FOREGROUND);
+           mFilter = new IntentFilter();
+           mFilter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED);
+           mFilter.addAction(Intent.ACTION_USER_FOREGROUND);
 
-       initiateSettingsObserver();
+           initiateSettingsObserver();
+       }
    }
 
    private void registerReceiver() {
@@ -102,7 +106,11 @@ public class SmartPixelsReceiver extends BroadcastReceiver {
            update();
        }
 
-       public void update() {
+       private void update() {
+           boolean isAvailable = mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_supportSmartPixels);
+           if (!isAvailable) return;
+
            mEnabled = (Settings.System.getIntForUser(
                    mResolver, Settings.System.SMART_PIXELS_ENABLE,
                    0, UserHandle.USER_CURRENT) == 1);
