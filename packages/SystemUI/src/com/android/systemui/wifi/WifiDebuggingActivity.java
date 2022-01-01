@@ -104,7 +104,9 @@ public class WifiDebuggingActivity extends AlertActivity
         setupAlert();
 
         boolean mSmartPixels = Settings.System.getIntForUser(ap.mContext.getContentResolver(),
-                Settings.System.SMART_PIXELS_ENABLE, 0, UserHandle.USER_CURRENT) == 1;
+                Settings.System.SMART_PIXELS_ENABLE, 0, UserHandle.USER_CURRENT) == 1 &&
+                ap.mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_supportSmartPixels);
 
         // adding touch listener on affirmative button - checks if window is obscured
         // if obscured, do not let user give permissions (could be tapjacking involved)
