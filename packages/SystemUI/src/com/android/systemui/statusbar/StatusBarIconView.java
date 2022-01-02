@@ -71,8 +71,6 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
 
     public static final String STATUSBAR_COLORED_ICONS =
             "system:" + Settings.System.STATUSBAR_COLORED_ICONS;
-    public static final String STATUSBAR_NOTIF_COUNT =
-            "system:" + Settings.System.STATUSBAR_NOTIF_COUNT;
 
     public static final int NO_COLOR = 0;
 
@@ -186,8 +184,6 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
     private boolean mNewIconStyle;
     private boolean mShowNotificationCount;
 
-    private ArrayList<StatusBarIconView> mIconViews = new ArrayList<StatusBarIconView>();
-
     public StatusBarIconView(Context context, String slot, StatusBarNotification sbn) {
         this(context, slot, sbn, false);
     }
@@ -198,8 +194,7 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
         mDozer = new NotificationIconDozeHelper(context);
         mBlocked = blocked;
         mSlot = slot;
-        final float densityMultiplier = context.getResources().getDisplayMetrics().density;
-        final float scaledPx = 8 * densityMultiplier;
+        final float scaledPx = 8 * getResources().getDisplayMetrics().density;
         mNumberPain = new Paint();
         mNumberPain.setTextAlign(Paint.Align.CENTER);
         mNumberPain.setColor(context.getColor(R.drawable.notification_number_text_color));
@@ -231,22 +226,15 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-
-        mIconViews.add(this);
-
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, STATUSBAR_COLORED_ICONS);
-        tunerService.addTunable(this, STATUSBAR_NOTIF_COUNT);
     }
 
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.removeTunable(this);
-
-        mIconViews.remove(this);
     }
 
     @Override
@@ -260,17 +248,6 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
                     initializeDecorColor();
                     reloadDimens();
                     maybeUpdateIconScaleDimens();
-                }
-                break;
-            case STATUSBAR_NOTIF_COUNT:
-                boolean showIconCount =
-                    TunerService.parseIntegerSwitch(newValue, false);
-                if (mShowNotificationCount != showIconCount) {
-                    mShowNotificationCount = showIconCount;
-                    for (StatusBarIconView sbiv : mIconViews) {
-                        sbiv.mShowNotificationCount = showIconCount;
-                        sbiv.set(sbiv.mIcon, true);
-                    }
                 }
                 break;
             default:
@@ -396,11 +373,20 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
                 return false;
         }
     }
+
+    public void setShowCount(boolean showCount) {
+        mShowNotificationCount = showCount;
+    }
+
     /**
      * Returns whether the set succeeded.
      */
     public boolean set(StatusBarIcon icon) {
         return set(icon, false);
+    }
+
+    public boolean updateIconForced() {
+        return set(mIcon, true);
     }
 
     private boolean set(StatusBarIcon icon, boolean force) {
