@@ -34,10 +34,10 @@
     <string name="gaming_mode_disabled_toast">Mode jeu désactivé</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Appuyez et maintenez le bouton Marche/Arrêt pour déverrouiller</string>
-    <string name="pocket_view_title">Pocket mode is on</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
+    <string name="pocket_view_title">Le mode poche est activé</string>
+    <string name="pocket_view_title_cancel">Pour utiliser votre téléphone :</string>
+    <string name="pocket_view_top_tag_cancel">Vérifiez si la zone de détection du téléphone est propre.</string>
+    <string name="pocket_view_top_tag_cancel2">Appuyez longuement sur le bouton d\'alimentation pour quitter le mode poche.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
