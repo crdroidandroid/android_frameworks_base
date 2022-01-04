@@ -70,11 +70,11 @@ import com.google.android.systemui.smartspace.KeyguardMediaViewController;
 import com.google.android.systemui.smartspace.KeyguardZenAlarmViewController;
 import com.google.android.systemui.smartspace.SmartSpaceController;     
 
-import javax.inject.Named;
-
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+
+import javax.inject.Named;
 
 import org.protonaosp.systemui.theme.CustomThemeOverlayController;
 

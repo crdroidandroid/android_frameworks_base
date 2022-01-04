@@ -2,7 +2,6 @@ package com.android.systemui.custom;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.os.Handler;
 
 import com.android.systemui.custom.dagger.DaggerCustomGlobalRootComponent;
 import com.android.systemui.custom.dagger.CustomGlobalRootComponent;
