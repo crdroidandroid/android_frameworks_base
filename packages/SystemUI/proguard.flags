@@ -21,7 +21,6 @@
 -keep class com.android.systemui.statusbar.tv.TvStatusBar
 -keep class com.android.systemui.car.CarSystemUIFactory
 -keep class com.android.systemui.SystemUIFactory
--keep class org.protonaosp.systemui.CustomSystemUIFactory
 -keep class com.android.systemui.tv.TvSystemUIFactory
 -keep class * extends com.android.systemui.SystemUI
 -keep class * implements com.android.systemui.SystemUI$Injector
@@ -58,3 +57,6 @@
 -keep class com.android.systemui.dagger.GlobalRootComponent$SysUIComponentImpl { *; }
 -keep class com.android.systemui.dagger.Dagger** { *; }
 -keep class com.android.systemui.tv.Dagger** { *; }
+
+# Custom rules
+-keep class com.android.systemui.custom.** { *; }

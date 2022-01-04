@@ -16,17 +16,12 @@
 
 package org.protonaosp.systemui
 
-import android.content.res.AssetManager
 import android.content.res.Resources
 import com.android.systemui.SystemUIFactory
 import com.android.systemui.theme.ThemeOverlayController
 import org.protonaosp.systemui.theme.CustomThemeOverlayController
 
 class CustomSystemUIFactory : SystemUIFactory() {
-    // ML back gesture provider
-    override fun createBackGestureTfClassifierProvider(am: AssetManager, modelName: String) =
-        CustomBackGestureTfClassifierProvider(am, modelName)
-
     // Override services without having to copy the entire array
     override fun getSystemUIServiceComponents(resources: Resources): Array<String> {
         val services = super.getSystemUIServiceComponents(resources)
