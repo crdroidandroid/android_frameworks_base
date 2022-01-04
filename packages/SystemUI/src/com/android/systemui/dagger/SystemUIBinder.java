@@ -43,8 +43,6 @@ import com.android.systemui.util.leak.GarbageMonitor;
 import com.android.systemui.volume.VolumeUI;
 import com.android.systemui.wmshell.WMShell;
 
-import org.protonaosp.systemui.theme.CustomThemeOverlayController;
-
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.ClassKey;
@@ -186,10 +184,4 @@ public abstract class SystemUIBinder {
     @IntoMap
     @ClassKey(HomeSoundEffectController.class)
     public abstract SystemUI bindHomeSoundEffectController(HomeSoundEffectController sysui);
-
-    /** Inject into CustomThemeOverlayController. */
-    @Binds
-    @IntoMap
-    @ClassKey(CustomThemeOverlayController.class)
-    public abstract SystemUI bindCustomThemeOverlayController(CustomThemeOverlayController sysui);
 }

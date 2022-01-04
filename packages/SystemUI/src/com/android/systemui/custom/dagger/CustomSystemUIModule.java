@@ -54,12 +54,15 @@ import com.android.systemui.statusbar.policy.IndividualSensorPrivacyController;
 import com.android.systemui.statusbar.policy.IndividualSensorPrivacyControllerImpl;
 import com.android.systemui.statusbar.policy.SensorPrivacyController;
 import com.android.systemui.statusbar.policy.SensorPrivacyControllerImpl;
+import com.android.systemui.theme.ThemeOverlayController;
 
 import javax.inject.Named;
 
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+
+import org.protonaosp.systemui.theme.CustomThemeOverlayController;
 
 @Module(includes = {
         MediaModule.class,
@@ -185,5 +188,8 @@ public abstract class CustomSystemUIModule {
 
     @Binds
     abstract DozeHost provideDozeHost(DozeServiceHost dozeServiceHost);
+
+    @Binds
+    abstract ThemeOverlayController provideThemeOverlayController(CustomThemeOverlayController themeOverlayController);
 
 }
