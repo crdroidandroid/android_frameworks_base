@@ -90,4 +90,7 @@
     <dimen name="right_tri_state_up_bottom_right_radius">0.0dip</dimen>
     <dimen name="right_tri_state_up_top_left_radius">24.0dip</dimen>
     <dimen name="right_tri_state_up_top_right_radius">24.0dip</dimen>
+
+    <!-- FPS Info tile -->
+    <dimen name="fps_info_text_padding">4dp</dimen>
 </resources>
