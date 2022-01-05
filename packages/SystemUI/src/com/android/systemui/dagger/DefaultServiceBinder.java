@@ -18,6 +18,7 @@ package com.android.systemui.dagger;
 
 import android.app.Service;
 
+import com.android.systemui.FPSInfoService;
 import com.android.systemui.SystemUIService;
 import com.android.systemui.doze.DozeService;
 import com.android.systemui.dreams.DreamOverlayService;
@@ -85,4 +86,10 @@ public abstract class DefaultServiceBinder {
     @IntoMap
     @ClassKey(RecordingService.class)
     public abstract Service bindRecordingService(RecordingService service);
+
+    /** Inject into FPSInfoService */
+    @Binds
+    @IntoMap
+    @ClassKey(FPSInfoService.class)
+    public abstract Service bindFPSInfoService(FPSInfoService service);
 }
