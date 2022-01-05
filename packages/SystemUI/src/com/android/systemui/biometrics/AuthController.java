@@ -624,8 +624,11 @@ public class AuthController extends CoreStartable implements CommandQueue.Callba
     }
 
     private void updateFingerprintLocation() {
+        boolean isPowerbuttonFps =
+                mFingerprintManager != null && mFingerprintManager.isPowerbuttonFps();
+
         int xLocation;
-        if (mFingerprintManager != null && mFingerprintManager.isPowerbuttonFps()) {
+        if (isPowerbuttonFps) {
             xLocation = getDisplayWidth();
         } else {
             xLocation = getDisplayWidth() / 2;
