@@ -29,8 +29,7 @@ import com.android.systemui.R;
 
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
 
 import javax.inject.Inject;
 
@@ -39,10 +38,15 @@ public class FPSInfoTile extends QSTileImpl<BooleanState> {
 
     private final SystemSetting mSetting;
     private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_fps_info);
+    private final boolean isAvailable;
 
     @Inject
     public FPSInfoTile(QSHost host) {
         super(host);
+
+        final String fpsInfoSysNode = mContext.getResources().getString(
+                R.string.config_fpsInfoSysNode);
+        isAvailable = fpsInfoSysNode != null && (new File(fpsInfoSysNode).isFile());
 
         mSetting = new SystemSetting(mContext, mHandler, System.SHOW_FPS_OVERLAY) {
             @Override
@@ -121,22 +125,6 @@ public class FPSInfoTile extends QSTileImpl<BooleanState> {
 
     @Override
     public boolean isAvailable() {
-        return readOneLine(mContext.getResources().getString(R.string.config_fpsInfoSysNode));
-    }
-
-    private static boolean readOneLine(String fname) {
-        BufferedReader br;
-        String line = null;
-        try {
-            br = new BufferedReader(new FileReader(fname), 512);
-            try {
-                line = br.readLine();
-            } finally {
-                br.close();
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+        return isAvailable;
     }
 }
