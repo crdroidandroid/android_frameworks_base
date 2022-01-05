@@ -74,4 +74,7 @@
     <!-- StatusBar burn-in protection -->
     <dimen name="horizontal_max_shift">4dp</dimen>
     <dimen name="vertical_max_shift">4dp</dimen>
+
+    <!-- FPS Info tile -->
+    <dimen name="fps_info_text_padding">4dp</dimen>
 </resources>
