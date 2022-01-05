@@ -18,6 +18,7 @@ package com.android.systemui.dagger;
 
 import android.app.Service;
 
+import com.android.systemui.FPSInfoService;
 import com.android.systemui.SystemUIService;
 import com.android.systemui.communal.widgets.GlanceableHubWidgetManagerService;
 import com.android.systemui.doze.DozeService;
@@ -114,4 +115,10 @@ public abstract class DefaultServiceBinder {
     @IntoMap
     @ClassKey(LocationButtonRenderService.class)
     public abstract Service bindLocationButtonRenderService(LocationButtonRenderService service);
+
+    /** Inject into FPSInfoService */
+    @Binds
+    @IntoMap
+    @ClassKey(FPSInfoService.class)
+    public abstract Service bindFPSInfoService(FPSInfoService service);
 }
