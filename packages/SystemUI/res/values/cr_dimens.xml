@@ -93,4 +93,7 @@
 
     <!-- Maximum vertical offset of navigation bar for burn-in protection -->
     <dimen name="navigation_bar_burn_in_offset_max_y">8dp</dimen>
+
+    <!-- FPS Info tile -->
+    <dimen name="fps_info_text_padding">4dp</dimen>
 </resources>
