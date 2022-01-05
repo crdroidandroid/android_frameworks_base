@@ -43,6 +43,8 @@ import com.android.systemui.util.settings.SecureSettings;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
+import java.io.File;
+
 import javax.inject.Inject;
 
 /** Quick settings tile: FPSInfo overlay **/
@@ -50,6 +52,7 @@ public class FPSInfoTile extends QSTileImpl<BooleanState> {
 
     private final SecureSetting mSetting;
     private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_fps_info);
+    private final boolean isAvailable;
 
     @Inject
     public FPSInfoTile(
@@ -64,6 +67,10 @@ public class FPSInfoTile extends QSTileImpl<BooleanState> {
             SecureSettings secureSettings) {
         super(host, backgroundLooper, mainHandler, falsingManager, metricsLogger,
                 statusBarStateController, activityStarter, qsLogger);
+
+        final String fpsInfoSysNode = mContext.getResources().getString(
+                R.string.config_fpsInfoSysNode);
+        isAvailable = fpsInfoSysNode != null && (new File(fpsInfoSysNode).isFile());
 
         mSetting = new SecureSetting(secureSettings, mHandler, Secure.SHOW_FPS_OVERLAY) {
             @Override
@@ -138,5 +145,10 @@ public class FPSInfoTile extends QSTileImpl<BooleanState> {
     @Override
     public void handleSetListening(boolean listening) {
         // Do nothing
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return isAvailable;
     }
 }
