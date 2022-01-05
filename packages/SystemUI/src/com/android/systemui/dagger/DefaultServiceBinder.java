@@ -18,6 +18,7 @@ package com.android.systemui.dagger;
 
 import android.app.Service;
 
+import com.android.systemui.FPSInfoService;
 import com.android.systemui.SystemUIService;
 import com.android.systemui.communal.widgets.GlanceableHubWidgetManagerService;
 import com.android.systemui.doze.DozeService;
@@ -100,4 +101,10 @@ public abstract class DefaultServiceBinder {
     @ClassKey(GlanceableHubWidgetManagerService.class)
     public abstract Service bindGlanceableHubWidgetManagerService(
             GlanceableHubWidgetManagerService service);
+
+    /** Inject into FPSInfoService */
+    @Binds
+    @IntoMap
+    @ClassKey(FPSInfoService.class)
+    public abstract Service bindFPSInfoService(FPSInfoService service);
 }
