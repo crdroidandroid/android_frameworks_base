@@ -56,4 +56,7 @@
     <!-- Additional gesture navbar lengths -->
     <dimen name="navigation_home_handle_width_short">72dp</dimen>
     <dimen name="navigation_home_handle_width_long">140dp</dimen>
+
+    <!-- FPS Info tile -->
+    <dimen name="fps_info_text_padding">4dp</dimen>
 </resources>
