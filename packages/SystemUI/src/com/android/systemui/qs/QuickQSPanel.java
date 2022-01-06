@@ -18,6 +18,7 @@ package com.android.systemui.qs;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -39,8 +40,6 @@ public class QuickQSPanel extends QSPanel implements TunerService.Tunable {
     private static final String TAG = "QuickQSPanel";
     // A default value so that we never return 0.
     public static final int DEFAULT_MAX_TILES = 6;
-
-    public static final String QQS_BRIGHTNESS_SLIDER = "sysui_qqs_brightness_slider";
 
     private boolean mDisabledByPolicy;
     private int mMaxTiles;
@@ -144,27 +143,39 @@ public class QuickQSPanel extends QSPanel implements TunerService.Tunable {
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if ((QQS_BRIGHTNESS_SLIDER.equals(key) || QS_SHOW_BRIGHTNESS.equals(key)) && mBrightnessView != null) {
-            boolean mQQsSlider = Dependency.get(TunerService.class).getValue(
-                    QQS_BRIGHTNESS_SLIDER, 0) == 1;
-            boolean mQsSlider = Dependency.get(TunerService.class).getValue(
-                    QS_SHOW_BRIGHTNESS, 1) == 1;
-            mBrightnessView.setVisibility(mQQsSlider && mQsSlider ? VISIBLE : GONE);
-        }
-        if (QS_BRIGHTNESS_POSITION_BOTTOM.equals(key)) {
-            mTop = newValue == null || Integer.parseInt(newValue) == 0;
-            removeView(mBrightnessView);
-            addView(mBrightnessView, mTop ? 0 : 1);
-            setBrightnessViewMargin(mTop);
-            if (mBrightnessRunnable != null) {
-                mBrightnessRunnable.run();
-            }
-        }
-        if (QS_SHOW_AUTO_BRIGHTNESS_BUTTON.equals(key)) {
-            mShowAutoBrightnessButton = newValue == null
-                    || Integer.parseInt(newValue) == 1;
-            mAutoBrightnessIcon.setVisibility(
-                    mShowAutoBrightnessButton ? View.VISIBLE : View.GONE);
+        switch (key) {
+            case QS_SHOW_BRIGHTNESS_SLIDER:
+                boolean value =
+                        TunerService.parseInteger(newValue, 1) > 1;
+                if (mBrightnessView != null) {
+                    mBrightnessView.setVisibility(value ? VISIBLE : GONE);
+                }
+                break;
+            case QS_BRIGHTNESS_SLIDER_POSITION:
+                mTop = TunerService.parseInteger(newValue, 0) == 0;
+                updateBrightnessSliderPosition();
+                break;
+            case QS_SHOW_AUTO_BRIGHTNESS:
+                mShowAutoBrightnessButton =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                if (mAutoBrightnessIcon != null) {
+                    mAutoBrightnessIcon.setVisibility(mAutomaticAvailable &&
+                            mShowAutoBrightnessButton ? View.VISIBLE : View.GONE);
+                }
+                break;
+            default:
+                break;
+         }
+    }
+
+    private void updateBrightnessSliderPosition() {
+        if (mBrightnessView == null) return;
+        removeView(mBrightnessView);
+        addView(mBrightnessView, mTop ? 0 : 1);
+        setBrightnessViewMargin(mTop);
+        if (mBrightnessRunnable != null) {
+            updateResources();
+            mBrightnessRunnable.run();
         }
     }
 
