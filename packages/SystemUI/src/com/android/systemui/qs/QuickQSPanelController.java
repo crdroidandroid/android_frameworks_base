@@ -100,10 +100,9 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel> 
     protected void onViewAttached() {
         super.onViewAttached();
 
-        mTunerService.addTunable(mView, QSPanel.QS_SHOW_BRIGHTNESS);
-        mTunerService.addTunable(mView, QSPanel.QS_BRIGHTNESS_POSITION_BOTTOM);
-        mTunerService.addTunable(mView, QSPanel.QS_SHOW_AUTO_BRIGHTNESS_BUTTON);
-        mTunerService.addTunable(mView, QuickQSPanel.QQS_BRIGHTNESS_SLIDER);
+        mTunerService.addTunable(mView, QSPanel.QS_BRIGHTNESS_SLIDER_POSITION);
+        mTunerService.addTunable(mView, QSPanel.QS_SHOW_AUTO_BRIGHTNESS);
+        mTunerService.addTunable(mView, QSPanel.QS_SHOW_BRIGHTNESS_SLIDER);
 
         mView.setBrightnessRunnable(() -> {
             mView.updateResources();
