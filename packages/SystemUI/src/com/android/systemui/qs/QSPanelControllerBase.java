@@ -416,9 +416,6 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
     public View getBrightnessView() {
         return mView.getBrightnessView();
     }
-
-    void setBrightnessMirror(BrightnessMirrorController brightnessMirrorController) { }
-
     /** */
     public static final class TileRecord extends QSPanel.Record {
         public QSTile tile;
