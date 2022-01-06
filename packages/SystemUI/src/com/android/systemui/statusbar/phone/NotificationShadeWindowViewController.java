@@ -17,7 +17,6 @@
 package com.android.systemui.statusbar.phone;
 
 import static android.app.StatusBarManager.WINDOW_STATE_SHOWING;
-import static com.android.systemui.qs.QSPanel.QS_SHOW_AUTO_BRIGHTNESS_BUTTON;
 
 import android.app.StatusBarManager;
 import android.content.Context;
@@ -127,6 +126,9 @@ public class NotificationShadeWindowViewController {
 
     private static final String DOUBLE_TAP_SLEEP_GESTURE =
             "lineagesystem:" + LineageSettings.System.DOUBLE_TAP_SLEEP_GESTURE;
+    private static final String QS_SHOW_AUTO_BRIGHTNESS =
+            "lineagesecure:" + LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS;
+
     private boolean mDoubleTapToSleepEnabled;
     private int mQuickQsOffsetHeight;
 
@@ -191,8 +193,6 @@ public class NotificationShadeWindowViewController {
         mBrightnessMirror = mView.findViewById(R.id.brightness_mirror_container);
         mAutoBrightnessIcon = (ImageView)
                 mBrightnessMirror.findViewById(R.id.brightness_icon);
-        mShowAutoBrightnessButton = mTunerService.getValue(
-                QS_SHOW_AUTO_BRIGHTNESS_BUTTON, 1) == 1;
     }
 
     /** Inflates the {@link R.layout#status_bar_expanded} layout and sets it up. */
@@ -216,12 +216,12 @@ public class NotificationShadeWindowViewController {
                 case DOUBLE_TAP_SLEEP_GESTURE:
                     mDoubleTapToSleepEnabled = TunerService.parseIntegerSwitch(newValue, true);
                     break;
-                case QS_SHOW_AUTO_BRIGHTNESS_BUTTON:
+                case QS_SHOW_AUTO_BRIGHTNESS:
+                    mShowAutoBrightnessButton =
+                            TunerService.parseIntegerSwitch(newValue, true);
                     if (mAutoBrightnessIcon != null) {
-                        mShowAutoBrightnessButton = (newValue == null ||
-                                Integer.parseInt(newValue) == 0) ? false : true;
-                        mAutoBrightnessIcon.setVisibility(!mShowAutoBrightnessButton
-                                ? View.GONE : View.VISIBLE);
+                        mAutoBrightnessIcon.setVisibility(
+                                mShowAutoBrightnessButton ? View.VISIBLE : View.GONE);
                     }
                     break;
             }
@@ -231,7 +231,7 @@ public class NotificationShadeWindowViewController {
                 Settings.Secure.DOZE_DOUBLE_TAP_GESTURE,
                 Settings.Secure.DOZE_TAP_SCREEN_GESTURE,
                 DOUBLE_TAP_SLEEP_GESTURE,
-                QS_SHOW_AUTO_BRIGHTNESS_BUTTON);
+                QS_SHOW_AUTO_BRIGHTNESS);
         mQuickQsOffsetHeight = mView.getResources().getDimensionPixelSize(
                 com.android.internal.R.dimen.quick_qs_offset_height);
 
@@ -479,8 +479,8 @@ public class NotificationShadeWindowViewController {
                     mBrightnessMirror = child;
                     mAutoBrightnessIcon = (ImageView)
                             child.findViewById(R.id.brightness_icon);
-                    mAutoBrightnessIcon.setVisibility(!mShowAutoBrightnessButton
-                            ? View.GONE : View.VISIBLE);
+                    mAutoBrightnessIcon.setVisibility(mShowAutoBrightnessButton
+                            ? View.VISIBLE : View.GONE);
                 }
             }
 
