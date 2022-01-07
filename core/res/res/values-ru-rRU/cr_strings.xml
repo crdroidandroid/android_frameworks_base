@@ -35,11 +35,11 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Нажмите и удерживайте кнопку питания, чтобы разблокировать</string>
     <string name="pocket_view_title">Режим \"В кармане\" включен</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
-    <string name="pocket_view_top_tag_number1">1.\u0020</string>
-    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <string name="pocket_view_title_cancel">Для использования Вашего телефона:</string>
+    <string name="pocket_view_top_tag_cancel">Проверьте, чтобы синяя зона Вашего телефона была очищена от каких-либо предметов или протрите её.</string>
+    <string name="pocket_view_top_tag_cancel2">Долгое нажатие на кнопку включения для принудительного выхода из режима \"В кармане\".</string>
+    <string name="pocket_view_top_tag_number1">\u0020</string>
+    <string name="pocket_view_top_tag_number2">\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">Скопировать ссылку журнала сбоев</string>
     <string name="url_copy_success">Ссылка успешно скопирована</string>
