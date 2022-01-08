@@ -317,12 +317,9 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
                     (task.isRootTask() && !task.mCreatedByOrganizer)
                             || task.getParent().asTask().mCreatedByOrganizer;
             if (isNonOrganizedRootableTask) {
-                final WindowContainer wc = WindowContainer.fromBinder(hop.getNewParent());
-                if (wc == null) {
-                    Slog.e(TAG, "Can't resolve parent window from token");
-                    return 0;
-                }
-                Task newParent = hop.getNewParent() == null ? null : wc.asTask();
+                WindowContainer wc = hop.getNewParent() != null
+                    ? WindowContainer.fromBinder(hop.getNewParent()) : null;
+                Task newParent = wc == null ? null : wc.asTask();
                 if (task.getParent() != newParent) {
                     if (newParent == null) {
                         // Re-parent task to display as a root task.
