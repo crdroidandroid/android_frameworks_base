@@ -33,7 +33,7 @@
     <string name="gaming_mode_disabled_toast">Modo Gaming desactivado</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Pulse y mantenga el botón de encendido para desbloquear</string>
-    <string name="pocket_view_title">Modo bolsillo está activado</string>
+    <string name="pocket_view_title">Modo bolsillo activado</string>
     <string name="pocket_view_title_cancel">Para usar su teléfono:</string>
     <string name="pocket_view_top_tag_cancel">Compruebe si la zona azul de su teléfono está libre de cualquier obstrucción, y limpie cualquier suciedad o polvo.</string>
     <string name="pocket_view_top_tag_cancel2">Mantenga pulsado el botón encendido para forzar el apagado del modo bolsillo.</string>
