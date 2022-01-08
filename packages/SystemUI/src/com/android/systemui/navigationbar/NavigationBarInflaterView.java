@@ -219,7 +219,7 @@ public class NavigationBarInflaterView extends FrameLayout
 
     private void setNavigationBarLayout(String layoutValue) {
         if (!Objects.equals(mCurrentLayout, layoutValue)) {
-            mUsingCustomLayout = layoutValue.equals("default");
+            mUsingCustomLayout = !layoutValue.equals("default");
             clearViews();
             inflateLayout(layoutValue);
         }
