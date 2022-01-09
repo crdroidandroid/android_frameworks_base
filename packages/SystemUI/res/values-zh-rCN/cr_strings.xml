@@ -77,9 +77,9 @@
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">切换上网卡</string>
     <string name="qs_data_switch_changed_1">SIM卡1作为上网卡</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_changed_2">SIM卡2作为上网卡</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">Delete</string>
+    <string name="screenshot_delete_label">删除</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Delete screenshot</string>
+    <string name="screenshot_delete_description">删除屏幕截图</string>
 </resources>
