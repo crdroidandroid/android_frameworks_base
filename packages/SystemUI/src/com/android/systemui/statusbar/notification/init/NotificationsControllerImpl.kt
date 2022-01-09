@@ -22,6 +22,7 @@ import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.flags.FeatureFlags
 import com.android.systemui.people.widget.PeopleSpaceWidgetManager
 import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper.SnoozeOption
+import com.android.systemui.shade.EdgeLightViewController
 import com.android.systemui.statusbar.NotificationListener
 import com.android.systemui.statusbar.NotificationMediaManager
 import com.android.systemui.statusbar.NotificationPresenter
@@ -74,7 +75,8 @@ class NotificationsControllerImpl @Inject constructor(
     private val bubblesOptional: Optional<Bubbles>,
     private val fgsNotifListener: ForegroundServiceNotificationListener,
     private val memoryMonitor: Lazy<NotificationMemoryMonitor>,
-    private val featureFlags: FeatureFlags
+    private val featureFlags: FeatureFlags,
+    private val edgeLightViewController: EdgeLightViewController
 ) : NotificationsController {
 
     override fun initialize(
@@ -115,6 +117,7 @@ class NotificationsControllerImpl @Inject constructor(
         notificationsMediaManager.setUpWithPresenter(presenter)
         notificationLogger.setUpWithContainer(listContainer)
         peopleSpaceWidgetManager.attach(notificationListener)
+        edgeLightViewController.attach(notificationListener)
         fgsNotifListener.init()
         memoryMonitor.get().init()
     }
