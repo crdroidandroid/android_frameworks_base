@@ -27,11 +27,11 @@
     <!-- Advanced Reboot -->
     <string name="global_action_restart_system">系统</string>
     <string name="global_action_restart_recovery">恢复模式</string>
-    <string name="global_action_restart_bootloader">Bootloader</string>
-    <string name="global_action_restart_ui">软重启</string>
+    <string name="global_action_restart_bootloader">引导程序</string>
+    <string name="global_action_restart_ui">系统界面</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">行走模式已激活</string>
-    <string name="onthego_notif_title">行走模式已开启</string>
+    <string name="onthego_notif_title">行走模式处于活动状态</string>
     <string name="onthego_notif_stop">停止</string>
     <string name="onthego_notif_options">选项</string>
     <string name="onthego_notif_error">无法启动行走模式</string>
@@ -77,7 +77,7 @@
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">切换上网卡</string>
     <string name="qs_data_switch_changed_1">SIM卡1作为上网卡</string>
-    <string name="qs_data_switch_changed_2">SIM卡2作为上网卡</string>
+    <string name="qs_data_switch_changed_2">使用 SIM 卡 2 作为移动数据</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">删除</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
