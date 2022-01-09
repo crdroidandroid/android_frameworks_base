@@ -142,4 +142,7 @@
         <item>com.gaana</item>
         <item>com.facebook.katana.LoginActivity</item>
     </string-array>
+
+    <!-- Whether to force enable multi resolution configuration for camera -->
+    <bool name="config_forceMultiResolution">false</bool>
 </resources>
