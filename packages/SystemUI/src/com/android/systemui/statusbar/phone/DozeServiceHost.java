@@ -44,6 +44,7 @@ import com.android.systemui.doze.DozeReceiver;
 import com.android.systemui.keyguard.WakefulnessLifecycle;
 import com.android.systemui.keyguard.domain.interactor.DozeInteractor;
 import com.android.systemui.scene.shared.flag.SceneContainerFlag;
+import com.android.systemui.shade.EdgeLightViewController;
 import com.android.systemui.shade.NotificationShadeWindowViewController;
 import com.android.systemui.shade.domain.interactor.ShadeLockscreenInteractor;
 import com.android.systemui.statusbar.NotificationShadeWindowController;
@@ -103,6 +104,7 @@ public final class DozeServiceHost implements DozeHost {
     private final NotificationWakeUpCoordinator mNotificationWakeUpCoordinator;
     private NotificationShadeWindowViewController mNotificationShadeWindowViewController;
     private final AuthController mAuthController;
+    private final EdgeLightViewController mEdgeLightViewController;
     private StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
     private final ShadeLockscreenInteractor mShadeLockscreenInteractor;
     private View mAmbientIndicationContainer;
@@ -126,7 +128,8 @@ public final class DozeServiceHost implements DozeHost {
             NotificationWakeUpCoordinator notificationWakeUpCoordinator,
             AuthController authController,
             ShadeLockscreenInteractor shadeLockscreenInteractor,
-            DozeInteractor dozeInteractor) {
+            DozeInteractor dozeInteractor,
+            EdgeLightViewController edgeLightViewController) {
         super();
         mDozeLog = dozeLog;
         mPowerManager = powerManager;
@@ -147,6 +150,7 @@ public final class DozeServiceHost implements DozeHost {
         mShadeLockscreenInteractor = shadeLockscreenInteractor;
         mHeadsUpManager.addListener(mOnHeadsUpChangedListener);
         mDozeInteractor = dozeInteractor;
+        mEdgeLightViewController = edgeLightViewController;
     }
 
     // TODO: we should try to not pass status bar in here if we can avoid it.
@@ -310,6 +314,7 @@ public final class DozeServiceHost implements DozeHost {
                 mCentralSurfaces.updateScrimController();
                 mPulseExpansionHandler.setPulsing(pulsing);
                 mNotificationWakeUpCoordinator.setPulsing(pulsing);
+                mEdgeLightViewController.setPulsing(pulsing, reason);
             }
         }, reason);
         // DozeScrimController is in pulse state, now let's ask ScrimController to start
