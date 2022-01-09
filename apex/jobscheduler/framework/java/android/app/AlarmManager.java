@@ -1241,6 +1241,43 @@ public class AlarmManager {
     }
 
     /**
+     * Direct callback version of {@link #setExactAndAllowWhileIdle(int, long, PendingIntent)}.
+     * Rather than supplying a PendingIntent to be sent when the alarm time is reached, this variant
+     * supplies an {@link OnAlarmListener} instance that will be invoked at that time.
+     * <p>
+     * The OnAlarmListener's {@link OnAlarmListener#onAlarm() onAlarm()} method will be
+     * invoked via the specified target Handler, or on the application's main looper
+     * if {@code null} is passed as the {@code targetHandler} parameter.
+     *
+     * <p class="note"><strong>Note:</strong>
+     * Starting with {@link Build.VERSION_CODES#S}, apps targeting SDK level 31 or higher
+     * need to request the
+     * {@link Manifest.permission#SCHEDULE_EXACT_ALARM SCHEDULE_EXACT_ALARM} permission to use this
+     * API, unless the app is exempt from battery restrictions.
+     * The user and the system can revoke this permission via the special app access screen in
+     * Settings.
+     *
+     * <p class="note"><strong>Note:</strong>
+     * Exact alarms should only be used for user-facing features.
+     * For more details, see <a
+     * href="{@docRoot}about/versions/12/behavior-changes-12#exact-alarm-permission">
+     * Exact alarm permission</a>.
+     *
+     * @see Manifest.permission#SCHEDULE_EXACT_ALARM SCHEDULE_EXACT_ALARM
+     * @hide
+     */
+    @SystemApi
+    @RequiresPermission(value = Manifest.permission.SCHEDULE_EXACT_ALARM, conditional = true)
+    public void setExactAndAllowWhileIdle(@AlarmType int type, long triggerAtMillis,
+            @Nullable String tag, @NonNull Handler targetHandler,
+            @NonNull OnAlarmListener listener) {
+        Objects.requireNonNull(targetHandler);
+        Objects.requireNonNull(listener);
+        setImpl(type, triggerAtMillis, WINDOW_EXACT, 0, FLAG_ALLOW_WHILE_IDLE, null,
+                listener, tag, targetHandler, null, null);
+    }
+
+    /**
      * Like {@link #setExact(int, long, PendingIntent)}, but this alarm will be allowed to execute
      * even when the system is in low-power idle modes.  If you don't need exact scheduling of
      * the alarm but still need to execute while idle, consider using
