@@ -63,23 +63,23 @@
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">나침반</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
-    <string name="quick_settings_compass_SE">SE</string>
-    <string name="quick_settings_compass_S">S</string>
-    <string name="quick_settings_compass_SW">SW</string>
-    <string name="quick_settings_compass_W">W</string>
-    <string name="quick_settings_compass_NW">NW</string>
+    <string name="quick_settings_compass_init">초기화 중\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">나침반 꺼짐</string>
+    <string name="accessibility_quick_settings_compass_on">나침반 켜짐</string>
+    <string name="quick_settings_compass_N">북</string>
+    <string name="quick_settings_compass_NE">북동</string>
+    <string name="quick_settings_compass_E">동</string>
+    <string name="quick_settings_compass_SE">남동</string>
+    <string name="quick_settings_compass_S">남</string>
+    <string name="quick_settings_compass_SW">남서</string>
+    <string name="quick_settings_compass_W">서</string>
+    <string name="quick_settings_compass_NW">북서</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">데이터 카드 전환</string>
+    <string name="qs_data_switch_changed_1">모바일 데이터에 SIM 1 사용</string>
+    <string name="qs_data_switch_changed_2">모바일 데이터에 SIM 2 사용</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">Delete</string>
+    <string name="screenshot_delete_label">삭제</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Delete screenshot</string>
+    <string name="screenshot_delete_description">스크린샷 삭제</string>
 </resources>
