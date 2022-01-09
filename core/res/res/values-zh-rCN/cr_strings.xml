@@ -18,7 +18,7 @@
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_fakePackageSignature">软件伪造签名</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">允许应用伪装成其他应用。恶意应用程序会借此来访问你的隐私数据，请谨慎授予此权限！</string>
+    <string name="permdesc_fakePackageSignature">允许应用程序假装成为不同的应用程序。恶意应用程序可能会使用此来访问私有应用数据。合法的使用包括拟合器的仿真器是什么时候仿真。谨慎授予此权限！</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_fake_package_signature">软件伪造签名</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
@@ -28,12 +28,12 @@
         &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; 伪装软件包签名？</string>
     <!-- Advenced reboot -->
     <string name="reboot_title">重新启动</string>
-    <string name="reboot_message">正在重启...</string>
+    <string name="reboot_message">正在重启</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">长按电源键以解锁</string>
+    <string name="pocket_lock_message_long_press">按住电源按钮解锁</string>
     <string name="pocket_view_title">口袋模式已开启</string>
     <string name="pocket_view_title_cancel">激活您的手机</string>
-    <string name="pocket_view_top_tag_cancel">确保你手机的蓝色区域清洁无杂物。</string>
+    <string name="pocket_view_top_tag_cancel">确保你手机的蓝色区域清洁无杂物</string>
     <string name="pocket_view_top_tag_cancel2">长按电源按钮强制退出口袋模式</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
