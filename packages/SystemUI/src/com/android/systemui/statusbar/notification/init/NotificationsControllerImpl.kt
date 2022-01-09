@@ -21,6 +21,7 @@ import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.media.NotificationMediaManager
 import com.android.systemui.people.widget.PeopleSpaceWidgetManager
 import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper.SnoozeOption
+import com.android.systemui.shade.EdgeLightViewController
 import com.android.systemui.statusbar.NotificationListener
 import com.android.systemui.statusbar.NotificationPresenter
 import com.android.systemui.statusbar.notification.AnimatedImageNotificationManager
@@ -70,6 +71,7 @@ constructor(
     private val animatedImageNotificationManager: AnimatedImageNotificationManager,
     private val peopleSpaceWidgetManager: PeopleSpaceWidgetManager,
     private val bubblesOptional: Optional<Bubbles>,
+    private val edgeLightViewController: EdgeLightViewController,
 ) : NotificationsController {
 
     override fun initialize(
@@ -108,6 +110,7 @@ constructor(
             }
         }
         peopleSpaceWidgetManager.attach(notificationListener)
+        edgeLightViewController.attach(notificationListener)
     }
 
     // TODO: Convert all functions below this line into listeners instead of public methods
