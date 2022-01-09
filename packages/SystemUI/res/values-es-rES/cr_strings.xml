@@ -39,7 +39,7 @@
     <string name="onthego_notif_camera_changed">Modo de cámara cambiado</string>
     <string name="onthego_transparency">Transparencia</string>
     <string name="onthego_front_camera">Usar la cámara frontal</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
+    <string name="onthego_service_toggle">Reiniciar el servicio automáticamente</string>
     <string name="onthego_channel_name">Principal</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- OnTheGo Tile -->
@@ -62,7 +62,7 @@
     <string name="status_bar_call_strength">Intensidad de llamada</string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Brújula</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0<xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Iniciando\u2026</string>
     <string name="accessibility_quick_settings_compass_off">Brújula desactivada.</string>
     <string name="accessibility_quick_settings_compass_on">Brújula activada.</string>
