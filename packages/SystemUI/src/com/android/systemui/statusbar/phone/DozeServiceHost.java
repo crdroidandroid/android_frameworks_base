@@ -40,6 +40,7 @@ import com.android.systemui.doze.DozeReceiver;
 import com.android.systemui.keyguard.WakefulnessLifecycle;
 import com.android.systemui.keyguard.domain.interactor.BurnInInteractor;
 import com.android.systemui.keyguard.domain.interactor.DozeInteractor;
+import com.android.systemui.shade.EdgeLightViewController;
 import com.android.systemui.shade.NotificationShadeWindowViewController;
 import com.android.systemui.shade.ShadeViewController;
 import com.android.systemui.statusbar.NotificationShadeWindowController;
@@ -94,6 +95,7 @@ public final class DozeServiceHost implements DozeHost {
     private NotificationShadeWindowViewController mNotificationShadeWindowViewController;
     private final AuthController mAuthController;
     private final NotificationIconAreaController mNotificationIconAreaController;
+    private final EdgeLightViewController mEdgeLightViewController;
     private final BurnInInteractor mBurnInInteractor;
     private StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
     private ShadeViewController mNotificationPanel;
@@ -119,7 +121,8 @@ public final class DozeServiceHost implements DozeHost {
             AuthController authController,
             NotificationIconAreaController notificationIconAreaController,
             DozeInteractor dozeInteractor,
-            BurnInInteractor burnInInteractor) {
+            BurnInInteractor burnInInteractor,
+            EdgeLightViewController edgeLightViewController) {
         super();
         mDozeLog = dozeLog;
         mPowerManager = powerManager;
@@ -141,6 +144,7 @@ public final class DozeServiceHost implements DozeHost {
         mBurnInInteractor = burnInInteractor;
         mHeadsUpManagerPhone.addListener(mOnHeadsUpChangedListener);
         mDozeInteractor = dozeInteractor;
+        mEdgeLightViewController = edgeLightViewController;
     }
 
     // TODO: we should try to not pass status bar in here if we can avoid it.
@@ -282,6 +286,7 @@ public final class DozeServiceHost implements DozeHost {
                 mCentralSurfaces.updateScrimController();
                 mPulseExpansionHandler.setPulsing(pulsing);
                 mNotificationWakeUpCoordinator.setPulsing(pulsing);
+                mEdgeLightViewController.setPulsing(pulsing, reason);
             }
         }, reason);
         // DozeScrimController is in pulse state, now let's ask ScrimController to start
