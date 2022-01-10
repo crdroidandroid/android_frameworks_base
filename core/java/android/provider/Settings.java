@@ -6284,6 +6284,13 @@ public final class Settings {
         public static final String SENSOR_BLOCKED_APP_DUMMY = "sensor_blocked_app_dummy";
 
         /**
+         * Whether to show floating rotation button
+         * @hide
+         */
+        @Readable
+        public static final String ENABLE_FLOATING_ROTATION_BUTTON = "enable_floating_rotation_button";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
