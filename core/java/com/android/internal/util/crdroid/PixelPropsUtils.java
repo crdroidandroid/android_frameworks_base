@@ -99,9 +99,6 @@ public class PixelPropsUtils {
         if (packageName == null) {
             return;
         }
-        if (packageName.equals(PACKAGE_GMS)) {
-            sIsGms = true;
-        }
         if (packageName.startsWith("com.google.") || Arrays.asList(extraPackagesToChange).contains(packageName)) {
             Map<String, Object> propsToChange = propsToChangePixel6;
 
@@ -124,10 +121,13 @@ public class PixelPropsUtils {
                 if (DEBUG) Log.d(TAG, "Defining " + key + " prop for: " + packageName);
                 setPropValue(key, value);
             }
-        }
-        // Set proper indexing fingerprint
-        if (packageName.equals("com.google.android.settings.intelligence")) {
-            setPropValue("FINGERPRINT", Build.DATE);
+            if (packageName.equals(PACKAGE_GMS)) {
+                sIsGms = true;
+            }
+            // Set proper indexing fingerprint
+            if (packageName.equals("com.google.android.settings.intelligence")) {
+                setPropValue("FINGERPRINT", Build.DATE);
+            }
         }
     }
 
