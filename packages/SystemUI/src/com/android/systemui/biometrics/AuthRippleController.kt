@@ -23,6 +23,8 @@ import android.content.Context
 import android.graphics.Point
 import android.hardware.biometrics.BiometricFingerprintConstants
 import android.hardware.biometrics.BiometricSourceType
+import android.os.UserHandle
+import android.provider.Settings
 import android.util.DisplayMetrics
 import androidx.annotation.VisibleForTesting
 import com.android.keyguard.KeyguardUpdateMonitor
@@ -95,6 +97,10 @@ class AuthRippleController @Inject constructor(
 
     private var udfpsController: UdfpsController? = null
     private var udfpsRadius: Float = -1f
+
+    private val isRippleEnabled: Boolean
+        get() = Settings.System.getIntForUser(context.contentResolver,
+            Settings.System.ENABLE_RIPPLE_EFFECT, 1, UserHandle.USER_CURRENT) == 1
 
     override fun start() {
         init()
@@ -187,6 +193,8 @@ class AuthRippleController @Inject constructor(
     }
 
     private fun showUnlockedRipple() {
+        if (!isRippleEnabled) return
+
         notificationShadeWindowController.setForcePluginOpen(true, this)
 
         // This code path is not used if the KeyguardTransitionRepository is managing the light
@@ -210,6 +218,14 @@ class AuthRippleController @Inject constructor(
     }
 
     override fun onKeyguardFadingAwayChanged() {
+        if (!isRippleEnabled) {
+            // reset and hide the scrim so it doesn't appears on
+            // the next notification shade usage
+            lightRevealScrim.revealAmount = 1f
+            startLightRevealScrimOnKeyguardFadingAway = false
+            return
+        }
+
         if (featureFlags.isEnabled(Flags.LIGHT_REVEAL_MIGRATION)) {
             return
         }
