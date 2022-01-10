@@ -225,6 +225,6 @@ public class SystemSettingsValidators {
                         return true;
                     }
                 });
-
+        VALIDATORS.put(System.ENABLE_FLOATING_ROTATION_BUTTON, BOOLEAN_VALIDATOR);
     }
 }
