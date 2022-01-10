@@ -259,7 +259,7 @@
     <string name="quick_settings_monotoggle_tile_stereo">스테레오 오디오</string>
     <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">데이터 절약 모드</string>
     <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go 활성화됨</string>

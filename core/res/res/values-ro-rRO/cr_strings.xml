@@ -34,10 +34,10 @@
     <string name="gaming_mode_disabled_toast">Mod pentru jocuri oprit</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Apăsați și țineți apăsat butonul de alimentare pentru a debloca</string>
-    <string name="pocket_view_title">Pocket mode is on</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
+    <string name="pocket_view_title">Modul buzunar este pornit</string>
+    <string name="pocket_view_title_cancel">Pentru a folosi telefonul:</string>
+    <string name="pocket_view_top_tag_cancel">Verificaţi dacă zona albastră a telefonului dumneavoastră nu are nici un fel de obstrucţii şi ştergeţi orice noroi sau praf.</string>
+    <string name="pocket_view_top_tag_cancel2">Apăsați lung butonul de pornire pentru a forța ieșirea din modul buzunar.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->

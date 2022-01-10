@@ -34,10 +34,10 @@
     <string name="gaming_mode_disabled_toast">Ігровий режим вимкнено</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Нажміть і утримуйте кнопку живлення, щоб розблокувати</string>
-    <string name="pocket_view_title">Кишеньковий режим увімкнено</string>
-    <string name="pocket_view_title_cancel">Щоб скористатися вашим телефоном:</string>
-    <string name="pocket_view_top_tag_cancel">Перевірте, чи синя ділянка вашого телефону чітка будь-яких обструкцій і очищення від будь-якої землі або пилу.</string>
-    <string name="pocket_view_top_tag_cancel2">Утримуйте кнопку живлення, щоб примусово вийти з кишенькового режиму.</string>
+    <string name="pocket_view_title">Режим \"У кишені\" увімкнено</string>
+    <string name="pocket_view_title_cancel">Щоб користуватися телефоном:</string>
+    <string name="pocket_view_top_tag_cancel">Перевірте, чи над синьою ділянкою телефону немає перешкод, і очистіть від бруду чи пилу.</string>
+    <string name="pocket_view_top_tag_cancel2">Натисніть й утримуйте кнопку живлення, щоб примусово вийти з режиму \"У кишені\".</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
