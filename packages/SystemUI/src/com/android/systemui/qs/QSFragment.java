@@ -54,6 +54,7 @@ import com.android.systemui.statusbar.notification.stack.StackStateAnimator;
 import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
+import com.android.systemui.statusbar.policy.SecureLockscreenQSDisabler;
 import com.android.systemui.util.LifecycleFragment;
 import com.android.systemui.util.Utils;
 
@@ -102,6 +103,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
     private final QSFragmentComponent.Factory mQsComponentFactory;
     private final QSFragmentDisableFlagsLogger mQsFragmentDisableFlagsLogger;
     private final QSTileHost mHost;
+    private final SecureLockscreenQSDisabler mSecureLockscreenQSDisabler;
     private boolean mShowCollapsedOnKeyguard;
     private boolean mLastKeyguardAndExpanded;
     /**
@@ -152,7 +154,8 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
             KeyguardBypassController keyguardBypassController,
             QSFragmentComponent.Factory qsComponentFactory,
             QSFragmentDisableFlagsLogger qsFragmentDisableFlagsLogger,
-            FalsingManager falsingManager, DumpManager dumpManager) {
+            FalsingManager falsingManager, DumpManager dumpManager,
+            SecureLockscreenQSDisabler secureLockscreenQSDisabler) {
         mRemoteInputQuickSettingsDisabler = remoteInputQsDisabler;
         mCommandQueue = commandQueue;
         mQsDetailDisplayer = qsDetailDisplayer;
@@ -166,6 +169,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
         mBypassController = keyguardBypassController;
         mStatusBarStateController = statusBarStateController;
         mDumpManager = dumpManager;
+        mSecureLockscreenQSDisabler = secureLockscreenQSDisabler;
     }
 
     @Override
@@ -361,6 +365,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
         }
         int state2BeforeAdjustment = state2;
         state2 = mRemoteInputQuickSettingsDisabler.adjustDisableFlags(state2);
+        state2 = mSecureLockscreenQSDisabler.adjustDisableFlags(state2);
 
         mQsFragmentDisableFlagsLogger.logDisableFlagChange(
                 /* new= */ new DisableState(state1, state2BeforeAdjustment),
