@@ -68,6 +68,7 @@ import com.android.systemui.statusbar.policy.FlashlightController;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
+import com.android.systemui.statusbar.policy.SecureLockscreenQSDisabler;
 import com.android.wm.shell.legacysplitscreen.LegacySplitScreen;
 
 import java.util.Optional;
@@ -106,6 +107,7 @@ public class StatusBarCommandQueueCallbacks implements CommandQueue.Callbacks {
     private final int mDisplayId;
     private final boolean mVibrateOnOpening;
     private final VibrationEffect mCameraLaunchGestureVibrationEffect;
+    private final SecureLockscreenQSDisabler mSecureLockscreenQSDisabler;
 
 
     private static final AudioAttributes VIBRATION_ATTRIBUTES = new AudioAttributes.Builder()
@@ -142,7 +144,8 @@ public class StatusBarCommandQueueCallbacks implements CommandQueue.Callbacks {
             Optional<Vibrator> vibratorOptional,
             LightBarController lightBarController,
             DisableFlagsLogger disableFlagsLogger,
-            @DisplayId int displayId) {
+            @DisplayId int displayId,
+            SecureLockscreenQSDisabler secureLockscreenQSDisabler) {
 
         mStatusBar = statusBar;
         mContext = context;
@@ -171,6 +174,7 @@ public class StatusBarCommandQueueCallbacks implements CommandQueue.Callbacks {
         mLightBarController = lightBarController;
         mDisableFlagsLogger = disableFlagsLogger;
         mDisplayId = displayId;
+        mSecureLockscreenQSDisabler = secureLockscreenQSDisabler;
 
         mVibrateOnOpening = resources.getBoolean(R.bool.config_vibrateOnIconAnimation);
         mCameraLaunchGestureVibrationEffect = getCameraGestureVibrationEffect(
@@ -281,6 +285,7 @@ public class StatusBarCommandQueueCallbacks implements CommandQueue.Callbacks {
 
         int state2BeforeAdjustment = state2;
         state2 = mRemoteInputQuickSettingsDisabler.adjustDisableFlags(state2);
+        state2 = mSecureLockscreenQSDisabler.adjustDisableFlags(state2);
         Log.d(StatusBar.TAG,
                 mDisableFlagsLogger.getDisableFlagsString(
                         /* old= */ new DisableFlagsLogger.DisableState(
