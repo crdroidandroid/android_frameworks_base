@@ -69,6 +69,7 @@ import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
+import com.android.systemui.statusbar.policy.SecureLockscreenQSDisabler;
 
 import java.util.Optional;
 
@@ -108,6 +109,7 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
     private final Lazy<CameraLauncher> mCameraLauncherLazy;
     private final QuickSettingsController mQsController;
     private final QSHost mQSHost;
+    private final SecureLockscreenQSDisabler mSecureLockscreenQSDisabler;
 
     private static final VibrationAttributes HARDWARE_FEEDBACK_VIBRATION_ATTRIBUTES =
             VibrationAttributes.createForUsage(VibrationAttributes.USAGE_HARDWARE_FEEDBACK);
@@ -141,7 +143,8 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
             SystemBarAttributesListener systemBarAttributesListener,
             Lazy<CameraLauncher> cameraLauncherLazy,
             UserTracker userTracker,
-            QSHost qsHost) {
+            QSHost qsHost,
+            SecureLockscreenQSDisabler secureLockscreenQSDisabler) {
         mCentralSurfaces = centralSurfaces;
         mQsController = quickSettingsController;
         mContext = context;
@@ -168,6 +171,7 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
         mCameraLauncherLazy = cameraLauncherLazy;
         mUserTracker = userTracker;
         mQSHost = qsHost;
+        mSecureLockscreenQSDisabler = secureLockscreenQSDisabler;
 
         mVibrateOnOpening = resources.getBoolean(R.bool.config_vibrateOnIconAnimation);
         mCameraLaunchGestureVibrationEffect = getCameraGestureVibrationEffect(
@@ -263,6 +267,7 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
 
         int state2BeforeAdjustment = state2;
         state2 = mRemoteInputQuickSettingsDisabler.adjustDisableFlags(state2);
+        state2 = mSecureLockscreenQSDisabler.adjustDisableFlags(state2);
         Log.d(CentralSurfaces.TAG,
                 mDisableFlagsLogger.getDisableFlagsString(
                         /* old= */ new DisableFlagsLogger.DisableState(
