@@ -70,6 +70,7 @@ import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.notification.headsup.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
+import com.android.systemui.statusbar.policy.SecureLockscreenQSDisabler;
 
 import dagger.Lazy;
 
@@ -112,6 +113,8 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
     private final QuickSettingsController mQsController;
     private final QSHost mQSHost;
     private final KeyguardInteractor mKeyguardInteractor;
+    private final SecureLockscreenQSDisabler mSecureLockscreenQSDisabler;
+
     private static final VibrationAttributes HARDWARE_FEEDBACK_VIBRATION_ATTRIBUTES =
             VibrationAttributes.createForUsage(VibrationAttributes.USAGE_HARDWARE_FEEDBACK);
 
@@ -152,7 +155,8 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
             QSHost qsHost,
             ActivityStarter activityStarter,
             KeyguardInteractor keyguardInteractor,
-            EmergencyGestureIntentFactory emergencyGestureIntentFactory) {
+            EmergencyGestureIntentFactory emergencyGestureIntentFactory,
+            SecureLockscreenQSDisabler secureLockscreenQSDisabler) {
         mCentralSurfaces = centralSurfaces;
         mQsController = quickSettingsController;
         mContext = context;
@@ -181,6 +185,7 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
         mUserTracker = userTracker;
         mQSHost = qsHost;
         mKeyguardInteractor = keyguardInteractor;
+        mSecureLockscreenQSDisabler = secureLockscreenQSDisabler;
         mVibrateOnOpening = resources.getBoolean(R.bool.config_vibrateOnIconAnimation);
         mCameraLaunchGestureVibrationEffect = getCameraGestureVibrationEffect(
                 mVibratorOptional, resources);
@@ -278,6 +283,7 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
         mDisabled1 = state1;
 
         state2 = mRemoteInputQuickSettingsDisabler.adjustDisableFlags(state2);
+        state2 = mSecureLockscreenQSDisabler.adjustDisableFlags(state2);
         final int old2 = mDisabled2;
         final int diff2 = state2 ^ old2;
         mDisabled2 = state2;
