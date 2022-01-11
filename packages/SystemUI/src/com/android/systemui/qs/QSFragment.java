@@ -53,6 +53,7 @@ import com.android.systemui.statusbar.notification.stack.StackStateAnimator;
 import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.phone.NotificationsQuickSettingsContainer;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
+import com.android.systemui.statusbar.policy.SecureLockscreenQSDisabler;
 import com.android.systemui.util.InjectionInflationController;
 import com.android.systemui.util.LifecycleFragment;
 import com.android.systemui.util.Utils;
@@ -99,6 +100,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
     private final MediaHost mQqsMediaHost;
     private final QSFragmentComponent.Factory mQsComponentFactory;
     private final QSTileHost mHost;
+    private final SecureLockscreenQSDisabler mSecureLockscreenQSDisabler;
     private boolean mShowCollapsedOnKeyguard;
     private boolean mLastKeyguardAndExpanded;
     /**
@@ -143,7 +145,8 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
             @Named(QUICK_QS_PANEL) MediaHost qqsMediaHost,
             KeyguardBypassController keyguardBypassController,
             QSFragmentComponent.Factory qsComponentFactory, FeatureFlags featureFlags,
-            FalsingManager falsingManager, DumpManager dumpManager) {
+            FalsingManager falsingManager, DumpManager dumpManager,
+            SecureLockscreenQSDisabler secureLockscreenQSDisabler) {
         mRemoteInputQuickSettingsDisabler = remoteInputQsDisabler;
         mInjectionInflater = injectionInflater;
         mCommandQueue = commandQueue;
@@ -158,6 +161,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
         mBypassController = keyguardBypassController;
         mStatusBarStateController = statusBarStateController;
         mDumpManager = dumpManager;
+        mSecureLockscreenQSDisabler = secureLockscreenQSDisabler;
     }
 
     @Override
@@ -352,6 +356,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
             return;
         }
         state2 = mRemoteInputQuickSettingsDisabler.adjustDisableFlags(state2);
+        state2 = mSecureLockscreenQSDisabler.adjustDisableState(state2);
 
         final boolean disabled = (state2 & DISABLE2_QUICK_SETTINGS) != 0;
         if (disabled == mQsDisabled) return;

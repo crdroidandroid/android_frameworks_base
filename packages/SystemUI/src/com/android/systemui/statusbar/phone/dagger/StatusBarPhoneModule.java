@@ -104,6 +104,7 @@ import com.android.systemui.statusbar.policy.ExtensionController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
+import com.android.systemui.statusbar.policy.SecureLockscreenQSDisabler;
 import com.android.systemui.statusbar.policy.UserInfoControllerImpl;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
 import com.android.systemui.tuner.TunerService;
@@ -224,7 +225,8 @@ public interface StatusBarPhoneModule {
             KeyguardUnlockAnimationController keyguardUnlockAnimationController,
             UnlockedScreenOffAnimationController unlockedScreenOffAnimationController,
             Optional<StartingSurface> startingSurfaceOptional,
-            TunerService tunerService) {
+            TunerService tunerService,
+            SecureLockscreenQSDisabler secureLockscreenQSDisabler) {
         return new StatusBar(
                 context,
                 notificationsController,
@@ -315,6 +317,7 @@ public interface StatusBarPhoneModule {
                 keyguardUnlockAnimationController,
                 unlockedScreenOffAnimationController,
                 startingSurfaceOptional,
-                tunerService);
+                tunerService,
+                secureLockscreenQSDisabler);
     }
 }
