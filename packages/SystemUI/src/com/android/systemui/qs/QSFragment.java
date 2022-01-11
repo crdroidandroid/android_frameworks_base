@@ -70,6 +70,7 @@ import com.android.systemui.statusbar.notification.stack.StackStateAnimator;
 import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
+import com.android.systemui.statusbar.policy.SecureLockscreenQSDisabler;
 import com.android.systemui.util.LifecycleFragment;
 import com.android.systemui.util.Utils;
 
@@ -121,6 +122,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
     private final FooterActionsController mFooterActionsController;
     private final FooterActionsViewModel.Factory mFooterActionsViewModelFactory;
     private final ListeningAndVisibilityLifecycleOwner mListeningAndVisibilityLifecycleOwner;
+    private final SecureLockscreenQSDisabler mSecureLockscreenQSDisabler;
     private boolean mShowCollapsedOnKeyguard;
     private boolean mLastKeyguardAndExpanded;
     /**
@@ -178,7 +180,8 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
             FooterActionsController footerActionsController,
             FooterActionsViewModel.Factory footerActionsViewModelFactory,
             LargeScreenShadeInterpolator largeScreenShadeInterpolator,
-            FeatureFlags featureFlags) {
+            FeatureFlags featureFlags,
+            SecureLockscreenQSDisabler secureLockscreenQSDisabler) {
         mRemoteInputQuickSettingsDisabler = remoteInputQsDisabler;
         mQsMediaHost = qsMediaHost;
         mQqsMediaHost = qqsMediaHost;
@@ -194,6 +197,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
         mFooterActionsController = footerActionsController;
         mFooterActionsViewModelFactory = footerActionsViewModelFactory;
         mListeningAndVisibilityLifecycleOwner = new ListeningAndVisibilityLifecycleOwner();
+        mSecureLockscreenQSDisabler = secureLockscreenQSDisabler;
     }
 
     @Override
@@ -434,6 +438,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
         }
         int state2BeforeAdjustment = state2;
         state2 = mRemoteInputQuickSettingsDisabler.adjustDisableFlags(state2);
+        state2 = mSecureLockscreenQSDisabler.adjustDisableFlags(state2);
 
         mQsFragmentDisableFlagsLogger.logDisableFlagChange(
                 /* new= */ new DisableState(state1, state2BeforeAdjustment),
