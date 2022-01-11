@@ -87,5 +87,5 @@
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Látható megállítógomb\nHosszan nyomva áthelyezhető</string>
     <string name="screenrecord_lowquality_label">Gyengébb minőség, hogy kisebbek legyenek a fájlok</string>
-    <string name="screenrecord_longer_timeout_switch_label">Bigger file size limit\nLimit recording size to 15GiB</string>
+    <string name="screenrecord_longer_timeout_switch_label">A fájlméret felső határa\n15GB lehet a legnagyobb méret</string>
 </resources>
