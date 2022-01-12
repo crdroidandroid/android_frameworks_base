@@ -35,8 +35,8 @@
     <string name="pocket_lock_message_long_press">Kilidi açmaq üçün güc düyməsinə basıb saxlayın</string>
     <string name="pocket_view_title">Cib rejimi açıqdır</string>
     <string name="pocket_view_title_cancel">Telefonunu istifadə et:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
+    <string name="pocket_view_top_tag_cancel">Telefonun mavi hissəsində hər hansı tozun olub olmadığını yoxlayın və əgər varsa onları təmizləyin.</string>
+    <string name="pocket_view_top_tag_cancel2">Cib rejimindən çıxmağa məcbur etmək üçün güc düyməsinə uzun basın.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
