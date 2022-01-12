@@ -87,5 +87,5 @@
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Показывать кнопку остановки\nУдерживайте для перемещения</string>
     <string name="screenrecord_lowquality_label">Низкое качество для меньшего размера файла</string>
-    <string name="screenrecord_longer_timeout_switch_label">Большой размер файла\nОграничение размера записи до 15 Гб</string>
+    <string name="screenrecord_longer_timeout_switch_label">Большой размер файла\Ограничить размера записи до 15 Гб</string>
 </resources>
