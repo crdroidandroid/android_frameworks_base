@@ -87,5 +87,5 @@
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">显示停止点\n长按移动它</string>
     <string name="screenrecord_lowquality_label">使用较低画质以节省存储空间</string>
-    <string name="screenrecord_longer_timeout_switch_label">Bigger file size limit\nLimit recording size to 15GiB</string>
+    <string name="screenrecord_longer_timeout_switch_label">文件大小限制\n将录制大小限制为 15 Gb</string>
 </resources>
