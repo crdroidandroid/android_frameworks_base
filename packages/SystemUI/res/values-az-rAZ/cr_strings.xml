@@ -231,11 +231,11 @@
     <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go aktivləşdirildi</string>
-    <string name="onthego_notif_title">On-The-Go aktifdir</string>
+    <string name="onthego_notif_title">On-The-Go aktivdir</string>
     <string name="onthego_notif_stop">Dayandırın</string>
     <string name="onthego_notif_options">Seçimlər</string>
-    <string name="onthego_notif_error">On-The-Go açılmır</string>
-    <string name="onthego_notif_restart">On-The-Go\'yu yenidən başlat</string>
+    <string name="onthego_notif_error">On-The-Go funksiyasını açmaq mümkün olmadı</string>
+    <string name="onthego_notif_restart">On-The-Go funksiyasını yenidən işə sal</string>
     <string name="onthego_notif_camera_changed">Kamera rejimi dəyişdirildi</string>
     <string name="onthego_transparency">Şəffaflıq</string>
     <string name="onthego_front_camera">Ön kameradan istifadə edin</string>
