@@ -27,14 +27,14 @@
     <string name="permgrouprequest_fake_package_signature">Allow
         &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; to spoof package signature?</string>
     <!-- Advenced reboot -->
-    <string name="reboot_title">Reboot</string>
-    <string name="reboot_message">Rebooting system</string>
+    <string name="reboot_title">Khởi động lại</string>
+    <string name="reboot_message">Đang khởi động lại hệ thống</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
+    <string name="pocket_lock_message_long_press">Bấm và giữ nút nguồn để mở khoá</string>
     <string name="pocket_view_title">Chế độ bỏ túi đang bật</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
+    <string name="pocket_view_title_cancel">Để sử dụng điện thoại của bạn:</string>
+    <string name="pocket_view_top_tag_cancel">Đảm bảo không có vật cản nào trên vùng màu xanh của điện thoại và làm sạch bụi bẩn.</string>
+    <string name="pocket_view_top_tag_cancel2">Nhấn giữ nút nguồn để buộc thoát khỏi chế độ bỏ túi.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
 </resources>
