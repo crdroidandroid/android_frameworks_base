@@ -18,7 +18,7 @@
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">Sil</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Ekran rekordu silindi</string>
+    <string name="screenrecord_delete_description">Ekran qeydi silindi</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Səs</string>
     <string name="quick_settings_sound_ring">Zəng səsi</string>
@@ -31,11 +31,11 @@
     <string name="global_action_restart_ui">Sistem interfeysi</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go aktivləşdirildi</string>
-    <string name="onthego_notif_title">On-The-Go aktifdir</string>
+    <string name="onthego_notif_title">On-The-Go aktivdir</string>
     <string name="onthego_notif_stop">Dayandırın</string>
     <string name="onthego_notif_options">Seçimlər</string>
     <string name="onthego_notif_error">On-The-Go açılmır</string>
-    <string name="onthego_notif_restart">On-The-Go\'yu yenidən başlat</string>
+    <string name="onthego_notif_restart">On-The-Go funksiyasını yenidən işə sal</string>
     <string name="onthego_notif_camera_changed">Kamera rejimi dəyişdirildi</string>
     <string name="onthego_transparency">Şəffaflıq</string>
     <string name="onthego_front_camera">Ön kameradan istifadə edin</string>
@@ -64,7 +64,7 @@
     <string name="quick_settings_compass_label">Kompas</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Hazırlanır\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Kompas qapalı.</string>
+    <string name="accessibility_quick_settings_compass_off">Kompas bağlıdır.</string>
     <string name="accessibility_quick_settings_compass_on">Kompas açıq.</string>
     <string name="quick_settings_compass_N">Şi</string>
     <string name="quick_settings_compass_NE">ŞŞ</string>
