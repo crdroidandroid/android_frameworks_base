@@ -87,5 +87,5 @@
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Εμφάνιση κουκίδας παύσης\nΠαρατεταμέο πάτημα για να την μετακινήσεις</string>
     <string name="screenrecord_lowquality_label">Μείωση της ποιότητας για μικρότερο μέγεθος αρχείου</string>
-    <string name="screenrecord_longer_timeout_switch_label">Bigger file size limit\nLimit recording size to 15GiB</string>
+    <string name="screenrecord_longer_timeout_switch_label">Μεγαλύτερο όριο μεγέθους αρχείου\nΠεριορίστε το μέγεθος εγγραφής στα 15GiB</string>
 </resources>
