@@ -157,7 +157,7 @@ public abstract class ColumbusModule {
 
     @Provides
     @SysUISingleton
-    static ColumbusContentObserver.Factory provideColumbusContentObserver(ContentResolverWrapper contentResolverWrapper, UserTracker userTracker, @Background Handler handler, @Main Executor executor) {
+    static ColumbusContentObserver.Factory provideColumbusContentObserver(ContentResolverWrapper contentResolverWrapper, UserTracker userTracker, @Main Handler handler, @Main Executor executor) {
         return new ColumbusContentObserver.Factory(contentResolverWrapper, userTracker, handler, executor);
     }
 
@@ -271,7 +271,7 @@ public abstract class ColumbusModule {
 
     @Provides
     @SysUISingleton
-    static GestureSensorImpl provideGestureSensorImpl(Context context, UiEventLogger uiEventLogger, Handler handler) {
+    static GestureSensorImpl provideGestureSensorImpl(Context context, UiEventLogger uiEventLogger, @Main Handler handler) {
         return new GestureSensorImpl(context, uiEventLogger, handler);
     }
 
@@ -283,7 +283,7 @@ public abstract class ColumbusModule {
 
     @Provides
     @SysUISingleton
-    static CHREGestureSensor provideCHREGestureSensor(Context context, UiEventLogger uiEventLogger, GestureConfiguration gestureConfiguration, StatusBarStateController statusBarStateController, WakefulnessLifecycle wakefulnessLifecycle, Handler handler) {
+    static CHREGestureSensor provideCHREGestureSensor(Context context, UiEventLogger uiEventLogger, GestureConfiguration gestureConfiguration, StatusBarStateController statusBarStateController, WakefulnessLifecycle wakefulnessLifecycle, @Main Handler handler) {
         return new CHREGestureSensor(context, uiEventLogger, gestureConfiguration, statusBarStateController, wakefulnessLifecycle, handler);
     }
 
