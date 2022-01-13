@@ -247,5 +247,5 @@
     <string name="accessibility_quick_settings_onthego_off">Menet közben (On-The-Go) ki</string>
     <string name="accessibility_quick_settings_onthego_on">Menet közben (On-The-Go) be</string>
     <!-- FPS view text placeholder -->
-    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <string name="fps_text_placeholder"><xliff:g id="fps" example="90">%1$d</xliff:g> FPS</string>
 </resources>
