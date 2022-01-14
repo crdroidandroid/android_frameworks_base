@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2021 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">ک‌ب/ث</string>
+    <string name="megabitspersecond_short">م‌ب/ث</string>
+    <string name="gigabitspersecond_short">گ‌ب/ث</string>
+    <string name="kilobytespersecond_short">ک‌ب/ث</string>
+    <string name="megabytespersecond_short">م‌ب/ث</string>
+    <string name="gigabytespersecond_short">گ‌ب/ث</string>
+    <!-- Omnijaws Weather -->
+    <string name="omnijaws_service_error">خطا</string>
+    <string name="omnijaws_service_unkown">بدون اطلاعات آب و هوا</string>
+    <string name="omnijaws_service_error_long">خطا در بارگیری اطلاعات آب و هوا</string>
+    <string name="omnijaws_service_disabled">سرویس غیرفعال شده است</string>
+    <string name="omnijaws_detail_header">آب و هوا</string>
+    <string name="omnijaws_label_default">آب و هوا</string>
+    <string name="omnijaws_current_text">اکنون</string>
+    <string name="omnijaws_package_not_available">OmniJaws در دسترس نیست</string>
+    <string name="omnijaws_service_last_update">آخرین به‌روز رسانی:</string>
+    <!-- Always on Display tile -->
+    <string name="quick_settings_always_on_display_label">همیشه روی صفحه نمایش</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">تعویض سیم کارت دیتا</string>
+    <string name="qs_data_switch_changed_1">استفاده از سیم‌کارت ۱ برای دیتا گوشی</string>
+    <string name="qs_data_switch_changed_2">استفاده از سیم‌کارت ۲ برای دیتا گوشی</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ سریع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> مانده تا کامل شود)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Wشارژ بی‌سیم</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ نامنظم (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> مانده تا کامل شود)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • شارژ نامنظم</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ فوق سریع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> مانده تا کامل شود)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • شارژ فوق سریع</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">اطلاعات پردازنده</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">اطلاعات FPS</string>
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">حالت بازی در تنظیمات غیرفعال شده است</string>
+    <string name="quick_settings_gaming_mode_label">حالت بازی</string>
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">پیکسل هوشمند</string>
+    <string name="quick_settings_smart_pixels_on_power_save">فعال سازی خودکار پیکسل هوشمند</string>
+    <!-- Reboot/Recovery/PowerOff QS tile -->
+    <string name="quick_settings_reboot_label">راه اندازی مجدد</string>
+    <string name="quick_settings_reboot_recovery_label">بازیابی</string>
+    <string name="quick_settings_poweroff_label">خاموش کردن</string>
+    <!-- Sound Search tile -->
+    <string name="quick_settings_sound_search">جستجوی صدا</string>
+    <!-- Sound QS tile -->
+    <string name="quick_settings_sound_label">صدا</string>
+    <string name="quick_settings_sound_ring">زنگ</string>
+    <string name="quick_settings_sound_vibrate">لرزش</string>
+    <string name="quick_settings_sound_dnd">مزاحم نشوید</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">قطب‌نما</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">مقدار اولیه\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">قطب‌نما خاموش.</string>
+    <string name="accessibility_quick_settings_compass_on">قطب‌نما روشن.</string>
+    <string name="quick_settings_compass_N">شمال</string>
+    <string name="quick_settings_compass_NE">شمال شرقی</string>
+    <string name="quick_settings_compass_E">شرق</string>
+    <string name="quick_settings_compass_SE">جنوب شرقی</string>
+    <string name="quick_settings_compass_S">جنوب</string>
+    <string name="quick_settings_compass_SW">جنوب غربی</string>
+    <string name="quick_settings_compass_W">غرب</string>
+    <string name="quick_settings_compass_NW">شمال غربی</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">زبان</string>
+    <string name="quick_settings_locale_more_locales_toast">لطفا چندین زبان را برای فعال کردن قابلیت تغییر وضعیت پیکربندی کنید</string>
+    <!-- Time displayed on typographic clock face, which displays the time in words.
+             Example:
+
+                 It's
+                 Four
+                 Twenty Nine
+
+         This string requires two arguments: the first in the hours of the time and
+         the second is the minutes of the time. The hours string is obtained from
+         string-array type_clock_hours below and the minutes string is obtained
+         from string-array type_clock_minutes below.
+
+    [CHAR LIMIT=8] -->
+    <plurals name="type_clock_header">
+        <item quantity="other"><annotation name="color">It’s</annotation>\n^1\n^2</item>
+        <item quantity="one"><annotation name="color">این هست</annotation>\n^1\n^2</item>
+    </plurals>
+    <!-- Hour displayed in words on the typographic clock face. [CHAR LIMIT=12] -->
+    <string name="text_clock_h_one">یک</string>
+    <string name="text_clock_h_two">دو</string>
+    <string name="text_clock_h_three">سه</string>
+    <string name="text_clock_h_four">چهار</string>
+    <string name="text_clock_h_five">پنج</string>
+    <string name="text_clock_h_six">شیش</string>
+    <string name="text_clock_h_seven">هفت</string>
+    <string name="text_clock_h_eight">هشت</string>
+    <string name="text_clock_h_nine">نه</string>
+    <string name="text_clock_h_ten">ده</string>
+    <string name="text_clock_h_eleven">یازده</string>
+    <string name="text_clock_h_twelve">دوازده</string>
+    <!-- Minutes displayed in words on the typographic clock face. [CHAR LIMIT=20] -->
+    <string name="text_clock_m_zero">O’ساعت</string>
+    <string name="text_clock_m_one">O’یک</string>
+    <string name="text_clock_m_two">O’دو</string>
+    <string name="text_clock_m_three">O’سه</string>
+    <string name="text_clock_m_four">O’چهار</string>
+    <string name="text_clock_m_five">O’پنج</string>
+    <string name="text_clock_m_six">O’شیش</string>
+    <string name="text_clock_m_seven">O’هفت</string>
+    <string name="text_clock_m_eight">O’هشت</string>
+    <string name="text_clock_m_nine">O’نه</string>
+    <string name="text_clock_m_ten">ده</string>
+    <string name="text_clock_m_eleven">یازده</string>
+    <string name="text_clock_m_twelve">دوازده</string>
+    <string name="text_clock_m_thirteen">سیزده</string>
+    <string name="text_clock_m_fourteen">چهارده</string>
+    <string name="text_clock_m_fifteen">پانزده</string>
+    <string name="text_clock_m_sixteen">شانزده</string>
+    <string name="text_clock_m_seventeen">هیفده</string>
+    <string name="text_clock_m_eighteen">هیژده</string>
+    <string name="text_clock_m_nineteen">نوزده</string>
+    <string name="text_clock_m_twenty">بیست</string>
+    <string name="text_clock_m_twenty_one">بیست و یک</string>
+    <string name="text_clock_m_twenty_two">بیست و دو</string>
+    <string name="text_clock_m_twenty_three">بیست و سه</string>
+    <string name="text_clock_m_twenty_four">بیست و چهار</string>
+    <string name="text_clock_m_twenty_five">بیست و پنج</string>
+    <string name="text_clock_m_twenty_six">بیست و شیش</string>
+    <string name="text_clock_m_twenty_seven">بیست و هفت</string>
+    <string name="text_clock_m_twenty_eight">بیست و هشت</string>
+    <string name="text_clock_m_twenty_nine">بیست و نه</string>
+    <string name="text_clock_m_thirty">سی</string>
+    <string name="text_clock_m_thirty_one">سی و یک</string>
+    <string name="text_clock_m_thirty_two">سی و دو</string>
+    <string name="text_clock_m_thirty_three">سی و سه</string>
+    <string name="text_clock_m_thirty_four">سی و چهار</string>
+    <string name="text_clock_m_thirty_five">سی و پنج</string>
+    <string name="text_clock_m_thirty_six">سی و شیش</string>
+    <string name="text_clock_m_thirty_seven">سی و هفت</string>
+    <string name="text_clock_m_thirty_eight">سی و هشت</string>
+    <string name="text_clock_m_thirty_nine">سی و نه</string>
+    <string name="text_clock_m_forty">چهل</string>
+    <string name="text_clock_m_forty_one">چهل و یک</string>
+    <string name="text_clock_m_forty_two">چهل و دو</string>
+    <string name="text_clock_m_forty_three">چهل و سه</string>
+    <string name="text_clock_m_forty_four">چهل و چهار</string>
+    <string name="text_clock_m_forty_five">چهل و پنج</string>
+    <string name="text_clock_m_forty_six">چهل و شیش</string>
+    <string name="text_clock_m_forty_seven">چهل و هفت</string>
+    <string name="text_clock_m_forty_eight">چهل و هشت</string>
+    <string name="text_clock_m_forty_nine">چهل و نه</string>
+    <string name="text_clock_m_fifty">پنجاه</string>
+    <string name="text_clock_m_fifty_one">پنجاه و یک</string>
+    <string name="text_clock_m_fifty_two">پنجاه و دو</string>
+    <string name="text_clock_m_fifty_three">پنجاه و سه</string>
+    <string name="text_clock_m_fifty_four">پنجاه و چهار</string>
+    <string name="text_clock_m_fifty_five">پنجاه و پنج</string>
+    <string name="text_clock_m_fifty_six">پنجاه و شیش</string>
+    <string name="text_clock_m_fifty_seven">پنجاه و هفت</string>
+    <string name="text_clock_m_fifty_eight">پنجاه و هشت</string>
+    <string name="text_clock_m_fifty_nine">پنجاه و نه</string>
+    <!-- Binary clock -->
+    <!-- Samsung clock -->
+    <!-- Tux clock -->
+    <!-- Oroño clock -->
+    <string name="date_long_title_today">امروز ساعت %s</string>
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">حذف</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">فیلم ضبط صفحه حذف شد</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">اولویت</string>
+    <string name="volume_ringer_alarms_only">زنگ هشدار</string>
+    <string name="volume_ringer_dnd">مزاحم نشو</string>
+    <string name="tristate_flashlight_on">روشن کردن</string>
+    <string name="tristate_flashlight_off">خاموش کردن</string>
+    <string name="tristate_flashlight_blink">چشمک زدن</string>
+    <string name="tristate_brightness_bright">حداکثر روشنایی</string>
+    <string name="tristate_brightness_dark">حداقل روشنایی</string>
+    <string name="tristate_brightness_auto">روشنایی خودکار</string>
+    <string name="tristate_rotation_auto">چرخش خودکار</string>
+    <string name="tristate_rotation_0">عمودی</string>
+    <string name="tristate_rotation_90">افقی(90 درجه)</string>
+    <string name="tristate_rotation_270">افقی(270 درجه)</string>
+    <!-- Screenrecorder -->
+    <string name="screenrecord_stopdot_label">نشان دادن نقطه توقف\nبرای جابجا کردن، مدتی نگه دارید</string>
+    <string name="screenrecord_lowquality_label">استفاده‌ از کیفیت پایین تر برای حجم کمتر</string>
+    <!-- Biometric Dialog - Use Face -->
+    <string name="biometric_dialog_button_use_face">استفاده از چهره</string>
+    <!-- Daily data usage -->
+    <string name="daily_data_usage_title">استفاده امروز</string>
+    <!-- App Lock -->
+    <string name="applock_locked">&#160;قفل شده</string>
+    <string name="applock_fingerprint_face">, اثر انگشت یا چهره شما برای بازگشایی</string>
+    <string name="applock_face">&#160;یا چهره شما برای بازگشایی</string>
+    <string name="applock_fingerprint">&#160;یا اثرانگشت شما برای بازگشایی</string>
+    <string name="applock_credential">&#160;برای بازگشایی</string>
+    <string name="applock_unlock">بازکردن</string>
+    <!-- Power menu QS tile -->
+    <string name="quick_settings_power_menu_label">منوی پاور</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">به اجبار متوقف شود؟</string>
+    <string name="force_stop_dlg_text">اگر برنامه‌ای را به اجبار متوقف کنید، ممکن است درست کار نکند.</string>
+    <string name="guts_force_close_app">توقف اجباری</string>
+    <!-- Title for media output settings -->
+    <string name="media_output_title">پخش رسانه با</string>
+    <!-- Mono audio tile -->
+    <string name="quick_settings_monotoggle_tile">حالت صدا</string>
+    <string name="quick_settings_monotoggle_tile_mono">صدای تک(مونو)</string>
+    <string name="quick_settings_monotoggle_tile_stereo">صدای سه بعدی(استریو)</string>
+    <!-- Tuner items -->
+    <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_vpn">VPN</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">On-The-Go activated</string>
+    <string name="onthego_notif_title">On-The-Go is active</string>
+    <string name="onthego_notif_stop">Stop</string>
+    <string name="onthego_notif_options">Options</string>
+    <string name="onthego_notif_error">Unable to start On-The-Go</string>
+    <string name="onthego_notif_restart">Restart On-The-Go</string>
+    <string name="onthego_notif_camera_changed">Camera mode changed</string>
+    <string name="onthego_transparency">Transparency</string>
+    <string name="onthego_front_camera">Use front camera</string>
+    <string name="onthego_service_toggle">Automatically restart service</string>
+    <string name="onthego_channel_name">Main</string>
+    <string name="global_action_onthego">On-The-Go</string>
+    <!-- OnTheGo Tile -->
+    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
+    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+</resources>
