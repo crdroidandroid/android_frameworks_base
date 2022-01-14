@@ -115,6 +115,7 @@ import com.android.internal.util.EmergencyAffordanceManager;
 import com.android.internal.util.ScreenshotHelper;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardUpdateMonitor;
+import com.android.systemui.Dependency;
 import com.android.systemui.MultiListLayout;
 import com.android.systemui.MultiListLayout.MultiListAdapter;
 import com.android.systemui.animation.Interpolators;
@@ -131,15 +132,18 @@ import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.telephony.TelephonyListenerManager;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.EmergencyDialerConstants;
 import com.android.systemui.util.RingerModeTracker;
 import com.android.systemui.util.settings.GlobalSettings;
 import com.android.systemui.util.settings.SecureSettings;
 
+import lineageos.app.LineageGlobalActions;
 import lineageos.providers.LineageSettings;
 import org.lineageos.internal.util.PowerMenuUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -153,7 +157,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         DialogInterface.OnShowListener,
         ConfigurationController.ConfigurationListener,
         GlobalActionsPanelPlugin.Callbacks,
-        LifecycleOwner {
+        LifecycleOwner, TunerService.Tunable {
 
     public static final String SYSTEM_DIALOG_REASON_KEY = "reason";
     public static final String SYSTEM_DIALOG_REASON_GLOBAL_ACTIONS = "globalactions";
@@ -194,6 +198,9 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     // See NotificationManagerService.LONG_DELAY
     private static final int TOAST_VISIBLE_TIME = 3500;
 
+    private static final String POWER_MENU_ACTIONS =
+            "lineagesecure:" + LineageSettings.Secure.POWER_MENU_ACTIONS;
+
     private final Context mContext;
     private final GlobalActionsManager mWindowManagerFuncs;
     private final AudioManager mAudioManager;
@@ -215,6 +222,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     private final UiEventLogger mUiEventLogger;
     private final SysUiState mSysUiState;
     private final GlobalActionsInfoProvider mInfoProvider;
+    private final LineageGlobalActions mLineageGlobalActions;
 
     // Used for RingerModeTracker
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
@@ -259,6 +267,9 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     private int mSmallestScreenWidthDp;
     private final StatusBar mStatusBar;
     private final KeyguardUpdateMonitor mKeyguardUpdateMonitor;
+
+    // Power menu customizations
+    private String[] mActions;
 
     @VisibleForTesting
     public enum GlobalActionsEvent implements UiEventLogger.UiEventEnum {
@@ -399,6 +410,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         mSmallestScreenWidthDp = resources.getConfiguration().smallestScreenWidthDp;
         mStatusBar = statusBar;
         mKeyguardUpdateMonitor = keyguardUpdateMonitor;
+        mLineageGlobalActions = LineageGlobalActions.getInstance(mContext);
 
         // receive broadcasts
         IntentFilter filter = new IntentFilter();
@@ -428,6 +440,11 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         mScreenshotHelper = new ScreenshotHelper(context);
 
         mConfigurationController.addCallback(this);
+
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, POWER_MENU_ACTIONS);
+
+        mActions = mLineageGlobalActions.getUserActionsArray();
     }
 
     /**
@@ -589,7 +606,6 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         mOverflowItems.clear();
         mPowerItems.clear();
         mRestartItems.clear();
-        String[] defaultActions = getDefaultActions();
         String[] restartActions = getRestartActions();
 
         ShutDownAction shutdownAction = new ShutDownAction();
@@ -605,13 +621,16 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         CurrentUserProvider currentUser = new CurrentUserProvider();
 
         // make sure emergency affordance action is first, if needed
-        if (mEmergencyAffordanceManager.needsEmergencyAffordance()) {
+        boolean showEmergencyAffordance = Arrays.stream(mActions)
+                .anyMatch(GLOBAL_ACTION_KEY_EMERGENCY::equals);
+        if (showEmergencyAffordance &&
+                mEmergencyAffordanceManager.needsEmergencyAffordance()) {
             addIfShouldShowAction(tempActions, new EmergencyAffordanceAction());
             addedKeys.add(GLOBAL_ACTION_KEY_EMERGENCY);
         }
 
-        for (int i = 0; i < defaultActions.length; i++) {
-            String actionKey = defaultActions[i];
+        for (int i = 0; i < mActions.length; i++) {
+            String actionKey = mActions[i];
             if (addedKeys.contains(actionKey)) {
                 // If we already have added this, don't add it again.
                 continue;
@@ -1102,7 +1121,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     }
 
     @VisibleForTesting
-    class ScreenshotAction extends SinglePressAction {
+    class ScreenshotAction extends SinglePressAction implements LongPressAction {
         ScreenshotAction() {
             super(R.drawable.ic_screenshot, R.string.global_action_screenshot);
         }
@@ -1135,15 +1154,21 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         }
 
         @Override
-        public boolean shouldShow() {
-            // Include screenshot in power menu for legacy nav because it is not accessible
-            // through Recents in that mode
-            return is2ButtonNavigationEnabled();
-        }
-
-        boolean is2ButtonNavigationEnabled() {
-            return NAV_BAR_MODE_2BUTTON == mContext.getResources().getInteger(
-                    com.android.internal.R.integer.config_navBarInteractionMode);
+        public boolean onLongPress() {
+            // Add a little delay before executing, to give the
+            // dialog a chance to go away before it takes a
+            // screenshot.
+            // TODO: instead, omit global action dialog layer
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mScreenshotHelper.takeScreenshot(TAKE_SCREENSHOT_SELECTED_REGION, true, true,
+                            SCREENSHOT_GLOBAL_ACTIONS, mHandler, null);
+                    mMetricsLogger.action(MetricsEvent.ACTION_SCREENSHOT_POWER_MENU);
+                    mUiEventLogger.log(GlobalActionsEvent.GA_SCREENSHOT_PRESS);
+                }
+            }, mDialogPressDelay);
+            return true;
         }
     }
 
@@ -2271,6 +2296,18 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
             mRestartAdapter.notifyDataSetChanged();
         }
     };
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case POWER_MENU_ACTIONS:
+                mActions =
+                        mLineageGlobalActions.getUserActionsArray();
+                break;
+            default:
+                break;
+        }
+    }
 
     private final ContentObserver mAirplaneModeObserver = new ContentObserver(mMainHandler) {
         @Override
