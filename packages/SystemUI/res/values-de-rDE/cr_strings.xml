@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">Löschen</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">Bildschirmaufnahme gelöscht</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Ton</string>
+    <string name="quick_settings_sound_ring">Klingeln</string>
+    <string name="quick_settings_sound_vibrate">Vibrieren</string>
+    <string name="quick_settings_sound_dnd">Bitte nicht stören</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">On-The-Go aktiviert</string>
+    <string name="onthego_notif_title">On-The-Go ist aktiv</string>
+    <string name="onthego_notif_stop">Beenden</string>
+    <string name="onthego_notif_options">Optionen</string>
+    <string name="onthego_notif_error">On-The-Go kann nicht gestartet werden</string>
+    <string name="onthego_notif_restart">On-The-Go neu starten</string>
+    <string name="onthego_notif_camera_changed">Kameramodus geändert</string>
+    <string name="onthego_transparency">Transparenz</string>
+    <string name="onthego_front_camera">Frontkamera verwenden</string>
+    <string name="onthego_service_toggle">Dienst automatisch neu starten</string>
+    <string name="onthego_channel_name">Primär</string>
+    <string name="global_action_onthego">On-The-Go</string>
+    <!-- OnTheGo Tile -->
+    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="accessibility_quick_settings_onthego_off">On-The-Go aus</string>
+    <string name="accessibility_quick_settings_onthego_on">On-The-Go an</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kbit/s</string>
+    <string name="megabitspersecond_short">Mbit/s</string>
+    <string name="gigabitspersecond_short">Gbit/s</string>
+    <string name="kilobytespersecond_short">kBit/s</string>
+    <string name="megabytespersecond_short">MBit/s</string>
+    <string name="gigabytespersecond_short">GBit/s</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">CPU-Info</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">FPS-Info</string>
+    <!-- VPN / Call strength icons in statusbar -->
+    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_call_strength">Anruf-Signalstärke</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Kompass</string>
+    <string name="quick_settings_compass_value"><xliff:g id="Grad">%1$.0f</xliff:g>\u00b0 <xliff:g id="Richtung">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Initialisiere\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Kompass aus.</string>
+    <string name="accessibility_quick_settings_compass_on">Kompass an.</string>
+    <string name="quick_settings_compass_N">N</string>
+    <string name="quick_settings_compass_NE">NO</string>
+    <string name="quick_settings_compass_E">O</string>
+    <string name="quick_settings_compass_SE">SO</string>
+    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_SW">SW</string>
+    <string name="quick_settings_compass_W">W</string>
+    <string name="quick_settings_compass_NW">NW</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">SIM-Karte für mobile Daten wechseln</string>
+    <string name="qs_data_switch_changed_1">SIM-Karte 1 wird für mobile Daten verwendet</string>
+    <string name="qs_data_switch_changed_2">SIM-Karte 2 wird für mobile Daten verwendet</string>
+    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_delete_label">Löschen</string>
+    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
+    <string name="screenshot_delete_description">Screenshot löschen</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">Stopppunkt anzeigen\nGedrückt halten, um ihn zu verschieben</string>
+    <string name="screenrecord_lowquality_label">Qualität verringern für kleinere Dateigröße</string>
+    <string name="screenrecord_longer_timeout_switch_label">Größere Dateigröße erlauben\nBegrenzung der Aufnahmegröße auf 15 GiB</string>
+    <!-- Text to use when the number in a notification info is too large -->
+</resources>
