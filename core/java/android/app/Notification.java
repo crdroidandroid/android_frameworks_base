@@ -2573,10 +2573,10 @@ public class Notification implements Parcelable
 
         mSortKey = parcel.readString8();
 
+        actions = parcel.createTypedArray(Action.CREATOR); // may be null
+
         extras = Bundle.setDefusable(parcel.readBundle(), true); // may be null
         fixDuplicateExtras();
-
-        actions = parcel.createTypedArray(Action.CREATOR); // may be null
 
         if (parcel.readInt() != 0) {
             bigContentView = RemoteViews.CREATOR.createFromParcel(parcel);
@@ -3065,9 +3065,9 @@ public class Notification implements Parcelable
 
         parcel.writeString8(mSortKey);
 
-        parcel.writeBundle(extras); // null ok
-
         parcel.writeTypedArray(actions, 0); // null ok
+
+        parcel.writeBundle(extras); // null ok
 
         if (bigContentView != null) {
             parcel.writeInt(1);
