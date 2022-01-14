@@ -156,14 +156,14 @@ public class PulseControllerImpl
 
         @Override
         public void onFFTUpdate(byte[] bytes) {
-            if (mRenderer != null) {
+            if (mRenderer != null && bytes != null) {
                 mRenderer.onFFTUpdate(bytes);
             }
         }
 
         @Override
         public void onWaveFormUpdate(byte[] bytes) {
-            if (mRenderer != null) {
+            if (mRenderer != null && bytes != null) {
                 mRenderer.onWaveFormUpdate(bytes);
             }
         }
