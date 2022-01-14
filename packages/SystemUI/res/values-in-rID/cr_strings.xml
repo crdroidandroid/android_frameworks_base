@@ -269,4 +269,6 @@ Sembilan</string>
     <string name="quick_settings_onthego_label">On-The-Go</string>
     <string name="accessibility_quick_settings_onthego_off">On-The-Go nonaktif</string>
     <string name="accessibility_quick_settings_onthego_on">On-The-Go aktif</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
 </resources>

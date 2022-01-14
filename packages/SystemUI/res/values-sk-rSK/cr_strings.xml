@@ -229,23 +229,25 @@
     <string name="quick_settings_monotoggle_tile_stereo">Stereo zvuk</string>
     <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Šetrič dát</string>
     <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
+    <string name="onthego_notif_ticker">Režim On-The-Go aktivovaný</string>
+    <string name="onthego_notif_title">Režim On-The-Go je aktívny</string>
     <string name="onthego_notif_stop">Zastaviť</string>
     <string name="onthego_notif_options">Možnosti</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
+    <string name="onthego_notif_error">Nepodarilo sa spustiť Režim On-The-Go</string>
+    <string name="onthego_notif_restart">Reštartovať On-The-Go</string>
+    <string name="onthego_notif_camera_changed">Režim fotoaparátu bol zmenený</string>
     <string name="onthego_transparency">Priehľadnosť</string>
     <string name="onthego_front_camera">Použiť prednú kameru</string>
     <string name="onthego_service_toggle">Automaticky reštartovať službu</string>
     <string name="onthego_channel_name">Hlavné</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- OnTheGo Tile -->
-    <string name="quick_settings_onthego_label">On-The-Go</string>
-    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
-    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
+    <string name="quick_settings_onthego_label">Režim na cestách</string>
+    <string name="accessibility_quick_settings_onthego_off">Režim On-The-Go vyp.</string>
+    <string name="accessibility_quick_settings_onthego_on">Režim On-The-Go zap.</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">Priečinok: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
 </resources>

@@ -34,12 +34,12 @@
     <string name="gaming_mode_disabled_toast">Herný režim vypnutý</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Stlačte a podržte tlačidlo napájania pre odomknutie</string>
-    <string name="pocket_view_title">Pocket mode is on</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
-    <string name="pocket_view_top_tag_number1">1.\u0020</string>
-    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <string name="pocket_view_title">Vreckový režim je zapnutý</string>
+    <string name="pocket_view_title_cancel">Ak chcete používať telefón:</string>
+    <string name="pocket_view_top_tag_cancel">Skontrolujte, či sa v modrej oblasti telefónu nenachádzajú žiadne prekážky, a očistite ho od nečistôt a prachu.</string>
+    <string name="pocket_view_top_tag_cancel2">Dlhým stlačením tlačidla napájania vynútite ukončenie vreckového režimu.</string>
+    <string name="pocket_view_top_tag_number1">\u0020</string>
+    <string name="pocket_view_top_tag_number2">\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">Kopírovať adresu URL záznamu o chybe</string>
     <string name="url_copy_success">URL úspešne skopírované</string>
