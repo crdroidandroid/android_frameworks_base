@@ -29,7 +29,7 @@
     <string name="notification_channel_gaming">Oyun rejimi</string>
     <string name="gaming_mode_notification_title">Oyun rejimi aktivdir</string>
     <string name="gaming_mode_notification_content">Oyun rejimini bağlamaq üçün toxunun</string>
-    <string name="gaming_mode_enabled_toast">Oyun rejimi açıldı</string>
+    <string name="gaming_mode_enabled_toast">Oyun rejimi açıqdır</string>
     <string name="gaming_mode_disabled_toast">Oyun rejimi bağlanıldı</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Kilidi açmaq üçün güc düyməsinə basıb saxlayın</string>
