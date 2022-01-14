@@ -228,7 +228,7 @@
     <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
     <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Economizor date</string>
     <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go activat</string>
