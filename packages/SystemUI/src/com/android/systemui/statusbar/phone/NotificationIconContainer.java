@@ -295,7 +295,7 @@ public class NotificationIconContainer extends ViewGroup {
         mIconSize = size;
     }
 
-    private void updateState() {
+    public void updateState() {
         resetViewStates();
         calculateIconXTranslations();
         applyIconStates();
@@ -805,9 +805,13 @@ public class NotificationIconContainer extends ViewGroup {
                 icon.setVisibleState(visibleState, animationsAllowed);
                 boolean newIconStyle = Settings.System.getIntForUser(getContext().getContentResolver(),
                             Settings.System.STATUSBAR_COLORED_ICONS, 0, UserHandle.USER_CURRENT) == 1;
-                if (icon.getStatusBarIcon().pkg.contains("systemui") || !newIconStyle)
+                if (icon.getStatusBarIcon().pkg.contains("systemui") || !newIconStyle) {
                     icon.setIconColor(mInNotificationIconShelf ? mThemedTextColorPrimary : iconColor,
                             needsCannedAnimation && animationsAllowed);
+                } else {
+                    icon.setIconColor(StatusBarIconView.NO_COLOR,
+                            needsCannedAnimation && animationsAllowed);
+                }
                 if (animate) {
                     animateTo(icon, animationProperties);
                 } else {
@@ -829,10 +833,11 @@ public class NotificationIconContainer extends ViewGroup {
                 StatusBarIconView icon = (StatusBarIconView) view;
                 boolean newIconStyle = Settings.System.getIntForUser(getContext().getContentResolver(),
                             Settings.System.STATUSBAR_COLORED_ICONS, 0, UserHandle.USER_CURRENT) == 1;
-                if (icon.getStatusBarIcon().pkg.contains("systemui") || !newIconStyle)
+                if (icon.getStatusBarIcon().pkg.contains("systemui") || !newIconStyle) {
                     iconColor = ((StatusBarIconView) view).getStaticDrawableColor();
-                else
-                    return;
+                } else {
+                    iconColor = StatusBarIconView.NO_COLOR;
+                }
             }
         }
     }
