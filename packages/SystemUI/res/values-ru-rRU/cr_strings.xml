@@ -229,7 +229,7 @@
     <string name="quick_settings_monotoggle_tile_stereo">Стерео режим</string>
     <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Экономия трафика</string>
     <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Режим «На ходу» включен</string>
