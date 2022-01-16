@@ -169,6 +169,8 @@ public final class NotificationAttentionHelper {
     private final PolitenessStrategy mStrategy;
     private int mCurrentWorkProfileId = UserHandle.USER_NULL;
 
+    private boolean mSoundVibScreenOn;
+
     public NotificationAttentionHelper(Context context, LightsManager lightsManager,
             AccessibilityManager accessibilityManager, PackageManager packageManager,
             UserManager userManager, NotificationUsageStats usageStats,
@@ -312,6 +314,9 @@ public final class NotificationAttentionHelper {
         mContext.getContentResolver().registerContentObserver(
                 SettingsObserver.NOTIFICATION_LIGHT_PULSE_URI, false, mSettingsObserver,
                 UserHandle.USER_ALL);
+        mContext.getContentResolver().registerContentObserver(
+                SettingsObserver.NOTIFICATION_SOUND_VIB_SCREEN_ON_URI, false, mSettingsObserver,
+                UserHandle.USER_ALL);
         if (Flags.politeNotifications()) {
             mContext.getContentResolver().registerContentObserver(
                     SettingsObserver.NOTIFICATION_COOLDOWN_ENABLED_URI, false, mSettingsObserver,
@@ -326,6 +331,10 @@ public final class NotificationAttentionHelper {
     }
 
     private void loadUserSettings() {
+        mSoundVibScreenOn = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON, 1,
+                UserHandle.USER_CURRENT) == 1;
         if (Flags.politeNotifications()) {
             try {
                 mCurrentWorkProfileId = getManagedProfileId(ActivityManager.getCurrentUser());
@@ -410,7 +419,8 @@ public final class NotificationAttentionHelper {
         }
 
         if (aboveThreshold && isNotificationForCurrentUser(record, signals)) {
-            if (mSystemReady && mAudioManager != null) {
+            boolean skipSound = mScreenOn && !mSoundVibScreenOn;
+            if (!skipSound && mSystemReady && mAudioManager != null) {
                 Uri soundUri = record.getSound();
                 hasValidSound = soundUri != null && !Uri.EMPTY.equals(soundUri);
                 VibrationEffect vibration = record.getVibration();
@@ -1560,6 +1570,8 @@ public final class NotificationAttentionHelper {
                 Settings.System.NOTIFICATION_COOLDOWN_ALL);
         private static final Uri NOTIFICATION_COOLDOWN_VIBRATE_UNLOCKED_URI =
                 Settings.System.getUriFor(Settings.System.NOTIFICATION_COOLDOWN_VIBRATE_UNLOCKED);
+        private static final Uri NOTIFICATION_SOUND_VIB_SCREEN_ON_URI =
+                Settings.System.getUriFor(Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON);
         public SettingsObserver() {
             super(null);
         }
@@ -1576,6 +1588,12 @@ public final class NotificationAttentionHelper {
                     mNotificationPulseEnabled = pulseEnabled;
                     updateLightsLocked();
                 }
+            }
+            if (NOTIFICATION_SOUND_VIB_SCREEN_ON_URI.equals(uri)) {
+                mSoundVibScreenOn = Settings.System.getIntForUser(
+                        mContext.getContentResolver(),
+                        Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON, 1,
+                        UserHandle.USER_CURRENT) == 1;
             }
             if (Flags.politeNotifications()) {
                 if (NOTIFICATION_COOLDOWN_ENABLED_URI.equals(uri)) {
