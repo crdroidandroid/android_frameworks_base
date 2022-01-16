@@ -27,11 +27,11 @@
     <string name="permgrouprequest_fake_package_signature">Дазволіць
         &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; падманваць подпіс пакета?</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
-    <string name="pocket_view_title">Pocket mode is on</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
+    <string name="pocket_lock_message_long_press">Націсніце і ўтрымлівайце кнопку сілкавання, каб разблакаваць</string>
+    <string name="pocket_view_title">Рэжым \"У кішэні\" уключаны</string>
+    <string name="pocket_view_title_cancel">Для выкарыстання тэлефона:</string>
+    <string name="pocket_view_top_tag_cancel">Праверце, ці не закрыта сіняя вобласць вашага тэлефона якімі-небудзь прадметамі, і ачысціце ад бруду або пылу.</string>
+    <string name="pocket_view_top_tag_cancel2">Доўгі націск кнопкі сілкавання для прымусовага выхаду з рэжыму \"У кішэні\".</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
 </resources>
