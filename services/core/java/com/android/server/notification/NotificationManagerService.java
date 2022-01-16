@@ -682,6 +682,8 @@ public class NotificationManagerService extends SystemService {
 
     private LineageNotificationLights mLineageNotificationLights;
 
+    private boolean mSoundVibScreenOn;
+
     static class Archive {
         final SparseArray<Boolean> mEnabled;
         final int mBufferSize;
@@ -1878,6 +1880,8 @@ public class NotificationManagerService extends SystemService {
                         Settings.Secure.LOCK_SCREEN_ALLOW_PRIVATE_NOTIFICATIONS);
         private final Uri LOCK_SCREEN_SHOW_NOTIFICATIONS
                 = Settings.Secure.getUriFor(Settings.Secure.LOCK_SCREEN_SHOW_NOTIFICATIONS);
+        private final Uri NOTIFICATION_SOUND_VIB_SCREEN_ON
+                = Settings.System.getUriFor(Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON);
 
         SettingsObserver(Handler handler) {
             super(handler);
@@ -1901,6 +1905,8 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(LOCK_SCREEN_ALLOW_PRIVATE_NOTIFICATIONS,
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(LOCK_SCREEN_SHOW_NOTIFICATIONS,
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(NOTIFICATION_SOUND_VIB_SCREEN_ON,
                     false, this, UserHandle.USER_ALL);
             update(null);
         }
@@ -1948,6 +1954,11 @@ public class NotificationManagerService extends SystemService {
             }
             if (uri == null || LOCK_SCREEN_SHOW_NOTIFICATIONS.equals(uri)) {
                 mPreferencesHelper.updateLockScreenShowNotifications();
+            }
+            if (uri == null || NOTIFICATION_SOUND_VIB_SCREEN_ON.equals(uri)) {
+                mSoundVibScreenOn = Settings.System.getIntForUser(resolver,
+                        Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON, 1,
+                        UserHandle.USER_CURRENT) == 1;
             }
         }
     }
@@ -7902,7 +7913,8 @@ public class NotificationManagerService extends SystemService {
         }
 
         if (aboveThreshold && isNotificationForCurrentUser(record)) {
-            if (mSystemReady && mAudioManager != null) {
+            boolean skipSound = mScreenOn && !mSoundVibScreenOn;
+            if (mSystemReady && mAudioManager != null && !skipSound) {
                 Uri soundUri = record.getSound();
                 hasValidSound = soundUri != null && !Uri.EMPTY.equals(soundUri);
                 VibrationEffect vibration = record.getVibration();
