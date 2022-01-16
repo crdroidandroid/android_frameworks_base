@@ -94,7 +94,7 @@ public class NavigationBarInflaterView extends FrameLayout {
     private static final String ABSOLUTE_VERTICAL_CENTERED_SUFFIX = "C";
 
     private static final String OVERLAY_NAVIGATION_HIDE_HINT =
-            "org.lineageos.overlay.customization.navbar.nohint";
+            "com.custom.overlay.systemui.gestural.hidden";
 
     private static class Listener implements NavigationModeController.ModeChangedListener {
         private final WeakReference<NavigationBarInflaterView> mSelf;
