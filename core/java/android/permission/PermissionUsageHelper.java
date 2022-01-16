@@ -72,10 +72,6 @@ public class PermissionUsageHelper implements AppOpsManager.OnOpActiveChangedLis
     /** Whether to show the mic and camera icons.  */
     private static final String PROPERTY_CAMERA_MIC_ICONS_ENABLED = "camera_mic_icons_enabled";
 
-    /** Whether to show the location indicators. */
-    private static final String PROPERTY_LOCATION_INDICATORS_ENABLED =
-            "location_indicators_enabled";
-
     /** Whether to show the Permissions Hub.  */
     private static final String PROPERTY_PERMISSIONS_HUB_2_ENABLED = "permissions_hub_2_enabled";
 
@@ -102,9 +98,7 @@ public class PermissionUsageHelper implements AppOpsManager.OnOpActiveChangedLis
 
     private boolean shouldShowLocationIndicator() {
         return Settings.Secure.getIntForUser(mContext.getContentResolver(),
-            Settings.Secure.ENABLE_LOCATION_PRIVACY_INDICATOR,
-            DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_PRIVACY,
-                PROPERTY_LOCATION_INDICATORS_ENABLED, true) ? 1 : 0,
+            Settings.Secure.ENABLE_LOCATION_PRIVACY_INDICATOR, 1,
             UserHandle.USER_CURRENT) == 1;
     }
 
