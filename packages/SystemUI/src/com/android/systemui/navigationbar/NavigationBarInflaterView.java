@@ -94,7 +94,7 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
     private static final String KEY_NAVIGATION_HINT =
             "lineagesystem:" + LineageSettings.System.NAVIGATION_BAR_HINT;
     private static final String OVERLAY_NAVIGATION_HIDE_HINT =
-            "org.lineageos.overlay.customization.navbar.nohint";
+            "com.custom.overlay.systemui.gestural.hidden";
 
     private static class Listener implements NavigationModeController.ModeChangedListener {
         private final WeakReference<NavigationBarInflaterView> mSelf;
