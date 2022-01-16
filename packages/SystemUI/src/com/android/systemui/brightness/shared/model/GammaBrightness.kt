@@ -23,13 +23,13 @@ import com.android.systemui.util.kotlin.pairwiseBy
 import kotlinx.coroutines.flow.Flow
 
 @JvmInline
-value class GammaBrightness(
-    @IntRange(
-        from = BrightnessUtils.GAMMA_SPACE_MIN.toLong(),
-        to = BrightnessUtils.GAMMA_SPACE_MAX.toLong()
-    )
-    val value: Int
-)
+value class GammaBrightness(val value: Int) {
+    init {
+        require(value in BrightnessUtils.GAMMA_SPACE_MIN..BrightnessUtils.GAMMA_SPACE_MAX) {
+            "Value must be in range ${BrightnessUtils.GAMMA_SPACE_MIN} to ${BrightnessUtils.GAMMA_SPACE_MAX}"
+        }
+    }
+}
 
 internal fun Flow<GammaBrightness>.logDiffForTable(
     tableLogBuffer: TableLogBuffer,
