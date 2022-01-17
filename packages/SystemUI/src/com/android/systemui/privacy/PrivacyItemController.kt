@@ -88,8 +88,6 @@ class PrivacyItemController @Inject constructor(
             addAction(Intent.ACTION_MANAGED_PROFILE_UNAVAILABLE)
         }
         const val TAG = "PrivacyItemController"
-        private const val MIC_CAMERA = SystemUiDeviceConfigFlags.PROPERTY_MIC_CAMERA_ENABLED
-        private const val DEFAULT_MIC_CAMERA = true
         @VisibleForTesting const val TIME_TO_HOLD_INDICATORS = 5000L
     }
 
@@ -99,8 +97,8 @@ class PrivacyItemController @Inject constructor(
         @Synchronized set
 
     private fun isMicCameraEnabled(): Boolean {
-        return deviceConfigProxy.getBoolean(DeviceConfig.NAMESPACE_PRIVACY,
-                MIC_CAMERA, DEFAULT_MIC_CAMERA)
+        return secureSettings.getIntForUser(Settings.Secure.ENABLE_CAMERA_PRIVACY_INDICATOR,
+            1, UserHandle.USER_CURRENT) == 1
     }
 
     private fun isLocationEnabled(): Boolean {
@@ -131,24 +129,6 @@ class PrivacyItemController @Inject constructor(
 
     var allIndicatorsAvailable = micCameraAvailable && locationAvailable
 
-    private val devicePropertiesChangedListener =
-            object : DeviceConfig.OnPropertiesChangedListener {
-        override fun onPropertiesChanged(properties: DeviceConfig.Properties) {
-            if (DeviceConfig.NAMESPACE_PRIVACY.equals(properties.getNamespace()) &&
-                    (properties.keyset.contains(MIC_CAMERA))) {
-
-                // Running on the ui executor so can iterate on callbacks
-                if (properties.keyset.contains(MIC_CAMERA)) {
-                    micCameraAvailable = properties.getBoolean(MIC_CAMERA, DEFAULT_MIC_CAMERA)
-                    allIndicatorsAvailable = micCameraAvailable && locationAvailable
-                    callbacks.forEach { it.get()?.onFlagMicCameraChanged(micCameraAvailable) }
-                    update(false)
-                }
-                internalUiExecutor.updateListeningState()
-            }
-        }
-    }
-
     private val settingsObserver = object : ContentObserver(handler) {
         override fun onChange(selfChange: Boolean) {
             val enabled = isLocationEnabled()
@@ -156,6 +136,14 @@ class PrivacyItemController @Inject constructor(
                 locationAvailable = enabled
                 allIndicatorsAvailable = micCameraAvailable && locationAvailable
                 callbacks.forEach { it.get()?.onFlagLocationChanged(locationAvailable) }
+                update(false)
+                internalUiExecutor.updateListeningState()
+            }
+            val cameraEnabled = isMicCameraEnabled()
+            if (micCameraAvailable != cameraEnabled) {
+                micCameraAvailable = cameraEnabled
+                allIndicatorsAvailable = micCameraAvailable && locationAvailable
+                callbacks.forEach { it.get()?.onFlagMicCameraChanged(micCameraAvailable) }
                 update(false)
                 internalUiExecutor.updateListeningState()
             }
@@ -200,13 +188,13 @@ class PrivacyItemController @Inject constructor(
     }
 
     init {
-        deviceConfigProxy.addOnPropertiesChangedListener(
-                DeviceConfig.NAMESPACE_PRIVACY,
-                uiExecutor,
-                devicePropertiesChangedListener)
         dumpManager.registerDumpable(TAG, this)
         secureSettings.registerContentObserverForUser(
             Settings.Secure.ENABLE_LOCATION_PRIVACY_INDICATOR,
+            settingsObserver, UserHandle.USER_CURRENT
+        )
+        secureSettings.registerContentObserverForUser(
+            Settings.Secure.ENABLE_CAMERA_PRIVACY_INDICATOR,
             settingsObserver, UserHandle.USER_CURRENT
         )
     }
