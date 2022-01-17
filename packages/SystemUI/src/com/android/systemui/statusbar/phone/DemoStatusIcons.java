@@ -143,12 +143,6 @@ public class DemoStatusIcons extends StatusIconContainer implements DemoMode, Da
                     ? R.drawable.stat_sys_data_bluetooth_connected : 0;
             updateSlot("bluetooth", null, iconId);
         }
-        String location = args.getString("location");
-        if (location != null) {
-            int iconId = location.equals("show") ? PhoneStatusBarPolicy.LOCATION_STATUS_ICON_ID
-                    : 0;
-            updateSlot("location", null, iconId);
-        }
         String alarm = args.getString("alarm");
         if (alarm != null) {
             int iconId = alarm.equals("show") ? R.drawable.stat_sys_alarm
