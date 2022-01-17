@@ -20,7 +20,8 @@ import android.annotation.UiThread
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
-import android.location.flags.Flags.locationIndicatorsEnabled
+import android.os.UserHandle
+import android.provider.Settings
 import android.util.Log
 import android.view.Display
 import android.view.View
@@ -188,6 +189,12 @@ constructor(
                 updateStatusBarState()
             }
         }
+
+    private val locationIndicatorsEnabled
+        get() = if (!this::tl.isInitialized) false else 
+            Settings.Secure.getIntForUser(tl.context.contentResolver,
+            Settings.Secure.ENABLE_LOCATION_PRIVACY_INDICATOR, 1,
+            UserHandle.USER_CURRENT) == 1
 
     init {
         contentInsetsProvider.addCallback(insetsChangedListener)
@@ -588,7 +595,7 @@ constructor(
     @UiThread
     override fun updateDotView(state: ViewState) {
         val shouldShow = state.shouldShowDot()
-        if (locationIndicatorsEnabled()) {
+        if (locationIndicatorsEnabled) {
             if (shouldShow && state.designatedCorner != null) {
                 val dot = state.designatedCorner
                 val privacyDotView = dot.findViewById<ImageView>(R.id.privacy_dot)
@@ -624,7 +631,7 @@ constructor(
                 privacyItems: List<PrivacyItem>?,
             ): Animator? {
                 synchronized(lock) {
-                    if (locationIndicatorsEnabled()) {
+                    if (locationIndicatorsEnabled) {
                         nextViewState =
                             nextViewState.copy(
                                 systemPrivacyEventIsActive = true,

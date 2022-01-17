@@ -16,7 +16,6 @@
 
 package com.android.systemui.statusbar.events
 
-import android.location.flags.Flags.locationIndicatorsEnabled
 import android.os.Process
 import android.provider.DeviceConfig
 import android.view.Display
@@ -177,8 +176,7 @@ constructor(
         }
 
         if (
-            locationIndicatorsEnabled() &&
-                event is PrivacyEvent &&
+            event is PrivacyEvent &&
                 event.privacyItems.isNotEmpty() &&
                 hasPersistentDot
         ) {
@@ -425,7 +423,7 @@ constructor(
         val anims: List<Animator> =
             listeners.mapNotNull {
                 var privacyItems: List<PrivacyItem>? = null
-                if (locationIndicatorsEnabled() && event is PrivacyEvent) {
+                if (event is PrivacyEvent) {
                     privacyItems = event.privacyItems
                 }
                 it.onSystemStatusAnimationTransitionToPersistentDot(
