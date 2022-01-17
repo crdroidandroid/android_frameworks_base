@@ -19,7 +19,6 @@ package com.android.systemui.statusbar.events
 import android.annotation.IntRange
 import android.content.Context
 import android.location.flags.Flags.locationIndicatorsAnimation
-import android.location.flags.Flags.locationIndicatorsEnabled
 import android.provider.DeviceConfig
 import android.provider.DeviceConfig.NAMESPACE_PRIVACY
 import com.android.internal.annotations.VisibleForTesting
@@ -196,7 +195,7 @@ constructor(
                             // 10-minute debounce is handled in filterOutExemptItems.
                             val shouldAnimateLocation =
                                 hasOnlyLocationItems &&
-                                    locationIndicatorsEnabled() &&
+                                    privacyController.locationAvailable &&
                                     locationIndicatorsAnimation()
 
                             isChipAnimationEnabled() &&
@@ -209,7 +208,7 @@ constructor(
                     currentPrivacyItems.forEach {
                         if (
                             it.privacyType == PrivacyType.TYPE_LOCATION &&
-                                locationIndicatorsEnabled()
+                                privacyController.locationAvailable
                         ) {
                             appLastLocationUseTime[it.application.packageName] = now
                         }
@@ -226,7 +225,7 @@ constructor(
             private fun filterOutExemptItems(items: List<PrivacyItem>): List<PrivacyItem> {
                 val now = systemClock.elapsedRealtime()
 
-                val locationFlagEnabled = locationIndicatorsEnabled()
+                val locationFlagEnabled = privacyController.locationAvailable
 
                 // First, filter out camera/mic exemptions
                 val afterCameraMicFilter =
