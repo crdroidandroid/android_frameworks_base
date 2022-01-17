@@ -482,10 +482,12 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
             // Animates the icons and battery indicator from alpha 0 to 1, when the chip is visible
             mIconsAlphaAnimator = mIconsAlphaAnimatorFixed;
             mIconsAlphaAnimator.setPosition(mKeyguardExpansionFraction);
+            mBatteryRemainingIcon.setClickable(!visibility || mKeyguardExpansionFraction == 1f);
         } else {
             mIconsAlphaAnimator = null;
             mIconContainer.setAlpha(1);
             mBatteryRemainingIcon.setAlpha(1);
+            mBatteryRemainingIcon.setClickable(true);
         }
     }
 
@@ -517,6 +519,9 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         }
         if (mIconsAlphaAnimator != null) {
             mIconsAlphaAnimator.setPosition(keyguardExpansionFraction);
+        }
+        if (keyguardExpansionFraction == 1f && mBatteryRemainingIcon != null) {
+            mBatteryRemainingIcon.setClickable(true);
         }
         // If forceExpanded (we are opening QS from lockscreen), the animators have been set to
         // position = 1f.
