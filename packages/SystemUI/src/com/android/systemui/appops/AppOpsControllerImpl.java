@@ -374,7 +374,7 @@ public class AppOpsControllerImpl extends BroadcastReceiver implements AppOpsCon
         // We should keep this so we make sure it cannot time out.
         mBGHandler.removeCallbacksAndMessages(item);
         final long delay =
-                (Flags.locationIndicatorsEnabled() && isOpLocation(code))
+                isOpLocation(code)
                         ? NOTED_OP_TIME_LOCATION_ONLY_DELAY_MS
                         : NOTED_OP_TIME_DELAY_MS;
         mBGHandler.scheduleRemoval(item, delay);
