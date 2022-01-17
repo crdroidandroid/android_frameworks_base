@@ -82,6 +82,6 @@
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Afficher le point d\'arrêt\nAppui long pour le déplacer</string>
     <string name="screenrecord_lowquality_label">Diminuer la qualité de l\'image pour une taille de fichier plus petite</string>
-    <string name="screenrecord_longer_timeout_switch_label">Bigger file size limit\nLimit recording size to 15GiB</string>
+    <string name="screenrecord_longer_timeout_switch_label">Limite de taille de fichier plus grande\nLimiter la taille d\'enregistrement à 15 Go</string>
     <!-- Text to use when the number in a notification info is too large -->
 </resources>
