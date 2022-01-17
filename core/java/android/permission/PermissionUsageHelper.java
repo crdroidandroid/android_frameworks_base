@@ -53,6 +53,7 @@ import android.media.AudioManager;
 import android.os.Process;
 import android.os.UserHandle;
 import android.provider.DeviceConfig;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.ArrayMap;
 import android.util.ArraySet;
@@ -76,17 +77,6 @@ public class PermissionUsageHelper implements AppOpsManager.OnOpActiveChangedLis
         AppOpsManager.OnOpStartedListener {
 
     /**
-     * Whether to show the mic and camera icons.
-     */
-    private static final String PROPERTY_CAMERA_MIC_ICONS_ENABLED = "camera_mic_icons_enabled";
-
-    /**
-     * Whether to show the location indicators.
-     */
-    private static final String PROPERTY_LOCATION_INDICATORS_ENABLED =
-            "location_indicators_enabled";
-
-    /**
      * How long after an access to show it as "recent"
      */
     private static final String RECENT_ACCESS_TIME_MS = "recent_access_time_ms";
@@ -101,14 +91,20 @@ public class PermissionUsageHelper implements AppOpsManager.OnOpActiveChangedLis
     private static final long DEFAULT_RUNNING_TIME_MS = 5000L;
     private static final long DEFAULT_RECENT_TIME_MS = 15000L;
 
-    private static boolean shouldShowIndicators() {
-        return DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_PRIVACY,
-                PROPERTY_CAMERA_MIC_ICONS_ENABLED, true);
+    private boolean shouldShowIndicators() {
+        return shouldShowCameraIndicator() || shouldShowLocationIndicator();
     }
 
-    private static boolean shouldShowLocationIndicator() {
-        return DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_PRIVACY,
-                PROPERTY_LOCATION_INDICATORS_ENABLED, false);
+    private boolean shouldShowCameraIndicator() {
+        return Settings.Secure.getIntForUser(mContext.getContentResolver(),
+            Settings.Secure.ENABLE_CAMERA_PRIVACY_INDICATOR, 1,
+            UserHandle.USER_CURRENT) == 1;
+    }
+
+    private boolean shouldShowLocationIndicator() {
+        return Settings.Secure.getIntForUser(mContext.getContentResolver(),
+            Settings.Secure.ENABLE_LOCATION_PRIVACY_INDICATOR, 1,
+            UserHandle.USER_CURRENT) == 1;
     }
 
     private static long getRecentThreshold(Long now) {
@@ -289,12 +285,15 @@ public class PermissionUsageHelper implements AppOpsManager.OnOpActiveChangedLis
             return usages;
         }
 
-        List<String> ops = new ArrayList<>(CAMERA_OPS);
+        List<String> ops = new ArrayList<>();
+        if (shouldShowCameraIndicator()) {
+            ops.addAll(CAMERA_OPS);
+            if (!isMicMuted) {
+                ops.addAll(MIC_OPS);
+            }
+        }
         if (shouldShowLocationIndicator()) {
             ops.addAll(LOCATION_OPS);
-        }
-        if (!isMicMuted) {
-            ops.addAll(MIC_OPS);
         }
 
         Map<String, List<OpUsage>> rawUsages = getOpUsages(ops);
