@@ -18,7 +18,6 @@ package com.android.systemui.statusbar.events
 
 import android.annotation.IntRange
 import android.content.Context
-import android.location.flags.Flags.locationIndicatorsEnabled
 import android.provider.DeviceConfig
 import android.provider.DeviceConfig.NAMESPACE_PRIVACY
 import com.android.internal.annotations.VisibleForTesting
@@ -192,7 +191,7 @@ constructor(
                             // For location-only, we show an animation if the flag is enabled. The
                             // 10-minute debounce is handled in filterOutExemptItems.
                             val shouldAnimateLocation =
-                                hasOnlyLocationItems && locationIndicatorsEnabled()
+                                hasOnlyLocationItems && privacyController.locationAvailable
 
                             isChipAnimationEnabled() &&
                                 (shouldAnimateCameraMic || shouldAnimateLocation)
@@ -204,7 +203,7 @@ constructor(
                     currentPrivacyItems.forEach {
                         if (
                             it.privacyType == PrivacyType.TYPE_LOCATION &&
-                                locationIndicatorsEnabled()
+                                privacyController.locationAvailable
                         ) {
                             appLastLocationUseTime[it.application.packageName] = now
                         }
@@ -222,7 +221,7 @@ constructor(
                 val now = systemClock.elapsedRealtime()
 
                 val cameraMicExemption = Flags.statusBarPrivacyChipAnimationExemption()
-                val locationFlagEnabled = locationIndicatorsEnabled()
+                val locationFlagEnabled = privacyController.locationAvailable
 
                 if (!cameraMicExemption && !locationFlagEnabled) {
                     return items
