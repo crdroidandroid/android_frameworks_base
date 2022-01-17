@@ -16,7 +16,8 @@
 
 package com.android.systemui.privacy
 
-import android.location.flags.Flags.locationIndicatorsEnabled
+import android.os.UserHandle
+import android.provider.Settings
 import com.android.internal.annotations.VisibleForTesting
 import com.android.systemui.Dumpable
 import com.android.systemui.appops.AppOpsController
@@ -27,6 +28,7 @@ import com.android.systemui.dump.DumpManager
 import com.android.systemui.privacy.logging.PrivacyLogger
 import com.android.systemui.util.asIndenting
 import com.android.systemui.util.concurrency.DelayableExecutor
+import com.android.systemui.util.settings.SecureSettings
 import com.android.systemui.util.time.SystemClock
 import com.android.systemui.util.withIncreasedIndent
 import java.io.PrintWriter
@@ -42,6 +44,7 @@ class PrivacyItemController @Inject constructor(
     private val privacyItemMonitors: Set<@JvmSuppressWildcards PrivacyItemMonitor>,
     private val logger: PrivacyLogger,
     private val systemClock: SystemClock,
+    private val secureSettings: SecureSettings,
     dumpManager: DumpManager
 ) : Dumpable {
 
@@ -65,11 +68,16 @@ class PrivacyItemController @Inject constructor(
     private var holdingRunnableCanceler: Runnable? = null
 
     val micCameraAvailable
-        get() = privacyConfig.micCameraAvailable
+        get() = secureSettings.getIntForUser(
+            Settings.Secure.ENABLE_CAMERA_PRIVACY_INDICATOR, 1, UserHandle.USER_CURRENT) == 1
     val locationAvailable
-        get() = privacyConfig.locationAvailable
+        get() = secureSettings.getIntForUser(
+            Settings.Secure.ENABLE_LOCATION_PRIVACY_INDICATOR, 1, UserHandle.USER_CURRENT) == 1
+    val mediaProjectionAvailable
+        get() = secureSettings.getIntForUser(
+            Settings.Secure.ENABLE_PROJECTION_PRIVACY_INDICATOR, 1, UserHandle.USER_CURRENT) == 1
     val allIndicatorsAvailable
-        get() = micCameraAvailable && locationAvailable && privacyConfig.mediaProjectionAvailable
+        get() = micCameraAvailable && locationAvailable && mediaProjectionAvailable
 
     private val notifyChanges = Runnable {
         val list = privacyList
@@ -186,7 +194,7 @@ class PrivacyItemController @Inject constructor(
      */
     private fun processNewList(list: List<PrivacyItem>): List<PrivacyItem> {
         val allPrivacyItemsAreLocation =
-            locationIndicatorsEnabled() &&
+            locationAvailable &&
                 PrivacyConfig.Companion.privacyItemsAreLocationOnly((list + privacyList).distinct())
         val timeToHold =
             if (allPrivacyItemsAreLocation) {

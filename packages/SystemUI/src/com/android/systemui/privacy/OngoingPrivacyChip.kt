@@ -18,7 +18,8 @@ import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.drawable.GradientDrawable
-import android.location.flags.Flags.locationIndicatorsEnabled
+import android.os.UserHandle
+import android.provider.Settings
 import android.util.AttributeSet
 import android.view.Gravity.CENTER_VERTICAL
 import android.view.Gravity.END
@@ -55,18 +56,23 @@ constructor(
     val launchableContentView
         get() = iconsContainer
 
+    private val locationIndicatorsEnabled
+        get() = Settings.Secure.getIntForUser(context.contentResolver,
+            Settings.Secure.ENABLE_LOCATION_PRIVACY_INDICATOR, 1,
+            UserHandle.USER_CURRENT) == 1
+
     var privacyList = emptyList<PrivacyItem>()
         set(value) {
             field = value
             updateView(PrivacyChipBuilder(context, field))
-            if (locationIndicatorsEnabled()) {
+            if (locationIndicatorsEnabled) {
                 updateResources()
             }
         }
 
     private val locationOnly: Boolean
         private get() =
-            if (locationIndicatorsEnabled()) {
+            if (locationIndicatorsEnabled) {
                 PrivacyConfig.Companion.privacyItemsAreLocationOnly(privacyList)
             } else {
                 false
@@ -168,7 +174,7 @@ constructor(
             iconsContainer.minimumWidth =
                 context.resources.getDimensionPixelSize(R.dimen.ongoing_appops_chip_min_width)
         }
-        if (locationIndicatorsEnabled()) {
+        if (locationIndicatorsEnabled) {
             if (chipDrawable == null) {
                 chipDrawable =
                     context.getDrawable(R.drawable.statusbar_privacy_chip_bg)?.mutate()
