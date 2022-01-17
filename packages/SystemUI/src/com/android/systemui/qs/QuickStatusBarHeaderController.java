@@ -258,7 +258,7 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
         } else {
             mPrivacyLogger.logChipVisible(false);
         }
-        mView.setChipVisibility(chipVisible);
+        mView.setChipVisibility(chipVisible && getChipEnabled());
     }
 
     private void updatePrivacyIconSlots() {
