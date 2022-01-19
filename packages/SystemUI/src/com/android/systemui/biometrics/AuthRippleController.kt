@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.PointF
 import android.hardware.biometrics.BiometricSourceType
+import android.provider.Settings
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.android.keyguard.KeyguardUpdateMonitor
@@ -85,6 +86,10 @@ class AuthRippleController @Inject constructor(
     private var aodExpandedDwellScale = 2.3f
     private var udfpsRadius: Float = -1f
 
+    private val isRippleEnabled: Boolean
+        get() = Settings.System.getInt(context.contentResolver,
+            Settings.System.ENABLE_RIPPLE_EFFECT, 1) == 1
+
     override fun onInit() {
         mView.setAlphaInDuration(sysuiContext.resources.getInteger(
                 R.integer.auth_ripple_alpha_in_duration).toLong())
@@ -138,6 +143,8 @@ class AuthRippleController @Inject constructor(
     }
 
     private fun showUnlockedRipple() {
+        if (!isRippleEnabled) return
+
         notificationShadeWindowController.setForcePluginOpen(true, this)
         val useCircleReveal = circleReveal != null && biometricUnlockController.isWakeAndUnlock
         val lightRevealScrim = statusBar.lightRevealScrim
@@ -155,6 +162,14 @@ class AuthRippleController @Inject constructor(
     }
 
     override fun onKeyguardFadingAwayChanged() {
+        if (!isRippleEnabled) {
+            // reset and hide the scrim so it doesn't appears on
+            // the next notification shade usage
+            statusBar.lightRevealScrim?.revealAmount = 1f
+            startLightRevealScrimOnKeyguardFadingAway = false
+            return
+        }
+
         if (keyguardStateController.isKeyguardFadingAway) {
             val lightRevealScrim = statusBar.lightRevealScrim
             if (startLightRevealScrimOnKeyguardFadingAway && lightRevealScrim != null) {
