@@ -5571,12 +5571,6 @@ public final class Settings {
         public static final String NOTIFICATION_SOUND_VIB_SCREEN_ON = "notification_sound_vib_screen_on";
 
         /**
-         * Whether to enable or disable vibration during calls
-         * @hide
-         */
-        public static final String INCALL_FEEDBACK_VIBRATE = "incall_feeedback_vibrate";
-
-        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
