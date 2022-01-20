@@ -84,4 +84,7 @@
     <string name="screenrecord_lowquality_label">Qualidade inferior para ficheiros mais pequenos</string>
     <string name="screenrecord_longer_timeout_switch_label">Limite de tamanho de ficheiros grandes\nLimitar o tamanho a 15 GB</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
+    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
 </resources>
