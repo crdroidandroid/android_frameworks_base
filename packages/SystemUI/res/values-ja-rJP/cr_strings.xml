@@ -85,6 +85,6 @@
     <string name="screenrecord_longer_timeout_switch_label">ファイルサイズ制限です\n録画サイズを15 GBに制限します</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">ゲームモードが設定で無効になっています</string>
+    <string name="quick_settings_gaming_mode_label">ゲームモード</string>
 </resources>
