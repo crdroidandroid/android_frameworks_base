@@ -85,6 +85,6 @@
     <string name="screenrecord_longer_timeout_switch_label">Väčší limit veľkosti súboru\nObmedzte veľkosť záznamu na 15GiB</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Herní režim je vypnutý v\u00a0Nastavení</string>
+    <string name="quick_settings_gaming_mode_label">Herný režim</string>
 </resources>
