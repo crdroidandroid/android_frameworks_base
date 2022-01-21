@@ -5580,18 +5580,6 @@ public final class Settings {
         public static final String BERRY_ROUNDED_STYLE = "berry_rounded_style";
 
         /**
-         * Switch between different signal bar styles
-         * @hide
-         */
-        public static final String BERRY_SIGNAL_STYLE = "berry_signal_style";
-
-        /**
-         * Switch between different wifi bar styles
-         * @hide
-         */
-        public static final String BERRY_WIFI_STYLE = "berry_wifi_style";
-
-        /**
          * Whether to play a battery fully charged sound.
          * @hide
          */
