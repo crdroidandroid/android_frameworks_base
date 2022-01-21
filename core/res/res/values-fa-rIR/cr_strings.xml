@@ -31,7 +31,7 @@
     <string name="pocket_view_title">حالت جیب روشن است</string>
     <string name="pocket_view_title_cancel">برای استفاده از تلفن‌تان:</string>
     <string name="pocket_view_top_tag_cancel">بررسی کنید که آیا قسمت آبی گوشی شما خالی از هرگونه مانع است یا خیر، و هرگونه کثیفی یا گرد و غبار را تمیز کنید.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
+    <string name="pocket_view_top_tag_cancel2">برای خروج اجباری از حالت جیبی، دکمه پاور را به مدت طولانی فشار دهید.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
 </resources>
