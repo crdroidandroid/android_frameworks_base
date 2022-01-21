@@ -85,6 +85,6 @@
     <string name="screenrecord_longer_timeout_switch_label">Daha büyük dosya boyutu sınırı\nKayıt boyutunu 15GB ile sınırlayın</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Oyun modu ayarlardan devre dışı bırakıldı</string>
+    <string name="quick_settings_gaming_mode_label">Oyun modu</string>
 </resources>
