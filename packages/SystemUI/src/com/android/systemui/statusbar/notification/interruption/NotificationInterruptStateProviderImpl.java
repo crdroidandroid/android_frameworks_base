@@ -204,11 +204,13 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
 
         StatusBarNotification sbn = entry.getSbn();
 
-        if (shouldSkipHeadsUp(sbn)) {
-            if (DEBUG_HEADS_UP) {
-                Log.d(TAG, "No alerting: gaming mode or boring apps");
+        if (mSkipHeadsUp || mLessBoringHeadsUp) {
+            if (shouldSkipHeadsUp(sbn)) {
+                if (DEBUG_HEADS_UP) {
+                    Log.d(TAG, "No alerting: gaming mode or boring apps");
+                }
+                return false;
             }
-            return false;
         }
 
         if (!mUseHeadsUp) {
