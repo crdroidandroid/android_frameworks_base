@@ -85,6 +85,6 @@
     <string name="screenrecord_longer_timeout_switch_label">Limite del file maggiore\nLimita la dimensione della registrazione a 15GB</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
+    <string name="gaming_mode_not_enabled">La modalità gaming è disabilitata nelle impostazioni</string>
     <string name="quick_settings_gaming_mode_label">Gaming mode</string>
 </resources>
