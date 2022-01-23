@@ -84,4 +84,7 @@
     <string name="screenrecord_lowquality_label">보다 작은 파일 크기를 위한 낮은 음질</string>
     <string name="screenrecord_longer_timeout_switch_label">더 큰 파일 크기 제한\n녹화 최대 크기를 15GB로 제한합니다</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">게임 모드가 설정에서 비활성화 되었습니다.</string>
+    <string name="quick_settings_gaming_mode_label">게임 모드</string>
 </resources>

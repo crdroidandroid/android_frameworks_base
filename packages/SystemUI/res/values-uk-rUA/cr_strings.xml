@@ -84,4 +84,7 @@
     <string name="screenrecord_lowquality_label">Низька якість для меншого розміру файлу</string>
     <string name="screenrecord_longer_timeout_switch_label">Більший розмір файлу\nОбмежити розмір запису до 15ГБ</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Ігровий режим вимкнено в налаштуваннях</string>
+    <string name="quick_settings_gaming_mode_label">Ігровий режим вимкнено</string>
 </resources>

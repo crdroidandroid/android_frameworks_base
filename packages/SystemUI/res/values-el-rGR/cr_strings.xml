@@ -84,4 +84,7 @@
     <string name="screenrecord_lowquality_label">Μείωση της ποιότητας για μικρότερο μέγεθος αρχείου</string>
     <string name="screenrecord_longer_timeout_switch_label">Μεγαλύτερο όριο μεγέθους αρχείου\nΠεριορίστε το μέγεθος εγγραφής στα 15GiB</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Η λειτουργία παιχνιδιού είναι απενεργοποιημένη στις ρυθμίσεις</string>
+    <string name="quick_settings_gaming_mode_label">Λειτουργία παιχνιδιού</string>
 </resources>

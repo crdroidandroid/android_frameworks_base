@@ -84,4 +84,7 @@
     <string name="screenrecord_lowquality_label">使用较低画质以节省存储空间</string>
     <string name="screenrecord_longer_timeout_switch_label">文件大小限制\n将录制大小限制为 15 Gb</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">游戏模式在设置中被禁用</string>
+    <string name="quick_settings_gaming_mode_label">游戏模式</string>
 </resources>

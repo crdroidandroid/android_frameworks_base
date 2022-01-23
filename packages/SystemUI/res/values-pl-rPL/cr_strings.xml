@@ -84,4 +84,7 @@
     <string name="screenrecord_lowquality_label">Niższa jakość dla mniejszego rozmiaru pliku</string>
     <string name="screenrecord_longer_timeout_switch_label">Zbyt duży rozmiar pliku\nOgranicz rozmiar nagrywania do 15 GiB</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Tryb gry jest wyłączony w ustawieniach</string>
+    <string name="quick_settings_gaming_mode_label">Tryb gry</string>
 </resources>
