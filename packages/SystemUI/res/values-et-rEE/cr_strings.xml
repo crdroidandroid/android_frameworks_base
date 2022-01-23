@@ -222,7 +222,7 @@
     <!-- Title for media output settings -->
     <string name="media_output_title">Meedia esitamine</string>
     <!-- Mono audio tile -->
-    <string name="quick_settings_monotoggle_tile">Audio mode</string>
+    <string name="quick_settings_monotoggle_tile">Audio režiim</string>
     <string name="quick_settings_monotoggle_tile_mono">Mono audio</string>
     <string name="quick_settings_monotoggle_tile_stereo">Stereo audio</string>
     <!-- Tuner items -->
