@@ -18,6 +18,7 @@ package com.android.server.notification;
 
 import static android.service.notification.NotificationListenerService.REASON_CANCEL;
 import static android.service.notification.NotificationListenerService.REASON_CLICK;
+import static android.service.notification.NotificationListenerService.REASON_GROUP_SUMMARY_CANCELED;
 import static android.service.notification.NotificationListenerService.REASON_TIMEOUT;
 
 import android.annotation.NonNull;
@@ -213,7 +214,7 @@ public interface NotificationRecordLogger {
             }
             // User cancels have a meaningful surface, which we differentiate by. See b/149038335
             // for caveats.
-            if (reason != REASON_CANCEL) {
+            if (reason != REASON_CANCEL && reason != REASON_GROUP_SUMMARY_CANCELED) {
                 if (NotificationManagerService.DBG) {
                     throw new IllegalArgumentException("Unexpected cancel with surface " + reason);
                 }
