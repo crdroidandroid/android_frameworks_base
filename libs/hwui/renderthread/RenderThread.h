@@ -108,7 +108,6 @@ public:
 
     GrContext* getGrContext() const { return mGrContext.get(); }
     void setGrContext(sk_sp<GrContext> cxt);
-    sk_sp<GrContext> requireGrContext();
 
     CacheManager& cacheManager() { return *mCacheManager; }
     VulkanManager& vulkanManager() { return *mVkManager; }
