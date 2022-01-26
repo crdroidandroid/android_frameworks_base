@@ -52,6 +52,8 @@
     <string name="quick_settings_cpuinfo_label">Информация о CPU</string>
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">Информация о FPS</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">ФПС: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- VPN / Call strength icons in statusbar -->
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_call_strength">Уровень сигнала</string>
@@ -77,14 +79,12 @@
     <string name="screenshot_delete_label">Удалить</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">Удалить снимок экрана</string>
-    <!-- FPS view text placeholder -->
-    <string name="fps_text_placeholder">ФПС: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Показывать кнопку остановки\nУдерживайте для перемещения</string>
     <string name="screenrecord_lowquality_label">Низкое качество для меньшего размера файла</string>
     <string name="screenrecord_longer_timeout_switch_label">Большой размер файла\nОграничение размера записи до 15 Гб</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Игровой режим отключен в настройках</string>
+    <string name="gaming_mode_not_enabled">Игровой режим выключен в настройках</string>
     <string name="quick_settings_gaming_mode_label">Игровой режим</string>
 </resources>
