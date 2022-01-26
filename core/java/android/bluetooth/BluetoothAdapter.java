@@ -3281,6 +3281,7 @@ public final class BluetoothAdapter {
             case BluetoothProfile.LE_AUDIO:
                 BluetoothLeAudio leAudio = (BluetoothLeAudio) proxy;
                 leAudio.close();
+                break;
             case BluetoothProfile.GROUP_CLIENT:
                 BluetoothDeviceGroup groupClient = (BluetoothDeviceGroup) proxy;
                 groupClient.close();
