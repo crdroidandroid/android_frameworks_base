@@ -85,6 +85,6 @@
     <string name="screenrecord_longer_timeout_switch_label">Большой размер файла\nОграничение размера записи до 15 Гб</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Игровой режим отключен в настройках</string>
+    <string name="gaming_mode_not_enabled">Игровой режим выключен в настройках</string>
     <string name="quick_settings_gaming_mode_label">Игровой режим</string>
 </resources>
