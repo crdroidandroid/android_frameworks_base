@@ -74,7 +74,8 @@ public class PixelPropsUtils {
         "com.google.android.MTCL83",
         "com.google.android.UltraCVM",
         "com.google.android.apps.cameralite",
-        "com.google.android.dialer"
+        "com.google.android.dialer",
+        "com.google.ar.core"
     };
 
     private static final Map<String, Object> propsToChangeROG1;
