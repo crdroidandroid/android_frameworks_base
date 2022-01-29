@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.systemui.assist.OpaLayout
+<com.android.systemui.crdroid.OpaLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
     android:id="@id/home"
@@ -42,22 +42,6 @@
     </RelativeLayout>
 
     <ImageView
-        android:id="@id/halo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:importantForAccessibility="no"
-        android:layout_gravity="center"
-        android:scaleType="center" />
-
-    <ImageView
-        android:id="@id/white_cutout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:importantForAccessibility="no"
-        android:layout_gravity="center"
-        android:scaleType="center" />
-
-    <ImageView
         android:id="@id/white"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -74,4 +58,4 @@
         android:scaleType="center"
         systemui:keyCode="3" />
 
-</com.google.android.systemui.assist.OpaLayout>
+</com.android.systemui.crdroid.OpaLayout>
