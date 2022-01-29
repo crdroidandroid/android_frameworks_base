@@ -85,6 +85,6 @@
     <string name="screenrecord_longer_timeout_switch_label">Limita mai mare a dimensiunii fișierului\nLimită dimensiune de înregistrare la 15GiB</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Modul de joc este dezactivat în setări</string>
+    <string name="quick_settings_gaming_mode_label">Mod pentru jocuri</string>
 </resources>
