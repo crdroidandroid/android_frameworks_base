@@ -42,22 +42,6 @@
     </RelativeLayout>
 
     <ImageView
-        android:id="@id/halo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:importantForAccessibility="no"
-        android:layout_gravity="center"
-        android:scaleType="center" />
-
-    <ImageView
-        android:id="@id/white_cutout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:importantForAccessibility="no"
-        android:layout_gravity="center"
-        android:scaleType="center" />
-
-    <ImageView
         android:id="@id/white"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
