@@ -45,4 +45,12 @@
 
     <!-- QS A11 Style -->
     <dimen name="custom_qs_panel_padding_top">0dp</dimen>
+
+    <!-- Pixel navbar -->
+    <dimen name="opa_diamond_translation">16dp</dimen>
+    <dimen name="opa_disabled_home_diameter">@dimen/navigation_icon_size</dimen>
+    <dimen name="opa_dot_diam">10dp</dimen>
+    <dimen name="opa_line_x_trans_bg">30dp</dimen>
+    <dimen name="opa_line_x_trans_ry">15dp</dimen>
+    <dimen name="opa_line_y_translation">16dp</dimen>
 </resources>
