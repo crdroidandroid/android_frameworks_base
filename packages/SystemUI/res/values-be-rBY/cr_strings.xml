@@ -52,6 +52,8 @@
     <string name="quick_settings_cpuinfo_label">Інфармацыя аб працэсары</string>
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">Інфармацыя аб FPS</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- VPN / Call strength icons in statusbar -->
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_call_strength">Узровень сігналу</string>
@@ -77,14 +79,12 @@
     <string name="screenshot_delete_label">Выдаліць</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">Выдаліць здымак экрана</string>
-    <!-- FPS view text placeholder -->
-    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Паказаць кропку спынення\nНацісніце, каб перамясціць</string>
     <string name="screenrecord_lowquality_label">Нізкая якасць для меншага памеру файла</string>
     <string name="screenrecord_longer_timeout_switch_label">Абмежаванне на большы памер файла\nАбмежаванне памеру запісу да 15 Гб</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="gaming_mode_not_enabled">Гульнявы рэжым адключаны ў наладах</string>
+    <string name="quick_settings_gaming_mode_label">Гульнявы рэжым</string>
 </resources>

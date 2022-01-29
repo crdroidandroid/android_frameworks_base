@@ -52,6 +52,8 @@
     <string name="quick_settings_cpuinfo_label">Info procesor</string>
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">Info FPS</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- VPN / Call strength icons in statusbar -->
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_call_strength">Putere apel</string>
@@ -77,8 +79,6 @@
     <string name="screenshot_delete_label">Șterge</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">Ștergere captură ecran</string>
-    <!-- FPS view text placeholder -->
-    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Arată punctul stop\nApăsați lung pentru a-l muta</string>
     <string name="screenrecord_lowquality_label">Calitate scăzută pentru dimensiunea mai mică a fișierului</string>
