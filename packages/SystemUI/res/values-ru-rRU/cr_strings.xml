@@ -249,5 +249,5 @@
     <string name="accessibility_quick_settings_onthego_off">Режим \"На ходу\" выкл</string>
     <string name="accessibility_quick_settings_onthego_on">Режим \"На ходу\" вкл</string>
     <!-- FPS view text placeholder -->
-    <string name="fps_text_placeholder">ФПС: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
 </resources>
