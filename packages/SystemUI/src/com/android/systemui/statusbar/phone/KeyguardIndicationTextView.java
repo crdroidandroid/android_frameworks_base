@@ -93,6 +93,11 @@ public class KeyguardIndicationTextView extends TextView {
         switchIndication(indication == null ? null : indication.getMessage(), indication);
     }
 
+    public void switchIndication(KeyguardIndication indication, boolean animate) {
+        switchIndication(indication == null ? null : indication.getMessage(), indication,
+            animate, null);
+    }
+
     /**
      * Changes the text with an animation.
      */
