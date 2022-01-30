@@ -82,7 +82,11 @@ public class KeyguardIndicationTextView extends TextView {
      * Changes the text with an animation and makes sure a single indication is shown long enough.
      */
     public void switchIndication(int textResId) {
-        switchIndication(getResources().getText(textResId), null);
+        switchIndication(getResources().getText(textResId), null, true /* animate */);
+    }
+
+    public void switchIndication(int textResId, boolean animate) {
+        switchIndication(getResources().getText(textResId), null, animate);
     }
 
     /**
@@ -91,7 +95,11 @@ public class KeyguardIndicationTextView extends TextView {
      * @param indication The text to show.
      */
     public void switchIndication(KeyguardIndication indication) {
-        switchIndication(indication == null ? null : indication.getMessage(), indication);
+        switchIndication(indication == null ? null : indication.getMessage(), indication,  true /* animate */);
+    }
+
+    public void switchIndication(KeyguardIndication indication, boolean animate) {
+        switchIndication(indication == null ? null : indication.getMessage(), indication,  animate);
     }
 
     /**
@@ -101,11 +109,19 @@ public class KeyguardIndicationTextView extends TextView {
      * @param indication optional display information for the text
      */
     public void switchIndication(CharSequence text, KeyguardIndication indication) {
+        switchIndication(text, indication, true /* animate */);
+    }
+
+    public void switchIndication(CharSequence text, KeyguardIndication indication, boolean animate) {
         if (text == null) text = "";
 
         CharSequence lastPendingMessage = mMessages.peekLast();
         if (TextUtils.equals(lastPendingMessage, text)
                 || (lastPendingMessage == null && TextUtils.equals(text, getText()))) {
+            return;
+        }
+        if (!animate) {
+            setText(text);
             return;
         }
         mMessages.add(text);
