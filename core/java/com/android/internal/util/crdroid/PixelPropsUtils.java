@@ -18,6 +18,7 @@
 package com.android.internal.util.crdroid;
 
 import android.os.Build;
+import android.os.SystemProperties;
 import android.util.Log;
 
 import java.lang.reflect.Field;
@@ -155,6 +156,12 @@ public class PixelPropsUtils {
         }
         if (packageName.startsWith("com.google.")
                 || Arrays.asList(extraPackagesToChange).contains(packageName)) {
+
+            if (packageName.equals("com.google.android.apps.photos")) {
+                if (!SystemProperties.getBoolean("persist.sys.pixelprops.gphotos", true))
+                    return;
+            }
+
             Map<String, Object> propsToChange = propsToChangePixel6;
 
             if (Arrays.asList(packagesToChangePixel5).contains(packageName)) {
