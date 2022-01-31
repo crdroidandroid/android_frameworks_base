@@ -720,8 +720,35 @@ public class ApplicationPackageManager extends PackageManager {
                 }
             };
 
+    private static final String[] featuresPixel = {
+            "com.google.android.apps.photos.PIXEL_2019_PRELOAD",
+            "com.google.android.apps.photos.PIXEL_2019_MIDYEAR_PRELOAD",
+            "com.google.android.apps.photos.PIXEL_2018_PRELOAD",
+            "com.google.android.apps.photos.PIXEL_2017_PRELOAD",
+            "com.google.android.feature.PIXEL_2021_EXPERIENCE",
+            "com.google.android.feature.PIXEL_2021_MIDYEAR_EXPERIENCE",
+            "com.google.android.feature.PIXEL_2020_EXPERIENCE",
+            "com.google.android.feature.PIXEL_2020_MIDYEAR_EXPERIENCE",
+            "com.google.android.feature.PIXEL_2019_EXPERIENCE",
+            "com.google.android.feature.PIXEL_2019_MIDYEAR_EXPERIENCE",
+            "com.google.android.feature.PIXEL_2017_EXPERIENCE"
+    };
+
+    private static final String[] featuresNexus = {
+            "com.google.android.apps.photos.NEXUS_PRELOAD",
+            "com.google.android.apps.photos.nexus_preload"
+    };
+
     @Override
     public boolean hasSystemFeature(String name, int version) {
+        String packageName = ActivityThread.currentPackageName();
+        if (packageName != null &&
+                packageName.equals("com.google.android.apps.photos") &&
+                SystemProperties.getBoolean("persist.sys.pixelprops.gphotos", true)) {
+            if (Arrays.asList(featuresPixel).contains(name)) return false;
+            if (Arrays.asList(featuresNexus).contains(name)) return true;
+        }
+        if (Arrays.asList(featuresPixel).contains(name)) return true;
         return mHasSystemFeatureCache.query(new HasSystemFeatureQuery(name, version));
     }
 
