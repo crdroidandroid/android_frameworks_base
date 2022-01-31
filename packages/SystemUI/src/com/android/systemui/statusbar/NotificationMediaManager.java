@@ -24,7 +24,6 @@ import android.annotation.MainThread;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.Notification;
-import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -77,7 +76,6 @@ import com.android.systemui.statusbar.phone.ScrimController;
 import com.android.systemui.statusbar.phone.ScrimState;
 import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
-import com.android.systemui.statusbar.VisualizerView;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.DeviceConfigProxy;
 import com.android.systemui.util.Utils;
@@ -150,7 +148,6 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
     private final Lazy<StatusBar> mStatusBarLazy;
     private final MediaArtworkProcessor mMediaArtworkProcessor;
     private final Set<AsyncTask<?, ?, ?>> mProcessArtworkTasks = new ArraySet<>();
-    private final WallpaperManager mWallpaperManager;
 
     protected NotificationPresenter mPresenter;
     private MediaController mMediaController;
@@ -179,8 +176,6 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
                     clearCurrentMediaNotification();
                 }
                 findAndUpdateMediaNotifications();
-                mStatusBarLazy.get().getVisualizerView()
-                        .setPlaying(state.getState() == PlaybackState.STATE_PLAYING);
             }
         }
 
@@ -220,8 +215,6 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
         // in session state
         mMediaSessionManager = (MediaSessionManager) mContext.getSystemService(
                 Context.MEDIA_SESSION_SERVICE);
-        mWallpaperManager = (WallpaperManager) mContext.getSystemService(
-                Context.WALLPAPER_SERVICE);
         // TODO: use KeyguardStateController#isOccluded to remove this dependency
         mStatusBarLazy = statusBarLazy;
         mNotificationShadeWindowController = notificationShadeWindowController;
@@ -775,10 +768,9 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
         }
         boolean hasMediaArtwork = artworkDrawable != null;
         boolean allowWhenShade = false;
-        Bitmap lockWallpaper = null;
         // if no media artwork, show normal lockscreen wallpaper
         if (ENABLE_LOCKSCREEN_WALLPAPER && artworkDrawable == null) {
-            lockWallpaper =
+            Bitmap lockWallpaper =
                     mLockscreenWallpaper != null ? mLockscreenWallpaper.getBitmap() : null;
             if (lockWallpaper != null) {
                 artworkDrawable = new LockscreenWallpaper.WallpaperDrawable(
@@ -797,27 +789,6 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
         mColorExtractor.setHasMediaArtwork(hasMediaArtwork);
         if (mScrimController != null) {
             mScrimController.setHasBackdrop(hasArtwork);
-        }
-
-        if (mStatusBarStateController.getState() != StatusBarState.SHADE) {
-            VisualizerView visualizerView = mStatusBarLazy.get().getVisualizerView();
-            if (!mKeyguardStateController.isKeyguardFadingAway() &&
-                    !mStatusBarLazy.get().isScreenFullyOff()) {
-                visualizerView.setPlaying(getMediaControllerPlaybackState(mMediaController) ==
-                        PlaybackState.STATE_PLAYING);
-            }
-
-            if (artworkDrawable instanceof BitmapDrawable) {
-                // always use current backdrop to color eq
-                visualizerView.setBitmap(((BitmapDrawable) artworkDrawable).getBitmap());
-            } else if (lockWallpaper instanceof Bitmap) {
-                // use lockscreen wallpaper in case user set one
-                visualizerView.setBitmap(lockWallpaper.getConfig() == Bitmap.Config.HARDWARE ?
-                        lockWallpaper.copy(Bitmap.Config.ARGB_8888, false) : lockWallpaper);
-            } else {
-                // use regular wallpaper
-                visualizerView.setBitmap(mWallpaperManager.getBitmap(false));
-            }
         }
 
         if ((hasArtwork || DEBUG_MEDIA_FAKE_ARTWORK)
