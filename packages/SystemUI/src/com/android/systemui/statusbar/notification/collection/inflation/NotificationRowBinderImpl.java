@@ -258,7 +258,8 @@ public class NotificationRowBinderImpl implements NotificationRowBinder {
         // inflated to avoid any latency associated with reinflating all notification views when
         // screen share starts and stops
         if (screenshareNotificationHiding()
-                || mNotificationLockscreenUserManager.needsRedaction(entry)) {
+                || mNotificationLockscreenUserManager.needsRedaction(entry)
+                || entry.getSbn().getIsContentSecure()) {
             params.requireContentViews(FLAG_CONTENT_VIEW_PUBLIC);
         } else {
             params.markContentViewsFreeable(FLAG_CONTENT_VIEW_PUBLIC);
