@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.notification.collection.inflation;
 
 import static com.android.systemui.statusbar.NotificationLockscreenUserManager.REDACTION_TYPE_NONE;
+import static com.android.systemui.statusbar.NotificationLockscreenUserManager.REDACTION_TYPE_PUBLIC;
 import static com.android.systemui.statusbar.notification.row.NotificationRowContentBinder.FLAG_CONTENT_VIEW_CONTRACTED;
 import static com.android.systemui.statusbar.notification.row.NotificationRowContentBinder.FLAG_CONTENT_VIEW_EXPANDED;
 import static com.android.systemui.statusbar.notification.row.NotificationRowContentBinder.FLAG_CONTENT_VIEW_PUBLIC;
@@ -248,7 +249,8 @@ public class NotificationRowBinderImpl implements NotificationRowBinder {
         params.requireContentViews(FLAG_CONTENT_VIEW_CONTRACTED);
         params.requireContentViews(FLAG_CONTENT_VIEW_EXPANDED);
         params.setUseMinimized(isMinimized);
-        int redactionType = inflaterParams.getRedactionType();
+        int redactionType = entry.getSbn().getIsContentSecure() ?
+            REDACTION_TYPE_PUBLIC : inflaterParams.getRedactionType();
 
         params.setRedactionType(redactionType);
         if (redactionType != REDACTION_TYPE_NONE) {
