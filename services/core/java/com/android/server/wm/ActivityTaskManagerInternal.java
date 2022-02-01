@@ -712,4 +712,6 @@ public abstract class ActivityTaskManagerInternal {
      */
     public abstract void restartTaskActivityProcessIfVisible(
             int taskId, @NonNull String packageName);
+
+    public abstract boolean isVisibleActivity(IBinder activityToken);
 }
