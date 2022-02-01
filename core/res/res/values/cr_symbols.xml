@@ -134,4 +134,8 @@
     <!-- App version -->
     <java-symbol type="string" name="old_version_number" />
     <java-symbol type="string" name="new_version_number" />
+
+    <!-- App lock -->
+    <java-symbol type="string" name="unlock_application" />
+    <java-symbol type="array" name="config_appLockAllowedSystemApps" />
 </resources>

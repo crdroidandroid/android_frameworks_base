@@ -383,7 +383,7 @@ class StatusBarNotificationPresenter implements NotificationPresenter,
 
         @Override
         public boolean suppressAwakeInterruptions(NotificationEntry entry) {
-            return isDeviceInVrMode();
+            return isDeviceInVrMode() || entry.getSbn().getIsContentSecure();
         }
 
         @Override
