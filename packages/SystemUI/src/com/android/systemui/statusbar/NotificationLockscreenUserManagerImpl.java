@@ -742,7 +742,8 @@ public class NotificationLockscreenUserManagerImpl implements
 
         boolean notificationRequestsRedaction =
                 ent.isNotificationVisibilityPrivate();
-        boolean userForcesRedaction = packageHasVisibilityOverride(ent.getSbn().getKey());
+        boolean userForcesRedaction = packageHasVisibilityOverride(ent.getSbn().getKey()) ||
+                ent.getSbn().getIsContentSecure();
 
         if (userForcesRedaction) {
             return REDACTION_TYPE_PUBLIC;

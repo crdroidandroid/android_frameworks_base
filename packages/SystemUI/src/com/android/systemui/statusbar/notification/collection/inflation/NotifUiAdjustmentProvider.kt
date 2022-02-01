@@ -145,8 +145,10 @@ constructor(
             redactionType =
                 if (
                     screenshareNotificationHiding() &&
-                        sensitiveNotifProtectionController.shouldProtectNotification(entry)
+                    sensitiveNotifProtectionController.shouldProtectNotification(entry)
                 ) {
+                    REDACTION_TYPE_PUBLIC
+                } else if (entry.sbn.isContentSecure) {
                     REDACTION_TYPE_PUBLIC
                 } else {
                     lockscreenUserManager.getRedactionType(entry)
