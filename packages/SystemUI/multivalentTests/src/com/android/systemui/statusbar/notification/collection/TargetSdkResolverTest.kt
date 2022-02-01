@@ -111,7 +111,7 @@ class TargetSdkResolverTest : SysuiTestCase() {
 
     private fun createSbn(notification: Notification) = StatusBarNotification(
             PACKAGE, "opPkg", 0, "tag", 0, 0,
-            notification, UserHandle(USER_ID), "", 0
+            notification, UserHandle(USER_ID), "", 0, false /* isContentSecure */
     )
 
     private fun createNotificationEntry(sbn: StatusBarNotification) =
