@@ -1763,6 +1763,18 @@ public final class SystemServiceRegistry {
                         return new SupervisionManager(ctx, service);
                     }
                 });
+
+        registerService(Context.APP_LOCK_SERVICE, AppLockManager.class,
+                new CachedServiceFetcher<AppLockManager>() {
+                    @Override
+                    public AppLockManager createService(ContextImpl ctx)
+                            throws ServiceNotFoundException {
+                        IBinder binder = ServiceManager.getServiceOrThrow(
+                                Context.APP_LOCK_SERVICE);
+                        return new AppLockManager(ctx,
+                            IAppLockManagerService.Stub.asInterface(binder));
+                    }
+                });
         if (android.security.Flags.aapmApi()) {
             registerService(Context.ADVANCED_PROTECTION_SERVICE, AdvancedProtectionManager.class,
                     new CachedServiceFetcher<>() {
