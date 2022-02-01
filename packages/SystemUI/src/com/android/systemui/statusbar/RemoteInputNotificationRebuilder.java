@@ -165,8 +165,7 @@ public class RemoteInputNotificationRebuilder {
                 newNotification,
                 sbn.getUser(),
                 sbn.getOverrideGroupKey(),
-                sbn.getPostTime());
+                sbn.getPostTime(),
+                sbn.getIsContentSecure());
     }
-
-
 }

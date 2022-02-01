@@ -825,4 +825,6 @@ public abstract class ActivityTaskManagerInternal {
 
     /** Returns whether assist data is allowed. */
     public abstract boolean isAssistDataAllowed();
+
+    public abstract boolean isVisibleActivity(IBinder activityToken);
 }
