@@ -41,6 +41,7 @@ import android.annotation.UiContext;
 import android.annotation.UserIdInt;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AppLockManager;
 import android.app.BroadcastOptions;
 import android.app.GameManager;
 import android.app.GrammaticalInflectionManager;
@@ -6318,6 +6319,14 @@ public abstract class Context {
      * @see android.os.PocketManager
      */
     public static final String POCKET_SERVICE = "pocket";
+
+    /**
+     * {@link AppLockManager}.
+     *
+     * @see #getSystemService(String)
+     * @hide
+     */
+    public static final String APP_LOCK_SERVICE = "app_lock";
 
     /**
      * Use with {@link #getSystemService(String)} to retrieve a

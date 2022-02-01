@@ -19,7 +19,10 @@ filegroup {
 
 filegroup {
     name: "services.core-sources",
-    srcs: ["java/**/*.java"],
+    srcs: [
+        "java/**/*.java",
+        "java/**/*.kt",
+    ],
     exclude_srcs: [
         ":services.core-sources-am-wm",
     ],
@@ -189,6 +192,9 @@ java_library_static {
         "securebox",
         "vendor.aospa.biometrics.face",
         "vendor.aac.hardware.richtap.vibrator",
+        "kotlin-stdlib",
+        "kotlinx_coroutines_android",
+        "kotlinx_coroutines",
     ],
     javac_shard_size: 50,
     javacflags: [

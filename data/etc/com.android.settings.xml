@@ -28,6 +28,7 @@
         <permission name="android.permission.FORCE_STOP_PACKAGES"/>
         <permission name="android.permission.LOCAL_MAC_ADDRESS"/>
         <permission name="android.permission.LOG_COMPAT_CHANGE" />
+        <permission name="android.permission.MANAGE_APP_LOCK" />
         <permission name="android.permission.MANAGE_DEBUGGING"/>
         <permission name="android.permission.MANAGE_DEVICE_ADMINS"/>
         <permission name="android.permission.MANAGE_FINGERPRINT"/>
