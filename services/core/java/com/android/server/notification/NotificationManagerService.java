@@ -43,6 +43,7 @@ import static android.app.NotificationManager.ACTION_NOTIFICATION_CHANNEL_GROUP_
 import static android.app.NotificationManager.ACTION_NOTIFICATION_LISTENER_ENABLED_CHANGED;
 import static android.app.NotificationManager.ACTION_NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED;
 import static android.app.NotificationManager.BUBBLE_PREFERENCE_ALL;
+import static android.app.NotificationManager.BUBBLE_PREFERENCE_NONE;
 import static android.app.NotificationManager.EXTRA_AUTOMATIC_ZEN_RULE_ID;
 import static android.app.NotificationManager.EXTRA_AUTOMATIC_ZEN_RULE_STATUS;
 import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
@@ -313,6 +314,7 @@ import com.android.server.EventLogTags;
 import com.android.server.IoThread;
 import com.android.server.LocalServices;
 import com.android.server.SystemService;
+import com.android.server.app.AppLockManagerServiceInternal;
 import com.android.server.job.JobSchedulerInternal;
 import com.android.server.lights.LightsManager;
 import com.android.server.lights.LogicalLight;
@@ -709,6 +711,8 @@ public class NotificationManagerService extends SystemService {
     private LineageNotificationLights mLineageNotificationLights;
 
     private boolean mSoundVibScreenOn;
+
+    private AppLockManagerServiceInternal mAppLockManagerService = null;
 
     static class Archive {
         final SparseArray<Boolean> mEnabled;
@@ -2818,6 +2822,7 @@ public class NotificationManagerService extends SystemService {
             maybeShowInitialReviewPermissionsNotification();
         } else if (phase == SystemService.PHASE_ACTIVITY_MANAGER_READY) {
             mSnoozeHelper.scheduleRepostsForPersistedNotifications(System.currentTimeMillis());
+            mAppLockManagerService = LocalServices.getService(AppLockManagerServiceInternal.class);
         } else if (phase == SystemService.PHASE_DEVICE_SPECIFIC_SERVICES_READY) {
             mPreferencesHelper.updateFixedImportance(mUm.getUsers());
             mPreferencesHelper.migrateNotificationPermissions(mUm.getUsers());
@@ -3698,8 +3703,8 @@ public class NotificationManagerService extends SystemService {
         public int getBubblePreferenceForPackage(String pkg, int uid) {
             enforceSystemOrSystemUIOrSamePackage(pkg,
                     "Caller not system or systemui or same package");
-
-            if (UserHandle.getCallingUserId() != UserHandle.getUserId(uid)) {
+            final int userId = UserHandle.getUserId(uid);
+            if (UserHandle.getCallingUserId() != userId) {
                 getContext().enforceCallingPermission(
                         android.Manifest.permission.INTERACT_ACROSS_USERS,
                         "getBubblePreferenceForPackage for uid " + uid);
@@ -4504,7 +4509,8 @@ public class NotificationManagerService extends SystemService {
                             sbn.getOpPkg(),
                             sbn.getId(), sbn.getTag(), sbn.getUid(), sbn.getInitialPid(),
                             notification,
-                            sbn.getUser(), sbn.getOverrideGroupKey(), sbn.getPostTime());
+                            sbn.getUser(), sbn.getOverrideGroupKey(),
+                            sbn.getPostTime(), sbn.getIsContentSecure());
                 }
             }
             return null;
@@ -6131,6 +6137,8 @@ public class NotificationManagerService extends SystemService {
                             0, appIntent, PendingIntent.FLAG_IMMUTABLE, null,
                             pkg, appInfo.uid);
                 }
+                final boolean isContentSecure = mAppLockManagerService != null &&
+                    mAppLockManagerService.shouldRedactNotification(pkg, userId);
                 final StatusBarNotification summarySbn =
                         new StatusBarNotification(adjustedSbn.getPackageName(),
                                 adjustedSbn.getOpPkg(),
@@ -6138,13 +6146,16 @@ public class NotificationManagerService extends SystemService {
                                 GroupHelper.AUTOGROUP_KEY, adjustedSbn.getUid(),
                                 adjustedSbn.getInitialPid(), summaryNotification,
                                 adjustedSbn.getUser(), GroupHelper.AUTOGROUP_KEY,
-                                System.currentTimeMillis());
+                                System.currentTimeMillis(), isContentSecure);
                 summaryRecord = new NotificationRecord(getContext(), summarySbn,
                         notificationRecord.getChannel());
                 summaryRecord.setImportanceFixed(isPermissionFixed);
                 summaryRecord.setIsAppImportanceLocked(
                         notificationRecord.getIsAppImportanceLocked());
                 summaries.put(pkg, summarySbn.getKey());
+                summaryRecord.setBubbleUpSuppressedByAppLock(
+                    mAppLockManagerService != null &&
+                    mAppLockManagerService.requireUnlock(pkg, userId));
             }
             if (summaryRecord != null && checkDisqualifyingFeatures(userId, uid,
                     summaryRecord.getSbn().getId(), summaryRecord.getSbn().getTag(), summaryRecord,
@@ -6619,6 +6630,32 @@ public class NotificationManagerService extends SystemService {
             checkCallerIsSystem();
             mHistoryManager.cleanupHistoryFiles();
         }
+
+        public void updateSecureNotifications(String pkg, boolean isContentSecure,
+                boolean isBubbleUpSuppressed, int userId) {
+            mHandler.post(() -> updateSecureNotificationsInternal(pkg, isContentSecure,
+                isBubbleUpSuppressed, userId));
+        }
+
+        private void updateSecureNotificationsInternal(String pkg, boolean isContentSecure,
+                boolean isBubbleUpSuppressed, int userId) {
+            synchronized (mNotificationLock) {
+                for (int i = 0; i < mNotificationList.size(); i++) {
+                    final NotificationRecord nr = mNotificationList.get(i);
+                    final StatusBarNotification sbn = nr.getSbn();
+                    if (UserHandle.getUserId(sbn.getUid()) == userId
+                            && sbn.getPackageName().equals(pkg)) {
+                        if (sbn.getIsContentSecure() != isContentSecure ||
+                                nr.isBubbleUpSuppressedByAppLock() != isBubbleUpSuppressed) {
+                            sbn.setIsContentSecure(isContentSecure);
+                            nr.setBubbleUpSuppressedByAppLock(isBubbleUpSuppressed);
+                            mListeners.notifyPostedLocked(nr, nr);
+                        }
+                    }
+                }
+            }
+            mRankingHandler.requestSort();
+        }
     };
 
     int getNumNotificationChannelsForPackage(String pkg, int uid, boolean includeDeleted) {
@@ -6781,9 +6818,11 @@ public class NotificationManagerService extends SystemService {
 
         mUsageStats.registerEnqueuedByApp(pkg);
 
+        final boolean isContentSecure = mAppLockManagerService != null &&
+            mAppLockManagerService.shouldRedactNotification(pkg, userId);
         final StatusBarNotification n = new StatusBarNotification(
                 pkg, opPkg, id, tag, notificationUid, callingPid, notification,
-                user, null, System.currentTimeMillis());
+                user, null, System.currentTimeMillis(), isContentSecure);
 
         // setup local book-keeping
         String channelId = notification.getChannelId();
@@ -6824,6 +6863,8 @@ public class NotificationManagerService extends SystemService {
         r.setPostSilently(postSilently);
         r.setFlagBubbleRemoved(false);
         r.setPkgAllowedAsConvo(mMsgPkgsAllowedAsConvos.contains(pkg));
+        r.setBubbleUpSuppressedByAppLock(mAppLockManagerService != null &&
+            mAppLockManagerService.requireUnlock(pkg, userId));
         boolean isImportanceFixed = mPermissionHelper.isPermissionFixed(pkg, userId);
         r.setImportanceFixed(isImportanceFixed);
 
@@ -9049,7 +9090,8 @@ public class NotificationManagerService extends SystemService {
                         r.getRankingScore(),
                         r.isConversation(),
                         r.getProposedImportance(),
-                        r.hasSensitiveContent());
+                        r.hasSensitiveContent(),
+                        r.isBubbleUpSuppressedByAppLock());
                 extractorDataBefore.put(r.getKey(), extractorData);
                 mRankingHelper.extractSignals(r);
             }
