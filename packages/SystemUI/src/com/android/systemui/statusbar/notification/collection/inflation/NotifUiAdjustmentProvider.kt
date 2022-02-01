@@ -141,6 +141,7 @@ constructor(
             isSnoozeEnabled = isSnoozeSettingsEnabled && !entry.isCanceled,
             isMinimized = isEntryMinimized(entry),
             needsRedaction =
+                entry.sbn.isContentSecure ||
                 lockscreenUserManager.needsRedaction(entry) ||
                     (screenshareNotificationHiding() &&
                         sensitiveNotifProtectionController.shouldProtectNotification(entry)),
