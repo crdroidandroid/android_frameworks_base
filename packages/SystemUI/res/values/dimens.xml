@@ -31,6 +31,11 @@
 
     <!-- dimensions for the navigation bar handle -->
     <dimen name="navigation_handle_radius">2dp</dimen>
+    <dimen name="navigation_handle_radius1">0.5dp</dimen>
+    <dimen name="navigation_handle_radius2">1dp</dimen>
+    <dimen name="navigation_handle_radius3">1.5dp</dimen>
+    <dimen name="navigation_handle_radius4">2.5dp</dimen>
+    <dimen name="navigation_handle_radius5">3dp</dimen>
     <dimen name="navigation_handle_bottom">10dp</dimen>
     <dimen name="navigation_handle_sample_horizontal_margin">10dp</dimen>
     <dimen name="navigation_home_handle_width">108dp</dimen>
