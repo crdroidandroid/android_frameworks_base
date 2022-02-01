@@ -294,6 +294,7 @@ import com.android.server.am.PendingIntentController;
 import com.android.server.am.PendingIntentRecord;
 import com.android.server.am.ProcessStateController;
 import com.android.server.am.UserState;
+import com.android.server.app.AppLockManagerServiceInternal;
 import com.android.server.firewall.IntentFirewall;
 import com.android.server.grammaticalinflection.GrammaticalInflectionManagerInternal;
 import com.android.server.pm.UserManagerInternal;
@@ -829,6 +830,8 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
     private LineageActivityManager mLineageActivityManager;
 
     private SystemSensorManager mSystemSensorManager;
+
+    private AppLockManagerServiceInternal mAppLockManagerService = null;
 
     private final class SettingObserver extends ContentObserver {
         private final Uri mFontScaleUri = Settings.System.getUriFor(FONT_SCALE);
@@ -4534,6 +4537,15 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
                     Slog.w(TAG, "takeTaskSnapshot: taskId=" + taskId + " not found or not visible");
                     return null;
                 }
+                final Task rootTask = task.getRootTask();
+                final String packageName =
+                    rootTask != null && rootTask.realActivity != null
+                        ? rootTask.realActivity.getPackageName()
+                        : null;
+                if (packageName != null && getAppLockManagerService().requireUnlock(
+                        packageName, task.mUserId)) {
+                    return null;
+                }
                 // Note that if updateCache is true, ActivityRecord#shouldUseAppThemeSnapshot will
                 // be used to decide whether the task is allowed to be captured because that may
                 // be retrieved by recents. While if updateCache is false, the real snapshot will
@@ -6071,6 +6083,13 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
     @Nullable
     ActivityRecord.WindowStyle getWindowStyle(String packageName, int theme, int userId) {
         return mWindowStyleCache.get(packageName, theme, userId);
+    }
+
+    AppLockManagerServiceInternal getAppLockManagerService() {
+        if (mAppLockManagerService == null) {
+            mAppLockManagerService = LocalServices.getService(AppLockManagerServiceInternal.class);
+        }
+        return mAppLockManagerService;
     }
 
     AppWarnings getAppWarningsLocked() {
@@ -8149,6 +8168,14 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
         @Override
         public int getLockTaskModeState() {
             return ActivityTaskManagerService.this.getLockTaskModeState();
+        }
+
+        @Override
+        public boolean isVisibleActivity(IBinder activityToken) {
+            synchronized (mGlobalLock) {
+                final ActivityRecord r = ActivityRecord.isInRootTaskLocked(activityToken);
+                return r != null && r.isInterestingToUserLocked();
+            }
         }
     }
 
