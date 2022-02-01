@@ -62,6 +62,7 @@ import com.android.internal.app.SuspendedAppActivity;
 import com.android.internal.app.UnlaunchableAppActivity;
 import com.android.server.LocalServices;
 import com.android.server.am.ActivityManagerService;
+import com.android.server.app.AppLockManagerServiceInternal;
 import com.android.server.wm.ActivityInterceptorCallback.ActivityInterceptResult;
 
 /**
@@ -217,6 +218,9 @@ class ActivityStartInterceptor {
             return true;
         }
         if (interceptLockedManagedProfileIfNeeded()) {
+            return true;
+        }
+        if (interceptLockedAppIfNeeded()) {
             return true;
         }
 
@@ -467,5 +471,33 @@ class ActivityStartInterceptor {
                 mRealCallingPid, mUserId, mCallingPackage, mCallingFeatureId, mIntent,
                 mRInfo, mAInfo, mResolvedType, mCallingPid, mCallingUid,
                 mActivityOptions, clearOptionsAnimation);
+    }
+
+    private AppLockManagerServiceInternal getAppLockManagerService() {
+        return mService.getAppLockManagerService();
+    }
+
+    private boolean interceptLockedAppIfNeeded() {
+        if (getAppLockManagerService() == null) return false;
+        final Intent interceptingIntent = getAppLockManagerService().interceptActivity(getInterceptorInfo(null));
+        if (interceptingIntent == null) return false;
+        mIntent = interceptingIntent;
+        mCallingPid = mRealCallingPid;
+        mCallingUid = mRealCallingUid;
+        mResolvedType = null;
+        // If we are intercepting and there was a task, convert it into an extra for the
+        // ConfirmCredentials intent and unassign it, as otherwise the task will move to
+        // front even if ConfirmCredentials is cancelled.
+        if (mInTask != null) {
+            mIntent.putExtra(EXTRA_TASK_ID, mInTask.mTaskId);
+            mInTask = null;
+        }
+        if (mActivityOptions == null) {
+            mActivityOptions = ActivityOptions.makeBasic();
+        }
+
+        mRInfo = mSupervisor.resolveIntent(mIntent, mResolvedType, mUserId, 0, mRealCallingUid);
+        mAInfo = mSupervisor.resolveActivity(mIntent, mRInfo, mStartFlags, null /*profilerInfo*/);
+        return true;
     }
 }
