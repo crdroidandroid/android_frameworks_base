@@ -465,6 +465,9 @@ public final class SystemServer implements Dumpable {
 
     private static final String TETHERING_CONNECTOR_CLASS = "android.net.ITetheringConnector";
 
+    private static final String APP_LOCK_SERVICE_CLASS =
+            "com.android.server.app.AppLockManagerService$Lifecycle";
+
     private static final String PERSISTENT_DATA_BLOCK_PROP = "ro.frp.pst";
 
     private static final String UNCRYPT_PACKAGE_FILE = "/cache/recovery/uncrypt_file";
@@ -2713,6 +2716,10 @@ public final class SystemServer implements Dumpable {
 
             t.traceBegin("FreeformService");
             mSystemServiceManager.startService(FreeformService.class);
+            t.traceEnd();
+
+            t.traceBegin("AppLockManagerService");
+            mSystemServiceManager.startService(APP_LOCK_SERVICE_CLASS);
             t.traceEnd();
 
             if (!isWatch) {
