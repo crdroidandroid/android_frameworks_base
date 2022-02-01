@@ -103,9 +103,11 @@ private class SensitiveContentCoordinatorImpl @Inject constructor(
                     else -> lockscreenUserManager.needsSeparateWorkChallenge(notifUserId)
                 }
             }
-            val needsRedaction = lockscreenUserManager.needsRedaction(entry)
+            val isSecure = entry.sbn.isContentSecure
+            val needsRedaction = isSecure || lockscreenUserManager.needsRedaction(entry)
             val isSensitive = userPublic && needsRedaction
-            entry.setSensitive(isSensitive, deviceSensitive)
+            entry.setSensitive(isSensitive, isSecure || deviceSensitive)
+            entry.row.setForceHideContents(isSecure)
         }
     }
 }
