@@ -46,4 +46,8 @@
 
     <!-- Lock gesture -->
     <java-symbol type="string" name="gesture_locked_warning" />
+
+    <!-- App lock -->
+    <java-symbol type="string" name="unlock_application" />
+    <java-symbol type="array" name="config_appLockAllowedSystemApps" />
 </resources>
