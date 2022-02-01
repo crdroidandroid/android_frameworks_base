@@ -809,4 +809,6 @@ public abstract class ActivityTaskManagerInternal {
      * Returns true if the back gesture request was successful, false otherwise.
      */
     public abstract boolean requestBackGesture();
+
+    public abstract boolean isVisibleActivity(IBinder activityToken);
 }
