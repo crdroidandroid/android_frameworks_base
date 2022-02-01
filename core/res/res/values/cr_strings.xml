@@ -29,4 +29,7 @@
     <string name="aerr_copy">Copy crash log URL</string>
     <string name="url_copy_success">URL copied successfully</string>
     <string name="url_copy_failed">An error occured while uploading the log to Pasty</string>
+
+    <!-- App lock -->
+    <string name="unlock_application">Unlock <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>

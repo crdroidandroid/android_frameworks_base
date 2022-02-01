@@ -71,10 +71,13 @@ public class StatusBarNotification implements Parcelable {
 
     private Context mContext; // used for inflation & icon expansion
 
+    private boolean mIsContentSecure;
+
     /** @hide */
     public StatusBarNotification(String pkg, String opPkg, int id,
             String tag, int uid, int initialPid, Notification notification, UserHandle user,
-            String overrideGroupKey, long postTime) {
+            String overrideGroupKey, long postTime,
+            boolean isContentSecure) {
         if (pkg == null) throw new NullPointerException();
         if (notification == null) throw new NullPointerException();
 
@@ -90,6 +93,7 @@ public class StatusBarNotification implements Parcelable {
         this.overrideGroupKey = overrideGroupKey;
         this.key = key();
         this.groupKey = groupKey();
+        mIsContentSecure = isContentSecure;
     }
 
     /**
@@ -137,6 +141,7 @@ public class StatusBarNotification implements Parcelable {
         }
         this.key = key();
         this.groupKey = groupKey();
+        mIsContentSecure = in.readBoolean();
     }
 
     /**
@@ -237,6 +242,7 @@ public class StatusBarNotification implements Parcelable {
         } else {
             out.writeInt(0);
         }
+        out.writeBoolean(mIsContentSecure);
     }
 
     public int describeContents() {
@@ -276,7 +282,8 @@ public class StatusBarNotification implements Parcelable {
     StatusBarNotification cloneShallow(Notification notification) {
         StatusBarNotification result = new StatusBarNotification(this.pkg, this.opPkg,
                 this.id, this.tag, this.uid, this.initialPid,
-                notification, this.user, this.overrideGroupKey, this.postTime);
+                notification, this.user, this.overrideGroupKey,
+                this.postTime, mIsContentSecure);
         result.setInstanceId(this.mInstanceId);
         return result;
     }
@@ -559,5 +566,25 @@ public class StatusBarNotification implements Parcelable {
         String hash = Integer.toHexString(logTag.hashCode());
         return logTag.substring(0, MAX_LOG_TAG_LENGTH - hash.length() - 1) + "-"
                 + hash;
+    }
+
+    /**
+     * Set whether the notification content is secure.
+     *
+     * @param isContentSecure whether the content is secure.
+     * @hide
+     */
+    public void setIsContentSecure(boolean isContentSecure) {
+        mIsContentSecure = isContentSecure;
+    }
+
+    /**
+     * Check whether the notification content is secure.
+     *
+     * @return true if content is secure, false otherwise.
+     * @hide
+     */
+    public boolean getIsContentSecure() {
+        return mIsContentSecure;
     }
 }
