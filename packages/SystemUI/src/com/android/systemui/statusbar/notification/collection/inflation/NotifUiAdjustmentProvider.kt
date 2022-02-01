@@ -120,6 +120,6 @@ class NotifUiAdjustmentProvider @Inject constructor(
         isConversation = entry.ranking.isConversation,
         isSnoozeEnabled = isSnoozeSettingsEnabled && !entry.isCanceled,
         isMinimized = isEntryMinimized(entry),
-        needsRedaction = lockscreenUserManager.needsRedaction(entry),
+        needsRedaction = entry.sbn.isContentSecure || lockscreenUserManager.needsRedaction(entry),
     )
 }
