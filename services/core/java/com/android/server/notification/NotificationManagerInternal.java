@@ -78,6 +78,9 @@ public interface NotificationManagerInternal {
      */
     void setDeviceEffectsApplier(DeviceEffectsApplier applier);
 
+    void updateSecureNotifications(String pkg, boolean isContentSecure,
+        boolean isBubbleUpSuppressed, int userId);
+
     // Backup/restore interface
     byte[] getBackupPayload(int user, BackupRestoreEventLogger logger);
 
