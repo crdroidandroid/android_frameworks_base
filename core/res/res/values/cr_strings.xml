@@ -19,4 +19,7 @@
     <string name="pocket_mode_instructions_header">To use your phone:</string>
     <string name="pocket_mode_instruction_step1">1. Ensure the blue area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
     <string name="pocket_mode_instruction_step2">2. Press and hold the power button to exit pocket mode.</string>
+
+    <!-- App lock -->
+    <string name="unlock_application">Unlock <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>
