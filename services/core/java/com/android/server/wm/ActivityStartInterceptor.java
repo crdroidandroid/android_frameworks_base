@@ -64,6 +64,7 @@ import com.android.internal.app.SuspendedAppActivity;
 import com.android.internal.app.UnlaunchableAppActivity;
 import com.android.server.LocalServices;
 import com.android.server.am.ActivityManagerService;
+import com.android.server.app.AppLockManagerServiceInternal;
 import com.android.server.wm.ActivityInterceptorCallback.ActivityInterceptResult;
 
 /**
@@ -219,6 +220,9 @@ class ActivityStartInterceptor {
             return true;
         }
         if (interceptLockedManagedProfileIfNeeded()) {
+            return true;
+        }
+        if (interceptLockedAppIfNeeded()) {
             return true;
         }
 
@@ -527,6 +531,52 @@ class ActivityStartInterceptor {
         if (orderId == MAINLINE_SDK_SANDBOX_ORDER_ID) {
             return info.getIntent() != null && info.getIntent().isSandboxActivity(mServiceContext);
         }
+        return true;
+    }
+
+    private AppLockManagerServiceInternal getAppLockManagerService() {
+        return mService.getAppLockManagerService();
+    }
+
+    private boolean interceptLockedAppIfNeeded() {
+        if (getAppLockManagerService() == null) return false;
+        final Intent interceptingIntent = getAppLockManagerService().interceptActivity(getInterceptorInfo(null));
+        if (interceptingIntent == null) {
+            return false;
+        }
+        mIntent = interceptingIntent;
+        mCallingPid = mRealCallingPid;
+        mCallingUid = mRealCallingUid;
+        mResolvedType = null;
+        final TaskFragment taskFragment = getLaunchTaskFragment();
+        // If we are intercepting and there was a task, convert it into an extra for the
+        // ConfirmCredentials intent and unassign it, as otherwise the task will move to
+        // front even if ConfirmCredentials is cancelled.
+        if (mInTask != null) {
+            mIntent.putExtra(EXTRA_TASK_ID, mInTask.mTaskId);
+            mInTask = null;
+        } else if (taskFragment != null) {
+            // If the original intent is started to an embedded TaskFragment, append its parent task
+            // id to extra. It is to embed back the original intent to the TaskFragment with the
+            // same task.
+            final Task parentTask = taskFragment.getTask();
+            if (parentTask != null) {
+                mIntent.putExtra(EXTRA_TASK_ID, parentTask.mTaskId);
+            }
+        }
+        if (mActivityOptions == null) {
+            mActivityOptions = ActivityOptions.makeBasic();
+        }
+
+        final UserInfo parent = mUserManager.getProfileParent(mUserId);
+        if (parent != null) {
+            mRInfo = mSupervisor.resolveIntent(mIntent, mResolvedType, parent.id, 0,
+                    mRealCallingUid, mRealCallingPid);
+        } else {
+            mRInfo = mSupervisor.resolveIntent(mIntent, mResolvedType, mUserId, 0,
+                    mRealCallingUid, mRealCallingPid);
+        }
+        mAInfo = mSupervisor.resolveActivity(mIntent, mRInfo, mStartFlags, null /*profilerInfo*/);
         return true;
     }
 }

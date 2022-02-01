@@ -125,4 +125,8 @@
 
     <!-- Whether to use Richtap vibration -->
     <bool name="config_usesRichtapVibration">false</bool>
+
+  <!-- List of system apps that are allowed to be locked with app lock.
+        Use with extreme caution. -->
+  <string-array name="config_appLockAllowedSystemApps" translatable="false" />
 </resources>

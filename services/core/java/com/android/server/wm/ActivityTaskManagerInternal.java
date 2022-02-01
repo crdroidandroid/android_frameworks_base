@@ -778,4 +778,6 @@ public abstract class ActivityTaskManagerInternal {
      * @param token The activity token.
      */
     public abstract int getDisplayId(IBinder token);
+
+    public abstract boolean isVisibleActivity(IBinder activityToken);
 }
