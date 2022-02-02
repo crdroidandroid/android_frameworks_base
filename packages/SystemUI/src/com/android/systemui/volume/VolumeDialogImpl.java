@@ -155,6 +155,8 @@ public class VolumeDialogImpl implements VolumeDialog,
             "lineagesecure:" + LineageSettings.Secure.VOLUME_PANEL_ON_LEFT;
     public static final String VOLUME_DIALOG_TIMEOUT =
             "system:" + Settings.System.VOLUME_DIALOG_TIMEOUT;
+    public static final String SHOW_APP_VOLUME =
+            "system:" + Settings.System.SHOW_APP_VOLUME;
 
     private static final long USER_ATTEMPT_GRACE_PERIOD = 1000;
     private static final int UPDATE_ANIMATION_DURATION = 80;
@@ -297,6 +299,8 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     private int mTimeOutDesired, mTimeOut;
 
+    private boolean mShowAppVolume = true;
+
     public VolumeDialogImpl(
             Context context,
             VolumeDialogController volumeDialogController,
@@ -347,6 +351,7 @@ public class VolumeDialogImpl implements VolumeDialog,
             mTunerService.addTunable(mTunable, VOLUME_PANEL_ON_LEFT);
         }
         mTunerService.addTunable(mTunable, VOLUME_DIALOG_TIMEOUT);
+        mTunerService.addTunable(mTunable, SHOW_APP_VOLUME);
 
         initDimens();
     }
@@ -754,6 +759,9 @@ public class VolumeDialogImpl implements VolumeDialog,
             } else if (VOLUME_DIALOG_TIMEOUT.equals(key)) {
                 mTimeOutDesired = TunerService.parseInteger(newValue, 3);
                 mTimeOut = mTimeOutDesired * 1000;
+            } else if (SHOW_APP_VOLUME.equals(key)) {
+                mShowAppVolume =  TunerService.parseIntegerSwitch(newValue, true);
+                initAppVolumeH();
             }
         }
     };
@@ -1310,7 +1318,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     }
 
     public void initAppVolumeH() {
-        boolean showAppVolume = shouldShowAppVolume();
+        boolean showAppVolume = mShowAppVolume && shouldShowAppVolume();
         if (mAppVolumeView != null) {
             mAppVolumeView.setVisibility(showAppVolume ? VISIBLE : GONE);
         }
