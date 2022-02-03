@@ -26,27 +26,27 @@
     <string name="quick_settings_sound_dnd">Не турбаваць</string>
     <!-- Advanced restart menu -->
     <!-- Button to indicate more options -->
-    <string name="global_action_restart_more">Restart\u2026</string>
+    <string name="global_action_restart_more">Перазагрузка \u2026</string>
     <!-- Button to restart the device, within the Restart Options dialog -->
-    <string name="global_action_restart_system">System</string>
+    <string name="global_action_restart_system">Сістэма</string>
     <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
-    <string name="global_action_restart_recovery">Recovery</string>
+    <string name="global_action_restart_recovery">Рэжым аднаўлення</string>
     <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
-    <string name="global_action_restart_bootloader">Bootloader</string>
+    <string name="global_action_restart_bootloader">Загрузчык</string>
     <!-- Button to restart the device into download mode, within the Restart Options dialog -->
-    <string name="global_action_restart_download">Download</string>
+    <string name="global_action_restart_download">Спампоўка</string>
     <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
     <string name="global_action_restart_fastboot">Fastbootd</string>
     <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_progress">Restarting\u2026</string>
+    <string name="global_action_restart_progress">Перазапуск\u2026</string>
     <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_recovery_progress">Restarting to recovery mode\u2026</string>
+    <string name="global_action_restart_recovery_progress">Перазапуск ў рэжым аднаўлення\u2026</string>
     <!-- Restart to bootloader mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_bootloader_progress">Restarting to bootloader mode\u2026</string>
+    <string name="global_action_restart_bootloader_progress">Пераход у рэжым загрузніка\u2026</string>
     <!-- Restart to download mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_download_progress">Restarting to download mode\u2026</string>
+    <string name="global_action_restart_download_progress">Пераход у рэжым абнаўлення ПЗ\u2026</string>
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_fastboot_progress">Restarting to fastbootd mode\u2026</string>
+    <string name="global_action_restart_fastboot_progress">Перазагрузка ў рэжым fastbootd\u2026</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Рэжым «На хаду» уключаны</string>
     <string name="onthego_notif_title">Рэжым «На хаду» актыўны</string>
