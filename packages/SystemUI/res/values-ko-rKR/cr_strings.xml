@@ -24,6 +24,29 @@
     <string name="quick_settings_sound_ring">벨소리</string>
     <string name="quick_settings_sound_vibrate">진동</string>
     <string name="quick_settings_sound_dnd">방해 금지</string>
+    <!-- Advanced restart menu -->
+    <!-- Button to indicate more options -->
+    <string name="global_action_restart_more">재시작\u2026</string>
+    <!-- Button to restart the device, within the Restart Options dialog -->
+    <string name="global_action_restart_system">시스템</string>
+    <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
+    <string name="global_action_restart_recovery">복구 모드</string>
+    <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
+    <string name="global_action_restart_bootloader">부트 로더 모드</string>
+    <!-- Button to restart the device into download mode, within the Restart Options dialog -->
+    <string name="global_action_restart_download">다운로드 모드</string>
+    <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
+    <string name="global_action_restart_fastboot">Fastbootd 모드</string>
+    <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_progress">다시 시작하는 중\u2026</string>
+    <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_recovery_progress">복구 모드로 다시 시작하는 중\u2026</string>
+    <!-- Restart to bootloader mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_bootloader_progress">부트 로더 모드로 다시 시작하는 중\u2026</string>
+    <!-- Restart to download mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_download_progress">다운로드 모드로 다시 시작하는 중\u2026</string>
+    <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_fastboot_progress">Fastbootd 모드로 다시 시작하는 중...</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go 활성화됨</string>
     <string name="onthego_notif_title">On-The-Go가 활성화 되었습니다</string>
