@@ -32,21 +32,21 @@
     <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
     <string name="global_action_restart_recovery">Recovery</string>
     <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
-    <string name="global_action_restart_bootloader">Gestor de arranque</string>
+    <string name="global_action_restart_bootloader">Bootloader</string>
     <!-- Button to restart the device into download mode, within the Restart Options dialog -->
-    <string name="global_action_restart_download">Descarga</string>
+    <string name="global_action_restart_download">Download</string>
     <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
     <string name="global_action_restart_fastboot">Fastbootd</string>
     <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_progress">Diálogo de progreso de reinicio. Se muestra si el usuario decide reiniciar el dispositivo</string>
+    <string name="global_action_restart_progress">Reiniciando...\u2026</string>
     <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_recovery_progress">Reiniciando en modo Recovery</string>
+    <string name="global_action_restart_recovery_progress">Reiniciando en modo Recovery\u2026</string>
     <!-- Restart to bootloader mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_bootloader_progress">Reiniciando en modo gestor de arranque\u2026</string>
+    <string name="global_action_restart_bootloader_progress">Reiniciando en modo Bootloader\u2026</string>
     <!-- Restart to download mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_download_progress">Reiniciando en modo descarga\u2026</string>
+    <string name="global_action_restart_download_progress">Reiniciando en modo Download\u2026</string>
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_fastboot_progress">Reiniciando en modo fastboot\u2026</string>
+    <string name="global_action_restart_fastboot_progress">Reiniciando en modo Fastbootd\u2026</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go activado</string>
     <string name="onthego_notif_title">On-The-Go está activo</string>
