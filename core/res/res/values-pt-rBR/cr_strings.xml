@@ -35,7 +35,7 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Pressione e segure o botão liga/desliga para desbloquear</string>
     <string name="pocket_view_title">Modo de bolso está ativado</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
+    <string name="pocket_view_title_cancel">Para usar seu telefone:</string>
     <string name="pocket_view_top_tag_cancel">Verifique se a área azul do seu telefone está livre de qualquer obstrução, e limpe qualquer sujeira ou pó.</string>
     <string name="pocket_view_top_tag_cancel2">Pressione e segure o botão liga/desliga para forçar a saída do modo de bolso.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
