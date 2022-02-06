@@ -145,6 +145,21 @@ constructor(
         )
     }
 
+    fun createLens(rawUri: Uri, context: Context, owner: UserHandle): PendingIntent {
+        return PendingIntent.getBroadcast(context, rawUri.toString().hashCode(),
+                Intent(context, LensScreenshotReceiver::class.java)
+                        .putExtra(
+                            LensScreenshotReceiver.EXTRA_LENS_SCREENSHOT_URI_ID,
+                            rawUri.toString())
+                        .putExtra(
+                            LensScreenshotReceiver.EXTRA_SCREENSHOT_USER_HANDLE,
+                            owner)
+                        .addFlags(Intent.FLAG_RECEIVER_FOREGROUND),
+                        (PendingIntent.FLAG_CANCEL_CURRENT
+                        or PendingIntent.FLAG_ONE_SHOT
+                        or PendingIntent.FLAG_IMMUTABLE))
+    }
+
     /** @return an Intent to start the LongScreenshotActivity */
     fun createLongScreenshotIntent(owner: UserHandle): Intent {
         return Intent(context, LongScreenshotActivity::class.java)
