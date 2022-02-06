@@ -113,6 +113,16 @@ object ActionIntentCreator {
                         or PendingIntent.FLAG_IMMUTABLE))
     }
 
+    fun createLens(rawUri: Uri, context: Context): PendingIntent {
+        return PendingIntent.getBroadcast(context, rawUri.toString().hashCode(),
+                Intent(context, LensScreenshotReceiver::class.java)
+                        .putExtra(ScreenshotController.SCREENSHOT_URI_ID, rawUri.toString())
+                        .addFlags(Intent.FLAG_RECEIVER_FOREGROUND),
+                        (PendingIntent.FLAG_CANCEL_CURRENT
+                        or PendingIntent.FLAG_ONE_SHOT
+                        or PendingIntent.FLAG_IMMUTABLE))
+    }
+
     /** @return an Intent to start the LongScreenshotActivity */
     fun createLongScreenshotIntent(owner: UserHandle, context: Context): Intent {
         return Intent(context, LongScreenshotActivity::class.java)

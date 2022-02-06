@@ -24,6 +24,7 @@ import com.android.systemui.media.dialog.MediaOutputDialogReceiver;
 import com.android.systemui.people.widget.PeopleSpaceWidgetPinnedReceiver;
 import com.android.systemui.people.widget.PeopleSpaceWidgetProvider;
 import com.android.systemui.screenshot.DeleteScreenshotReceiver;
+import com.android.systemui.screenshot.LensScreenshotReceiver;
 import com.android.systemui.screenshot.SmartActionsReceiver;
 
 import dagger.Binds;
@@ -44,6 +45,15 @@ public abstract class DefaultBroadcastReceiverBinder {
     @ClassKey(DeleteScreenshotReceiver.class)
     public abstract BroadcastReceiver bindDeleteScreenshotReceiver(
             DeleteScreenshotReceiver broadcastReceiver);
+
+    /**
+     *
+     */
+    @Binds
+    @IntoMap
+    @ClassKey(LensScreenshotReceiver.class)
+    public abstract BroadcastReceiver bindLensScreenshotReceiver(
+            LensScreenshotReceiver broadcastReceiver);
 
     /**
      *
