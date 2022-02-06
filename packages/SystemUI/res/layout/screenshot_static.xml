@@ -59,6 +59,9 @@
             <include layout="@layout/overlay_action_chip"
                      android:id="@+id/screenshot_delete_chip"/>
             <include layout="@layout/overlay_action_chip"
+                     android:id="@+id/screenshot_lens_chip"
+                     android:visibility="gone" />
+            <include layout="@layout/overlay_action_chip"
                      android:id="@+id/screenshot_scroll_chip"
                      android:visibility="gone" />
         </LinearLayout>

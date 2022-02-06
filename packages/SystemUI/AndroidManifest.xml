@@ -564,6 +564,10 @@
         <receiver android:name=".screenshot.DeleteScreenshotReceiver"
             android:exported="false" />
 
+        <!-- Callback for Google Lens screenshot notification -->
+        <receiver android:name=".screenshot.LensScreenshotReceiver"
+            android:exported="false" />
+
         <!-- Callback for invoking a smart action from the screenshot notification. -->
         <receiver android:name=".screenshot.SmartActionsReceiver"
                   android:exported="false"/>
