@@ -227,25 +227,25 @@
     <string name="quick_settings_monotoggle_tile_stereo">Áudio estéreo</string>
     <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Economia de dados</string>
     <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
-    <string name="global_action_onthego">On-The-Go</string>
+    <string name="onthego_notif_ticker">OTG ativado</string>
+    <string name="onthego_notif_title">OTG está ativo</string>
+    <string name="onthego_notif_stop">Parar</string>
+    <string name="onthego_notif_options">Opções</string>
+    <string name="onthego_notif_error">Não foi possível iniciar OTG</string>
+    <string name="onthego_notif_restart">Reiniciar OTG</string>
+    <string name="onthego_notif_camera_changed">Modo câmera alterado</string>
+    <string name="onthego_transparency">Transparência</string>
+    <string name="onthego_front_camera">Usar câmera frontal</string>
+    <string name="onthego_service_toggle">Reiniciar automaticamente o serviço</string>
+    <string name="onthego_channel_name">Principal</string>
+    <string name="global_action_onthego">OTG</string>
     <!-- OnTheGo Tile -->
-    <string name="quick_settings_onthego_label">On-The-Go</string>
-    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
-    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
+    <string name="quick_settings_onthego_label">OTG</string>
+    <string name="accessibility_quick_settings_onthego_off">OTG desativado</string>
+    <string name="accessibility_quick_settings_onthego_on">OTG ativado</string>
     <!-- FPS view text placeholder -->
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" exemplo="90">%1$d</xliff:g></string>
 </resources>
