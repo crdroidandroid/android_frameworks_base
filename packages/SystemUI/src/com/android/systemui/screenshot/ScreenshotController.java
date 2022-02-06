@@ -182,6 +182,7 @@ public class ScreenshotController {
     public static class SavedImageData {
         public Uri uri;
         public Notification.Action deleteAction;
+        public Notification.Action lensAction;
         public List<Notification.Action> smartActions;
         public Notification.Action quickShareAction;
         public UserHandle owner;
@@ -193,6 +194,7 @@ public class ScreenshotController {
         public void reset() {
             uri = null;
             deleteAction = null;
+            lensAction = null;
             smartActions = null;
             quickShareAction = null;
             subject = null;
@@ -236,6 +238,7 @@ public class ScreenshotController {
     static final String EXTRA_ID = "android:screenshot_id";
     static final String ACTION_TYPE_VIEW = "View";
     static final String ACTION_TYPE_DELETE = "Delete";
+    static final String ACTION_TYPE_LENS = "Lens";
     static final String ACTION_TYPE_SHARE = "Share";
     static final String ACTION_TYPE_EDIT = "Edit";
     static final String EXTRA_SMART_ACTIONS_ENABLED = "android:smart_actions_enabled";
