@@ -15,7 +15,6 @@
      limitations under the License.
 -->
 <resources>
-
     <!-- Package Manager -->
     <java-symbol type="array" name="config_deviceDisabledComponents" />
     <java-symbol type="array" name="config_globallyDisabledComponents" />
@@ -59,12 +58,30 @@
     <!-- Whether to use old mobile type icons as default -->
     <java-symbol type="bool" name="config_useOldMobileIcons" />
 
+    <!-- Whether device has dash charging support -->
+    <java-symbol type="bool" name="config_hasDashCharger" />
+
+    <!-- Whether device has warp charging support -->
+    <java-symbol type="bool" name="config_hasWarpCharger" />
+
+    <!-- Whether device has VOOC charging support -->
+    <java-symbol type="bool" name="config_hasVoocCharger" />
+
+    <!-- Path to fast charging status file to detect whether an oem fast charger is active -->
+    <java-symbol type="string" name="config_oemFastChargerStatusPath" />
+
+    <!-- Path to fast charging status file to detect whether an oem fast charger is active -->
+    <java-symbol type="string" name="config_oemFastChargerStatusPath2" />
+
+    <!-- Expected value from fast charging status file -->
+    <java-symbol type="string" name="config_oemFastChargerStatusValue" />
+
     <!-- Whether device has physical tri state switch -->
     <java-symbol type="bool" name="config_hasAlertSlider" />
 
     <!-- The location of the devices physical tri state switch -->
     <java-symbol type="integer" name="config_alertSliderLocation" />
-
+  
     <!-- Whether key handler sends intent when changing slider position -->
     <java-symbol type="string" name="config_alertSliderIntent" />
 
