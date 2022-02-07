@@ -136,6 +136,6 @@
     <string name="tristate_brightness_auto">Autom. Helligkeit</string>
     <string name="tristate_rotation_auto">Autom. drehen</string>
     <string name="tristate_rotation_0">Hochformat</string>
-    <string name="tristate_rotation_90">Querformat (90 °)</string>
-    <string name="tristate_rotation_270">Querformat (270 °)</string>
+    <string name="tristate_rotation_90">Querformat (90°)</string>
+    <string name="tristate_rotation_270">Querformat (270°)</string>
 </resources>
