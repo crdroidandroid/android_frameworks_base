@@ -114,4 +114,28 @@
     <string name="status_bar_nfc">NFC</string>
     <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
     <string name="accessibility_status_bar_nfc">Nfc</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Schnellladen per „Dash“ (<xliff:g id="charging_time_left" example="4 Stunden und 2 Minuten">%1$s</xliff:g> bis voll)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Schnellladen per „Dash“</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Schnellladen per „Warp“ (<xliff:g id="charging_time_left" example="4 Stunden und 2 Minuten">%1$s</xliff:g> bis voll)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Schnellladen per „Warp“</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Schnellladen per VOOC (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> bis voll)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Schnellladen per VOOC</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Wichtige</string>
+    <string name="volume_ringer_alarms_only">Wecker</string>
+    <string name="volume_ringer_dnd">Bitte nicht stören</string>
+    <string name="tristate_flashlight">Taschenlampe</string>
+    <string name="tristate_flashlight_on">Taschenlampe ein</string>
+    <string name="tristate_flashlight_off">Taschenlampe aus</string>
+    <string name="tristate_flashlight_blink">Taschenlampe (blinken)</string>
+    <string name="tristate_brightness_bright">Maximale Helligkeit</string>
+    <string name="tristate_brightness_dark">Minimale Helligkeit</string>
+    <string name="tristate_brightness_auto">Autom. Helligkeit</string>
+    <string name="tristate_rotation_auto">Autom. drehen</string>
+    <string name="tristate_rotation_0">Hochformat</string>
+    <string name="tristate_rotation_90">Querformat (90°)</string>
+    <string name="tristate_rotation_270">Querformat (270°)</string>
 </resources>

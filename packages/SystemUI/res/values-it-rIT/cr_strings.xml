@@ -26,9 +26,9 @@
     <string name="quick_settings_sound_dnd">Non disturbare</string>
     <!-- Advanced restart menu -->
     <!-- Button to indicate more options -->
-    <string name="global_action_restart_more">Restart\u2026</string>
+    <string name="global_action_restart_more">Riavvia\u2026</string>
     <!-- Button to restart the device, within the Restart Options dialog -->
-    <string name="global_action_restart_system">System</string>
+    <string name="global_action_restart_system">Sistema</string>
     <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
     <string name="global_action_restart_recovery">Recovery</string>
     <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
@@ -36,17 +36,17 @@
     <!-- Button to restart the device into download mode, within the Restart Options dialog -->
     <string name="global_action_restart_download">Download</string>
     <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
-    <string name="global_action_restart_fastboot">Fastbootd</string>
+    <string name="global_action_restart_fastboot">Fastboot</string>
     <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_progress">Restarting\u2026</string>
+    <string name="global_action_restart_progress">Riavvio\u2026</string>
     <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_recovery_progress">Restarting to recovery mode\u2026</string>
+    <string name="global_action_restart_recovery_progress">Riavvio in modalità recovery\u2026</string>
     <!-- Restart to bootloader mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_bootloader_progress">Restarting to bootloader mode\u2026</string>
+    <string name="global_action_restart_bootloader_progress">Riavvio in modalità bootloader\u2026</string>
     <!-- Restart to download mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_download_progress">Restarting to download mode\u2026</string>
+    <string name="global_action_restart_download_progress">Riavvio in modalità download\u2026</string>
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_fastboot_progress">Restarting to fastbootd mode\u2026</string>
+    <string name="global_action_restart_fastboot_progress">Riavvio in modalità fastbootd\u2026</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go attivato</string>
     <string name="onthego_notif_title">On-The-Go è attivo</string>
@@ -114,4 +114,28 @@
     <string name="status_bar_nfc">NFC</string>
     <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
     <string name="accessibility_status_bar_nfc">Nfc</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Ricarica rapida (<xliff:g id="charging_time_left" example="4 ore e 2 minuti">%1$s</xliff:g> fino al completamento della carica)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Ricarica Dash</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Ricarica Warp (<xliff:g id="charging_time_left" example="4 ore e 2 minuti">%1$s</xliff:g> fino al completamento della carica)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Ricarica Warp</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carica VOOC (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> al completamento)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Carica VOOC</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Priorità</string>
+    <string name="volume_ringer_alarms_only">Sveglie</string>
+    <string name="volume_ringer_dnd">DnD</string>
+    <string name="tristate_flashlight">Torcia</string>
+    <string name="tristate_flashlight_on">Torcia attiva</string>
+    <string name="tristate_flashlight_off">Torcia spenta</string>
+    <string name="tristate_flashlight_blink">Torcia lampeggiante</string>
+    <string name="tristate_brightness_bright">Luminosità massima</string>
+    <string name="tristate_brightness_dark">Luminosità minima</string>
+    <string name="tristate_brightness_auto">Luminosità automatica</string>
+    <string name="tristate_rotation_auto">Rotazione automatica</string>
+    <string name="tristate_rotation_0">Verticale</string>
+    <string name="tristate_rotation_90">Orizzontale (90°)</string>
+    <string name="tristate_rotation_270">Orizzontale (270°)</string>
 </resources>

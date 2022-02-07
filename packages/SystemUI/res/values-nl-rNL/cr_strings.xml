@@ -114,4 +114,28 @@
     <string name="status_bar_nfc">NFC</string>
     <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
     <string name="accessibility_status_bar_nfc">Nfc</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Opladen (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> tot volledig opgeladen)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Opladen</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Opladen (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> tot volledig opgeladen)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Opladen</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Opladen (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> tot volledig opgeladen)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Opladen</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Prioriteit</string>
+    <string name="volume_ringer_alarms_only">Alarmen</string>
+    <string name="volume_ringer_dnd">DnD</string>
+    <string name="tristate_flashlight">Zaklamp</string>
+    <string name="tristate_flashlight_on">Zaklamp aan</string>
+    <string name="tristate_flashlight_off">Zaklamp uit</string>
+    <string name="tristate_flashlight_blink">Zaklamp knipperen</string>
+    <string name="tristate_brightness_bright">Maximale helderheid</string>
+    <string name="tristate_brightness_dark">Minimale helderheid</string>
+    <string name="tristate_brightness_auto">Automatische helderheid</string>
+    <string name="tristate_rotation_auto">Automatisch draaien</string>
+    <string name="tristate_rotation_0">Staand</string>
+    <string name="tristate_rotation_90">Liggend (90°)</string>
+    <string name="tristate_rotation_270">Liggend (270°)</string>
 </resources>
