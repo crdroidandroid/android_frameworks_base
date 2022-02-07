@@ -1581,9 +1581,9 @@ class StorageManagerService extends IStorageManager.Stub
                 vol.mountFlags |= VolumeInfo.MOUNT_FLAG_VISIBLE;
             }
 
-            // Set sdcards to visible to apps. If they are visible media is scanned
-            // and they can be used for other stuff.
-            if (vol.disk.isSd()) {
+            // Adoptable public disks are visible to apps, since they meet
+            // public API requirement of being in a stable location.
+            if (vol.disk.isAdoptable()) {
                 vol.mountFlags |= VolumeInfo.MOUNT_FLAG_VISIBLE;
             }
 
