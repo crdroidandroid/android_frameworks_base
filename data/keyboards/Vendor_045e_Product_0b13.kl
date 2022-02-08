@@ -1,0 +1,58 @@
+# Copyright (C) 2022 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Microsoft Xbox Series X/S Wireless Controller
+
+key 304   BUTTON_A
+key 305   BUTTON_B
+key 307   BUTTON_X
+key 308   BUTTON_Y
+
+# Button "LB" maps to BUTTON_L1.
+key 310   BUTTON_L1
+# Button "RB" maps to BUTTON_R1.
+key 311   BUTTON_R1
+
+# Button with two overlapping rectangles
+key 314   BUTTON_SELECT
+# Button with three parallel horizontal lines (hamburger menu)
+key 315   BUTTON_START
+# Button with Xbox logo
+key 316   BUTTON_MODE
+# Button below the Xbox logo (share button)
+key 167   MEDIA_RECORD
+
+# These two keycodes are for click (press from above) on analog control sticks.
+key 317   BUTTON_THUMBL
+key 318   BUTTON_THUMBR
+
+# Left and right stick.
+# The reported value for flat is 128 out of a range from -32767 to 32768, which is absurd.
+# This confuses applications that rely on the flat value because the joystick actually
+# settles in a flat range of +/- 4096 or so.
+axis 0x00 X flat 4096
+axis 0x01 Y flat 4096
+axis 0x02 Z flat 4096
+axis 0x05 RZ flat 4096
+
+# Triggers.
+# (Shoulder trigger buttons are reported as analog.)
+axis 0x09 RTRIGGER
+axis 0x0a LTRIGGER
+
+# Hat.
+# (D-pad is reported as analog. Each axis has range from -1 to 1.)
+axis 0x10 HAT_X
+axis 0x11 HAT_Y
+
