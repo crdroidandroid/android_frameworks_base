@@ -79,6 +79,8 @@ class ScreenRecordPermissionDialogDelegate(
     private lateinit var lowQualitySwitchContainer: ViewGroup
     private lateinit var longerDurationSwitch: Switch
     private lateinit var longerDurationSwitchContainer: ViewGroup
+    private lateinit var skipTimeSwitch: Switch
+    private lateinit var skipTimeSwitchContainer: ViewGroup
 
     override fun createDialog(): SystemUIDialog {
         return systemUIDialogFactory.create(this)
@@ -142,13 +144,16 @@ class ScreenRecordPermissionDialogDelegate(
         stopDotSwitch = dialog.requireViewById(R.id.screenrecord_stopdot_switch)
         lowQualitySwitch = dialog.requireViewById(R.id.screenrecord_lowquality_switch)
         longerDurationSwitch = dialog.requireViewById(R.id.screenrecord_longer_timeout_switch)
+        skipTimeSwitch = dialog.requireViewById(R.id.screenrecord_skip_time_switch)
         stopDotSwitchContainer = dialog.requireViewById(R.id.screenrecord_stopdot_switch_container)
         lowQualitySwitchContainer = dialog.requireViewById(R.id.screenrecord_lowquality_switch_container)
         longerDurationSwitchContainer = dialog.requireViewById(R.id.screenrecord_longer_timeout_switch_container)
+        skipTimeSwitchContainer = dialog.requireViewById(R.id.screenrecord_skip_time_switch_container)
 
         stopDotSwitchContainer.setOnClickListener { stopDotSwitch.toggle() }
         lowQualitySwitchContainer.setOnClickListener { lowQualitySwitch.toggle() }
         longerDurationSwitchContainer.setOnClickListener { longerDurationSwitch.toggle() }
+        skipTimeSwitchContainer.setOnClickListener { skipTimeSwitch.toggle() }
 
         val a: ArrayAdapter<*> =
             ScreenRecordingAdapter(
@@ -223,7 +228,8 @@ class ScreenRecordPermissionDialogDelegate(
                 RecordingService.getStopIntent(userContext),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
-        controller.startCountdown(DELAY_MS, INTERVAL_MS, startIntent, stopIntent)
+        controller.startCountdown(if (skipTimeSwitch.isChecked) NO_DELAY else DELAY_MS,
+                                                    INTERVAL_MS, startIntent, stopIntent)
     }
 
     private inner class CaptureTargetResultReceiver() :
@@ -250,6 +256,7 @@ class ScreenRecordPermissionDialogDelegate(
                 ScreenRecordingAudioSource.MIC_AND_INTERNAL
             )
         private const val DELAY_MS: Long = 3000
+        private const val NO_DELAY: Long = 100
         private const val INTERVAL_MS: Long = 1000
 
         private fun createOptionList(): List<ScreenShareOption> {
