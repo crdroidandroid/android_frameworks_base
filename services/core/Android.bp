@@ -163,6 +163,7 @@ java_library_static {
         "overlayable_policy_aidl-java",
         "SurfaceFlingerProperties",
         "com.android.sysprop.watchdog",
+        "faceunlock_framework",
     ],
     javac_shard_size: 50,
 }
