@@ -144,14 +144,15 @@ class RefreshRateTile @Inject constructor(
     }
 
     private fun updateMode() {
-        val minRate = systemSettings.getFloat(MIN_REFRESH_RATE, NO_CONFIG)
+        val minRate = systemSettings.getFloat(MIN_REFRESH_RATE, DEFAULT_REFRESH_RATE)
         val maxRate = systemSettings.getFloat(PEAK_REFRESH_RATE, defaultPeakRefreshRate)
         logD("minRate = $minRate, maxRate = $maxRate")
 
-        if (minRate >= peakRefreshRate) {
-            refreshRateMode = Mode.MAX
-        } else if (minRate <= DEFAULT_REFRESH_RATE) {
-            refreshRateMode = if (maxRate == peakRefreshRate) Mode.AUTO else Mode.MIN
+        if (minRate == maxRate) {
+            if (minRate == DEFAULT_REFRESH_RATE) refreshRateMode = Mode.MIN
+            else refreshRateMode = Mode.MAX
+        } else {
+            refreshRateMode = Mode.AUTO
         }
         logD("refreshRateMode = $refreshRateMode")
     }
@@ -173,15 +174,15 @@ class RefreshRateTile @Inject constructor(
         var minRate: Float; var maxRate: Float
         when (mode) {
             Mode.AUTO -> {
-                minRate = NO_CONFIG
+                minRate = DEFAULT_REFRESH_RATE
                 maxRate = peakRefreshRate
             }
             Mode.MAX -> {
                 minRate = peakRefreshRate
-                maxRate = DEFAULT_REFRESH_RATE
+                maxRate = peakRefreshRate
             }
             Mode.MIN -> {
-                minRate = NO_CONFIG
+                minRate = DEFAULT_REFRESH_RATE
                 maxRate = DEFAULT_REFRESH_RATE
             }   
         }
@@ -231,7 +232,6 @@ class RefreshRateTile @Inject constructor(
         private const val DEBUG = false
 
         private const val DEFAULT_REFRESH_RATE = 60f
-        private const val NO_CONFIG = 0f
 
         private val icon: Icon = ResourceIcon.get(R.drawable.ic_refresh_rate)
         private val displaySettingsIntent = Intent().setComponent(ComponentName("com.android.settings",
