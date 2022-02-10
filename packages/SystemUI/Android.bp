@@ -178,6 +178,7 @@ android_library {
         "LowLightDreamLib",
         "motion_tool_lib",
         "vendor.lineage.powershare-V1.0-java",
+        "faceunlock_framework",
     ],
     manifest: "AndroidManifest.xml",
     additional_manifests: ["LineageManifest.xml"],
