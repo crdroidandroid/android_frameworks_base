@@ -40,4 +40,7 @@
     <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
+
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>
