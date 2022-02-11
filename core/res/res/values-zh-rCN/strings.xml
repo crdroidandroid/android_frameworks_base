@@ -665,8 +665,6 @@
     <string name="face_acquired_recalibrate_alt" msgid="5702674220280332115">"无法创建您的脸部模型，请重试。"</string>
     <string name="face_acquired_dark_glasses_detected_alt" msgid="4052123776406041972">"检测到墨镜，您的脸部必须完全可见。"</string>
     <string name="face_acquired_mouth_covering_detected_alt" msgid="1122294982850589766">"检测到脸部有遮挡物，您的脸部必须完全可见。"</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"无法验证人脸。硬件无法使用。"</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"请重新尝试人脸解锁"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"无法存储新的人脸数据。请先删除旧的人脸数据。"</string>
@@ -684,8 +682,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"使用人脸解锁或屏幕锁定凭据"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"使用您的面孔验证身份才能继续"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"使用人脸解锁或屏幕锁定凭据验证身份，才能继续操作"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"出了点问题。请重试。"</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"面孔图标"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"读取同步设置"</string>
