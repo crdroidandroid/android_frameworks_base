@@ -71,7 +71,6 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
     private final MyCallStateListener mPhoneStateListener;
     private final SubscriptionManager mSubscriptionManager;
     private final TelephonyManager mTelephonyManager;
-    private String mInactiveSlotName;
 
     class MyCallStateListener extends PhoneStateListener {
         MyCallStateListener() {
@@ -192,22 +191,26 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
             case 0:
                 state.icon = ResourceIcon.get(R.drawable.ic_qs_data_switch_0);
                 state.value = false;
+                state.secondaryLabel = mContext.getString(R.string.tile_unavailable);
                 break;
             case 1:
                 state.icon = ResourceIcon.get(activeSIMZero
                         ? R.drawable.ic_qs_data_switch_2
                         : R.drawable.ic_qs_data_switch_1);
                 state.value = false;
+                state.secondaryLabel = mContext.getString(R.string.tile_unavailable);
                 break;
             case 2:
                 state.icon = ResourceIcon.get(activeSIMZero
                         ? R.drawable.ic_qs_data_switch_2
                         : R.drawable.ic_qs_data_switch_1);
                 state.value = true;
+                state.secondaryLabel = getInactiveSlotName();
                 break;
             default:
                 state.icon = ResourceIcon.get(R.drawable.ic_qs_data_switch_1);
                 state.value = false;
+                state.secondaryLabel = mContext.getString(R.string.tile_unavailable);
                 break;
         }
         if (mSimCount < 2) {
@@ -220,9 +223,6 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
         }
 
         state.label = mContext.getString(R.string.qs_data_switch_label);
-        if (mInactiveSlotName != null) {
-            state.secondaryLabel = mInactiveSlotName;
-        }
     }
 
     @Override
@@ -250,11 +250,27 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
                     // Indicate we found sim with active data, disable data on remaining sim.
                     if (!foundActive) foundActive = !dataEnabled;
                 }
-                // Store carrier label of inactive/opposite sim slot.
-                if (!foundActive) mInactiveSlotName = subInfo.getDisplayName().toString();
                 Log.d(TAG, "Changed subID " + subInfo.getSubscriptionId() + " to "
                     + !dataEnabled);
             }
         }
+    }
+
+    private String getInactiveSlotName() {
+        TelephonyManager telephonyManager;
+        String mInitialState = mContext.getString(R.string.tile_unavailable);
+        List<SubscriptionInfo> subInfoList =
+                mSubscriptionManager.getActiveSubscriptionInfoList(true);
+        if (subInfoList != null) {
+            for (SubscriptionInfo subInfo : subInfoList) {
+                telephonyManager =
+                        mTelephonyManager.createForSubscriptionId(subInfo.getSubscriptionId());
+                if (!telephonyManager.getDataEnabled()) {
+                    // Inactive SIM found
+                    return subInfo.getDisplayName().toString();
+                }
+            }
+        }
+        return mInitialState;
     }
 }
