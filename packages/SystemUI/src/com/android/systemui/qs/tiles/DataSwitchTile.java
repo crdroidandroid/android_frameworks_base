@@ -149,6 +149,28 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
         Log.d(TAG, "DataSwitchTile:updateSimCount:mSimCount=" + mSimCount);
     }
 
+    private String getInitialState() {
+        TelephonyManager telephonyManager;
+        boolean dataEnabled = false;
+        String mInitialState = "";
+        List<SubscriptionInfo> subInfoList =
+                mSubscriptionManager.getActiveSubscriptionInfoList(true);
+        if (subInfoList != null) {
+            for (SubscriptionInfo subInfo : subInfoList) {
+                telephonyManager =
+                        mTelephonyManager.createForSubscriptionId(subInfo.getSubscriptionId());
+                dataEnabled = telephonyManager.getDataEnabled();
+                if (!subInfo.isOpportunistic()) {
+                    if (!dataEnabled) {
+                        // Store carrier label of inactive/opposite sim slot.
+                        mInitialState = subInfo.getDisplayName().toString();
+                    }
+                }
+            }
+        }
+        return mInitialState;
+    }
+
     @Override
     protected void handleClick(@Nullable View view) {
         if (!mCanSwitch) {
@@ -190,12 +212,16 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
         switch (mSimCount) {
             case 0:
                 state.icon = ResourceIcon.get(R.drawable.ic_qs_data_switch_0);
+                state.secondaryLabel = mContext.getString(R.string.qs_data_switch_not_available);
+                mInactiveSlotName = null;
                 state.value = false;
                 break;
             case 1:
                 state.icon = ResourceIcon.get(activeSIMZero
                         ? R.drawable.ic_qs_data_switch_2
                         : R.drawable.ic_qs_data_switch_1);
+                state.secondaryLabel = mContext.getString(R.string.qs_data_switch_not_available);
+                mInactiveSlotName = null;
                 state.value = false;
                 break;
             case 2:
@@ -203,9 +229,16 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
                         ? R.drawable.ic_qs_data_switch_2
                         : R.drawable.ic_qs_data_switch_1);
                 state.value = true;
+                if (mInactiveSlotName != null) {
+                    state.secondaryLabel = mInactiveSlotName;
+                } else {
+                    state.secondaryLabel = getInitialState();
+                }
                 break;
             default:
                 state.icon = ResourceIcon.get(R.drawable.ic_qs_data_switch_1);
+                state.secondaryLabel = mContext.getString(R.string.qs_data_switch_not_available);
+                mInactiveSlotName = null;
                 state.value = false;
                 break;
         }
@@ -223,9 +256,6 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
                         ? R.string.qs_data_switch_changed_1
                         : R.string.qs_data_switch_changed_2);
         state.label = mContext.getString(R.string.qs_data_switch_label);
-        if (mInactiveSlotName != null) {
-            state.secondaryLabel = mInactiveSlotName;
-        }
     }
 
     @Override
