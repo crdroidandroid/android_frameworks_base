@@ -665,8 +665,6 @@
     <string name="face_acquired_recalibrate_alt" msgid="5702674220280332115">"無法建立臉部模型，請再試一次。"</string>
     <string name="face_acquired_dark_glasses_detected_alt" msgid="4052123776406041972">"偵測到墨鏡，請露出整張臉。"</string>
     <string name="face_acquired_mouth_covering_detected_alt" msgid="1122294982850589766">"偵測到有物品遮住臉，請露出整張臉。"</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"相關硬體無法使用，因此無法驗證臉孔。"</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"請重新進行人臉解鎖"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"無法儲存新的臉孔資料，請先刪除舊的資料。"</string>
@@ -684,8 +682,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"使用人臉解鎖或螢幕鎖定功能"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"如要繼續操作，請透過你的臉孔驗證身分"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"請使用人臉解鎖或螢幕鎖定功能驗證身分，才能繼續操作"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"發生錯誤，請再試一次。"</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"臉孔圖示"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"讀取同步處理設定"</string>
