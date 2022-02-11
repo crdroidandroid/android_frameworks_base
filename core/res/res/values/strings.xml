@@ -1761,6 +1761,7 @@
 
     <!-- Array containing custom error messages from vendor.  Vendor is expected to add and translate these strings -->
     <string-array name="face_error_vendor">
+        <item>@string/face_unlock_disabled_idle</item>
     </string-array>
     <!-- Default error message to use when face_error_vendor does not contain a message. [CHAR LIMIT=NONE] -->
     <string name="face_error_vendor_unknown">Something went wrong. Try again.</string>
