@@ -665,8 +665,6 @@
     <string name="face_acquired_recalibrate_alt" msgid="5702674220280332115">"Kan nie jou gesigmodel skep nie. Probeer weer."</string>
     <string name="face_acquired_dark_glasses_detected_alt" msgid="4052123776406041972">"Donkerbril bespeur. Jou gesig moet heeltemal sigbaar wees."</string>
     <string name="face_acquired_mouth_covering_detected_alt" msgid="1122294982850589766">"Gesigbedekking bespeur. Jou gesig moet heeltemal sigbaar wees."</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"Kan nie gesig verifieer nie. Hardeware nie beskikbaar nie."</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"Probeer Gesigslot weer"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"Kan nie nuwe gesigdata berg nie. Vee eers \'n ou een uit."</string>
@@ -684,8 +682,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"Gebruik Gesigslot of Skermslot"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"Gebruik jou gesig om voort te gaan"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"Gebruik jou gesig of skermslot om voort te gaan"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"Iets is fout. Probeer weer."</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"Gesig-ikoon"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"lees sinkroniseer-instellings"</string>
