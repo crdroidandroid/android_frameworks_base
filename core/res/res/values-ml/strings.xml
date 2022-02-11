@@ -665,8 +665,6 @@
     <string name="face_acquired_recalibrate_alt" msgid="5702674220280332115">"മുഖ മോഡൽ സൃഷ്ടിക്കാനാകില്ല. വീണ്ടും ശ്രമിക്കൂ."</string>
     <string name="face_acquired_dark_glasses_detected_alt" msgid="4052123776406041972">"കറുത്ത കണ്ണട കണ്ടെത്തി. നിങ്ങളുടെ മുഖം പൂർണ്ണമായും ദൃശ്യമായിരിക്കണം."</string>
     <string name="face_acquired_mouth_covering_detected_alt" msgid="1122294982850589766">"മുഖം മറച്ചിരിക്കുന്നതായി കണ്ടെത്തി. നിങ്ങളുടെ മുഖം പൂർണ്ണമായും ദൃശ്യമായിരിക്കണം."</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"മുഖം പരിശോധിക്കാൻ കഴിയില്ല. ഹാർഡ്‌വെയർ ലഭ്യമല്ല."</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"ഫെയ്‌സ് അൺലോക്ക് വീണ്ടും പരീക്ഷിച്ച് നോക്കൂ"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"പുതിയ മുഖ ഡാറ്റ സംഭരിക്കാനാകില്ല. ആദ്യം പഴയത് ഇല്ലാതാക്കുക."</string>
@@ -684,8 +682,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"ഫെയ്‌സ് അല്ലെങ്കിൽ സ്‌ക്രീൻ ലോക്ക് ഉപയോഗിക്കുക"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"തുടരാൻ നിങ്ങളുടെ മുഖം ഉപയോഗിക്കുക"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"തുടരാൻ നിങ്ങളുടെ മുഖം‌ അല്ലെങ്കിൽ സ്‌ക്രീൻ ലോക്ക് ഉപയോഗിക്കുക"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"എന്തോ കുഴപ്പമുണ്ടായി. വീണ്ടും ശ്രമിക്കുക."</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"മുഖത്തിന്റെ ഐക്കൺ"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"സമന്വയ ക്രമീകരണങ്ങൾ റീഡുചെയ്യുക"</string>

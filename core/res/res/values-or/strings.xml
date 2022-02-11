@@ -665,8 +665,6 @@
     <string name="face_acquired_recalibrate_alt" msgid="5702674220280332115">"ଫେସର ମଡେଲ ତିଆରି କରାଯାଇପାରିବ ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କର।"</string>
     <string name="face_acquired_dark_glasses_detected_alt" msgid="4052123776406041972">"କଳା ଚଷମା ଚିହ୍ନଟ କରାଯାଇଛି। ଆପଣଙ୍କ ଫେସ ସମ୍ପୂର୍ଣ୍ଣ ଭାବରେ ଦେଖାଯିବା ଆବଶ୍ଯକ।"</string>
     <string name="face_acquired_mouth_covering_detected_alt" msgid="1122294982850589766">"ଫେସରେ କଭରିଂ ଚିହ୍ନଟ କରାଯାଇଛି। ଆପଣଙ୍କ ଫେସ ସମ୍ପୂର୍ଣ୍ଣ ଭାବରେ ଦେଖାଯିବା ଆବଶ୍ଯକ।"</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"ମୁହଁ ଚିହ୍ନଟ କରିପାରିଲା ନାହିଁ। ହାର୍ଡୱେୟାର୍ ଉପଲବ୍ଧ ନାହିଁ।"</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"ଫେସ୍ ଅନଲକ୍ ପୁଣି ବ୍ୟବହାର କରି ଦେଖନ୍ତୁ"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"ନୂଆ ମୁହଁ ଡାଟା ଷ୍ଟୋର୍ ହେବ ନାହିଁ। ପ୍ରଥମେ ପୁରୁଣାକୁ ଡିଲିଟ୍ କରନ୍ତୁ।"</string>
@@ -684,8 +682,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"ଫେସ୍ ବା ସ୍କ୍ରିନ୍ ଲକ୍ ବ୍ୟବହାର କରନ୍ତୁ"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"ଜାରି ରଖିବାକୁ ଆପଣଙ୍କ ଚେହେରା ବ୍ୟବହାର କରନ୍ତୁ"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"ଜାରି ରଖିବାକୁ ଆପଣଙ୍କ ଚେହେରା କିମ୍ବା ସ୍କ୍ରିନ୍ ଲକ୍ ବ୍ୟବହାର କରନ୍ତୁ"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"କିଛି ତ୍ରୁଟି ହୋଇଛି। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"ଫେସ୍ ଆଇକନ୍"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"ସିଙ୍କ ସେଟିଙ୍ଗକୁ ପଢ଼ନ୍ତୁ"</string>

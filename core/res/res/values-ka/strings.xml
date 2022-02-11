@@ -665,8 +665,6 @@
     <string name="face_acquired_recalibrate_alt" msgid="5702674220280332115">"თქვენი სახის მოდელი ვერ იქმნება. ცადეთ ხელახლა."</string>
     <string name="face_acquired_dark_glasses_detected_alt" msgid="4052123776406041972">"აღმოჩენილია მუქი სათვალე. თქვენი სახე მთლიანად უნდა ჩანდეს."</string>
     <string name="face_acquired_mouth_covering_detected_alt" msgid="1122294982850589766">"აღმოჩენილია სახის დაფარვა. თქვენი სახე მთლიანად უნდა ჩანდეს."</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"სახე ვერ დასტურდება. აპარატი მიუწვდომელია."</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"ხელახლა ცადეთ სახით განბლოკვა"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"სახის ახალი მონაცემები ვერ ინახება. ჯერ ძველი წაშალეთ."</string>
@@ -684,8 +682,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"გამოიყენეთ სახით ან ეკრანის დაბლოკვა"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"გასაგრძელებლად გამოიყენეთ თქვენი სახე"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"გასაგრძელებლად გამოიყენეთ თქვენი სახე ან ეკრანის განბლოკვის ნიმუში"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"რაღაც შეცდომა მოხდა. ცადეთ ხელახლა."</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"სახის ხატულა"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"სინქრონიზაციის პარამეტრების წაკითხვა"</string>
