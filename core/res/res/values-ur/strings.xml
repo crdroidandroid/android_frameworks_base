@@ -665,8 +665,6 @@
     <string name="face_acquired_recalibrate_alt" msgid="5702674220280332115">"آپکے چہرے کا ماڈل تخلیق نہیں ہو سکا۔ پھر کوشش کریں۔"</string>
     <string name="face_acquired_dark_glasses_detected_alt" msgid="4052123776406041972">"گہرے چشمے کا پتہ چلا۔ آپ کا چہرہ مکمل طور پر دکھائی دینا ضروری ہے۔"</string>
     <string name="face_acquired_mouth_covering_detected_alt" msgid="1122294982850589766">"چہرے کو ڈھانپنے کا پتہ چلا۔ آپ کا چہرہ مکمل طور پر دکھائی دینا ضروری ہے۔"</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"چہرے کی توثیق نہیں کی جا سکی۔ ہارڈ ویئر دستیاب نہیں ہے۔"</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"فیس اَنلاک کو دوبارہ آزمائیں"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"چہرے کا نیا ڈیٹا اسٹور نہیں کر سکتے۔ پہلے پرانا حذف کریں۔"</string>
@@ -684,8 +682,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"فیس یا اسکرین لاک استعمال کریں"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"جاری رکھنے کے لیے اپنے چہرے کا استعمال کریں"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"جاری رکھنے کے لیے اپنے چہرے یا اسکرین لاک کا استعمال کریں"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"کچھ غلط ہو گیا۔ دوبارہ کوشش کریں۔"</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"چہرے کا آئیکن"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"مطابقت پذیری کی ترتیبات پڑھیں"</string>

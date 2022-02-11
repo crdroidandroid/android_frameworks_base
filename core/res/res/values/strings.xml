@@ -1902,9 +1902,6 @@
     <!-- Subtitle shown on the system-provided biometric dialog, asking the user to authenticate with their face or screen lock credential (i.e. PIN, pattern, or password). [CHAR LIMIT=90] -->
     <string name="face_or_screen_lock_dialog_default_subtitle">Use your face or screen lock to continue</string>
 
-    <!-- Array containing custom error messages from vendor.  Vendor is expected to add and translate these strings -->
-    <string-array name="face_error_vendor">
-    </string-array>
     <!-- Default error message to use when face_error_vendor does not contain a message. [CHAR LIMIT=NONE] -->
     <string name="face_error_vendor_unknown">Something went wrong. Try again.</string>
 
