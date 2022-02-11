@@ -253,15 +253,18 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
         if (subInfoList != null) {
             for (SubscriptionInfo subInfo : subInfoList) {
                 telephonyManager =
-                    mTelephonyManager.createForSubscriptionId(subInfo.getSubscriptionId());
+                        mTelephonyManager.createForSubscriptionId(subInfo.getSubscriptionId());
                 dataEnabled = telephonyManager.getDataEnabled();
-                if (!subInfo.isOpportunistic() || !dataEnabled) {
-                    telephonyManager.setDataEnabled(!dataEnabled && !foundActive);
-                    // Indicate we found sim with active data, disable data on remaining sim.
-                    if (!foundActive) foundActive = !dataEnabled;
+                if (!subInfo.isOpportunistic()) {
+                    if (dataEnabled) {
+                        // Store carrier label of inactive/opposite sim slot.
+                        mInactiveSlotName = subInfo.getDisplayName().toString();
+                    } else {
+                        telephonyManager.setDataEnabled(!dataEnabled && !foundActive);
+                        // Indicate we found sim with active data, disable data on remaining sim.
+                        if (!foundActive) foundActive = !dataEnabled;
+                    }
                 }
-                // Store carrier label of inactive/opposite sim slot.
-                if (!foundActive) mInactiveSlotName = subInfo.getDisplayName().toString();
                 Log.d(TAG, "Changed subID " + subInfo.getSubscriptionId() + " to "
                     + !dataEnabled);
             }
