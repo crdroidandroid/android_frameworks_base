@@ -666,8 +666,6 @@
     <string name="face_acquired_recalibrate_alt" msgid="5702674220280332115">"Nu se poate crea modelul facial. Reîncearcă."</string>
     <string name="face_acquired_dark_glasses_detected_alt" msgid="4052123776406041972">"S-au detectat ochelari de culoare închisă. Chipul trebuie să fie vizibil în totalitate."</string>
     <string name="face_acquired_mouth_covering_detected_alt" msgid="1122294982850589766">"S-a detectat un articol care acoperă chipul. Chipul trebuie să fie vizibil în totalitate."</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"Nu se poate confirma fața. Hardware-ul nu este disponibil."</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"Încearcă din nou Deblocarea facială"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"Nu se pot stoca date faciale noi. Șterge întâi unele vechi."</string>
@@ -685,8 +683,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"Folosește deblocarea facială sau ecranul de blocare"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"Folosește-ți chipul pentru a continua"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"Folosește-ți chipul sau blocarea ecranului pentru a continua"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"A apărut o eroare. Încearcă din nou."</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"Pictograma chip"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"să citească setări sincronizare"</string>
