@@ -665,8 +665,6 @@
     <string name="face_acquired_recalibrate_alt" msgid="5702674220280332115">"ਤੁਹਾਡੇ ਚਿਹਰੇ ਦਾ ਮਾਡਲ ਨਹੀਂ ਬਣਿਆ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।"</string>
     <string name="face_acquired_dark_glasses_detected_alt" msgid="4052123776406041972">"ਧੁੱਪ ਦੀਆਂ ਐਨਕਾਂ ਦਾ ਪਤਾ ਲੱਗਾ। ਤੁਹਾਡਾ ਪੂਰਾ ਚਿਹਰਾ ਦਿਸਣਾ ਲਾਜ਼ਮੀ ਹੈ।"</string>
     <string name="face_acquired_mouth_covering_detected_alt" msgid="1122294982850589766">"ਚਿਹਰਾ ਢੱਕਿਆ ਹੋਣ ਦਾ ਪਤਾ ਲੱਗਾ। ਤੁਹਾਡਾ ਪੂਰਾ ਚਿਹਰਾ ਦਿਸਣਾ ਲਾਜ਼ਮੀ ਹੈ।"</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"ਚਿਹਰੇ ਦੀ ਪੁਸ਼ਟੀ ਨਹੀਂ ਹੋ ਸਕੀ। ਹਾਰਡਵੇਅਰ ਉਪਲਬਧ ਨਹੀਂ।"</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"ਫ਼ੇਸ ਅਣਲਾਕ ਦੁਬਾਰਾ ਵਰਤ ਕੇ ਦੇਖੋ"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"ਨਵਾਂ ਚਿਹਰਾ ਡਾਟਾ ਸਟੋਰ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ। ਪਹਿਲਾਂ ਪੁਰਾਣਾ ਹਟਾਓ।"</string>
@@ -684,8 +682,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"ਫ਼ੇਸ ਜਾਂ ਸਕ੍ਰੀਨ ਲਾਕ ਦੀ ਵਰਤੋਂ ਕਰੋ"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"ਜਾਰੀ ਰੱਖਣ ਲਈ ਆਪਣੇ ਚਿਹਰੇ ਦੀ ਵਰਤੋਂ ਕਰੋ"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"ਜਾਰੀ ਰੱਖਣ ਲਈ ਆਪਣਾ ਚਿਹਰਾ ਜਾਂ ਸਕ੍ਰੀਨ ਲਾਕ ਵਰਤੋ"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"ਕੋਈ ਗੜਬੜ ਹੋ ਗਈ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।"</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"ਚਿਹਰਾ ਪ੍ਰਤੀਕ"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"ਸਿੰਕ ਸੈਟਿੰਗਾਂ ਪੜ੍ਹੋ"</string>

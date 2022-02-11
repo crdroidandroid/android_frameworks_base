@@ -665,8 +665,6 @@
     <string name="face_acquired_recalibrate_alt" msgid="5702674220280332115">"Tidak dapat membuat model wajah anda. Cuba lagi."</string>
     <string name="face_acquired_dark_glasses_detected_alt" msgid="4052123776406041972">"Cermin mata gelap dikesan. Wajah anda mesti terlihat sepenuhnya."</string>
     <string name="face_acquired_mouth_covering_detected_alt" msgid="1122294982850589766">"Pelitup muka dikesan. Wajah anda mesti terlihat sepenuhnya."</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"Tdk dpt sahkan wajah. Perkakasan tidak tersedia."</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"Cuba Buka Kunci Wajah sekali lagi"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"Tdk dpt menyimpan data wajah baharu. Padamkan yg lama dahulu."</string>
@@ -684,8 +682,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"Gunakan kunci wajah atau skrin"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"Gunakan wajah untuk teruskan"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"Gunakan wajah atau kunci skrin anda untuk meneruskan"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"Kesilapan telah berlaku. Cuba lagi."</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"Ikon wajah"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"membaca tetapan penyegerakan"</string>
