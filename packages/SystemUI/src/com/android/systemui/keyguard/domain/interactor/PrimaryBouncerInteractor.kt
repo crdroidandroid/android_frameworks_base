@@ -71,16 +71,6 @@ constructor(
     private val keyguardUpdateMonitor: KeyguardUpdateMonitor,
     keyguardBypassController: KeyguardBypassController,
 ) {
-    /** Whether we want to wait for face auth. */
-    private val primaryBouncerFaceDelay =
-        keyguardStateController.isFaceAuthEnabled &&
-            !keyguardUpdateMonitor.getCachedIsUnlockWithFingerprintPossible(
-                KeyguardUpdateMonitor.getCurrentUser()
-            ) &&
-            !needsFullscreenBouncer() &&
-            keyguardUpdateMonitor.isUnlockingWithBiometricAllowed(BiometricSourceType.FACE) &&
-            !keyguardBypassController.bypassEnabled
-
     /** Runnable to show the primary bouncer. */
     val showRunnable = Runnable {
         repository.setPrimaryShow(true)
@@ -179,11 +169,7 @@ constructor(
         }
 
         repository.setPrimaryShowingSoon(true)
-        if (primaryBouncerFaceDelay) {
-            mainHandler.postDelayed(showRunnable, 1200L)
-        } else {
-            DejankUtils.postAfterTraversal(showRunnable)
-        }
+        DejankUtils.postAfterTraversal(showRunnable)
         keyguardStateController.notifyPrimaryBouncerShowing(true)
         primaryBouncerCallbackInteractor.dispatchStartingToShow()
         Trace.endSection()
