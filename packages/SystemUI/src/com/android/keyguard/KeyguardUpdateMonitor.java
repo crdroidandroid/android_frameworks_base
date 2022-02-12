@@ -2560,7 +2560,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
                 && mFpm.hasEnrolledTemplates(userId);
     }
 
-    private boolean isUnlockWithFacePossible(int userId) {
+    public boolean isUnlockWithFacePossible(int userId) {
         return isFaceAuthEnabledForUser(userId) && !isFaceDisabled(userId);
     }
 
