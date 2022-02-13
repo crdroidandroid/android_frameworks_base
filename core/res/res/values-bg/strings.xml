@@ -642,8 +642,6 @@
     <string name="face_acquired_roll_too_extreme" msgid="1442830503572636825">"Не завъртайте главата си толкова много."</string>
     <string name="face_acquired_obscured" msgid="4917643294953326639">"Премахнете всичко, което закрива лицето ви."</string>
     <string name="face_acquired_sensor_dirty" msgid="8968391891086721678">"Почистете горната част на екрана си, включително черната лента"</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"Лицето не може да се потвърди. Хардуерът не е налице."</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"Опитайте отново да отключите с лице"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"Не може да се запази ново лице. Първо изтрийте старо."</string>
@@ -661,8 +659,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"Използване на отключването с лице или опцията за заключване на екрана"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"Използвайте лицето си, за да продължите"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"Използвайте лицето си или опцията за заключване на екрана, за да продължите"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"Нещо се обърка. Опитайте отново."</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"Икона на лице"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"четене на настройките за синхронизиране"</string>

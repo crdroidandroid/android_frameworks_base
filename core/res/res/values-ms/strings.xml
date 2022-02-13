@@ -642,8 +642,6 @@
     <string name="face_acquired_roll_too_extreme" msgid="1442830503572636825">"Pusingkan kepala anda kurang sedikit."</string>
     <string name="face_acquired_obscured" msgid="4917643294953326639">"Alih keluar apa saja yang melindungi wajah anda."</string>
     <string name="face_acquired_sensor_dirty" msgid="8968391891086721678">"Bersihkan bahagian atas skrin anda, termasuk bar hitam"</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"Tdk dpt sahkan wajah. Perkakasan tidak tersedia."</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"Cuba Buka Kunci Wajah sekali lagi"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"Tdk dpt menyimpan data wajah baharu. Padamkan yg lama dahulu."</string>
@@ -661,8 +659,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"Gunakan kunci wajah atau skrin"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"Gunakan wajah untuk teruskan"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"Gunakan wajah atau kunci skrin anda untuk meneruskan"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"Kesilapan telah berlaku. Cuba lagi."</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"Ikon wajah"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"membaca tetapan penyegerakan"</string>
