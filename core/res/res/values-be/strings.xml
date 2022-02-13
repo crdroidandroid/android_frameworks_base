@@ -648,8 +648,6 @@
     <string name="face_acquired_roll_too_extreme" msgid="1442830503572636825">"Вы занадта моцна павярнулі галаву."</string>
     <string name="face_acquired_obscured" msgid="4917643294953326639">"Прыміце ўсё, што закрывае ваш твар."</string>
     <string name="face_acquired_sensor_dirty" msgid="8968391891086721678">"Ачысціце ад бруду верхнюю частку экрана, у тым ліку чорную панэль"</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"Твар не спраўджаны. Абсталяванне недаступнае."</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"Выканайце распазнаванне твару паўторна"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"Новыя даныя пра твар не захаваны. Спачатку выдаліце старыя."</string>
@@ -667,8 +665,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"Выкарыстоўваць распазнаванне твару ці блакіроўку экрана"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"Каб працягнуць, скарыстайце распазнаванне твару"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"Каб працягнуць, скарыстайце распазнаванне твару ці сродак разблакіроўкі экрана"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"Нешта пайшло не так. Паўтарыце спробу."</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"Значок твару"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"чытаць параметры сінхранізацыі"</string>

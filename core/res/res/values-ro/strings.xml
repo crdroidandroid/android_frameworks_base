@@ -645,8 +645,6 @@
     <string name="face_acquired_roll_too_extreme" msgid="1442830503572636825">"Întoarceți capul mai puțin."</string>
     <string name="face_acquired_obscured" msgid="4917643294953326639">"Eliminați orice vă ascunde chipul."</string>
     <string name="face_acquired_sensor_dirty" msgid="8968391891086721678">"Curățați partea de sus a ecranului, inclusiv bara neagră"</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"Nu se poate confirma fața. Hardware-ul nu este disponibil."</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"Încercați din nou Deblocarea facială"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"Nu se pot stoca date faciale noi. Ștergeți întâi unele vechi."</string>
@@ -664,8 +662,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"Folosiți deblocarea facială sau ecranul de blocare"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"Folosiți-vă chipul ca să continuați"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"Folosiți-vă chipul sau blocarea ecranului pentru a continua"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"A apărut o eroare. Încercați din nou."</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"Pictograma chip"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"citire setări sincronizare"</string>
