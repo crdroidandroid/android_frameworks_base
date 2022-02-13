@@ -642,8 +642,6 @@
     <string name="face_acquired_roll_too_extreme" msgid="1442830503572636825">"ងាកក្បាល​របស់អ្នក​បន្តិចទៀត។"</string>
     <string name="face_acquired_obscured" msgid="4917643294953326639">"យកអ្វី​ដែលបាំង​មុខ​របស់អ្នកចេញ។"</string>
     <string name="face_acquired_sensor_dirty" msgid="8968391891086721678">"សម្អាតផ្នែកខាង​លើនៃ​អេក្រង់​របស់​អ្នក រួមទាំង​របារខ្មៅ"</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"មិនអាច​ផ្ទៀងផ្ទាត់​មុខបានទេ។ មិនមាន​ហាតវែរទេ។"</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"សាកល្បង​ដោះសោតាមទម្រង់មុខ​ម្ដងទៀត"</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"មិនអាច​ផ្ទុកទិន្នន័យទម្រង់​មុខថ្មី​បានទេ។ សូមលុបទិន្នន័យទម្រង់​មុខចាស់ជាមុនសិន។"</string>
@@ -661,8 +659,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"ប្រើមុខ ឬ​ការចាក់សោអេក្រង់"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"ប្រើមុខរបស់អ្នក ដើម្បីបន្ត"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"ប្រើការចាក់សោអេក្រង់ ឬមុខរបស់អ្នក ដើម្បីបន្ត"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"មានអ្វីមួយខុសប្រក្រតី។ សូមព្យាយាមម្ដងទៀត។"</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"រូប​ផ្ទៃមុខ"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"អាន​ការ​កំណត់​ធ្វើ​សម​កាល​កម្ម"</string>
