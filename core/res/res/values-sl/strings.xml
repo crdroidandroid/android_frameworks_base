@@ -647,8 +647,6 @@
     <string name="face_acquired_roll_too_extreme" msgid="1442830503572636825">"Glejte malce bolj naravnost."</string>
     <string name="face_acquired_obscured" msgid="4917643294953326639">"Umaknite vse, kar vam morda zakriva obraz."</string>
     <string name="face_acquired_sensor_dirty" msgid="8968391891086721678">"Očistite vrhnji del zaslona, vključno s črno vrstico"</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"Obraza ni mogoče preveriti. Str. opr. ni na voljo."</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"Znova izvedite odklepanje z obrazom."</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"Novega obraza ni mogoče shraniti. Najprej izbrišite starega."</string>
@@ -666,8 +664,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"Uporaba odklepanja z obrazom ali s poverilnico"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"Uporabite obraz, če želite nadaljevati."</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"Za nadaljevanje uporabite obraz ali odklepanje s poverilnico."</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"Prišlo je do napake. Poskusite znova."</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"Ikona obraza"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"branje nastavitev sinhronizacije"</string>
