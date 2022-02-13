@@ -641,8 +641,6 @@
     <string name="face_acquired_roll_too_extreme" msgid="1442830503572636825">"고개를 조금 덜 돌려 보세요."</string>
     <string name="face_acquired_obscured" msgid="4917643294953326639">"얼굴이 가려지지 않도록 해 주세요."</string>
     <string name="face_acquired_sensor_dirty" msgid="8968391891086721678">"검은색 바를 포함한 화면 상단을 청소하세요."</string>
-  <string-array name="face_acquired_vendor">
-  </string-array>
     <string name="face_error_hw_not_available" msgid="5085202213036026288">"얼굴을 확인할 수 없습니다. 하드웨어를 사용할 수 없습니다."</string>
     <string name="face_error_timeout" msgid="2598544068593889762">"얼굴 인식 잠금 해제를 다시 시도해 주세요."</string>
     <string name="face_error_no_space" msgid="5649264057026021723">"새 얼굴 데이터를 저장할 수 없습니다. 먼저 기존 얼굴 데이터를 삭제하세요."</string>
@@ -660,8 +658,6 @@
     <string name="face_or_screen_lock_app_setting_name" msgid="1603149075605709106">"얼굴 또는 화면 잠금 사용"</string>
     <string name="face_dialog_default_subtitle" msgid="6620492813371195429">"계속하려면 얼굴로 인증하세요"</string>
     <string name="face_or_screen_lock_dialog_default_subtitle" msgid="5006381531158341844">"계속하려면 얼굴 또는 화면 잠금을 사용하세요"</string>
-  <string-array name="face_error_vendor">
-  </string-array>
     <string name="face_error_vendor_unknown" msgid="7387005932083302070">"문제가 발생했습니다. 다시 시도해 보세요."</string>
     <string name="face_icon_content_description" msgid="465030547475916280">"얼굴 아이콘"</string>
     <string name="permlab_readSyncSettings" msgid="6250532864893156277">"동기화 설정 읽기"</string>
