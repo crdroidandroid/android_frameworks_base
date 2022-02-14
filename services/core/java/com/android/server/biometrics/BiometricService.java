@@ -109,6 +109,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
+import com.android.server.biometrics.sensors.face.sense.SenseUtils;
+
 /**
  * System service that arbitrates the modality for BiometricPrompt to use.
  */
@@ -342,7 +344,7 @@ public class BiometricService extends SystemService {
         public void updateContentObserver() {
             mContentResolver.unregisterContentObserver(this);
 
-            if (mUseLegacyFaceOnlySettings) {
+            if (mUseLegacyFaceOnlySettings || SenseUtils.canUseProvider()) {
                 mContentResolver.registerContentObserver(FACE_UNLOCK_KEYGUARD_ENABLED,
                         false /* notifyForDescendants */,
                         this /* observer */,
@@ -351,7 +353,9 @@ public class BiometricService extends SystemService {
                         false /* notifyForDescendants */,
                         this /* observer */,
                         UserHandle.USER_ALL);
-            } else if (com.android.settings.flags.Flags.biometricsOnboardingEducation()) {
+            }
+            if (!mUseLegacyFaceOnlySettings &&
+                    com.android.settings.flags.Flags.biometricsOnboardingEducation()) {
                 mContentResolver.registerContentObserver(FINGERPRINT_KEYGUARD_ENABLED,
                         false /* notifyForDescendants */,
                         this /* observer */,
@@ -368,7 +372,7 @@ public class BiometricService extends SystemService {
                         false /* notifyForDescendants */,
                         this /* observer */,
                         UserHandle.USER_ALL);
-            } else {
+            } else if (!mUseLegacyFaceOnlySettings) {
                 mContentResolver.registerContentObserver(BIOMETRIC_KEYGUARD_ENABLED,
                         false /* notifyForDescendants */,
                         this /* observer */,
@@ -489,7 +493,8 @@ public class BiometricService extends SystemService {
                 }
             } else {
                 if (!mBiometricEnabledOnKeyguard.containsKey(userId)) {
-                    if (mUseLegacyFaceOnlySettings) {
+                    if (mUseLegacyFaceOnlySettings ||
+                        (SenseUtils.canUseProvider() && modality == TYPE_FACE)) {
                         onChange(true /* selfChange */, FACE_UNLOCK_KEYGUARD_ENABLED, userId);
                     } else {
                         onChange(true /* selfChange */, BIOMETRIC_KEYGUARD_ENABLED, userId);
@@ -517,7 +522,8 @@ public class BiometricService extends SystemService {
                 }
             } else {
                 if (!mBiometricEnabledForApps.containsKey(userId)) {
-                    if (mUseLegacyFaceOnlySettings) {
+                    if (mUseLegacyFaceOnlySettings ||
+                        (SenseUtils.canUseProvider() && modality == TYPE_FACE)) {
                         onChange(true /* selfChange */, FACE_UNLOCK_APP_ENABLED, userId);
                     } else {
                         onChange(true /* selfChange */, BIOMETRIC_APP_ENABLED, userId);
