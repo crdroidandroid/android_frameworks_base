@@ -168,7 +168,7 @@
     <string name="biometric_dialog_last_pin_attempt_before_wipe_profile" msgid="545567685899091757">"Se você informar um PIN incorreto na próxima tentativa, seu perfil de trabalho e os dados dele serão excluídos."</string>
     <string name="biometric_dialog_last_password_attempt_before_wipe_profile" msgid="8538032972389729253">"Se você informar uma senha incorreta na próxima tentativa, seu perfil de trabalho e os dados dele serão excluídos."</string>
     <string name="fingerprint_dialog_touch_sensor" msgid="2817887108047658975">"Toque no sensor de impressão digital"</string>
-    <string name="fingerprint_dialog_use_fingerprint_instead" msgid="6178228876763024452">"Não foi possível reconhecer o rosto Use a impressão digital."</string>
+    <string name="fingerprint_dialog_use_fingerprint_instead" msgid="6178228876763024452">"Não foi possível reconhecer o rosto, use a impressão digital."</string>
     <!-- no translation found for keyguard_face_failed_use_fp (7140293906176164263) -->
     <skip />
     <string name="keyguard_face_failed" msgid="9044619102286917151">"Rosto não reconhecido"</string>
