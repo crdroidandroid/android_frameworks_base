@@ -37,14 +37,18 @@ public class PixelPropsUtils {
 
     private static final Map<String, Object> propsToChangePixel5;
     private static final String[] packagesToChangePixel5 = {
-            "com.google.android.tts",
+            "com.google.android.apps.recorder",
+            "com.google.android.apps.translate",
+            "com.google.android.apps.turbo",
+            "com.google.android.apps.turboadapter",
+            "com.google.android.apps.wearables.maestro.companion",
             "com.google.android.googlequicksearchbox",
-            "com.google.android.apps.recorder"
+            "com.google.android.tts",
+            "com.google.audio.hearing.visualization.accessibility.scribe"
     };
 
     private static final Map<String, Object> propsToChangePixelXL;
     private static final String[] packagesToChangePixelXL = {
-            "com.google.android.apps.photos",
             "com.samsung.accessory",
             "com.samsung.accessory.fridaymgr",
             "com.samsung.accessory.berrymgr",
@@ -157,19 +161,22 @@ public class PixelPropsUtils {
         if (packageName.startsWith("com.google.")
                 || Arrays.asList(extraPackagesToChange).contains(packageName)) {
 
-            if (packageName.equals("com.google.android.apps.photos")) {
-                if (!SystemProperties.getBoolean("persist.sys.pixelprops.gphotos", true))
-                    return;
-            }
-
             Map<String, Object> propsToChange = propsToChangePixel6;
 
-            if (Arrays.asList(packagesToChangePixel5).contains(packageName)) {
-                propsToChange = propsToChangePixel5;
-            }
+            if (packageName.equals("com.google.android.apps.photos")) {
+                if (SystemProperties.getBoolean("persist.sys.pixelprops.gphotos", true)) {
+                    propsToChange = propsToChangePixelXL;
+                } else {
+                    propsToChange = propsToChangePixel5;
+                }
+            } else {
+                if (Arrays.asList(packagesToChangePixel5).contains(packageName)) {
+                    propsToChange = propsToChangePixel5;
+                }
 
-            if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
-                propsToChange = propsToChangePixelXL;
+                if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
+                    propsToChange = propsToChangePixelXL;
+                }
             }
 
             if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
