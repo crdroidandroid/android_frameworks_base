@@ -428,9 +428,9 @@ public final class UserTypeFactory {
         // Only add String values to the bundle, settings are written as Strings eventually
         final Bundle settings = new Bundle();
         settings.putString(
-                android.provider.Settings.Secure.MANAGED_PROFILE_CONTACT_REMOTE_SEARCH, "1");
+                android.provider.Settings.Secure.MANAGED_PROFILE_CONTACT_REMOTE_SEARCH, "0");
         settings.putString(
-                android.provider.Settings.Secure.CROSS_PROFILE_CALENDAR_ENABLED, "1");
+                android.provider.Settings.Secure.CROSS_PROFILE_CALENDAR_ENABLED, "0");
         return settings;
     }
 
