@@ -5169,6 +5169,10 @@
     <!-- On-device package for providing companion device associations. -->
     <string name="config_systemCompanionDeviceProvider" translatable="false"></string>
 
+    <!-- Package name of a telephony-related system app, such as an IMS service.
+         Exempted from privacy indicators. -->
+    <string name="config_systemTelephonyPackage" translatable="false"></string>
+
     <!-- Whether this device is supporting the microphone toggle -->
     <bool name="config_supportsMicToggle">false</bool>
     <!-- Whether this device is supporting the camera toggle -->
