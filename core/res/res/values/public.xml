@@ -3190,6 +3190,8 @@
     <public type="string" name="config_systemTextIntelligence" id="0x01040036" />
     <!-- @hide @SystemApi -->
     <public type="string" name="config_systemVisualIntelligence" id="0x01040037" />
+    <!-- @hide -->
+    <public type="string" name="config_systemTelephonyPackage" id="0x0104003c" />
     <!-- @hide @SystemApi -->
     <public type="string" name="config_systemActivityRecognizer" id="0x01040038" />
     <!-- @hide @SystemApi -->
