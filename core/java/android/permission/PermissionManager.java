@@ -113,7 +113,7 @@ public final class PermissionManager {
     private static final int[] EXEMPTED_ROLES = {R.string.config_systemAmbientAudioIntelligence,
         R.string.config_systemUiIntelligence, R.string.config_systemAudioIntelligence,
         R.string.config_systemNotificationIntelligence, R.string.config_systemTextIntelligence,
-        R.string.config_systemVisualIntelligence};
+        R.string.config_systemVisualIntelligence, R.string.config_systemTelephonyPackage};
 
     private static final String[] INDICATOR_EXEMPTED_PACKAGES = new String[EXEMPTED_ROLES.length];
 
