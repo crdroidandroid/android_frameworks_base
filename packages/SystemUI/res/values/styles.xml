@@ -157,7 +157,6 @@
 
     <style name="TextAppearance.QS.TileLabel">
         <item name="android:textSize">@dimen/qs_tile_text_size</item>
-        <item name="android:letterSpacing">0.01</item>
         <item name="android:lineHeight">20sp</item>
         <item name="android:fontFamily">@*android:string/config_bodyFontFamilyMedium</item>
     </style>
@@ -177,7 +176,6 @@
         <item name="android:fontFamily">@*android:string/config_bodyFontFamilyMedium</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">0.01</item>
         <item name="android:lineHeight">20sp</item>
     </style>
 
@@ -532,7 +530,6 @@
 
     <style name="TextAppearance.QSEdit" >
         <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">0.01</item>
         <item name="android:lineHeight">20sp</item>
         <item name="android:fontFamily">@*android:string/config_headlineFontFamily</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
