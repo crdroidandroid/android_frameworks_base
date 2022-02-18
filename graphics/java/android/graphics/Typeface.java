@@ -217,6 +217,8 @@ public class Typeface {
 
     private @IntRange(from = 0, to = FontStyle.FONT_WEIGHT_MAX) final int mWeight;
 
+    private boolean mIsSystemDefault;
+
     // Value for weight and italic. Indicates the value is resolved by font metadata.
     // Must be the same as the C++ constant in core/jni/android/graphics/FontFamily.cpp
     /** @hide */
@@ -242,6 +244,7 @@ public class Typeface {
      */
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.P)
     private static void setDefault(Typeface t) {
+        t.mIsSystemDefault = true;
         synchronized (SYSTEM_FONT_MAP_LOCK) {
             sDefaultTypeface = t;
             nativeSetDefault(t.native_instance);
@@ -938,7 +941,7 @@ public class Typeface {
                 }
             }
 
-            typeface = new Typeface(nativeCreateFromTypeface(ni, style));
+            typeface = new Typeface(nativeCreateFromTypeface(ni, style), family.mIsSystemDefault);
             styles.put(style, typeface);
         }
         return typeface;
@@ -1006,7 +1009,8 @@ public class Typeface {
             }
 
             typeface = new Typeface(
-                    nativeCreateFromTypefaceWithExactStyle(base.native_instance, weight, italic));
+                    nativeCreateFromTypefaceWithExactStyle(base.native_instance, weight, italic),
+                    base.mIsSystemDefault);
             innerCache.put(key, typeface);
         }
         return typeface;
@@ -1016,7 +1020,8 @@ public class Typeface {
     public static Typeface createFromTypefaceWithVariation(@Nullable Typeface family,
             @NonNull List<FontVariationAxis> axes) {
         final Typeface base = family == null ? Typeface.DEFAULT : family;
-        return new Typeface(nativeCreateFromTypefaceWithVariation(base.native_instance, axes));
+        return new Typeface(nativeCreateFromTypefaceWithVariation(base.native_instance, axes),
+                base.mIsSystemDefault);
     }
 
     /**
@@ -1179,6 +1184,12 @@ public class Typeface {
         mCleaner = sRegistry.registerNativeAllocation(this, native_instance);
         mStyle = nativeGetStyle(ni);
         mWeight = nativeGetWeight(ni);
+        mIsSystemDefault = false;
+    }
+
+    private Typeface(long ni, boolean isSystemDefault) {
+        this(ni);
+        mIsSystemDefault = isSystemDefault;
     }
 
     private static Typeface getSystemOverrideTypeface(@NonNull String familyName) {
@@ -1199,6 +1210,7 @@ public class Typeface {
         for (Map.Entry<String, FontFamily[]> entry : fallbacks.entrySet()) {
             outSystemFontMap.put(entry.getKey(), createFromFamilies(entry.getValue()));
         }
+        outSystemFontMap.get("sans-serif").mIsSystemDefault = true;
 
         for (int i = 0; i < aliases.size(); ++i) {
             final FontConfig.Alias alias = aliases.get(i);
@@ -1213,7 +1225,8 @@ public class Typeface {
             }
             final int weight = alias.getWeight();
             final Typeface newFace = weight == 400 ? base :
-                    new Typeface(nativeCreateWeightAlias(base.native_instance, weight));
+                    new Typeface(nativeCreateWeightAlias(base.native_instance, weight),
+                            base.mIsSystemDefault);
             outSystemFontMap.put(alias.getName(), newFace);
         }
     }
@@ -1240,6 +1253,7 @@ public class Typeface {
         for (Map.Entry<String, Typeface> entry : fontMap.entrySet()) {
             nativePtrs[i++] = entry.getValue().native_instance;
             writeString(namesBytes, entry.getKey());
+            writeInt(namesBytes, entry.getValue().mIsSystemDefault ? 1 : 0);
         }
         int typefacesBytesCount = nativeWriteTypefaces(null, nativePtrs);
         // int (typefacesBytesCount), typefaces, namesBytes
@@ -1281,7 +1295,8 @@ public class Typeface {
         buffer.position(buffer.position() + typefacesBytesCount);
         for (long nativePtr : nativePtrs) {
             String name = readString(buffer);
-            out.put(name, new Typeface(nativePtr));
+            boolean isSystemDefault = buffer.getInt() == 1;
+            out.put(name, new Typeface(nativePtr, isSystemDefault));
         }
         return nativePtrs;
     }
@@ -1553,6 +1568,11 @@ public class Typeface {
             families.add(new FontFamily(nativeGetFamily(native_instance, i)));
         }
         return families;
+    }
+
+    /** @hide */
+    public boolean isSystemFont() {
+        return mIsSystemDefault;
     }
 
     private static native long nativeCreateFromTypeface(long native_instance, int style);
