@@ -746,11 +746,8 @@ public class WindowManagerService extends IWindowManager.Stub
             }
 
             if (mDisableAnimationsUri.equals(uri))  {
-                mAnimationsForceDisabled = Settings.Global.getInt(
-                    mContext.getContentResolver(), Settings.Global.DISABLE_TRANSITION_ANIMATIONS, 0) != 0;
-                synchronized (mWindowMap) {
-                    dispatchNewAnimatorScaleLocked(null);
-                }
+                updateAnimationSettings();
+                return;
             }
 
             @UpdateAnimationScaleMode
@@ -793,6 +790,14 @@ public class WindowManagerService extends IWindowManager.Stub
                 mRoot.forAllDisplayPolicies(PooledLambda.obtainConsumer(
                         DisplayPolicy::setPointerLocationEnabled, PooledLambda.__(),
                         mPointerLocationEnabled));
+            }
+        }
+
+        void updateAnimationSettings() {
+            mAnimationsForceDisabled = Settings.Global.getInt(
+                mContext.getContentResolver(), Settings.Global.DISABLE_TRANSITION_ANIMATIONS, 0) != 0;
+            synchronized (mWindowMap) {
+                dispatchNewAnimatorScaleLocked(null);
             }
         }
     }
@@ -4525,6 +4530,7 @@ public class WindowManagerService extends IWindowManager.Stub
         mHasHdrSupport = queryHdrSupport();
         UiThread.getHandler().post(mSettingsObserver::updateSystemUiSettings);
         UiThread.getHandler().post(mSettingsObserver::updatePointerLocation);
+        UiThread.getHandler().post(mSettingsObserver::updateAnimationSettings);
         IVrManager vrManager = IVrManager.Stub.asInterface(
                 ServiceManager.getService(Context.VR_SERVICE));
         if (vrManager != null) {
