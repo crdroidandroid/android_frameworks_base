@@ -55,7 +55,9 @@ class BurnInProtectionController @Inject constructor(
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    private val shiftEnabled = context.resources.getBoolean(R.bool.config_statusBarBurnInProtection)
+    private val shiftEnabled = context.resources.getBoolean(
+            com.android.internal.R.bool.config_enableBurnInProtection)
+            && !context.resources.getBoolean(R.bool.config_disableStatusBarBurnInProtection);
 
     private var navigationMode: Int = navigationModeController.addListener(this)
 
