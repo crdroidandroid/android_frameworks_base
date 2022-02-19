@@ -308,7 +308,7 @@
     <bool name="config_keyguard_user_switch_opens_qs_details">false</bool>
 
     <!-- SystemUIFactory component -->
-    <string name="config_systemUIFactoryComponent" translatable="false">org.protonaosp.systemui.CustomSystemUIFactory</string>
+    <string name="config_systemUIFactoryComponent" translatable="false">com.crdroid.android.systemui.CrDroidSystemUIFactory</string>
 
     <!-- SystemUI Services: The classes of the stuff to start. -->
     <string-array name="config_systemUIServiceComponents" translatable="false">
@@ -342,7 +342,7 @@
     <dimen name="config_qsTileStrokeWidthInactive">-1dp</dimen>
 
     <!-- SystemUI vender service, used in config_systemUIServiceComponents. -->
-    <string name="config_systemUIVendorServiceComponent" translatable="false">com.android.systemui.VendorServices</string>
+    <string name="config_systemUIVendorServiceComponent" translatable="false">com.crdroid.android.systemui.CrDroidServices</string>
 
     <!-- SystemUI Services (per user): The classes of the stuff to start for each user. This is a subset of the config_systemUIServiceComponents -->
     <string-array name="config_systemUIServiceComponentsPerUser" translatable="false">
