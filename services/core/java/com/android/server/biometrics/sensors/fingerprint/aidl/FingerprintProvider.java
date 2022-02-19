@@ -137,6 +137,8 @@ public class FingerprintProvider implements IBinder.DeathRecipient, ServiceProvi
     @Nullable private IVirtualHal mVhal;
     @Nullable private String mHalInstanceNameCurrent;
 
+    private boolean mCleanup;
+
     private final class BiometricTaskStackListener extends TaskStackListener {
         @Override
         public void onTaskStackChanged() {
@@ -205,6 +207,9 @@ public class FingerprintProvider implements IBinder.DeathRecipient, ServiceProvi
         mDaemon = daemon;
         mTestHalEnabled = testHalEnabled;
         mBiometricHandlerProvider = biometricHandlerProvider;
+
+        mCleanup = context.getResources().getBoolean(
+                org.lineageos.platform.internal.R.bool.config_cleanupUnusedFingerprints);
 
         initAuthenticationBroadcastReceiver();
         initFingerprintDanglingBroadcastReceiver();
@@ -674,6 +679,9 @@ public class FingerprintProvider implements IBinder.DeathRecipient, ServiceProvi
     @Override
     public void scheduleInternalCleanup(int sensorId, int userId,
             @Nullable ClientMonitorCallback callback, boolean favorHalEnrollments) {
+        if (!mCleanup) {
+            return;
+        }
         mHandler.post(() -> {
             final FingerprintInternalCleanupClient client =
                     new FingerprintInternalCleanupClient(mContext,
