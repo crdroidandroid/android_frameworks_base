@@ -16,9 +16,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_fakePackageSignature">模仿软件包签名</string>
+    <string name="permlab_fakePackageSignature">伪造安装包签名</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">允许应用假装成为一个不同的应用。恶意应用可能能够使用它来访问私人应用数据。 合法的使用包括假装仿真的仿真器。请谨慎地授予此权限！</string>
+    <string name="permdesc_fakePackageSignature">允许应用伪装成另一个应用。恶意应用程序可能会利用这一点来访问私人应用程序数据。合法的使用该功能。请谨慎地授予此权限！</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_fake_package_signature">允许软件包签名欺骗</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
