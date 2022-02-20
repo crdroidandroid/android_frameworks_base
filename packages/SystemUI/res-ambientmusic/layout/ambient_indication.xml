@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.ambientmusic.AmbientIndicationContainer xmlns:android="http://schemas.android.com/apk/res/android" android:layout_gravity="bottom" android:id="@+id/ambient_indication_container" android:layout="@layout/ambient_indication_inner" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/ambient_indication_margin_bottom" android:layout_marginStart="41dp" android:layout_marginEnd="41dp" android:forceHasOverlappingRendering="false"/>

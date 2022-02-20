@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:ordering="together">
+
+    <objectAnimator
+        android:duration="17"
+        android:interpolator="@anim/audioanim_animation__16__0"
+        android:propertyName="translateY"
+        android:startOffset="0"
+        android:valueFrom="33.575"
+        android:valueTo="33.575"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="183"
+        android:interpolator="@anim/audioanim_animation__16__1"
+        android:propertyName="translateY"
+        android:startOffset="17"
+        android:valueFrom="33.575"
+        android:valueTo="-13.175"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="250"
+        android:interpolator="@anim/audioanim_animation__16__2"
+        android:propertyName="translateY"
+        android:startOffset="200"
+        android:valueFrom="-13.175"
+        android:valueTo="20.825"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="17"
+        android:interpolator="@anim/audioanim_animation__16__3"
+        android:propertyName="translateY"
+        android:startOffset="450"
+        android:valueFrom="20.825"
+        android:valueTo="32.075"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="283"
+        android:interpolator="@anim/audioanim_animation__16__4"
+        android:propertyName="translateY"
+        android:startOffset="467"
+        android:valueFrom="32.075"
+        android:valueTo="13.575"
+        android:valueType="floatType" />
+
+</set>

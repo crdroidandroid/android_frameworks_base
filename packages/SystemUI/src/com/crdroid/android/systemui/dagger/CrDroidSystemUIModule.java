@@ -294,9 +294,10 @@ public abstract class CrDroidSystemUIModule {
 
     @Provides
     @SysUISingleton
-    static CrDroidServices provideCrDroidServices(Context context, UiEventLogger uiEventLogger, Lazy<ServiceConfigurationGoogle> lazy, Lazy<ColumbusServiceWrapper> lazyB) {
-        return new CrDroidServices(context, uiEventLogger, lazy, lazyB);
+    static CrDroidServices provideCrDroidServices(Context context, UiEventLogger uiEventLogger, Lazy<ServiceConfigurationGoogle> lazy, Lazy<ColumbusServiceWrapper> lazyB, AlarmManager am, StatusBar sb) {
+        return new CrDroidServices(context, uiEventLogger, lazy, lazyB, am, sb);
     }
+
 
     // Google
     @Provides

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:ordering="together">
+
+    <objectAnimator
+        android:duration="83"
+        android:interpolator="@anim/reverse_charging_animation__3__0"
+        android:propertyName="fillAlpha"
+        android:startOffset="0"
+        android:valueFrom="0"
+        android:valueTo="0"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="17"
+        android:interpolator="@anim/reverse_charging_animation__3__1"
+        android:propertyName="fillAlpha"
+        android:startOffset="83"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:valueType="floatType" />
+
+</set>

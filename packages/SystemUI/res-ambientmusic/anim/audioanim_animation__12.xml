@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:ordering="together">
+
+    <objectAnimator
+        android:duration="483"
+        android:interpolator="@anim/audioanim_animation__12__0"
+        android:propertyName="rotation"
+        android:startOffset="0"
+        android:valueFrom="70"
+        android:valueTo="70"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="317"
+        android:interpolator="@anim/audioanim_animation__12__1"
+        android:propertyName="rotation"
+        android:startOffset="483"
+        android:valueFrom="70"
+        android:valueTo="0"
+        android:valueType="floatType" />
+
+</set>

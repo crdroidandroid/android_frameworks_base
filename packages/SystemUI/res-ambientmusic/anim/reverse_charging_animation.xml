@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:drawable="@anim/reverse_charging_animation__8">
+
+    <target
+        android:animation="@anim/reverse_charging_animation__0"
+        android:name="_R_G_L_1_G_D_0_P_0" />
+
+    <target
+        android:animation="@anim/reverse_charging_animation__1"
+        android:name="_R_G_L_1_G_D_0_P_0" />
+
+    <target
+        android:animation="@anim/reverse_charging_animation__2"
+        android:name="_R_G_L_1_G" />
+
+    <target
+        android:animation="@anim/reverse_charging_animation__3"
+        android:name="_R_G_L_0_G_D_0_P_0" />
+
+    <target
+        android:animation="@anim/reverse_charging_animation__4"
+        android:name="_R_G_L_0_G_D_0_P_0" />
+
+    <target
+        android:animation="@anim/reverse_charging_animation__5"
+        android:name="_R_G_L_0_G" />
+
+    <target
+        android:animation="@anim/reverse_charging_animation__6"
+        android:name="_R_G_L_0_G_N_3_T_0" />
+
+    <target
+        android:animation="@anim/reverse_charging_animation__7"
+        android:name="time_group" />
+
+</animated-vector>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:id="@+id/ambient_indication" android:paddingTop="8dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:forceHasOverlappingRendering="false">
+    <ImageView android:layout_gravity="top|center_vertical|center_horizontal|center" android:id="@+id/docked_top_icon" android:padding="@dimen/dock_top_logo_padding" android:visibility="gone" android:clickable="true" android:layout_width="@dimen/dock_logo_min_size" android:layout_height="@dimen/dock_logo_min_size" android:layout_marginBottom="@dimen/dock_top_logo_margin" android:scaleType="fitXY" android:cropToPadding="true"/>
+    <LinearLayout android:layout_gravity="center" android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <ImageView android:layout_gravity="center" android:id="@+id/ambient_indication_icon" android:visibility="gone" android:clickable="true" android:layout_width="48dp" android:layout_height="48dp" android:scaleType="center"/>
+        <TextView android:textAppearance="@style/TextAppearance_Keyguard_BottomArea" android:textSize="14sp" android:gravity="center_vertical" android:layout_gravity="center" android:id="@+id/ambient_indication_text" android:paddingTop="15sp" android:paddingBottom="15sp" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true" android:letterSpacing="0.02" android:forceHasOverlappingRendering="false"/>
+    </LinearLayout>
+</LinearLayout>

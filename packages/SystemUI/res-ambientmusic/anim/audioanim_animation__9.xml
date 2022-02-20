@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:ordering="together">
+
+    <objectAnimator
+        android:duration="483"
+        android:interpolator="@anim/audioanim_animation__9__0"
+        android:propertyName="scaleX"
+        android:startOffset="0"
+        android:valueFrom="0.5"
+        android:valueTo="0.5"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="483"
+        android:interpolator="@anim/audioanim_animation__9__1"
+        android:propertyName="scaleY"
+        android:startOffset="0"
+        android:valueFrom="1"
+        android:valueTo="1"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="317"
+        android:interpolator="@anim/audioanim_animation__9__2"
+        android:propertyName="scaleX"
+        android:startOffset="483"
+        android:valueFrom="0.5"
+        android:valueTo="1"
+        android:valueType="floatType" />
+
+    <objectAnimator
+        android:duration="317"
+        android:interpolator="@anim/audioanim_animation__9__3"
+        android:propertyName="scaleY"
+        android:startOffset="483"
+        android:valueFrom="1"
+        android:valueTo="1"
+        android:valueType="floatType" />
+
+</set>

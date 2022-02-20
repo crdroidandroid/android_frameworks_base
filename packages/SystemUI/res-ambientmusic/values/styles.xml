@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextAppearance_Keyguard_BottomArea" parent="@style/TextAppearance.Keyguard">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?attr/wallpaperTextColor</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:shadowColor">@color/keyguard_shadow_color</item>
+        <item name="android:shadowRadius">?attr/shadowRadius</item>
+    </style>
+    <style name="TextAppearance_Keyguard_BottomArea_Button" parent="@style/TextAppearance_Keyguard_BottomArea">
+        <item name="android:shadowRadius">@null</item>
+    </style>
+</resources>

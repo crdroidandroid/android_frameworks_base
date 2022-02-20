@@ -323,6 +323,9 @@
 
     <uses-permission android:name="android.permission.MANAGE_GAME_MODE" android:protectionLevel="signature"/>
 
+    <permission android:name="com.google.android.ambientindication.permission.AMBIENT_INDICATION" android:protectionLevel="signature|system"/>
+    <uses-permission android:name="com.google.android.ambientindication.permission.AMBIENT_INDICATION"/>
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"

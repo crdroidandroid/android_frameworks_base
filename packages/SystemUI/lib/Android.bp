@@ -1,4 +1,10 @@
 java_import {
+    name: "ambientmusic-google",
+    jars: ["ambientmusic.jar"],
+    sdk_version: "current",
+}
+
+java_import {
     name: "assistmanager-google",
     jars: ["assistmanager.jar"],
     sdk_version: "current",

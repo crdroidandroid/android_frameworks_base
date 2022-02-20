@@ -89,6 +89,7 @@ android_library {
         "res-assist",
         "res-gamedashboard",
         "res-elmyra",
+        "res-ambientmusic",
     ],
     static_libs: [
         "WindowManager-Shell",
@@ -136,6 +137,7 @@ android_library {
         "columbus-sysui-google",
         "elmyra-sysui-google",
         "gamedashboard-sysui-google",
+        "ambientmusic-google",
         "vendor-pixelatoms-java",
     ],
     manifest: "AndroidManifest.xml",
