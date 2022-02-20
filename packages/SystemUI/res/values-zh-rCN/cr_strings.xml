@@ -200,7 +200,7 @@
     <string name="tristate_rotation_270">横向 (270°)</string>
     <!-- Screenrecorder -->
     <string name="screenrecord_stopdot_label">显示停止点\n长按移动它</string>
-    <string name="screenrecord_lowquality_label">较低画质以求更小的文件大小</string>
+    <string name="screenrecord_lowquality_label">降低录制质量来减小文件大小</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">刷脸</string>
     <!-- Daily data usage -->
