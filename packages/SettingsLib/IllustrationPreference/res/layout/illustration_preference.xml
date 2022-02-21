@@ -19,7 +19,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:background="?android:attr/colorBackground"
+    android:background="@android:color/transparent"
     android:importantForAccessibility="noHideDescendants"
     android:gravity="center"
     android:orientation="horizontal">
@@ -43,12 +43,9 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:maxWidth="@dimen/settingslib_illustration_width"
-            android:maxHeight="@dimen/settingslib_illustration_height"
-            android:adjustViewBounds="true"/>
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_gravity="center" />
 
         <FrameLayout
             android:id="@+id/middleground_layout"
