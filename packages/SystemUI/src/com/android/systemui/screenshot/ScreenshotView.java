@@ -666,7 +666,6 @@ public class ScreenshotView extends FrameLayout implements
             mPendingInteraction = PendingInteraction.PREVIEW;
         });
 
-        mScrollChip.setText(mContext.getString(R.string.screenshot_scroll_label));
         mScrollChip.setIcon(Icon.createWithResource(mContext,
                 R.drawable.ic_screenshot_scroll), true);
         chips.add(mScrollChip);
