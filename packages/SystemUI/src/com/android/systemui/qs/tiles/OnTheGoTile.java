@@ -48,6 +48,7 @@ import javax.inject.Inject;
 public class OnTheGoTile extends QSTileImpl<BooleanState> {
 
     private final Icon mIcon = ResourceIcon.get(drawable.ic_qs_onthego);
+    private boolean mIsEnabled;
 
     @Inject
     public OnTheGoTile(
@@ -62,6 +63,7 @@ public class OnTheGoTile extends QSTileImpl<BooleanState> {
     ) {
         super(host, backgroundLooper, mainHandler, falsingManager, metricsLogger,
                 statusBarStateController, activityStarter, qsLogger);
+        mIsEnabled = isOnTheGoEnabled();
     }
 
     @Override
@@ -89,8 +91,10 @@ public class OnTheGoTile extends QSTileImpl<BooleanState> {
         startIntent.setComponent(cn);
         if (isOnTheGoEnabled()) {
             startIntent.setAction("stop");
+            mIsEnabled = false;
         } else {
             startIntent.setAction("start");
+            mIsEnabled = true;
         }
         mContext.startService(startIntent);
         refreshState();
@@ -108,7 +112,7 @@ public class OnTheGoTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        state.value = isOnTheGoEnabled();
+        state.value = mIsEnabled;
         state.state = state.value ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
         state.label = mContext.getString(R.string.quick_settings_onthego_label);
         state.icon = mIcon;
