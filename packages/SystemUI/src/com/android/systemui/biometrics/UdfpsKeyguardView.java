@@ -69,6 +69,7 @@ public class UdfpsKeyguardView extends UdfpsAnimationView {
     private float mInterpolatedDarkAmount;
 
     private boolean mCustomUdfpsIcon;
+    private boolean mPackageInstalled;
 
     public UdfpsKeyguardView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -78,6 +79,9 @@ public class UdfpsKeyguardView extends UdfpsAnimationView {
             .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_x);
         mMaxBurnInOffsetY = context.getResources()
             .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_y);
+
+        mPackageInstalled = com.android.internal.util.crdroid.Utils.isPackageInstalled(
+                mContext, "com.crdroid.udfps.icons");
     }
 
     @Override
@@ -118,10 +122,8 @@ public class UdfpsKeyguardView extends UdfpsAnimationView {
     }
 
     private void updateIcon() {
-        mCustomUdfpsIcon = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.UDFPS_ICON, 0) != 0
-                && com.android.internal.util.crdroid.Utils.isPackageInstalled(mContext,
-                "com.crdroid.udfps.resources");
+        mCustomUdfpsIcon = mPackageInstalled && (Settings.System.getInt(
+                mContext.getContentResolver(), Settings.System.UDFPS_ICON, 0) != 0);
         mBgProtection.setImageDrawable(mCustomUdfpsIcon
                 ? mFingerprintDrawable :
                 getContext().getDrawable(R.drawable.fingerprint_bg));
