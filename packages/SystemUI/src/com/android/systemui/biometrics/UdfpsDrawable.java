@@ -47,7 +47,7 @@ public abstract class UdfpsDrawable extends Drawable {
 
     static final String UDFPS_ICON = "system:" + Settings.System.UDFPS_ICON;
 
-    String udfpsResourcesPackage = "com.crdroid.udfps.resources";
+    String udfpsResourcesPackage = "com.crdroid.udfps.icons";
 
     @NonNull final Context mContext;
     @NonNull final ShapeDrawable mFingerprintDrawable;
