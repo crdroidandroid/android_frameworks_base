@@ -46,7 +46,7 @@
     <!-- Restart to download mode progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_download_progress">Ponowne uruchamianie w trybie pobierania\u2026</string>
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_fastboot_progress">Uruchamianie ponownie w trybie fastbootd\u2026</string>
+    <string name="global_action_restart_fastboot_progress">Ponowne uruchamianie w trybie fastbootd\u2026</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Tryb \"W ruchu\" aktywowany</string>
     <string name="onthego_notif_title">Tryb \"W ruchu\" jest aktywny</string>
@@ -116,10 +116,10 @@
     <string name="accessibility_status_bar_nfc">Nfc</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Szybkie ładowanie (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> do pełnego naładowania)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • Szybkie ładowanie</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Szybkie ładowanie</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Szybkie ładowanie (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> do pełnego naładowania)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="Percentage">%s</xliff:g> • Szybkie ładowanie</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Szybkie ładowanie</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Szybkie ładowanie (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> do pełnego naładowania)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Ładowanie VOOC</string>
