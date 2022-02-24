@@ -201,7 +201,7 @@ package android {
     field public static final String CALL_LOG = "android.permission-group.CALL_LOG";
     field public static final String CAMERA = "android.permission-group.CAMERA";
     field public static final String CONTACTS = "android.permission-group.CONTACTS";
-    field public static final String FAKE_PACKAGE = "android.permission-group.FAKE_PACKAGE";
+    field public static final String FAKE_PACKAGE_SIGNATURE = "android.permission-group.FAKE_PACKAGE_SIGNATURE";
     field public static final String LOCATION = "android.permission-group.LOCATION";
     field public static final String MICROPHONE = "android.permission-group.MICROPHONE";
     field public static final String NEARBY_DEVICES = "android.permission-group.NEARBY_DEVICES";
