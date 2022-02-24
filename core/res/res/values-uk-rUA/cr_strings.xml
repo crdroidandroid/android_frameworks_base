@@ -38,4 +38,6 @@
     <string name="aerr_copy">Копіювати URL логу збою</string>
     <string name="url_copy_success">URL успішно скопійовано</string>
     <string name="url_copy_failed">Сталася помилка під час завантаження журналу до Pasty</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>
