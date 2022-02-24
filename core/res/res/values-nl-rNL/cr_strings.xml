@@ -39,5 +39,5 @@
     <string name="url_copy_success">URL succesvol gekopieerd</string>
     <string name="url_copy_failed">Er is een fout opgetreden tijdens het uploaden van het logboek naar Pasty</string>
     <!-- Face unlock -->
-    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
+    <string name="face_unlock_disabled_idle">Ontgrendelen via gezichtsherkenning uitgeschakeld door inactiviteit</string>
 </resources>
