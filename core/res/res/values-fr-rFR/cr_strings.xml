@@ -38,4 +38,6 @@
     <string name="aerr_copy">Copier l\'URL du rapport d\'erreur</string>
     <string name="url_copy_success">URL copiée avec succès</string>
     <string name="url_copy_failed">Une erreur est survenue pendant l\'envoi du rapport</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>
