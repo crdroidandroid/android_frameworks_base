@@ -140,4 +140,6 @@
     <string name="tristate_rotation_270">Na šírku (270°)</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Panel hlasitosti</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Recognizing face...</string>
 </resources>
