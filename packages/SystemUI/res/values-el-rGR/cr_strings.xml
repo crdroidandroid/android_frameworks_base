@@ -140,4 +140,6 @@
     <string name="tristate_rotation_270">Οριζόντια (270°)</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Πίνακας έντασης ήχου</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Αναγνώριση προσώπου...</string>
 </resources>

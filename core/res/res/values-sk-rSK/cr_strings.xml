@@ -38,4 +38,6 @@
     <string name="aerr_copy">Kopírovať adresu URL záznamu o chybe</string>
     <string name="url_copy_success">URL úspešne skopírované</string>
     <string name="url_copy_failed">Pri nahrávaní protokolu o zlyhaní došlo k chybe</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>

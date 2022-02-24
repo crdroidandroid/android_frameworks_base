@@ -37,4 +37,6 @@
     <string name="aerr_copy">Skopiuj adres URL dziennika awarii</string>
     <string name="url_copy_success">Adres URL został skopiowany</string>
     <string name="url_copy_failed">Wystąpił błąd podczas przesyłania dziennika do serwisu Pasty</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Rozpoznawanie twarzy wyłączone z powodu braku aktywności</string>
 </resources>

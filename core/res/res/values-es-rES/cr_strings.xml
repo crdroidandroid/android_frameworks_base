@@ -37,4 +37,6 @@
     <string name="aerr_copy">Copiar URL del registro de errores</string>
     <string name="url_copy_success">URL copiada correctamente</string>
     <string name="url_copy_failed">Se ha producido un error cargando el registro a Pasty</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>

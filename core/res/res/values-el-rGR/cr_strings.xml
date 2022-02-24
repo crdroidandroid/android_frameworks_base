@@ -38,4 +38,6 @@
     <string name="aerr_copy">Αντιγραφή URL αρχείου καταγραφής σφαλμάτων</string>
     <string name="url_copy_success">Το URL αντιγράφηκε επιτυχώς</string>
     <string name="url_copy_failed">Παρουσιάστηκε σφάλμα κατά τη μεταφόρτωση του αρχείου καταγραφής στο Pasty</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Το Face Unlock απενεργοποιήθηκε λόγω αδράνειας</string>
 </resources>

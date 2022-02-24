@@ -38,4 +38,6 @@
     <string name="aerr_copy">Copiar URL do registo de falhas</string>
     <string name="url_copy_success">URL copiado com sucesso</string>
     <string name="url_copy_failed">Ocorreu um erro ao enviar o registo para o dogbin</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>

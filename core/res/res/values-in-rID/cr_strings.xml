@@ -38,4 +38,6 @@
     <string name="aerr_copy">Salin URL log kerusakan</string>
     <string name="url_copy_success">URL berhasil disalin</string>
     <string name="url_copy_failed">Terjadi kesalahan pada saat mengunggah log ke Pasty</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>

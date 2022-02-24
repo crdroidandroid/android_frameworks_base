@@ -37,4 +37,6 @@
     <string name="aerr_copy">Çökme günlüğü URL\' sini kopyala</string>
     <string name="url_copy_success">URL başarıyla kopyalandı</string>
     <string name="url_copy_failed">Günlük Pasty\'ye yüklenirken bir hata oluştu</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Hareketsizlik nedeniyle yüz kilidi devre dışı bırakıldı</string>
 </resources>

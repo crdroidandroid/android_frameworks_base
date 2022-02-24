@@ -40,4 +40,6 @@
     <string name="aerr_copy">העתק את כתובת ה- URL של דו\"ח הקריסה</string>
     <string name="url_copy_success">כתובת ה- URL הועתקה בהצלחה</string>
     <string name="url_copy_failed">התרחשה שגיאה במהלך העלאת דו\"ח הקריסה</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>

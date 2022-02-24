@@ -38,4 +38,6 @@
     <string name="aerr_copy">Sao chép URL nhật ký sự cố</string>
     <string name="url_copy_success">Đã sao chép URL thành công</string>
     <string name="url_copy_failed">Đã xảy ra lỗi khi tải nhật ký lên Pasty</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>

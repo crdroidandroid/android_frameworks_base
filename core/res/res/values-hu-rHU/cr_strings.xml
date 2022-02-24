@@ -37,4 +37,6 @@
     <string name="aerr_copy">Az összeomlási napló URL-jének másolása</string>
     <string name="url_copy_success">Az URL sikeresen másolva</string>
     <string name="url_copy_failed">Hiba történt a napló feltöltése során</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Inaktivitás miatt az arcfeloldás letiltásra került</string>
 </resources>

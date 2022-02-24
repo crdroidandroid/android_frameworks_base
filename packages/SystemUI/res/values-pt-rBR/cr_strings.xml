@@ -140,4 +140,6 @@
     <string name="tristate_rotation_270">Paisagem (270°)</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Painel de volume</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Reconhecendo...</string>
 </resources>
