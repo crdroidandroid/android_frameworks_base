@@ -38,4 +38,6 @@
     <string name="aerr_copy">Copiază URL-ul jurnalului de erori</string>
     <string name="url_copy_success">URL copiat cu succes</string>
     <string name="url_copy_failed">A apărut o eroare la încărcarea registrului în pasty</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>
