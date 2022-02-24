@@ -141,5 +141,5 @@
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Панель громкости</string>
     <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">Recognizing face...</string>
+    <string name="face_unlock_recognizing">Распознавание лица...</string>
 </resources>
