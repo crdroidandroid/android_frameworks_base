@@ -38,5 +38,5 @@
     <string name="url_copy_success">Az URL sikeresen másolva</string>
     <string name="url_copy_failed">Hiba történt a napló feltöltése során</string>
     <!-- Face unlock -->
-    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
+    <string name="face_unlock_disabled_idle">Inaktivitás miatt az arcfeloldás letiltásra került</string>
 </resources>
