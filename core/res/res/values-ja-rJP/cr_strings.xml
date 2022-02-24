@@ -37,4 +37,6 @@
     <string name="aerr_copy">クラッシュログ URL をコピー</string>
     <string name="url_copy_success">URL をコピーしました</string>
     <string name="url_copy_failed">Pasty へのログのアップロード中にエラーが発生しました</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>
