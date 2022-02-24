@@ -37,4 +37,6 @@
     <string name="aerr_copy">URL des Absturzberichts kopieren</string>
     <string name="url_copy_success">URL erfolgreich kopiert</string>
     <string name="url_copy_failed">Beim Hochladen des Absturzberichts zu Pasty ist ein Fehler aufgetreten</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>
