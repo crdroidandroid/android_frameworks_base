@@ -20,25 +20,26 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
-import android.service.quicksettings.Tile;
 import android.view.View;
-
-import androidx.annotation.Nullable;
+import android.service.quicksettings.Tile;
 
 import com.android.systemui.R;
 import com.android.systemui.R.drawable;
 import com.android.systemui.crdroid.onthego.OnTheGoService;
+import com.android.systemui.plugins.qs.QSTile.BooleanState;
+import com.android.systemui.qs.QSHost;
+import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.FalsingManager;
-import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
-import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.logging.QSLogger;
-import com.android.systemui.qs.tileimpl.QSTileImpl;
+
+import androidx.annotation.Nullable;
 
 import com.android.internal.logging.MetricsLogger;
+
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.util.crdroid.OnTheGoUtils;
 
@@ -68,9 +69,7 @@ public class OnTheGoTile extends QSTileImpl<BooleanState> {
 
     @Override
     public BooleanState newTileState() {
-        BooleanState state = new BooleanState();
-        state.handlesLongClick = false;
-        return state;
+        return new BooleanState();
     }
 
     @Override
@@ -85,6 +84,10 @@ public class OnTheGoTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleClick(@Nullable View view) {
+        toggleService();
+    }
+
+    protected void toggleService() {
         ComponentName cn = new ComponentName("com.android.systemui",
                 "com.android.systemui.crdroid.onthego.OnTheGoService");
         Intent startIntent = new Intent();

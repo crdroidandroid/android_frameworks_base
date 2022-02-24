@@ -5,6 +5,7 @@
 
     <!-- ActivityManager -->
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+    <uses-permission android:name="android.permission.WRITE_DEVICE_CONFIG" />
 
     <application android:allowClearUserData="false"
                  android:label="@string/app_label"

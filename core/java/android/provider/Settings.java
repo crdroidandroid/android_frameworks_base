@@ -16955,6 +16955,18 @@ public final class Settings {
                 "nr_nsa_tracking_screen_off_mode";
 
         /**
+         * The amount of time in milliseconds before wifi is turned off
+         * @hide
+         */
+        public static final String WIFI_OFF_TIMEOUT = "wifi_off_timeout";
+
+        /**
+         * The amount of time in milliseconds before bluetooth is turned off
+         * @hide
+         */
+        public static final String BLUETOOTH_OFF_TIMEOUT = "bluetooth_off_timeout";
+
+        /**
          * Whether to show People Space.
          * Values are:
          * 0: Disabled (default)
