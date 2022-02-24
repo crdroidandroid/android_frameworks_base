@@ -38,4 +38,6 @@
     <string name="aerr_copy">複製崩潰紀錄連結</string>
     <string name="url_copy_success">已成功複製連結</string>
     <string name="url_copy_failed">上傳紀錄至 Pasty 時發生錯誤</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
 </resources>
