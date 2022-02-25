@@ -69,6 +69,7 @@ import com.android.systemui.SysuiTestCase;
 import com.android.systemui.animation.DialogTransitionAnimator;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.colorextraction.SysuiColorExtractor;
+import com.android.systemui.controls.dagger.ControlsComponent;
 import com.android.systemui.display.data.repository.FakeDisplayWindowPropertiesRepository;
 import com.android.systemui.globalactions.domain.interactor.GlobalActionsInteractor;
 import com.android.systemui.kosmos.KosmosJavaAdapter;
@@ -144,6 +145,7 @@ public class GlobalActionsDialogLiteTest extends SysuiTestCase {
     @Mock private DialogTransitionAnimator mDialogTransitionAnimator;
     @Mock private SelectedUserInteractor mSelectedUserInteractor;
     @Mock private UserLogoutInteractor mLogoutInteractor;
+    @Mock private ControlsComponent mControlsComponent;
     @Mock private OnBackInvokedDispatcher mOnBackInvokedDispatcher;
     @Mock private PowerManager mPowerManager;
     @Captor private ArgumentCaptor<OnBackInvokedCallback> mOnBackInvokedCallback;
@@ -207,6 +209,7 @@ public class GlobalActionsDialogLiteTest extends SysuiTestCase {
                 mSelectedUserInteractor,
                 mLogoutInteractor,
                 mInteractor,
+                mControlsComponent,
                 () -> new FakeDisplayWindowPropertiesRepository(mContext),
                 mPowerManager
         );
