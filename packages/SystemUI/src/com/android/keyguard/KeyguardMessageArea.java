@@ -149,9 +149,11 @@ public class KeyguardMessageArea extends TextView implements SecurityMessageDisp
                 ? INVISIBLE : VISIBLE);
         setText(status);
         ColorStateList colorState = mDefaultColorState;
-        if (mNextMessageColorState.getDefaultColor() != DEFAULT_COLOR) {
-            colorState = mNextMessageColorState;
-            mNextMessageColorState = ColorStateList.valueOf(DEFAULT_COLOR);
+        if (mNextMessageColorState != null) {
+            if (mNextMessageColorState.getDefaultColor() != DEFAULT_COLOR) {
+                colorState = mNextMessageColorState;
+                mNextMessageColorState = ColorStateList.valueOf(DEFAULT_COLOR);
+            }
         }
         setTextColor(colorState);
     }
