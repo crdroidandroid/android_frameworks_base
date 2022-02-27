@@ -61,7 +61,7 @@ import javax.inject.Singleton;
 public class NavigationModeController implements Dumpable {
 
     private static final String TAG = NavigationModeController.class.getSimpleName();
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private static final String HIDDEN_OVERLAY_PKG = "com.custom.overlay.systemui.gestural.hidden";
 
