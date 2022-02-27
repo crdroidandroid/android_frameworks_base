@@ -80,7 +80,10 @@ public class PixelPropsUtils {
         "com.google.android.UltraCVM",
         "com.google.android.apps.cameralite",
         "com.google.android.dialer",
-        "com.google.ar.core"
+        "com.google.ar.core",
+        "com.google.android.youtube",
+        "com.google.android.apps.youtube.kids",
+        "com.google.android.apps.youtube.music"
     };
 
     private static final Map<String, Object> propsToChangeROG1;
