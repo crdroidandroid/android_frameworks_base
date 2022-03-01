@@ -48,8 +48,8 @@
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_fastboot_progress">Reiniciando...</string>
     <!-- Label for current user in power menu options dialog -->
-    <string name="global_action_current_user">Current</string>
-    <string name="global_action_users">Users</string>
+    <string name="global_action_current_user">Atual</string>
+    <string name="global_action_users">Usuários</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go ativado</string>
     <string name="onthego_notif_title">On-The-Go está ativo</string>
