@@ -47,6 +47,9 @@
     <string name="global_action_restart_download_progress">ダウンロードモードへ再起動中\u2026</string>
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_fastboot_progress">Fastbootd へ再起動中\u2026</string>
+    <!-- Label for current user in power menu options dialog -->
+    <string name="global_action_current_user">現在</string>
+    <string name="global_action_users">ユーザー</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go モードを有効化しました</string>
     <string name="onthego_notif_title">On-The-Go モードが有効です</string>
