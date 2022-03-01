@@ -506,6 +506,15 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
         }
     }
 
+    public void setTint(int tint) {
+        newTint = tint;
+        // Wait for icon to be visible and tint to be changed
+        if (mVisible && mIconTint != newTint) {
+            mIconTint = newTint;
+            updateTrafficDrawable();
+        }
+    }
+
     protected void updateTrafficDrawable() {
         if (mDrawable != null) {
             mDrawable.setColorFilter(mIconTint, PorterDuff.Mode.MULTIPLY);
