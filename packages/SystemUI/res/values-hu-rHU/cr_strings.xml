@@ -47,6 +47,9 @@
     <string name="global_action_restart_download_progress">Újraindítás download-módba\u2026</string>
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_fastboot_progress">Újraindítás Fastboot-módba\u2026</string>
+    <!-- Label for current user in power menu options dialog -->
+    <string name="global_action_current_user">Jelenlegi</string>
+    <string name="global_action_users">Felhasználók</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Útközben (On-The-Go) aktiválva</string>
     <string name="onthego_notif_title">Az Útközben (On-The-Go) aktív</string>
