@@ -374,6 +374,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                     mTextColorPrimary);
             mBatteryIcon.updateColors(mTextColorPrimary, textColorSecondary,
                     mTextColorPrimary);
+            mNetworkTraffic.setTint(textColor);
         }
 
         MarginLayoutParams qqsLP = (MarginLayoutParams) mHeaderQsPanel.getLayoutParams();
