@@ -34,6 +34,8 @@
 
 package com.android.systemui.smartpixels;
 
+import static android.view.WindowManager.LayoutParams.PRIVATE_FLAG_TRUSTED_OVERLAY;
+
 import android.Manifest;
 import android.app.Service;
 import android.content.ContentResolver;
@@ -117,6 +119,7 @@ public class SmartPixelsService extends Service {
         view.setBackground(draw);
 
         WindowManager.LayoutParams params = getLayoutParams();
+        params.privateFlags |= PRIVATE_FLAG_TRUSTED_OVERLAY;
         try {
             windowManager.addView(view, params);
         } catch (Exception e) {
