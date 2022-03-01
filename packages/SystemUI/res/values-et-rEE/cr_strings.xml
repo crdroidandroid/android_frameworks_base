@@ -47,6 +47,9 @@
     <string name="global_action_restart_download_progress">Restarting to download mode\u2026</string>
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_fastboot_progress">Restarting to fastbootd mode\u2026</string>
+    <!-- Label for current user in power menu options dialog -->
+    <string name="global_action_current_user">Current</string>
+    <string name="global_action_users">Users</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go activated</string>
     <string name="onthego_notif_title">On-The-Go is active</string>
