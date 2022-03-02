@@ -209,19 +209,19 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
     }
 
     private void setMobileSignalWidth(boolean small) {
-        ViewGroup.LayoutParams p = mMobileSignalType.getLayoutParams();
-        if (small) {
-            p.width = mContext.getResources().getDimensionPixelSize(
-                        R.dimen.status_bar_mobile_signal_width);
-        } else {
-            p.width = mContext.getResources().getDimensionPixelSize(
-                    R.dimen.status_bar_mobile_signal_with_type_width);
-            int paddingLimit = mContext.getResources().getDimensionPixelSize(
-                    R.dimen.status_bar_mobile_type_padding_limit);
-            int padding = mMobileTypeSmall.getWidth() < paddingLimit ?
-                    mContext.getResources().getDimensionPixelSize(R.dimen.status_bar_mobile_type_padding) : 0;
+        if (!small) {
+            final int paddingLimit = mContext.getResources().getDimensionPixelSize(
+                R.dimen.status_bar_mobile_type_padding_limit);
+            final int padding = mMobileTypeSmall.getWidth() < paddingLimit
+                ? mContext.getResources().getDimensionPixelSize(
+                    R.dimen.status_bar_mobile_type_padding)
+                : 0;
             mMobileTypeSmall.setPadding(padding, 0, 0, 0);
         }
+        final ViewGroup.LayoutParams p = mMobileSignalType.getLayoutParams();
+        p.width = mContext.getResources().getDimensionPixelSize(small
+            ? R.dimen.status_bar_mobile_signal_width
+            : R.dimen.status_bar_mobile_signal_with_type_width);
         mMobileSignalType.setLayoutParams(p);
     }
 
