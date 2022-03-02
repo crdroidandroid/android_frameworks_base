@@ -23,6 +23,7 @@ import android.content.Context;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.util.Log;
@@ -66,6 +67,10 @@ public class StatusBarIconControllerImpl implements Tunable,
         ConfigurationListener, Dumpable, CommandQueue.Callbacks, StatusBarIconController, DemoMode {
 
     private static final String TAG = "StatusBarIconController";
+
+    private static final String USE_OLD_MOBILETYPE =
+        "system:" + Settings.System.USE_OLD_MOBILETYPE;
+
     // Use this suffix to prevent external icon slot names from unintentionally overriding our
     // internal, system-level slot names. See b/255428281.
     @VisibleForTesting
@@ -76,6 +81,8 @@ public class StatusBarIconControllerImpl implements Tunable,
     private final ArraySet<String> mIconHideList = new ArraySet<>();
     private final StatusBarPipelineFlags mStatusBarPipelineFlags;
     private final Context mContext;
+
+    private boolean mIsOldSignalStyle;
 
     /** */
     @Inject
@@ -92,10 +99,13 @@ public class StatusBarIconControllerImpl implements Tunable,
         mStatusBarIconList = statusBarIconList;
         mContext = context;
         mStatusBarPipelineFlags = statusBarPipelineFlags;
+        mIsOldSignalStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.USE_OLD_MOBILETYPE, 0, UserHandle.USER_CURRENT) == 1;
 
         configurationController.addCallback(this);
         commandQueue.addCallback(this);
         tunerService.addTunable(this, ICON_HIDE_LIST);
+        tunerService.addTunable(this, USE_OLD_MOBILETYPE);
         demoModeController.addCallback(this);
         dumpManager.registerDumpable(getClass().getSimpleName(), this);
     }
@@ -111,6 +121,7 @@ public class StatusBarIconControllerImpl implements Tunable,
         }
 
         group.setController(this);
+        group.setMobileSignalStyle(mIsOldSignalStyle);
         mIconGroups.add(group);
         List<Slot> allSlots = mStatusBarIconList.getSlots();
         for (int i = 0; i < allSlots.size(); i++) {
@@ -149,6 +160,16 @@ public class StatusBarIconControllerImpl implements Tunable,
     /** */
     @Override
     public void onTuningChanged(String key, String newValue) {
+        if (USE_OLD_MOBILETYPE.equals(key)) {
+            boolean isOldSignalStyle = (Boolean) newValue;
+            if (mIsOldSignalStyle == isOldSignalStyle) return;
+            mIsOldSignalStyle = isOldSignalStyle;
+            mIconGroups.forEach(group -> {
+                group.setMobileSignalStyle(mIsOldSignalStyle);
+                group.updateMobileIconStyle();
+            });
+            return;
+        }
         if (!ICON_HIDE_LIST.equals(key)) {
             return;
         }
