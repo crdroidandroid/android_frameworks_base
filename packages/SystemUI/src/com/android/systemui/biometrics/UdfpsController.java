@@ -35,7 +35,6 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.hardware.biometrics.BiometricOverlayConstants;
 import android.hardware.biometrics.SensorLocationInternal;
-import android.hardware.display.AmbientDisplayConfiguration;
 import android.hardware.display.DisplayManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.hardware.fingerprint.FingerprintSensorPropertiesInternal;
@@ -172,7 +171,7 @@ public class UdfpsController implements DozeReceiver {
     private boolean mAttemptedToDismissKeyguard;
     private final int mUdfpsVendorCode;
     private Set<Callback> mCallbacks = new HashSet<>();
-    private final AmbientDisplayConfiguration mAmbientDisplayConfiguration;
+
     private final SystemSettings mSystemSettings;
     private boolean mScreenOffUdfps;
 
@@ -336,13 +335,13 @@ public class UdfpsController implements DozeReceiver {
         @Override
         public void onAcquired(int sensorId, int acquiredInfo, int vendorCode) {
             mFgExecutor.execute(() -> {
-                final boolean isAodEnabled = mAmbientDisplayConfiguration.alwaysOnEnabled(UserHandle.USER_CURRENT);
-                final boolean isShowingAmbientDisplay = mStatusBarStateController.isDozing() && mScreenOn;
-                if (acquiredInfo == 6 && ((mScreenOffUdfps && !mScreenOn) || (isAodEnabled && isShowingAmbientDisplay))) {
-                    if (vendorCode == mUdfpsVendorCode) {
+                final boolean isDozing = mStatusBarStateController.isDozing() || !mScreenOn;
+                if (acquiredInfo == 6 && vendorCode == mUdfpsVendorCode) {
+                    if ((mScreenOffUdfps && isDozing) /** Screen off and dozing */ ||
+                            (mKeyguardUpdateMonitor.isDreaming() && mScreenOn) /** AOD or pulse */) {
                         mPowerManager.wakeUp(mSystemClock.uptimeMillis(),
                                 PowerManager.WAKE_REASON_GESTURE, TAG);
-                        onAodInterrupt(0, 0, 0, 0); // To-Do pass proper values
+                        onAodInterrupt(0, 0, 0, 0);
                     }
                 }
             });
@@ -680,7 +679,6 @@ public class UdfpsController implements DozeReceiver {
             mUdfpsAnimation = new UdfpsAnimation(mContext, mWindowManager, mSensorProps);
         }
 
-        mAmbientDisplayConfiguration = new AmbientDisplayConfiguration(mContext);
         mSystemSettings = systemSettings;
         updateScreenOffUdfpsState();
         mSystemSettings.registerContentObserver(Settings.System.SCREEN_OFF_UDFPS,
