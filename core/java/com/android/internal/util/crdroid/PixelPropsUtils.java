@@ -32,16 +32,21 @@ public class PixelPropsUtils {
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final boolean DEBUG = false;
 
-    private static final Map<String, Object> propsToChangePixel6;
-
+    private static final Map<String, Object> propsToChange;
     private static final Map<String, Object> propsToChangePixel5;
-    private static final String[] packagesToChangePixel5 = {
-            "com.google.android.tts",
-            "com.google.android.googlequicksearchbox",
-            "com.google.android.apps.recorder"
+    private static final Map<String, Object> propsToChangePixel6;
+    private static final Map<String, Object> propsToChangePixelXL;
+    private static final Map<String, ArrayList<String>> propsToKeep;
+
+    private static final String[] extraPackagesToChange = {
+            "com.android.chrome",
+            "com.breel.wallpapers20"
     };
 
-    private static final Map<String, Object> propsToChangePixelXL;
+    private static final String[] packagesToChangePixel6 = {
+            "com.google.android.gms"
+    };
+
     private static final String[] packagesToChangePixelXL = {
             "com.google.android.apps.photos",
             "com.samsung.accessory",
@@ -54,12 +59,6 @@ public class PixelPropsUtils {
             "com.samsung.android.modenplugin",
             "com.samsung.android.neatplugin",
             "com.samsung.android.waterplugin"
-    };
-
-    private static final Map<String, ArrayList<String>> propsToKeep;
-    private static final String[] extraPackagesToChange = {
-            "com.android.chrome",
-            "com.breel.wallpapers20"
     };
 
     private static final String[] packagesToKeep = {
@@ -117,6 +116,7 @@ public class PixelPropsUtils {
 
     static {
         propsToKeep = new HashMap<>();
+        propsToChange = new HashMap<>();
         propsToKeep.put("com.google.android.settings.intelligence", new ArrayList<>(Collections.singletonList("FINGERPRINT")));
         propsToChangePixel6 = new HashMap<>();
         propsToChangePixel6.put("BRAND", "google");
@@ -158,14 +158,13 @@ public class PixelPropsUtils {
         }
         if (packageName.startsWith("com.google.")
                 || Arrays.asList(extraPackagesToChange).contains(packageName)) {
-            Map<String, Object> propsToChange = propsToChangePixel6;
 
-            if (Arrays.asList(packagesToChangePixel5).contains(packageName)) {
-                propsToChange = propsToChangePixel5;
-            }
-
-            if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
-                propsToChange = propsToChangePixelXL;
+            if (Arrays.asList(packagesToChangePixel6).contains(packageName)) {
+                propsToChange.putAll(propsToChangePixel6);
+            } else if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
+                propsToChange.putAll(propsToChangePixelXL);
+            } else {
+                propsToChange.putAll(propsToChangePixel5);
             }
 
             if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
