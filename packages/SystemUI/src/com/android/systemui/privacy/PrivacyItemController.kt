@@ -66,6 +66,9 @@ class PrivacyItemController @Inject constructor(
 
     @VisibleForTesting
     internal companion object {
+        val LOCATION_WHITELIST_PKG = arrayOf(
+            "com.android.bluetooth",
+        )
         val OPS_MIC_CAMERA = intArrayOf(AppOpsManager.OP_CAMERA,
                 AppOpsManager.OP_PHONE_CALL_CAMERA, AppOpsManager.OP_RECORD_AUDIO,
                 AppOpsManager.OP_PHONE_CALL_MICROPHONE)
@@ -152,7 +155,8 @@ class PrivacyItemController @Inject constructor(
             if (code in OPS_MIC_CAMERA && !micCameraAvailable) {
                 return
             }
-            if (code in OPS_LOCATION && !locationAvailable) {
+            if (code in OPS_LOCATION && !locationAvailable
+                    || packageName in LOCATION_WHITELIST_PKG) {
                 return
             }
             val userId = UserHandle.getUserId(uid)
@@ -334,7 +338,8 @@ class PrivacyItemController @Inject constructor(
         if (type == PrivacyType.TYPE_CAMERA && !micCameraAvailable) {
             return null
         }
-        if (type == PrivacyType.TYPE_LOCATION && !locationAvailable) {
+        if (type == PrivacyType.TYPE_LOCATION && !locationAvailable
+                || appOpItem.packageName in LOCATION_WHITELIST_PKG) {
             return null
         }
         val app = PrivacyApplication(appOpItem.packageName, appOpItem.uid)
