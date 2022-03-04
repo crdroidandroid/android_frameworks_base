@@ -128,21 +128,21 @@
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Càrrega VOOC</string>
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Prioritat</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
-    <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight">Torch</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="volume_ringer_alarms_only">Alarmes</string>
+    <string name="volume_ringer_dnd">No molestar</string>
+    <string name="tristate_flashlight">Llanterna</string>
+    <string name="tristate_flashlight_on">Llanterna encesa</string>
+    <string name="tristate_flashlight_off">Llanterna apagada</string>
+    <string name="tristate_flashlight_blink">Llanterna parpadejant</string>
+    <string name="tristate_brightness_bright">Brillantor màxima</string>
+    <string name="tristate_brightness_dark">Brillantor mínima</string>
+    <string name="tristate_brightness_auto">Brillantor automàtica</string>
+    <string name="tristate_rotation_auto">Auto-rotació</string>
+    <string name="tristate_rotation_0">Vertical</string>
+    <string name="tristate_rotation_90">Paisatje (90º)</string>
+    <string name="tristate_rotation_270">Paisatje (270º)</string>
     <!-- Volume panel QS tile -->
-    <string name="quick_settings_volume_panel_label">Volume panel</string>
+    <string name="quick_settings_volume_panel_label">Panell de volum</string>
     <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">Recognizing face...</string>
+    <string name="face_unlock_recognizing">Reconeixent rostre...</string>
 </resources>
