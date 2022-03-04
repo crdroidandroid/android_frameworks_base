@@ -39,7 +39,6 @@ import android.database.ContentObserver;
 import android.graphics.Rect;
 import android.hardware.biometrics.BiometricFingerprintConstants;
 import android.hardware.biometrics.SensorProperties;
-import android.hardware.display.AmbientDisplayConfiguration;
 import android.hardware.display.DisplayManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.hardware.fingerprint.FingerprintSensorProperties;
@@ -233,8 +232,6 @@ public class UdfpsController implements DozeReceiver, Dumpable {
     private boolean mUseFrameworkDimming;
     private int[][] mBrightnessAlphaArray;
     private final int mUdfpsVendorCode;
-
-    private final AmbientDisplayConfiguration mAmbientDisplayConfiguration;
     private boolean mScreenOffFod;
 
     @VisibleForTesting
@@ -357,11 +354,10 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                 });
             } else {
                 boolean acquiredVendor = acquiredInfo == FINGERPRINT_ACQUIRED_VENDOR;
-                final boolean isAodEnabled = mAmbientDisplayConfiguration.alwaysOnEnabled(UserHandle.USER_CURRENT);
-                final boolean isShowingAmbientDisplay = mStatusBarStateController.isDozing() && mScreenOn;
-
-                if (acquiredVendor && ((mScreenOffFod && !mScreenOn) || (isAodEnabled && isShowingAmbientDisplay))) {
-                    if (vendorCode == mUdfpsVendorCode) {
+                final boolean isDozing = mStatusBarStateController.isDozing() || !mScreenOn;
+                if (acquiredVendor && vendorCode == mUdfpsVendorCode) {
+                    if ((mScreenOffFod && isDozing) /** Screen off and dozing */ ||
+                            (mKeyguardUpdateMonitor.isDreaming() && mScreenOn) /** AOD or pulse */) {
                         mPowerManager.wakeUp(mSystemClock.uptimeMillis(),
                                 PowerManager.WAKE_REASON_GESTURE, TAG);
                         onAodInterrupt(0, 0, 0, 0);
@@ -799,8 +795,6 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         udfpsHapticsSimulator.setUdfpsController(this);
         udfpsShell.setUdfpsOverlayController(mUdfpsOverlayController);
         mUdfpsVendorCode = mContext.getResources().getInteger(com.android.systemui.res.R.integer.config_udfpsVendorCode);
-
-        mAmbientDisplayConfiguration = new AmbientDisplayConfiguration(mContext);
         boolean screenOffFodSupported = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_supportScreenOffUdfps) ||
                 !TextUtils.isEmpty(mContext.getResources().getString(
