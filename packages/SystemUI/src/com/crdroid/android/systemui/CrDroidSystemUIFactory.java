@@ -1,17 +1,17 @@
-package com.android.systemui.custom;
+package com.crdroid.android.systemui;
 
 import android.content.Context;
 
-import com.android.systemui.custom.dagger.DaggerCustomGlobalRootComponent;
-import com.android.systemui.custom.dagger.CustomGlobalRootComponent;
+import com.crdroid.android.systemui.dagger.CrDroidGlobalRootComponent;
+import com.crdroid.android.systemui.dagger.DaggerCrDroidGlobalRootComponent;
 
-import com.android.systemui.dagger.GlobalRootComponent;
 import com.android.systemui.SystemUIFactory;
+import com.android.systemui.dagger.GlobalRootComponent;
 
-public class CustomSystemUIFactory extends SystemUIFactory {
+public class CrDroidSystemUIFactory extends SystemUIFactory {
     @Override
     protected GlobalRootComponent buildGlobalRootComponent(Context context) {
-        return DaggerCustomGlobalRootComponent.builder()
+        return DaggerCrDroidGlobalRootComponent.builder()
                 .context(context)
                 .build();
     }
