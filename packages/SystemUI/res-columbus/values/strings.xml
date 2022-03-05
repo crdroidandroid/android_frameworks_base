@@ -1,0 +1,7 @@
+<resources>
+    <string name="columbus_bouncer_message">Unlock to complete Quick Tap</string>
+    <string name="columbus_target_request_dialog_allow">Allow</string>
+    <string name="columbus_target_request_dialog_deny">Don’t allow</string>
+    <string name="columbus_target_request_dialog_title">Allow Quick Tap to open %1$s?</string>
+    <string name="columbus_target_request_dialog_summary">When you double-tap the back of your phone, %1$s will open. You can change this preference anytime in Settings.</string>
+</resources>

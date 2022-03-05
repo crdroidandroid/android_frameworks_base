@@ -1,6 +1,18 @@
 java_import {
+    name: "assistmanager-google",
+    jars: ["assistmanager.jar"],
+    sdk_version: "current",
+}
+
+java_import {
     name: "backgesture-google",
     jars: ["backgesture.jar"],
+    sdk_version: "current",
+}
+
+java_import {
+    name: "columbus-sysui-google",
+    jars: ["columbus.jar"],
     sdk_version: "current",
 }
 

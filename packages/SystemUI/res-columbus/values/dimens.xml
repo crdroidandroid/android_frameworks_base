@@ -1,0 +1,19 @@
+<resources>
+    <dimen name="columbus_target_request_dialog_bottom_padding">18.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_button_background_radius">18.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_button_background_vertical_insets">6.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_button_height">48.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_button_to_button_space">8.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_content_line_height">20.0sp</dimen>
+    <dimen name="columbus_target_request_dialog_content_text_size">14.0sp</dimen>
+    <dimen name="columbus_target_request_dialog_content_to_button_space">32.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_end_padding">24.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_icon_size">32.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_icon_to_title_space">16.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_start_padding">24.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_title_line_height">32.0sp</dimen>
+    <dimen name="columbus_target_request_dialog_title_text_size">24.0sp</dimen>
+    <dimen name="columbus_target_request_dialog_title_to_content_space">16.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_top_padding">24.0dip</dimen>
+    <dimen name="columbus_target_request_dialog_width">348.0dip</dimen>
+</resources>
