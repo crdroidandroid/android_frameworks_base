@@ -306,6 +306,10 @@
 
     <protected-broadcast android:name="com.android.systemui.doze.pulse" />
 
+    <protected-broadcast android:name="com.google.android.systemui.smartspace.CLICK_EVENT"/>
+    <protected-broadcast android:name="com.google.android.systemui.smartspace.ENABLE_UPDATE"/>
+    <protected-broadcast android:name="com.google.android.systemui.smartspace.EXPIRE_EVENT"/>
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
@@ -881,7 +885,7 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <provider android:name=".keyguard.KeyguardSliceProvider"
+        <provider android:name="com.crdroid.android.systemui.keyguard.CrDroidKeyguardSliceProvider"
                   android:authorities="com.android.systemui.keyguard"
                   android:grantUriPermissions="true"
                   android:exported="true">

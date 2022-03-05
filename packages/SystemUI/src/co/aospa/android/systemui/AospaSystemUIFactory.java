@@ -1,12 +1,12 @@
-package com.crdroid.android.systemui;
+package co.aospa.android.systemui;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Handler;
 
-import com.crdroid.android.systemui.dagger.CrDroidGlobalRootComponent;
-import com.crdroid.android.systemui.dagger.CrDroidSysUIComponent;
-import com.crdroid.android.systemui.dagger.DaggerCrDroidGlobalRootComponent;
+import co.aospa.android.systemui.dagger.AospaGlobalRootComponent;
+import co.aospa.android.systemui.dagger.AospaSysUIComponent;
+import co.aospa.android.systemui.dagger.DaggerAospaGlobalRootComponent;
 
 import com.android.systemui.SystemUIFactory;
 import com.android.systemui.dagger.GlobalRootComponent;
@@ -18,10 +18,10 @@ import com.google.android.systemui.gesture.BackGestureTfClassifierProviderGoogle
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
-public class CrDroidSystemUIFactory extends SystemUIFactory {
+public class AospaSystemUIFactory extends SystemUIFactory {
     @Override
     protected GlobalRootComponent buildGlobalRootComponent(Context context) {
-        return DaggerCrDroidGlobalRootComponent.builder()
+        return DaggerAospaGlobalRootComponent.builder()
                 .context(context)
                 .build();
     }
@@ -35,7 +35,7 @@ public class CrDroidSystemUIFactory extends SystemUIFactory {
     public void init(Context context, boolean fromTest) throws ExecutionException, InterruptedException {
         super.init(context, fromTest);
         if (shouldInitializeComponents()) {
-            ((CrDroidSysUIComponent) getSysUIComponent()).createKeyguardSmartspaceController();
+            ((AospaSysUIComponent) getSysUIComponent()).createKeyguardSmartspaceController();
         }
     }
 }
