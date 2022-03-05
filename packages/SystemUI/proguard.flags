@@ -62,5 +62,6 @@
 -keep class com.crdroid.** { *; }
 
 # Google rules
+-keep class android.hardware.** { *; }
 -keep class com.google.** { *; }
 -keep class vendor.** { *; }

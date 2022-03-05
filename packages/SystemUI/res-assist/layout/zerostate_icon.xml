@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.assist.uihints.ZeroStateIconView android:layout_gravity="bottom|center|left" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/zerostate_icon_left_margin" android:layout_marginBottom="@dimen/zerostate_icon_bottom_margin"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:layout_gravity="center" android:id="@+id/zerostate_icon_image" android:focusable="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_explore" android:scaleType="center" android:contentDescription="@string/assistant_zero_state_icon_label" android:importantForAccessibility="yes" />
+</com.google.android.systemui.assist.uihints.ZeroStateIconView>

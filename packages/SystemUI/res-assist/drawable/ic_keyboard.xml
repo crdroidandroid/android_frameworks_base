@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset android:visible="true" android:drawable="@drawable/ic_keyboard_inset" android:insetLeft="@dimen/keyboard_icon_tap_padding" android:insetRight="@dimen/keyboard_icon_tap_padding" android:insetTop="@dimen/keyboard_icon_tap_padding" android:insetBottom="@dimen/keyboard_icon_tap_padding"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

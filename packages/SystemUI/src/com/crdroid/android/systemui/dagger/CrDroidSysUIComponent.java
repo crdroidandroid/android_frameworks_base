@@ -7,6 +7,7 @@ import com.android.systemui.dagger.SystemUIBinder;
 import com.android.systemui.dagger.SysUIComponent;
 import com.android.systemui.dagger.SystemUIModule;
 
+import com.crdroid.android.systemui.columbus.ColumbusModule;
 import com.crdroid.android.systemui.keyguard.CrDroidKeyguardSliceProvider;
 import com.crdroid.android.systemui.smartspace.KeyguardSmartspaceController;
 
@@ -14,9 +15,10 @@ import dagger.Subcomponent;
 
 @SysUISingleton
 @Subcomponent(modules = {
+        ColumbusModule.class,
         DefaultComponentBinder.class,
         DependencyProvider.class,
-        SystemUIBinder.class,
+        CrDroidSystemUIBinder.class,
         SystemUIModule.class,
         CrDroidSystemUIModule.class})
 public interface CrDroidSysUIComponent extends SysUIComponent {
