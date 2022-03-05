@@ -17,6 +17,12 @@ java_import {
 }
 
 java_import {
+    name: "elmyra-sysui-google",
+    jars: ["elmyra.jar"],
+    sdk_version: "current",
+}
+
+java_import {
     name: "smartspace-google",
     jars: ["smartspace.jar"],
     sdk_version: "current",

@@ -139,6 +139,7 @@ import com.google.android.systemui.assist.uihints.input.NgaInputHandler;
 import com.google.android.systemui.assist.uihints.input.TouchActionRegion;
 import com.google.android.systemui.assist.uihints.input.TouchInsideRegion;
 import com.google.android.systemui.columbus.ColumbusServiceWrapper;
+import com.google.android.systemui.elmyra.ServiceConfigurationGoogle;
 import com.google.android.systemui.smartspace.BcSmartspaceDataProvider;
 import com.google.android.systemui.smartspace.KeyguardMediaViewController;
 import com.google.android.systemui.smartspace.KeyguardZenAlarmViewController;
@@ -293,8 +294,8 @@ public abstract class CrDroidSystemUIModule {
 
     @Provides
     @SysUISingleton
-    static CrDroidServices provideCrDroidServices(Context context, UiEventLogger uiEventLogger, Lazy<ColumbusServiceWrapper> lazyB) {
-        return new CrDroidServices(context, uiEventLogger, lazyB);
+    static CrDroidServices provideCrDroidServices(Context context, UiEventLogger uiEventLogger, Lazy<ServiceConfigurationGoogle> lazy, Lazy<ColumbusServiceWrapper> lazyB) {
+        return new CrDroidServices(context, uiEventLogger, lazy, lazyB);
     }
 
     // Google
