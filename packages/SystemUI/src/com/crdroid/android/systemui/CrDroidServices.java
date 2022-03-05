@@ -28,6 +28,9 @@ import com.android.systemui.statusbar.phone.StatusBar;
 
 import com.google.android.systemui.columbus.ColumbusContext;
 import com.google.android.systemui.columbus.ColumbusServiceWrapper;
+import com.google.android.systemui.elmyra.ElmyraContext;
+import com.google.android.systemui.elmyra.ElmyraService;
+import com.google.android.systemui.elmyra.ServiceConfigurationGoogle;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -42,17 +45,23 @@ public class CrDroidServices extends VendorServices {
 
     private final UiEventLogger mUiEventLogger;
     private final Lazy<ColumbusServiceWrapper> mColumbusServiceLazy;
+    private final Lazy<ServiceConfigurationGoogle> mServiceConfigurationGoogle;
     private final ArrayList<Object> mServices = new ArrayList<>();
 
     @Inject
-    public CrDroidServices(Context context, UiEventLogger uiEventLogger, Lazy<ColumbusServiceWrapper> columbusService) {
+    public CrDroidServices(Context context, UiEventLogger uiEventLogger, Lazy<ServiceConfigurationGoogle> serviceConfigurationGoogle, Lazy<ColumbusServiceWrapper> columbusService) {
         super(context);
         mUiEventLogger = uiEventLogger;
+        mServiceConfigurationGoogle = serviceConfigurationGoogle;
         mColumbusServiceLazy = columbusService;
     }
 
     @Override
     public void start() {
+        if (mContext.getPackageManager().hasSystemFeature("android.hardware.context_hub")
+                && new ElmyraContext(mContext).isAvailable()) {
+            addService(new ElmyraService(mContext, mServiceConfigurationGoogle.get(), mUiEventLogger));
+        }
         if (new ColumbusContext(mContext).isAvailable()) {
             addService(mColumbusServiceLazy.get());
         }
