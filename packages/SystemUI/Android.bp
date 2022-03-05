@@ -108,6 +108,7 @@ android_library {
         "faceunlock_framework",
         "assistmanager-google",
         "columbus-sysui-google",
+        "elmyra-sysui-google",
         "vendor-pixelatoms-java",
     ],
     manifest: "AndroidManifest.xml",
