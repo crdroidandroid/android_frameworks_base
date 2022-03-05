@@ -48,8 +48,8 @@
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_fastboot_progress">正在重新啟動至 Fastbootd\u2026</string>
     <!-- Label for current user in power menu options dialog -->
-    <string name="global_action_current_user">Current</string>
-    <string name="global_action_users">Users</string>
+    <string name="global_action_current_user">當前</string>
+    <string name="global_action_users">使用者</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">行走模式已啟動</string>
     <string name="onthego_notif_title">行走模式正處於啟用狀態</string>
@@ -144,5 +144,5 @@
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">音量面板</string>
     <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">Recognizing face...</string>
+    <string name="face_unlock_recognizing">臉部辨識中...</string>
 </resources>
