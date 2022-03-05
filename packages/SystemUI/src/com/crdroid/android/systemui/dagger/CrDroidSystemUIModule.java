@@ -75,11 +75,11 @@ import com.android.systemui.theme.ThemeOverlayController;
 import com.android.systemui.util.concurrency.DelayableExecutor;
 import com.android.systemui.volume.dagger.VolumeModule;
 
-import javax.inject.Named;
-
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+
+import javax.inject.Named;
 
 @Module(includes = {
         MediaModule.class,

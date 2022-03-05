@@ -2,7 +2,6 @@ package com.crdroid.android.systemui;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.os.Handler;
 
 import com.crdroid.android.systemui.dagger.CrDroidGlobalRootComponent;
 import com.crdroid.android.systemui.dagger.CrDroidSysUIComponent;
