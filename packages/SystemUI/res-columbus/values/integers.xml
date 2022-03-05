@@ -1,0 +1,4 @@
+<resources>
+    <integer name="columbus_default_sensitivity_percent">77</integer>
+    <integer name="columbus_low_sensitivity_percent">0</integer>
+</resources>

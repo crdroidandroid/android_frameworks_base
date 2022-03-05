@@ -1,0 +1,14 @@
+<resources>
+    <color name="assist_chip_background_dark">#ff171717</color>
+    <color name="assist_chip_background_light">#ffffffff</color>
+    <color name="assist_chip_border_dark">#ff292a2d</color>
+    <color name="assist_chip_border_light">#ffe8eaed</color>
+    <color name="assist_chip_ripple_dark">#42ffffff</color>
+    <color name="assist_chip_ripple_light">#1f000000</color>
+    <color name="assist_chip_text_dark">#fff5f7fa</color>
+    <color name="assist_chip_text_light">#ff202124</color>
+    <color name="transcription_icon_dark">#8affffff</color>
+    <color name="transcription_icon_light">#8a000000</color>
+    <color name="transcription_text_dark">#ffffffff</color>
+    <color name="transcription_text_light">#de000000</color>
+</resources>

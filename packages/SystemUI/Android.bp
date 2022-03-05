@@ -58,10 +58,12 @@ android_library {
         "src/**/I*.aidl",
     ],
     resource_dirs: [
+        "res",
         "res-product",
         "res-keyguard",
         "res-smartspace",
-        "res",
+        "res-columbus",
+        "res-assist",
     ],
     static_libs: [
         "WindowManager-Shell",
@@ -104,6 +106,9 @@ android_library {
         "smartspace-google",
         "tensorflowlite_java",
         "faceunlock_framework",
+        "assistmanager-google",
+        "columbus-sysui-google",
+        "vendor-pixelatoms-java",
     ],
     manifest: "AndroidManifest.xml",
     additional_manifests: ["LineageManifest.xml"],

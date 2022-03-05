@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View android:layout_gravity="bottom" android:background="@drawable/scrim_strip" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="256.0dip" android:contentDescription="@string/assistant_scrim_label"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

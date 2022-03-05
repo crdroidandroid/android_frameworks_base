@@ -1,0 +1,8 @@
+<resources>
+    <string name="assistant_keyboard_icon_label">Keyboard</string>
+    <string name="assistant_scrim_label">Listening, tap to cancel</string>
+    <string name="assistant_zero_state_icon_label">Assistant Overview</string>
+    <string name="handle_invocation_prompt">Swipe to talk</string>
+    <string name="squeeze_invocation_prompt">Squeeze to talk</string>
+    <string name="voice_reply_cta_text">“Hey Google, reply”</string>
+</resources>
