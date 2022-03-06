@@ -16,11 +16,15 @@
 -->
 <resources>
 
-    <!-- Height of the landscape battery icon in the status bar. -->
-    <dimen name="status_bar_battery_icon_height_landscape">10.5dp</dimen>
-
-    <!-- Width of the landscape battery icon in the status bar. -->
-    <dimen name="status_bar_battery_icon_width_landscape">20dp</dimen>
+    
+    <!-- Width of the battery icon in the status bar when set to circle style. -->
+    <dimen name="status_bar_battery_icon_circle_width">14.5dp</dimen>
+	
+    <!-- Height of the battery icon in the status bar. -->
+    <dimen name="status_bar_battery_icon_height_landscape_default">12.5dp</dimen>
+    <dimen name="status_bar_battery_icon_width_landscape_default">24dp</dimen>
+    <dimen name="status_bar_battery_icon_height_landscape_style_a_b">12dp</dimen>
+    <dimen name="status_bar_battery_icon_width_landscape_style_a_b">23dp</dimen>
 
     <dimen name="fps_info_text_padding">4dp</dimen>
 

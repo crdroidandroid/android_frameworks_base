@@ -3407,6 +3407,26 @@
   <java-symbol type="string" name="config_batterymeterLandBoltPath" />
   <java-symbol type="string" name="config_batterymeterLandPowersavePath" />
   <java-symbol type="string" name="config_batterymeterLandErrorPerimeterPath" />
+  <java-symbol type="string" name="config_batterymeterRLandPerimeterPathStyleA" />
+  <java-symbol type="string" name="config_batterymeterRLandFillMaskStyleA" />
+  <java-symbol type="string" name="config_batterymeterRLandBoltPathStyleA" />
+  <java-symbol type="string" name="config_batterymeterRLandPowersavePathStyleA" />
+  <java-symbol type="string" name="config_batterymeterRLandErrorPerimeterPathStyleA" />
+  <java-symbol type="string" name="config_batterymeterLandPerimeterPathStyleA" />
+  <java-symbol type="string" name="config_batterymeterLandFillMaskStyleA" />
+  <java-symbol type="string" name="config_batterymeterLandBoltPathStyleA" />
+  <java-symbol type="string" name="config_batterymeterLandPowersavePathStyleA" />
+  <java-symbol type="string" name="config_batterymeterLandErrorPerimeterPathStyleA" />
+  <java-symbol type="string" name="config_batterymeterRLandPerimeterPathStyleB" />
+  <java-symbol type="string" name="config_batterymeterRLandFillMaskStyleB" />
+  <java-symbol type="string" name="config_batterymeterRLandBoltPathStyleB" />
+  <java-symbol type="string" name="config_batterymeterRLandPowersavePathStyleB" />
+  <java-symbol type="string" name="config_batterymeterRLandErrorPerimeterPathStyleB" />
+  <java-symbol type="string" name="config_batterymeterLandPerimeterPathStyleB" />
+  <java-symbol type="string" name="config_batterymeterLandFillMaskStyleB" />
+  <java-symbol type="string" name="config_batterymeterLandBoltPathStyleB" />
+  <java-symbol type="string" name="config_batterymeterLandPowersavePathStyleB" />
+  <java-symbol type="string" name="config_batterymeterLandErrorPerimeterPathStyleB" />
 
   <java-symbol type="bool" name="config_debugEnableAutomaticSystemServerHeapDumps" />
   <java-symbol type="integer" name="config_debugSystemServerPssThresholdBytes" />
