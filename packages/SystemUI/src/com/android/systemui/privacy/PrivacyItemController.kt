@@ -59,6 +59,8 @@ class PrivacyItemController @Inject constructor(
     internal companion object {
         val LOCATION_WHITELIST_PKG = arrayOf(
             "com.android.bluetooth",
+            "com.android.networkstack.tethering",
+            "com.android.systemui",
         )
         val OPS_MIC_CAMERA = intArrayOf(AppOpsManager.OP_CAMERA,
                 AppOpsManager.OP_PHONE_CALL_CAMERA, AppOpsManager.OP_RECORD_AUDIO,
