@@ -23,7 +23,6 @@ import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL;
 import android.annotation.Nullable;
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.om.IOverlayManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.Icon;
 import android.os.RemoteException;
@@ -100,8 +99,6 @@ public class NavigationBarInflaterView extends FrameLayout
 
     private static final String KEY_NAVIGATION_HINT =
             "lineagesystem:" + LineageSettings.System.NAVIGATION_BAR_HINT;
-    private static final String OVERLAY_NAVIGATION_HIDE_HINT =
-            "com.custom.overlay.systemui.gestural.hidden";
     private static final String GESTURE_NAVBAR_LENGTH_MODE =
             "system:" + Settings.System.GESTURE_NAVBAR_LENGTH_MODE;
 
@@ -179,7 +176,6 @@ public class NavigationBarInflaterView extends FrameLayout
     @Override
     public void onNavigationModeChanged(int mode) {
         mNavBarMode = mode;
-        updateHint();
         onLikelyDefaultLayoutChange();
     }
 
@@ -206,18 +202,18 @@ public class NavigationBarInflaterView extends FrameLayout
             updateLayoutInversion();
         } else if (KEY_NAVIGATION_HINT.equals(key)) {
             mIsHintEnabled = TunerService.parseIntegerSwitch(newValue, true);
-            updateHint();
-            onLikelyDefaultLayoutChange();
+            if (QuickStepContract.isGesturalMode(mNavBarMode)) {
+                setNavigationBarLayout(getDefaultLayout(), true);
+            }
         } else if (NAVBAR_LAYOUT_VIEWS.equals(key)) {
             mNavBarLayout = (String) newValue;
             if (!QuickStepContract.isGesturalMode(mNavBarMode)) {
-                setNavigationBarLayout(mNavBarLayout);
+                setNavigationBarLayout(mNavBarLayout, false);
             }
         } else if (GESTURE_NAVBAR_LENGTH_MODE.equals(key)) {
             mHomeHandleWidthMode = TunerService.parseInteger(newValue, 0);
             if (QuickStepContract.isGesturalMode(mNavBarMode)) {
-                clearViews();
-                inflateLayout(getDefaultLayout());
+                setNavigationBarLayout(getDefaultLayout(), true);
             }
         }
     }
@@ -230,21 +226,20 @@ public class NavigationBarInflaterView extends FrameLayout
 
     @Override
     public void onOverlayChanged() {
-        updateHint();
         onLikelyDefaultLayoutChange();
     }
 
-    private void setNavigationBarLayout(String layoutValue) {
-        if (!Objects.equals(mCurrentLayout, layoutValue)) {
+    private void setNavigationBarLayout(String layoutValue, boolean force) {
+        if (!Objects.equals(mCurrentLayout, layoutValue) || force) {
             clearViews();
             inflateLayout(layoutValue);
         }
     }
 
     public void onLikelyDefaultLayoutChange() {
-        setNavigationBarLayout(getDefaultLayout());
+        setNavigationBarLayout(getDefaultLayout(), false);
         if (!QuickStepContract.isGesturalMode(mNavBarMode)) {
-            setNavigationBarLayout(mNavBarLayout);
+            setNavigationBarLayout(mNavBarLayout, false);
         }
     }
 
@@ -288,24 +283,6 @@ public class NavigationBarInflaterView extends FrameLayout
     private void updateAlternativeOrder(View v) {
         if (v instanceof ReverseLinearLayout) {
             ((ReverseLinearLayout) v).setAlternativeOrder(mAlternativeOrder);
-        }
-    }
-
-    private void updateHint() {
-        final IOverlayManager iom = IOverlayManager.Stub.asInterface(
-                ServiceManager.getService(Context.OVERLAY_SERVICE));
-        final boolean state = mNavBarMode == NAV_BAR_MODE_GESTURAL && !mIsHintEnabled;
-        final int userId = ActivityManager.getCurrentUser();
-        try {
-            iom.setEnabled(OVERLAY_NAVIGATION_HIDE_HINT, state, userId);
-            if (state) {
-                // As overlays are also used to apply navigation mode, it is needed to set
-                // our customization overlay to highest priority to ensure it is applied.
-                iom.setHighestPriority(OVERLAY_NAVIGATION_HIDE_HINT, userId);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to " + (state ? "enable" : "disable")
-                    + " overlay " + OVERLAY_NAVIGATION_HIDE_HINT + " for user " + userId);
         }
     }
 
