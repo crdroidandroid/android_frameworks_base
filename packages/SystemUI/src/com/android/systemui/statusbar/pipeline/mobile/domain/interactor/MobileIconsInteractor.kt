@@ -110,6 +110,9 @@ interface MobileIconsInteractor {
     /** True if we're configured to force-hide the mobile icons and false otherwise. */
     val isForceHidden: Flow<Boolean>
 
+    /** True if we're configured to force-hide the roaming and false otherwise. */
+    val isRoamingForceHidden: Flow<Boolean>
+
     /**
      * True if the device-level service state (with -1 subscription id) reports emergency calls
      * only. This value is only useful when there are no other subscriptions OR all existing
@@ -384,6 +387,11 @@ constructor(
             .map { it.contains(ConnectivitySlot.MOBILE) }
             .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
+    override val isRoamingForceHidden: Flow<Boolean> =
+        connectivityRepository.forceHiddenSlots
+            .map { it.contains(ConnectivitySlot.ROAMING) }
+            .stateIn(scope, SharingStarted.WhileSubscribed(), false)
+
     override val isDeviceInEmergencyCallsOnlyMode: Flow<Boolean> =
         mobileConnectionsRepo.deviceServiceState.map { it?.isEmergencyOnly ?: false }
 
@@ -403,6 +411,7 @@ constructor(
                 defaultMobileIconGroup,
                 isDefaultConnectionFailed,
                 isForceHidden,
+                isRoamingForceHidden,
                 mobileConnectionsRepo.getRepoForSubId(subId),
                 context,
             )
