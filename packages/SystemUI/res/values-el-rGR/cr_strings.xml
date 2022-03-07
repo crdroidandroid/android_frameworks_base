@@ -145,4 +145,7 @@
     <string name="quick_settings_volume_panel_label">Πίνακας έντασης ήχου</string>
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Αναγνώριση προσώπου...</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Αναγκαστική διακοπή;</string>
+    <string name="force_stop_dlg_text">Αν επιβάλετε τη διακοπή μιας εφαρμογής, ενδέχεται να μη λειτουργήσει σωστά.</string>
 </resources>

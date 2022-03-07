@@ -145,4 +145,7 @@
     <string name="quick_settings_volume_panel_label">Painel de volume</string>
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Reconhecendo...</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Forçar parada?</string>
+    <string name="force_stop_dlg_text">Se você forçar a parada de um aplicativo, ele poderá apresentar falhas.</string>
 </resources>

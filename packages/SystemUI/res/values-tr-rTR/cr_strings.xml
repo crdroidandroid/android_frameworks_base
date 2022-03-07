@@ -145,4 +145,7 @@
     <string name="quick_settings_volume_panel_label">Ses paneli</string>
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Yüz tanınıyor...</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Zorla durdurulsun mu?</string>
+    <string name="force_stop_dlg_text">Uygulamayı zorla durdurursanız, hatalı davranabilir.</string>
 </resources>
