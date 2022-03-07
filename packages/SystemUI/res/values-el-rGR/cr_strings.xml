@@ -146,6 +146,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Αναγνώριση προσώπου...</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
+    <string name="force_stop_dlg_title">Αναγκαστική διακοπή;</string>
     <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
 </resources>
