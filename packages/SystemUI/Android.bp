@@ -60,7 +60,6 @@ android_library {
     resource_dirs: [
         "res-product",
         "res-keyguard",
-        "res-smartspace",
         "res",
     ],
     static_libs: [
@@ -98,11 +97,9 @@ android_library {
         "lottie",
         "org.lineageos.platform.internal",
         "vendor.lineage.powershare-V1.0-java",
+        "tensorflowlite_java",
         "colorkt",
         "themelib",
-        "backgesture-google",
-        "smartspace-google",
-        "tensorflowlite_java",
         "faceunlock_framework",
     ],
     manifest: "AndroidManifest.xml",
@@ -218,9 +215,7 @@ android_app {
     static_libs: [
         "SystemUI-core",
     ],
-    jni_libs: [
-        "libtensorflowlite_jni",
-    ],
+    jni_libs: ["libtensorflowlite_jni"],
     use_embedded_native_libs: true,
     resource_dirs: [],
 
