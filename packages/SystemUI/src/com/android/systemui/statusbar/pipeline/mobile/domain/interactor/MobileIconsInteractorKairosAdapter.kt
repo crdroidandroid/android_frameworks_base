@@ -123,6 +123,11 @@ constructor(
             )
             .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
+    override val isRoamingForceHidden: Flow<Boolean> =
+        kairosInteractor.isRoamingForceHidden
+            .toColdConflatedFlow(kairosNetwork)
+            .stateIn(scope, SharingStarted.WhileSubscribed(), false)
+
     override val activeMobileDataSubscriptionId: StateFlow<Int?>
         get() = repo.activeMobileDataSubscriptionId
 
@@ -233,6 +238,7 @@ constructor(
             override val isSingleCarrier: Flow<Boolean> = latest { isSingleCarrier }
             override val isRoaming: Flow<Boolean> = latest { isRoaming }
             override val isForceHidden: Flow<Boolean> = latest { isForceHidden }
+            override val isRoamingForceHidden: Flow<Boolean> = latest { isRoamingForceHidden }
             override val isAllowedDuringAirplaneMode: Flow<Boolean> = latest {
                 isAllowedDuringAirplaneMode
             }

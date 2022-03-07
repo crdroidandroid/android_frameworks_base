@@ -124,6 +124,9 @@ interface MobileIconsInteractorKairos {
     /** True if we're configured to force-hide the mobile icons and false otherwise. */
     val isForceHidden: State<Boolean>
 
+    /** True if we're configured to force-hide the roaming icon and false otherwise. */
+    val isRoamingForceHidden: State<Boolean>
+
     /**
      * True if the device-level service state (with -1 subscription id) reports emergency calls
      * only. This value is only useful when there are no other subscriptions OR all existing
@@ -429,6 +432,12 @@ constructor(
             .map { it.contains(ConnectivitySlot.MOBILE) }
     }
 
+    override val isRoamingForceHidden: State<Boolean> = buildState {
+        connectivityRepository.forceHiddenSlots.toState().map {
+            it.contains(ConnectivitySlot.ROAMING)
+        }
+    }
+
     override val isDeviceInEmergencyCallsOnlyMode: State<Boolean>
         get() = mobileConnectionsRepo.isDeviceEmergencyCallCapable
 
@@ -446,6 +455,7 @@ constructor(
             defaultMobileIconGroup,
             isDefaultConnectionFailed,
             isForceHidden,
+	    isRoamingForceHidden,
             repo,
             context,
         )
