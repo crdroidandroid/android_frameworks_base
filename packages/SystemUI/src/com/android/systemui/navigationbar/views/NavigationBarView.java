@@ -34,12 +34,12 @@ import android.annotation.DrawableRes;
 import android.app.StatusBarManager;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -63,6 +63,7 @@ import androidx.annotation.Nullable;
 import com.android.app.animation.Interpolators;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.settingslib.Utils;
+import com.android.systemui.Dependency;
 import com.android.systemui.Gefingerpoken;
 import com.android.systemui.model.SysUiState;
 import com.android.systemui.navigationbar.ScreenPinningNotify;
@@ -85,6 +86,7 @@ import com.android.systemui.shared.system.QuickStepContract;
 import com.android.systemui.statusbar.phone.AutoHideController;
 import com.android.systemui.statusbar.phone.CentralSurfaces;
 import com.android.systemui.statusbar.phone.LightBarTransitionsController;
+import com.android.systemui.tuner.TunerService;
 import com.android.wm.shell.back.BackAnimation;
 import com.android.wm.shell.pip.Pip;
 
@@ -97,9 +99,14 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 /** */
-public class NavigationBarView extends FrameLayout {
+public class NavigationBarView extends FrameLayout implements TunerService.Tunable {
     final static boolean DEBUG = false;
     final static String TAG = "NavBarView";
+
+    private static final String NAVIGATION_BAR_MENU_ARROW_KEYS =
+            "lineagesystem:" + LineageSettings.System.NAVIGATION_BAR_MENU_ARROW_KEYS;
+    private static final String NAVBAR_STYLE =
+            "system:" + Settings.System.NAVBAR_STYLE;
 
     final static boolean ALTERNATE_CAR_MODE_UI = false;
 
@@ -162,6 +169,8 @@ public class NavigationBarView extends FrameLayout {
     private FloatingRotationButton mFloatingRotationButton;
     private RotationButtonController mRotationButtonController;
 
+    private TunerService mTunerService;
+
     /**
      * Helper that is responsible for showing the right toast when a disallowed activity operation
      * occurred. In pinned mode, we show instructions on how to break out of this mode, whilst in
@@ -185,7 +194,6 @@ public class NavigationBarView extends FrameLayout {
     private boolean mShowSwipeUpUi;
     private UpdateActiveTouchRegionsCallback mUpdateActiveTouchRegionsCallback;
 
-    private final ContentObserver mShowCursorKeysObserver;
     private boolean mShowCursorKeys;
     private boolean mImeVisible;
 
@@ -343,16 +351,7 @@ public class NavigationBarView extends FrameLayout {
         mButtonDispatchers.put(R.id.dpad_left, cursorLeftButton);
         mButtonDispatchers.put(R.id.dpad_right, cursorRightButton);
         mDeadZone = new DeadZone(this);
-
-        mShowCursorKeysObserver = new ContentObserver(null) {
-            @Override
-            public void onChange(boolean selfChange) {
-                mShowCursorKeys = LineageSettings.System.getInt(
-                        mContext.getContentResolver(),
-                        LineageSettings.System.NAVIGATION_BAR_MENU_ARROW_KEYS, 0) != 0;
-                setNavigationIconHints(mNavigationIconHints);
-            }
-        };
+        mTunerService = Dependency.get(TunerService.class);
     }
 
     public void setEdgeBackGestureHandler(EdgeBackGestureHandler edgeBackGestureHandler) {
@@ -1124,11 +1123,8 @@ public class NavigationBarView extends FrameLayout {
         super.onAttachedToWindow();
         requestApplyInsets();
         reorient();
-
-        mContext.getContentResolver().registerContentObserver(LineageSettings.System.getUriFor(
-                        LineageSettings.System.NAVIGATION_BAR_MENU_ARROW_KEYS), false,
-                mShowCursorKeysObserver);
-        mShowCursorKeysObserver.onChange(true);
+        mTunerService.addTunable(this, NAVIGATION_BAR_MENU_ARROW_KEYS);
+        mTunerService.addTunable(this, NAVBAR_STYLE);
         if (mRotationButtonController != null) {
             mRotationButtonController.registerListeners(false /* registerRotationWatcher */);
         }
@@ -1139,13 +1135,23 @@ public class NavigationBarView extends FrameLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mContext.getContentResolver().unregisterContentObserver(mShowCursorKeysObserver);
+        mTunerService.removeTunable(this);
         for (int i = 0; i < mButtonDispatchers.size(); ++i) {
             mButtonDispatchers.valueAt(i).onDestroy();
         }
         if (mRotationButtonController != null) {
             mFloatingRotationButton.hide();
             mRotationButtonController.unregisterListeners();
+        }
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        if (NAVIGATION_BAR_MENU_ARROW_KEYS.equals(key)) {
+            mShowCursorKeys = TunerService.parseIntegerSwitch(newValue, false);
+            setNavigationIconHints(mNavigationIconHints);
+        } else if (NAVBAR_STYLE.equals(key)) {
+            reloadNavIcons();
         }
     }
 
