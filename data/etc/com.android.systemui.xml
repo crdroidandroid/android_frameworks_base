@@ -17,11 +17,13 @@
 <permissions>
     <privapp-permissions package="com.android.systemui">
         <permission name="android.permission.ACCESS_FINE_LOCATION"/>
-        <permission name="android.permission.CAPTURE_AUDIO_OUTPUT"/>
+        <permission name="android.permission.ACCESS_CONTEXT_HUB"/>
         <permission name="android.permission.ALLOW_SLIPPERY_TOUCHES"/>
         <permission name="android.permission.BATTERY_STATS"/>
         <permission name="android.permission.BIND_APPWIDGET"/>
+        <permission name="android.permission.BLUETOOTH_CONNECT"/>
         <permission name="android.permission.BLUETOOTH_PRIVILEGED"/>
+        <permission name="android.permission.CAPTURE_AUDIO_OUTPUT"/>
         <permission name="android.permission.CHANGE_COMPONENT_ENABLED_STATE"/>
         <permission name="android.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST"/>
         <permission name="android.permission.CHANGE_OVERLAY_PACKAGES"/>
@@ -50,6 +52,7 @@
         <permission name="android.permission.OBSERVE_GRANT_REVOKE_PERMISSIONS" />
         <permission name="android.permission.OVERRIDE_WIFI_CONFIG"/>
         <permission name="android.permission.PACKAGE_USAGE_STATS" />
+        <permission name="android.permission.READ_CONTACTS"/>
         <permission name="android.permission.READ_DREAM_STATE"/>
         <permission name="android.permission.READ_FRAME_BUFFER"/>
         <permission name="android.permission.READ_NETWORK_USAGE_HISTORY"/>
