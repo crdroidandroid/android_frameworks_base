@@ -39,6 +39,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -108,6 +109,8 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
             "lineagesystem:" + LineageSettings.System.NAVIGATION_BAR_MENU_ARROW_KEYS;
     public static final String KEY_APP_SWITCH_ACTION =
             "lineagesystem:" + LineageSettings.System.KEY_APP_SWITCH_ACTION;
+    private static final String NAVBAR_STYLE =
+            "system:" + Settings.System.NAVBAR_STYLE;
 
     public static final int[] NAVBAR_ICON_RESOURCES = {
         R.drawable.ic_sysbar_no_action,
@@ -1202,6 +1205,7 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, NAVIGATION_BAR_MENU_ARROW_KEYS);
         tunerService.addTunable(this, KEY_APP_SWITCH_ACTION);
+        tunerService.addTunable(this, NAVBAR_STYLE);
         if (mRotationButtonController != null) {
             mRotationButtonController.registerListeners(false /* registerRotationWatcher */);
         }
@@ -1231,6 +1235,9 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
             case KEY_APP_SWITCH_ACTION:
                 reloadNavIcons();
                 updateNavButtonIcons();
+                break;
+            case NAVBAR_STYLE:
+                reloadNavIcons();
                 break;
         }
     }
