@@ -89,9 +89,9 @@
     <string name="quick_settings_compass_init">تهيئة/u2026</string>
     <string name="accessibility_quick_settings_compass_off">البوصلة معطلة.</string>
     <string name="accessibility_quick_settings_compass_on">البوصلة مفعلة.</string>
-    <string name="quick_settings_compass_N">N</string>
-    <string name="quick_settings_compass_NE">NE</string>
-    <string name="quick_settings_compass_E">E</string>
+    <string name="quick_settings_compass_N">الشمال</string>
+    <string name="quick_settings_compass_NE">الشمال شرقي</string>
+    <string name="quick_settings_compass_E">الشرق</string>
     <string name="quick_settings_compass_SE">SE</string>
     <string name="quick_settings_compass_S">S</string>
     <string name="quick_settings_compass_SW">SW</string>
