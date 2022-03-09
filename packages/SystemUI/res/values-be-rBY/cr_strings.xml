@@ -48,8 +48,8 @@
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_fastboot_progress">Перазагрузка ў рэжым fastbootd\u2026</string>
     <!-- Label for current user in power menu options dialog -->
-    <string name="global_action_current_user">Current</string>
-    <string name="global_action_users">Users</string>
+    <string name="global_action_current_user">Бягучы</string>
+    <string name="global_action_users">Карыстальнікі</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Рэжым «На хаду» уключаны</string>
     <string name="onthego_notif_title">Рэжым «На хаду» актыўны</string>
@@ -144,8 +144,8 @@
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Панэль гучнасці</string>
     <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">Recognizing face...</string>
+    <string name="face_unlock_recognizing">Распазнаванне асобы...</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="force_stop_dlg_title">Спынiць прымусова?</string>
+    <string name="force_stop_dlg_text">Прымусовае закрыццё праграмы можа адбіцца на яе функцыянальнасці.</string>
 </resources>
