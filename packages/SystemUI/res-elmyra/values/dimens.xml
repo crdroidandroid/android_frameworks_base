@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="elmyra_progress_alpha">0.35</dimen>
+    <dimen name="elmyra_progress_detect_threshold">0.5</dimen>
+    <dimen name="elmyra_progress_report_threshold">0.55</dimen>
+    <dimen name="elmyra_screen_off_adjustment">-0.1</dimen>
+    <dimen name="opa_elmyra_orb_height">100dp</dimen>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="elmyra_blocking_system_keys">
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+    </array>
+</resources>

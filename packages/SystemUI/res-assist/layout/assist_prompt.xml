@@ -1,3 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.systemui.assist.uihints.PromptView android:textSize="@dimen/transcription_text_size" android:layout_gravity="bottom|center" android:id="@+id/assist_prompt" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/assist_prompt_start_height" android:fontFamily="google-sans-medium"
-  xmlns:android="http://schemas.android.com/apk/res/android" />
+<com.google.android.systemui.assist.uihints.PromptView xmlns:android="http://schemas.android.com/apk/res/android" android:textSize="@dimen/transcription_text_size" android:layout_gravity="bottom|center_vertical|center_horizontal|center" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/assist_prompt_start_height" android:fontFamily="google-sans-medium"/>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.systemui.assist.LockscreenOpaLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_gravity="bottom|center_vertical|center_horizontal|center" android:id="@+id/lockscreen_opa" android:paddingBottom="@dimen/opa_lockscreen_padding_bottom" android:layout_width="match_parent" android:layout_height="wrap_content">
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="match_parent">
+        <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
+            <ImageView android:layout_gravity="end" android:id="@+id/red" android:src="@drawable/ic_sysbar_opa_red" android:importantForAccessibility="no" android:layout_marginEnd="-10dp" style="@style/LockscreenDotStyle"/>
+            <ImageView android:layout_gravity="end" android:id="@+id/blue" android:src="@drawable/ic_sysbar_opa_blue" android:importantForAccessibility="no" android:layout_marginEnd="-10dp" style="@style/LockscreenDotStyle"/>
+        </FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
+            <ImageView android:layout_gravity="start" android:id="@+id/green" android:src="@drawable/ic_sysbar_opa_green" android:importantForAccessibility="no" android:layout_marginStart="-10dp" style="@style/LockscreenDotStyle"/>
+            <ImageView android:layout_gravity="start" android:id="@+id/yellow" android:src="@drawable/ic_sysbar_opa_yellow" android:importantForAccessibility="no" android:layout_marginStart="-10dp" style="@style/LockscreenDotStyle"/>
+        </FrameLayout>
+    </LinearLayout>
+</com.google.android.systemui.assist.LockscreenOpaLayout>

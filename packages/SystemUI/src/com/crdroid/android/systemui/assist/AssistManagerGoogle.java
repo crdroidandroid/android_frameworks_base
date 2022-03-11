@@ -35,13 +35,13 @@ import com.android.systemui.assist.AssistManager;
 import com.android.systemui.assist.AssistantSessionEvent;
 import com.android.systemui.assist.PhoneStateMonitor;
 import com.android.systemui.assist.ui.DefaultUiController;
+import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.model.SysUiState;
 import com.android.systemui.navigationbar.NavigationModeController;
 import com.android.systemui.recents.OverviewProxyService;
 import com.android.systemui.shared.system.QuickStepContract;
 import com.android.systemui.statusbar.CommandQueue;
-import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.google.android.systemui.assist.OpaEnabledDispatcher;
 import com.google.android.systemui.assist.OpaEnabledListener;
@@ -81,8 +81,8 @@ public class AssistManagerGoogle extends AssistManager {
     };
 
     @Inject
-    public AssistManagerGoogle(DeviceProvisionedController deviceProvisionedController, Context context, AssistUtils assistUtils, NgaUiController ngaUiController, CommandQueue commandQueue, OpaEnabledReceiver opaEnabledReceiver, PhoneStateMonitor phoneStateMonitor, OverviewProxyService overviewProxyService, OpaEnabledDispatcher opaEnabledDispatcher, KeyguardUpdateMonitor keyguardUpdateMonitor, NavigationModeController navigationModeController, ConfigurationController configurationController, AssistantPresenceHandler assistantPresenceHandler, NgaMessageHandler ngaMessageHandler, Lazy<SysUiState> lazy, Handler handler, DefaultUiController defaultUiController, GoogleDefaultUiController googleDefaultUiController, IWindowManager iWindowManager, AssistLogger assistLogger) {
-        super(deviceProvisionedController, context, assistUtils, commandQueue, phoneStateMonitor, overviewProxyService, configurationController, lazy, defaultUiController, assistLogger, handler);
+    public AssistManagerGoogle(DeviceProvisionedController deviceProvisionedController, Context context, AssistUtils assistUtils, NgaUiController ngaUiController, CommandQueue commandQueue, OpaEnabledReceiver opaEnabledReceiver, PhoneStateMonitor phoneStateMonitor, OverviewProxyService overviewProxyService, OpaEnabledDispatcher opaEnabledDispatcher, KeyguardUpdateMonitor keyguardUpdateMonitor, NavigationModeController navigationModeController, AssistantPresenceHandler assistantPresenceHandler, NgaMessageHandler ngaMessageHandler, Lazy<SysUiState> lazy, @Main Handler handler, DefaultUiController defaultUiController, GoogleDefaultUiController googleDefaultUiController, IWindowManager iWindowManager, AssistLogger assistLogger) {
+        super(deviceProvisionedController, context, assistUtils, commandQueue, phoneStateMonitor, overviewProxyService, lazy, defaultUiController, assistLogger, handler);
         mUiHandler = handler;
         mOpaEnabledReceiver = opaEnabledReceiver;
         addOpaEnabledListener(opaEnabledDispatcher);
@@ -118,11 +118,6 @@ public class AssistManagerGoogle extends AssistManager {
         });
         mNgaMessageHandler = ngaMessageHandler;
         mWindowManagerService = iWindowManager;
-    }
-
-    @Override
-    public boolean shouldShowOrb() {
-        return false;
     }
 
     public boolean shouldUseHomeButtonAnimations() {

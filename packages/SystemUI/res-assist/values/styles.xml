@@ -24,4 +24,10 @@
         <item name="android:alpha">0.0</item>
     </style>
 
+    <style name="LockscreenDotStyle" parent="@style/DotStyle">
+        <item name="android:alpha">0.0</item>
+        <item name="android:scaleX">0.8</item>
+        <item name="android:scaleY">0.8</item>
+    </style>
+
 </resources>

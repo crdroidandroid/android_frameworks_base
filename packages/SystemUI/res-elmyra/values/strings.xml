@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="elmyra_raw_sensor_string_type">com.google.sensor.elmyra.raw</string>
+    <string name="google_camera_app_package_name">com.google.android.GoogleCamera</string>
+    <string name="settings_app_package_name">com.android.settings</string>
+</resources>
