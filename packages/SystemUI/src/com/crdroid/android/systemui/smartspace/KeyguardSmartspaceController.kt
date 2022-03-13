@@ -4,7 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 
 import com.android.systemui.dagger.SysUISingleton
-import com.android.systemui.statusbar.FeatureFlags
+import com.android.systemui.flags.FeatureFlags
 
 import com.google.android.systemui.smartspace.KeyguardMediaViewController
 import com.google.android.systemui.smartspace.KeyguardZenAlarmViewController
