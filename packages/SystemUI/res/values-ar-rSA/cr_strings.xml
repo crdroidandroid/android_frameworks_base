@@ -62,7 +62,7 @@
     <string name="quick_settings_reboot_recovery_label">الإستعادة</string>
     <string name="quick_settings_poweroff_label">إيقاف التشغيل</string>
     <!-- Sound Search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">البحث الصوتي</string>
     <!-- Sound QS tile -->
     <string name="quick_settings_sound_label">الصوت</string>
     <string name="quick_settings_sound_ring">نغمة الرنين</string>
@@ -231,25 +231,25 @@
     <string name="quick_settings_monotoggle_tile_stereo">صوت ستيريو</string>
     <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">موفِّر البيانات</string>
     <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
-    <string name="global_action_onthego">On-The-Go</string>
+    <string name="onthego_notif_ticker">وضع المشي مفعل</string>
+    <string name="onthego_notif_title">تم تفعيل وضع المشي</string>
+    <string name="onthego_notif_stop">إيقاف</string>
+    <string name="onthego_notif_options">الخيارات</string>
+    <string name="onthego_notif_error">غير قادر على بدء وضع المشي</string>
+    <string name="onthego_notif_restart">إعادة تشغيل وضع المشي</string>
+    <string name="onthego_notif_camera_changed">تم تغيير وضع الكاميرا</string>
+    <string name="onthego_transparency">الشفافيه</string>
+    <string name="onthego_front_camera">استخدام الكاميرا الأمامية</string>
+    <string name="onthego_service_toggle">إعادة تشغيل الخدمة تلقائيا</string>
+    <string name="onthego_channel_name">الرئيسية</string>
+    <string name="global_action_onthego">وضع المشي</string>
     <!-- OnTheGo Tile -->
-    <string name="quick_settings_onthego_label">On-The-Go</string>
-    <string name="accessibility_quick_settings_onthego_off">On-The-Go off</string>
-    <string name="accessibility_quick_settings_onthego_on">On-The-Go on</string>
+    <string name="quick_settings_onthego_label">وضع المشي</string>
+    <string name="accessibility_quick_settings_onthego_off">تعطيل وضع المشي</string>
+    <string name="accessibility_quick_settings_onthego_on">تفعيل وضع المشي</string>
     <!-- FPS view text placeholder -->
-    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <string name="fps_text_placeholder">إطار: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
 </resources>
