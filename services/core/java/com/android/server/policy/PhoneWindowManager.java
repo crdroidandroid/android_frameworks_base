@@ -2483,6 +2483,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         filter = new IntentFilter(Intent.ACTION_USER_SWITCHED);
         context.registerReceiver(mMultiuserReceiver, filter);
 
+	// register power menu broadcast
+        filter = new IntentFilter("android.intent.action.POWER_MENU");
+        context.registerReceiver(new BroadcastReceiver(){
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				showGlobalActionsInternal();
+			}
+		}, filter);
+
         mVibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
         mSafeModeEnabledVibePattern = getLongIntArray(mContext.getResources(),
                 com.android.internal.R.array.config_safeModeEnabledVibePattern);

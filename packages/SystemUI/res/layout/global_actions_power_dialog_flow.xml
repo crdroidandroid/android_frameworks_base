@@ -20,7 +20,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="@drawable/global_actions_lite_background"
+    android:background="@android:color/transparent"
     android:padding="@dimen/global_actions_lite_padding">
 
     <androidx.constraintlayout.helper.widget.Flow

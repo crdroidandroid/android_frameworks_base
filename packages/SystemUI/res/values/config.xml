@@ -520,6 +520,9 @@
     <!-- Max number of columns for quick controls area -->
     <integer name="controls_max_columns">2</integer>
 
+    <!-- Max number of columns for power menu -->
+    <integer name="power_menu_max_columns">3</integer>
+
     <!-- Max number of columns for power menu lite -->
     <integer name="power_menu_lite_max_columns">2</integer>
     <!-- Max number of rows for power menu lite -->
@@ -547,6 +550,9 @@
     <bool name="config_showNotificationForUnknownBatteryState">false</bool>
     <!-- content URL in a notification when ACTION_BATTERY_CHANGED.EXTRA_PRESENT field is false -->
     <string translatable="false" name="config_batteryStateUnknownUrl"></string>
+
+    <!-- Whether wallet view is shown in landscape / seascape orientations -->
+    <bool name="global_actions_show_landscape_wallet_view">false</bool>
 
     <!-- Package name of the preferred system app to perform eSOS action -->
     <string name="config_preferredEmergencySosPackage" translatable="false"></string>

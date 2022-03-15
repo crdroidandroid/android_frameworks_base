@@ -32,6 +32,12 @@
     <!-- orientation of the dead zone when touches have recently occurred elsewhere on screen -->
     <integer name="navigation_bar_deadzone_orientation">0</integer>
 
+    <!-- Whether wallet view is shown in landscape / seascape orientations -->
+    <bool name="global_actions_show_landscape_wallet_view">true</bool>
+
+    <!-- Max number of columns for quick controls area -->
+    <integer name="controls_max_columns">4</integer>
+
     <!-- How many lines to show in the security footer -->
     <integer name="qs_security_footer_maxLines">1</integer>
 
