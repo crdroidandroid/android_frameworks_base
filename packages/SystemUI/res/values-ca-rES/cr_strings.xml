@@ -146,6 +146,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Reconeixent rostre...</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="force_stop_dlg_title">Forçar l\'aturada?</string>
+    <string name="force_stop_dlg_text">Si es força l\'aturada d\'una app, és possible que no funcioni correctament.</string>
 </resources>
