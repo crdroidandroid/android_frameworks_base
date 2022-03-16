@@ -146,6 +146,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Reconociendo rostro...</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="force_stop_dlg_title">¿Forzar detención?</string>
+    <string name="force_stop_dlg_text">Si fuerzas la detención de una aplicación, es posible que no funcione incorrectamente.</string>
 </resources>
