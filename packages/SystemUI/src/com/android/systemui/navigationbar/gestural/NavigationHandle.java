@@ -37,7 +37,7 @@ import com.android.systemui.res.R;
 
 public class NavigationHandle extends View implements ButtonInterface {
 
-    protected final Paint mPaint = new Paint();
+    private final Paint mPaint = new Paint();
     private @ColorInt final int mLightColor;
     private @ColorInt final int mDarkColor;
     protected final float mRadius;
