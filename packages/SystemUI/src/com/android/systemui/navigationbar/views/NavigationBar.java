@@ -29,7 +29,6 @@ import static android.inputmethodservice.InputMethodService.ENABLE_HIDE_IME_CAPT
 import static android.view.InsetsSource.FLAG_SUPPRESS_SCRIM;
 import static android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE;
 import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
-import static android.view.WindowManager.LayoutParams.PRIVATE_FLAG_NO_MOVE_ANIMATION;
 import static android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD;
 import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_3BUTTON;
 import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL;
@@ -122,7 +121,6 @@ import com.android.systemui.navigationbar.NavigationBarComponent.NavigationBarSc
 import com.android.systemui.navigationbar.NavigationModeController;
 import com.android.systemui.navigationbar.NavigationModeController.ModeChangedListener;
 import com.android.systemui.navigationbar.gestural.EdgeBackGestureHandler;
-import com.android.systemui.navigationbar.gestural.QuickswitchOrientedNavHandle;
 import com.android.systemui.navigationbar.views.buttons.ButtonDispatcher;
 import com.android.systemui.navigationbar.views.buttons.DeadZone;
 import com.android.systemui.navigationbar.views.buttons.KeyButtonView;
@@ -274,37 +272,13 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
     private boolean mIsOnDefaultDisplay;
     private boolean mHomeBlockedThisTouch;
 
-    /**
-     * When user is QuickSwitching between apps of different orientations, we'll draw a fake
-     * home handle on the orientation they originally touched down to start their swipe
-     * gesture to indicate to them that they can continue in that orientation without having to
-     * rotate the phone
-     * The secondary handle will show when we get
-     * {@link OverviewProxyListener#notifyPrioritizedRotation(int)} callback with the
-     * original handle hidden and we'll flip the visibilities once the
-     * {@link #mTasksFrozenListener} fires
-     */
-    private QuickswitchOrientedNavHandle mOrientationHandle;
-    private WindowManager.LayoutParams mOrientationParams;
-    private int mStartingQuickSwitchRotation = -1;
     private int mCurrentRotation;
-    private ViewTreeObserver.OnGlobalLayoutListener mOrientationHandleGlobalLayoutListener;
-    private boolean mShowOrientedHandleForImmersiveMode;
     private final DeadZone mDeadZone;
     private boolean mImeVisible;
     private final Rect mSamplingBounds = new Rect();
     private final Binder mInsetsSourceOwner = new Binder();
     private final NavBarButtonClickLogger mNavBarButtonClickLogger;
     private final NavbarOrientationTrackingLogger mNavbarOrientationTrackingLogger;
-
-    /**
-     * When quickswitching between apps of different orientations, we draw a secondary home handle
-     * in the position of the first app's orientation. This rect represents the region of that
-     * home handle so we can apply the correct light/dark luma on that.
-     * @see {@link NavigationBar#mOrientationHandle}
-     */
-    @android.annotation.Nullable
-    private Rect mOrientedHandleSamplingRegion;
 
     @com.android.internal.annotations.VisibleForTesting
     public enum NavBarActionEvent implements UiEventLogger.UiEventEnum {
@@ -395,11 +369,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
 
         @Override
         public void onPrioritizedRotation(@Surface.Rotation int rotation) {
-            mStartingQuickSwitchRotation = rotation;
-            if (rotation == -1) {
-                mShowOrientedHandleForImmersiveMode = false;
-            }
-            orientSecondaryHomeHandle();
         }
 
         @Override
@@ -460,14 +429,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
             mView.getRotationButtonController().setSkipOverrideUserLockPrefsOnce();
         }
     };
-
-    private NavigationBarTransitions.DarkIntensityListener mOrientationHandleIntensityListener =
-            new NavigationBarTransitions.DarkIntensityListener() {
-                @Override
-                public void onDarkIntensity(float darkIntensity) {
-                    mOrientationHandle.setDarkIntensity(darkIntensity);
-                }
-            };
 
     private final Runnable mAutoDim = () -> getBarTransitions().setAutoDim(true);
     private final Runnable mEnableLayoutTransitions = () -> mView.setLayoutTransitionsEnabled(true);
@@ -681,10 +642,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
 
                     @Override
                     public Rect getSampledRegion(View sampledView) {
-                        if (mOrientedHandleSamplingRegion != null) {
-                            return mOrientedHandleSamplingRegion;
-                        }
-
                         return calculateSamplingRect();
                     }
 
@@ -839,8 +796,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
         }
         setDisabled2Flags(mDisabledFlags2);
 
-        initSecondaryHomeHandleForRotation();
-
         // Unfortunately, we still need it because status bar needs LightBarController
         // before notifications creation. We cannot directly use getLightBarController()
         // from NavigationBarFragment directly.
@@ -866,13 +821,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
         mOverviewProxyService.removeCallback(mOverviewProxyListener);
         mUserTracker.removeCallback(mUserChangedCallback);
         mWakefulnessLifecycle.removeObserver(mWakefulnessObserver);
-        if (mOrientationHandle != null) {
-            resetSecondaryHandle();
-            getBarTransitions().removeDarkIntensityListener(mOrientationHandleIntensityListener);
-            mViewCaptureAwareWindowManager.removeView(mOrientationHandle);
-            mOrientationHandle.getViewTreeObserver().removeOnGlobalLayoutListener(
-                    mOrientationHandleGlobalLayoutListener);
-        }
         mView.getViewTreeObserver().removeOnComputeInternalInsetsListener(
                 mOnComputeInternalInsetsListener);
         mHandler.removeCallbacks(mAutoDim);
@@ -881,7 +829,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
         mNavBarHelper.removeNavTaskStateUpdater(mNavbarTaskbarStateUpdater);
         mPipOptional.ifPresent(mView::removePipExclusionBoundsChangeListener);
         mFrame = null;
-        mOrientationHandle = null;
     }
 
     // TODO: Remove this when we update nav bar recreation
@@ -912,126 +859,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
             refreshLayout(ld);
         }
         repositionNavigationBar(rotation);
-        if (canShowSecondaryHandle()) {
-            if (rotation != mCurrentRotation) {
-                mCurrentRotation = rotation;
-                orientSecondaryHomeHandle();
-            }
-        }
-    }
-
-    private void initSecondaryHomeHandleForRotation() {
-        if (mNavBarMode != NAV_BAR_MODE_GESTURAL) {
-            return;
-        }
-
-        mOrientationHandle = new QuickswitchOrientedNavHandle(mContext);
-        mOrientationHandle.setId(R.id.secondary_home_handle);
-
-        getBarTransitions().addDarkIntensityListener(mOrientationHandleIntensityListener);
-        mOrientationParams = new WindowManager.LayoutParams(0, 0,
-                WindowManager.LayoutParams.TYPE_NAVIGATION_BAR_PANEL,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-                        | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                        | WindowManager.LayoutParams.FLAG_SLIPPERY,
-                PixelFormat.TRANSLUCENT);
-        mOrientationParams.setTitle("SecondaryHomeHandle" + mContext.getDisplayId());
-        mOrientationParams.privateFlags |= PRIVATE_FLAG_NO_MOVE_ANIMATION
-                | WindowManager.LayoutParams.PRIVATE_FLAG_LAYOUT_SIZE_EXTENDED_BY_CUTOUT;
-        mViewCaptureAwareWindowManager.addView(mOrientationHandle, mOrientationParams);
-        mOrientationHandle.setVisibility(View.GONE);
-
-        logNavbarOrientation("initSecondaryHomeHandleForRotation");
-        mOrientationParams.setFitInsetsTypes(0 /* types*/);
-        mOrientationHandleGlobalLayoutListener =
-                () -> {
-                    if (mStartingQuickSwitchRotation == -1) {
-                        return;
-                    }
-
-                    RectF boundsOnScreen = mOrientationHandle.computeHomeHandleBounds();
-                    mOrientationHandle.mapRectFromViewToScreenCoords(boundsOnScreen, true);
-                    Rect boundsRounded = new Rect();
-                    boundsOnScreen.roundOut(boundsRounded);
-                    setOrientedHandleSamplingRegion(boundsRounded);
-                };
-        mOrientationHandle.getViewTreeObserver().addOnGlobalLayoutListener(
-                mOrientationHandleGlobalLayoutListener);
-    }
-
-    private void orientSecondaryHomeHandle() {
-        if (!canShowSecondaryHandle()) {
-            return;
-        }
-
-        if (mStartingQuickSwitchRotation == -1) {
-            resetSecondaryHandle();
-        } else {
-            int deltaRotation = deltaRotation(mCurrentRotation, mStartingQuickSwitchRotation);
-            if (mStartingQuickSwitchRotation == -1 || deltaRotation == -1) {
-                // Curious if starting quickswitch can change between the if check and our delta
-                Log.d(TAG, "secondary nav delta rotation: " + deltaRotation
-                        + " current: " + mCurrentRotation
-                        + " starting: " + mStartingQuickSwitchRotation);
-            }
-            int height = 0;
-            int width = 0;
-            Rect dispSize = mWindowManager.getCurrentWindowMetrics().getBounds();
-            mOrientationHandle.setDeltaRotation(deltaRotation);
-            switch (deltaRotation) {
-                case Surface.ROTATION_90:
-                case Surface.ROTATION_270:
-                    height = dispSize.height();
-                    width = mView.getHeight();
-                    break;
-                case Surface.ROTATION_180:
-                case Surface.ROTATION_0:
-                    // TODO(b/152683657): Need to determine best UX for this
-                    if (!mShowOrientedHandleForImmersiveMode) {
-                        resetSecondaryHandle();
-                        return;
-                    }
-                    width = dispSize.width();
-                    height = mView.getHeight();
-                    break;
-            }
-
-            mOrientationParams.gravity =
-                    deltaRotation == Surface.ROTATION_0 ? Gravity.BOTTOM :
-                            (deltaRotation == Surface.ROTATION_90 ? Gravity.LEFT : Gravity.RIGHT);
-            mOrientationParams.height = height;
-            mOrientationParams.width = width;
-            mWindowManager.updateViewLayout(mOrientationHandle, mOrientationParams);
-            mView.setVisibility(View.GONE);
-            mOrientationHandle.setVisibility(View.VISIBLE);
-            logNavbarOrientation("orientSecondaryHomeHandle");
-        }
-    }
-
-    private void resetSecondaryHandle() {
-        if (mOrientationHandle != null) {
-            // Case where nav mode is changed w/o ever invoking a quickstep
-            // mOrientedHandle is initialized lazily
-            mOrientationHandle.setVisibility(View.GONE);
-        }
-        mView.setVisibility(View.VISIBLE);
-        logNavbarOrientation("resetSecondaryHandle");
-        setOrientedHandleSamplingRegion(null);
-    }
-
-    /**
-     * Logging method for issues concerning Navbar/secondary handle visibility.
-     */
-    private void logNavbarOrientation(String methodName) {
-        boolean isViewVisible = (mView != null) && (mView.getVisibility() == View.VISIBLE);
-        boolean isSecondaryHandleVisible =
-                (mOrientationHandle != null) && (mOrientationHandle.getVisibility()
-                        == View.VISIBLE);
-        mNavbarOrientationTrackingLogger.logPrimaryAndSecondaryVisibility(methodName, isViewVisible,
-                mShowOrientedHandleForImmersiveMode, isSecondaryHandleVisible, mCurrentRotation,
-                mStartingQuickSwitchRotation);
     }
 
     private void parseCurrentSysuiState() {
@@ -1068,7 +895,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
 
     public void dump(PrintWriter pw) {
         pw.println("NavigationBar (displayId=" + mDisplayId + "):");
-        pw.println("  mStartingQuickSwitchRotation=" + mStartingQuickSwitchRotation);
         pw.println("  mCurrentRotation=" + mCurrentRotation);
         pw.println("  mHomeButtonLongPressDurationMs=" + mHomeButtonLongPressDurationMs);
         pw.println("  mOverrideHomeButtonLongPressDurationMs="
@@ -1086,7 +912,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
         pw.println("  mScreenPinningActive=" + mScreenPinningActive);
         dumpBarTransitions(pw, "mNavigationBarView", getBarTransitions());
 
-        pw.println("  mOrientedHandleSamplingRegion: " + mOrientedHandleSamplingRegion);
         mView.dump(pw);
         mRegionSamplingHelper.dump(pw);
         if (mAutoHideController != null) {
@@ -1121,11 +946,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
                 && mNavigationBarWindowState != state) {
             mNavigationBarWindowState = state;
             updateSystemUiStateFlags();
-            mShowOrientedHandleForImmersiveMode = state == WINDOW_STATE_HIDDEN;
-            if (mOrientationHandle != null
-                    && mStartingQuickSwitchRotation != -1) {
-                orientSecondaryHomeHandle();
-            }
             if (DEBUG_WINDOW_STATE) Log.d(TAG, "Navigation bar " + windowStateToString(state));
             setWindowVisible(isNavBarWindowVisible());
         }
@@ -1871,10 +1691,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
         };
     }
 
-    private boolean canShowSecondaryHandle() {
-        return mNavBarMode == NAV_BAR_MODE_GESTURAL && mOrientationHandle != null;
-    }
-
     private final UserTracker.Callback mUserChangedCallback =
             new UserTracker.Callback() {
                 @Override
@@ -1982,11 +1798,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
         region.op(bounds, Region.Op.UNION);
     }
 
-    void setOrientedHandleSamplingRegion(Rect orientedHandleSamplingRegion) {
-        mOrientedHandleSamplingRegion = orientedHandleSamplingRegion;
-        mRegionSamplingHelper.updateSamplingRect();
-    }
-
     private Rect calculateSamplingRect() {
         mSamplingBounds.setEmpty();
         // TODO: Extend this to 2/3 button layout as well
@@ -2053,9 +1864,6 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
             setNavBarMode(mode);
             repositionNavigationBar(mCurrentRotation);
 
-            if (!canShowSecondaryHandle()) {
-                resetSecondaryHandle();
-            }
             mView.setShouldShowSwipeUpUi(mOverviewProxyService.shouldShowSwipeUpUI());
         }
     };
