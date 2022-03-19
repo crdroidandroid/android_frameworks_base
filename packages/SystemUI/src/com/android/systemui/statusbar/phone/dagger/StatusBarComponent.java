@@ -30,7 +30,6 @@ import com.android.systemui.statusbar.phone.StatusBarCommandQueueCallbacks;
 import com.android.systemui.statusbar.phone.StatusBarDemoMode;
 import com.android.systemui.statusbar.phone.StatusBarHeadsUpChangeListener;
 import com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragment;
-import com.android.systemui.statusbar.VisualizerView;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -73,10 +72,6 @@ public interface StatusBarComponent {
      */
     @StatusBarScope
     NotificationShadeWindowView getNotificationShadeWindowView();
-
-    /** */
-    @StatusBarScope
-    VisualizerView getVisualizerView();
 
     /** */
     @StatusBarScope
