@@ -772,12 +772,17 @@ public class ResolverActivity extends Activity implements
     }
 
     protected @Nullable UserHandle fetchWorkProfileUserProfile() {
+        if (getCurrentProfile() == PROFILE_WORK) {
+            mWorkProfileUserHandle = UserHandle.of(UserHandle.myUserId());
+            return mWorkProfileUserHandle;
+        }
         mWorkProfileUserHandle = null;
         UserManager userManager = getSystemService(UserManager.class);
         for (final UserInfo userInfo : userManager
                 .getProfiles(mPersonalProfileUserHandle.getIdentifier())) {
             if (userInfo.isManagedProfile()) {
                 mWorkProfileUserHandle = userInfo.getUserHandle();
+                break;
             }
         }
         return mWorkProfileUserHandle;
