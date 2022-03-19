@@ -192,10 +192,36 @@
     <color name="profile_badge_1">#ff1A73E8</color><!-- Blue -->
     <color name="profile_badge_2">#ffff6d00</color><!-- Orange -->
     <color name="profile_badge_3">#ff22f033</color><!-- Green -->
+    <color name="profile_badge_4">#ff8213f4</color>
+    <color name="profile_badge_5">#ffb51258</color>
+    <color name="profile_badge_6">#ff587700</color>
+    <color name="profile_badge_7">#ff8213f4</color>
+    <color name="profile_badge_8">#ffa63100</color>
+    <color name="profile_badge_9">#ff148e00</color>
+    <color name="profile_badge_10">#ffaf0fbe</color>
+    <color name="profile_badge_11">#ff825300</color>
+    <color name="profile_badge_12">#ff008846</color>
+    <color name="profile_badge_13">#ffc6efff</color>
+    <color name="profile_badge_14">#fffee9ac</color>
+    <color name="profile_badge_15">#ffcfff81</color>
+    <color name="profile_badge_16">#ffc7c7c7</color>
 
     <color name="profile_badge_1_dark">#ff8ab4f8</color><!-- Blue 300-->
     <color name="profile_badge_2_dark">#fffdd663</color><!-- Orange 300 -->
     <color name="profile_badge_3_dark">#ff81c995</color><!-- Green 300 -->
+    <color name="profile_badge_4_dark">#ff370087</color>
+    <color name="profile_badge_5_dark">#ff5a0009</color>
+    <color name="profile_badge_6_dark">#ff113600</color>
+    <color name="profile_badge_7_dark">#ff370087</color>
+    <color name="profile_badge_8_dark">#ffa63100</color>
+    <color name="profile_badge_9_dark">#ff004500</color>
+    <color name="profile_badge_10_dark">#ff590058</color>
+    <color name="profile_badge_11_dark">#ff311a00</color>
+    <color name="profile_badge_12_dark">#ff003c14</color>
+    <color name="profile_badge_13_dark">#ff60afff</color>
+    <color name="profile_badge_14_dark">#ffe4a210</color>
+    <color name="profile_badge_15_dark">#ff70e800</color>
+    <color name="profile_badge_16_dark">#ff6e6e6e</color>
 
     <!-- Default instant app badge color -->
     <color name="instant_app_badge">#ff757575</color><!-- Grey -->
