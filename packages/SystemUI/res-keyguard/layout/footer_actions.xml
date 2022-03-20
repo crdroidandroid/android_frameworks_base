@@ -61,6 +61,28 @@
         </com.android.systemui.statusbar.phone.MultiUserSwitch>
 
         <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
+            android:id="@+id/services_button_container"
+            android:layout_width="@dimen/qs_footer_action_button_size"
+            android:layout_height="@dimen/qs_footer_action_button_size"
+            android:background="@drawable/qs_footer_action_circle"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <com.android.systemui.statusbar.phone.SettingsButton
+                android:id="@+id/services_button"
+                android:layout_width="@dimen/qs_footer_icon_size"
+                android:layout_height="@dimen/qs_footer_icon_size"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:focusable="false"
+                android:clickable="false"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_services"
+                android:tint="?android:attr/textColorPrimary" />
+
+        </com.android.systemui.statusbar.AlphaOptimizedFrameLayout>
+
+        <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
             android:id="@+id/settings_button_container"
             android:layout_width="@dimen/qs_footer_action_button_size"
             android:layout_height="@dimen/qs_footer_action_button_size"
