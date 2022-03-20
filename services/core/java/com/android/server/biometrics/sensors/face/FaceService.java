@@ -657,7 +657,7 @@ public class FaceService extends SystemService {
 
         private void addCustomProviders() {
             if (CustomFaceProvider.useCustomFaceUnlockService()) {
-                mServiceProviders.add(new CustomFaceProvider(getContext(), new FaceSensorPropertiesInternal(CustomFaceProvider.DEVICE_ID, SensorProperties.STRENGTH_STRONG, 1, new ArrayList(), 1, false, false, false), mLockoutResetDispatcher));
+                mServiceProviders.add(new CustomFaceProvider(getContext(), new FaceSensorPropertiesInternal(CustomFaceProvider.DEVICE_ID, SensorProperties.STRENGTH_WEAK, 1, new ArrayList(), 1, false, false, false), mLockoutResetDispatcher));
             }
         }
 
