@@ -69,6 +69,20 @@
         android:contentDescription="@string/accessibility_quick_settings_power_menu"
         android:tint="?android:attr/textColorPrimary" />
 
+    <com.android.systemui.statusbar.phone.RunningServicesButton
+        android:id="@+id/running_services_button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/qs_footer_action_button_size"
+        android:layout_marginEnd="@dimen/qs_tile_margin_horizontal"
+        android:layout_weight="1"
+        android:background="@drawable/qs_footer_action_chip_background"
+        android:clickable="true"
+        android:clipToPadding="false"
+        android:focusable="true"
+        android:padding="@dimen/qs_footer_icon_padding"
+        android:src="@drawable/ic_settings_memory"
+        android:tint="?android:attr/textColorPrimary" />
+
     <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
         android:id="@+id/settings_button_container"
         android:layout_width="0dp"
