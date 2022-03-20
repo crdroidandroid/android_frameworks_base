@@ -38,27 +38,34 @@ import com.android.systemui.statusbar.phone.MultiUserSwitch
  * edit tiles, power off and conditionally: user switch and tuner
  */
 class FooterActionsView(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
-    private lateinit var settingsContainer: View
+
     private lateinit var multiUserSwitch: MultiUserSwitch
+    private lateinit var servicesContainer: View
+    private lateinit var settingsContainer: View
     private lateinit var multiUserAvatar: ImageView
 
     private var qsDisabled = false
     private var expansionAmount = 0f
 
     private var mMultiUserEnabled = true
+    private var mShowServicesIcon = false
     private var mShowSettingsIcon = true
     private var mShowUserIcon = true
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        settingsContainer = findViewById(R.id.settings_button_container)
         multiUserSwitch = findViewById(R.id.multi_user_switch)
+        settingsContainer = findViewById(R.id.settings_button_container)
+        servicesContainer = findViewById(R.id.services_button_container)
         multiUserAvatar = multiUserSwitch.findViewById(R.id.multi_user_avatar)
 
         // RenderThread is doing more harm than good when touching the header (to expand quick
         // settings), so disable it for this view
         if (settingsContainer.background is RippleDrawable) {
             (settingsContainer.background as RippleDrawable).setForceSoftware(true)
+        }
+        if (servicesContainer.background is RippleDrawable) {
+            (servicesContainer.background as RippleDrawable).setForceSoftware(true)
         }
         importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
     }
@@ -88,6 +95,7 @@ class FooterActionsView(context: Context?, attrs: AttributeSet?) : LinearLayout(
     private fun updateClickabilities() {
         multiUserSwitch.isClickable = multiUserSwitch.visibility == VISIBLE
         settingsContainer.isClickable = settingsContainer.visibility == VISIBLE
+        servicesContainer.isClickable = servicesContainer.visibility == VISIBLE
     }
 
     private fun updateVisibilities(
@@ -95,6 +103,7 @@ class FooterActionsView(context: Context?, attrs: AttributeSet?) : LinearLayout(
     ) {
         multiUserSwitch.visibility = if (mShowUserIcon && multiUserEnabled) VISIBLE else GONE
         val isDemo = UserManager.isDeviceInDemoMode(context)
+        servicesContainer.visibility = if (isDemo || qsDisabled || !mShowServicesIcon) GONE else VISIBLE
         settingsContainer.visibility = if (isDemo || qsDisabled || !mShowSettingsIcon) GONE else VISIBLE
     }
 
@@ -117,6 +126,13 @@ class FooterActionsView(context: Context?, attrs: AttributeSet?) : LinearLayout(
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (VERBOSE) Log.d(TAG, "FooterActionsView onTouchEvent ${event?.string}")
         return super.onTouchEvent(event)
+    }
+
+    public fun updateServicesIconVisibility(
+        visible: Boolean
+    ) {
+        mShowServicesIcon = visible
+        updateEverything(mMultiUserEnabled)
     }
 
     public fun updateSettingsIconVisibility(
