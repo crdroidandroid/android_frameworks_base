@@ -59,7 +59,7 @@
     <string name="onthego_notif_restart">On-The-Go モードを再起動</string>
     <string name="onthego_notif_camera_changed">カメラモードを変更しました</string>
     <string name="onthego_transparency">透明度</string>
-    <string name="onthego_front_camera">フロントカメラを使用する</string>
+    <string name="onthego_front_camera">フロントカメラを使用</string>
     <string name="onthego_service_toggle">サービスを自動的に再起動する</string>
     <string name="onthego_channel_name">メイン</string>
     <string name="global_action_onthego">On-The-Go</string>
