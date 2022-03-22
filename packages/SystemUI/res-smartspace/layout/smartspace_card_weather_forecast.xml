@@ -1,3 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.systemui.smartspace.BcSmartspaceCardWeatherForecast android:background="@drawable/bg_smartspace_card_secondary" android:layout_width="fill_parent" android:layout_height="fill_parent" android:paddingStart="12.0dip" android:paddingEnd="12.0dip"
-  xmlns:android="http://schemas.android.com/apk/res/android" />
+<com.google.android.systemui.smartspace.BcSmartspaceCardWeatherForecast xmlns:android="http://schemas.android.com/apk/res/android" android:background="@drawable/bg_smartspace_card_secondary" android:layout_width="match_parent" android:layout_height="match_parent" android:paddingStart="12dp" android:paddingEnd="12dp"/>

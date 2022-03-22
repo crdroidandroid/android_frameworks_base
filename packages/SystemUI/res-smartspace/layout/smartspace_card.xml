@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.systemui.smartspace.BcSmartspaceCard android:layout_width="fill_parent" android:layout_height="fill_parent" android:baselineAligned="false"
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <include android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="3.0" layout="@layout/smartspace_title_subtile_pane" />
+<com.google.android.systemui.smartspace.BcSmartspaceCard xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:baselineAligned="false">
+    <include android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="3" layout="@layout/smartspace_title_subtile_pane"/>
 </com.google.android.systemui.smartspace.BcSmartspaceCard>
