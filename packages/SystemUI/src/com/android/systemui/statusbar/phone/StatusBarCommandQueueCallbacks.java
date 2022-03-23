@@ -654,4 +654,11 @@ public class StatusBarCommandQueueCallbacks implements CommandQueue.Callbacks {
             }
         }
     }
+
+    @Override
+    public void setBlockedGesturalNavigation(boolean blocked) {
+        if (mStatusBar.getNavigationBarView() != null) {
+            mStatusBar.getNavigationBarView().setBlockedGesturalNavigation(blocked);
+        }
+    }
 }
