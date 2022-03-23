@@ -791,11 +791,6 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     private void addRow(int stream, int iconRes, int iconMuteRes, boolean important,
             boolean defaultStream) {
-        addRow(stream, iconRes, iconMuteRes, important, defaultStream, false);
-    }
-
-    private void addRow(int stream, int iconRes, int iconMuteRes, boolean important,
-            boolean defaultStream, boolean dynamic) {
         if (D.BUG) Slog.d(TAG, "Adding row for stream " + stream);
         VolumeRow row = new VolumeRow();
         initRow(row, stream, iconRes, iconMuteRes, important, defaultStream);
@@ -1996,7 +1991,7 @@ public class VolumeDialogImpl implements VolumeDialog,
             mDynamic.put(stream, true);
             if (findRow(stream) == null) {
                 addRow(stream, R.drawable.ic_volume_remote, R.drawable.ic_volume_remote_mute, true,
-                        false, true);
+                        false);
             }
         }
 
