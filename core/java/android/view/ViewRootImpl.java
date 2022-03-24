@@ -6531,7 +6531,6 @@ public final class ViewRootImpl implements ViewParent,
         }
         if (x < 0 || x >= mView.getWidth() || y < 0 || y >= mView.getHeight()) {
             // E.g. when moving window divider with mouse
-            Slog.d(mTag, "updatePointerIcon called with position out of bounds");
             return false;
         }
         final PointerIcon pointerIcon = mView.onResolvePointerIcon(event, pointerIndex);
