@@ -149,7 +149,7 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
     }
 
     public void setSquishinessFraction(float squishinessFraction) {
-        mView.setSquishinessFraction(squishinessFraction);
+        mView.setSquishinessFraction(mShouldUseSplitNotificationShade ? 1f : squishinessFraction);
     }
 
     @Override
