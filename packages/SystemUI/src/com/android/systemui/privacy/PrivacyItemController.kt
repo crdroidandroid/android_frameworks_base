@@ -170,12 +170,12 @@ class PrivacyItemController @Inject constructor(
             active: Boolean
         ) {
             // Check if we care about this code right now
-            if (code in OPS_LOCATION && !locationAvailable
-                    || packageName in LOCATION_WHITELIST_PKG) {
+            if (code in OPS_LOCATION && (!locationAvailable
+                    || packageName in LOCATION_WHITELIST_PKG)) {
                 return
             }
-            if (code in OPS_MIC_CAMERA && !micCameraAvailable
-                    || packageName in CAMERA_WHITELIST_PKG) {
+            if (code in OPS_MIC_CAMERA && (!micCameraAvailable
+                    || packageName in CAMERA_WHITELIST_PKG)) {
                 return
             }
             val userId = UserHandle.getUserId(uid)
@@ -351,12 +351,12 @@ class PrivacyItemController @Inject constructor(
             AppOpsManager.OP_RECORD_AUDIO -> PrivacyType.TYPE_MICROPHONE
             else -> return null
         }
-        if (type == PrivacyType.TYPE_LOCATION && !locationAvailable
-                || appOpItem.packageName in LOCATION_WHITELIST_PKG) {
+        if (type == PrivacyType.TYPE_LOCATION && (!locationAvailable
+                || appOpItem.packageName in LOCATION_WHITELIST_PKG)) {
             return null
         }
-        if (type == PrivacyType.TYPE_CAMERA && !micCameraAvailable
-                || appOpItem.packageName in CAMERA_WHITELIST_PKG) {
+        if ((type == PrivacyType.TYPE_CAMERA ||  type == PrivacyType.TYPE_MICROPHONE)
+                && (!micCameraAvailable || appOpItem.packageName in CAMERA_WHITELIST_PKG)) {
             return null
         }
         val app = PrivacyApplication(appOpItem.packageName, appOpItem.uid)
