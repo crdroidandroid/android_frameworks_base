@@ -5388,14 +5388,6 @@ public final class Settings {
         public static final String QS_BATTERY_STYLE = "qs_battery_style";
 
         /**
-         * QS battery location
-         * 0: QS Panel
-         * 1: Quick Statusbar
-         * @hide
-         */
-        public static final String QS_BATTERY_LOCATION = "qs_battery_location";
-
-        /**
          * QS battery %
          * 0: Hide the battery percentage
          * 1: Display the battery percentage inside the icon
