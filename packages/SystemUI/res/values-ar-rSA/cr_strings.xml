@@ -105,6 +105,8 @@
     <string name="screenshot_delete_label">حذف</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">احذف لقطة الشاشة</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">إظهار نقطة الإيقاف\nضغطة مطولة لتحريكها</string>
     <string name="screenrecord_lowquality_label">تخفيض الدقة لحجم ملف أقل</string>
@@ -143,8 +145,6 @@
     <string name="tristate_rotation_270">عرضي (270 درجة)</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">لوحة تحكم الصوت</string>
-    <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">فرض إيقاف؟</string>
     <string name="force_stop_dlg_text">في حالة فرض إيقاف التطبيق، ربما لن يعمل بشكل جيد.</string>
