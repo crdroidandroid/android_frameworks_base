@@ -30,9 +30,9 @@
     <!-- Button to restart the device, within the Restart Options dialog -->
     <string name="global_action_restart_system">Sistema</string>
     <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
-    <string name="global_action_restart_recovery">Recovery</string>
+    <string name="global_action_restart_recovery">Riavvia in recovery</string>
     <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
-    <string name="global_action_restart_bootloader">Bootloader</string>
+    <string name="global_action_restart_bootloader">Riavvia in Bootloader</string>
     <!-- Button to restart the device into download mode, within the Restart Options dialog -->
     <string name="global_action_restart_download">Download</string>
     <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
@@ -114,7 +114,7 @@
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Gaming mode -->
     <string name="gaming_mode_not_enabled">La modalità gaming è disabilitata nelle impostazioni</string>
-    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
+    <string name="quick_settings_gaming_mode_label">Modalità gioco</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
