@@ -105,6 +105,8 @@
     <string name="screenshot_delete_label">Usuń</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">Usuń zrzut ekranu</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Rozpoznawanie twarzy...</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Pokaż kropkę do zatrzymania\nPrzytrzymaj, aby ją przenieść</string>
     <string name="screenrecord_lowquality_label">Niższa jakość dla mniejszego rozmiaru pliku</string>
@@ -143,8 +145,6 @@
     <string name="tristate_rotation_270">Poziomo (270°)</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Panel głośności</string>
-    <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">Rozpoznawanie twarzy...</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Wymusić zatrzymanie?</string>
     <string name="force_stop_dlg_text">Jeśli wymusisz zatrzymanie aplikacji, może ona działać nieprawidłowo.</string>
