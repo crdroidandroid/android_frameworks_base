@@ -36,7 +36,7 @@
     <!-- Button to restart the device into download mode, within the Restart Options dialog -->
     <string name="global_action_restart_download">Pobierz</string>
     <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
-    <string name="global_action_restart_fastboot">Fastbootd</string>
+    <string name="global_action_restart_fastboot">Fastboot</string>
     <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_progress">Uruchamiam ponownie\u2026</string>
     <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
@@ -79,7 +79,7 @@
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">Wskaźnik FPS</string>
     <!-- FPS view text placeholder -->
-    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" przykład="90">%1$d</xliff:g></string>
     <!-- VPN / Call strength icons in statusbar -->
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_call_strength">Siła połączenia</string>
@@ -105,6 +105,8 @@
     <string name="screenshot_delete_label">Usuń</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">Usuń zrzut ekranu</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Rozpoznawanie twarzy...</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Pokaż kropkę do zatrzymania\nPrzytrzymaj, aby ją przenieść</string>
     <string name="screenrecord_lowquality_label">Niższa jakość dla mniejszego rozmiaru pliku</string>
@@ -143,8 +145,6 @@
     <string name="tristate_rotation_270">Poziomo (270°)</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Panel głośności</string>
-    <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">Rozpoznawanie twarzy...</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Wymusić zatrzymanie?</string>
     <string name="force_stop_dlg_text">Jeśli wymusisz zatrzymanie aplikacji, może ona działać nieprawidłowo.</string>

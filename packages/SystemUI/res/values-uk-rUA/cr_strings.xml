@@ -105,6 +105,8 @@
     <string name="screenshot_delete_label">Видалити</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">Видалити скріншот</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Розпізнавання...</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Показувати крапку зупинки\nТривале натискання для переміщення</string>
     <string name="screenrecord_lowquality_label">Низька якість для меншого розміру файлу</string>
@@ -143,8 +145,6 @@
     <string name="tristate_rotation_270">Горизонтальна орієнтація (270°)</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Панель гучності</string>
-    <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">Розпізнавання...</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Примусово зупинити?</string>
     <string name="force_stop_dlg_text">Примусове закриття додатку може призвести до збою в його роботі.</string>

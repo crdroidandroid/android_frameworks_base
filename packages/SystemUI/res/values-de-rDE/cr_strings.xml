@@ -105,6 +105,8 @@
     <string name="screenshot_delete_label">Löschen</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">Screenshot löschen</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Gesichtserkennung …</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Stopppunkt anzeigen\nGedrückt halten, um ihn zu verschieben</string>
     <string name="screenrecord_lowquality_label">Qualität verringern für kleinere Dateigröße</string>
@@ -143,8 +145,6 @@
     <string name="tristate_rotation_270">Querformat (270°)</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Lautstärkeregler</string>
-    <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">Gesichtserkennung …</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Beenden erzwingen?</string>
     <string name="force_stop_dlg_text">Das Beenden einer App zu erzwingen kann zu unerwünschtem Verhalten führen.</string>

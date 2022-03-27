@@ -105,6 +105,8 @@
     <string name="screenshot_delete_label">삭제</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">스크린샷 삭제</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">얼굴 인식 중...</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">정지 버튼 표시\n길게 눌러서 이동하기</string>
     <string name="screenrecord_lowquality_label">보다 작은 파일 크기를 위한 낮은 음질</string>
@@ -143,8 +145,6 @@
     <string name="tristate_rotation_270">가로 (270°)</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">볼륨 조절 창</string>
-    <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">얼굴 인식 중...</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">강제로 중지하시겠습니까?</string>
     <string name="force_stop_dlg_text">강제로 앱을 종료하면 예기치 않은 오류가 발생할 수 있습니다.</string>
