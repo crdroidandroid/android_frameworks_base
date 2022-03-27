@@ -36,7 +36,7 @@
     <!-- Button to restart the device into download mode, within the Restart Options dialog -->
     <string name="global_action_restart_download">Pobierz</string>
     <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
-    <string name="global_action_restart_fastboot">Fastbootd</string>
+    <string name="global_action_restart_fastboot">Fastboot</string>
     <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_progress">Uruchamiam ponownie\u2026</string>
     <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
@@ -79,7 +79,7 @@
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">Wskaźnik FPS</string>
     <!-- FPS view text placeholder -->
-    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" przykład="90">%1$d</xliff:g></string>
     <!-- VPN / Call strength icons in statusbar -->
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_call_strength">Siła połączenia</string>
