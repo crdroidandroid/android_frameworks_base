@@ -105,6 +105,8 @@
     <string name="screenshot_delete_label">Διαγραφή</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">Διαγραφή στιγμιοτύπου οθόνης</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Αναγνώριση προσώπου...</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Εμφάνιση κουκίδας παύσης\nΠαρατεταμέο πάτημα για να την μετακινήσεις</string>
     <string name="screenrecord_lowquality_label">Μείωση της ποιότητας για μικρότερο μέγεθος αρχείου</string>
@@ -143,8 +145,6 @@
     <string name="tristate_rotation_270">Οριζόντια (270°)</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Πίνακας έντασης ήχου</string>
-    <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">Αναγνώριση προσώπου...</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Αναγκαστική διακοπή;</string>
     <string name="force_stop_dlg_text">Αν επιβάλετε τη διακοπή μιας εφαρμογής, ενδέχεται να μη λειτουργήσει σωστά.</string>
