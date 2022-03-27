@@ -227,7 +227,7 @@
     <string name="quick_settings_monotoggle_tile_stereo">Àudio stereo</string>
     <!-- Tuner items -->
     <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Estalvi de dades</string>
     <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go activat</string>
@@ -247,5 +247,5 @@
     <string name="accessibility_quick_settings_onthego_off">On-The-Go desactivat</string>
     <string name="accessibility_quick_settings_onthego_on">On-The-Go activat</string>
     <!-- FPS view text placeholder -->
-    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" exemple="90">%1$d</xliff:g></string>
 </resources>
