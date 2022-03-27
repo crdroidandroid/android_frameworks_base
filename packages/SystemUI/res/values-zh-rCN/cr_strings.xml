@@ -40,13 +40,13 @@
     <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_progress">正在重启\u2026</string>
     <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_recovery_progress">重新启动到恢复模式\u2026</string>
+    <string name="global_action_restart_recovery_progress">正在重启至恢复模式\u2026</string>
     <!-- Restart to bootloader mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_bootloader_progress">重新启动到引导模式\u2026</string>
+    <string name="global_action_restart_bootloader_progress">正在重启至引导模式\u2026</string>
     <!-- Restart to download mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_download_progress">重新启动到下载模式\u2026</string>
+    <string name="global_action_restart_download_progress">正在重启至下载模式\u2026</string>
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_fastboot_progress">重新启动到快速启动模式\u2026</string>
+    <string name="global_action_restart_fastboot_progress">正在重启至 fastbootd 模式\u2026</string>
     <!-- Label for current user in power menu options dialog -->
     <string name="global_action_current_user">当前</string>
     <string name="global_action_users">用户</string>
@@ -116,7 +116,7 @@
     <string name="gaming_mode_not_enabled">游戏模式在设置中被禁用</string>
     <string name="quick_settings_gaming_mode_label">游戏模式</string>
     <!-- Name of the nfc status bar icon. -->
-    <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_nfc">NFC 近场通讯</string>
     <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
     <string name="accessibility_status_bar_nfc">近场通讯</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
