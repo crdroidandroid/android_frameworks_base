@@ -105,6 +105,8 @@
     <string name="screenshot_delete_label">删除</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">删除屏幕截图</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">正在识别面部...</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">显示停止点\n长按移动它</string>
     <string name="screenrecord_lowquality_label">使用较低画质以节省存储空间</string>
@@ -143,8 +145,6 @@
     <string name="tristate_rotation_270">横向 (270°)</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">音量面板</string>
-    <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">正在识别面部...</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">强行停止?</string>
     <string name="force_stop_dlg_text">如果您强制停止某个应用程序，它可能会出现异常</string>
