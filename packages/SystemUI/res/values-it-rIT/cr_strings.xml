@@ -114,7 +114,7 @@
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Gaming mode -->
     <string name="gaming_mode_not_enabled">La modalità gaming è disabilitata nelle impostazioni</string>
-    <string name="quick_settings_gaming_mode_label">Modalità gioco</string>
+    <string name="quick_settings_gaming_mode_label">Gaming mode</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
@@ -131,7 +131,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Priorità</string>
     <string name="volume_ringer_alarms_only">Sveglie</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">Non Disturbare</string>
     <string name="tristate_flashlight">Torcia</string>
     <string name="tristate_flashlight_on">Torcia attiva</string>
     <string name="tristate_flashlight_off">Torcia spenta</string>
