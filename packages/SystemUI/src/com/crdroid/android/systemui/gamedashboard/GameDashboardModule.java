@@ -10,7 +10,6 @@ import android.view.accessibility.AccessibilityManager;
 
 import com.android.internal.logging.UiEventLogger;
 
-import com.android.wm.shell.legacysplitscreen.LegacySplitScreen;
 import com.android.wm.shell.tasksurfacehelper.TaskSurfaceHelper;
 
 import com.android.systemui.broadcast.BroadcastDispatcher;
@@ -21,6 +20,7 @@ import com.android.systemui.navigationbar.NavigationModeController;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.recents.OverviewProxyService;
 import com.android.systemui.screenrecord.RecordingController;
+import com.android.systemui.settings.UserContextProvider;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.phone.KeyguardDismissUtil;
 import com.android.systemui.statusbar.policy.ConfigurationController;
@@ -56,8 +56,8 @@ public abstract class GameDashboardModule {
 
     @Provides
     @SysUISingleton
-    static EntryPointController provideEntryPointController(Context context, AccessibilityManager accessibilityManager, BroadcastDispatcher broadcastDispatcher, CommandQueue commandQueue, GameModeDndController gameModeDndController, Handler handler, Optional<LegacySplitScreen> optionalSplitScreen, NavigationModeController navigationModeController, OverviewProxyService overviewProxyService, PackageManager packageManager, ShortcutBarController shortcutBarController, ToastController toastController, GameDashboardUiEventLogger gameDashboardUiEventLogger, Optional<TaskSurfaceHelper> optional) {
-        return new EntryPointController(context, accessibilityManager, broadcastDispatcher, commandQueue, gameModeDndController, handler, navigationModeController, optionalSplitScreen, overviewProxyService, packageManager, shortcutBarController, toastController, gameDashboardUiEventLogger, optional);
+    static EntryPointController provideEntryPointController(Context context, AccessibilityManager accessibilityManager, BroadcastDispatcher broadcastDispatcher, CommandQueue commandQueue, GameModeDndController gameModeDndController, Handler handler, NavigationModeController navigationModeController, OverviewProxyService overviewProxyService, PackageManager packageManager, ShortcutBarController shortcutBarController, ToastController toastController, GameDashboardUiEventLogger gameDashboardUiEventLogger, Optional<TaskSurfaceHelper> optional) {
+        return new EntryPointController(context, accessibilityManager, broadcastDispatcher, commandQueue, gameModeDndController, handler, navigationModeController, overviewProxyService, packageManager, shortcutBarController, toastController, gameDashboardUiEventLogger, optional);
     }
 
     @Provides
@@ -86,8 +86,8 @@ public abstract class GameDashboardModule {
 
     @Provides
     @SysUISingleton
-    static ScreenRecordController provideScreenRecordController(RecordingController recordingController, Handler handler, KeyguardDismissUtil keyguardDismissUtil, Context context, ToastController toastController) {
-        return new ScreenRecordController(recordingController, handler, keyguardDismissUtil, context, toastController);
+    static ScreenRecordController provideScreenRecordController(RecordingController recordingController, Handler handler, KeyguardDismissUtil keyguardDismissUtil, UserContextProvider userContextProvider, ToastController toastController) {
+        return new ScreenRecordController(recordingController, handler, keyguardDismissUtil, userContextProvider, toastController);
     }
 
     @Provides
