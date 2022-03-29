@@ -2141,7 +2141,7 @@ public final class CameraManager {
              * if the package name does not falls in this bucket
              */
             boolean exposeAuxCamera = Camera.shouldExposeAuxCamera();
-            if (!exposeAuxCamera == false && Integer.parseInt(id) >= 2) {
+            if (exposeAuxCamera == false && Integer.parseInt(id) >= 2) {
                 Log.w(TAG, "ignore the torch status update of camera: " + id);
                 return;
             }
