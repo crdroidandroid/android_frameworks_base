@@ -327,6 +327,9 @@ public class QSPanel extends LinearLayout {
     }
 
     private void updateViewPositions() {
+        if (mChildrenLayoutTop == null || mChildrenLayoutTop.isEmpty()) {
+            return;
+        }
         // Adjust view positions based on tile squishing
         int tileHeightOffset = mTileLayout.getTilesHeight() - mTileLayout.getHeight();
 
