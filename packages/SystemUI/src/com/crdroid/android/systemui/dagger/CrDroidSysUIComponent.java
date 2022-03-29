@@ -8,7 +8,6 @@ import com.android.systemui.dagger.SysUIComponent;
 import com.android.systemui.dagger.SystemUIModule;
 
 import com.crdroid.android.systemui.columbus.ColumbusModule;
-import com.crdroid.android.systemui.gamedashboard.GameDashboardModule;
 import com.crdroid.android.systemui.keyguard.CrDroidKeyguardSliceProvider;
 import com.crdroid.android.systemui.elmyra.ElmyraModule;
 import com.crdroid.android.systemui.smartspace.KeyguardSmartspaceController;
@@ -21,7 +20,6 @@ import dagger.Subcomponent;
         DefaultComponentBinder.class,
         DependencyProvider.class,
         ElmyraModule.class,
-        GameDashboardModule.class,
         CrDroidSystemUIBinder.class,
         SystemUIModule.class,
         CrDroidSystemUIModule.class})

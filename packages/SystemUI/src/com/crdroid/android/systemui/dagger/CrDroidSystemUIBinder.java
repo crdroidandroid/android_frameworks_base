@@ -16,7 +16,6 @@
 
 package com.crdroid.android.systemui.dagger;
 
-import android.app.Activity;
 import android.app.Service;
 
 import com.android.systemui.SystemUI;
@@ -24,7 +23,6 @@ import com.android.systemui.dagger.SystemUIBinder;
 import com.android.systemui.theme.ThemeOverlayController;
 
 import com.google.android.systemui.columbus.ColumbusTargetRequestService;
-import com.google.android.systemui.gamedashboard.GameMenuActivity;
 
 import com.crdroid.android.systemui.CrDroidServices;
 import com.crdroid.android.systemui.theme.CrDroidThemeOverlayController;
@@ -51,12 +49,4 @@ public abstract class CrDroidSystemUIBinder extends SystemUIBinder {
     @IntoMap
     @ClassKey(ColumbusTargetRequestService.class)
     public abstract Service bindColumbusTargetRequestService(ColumbusTargetRequestService activity);
-
-    /**
-     * Inject into GameMenuActivity.
-     */
-    @Binds
-    @IntoMap
-    @ClassKey(GameMenuActivity.class)
-    public abstract Activity bindGameMenuActivity(GameMenuActivity activity);
 }

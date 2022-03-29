@@ -324,8 +324,6 @@
     <uses-permission android:name="com.google.restricted_assist_gesture.permission.RESTRICTED_ASSIST_GESTURE_PROVIDER"/>
     <uses-permission android:name="com.google.sensor.elmyra.permission.USE_RAW_SENSOR"/>
 
-    <uses-permission android:name="android.permission.MANAGE_GAME_MODE" android:protectionLevel="signature"/>
-
     <permission android:name="com.google.android.ambientindication.permission.AMBIENT_INDICATION" android:protectionLevel="signature|system"/>
     <uses-permission android:name="com.google.android.ambientindication.permission.AMBIENT_INDICATION"/>
 
@@ -935,27 +933,6 @@
             android:name="com.google.android.systemui.elmyra.ElmyraServiceProxy"
             android:permission="com.google.android.elmyra.permission.CONFIGURE_ASSIST_GESTURE"
             android:exported="true"/>
-
-        <!-- Game Dashboard -->
-        <activity
-            android:theme="@style/GameMenuTheme"
-            android:name="com.google.android.systemui.gamedashboard.GameMenuActivity"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="behind"
-            android:finishOnCloseSystemDialogs="true"
-            android:showForAllUsers="true"/>
-
-        <activity
-            android:theme="@style/GameMenuTheme"
-            android:name="com.google.android.systemui.gamedashboard.GameDndConfigActivity"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="behind"
-            android:finishOnCloseSystemDialogs="true"
-            android:showForAllUsers="true"/>
 
         <!-- Wifi Timeout -->
         <receiver android:name="com.android.settingslib.wifi.WifiTimeoutReceiver"
