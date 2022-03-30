@@ -66,6 +66,12 @@ public class FadeAnimationController {
      */
     public void fadeWindowToken(boolean show, WindowToken windowToken, int animationType) {
         if (windowToken == null || windowToken.getParent() == null) {
+            if (windowToken != null) {
+                final Runnable runnable = mDeferredFinishCallbacks.remove(windowToken);
+                if (runnable != null) {
+                    runnable.run();
+                }
+            }
             return;
         }
 
