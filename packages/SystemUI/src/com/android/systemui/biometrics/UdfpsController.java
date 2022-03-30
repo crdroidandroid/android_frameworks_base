@@ -694,7 +694,7 @@ public class UdfpsController implements DozeReceiver {
     }
 
     private void updateScreenOffUdfpsState() {
-        mScreenOffUdfps = mSystemSettings.getIntForUser(Settings.System.SCREEN_OFF_UDFPS, 1, UserHandle.USER_CURRENT) == 1;
+        mScreenOffUdfps = mSystemSettings.getIntForUser(Settings.System.SCREEN_OFF_UDFPS, 0, UserHandle.USER_CURRENT) != 0;
     }
 
     /**
