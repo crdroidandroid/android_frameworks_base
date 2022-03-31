@@ -478,20 +478,18 @@ public class QSPanel extends LinearLayout implements Tunable {
     private void switchAllContentToParent(ViewGroup parent, QSTileLayout newLayout) {
         int index = parent == this ? mMovableContentStartIndex : 0;
 
+        if (mBrightnessView != null && mTop) {
+            switchToParent(mBrightnessView, parent, index);
+            index++;
+        }
+
         // Let's first move the tileLayout to the new parent, since that should come first.
         switchToParent((View) newLayout, parent, index);
         index++;
 
-        if (mBrightnessView != null) {
-            mTop = LineageSettings.Secure.getIntForUser(mContext.getContentResolver(),
-                LineageSettings.Secure.QS_BRIGHTNESS_SLIDER_POSITION,
-                0, UserHandle.USER_CURRENT) == 0;
-            if (!mUsingHorizontalLayout) {
-                switchToParent(mBrightnessView, parent, mTop ? 0 : index);
-                index++;
-            } else {
-                updateBrightnessSliderPosition();
-            }
+        if (mBrightnessView != null && !mTop) {
+            switchToParent(mBrightnessView, parent, index);
+            index++;
         }
 
         if (mFooter != null) {
@@ -665,6 +663,10 @@ public class QSPanel extends LinearLayout implements Tunable {
             mUsingHorizontalLayout = horizontal;
             ViewGroup newParent = horizontal ? mHorizontalContentContainer : this;
             switchAllContentToParent(newParent, mTileLayout);
+            if (mBrightnessRunnable != null) {
+                updateResources();
+                mBrightnessRunnable.run();
+            }
             reAttachMediaHost(mediaHostView, horizontal);
             if (needsDynamicRowsAndColumns()) {
                 mTileLayout.setMinRows(horizontal ? 2 : 1);
@@ -683,8 +685,8 @@ public class QSPanel extends LinearLayout implements Tunable {
 
     protected void updateBrightnessSliderPosition() {
         if (mBrightnessView == null) return;
-        removeView(mBrightnessView);
-        addView(mBrightnessView, mTop ? 0 : 1);
+        ViewGroup newParent = mUsingHorizontalLayout ? mHorizontalContentContainer : this;
+        switchAllContentToParent(newParent, mTileLayout);
         if (mBrightnessRunnable != null) {
             updateResources();
             mBrightnessRunnable.run();
