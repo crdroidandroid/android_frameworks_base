@@ -257,6 +257,7 @@ public class PhoneStatusBarPolicy
                 com.android.internal.R.string.status_bar_screen_record);
         mSlotFirewall = resources.getString(R.string.status_bar_firewall_slot);
         mSlotNfc = resources.getString(com.android.internal.R.string.status_bar_nfc);
+        mCurrentUserSetup = mProvisionedController.isDeviceProvisioned();
 
         mDisplayId = displayId;
         mSharedPreferences = sharedPreferences;
