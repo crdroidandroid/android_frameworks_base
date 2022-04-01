@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">패키지 서명 스푸핑</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">앱이 다른 앱인 것처럼 흉내내는 것을 허용합니다. 악성 앱들이 이 권한을 사용하여 사적인 앱 정보에 접근할 수 있으니 주의해서 사용하세요!</string>
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_fake_package_signature">패키지 서명 스푸핑</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_fake_package_signature">패키지 서명 스푸핑을 허용합니다</string>
+    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
+    <string name="permgrouprequest_fake_package_signature">&lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt;의 패키지 서명 스푸핑을 허용 하시겠습니까?</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">전원 버튼을 길게 눌러 잠금 해제</string>
+    <string name="pocket_view_title">주머니 모드가 켜졌습니다</string>
+    <string name="pocket_view_title_cancel">기기를 사용하려면:</string>
+    <string name="pocket_view_top_tag_cancel">파란색으로 표시된 부분이 가려졌는지 확인하고 먼지를 닦아주세요.</string>
+    <string name="pocket_view_top_tag_cancel2">주머니 감지 모드를 강제 종료하려면 전원 버튼을 길게 누르세요.</string>
+    <string name="pocket_view_top_tag_number1">1.\u0020</string>
+    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">장시간 인식하지 않아 얼굴 인식이 비활성화되었습니다</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">비정상 종료 로그 URL 복사</string>
+    <string name="url_copy_success">링크가 성공적으로 복사되었습니다</string>
+    <string name="url_copy_failed">로그를 Pastey에 업로드하는 동안 오류가 발생했습니다.</string>
+</resources>
