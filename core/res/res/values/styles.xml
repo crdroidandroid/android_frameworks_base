@@ -1486,12 +1486,14 @@ please see styles_device_defaults.xml.
     <style name="NotificationAction" parent="Widget.Material.Light.Button.Borderless.Small">
       <item name="textColor">@color/notification_action_button_text_color</item>
       <item name="background">@drawable/notification_material_action_background</item>
+      <item name="textAllCaps">false</item>
     </style>
 
     <!-- The style for emphasized action button on notification: Colored bordered ink button -->
     <style name="NotificationEmphasizedAction" parent="Widget.Material.Button">
         <item name="background">@drawable/btn_notification_emphasized</item>
         <item name="stateListAnimator">@anim/flat_button_state_list_anim_material</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <!-- The style for disabled action button on notification -->
