@@ -30,9 +30,9 @@
     <!-- Button to restart the device, within the Restart Options dialog -->
     <string name="global_action_restart_system">Sistema</string>
     <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
-    <string name="global_action_restart_recovery">Recovery</string>
+    <string name="global_action_restart_recovery">Riavvia in recovery</string>
     <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
-    <string name="global_action_restart_bootloader">Bootloader</string>
+    <string name="global_action_restart_bootloader">Riavvia in Bootloader</string>
     <!-- Button to restart the device into download mode, within the Restart Options dialog -->
     <string name="global_action_restart_download">Download</string>
     <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
@@ -131,7 +131,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Priorità</string>
     <string name="volume_ringer_alarms_only">Sveglie</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">Non Disturbare</string>
     <string name="tristate_flashlight">Torcia</string>
     <string name="tristate_flashlight_on">Torcia attiva</string>
     <string name="tristate_flashlight_off">Torcia spenta</string>
