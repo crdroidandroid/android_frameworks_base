@@ -592,31 +592,35 @@ public class CameraMetadataNative implements Parcelable {
     }
 
     private <T> T getBase(Key<T> key) {
-        int tag;
-        if (key.hasTag()) {
-            tag = key.getTag();
-        } else {
-            tag = nativeGetTagFromKeyLocal(mMetadataPtr, key.getName());
-            key.cacheTag(tag);
-        }
-        byte[] values = readValues(tag);
-        if (values == null) {
-            // If the key returns null, use the fallback key if exists.
-            // This is to support old key names for the newly published keys.
-            if (key.mFallbackName == null) {
-                return null;
+        try {
+            int tag;
+            if (key.hasTag()) {
+                tag = key.getTag();
+            } else {
+                tag = nativeGetTagFromKeyLocal(mMetadataPtr, key.getName());
+                key.cacheTag(tag);
             }
-            tag = nativeGetTagFromKeyLocal(mMetadataPtr, key.mFallbackName);
-            values = readValues(tag);
+            byte[] values = readValues(tag);
             if (values == null) {
-                return null;
+                // If the key returns null, use the fallback key if exists.
+                // This is to support old key names for the newly published keys.
+                if (key.mFallbackName == null) {
+                    return null;
+                }
+                tag = nativeGetTagFromKeyLocal(mMetadataPtr, key.mFallbackName);
+                values = readValues(tag);
+                if (values == null) {
+                    return null;
+                }
             }
-        }
 
-        int nativeType = nativeGetTypeFromTagLocal(mMetadataPtr, tag);
-        Marshaler<T> marshaler = getMarshalerForKey(key, nativeType);
-        ByteBuffer buffer = ByteBuffer.wrap(values).order(ByteOrder.nativeOrder());
-        return marshaler.unmarshal(buffer);
+            int nativeType = nativeGetTypeFromTagLocal(mMetadataPtr, tag);
+            Marshaler<T> marshaler = getMarshalerForKey(key, nativeType);
+            ByteBuffer buffer = ByteBuffer.wrap(values).order(ByteOrder.nativeOrder());
+            return marshaler.unmarshal(buffer);
+        } catch (Exception e) {
+                return null;
+        }
     }
 
     // Use Command pattern here to avoid lots of expensive if/equals checks in get for overridden
