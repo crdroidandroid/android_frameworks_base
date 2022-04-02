@@ -94,7 +94,7 @@ class PlayerViewHolder private constructor(itemView: View) {
     }
 
     fun marquee(start: Boolean, delay: Long) {
-        longPressText.getHandler().postDelayed({ longPressText.setSelected(start) }, delay)
+        longPressText.handler?.postDelayed({ longPressText.setSelected(start) }, delay)
     }
 
     companion object {
