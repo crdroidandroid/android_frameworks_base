@@ -280,6 +280,10 @@ public class StatusBarNotificationPresenter implements NotificationPresenter,
     private void updateNotificationsOnUiModeChanged() {
         // TODO(b/145659174): Remove legacy pipeline code
         if (mFeatureFlags.isNewNotifPipelineRenderingEnabled()) return;
+        updateNotificationOnUiModeChanged();
+    }
+
+    private void updateNotificationOnUiModeChanged() {
         List<NotificationEntry> userNotifications =
                 mEntryManager.getActiveNotificationsForCurrentUser();
         for (int i = 0; i < userNotifications.size(); i++) {
