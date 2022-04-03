@@ -137,24 +137,6 @@ public class BluetoothEventManager {
         addHandler(BluetoothDevice.ACTION_ACL_CONNECTED, new AclStateChangedHandler());
         addHandler(BluetoothDevice.ACTION_ACL_DISCONNECTED, new AclStateChangedHandler());
         addHandler(BluetoothA2dp.ACTION_CODEC_CONFIG_CHANGED, new A2dpCodecConfigChangedHandler());
-        Object sourceInfoHandler = null;
-        try {
-           Class<?> classSourceInfoHandler =
-               Class.forName("com.android.settingslib.bluetooth.BroadcastSourceInfoHandler");
-           Constructor ctor;
-           ctor = classSourceInfoHandler.getDeclaredConstructor(
-                      new Class[] {CachedBluetoothDeviceManager.class});
-           sourceInfoHandler = ctor.newInstance(mDeviceManager);
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException
-                  | InstantiationException | InvocationTargetException e) {
-              e.printStackTrace();
-        }
-        if (sourceInfoHandler != null) {
-           Log.d(TAG, "adding SourceInfo Handler");
-           addHandler(ACT_BROADCAST_SOURCE_INFO,
-                    (Handler)sourceInfoHandler);
-        }
-
         // Broadcast broadcasts
         addHandler("android.bluetooth.broadcast.profile.action.BROADCAST_STATE_CHANGED",
                 new BroadcastStateChangedHandler());
