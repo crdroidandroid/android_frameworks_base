@@ -5820,6 +5820,12 @@ public final class Settings {
         public static final String SCREEN_OFF_UDFPS = "screen_off_udfps";
 
         /**
+         * UDFPS night light
+         * @hide
+         */
+        public static final String UDFPS_NIGHT_LIGHT = "udfps_night_light";
+
+        /**
          * Navbar style
          * @hide
          */

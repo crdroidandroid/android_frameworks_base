@@ -29,12 +29,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ContentResolver;
 import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.hardware.biometrics.BiometricOverlayConstants;
 import android.hardware.biometrics.SensorLocationInternal;
+import android.hardware.display.ColorDisplayManager;
 import android.hardware.display.DisplayManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.hardware.fingerprint.FingerprintSensorPropertiesInternal;
@@ -177,6 +179,12 @@ public class UdfpsController implements DozeReceiver {
 
     private UdfpsAnimation mUdfpsAnimation;
 
+    private boolean mDisableNightMode;
+    private boolean mNightModeActive;
+    private boolean mNightModeDisabled;
+    private int mAutoModeState;
+    private float mAnimatorDurationScaleSetting;
+
     @VisibleForTesting
     public static final AudioAttributes VIBRATION_SONIFICATION_ATTRIBUTES =
             new AudioAttributes.Builder()
@@ -201,6 +209,9 @@ public class UdfpsController implements DozeReceiver {
 
         @Override
         public void onScreenTurnedOff() {
+            if (mNightModeDisabled && (mDisableNightMode && isNightLightEnabled())) {
+                setNightMode(mNightModeActive, mAutoModeState);
+            }
             mScreenOn = false;
         }
     };
@@ -649,6 +660,7 @@ public class UdfpsController implements DozeReceiver {
         udfpsHapticsSimulator.setUdfpsController(this);
 
         mUdfpsVendorCode = mContext.getResources().getInteger(R.integer.config_udfps_vendor_code);
+        mDisableNightMode = mContext.getResources().getBoolean(com.android.internal.R.bool.disable_udfps_night_light);
 
         if (com.android.internal.util.crdroid.Utils.isPackageInstalled(mContext, "com.crdroid.udfps.animations")) {
             mUdfpsAnimation = new UdfpsAnimation(mContext, mWindowManager, mSensorProps);
@@ -670,6 +682,35 @@ public class UdfpsController implements DozeReceiver {
 
     private void updateScreenOffUdfpsState() {
         mScreenOffUdfps = mSystemSettings.getIntForUser(Settings.System.SCREEN_OFF_UDFPS, 0, UserHandle.USER_CURRENT) != 0;
+    }
+
+    private boolean isNightLightEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.UDFPS_NIGHT_LIGHT, 1) == 1;
+    }
+
+    private void disableNightMode() {
+        mAnimatorDurationScaleSetting = Settings.Global.getFloat(mContext.getContentResolver(),
+                        Settings.Global.ANIMATOR_DURATION_SCALE, mAnimatorDurationScaleSetting);
+        Settings.Global.putFloat(mContext.getContentResolver(),
+                        Settings.Global.ANIMATOR_DURATION_SCALE, 0);
+        ColorDisplayManager colorDisplayManager = mContext.getSystemService(ColorDisplayManager.class);
+        mAutoModeState = colorDisplayManager.getNightDisplayAutoMode();
+        mNightModeActive = colorDisplayManager.isNightDisplayActivated();
+        colorDisplayManager.setNightDisplayActivated(false);
+        mNightModeDisabled = true;
+    }
+
+    private void setNightMode(boolean activated, int autoMode) {
+        ColorDisplayManager colorDisplayManager = mContext.getSystemService(ColorDisplayManager.class);
+        if (autoMode == 0 || mNightModeActive) {
+            colorDisplayManager.setNightDisplayActivated(activated);
+        } else if (autoMode == 1 || autoMode == 2) {
+            colorDisplayManager.setNightDisplayAutoMode(autoMode);
+        }
+        Settings.Global.putFloat(mContext.getContentResolver(),
+            Settings.Global.ANIMATOR_DURATION_SCALE, mAnimatorDurationScaleSetting);
+        mNightModeDisabled = false;
     }
 
     /**
@@ -1033,6 +1074,11 @@ public class UdfpsController implements DozeReceiver {
 
     private void onFingerDown(int x, int y, float minor, float major) {
         mExecution.assertIsMainThread();
+
+        if (!mNightModeDisabled && (mDisableNightMode && isNightLightEnabled())) {
+            disableNightMode();
+        }
+
         if (mView == null) {
             Log.w(TAG, "Null view in onFingerDown");
             return;
@@ -1071,6 +1117,11 @@ public class UdfpsController implements DozeReceiver {
         mExecution.assertIsMainThread();
         mActivePointerId = -1;
         mGoodCaptureReceived = false;
+
+        if (mNightModeDisabled && (mDisableNightMode && isNightLightEnabled())) {
+            setNightMode(mNightModeActive, mAutoModeState);
+        }
+
         if (mView == null) {
             Log.w(TAG, "Null view in onFingerUp");
             return;

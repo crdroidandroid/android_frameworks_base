@@ -88,4 +88,7 @@
 
     <!-- Screen off UDFPS -->
     <bool name="config_supportScreenOffUdfps">false</bool>
+
+    <!-- NightLight UDFPS -->
+    <bool name="disable_udfps_night_light">false</bool>
 </resources>

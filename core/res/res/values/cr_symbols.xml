@@ -89,4 +89,7 @@
 
     <!-- Screen off UDFPS -->
     <java-symbol type="bool" name="config_supportScreenOffUdfps" />
+
+    <!-- NightLight UDFPS -->
+    <java-symbol type="bool" name="disable_udfps_night_light"/>
 </resources>
