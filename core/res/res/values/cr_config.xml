@@ -97,4 +97,43 @@
          the sensor embedded in the power key and listening all the time
          causes a poor experience. -->
     <bool name="config_fingerprintWakeAndUnlock">true</bool>
+
+    <!-- Minimum interval (in milliseconds) needed to trigger doze pulsing
+         on "Pickup up" gesture.
+         Default: 2500 milliseconds (2.5 seconds * 1000) -->
+    <integer name="config_dozePulsePickup_MinPulseIntervalMs">2500</integer>
+
+    <!-- Timeout interval (in milliseconds) needed to wake up the screen
+         after "Pickup up" gesture is triggered.
+         Default: 300 milliseconds -->
+    <integer name="config_dozePulsePickup_WakelockTimeoutMs">300</integer>
+
+    <!-- Maximum time (in nanoseconds) for the hand to cover the proximity sensor
+         to trigger doze pulsing on "Hand wave" gesture.
+         Default: 1000000000 nanoseconds (1 second * 1000 * 1000 * 1000) -->
+    <integer name="config_dozePulseProximity_HandwaveMaxDeltaNs">1000000000</integer>
+
+    <!-- Minimum time (in nanoseconds) until the device is considered to have been
+         in the pocket.
+         Default: 2000000000 nanoseconds (2 seconds * 1000 * 1000 * 1000) -->
+    <integer name="config_dozePulseProximity_PocketMinDeltaNs">2000000000</integer>
+
+    <!-- Timeout interval (in milliseconds) needed to wake up the screen
+         after "Hand wave" gesture is triggered.
+         Default: 300 milliseconds -->
+    <integer name="config_dozePulseProximity_WakelockTimeoutMs">300</integer>
+
+    <!-- The tilt sensor rate (in milliseconds) events are delivered at.
+         Default: 100 milliseconds -->
+    <integer name="config_dozePulseTilt_BatchLatencyInMs">100</integer>
+
+    <!-- Minimum interval (in milliseconds) needed to trigger doze pulsing
+         on "Tilt" gesture.
+         Default: 2500 milliseconds (2.5 seconds * 1000) -->
+    <integer name="config_dozePulseTilt_MinPulseIntervalMs">2500</integer>
+
+    <!-- Timeout interval (in milliseconds) needed to wake up the screen
+         after "Tilt" gesture is triggered.
+         Default: 300 milliseconds -->
+    <integer name="config_dozePulseTilt_WakelockTimeoutMs">300</integer>
 </resources>

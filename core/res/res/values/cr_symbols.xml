@@ -24,6 +24,16 @@
     <!-- Whether doze feature is enabled by default in settings -->
     <java-symbol type="bool" name="config_doze_enabled_by_default" />
 
+    <!-- Sensor based doze calibration timings -->
+    <java-symbol type="integer" name="config_dozePulsePickup_MinPulseIntervalMs" />
+    <java-symbol type="integer" name="config_dozePulsePickup_WakelockTimeoutMs" />
+    <java-symbol type="integer" name="config_dozePulseProximity_HandwaveMaxDeltaNs" />
+    <java-symbol type="integer" name="config_dozePulseProximity_PocketMinDeltaNs" />
+    <java-symbol type="integer" name="config_dozePulseProximity_WakelockTimeoutMs" />
+    <java-symbol type="integer" name="config_dozePulseTilt_BatchLatencyInMs" />
+    <java-symbol type="integer" name="config_dozePulseTilt_MinPulseIntervalMs" />
+    <java-symbol type="integer" name="config_dozePulseTilt_WakelockTimeoutMs" />
+
     <!-- Light / Regular style fonts -->
     <java-symbol type="string" name="config_lightFontFamily" />
     <java-symbol type="string" name="config_regularFontFamily" />
