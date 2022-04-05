@@ -220,8 +220,11 @@ public class BrightnessMirrorController
                     UserHandle.USER_CURRENT);
             boolean isAutomatic = automatic != Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
             mIcon.setImageResource(isAutomatic
-                    ? R.drawable.ic_qs_brightness_auto_on
-                    : R.drawable.ic_qs_brightness_auto_off);
+                    ? R.drawable.ic_qs_brightness_auto_on_new
+                    : R.drawable.ic_qs_brightness_auto_off_new);
+            mIcon.setBackgroundResource(isAutomatic
+                    ? R.drawable.bg_qs_brightness_auto_on
+                    : R.drawable.bg_qs_brightness_auto_off);
             mIcon.setVisibility(View.VISIBLE);
         } else {
             mIcon.setVisibility(View.GONE);
