@@ -150,5 +150,5 @@
     <string name="force_stop_dlg_text">Se você forçar a parada de um aplicativo, ele poderá apresentar falhas.</string>
     <!-- Smart Pixels QS Tile -->
     <string name="quick_settings_smart_pixels">Pixels Inteligentes</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Ativação automática dos pixels inteligentes</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Ativar pixels inteligentes automaticamente</string>
 </resources>
