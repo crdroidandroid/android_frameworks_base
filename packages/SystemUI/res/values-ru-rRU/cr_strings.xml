@@ -149,6 +149,6 @@
     <string name="force_stop_dlg_title">Остановить принудительно?</string>
     <string name="force_stop_dlg_text">Принудительная остановка приложения может привести к неправильному поведению.</string>
     <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Smart Pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled Smart Pixels</string>
+    <string name="quick_settings_smart_pixels">Умные точки</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Автовключение умных точек</string>
 </resources>
