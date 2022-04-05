@@ -149,6 +149,6 @@
     <string name="force_stop_dlg_title">Примусово зупинити?</string>
     <string name="force_stop_dlg_text">Примусове закриття додатку може призвести до збою в його роботі.</string>
     <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Smart Pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled Smart Pixels</string>
+    <string name="quick_settings_smart_pixels">Смарт Пікселі</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Автоматичне ввімкнення Смарт Пікселів</string>
 </resources>
