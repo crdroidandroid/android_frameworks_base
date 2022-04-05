@@ -220,8 +220,11 @@ public class BrightnessMirrorController
                     UserHandle.USER_CURRENT);
             boolean isAutomatic = automatic != Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
             mIcon.setImageResource(isAutomatic
-                    ? com.android.systemui.R.drawable.ic_qs_brightness_auto_on
-                    : com.android.systemui.R.drawable.ic_qs_brightness_auto_off);
+                    ? com.android.systemui.R.drawable.ic_qs_brightness_auto_on_new
+                    : com.android.systemui.R.drawable.ic_qs_brightness_auto_off_new);
+            mIcon.setBackgroundResource(isAutomatic
+                    ? com.android.systemui.R.drawable.bg_qs_brightness_auto_on
+                    : com.android.systemui.R.drawable.bg_qs_brightness_auto_off);
             mIcon.setVisibility(View.VISIBLE);
         } else {
             mIcon.setVisibility(View.GONE);
