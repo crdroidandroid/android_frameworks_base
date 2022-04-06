@@ -148,4 +148,7 @@
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">強制停止しますか？</string>
     <string name="force_stop_dlg_text">アプリを強制停止すると、正常に機能しなくなることがあります。</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">スマートピクセル</string>
+    <string name="quick_settings_smart_pixels_on_power_save">スマートピクセルを自動的に有効にする</string>
 </resources>
