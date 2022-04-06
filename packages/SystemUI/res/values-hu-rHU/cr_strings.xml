@@ -85,7 +85,7 @@
     <string name="status_bar_call_strength">Híváserősség</string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Iránytű</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0<xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Előkészítés\u2026</string>
     <string name="accessibility_quick_settings_compass_off">Iránytű ki.</string>
     <string name="accessibility_quick_settings_compass_on">Iránytű be.</string>
@@ -148,4 +148,7 @@
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Kényszeríti a leállítást?</string>
     <string name="force_stop_dlg_text">Ha egy alkalmazást leállásra kényszerít, lehetséges, hogy az hibásan fog működni.</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">Intelligens pixelek</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Az Intelligens pixelek automatikus engedélyezése</string>
 </resources>
