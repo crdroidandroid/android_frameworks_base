@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Napodobniť podpis balíčku</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Umožňuje aplikácii vydávať sa za inú aplikáciu. Škodlivé aplikácie by mohli použiť túto možnosť pre prístup k dátam súkromných aplikácií. Legitímne použitie zahŕňa emulátor, ktorý predstiera, že je to, čo napodobňuje. Udeľujte toto oprávnenie s opatrnosťou!</string>
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_fake_package_signature">Napodobniť podpis balíčku</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_fake_package_signature">Povoliť napodobenie podpisu balíčku</string>
+    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
+    <string name="permgrouprequest_fake_package_signature">Povoliť aplikácii
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; napodobniť podpis balíčku?</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Stlačte a podržte tlačidlo napájania pre odomknutie</string>
+    <string name="pocket_view_title">Vreckový režim je zapnutý</string>
+    <string name="pocket_view_title_cancel">Ak chcete používať telefón:</string>
+    <string name="pocket_view_top_tag_cancel">Skontrolujte, či sa v modrej oblasti telefónu nenachádzajú žiadne prekážky, a očistite ho od nečistôt a prachu.</string>
+    <string name="pocket_view_top_tag_cancel2">Dlhým stlačením tlačidla napájania vynútite ukončenie vreckového režimu.</string>
+    <string name="pocket_view_top_tag_number1">\u0020</string>
+    <string name="pocket_view_top_tag_number2">\u0020</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Odomknutie tvárou je vypnuté z dôvodu nečinnosti</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Kopírovať adresu URL záznamu o chybe</string>
+    <string name="url_copy_success">URL úspešne skopírované</string>
+    <string name="url_copy_failed">Pri nahrávaní protokolu o zlyhaní došlo k chybe</string>
+</resources>
