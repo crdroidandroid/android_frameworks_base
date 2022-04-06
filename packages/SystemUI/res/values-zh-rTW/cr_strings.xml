@@ -148,4 +148,7 @@
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">是否強制停止？</string>
     <string name="force_stop_dlg_text">如果您強制停止應用程式，它可能會無法正常運作。</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">智慧像素</string>
+    <string name="quick_settings_smart_pixels_on_power_save">自動啟用智慧像素</string>
 </resources>
