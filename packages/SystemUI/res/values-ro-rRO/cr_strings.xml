@@ -131,7 +131,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Prioritate</string>
     <string name="volume_ringer_alarms_only">Alarme</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">Nu deranjați</string>
     <string name="tristate_flashlight">Lanternă</string>
     <string name="tristate_flashlight_on">Lanternă activată</string>
     <string name="tristate_flashlight_off">Lanternă oprită</string>
@@ -148,4 +148,7 @@
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Oprire forțată?</string>
     <string name="force_stop_dlg_text">Dacă forțați oprirea unei aplicații, aceasta se poate comporta necorespunzător.</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">Pixeli inteligenți</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Auto-activare pixeli inteligenți</string>
 </resources>
