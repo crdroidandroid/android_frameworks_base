@@ -148,4 +148,7 @@
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Paksa berhenti?</string>
     <string name="force_stop_dlg_text">Jika Anda menghentikan paksa aplikasi, kemungkinan akan terjadi gagal fungsi.</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">Piksel Cerdas</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Aktifkan otomatis Piksel Cerdas</string>
 </resources>
