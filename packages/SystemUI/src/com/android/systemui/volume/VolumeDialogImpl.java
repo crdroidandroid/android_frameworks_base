@@ -311,6 +311,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     // Variable to track the default row with which the panel is initially shown
     private VolumeRow mDefaultRow = null;
 
+    private FrameLayout mRoundedBorderBottom;
+
     // Volume panel expand state
     private boolean mExpanded;
 
@@ -663,6 +665,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
         mSettingsView = mDialog.findViewById(R.id.settings_container);
         mSettingsIcon = mDialog.findViewById(R.id.settings);
+
+        mRoundedBorderBottom = mDialog.findViewById(R.id.rounded_border_bottom);
 
         mExpandRowsView = mDialog.findViewById(R.id.expandable_indicator_container);
         mExpandRows = mDialog.findViewById(R.id.expandable_indicator);
@@ -1291,6 +1295,11 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     private void initSettingsH(int lockTaskModeState) {
+        if (mRoundedBorderBottom != null) {
+            mRoundedBorderBottom.setVisibility(!mDeviceProvisionedController.isCurrentUserSetup() ||
+                    mActivityManager.getLockTaskModeState() != LOCK_TASK_MODE_NONE
+                    ? VISIBLE : GONE);
+        }
         if (mSettingsView != null) {
             mSettingsView.setVisibility(
                     mDeviceProvisionedController.isCurrentUserSetup() &&
