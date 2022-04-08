@@ -342,8 +342,7 @@ internal constructor(
                 }
 
                 override fun onTouchOutside() {
-                    // TODO(159460485): Remove this when focus is handled properly in the system
-                    window.setFocusable(false)
+                    viewProxy.requestDismissal(ScreenshotEvent.SCREENSHOT_DISMISSED_OTHER)
                 }
             }
 
