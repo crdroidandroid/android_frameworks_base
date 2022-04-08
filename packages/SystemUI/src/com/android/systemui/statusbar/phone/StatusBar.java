@@ -3832,6 +3832,9 @@ public class StatusBar extends SystemUI implements
         public void onScreenTurnedOff() {
             mFalsingCollector.onScreenOff();
             mScrimController.onScreenTurnedOff();
+            if (mNotificationPanelViewController.isQsExpanded()) {
+                mNotificationPanelViewController.closeQs();
+            }
             updateIsKeyguard();
         }
     };
