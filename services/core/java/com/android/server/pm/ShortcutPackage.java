@@ -1579,9 +1579,10 @@ class ShortcutPackage extends ShortcutPackageItem {
                     // Don't adjust ranks for manifest shortcuts.
                     continue;
                 }
-                // At this point, it must be dynamic.
+                // At this point, it must be dynamic. But certain apps publish shortcut info
+                // that doesn't satisfy this, so just log a warning instead of full stack trace.
                 if (!si.isDynamic()) {
-                    s.wtf("Non-dynamic shortcut found.");
+                    Slog.w(TAG, "Non-dynamic shortcut found.");
                     continue;
                 }
                 final int thisRank = rank++;
