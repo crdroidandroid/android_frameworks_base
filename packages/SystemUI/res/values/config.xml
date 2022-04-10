@@ -74,7 +74,7 @@
 
     <!-- The default tiles to display in QuickSettings -->
     <string name="quick_settings_tiles_default" translatable="false">
-        internet,bt,flashlight,dnd,alarm,airplane,nfc,controls,wallet,rotation,battery,cast,screenrecord
+        internet,bt,flashlight,dnd,alarm,airplane,nfc,controls,wallet,rotation,battery,cast,screenrecord,custom(com.google.android.gms/.nearby.sharing.SharingTileService)
     </string>
 
     <!-- The minimum number of tiles to display in QuickSettings -->
