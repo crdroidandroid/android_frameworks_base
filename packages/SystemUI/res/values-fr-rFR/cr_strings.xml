@@ -30,11 +30,11 @@
     <!-- Button to restart the device, within the Restart Options dialog -->
     <string name="global_action_restart_system">Système</string>
     <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
-    <string name="global_action_restart_recovery">Recovery</string>
+    <string name="global_action_restart_recovery">Récupération</string>
     <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
-    <string name="global_action_restart_bootloader">Bootloader</string>
+    <string name="global_action_restart_bootloader">Amorçage</string>
     <!-- Button to restart the device into download mode, within the Restart Options dialog -->
-    <string name="global_action_restart_download">Download</string>
+    <string name="global_action_restart_download">EDL</string>
     <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
     <string name="global_action_restart_fastboot">Fastboot</string>
     <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
@@ -118,7 +118,7 @@
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
-    <string name="accessibility_status_bar_nfc">Nfc</string>
+    <string name="accessibility_status_bar_nfc">NFC</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Charge Rapide (<xliff:g id="charging_time_left" exemple="4 heures et 2 minutes">%1$s</xliff:g> restant jusqu\'à charge complète)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Charge Rapide</string>
@@ -149,13 +149,13 @@
     <string name="force_stop_dlg_title">Forcer l\'arrêt ?</string>
     <string name="force_stop_dlg_text">Si vous forcez l\'arrêt d\'une application, cela peut provoquer son dysfonctionnement.</string>
     <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Smart Pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled Smart Pixels</string>
+    <string name="quick_settings_smart_pixels">Pixels intelligents</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Pixels intelligents à l\'économiseur de batterie</string>
     <!-- VPN QS tile -->
     <string name="quick_settings_vpn_label">VPN</string>
-    <string name="quick_settings_vpn_connect_dialog_title">Connect to\u2026</string>
-    <string name="vpn_credentials_hint">Please enter your credentials for connecting to <xliff:g id="name">%s</xliff:g></string>
-    <string name="vpn_credentials_username">Username</string>
-    <string name="vpn_credentials_password">Password</string>
-    <string name="vpn_credentials_dialog_connect">Connect</string>
+    <string name="quick_settings_vpn_connect_dialog_title">Connexion à\u2026</string>
+    <string name="vpn_credentials_hint">Veuillez saisir vos identifiants pour vous connecter à <xliff:g id="name">%s</xliff:g></string>
+    <string name="vpn_credentials_username">Nom d\'utilisateur</string>
+    <string name="vpn_credentials_password">Mot de passe</string>
+    <string name="vpn_credentials_dialog_connect">Connexion</string>
 </resources>
