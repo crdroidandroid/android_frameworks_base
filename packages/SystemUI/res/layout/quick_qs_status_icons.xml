@@ -39,12 +39,12 @@
             android:id="@+id/clock"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:minHeight="@dimen/qs_header_row_min_height"
+            android:minHeight="22dp"
             android:gravity="center_vertical|start"
             android:paddingStart="@dimen/status_bar_left_clock_starting_padding"
             android:paddingEnd="@dimen/status_bar_left_clock_end_padding"
             android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.QS.Status"
+            android:textAppearance="@style/TextAppearance.QS.CustomClock"
             systemui:showDark="false" />
 
         <com.android.systemui.statusbar.policy.VariableDateView
