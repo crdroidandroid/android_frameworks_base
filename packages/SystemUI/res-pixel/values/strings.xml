@@ -99,7 +99,6 @@ The face data used by face unlock will be permanently and securely deleted. Afte
     <string name="no_content_in_select_mode">No text or image to be selected</string>
     <string name="quick_settings_rotation_posture_folded">folded</string>
     <string name="quick_settings_rotation_posture_unfolded">unfolded</string>
-    <string name="quick_settings_tiles_default">internet,bt,flashlight,dnd,alarm,airplane,controls,wallet,rotation,battery,cast,screenrecord,custom(com.google.android.gms/.nearby.sharing.SharingTileService),mictoggle,cameratoggle</string>
     <string name="reverse_charging_device_name_text">Other Pixel</string>
     <string name="reverse_charging_device_providing_charge_text">%1$s providing charge (%2$s)</string>
     <string name="reverse_charging_on_notification_title">Battery Share is on</string>
