@@ -158,4 +158,10 @@
 
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI Assistant</string>
+
+    <!-- Preferred network tile -->
+    <string name="qs_preferred_network_label">Preferred network</string>
+    <string name="qs_preferred_network_lte">4G / LTE</string>
+    <string name="qs_preferred_network_nr">5G / NR</string>
+    <string name="qs_preferred_network_unsupported">Unsupported</string>
 </resources>
