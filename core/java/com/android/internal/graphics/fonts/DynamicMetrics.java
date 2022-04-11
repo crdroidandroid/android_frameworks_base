@@ -17,7 +17,9 @@
 package com.android.internal.graphics.fonts;
 
 import android.app.ActivityThread;
+import android.content.ComponentCallbacks;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 
 public class DynamicMetrics {
@@ -99,6 +101,16 @@ public class DynamicMetrics {
         /* 32.0dp */ -0.02160486150154747f,
     };
 
+    private static final ComponentCallbacks callbacks = new ComponentCallbacks() {
+        @Override
+        public void onConfigurationChanged(Configuration newConfig) {
+            sDensity = getDensity();
+        }
+
+        @Override
+        public void onLowMemory() {}
+    };
+
     private DynamicMetrics() {}
 
     public static float calcTracking(float sizePx) {
@@ -108,7 +120,8 @@ public class DynamicMetrics {
                 return 0.0f;
             }
 
-            sDensity = context.getResources().getDisplayMetrics().density;
+            sDensity = getDensity();
+            context.registerComponentCallbacks(callbacks);
         }
 
         // Pixels -> sp
@@ -125,5 +138,14 @@ public class DynamicMetrics {
 
     public static boolean shouldModifyFont(Typeface typeface) {
         return typeface == null || typeface.isSystemFont();
+    }
+
+    private static float getDensity() {
+        Context context = ActivityThread.currentApplication();
+        if (context == null) {
+            return 1.0f;
+        }
+
+        return context.getResources().getDisplayMetrics().scaledDensity;
     }
 }
