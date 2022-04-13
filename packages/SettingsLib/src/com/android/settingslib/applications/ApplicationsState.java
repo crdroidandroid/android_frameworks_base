@@ -210,7 +210,8 @@ public class ApplicationsState {
         mAdminRetrieveFlags = PackageManager.MATCH_ANY_USER |
                 PackageManager.MATCH_DISABLED_COMPONENTS |
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS;
-        mRetrieveFlags = PackageManager.MATCH_DISABLED_COMPONENTS |
+        mRetrieveFlags = PackageManager.MATCH_UNINSTALLED_PACKAGES |
+                PackageManager.MATCH_DISABLED_COMPONENTS |
                 PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS;
 
         final List<ModuleInfo> moduleInfos = mPm.getInstalledModules(0 /* flags */);
@@ -1157,24 +1158,26 @@ public class ApplicationsState {
                                 mMainHandler.sendMessage(m);
                             }
                             ApplicationInfo info = mApplications.get(i);
-                            int userId = UserHandle.getUserId(info.uid);
-                            if (mEntriesMap.get(userId).get(info.packageName) == null) {
-                                numDone++;
-                                getEntryLocked(info);
-                            }
-                            if (userId != 0 && mEntriesMap.indexOfKey(0) >= 0) {
-                                // If this app is for a profile and we are on the owner, remove
-                                // the owner entry if it isn't installed.  This will prevent
-                                // duplicates of work only apps showing up as 'not installed
-                                // for this user'.
-                                // Note: This depends on us traversing the users in order, which
-                                // happens because of the way we generate the list in
-                                // doResumeIfNeededLocked.
-                                AppEntry entry = mEntriesMap.get(0).get(info.packageName);
-                                if (entry != null && !hasFlag(entry.info.flags,
-                                        ApplicationInfo.FLAG_INSTALLED)) {
-                                    mEntriesMap.get(0).remove(info.packageName);
-                                    mAppEntries.remove(entry);
+                            if (hasFlag(info.flags, ApplicationInfo.FLAG_INSTALLED)) {
+                                int userId = UserHandle.getUserId(info.uid);
+                                if (mEntriesMap.get(userId).get(info.packageName) == null) {
+                                    numDone++;
+                                    getEntryLocked(info);
+                                }
+                                if (userId != 0 && mEntriesMap.indexOfKey(0) >= 0) {
+                                    // If this app is for a profile and we are on the owner, remove
+                                    // the owner entry if it isn't installed.  This will prevent
+                                    // duplicates of work only apps showing up as 'not installed
+                                    // for this user'.
+                                    // Note: This depends on us traversing the users in order, which
+                                    // happens because of the way we generate the list in
+                                    // doResumeIfNeededLocked.
+                                    AppEntry entry = mEntriesMap.get(0).get(info.packageName);
+                                    if (entry != null && !hasFlag(entry.info.flags,
+                                            ApplicationInfo.FLAG_INSTALLED)) {
+                                        mEntriesMap.get(0).remove(info.packageName);
+                                        mAppEntries.remove(entry);
+                                    }
                                 }
                             }
                         }
@@ -1506,6 +1509,10 @@ public class ApplicationsState {
                 String pkgName = data.getEncodedSchemeSpecificPart();
                 for (int i = 0; i < mEntriesMap.size(); i++) {
                     removePackage(pkgName, mEntriesMap.keyAt(i));
+                    if (!intent.getBooleanExtra(Intent.EXTRA_DATA_REMOVED, true)
+                            && !intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
+                        addPackage(pkgName, mEntriesMap.keyAt(i));
+                    }
                 }
             } else if (Intent.ACTION_PACKAGE_CHANGED.equals(actionStr)) {
                 Uri data = intent.getData();
