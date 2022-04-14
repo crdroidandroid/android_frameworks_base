@@ -34,16 +34,16 @@
     <string name="gaming_mode_disabled_toast">Mängimisrežiim välja lülitatud</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Avamiseks vajutage ja hoidke all toitenuppu</string>
-    <string name="pocket_view_title">Pocket mode is on</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
+    <string name="pocket_view_title">Taskurežiim on sees</string>
+    <string name="pocket_view_title_cancel">Telefoni kasutamiseks:</string>
+    <string name="pocket_view_top_tag_cancel">Kontrolli, et sinu telefoni sinine ala on takistustest vaba ning eemalda mistahes tolm või mustus.</string>
+    <string name="pocket_view_top_tag_cancel2">Taskurežiimist sundväljumiseks vajuta pikalt toitenuppu.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">Kopeeri rikke logi URL</string>
     <string name="url_copy_success">URL kopeeritud</string>
-    <string name="url_copy_failed">An error occured while uploading the log to pasty</string>
+    <string name="url_copy_failed">Logi Pasty\'sse üleslaadimisel esines viga</string>
     <!-- Clipboard access toast -->
     <string name="app_clipboard_access_denied">%1$s keelati ligipääs lõikelauale</string>
     <string name="app_clipboard_access_granted">%1$s lubati ligipääs lõikelauale</string>
