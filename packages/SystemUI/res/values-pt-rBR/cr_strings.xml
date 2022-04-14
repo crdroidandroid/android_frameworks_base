@@ -153,7 +153,7 @@
     <string name="quick_settings_smart_pixels_on_power_save">Ativar pixels inteligentes automaticamente</string>
     <!-- VPN QS tile -->
     <string name="quick_settings_vpn_label">VPN</string>
-    <string name="quick_settings_vpn_connect_dialog_title">Conectar ao\u2026</string>
+    <string name="quick_settings_vpn_connect_dialog_title">Conectar-se a\u2026</string>
     <string name="vpn_credentials_hint">Por favor, insira as suas credenciais para conectar-se a <xliff:g id="name">%s</xliff:g></string>
     <string name="vpn_credentials_username">Nome de usuário</string>
     <string name="vpn_credentials_password">Senha</string>
