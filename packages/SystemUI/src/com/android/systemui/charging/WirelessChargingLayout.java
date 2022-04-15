@@ -74,9 +74,9 @@ public class WirelessChargingLayout extends FrameLayout {
                 (transmittingBatteryLevel != UNKNOWN_BATTERY_LEVEL);
 
         // set style based on background
-        int style = R.style.ChargingAnim_WallpaperBackground;
+        int style = R.style.ChargingAnim_Background;
         if (isDozing) {
-            style = R.style.ChargingAnim_DarkBackground;
+            style = R.style.ChargingAnim_Background;
         }
 
         inflate(new ContextThemeWrapper(context, style), R.layout.wireless_charging_layout, this);
