@@ -452,7 +452,7 @@ public abstract class KernelCpuUidTimeReader<T> {
                 // Unit is 10ms.
                 mDeltaTimes[i] = mCurTimes[i] - lastTimes[i];
                 if (mDeltaTimes[i] < 0) {
-                    Slog.e(mTag, "Negative delta from freq time for uid: " + uid
+                    if (DEBUG) Slog.e(mTag, "Negative delta from freq time for uid: " + uid
                             + ", delta: " + mDeltaTimes[i]);
                     return;
                 }
@@ -628,7 +628,7 @@ public abstract class KernelCpuUidTimeReader<T> {
                         cb.onUidCpuTime(uid, delta);
                     }
                 } else if (delta < 0) {
-                    Slog.e(mTag, "Negative delta from active time for uid: " + uid
+                    if (DEBUG) Slog.e(mTag, "Negative delta from active time for uid: " + uid
                             + ", delta: " + delta);
                 }
             }
