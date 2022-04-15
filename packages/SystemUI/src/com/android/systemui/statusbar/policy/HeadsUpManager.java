@@ -65,6 +65,7 @@ public abstract class HeadsUpManager extends AlertingNotificationManager {
     private final AccessibilityManagerWrapper mAccessibilityMgr;
 
     private final UiEventLogger mUiEventLogger;
+    private final int mDecayDefault;
 
     /**
      * Enum entry for notification peek logged from this class.
@@ -88,11 +89,10 @@ public abstract class HeadsUpManager extends AlertingNotificationManager {
         mUiEventLogger = Dependency.get(UiEventLogger.class);
         Resources resources = context.getResources();
         mMinimumDisplayTime = resources.getInteger(R.integer.heads_up_notification_minimum_time);
-        int defaultHeadsUpNotificationDecayMs =
-                resources.getInteger(R.integer.heads_up_notification_decay);
+        mDecayDefault = resources.getInteger(R.integer.heads_up_notification_decay) / 1000;
         mAutoDismissNotificationDecay = Settings.System.getIntForUser(context.getContentResolver(),
                 Settings.System.HEADS_UP_TIMEOUT,
-                defaultHeadsUpNotificationDecayMs, UserHandle.USER_CURRENT);
+                mDecayDefault, UserHandle.USER_CURRENT) * 1000;
         mTouchAcceptanceDelay = resources.getInteger(R.integer.touch_acceptance_delay);
         mSnoozedPackages = new ArrayMap<>();
         int defaultSnoozeLengthMs =
@@ -111,10 +111,16 @@ public abstract class HeadsUpManager extends AlertingNotificationManager {
                         Log.v(TAG, "mSnoozeLengthMs = " + mSnoozeLengthMs);
                     }
                 }
+                mAutoDismissNotificationDecay = Settings.System.getIntForUser(
+                    context.getContentResolver(), Settings.System.HEADS_UP_TIMEOUT,
+                    mDecayDefault, UserHandle.USER_CURRENT) * 1000;
             }
         };
         context.getContentResolver().registerContentObserver(
                 Settings.Global.getUriFor(SETTING_HEADS_UP_SNOOZE_LENGTH_MS), false,
+                settingsObserver);
+        context.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.HEADS_UP_TIMEOUT), false,
                 settingsObserver);
     }
 
