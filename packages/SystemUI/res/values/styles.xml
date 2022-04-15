@@ -910,14 +910,9 @@
     <!-- Used to style charging animation AVD animation -->
     <style name="ChargingAnim" />
 
-    <style name="ChargingAnim.WallpaperBackground">
-        <item name="chargingAnimColor">?attr/wallpaperTextColor</item>
-        <item name="android:textColor">?attr/wallpaperTextColor</item>
-    </style>
-
-    <style name="ChargingAnim.DarkBackground">
-        <item name="chargingAnimColor">@android:color/white</item>
-        <item name="android:textColor">@android:color/white</item>
+    <style name="ChargingAnim.Background">
+        <item name="chargingAnimColor">?android:attr/colorAccent</item>
+        <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 
     <!-- Screen recording -->
