@@ -30,7 +30,7 @@
     <!-- Button to restart the device, within the Restart Options dialog -->
     <string name="global_action_restart_system">Система</string>
     <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
-    <string name="global_action_restart_recovery">Восстановление</string>
+    <string name="global_action_restart_recovery">Режим восстановления</string>
     <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
     <string name="global_action_restart_bootloader">Загрузчик</string>
     <!-- Button to restart the device into download mode, within the Restart Options dialog -->
@@ -110,7 +110,7 @@
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Показывать кнопку остановки\nУдерживайте для перемещения</string>
     <string name="screenrecord_lowquality_label">Низкое качество для меньшего размера файла</string>
-    <string name="screenrecord_longer_timeout_switch_label">Большой размер файла\nОграничение размера записи до 15 Гб</string>
+    <string name="screenrecord_longer_timeout_switch_label">Большой размер файла\nОграничение размера записи до 15 ГиБ</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Gaming mode -->
     <string name="gaming_mode_not_enabled">Игровой режим выключен в настройках</string>
