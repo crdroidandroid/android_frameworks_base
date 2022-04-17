@@ -150,7 +150,7 @@
     <string name="force_stop_dlg_text">Принудительная остановка приложения может привести к неправильному поведению.</string>
     <!-- Smart Pixels QS Tile -->
     <string name="quick_settings_smart_pixels">Умные пиксели</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Автоматические «Умные пиксели»</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Автовключение «Умные пиксели»</string>
     <!-- VPN QS tile -->
     <string name="quick_settings_vpn_label">VPN</string>
     <string name="quick_settings_vpn_connect_dialog_title">Подключить к\u2026</string>
