@@ -9224,7 +9224,7 @@ public class AudioService extends IAudioService.Stub
                 }
             }
             return pids;
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
             return new HashSet<Integer>();
         }
     }
