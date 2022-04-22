@@ -51,6 +51,9 @@ public interface NavigationEdgeBackPlugin extends Plugin {
     /** Specifies if the arrow animation is shown for back gesture. */
     void setBackArrowVisibility(boolean backArrowVisibility);
 
+    /** Specifies if the arrow animation is shown for back gesture. */
+    void setEdgeHapticEnabled(boolean edgeHapticEnabled);
+
     /** Sets the base LayoutParams for the UI. */
     void setLayoutParams(WindowManager.LayoutParams layoutParams);
 
