@@ -99,20 +99,31 @@ constructor(
      *   if enabled, falling back to config_screenshotEditor if that's non-empty.
      */
     suspend fun createEdit(rawUri: Uri): Intent {
+        return createEditOrView(rawUri, Intent(Intent.ACTION_EDIT))
+    }
+
+    /**
+     * @return an ACTION_VIEW intent for the given URI, directed to config_screenshotEditor if
+     *   available.
+     */
+    suspend fun createView(rawUri: Uri): Intent {
+        return createEditOrView(rawUri, Intent(Intent.ACTION_VIEW))
+    }
+
+    suspend fun createEditOrView(rawUri: Uri, intent: Intent): Intent {
         val uri = uriWithoutUserId(rawUri)
-        val editIntent = Intent(Intent.ACTION_EDIT)
 
         if (usePreferredImageEditor()) {
             // Use the preferred editor if it's available, otherwise fall back to the default editor
-            editIntent.component = preferredEditor() ?: defaultEditor()
+            intent.component = preferredEditor() ?: defaultEditor()
         } else {
             val editor = context.getString(R.string.config_screenshotEditor)
             if (editor.isNotEmpty()) {
-                editIntent.component = ComponentName.unflattenFromString(editor)
+                intent.component = ComponentName.unflattenFromString(editor)
             }
         }
 
-        return editIntent
+        return intent
             .setDataAndType(uri, "image/png")
             .putExtra(EXTRA_EDIT_SOURCE, EDIT_SOURCE_SCREENSHOT)
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
