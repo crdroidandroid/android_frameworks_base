@@ -159,6 +159,8 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
             "lineagesystem:" + LineageSettings.System.FORCE_SHOW_NAVBAR;
     private static final String BACK_GESTURE_ARROW =
             Settings.Secure.BACK_GESTURE_ARROW;
+    private static final String BACK_GESTURE_HAPTIC =
+            Settings.Secure.BACK_GESTURE_HAPTIC;
 
     private static final int MAX_NUM_LOGGED_PREDICTIONS = 10;
     private static final int MAX_NUM_LOGGED_GESTURES = 10;
@@ -350,6 +352,7 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
 
     private boolean mNavbarVisible;
     private boolean mIsBackGestureArrowEnabled;
+    private boolean mIsEdgeHapticEnabled;
 
     private final NavigationEdgeBackPlugin.BackCallback mBackCallback =
             new NavigationEdgeBackPlugin.BackCallback() {
@@ -652,6 +655,10 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
                         Settings.Secure.BACK_GESTURE_ARROW, 1, UserHandle.USER_CURRENT) != 0;
         updateBackArrowVisibility();
 
+        mIsEdgeHapticEnabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                        Settings.Secure.BACK_GESTURE_HAPTIC, 1, UserHandle.USER_CURRENT) != 0;
+        updateEdgeHaptic();
+
         // Reduce the default touch slop to ensure that we can intercept the gesture
         // before the app starts to react to it.
         // TODO(b/130352502) Tune this value and extract into a constant
@@ -706,6 +713,7 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
         mTunerService.addTunable(this, BACK_GESTURE_HEIGHT);
         mTunerService.addTunable(this, FORCE_SHOW_NAVBAR);
         mTunerService.addTunable(this, BACK_GESTURE_ARROW);
+        mTunerService.addTunable(this, BACK_GESTURE_HAPTIC);
     }
 
     /**
@@ -976,6 +984,10 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
             mIsBackGestureArrowEnabled =
                 TunerService.parseIntegerSwitch(newValue, true);
             updateBackArrowVisibility();
+        } else if (BACK_GESTURE_HAPTIC.equals(key)) {
+            mIsEdgeHapticEnabled =
+                TunerService.parseIntegerSwitch(newValue, true);
+            updateEdgeHaptic();
         }
     }
 
@@ -1017,6 +1029,12 @@ public class EdgeBackGestureHandler implements TunerService.Tunable {
     private void updateBackArrowVisibility() {
         if (mIsEnabled && mEdgeBackPlugin != null) {
             mEdgeBackPlugin.setBackArrowVisibility(mIsBackGestureArrowEnabled);
+        }
+    }
+
+    private void updateEdgeHaptic() {
+        if (mIsEnabled && mEdgeBackPlugin != null) {
+            mEdgeBackPlugin.setEdgeHapticEnabled(mIsEdgeHapticEnabled);
         }
     }
 
