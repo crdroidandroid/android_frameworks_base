@@ -353,6 +353,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
 
     private boolean mBlockedGesturalNavigation;
     private boolean mIsBackGestureArrowEnabled;
+    private boolean mIsEdgeHapticEnabled;
 
     EdgeBackGestureHandler(
             Context context,
@@ -460,6 +461,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
         mIsBackGestureAllowed =
                 !mGestureNavigationSettingsObserver.areNavigationButtonForcedVisible();
         mIsBackGestureArrowEnabled = mGestureNavigationSettingsObserver.getBackArrowGesture();
+        mIsEdgeHapticEnabled = mGestureNavigationSettingsObserver.getEdgeHapticEnabled();
 
         final DisplayMetrics dm = res.getDisplayMetrics();
         final float defaultGestureHeight = res.getDimension(
@@ -948,6 +950,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
             if (mAllowGesture) {
                 mEdgeBackPlugin.setIsLeftPanel(mIsOnLeftEdge);
                 mEdgeBackPlugin.setBackArrowVisibility(mIsBackGestureArrowEnabled);
+                mEdgeBackPlugin.setEdgeHapticEnabled(mIsEdgeHapticEnabled);
                 mEdgeBackPlugin.onMotionEvent(ev);
                 dispatchToBackAnimation(ev);
             }
