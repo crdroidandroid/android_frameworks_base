@@ -49,6 +49,7 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+import android.sysprop.TelephonyProperties;
 import android.telephony.AccessNetworkConstants;
 import android.telephony.NetworkRegistrationInfo;
 import android.telephony.ServiceState;
@@ -177,6 +178,9 @@ public class InternetDetailsContentController implements AccessPointController.A
     static final int SATELLITE_CONNECTED = 2;
     static final int SATELLITE_STARTED = 1;
     static final int SATELLITE_NOT_STARTED = 0;
+
+    // Every RILConstants network mode above NETWORK_MODE_LTE_TDSCDMA_CDMA_EVDO_GSM_WCDMA (22)
+    private static final int NETWORK_MODE_NR_THRESHOLD = 22;
 
     private final FeatureFlags mFeatureFlags;
 
@@ -1320,6 +1324,75 @@ public class InternetDetailsContentController implements AccessPointController.A
             return;
         }
         tm.setMobileDataPolicyEnabled(TelephonyManager.MOBILE_DATA_POLICY_AUTO_DATA_SWITCH, enable);
+    }
+
+    @WorkerThread
+    boolean isFivegSupported() {
+        final TelephonyManager tm = mTelephonyManager;
+        if (tm != null) {
+            try {
+                final long supportedRaf = tm.getSupportedRadioAccessFamily();
+                if (supportedRaf != TelephonyManager.NETWORK_TYPE_BITMASK_UNKNOWN) {
+                    return (supportedRaf & TelephonyManager.NETWORK_TYPE_BITMASK_NR) != 0;
+                }
+            } catch (RuntimeException e) {
+                Log.e(TAG, "Can not read the supported radio access family", e);
+            }
+        }
+        try {
+            for (Integer networkMode : TelephonyProperties.default_network()) {
+                if (networkMode != null && networkMode > NETWORK_MODE_NR_THRESHOLD) {
+                    return true;
+                }
+            }
+        } catch (RuntimeException e) {
+            Log.e(TAG, "Can not read the default network mode", e);
+        }
+        return false;
+    }
+
+    @WorkerThread
+    boolean isFivegEnabled() {
+        final TelephonyManager tm = mTelephonyManager;
+        if (tm == null) {
+            if (DEBUG) {
+                Log.d(TAG, "TelephonyManager is null, can not read the allowed network types.");
+            }
+            return false;
+        }
+        try {
+            return (tm.getAllowedNetworkTypesForReason(
+                    TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_USER)
+                    & TelephonyManager.NETWORK_TYPE_BITMASK_NR) != 0;
+        } catch (RuntimeException e) {
+            Log.e(TAG, "Can not read the allowed network types", e);
+            return false;
+        }
+    }
+
+    @WorkerThread
+    void setFivegEnabled(boolean enabled) {
+        final TelephonyManager tm = mTelephonyManager;
+        if (tm == null) {
+            if (DEBUG) {
+                Log.d(TAG, "TelephonyManager is null, can not set the allowed network types.");
+            }
+            return;
+        }
+        try {
+            final long allowedNetworkTypes = tm.getAllowedNetworkTypesForReason(
+                    TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_USER);
+            final long newNetworkTypes = enabled
+                    ? (allowedNetworkTypes | TelephonyManager.NETWORK_TYPE_BITMASK_NR)
+                    : (allowedNetworkTypes & ~TelephonyManager.NETWORK_TYPE_BITMASK_NR);
+            if (newNetworkTypes == allowedNetworkTypes) {
+                return;
+            }
+            tm.setAllowedNetworkTypesForReason(
+                    TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_USER, newNetworkTypes);
+        } catch (RuntimeException e) {
+            Log.e(TAG, "Can not set the allowed network types", e);
+        }
     }
 
     boolean isDataStateInService(int subId) {
