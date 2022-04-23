@@ -165,4 +165,7 @@
 
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Recognizing face...</string>
+
+    <!-- 5G toggle in Internet Dialog -->
+    <string name="enable_fiveg">Enable 5G</string>
 </resources>
