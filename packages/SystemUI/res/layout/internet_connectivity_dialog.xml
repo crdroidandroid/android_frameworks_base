@@ -129,65 +129,130 @@
                 <LinearLayout
                     android:id="@+id/mobile_network_layout"
                     style="@style/InternetDialog.Network"
-                    android:layout_height="72dp">
-
-                    <FrameLayout
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:clickable="false"
-                        android:layout_gravity="center_vertical|start">
-                        <ImageView
-                            android:id="@+id/signal_icon"
-                            android:autoMirrored="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"/>
-                    </FrameLayout>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:clickable="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="start|center_vertical">
-                        <TextView
-                            android:id="@+id/mobile_title"
-                            android:maxLines="1"
-                            style="@style/InternetDialog.NetworkTitle"/>
-                        <TextView
-                            android:id="@+id/mobile_summary"
-                            style="@style/InternetDialog.NetworkSummary"/>
-                        <TextView
-                            android:id="@+id/airplane_mode_summary"
-                            android:text="@string/airplane_mode"
-                            android:visibility="gone"
-                            style="@style/InternetDialog.NetworkSummary"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="72dp">
+
+                        <FrameLayout
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:clickable="false"
+                            android:layout_gravity="center_vertical|start">
+                            <ImageView
+                                android:id="@+id/signal_icon"
+                                android:autoMirrored="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:clickable="false"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="start|center_vertical">
+                            <TextView
+                                android:id="@+id/mobile_title"
+                                android:maxLines="1"
+                                style="@style/InternetDialog.NetworkTitle"/>
+                            <TextView
+                                android:id="@+id/mobile_summary"
+                                style="@style/InternetDialog.NetworkSummary"/>
+                            <TextView
+                                android:id="@+id/airplane_mode_summary"
+                                android:text="@string/airplane_mode"
+                                android:visibility="gone"
+                                style="@style/InternetDialog.NetworkSummary"/>
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/mobile_toggle_divider"
+                            android:layout_width="1dp"
+                            android:layout_height="28dp"
+                            android:layout_marginStart="7dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_gravity="center_vertical"/>
+
+                        <FrameLayout
+                            android:layout_width="@dimen/settingslib_switch_track_width"
+                            android:layout_height="48dp"
+                            android:layout_gravity="end|center_vertical">
+                            <Switch
+                                android:id="@+id/mobile_toggle"
+                                android:contentDescription="@string/mobile_data_settings_title"
+                                android:switchMinWidth="@dimen/settingslib_switch_track_width"
+                                android:layout_gravity="center"
+                                android:layout_width="@dimen/settingslib_switch_track_width"
+                                android:layout_height="match_parent"
+                                android:track="@drawable/settingslib_track_selector"
+                                android:thumb="@drawable/settingslib_thumb_selector"
+                                android:theme="@style/MainSwitch.Settingslib"/>
+                        </FrameLayout>
+
                     </LinearLayout>
 
-                    <View
-                        android:id="@+id/mobile_toggle_divider"
-                        android:layout_width="1dp"
-                        android:layout_height="28dp"
-                        android:layout_marginStart="7dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_gravity="center_vertical"/>
+                    <LinearLayout
+                        android:id="@+id/fiveg_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="72dp">
 
-                    <FrameLayout
-                        android:layout_width="@dimen/settingslib_switch_track_width"
-                        android:layout_height="48dp"
-                        android:layout_gravity="end|center_vertical">
-                        <Switch
-                            android:id="@+id/mobile_toggle"
-                            android:contentDescription="@string/mobile_data_settings_title"
-                            android:switchMinWidth="@dimen/settingslib_switch_track_width"
-                            android:layout_gravity="center"
-                            android:layout_width="@dimen/settingslib_switch_track_width"
+                        <FrameLayout
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:clickable="false"
+                            android:layout_gravity="center_vertical|start">
+                            <ImageView
+                                android:id="@+id/fiveg_icon"
+                                android:autoMirrored="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_5g_mobiledata"/>
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:clickable="false"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:track="@drawable/settingslib_track_selector"
-                            android:thumb="@drawable/settingslib_thumb_selector"
-                            android:theme="@style/MainSwitch.Settingslib"/>
-                    </FrameLayout>
+                            android:gravity="start|center_vertical">
+                            <TextView
+                                android:id="@+id/fiveg_title"
+                                android:maxLines="1"
+                                style="@style/InternetDialog.NetworkTitle"/>
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/fiveg_toggle_divider"
+                            android:layout_width="1dp"
+                            android:layout_height="28dp"
+                            android:layout_marginStart="7dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_gravity="center_vertical"/>
+
+                        <FrameLayout
+                            android:layout_width="@dimen/settingslib_switch_track_width"
+                            android:layout_height="48dp"
+                            android:layout_gravity="end|center_vertical">
+                            <Switch
+                                android:id="@+id/fiveg_toggle"
+                                android:contentDescription="@string/enable_fiveg"
+                                android:switchMinWidth="@dimen/settingslib_switch_track_width"
+                                android:layout_gravity="center"
+                                android:layout_width="@dimen/settingslib_switch_track_width"
+                                android:layout_height="match_parent"
+                                android:track="@drawable/settingslib_track_selector"
+                                android:thumb="@drawable/settingslib_thumb_selector"
+                                android:theme="@style/MainSwitch.Settingslib"/>
+                        </FrameLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
