@@ -303,7 +303,7 @@ public class ProcessCpuTracker {
                 return sta.added ? -1 : 1;
             }
             if (sta.removed != stb.removed) {
-                return sta.added ? -1 : 1;
+                return sta.removed ? -1 : 1;
             }
             return 0;
         }
