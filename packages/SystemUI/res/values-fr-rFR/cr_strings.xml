@@ -32,9 +32,9 @@
     <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
     <string name="global_action_restart_recovery">Récupération</string>
     <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
-    <string name="global_action_restart_bootloader">Amorçage</string>
+    <string name="global_action_restart_bootloader">Bootloader</string>
     <!-- Button to restart the device into download mode, within the Restart Options dialog -->
-    <string name="global_action_restart_download">EDL</string>
+    <string name="global_action_restart_download">Download</string>
     <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
     <string name="global_action_restart_fastboot">Fastboot</string>
     <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
@@ -68,7 +68,7 @@
     <string name="accessibility_quick_settings_onthego_off">On-The-Go désactivé</string>
     <string name="accessibility_quick_settings_onthego_on">On-The-Go activé</string>
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="kilobitspersecond_short">Kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
     <string name="gigabitspersecond_short">Gb/s</string>
     <string name="kilobytespersecond_short">ko/s</string>
@@ -149,8 +149,8 @@
     <string name="force_stop_dlg_title">Forcer l\'arrêt ?</string>
     <string name="force_stop_dlg_text">Si vous forcez l\'arrêt d\'une application, cela peut provoquer son dysfonctionnement.</string>
     <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Pixels intelligents</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Pixels intelligents à l\'économiseur de batterie</string>
+    <string name="quick_settings_smart_pixels">Smart Pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Activation automatique de Smart Pixels</string>
     <!-- VPN QS tile -->
     <string name="quick_settings_vpn_label">VPN</string>
     <string name="quick_settings_vpn_connect_dialog_title">Connexion à\u2026</string>
