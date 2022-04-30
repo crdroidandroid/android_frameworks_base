@@ -5875,6 +5875,11 @@ public final class Settings {
         };
 
         /**
+         * @hide
+         */
+        public static final String QS_TRANSPARENCY = "qs_transparency";
+
+        /**
          * These are all public system settings
          *
          * @hide
