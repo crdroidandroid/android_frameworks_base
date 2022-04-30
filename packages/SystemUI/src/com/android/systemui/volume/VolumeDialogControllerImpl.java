@@ -215,6 +215,8 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
                     VolumePolicy.A11Y_MODE_INDEPENDENT_A11Y_VOLUME :
                         VolumePolicy.A11Y_MODE_MEDIA_A11Y_VOLUME);
 
+        updateLinkNotificationConfigW();
+
         mWakefulnessLifecycle.addObserver(mWakefullnessLifecycleObserver);
     }
 
