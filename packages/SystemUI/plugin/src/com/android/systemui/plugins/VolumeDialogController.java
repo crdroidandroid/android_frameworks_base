@@ -106,7 +106,7 @@ public interface VolumeDialogController {
         public ComponentName effectsSuppressor;
         public String effectsSuppressorName;
         public int activeStream = NO_ACTIVE_STREAM;
-        public boolean linkedNotification;
+        public boolean linkedNotification = true;
         public boolean disallowAlarms;
         public boolean disallowMedia;
         public boolean disallowSystem;
