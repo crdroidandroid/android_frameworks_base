@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">Выдаліць</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">Запіс экрана выдалены</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Гук</string>
+    <string name="quick_settings_sound_ring">Званок</string>
+    <string name="quick_settings_sound_vibrate">Вібрацыя</string>
+    <string name="quick_settings_sound_dnd">Не турбаваць</string>
+    <!-- Advanced restart menu -->
+    <!-- Button to indicate more options -->
+    <string name="global_action_restart_more">Перазагрузка \u2026</string>
+    <!-- Button to restart the device, within the Restart Options dialog -->
+    <string name="global_action_restart_system">Сістэма</string>
+    <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
+    <string name="global_action_restart_recovery">Рэжым аднаўлення</string>
+    <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
+    <string name="global_action_restart_bootloader">Загрузчык</string>
+    <!-- Button to restart the device into download mode, within the Restart Options dialog -->
+    <string name="global_action_restart_download">Спампоўка</string>
+    <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
+    <string name="global_action_restart_fastboot">Fastbootd</string>
+    <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_progress">Перазапуск\u2026</string>
+    <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_recovery_progress">Перазапуск ў рэжым аднаўлення\u2026</string>
+    <!-- Restart to bootloader mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_bootloader_progress">Пераход у рэжым загрузніка\u2026</string>
+    <!-- Restart to download mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_download_progress">Пераход у рэжым абнаўлення ПЗ\u2026</string>
+    <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_fastboot_progress">Перазагрузка ў рэжым fastbootd\u2026</string>
+    <!-- Label for current user in power menu options dialog -->
+    <string name="global_action_current_user">Бягучы</string>
+    <string name="global_action_users">Карыстальнікі</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">Рэжым «На хаду» уключаны</string>
+    <string name="onthego_notif_title">Рэжым «На хаду» актыўны</string>
+    <string name="onthego_notif_stop">Спыніць</string>
+    <string name="onthego_notif_options">Опцыі</string>
+    <string name="onthego_notif_error">Немагчыма запусціць рэжым «На хаду»</string>
+    <string name="onthego_notif_restart">Перазапусціць рэжым «На хаду»</string>
+    <string name="onthego_notif_camera_changed">Рэжым камеры зменены</string>
+    <string name="onthego_transparency">Празрыстасць</string>
+    <string name="onthego_front_camera">Выкарыстоўваць франтальную камеру</string>
+    <string name="onthego_service_toggle">Аўтаматычна перазапускаць службу</string>
+    <string name="onthego_channel_name">Галоўны</string>
+    <string name="global_action_onthego">\"На хаду\"</string>
+    <!-- OnTheGo Tile -->
+    <string name="quick_settings_onthego_label">\"На хаду\"</string>
+    <string name="accessibility_quick_settings_onthego_off">Рэжым «На хаду» адкл.</string>
+    <string name="accessibility_quick_settings_onthego_on">Рэжым «На хаду» укл.</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">кбіт/с</string>
+    <string name="megabitspersecond_short">Мб/с</string>
+    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="kilobytespersecond_short">кБ/с</string>
+    <string name="megabytespersecond_short">МБ/с</string>
+    <string name="gigabytespersecond_short">ГБ/с</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Інфармацыя аб працэсары</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Інфармацыя аб FPS</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <!-- VPN / Call strength icons in statusbar -->
+    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_call_strength">Узровень сігналу</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Компас</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Ініцыялізацыя\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Компас адкл.</string>
+    <string name="accessibility_quick_settings_compass_on">Компас укл.</string>
+    <string name="quick_settings_compass_N">Пн</string>
+    <string name="quick_settings_compass_NE">ПнУсх</string>
+    <string name="quick_settings_compass_E">Усх</string>
+    <string name="quick_settings_compass_SE">ПдУсх</string>
+    <string name="quick_settings_compass_S">Пд</string>
+    <string name="quick_settings_compass_SW">ПдЗх</string>
+    <string name="quick_settings_compass_W">Зх</string>
+    <string name="quick_settings_compass_NW">ПнЗх</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Пераключыць карту мабільных дадзеных</string>
+    <string name="qs_data_switch_changed_1">Выкарыстанне SIM 1 для перадачы дадзеных</string>
+    <string name="qs_data_switch_changed_2">Выкарыстанне SIM 2 для перадачы дадзеных</string>
+    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_delete_label">Выдаліць</string>
+    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
+    <string name="screenshot_delete_description">Выдаліць здымак экрана</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Распазнаванне асобы...</string>
+    <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">Паказаць кропку спынення\nНацісніце, каб перамясціць</string>
+    <string name="screenrecord_lowquality_label">Нізкая якасць для меншага памеру файла</string>
+    <string name="screenrecord_longer_timeout_switch_label">Абмежаванне на большы памер файла\nАбмежаванне памеру запісу да 15 Гб</string>
+    <!-- Text to use when the number in a notification info is too large -->
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Гульнявы рэжым адключаны ў наладах</string>
+    <string name="quick_settings_gaming_mode_label">Гульнявы рэжым</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+    <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
+    <string name="accessibility_status_bar_nfc">Nfc</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Хуткая зарадкаа (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> да поўнай зарадкі)</string>
+    <string name="keyguard_plugged_in_dash_charging">Ідзе зарадка (<xliff:g id="Percentage">%s</xliff:g>)</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp зарадка • (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> да поўнай зарадкі)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp зарадка</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC зарадка • (<xliff:g id="charging_time_left" example="4 гадзінны і 2 хвіліны">%1$s</xliff:g> да поўнай зарадкі)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC зарадка</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Прыярытэт</string>
+    <string name="volume_ringer_alarms_only">Будзільнікі</string>
+    <string name="volume_ringer_dnd">Не турбаваць</string>
+    <string name="tristate_flashlight">Ліхтарык</string>
+    <string name="tristate_flashlight_on">Ліхтарык уключаны</string>
+    <string name="tristate_flashlight_off">Ліхтарык выключаны</string>
+    <string name="tristate_flashlight_blink">Мігценне ліхтарыкам</string>
+    <string name="tristate_brightness_bright">Максімальная яркасць</string>
+    <string name="tristate_brightness_dark">Мінімальная яркасць</string>
+    <string name="tristate_brightness_auto">Аўтаматычная яркасць</string>
+    <string name="tristate_rotation_auto">Аўтапаварот</string>
+    <string name="tristate_rotation_0">Партрэт</string>
+    <string name="tristate_rotation_90">Ландшафт (90°)</string>
+    <string name="tristate_rotation_270">Ландшафт (270°)</string>
+    <!-- Volume panel QS tile -->
+    <string name="quick_settings_volume_panel_label">Панэль гучнасці</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Спынiць прымусова?</string>
+    <string name="force_stop_dlg_text">Прымусовае закрыццё праграмы можа адбіцца на яе функцыянальнасці.</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">Разумныя пікселі</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Аўтаматычнае ўключэнне разумных пікселяў</string>
+    <!-- VPN QS tile -->
+    <string name="quick_settings_vpn_label">VPN</string>
+    <string name="quick_settings_vpn_connect_dialog_title">Падлучэнне да\u2026</string>
+    <string name="vpn_credentials_hint">Калі ласка, увядзіце вашыя уліковыя дадзеныя для падлучэння да <xliff:g id="name">%s</xliff:g></string>
+    <string name="vpn_credentials_username">Імя карыстальніка</string>
+    <string name="vpn_credentials_password">Пароль</string>
+    <string name="vpn_credentials_dialog_connect">Падлучыць</string>
+</resources>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">Supprimer</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">Enregistrement d\'écran supprimé</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Son</string>
+    <string name="quick_settings_sound_ring">Sonner</string>
+    <string name="quick_settings_sound_vibrate">Vibrer</string>
+    <string name="quick_settings_sound_dnd">Ne pas déranger</string>
+    <!-- Advanced restart menu -->
+    <!-- Button to indicate more options -->
+    <string name="global_action_restart_more">Redémarrer\u2026</string>
+    <!-- Button to restart the device, within the Restart Options dialog -->
+    <string name="global_action_restart_system">Système</string>
+    <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
+    <string name="global_action_restart_recovery">Récupération</string>
+    <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
+    <string name="global_action_restart_bootloader">Bootloader</string>
+    <!-- Button to restart the device into download mode, within the Restart Options dialog -->
+    <string name="global_action_restart_download">Download</string>
+    <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
+    <string name="global_action_restart_fastboot">Fastboot</string>
+    <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_progress">Redémarrage\u2026</string>
+    <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_recovery_progress">Redémarrage en mode recovery\u2026</string>
+    <!-- Restart to bootloader mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_bootloader_progress">Redémarrage en mode bootloader\u2026</string>
+    <!-- Restart to download mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_download_progress">Redémarrage en mode download\u2026</string>
+    <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_fastboot_progress">Redémarrage en mode fastboot</string>
+    <!-- Label for current user in power menu options dialog -->
+    <string name="global_action_current_user">En cours</string>
+    <string name="global_action_users">Utilisateurs</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">On-The-Go activé</string>
+    <string name="onthego_notif_title">On-The-Go est actif</string>
+    <string name="onthego_notif_stop">Arrêter</string>
+    <string name="onthego_notif_options">Options</string>
+    <string name="onthego_notif_error">Impossible de démarrer On-The-Go</string>
+    <string name="onthego_notif_restart">Redémarrer On-The-Go</string>
+    <string name="onthego_notif_camera_changed">Mode de caméra modifié</string>
+    <string name="onthego_transparency">Transparence</string>
+    <string name="onthego_front_camera">Utiliser la caméra frontale</string>
+    <string name="onthego_service_toggle">Redémarrer automatiquement le service</string>
+    <string name="onthego_channel_name">Principal</string>
+    <string name="global_action_onthego">On-The-Go</string>
+    <!-- OnTheGo Tile -->
+    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="accessibility_quick_settings_onthego_off">On-The-Go désactivé</string>
+    <string name="accessibility_quick_settings_onthego_on">On-The-Go activé</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">Kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">ko/s</string>
+    <string name="megabytespersecond_short">Mo/s</string>
+    <string name="gigabytespersecond_short">Go/s</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Infos processeur</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Infos FPS</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <!-- VPN / Call strength icons in statusbar -->
+    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_call_strength">Puissance du réseau</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Boussole</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrés">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Initialisation\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">Boussole désactivée.</string>
+    <string name="accessibility_quick_settings_compass_on">Boussole activée.</string>
+    <string name="quick_settings_compass_N">N</string>
+    <string name="quick_settings_compass_NE">NE</string>
+    <string name="quick_settings_compass_E">E</string>
+    <string name="quick_settings_compass_SE">SE</string>
+    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_SW">SO</string>
+    <string name="quick_settings_compass_W">O</string>
+    <string name="quick_settings_compass_NW">NO</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Basculer de carte SIM</string>
+    <string name="qs_data_switch_changed_1">SIM 1 utilisée pour les données mobiles</string>
+    <string name="qs_data_switch_changed_2">SIM 2 utilisée pour les données mobiles</string>
+    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_delete_label">Supprimer</string>
+    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
+    <string name="screenshot_delete_description">Supprimer la capture d\'écran</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Reconnaissance faciale...</string>
+    <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">Afficher le point d\'arrêt\nAppui long pour le déplacer</string>
+    <string name="screenrecord_lowquality_label">Diminuer la qualité de l\'image pour une taille de fichier plus petite</string>
+    <string name="screenrecord_longer_timeout_switch_label">Limite de taille de fichier plus grande\nLimiter la taille d\'enregistrement à 15 Go</string>
+    <!-- Text to use when the number in a notification info is too large -->
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">Le mode jeu est désactivé dans les paramètres</string>
+    <string name="quick_settings_gaming_mode_label">Mode jeu</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+    <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
+    <string name="accessibility_status_bar_nfc">NFC</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Charge Rapide (<xliff:g id="charging_time_left" exemple="4 heures et 2 minutes">%1$s</xliff:g> restant jusqu\'à charge complète)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Charge Rapide</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Charge Rapide (<xliff:g id="charging_time_left" exemple="4 heures et 2 minutes">%1$s</xliff:g> restant jusqu\'à charge complète)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Charge Rapide</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Charge rapide (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> jusqu\'à la charge complète)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Charge rapide</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Prioritaire</string>
+    <string name="volume_ringer_alarms_only">Alarmes</string>
+    <string name="volume_ringer_dnd">Ne Pas Déranger</string>
+    <string name="tristate_flashlight">Lampe torche</string>
+    <string name="tristate_flashlight_on">Lampe torche allumée</string>
+    <string name="tristate_flashlight_off">Lampe torche éteinte</string>
+    <string name="tristate_flashlight_blink">Clignotement lampe torche</string>
+    <string name="tristate_brightness_bright">Luminosité maxi</string>
+    <string name="tristate_brightness_dark">Luminosité mini</string>
+    <string name="tristate_brightness_auto">Luminosité automatique</string>
+    <string name="tristate_rotation_auto">Rotation automatique</string>
+    <string name="tristate_rotation_0">Portrait</string>
+    <string name="tristate_rotation_90">Paysage (90°)</string>
+    <string name="tristate_rotation_270">Paysage (270°)</string>
+    <!-- Volume panel QS tile -->
+    <string name="quick_settings_volume_panel_label">Panneau de volume</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Forcer l\'arrêt ?</string>
+    <string name="force_stop_dlg_text">Si vous forcez l\'arrêt d\'une application, cela peut provoquer son dysfonctionnement.</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">Smart Pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Activation automatique de Smart Pixels</string>
+    <!-- VPN QS tile -->
+    <string name="quick_settings_vpn_label">VPN</string>
+    <string name="quick_settings_vpn_connect_dialog_title">Connexion à\u2026</string>
+    <string name="vpn_credentials_hint">Veuillez saisir vos identifiants pour vous connecter à <xliff:g id="name">%s</xliff:g></string>
+    <string name="vpn_credentials_username">Nom d\'utilisateur</string>
+    <string name="vpn_credentials_password">Mot de passe</string>
+    <string name="vpn_credentials_dialog_connect">Connexion</string>
+</resources>

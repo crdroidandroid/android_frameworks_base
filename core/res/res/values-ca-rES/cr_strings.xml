@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Enganyar la signatura del paquet</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Permet que l\'aplicació s\'executi com una aplicació diferent. Les aplicacions malicioses poden utilitzar això per accedir a dades personals. Hi han usos legítims, com un emulador pretenent ser el que emula. Concediu aquest permís amb compte!</string>
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_fake_package_signature">Falsificar la signatura del paquet</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_fake_package_signature">permetre falsificar la signatura del paquet</string>
+    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
+    <string name="permgrouprequest_fake_package_signature">Voleu permetre que
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; falsifiqui la signatura del paquet?</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Prem i mantén el botó d’encesa per desbloquejar</string>
+    <string name="pocket_view_title">El mode butxaca està activat</string>
+    <string name="pocket_view_title_cancel">Per a utilitzar el teu telèfon:</string>
+    <string name="pocket_view_top_tag_cancel">Comprova si l\'àrea blava del teu telèfon està lliure d\'obstruccions i neteja tota la pols i brutícia.</string>
+    <string name="pocket_view_top_tag_cancel2">Deixa premut el botó d\'encesa per a treure el mode butzaca de forma forçada.</string>
+    <string name="pocket_view_top_tag_number1">1.\u0020</string>
+    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Desbloqueig facial desactivat a causa de la inactivitat</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Copiar URL del registre d\'errors</string>
+    <string name="url_copy_success">URL copiada amb èxit</string>
+    <string name="url_copy_failed">Hi ha hagut un error mentre es carregava el registre a Pasty</string>
+</resources>
