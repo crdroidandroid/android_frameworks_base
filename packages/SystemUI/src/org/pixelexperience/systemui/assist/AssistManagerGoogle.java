@@ -45,9 +45,6 @@ import com.android.systemui.recents.OverviewProxyService;
 import com.android.systemui.shared.system.QuickStepContract;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
-import com.google.android.systemui.assist.OpaEnabledDispatcher;
-import com.google.android.systemui.assist.OpaEnabledListener;
-import com.google.android.systemui.assist.OpaEnabledReceiver;
 import com.google.android.systemui.assist.uihints.AssistantPresenceHandler;
 import com.google.android.systemui.assist.uihints.GoogleDefaultUiController;
 import com.google.android.systemui.assist.uihints.NgaMessageHandler;
@@ -65,7 +62,6 @@ public class AssistManagerGoogle extends AssistManager {
     private final GoogleDefaultUiController mDefaultUiController;
     private final NgaMessageHandler mNgaMessageHandler;
     private final NgaUiController mNgaUiController;
-    private final OpaEnabledReceiver mOpaEnabledReceiver;
     private final Handler mUiHandler;
     private final IWindowManager mWindowManagerService;
     private boolean mGoogleIsAssistant;
@@ -86,15 +82,13 @@ public class AssistManagerGoogle extends AssistManager {
     private boolean mAllowAnimation = true;
 
     @Inject
-    public AssistManagerGoogle(DeviceProvisionedController deviceProvisionedController, Context context, AssistUtils assistUtils, NgaUiController ngaUiController, CommandQueue commandQueue, OpaEnabledReceiver opaEnabledReceiver, PhoneStateMonitor phoneStateMonitor, OverviewProxyService overviewProxyService, OpaEnabledDispatcher opaEnabledDispatcher, KeyguardUpdateMonitor keyguardUpdateMonitor, NavigationModeController navigationModeController, AssistantPresenceHandler assistantPresenceHandler, NgaMessageHandler ngaMessageHandler, Lazy<SysUiState> lazy, Handler handler, DefaultUiController defaultUiController, GoogleDefaultUiController googleDefaultUiController, IWindowManager iWindowManager, AssistLogger assistLogger) {
+    public AssistManagerGoogle(DeviceProvisionedController deviceProvisionedController, Context context, AssistUtils assistUtils, NgaUiController ngaUiController, CommandQueue commandQueue, PhoneStateMonitor phoneStateMonitor, OverviewProxyService overviewProxyService, KeyguardUpdateMonitor keyguardUpdateMonitor, NavigationModeController navigationModeController, AssistantPresenceHandler assistantPresenceHandler, NgaMessageHandler ngaMessageHandler, Lazy<SysUiState> lazy, Handler handler, DefaultUiController defaultUiController, GoogleDefaultUiController googleDefaultUiController, IWindowManager iWindowManager, AssistLogger assistLogger) {
         super(deviceProvisionedController, context, assistUtils, commandQueue, phoneStateMonitor, overviewProxyService, lazy, defaultUiController, assistLogger, handler);
         mUiHandler = handler;
-        mOpaEnabledReceiver = opaEnabledReceiver;
-        addOpaEnabledListener(opaEnabledDispatcher);
         keyguardUpdateMonitor.registerCallback(new KeyguardUpdateMonitorCallback() {
             @Override
             public void onUserSwitching(int i) {
-                mOpaEnabledReceiver.onUserSwitching(i);
+
             }
         });
         mNgaUiController = ngaUiController;
@@ -214,16 +208,8 @@ public class AssistManagerGoogle extends AssistManager {
         }
     }
 
-    public void addOpaEnabledListener(OpaEnabledListener opaEnabledListener) {
-        mOpaEnabledReceiver.addOpaEnabledListener(opaEnabledListener);
-    }
-
     public boolean isActiveAssistantNga() {
         return mNgaIsAssistant;
-    }
-
-    public void dispatchOpaEnabledState() {
-        mOpaEnabledReceiver.dispatchOpaEnabledState();
     }
 
     private void checkSqueezeGestureStatus() {

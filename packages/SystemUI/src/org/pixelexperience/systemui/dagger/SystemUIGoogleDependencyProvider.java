@@ -127,9 +127,6 @@ import com.android.wm.shell.legacysplitscreen.LegacySplitScreen;
 import com.google.android.systemui.LiveWallpaperScrimController;
 import com.google.android.systemui.NotificationLockscreenUserManagerGoogle;
 import com.google.android.systemui.assist.GoogleAssistLogger;
-import com.google.android.systemui.assist.OpaEnabledDispatcher;
-import com.google.android.systemui.assist.OpaEnabledReceiver;
-import com.google.android.systemui.assist.OpaEnabledSettings;
 import com.google.android.systemui.assist.uihints.AssistantPresenceHandler;
 import com.google.android.systemui.assist.uihints.AssistantWarmer;
 import com.google.android.systemui.assist.uihints.ColorChangeHandler;
@@ -769,32 +766,14 @@ public class SystemUIGoogleDependencyProvider {
 
     @Provides
     @SysUISingleton
-    static OpaEnabledDispatcher provideOpaEnabledDispatcher(Lazy<StatusBar> lazy) {
-        return new OpaEnabledDispatcher(lazy);
-    }
-
-    @Provides
-    @SysUISingleton
     static GoogleAssistLogger provideGoogleAssistLogger(Context context, UiEventLogger uiEventLogger, AssistUtils assistUtils, PhoneStateMonitor phoneStateMonitor, AssistantPresenceHandler assistantPresenceHandler) {
         return new GoogleAssistLogger(context, uiEventLogger, assistUtils, phoneStateMonitor, assistantPresenceHandler);
     }
 
     @Provides
     @SysUISingleton
-    static OpaEnabledReceiver provideOpaEnabledReceiver(Context context, BroadcastDispatcher broadcastDispatcher, @Main Executor executor, @Background Executor executorB, OpaEnabledSettings opaEnabledSettings) {
-        return new OpaEnabledReceiver(context, broadcastDispatcher, executor, executorB, opaEnabledSettings);
-    }
-
-    @Provides
-    @SysUISingleton
-    static AssistManagerGoogle provideAssistManagerGoogle(DeviceProvisionedController deviceProvisionedController, Context context, AssistUtils assistUtils, NgaUiController ngaUiController, CommandQueue commandQueue, OpaEnabledReceiver opaEnabledReceiver, PhoneStateMonitor phoneStateMonitor, OverviewProxyService overviewProxyService, OpaEnabledDispatcher opaEnabledDispatcher, KeyguardUpdateMonitor keyguardUpdateMonitor, NavigationModeController navigationModeController, AssistantPresenceHandler assistantPresenceHandler, NgaMessageHandler ngaMessageHandler, Lazy<SysUiState> lazy, Handler handler, DefaultUiController defaultUiController, GoogleDefaultUiController googleDefaultUiController, IWindowManager iWindowManager, AssistLogger assistLogger) {
-        return new AssistManagerGoogle(deviceProvisionedController, context, assistUtils, ngaUiController, commandQueue, opaEnabledReceiver, phoneStateMonitor, overviewProxyService, opaEnabledDispatcher, keyguardUpdateMonitor, navigationModeController, assistantPresenceHandler, ngaMessageHandler, lazy, handler, defaultUiController, googleDefaultUiController, iWindowManager, assistLogger);
-    }
-
-    @Provides
-    @SysUISingleton
-    static OpaEnabledSettings provideOpaEnabledSettings(Context context) {
-        return new OpaEnabledSettings(context);
+    static AssistManagerGoogle provideAssistManagerGoogle(DeviceProvisionedController deviceProvisionedController, Context context, AssistUtils assistUtils, NgaUiController ngaUiController, CommandQueue commandQueue, PhoneStateMonitor phoneStateMonitor, OverviewProxyService overviewProxyService, KeyguardUpdateMonitor keyguardUpdateMonitor, NavigationModeController navigationModeController, AssistantPresenceHandler assistantPresenceHandler, NgaMessageHandler ngaMessageHandler, Lazy<SysUiState> lazy, Handler handler, DefaultUiController defaultUiController, GoogleDefaultUiController googleDefaultUiController, IWindowManager iWindowManager, AssistLogger assistLogger) {
+        return new AssistManagerGoogle(deviceProvisionedController, context, assistUtils, ngaUiController, commandQueue, phoneStateMonitor, overviewProxyService, keyguardUpdateMonitor, navigationModeController, assistantPresenceHandler, ngaMessageHandler, lazy, handler, defaultUiController, googleDefaultUiController, iWindowManager, assistLogger);
     }
 
     @Provides
