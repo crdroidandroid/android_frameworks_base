@@ -8426,7 +8426,14 @@ public class ActivityManagerService extends IActivityManager.Stub
                     }
                 }
 
-                dbox.addText(dropboxTag, sb.toString());
+                //toString() of StringBuilder need to create a array copy with count,
+                //if no more memory could be made available by the garbage collector,
+                //"free list large object space" maybe oom.
+                try {
+                    dbox.addText(dropboxTag, sb.toString());
+                } catch (OutOfMemoryError e) {
+                    Slog.e(TAG, "Error writing string for count:" + sb.length(), e);
+                }
             }
         };
 
