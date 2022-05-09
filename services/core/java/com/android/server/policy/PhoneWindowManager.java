@@ -1395,6 +1395,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             case LONG_PRESS_POWER_TORCH:
                 mPowerKeyHandled = true;
+                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, false,
+                        "Power - Long Press - Torch");
                 // Toggle torch state asynchronously to help protect against
                 // a misbehaving cameraservice from blocking systemui.
                 mHandler.removeMessages(MSG_TOGGLE_TORCH);
