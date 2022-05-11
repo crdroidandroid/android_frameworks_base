@@ -94,4 +94,14 @@
          the sensor embedded in the power key and listening all the time
          causes a poor experience. -->
     <bool name="config_fingerprintWakeAndUnlock">true</bool>
+
+    <!-- These are system packages exempted from privacy indicator -->
+    <string-array name="config_indicatorExemptedPackageNames" translatable="false">
+        <item>com.android.bluetooth</item>
+        <item>com.android.phone</item>
+        <item>com.android.networkstack.tethering</item>
+        <item>com.android.systemui</item>
+        <item>com.google.android.settings.intelligence</item>
+        <item>com.crdroid.faceunlock</item>
+    </string-array>
 </resources>
