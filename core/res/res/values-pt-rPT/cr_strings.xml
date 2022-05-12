@@ -34,16 +34,16 @@
     <string name="gaming_mode_disabled_toast">O modo de jogo foi desativado</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Para desbloquear pressione e mantenha pressionado o botão de ligar</string>
-    <string name="pocket_view_title">Pocket mode is on</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
+    <string name="pocket_view_title">Modo de bolso ativado</string>
+    <string name="pocket_view_title_cancel">Para utilizar o seu telefone:</string>
+    <string name="pocket_view_top_tag_cancel">Verifique se a área azul do seu telefone está desobstruída e limpe qualquer sujidade ou pó.</string>
+    <string name="pocket_view_top_tag_cancel2">Pressione longamente o botão de energia para forçar a saída do modo de bolso.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">Copiar URL do registo de falhas</string>
     <string name="url_copy_success">URL copiado com sucesso</string>
-    <string name="url_copy_failed">An error occured while uploading the log to pasty</string>
+    <string name="url_copy_failed">Ocorreu um erro ao enviar o registo para o dogbin</string>
     <!-- Clipboard access toast -->
     <string name="app_clipboard_access_denied">%1$s teve acesso negado à área de transferência</string>
     <string name="app_clipboard_access_granted">%1$s teve acesso à área de transferência</string>
