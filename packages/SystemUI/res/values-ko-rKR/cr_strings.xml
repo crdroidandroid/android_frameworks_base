@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">삭제</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">화면 녹화 영상이 삭제되었습니다.</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">소리</string>
+    <string name="quick_settings_sound_ring">벨소리</string>
+    <string name="quick_settings_sound_vibrate">진동</string>
+    <string name="quick_settings_sound_dnd">방해 금지</string>
+    <!-- Advanced restart menu -->
+    <!-- Button to indicate more options -->
+    <string name="global_action_restart_more">재시작\u2026</string>
+    <!-- Button to restart the device, within the Restart Options dialog -->
+    <string name="global_action_restart_system">시스템</string>
+    <!-- Button to restart the device into recovery mode, within the Restart Options dialog -->
+    <string name="global_action_restart_recovery">복구 모드</string>
+    <!-- Button to restart the device into bootloader mode, within the Restart Options dialog -->
+    <string name="global_action_restart_bootloader">부트 로더 모드</string>
+    <!-- Button to restart the device into download mode, within the Restart Options dialog -->
+    <string name="global_action_restart_download">다운로드 모드</string>
+    <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
+    <string name="global_action_restart_fastboot">Fastbootd 모드</string>
+    <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_progress">다시 시작하는 중\u2026</string>
+    <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_recovery_progress">복구 모드로 다시 시작하는 중\u2026</string>
+    <!-- Restart to bootloader mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_bootloader_progress">부트 로더 모드로 다시 시작하는 중\u2026</string>
+    <!-- Restart to download mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_download_progress">다운로드 모드로 다시 시작하는 중\u2026</string>
+    <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
+    <string name="global_action_restart_fastboot_progress">Fastbootd 모드로 다시 시작하는 중...</string>
+    <!-- Label for current user in power menu options dialog -->
+    <string name="global_action_current_user">현재</string>
+    <string name="global_action_users">사용자</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">On-The-Go 활성화됨</string>
+    <string name="onthego_notif_title">On-The-Go가 활성화 되었습니다</string>
+    <string name="onthego_notif_stop">중지</string>
+    <string name="onthego_notif_options">옵션</string>
+    <string name="onthego_notif_error">On-The-Go를 시작할 수 없습니다.</string>
+    <string name="onthego_notif_restart">On-The-Go 다시 시작</string>
+    <string name="onthego_notif_camera_changed">카메라 모드 변경됨</string>
+    <string name="onthego_transparency">투명도</string>
+    <string name="onthego_front_camera">전면 카메라 사용</string>
+    <string name="onthego_service_toggle">자동으로 서비스 다시 시작</string>
+    <string name="onthego_channel_name">메인</string>
+    <string name="global_action_onthego">On-The-Go</string>
+    <!-- OnTheGo Tile -->
+    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="accessibility_quick_settings_onthego_off">On-The-Go 꺼짐</string>
+    <string name="accessibility_quick_settings_onthego_on">On-The-Go 켜짐</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/초</string>
+    <string name="megabitspersecond_short">Mb/초</string>
+    <string name="gigabitspersecond_short">Gb/초</string>
+    <string name="kilobytespersecond_short">kB/초</string>
+    <string name="megabytespersecond_short">MB/초</string>
+    <string name="gigabytespersecond_short">GB/초</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">CPU 정보</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">FPS 정보</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <!-- VPN / Call strength icons in statusbar -->
+    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_call_strength">통화 세기</string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">나침반</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">초기화 중\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">나침반 꺼짐</string>
+    <string name="accessibility_quick_settings_compass_on">나침반 켜짐</string>
+    <string name="quick_settings_compass_N">북</string>
+    <string name="quick_settings_compass_NE">북동</string>
+    <string name="quick_settings_compass_E">동</string>
+    <string name="quick_settings_compass_SE">남동</string>
+    <string name="quick_settings_compass_S">남</string>
+    <string name="quick_settings_compass_SW">남서</string>
+    <string name="quick_settings_compass_W">서</string>
+    <string name="quick_settings_compass_NW">북서</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">데이터 카드 전환</string>
+    <string name="qs_data_switch_changed_1">모바일 데이터에 SIM 1 사용</string>
+    <string name="qs_data_switch_changed_2">모바일 데이터에 SIM 2 사용</string>
+    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_delete_label">삭제</string>
+    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
+    <string name="screenshot_delete_description">스크린샷 삭제</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">얼굴 인식 중...</string>
+    <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">정지 버튼 표시\n길게 눌러서 이동하기</string>
+    <string name="screenrecord_lowquality_label">보다 작은 파일 크기를 위한 낮은 음질</string>
+    <string name="screenrecord_longer_timeout_switch_label">더 큰 파일 크기 제한\n녹화 최대 크기를 15GB로 제한합니다</string>
+    <!-- Text to use when the number in a notification info is too large -->
+    <!-- Gaming mode -->
+    <string name="gaming_mode_not_enabled">게임 모드가 설정에서 비활성화 되었습니다.</string>
+    <string name="quick_settings_gaming_mode_label">게임 모드</string>
+    <!-- Name of the nfc status bar icon. -->
+    <string name="status_bar_nfc">NFC</string>
+    <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
+    <string name="accessibility_status_bar_nfc">Nfc</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 급속 충전 중 (완전 충전까지 <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 남음)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • 고속 충전 중</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 급속 충전 중 (완전 충전까지 <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 남음)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • 급속 충전 중</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC 급속 충전 중 (완전 충전까지 <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 남음)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC 고속 충전 중</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">우선순위</string>
+    <string name="volume_ringer_alarms_only">알람</string>
+    <string name="volume_ringer_dnd">방해금지</string>
+    <string name="tristate_flashlight">손전등</string>
+    <string name="tristate_flashlight_on">손전등 켜기</string>
+    <string name="tristate_flashlight_off">손전등 끄기</string>
+    <string name="tristate_flashlight_blink">손전등 깜빡임</string>
+    <string name="tristate_brightness_bright">최대 밝기</string>
+    <string name="tristate_brightness_dark">최소 밝기</string>
+    <string name="tristate_brightness_auto">자동 밝기</string>
+    <string name="tristate_rotation_auto">자동 회전</string>
+    <string name="tristate_rotation_0">세로</string>
+    <string name="tristate_rotation_90">가로 (90°)</string>
+    <string name="tristate_rotation_270">가로 (270°)</string>
+    <!-- Volume panel QS tile -->
+    <string name="quick_settings_volume_panel_label">볼륨 조절 창</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">강제로 중지하시겠습니까?</string>
+    <string name="force_stop_dlg_text">강제로 앱을 종료하면 예기치 않은 오류가 발생할 수 있습니다.</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">스마트 픽셀</string>
+    <string name="quick_settings_smart_pixels_on_power_save">스마트 픽셀 자동으로 켜기</string>
+    <!-- VPN QS tile -->
+    <string name="quick_settings_vpn_label">VPN</string>
+    <string name="quick_settings_vpn_connect_dialog_title">\u2026에 연결</string>
+    <string name="vpn_credentials_hint"><xliff:g id="name">%s</xliff:g>에 연결하기 위해 당신의 자격 증명을 입력하세요</string>
+    <string name="vpn_credentials_username">사용자 이름</string>
+    <string name="vpn_credentials_password">비밀번호</string>
+    <string name="vpn_credentials_dialog_connect">연결</string>
+</resources>
