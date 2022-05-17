@@ -605,8 +605,8 @@ final class ElectronBeam implements ScreenStateAnimator {
                     EGL14.EGL_NONE
             };
             if (isProtected) {
-                eglContextAttribList[2] = EGL_PROTECTED_CONTENT_EXT;
-                eglContextAttribList[3] = EGL14.EGL_TRUE;
+                eglContextAttribList[3] = EGL_PROTECTED_CONTENT_EXT;
+                eglContextAttribList[4] = EGL14.EGL_TRUE;
             }
             mEglContext = EGL14.eglCreateContext(mEglDisplay, mEglConfig, EGL14.EGL_NO_CONTEXT,
                     eglContextAttribList, 0);
