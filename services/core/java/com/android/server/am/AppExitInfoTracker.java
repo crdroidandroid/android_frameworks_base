@@ -354,6 +354,11 @@ public final class AppExitInfoTracker {
 
     /** Calls when zygote sends us SIGCHLD */
     void handleZygoteSigChld(int pid, int uid, int status) {
+        // If an app forks a child process, and the parent process exits normally before the child
+        // process exit, the binder node of parent process will not die until the child process
+        // exits, resulting in some processes can not receive binderDied of parent process, e.g.,
+        // system_server.
+        Process.killProcessGroup(uid, pid);
         if (DEBUG_PROCESSES) {
             Slog.i(TAG, "Got SIGCHLD from zygote: pid=" + pid + ", uid=" + uid
                     + ", status=" + Integer.toHexString(status));
