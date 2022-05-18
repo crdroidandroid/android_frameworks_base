@@ -112,9 +112,6 @@
     <string name="screenrecord_lowquality_label">Chất lượng thấp cho dung lượng nhỏ hơn</string>
     <string name="screenrecord_longer_timeout_switch_label">Giới hạn kích thước tệp lớn\nKích thước bản ghi giới hạn ở 15 GiB</string>
     <!-- Text to use when the number in a notification info is too large -->
-    <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Chế độ trò chơi đang tắt trong cài đặt</string>
-    <string name="quick_settings_gaming_mode_label">Chế độ chơi game</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
