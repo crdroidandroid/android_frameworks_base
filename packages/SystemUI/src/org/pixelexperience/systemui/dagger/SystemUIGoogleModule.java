@@ -72,7 +72,6 @@ import com.android.systemui.volume.dagger.VolumeModule;
 import com.google.android.systemui.LiveWallpaperScrimController;
 import com.google.android.systemui.NotificationLockscreenUserManagerGoogle;
 import com.google.android.systemui.dreamliner.DockObserver;
-import com.google.android.systemui.gamedashboard.EntryPointController;
 import com.google.android.systemui.power.EnhancedEstimatesGoogleImpl;
 import com.google.android.systemui.reversecharging.ReverseChargingController;
 import com.google.android.systemui.statusbar.KeyguardIndicationControllerGoogle;
@@ -222,9 +221,6 @@ public abstract class SystemUIGoogleModule {
     @Binds
     @SysUISingleton
     abstract AssistManager bindAssistManagerGoogle(AssistManagerGoogle assistManager);
-
-    @Binds
-    abstract NavigationBarOverlayController bindEntryPointController(EntryPointController assistManager);
 
     @Binds
     abstract KeyguardIndicationController bindKeyguardIndicationControllerGoogle(KeyguardIndicationControllerGoogle keyguardIndicationControllerGoogle);
