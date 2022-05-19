@@ -215,13 +215,6 @@ import com.google.android.systemui.elmyra.actions.SetupWizardAction;
 import com.google.android.systemui.elmyra.feedback.OpaHomeButton;
 import com.google.android.systemui.elmyra.feedback.OpaLockscreen;
 import com.google.android.systemui.elmyra.feedback.SquishyNavigationButtons;
-import com.google.android.systemui.gamedashboard.EntryPointController;
-import com.google.android.systemui.gamedashboard.FpsController;
-import com.google.android.systemui.gamedashboard.GameDashboardUiEventLogger;
-import com.google.android.systemui.gamedashboard.GameModeDndController;
-import com.google.android.systemui.gamedashboard.ScreenRecordController;
-import com.google.android.systemui.gamedashboard.ShortcutBarController;
-import com.google.android.systemui.gamedashboard.ToastController;
 import com.google.android.systemui.power.EnhancedEstimatesGoogleImpl;
 import com.google.android.systemui.power.PowerNotificationWarningsGoogleImpl;
 import com.google.android.systemui.reversecharging.ReverseChargingController;
@@ -372,48 +365,6 @@ public class SystemUIGoogleDependencyProvider {
     @SysUISingleton
     static CameraAction.Builder provideCameraAction(Context context, StatusBar statusBar) {
         return new CameraAction.Builder(context, statusBar);
-    }
-
-    @Provides
-    @SysUISingleton
-    static EntryPointController provideEntryPointController(Context context, AccessibilityManager accessibilityManager, BroadcastDispatcher broadcastDispatcher, CommandQueue commandQueue, GameModeDndController gameModeDndController, Handler handler, NavigationModeController navigationModeController, Optional<LegacySplitScreen> optionalLegacySplitScreen, OverviewProxyService overviewProxyService, PackageManager packageManager, ShortcutBarController shortcutBarController, ToastController toastController, GameDashboardUiEventLogger gameDashboardUiEventLogger, Optional<TaskSurfaceHelper> optionalTaskSurfaceHelper) {
-        return new EntryPointController(context, accessibilityManager, broadcastDispatcher, commandQueue, gameModeDndController, handler, navigationModeController, optionalLegacySplitScreen, overviewProxyService, packageManager, shortcutBarController, toastController, gameDashboardUiEventLogger, optionalTaskSurfaceHelper);
-    }
-
-    @Provides
-    @SysUISingleton
-    static ShortcutBarController provideShortcutBarController(Context context, WindowManager windowManager, FpsController fpsController, ConfigurationController configurationController, Handler handler, ScreenRecordController screenRecordController, Optional<TaskSurfaceHelper> optional, GameDashboardUiEventLogger gameDashboardUiEventLogger, ToastController toastController) {
-        return new ShortcutBarController(context, windowManager, fpsController, configurationController, handler, screenRecordController, optional, gameDashboardUiEventLogger, toastController);
-    }
-
-    @Provides
-    @SysUISingleton
-    static FpsController provideFpsController(@Main Executor executor) {
-        return new FpsController(executor);
-    }
-
-    @Provides
-    @SysUISingleton
-    static GameDashboardUiEventLogger provideGameDashboardUiEventLogger(UiEventLogger uiEventLogger) {
-        return new GameDashboardUiEventLogger(uiEventLogger);
-    }
-
-    @Provides
-    @SysUISingleton
-    static GameModeDndController provideGameModeDndController(Context context, NotificationManager notificationManager, BroadcastDispatcher broadcastDispatcher) {
-        return new GameModeDndController(context, notificationManager, broadcastDispatcher);
-    }
-
-    @Provides
-    @SysUISingleton
-    static ScreenRecordController provideScreenRecordController(RecordingController recordingController, Handler handler, KeyguardDismissUtil keyguardDismissUtil, Context context, ToastController toastController) {
-        return new ScreenRecordController(recordingController, handler, keyguardDismissUtil, context, toastController);
-    }
-
-    @Provides
-    @SysUISingleton
-    static ToastController provideToastController(Context context, ConfigurationController configurationController, WindowManager windowManager, UiEventLogger uiEventLogger, NavigationModeController navigationModeController) {
-        return new ToastController(context, configurationController, windowManager, uiEventLogger, navigationModeController);
     }
 
     @Provides
