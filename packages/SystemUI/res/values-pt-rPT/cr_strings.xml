@@ -112,9 +112,6 @@
     <string name="screenrecord_lowquality_label">Qualidade inferior para ficheiros mais pequenos</string>
     <string name="screenrecord_longer_timeout_switch_label">Limite de tamanho de ficheiros grandes\nLimitar o tamanho a 15 GB</string>
     <!-- Text to use when the number in a notification info is too large -->
-    <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Modo de jogo está desativado nas definições</string>
-    <string name="quick_settings_gaming_mode_label">Modo de jogo</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->

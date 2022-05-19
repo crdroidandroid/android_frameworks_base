@@ -112,9 +112,6 @@
     <string name="screenrecord_lowquality_label">Madalda kvaliteeti väiksema failisuuruse jaoks</string>
     <string name="screenrecord_longer_timeout_switch_label">Suurem failisuuruse piirang\nPiira salvestuse suuruseks 15GiB</string>
     <!-- Text to use when the number in a notification info is too large -->
-    <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Mängimisrežiim on seadetes keelatud</string>
-    <string name="quick_settings_gaming_mode_label">Mängimisrežiim</string>
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
     <!-- Accessibility label for nfc icon (not shown on screen) [CHAR LIMIT=NONE] -->
