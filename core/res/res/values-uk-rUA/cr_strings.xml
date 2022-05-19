@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Підміна підпису пакету</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Дозволити додатку видавати себе за інший додаток. Шкідливі програми можуть використовувати це для доступу до приватних даних програми. Законне використання включає емулятор, яке видає себе за те що емулює. Дозволяйте це з обережністю!</string>
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_fake_package_signature">Підміна підпису додатка</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_fake_package_signature">дозволити підміну підпису додатка</string>
+    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
+    <string name="permgrouprequest_fake_package_signature">Дозволити
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; підробити підпис пакету?</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Натисніть та утримуйте кнопку живлення, щоб розблокувати</string>
+    <string name="pocket_view_title">Режим \"У кишені\" увімкнено</string>
+    <string name="pocket_view_title_cancel">Щоб скористатися вашим телефоном:</string>
+    <string name="pocket_view_top_tag_cancel">Перевірте, чи синя зона на телефоні нічим не перекрита, а також очистіть її від будь-якого бруду.</string>
+    <string name="pocket_view_top_tag_cancel2">Утримуйте кнопку живлення, щоб примусово вийти з кишенькового режиму.</string>
+    <string name="pocket_view_top_tag_number1">1.\u0020</string>
+    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Розблокування за обличчю вимкнено через неактивність</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Копіювати URL логу збою</string>
+    <string name="url_copy_success">URL успішно скопійовано</string>
+    <string name="url_copy_failed">Сталася помилка під час завантаження журналу до Pasty</string>
+</resources>
