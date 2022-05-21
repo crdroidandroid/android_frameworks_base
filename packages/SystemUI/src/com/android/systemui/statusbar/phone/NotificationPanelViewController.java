@@ -46,6 +46,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.app.Fragment;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.ContentResolver;
@@ -75,6 +76,7 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.os.VibrationEffect;
 import android.provider.Settings;
+import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 import android.transition.ChangeBounds;
 import android.transition.TransitionManager;
@@ -665,7 +667,7 @@ public class NotificationPanelViewController extends PanelViewController {
 
     private boolean mBlockedGesturalNavigation;
 
-    private String[] mAppExceptions;
+    private final String[] mAppExceptions;
 
     /*Reticker*/
     private LinearLayout mReTickerComeback;
@@ -879,6 +881,7 @@ public class NotificationPanelViewController extends PanelViewController {
         mLockIconViewController = lockIconViewController;
         mUnlockedScreenOffAnimationController = unlockedScreenOffAnimationController;
         mRemoteInputManager = remoteInputManager;
+        mAppExceptions = mResources.getStringArray(R.array.app_exceptions);
 
         int currentMode = navigationModeController.addListener(
                 mode -> mIsGestureNavigation = QuickStepContract.isGesturalMode(mode));
@@ -4950,41 +4953,39 @@ public class NotificationPanelViewController extends PanelViewController {
         if (visibility && mReTickerComeback.getVisibility() == View.VISIBLE) {
             reTickerDismissal();
         }
-        String reTickerContent = "";
-        boolean debug = true;
+        String reTickerContent;
         if (visibility && getExpandedFraction() != 1) {
             mNotificationStackScroller.setVisibility(GONE);
-            ExpandableNotificationRow row = mHeadsUpManager.getTopEntry().getRow();
-            String pkgname = row.getEntry().getSbn().getPackageName();
+            StatusBarNotification sbn = mHeadsUpManager.getTopEntry().getRow().getEntry().getSbn();
+            Notification notification = sbn.getNotification();
+            String pkgname = sbn.getPackageName();
             Drawable icon = null;
             try {
-                if (pkgname.contains("systemui")) {
-                    icon = mView.getContext().getDrawable(row.getEntry().getSbn().getNotification().icon);
+                if (pkgname.equals("com.android.systemui")) {
+                    icon = mView.getContext().getDrawable(notification.icon);
                 } else {
                     icon = mView.getContext().getPackageManager().getApplicationIcon(pkgname);
                 }
             } catch (NameNotFoundException e) {
                 return;
             }
-            String content = row.getEntry().getSbn().getNotification().extras.getString("android.text");
-            if (!TextUtils.isEmpty(content)) {
-                reTickerContent = content;
-            } else {
-                return;
-            }
-            String reTickerAppName = row.getEntry().getSbn().getNotification().extras.getString("android.title");
-            PendingIntent reTickerIntent = row.getEntry().getSbn().getNotification().contentIntent;
+            String content = notification.extras.getString("android.text");
+            if (TextUtils.isEmpty(content)) return;
+            reTickerContent = content;
+            String reTickerAppName = notification.extras.getString("android.title");
+            PendingIntent reTickerIntent = notification.contentIntent;
             String mergedContentText = reTickerAppName + " " + reTickerContent;
             mReTickerComebackIcon.setImageDrawable(icon);
             Drawable dw = mView.getContext().getDrawable(R.drawable.reticker_background);
             if (mReTickerColored) {
-                int col;
-                col = row.getEntry().getSbn().getNotification().color;
-                mAppExceptions = mView.getContext().getResources().getStringArray(R.array.app_exceptions);
-                //check if we need to override the color
-                for (int i = 0; i < mAppExceptions.length; i++) {
-                    if (mAppExceptions[i].contains(pkgname)) {
-                        col = Color.parseColor(mAppExceptions[i += 1]);
+                int col = notification.color;
+                // check if we need to override the color
+                if ((mAppExceptions.length & 1) == 0) {
+                    for (int i = 0; i < mAppExceptions.length; i += 2) {
+                        if (mAppExceptions[i].equals(pkgname)) {
+                            col = Color.parseColor(mAppExceptions[i + 1]);
+                            break;
+                        }
                     }
                 }
                 dw.setTint(col);
@@ -4996,17 +4997,16 @@ public class NotificationPanelViewController extends PanelViewController {
             mReTickerContentTV.setTextAppearance(mView.getContext(), R.style.TextAppearance_Notifications_reTicker);
             mReTickerContentTV.setSelected(true);
             RetickerAnimations.doBounceAnimationIn(mReTickerComeback);
-            mReTickerComeback.setOnClickListener(v -> {
-                try {
-                    if (reTickerIntent != null)
+            if (reTickerIntent != null) {
+                mReTickerComeback.setOnClickListener(v -> {
+                    try {
                         reTickerIntent.send();
-                } catch (PendingIntent.CanceledException e) {
-                }
-                if (reTickerIntent != null) {
+                    } catch (PendingIntent.CanceledException e) {
+                    }
                     RetickerAnimations.doBounceAnimationOut(mReTickerComeback, mNotificationStackScroller);
                     reTickerViewVisibility();
-                }
-            });
+                });
+            }
         } else {
             reTickerDismissal();
         }
