@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2019-2021 crDroid Android Project
+ * Copyright (C) 2019-2022 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -133,7 +133,7 @@ public class StatusBarNetworkTraffic extends NetworkTraffic implements DarkRecei
     @Override
     protected void updateVisibility() {
         boolean visible = mEnabled && mIsActive && !mKeyguardShowing && mSystemIconVisible
-            && getText() != "";
+            && getText() != "" && mScreenOn;
         if (visible != mVisible) {
             mVisible = visible;
             setVisibility(mVisible ? VISIBLE : GONE);

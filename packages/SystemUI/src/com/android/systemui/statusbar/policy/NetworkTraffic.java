@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2019-2021 crDroid Android Project
+ * Copyright (C) 2019-2022 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,6 +118,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
     private INetworkManagementService mNetworkManagementService;
 
     protected boolean mVisible = true;
+    protected boolean mScreenOn = true;
 
     private ConnectivityManager mConnectivityManager;
 
@@ -162,6 +163,8 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
 
             IntentFilter filter = new IntentFilter();
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_SCREEN_ON);
             mContext.registerReceiver(mIntentReceiver, filter, null, mTrafficHandler);
         }
         updateViews();
@@ -250,7 +253,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
             }
 
             // Schedule periodic refresh
-            if (mEnabled && mAttached) {
+            if (mEnabled && mScreenOn && mAttached) {
                 mTrafficHandler.sendEmptyMessageDelayed(MESSAGE_TYPE_PERIODIC_REFRESH,
                         mRefreshInterval * 1000);
             }
@@ -346,7 +349,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
 
     protected void updateVisibility() {
         boolean visible = mEnabled && mIsActive && getText() != ""
-            && !mChipVisible;
+            && !mChipVisible && mScreenOn;
         if (visible != mVisible) {
             mVisible = visible;
             setVisibility(mVisible ? VISIBLE : GONE);
@@ -361,6 +364,11 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
             if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
                 mConnectionAvailable = mConnectivityManager.getActiveNetworkInfo() != null;
                 updateViews();
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                mScreenOn = true;
+                updateViews();
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                mScreenOn = false;
             }
         }
     };
