@@ -389,6 +389,11 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
                     mAllViews.add(tileView.getSecondaryLabel());
                 }
 
+                QSTileView quickTileView = mQuickQSPanelController.getTileView(tile);
+                if (quickTileView != null) {
+                    quickTileView.getSecondaryLabel().setAlpha(0f);
+                }
+
                 mAllViews.add(tileView);
                 count++;
             }
