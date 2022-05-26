@@ -260,11 +260,15 @@ public class KeyguardStatusBarView extends RelativeLayout {
     WindowInsets updateWindowInsets(
             WindowInsets insets,
             StatusBarContentInsetsProvider insetsProvider) {
+        updateWindowInsets(insetsProvider);
+        return super.onApplyWindowInsets(insets);
+    }
+
+    private void updateWindowInsets(StatusBarContentInsetsProvider insetsProvider) {
         mLayoutState = LAYOUT_NONE;
         if (updateLayoutConsideringCutout(insetsProvider)) {
             requestLayout();
         }
-        return super.onApplyWindowInsets(insets);
     }
 
     private boolean updateLayoutConsideringCutout(StatusBarContentInsetsProvider insetsProvider) {
@@ -434,9 +438,11 @@ public class KeyguardStatusBarView extends RelativeLayout {
     }
 
     /** Should only be called from {@link KeyguardStatusBarViewController}. */
-    void onThemeChanged(StatusBarIconController.TintedIconManager iconManager) {
+    void onThemeChanged(StatusBarIconController.TintedIconManager iconManager,
+            StatusBarContentInsetsProvider insetsProvider) {
         mBatteryView.setColorsFromContext(mContext);
         updateIconsAndTextColors(iconManager);
+        updateWindowInsets(insetsProvider);
     }
 
     /** Should only be called from {@link KeyguardStatusBarViewController}. */
