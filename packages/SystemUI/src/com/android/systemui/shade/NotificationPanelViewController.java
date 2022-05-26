@@ -1033,13 +1033,6 @@ public final class NotificationPanelViewController implements Dumpable {
             }
         }
 
-        mKeyguardStatusBarViewController =
-                mKeyguardStatusBarViewComponentFactory.build(
-                                mKeyguardStatusBar,
-                                mNotificationPanelViewStateProvider)
-                        .getKeyguardStatusBarViewController();
-        mKeyguardStatusBarViewController.init();
-
         mNotificationContainerParent = mView.findViewById(R.id.notification_container_parent);
         updateViewControllers(
                 mView.findViewById(R.id.keyguard_status_view),
@@ -1190,6 +1183,14 @@ public final class NotificationPanelViewController implements Dumpable {
                 mKeyguardStatusViewComponentFactory.build(keyguardStatusView);
         mKeyguardStatusViewController = statusViewComponent.getKeyguardStatusViewController();
         mKeyguardStatusViewController.init();
+
+        mKeyguardStatusBarViewController =
+                mKeyguardStatusBarViewComponentFactory.build(
+                                mKeyguardStatusBar,
+                                mNotificationPanelViewStateProvider)
+                        .getKeyguardStatusBarViewController();
+        mKeyguardStatusBarViewController.init();
+
         updateClockAppearance();
 
         if (mKeyguardUserSwitcherController != null) {
@@ -1300,6 +1301,15 @@ public final class NotificationPanelViewController implements Dumpable {
         keyguardStatusView = (KeyguardStatusView) mLayoutInflater.inflate(
                 R.layout.keyguard_status_view, mNotificationContainerParent, false);
         mNotificationContainerParent.addView(keyguardStatusView, statusIndex);
+
+        // Re-inflate the keyguard status bar.
+        statusIndex = mView.indexOfChild(mKeyguardStatusBar);
+        mView.removeView(mKeyguardStatusBar);
+        mKeyguardStatusBar = (KeyguardStatusBarView) mLayoutInflater.inflate(
+                R.layout.keyguard_status_bar, mView, false);
+        mView.addView(mKeyguardStatusBar);
+        mKeyguardStatusBar.setVisibility(isOnKeyguard() ? View.VISIBLE : View.INVISIBLE);
+
         // When it's reinflated, this is centered by default. If it shouldn't be, this will update
         // below when resources are updated.
         mStatusViewCentered = true;
