@@ -82,7 +82,8 @@ public class PixelPropsUtils {
         "com.google.ar.core",
         "com.google.android.youtube",
         "com.google.android.apps.youtube.kids",
-        "com.google.android.apps.youtube.music"
+        "com.google.android.apps.youtube.music",
+        "com.google.android.apps.recorder"
     };
 
     private static final String[] packagesToChangeROG1 = {
