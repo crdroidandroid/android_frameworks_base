@@ -316,7 +316,6 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
             states[i].init(mScrimInFront, mScrimBehind, mDozeParameters, mDockManager);
             states[i].setScrimBehindAlphaKeyguard(mScrimBehindAlphaKeyguard);
             states[i].setDefaultScrimAlpha(mDefaultScrimAlpha);
-            states[i].setQSClipScrimAlpha(QS_CLIP_SCRIM_ALPHA);
         }
 
         mScrimBehind.setDefaultFocusHighlightEnabled(false);
