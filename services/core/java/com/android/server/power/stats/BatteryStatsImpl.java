@@ -2182,7 +2182,7 @@ public class BatteryStatsImpl extends BatteryStats {
                 if (mCounts == null) {
                     mCounts = new long[counts.length];
                 }
-                for (int i = 0; i < counts.length; ++i) {
+                for (int i = 0; i < counts.length && i < mCounts.length; ++i) {
                     mCounts[i] += counts[i];
                 }
             }
