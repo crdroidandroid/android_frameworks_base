@@ -43,6 +43,7 @@ import static android.hardware.SensorPrivacyManager.Sources.OTHER;
 import static android.hardware.SensorPrivacyManager.Sources.QS_TILE;
 import static android.hardware.SensorPrivacyManager.Sources.SETTINGS;
 import static android.hardware.SensorPrivacyManager.Sources.SHELL;
+import static android.os.UserHandle.USER_SYSTEM;
 import static android.hardware.SensorPrivacyManager.TOGGLE_TYPE_HARDWARE;
 import static android.hardware.SensorPrivacyManager.TOGGLE_TYPE_SOFTWARE;
 import static android.os.UserHandle.USER_NULL;
@@ -905,7 +906,10 @@ public final class SensorPrivacyService extends SystemService {
         }
 
         private void enforcePermission(String permission, String message) {
-            if (mContext.checkCallingOrSelfPermission(permission) == PERMISSION_GRANTED) {
+            PackageManagerInternal pm = LocalServices.getService(PackageManagerInternal.class);
+            if (mContext.checkCallingOrSelfPermission(permission) == PERMISSION_GRANTED ||
+                    Binder.getCallingUid() == pm.getPackageUid(pm.getSystemUiServiceComponent().
+                    getPackageName(), MATCH_SYSTEM_ONLY, USER_SYSTEM)) {
                 return;
             }
             throw new SecurityException(message);
