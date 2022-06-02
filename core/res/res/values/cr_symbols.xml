@@ -49,4 +49,7 @@
 
     <!-- Whether device has physical tri state switch -->
     <java-symbol type="bool" name="config_hasAlertSlider" />
+
+    <!-- Lock gesture -->
+    <java-symbol type="string" name="gesture_locked_warning" />
 </resources>
