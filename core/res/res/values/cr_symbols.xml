@@ -40,4 +40,7 @@
 
     <!-- Sensor block -->
     <java-symbol type="array" name="config_blockPackagesSensorDrain" />
+
+    <!-- Lock gesture -->
+    <java-symbol type="string" name="gesture_locked_warning" />
 </resources>
