@@ -44,7 +44,7 @@
             android:text="@string/immersive_cling_title"
             android:textColor="?androidprv:attr/materialColorOnSurface"
             android:textSize="24sp"
-            android:fontFamily="google-sans" />
+            android:fontFamily="@*android:string/config_headlineFontFamily" />
 
     <TextView
             android:id="@+id/immersive_cling_description"
@@ -56,7 +56,7 @@
             android:text="@string/immersive_cling_description"
             android:textColor="?androidprv:attr/materialColorOnSurfaceVariant"
             android:textSize="14sp"
-            android:fontFamily="google-sans" />
+            android:fontFamily="@*android:string/config_bodyFontFamily" />
 
     <Button
             android:id="@+id/ok"
@@ -76,5 +76,5 @@
             android:textAllCaps="false"
             android:textSize="14sp"
             android:textFontWeight="500"
-            android:fontFamily="google-sans" />
+            android:fontFamily="@*android:string/config_bodyFontFamily" />
 </RelativeLayout>

@@ -41,7 +41,7 @@
         android:padding="8dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:fontFamily="google-sans-text"
+        android:fontFamily="@*android:string/config_headlineFontFamily"
         android:textAppearance="?attr/textAppearance"
         android:textColor="?attr/materialColorPrimary"
         android:visibility="gone"/>
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:fontFamily="google-sans-text"
+                android:fontFamily="@*android:string/config_bodyFontFamily"
                 android:textColor="@color/input_method_switch_on_item"
                 android:textAppearance="?attr/textAppearanceListItem"/>
 
