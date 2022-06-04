@@ -45,7 +45,7 @@
         android:textAppearance="?attr/textAppearanceSmall"
         android:textColor="?attr/textColorPrimary"
         android:textSize="12sp"
-        android:fontFamily="sans-serif-condensed"
+        android:fontFamily="@*android:string/config_bodyFontFamily"
         android:gravity="top|center_horizontal"
         android:minLines="2"
         android:maxLines="2"
