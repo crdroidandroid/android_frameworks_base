@@ -51,7 +51,7 @@
                 android:gravity="center"
                 android:textSize="20sp"
                 android:textColor="?android:attr/textColorPrimary"
-                android:fontFamily="google-sans-medium"/>
+                android:fontFamily="@*android:string/config_headlineFontFamily"/>
 
             <TextView
                 android:id="@+id/accessibility_encryption_warning"
@@ -70,7 +70,7 @@
                 android:text="@string/accessibility_service_warning_description"
                 android:textSize="16sp"
                 android:textColor="?android:attr/textColorPrimary"
-                android:fontFamily="sans-serif"/>
+                android:fontFamily="@*android:string/config_bodyFontFamily"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,7 +94,7 @@
                     android:text="@string/accessibility_service_screen_control_title"
                     android:textSize="16sp"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:fontFamily="sans-serif"/>
+                    android:fontFamily="@*android:string/config_headlineFontFamily"/>
             </LinearLayout>
 
             <TextView
@@ -106,7 +106,7 @@
                 android:text="@string/accessibility_service_screen_control_description"
                 android:textSize="14sp"
                 android:textColor="?android:attr/textColorSecondary"
-                android:fontFamily="sans-serif"/>
+                android:fontFamily="@*android:string/config_bodyFontFamily"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -130,7 +130,7 @@
                     android:text="@string/accessibility_service_action_perform_title"
                     android:textSize="16sp"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:fontFamily="sans-serif"/>
+                    android:fontFamily="@*android:string/config_headlineFontFamily"/>
             </LinearLayout>
 
             <TextView
@@ -142,7 +142,7 @@
                 android:text="@string/accessibility_service_action_perform_description"
                 android:textSize="14sp"
                 android:textColor="?android:attr/textColorSecondary"
-                android:fontFamily="sans-serif" />
+                android:fontFamily="@*android:string/config_bodyFontFamily" />
         </LinearLayout>
 
         <View
