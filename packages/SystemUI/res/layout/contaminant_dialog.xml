@@ -32,7 +32,7 @@
         android:paddingTop="18dp"
         android:paddingBottom="18dp"
         android:textAlignment="center"
-        android:fontFamily="google-sans-medium"
+        android:fontFamily="@*android:string/config_headlineFontFamily"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="?android:attr/textColorPrimary"/>
@@ -46,7 +46,7 @@
         android:paddingBottom="24dp"
         android:textAlignment="center"
         android:textSize="16sp"
-        android:fontFamily="roboto-regular"
+        android:fontFamily="@*android:string/config_bodyFontFamily"
         android:textColor="?android:attr/textColorPrimary" />
 
     <LinearLayout
