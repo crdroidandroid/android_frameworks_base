@@ -30,7 +30,7 @@
         android:layout_marginHorizontal="8dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:fontFamily="google-sans-text"
+        android:fontFamily="@*android:string/config_bodyFontFamily"
         android:textAppearance="?attr/textAppearance"
         android:accessibilityHeading="true"
         android:textColor="@color/materialColorPrimary"/>
