@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="none"
-            android:fontFamily="google-sans-medium"
+            android:fontFamily="@*android:string/config_bodyFontFamilyMedium"
             android:includeFontPadding="false"
             android:layout_gravity="center"
             android:layout_marginRight="@dimen/assist_chip_end_padding"

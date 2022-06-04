@@ -78,7 +78,7 @@
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="14sp"
-                android:fontFamily="roboto-regular"
+                android:fontFamily="@*android:string/config_bodyFontFamily"
                 android:visibility="gone"/>
             <SeekBar
                 android:id="@+id/volume_seekbar"
