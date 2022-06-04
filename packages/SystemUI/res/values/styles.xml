@@ -1621,13 +1621,13 @@
     <style name="TextAppearance.MagnificationSetting" />
 
     <style name="TextAppearance.MagnificationSetting.Title">
-        <item name="android:fontFamily">google-sans</item>
+        <item name="android:fontFamily">@*android:string/config_headlineFontFamily</item>
         <item name="android:textColor">@color/materialColorOnSurface</item>
         <item name="android:textSize">@dimen/magnification_setting_text_size</item>
     </style>
 
     <style name="TextAppearance.MagnificationSetting.EditButton">
-        <item name="android:fontFamily">google-sans</item>
+        <item name="android:fontFamily">@*android:string/config_headlineFontFamily</item>
         <item name="android:textColor">?androidprv:attr/colorAccent</item>
         <item name="android:textSize">@dimen/magnification_setting_text_size</item>
         <item name="android:lineHeight">@dimen/magnification_setting_button_line_height</item>
@@ -1635,7 +1635,7 @@
     </style>
 
     <style name="TextAppearance.MagnificationSetting.DoneButton">
-        <item name="android:fontFamily">google-sans</item>
+        <item name="android:fontFamily">@*android:string/config_headlineFontFamily</item>
         <item name="android:textColor">@color/materialColorOnSurface</item>
         <item name="android:textSize">@dimen/magnification_setting_text_size</item>
         <item name="android:lineHeight">@dimen/magnification_setting_button_line_height</item>
