@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:ellipsize="none"
-    android:fontFamily="google-sans-medium"
+    android:fontFamily="@*android:string/config_bodyFontFamilyMedium"
     android:gravity="start|bottom|center"
     android:layout_gravity="start|bottom|center"
     android:layout_marginBottom="@dimen/transcription_space_bottom_margin"
