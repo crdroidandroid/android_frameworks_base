@@ -43,7 +43,7 @@
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="1"
             android:singleLine="true"
-            android:fontFamily="google-sans-text"
+            android:fontFamily="@*android:string/config_bodyFontFamily"
             android:textColor="@color/input_method_switch_on_item"
             android:textAppearance="?attr/textAppearanceListItem"/>
 
@@ -55,7 +55,7 @@
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="1"
             android:singleLine="true"
-            android:fontFamily="google-sans-text"
+            android:fontFamily="@*android:string/config_bodyFontFamily"
             android:textColor="@color/materialColorOnSurfaceVariant"
             android:textAppearance="?attr/textAppearanceListItemSecondary"
             android:textAllCaps="true"
