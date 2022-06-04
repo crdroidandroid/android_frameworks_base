@@ -914,7 +914,7 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
         if (mTriggerLongSwipe != triggerLongSwipe) {
             mTriggerLongSwipe = triggerLongSwipe;
             if (mEdgeHapticEnabled) {
-                mVibratorHelper.vibrate(VibrationEffect.EFFECT_CLICK);
+                mVibratorHelper.vibrate(VibrationEffect.EFFECT_DOUBLE_CLICK);
             }
             mAngleAnimation.cancel();
             updateAngle(animated);
