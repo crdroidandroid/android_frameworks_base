@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:text="@string/controls_media_smartspace_rec_title"
-        android:fontFamily="google-sans-medium"
+        android:fontFamily="@*android:string/config_bodyFontFamilyMedium"
         android:textDirection="locale"
         android:textSize="@dimen/qq_aa_media_rec_header_text_size"
         android:hyphenationFrequency="none"

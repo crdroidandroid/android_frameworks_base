@@ -31,8 +31,10 @@ import java.util.Objects;
 
 public class SegmentedButtons extends LinearLayout {
     private static final int LABEL_RES_KEY = R.id.label;
-    private static final Typeface REGULAR = Typeface.create("sans-serif", Typeface.NORMAL);
-    private static final Typeface MEDIUM = Typeface.create("sans-serif-medium", Typeface.NORMAL);
+    private final String txtFont;
+    private final String txtMediumFont;
+    private final Typeface REGULAR;
+    private final Typeface MEDIUM;
 
     private final Context mContext;
     protected final LayoutInflater mInflater;
@@ -47,6 +49,10 @@ public class SegmentedButtons extends LinearLayout {
         mInflater = LayoutInflater.from(mContext);
         setOrientation(HORIZONTAL);
         mConfigurableTexts = new ConfigurableTexts(mContext);
+        txtFont = getResources().getString(com.android.internal.R.string.config_bodyFontFamily);
+        txtMediumFont = getResources().getString(com.android.internal.R.string.config_bodyFontFamilyMedium);
+        REGULAR = Typeface.create(txtFont, Typeface.NORMAL);
+        MEDIUM = Typeface.create(txtMediumFont, Typeface.NORMAL);
     }
 
     public void setCallback(Callback callback) {

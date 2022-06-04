@@ -50,7 +50,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorPrimary"
-                android:fontFamily="@*android:string/config_headlineFontFamilyMedium"
+                android:fontFamily="@*android:string/config_headlineFontFamily"
                 android:textSize="20sp"/>
             <TextView
                 android:id="@+id/header_subtitle"
@@ -60,7 +60,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorSecondary"
-                android:fontFamily="roboto-regular"
+                android:fontFamily="@*android:string/config_bodyFontFamily"
                 android:textSize="16sp"/>
         </LinearLayout>
     </LinearLayout>
