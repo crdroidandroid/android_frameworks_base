@@ -200,7 +200,6 @@
     <string name="tristate_rotation_90">Yatay (90°)</string>
     <string name="tristate_rotation_270">Yatay (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Durma noktasını göster\nTaşımak için uzun basın</string>
     <string name="screenrecord_lowquality_label">Daha küçük dosya boyutu için daha düşük kalite</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Bir yüz kullan</string>
