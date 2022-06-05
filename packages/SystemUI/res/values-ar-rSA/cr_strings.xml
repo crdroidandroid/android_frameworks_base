@@ -108,6 +108,7 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
     <string name="screenrecord_stopdot_summary">Longpress to move it</string>
     <string name="screenrecord_lowquality_label">تخفيض الدقة لحجم ملف أقل</string>
     <string name="screenrecord_lowquality_summary">For smaller file size</string>
