@@ -108,14 +108,13 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Arcfelismerés...</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Látható megállítógomb\nHosszan nyomva áthelyezhető</string>
-    <string name="screenrecord_stopdot_summary">Longpress to move it</string>
+    <string name="screenrecord_stopdot_summary">Eltávolítás hosszannyomással</string>
     <string name="screenrecord_lowquality_label">Gyengébb minőség, hogy kisebbek legyenek a fájlok</string>
-    <string name="screenrecord_lowquality_summary">For smaller file size</string>
-    <string name="screenrecord_longer_timeout_switch_label">A fájlméret felső határa\n15GB lehet a legnagyobb méret</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Limit recording size to 15 GB</string>
-    <string name="screenrecord_skip_time_label">Skip timer</string>
-    <string name="screenrecord_skip_time_summary">Remove 3 second wait</string>
+    <string name="screenrecord_lowquality_summary">Kisebb fájlméretért</string>
+    <string name="screenrecord_longer_timeout_switch_label">A fájlméret felső határa</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Max.15GB felvételi fájlméret</string>
+    <string name="screenrecord_skip_time_label">Időzitő kihagyása</string>
+    <string name="screenrecord_skip_time_summary">A 3mp-s késleltetés elhagyása</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
