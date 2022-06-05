@@ -108,7 +108,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Reconociendo rostro...</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Mostrar punto para detener grabación\npulsación larga para moverlo</string>
     <string name="screenrecord_stopdot_summary">Longpress to move it</string>
     <string name="screenrecord_lowquality_label">Menor calidad para archivo más pequeño</string>
     <string name="screenrecord_lowquality_summary">For smaller file size</string>
