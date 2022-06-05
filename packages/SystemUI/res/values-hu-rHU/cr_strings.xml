@@ -108,6 +108,7 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Arcfelismerés...</string>
     <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
     <string name="screenrecord_stopdot_summary">Eltávolítás hosszannyomással</string>
     <string name="screenrecord_lowquality_label">Gyengébb minőség, hogy kisebbek legyenek a fájlok</string>
     <string name="screenrecord_lowquality_summary">Kisebb fájlméretért</string>
