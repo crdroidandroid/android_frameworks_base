@@ -200,7 +200,6 @@
     <string name="tristate_rotation_90">Querformat (90°)</string>
     <string name="tristate_rotation_270">Querformat (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Stopppunkt anzeigen,\nlanges Drücken, um ihn zu verschieben</string>
     <string name="screenrecord_lowquality_label">Qualität verringern für kleinere Dateigröße</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Gesichtserkennung</string>
