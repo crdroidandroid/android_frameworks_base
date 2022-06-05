@@ -199,7 +199,7 @@
     <string name="tristate_rotation_90">Ngang (90°)</string>
     <string name="tristate_rotation_270">Ngang (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot\nLongpress to move it</string>
+    <string name="screenrecord_stopdot_label">Hiện chấm dừng\nNhấn giữ để di chuyển nó</string>
     <string name="screenrecord_lowquality_label">Chất lượng thấp cho dung lượng nhỏ hơn</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Dùng khuôn mặt</string>
