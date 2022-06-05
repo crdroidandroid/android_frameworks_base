@@ -200,7 +200,6 @@
     <string name="tristate_rotation_90">افقی(90 درجه)</string>
     <string name="tristate_rotation_270">افقی(270 درجه)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">نشان دادن نقطه توقف\nبرای جابجا کردن، مدتی نگه دارید</string>
     <string name="screenrecord_lowquality_label">استفاده‌ از کیفیت پایین تر برای حجم کمتر</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">استفاده از چهره</string>
