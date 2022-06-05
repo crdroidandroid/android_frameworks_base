@@ -108,6 +108,7 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
     <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
     <string name="screenrecord_stopdot_summary">برای حرکت دادن به فشار طولانی دهید</string>
     <string name="screenrecord_lowquality_label">Lower quality for smaller file size</string>
     <string name="screenrecord_lowquality_summary">برای انداره کوچیک تر فایل</string>
