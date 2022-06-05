@@ -223,7 +223,6 @@ Sembilan</string>
     <string name="tristate_rotation_90">Lanskap (90°)</string>
     <string name="tristate_rotation_270">Lanskap (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Tampilkan titik berhenti\nTekan lama untuk memindahkannya</string>
     <string name="screenrecord_lowquality_label">Kualitas lebih rendah untuk ukuran file yang lebih kecil</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Gunakan Wajah</string>
