@@ -200,7 +200,6 @@
     <string name="tristate_rotation_90">Horitzontal (90º)</string>
     <string name="tristate_rotation_270">Horitzontal (270º)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Mostra el punt per a aturar\nFeu una pulsació llarga per a moure</string>
     <string name="screenrecord_lowquality_label">Menys qualitat per a un fitxer de menor mida</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Utilitza la cara</string>
