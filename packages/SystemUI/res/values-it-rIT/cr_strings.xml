@@ -108,6 +108,7 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Riconoscimento volto...</string>
     <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
     <string name="screenrecord_stopdot_summary">Premi a lungo per spostarlo</string>
     <string name="screenrecord_lowquality_label">Qualità inferiore per un file più piccolo</string>
     <string name="screenrecord_lowquality_summary">Per dimensioni di file più piccoli</string>
