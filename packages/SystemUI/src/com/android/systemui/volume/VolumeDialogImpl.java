@@ -246,6 +246,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     private ExpandableIndicator mExpandRows;
     private View mAppVolumeView;
     private ImageButton mAppVolumeIcon;
+    private String mAppVolumeActivePackageName;
     private FrameLayout mZenIcon;
     private final List<VolumeRow> mRows = new ArrayList<>();
     private ConfigurableTexts mConfigurableTexts;
@@ -1286,20 +1287,34 @@ public class VolumeDialogImpl implements VolumeDialog,
     }
 
     private boolean shouldShowAppVolume() {
+        mAppVolumeActivePackageName = null;
         AudioManager audioManager = mController.getAudioManager();
         for (AppVolume av : audioManager.listAppVolumes()) {
             if (av.isActive()) {
-                return true;
+                mAppVolumeActivePackageName = av.getPackageName();
+                return mAppVolumeActivePackageName != null;
             }
         }
         return false;
     }
 
-    public void initAppVolumeH() {
-        if (mAppVolumeView != null) {
-            mAppVolumeView.setVisibility(shouldShowAppVolume() ? VISIBLE : GONE);
+    private Drawable getApplicationIcon(String packageName) {
+        PackageManager pm = mContext.getPackageManager();
+        Drawable icon = null;
+        try {
+            icon = pm.getApplicationIcon(packageName);
+        } catch (Exception e) {
+            // nothing to do
         }
-        if (mAppVolumeIcon != null) {
+        return icon;
+    }
+
+    public void initAppVolumeH() {
+        boolean showAppVolume = shouldShowAppVolume();
+        if (mAppVolumeView != null) {
+            mAppVolumeView.setVisibility(showAppVolume ? VISIBLE : GONE);
+        }
+        if (mAppVolumeIcon != null && showAppVolume) {
             mAppVolumeIcon.setOnClickListener(v -> {
                 Events.writeEvent(Events.EVENT_SETTINGS_CLICK);
                 Intent intent = new Intent(Settings.Panel.ACTION_APP_VOLUME);
@@ -1307,6 +1322,12 @@ public class VolumeDialogImpl implements VolumeDialog,
                 mMediaOutputDialogFactory.dismiss();
                 mActivityStarter.startActivity(intent, true /* dismissShade */);
             });
+            Drawable icon = getApplicationIcon(mAppVolumeActivePackageName);
+            if (icon != null) {
+                mAppVolumeIcon.setImageTintList(null);
+                mAppVolumeIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                mAppVolumeIcon.setImageDrawable(icon);
+            }
         }
     }
 
