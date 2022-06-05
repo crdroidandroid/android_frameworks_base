@@ -109,8 +109,13 @@
     <string name="face_unlock_recognizing">正在识别面部...</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">显示停止点\n长按移动它</string>
+    <string name="screenrecord_stopdot_summary">Longpress to move it</string>
     <string name="screenrecord_lowquality_label">使用较低画质以节省存储空间</string>
+    <string name="screenrecord_lowquality_summary">For smaller file size</string>
     <string name="screenrecord_longer_timeout_switch_label">文件大小限制\n将录制大小限制为 15 Gb</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Limit recording size to 15 GB</string>
+    <string name="screenrecord_skip_time_label">Skip timer</string>
+    <string name="screenrecord_skip_time_summary">Remove 3 second wait</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC 近场通讯</string>
