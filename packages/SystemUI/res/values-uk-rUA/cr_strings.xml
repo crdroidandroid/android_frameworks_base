@@ -108,7 +108,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Розпізнавання...</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Показувати крапку зупинки\nТривале натискання для переміщення</string>
     <string name="screenrecord_stopdot_summary">Longpress to move it</string>
     <string name="screenrecord_lowquality_label">Низька якість для меншого розміру файлу</string>
     <string name="screenrecord_lowquality_summary">For smaller file size</string>
