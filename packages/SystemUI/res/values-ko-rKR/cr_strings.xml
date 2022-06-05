@@ -108,6 +108,7 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">얼굴 인식 중...</string>
     <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
     <string name="screenrecord_stopdot_summary">Longpress to move it</string>
     <string name="screenrecord_lowquality_label">보다 작은 파일 크기를 위한 낮은 음질</string>
     <string name="screenrecord_lowquality_summary">For smaller file size</string>
