@@ -108,9 +108,14 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">إظهار نقطة الإيقاف\nضغطة مطولة لتحريكها</string>
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_summary">Longpress to move it</string>
     <string name="screenrecord_lowquality_label">تخفيض الدقة لحجم ملف أقل</string>
+    <string name="screenrecord_lowquality_summary">For smaller file size</string>
     <string name="screenrecord_longer_timeout_switch_label">الحد الأقصى لحجم الملف\nحد حجم التسجيل إلى 15قيقا</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Limit recording size to 15 GB</string>
+    <string name="screenrecord_skip_time_label">Skip timer</string>
+    <string name="screenrecord_skip_time_summary">Remove 3 second wait</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>

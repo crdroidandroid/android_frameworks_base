@@ -108,9 +108,14 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Αναγνώριση προσώπου...</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Εμφάνιση κουκίδας παύσης\nΠαρατεταμέο πάτημα για να την μετακινήσεις</string>
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_summary">Πατήστε παρατεταμένα για να το μετακινήσετε</string>
     <string name="screenrecord_lowquality_label">Μείωση της ποιότητας για μικρότερο μέγεθος αρχείου</string>
+    <string name="screenrecord_lowquality_summary">Για μικρότερο μέγεθος αρχείου</string>
     <string name="screenrecord_longer_timeout_switch_label">Μεγαλύτερο όριο μεγέθους αρχείου\nΠεριορίστε το μέγεθος εγγραφής στα 15GiB</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Περιορισμός μεγέθους εγγραφής στα 15 GB</string>
+    <string name="screenrecord_skip_time_label">Παράλειψη χρονομέτρου</string>
+    <string name="screenrecord_skip_time_summary">Αφαιρέστε την αναμονή 3 δευτερολέπτων</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>

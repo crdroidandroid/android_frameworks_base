@@ -108,9 +108,14 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Rozpoznávání obličeje…</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Zobrazit tečku pro zastavení nahrávání\nDlouhým stiskem ji přesunete</string>
-    <string name="screenrecord_lowquality_label">Nižší kvalita pro zajištění menší velikosti souboru</string>
-    <string name="screenrecord_longer_timeout_switch_label">Omezení větší velikosti souborů\nOmezení velikosti záznamu na 15\u00a0GiB</string>
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_summary">Dlouhým stiskem přesunout</string>
+    <string name="screenrecord_lowquality_label">Nižší kvalita</string>
+    <string name="screenrecord_lowquality_summary">Pro menší velikost souboru</string>
+    <string name="screenrecord_longer_timeout_switch_label">Limit větší velikosti souboru</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Omezit velikost nahrávání na 15\u00a0GB</string>
+    <string name="screenrecord_skip_time_label">Přeskočit časovač</string>
+    <string name="screenrecord_skip_time_summary">Odstranit 3\u00a0sekundy čekání</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
