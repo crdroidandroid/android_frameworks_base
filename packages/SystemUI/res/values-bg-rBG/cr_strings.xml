@@ -200,7 +200,6 @@
     <string name="tristate_rotation_90">Пейзаж (90°)</string>
     <string name="tristate_rotation_270">Пейзаж (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Показване на бутон за спиране на записа\nЗадръжте за да го преместите</string>
     <string name="screenrecord_lowquality_label">Намалете качеството за по-малък размер на файла</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Използване на лицево разпознаване</string>
