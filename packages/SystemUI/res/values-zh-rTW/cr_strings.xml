@@ -199,7 +199,6 @@
     <string name="tristate_rotation_90">橫向 (90°)</string>
     <string name="tristate_rotation_270">橫向 (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">顯示停止點\n長按移動</string>
     <string name="screenrecord_lowquality_label">降低畫質以取得更小的檔案</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">使用臉部</string>

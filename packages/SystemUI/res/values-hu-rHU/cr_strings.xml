@@ -200,7 +200,6 @@
     <string name="tristate_rotation_90">Fekvőkép-mód</string>
     <string name="tristate_rotation_270">Fejreállított fekvőkép-mód</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Látható megállítógomb\nHosszan nyomva áthelyezhető</string>
     <string name="screenrecord_lowquality_label">Gyengébb minőség, hogy kisebbek legyenek a fájlok</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Az Arc használata</string>

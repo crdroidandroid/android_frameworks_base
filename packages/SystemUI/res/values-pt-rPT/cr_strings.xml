@@ -200,7 +200,6 @@
     <string name="tristate_rotation_90">Paisagem (90°)</string>
     <string name="tristate_rotation_270">Paisagem (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Mostrar botão de paragem\nPressione longamente para o mover</string>
     <string name="screenrecord_lowquality_label">Qualidade inferior para arquivos menores</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Utilizar Rosto</string>

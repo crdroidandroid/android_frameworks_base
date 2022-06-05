@@ -236,7 +236,6 @@
     <string name="tristate_rotation_90">Οριζόντια (90°)</string>
     <string name="tristate_rotation_270">Οριζόντια (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Εμφάνιση κουκίδας παύσης\nΠαρατεταμέο πάτημα για να την μετακινήσεις</string>
     <string name="screenrecord_lowquality_label">Μείωση της ποιότητας για μικρότερο μέγεθος αρχείου</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Χρήση Προσώπου</string>

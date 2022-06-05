@@ -232,7 +232,6 @@
     <string name="tristate_rotation_90">가로 (90°)</string>
     <string name="tristate_rotation_270">가로 (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">정지 버튼 표시\n길게 눌러서 이동하기</string>
     <string name="screenrecord_lowquality_label">보다 작은 파일 크기를 위한 낮은 음질</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Face ID 사용하기</string>

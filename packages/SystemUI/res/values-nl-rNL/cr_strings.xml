@@ -200,7 +200,6 @@
     <string name="tristate_rotation_90">Liggend (90°)</string>
     <string name="tristate_rotation_270">Liggend (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Toon stop punt\nLang indrukken om te verplaatsen</string>
     <string name="screenrecord_lowquality_label">Lagere kwaliteit voor kleinere bestandsgrootte</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Gezicht gebruiken</string>

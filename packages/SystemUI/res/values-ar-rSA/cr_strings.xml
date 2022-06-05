@@ -204,7 +204,6 @@
     <string name="tristate_rotation_90">عرضي (90 درجة)</string>
     <string name="tristate_rotation_270">عرضي (270 درجة)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">إظهار نقطة التوقف\nالضغط المطول لتحريكها</string>
     <string name="screenrecord_lowquality_label">جودة أقل لحجم الملف الأصغر</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">استخدام الوجه</string>
