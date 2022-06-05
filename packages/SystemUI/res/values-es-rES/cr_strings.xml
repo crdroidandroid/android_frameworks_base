@@ -227,7 +227,6 @@ Y Nueve</string>
     <string name="tristate_rotation_90">Paisaje (90°)</string>
     <string name="tristate_rotation_270">Paisaje (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Show point to stop recording. \N long press to move it</string>
     <string name="screenrecord_lowquality_label">Menor calidad para un tamaño de archivo más pequeño</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Usar la cara</string>
