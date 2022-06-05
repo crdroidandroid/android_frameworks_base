@@ -202,7 +202,6 @@
     <string name="tristate_rotation_90">Ландшафт (90°)</string>
     <string name="tristate_rotation_270">Ландшафт (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Паказаць кропку спынення\nНацісніце, каб перамясціць</string>
     <string name="screenrecord_lowquality_label">Нізкая якасць для меншага памеру файла</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Выкарыстоўваць твар</string>
