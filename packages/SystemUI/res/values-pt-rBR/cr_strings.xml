@@ -108,7 +108,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Reconhecendo...</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Mostrar ponto de parada\nPressione longamente para movê-lo</string>
     <string name="screenrecord_stopdot_summary">Longpress to move it</string>
     <string name="screenrecord_lowquality_label">Qualidade inferior para arquivos menores</string>
     <string name="screenrecord_lowquality_summary">For smaller file size</string>
