@@ -112,7 +112,7 @@
     <string name="screenrecord_stopdot_summary">Chạm và giữ để di chuyển</string>
     <string name="screenrecord_lowquality_label">Chất lượng thấp cho dung lượng nhỏ hơn</string>
     <string name="screenrecord_lowquality_summary">Để có kích cỡ tập tin nhỏ hơn</string>
-    <string name="screenrecord_longer_timeout_switch_label">Giới hạn kích thước tệp lớn\nKích thước bản ghi giới hạn ở 15 GiB</string>
+    <string name="screenrecord_longer_timeout_switch_label">Bigger file size limit</string>
     <string name="screenrecord_longer_timeout_switch_summary">Giới hạn kích cỡ quay hình tối đa 15 GB</string>
     <string name="screenrecord_skip_time_label">Bỏ qua bộ đếm</string>
     <string name="screenrecord_skip_time_summary">Loại bỏ 3 giây chờ</string>
