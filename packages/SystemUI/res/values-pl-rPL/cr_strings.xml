@@ -112,7 +112,7 @@
     <string name="screenrecord_stopdot_summary">Przytrzymaj, aby przenieść</string>
     <string name="screenrecord_lowquality_label">Niższa jakość dla mniejszego rozmiaru pliku</string>
     <string name="screenrecord_lowquality_summary">Dla mniejszego rozmiaru pliku</string>
-    <string name="screenrecord_longer_timeout_switch_label">Zbyt duży rozmiar pliku\nOgranicz rozmiar nagrywania do 15 GiB</string>
+    <string name="screenrecord_longer_timeout_switch_label">Bigger file size limit</string>
     <string name="screenrecord_longer_timeout_switch_summary">Ogranicz rozmiar nagrywania do 15 GB</string>
     <string name="screenrecord_skip_time_label">Pomiń minutnik</string>
     <string name="screenrecord_skip_time_summary">Usuń 3-sekundowe oczekiwanie</string>
