@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Falsifier la signature de l\'application</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Autorise l\'application à se faire passer pour une autre. Des applications malveillantes peuvent l\'utiliser pour accéder à vos données privées. Accordez cette autorisation avec prudence !</string>
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_fake_package_signature">Falsifier la signature de l\'application</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_fake_package_signature">autoriser la falsification de la signature de l\'application</string>
+    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
+    <string name="permgrouprequest_fake_package_signature">Autoriser
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; la falsification de l\'application ?</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Appuyez et maintenez le bouton Marche/Arrêt pour déverrouiller</string>
+    <string name="pocket_view_title">Le mode poche est activé</string>
+    <string name="pocket_view_title_cancel">Pour utiliser votre téléphone :</string>
+    <string name="pocket_view_top_tag_cancel">Vérifiez si la zone de détection du téléphone est propre.</string>
+    <string name="pocket_view_top_tag_cancel2">Appuyez longuement sur le bouton d\'alimentation pour quitter le mode poche.</string>
+    <string name="pocket_view_top_tag_number1">1.\u0020</string>
+    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Déverrouillage facial désactivé en raison de l\'inactivité</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Copier l\'URL du rapport d\'erreur</string>
+    <string name="url_copy_success">URL copiée avec succès</string>
+    <string name="url_copy_failed">Une erreur est survenue pendant l\'envoi du rapport</string>
+</resources>
