@@ -108,14 +108,14 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Yüz tanınıyor...</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_stopdot_summary">Longpress to move it</string>
-    <string name="screenrecord_lowquality_label">Daha küçük dosya boyutu için düşük kalite</string>
-    <string name="screenrecord_lowquality_summary">For smaller file size</string>
-    <string name="screenrecord_longer_timeout_switch_label">Daha büyük dosya boyutu sınırı\nKayıt boyutunu 15GB ile sınırlayın</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Limit recording size to 15 GB</string>
-    <string name="screenrecord_skip_time_label">Skip timer</string>
-    <string name="screenrecord_skip_time_summary">Remove 3 second wait</string>
+    <string name="screenrecord_stopdot_label">Durdurma noktasını göster</string>
+    <string name="screenrecord_stopdot_summary">Taşımak için uzun basın</string>
+    <string name="screenrecord_lowquality_label">Daha küçük kalite</string>
+    <string name="screenrecord_lowquality_summary">Daha küçük dosya boyutu için</string>
+    <string name="screenrecord_longer_timeout_switch_label">Daha büyük dosya boyutu sınırı</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Kayıt boyutunu 15 GB ile sınırlayın</string>
+    <string name="screenrecord_skip_time_label">Zamanlayıcıyı atla</string>
+    <string name="screenrecord_skip_time_summary">3 saniye beklemeyi kaldır</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the nfc status bar icon. -->
     <string name="status_bar_nfc">NFC</string>
