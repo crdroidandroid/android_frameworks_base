@@ -112,7 +112,7 @@
     <string name="screenrecord_stopdot_summary">Lang indrukken om het te verplaatsen</string>
     <string name="screenrecord_lowquality_label">Lagere kwaliteit voor kleinere bestandsgrootte</string>
     <string name="screenrecord_lowquality_summary">Voor kleinere bestandsgrootte</string>
-    <string name="screenrecord_longer_timeout_switch_label">Grotere bestandsgrootte limiet\nLimiteer opnamegrootte tot 15 GB</string>
+    <string name="screenrecord_longer_timeout_switch_label">Grotere bestandsgrootte limiet</string>
     <string name="screenrecord_longer_timeout_switch_summary">Beperk opnamegrootte tot 15 GB</string>
     <string name="screenrecord_skip_time_label">Timer overslaan</string>
     <string name="screenrecord_skip_time_summary">Verwijder 3 seconden wachten</string>
