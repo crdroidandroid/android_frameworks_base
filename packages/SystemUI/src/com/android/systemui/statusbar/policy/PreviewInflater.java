@@ -85,7 +85,7 @@ public class PreviewInflater {
                     appContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             appInflater = appInflater.cloneInContext(appContext);
             widgetView = appInflater.inflate(widgetInfo.layoutId, null, false);
-        } catch (PackageManager.NameNotFoundException|RuntimeException e) {
+        } catch (Exception e) {
             Log.w(TAG, "Error creating widget view", e);
         }
         return widgetView;
@@ -98,7 +98,7 @@ public class PreviewInflater {
             Bundle metaData = packageManager.getServiceInfo(
                     componentName, PackageManager.GET_META_DATA).metaData;
             return getWidgetInfoFromMetaData(componentName.getPackageName(), metaData);
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             Log.w(TAG, "Failed to load preview; " + componentName.flattenToShortString()
                     + " not found", e);
         }
