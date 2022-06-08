@@ -29,7 +29,9 @@ import android.service.quicksettings.Tile
 import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
@@ -283,6 +285,15 @@ open class QSTileViewImpl @JvmOverloads constructor(
     ) {
         setOnClickListener(click)
         onLongClickListener = longClick
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+        } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+        }
+        return super.onTouchEvent(event)
     }
 
     override fun onStateChanged(state: QSTile.State) {
