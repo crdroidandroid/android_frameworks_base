@@ -1165,6 +1165,9 @@ public class AppStateTrackerImpl implements AppStateTracker {
             return false;
         }
         synchronized (mLock) {
+            if (isAppRestricted(uid, packageName)) {
+                return true;
+            }
             final int appId = UserHandle.getAppId(uid);
             if (ArrayUtils.contains(mPowerExemptAllAppIds, appId)) {
                 return false;
@@ -1210,6 +1213,9 @@ public class AppStateTrackerImpl implements AppStateTracker {
             return false;
         }
         synchronized (mLock) {
+            if (isAppRestricted(uid, packageName)) {
+                return true;
+            }
             final int appId = UserHandle.getAppId(uid);
             if (ArrayUtils.contains(mPowerExemptAllAppIds, appId)
                     || ArrayUtils.contains(mTempExemptAppIds, appId)) {
@@ -1330,6 +1336,15 @@ public class AppStateTrackerImpl implements AppStateTracker {
         synchronized (mLock) {
             return ArrayUtils.contains(mTempExemptAppIds, UserHandle.getAppId(uid));
         }
+    }
+
+    /**
+     * @return whether the app is restricted battery usage
+     */
+    public boolean isAppRestricted(int uid, String packageName) {
+        return mAppOpsManager.checkOpNoThrow(
+                AppOpsManager.OP_RUN_ANY_IN_BACKGROUND,
+                uid, packageName) != AppOpsManager.MODE_ALLOWED;
     }
 
     /**
