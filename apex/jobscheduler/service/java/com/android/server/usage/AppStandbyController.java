@@ -1764,7 +1764,7 @@ public class AppStandbyController
                     // shouldn't be surprising.
                     // Exclude REASON_SUB_FORCED_USER_FLAG_INTERACTION since the RESTRICTED bucket
                     // isn't directly visible in that flow.
-                    if (Build.IS_DEBUGGABLE
+                    if (Build.IS_ENG
                             && (reason & REASON_SUB_MASK)
                             != REASON_SUB_FORCED_USER_FLAG_INTERACTION) {
                         Toast.makeText(mContext,
