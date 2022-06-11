@@ -20310,4 +20310,10 @@ public class ActivityManagerService extends IActivityManager.Stub
     public boolean shouldForceCutoutFullscreen(String packageName) {
         return mActivityTaskManager.shouldForceCutoutFullscreen(packageName);
     }
+    
+    public boolean shouldSkipBootCompletedBroadcastForPackage(ApplicationInfo info) {
+        return getAppOpsManager().checkOpNoThrow(
+                AppOpsManager.OP_RUN_ANY_IN_BACKGROUND,
+                info.uid, info.packageName) != AppOpsManager.MODE_ALLOWED;
+    }
 }
