@@ -287,6 +287,7 @@ import com.android.server.uri.NeededUriGrants;
 import com.android.server.uri.UriGrantsManagerInternal;
 import com.android.server.wallpaper.WallpaperManagerInternal;
 import com.android.wm.shell.Flags;
+import com.android.server.usage.AppStandbyInternal;
 
 import org.lineageos.internal.applications.LineageActivityManager;
 
@@ -809,6 +810,8 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
 
     private Set<Integer> mProfileOwnerUids = new ArraySet<Integer>();
 
+    public AppStandbyInternal mAppStandbyInternal;
+
     // Lineage sdk activity related helper
     private LineageActivityManager mLineageActivityManager;
 
@@ -901,6 +904,7 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
             // TODO(b/258792202) Cleanup once ASM is ready to launch
             ActivitySecurityModelFeatureFlags.initialize(mContext.getMainExecutor(), pm);
         }
+        mAppStandbyInternal = LocalServices.getService(AppStandbyInternal.class);
     }
 
     public void onInitPowerManagement() {

@@ -990,6 +990,11 @@ public class BroadcastQueueImpl extends BroadcastQueue {
         return intent;
     }
 
+	private boolean isBootCompletedIntent(Intent intent) {
+        return intent.getAction() == Intent.ACTION_BOOT_COMPLETED ||
+                intent.getAction() == Intent.ACTION_LOCKED_BOOT_COMPLETED;
+    }
+
     public void processNextBroadcastLocked(boolean fromMsg, boolean skipOomAdj) {
         BroadcastRecord r;
 
@@ -1387,6 +1392,14 @@ public class BroadcastQueueImpl extends BroadcastQueue {
                 info.activityInfo.applicationInfo.uid);
 
         boolean skip = mSkipPolicy.shouldSkip(r, info);
+
+        if (isBootCompletedIntent(r.intent) &&
+                mService.shouldSkipBootCompletedBroadcastForPackage(
+                        info.activityInfo.applicationInfo)) {
+            Slog.i(TAG, "BOOT_COMPLETED broadcast skipped because of strict standby for "
+                    + info.activityInfo.applicationInfo.packageName);
+            skip = true;
+        }
 
         // Filter packages in the intent extras, skipping delivery if none of the packages is
         // visible to the receiver.
