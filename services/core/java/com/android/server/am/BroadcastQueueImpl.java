@@ -990,6 +990,12 @@ public class BroadcastQueueImpl extends BroadcastQueue {
         return intent;
     }
 
+    private boolean isBootCompletedIntent(Intent intent) {
+        return Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) ||
+                Intent.ACTION_LOCKED_BOOT_COMPLETED.equals(intent.getAction()) ||
+                Intent.ACTION_MEDIA_MOUNTED.equals(intent.getAction());
+    }
+
     public void processNextBroadcastLocked(boolean fromMsg, boolean skipOomAdj) {
         BroadcastRecord r;
 
@@ -1401,6 +1407,14 @@ public class BroadcastQueueImpl extends BroadcastQueue {
                                 + info.activityInfo.packageName + " / " + receiverUid
                                 + " : receiver is filtered by the package visibility");
                     }
+                    skip = true;
+                }
+            }
+        }
+
+        if (!skip) {
+            if (app == null) {
+                if (mService.shouldSkipBootCompletedBroadcastForPackage(info.activityInfo.applicationInfo)) {
                     skip = true;
                 }
             }
