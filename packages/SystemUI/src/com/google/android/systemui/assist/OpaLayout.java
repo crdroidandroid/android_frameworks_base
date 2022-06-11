@@ -15,6 +15,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.os.Trace;
 import android.os.UserHandle;
@@ -84,7 +85,6 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
     private View mYellow;
 
     private Context mContext;
-    private Handler mHandler;
     private SettingsObserver mSettingsObserver;
     private boolean mAllowAnimation = true;
 
@@ -127,8 +127,6 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
             }
         };
         mContext = context;
-        mHandler = new Handler();
-        mSettingsObserver = new SettingsObserver(mHandler);
     }
 
     public OpaLayout(Context context, AttributeSet attributeSet, int i) {
@@ -152,7 +150,6 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
         mAnimatedViews.add(mGreen);
         mAnimatedViews.add(mWhite);
         mOverviewProxyService = (OverviewProxyService) Dependency.get(OverviewProxyService.class);
-        mSettingsObserver.observe();
         hideAllOpa();
     }
 
@@ -275,6 +272,8 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         mOverviewProxyService.addCallback(mOverviewProxyListener);
+        mSettingsObserver = new SettingsObserver(new Handler(Looper.getMainLooper()));
+        mSettingsObserver.observe();
         mOpaEnabledNeedsUpdate = true;
         post(new Runnable() {
             @Override
@@ -288,6 +287,10 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mOverviewProxyService.removeCallback(mOverviewProxyListener);
+        if (mSettingsObserver != null) {
+            mSettingsObserver.unobserve();
+            mSettingsObserver = null;
+        }
     }
 
     private class SettingsObserver extends ContentObserver {
@@ -301,6 +304,10 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
                     Settings.System.PIXEL_NAV_ANIMATION),
                     false, this, UserHandle.USER_ALL);
             update();
+        }
+
+        void unobserve() {
+            mContext.getContentResolver().unregisterContentObserver(this);
         }
 
         @Override

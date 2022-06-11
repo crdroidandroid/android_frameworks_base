@@ -338,9 +338,6 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
         if (mMLEnableWidth > mEdgeWidthRight) mMLEnableWidth = mEdgeWidthRight;
         if (mMLEnableWidth > mEdgeWidthLeft) mMLEnableWidth = mEdgeWidthLeft;
 
-        final TunerService tunerService = Dependency.get(TunerService.class);
-        tunerService.addTunable(this, KEY_EDGE_LONG_SWIPE_ACTION);
-
         // Reduce the default touch slop to ensure that we can intercept the gesture
         // before the app starts to react to it.
         // TODO(b/130352502) Tune this value and extract into a constant
@@ -390,6 +387,8 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
      */
     public void onNavBarAttached() {
         mIsAttached = true;
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, KEY_EDGE_LONG_SWIPE_ACTION);
         Dependency.get(ProtoTracer.class).add(this);
         mOverviewProxyService.addCallback(mQuickSwitchListener);
         mSysUiState.addCallback(mSysUiStateCallback);
@@ -402,6 +401,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
      */
     public void onNavBarDetached() {
         mIsAttached = false;
+        Dependency.get(TunerService.class).removeTunable(this);
         Dependency.get(ProtoTracer.class).remove(this);
         mOverviewProxyService.removeCallback(mQuickSwitchListener);
         mSysUiState.removeCallback(mSysUiStateCallback);

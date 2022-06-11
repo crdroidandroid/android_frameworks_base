@@ -351,6 +351,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             "system:" + Settings.System.STATUS_BAR_TICKER_TICK_DURATION;
     private static final String SYSUI_ROUNDED_FWVALS =
             Settings.Secure.SYSUI_ROUNDED_FWVALS;
+    private static final String QS_FOOTER_WARNINGS =
+            "system:" + Settings.System.QS_FOOTER_WARNINGS;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -1057,6 +1059,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mTunerService.addTunable(this, STATUS_BAR_TICKER_ANIMATION_MODE);
         mTunerService.addTunable(this, STATUS_BAR_TICKER_TICK_DURATION);
         mTunerService.addTunable(this, SYSUI_ROUNDED_FWVALS);
+        mTunerService.addTunable(this, QS_FOOTER_WARNINGS);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -4068,6 +4071,12 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     }
 
+    private void setQsPanelOptions() {
+        if (mQSPanel != null) {
+            mQSPanel.updateSettings();
+        }
+    }
+
     /**
      * Switches theme from light to dark and vice-versa.
      */
@@ -5279,9 +5288,12 @@ public class StatusBar extends SystemUI implements DemoMode,
                         TunerService.parseIntegerSwitch(newValue, true);
                 updateCorners();
                 break;
+            case QS_FOOTER_WARNINGS:
+                setQsPanelOptions();
+                break;
             default:
                 break;
-         }
+        }
     }
     // End Extra BaseStatusBarMethods.
 

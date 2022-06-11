@@ -150,9 +150,19 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         mKeyguardStateController = keyguardStateController;
         mScreenLifecycle = screenLifecycle;
         updateNavBackDrop(getResources().getConfiguration());
+    }
 
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
         Dependency.get(TunerService.class).addTunable(this,
                 STATUS_BAR_CUSTOM_HEADER);
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Dependency.get(TunerService.class).removeTunable(this);
     }
 
     @Override

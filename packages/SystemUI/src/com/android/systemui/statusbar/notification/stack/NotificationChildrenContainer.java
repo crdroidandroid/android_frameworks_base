@@ -134,8 +134,19 @@ public class NotificationChildrenContainer extends ViewGroup implements TunerSer
         mHybridGroupManager = new HybridGroupManager(getContext());
         initDimens();
         setClipChildren(false);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, NOTIFICATION_BG_ALPHA);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Dependency.get(TunerService.class).removeTunable(this);
     }
 
     @Override

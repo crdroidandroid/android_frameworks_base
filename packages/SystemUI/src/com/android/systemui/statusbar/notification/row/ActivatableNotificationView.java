@@ -222,6 +222,12 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Dependency.get(TunerService.class).removeTunable(this);
+    }
+
+    @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
             case NOTIFICATION_BG_ALPHA:

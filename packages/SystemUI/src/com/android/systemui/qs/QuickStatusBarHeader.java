@@ -355,18 +355,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mNextAlarmTextView.setSelected(true);
 
         updateResources();
-
-        Dependency.get(TunerService.class).addTunable(this,
-                QS_SHOW_AUTO_BRIGHTNESS,
-                QS_SHOW_BRIGHTNESS_SLIDER,
-                SHOW_QS_CLOCK,
-                QS_SHOW_BATTERY_PERCENT,
-                QS_SHOW_BATTERY_ESTIMATE,
-                STATUS_BAR_BATTERY_STYLE,
-                QS_BATTERY_STYLE,
-                QS_BATTERY_LOCATION,
-                STATUS_BAR_CUSTOM_HEADER,
-                QS_DATAUSAGE);
     }
 
     public QuickQSPanel getHeaderQsPanel() {
@@ -678,6 +666,17 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
+        Dependency.get(TunerService.class).addTunable(this,
+                QS_SHOW_AUTO_BRIGHTNESS,
+                QS_SHOW_BRIGHTNESS_SLIDER,
+                SHOW_QS_CLOCK,
+                QS_SHOW_BATTERY_PERCENT,
+                QS_SHOW_BATTERY_ESTIMATE,
+                STATUS_BAR_BATTERY_STYLE,
+                QS_BATTERY_STYLE,
+                QS_BATTERY_LOCATION,
+                STATUS_BAR_CUSTOM_HEADER,
+                QS_DATAUSAGE);
         mRingerModeTracker.getRingerModeInternal().observe(this, ringer -> {
             mRingerMode = ringer;
             updateStatusText();
@@ -765,6 +764,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         setListening(false);
         mRingerModeTracker.getRingerModeInternal().removeObservers(this);
         mStatusBarIconController.removeIconGroup(mIconManager);
+        Dependency.get(TunerService.class).removeTunable(this);
         super.onDetachedFromWindow();
     }
 

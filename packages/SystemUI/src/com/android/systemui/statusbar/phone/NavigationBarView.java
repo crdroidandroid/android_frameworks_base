@@ -1291,6 +1291,7 @@ public class NavigationBarView extends FrameLayout implements
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         Dependency.get(NavigationModeController.class).removeListener(this);
+        Dependency.get(TunerService.class).removeTunable(this);
         setUpSwipeUpOnboarding(false);
         for (int i = 0; i < mButtonDispatchers.size(); ++i) {
             mButtonDispatchers.valueAt(i).onDestroy();
