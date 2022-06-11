@@ -262,7 +262,7 @@ public class QSFooterView extends FrameLayout {
                 Settings.System.QS_FOOTER_DATA_USAGE, 0,
                 UserHandle.USER_CURRENT) == 1;
 
-        mUsageText.setVisibility(mShouldShowDataUsage && mExpanded ? View.VISIBLE : View.GONE);
+        mUsageText.setVisibility(mShouldShowDataUsage && mExpanded ? View.VISIBLE : View.INVISIBLE);
         if ((mExpanded) && mShouldShowDataUsage) setUsageText();
     }
 }
