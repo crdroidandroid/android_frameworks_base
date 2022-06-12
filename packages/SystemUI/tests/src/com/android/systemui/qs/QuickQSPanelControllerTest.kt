@@ -67,6 +67,8 @@ class QuickQSPanelControllerTest : SysuiTestCase() {
     @Mock
     private lateinit var tileView: QSTileView
     @Mock
+    private lateinit var quickQsBrightnessController: QuickQSBrightnessController
+    @Mock
     private lateinit var footerActionsController: FooterActionsController
     @Captor
     private lateinit var captor: ArgumentCaptor<QSPanel.OnConfigurationChangedListener>
@@ -93,6 +95,7 @@ class QuickQSPanelControllerTest : SysuiTestCase() {
                 uiEventLogger,
                 qsLogger,
                 dumpManager,
+                quickQsBrightnessController,
                 footerActionsController
         )
 
@@ -125,11 +128,13 @@ class QuickQSPanelControllerTest : SysuiTestCase() {
     }
 
     @Test
-    fun testFooterVisibilityRefreshedWhenConfigurationChanged() {
+    fun testBrightnessAndFooterVisibilityRefreshedWhenConfigurationChanged() {
         // times(2) because both controller and base controller are registering their listeners
         verify(quickQSPanel, times(2)).addOnConfigurationChangedListener(captor.capture())
 
         captor.allValues.forEach { it.onConfigurationChange(Configuration.EMPTY) }
+
+        verify(quickQsBrightnessController).refreshVisibility(anyBoolean())
         // times(2) because footer visibility is also refreshed on controller init
         verify(footerActionsController, times(2)).refreshVisibility(anyBoolean())
     }
