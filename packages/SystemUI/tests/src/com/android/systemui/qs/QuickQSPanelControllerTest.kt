@@ -68,6 +68,8 @@ class QuickQSPanelControllerTest : SysuiTestCase() {
     private lateinit var tileLayout: TileLayout
     @Mock
     private lateinit var tileView: QSTileView
+    @Mock
+    private lateinit var quickQsBrightnessController: QuickQSBrightnessController
     @Captor
     private lateinit var captor: ArgumentCaptor<QSPanel.OnConfigurationChangedListener>
 
@@ -93,7 +95,8 @@ class QuickQSPanelControllerTest : SysuiTestCase() {
                 metricsLogger,
                 uiEventLogger,
                 qsLogger,
-                dumpManager
+                dumpManager,
+                quickQsBrightnessController
         )
 
         controller.init()
@@ -136,6 +139,7 @@ class QuickQSPanelControllerTest : SysuiTestCase() {
         controller.setRotation(RotationUtils.ROTATION_LANDSCAPE)
         captor.allValues.forEach { it.onConfigurationChange(Configuration.EMPTY) }
 
+        verify(quickQsBrightnessController).refreshVisibility(anyBoolean())
         verify(mediaHost).expansion = MediaHostState.COLLAPSED
     }
 
