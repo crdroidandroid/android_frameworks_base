@@ -568,6 +568,8 @@ final class ElectronBeam implements ScreenStateAnimator {
 
         if (mEglConfig == null) {
             int[] eglConfigAttribList = new int[] {
+                    EGL14.EGL_RENDERABLE_TYPE,
+                    EGL14.EGL_OPENGL_ES2_BIT,
                     EGL14.EGL_RED_SIZE, 8,
                     EGL14.EGL_GREEN_SIZE, 8,
                     EGL14.EGL_BLUE_SIZE, 8,
@@ -579,6 +581,10 @@ final class ElectronBeam implements ScreenStateAnimator {
             if (!EGL14.eglChooseConfig(mEglDisplay, eglConfigAttribList, 0,
                     eglConfigs, 0, eglConfigs.length, numEglConfigs, 0)) {
                 logEglError("eglChooseConfig");
+                return false;
+            }
+            if (numEglConfigs[0] <= 0) {
+                Slog.e(TAG, "no valid config found");
                 return false;
             }
 
@@ -594,6 +600,7 @@ final class ElectronBeam implements ScreenStateAnimator {
 
         if (mEglContext == null) {
             int[] eglContextAttribList = new int[] {
+                    EGL14.EGL_CONTEXT_CLIENT_VERSION, 1,
                     EGL14.EGL_NONE, EGL14.EGL_NONE,
                     EGL14.EGL_NONE
             };
@@ -707,7 +714,11 @@ final class ElectronBeam implements ScreenStateAnimator {
             mSurfaceLayout.dispose();
             mSurfaceLayout = null;
             mTransaction.remove(mSurfaceControl).apply();
-            mSurface.release();
+            if (mSurface != null) {
+                mSurface.release();
+                mSurface = null;
+            }
+
             mSurfaceControl = null;
             mSurfaceVisible = false;
             mSurfaceAlpha = 0f;
@@ -843,29 +854,32 @@ final class ElectronBeam implements ScreenStateAnimator {
                 if (mSurfaceControl == null) {
                     return;
                 }
-                try {
-                    DisplayInfo displayInfo = mDisplayManagerInternal.getDisplayInfo(mDisplayId);
-                    switch (displayInfo.rotation) {
-                        case Surface.ROTATION_0:
-                            t.setPosition(mSurfaceControl, 0, 0);
-                            t.setMatrix(mSurfaceControl, 1, 0, 0, 1);
-                            break;
-                        case Surface.ROTATION_90:
-                            t.setPosition(mSurfaceControl, 0, displayInfo.logicalHeight);
-                            t.setMatrix(mSurfaceControl, 0, -1, 1, 0);
-                            break;
-                        case Surface.ROTATION_180:
-                            t.setPosition(mSurfaceControl, displayInfo.logicalWidth,
-                                    displayInfo.logicalHeight);
-                            t.setMatrix(mSurfaceControl, -1, 0, 0, -1);
-                            break;
-                        case Surface.ROTATION_270:
-                            t.setPosition(mSurfaceControl, displayInfo.logicalWidth, 0);
-                            t.setMatrix(mSurfaceControl, 0, 1, -1, 0);
-                            break;
-                    }
-                } catch (Exception e) {
 
+                DisplayInfo displayInfo = mDisplayManagerInternal.getDisplayInfo(mDisplayId);
+                if (displayInfo == null) {
+                    // displayInfo can be null if the associated display has been removed. There
+                    // is a delay between the display being removed and ElectronBeam being dismissed.
+                    return;
+                }
+
+                switch (displayInfo.rotation) {
+                    case Surface.ROTATION_0:
+                        t.setPosition(mSurfaceControl, 0, 0);
+                        t.setMatrix(mSurfaceControl, 1, 0, 0, 1);
+                        break;
+                    case Surface.ROTATION_90:
+                        t.setPosition(mSurfaceControl, 0, displayInfo.logicalHeight);
+                        t.setMatrix(mSurfaceControl, 0, -1, 1, 0);
+                        break;
+                    case Surface.ROTATION_180:
+                        t.setPosition(mSurfaceControl, displayInfo.logicalWidth,
+                                displayInfo.logicalHeight);
+                        t.setMatrix(mSurfaceControl, -1, 0, 0, -1);
+                        break;
+                    case Surface.ROTATION_270:
+                        t.setPosition(mSurfaceControl, displayInfo.logicalWidth, 0);
+                        t.setMatrix(mSurfaceControl, 0, 1, -1, 0);
+                        break;
                 }
             }
         }
