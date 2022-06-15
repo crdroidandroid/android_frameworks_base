@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal | center_vertical"
-        android:background="@android:color/transparent">
+        android:background="?android:attr/windowBackground">
 
     <ImageView
         android:id="@+id/one_handed_tutorial_image"
