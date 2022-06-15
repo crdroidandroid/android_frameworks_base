@@ -284,6 +284,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
 
     private static final String STATUS_BAR_BRIGHTNESS_CONTROL =
             "system:" + Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL;
+    private static final String QS_TRANSPARENCY =
+            "system:" + Settings.System.QS_TRANSPARENCY;
 
     private static final int MSG_LAUNCH_TRANSITION_TIMEOUT = 1003;
     private static final int MSG_LONG_PRESS_BRIGHTNESS_CHANGE = 1004;
@@ -948,6 +950,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         createAndAddWindows(result);
 
         mTunerService.addTunable(this, STATUS_BAR_BRIGHTNESS_CONTROL);
+        mTunerService.addTunable(this, QS_TRANSPARENCY);
 
         // Set up the initial notification state. This needs to happen before CommandQueue.disable()
         setUpPresenter();
@@ -3043,6 +3046,10 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                         TunerService.parseIntegerSwitch(newValue, false);
                 if (mPhoneStatusBarViewController != null)
                     mPhoneStatusBarViewController.setBrightnessControlEnabled(mBrightnessControl);
+                break;
+            case QS_TRANSPARENCY:
+                mScrimController.setCustomScrimAlpha(
+                        TunerService.parseInteger(newValue, 100));
                 break;
             default:
                 break;
