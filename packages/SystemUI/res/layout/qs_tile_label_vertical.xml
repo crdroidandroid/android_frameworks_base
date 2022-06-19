@@ -32,7 +32,7 @@
         android:textDirection="locale"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="1"
-        android:singleLine="true"
+        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.QS.TileLabel"/>
 
     <TextView
@@ -43,7 +43,7 @@
         android:textDirection="locale"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="1"
-        android:singleLine="true"
+        android:maxLines="1"
         android:visibility="gone"
         android:textAppearance="@style/TextAppearance.QS.TileLabel.Secondary"
         android:textColor="?android:attr/textColorSecondary"/>
