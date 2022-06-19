@@ -60,6 +60,7 @@ public class QSFooterView extends FrameLayout {
     private PageIndicator mPageIndicator;
     private TextView mUsageText;
     private View mActionsContainer;
+    private View mSpace;
 
     protected TouchAnimator mFooterAnimator;
 
@@ -89,6 +90,7 @@ public class QSFooterView extends FrameLayout {
         mPageIndicator = findViewById(R.id.footer_page_indicator);
         mActionsContainer = requireViewById(R.id.qs_footer_actions);
         mUsageText = findViewById(R.id.build);
+        mSpace = findViewById(R.id.spacer);
 
         updateResources();
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
@@ -249,12 +251,8 @@ public class QSFooterView extends FrameLayout {
     void updateEverything() {
         post(() -> {
             updateVisibilities();
-            updateClickabilities();
             setClickable(false);
         });
-    }
-
-    private void updateClickabilities() {
     }
 
     private void updateVisibilities() {
@@ -262,7 +260,15 @@ public class QSFooterView extends FrameLayout {
                 Settings.System.QS_FOOTER_DATA_USAGE, 0,
                 UserHandle.USER_CURRENT) == 1;
 
-        mUsageText.setVisibility(mShouldShowDataUsage && mExpanded ? View.VISIBLE : View.GONE);
-        if ((mExpanded) && mShouldShowDataUsage) setUsageText();
+        mSpace.setVisibility(mShouldShowDataUsage && mExpanded ? View.GONE : View.VISIBLE);
+
+        if (mExpanded && mShouldShowDataUsage) {
+            mUsageText.setVisibility(View.VISIBLE);
+            mSpace.setVisibility(View.GONE);
+            setUsageText();
+        } else {
+            mUsageText.setVisibility(View.INVISIBLE);
+            mSpace.setVisibility(View.VISIBLE);
+        }
     }
 }
