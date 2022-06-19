@@ -158,6 +158,18 @@ public class QuickQSPanel extends QSPanel implements TunerService.Tunable {
                             TunerService.parseIntegerSwitch(newValue, true) ? View.VISIBLE : View.GONE);
                 }
                 break;
+            case QS_TILE_ANIMATION_STYLE:
+                mAnimStyle =
+                       TunerService.parseInteger(newValue, 0);
+                break;
+            case QS_TILE_ANIMATION_DURATION:
+                mAnimDuration =
+                       TunerService.parseInteger(newValue, 1);
+                break;
+            case QS_TILE_ANIMATION_INTERPOLATOR:
+                mInterpolatorType =
+                       TunerService.parseInteger(newValue, 0);
+                break;
             default:
                 break;
          }
