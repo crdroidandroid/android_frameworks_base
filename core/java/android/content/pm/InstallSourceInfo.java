@@ -133,6 +133,8 @@ public final class InstallSourceInfo implements Parcelable {
      */
     @Nullable
     public String getInstallingPackageName() {
+        if ("com.aurora.store".equals(mInstallingPackageName))
+            return "com.android.vending";
         return mInstallingPackageName;
     }
 
