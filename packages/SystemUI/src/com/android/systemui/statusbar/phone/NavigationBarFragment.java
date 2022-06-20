@@ -114,6 +114,7 @@ import com.android.systemui.stackdivider.Divider;
 import com.android.systemui.statusbar.AutoHideUiElement;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.CommandQueue.Callbacks;
+import com.android.systemui.statusbar.NavigationBarController;
 import com.android.systemui.statusbar.NotificationRemoteInputManager;
 import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.notification.stack.StackStateAnimator;
@@ -125,6 +126,7 @@ import com.android.systemui.util.LifecycleFragment;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -326,6 +328,12 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
             new Handler(Looper.getMainLooper())) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
+            // TODO(b/198002034): Content observers currently can still be called back after being
+            // unregistered, and in this case we can ignore the change if the nav bar has been
+            // destroyed already
+            if (mNavigationBarView == null) {
+                return;
+            }
             boolean available = mAssistManager
                     .getAssistInfoForUser(UserHandle.USER_CURRENT) != null;
             if (mAssistantAvailable != available) {
@@ -481,7 +489,7 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
         if (mIsOnDefaultDisplay) {
             final RotationButtonController rotationButtonController =
                     mNavigationBarView.getRotationButtonController();
-            rotationButtonController.addRotationCallback(mRotationWatcher);
+            rotationButtonController.setRotationCallback(mRotationWatcher);
 
             // Reset user rotation pref to match that of the WindowManager if starting in locked
             // mode. This will automatically happen when switching from auto-rotate to locked mode.
@@ -504,6 +512,9 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
         super.onDestroyView();
         if (mNavigationBarView != null) {
             if (mIsOnDefaultDisplay) {
+                final RotationButtonController rotationButtonController =
+                        mNavigationBarView.getRotationButtonController();
+                rotationButtonController.setRotationCallback(null);
                 mNavigationBarView.getBarTransitions()
                         .removeDarkIntensityListener(mAssistHandlerViewController);
                 mAssistHandlerViewController = null;
@@ -513,6 +524,8 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
         }
         mOverviewProxyService.removeCallback(mOverviewProxyListener);
         mBroadcastDispatcher.unregisterReceiver(mBroadcastReceiver);
+        mHandler.removeCallbacks(mAutoDim);
+        mNavigationBarView = null;
     }
 
     @Override
@@ -1263,11 +1276,11 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
         if (DEBUG) Log.v(TAG, "addNavigationBar: about to add " + navigationBarView);
         if (navigationBarView == null) return null;
 
-        final NavigationBarFragment fragment = FragmentHostManager.get(navigationBarView)
-                .create(NavigationBarFragment.class);
         navigationBarView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
+                final NavigationBarFragment fragment =
+                        FragmentHostManager.get(v).create(NavigationBarFragment.class);
                 final FragmentHostManager fragmentHost = FragmentHostManager.get(v);
                 fragmentHost.getFragmentManager().beginTransaction()
                         .replace(R.id.navigation_bar_frame, fragment, TAG)
@@ -1277,6 +1290,8 @@ public class NavigationBarFragment extends LifecycleFragment implements Callback
 
             @Override
             public void onViewDetachedFromWindow(View v) {
+                final FragmentHostManager fragmentHost = FragmentHostManager.get(v);
+                fragmentHost.removeTagListener(TAG, listener);
                 FragmentHostManager.removeAndDestroy(v);
                 navigationBarView.removeOnAttachStateChangeListener(this);
             }

@@ -149,9 +149,6 @@ public class KeyguardStatusView extends GridLayout implements
         mIActivityManager = ActivityManager.getService();
         mLockPatternUtils = new LockPatternUtils(getContext());
         mHandler = new Handler();
-        final TunerService tunerService = Dependency.get(TunerService.class);
-        tunerService.addTunable(this, LOCKSCREEN_WEATHER_ENABLED);
-        tunerService.addTunable(this, LOCKSCREEN_WEATHER_STYLE);
         onDensityOrFontScaleChanged();
     }
 
@@ -334,6 +331,9 @@ public class KeyguardStatusView extends GridLayout implements
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, LOCKSCREEN_WEATHER_ENABLED);
+        tunerService.addTunable(this, LOCKSCREEN_WEATHER_STYLE);
         Dependency.get(KeyguardUpdateMonitor.class).registerCallback(mInfoCallback);
         Dependency.get(ConfigurationController.class).addCallback(this);
     }
@@ -343,6 +343,7 @@ public class KeyguardStatusView extends GridLayout implements
         super.onDetachedFromWindow();
         Dependency.get(KeyguardUpdateMonitor.class).removeCallback(mInfoCallback);
         Dependency.get(ConfigurationController.class).removeCallback(this);
+        Dependency.get(TunerService.class).removeTunable(this);
     }
 
     @Override

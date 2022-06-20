@@ -283,7 +283,7 @@ public class NavigationBarView extends FrameLayout implements
     };
 
     private final Consumer<Boolean> mRotationButtonListener = (visible) -> {
-        if (visible) {
+        if (visible && mAutoHideController != null) {
             // If the button will actually become visible and the navbar is about to hide,
             // tell the statusbar to keep it around for longer
             mAutoHideController.touchAutoHide();
@@ -1291,6 +1291,7 @@ public class NavigationBarView extends FrameLayout implements
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         Dependency.get(NavigationModeController.class).removeListener(this);
+        Dependency.get(TunerService.class).removeTunable(this);
         setUpSwipeUpOnboarding(false);
         for (int i = 0; i < mButtonDispatchers.size(); ++i) {
             mButtonDispatchers.valueAt(i).onDestroy();

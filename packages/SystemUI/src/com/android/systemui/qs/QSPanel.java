@@ -503,6 +503,10 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         }
     }
 
+    public void updateSettings() {
+        mSecurityFooter.updateSettings();
+    }
+
     protected void updatePadding() {
         final Resources res = mContext.getResources();
         int padding = res.getDimensionPixelSize(R.dimen.qs_panel_padding_top);

@@ -138,6 +138,7 @@ class InsetsSourceProvider {
             // TODO: Ideally, we should wait for the animation to finish so previous window can
             // animate-out as new one animates-in.
             mWin.cancelAnimation();
+            mSeamlessRotating = false;
         }
         ProtoLog.d(WM_DEBUG_IME, "InsetsSource setWin %s", win);
         mWin = win;

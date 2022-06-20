@@ -177,9 +177,19 @@ public class SmartReplyView extends ViewGroup implements TunerService.Tunable {
 
         mBreakIterator = BreakIterator.getLineInstance();
         reallocateCandidateButtonQueueForSqueezing();
+    }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, NOTIFICATION_BG_ALPHA);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Dependency.get(TunerService.class).removeTunable(this);
     }
 
     @Override

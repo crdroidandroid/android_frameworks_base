@@ -30,6 +30,7 @@
 #include <memory>
 #include <set>
 #include <type_traits>
+#include <vector>
 
 #include <android-base/macros.h>
 #include <androidfw/ByteBucketArray.h>
@@ -943,7 +944,7 @@ ssize_t ResStringPool::indexOfString(const char16_t* str, size_t strLen) const
             // But we don't want to hit the cache, so instead we will have a
             // local temporary allocation for the conversions.
             size_t convBufferLen = strLen + 4;
-            char16_t* convBuffer = (char16_t*)calloc(convBufferLen, sizeof(char16_t));
+            std::vector<char16_t> convBuffer(convBufferLen);
             ssize_t l = 0;
             ssize_t h = mHeader->stringCount-1;
 
@@ -953,8 +954,8 @@ ssize_t ResStringPool::indexOfString(const char16_t* str, size_t strLen) const
                 const uint8_t* s = (const uint8_t*)string8At(mid, &len);
                 int c;
                 if (s != NULL) {
-                    char16_t* end = utf8_to_utf16(s, len, convBuffer, convBufferLen);
-                    c = strzcmp16(convBuffer, end-convBuffer, str, strLen);
+                    char16_t* end = utf8_to_utf16(s, len, convBuffer.data(), convBufferLen);
+                    c = strzcmp16(convBuffer.data(), end-convBuffer.data(), str, strLen);
                 } else {
                     c = -1;
                 }
@@ -966,7 +967,6 @@ ssize_t ResStringPool::indexOfString(const char16_t* str, size_t strLen) const
                     if (kDebugStringPoolNoisy) {
                         ALOGI("MATCH!");
                     }
-                    free(convBuffer);
                     return mid;
                 } else if (c < 0) {
                     l = mid + 1;
@@ -974,7 +974,6 @@ ssize_t ResStringPool::indexOfString(const char16_t* str, size_t strLen) const
                     h = mid - 1;
                 }
             }
-            free(convBuffer);
         } else {
             // It is unusual to get the ID from an unsorted string block...
             // most often this happens because we want to get IDs for style

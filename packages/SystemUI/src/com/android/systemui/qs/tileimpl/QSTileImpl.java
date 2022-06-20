@@ -75,7 +75,6 @@ import com.android.systemui.qs.QSEvent;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.QuickStatusBarHeader;
 import com.android.systemui.qs.logging.QSLogger;
-import com.android.systemui.tuner.TunerService;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -90,7 +89,7 @@ import java.util.ArrayList;
  *
  * @param <TState> see above
  */
-public abstract class QSTileImpl<TState extends State> implements QSTile, LifecycleOwner, Dumpable, TunerService.Tunable {
+public abstract class QSTileImpl<TState extends State> implements QSTile, LifecycleOwner, Dumpable {
     protected final String TAG = "Tile." + getClass().getSimpleName();
     protected static final boolean DEBUG = Log.isLoggable("Tile", Log.DEBUG);
 
@@ -122,10 +121,6 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
     private int mIsFullQs;
 
     protected Vibrator mVibrator;
-    private boolean mVibrationEnabled;
-
-    private static final String QUICK_SETTINGS_VIBRATE =
-            "system:" + Settings.System.QUICK_SETTINGS_VIBRATE;
 
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
 
@@ -174,21 +169,6 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
         mUiEventLogger = host.getUiEventLogger();
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         mUiHandler.post(() -> mLifecycle.setCurrentState(CREATED));
-
-        Dependency.get(TunerService.class).addTunable(this,
-                QUICK_SETTINGS_VIBRATE);
-    }
-
-    @Override
-    public void onTuningChanged(String key, String newValue) {
-        switch (key) {
-            case QUICK_SETTINGS_VIBRATE:
-                mVibrationEnabled =
-                        TunerService.parseIntegerSwitch(newValue, false);
-                break;
-            default:
-                break;
-        }
     }
 
     protected final void resetStates() {
@@ -264,7 +244,9 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
     }
 
     public void vibrateTile(int duration) {
-        if (mVibrationEnabled && mVibrator != null && mVibrator.hasVibrator()) {
+        boolean isVibrationEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.QUICK_SETTINGS_VIBRATE, 0, UserHandle.USER_CURRENT) == 1;
+        if (isVibrationEnabled && mVibrator != null && mVibrator.hasVibrator()) {
             mVibrator.vibrate(VibrationEffect.createOneShot(duration,
                     VibrationEffect.DEFAULT_AMPLITUDE));
         }
