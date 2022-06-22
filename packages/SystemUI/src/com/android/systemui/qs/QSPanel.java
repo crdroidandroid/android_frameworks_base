@@ -872,10 +872,13 @@ public class QSPanel extends LinearLayout implements Tunable {
 
         switch (mAnimStyle) {
             case 1:
-                animTile = ObjectAnimator.ofFloat(v, "rotationY", 0f, 360f);
+                animTile = ObjectAnimator.ofFloat(v, "rotation", 0f, 360f);
                 break;
             case 2:
-                animTile = ObjectAnimator.ofFloat(v, "rotation", 0f, 360f);
+                animTile = ObjectAnimator.ofFloat(v, "rotationX", 0f, 360f);
+                break;
+            case 3:
+                animTile = ObjectAnimator.ofFloat(v, "rotationY", 0f, 360f);
                 break;
             default:
                 return;
