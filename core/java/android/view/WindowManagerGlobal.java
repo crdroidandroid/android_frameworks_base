@@ -402,6 +402,8 @@ public final class WindowManagerGlobal {
                 // BadTokenException or InvalidDisplayException, clean up.
                 if (index >= 0) {
                     removeViewLocked(index, true);
+                } else {
+                    removeView(view, true);
                 }
                 throw e;
             }
