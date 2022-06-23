@@ -37,6 +37,7 @@ import android.view.Display
 import android.view.ScrollCaptureResponse
 import android.view.ViewRootImpl.ActivityConfigCallback
 import android.view.WindowManager.TAKE_SCREENSHOT_PROVIDED_IMAGE
+import android.view.WindowManager.TAKE_SCREENSHOT_SELECTED_REGION
 import android.widget.Toast
 import android.window.WindowContext
 import androidx.core.animation.doOnEnd
@@ -48,6 +49,7 @@ import com.android.systemui.clipboardoverlay.ClipboardOverlayController
 import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.res.R
 import com.android.systemui.screenshot.ScreenshotShelfViewProxy.ScreenshotViewCallback
+import com.android.systemui.screenshot.scroll.ScrollCaptureController.BitmapScreenshot
 import com.android.systemui.screenshot.scroll.ScrollCaptureController.LongScreenshot
 import com.android.systemui.screenshot.scroll.ScrollCaptureExecutor
 import com.android.systemui.util.Assert
@@ -169,6 +171,12 @@ internal constructor(
             info.loadLabel(packageManager).toString()
         }.getOrDefault("")
         scrollCaptureExecutor.longScreenshotHolder.foregroundAppName = packageLabel
+
+        if (screenshot.type == TAKE_SCREENSHOT_SELECTED_REGION) {
+            startPartialScreenshotActivity(Process.myUserHandle())
+            finisher.accept(null)
+            return
+        }
 
         val currentBitmap = screenshot.bitmap
         if (currentBitmap == null) {
@@ -391,6 +399,19 @@ internal constructor(
                 onScrollButtonClicked(owner, response)
             }
         }
+    }
+
+    private fun startPartialScreenshotActivity(owner: UserHandle) {
+        scrollCaptureExecutor.executeBatchScrollCapture(
+            BitmapScreenshot(context, imageCapture.captureDisplay(display.displayId, null)),
+            {
+                val intent = actionIntentCreator.createLongScreenshotIntent(owner)
+                context.startActivity(intent)
+            },
+            { _: Rect, onTransitionEnd: Runnable, _: LongScreenshot ->
+                onTransitionEnd.run()
+            },
+        )
     }
 
     private fun onScrollButtonClicked(owner: UserHandle, response: ScrollCaptureResponse) {
