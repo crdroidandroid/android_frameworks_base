@@ -181,12 +181,21 @@ public class LongScreenshotActivity extends Activity {
             mCacheLoadFuture = null;
         } else {
             LongScreenshot longScreenshot = mLongScreenshotHolder.takeLongScreenshot();
+            setMagnification(mLongScreenshotHolder.getNeedsMagnification());
             if (longScreenshot != null) {
                 onLongScreenshotReceived(longScreenshot);
             } else {
                 Log.e(TAG, "No long screenshot available!");
                 finishAndRemoveTask();
             }
+        }
+    }
+
+    private void setMagnification(boolean status) {
+        if (status) {
+            mCropView.setCropInteractionListener(mMagnifierView);
+        } else {
+            mCropView.setCropInteractionListener(null);
         }
     }
 
@@ -442,7 +451,6 @@ public class LongScreenshotActivity extends Activity {
             mCropView.setExtraPadding(extraPadding + mPreview.getPaddingTop(),
                     extraPadding + mPreview.getPaddingBottom());
             imageTop += (previewHeight - imageHeight) / 2;
-            mCropView.setExtraPadding(extraPadding, extraPadding);
             mCropView.setImageWidth(previewWidth);
             scale = previewWidth / (float) mPreview.getDrawable().getIntrinsicWidth();
         } else {
