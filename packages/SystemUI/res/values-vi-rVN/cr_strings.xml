@@ -160,4 +160,8 @@
     <string name="vpn_credentials_username">Tên đăng nhập</string>
     <string name="vpn_credentials_password">Mật khẩu</string>
     <string name="vpn_credentials_dialog_connect">Kết nối</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">đã dùng hôm nay</string>
+    <string name="usage_data_default_suffix">Dữ liệu</string>
+    <string name="usage_wifi_default_suffix">Wifi</string>
 </resources>
