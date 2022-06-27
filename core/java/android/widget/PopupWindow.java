@@ -1527,6 +1527,7 @@ public class PopupWindow {
         final PopupBackgroundView.LayoutParams listParams = new PopupBackgroundView.LayoutParams(
                 MATCH_PARENT, height);
         backgroundView.addView(contentView, listParams);
+        backgroundView.setClipToOutline(true);
 
         return backgroundView;
     }
