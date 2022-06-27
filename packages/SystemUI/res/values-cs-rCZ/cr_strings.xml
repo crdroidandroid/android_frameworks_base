@@ -160,4 +160,8 @@
     <string name="vpn_credentials_username">Uživatelské jméno</string>
     <string name="vpn_credentials_password">Heslo</string>
     <string name="vpn_credentials_dialog_connect">Připojit</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">využito dnes</string>
+    <string name="usage_data_default_suffix">Data</string>
+    <string name="usage_wifi_default_suffix">Wi‑Fi</string>
 </resources>

@@ -160,4 +160,8 @@
     <string name="vpn_credentials_username">Kullanıcı adı</string>
     <string name="vpn_credentials_password">Şifre</string>
     <string name="vpn_credentials_dialog_connect">Bağlan</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">bugün kullanılan</string>
+    <string name="usage_data_default_suffix">Veri</string>
+    <string name="usage_wifi_default_suffix">Kablosuz</string>
 </resources>

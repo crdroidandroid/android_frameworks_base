@@ -160,4 +160,8 @@
     <string name="vpn_credentials_username">Nome utente</string>
     <string name="vpn_credentials_password">Password</string>
     <string name="vpn_credentials_dialog_connect">Connetti</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">utilizzo di oggi</string>
+    <string name="usage_data_default_suffix">Dati</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
 </resources>

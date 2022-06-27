@@ -16,7 +16,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_fakePackageSignature">امضای بسته جعلی است</string>
+    <string name="permlab_fakePackageSignature">امضای بسته جعلی</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">به برنامه اجازه داده شده است تا به عنوان یک برنامه دیگر تظاهر کند. برنامه های مخرب ممکن است از این قابلیت استفاده کنند تا به دیتای شخصی شما دسترسی پیدا کنند. لطفا با احتیاط این اجازه را دهید!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->

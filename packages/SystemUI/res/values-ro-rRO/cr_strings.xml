@@ -160,4 +160,8 @@
     <string name="vpn_credentials_username">Nume de utilizator</string>
     <string name="vpn_credentials_password">Parola</string>
     <string name="vpn_credentials_dialog_connect">Conectare</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">utilizat azi</string>
+    <string name="usage_data_default_suffix">Date</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
 </resources>
