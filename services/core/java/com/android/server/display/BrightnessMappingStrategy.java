@@ -62,7 +62,7 @@ public abstract class BrightnessMappingStrategy {
 
     @Nullable
     public static BrightnessMappingStrategy create(Resources resources,
-            DisplayDeviceConfig displayDeviceConfig) {
+            DisplayDeviceConfig displayDeviceConfig, float adjustment) {
 
         // Display independent values
         float[] luxLevels = getLuxLevels(resources.getIntArray(
@@ -90,10 +90,10 @@ public abstract class BrightnessMappingStrategy {
             builder.setShortTermModelLowerLuxMultiplier(SHORT_TERM_MODEL_THRESHOLD_RATIO);
             builder.setShortTermModelUpperLuxMultiplier(SHORT_TERM_MODEL_THRESHOLD_RATIO);
             return new PhysicalMappingStrategy(builder.build(), nitsRange, brightnessRange,
-                    autoBrightnessAdjustmentMaxGamma);
+                    autoBrightnessAdjustmentMaxGamma, adjustment);
         } else if (isValidMapping(luxLevels, brightnessLevelsBacklight)) {
             return new SimpleMappingStrategy(luxLevels, brightnessLevelsBacklight,
-                    autoBrightnessAdjustmentMaxGamma, shortTermModelTimeout);
+                    autoBrightnessAdjustmentMaxGamma, shortTermModelTimeout, adjustment);
         } else {
             return null;
         }
@@ -524,7 +524,7 @@ public abstract class BrightnessMappingStrategy {
         private long mShortTermModelTimeout;
 
         private SimpleMappingStrategy(float[] lux, int[] brightness, float maxGamma,
-                long timeout) {
+                long timeout, float adjustment) {
             Preconditions.checkArgument(lux.length != 0 && brightness.length != 0,
                     "Lux and brightness arrays must not be empty!");
             Preconditions.checkArgument(lux.length == brightness.length,
@@ -542,7 +542,7 @@ public abstract class BrightnessMappingStrategy {
             }
 
             mMaxGamma = maxGamma;
-            mAutoBrightnessAdjustment = 0;
+            mAutoBrightnessAdjustment = adjustment;
             mUserLux = -1;
             mUserBrightness = -1;
             if (mLoggingEnabled) {
@@ -714,7 +714,7 @@ public abstract class BrightnessMappingStrategy {
         private float mUserBrightness;
 
         public PhysicalMappingStrategy(BrightnessConfiguration config, float[] nits,
-                float[] brightness, float maxGamma) {
+                float[] brightness, float maxGamma, float adjustment) {
 
             Preconditions.checkArgument(nits.length != 0 && brightness.length != 0,
                     "Nits and brightness arrays must not be empty!");
@@ -727,7 +727,7 @@ public abstract class BrightnessMappingStrategy {
                     PowerManager.BRIGHTNESS_MIN, PowerManager.BRIGHTNESS_MAX, "brightness");
 
             mMaxGamma = maxGamma;
-            mAutoBrightnessAdjustment = 0;
+            mAutoBrightnessAdjustment = adjustment;
             mUserLux = -1;
             mUserBrightness = -1;
 
