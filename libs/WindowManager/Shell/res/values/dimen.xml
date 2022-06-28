@@ -100,7 +100,7 @@
     <dimen name="split_divider_handle_height">3dp</dimen>
 
     <dimen name="split_divider_bar_width">10dp</dimen>
-    <dimen name="split_divider_corner_size">42dp</dimen>
+    <dimen name="split_divider_corner_size">22dp</dimen>
 
     <!-- One-Handed Mode -->
     <!-- Threshold for dragging distance to enable one-handed mode -->
