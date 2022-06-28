@@ -629,7 +629,6 @@ public abstract class BrightnessMappingStrategy {
                     PLOG.start("clear user data points")
                             .logPoint("user data point", mUserLux, mUserBrightness);
                 }
-                mAutoBrightnessAdjustment = 0;
                 mUserLux = -1;
                 mUserBrightness = -1;
                 computeSpline();
@@ -845,7 +844,6 @@ public abstract class BrightnessMappingStrategy {
                     PLOG.start("clear user data points")
                             .logPoint("user data point", mUserLux, mUserBrightness);
                 }
-                mAutoBrightnessAdjustment = 0;
                 mUserLux = -1;
                 mUserBrightness = -1;
                 computeSpline();
