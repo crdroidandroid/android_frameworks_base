@@ -119,7 +119,8 @@ public class DividerRoundedCorner extends View {
             mCornerPosition = cornerPosition;
 
             final RoundedCorner roundedCorner = getDisplay().getRoundedCorner(cornerPosition);
-            mRadius = roundedCorner == null ? 0 : roundedCorner.getRadius();
+            mRadius = roundedCorner == null ? 0 :
+                    getResources().getDimensionPixelSize(R.dimen.split_divider_corner_size);
 
             // Starts with a filled square, and then subtracting out a circle from the appropriate
             // corner.
