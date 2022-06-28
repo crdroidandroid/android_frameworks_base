@@ -624,7 +624,6 @@ public abstract class BrightnessMappingStrategy {
             }
 
             mMaxGamma = maxGamma;
-            mAutoBrightnessAdjustment = 0;
             mUserLux = INVALID_LUX;
             mUserBrightness = PowerManager.BRIGHTNESS_INVALID_FLOAT;
             if (mLoggingEnabled) {
@@ -722,7 +721,6 @@ public abstract class BrightnessMappingStrategy {
                     PLOG.start("clear user data points")
                             .logPoint("user data point", mUserLux, mUserBrightness);
                 }
-                mAutoBrightnessAdjustment = 0;
                 mUserLux = INVALID_LUX;
                 mUserBrightness = PowerManager.BRIGHTNESS_INVALID_FLOAT;
                 computeSpline();
