@@ -140,6 +140,8 @@ public class Interpolators {
             1.1f);
     public static final Interpolator PANEL_CLOSE_ACCELERATED = new PathInterpolator(0.3f, 0, 0.5f,
             1);
+    public static final Interpolator SLOWDOWN_INTERPOLATOR = new PathInterpolator(0.5f, 1f, 0.5f,
+            1);
     public static final Interpolator BOUNCE = new BounceInterpolator();
     /**
      * For state transitions on the control panel that lives in GlobalActions.
