@@ -7,4 +7,7 @@
 
     <!-- Notification counter -->
     <integer name="status_bar_notification_info_maxnum">999</integer>
+
+    <!-- Charging info current divider, if needed -->
+    <integer name="config_currentInfoDivider" translatable="false">1000</integer>
 </resources>
