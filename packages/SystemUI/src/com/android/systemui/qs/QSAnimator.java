@@ -47,6 +47,9 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+
 /** */
 @QSScope
 public class QSAnimator implements Callback, PageListener, Listener, OnLayoutChangeListener,
@@ -113,6 +116,11 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
     private final TunerService mTunerService;
     private boolean mShowCollapsedOnKeyguard;
     private boolean mTranslateWhileExpanding;
+
+    private final Function1<Boolean, Unit> mMediaHostVisibilityListener = (visible) -> {
+        requestAnimatorUpdate();
+        return null;
+    };
 
     @Inject
     public QSAnimator(QS qs, QuickQSPanel quickPanel, QuickStatusBarHeader quickStatusBarHeader,
@@ -192,12 +200,14 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
     public void onViewAttachedToWindow(View v) {
         mTunerService.addTunable(this, ALLOW_FANCY_ANIMATION,
                 MOVE_FULL_ROWS);
+        mQuickQSPanelController.mMediaHost.addVisibilityChangeListener(mMediaHostVisibilityListener);
     }
 
     @Override
     public void onViewDetachedFromWindow(View v) {
         mHost.removeCallback(this);
         mTunerService.removeTunable(this);
+        mQuickQSPanelController.mMediaHost.removeVisibilityChangeListener(mMediaHostVisibilityListener);
     }
 
     @Override
@@ -455,6 +465,12 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
     private void animateBrightnessSlider(Builder firstPageBuilder) {
         View qsBrightness = mQsPanelController.getBrightnessView();
         View qqsBrightness = mQuickQSPanelController.getBrightnessView();
+
+        if (mTunerService.getValue(QSPanel.QS_SHOW_BRIGHTNESS_SLIDER, 1) == 0) {
+            qsBrightness.setVisibility(View.GONE);
+            qqsBrightness.setVisibility(View.GONE);
+        }
+
         if (qqsBrightness != null && qqsBrightness.getVisibility() == View.VISIBLE) {
             // animating in split shade mode
             mAnimatedQsViews.add(qsBrightness);
@@ -466,6 +482,8 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
                     // portrait orientation before
                     .addFloat(qsBrightness, "sliderScaleY", 0.3f, 1)
                     .addFloat(qqsBrightness, "translationY", 0, translationY)
+                    .setInterpolator(mQuickQSPanelController.mMediaHost.getVisible() ?
+                            Interpolators.ALPHA_OUT : Interpolators.SLOWDOWN_INTERPOLATOR)
                     .build();
         } else if (qsBrightness != null) {
             firstPageBuilder.addFloat(qsBrightness, "translationY",
