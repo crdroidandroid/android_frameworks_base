@@ -108,7 +108,7 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">顔を認識中...</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_label">停止ドットを表示</string>
     <string name="screenrecord_stopdot_summary">長押しで移動します</string>
     <string name="screenrecord_lowquality_label">低品質にする</string>
     <string name="screenrecord_lowquality_summary">ファイルサイズを小さくします</string>
