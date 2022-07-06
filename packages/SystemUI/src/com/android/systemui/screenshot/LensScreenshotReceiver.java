@@ -22,15 +22,18 @@ import static com.android.systemui.screenshot.ScreenshotController.EXTRA_SMART_A
 import static com.android.systemui.screenshot.ScreenshotController.SCREENSHOT_URI_ID;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.widget.Toast;
 
-import com.android.systemui.dagger.qualifiers.Background;
 import com.android.internal.util.crdroid.Utils;
+
+import com.android.systemui.R;
+import com.android.systemui.dagger.qualifiers.Background;
 
 import java.util.concurrent.Executor;
 
@@ -38,9 +41,13 @@ import javax.inject.Inject;
 
 public class LensScreenshotReceiver extends BroadcastReceiver {
 
+    private static final String GSA_PACKAGE = "com.google.android.googlequicksearchbox";
+    private static final String LENS_ACTIVITY = "com.google.android.apps.lens.MainActivity";
+    private static final String LENS_SHARE_ACTIVITY = "com.google.android.apps.search.lens.LensShareEntryPointActivity";
+    private static final String LENS_URI = "google://lens";
+
     private final ScreenshotSmartActions mScreenshotSmartActions;
     private final Executor mBackgroundExecutor;
-    private final String ARPackageName = "com.google.ar.lens";
 
     @Inject
     public LensScreenshotReceiver(ScreenshotSmartActions screenshotSmartActions,
@@ -49,8 +56,8 @@ public class LensScreenshotReceiver extends BroadcastReceiver {
         mBackgroundExecutor = backgroundExecutor;
     }
 
-    private boolean doesGoogleLensExist(Context context) {
-        return Utils.isPackageInstalled(context, ARPackageName);
+    private boolean doesGoogleEnabled(Context context) {
+        return Utils.isPackageInstalled(context, GSA_PACKAGE, false /* ignoreState */);
     }
 
     @Override
@@ -62,22 +69,21 @@ public class LensScreenshotReceiver extends BroadcastReceiver {
         final Uri uri = Uri.parse(intent.getStringExtra(SCREENSHOT_URI_ID));
         mBackgroundExecutor.execute(() -> {
             // action to execute goes here
-            ContentResolver resolver = context.getContentResolver();
-            if (!doesGoogleLensExist(context)) {
+            if (!doesGoogleEnabled(context)) {
                 Toast.makeText(context, "Google Lens is not installed", Toast.LENGTH_SHORT).show();
-                // Launch an intent to the Play Store to install Google Lens
-                String playURL = "https://play.google.com/store/apps/details?id=" + ARPackageName;
-                Intent playAR = new Intent(Intent.ACTION_VIEW);
-                playAR.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                playAR.setData(Uri.parse(playURL));
-                context.startActivity(playAR);
                 return;
             }
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("image/*");
-            share.putExtra(Intent.EXTRA_STREAM, uri);
-            share.setPackage(ARPackageName);
-            share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            ClipData clipdata = new ClipData(new ClipDescription("content",
+                    new String[]{"image/png"}),
+                    new ClipData.Item(uri));
+            Intent share = new Intent();
+            share.setAction(Intent.ACTION_SEND)
+                    .setComponent(new ComponentName(GSA_PACKAGE, LENS_SHARE_ACTIVITY))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    .setType("image/png")
+                    .putExtra(Intent.EXTRA_STREAM, uri)
+                    .setClipData(clipdata);
             context.startActivity(share);
         });
 
