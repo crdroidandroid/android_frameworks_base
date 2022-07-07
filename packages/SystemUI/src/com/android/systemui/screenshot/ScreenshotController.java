@@ -61,6 +61,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -930,6 +931,9 @@ public class ScreenshotController {
 
     private void playCameraSound() {
         mCameraSound.addListener(() -> {
+            if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.SCREENSHOT_SHUTTER_SOUND, 1, UserHandle.USER_CURRENT) != 1)
+                return;
             try {
                 MediaPlayer player = mCameraSound.get();
                 if (player != null) {
