@@ -5539,6 +5539,12 @@ public final class Settings {
         public static final String ANBI_ENABLED = "anbi_enabled";
 
         /**
+         * Enable/Disable screenshot sound
+         * @hide
+         */
+        public static final String SCREENSHOT_SOUND = "screenshot_sound";
+
+        /**
          * Three Finger Gesture
          * @hide
          */
