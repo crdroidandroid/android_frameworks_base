@@ -352,8 +352,9 @@ class ActivityClientController extends IActivityClientController.Stub {
             synchronized (mGlobalLock) {
                 final int taskId = ActivityRecord.getTaskForActivityLocked(token, !nonRoot);
                 final Task task = mService.mRootWindowContainer.anyTaskForId(taskId);
-                if (task != null) {
-                    return ActivityRecord.getRootTask(token).moveTaskToBack(task);
+                final Task rootTask = ActivityRecord.getRootTask(token);
+                if (task != null && rootTask != null) {
+                    return rootTask.moveTaskToBack(task);
                 }
             }
         } finally {
