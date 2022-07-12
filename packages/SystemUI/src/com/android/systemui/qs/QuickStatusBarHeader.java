@@ -687,6 +687,13 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         setChipVisibility(mPrivacyChip.getVisibility() == View.VISIBLE);
     }
 
+    public BatteryMeterView getBatteryMeterView() {
+        if (mQSBatteryLocation == 0) {
+            return mBatteryRemainingIcon;
+        }
+        return mBatteryIcon;
+    }
+
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
