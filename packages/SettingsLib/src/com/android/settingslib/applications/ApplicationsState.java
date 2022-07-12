@@ -127,6 +127,7 @@ public class ApplicationsState {
     boolean mResumed;
     boolean mHaveDisabledApps;
     boolean mHaveInstantApps;
+    boolean mHaveHiddenApps;
 
     // Information about all applications.  Synchronize on mEntriesMap
     // to protect access to these.
@@ -298,6 +299,7 @@ public class ApplicationsState {
 
         mHaveDisabledApps = false;
         mHaveInstantApps = false;
+        mHaveHiddenApps = false;
         for (int i = 0; i < mApplications.size(); i++) {
             final ApplicationInfo info = mApplications.get(i);
             // Need to trim out any applications that are disabled by
@@ -316,6 +318,10 @@ public class ApplicationsState {
             }
             if (!mHaveInstantApps && AppUtils.isInstant(info)) {
                 mHaveInstantApps = true;
+            }
+            if (!mHaveHiddenApps && hasFlag(info.privateFlags,
+                    ApplicationInfo.PRIVATE_FLAG_HIDDEN)) {
+                mHaveHiddenApps = true;
             }
 
             int userId = UserHandle.getUserId(info.uid);
@@ -390,14 +396,14 @@ public class ApplicationsState {
                 appPackages = new HashSet<>();
                 packageMap.put(userId, appPackages);
             }
-            if (hasFlag(application.flags, ApplicationInfo.FLAG_INSTALLED)) {
+            if (isInstalledOrHidden(application)) {
                 appPackages.add(application.packageName);
             }
         }
 
         // detect any previous app is removed
         for (ApplicationInfo prevApplication : prevApplications) {
-            if (!hasFlag(prevApplication.flags, ApplicationInfo.FLAG_INSTALLED)) {
+            if (!isInstalledOrHidden(prevApplication)) {
                 continue;
             }
             final String userId = String.valueOf(UserHandle.getUserId(prevApplication.uid));
@@ -425,6 +431,10 @@ public class ApplicationsState {
 
     public boolean haveInstantApps() {
         return mHaveInstantApps;
+    }
+
+    public boolean haveHiddenApps() {
+        return mHaveHiddenApps;
     }
 
     boolean isHiddenModule(String packageName) {
@@ -524,7 +534,7 @@ public class ApplicationsState {
         if (DEBUG_LOCKING) Log.v(TAG, "requestSize about to acquire lock...");
         synchronized (mEntriesMap) {
             AppEntry entry = mEntriesMap.get(userId).get(packageName);
-            if (entry != null && hasFlag(entry.info.flags, ApplicationInfo.FLAG_INSTALLED)) {
+            if (entry != null && isInstalledOrHidden(entry.info)) {
                 mBackgroundHandler.post(
                         () -> {
                             try {
@@ -616,6 +626,10 @@ public class ApplicationsState {
                 if (AppUtils.isInstant(info)) {
                     mHaveInstantApps = true;
                 }
+                if (!mHaveHiddenApps && hasFlag(info.privateFlags,
+                        ApplicationInfo.PRIVATE_FLAG_HIDDEN)) {
+                    mHaveHiddenApps = true;
+                }
                 mApplications.add(info);
                 if (!mBackgroundHandler.hasMessages(BackgroundHandler.MSG_LOAD_ENTRIES)) {
                     mBackgroundHandler.sendEmptyMessage(BackgroundHandler.MSG_LOAD_ENTRIES);
@@ -657,6 +671,16 @@ public class ApplicationsState {
                     for (ApplicationInfo otherInfo : mApplications) {
                         if (AppUtils.isInstant(otherInfo)) {
                             mHaveInstantApps = true;
+                            break;
+                        }
+                    }
+                }
+                if (hasFlag(info.privateFlags, ApplicationInfo.PRIVATE_FLAG_HIDDEN)) {
+                    mHaveHiddenApps = false;
+                    for (ApplicationInfo otherInfo : mApplications) {
+                        if (hasFlag(info.privateFlags,
+                                ApplicationInfo.PRIVATE_FLAG_HIDDEN)) {
+                            mHaveHiddenApps = true;
                             break;
                         }
                     }
@@ -1158,7 +1182,7 @@ public class ApplicationsState {
                                 mMainHandler.sendMessage(m);
                             }
                             ApplicationInfo info = mApplications.get(i);
-                            if (hasFlag(info.flags, ApplicationInfo.FLAG_INSTALLED)) {
+                            if (isInstalledOrHidden(info)) {
                                 int userId = UserHandle.getUserId(info.uid);
                                 if (mEntriesMap.get(userId).get(info.packageName) == null) {
                                     numDone++;
@@ -1173,8 +1197,7 @@ public class ApplicationsState {
                                     // happens because of the way we generate the list in
                                     // doResumeIfNeededLocked.
                                     AppEntry entry = mEntriesMap.get(0).get(info.packageName);
-                                    if (entry != null && !hasFlag(entry.info.flags,
-                                            ApplicationInfo.FLAG_INSTALLED)) {
+                                    if (entry != null && !isInstalledOrHidden(entry.info)) {
                                         mEntriesMap.get(0).remove(info.packageName);
                                         mAppEntries.remove(entry);
                                     }
@@ -1237,6 +1260,7 @@ public class ApplicationsState {
                             List<ResolveInfo> intents = mPm.queryIntentActivitiesAsUser(
                                     launchIntent,
                                     PackageManager.MATCH_DISABLED_COMPONENTS
+                                            | PackageManager.MATCH_UNINSTALLED_PACKAGES
                                             | PackageManager.MATCH_DIRECT_BOOT_AWARE
                                             | PackageManager.MATCH_DIRECT_BOOT_UNAWARE,
                                     userId
@@ -1322,7 +1346,7 @@ public class ApplicationsState {
                             long now = SystemClock.uptimeMillis();
                             for (int i = 0; i < mAppEntries.size(); i++) {
                                 AppEntry entry = mAppEntries.get(i);
-                                if (hasFlag(entry.info.flags, ApplicationInfo.FLAG_INSTALLED)
+                                if (isInstalledOrHidden(entry.info)
                                         && (entry.size == SIZE_UNKNOWN || entry.sizeStale)) {
                                     if (entry.sizeLoadStart == 0 ||
                                             (entry.sizeLoadStart < (now - 20 * 1000))) {
@@ -1733,6 +1757,12 @@ public class ApplicationsState {
         return (flags & flag) != 0;
     }
 
+    private static boolean isInstalledOrHidden(ApplicationInfo info) {
+        return hasFlag(info.flags, ApplicationInfo.FLAG_INSTALLED) ||
+                hasFlag(info.privateFlags, ApplicationInfo.PRIVATE_FLAG_HIDDEN);
+
+    }
+
     /**
      * Compare by label, then package name, then uid.
      */
@@ -1904,6 +1934,19 @@ public class ApplicationsState {
         @Override
         public boolean filterApp(AppEntry entry) {
             return !entry.info.enabled && !AppUtils.isInstant(entry.info);
+        }
+    };
+
+    public static final AppFilter FILTER_HIDDEN = new AppFilter() {
+        @Override
+        public void init() {
+        }
+
+        @Override
+        public boolean filterApp(AppEntry entry) {
+            return !AppUtils.isInstant(entry.info)
+                    && hasFlag(entry.info.privateFlags,
+                    ApplicationInfo.PRIVATE_FLAG_HIDDEN);
         }
     };
 
