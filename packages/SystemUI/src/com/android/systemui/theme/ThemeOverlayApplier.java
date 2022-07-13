@@ -68,7 +68,7 @@ public class ThemeOverlayApplier implements Dumpable {
     static final String SYSUI_PACKAGE = "com.android.systemui";
 
     static final String OVERLAY_BLACK_THEME =
-            "org.lineageos.overlay.customization.blacktheme";
+            "com.android.system.theme.black";
 
     static final String OVERLAY_CATEGORY_DYNAMIC_COLOR =
             "android.theme.customization.dynamic_color";
