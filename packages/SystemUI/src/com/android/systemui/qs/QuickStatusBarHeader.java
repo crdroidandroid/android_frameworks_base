@@ -292,10 +292,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
             builder.appendPath(Long.toString(System.currentTimeMillis()));
             Intent todayIntent = new Intent(Intent.ACTION_VIEW, builder.build());
             mActivityStarter.postStartActivityDismissingKeyguard(todayIntent, 0);
-        } else if (v == mBatteryIcon) {
-            mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
-                    Intent.ACTION_POWER_USAGE_SUMMARY), 0);
-        } else if (v == mBatteryIcon) {
+        } else if (v == mBatteryRemainingIcon || v == mBatteryIcon) {
             mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
                     Intent.ACTION_POWER_USAGE_SUMMARY), 0);
         }
@@ -310,11 +307,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
             mActivityStarter.startActivity(nIntent, true /* dismissShade */);
             mVibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
             return true;
-        } else if (v == mBatteryRemainingIcon) {
-            mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
-                    Intent.ACTION_POWER_USAGE_SUMMARY), 0);
-            return true;
-        } else if (v == mBatteryRemainingIcon) {
+        } else if (v == mBatteryRemainingIcon || v == mBatteryIcon) {
             mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
                     Intent.ACTION_POWER_USAGE_SUMMARY), 0);
             return true;
