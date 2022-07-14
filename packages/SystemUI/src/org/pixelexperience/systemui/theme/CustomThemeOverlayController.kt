@@ -99,9 +99,7 @@ class CustomThemeOverlayController @Inject constructor(
     private val mTunerService: TunerService = Dependency.get(TunerService::class.java)
     override fun start() {
         mTunerService.addTunable(this, PREF_COLOR_OVERRIDE, PREF_WHITE_LUMINANCE,
-                PREF_CHROMA_FACTOR, PREF_ACCURATE_SHADES, PREF_LINEAR_LIGHTNESS, PREF_CUSTOM_COLOR,
-                Settings.Secure.UI_NIGHT_MODE, Settings.Secure.UI_NIGHT_MODE_OVERRIDE_ON,
-                Settings.Secure.UI_NIGHT_MODE_OVERRIDE_OFF)
+                PREF_CHROMA_FACTOR, PREF_ACCURATE_SHADES, PREF_LINEAR_LIGHTNESS, PREF_CUSTOM_COLOR)
         super.start()
     }
 
@@ -121,8 +119,6 @@ class CustomThemeOverlayController @Inject constructor(
                 )
                 linearLightness = Settings.Secure.getInt(mContext.contentResolver,
                         PREF_LINEAR_LIGHTNESS, 0) != 0
-                reevaluateSystemTheme(true /* forceReload */)
-            } else {
                 reevaluateSystemTheme(true /* forceReload */)
             }
         }
