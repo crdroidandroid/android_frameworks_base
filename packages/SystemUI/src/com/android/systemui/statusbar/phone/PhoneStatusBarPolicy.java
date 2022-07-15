@@ -34,7 +34,9 @@ import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.media.AudioManager;
+import android.net.INetworkPolicyListener;
 import android.net.INetworkPolicyManager;
+import android.net.NetworkPolicyManager;
 import android.nfc.NfcAdapter;
 import android.os.Handler;
 import android.os.Looper;
@@ -344,6 +346,8 @@ public class PhoneStatusBarPolicy
         mSensorPrivacyController.addCallback(mSensorPrivacyListener);
         mRecordingController.addCallback(this);
 
+        registerNetworkPolicyListener();
+
         mCommandQueue.addCallback(this);
 
         // Get initial user setup state
@@ -623,6 +627,36 @@ public class PhoneStatusBarPolicy
             }
         });
     }
+
+    private void registerNetworkPolicyListener() {
+        try {
+            INetworkPolicyManager policyManager = INetworkPolicyManager.Stub.asInterface(
+                    ServiceManager.getService(Context.NETWORK_POLICY_SERVICE));
+            policyManager.registerListener(mNetworkPolicyListener);
+        } catch (RemoteException e) {
+            Log.e(TAG, "registerNetworkPolicyListener: ", e);
+            return;
+        }
+    }
+
+    private final INetworkPolicyListener mNetworkPolicyListener =
+            new NetworkPolicyManager.Listener() {
+        @Override
+        public void onUidRulesChanged(int uid, int uidRules) {
+            if (DEBUG) Log.d(TAG, "INetworkPolicyListener." +
+                    "onUidRulesChanged: uid: " + uid +
+                    ", uidRules: " + uidRules);
+            updateFirewall();
+        }
+
+        @Override
+        public void onUidPoliciesChanged(int uid, int uidPolicies) {
+            if (DEBUG) Log.d(TAG, "INetworkPolicyListener." +
+                    "onUidPoliciesChanged: uid: " + uid +
+                    ", uidPolicies: " + uidPolicies);
+            updateFirewall();
+        }
+    };
 
     private final SynchronousUserSwitchObserver mUserSwitchListener =
             new SynchronousUserSwitchObserver() {
