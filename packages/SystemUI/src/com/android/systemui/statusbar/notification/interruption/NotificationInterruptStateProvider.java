@@ -178,4 +178,9 @@ public interface NotificationInterruptStateProvider {
      * Whether heads-up notification should be skipped when Less Boring heads up is enabled.
      */
     void setUseLessBoringHeadsUp(boolean lessBoring);
+
+    /**
+     * Whether reTicker mode is active; then disable Less Boring heads up
+     */
+    void setUseReticker(boolean reTicker);
 }
