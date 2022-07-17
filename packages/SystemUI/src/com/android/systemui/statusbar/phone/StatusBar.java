@@ -304,6 +304,8 @@ public class StatusBar extends SystemUI implements
             "system:" + Settings.System.NOTIFICATION_MATERIAL_DISMISS_BGSTYLE;
     private static final String QS_TRANSPARENCY =
             "system:" + Settings.System.QS_TRANSPARENCY;
+    private static final String RETICKER_STATUS =
+            "system:" + Settings.System.RETICKER_STATUS;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -1013,6 +1015,7 @@ public class StatusBar extends SystemUI implements
         mTunerService.addTunable(this, NOTIFICATION_MATERIAL_DISMISS_STYLE);
         mTunerService.addTunable(this, NOTIFICATION_MATERIAL_DISMISS_BGSTYLE);
         mTunerService.addTunable(this, QS_TRANSPARENCY);
+        mTunerService.addTunable(this, RETICKER_STATUS);
 
         mDisplayManager = mContext.getSystemService(DisplayManager.class);
 
@@ -4515,6 +4518,11 @@ public class StatusBar extends SystemUI implements
             case QS_TRANSPARENCY:
                 mScrimController.setCustomScrimAlpha(
                         TunerService.parseInteger(newValue, 100));
+                break;
+            case RETICKER_STATUS:
+                boolean reTicker = 
+                        TunerService.parseIntegerSwitch(newValue, false);
+                mNotificationInterruptStateProvider.setUseReticker(reTicker);
                 break;
             default:
                 break;

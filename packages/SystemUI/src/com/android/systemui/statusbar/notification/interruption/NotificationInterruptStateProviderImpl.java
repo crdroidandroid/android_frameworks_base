@@ -76,6 +76,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     protected boolean mUseHeadsUp = false;
 
     private boolean mLessBoringHeadsUp = false;
+    private boolean mReTicker = false;
     private TelecomManager mTm;
     private Context mContext;
 
@@ -201,7 +202,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
             return false;
         }
 
-        if (shouldSkipHeadsUp(sbn)) {
+        if (!mReTicker && shouldSkipHeadsUp(sbn)) {
             if (DEBUG_HEADS_UP) {
                 Log.d(TAG, "No alerting: boring apps");
             }
@@ -323,6 +324,11 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     @Override
     public void setUseLessBoringHeadsUp(boolean lessBoring) {
         mLessBoringHeadsUp = lessBoring;
+    }
+
+    @Override
+    public void setUseReticker(boolean reTicker) {
+        mReTicker = reTicker;
     }
 
     public boolean shouldSkipHeadsUp(StatusBarNotification sbn) {
