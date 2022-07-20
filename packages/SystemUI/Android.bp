@@ -503,6 +503,8 @@ android_library {
         "Traceur-res",
         "//frameworks/libs/systemui:motion_tool_lib",
         "//frameworks/libs/systemui:contextualeducationlib",
+        "motion_tool_lib",
+        "bcsmartspace-google",
         "notification_flags_lib",
         "PlatformComposeCore",
         "PlatformComposeSceneTransitionLayout",
