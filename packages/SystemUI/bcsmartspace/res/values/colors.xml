@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ambient_text_shadow_color">#40000000</color>
+    <color name="key_text_shadow_color">#89000000</color>
+    <color name="smartspace_button_background">@android:color/system_accent2_200</color>
+    <color name="smartspace_button_text">@android:color/system_accent2_700</color>
+</resources>
