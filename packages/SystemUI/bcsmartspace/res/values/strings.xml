@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
+    <string name="accessibility_next_alarm">Next alarm at %s</string>
+    <string name="accessibility_smartspace_page">Page %1$d of %2$d</string>
+    <string name="generic_smartspace_concatenated_desc">%1$s, %2$s</string>
+    <string name="smartspace_flight_card_gate_header">Gate</string>
+    <string name="smartspace_flight_card_seat_header">Seat</string>
+    <string name="smartspace_flight_qr_code">QR code</string>
+    <string name="smartspace_hours_mins">%1$s %2$s</string>
+    <string name="smartspace_icu_date_pattern">EEEMMMd</string>
+    <string name="smartspace_now">Now</string>
+    <string name="smartspace_pill_text_format">%1$s: %2$s</string>
+    <string name="smartspace_shopping_list_overflow">+ %1$d more</string>
+</resources>
