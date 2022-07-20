@@ -414,6 +414,16 @@
     <protected-broadcast android:name="com.android.systemui.STARTED" />
     <protected-broadcast android:name="com.android.systemui.doze.pulse" />
 
+    <!-- Smartspace -->
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
+    <permission android:name="com.android.systemui.permission.SEND_ALERT_BROADCASTS" android:protectionLevel="preinstalled|signature"/>
+    <uses-permission android:name="com.google.android.deskclock.permission.RECEIVE_ALERT_BROADCASTS"/>
+    <uses-permission android:name="com.google.android.apps.nexuslauncher.permission.QSB"/>
+    <protected-broadcast android:name="com.google.android.systemui.smartspace.CLICK_EVENT"/>
+    <protected-broadcast android:name="com.google.android.systemui.smartspace.ENABLE_UPDATE"/>
+    <protected-broadcast android:name="com.google.android.systemui.smartspace.EXPIRE_EVENT"/>
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
