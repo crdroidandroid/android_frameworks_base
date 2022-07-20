@@ -1,0 +1,10 @@
+java_library {
+    name: "smartspace-proto-java",
+    proto: {
+        type: "nano",
+    },
+    srcs: [
+        "smartspace.proto",
+    ],
+    sdk_version: "current",
+}
