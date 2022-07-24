@@ -104,7 +104,7 @@ class GameSpaceManager @Inject constructor(
             addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING
                 or Intent.FLAG_RECEIVER_FOREGROUND
                 or Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND)
-            context.sendBroadcastAsUser(this, UserHandle.SYSTEM)
+            context.sendBroadcastAsUser(this, UserHandle.CURRENT)
         }
     }
 
@@ -124,12 +124,18 @@ class GameSpaceManager @Inject constructor(
     fun isGameActive() = activeGame != null
 
     fun shouldSuppressFullScreenIntent() =
-        Settings.System.getInt(context.contentResolver,
-            Settings.System.GAMESPACE_SUPPRESS_FULLSCREEN_INTENT, 0) == 1 && isGameActive()
+        Settings.System.getIntForUser(
+            context.contentResolver,
+            Settings.System.GAMESPACE_SUPPRESS_FULLSCREEN_INTENT, 0,
+            UserHandle.USER_CURRENT) == 1 && isGameActive()
 
     private fun checkGameList(packageName: String?): String? {
         packageName ?: return null
-        val games = Settings.System.getString(context.contentResolver, Settings.System.GAMESPACE_GAME_LIST)
+        val games = Settings.System.getStringForUser(
+            context.contentResolver,
+            Settings.System.GAMESPACE_GAME_LIST,
+            UserHandle.USER_CURRENT)
+
         if (games.isNullOrEmpty())
             return null
 
