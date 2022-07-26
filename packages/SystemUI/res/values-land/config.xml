@@ -20,6 +20,12 @@
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds. -->
 <resources>
+    <!-- Whether to use the split 2-column notification shade -->
+    <bool name="config_use_split_notification_shade">true</bool>
+
+    <!-- Notifications are sized to match the width of two (of 4) qs tiles in landscape. -->
+    <bool name="config_skinnyNotifsInLandscape">false</bool>
+
     <!-- The maximum number of rows in the QuickSettings -->
     <integer name="quick_settings_max_rows">2</integer>
 

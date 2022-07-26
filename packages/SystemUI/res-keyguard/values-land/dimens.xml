@@ -26,4 +26,6 @@
 
     <!-- The size of PIN text in the PIN unlock method. -->
     <integer name="scaled_password_text_size">26</integer>
+
+    <dimen name="qs_header_system_icons_area_height">0dp</dimen>
 </resources>
