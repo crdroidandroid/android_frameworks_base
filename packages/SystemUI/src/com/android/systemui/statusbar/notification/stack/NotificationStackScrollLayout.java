@@ -644,7 +644,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
 
         mAmbientState = Dependency.get(AmbientState.class);
         mBgColor = Utils.getColorAttr(mContext,
-                com.android.internal.R.attr.materialColorSurfaceContainerHigh).getDefaultColor();
+                com.android.internal.R.attr.colorSurface).getDefaultColor();
         int minHeight = res.getDimensionPixelSize(R.dimen.notification_min_height);
         int maxHeight = res.getDimensionPixelSize(R.dimen.notification_max_height);
         mSplitShadeMinContentHeight = res.getDimensionPixelSize(
@@ -781,7 +781,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
 
     void updateBgColor() {
         mBgColor = Utils.getColorAttr(mContext,
-                com.android.internal.R.attr.materialColorSurfaceContainerHigh).getDefaultColor();
+                com.android.internal.R.attr.colorSurface).getDefaultColor();
         updateBackgroundDimming();
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
