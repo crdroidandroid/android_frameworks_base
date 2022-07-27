@@ -513,7 +513,7 @@ class PrivacyDotViewController @Inject constructor(
             if (shouldShow && state.designatedCorner != null) {
                 showDotView(state.designatedCorner, true)
             } else if (!shouldShow && state.designatedCorner != null) {
-                hideDotView(state.designatedCorner, true)
+                hideDotView(state.designatedCorner, false)
             }
         }
 
