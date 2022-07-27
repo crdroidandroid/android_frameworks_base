@@ -171,7 +171,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
      * be useful in a configuration change.
      */
     protected void initBackground() {
-        mBackgroundNormal.setCustomBackground(R.drawable.notification_material_bg);
+        setTranslucentBackground(true);
     }
 
     protected boolean hideBackground() {
@@ -182,6 +182,13 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         mBackgroundNormal.setVisibility(hideBackground() ? INVISIBLE : VISIBLE);
     }
 
+    public void setTranslucentBackground(boolean translucent) {
+        if (translucent) {
+            mBackgroundNormal.setCustomBackground(R.drawable.notification_material_bg);
+        } else {
+            mBackgroundNormal.setCustomBackground(R.drawable.notification_material_bg_monet);
+        }
+    }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
