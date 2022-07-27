@@ -358,9 +358,9 @@
     <!-- Width for the notification panel and related windows -->
     <dimen name="match_parent">-1px</dimen>
 
-    <!-- Height of status bar in split shade mode - visible only on large screens -->
-    <dimen name="split_shade_header_height">@*android:dimen/quick_qs_offset_height</dimen>
-    <dimen name="split_shade_header_min_height">@dimen/qs_header_row_min_height</dimen>
+    <!-- Height of status bar in split shade mode - visible only in landscape mode -->
+    <dimen name="split_shade_header_height">32dp</dimen>
+    <dimen name="split_shade_header_min_height">@dimen/split_shade_header_height</dimen>
 
     <!-- The top margin of the panel that holds the list of notifications. -->
     <dimen name="notification_panel_margin_top">0dp</dimen>

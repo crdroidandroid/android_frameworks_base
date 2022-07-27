@@ -191,10 +191,9 @@ public class Utils {
     /**
      * Gets the {@link R.dimen#split_shade_header_height}.
      *
-     * Currently, it's the same as {@link com.android.internal.R.dimen#quick_qs_offset_height}.
      */
     public static int getSplitShadeStatusBarHeight(Context context) {
-        return SystemBarUtils.getQuickQsOffsetHeight(context);
+        return context.getResources().getDimensionPixelSize(R.dimen.split_shade_header_height);
     }
 
     /**
