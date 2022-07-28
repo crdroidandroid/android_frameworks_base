@@ -58,7 +58,7 @@ public abstract class InternalEnumerateClient<T> extends HalClientMonitor<T>
         mEnrolledList = enrolledList;
         mUtils = utils;
         mCleanup = context.getResources().getBoolean(
-                 org.lineageos.platform.internal.R.bool.config_cleanupUnusedFingerprints);
+                 com.android.internal.R.bool.config_cleanupUnusedFingerprints);
     }
 
     @Override

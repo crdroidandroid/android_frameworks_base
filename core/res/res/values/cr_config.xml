@@ -107,4 +107,7 @@
 
     <!-- Whether or not we should show vendor mismatch message -->
     <bool name="config_show_vendor_mismatch_message">true</bool>
+
+    <!-- Whether to cleanup fingerprints upon connection to the daemon and when user switches -->
+    <bool name="config_cleanupUnusedFingerprints">true</bool>
 </resources>
