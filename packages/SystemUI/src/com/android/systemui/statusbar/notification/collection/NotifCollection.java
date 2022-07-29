@@ -536,6 +536,10 @@ public class NotifCollection implements Dumpable, PipelineDumpable {
 
             mLogger.logNotifUpdated(entry);
             mEventQueue.add(new EntryUpdatedEvent(entry, true /* fromSystem */));
+            // update ticker only, LyricController will handle it
+            if ((entry.getSbn().getNotification().flags & Notification.FLAG_ONLY_UPDATE_TICKER) != 0) {
+                return;
+            }
         }
     }
 
