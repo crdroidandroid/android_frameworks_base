@@ -750,6 +750,10 @@ public class ApplicationsState {
                 }
                 return null;
             }
+            if (info.sourceDir == null) {
+                // Avoid NullPointerException for broken uninstalled packages.
+                return null;
+            }
             if (DEBUG) {
                 Log.i(TAG, "Creating AppEntry for " + info.packageName);
             }
