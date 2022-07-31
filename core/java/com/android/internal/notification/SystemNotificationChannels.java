@@ -219,6 +219,8 @@ public class SystemNotificationChannels {
                 NotificationManager.IMPORTANCE_LOW);
         channelsList.add(abusiveBackgroundAppsChannel);
 
+        extraChannels(context, channelsList);
+
         nm.createNotificationChannels(channelsList);
     }
 
