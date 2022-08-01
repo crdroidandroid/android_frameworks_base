@@ -37,6 +37,7 @@ import com.android.internal.notification.SystemNotificationChannels;
 import com.android.internal.telephony.GsmAlphabet;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.IllegalStateException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -157,8 +158,13 @@ public class GpsNetInitiatedHandler {
                        be set to true when the phone is having emergency call, and then will
                        be set to false by mPhoneStateListener when the emergency call ends.
                 */
-                mIsInEmergencyCall = mTelephonyManager.isEmergencyNumber(phoneNumber);
-                if (DEBUG) Log.v(TAG, "ACTION_NEW_OUTGOING_CALL - " + getInEmergency());
+                try {
+                    mIsInEmergencyCall = mTelephonyManager.isEmergencyNumber(phoneNumber);
+                    if (DEBUG) Log.v(TAG, "ACTION_NEW_OUTGOING_CALL - " + getInEmergency());
+                } catch (IllegalStateException e) {
+                    mIsInEmergencyCall = false;
+                    Log.e(TAG, "Illegal state of Telephony process ", e);
+                }
             } else if (action.equals(LocationManager.MODE_CHANGED_ACTION)) {
                 updateLocationMode();
                 if (DEBUG) Log.d(TAG, "location enabled :" + getLocationEnabled());
