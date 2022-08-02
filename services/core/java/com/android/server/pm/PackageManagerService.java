@@ -15463,6 +15463,7 @@ public class PackageManagerService extends IPackageManager.Stub
                     mResolveActivity.launchMode = ActivityInfo.LAUNCH_MULTIPLE;
                     mResolveActivity.documentLaunchMode = ActivityInfo.DOCUMENT_LAUNCH_NEVER;
                     mResolveActivity.flags = ActivityInfo.FLAG_EXCLUDE_FROM_RECENTS
+                            | ActivityInfo.FLAG_HARDWARE_ACCELERATED 
                             | ActivityInfo.FLAG_RELINQUISH_TASK_IDENTITY;
                     mResolveActivity.theme = R.style.Theme_Material_Dialog_Alert;
                     mResolveActivity.exported = true;
