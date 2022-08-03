@@ -24,6 +24,7 @@ import android.annotation.Nullable;
 import android.app.AppOpsManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.media.AudioAttributes;
 import android.media.AudioFocusInfo;
 import android.media.AudioManager;
@@ -106,19 +107,23 @@ public class MediaFocusControl implements PlayerFocusEnforcer {
     @GuardedBy("mExtFocusChangeLock")
     private long mExtFocusChangeCounter;
 
+    // Observer to work with per-app volume
+    private SettingsObserver mSettingsObserver;
+    private boolean mPerAppVolumeEnabled = false;
+
     protected MediaFocusControl(Context cntxt, PlayerFocusEnforcer pfe) {
         mContext = cntxt;
         mAppOps = (AppOpsManager)mContext.getSystemService(Context.APP_OPS_SERVICE);
         mFocusEnforcer = pfe;
         final ContentResolver cr = mContext.getContentResolver();
-
+        mSettingsObserver = new SettingsObserver();
         boolean multiAudioFocusEnabledDefault =
                 audioFocusDesktop()
                         && mContext.getResources()
                                 .getBoolean(
                                         com.android.internal.R.bool
                                                 .config_multi_audio_focus_enabled_default);
-        mMultiAudioFocusEnabled = Settings.System.getIntForUser(cr,
+        mMultiAudioFocusEnabled = mPerAppVolumeEnabled || Settings.System.getIntForUser(cr,
                 Settings.System.MULTI_AUDIO_FOCUS_ENABLED,
                 multiAudioFocusEnabledDefault ? 1 : 0, cr.getUserId()) != 0;
         initFocusThreading();
@@ -1540,10 +1545,11 @@ public class MediaFocusControl implements PlayerFocusEnforcer {
 
     public void updateMultiAudioFocus(boolean enabled) {
         Log.d(TAG, "updateMultiAudioFocus( " + enabled + " )");
-        mMultiAudioFocusEnabled = enabled;
+        mMultiAudioFocusEnabled = mPerAppVolumeEnabled || enabled;
         final ContentResolver cr = mContext.getContentResolver();
         Settings.System.putIntForUser(cr,
-                Settings.System.MULTI_AUDIO_FOCUS_ENABLED, enabled ? 1 : 0, cr.getUserId());
+                Settings.System.MULTI_AUDIO_FOCUS_ENABLED,
+                enabled ? 1 : 0, cr.getUserId());
         if (!mFocusStack.isEmpty()) {
             final FocusRequester fr = mFocusStack.peek();
             fr.handleFocusLoss(AudioManager.AUDIOFOCUS_LOSS, null, false);
@@ -1681,6 +1687,30 @@ public class MediaFocusControl implements PlayerFocusEnforcer {
         @Override
         public int hashCode() {
             return mUid;
+        }
+    }
+
+    private class SettingsObserver extends ContentObserver {
+
+        SettingsObserver() {
+            super(new Handler());
+            ContentResolver cr = mContext.getContentResolver();
+            cr.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SHOW_APP_VOLUME), true, this);
+            mPerAppVolumeEnabled = Settings.System.getIntForUser(cr,
+                    Settings.System.SHOW_APP_VOLUME, 1, cr.getUserId()) != 0;
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            ContentResolver cr = mContext.getContentResolver();
+            boolean newValue = Settings.System.getIntForUser(cr,
+                    Settings.System.SHOW_APP_VOLUME, 1, cr.getUserId()) != 0;
+            if (mPerAppVolumeEnabled != newValue) {
+                mPerAppVolumeEnabled = newValue;
+                updateMultiAudioFocus(mMultiAudioFocusEnabled);
+            }
         }
     }
 }
