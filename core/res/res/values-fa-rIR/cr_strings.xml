@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">امضای بسته جعلی</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">به برنامه اجازه داده شده است تا به عنوان یک برنامه دیگر تظاهر کند. برنامه های مخرب ممکن است از این قابلیت استفاده کنند تا به دیتای شخصی شما دسترسی پیدا کنند. لطفا با احتیاط این اجازه را دهید!</string>
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_fake_package_signature">امضای بسته جعلی است</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_fake_package_signature">اجازه جعل امضای بسته را بدهید</string>
+    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
+    <string name="permgrouprequest_fake_package_signature">به
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; اجازه می دهید امضای بسته را جعل کند?</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">کلید پاور را برای بازکردن فشار داده و نگه دارید</string>
+    <string name="pocket_view_title">حالت جیب روشن است</string>
+    <string name="pocket_view_title_cancel">برای استفاده از تلفن‌تان:</string>
+    <string name="pocket_view_top_tag_cancel">بررسی کنید که آیا قسمت آبی گوشی شما خالی از هرگونه مانع است یا خیر، و هرگونه کثیفی یا گرد و غبار را تمیز کنید.</string>
+    <string name="pocket_view_top_tag_cancel2">برای خروج اجباری از حالت جیبی، دکمه پاور را به مدت طولانی فشار دهید.</string>
+    <string name="pocket_view_top_tag_number1">1.\u0020</string>
+    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">باز کردن قفل با چهره به دلیل بی حرکتی غیرفعال شد</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">کپی کردن آدرس گزارش خرابی</string>
+    <string name="url_copy_success">آدرس با موفقیت کپی شد</string>
+    <string name="url_copy_failed">هنگام بارگزاری گزارش در Pasty خطایی روی داد</string>
+</resources>
