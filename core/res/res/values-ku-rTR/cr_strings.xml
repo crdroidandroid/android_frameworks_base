@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">Îmzeya pakêtê spof</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">Destûrê dide sepanê ku xwe wekî sepanek cûda nîşan bide. Dibe ku serîlêdanên xirabkar karibin vê bikar bînin da ku bigihîjin daneyên serîlêdana taybet. Bikaranîna rewa di nav xwe de emulatorek heye ku xwe wekî tiştê ku ew dişibîne dike. Vê destûrê tenê bi hişyariyê bidin!</string>
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_fake_package_signature">Îmzeya pakêtê spof</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_fake_package_signature">destûrê bidin ku îmzeya pakêtê bixapînin</string>
+    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
+    <string name="permgrouprequest_fake_package_signature">&lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; to spoof package signature?</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Bişkojka hêzê bikirtînin û bigirin da ku vekin</string>
+    <string name="pocket_view_title">Moda Pocket li ser e</string>
+    <string name="pocket_view_title_cancel">Ji bo ku têlefona xwe bikar bînin:</string>
+    <string name="pocket_view_top_tag_cancel">Kontrol bikin ka devera şîn a têlefona we ji astengiyan paqij e, û her axê an tozê paqij bikin.</string>
+    <string name="pocket_view_top_tag_cancel2">Bişkoja hêzê dirêj bikirtînin da ku bi zorê dev ji moda pocketê berdin.</string>
+    <string name="pocket_view_top_tag_number1">1.\u0020</string>
+    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Ji ber bêçalaktiyê vekirina rû hat astengkirin</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">URL-ya têketina têkçûnê kopî bikin</string>
+    <string name="url_copy_success">URL bi serkeftî hate kopî kirin</string>
+    <string name="url_copy_failed">Di dema barkirina têketinê li Pasty de xeletiyek derket</string>
+</resources>

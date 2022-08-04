@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_fakePackageSignature">偽裝應用程式簽章</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_fakePackageSignature">允許應用程式偽裝成不同的應用程式。有害的應用程式可能可以使用這個功能來存取私人的應用程式資料。授予此權限時請小心！</string>
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_fake_package_signature">偽裝應用程式簽章</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_fake_package_signature">允許偽裝應用程式簽章</string>
+    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
+    <string name="permgrouprequest_fake_package_signature">允許
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; 使用偽裝應用程式簽章？</string>
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">長按電源鍵以解鎖</string>
+    <string name="pocket_view_title">防誤觸模式已開啟</string>
+    <string name="pocket_view_title_cancel">若要使用您的手機：</string>
+    <string name="pocket_view_top_tag_cancel">請確保藍色區域上沒有任何遮蔽物，且已清除任何灰塵、粉塵</string>
+    <string name="pocket_view_top_tag_cancel2">長按電源鍵來強制退出防誤觸模式</string>
+    <string name="pocket_view_top_tag_number1">1.\u0020</string>
+    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">因為無活動，臉部解鎖已停用</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">複製崩潰紀錄連結</string>
+    <string name="url_copy_success">已成功複製連結</string>
+    <string name="url_copy_failed">上傳紀錄至 Pasty 時發生錯誤</string>
+</resources>
