@@ -109,7 +109,7 @@
     <string name="face_unlock_recognizing">Розпізнавання...</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Показувати кнопку зупинки</string>
-    <string name="screenrecord_stopdot_summary">Тривале натискання щоб перемістити його</string>
+    <string name="screenrecord_stopdot_summary">Тривале натискання для переміщення</string>
     <string name="screenrecord_lowquality_label">Низька якість для меншого розміру файлу</string>
     <string name="screenrecord_lowquality_summary">Для меншого розміру файлу</string>
     <string name="screenrecord_longer_timeout_switch_label">Більший розмір файлу\nОбмежити розмір запису до 15ГБ</string>
