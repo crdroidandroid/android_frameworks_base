@@ -98,4 +98,9 @@
 
     <!-- These are system packages exempted from privacy indicator -->
     <java-symbol type="array" name="config_indicatorExemptedPackageNames" />
+
+    <!-- Smart charging battery percentage -->
+    <java-symbol type="integer" name="config_smartChargingBatteryLevel" />
+    <java-symbol type="integer" name="config_smartChargingBatteryResumeLevel" />
+
 </resources>
