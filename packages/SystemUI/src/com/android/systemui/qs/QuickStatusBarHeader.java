@@ -58,6 +58,8 @@ import com.android.systemui.statusbar.policy.NetworkTraffic;
 import com.android.systemui.statusbar.policy.VariableDateView;
 import com.android.systemui.tuner.TunerService;
 
+import lineageos.providers.LineageSettings;
+
 import java.util.List;
 
 /**
