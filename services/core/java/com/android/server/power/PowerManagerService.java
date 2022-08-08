@@ -232,10 +232,6 @@ public final class PowerManagerService extends SystemService
     // Threshold to consider proximity sensor covered
     private static final float PROXIMITY_NEAR_THRESHOLD = 5.0f;
 
-    // Smart charging: sysfs node of charger
-    private static final String POWER_INTPUT_SUSPEND_NODE =
-            "/sys/class/power_supply/battery/input_suspend";
-
     // How long a partial wake lock must be held until we consider it a long wake lock.
     static final long MIN_LONG_WAKE_CHECK_INTERVAL = 60*1000;
 
@@ -325,8 +321,11 @@ public final class PowerManagerService extends SystemService
     private float mKeyboardBrightness;
 
     // Smart charging
+    private string mPowerInputSuspendNode;
     private boolean mSmartChargingEnabled;
     private boolean mPowerInputSuspended = false;
+    private int mPowerInputSuspendNodeOnValue;
+    private int mPowerInputSuspendNodeOffValue;
     private int mSmartChargingLevel;
     private int mSmartChargingResumeLevel;
     private int mSmartChargingLevelDefaultConfig;
@@ -1372,6 +1371,12 @@ public final class PowerManagerService extends SystemService
     void readConfigurationLocked() {
         final Resources resources = mContext.getResources();
 
+        mPowerInputSuspendNode = resources.getString(
+                com.android.internal.R.string.config_PowerInputSuspendNode);      
+        mPowerInputSuspendNodeOnValue = resources.getInteger(
+                com.android.internal.R.integer.config_PowerInputSuspendNodeOnValue);        
+        mPowerInputSuspendNodeOffValue = resources.getInteger(
+                com.android.internal.R.integer.config_PowerInputSuspendNodeOffValue);                         
         mSmartChargingLevelDefaultConfig = resources.getInteger(
                 com.android.internal.R.integer.config_smartChargingBatteryLevel);
         mSmartChargingResumeLevelDefaultConfig = resources.getInteger(
@@ -2439,20 +2444,20 @@ public final class PowerManagerService extends SystemService
         if (mPowerInputSuspended && (mBatteryLevel <= mSmartChargingResumeLevel) ||
             (mPowerInputSuspended && !mSmartChargingEnabled)) {
             try {
-                FileUtils.stringToFile(POWER_INTPUT_SUSPEND_NODE, "0");
+                FileUtils.stringToFile(mPowerInputSuspendNode, mPowerInputSuspendNodeOnValue);
                 mPowerInputSuspended = false;
             } catch (IOException e) {
-                Slog.e(TAG, "failed to write to " + POWER_INTPUT_SUSPEND_NODE);
+                Slog.e(TAG, "failed to write to " + mPowerInputSuspendNode);
             }
             return;
         }
 
         if (mSmartChargingEnabled && !mPowerInputSuspended && (mBatteryLevel >= mSmartChargingLevel)) {
             try {
-                FileUtils.stringToFile(POWER_INTPUT_SUSPEND_NODE, "1");
+                FileUtils.stringToFile(mPowerInputSuspendNode, mPowerInputSuspendNodeOffValue);
                 mPowerInputSuspended = true;
             } catch (IOException e) {
-                    Slog.e(TAG, "failed to write to " + POWER_INTPUT_SUSPEND_NODE);
+                    Slog.e(TAG, "failed to write to " + mPowerInputSuspendNode);
             }
         }
     }
