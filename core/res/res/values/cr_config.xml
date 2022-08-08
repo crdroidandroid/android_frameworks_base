@@ -110,5 +110,5 @@
     <integer name="config_smartChargingBatteryResumeLevel">60</integer>
     <integer name="config_PowerInputSuspendNodeOnValue">0</integer>
     <integer name="config_PowerInputSuspendNodeOffValue">1</integer>     
-    <string name="config_PowerInputSuspendNode"></string>
+    <string name="config_PowerInputSuspendNode" translatable="false">/sys/class/power_supply/battery/input_suspend</string>
 </resources>
