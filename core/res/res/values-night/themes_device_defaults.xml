@@ -52,7 +52,7 @@ easier.
     <!-- DeviceDefault theme for a window that should look like the Settings app.  -->
     <style name="Theme.DeviceDefault.Settings" parent="Theme.DeviceDefault">
         <item name="windowLightStatusBar">false</item>
-        <item name="navigationBarColor">@android:color/black</item>
+        <item name="navigationBarColor">?attr/colorBackground</item>
         <item name="windowLightNavigationBar">false</item>
 
         <item name="colorPrimary">@color/primary_dark_device_default_settings</item>
