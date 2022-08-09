@@ -2299,8 +2299,8 @@ easier.
         <item name="colorEdgeEffect">@color/edge_effect_device_default_light</item>
 
         <!-- Add white nav bar with divider that matches material -->
-        <item name="navigationBarDividerColor">@color/navigation_bar_divider_device_default_settings</item>
-        <item name="navigationBarColor">@android:color/white</item>
+        <item name="navigationBarDividerColor">@null</item>
+        <item name="navigationBarColor">?attr/colorBackground</item>
         <item name="windowLightNavigationBar">true</item>
 
         <!-- Dialog attributes -->
