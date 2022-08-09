@@ -88,6 +88,7 @@ public class ScreenMediaRecorder {
     private ScreenInternalAudioRecorder mAudio;
     private ScreenRecordingAudioSource mAudioSource;
     private int mMaxRefreshRate;
+    private String mAvcProfileLevel;
 
     private boolean mLowQuality;
     private boolean mLongerDuration;
@@ -104,6 +105,8 @@ public class ScreenMediaRecorder {
         mAudioSource = audioSource;
         mMaxRefreshRate = mContext.getResources().getInteger(
                 R.integer.config_screenRecorderMaxFramerate);
+        mAvcProfileLevel = mContext.getResources().getString(
+                R.string.config_screenRecorderAVCProfileLevel);
     }
 
     public void setLowQuality(boolean low) {
@@ -157,13 +160,24 @@ public class ScreenMediaRecorder {
                 : VIDEO_FRAME_RATE_TO_RESOLUTION_RATIO;
         int vidBitRate = width * height * refreshRate / VIDEO_FRAME_RATE * resRatio;
         long maxFilesize = mLongerDuration ? MAX_FILESIZE_BYTES_LONGER : MAX_FILESIZE_BYTES;
+        String avcProfileLevelDefault = "4.2";
+        int avcProfileLevel;
+        try {
+            avcProfileLevel = getAvcProfileLevelCodeByName(
+                    mAvcProfileLevel != null && !mAvcProfileLevel.isEmpty()
+                    ? mAvcProfileLevel : avcProfileLevelDefault);
+        } catch (IllegalStateException e) {
+            Log.w(TAG, e.getMessage() + ". Using default level: " +
+                    avcProfileLevelDefault);
+            avcProfileLevel = getAvcProfileLevelCodeByName(avcProfileLevelDefault);
+        }
         /* PS: HEVC can be set too, to reduce file size without quality loss (h265 is more efficient than h264),
         but at the same time the cpu load is 8-10 times higher and some devices don't support it yet */
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         mMediaRecorder.setVideoEncodingProfileLevel(
                 MediaCodecInfo.CodecProfileLevel.AVCProfileMain,
                 mLowQuality ? MediaCodecInfo.CodecProfileLevel.AVCLevel32/*level 3.2*/
-                : MediaCodecInfo.CodecProfileLevel.AVCLevel42/*level 4.2*/);
+                : avcProfileLevel);
         mMediaRecorder.setVideoSize(width, height);
         mMediaRecorder.setVideoFrameRate(refreshRate);
         mMediaRecorder.setVideoEncodingBitRate(vidBitRate);
@@ -201,6 +215,21 @@ public class ScreenMediaRecorder {
                     mMediaProjection, mAudioSource == MIC_AND_INTERNAL);
         }
 
+    }
+
+    /**
+     * Match human-readable AVC level name to its constant value.
+     */
+    private int getAvcProfileLevelCodeByName(final String levelName) {
+        switch (levelName) {
+            case "3": return MediaCodecInfo.CodecProfileLevel.AVCLevel3;
+            case "3.1": return MediaCodecInfo.CodecProfileLevel.AVCLevel31;
+            case "3.2": return MediaCodecInfo.CodecProfileLevel.AVCLevel32;
+            case "4": return MediaCodecInfo.CodecProfileLevel.AVCLevel4;
+            case "4.1": return MediaCodecInfo.CodecProfileLevel.AVCLevel41;
+            case "4.2": return MediaCodecInfo.CodecProfileLevel.AVCLevel42;
+        }
+        throw new IllegalStateException("Unlisted AVC level: " + levelName);
     }
 
     /**
