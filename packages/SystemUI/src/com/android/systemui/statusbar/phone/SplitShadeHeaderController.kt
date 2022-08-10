@@ -16,26 +16,36 @@
 
 package com.android.systemui.statusbar.phone
 
+import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.View
 import androidx.constraintlayout.motion.widget.MotionLayout
+import com.android.settingslib.Utils
 import com.android.systemui.R
 import com.android.systemui.animation.ShadeInterpolation
 import com.android.systemui.battery.BatteryMeterView
 import com.android.systemui.battery.BatteryMeterViewController
 import com.android.systemui.flags.FeatureFlags
 import com.android.systemui.qs.HeaderPrivacyIconsController
+import com.android.systemui.qs.carrier.QSCarrierGroup
 import com.android.systemui.qs.carrier.QSCarrierGroupController
 import com.android.systemui.statusbar.phone.dagger.StatusBarComponent.StatusBarScope
 import com.android.systemui.statusbar.phone.dagger.StatusBarViewModule.SPLIT_SHADE_BATTERY_CONTROLLER
 import com.android.systemui.statusbar.phone.dagger.StatusBarViewModule.SPLIT_SHADE_HEADER
+import com.android.systemui.statusbar.policy.Clock
+import com.android.systemui.statusbar.policy.ConfigurationController
+import com.android.systemui.statusbar.policy.DateView
 import javax.inject.Inject
 import javax.inject.Named
 
 @StatusBarScope
 class SplitShadeHeaderController @Inject constructor(
     @Named(SPLIT_SHADE_HEADER) private val statusBar: View,
+    configurationController: ConfigurationController,
     private val statusBarIconController: StatusBarIconController,
     private val privacyIconsController: HeaderPrivacyIconsController,
+    private val context: Context,
     qsCarrierGroupControllerBuilder: QSCarrierGroupController.Builder,
     featureFlags: FeatureFlags,
     @Named(SPLIT_SHADE_BATTERY_CONTROLLER) batteryMeterViewController: BatteryMeterViewController
@@ -48,9 +58,10 @@ class SplitShadeHeaderController @Inject constructor(
 
     private val carrierIconSlots: List<String>
     private val combinedHeaders = featureFlags.useCombinedQSHeaders()
-    private val iconManager: StatusBarIconController.IconManager
+    private val iconManager: StatusBarIconController.TintedIconManager
     private val qsCarrierGroupController: QSCarrierGroupController
     private val iconContainer: StatusIconContainer
+    private var textColorPrimary = Color.TRANSPARENT
     private var visible = false
         set(value) {
             if (field == value) {
@@ -95,6 +106,11 @@ class SplitShadeHeaderController @Inject constructor(
             }
         }
 
+    val clock: Clock
+    val dateView: DateView
+    val batteryIcon: BatteryMeterView
+    val qsCarrierGroup: QSCarrierGroup
+
     init {
         if (statusBar is MotionLayout) {
             val context = statusBar.context
@@ -110,7 +126,10 @@ class SplitShadeHeaderController @Inject constructor(
 
     init {
         batteryMeterViewController.init()
-        val batteryIcon: BatteryMeterView = statusBar.findViewById(R.id.batteryRemainingIcon)
+        clock = statusBar.findViewById(R.id.clock)
+        dateView = statusBar.findViewById(R.id.date)
+        batteryIcon = statusBar.findViewById(R.id.batteryRemainingIcon)
+        qsCarrierGroup = statusBar.findViewById(R.id.carrier_group)
 
         // battery settings same as in QS icons
         batteryMeterViewController.ignoreTunerUpdates()
@@ -126,12 +145,40 @@ class SplitShadeHeaderController @Inject constructor(
         }
 
         iconContainer = statusBar.findViewById(R.id.statusIcons)
-        iconManager = StatusBarIconController.IconManager(iconContainer, featureFlags)
+        iconManager = StatusBarIconController.TintedIconManager(iconContainer, featureFlags)
         qsCarrierGroupController = qsCarrierGroupControllerBuilder
                 .setQSCarrierGroup(statusBar.findViewById(R.id.carrier_group))
                 .build()
+
+        val configurationChangedListener = object : ConfigurationController.ConfigurationListener {
+            override fun onUiModeChanged() {
+                updateResources()
+            }
+        }
+        configurationController.addCallback(configurationChangedListener)
+
         updateVisibility()
         updateConstraints()
+        updateResources()
+    }
+
+    private fun updateResources() {
+        val fillColor = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
+        iconManager.setTint(fillColor)
+        val textColor = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
+        val colorStateList = Utils.getColorAttr(context, android.R.attr.textColorPrimary)
+        if (textColor != textColorPrimary) {
+            val textColorSecondary = Utils.getColorAttrDefaultColor(context,
+                    android.R.attr.textColorSecondary)
+            textColorPrimary = textColor
+            if (iconManager != null) {
+                iconManager.setTint(textColor)
+            }
+            clock.setTextColor(textColorPrimary)
+            dateView.setTextColor(textColorPrimary)
+            qsCarrierGroup.updateColors(textColorPrimary, colorStateList)
+            batteryIcon.updateColors(textColorPrimary, textColorSecondary, textColorPrimary)
+        }
     }
 
     private fun onShadeExpandedChanged() {
@@ -142,6 +189,7 @@ class SplitShadeHeaderController @Inject constructor(
         }
         updateVisibility()
         updatePosition()
+        updateResources()
     }
 
     private fun onSplitShadeModeChanged() {
@@ -152,6 +200,7 @@ class SplitShadeHeaderController @Inject constructor(
         }
         updateVisibility()
         updateConstraints()
+        updateResources()
     }
 
     private fun updateVisibility() {
