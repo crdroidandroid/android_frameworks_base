@@ -60,6 +60,7 @@ import com.android.systemui.statusbar.phone.fragment.dagger.StatusBarFragmentCom
 import com.android.systemui.statusbar.phone.ongoingcall.OngoingCallController;
 import com.android.systemui.statusbar.phone.panelstate.PanelExpansionStateManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.concurrency.FakeExecutor;
 import com.android.systemui.util.settings.SecureSettings;
 import com.android.systemui.util.time.FakeSystemClock;
@@ -102,6 +103,8 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
     private HeadsUpAppearanceController mHeadsUpAppearanceController;
     @Mock
     private NotificationPanelViewController mNotificationPanelViewController;
+    @Mock
+    private TunerService mTunerService;
 
     public CollapsedStatusBarFragmentTest() {
         super(CollapsedStatusBarFragment.class);
@@ -379,7 +382,8 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
                         ),
                 mOperatorNameViewControllerFactory,
                 mSecureSettings,
-                mExecutor);
+                mExecutor,
+                mTunerService);
     }
 
     private void setUpDaggerComponent() {

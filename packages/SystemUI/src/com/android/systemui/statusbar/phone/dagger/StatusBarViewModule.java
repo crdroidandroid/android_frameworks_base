@@ -262,7 +262,8 @@ public abstract class StatusBarViewModule {
             CollapsedStatusBarFragmentLogger collapsedStatusBarFragmentLogger,
             OperatorNameViewController.Factory operatorNameViewControllerFactory,
             SecureSettings secureSettings,
-            @Main Executor mainExecutor
+            @Main Executor mainExecutor,
+            TunerService tunerService
     ) {
         return new CollapsedStatusBarFragment(statusBarFragmentComponentFactory,
                 ongoingCallController,
@@ -281,6 +282,7 @@ public abstract class StatusBarViewModule {
                 collapsedStatusBarFragmentLogger,
                 operatorNameViewControllerFactory,
                 secureSettings,
-                mainExecutor);
+                mainExecutor,
+                tunerService);
     }
 }
