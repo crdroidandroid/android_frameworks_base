@@ -20,6 +20,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.WindowConfiguration
 import android.content.ContentResolver
+import android.content.Context
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
@@ -106,8 +107,13 @@ constructor(
         val autoHide: Boolean,
         val denyListed: Boolean,
         val hideForHun: Boolean,
+        val showChip: Boolean,
         val position: Int,
         val visibilityModel: VisibilityModel,
+    )
+
+    private data class Padding(
+        val start: Int, val top: Int, val end: Int, val bottom: Int,
     )
 
     override fun bind(
@@ -125,6 +131,10 @@ constructor(
         val centerClock: Clock = view.findViewById(R.id.clock_center)
         val rightClock: Clock = view.findViewById(R.id.clock_right)
         val notificationIconsArea = view.requireViewById<View>(R.id.notificationIcons)
+
+        val leftPaddingInit = leftClock.capturePadding()
+        val centerPaddingInit = centerClock.capturePadding()
+        val rightPaddingInit = rightClock.capturePadding()
 
         // CollapsedStatusBarFragment doesn't need this
         if (StatusBarRootModernization.isEnabled) {
@@ -147,6 +157,7 @@ constructor(
                             autoHide = false,
                             denyListed = false,
                             hideForHun = false,
+                            showChip = false,
                             position = context.contentResolver.readClockPosition(),
                             visibilityModel = VisibilityModel(View.GONE, true),
                         )
@@ -160,6 +171,8 @@ constructor(
                     Settings.Secure.getUriFor(StatusBarIconController.ICON_HIDE_LIST)
                 val statusBarClockUri: Uri =
                     LineageSettings.System.getUriFor(LineageSettings.System.STATUS_BAR_CLOCK)
+                val statusBarClockChipUri: Uri =
+                    Settings.System.getUriFor(Settings.System.STATUSBAR_CLOCK_CHIP)
 
                 val taskStackListener =
                     object : TaskStackChangeListener {
@@ -210,13 +223,23 @@ constructor(
                                         current.copy(
                                             position = context.contentResolver.readClockPosition()
                                         )
+                                    statusBarClockChipUri -> {
+                                        val enabled =
+                                            Settings.System.getIntForUser(context.contentResolver,
+                                                Settings.System.STATUSBAR_CLOCK_CHIP, 0,
+                                                UserHandle.USER_CURRENT
+                                            ) == 1
+                                        current.copy(
+                                            showChip = enabled
+                                        )
+                                    }
                                     else -> current
                                 }
                             }
                         }
                     }
 
-                val urisToObserve = listOf(clockAutoHideUri, iconHideListUri, statusBarClockUri)
+                val urisToObserve = listOf(clockAutoHideUri, iconHideListUri, statusBarClockUri, statusBarClockChipUri)
                 urisToObserve.forEach { uri ->
                     context.contentResolver.registerContentObserver(
                         uri,
@@ -432,6 +455,9 @@ constructor(
                     }
 
                     launch {
+                        var lastChipEnabled: Boolean? = null
+                        var lastClockPosition: Int? = null
+
                         clockState.collect { state ->
                             // We only want to hide left clock for HUN
                             val hunBlocksClock =
@@ -466,6 +492,25 @@ constructor(
 
                             // Show only the active one
                             activeClock.adjustVisibility(finalVisibility)
+
+                            // Only touch chip UI when needed
+                            val chipNeedsUpdate = (lastChipEnabled != state.showChip)
+                                        || (lastClockPosition != state.position)
+                            if (chipNeedsUpdate) {
+                                applyClockChip(
+                                    context = context,
+                                    enabled = state.showChip,
+                                    activeClock = activeClock,
+                                    leftClock = leftClock,
+                                    centerClock = centerClock,
+                                    rightClock = rightClock,
+                                    leftPaddingInit = leftPaddingInit,
+                                    centerPaddingInit = centerPaddingInit,
+                                    rightPaddingInit = rightPaddingInit
+                                )
+                                lastChipEnabled = state.showChip
+                                lastClockPosition = state.position
+                            }
                         }
                     }
 
@@ -625,6 +670,46 @@ constructor(
         } else {
             this.hide(model.visibility, model.shouldAnimateChange)
         }
+    }
+
+    private fun View.capturePadding() = Padding(paddingStart, paddingTop, paddingEnd, paddingBottom)
+
+    private fun dpToPx(context: Context, dp: Int): Int {
+        return (dp * context.resources.displayMetrics.density).toInt()
+    }
+
+    private fun applyClockChip(
+        context: Context,
+        enabled: Boolean,
+        activeClock: Clock,
+        leftClock: Clock,
+        centerClock: Clock,
+        rightClock: Clock,
+        leftPaddingInit: Padding,
+        centerPaddingInit: Padding,
+        rightPaddingInit: Padding
+    ) {
+        fun reset(clock: Clock, padding: Padding) {
+            if (clock == null || padding == null) return
+            clock.setBackgroundResource(0)
+            clock.setPaddingRelative(padding.start, padding.top, padding.end, padding.bottom)
+        }
+
+        fun apply(clock: Clock) {
+            val hPad = dpToPx(context, 10)
+            val vPad = dpToPx(context, 2)
+            clock.setBackgroundResource(R.drawable.sb_date_bg)
+            clock.setPaddingRelative(hPad, vPad, hPad, vPad)
+        }
+
+        // Always reset first so the previous active clock loses chip when position changes
+        reset(leftClock, leftPaddingInit)
+        reset(centerClock, centerPaddingInit)
+        reset(rightClock, rightPaddingInit)
+
+        if (!enabled) return
+
+        apply(activeClock)
     }
 
     /**
