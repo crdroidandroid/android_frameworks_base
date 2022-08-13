@@ -5,4 +5,8 @@
 -->
 <resources>
 
+    <!-- Statusbar clock chip colors -->
+    <color name="rippleDark">#14000000</color>
+    <color name="neumorph_outline_start">#FFBDBDBD</color>
+    <color name="neumorph_outline_end">#FFF0F0F0</color>
 </resources>
