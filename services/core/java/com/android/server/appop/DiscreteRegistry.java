@@ -879,8 +879,7 @@ final class DiscreteRegistry {
 
                     }
                 } catch (Throwable t) {
-                    Slog.e(TAG, "Error while cleaning timeline files: " + t.getMessage() + " "
-                            + t.getStackTrace());
+                    Slog.e(TAG, "Error while cleaning timeline files: ", t);
                 }
             }
         }
