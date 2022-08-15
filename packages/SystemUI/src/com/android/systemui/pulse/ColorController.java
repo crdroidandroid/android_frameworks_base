@@ -35,6 +35,7 @@ import android.provider.Settings;
 import android.util.TypedValue;
 
 import com.android.internal.util.ContrastColorUtil;
+import com.android.settingslib.Utils;
 
 public class ColorController extends ContentObserver
         implements ColorAnimator.ColorAnimationListener,
@@ -127,9 +128,7 @@ public class ColorController extends ContentObserver
     }
 
     int getAccentColor() {
-        final TypedValue value = new TypedValue();
-        mContext.getTheme().resolveAttribute(android.R.attr.colorAccent, value, true);
-        return value.data;
+        return Utils.getColorAccentDefaultColor(mContext);
     }
 
     @Override
