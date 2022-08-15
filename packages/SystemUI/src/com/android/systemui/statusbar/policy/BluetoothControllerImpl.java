@@ -29,6 +29,7 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.Log;
 
+import com.android.internal.annotations.GuardedBy;
 import com.android.settingslib.bluetooth.BluetoothCallback;
 import com.android.settingslib.bluetooth.CachedBluetoothDevice;
 import com.android.settingslib.bluetooth.LocalBluetoothManager;
@@ -62,6 +63,7 @@ public class BluetoothControllerImpl implements BluetoothController, BluetoothCa
     private final WeakHashMap<CachedBluetoothDevice, ActuallyCachedState> mCachedState =
             new WeakHashMap<>();
     private final Handler mBgHandler;
+    @GuardedBy("mConnectedDevices")
     private final List<CachedBluetoothDevice> mConnectedDevices = new ArrayList<>();
 
     private boolean mEnabled;
@@ -110,7 +112,7 @@ public class BluetoothControllerImpl implements BluetoothController, BluetoothCa
         pw.print("  mAudioProfileOnly="); pw.println(mAudioProfileOnly);
         pw.print("  mBatteryLevel="); pw.println(mBatteryLevel);
         pw.print("  mIsActive="); pw.println(mIsActive);
-        pw.print("  mConnectedDevices="); pw.println(mConnectedDevices);
+        pw.print("  mConnectedDevices="); pw.println(getConnectedDevices());
         pw.print("  mCallbacks.size="); pw.println(mHandler.mCallbacks.size());
         pw.println("  Bluetooth Devices:");
         for (CachedBluetoothDevice device : getDevices()) {
@@ -143,7 +145,11 @@ public class BluetoothControllerImpl implements BluetoothController, BluetoothCa
 
     @Override
     public List<CachedBluetoothDevice> getConnectedDevices() {
-        return mConnectedDevices;
+        List<CachedBluetoothDevice> out;
+        synchronized (mConnectedDevices) {
+            out = new ArrayList<>(mConnectedDevices);
+        }
+        return out;
     }
 
     @Override
@@ -218,8 +224,10 @@ public class BluetoothControllerImpl implements BluetoothController, BluetoothCa
 
     @Override
     public String getConnectedDeviceName() {
-        if (mConnectedDevices.size() == 1) {
-            return mConnectedDevices.get(0).getName();
+        synchronized (mConnectedDevices) {
+            if (mConnectedDevices.size() == 1) {
+                return mConnectedDevices.get(0).getName();
+            }
         }
         return null;
     }
@@ -234,7 +242,7 @@ public class BluetoothControllerImpl implements BluetoothController, BluetoothCa
     private void updateConnected() {
         // Make sure our connection state is up to date.
         int state = mLocalBluetoothManager.getBluetoothAdapter().getConnectionState();
-        mConnectedDevices.clear();
+        List<CachedBluetoothDevice> newList = new ArrayList<>();
         // If any of the devices are in a higher state than the adapter, move the adapter into
         // that state.
         for (CachedBluetoothDevice device : getDevices()) {
@@ -243,14 +251,18 @@ public class BluetoothControllerImpl implements BluetoothController, BluetoothCa
                 state = maxDeviceState;
             }
             if (device.isConnected()) {
-                mConnectedDevices.add(device);
+                newList.add(device);
             }
         }
 
-        if (mConnectedDevices.isEmpty() && state == BluetoothAdapter.STATE_CONNECTED) {
+        if (newList.isEmpty() && state == BluetoothAdapter.STATE_CONNECTED) {
             // If somehow we think we are connected, but have no connected devices, we aren't
             // connected.
             state = BluetoothAdapter.STATE_DISCONNECTED;
+        }
+        synchronized (mConnectedDevices) {
+            mConnectedDevices.clear();
+            mConnectedDevices.addAll(newList);
         }
         if (state != mConnectionState) {
             mConnectionState = state;
