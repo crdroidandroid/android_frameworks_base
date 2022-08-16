@@ -27,17 +27,17 @@
     <string name="permgrouprequest_fake_package_signature">Позволи
         &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; да имитира подписа на пакета?</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
-    <string name="pocket_view_title">Pocket mode is on</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
-    <string name="pocket_view_top_tag_number1">1.\u0020</string>
-    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <string name="pocket_lock_message_long_press">Натиснете и задръжте бутона за изключване, за да отключите</string>
+    <string name="pocket_view_title">Джобен режим е включен</string>
+    <string name="pocket_view_title_cancel">За да използвате телефона:</string>
+    <string name="pocket_view_top_tag_cancel">Проверете дали синята зона на телефона ви е чиста</string>
+    <string name="pocket_view_top_tag_cancel2">Натиснете и задръжте бутона за изключване за да премахнете \"джобният режим\"</string>
+    <string name="pocket_view_top_tag_number1"></string>
+    <string name="pocket_view_top_tag_number2">,\u0020</string>
     <!-- Face unlock -->
-    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
+    <string name="face_unlock_disabled_idle">Лицевото отключване е деактивирано поради неактивност</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to Pasty</string>
+    <string name="aerr_copy">Копирай лог файла на сринатото приложение</string>
+    <string name="url_copy_success">URL aдресът е копиран успешно</string>
+    <string name="url_copy_failed">Възникна грешка при качването на лога в Pasty</string>
 </resources>
