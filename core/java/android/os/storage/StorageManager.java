@@ -1693,6 +1693,10 @@ public class StorageManager {
         return RoSystemProperties.CRYPTO_ENCRYPTED;
     }
 
+    public static boolean inCryptKeeperBounce() {
+        return false;
+    }
+
     /** {@hide}
      * Is this device file encrypted?
      * @return true for file encrypted. (Implies isEncrypted() == true)
