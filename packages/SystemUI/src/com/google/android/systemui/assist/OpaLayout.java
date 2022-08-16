@@ -44,6 +44,8 @@ import com.android.systemui.statusbar.policy.KeyButtonView;
 import java.util.ArrayList;
 
 public class OpaLayout extends FrameLayout implements ButtonInterface {
+    private static final String TAG = "OpaLayout";
+    private static final boolean DEBUG = false;
 
     private static final int OPA_FADE_IN_DURATION = 50;
     private static final int OPA_FADE_OUT_DURATION = 250;
@@ -595,14 +597,14 @@ public class OpaLayout extends FrameLayout implements ButtonInterface {
         if (mOpaEnabledNeedsUpdate) {
             ((AssistManagerGoogle) Dependency.get(AssistManager.class)).dispatchOpaEnabledState();
             if (mOpaEnabledNeedsUpdate) {
-                Log.w("OpaLayout", "mOpaEnabledNeedsUpdate not cleared by AssistManagerGoogle!");
+                Log.w(TAG, "mOpaEnabledNeedsUpdate not cleared by AssistManagerGoogle!");
             }
         }
         return mOpaEnabled;
     }
 
     public void setOpaEnabled(boolean z) {
-        Log.i("OpaLayout", "Setting opa enabled to " + z);
+        if (DEBUG) Log.i(TAG, "Setting opa enabled to " + z);
         mOpaEnabled = z;
         mOpaEnabledNeedsUpdate = false;
         updateOpaLayout();

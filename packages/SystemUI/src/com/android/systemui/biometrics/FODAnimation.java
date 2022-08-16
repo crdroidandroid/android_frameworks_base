@@ -76,7 +76,7 @@ public class FODAnimation extends ImageView {
 
     private final String mFodAnimationPackage;
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final String LOG_TAG = "FODAnimations";
 
     public FODAnimation(Context context, int mPositionX, int mPositionY) {
