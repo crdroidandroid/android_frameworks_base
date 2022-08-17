@@ -76,6 +76,11 @@ public class Clock extends TextView implements
         CommandQueue.Callbacks,
         DarkReceiver, ConfigurationListener {
 
+    public static final String STATUS_BAR_CLOCK_SIZE =
+            "system:" + Settings.System.STATUS_BAR_CLOCK_SIZE;
+    public static final String QS_HEADER_CLOCK_SIZE =
+            "system:" + Settings.System.QS_HEADER_CLOCK_SIZE;
+
     private static final String CLOCK_SUPER_PARCELABLE = "clock_super_parcelable";
     private static final String CURRENT_USER_ID = "current_user_id";
     private static final String VISIBLE_BY_POLICY = "visible_by_policy";
@@ -104,6 +109,9 @@ public class Clock extends TextView implements
             "system:" + Settings.System.STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION;
     public static final String STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION =
             "system:" + Settings.System.STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION;
+
+    private int mClockSize;
+    private int mClockSizeQsHeader;
 
     private final CurrentUserTracker mCurrentUserTracker;
     private final CommandQueue mCommandQueue;
@@ -254,7 +262,9 @@ public class Clock extends TextView implements
                     STATUS_BAR_CLOCK_DATE_FORMAT,
                     STATUS_BAR_CLOCK_AUTO_HIDE,
                     STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION,
-                    STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION);
+                    STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION,
+                    STATUS_BAR_CLOCK_SIZE,
+                    QS_HEADER_CLOCK_SIZE);
             mCommandQueue.addCallback(this);
             if (mShowDark) {
                 Dependency.get(DarkIconDispatcher.class).addDarkReceiver(this);
@@ -272,6 +282,7 @@ public class Clock extends TextView implements
         updateShowSeconds();
         updateClock();
         updateClockVisibility();
+        updateClockSize();
     }
 
     @Override
@@ -444,6 +455,18 @@ public class Clock extends TextView implements
             case STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION:
                 mShowDuration =
                         TunerService.parseInteger(newValue, SHOW_DURATION);
+                break;
+            case STATUS_BAR_CLOCK_SIZE:
+                if (newValue == null) {
+                    newValue = "14"; // Default Clock Size is 14
+                }
+                mClockSize = Integer.parseInt(newValue);
+                break;
+            case QS_HEADER_CLOCK_SIZE:
+                if (newValue == null) {
+                    newValue = "14"; // Default Clock Size is 14
+                }
+                mClockSizeQsHeader = Integer.parseInt(newValue);
                 break;
             default:
                 break;
@@ -718,6 +741,15 @@ public class Clock extends TextView implements
         public void onTaskMovedToFront(int taskId) {
             updateShowClock();
         }
+    }
+
+    public void updateClockSize() {
+        if(mQsHeader) {
+            setTextSize(mClockSizeQsHeader);
+        } else {
+            setTextSize(mClockSize);
+        }
+            updateClock();
     }
 }
 
