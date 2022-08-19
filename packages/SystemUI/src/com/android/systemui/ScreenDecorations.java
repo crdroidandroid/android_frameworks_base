@@ -1151,7 +1151,12 @@ public class ScreenDecorations implements CoreStartable, Dumpable {
                 }
             }
         }
-        mRoundedCornerResDelegate.dump(pw, args);
+        if (!DEBUG_DISABLE_SCREEN_DECORATIONS) {
+            mRoundedCornerResDelegate.dump(pw, args);
+        } else {
+            pw.println("  RoundedCornerResDelegate state:" +
+                       " skipped due to ScreenDecorations disabled");
+        }
         mDebugRoundedCornerDelegate.dump(pw);
     }
 
