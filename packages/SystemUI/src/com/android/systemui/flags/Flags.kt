@@ -300,7 +300,7 @@ object Flags {
     val MEDIA_TAP_TO_TRANSFER = unreleasedFlag(900, "media_tap_to_transfer", teamfood = true)
 
     // TODO(b/254512502): Tracking Bug
-    val MEDIA_SESSION_ACTIONS = unreleasedFlag(901, "media_session_actions")
+    val MEDIA_SESSION_ACTIONS = releasedFlag(901, "media_session_actions")
 
     // TODO(b/254512726): Tracking Bug
     val MEDIA_NEARBY_DEVICES = releasedFlag(903, "media_nearby_devices")
