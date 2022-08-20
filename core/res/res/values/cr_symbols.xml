@@ -109,4 +109,23 @@
 
     <!-- Whether to force enable multi resolution configuration for camera -->
     <java-symbol type="bool" name="config_forceMultiResolution" />
+
+    <!-- Parallel space badge -->
+    <java-symbol type="string" name="parallel_space_badge_label" />
+    <java-symbol type="drawable" name="ic_parallel_badge" />
+    <java-symbol type="drawable" name="ic_parallel_icon_badge" />
+
+    <!-- Parallel space badge colors -->
+    <java-symbol type="color" name="parallel_badge_1" />
+    <java-symbol type="color" name="parallel_badge_2" />
+    <java-symbol type="color" name="parallel_badge_3" />
+    <java-symbol type="color" name="parallel_badge_4" />
+    <java-symbol type="color" name="parallel_badge_5" />
+    <java-symbol type="color" name="parallel_badge_6" />
+    <java-symbol type="color" name="parallel_badge_7" />
+    <java-symbol type="color" name="parallel_badge_8" />
+    <java-symbol type="color" name="parallel_badge_9" />
+
+    <!-- Parallel space max count. -->
+    <java-symbol type="integer" name="config_parallelSpaceMaxCount" />
 </resources>
