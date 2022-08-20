@@ -571,7 +571,7 @@ class KeyguardUnlockAnimationController @Inject constructor(
 
         // Now that the Launcher surface (with its smartspace positioned identically to ours) is
         // visible, hide our smartspace.
-        lockscreenSmartspace!!.visibility = View.INVISIBLE
+        lockscreenSmartspace?.visibility = View.INVISIBLE
 
         // As soon as the shade has animated out of the way, finish the keyguard exit animation. The
         // in-window animations in the Launcher window will end on their own.
