@@ -3018,6 +3018,10 @@
     <permission android:name="android.permission.MANAGE_USERS"
         android:protectionLevel="signature|privileged" />
 
+    <!-- @hide Allow managing parallel spaces or receiving related broadcasts. -->
+    <permission android:name="android.permission.MANAGE_PARALLEL_SPACES"
+        android:protectionLevel="signature|privileged" />
+
     <!-- @SystemApi @hide Allows an application to create, remove users and get the list of
          users on the device. Applications holding this permission can create users (including
          normal, restricted, guest, managed, and demo users) and can optionally endow them with the

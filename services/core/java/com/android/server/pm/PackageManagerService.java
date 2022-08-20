@@ -243,6 +243,8 @@ import com.nvidia.NvAppProfileService;
 
 import dalvik.system.VMRuntime;
 
+import ink.kaleidoscope.server.ParallelSpaceManagerService;
+
 import libcore.util.HexEncoding;
 
 import java.io.ByteArrayInputStream;
@@ -3238,6 +3240,22 @@ public class PackageManagerService implements PackageSender, TestUtilityService 
             final IPackageDeleteObserver2 observer, final int userId, final int deleteFlags) {
         mDeletePackageHelper.deletePackageVersionedInternal(
                 versionedPackage, observer, userId, deleteFlags, false);
+
+        // Delete for parallel users if the package is deleted in their owner.
+        if (!ParallelSpaceManagerService.isCurrentParallelOwner(userId))
+            return;
+        final long token = Binder.clearCallingIdentity();
+        try {
+            for (int parallelUserId : ParallelSpaceManagerService.getCurrentParallelUserIds()) {
+                    mDeletePackageHelper.deletePackageVersionedInternal(versionedPackage,
+                    new PackageInstallerService.PackageDeleteObserverAdapter(
+                            mContext, null, versionedPackage.getPackageName(),
+                            false, parallelUserId)
+                    .getBinder(), parallelUserId, 0, true);
+            }
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
     }
 
     boolean isCallerVerifier(@NonNull Computer snapshot, int callingUid) {
