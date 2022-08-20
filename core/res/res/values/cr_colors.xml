@@ -16,4 +16,14 @@
 -->
 <resources>
 
+    <!-- Parallel space badge colors -->
+    <color name="parallel_badge_1">#025fee</color>
+    <color name="parallel_badge_2">#ee9002</color>
+    <color name="parallel_badge_3">#02d6ee</color>
+    <color name="parallel_badge_4">#9002ee</color>
+    <color name="parallel_badge_5">#ee0260</color>
+    <color name="parallel_badge_6">#00b200</color>
+    <color name="parallel_badge_7">#7200b6</color>
+    <color name="parallel_badge_8">#006f72</color>
+    <color name="parallel_badge_9">#eed315</color>
 </resources>
