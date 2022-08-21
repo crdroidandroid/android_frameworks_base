@@ -286,7 +286,7 @@ public class FingerprintAuthenticationClient
         // for most ACQUIRED messages. See BiometricFingerprintConstants#FingerprintAcquired
         mAuthenticationStateListeners.onAuthenticationAcquired(
                 BiometricSourceType.FINGERPRINT, getRequestReason(), acquiredInfo);
-        mSensorOverlays.ifUdfps(controller -> controller.onAcquired(getSensorId(), acquiredInfo));
+        mSensorOverlays.ifUdfps(controller -> controller.onAcquired(getSensorId(), acquiredInfo, vendorCode));
         super.onAcquired(acquiredInfo, vendorCode);
         PerformanceTracker pt = PerformanceTracker.getInstanceForSensorId(getSensorId());
         pt.incrementAcquireForUser(getTargetUserId(), isCryptoOperation());
