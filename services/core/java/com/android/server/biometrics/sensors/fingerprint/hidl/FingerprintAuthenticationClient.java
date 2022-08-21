@@ -71,6 +71,7 @@ class FingerprintAuthenticationClient
     private static final String TAG = "Biometrics/FingerprintAuthClient";
 
     private final LockoutFrameworkImpl mLockoutFrameworkImpl;
+    @Nullable private final IUdfpsOverlayController mUdfpsOverlayController;
     @NonNull private final SensorOverlays mSensorOverlays;
     @NonNull private final FingerprintSensorPropertiesInternal mSensorProps;
     @NonNull private final CallbackWithProbe<Probe> mALSProbeCallback;
@@ -99,6 +100,7 @@ class FingerprintAuthenticationClient
                 isStrongBiometric, taskStackListener, lockoutTracker, allowBackgroundAuthentication,
                 false /* shouldVibrate */, sensorStrength);
         setRequestId(requestId);
+        mUdfpsOverlayController = udfpsOverlayController;
         mLockoutFrameworkImpl = lockoutTracker;
         if (sidefpsControllerRefactor()) {
             mSensorOverlays = new SensorOverlays(udfpsOverlayController);
@@ -205,6 +207,11 @@ class FingerprintAuthenticationClient
         mAuthenticationStateListeners.onAuthenticationAcquired(
                 BiometricSourceType.FINGERPRINT, getRequestReason(), acquiredInfo);
         super.onAcquired(acquiredInfo, vendorCode);
+
+        try {
+            mUdfpsOverlayController.onAcquired(getSensorId(), acquiredInfo, vendorCode);
+        } catch (Exception e) {
+        }
 
         @LockoutTracker.LockoutMode final int lockoutMode =
                 getLockoutTracker().getLockoutModeForUser(getTargetUserId());
