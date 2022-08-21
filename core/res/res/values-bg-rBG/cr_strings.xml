@@ -16,28 +16,28 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_fakePackageSignature">Spoof package signature</string>
+    <string name="permlab_fakePackageSignature">Имитация на подпис пакет</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
+    <string name="permdesc_fakePackageSignature">Позволява на приложението да се представи като друго. Вредни приложения може да използват това, за да получат достъп до лична информация от приложенията. Легитимните употреби включват емулатор, удостоверяващ това, което емулира. Дайте това разрешение само с повишено внимание!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgrouplab_fake_package_signature">Spoof package signature</string>
+    <string name="permgrouplab_fake_package_signature">Имитиране на подписа на пакета</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgroupdesc_fake_package_signature">allow to spoof package signature</string>
+    <string name="permgroupdesc_fake_package_signature">Позволяване на имитация на подписа на пакета</string>
     <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
-    <string name="permgrouprequest_fake_package_signature">Allow
-        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; to spoof package signature?</string>
+    <string name="permgrouprequest_fake_package_signature">Позволи
+        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; да имитира подписа на пакета?</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Press and hold power button to unlock</string>
-    <string name="pocket_view_title">Pocket mode is on</string>
-    <string name="pocket_view_title_cancel">To use your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_view_top_tag_cancel2">Long press the power button to force quit pocket mode.</string>
-    <string name="pocket_view_top_tag_number1">1.\u0020</string>
-    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <string name="pocket_lock_message_long_press">Натиснете и задръжте бутона за изключване, за да отключите</string>
+    <string name="pocket_view_title">Джобен режим е включен</string>
+    <string name="pocket_view_title_cancel">За да използвате телефона:</string>
+    <string name="pocket_view_top_tag_cancel">Проверете дали синята зона на телефона ви е чиста</string>
+    <string name="pocket_view_top_tag_cancel2">Натиснете и задръжте бутона за изключване за да премахнете \"джобният режим\"</string>
+    <string name="pocket_view_top_tag_number1"></string>
+    <string name="pocket_view_top_tag_number2">,\u0020</string>
     <!-- Face unlock -->
-    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
+    <string name="face_unlock_disabled_idle">Лицевото отключване е деактивирано поради неактивност</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copy crash log URL</string>
-    <string name="url_copy_success">URL copied successfully</string>
-    <string name="url_copy_failed">An error occured while uploading the log to Pasty</string>
+    <string name="aerr_copy">Копирай лог файла на сринатото приложение</string>
+    <string name="url_copy_success">URL aдресът е копиран успешно</string>
+    <string name="url_copy_failed">Възникна грешка при качването на лога в Pasty</string>
 </resources>
