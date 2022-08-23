@@ -8339,7 +8339,7 @@ public class NotificationManagerService extends SystemService {
                 }
 
                 // tell the assistant service about the notification
-                if (mAssistants.isEnabled()) {
+                if (mAssistants.isEnabled() && !notification.isMediaNotification()) {
                     mAssistants.onNotificationEnqueuedLocked(r);
                     mHandler.postDelayed(
                             new PostNotificationRunnable(r.getKey(), r.getSbn().getPackageName(),
