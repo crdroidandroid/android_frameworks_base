@@ -68,6 +68,7 @@ public class PixelPropsUtils {
 
     private static final String[] extraPackagesToChange = {
             "com.android.chrome",
+            "com.android.vending",
             "com.breel.wallpapers20",
             "com.nhs.online.nhsonline"
     };
@@ -145,6 +146,7 @@ public class PixelPropsUtils {
     };
 
     private static volatile boolean sIsGms = false;
+    private static volatile boolean sIsFinsky = false;
 
     static {
         propsToKeep = new HashMap<>();
@@ -212,6 +214,9 @@ public class PixelPropsUtils {
                     if (isPixelDevice) return;
                     propsToChange.putAll(propsToChangePixel5);
                 }
+            } else if (packageName.equals("com.android.vending")) {
+                sIsFinsky = true;
+                return;
             } else {
                 if (isPixelDevice) return;
                 if (Arrays.asList(packagesToChangePixel7Pro).contains(packageName)) {
@@ -311,6 +316,11 @@ public class PixelPropsUtils {
     public static void onEngineGetCertificateChain() {
         // Check stack for SafetyNet
         if (sIsGms && isCallerSafetyNet()) {
+            throw new UnsupportedOperationException();
+        }
+
+        // Check stack for PlayIntegrity
+        if (sIsFinsky) {
             throw new UnsupportedOperationException();
         }
     }
