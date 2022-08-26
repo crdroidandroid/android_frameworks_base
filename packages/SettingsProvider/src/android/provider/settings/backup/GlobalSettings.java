@@ -105,6 +105,7 @@ public class GlobalSettings {
         Settings.Global.HDR_FORCE_CONVERSION_TYPE,
         Settings.Global.Wearable.RTL_SWIPE_TO_DISMISS_ENABLED_DEV,
         Settings.Global.Wearable.REDUCE_MOTION,
-        Settings.Global.WIFI_OFF_TIMEOUT
+        Settings.Global.WIFI_OFF_TIMEOUT,
+        Settings.Global.BLUETOOTH_OFF_TIMEOUT
     };
 }
