@@ -16,24 +16,64 @@
 
 package com.android.systemui.qs.panels.data.repository
 
+import android.content.Context
+import android.content.res.Configuration
 import android.content.res.Resources
+import android.database.ContentObserver
+import android.net.Uri
+import android.os.UserHandle
+import android.provider.Settings
 import com.android.systemui.common.ui.data.repository.ConfigurationRepository
 import com.android.systemui.dagger.SysUISingleton
+import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.res.R
 import com.android.systemui.shade.ShadeDisplayAware
 import com.android.systemui.util.kotlin.emitOnStart
+import com.android.systemui.util.kotlin.mapDirect
 import javax.inject.Inject
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.merge
 
 @SysUISingleton
-class QuickQuickSettingsRowRepository
-@Inject
-constructor(
+class QuickQuickSettingsRowRepository @Inject constructor(
+    @Application private val context: Context,
     @ShadeDisplayAware private val resources: Resources,
-    @ShadeDisplayAware configurationRepository: ConfigurationRepository,
+    @ShadeDisplayAware private val configurationRepository: ConfigurationRepository,
 ) {
-    val rows =
-        configurationRepository.onConfigurationChange.emitOnStart().map {
-            resources.getInteger(R.integer.quick_qs_paginated_grid_num_rows)
+    private fun settingsChanges(): Flow<Unit> = callbackFlow {
+        val uris: List<Uri> = listOf(
+            Settings.System.getUriFor(Settings.System.QQS_TILES_ROWS),
+            Settings.System.getUriFor(Settings.System.QQS_TILES_ROWS_LANDSCAPE)
+        )
+        val observer = object : ContentObserver(/* handler */ null) {
+            override fun onChange(selfChange: Boolean, uri: Uri?) {
+                trySend(Unit)
+            }
         }
+        val cr = context.contentResolver
+        uris.forEach { cr.registerContentObserver(it, /* notifyForDescendants */ false, observer, UserHandle.USER_ALL) }
+        awaitClose { cr.unregisterContentObserver(observer) }
+    }
+
+    private fun readRows(): Int {
+        val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        val key = if (isLandscape) Settings.System.QQS_TILES_ROWS_LANDSCAPE
+                  else Settings.System.QQS_TILES_ROWS
+        val def = resources.getInteger(R.integer.quick_qs_paginated_grid_num_rows)
+        return Settings.System.getIntForUser(
+            context.contentResolver, key, def, UserHandle.USER_CURRENT
+        ).coerceAtLeast(1)
+    }
+
+    val rows: Flow<Int> =
+        merge(configurationRepository.onConfigurationChange, settingsChanges())
+            .emitOnStart()
+            .mapDirect { readRows() }
+            .distinctUntilChanged()
+
+    val defaultRows: Int =
+        resources.getInteger(R.integer.quick_qs_paginated_grid_num_rows)
 }
