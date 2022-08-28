@@ -23,6 +23,7 @@ import com.android.systemui.development.ui.viewmodel.BuildNumberViewModel
 import com.android.systemui.inputdevice.domain.interactor.PointerDeviceInteractor
 import com.android.systemui.lifecycle.ExclusiveActivatable
 import com.android.systemui.lifecycle.Hydrator
+import com.android.systemui.qs.panels.domain.interactor.QSPaginatedRowsInteractor
 import com.android.systemui.qs.panels.ui.viewmodel.toolbar.EditModeButtonViewModel
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -39,11 +40,18 @@ constructor(
     val editModeButtonViewModelFactory: EditModeButtonViewModel.Factory,
     private val falsingInteractor: FalsingInteractor,
     pointerDeviceInteractor: PointerDeviceInteractor,
+    private val qsRowsInteractor: QSPaginatedRowsInteractor,
 ) : IconTilesViewModel by iconTilesViewModel, ExclusiveActivatable() {
 
     private val hydrator = Hydrator("PaginatedGridViewModel")
 
     var inFirstPage by inFirstPageViewModel::inFirstPage
+
+    private val rowsInternal by
+        hydrator.hydratedStateOf<Int>(traceName = "qsRows", source = qsRowsInteractor.rows)
+
+    val rows: Int
+        get() = rowsInternal
 
     val showArrowsInPagerDots by
         hydrator.hydratedStateOf(
