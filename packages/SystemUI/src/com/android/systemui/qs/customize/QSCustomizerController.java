@@ -22,6 +22,7 @@ import static com.android.systemui.qs.customize.QSCustomizer.MENU_RESET;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ import com.android.systemui.statusbar.phone.LightBarController;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.ViewController;
 
 import java.util.ArrayList;
@@ -56,7 +58,14 @@ import javax.inject.Inject;
 
 /** {@link ViewController} for {@link QSCustomizer}. */
 @QSScope
-public class QSCustomizerController extends ViewController<QSCustomizer> {
+public class QSCustomizerController extends ViewController<QSCustomizer>
+        implements TunerService.Tunable {
+
+    private static final String QS_LAYOUT_COLUMNS =
+            "system:" + Settings.System.QS_LAYOUT_COLUMNS;
+    private static final String QS_LAYOUT_COLUMNS_LANDSCAPE =
+            "system:" + Settings.System.QS_LAYOUT_COLUMNS_LANDSCAPE;
+
     private final TileQueryHelper mTileQueryHelper;
     private final QSHost mQsHost;
     private final TileAdapter mTileAdapter;
@@ -66,6 +75,7 @@ public class QSCustomizerController extends ViewController<QSCustomizer> {
     private final ConfigurationController mConfigurationController;
     private final UiEventLogger mUiEventLogger;
     private final Toolbar mToolbar;
+    private final TunerService mTunerService;
 
     private final OnMenuItemClickListener mOnMenuItemClickListener = new OnMenuItemClickListener() {
         @Override
@@ -94,12 +104,7 @@ public class QSCustomizerController extends ViewController<QSCustomizer> {
         public void onConfigChanged(Configuration newConfig) {
             mView.updateNavBackDrop(newConfig, mLightBarController);
             mView.updateResources();
-            if (mTileAdapter.updateNumColumns()) {
-                RecyclerView.LayoutManager lm = mView.getRecyclerView().getLayoutManager();
-                if (lm instanceof GridLayoutManager) {
-                    ((GridLayoutManager) lm).setSpanCount(mTileAdapter.getNumColumns());
-                }
-            }
+            updateColumns();
         }
     };
 
@@ -107,7 +112,8 @@ public class QSCustomizerController extends ViewController<QSCustomizer> {
     protected QSCustomizerController(QSCustomizer view, TileQueryHelper tileQueryHelper,
             QSHost qsHost, TileAdapter tileAdapter, ScreenLifecycle screenLifecycle,
             KeyguardStateController keyguardStateController, LightBarController lightBarController,
-            ConfigurationController configurationController, UiEventLogger uiEventLogger) {
+            ConfigurationController configurationController, UiEventLogger uiEventLogger,
+            TunerService tunerService) {
         super(view);
         mTileQueryHelper = tileQueryHelper;
         mQsHost = qsHost;
@@ -120,6 +126,7 @@ public class QSCustomizerController extends ViewController<QSCustomizer> {
         view.setSceneContainerEnabled(SceneContainerFlag.isEnabled());
 
         mToolbar = mView.findViewById(com.android.internal.R.id.action_bar);
+        mTunerService = tunerService;
     }
 
     public void applyBottomNavBarSizeToRecyclerViewPadding(int padding) {
@@ -169,15 +176,39 @@ public class QSCustomizerController extends ViewController<QSCustomizer> {
 
         mToolbar.setOnMenuItemClickListener(mOnMenuItemClickListener);
         mToolbar.setNavigationOnClickListener(v -> hide());
+
+        mTunerService.addTunable(this, QS_LAYOUT_COLUMNS);
+        mTunerService.addTunable(this, QS_LAYOUT_COLUMNS_LANDSCAPE);
     }
 
     @Override
     protected void onViewDetached() {
+        mTunerService.removeTunable(this);
         mTileQueryHelper.setListener(null);
         mToolbar.setOnMenuItemClickListener(null);
         mConfigurationController.removeCallback(mConfigurationListener);
     }
 
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QS_LAYOUT_COLUMNS:
+            case QS_LAYOUT_COLUMNS_LANDSCAPE:
+                updateColumns();
+                break;
+            default:
+                break;
+         }
+    }
+
+    private void updateColumns() {
+        if (mTileAdapter.updateNumColumns()) {
+            RecyclerView.LayoutManager lm = mView.getRecyclerView().getLayoutManager();
+            if (lm instanceof GridLayoutManager) {
+                ((GridLayoutManager) lm).setSpanCount(mTileAdapter.getNumColumns());
+            }
+        }
+    }
 
     private void reset() {
         mTileAdapter.resetTileSpecs(QSHost.getDefaultSpecs(getContext().getResources()));
