@@ -569,7 +569,7 @@ public class AudioEffect {
         try {
             AudioEffect fx = new AudioEffect(
                     EFFECT_TYPE_NULL, Objects.requireNonNull(uuid),
-                    0, -2, Objects.requireNonNull(device), true);
+                    0, -2, Objects.requireNonNull(device), false);
             fx.release();
             return true;
         } catch (Exception e) {
