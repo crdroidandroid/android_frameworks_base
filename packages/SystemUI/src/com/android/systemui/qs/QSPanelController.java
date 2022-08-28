@@ -146,6 +146,8 @@ public class QSPanelController extends QSPanelControllerBase<QSPanel> {
         mTunerService.addTunable(mView, QSPanel.QS_TILE_ANIMATION_STYLE);
         mTunerService.addTunable(mView, QSPanel.QS_TILE_ANIMATION_DURATION);
         mTunerService.addTunable(mView, QSPanel.QS_TILE_ANIMATION_INTERPOLATOR);
+        mTunerService.addTunable(mView, QSPanel.QS_LAYOUT_COLUMNS);
+        mTunerService.addTunable(mView, QSPanel.QS_LAYOUT_COLUMNS_LANDSCAPE);
 
         mView.setBrightnessRunnable(() -> {
             mView.updateResources();
