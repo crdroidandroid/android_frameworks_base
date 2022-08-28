@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 The Android Open Source Project
+ * Copyright (C) 2025 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+// QSPaginatedRowsRepository.kt
 package com.android.systemui.qs.panels.data.repository
 
 import android.content.Context
@@ -37,31 +38,33 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.merge
 
 @SysUISingleton
-class QuickQuickSettingsRowRepository @Inject constructor(
+class QSPaginatedRowsRepository
+@Inject
+constructor(
     @Application private val context: Context,
     @ShadeDisplayAware private val resources: Resources,
     @ShadeDisplayAware private val configurationRepository: ConfigurationRepository,
 ) {
     private fun settingsChanges(): Flow<Unit> = callbackFlow {
         val uris: List<Uri> = listOf(
-            Settings.System.getUriFor(Settings.System.QQS_TILES_ROWS),
-            Settings.System.getUriFor(Settings.System.QQS_TILES_ROWS_LANDSCAPE)
+            Settings.System.getUriFor(Settings.System.QS_TILES_ROWS),
+            Settings.System.getUriFor(Settings.System.QS_TILES_ROWS_LANDSCAPE)
         )
-        val observer = object : ContentObserver(/* handler */ null) {
+        val observer = object : ContentObserver(null) {
             override fun onChange(selfChange: Boolean, uri: Uri?) {
                 trySend(Unit)
             }
         }
         val cr = context.contentResolver
-        uris.forEach { cr.registerContentObserver(it, /* notifyForDescendants */ false, observer, UserHandle.USER_ALL) }
+        uris.forEach { cr.registerContentObserver(it, false, observer, UserHandle.USER_ALL) }
         awaitClose { cr.unregisterContentObserver(observer) }
     }
 
     private fun readRows(): Int {
         val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val key = if (isLandscape) Settings.System.QQS_TILES_ROWS_LANDSCAPE
-                  else Settings.System.QQS_TILES_ROWS
-        val def = resources.getInteger(R.integer.quick_qs_paginated_grid_num_rows)
+        val key = if (isLandscape) Settings.System.QS_TILES_ROWS_LANDSCAPE
+                  else Settings.System.QS_TILES_ROWS
+        val def = resources.getInteger(R.integer.quick_settings_paginated_grid_num_rows)
         return Settings.System.getIntForUser(
             context.contentResolver, key, def, UserHandle.USER_CURRENT
         ).coerceAtLeast(1)
@@ -73,5 +76,5 @@ class QuickQuickSettingsRowRepository @Inject constructor(
             .mapLatest { readRows() }
 
     val defaultRows: Int =
-        resources.getInteger(R.integer.quick_qs_paginated_grid_num_rows)
+        resources.getInteger(R.integer.quick_settings_paginated_grid_num_rows)
 }
