@@ -37,6 +37,7 @@ import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.qs.PageIndicator.PageScrollActionListener.Direction;
 import com.android.systemui.qs.QSPanel.QSTileLayout;
 import com.android.systemui.qs.QSPanelControllerBase.TileRecord;
+import com.android.systemui.qs.TileUtils;
 import com.android.systemui.qs.logging.QSLogger;
 import com.android.systemui.res.R;
 
@@ -512,7 +513,7 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
 
     @Override
     public boolean setMinRows(int minRows) {
-        mMinRows = minRows;
+        mMinRows = Math.min(minRows, TileUtils.getQSRowsCount(getContext()));
         boolean changed = false;
         for (int i = 0; i < mPages.size(); i++) {
             if (mPages.get(i).setMinRows(minRows)) {
@@ -530,10 +531,10 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
 
     @Override
     public boolean setMaxColumns(int maxColumns) {
-        mMaxColumns = maxColumns;
+        mMaxColumns = Math.max(maxColumns, TileUtils.getQSColumnsCount(getContext()));
         boolean changed = false;
         for (int i = 0; i < mPages.size(); i++) {
-            if (mPages.get(i).setMaxColumns(maxColumns)) {
+            if (mPages.get(i).setMaxColumns(mMaxColumns)) {
                 changed = true;
                 forceTilesRedistribution("maxColumns in pages changed");
             }
@@ -643,6 +644,30 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
     public int getNumTilesFirstPage() {
         if (mPages.size() == 0) return 0;
         return mPages.get(0).mRecords.size();
+    }
+
+    @Override
+    public int getResourceColumns() {
+        if (mPages.size() == 0)
+            return TileUtils.getQSColumnsCount(getContext());
+        TileLayout currentPage = mPages.get(getCurrentPageNumber());
+        return currentPage.getResourceColumns();
+    }
+
+    @Override
+    public int getResourceRows() {
+        if (mPages.size() == 0)
+            return TileUtils.getQSRowsCount(getContext());
+        TileLayout currentPage = mPages.get(getCurrentPageNumber());
+        return currentPage.getResourceRows();
+    }
+
+    @Override
+    public void updateSettings() {
+        for (int i = 0; i < mPages.size(); i++) {
+            mPages.get(i).updateSettings();
+        }
+        mDistributeTiles = true;
     }
 
     public void startTileReveal(Set<String> tilesToReveal, final Runnable postAnimation) {
