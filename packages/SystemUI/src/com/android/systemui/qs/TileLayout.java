@@ -3,6 +3,7 @@ package com.android.systemui.qs;
 import static com.android.systemui.util.Utils.useQsMediaPlayer;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -27,6 +28,8 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     public static final int NO_MAX_COLUMNS = 100;
 
     private static final String TAG = "TileLayout";
+
+    private static final int NUM_COLUMNS_ID = R.integer.quick_settings_num_columns;
 
     protected int mColumns;
     protected int mCellWidth;
@@ -58,6 +61,12 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         setFocusableInTouchMode(true);
         mLessRows = ((Settings.System.getInt(context.getContentResolver(), "qs_less_rows", 0) != 0)
                 || useQsMediaPlayer(context));
+        updateResources();
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         updateResources();
     }
 
@@ -128,21 +137,21 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         mCellMarginVertical= res.getDimensionPixelSize(R.dimen.qs_tile_margin_vertical);
         mMaxAllowedRows = Math.max(1, res.getInteger(R.integer.quick_settings_max_rows));
         if (mLessRows) mMaxAllowedRows = Math.max(mMinRows, mMaxAllowedRows - 1);
-        if (updateColumns()) {
-            requestLayout();
-            return true;
-        }
-        return false;
+        return updateColumns();
     }
 
     protected boolean useSidePadding() {
         return true;
     }
 
-    private boolean updateColumns() {
+    public boolean updateColumns() {
         int oldColumns = mColumns;
         mColumns = Math.min(getResourceColumns(), mMaxColumns);
-        return oldColumns != mColumns;
+        if (oldColumns != mColumns) {
+            requestLayout();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -314,13 +323,12 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     }
 
     public int getResourceColumns() {
-        int resourceColumns = Math.max(2, getResources().getInteger(R.integer.quick_settings_num_columns));
-        return TileUtils.getQSColumnsCount(mContext, resourceColumns);
+        int columns = getResources().getInteger(NUM_COLUMNS_ID);
+        return TileUtils.getQSColumnsCount(mContext, columns);
     }
 
     @Override
     public void updateSettings() {
-        setMaxColumns(getResourceColumns());
-        requestLayout();
+        updateResources();
     }
 }
