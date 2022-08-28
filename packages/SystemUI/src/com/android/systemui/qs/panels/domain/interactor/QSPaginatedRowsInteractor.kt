@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 The Android Open Source Project
+ * Copyright (C) 2025 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,21 @@
 package com.android.systemui.qs.panels.domain.interactor
 
 import com.android.systemui.dagger.SysUISingleton
-import com.android.systemui.qs.panels.data.repository.QuickQuickSettingsRowRepository
+import com.android.systemui.dagger.qualifiers.Application
+import com.android.systemui.qs.panels.data.repository.QSPaginatedRowsRepository
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 
 @SysUISingleton
-class QuickQuickSettingsRowInteractor
+class QSPaginatedRowsInteractor
 @Inject
 constructor(
-    quickQuickSettingsRowRepository: QuickQuickSettingsRowRepository,
+    @Application private val scope: CoroutineScope,
+    repo: QSPaginatedRowsRepository,
 ) {
-    val rows = quickQuickSettingsRowRepository.rows
-
-    val defaultRows = quickQuickSettingsRowRepository.defaultRows
+    val rows: StateFlow<Int> =
+        repo.rows.stateIn(scope, SharingStarted.WhileSubscribed(), repo.defaultRows)
 }
