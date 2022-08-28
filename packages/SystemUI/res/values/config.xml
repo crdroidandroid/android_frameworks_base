@@ -68,7 +68,7 @@
     <integer name="quick_settings_num_columns">2</integer>
 
     <!-- The number of rows in the QuickSettings -->
-    <integer name="quick_settings_max_rows">4</integer>
+    <integer name="quick_settings_max_rows">1</integer>
 
     <!-- The number of rows in the paginated grid QuickSettings -->
     <integer name="quick_settings_paginated_grid_num_rows">4</integer>
