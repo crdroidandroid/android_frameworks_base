@@ -7312,6 +7312,36 @@ public final class Settings {
         public static final String QS_BRIGHTNESS_SLIDER_SHAPE = "qs_brightness_slider_shape";
 
         /**
+         * @hide
+         */
+        public static final String QS_TILES_COLUMNS_LANDSCAPE = "qs_tiles_columns_landscape";
+
+        /**
+         * @hide
+         */
+        public static final String QS_TILES_COLUMNS = "qs_tiles_columns";
+
+        /**
+         * @hide
+         */
+        public static final String QS_TILES_ROWS_LANDSCAPE = "qs_tiles_rows_landscape";
+
+        /**
+         * @hide
+         */
+        public static final String QS_TILES_ROWS = "qs_tiles_rows";
+
+        /**
+         * @hide
+         */
+        public static final String QQS_TILES_ROWS_LANDSCAPE = "qqs_tiles_rows_landscape";
+
+        /**
+         * @hide
+         */
+        public static final String QQS_TILES_ROWS = "qqs_tiles_rows";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
