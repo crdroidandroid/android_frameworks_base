@@ -158,18 +158,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
         setId(generateViewId())
 
         vertical = TileUtils.getQSTileVerticalLayout(context, if (vertical) 1 else 0)
-        if (vertical) {
-            orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER_HORIZONTAL or Gravity.CENTER_VERTICAL
-        } else {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL or Gravity.START
-        }
-
         labelHide = TileUtils.getQSTileLabelHide(context)
-
-        if (labelHide)
-            gravity = Gravity.CENTER_HORIZONTAL or Gravity.CENTER_VERTICAL
 
         importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
         clipChildren = false
@@ -178,15 +167,12 @@ open class QSTileViewImpl @JvmOverloads constructor(
         background = createTileBackground()
         setColor(getBackgroundColorForState(QSTile.State.DEFAULT_STATE))
 
-        val padding = resources.getDimensionPixelSize(R.dimen.qs_tile_padding)
-        val startPadding = if (vertical) padding else resources.getDimensionPixelSize(R.dimen.qs_tile_start_padding)
-        setPaddingRelative(startPadding, padding, padding, padding)
-
         val iconSize = resources.getDimensionPixelSize(R.dimen.qs_icon_size)
         addView(_icon, LayoutParams(iconSize, iconSize))
 
         createAndAddLabels()
         createAndAddSideView()
+        updateResources()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
@@ -219,7 +205,6 @@ open class QSTileViewImpl @JvmOverloads constructor(
             width = iconSize
         }
 
-        vertical = TileUtils.getQSTileVerticalLayout(context, if (vertical) 1 else 0)
         if (vertical) {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL or Gravity.CENTER_VERTICAL
@@ -227,8 +212,6 @@ open class QSTileViewImpl @JvmOverloads constructor(
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL or Gravity.START
         }
-
-        labelHide = TileUtils.getQSTileLabelHide(context)
 
         if (labelHide)
             gravity = Gravity.CENTER_HORIZONTAL or Gravity.CENTER_VERTICAL
