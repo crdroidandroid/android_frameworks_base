@@ -74,6 +74,8 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
             "system:" + Settings.System.QS_LAYOUT_COLUMNS_LANDSCAPE;
     private static final String QS_TILE_LABEL_HIDE =
             "system:" + Settings.System.QS_TILE_LABEL_HIDE;
+    private static final String QS_TILE_LABEL_SIZE =
+            "system:" + Settings.System.QS_TILE_LABEL_SIZE;
 
     private static final String TAG = "QSPanelControllerBase";
     protected final QSHost mHost;
@@ -210,6 +212,7 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
         mTunerService.addTunable(this, QS_LAYOUT_COLUMNS);
         mTunerService.addTunable(this, QS_LAYOUT_COLUMNS_LANDSCAPE);
         mTunerService.addTunable(this, QS_TILE_LABEL_HIDE);
+        mTunerService.addTunable(this, QS_TILE_LABEL_SIZE);
     }
 
     @Override
@@ -510,6 +513,7 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
             case QS_LAYOUT_COLUMNS:
             case QS_LAYOUT_COLUMNS_LANDSCAPE:
             case QS_TILE_LABEL_HIDE:
+            case QS_TILE_LABEL_SIZE:
                 if (mView.getTileLayout() != null) {
                     mView.getTileLayout().updateSettings();
                     setTiles();
