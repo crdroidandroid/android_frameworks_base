@@ -43,7 +43,6 @@ import android.widget.Switch
 import android.widget.TextView
 import androidx.annotation.VisibleForTesting
 import com.android.settingslib.Utils
-import com.android.systemui.FontSizeUtils
 import com.android.systemui.R
 import com.android.systemui.animation.LaunchableView
 import com.android.systemui.animation.LaunchableViewDelegate
@@ -155,6 +154,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
     private var vertical = false
     private val forceHideCheveron = true
     private var labelHide = false
+    private var labelSize = 14f
 
     init {
         val typedValue = TypedValue()
@@ -166,6 +166,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
 
         vertical = TileUtils.getQSTileVerticalLayout(context, if (vertical) 1 else 0)
         labelHide = TileUtils.getQSTileLabelHide(context)
+        labelSize = TileUtils.getQSTileLabelSize(context)
 
         importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
         clipChildren = false
@@ -203,8 +204,8 @@ open class QSTileViewImpl @JvmOverloads constructor(
     }
 
     fun updateResources() {
-        FontSizeUtils.updateFontSize(label, R.dimen.qs_tile_text_size)
-        FontSizeUtils.updateFontSize(secondaryLabel, R.dimen.qs_tile_text_size)
+        label.setTextSize(TypedValue.COMPLEX_UNIT_SP, labelSize)
+        secondaryLabel.setTextSize(TypedValue.COMPLEX_UNIT_SP, labelSize)
 
         val iconSize = context.resources.getDimensionPixelSize(R.dimen.qs_icon_size)
         _icon.layoutParams.apply {
