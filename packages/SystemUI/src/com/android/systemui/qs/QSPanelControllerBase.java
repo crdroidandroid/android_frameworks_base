@@ -266,6 +266,7 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
 
         mTunerService.addTunable(this, QSPanel.QS_TILE_VERTICAL_LAYOUT);
         mTunerService.addTunable(this, QSPanel.QS_TILE_LABEL_HIDE);
+        mTunerService.addTunable(this, QSPanel.QS_TILE_LABEL_SIZE);
         mTunerService.addTunable(this, QSPanel.QS_LAYOUT_COLUMNS);
         mTunerService.addTunable(this, QSPanel.QS_LAYOUT_COLUMNS_LANDSCAPE);
         mTunerService.addTunable(this, QSPanel.QS_LAYOUT_ROWS);
@@ -646,6 +647,7 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
         switch (key) {
             case QSPanel.QS_TILE_VERTICAL_LAYOUT:
             case QSPanel.QS_TILE_LABEL_HIDE:
+            case QSPanel.QS_TILE_LABEL_SIZE:
             case QSPanel.QS_LAYOUT_COLUMNS:
             case QSPanel.QS_LAYOUT_COLUMNS_LANDSCAPE:
             case QSPanel.QS_LAYOUT_ROWS:
