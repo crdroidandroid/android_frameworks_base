@@ -82,6 +82,8 @@ public class QSPanel extends LinearLayout implements Tunable {
             "system:" + Settings.System.QS_TILE_VERTICAL_LAYOUT;
     public static final String QS_TILE_LABEL_HIDE =
             "system:" + Settings.System.QS_TILE_LABEL_HIDE;
+    public static final String QS_TILE_LABEL_SIZE =
+            "system:" + Settings.System.QS_TILE_LABEL_SIZE;
     public static final String QS_LAYOUT_COLUMNS =
             "system:" + Settings.System.QS_LAYOUT_COLUMNS;
     public static final String QS_LAYOUT_COLUMNS_LANDSCAPE =
