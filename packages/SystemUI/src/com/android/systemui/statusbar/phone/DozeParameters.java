@@ -348,7 +348,7 @@ public class DozeParameters implements
     }
 
     private boolean willAnimateFromLockScreenToAod() {
-        return getAlwaysOn() && mKeyguardVisible;
+        return canControlUnlockedScreenOff() && mKeyguardVisible;
     }
 
     private boolean getBoolean(String propName, int resId) {
