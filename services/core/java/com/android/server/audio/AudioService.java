@@ -56,6 +56,7 @@ import static android.media.audio.Flags.scoManagedByAudio;
 import static android.media.audiopolicy.Flags.enableFadeManagerConfiguration;
 import static android.os.Process.FIRST_APPLICATION_UID;
 import static android.os.Process.INVALID_UID;
+import static android.provider.Settings.Secure.VOLUME_HUSH_CYCLE;
 import static android.provider.Settings.Secure.VOLUME_HUSH_MUTE;
 import static android.provider.Settings.Secure.VOLUME_HUSH_OFF;
 import static android.provider.Settings.Secure.VOLUME_HUSH_VIBRATE;
@@ -5957,6 +5958,25 @@ public class AudioService extends IAudioService.Stub
                 effect = VibrationEffect.get(VibrationEffect.EFFECT_HEAVY_CLICK);
                 ringerMode = AudioManager.RINGER_MODE_VIBRATE;
                 toastText = com.android.internal.R.string.volume_dialog_ringer_guidance_vibrate;
+                break;
+            case VOLUME_HUSH_CYCLE:
+                switch (mRingerMode) {
+                    case AudioManager.RINGER_MODE_NORMAL:
+                        effect = VibrationEffect.get(VibrationEffect.EFFECT_HEAVY_CLICK);
+                        ringerMode = AudioManager.RINGER_MODE_VIBRATE;
+                        toastText = com.android.internal.R.string.volume_dialog_ringer_guidance_vibrate;
+                        break;
+                    case AudioManager.RINGER_MODE_VIBRATE:
+                        effect = VibrationEffect.get(VibrationEffect.EFFECT_DOUBLE_CLICK);
+                        ringerMode = AudioManager.RINGER_MODE_SILENT;
+                        toastText = com.android.internal.R.string.volume_dialog_ringer_guidance_silent;
+                        break;
+                    case AudioManager.RINGER_MODE_SILENT:
+                        effect = VibrationEffect.get(VibrationEffect.EFFECT_HEAVY_CLICK);
+                        ringerMode = AudioManager.RINGER_MODE_NORMAL;
+                        toastText = com.android.internal.R.string.volume_dialog_ringer_guidance_normal;
+                        break;
+                }
                 break;
         }
         maybeVibrate(effect, reason);
