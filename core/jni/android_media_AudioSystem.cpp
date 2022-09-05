@@ -27,6 +27,7 @@
 #include <media/AudioContainers.h>
 #include <media/AudioPolicy.h>
 #include <media/AudioSystem.h>
+#include <media/AppVolume.h>
 #include <media/MicrophoneInfo.h>
 #include <nativehelper/JNIHelp.h>
 #include <nativehelper/ScopedLocalRef.h>
@@ -47,6 +48,9 @@
 #include "android_media_MicrophoneInfo.h"
 #include "android_util_Binder.h"
 #include "core_jni_helpers.h"
+
+static jclass gAppVolumeClass;
+static jmethodID gAppVolumeCstor;
 
 // ----------------------------------------------------------------------------
 
@@ -841,6 +845,88 @@ android_media_AudioSystem_getMasterBalance(JNIEnv *env, jobject thiz)
         balance = 0.f;
     }
     return balance;
+}
+
+static jint
+android_media_AudioSystem_setAppVolume(JNIEnv *env, jobject thiz, jstring packageName, jfloat value)
+{
+    const jchar* c_packageName = env->GetStringCritical(packageName, 0);
+    String8 package8 = String8(reinterpret_cast<const char16_t*>(c_packageName), env->GetStringLength(packageName));
+    env->ReleaseStringCritical(packageName, c_packageName);
+    return (jint) check_AudioSystem_Command(AudioSystem::setAppVolume(package8, value));
+}
+
+static jint
+android_media_AudioSystem_setAppMute(JNIEnv *env, jobject thiz, jstring packageName, jboolean mute)
+{
+    const jchar* c_packageName = env->GetStringCritical(packageName, 0);
+    String8 package8 = String8(reinterpret_cast<const char16_t*>(c_packageName), env->GetStringLength(packageName));
+    env->ReleaseStringCritical(packageName, c_packageName);
+    return (jint) check_AudioSystem_Command(AudioSystem::setAppMute(package8, mute));
+}
+
+jint convertAppVolumeFromNative(JNIEnv *env, jobject *jAppVolume, const media::AppVolume *AppVolume)
+{
+    jint jStatus = (jint)AUDIO_JAVA_SUCCESS;
+    jstring jPackageName;
+    jfloat jVolume;
+    jboolean jMute;
+    jboolean jActive;
+
+    if (AppVolume == NULL || jAppVolume == NULL) {
+        jStatus = (jint)AUDIO_JAVA_ERROR;
+        goto exit;
+    }
+
+    jPackageName = env->NewStringUTF(AppVolume->packageName);
+    jVolume = AppVolume->volume;
+    jMute =  AppVolume->muted;
+    jActive = AppVolume->active;
+
+    *jAppVolume = env->NewObject(gAppVolumeClass, gAppVolumeCstor,
+                                jPackageName, jMute, jVolume, jActive);
+
+    env->DeleteLocalRef(jPackageName);
+exit:
+    return jStatus;
+}
+
+static jint
+android_media_AudioSystem_listAppVolumes(JNIEnv *env, jobject clazz, jobject jVolumes)
+{
+    ALOGV("listAppVolumes");
+
+    if (jVolumes == NULL) {
+        ALOGE("listAppVolumes NULL AppVolume ArrayList");
+        return (jint)AUDIO_JAVA_BAD_VALUE;
+    }
+    if (!env->IsInstanceOf(jVolumes, gArrayListClass)) {
+        ALOGE("listAppVolumes not an arraylist");
+        return (jint)AUDIO_JAVA_BAD_VALUE;
+    }
+
+    std::vector<media::AppVolume> volumes;
+
+    jint jStatus = (jint)AUDIO_JAVA_SUCCESS;
+    status_t status = AudioSystem::listAppVolumes(&volumes);
+
+    if (status != NO_ERROR) {
+        ALOGE("AudioSystem::listAppVolumes error %d", status);
+        jStatus = nativeToJavaStatus(status);
+        return jStatus;
+    }
+
+    for (size_t i = 0; i < volumes.size(); i++) {
+        jobject jAppVolume;
+        jStatus = convertAppVolumeFromNative(env, &jAppVolume, &volumes[i]);
+        if (jStatus != AUDIO_JAVA_SUCCESS) {
+            return jStatus;
+        }
+        env->CallBooleanMethod(jVolumes, gArrayListMethods.add, jAppVolume);
+        env->DeleteLocalRef(jAppVolume);
+    }
+
+    return jStatus;
 }
 
 static jint
@@ -3103,7 +3189,13 @@ static const JNINativeMethod gMethods[] =
           (void *)android_media_AudioSystem_getDirectPlaybackSupport},
          {"getDirectProfilesForAttributes",
           "(Landroid/media/AudioAttributes;Ljava/util/ArrayList;)I",
-          (void *)android_media_AudioSystem_getDirectProfilesForAttributes}};
+          (void *)android_media_AudioSystem_getDirectProfilesForAttributes},
+          {"setAppVolume", "(Ljava/lang/String;F)I",
+          (void *)android_media_AudioSystem_setAppVolume},
+         {"setAppMute", "(Ljava/lang/String;Z)I",
+          (void *)android_media_AudioSystem_setAppMute},
+         {"listAppVolumes", "(Ljava/util/ArrayList;)I",
+          (void *)android_media_AudioSystem_listAppVolumes}};
 
 static const JNINativeMethod gEventHandlerMethods[] = {
     {"native_setup",
@@ -3341,6 +3433,11 @@ int register_android_media_AudioSystem(JNIEnv *env)
     gVibratorMethods.getQFactor = GetMethodIDOrDie(env, vibratorClass, "getQFactor", "()F");
     gVibratorMethods.getMaxAmplitude =
             GetMethodIDOrDie(env, vibratorClass, "getHapticChannelMaximumAmplitude", "()F");
+
+    jclass AppVolumeClass = FindClassOrDie(env, "android/media/AppVolume");
+    gAppVolumeClass = MakeGlobalRefOrDie(env, AppVolumeClass);
+    gAppVolumeCstor = GetMethodIDOrDie(env, AppVolumeClass, "<init>",
+            "(Ljava/lang/String;ZFZ)V");
 
     AudioSystem::addErrorCallback(android_media_AudioSystem_error_callback);
 
