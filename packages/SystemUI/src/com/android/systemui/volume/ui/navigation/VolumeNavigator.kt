@@ -94,6 +94,11 @@ constructor(
                 )
             VolumePanelRoute.SYSTEM_UI_VOLUME_PANEL ->
                 volumePanelFactory.create(aboveStatusBar = true, view = null)
+            VolumePanelRoute.APP_VOLUME_PANEL ->
+                activityStarter.startActivity(
+                    /* intent= */ Intent(Settings.Panel.ACTION_APP_VOLUME),
+                    /* dismissShade= */ true
+                )
         }
     }
 
