@@ -303,7 +303,8 @@ public class CastTile extends QSTileImpl<BooleanState> {
                             refreshState();
                         }
                     } else {
-                        boolean enabledAndConnected = indicators.enabled && indicators.qsIcon.visible;
+                        boolean enabledAndConnected = indicators.enabled
+                            && (indicators.qsIcon == null ? false : indicators.qsIcon.visible);
                         if (enabledAndConnected != mWifiConnected) {
                             mWifiConnected = enabledAndConnected;
                             // Hotspot is not connected, so changes here should update
