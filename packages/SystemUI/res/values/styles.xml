@@ -497,6 +497,8 @@
         <!-- of ActionsDialogLite relies on this to be null (resource=0) to detect when to run -->
         <!-- the in-window animation. -->
         <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowBlurBehindEnabled">true</item>
+        <item name="android:windowBlurBehindRadius">@dimen/max_window_blur_radius</item>
     </style>
 
     <style name="QSBorderlessButton">
