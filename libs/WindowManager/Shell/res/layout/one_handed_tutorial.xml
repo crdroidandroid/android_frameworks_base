@@ -42,7 +42,7 @@
         android:layout_marginBottom="0dp"
         android:gravity="center_horizontal"
         android:textAlignment="center"
-        android:fontFamily="google-sans-medium"
+        android:fontFamily="@*android:string/config_bodyFontFamily"
         android:text="@string/one_handed_tutorial_title"
         android:textSize="16sp"
         android:textColor="@android:color/white"/>
