@@ -64,7 +64,7 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="android:fontFamily">google-sans-medium</item>
+        <item name="android:fontFamily">@*android:string/config_headlineFontFamilyMedium</item>
         <item name="android:layout_marginTop">8dp</item>
     </style>
 </resources>
