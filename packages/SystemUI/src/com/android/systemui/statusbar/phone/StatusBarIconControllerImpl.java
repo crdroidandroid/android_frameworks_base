@@ -37,6 +37,7 @@ import com.android.systemui.demomode.DemoModeController;
 import com.android.systemui.dump.DumpManager;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.StatusIconDisplayable;
+import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.BluetoothIconState;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.CallIndicatorIconState;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.MobileIconState;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.WifiIconState;
@@ -208,6 +209,23 @@ public class StatusBarIconControllerImpl implements Tunable,
             setIcon(slot, holder);
         } else {
             holder.setWifiState(state);
+            handleSet(slot, holder);
+        }
+    }
+
+    @Override
+    public void setBluetoothIcon(String slot, BluetoothIconState state) {
+        if (state == null) {
+            removeIcon(slot, 0);
+            return;
+        }
+
+        StatusBarIconHolder holder = mStatusBarIconList.getIconHolder(slot, 0);
+        if (holder == null) {
+            holder = StatusBarIconHolder.fromBluetoothIconState(state);
+            setIcon(slot, holder);
+        } else {
+            holder.setBluetoothState(state);
             handleSet(slot, holder);
         }
     }
