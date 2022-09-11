@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2022, Paranoid Android
+     SPDX-License-Identifier: Apache-2.0
+-->
+<com.android.systemui.statusbar.StatusBarBluetoothView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bluetooth_combo"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical">
+
+    <com.android.keyguard.AlphaOptimizedLinearLayout
+        android:id="@+id/bluetooth_group"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/bluetooth_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="@*android:dimen/status_bar_system_icon_size"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:src="@drawable/stat_sys_data_bluetooth_connected" />
+
+        <ImageView
+            android:id="@+id/bluetooth_battery"
+            android:layout_width="wrap_content"
+            android:layout_height="@*android:dimen/status_bar_system_icon_size"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_marginStart="-2dp"
+            android:paddingEnd="3dp"
+            android:visibility="gone" />
+    </com.android.keyguard.AlphaOptimizedLinearLayout>
+
+</com.android.systemui.statusbar.StatusBarBluetoothView>
