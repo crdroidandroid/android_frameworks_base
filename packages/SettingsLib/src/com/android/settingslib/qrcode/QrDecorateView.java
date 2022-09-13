@@ -34,16 +34,16 @@ public class QrDecorateView extends View {
     private static final float CORNER_LINE_LENGTH = 264f;   // 264dp
     private static final float CORNER_RADIUS = 16f;         // 16dp
 
-    final private int mCornerColor;
-    final private int mFocusedCornerColor;
-    final private int mBackgroundColor;
+    private final int mCornerColor;
+    private final int mFocusedCornerColor;
+    private final int mBackgroundColor;
 
-    final private Paint mStrokePaint;
-    final private Paint mTransparentPaint;
-    final private Paint mBackgroundPaint;
+    private final Paint mStrokePaint;
+    private final Paint mTransparentPaint;
+    private final Paint mBackgroundPaint;
 
-    final private float mRadius;
-    final private float mInnerRidus;
+    private final float mRadius;
+    private final float mInnerRadius;
 
     private Bitmap mMaskBitmap;
     private Canvas mMaskCanvas;
@@ -72,7 +72,7 @@ public class QrDecorateView extends View {
         mRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, CORNER_RADIUS,
                 getResources().getDisplayMetrics());
         // Inner radius needs to minus stroke width for keeping the width of border consistent.
-        mInnerRidus = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+        mInnerRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 CORNER_RADIUS - CORNER_STROKE_WIDTH, getResources().getDisplayMetrics());
 
         mCornerColor = context.getResources().getColor(R.color.qr_corner_line_color);
@@ -95,6 +95,9 @@ public class QrDecorateView extends View {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
 
+        if (!isLaidOut()) {
+            return;
+        }
         if(mMaskBitmap == null) {
             mMaskBitmap = Bitmap.createBitmap(getWidth() > 0 ? getWidth() : 1,
                     getHeight() > 0 ? getHeight() : 1, Bitmap.Config.ARGB_8888);
@@ -106,6 +109,9 @@ public class QrDecorateView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (mMaskCanvas == null || mMaskBitmap == null) {
+            return;
+        }
         // Set frame line color.
         mStrokePaint.setColor(mFocused ? mFocusedCornerColor : mCornerColor);
         // Draw background color.
@@ -113,7 +119,7 @@ public class QrDecorateView extends View {
         // Draw outer corner.
         mMaskCanvas.drawRoundRect(mOuterFrame, mRadius, mRadius, mStrokePaint);
         // Draw inner transparent corner.
-        mMaskCanvas.drawRoundRect(mInnerFrame, mInnerRidus, mInnerRidus, mTransparentPaint);
+        mMaskCanvas.drawRoundRect(mInnerFrame, mInnerRadius, mInnerRadius, mTransparentPaint);
 
         canvas.drawBitmap(mMaskBitmap, 0, 0, mBackgroundPaint);
         super.onDraw(canvas);
