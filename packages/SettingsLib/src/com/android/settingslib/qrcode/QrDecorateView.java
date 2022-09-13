@@ -96,7 +96,8 @@ public class QrDecorateView extends View {
         super.onLayout(changed, left, top, right, bottom);
 
         if(mMaskBitmap == null) {
-            mMaskBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+            mMaskBitmap = Bitmap.createBitmap(getWidth() > 0 ? getWidth() : 1,
+                    getHeight() > 0 ? getHeight() : 1, Bitmap.Config.ARGB_8888);
             mMaskCanvas = new Canvas(mMaskBitmap);
         }
 
