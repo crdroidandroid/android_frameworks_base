@@ -21,8 +21,11 @@ import android.animation.AnimatorListenerAdapter
 import android.annotation.IdRes
 import android.app.PendingIntent
 import android.app.StatusBarManager
+import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.Insets
 import android.os.Bundle
 import android.os.Trace
@@ -92,6 +95,7 @@ constructor(
     private val privacyIconsController: HeaderPrivacyIconsController,
     private val insetsProviderStore: StatusBarContentInsetsProviderStore,
     @ShadeDisplayAware private val configurationController: ConfigurationController,
+    private val context: Context,
     private val variableDateViewControllerFactory: VariableDateViewController.Factory,
     @Named(SHADE_HEADER) private val batteryMeterViewController: BatteryMeterViewController,
     private val dumpManager: DumpManager,
@@ -295,12 +299,33 @@ constructor(
                 clock.onDensityOrFontScaleChanged()
             }
 
+            override fun onUiModeChanged() {
+                updateIconManagerColors()
+            }
+
             override fun onThemeChanged() {
-                clock.setTextAppearance(R.style.TextAppearance_QS_Status)
-                date.setTextAppearance(R.style.TextAppearance_QS_Status)
-                mShadeCarrierGroup.updateTextAppearance(R.style.TextAppearance_QS_Status_Carriers)
+                updateIconManagerColors()
             }
         }
+
+    private fun updateIconManagerColors() {
+        val fgColor =
+            Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
+        val bgColor =
+            Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse)
+
+        iconManager.setTint(fgColor, bgColor)
+
+        batteryIcon.updateColors(
+            fgColor /* foreground */,
+            bgColor /* background */,
+            fgColor, /* single tone (current default) */
+        )
+        clock.setTextAppearance(R.style.TextAppearance_QS_Status)
+        date.setTextAppearance(R.style.TextAppearance_QS_Status)
+        mShadeCarrierGroup.updateTextAppearance(R.style.TextAppearance_QS_Status_Carriers)
+        updateResources()
+    }
 
     private val nextAlarmCallback =
         NextAlarmController.NextAlarmChangeCallback { nextAlarm ->
@@ -314,19 +339,8 @@ constructor(
         // battery settings same as in QS icons
         batteryMeterViewController.ignoreTunerUpdates()
 
-        val fgColor =
-            Utils.getColorAttrDefaultColor(header.context, android.R.attr.textColorPrimary)
-        val bgColor =
-            Utils.getColorAttrDefaultColor(header.context, android.R.attr.textColorPrimaryInverse)
-
         iconManager = tintedIconManagerFactory.create(iconContainer, StatusBarLocation.QS)
-        iconManager.setTint(fgColor, bgColor)
-
-        batteryIcon.updateColors(
-            fgColor /* foreground */,
-            bgColor /* background */,
-            fgColor, /* single tone (current default) */
-        )
+        updateIconManagerColors()
 
         carrierIconSlots =
             listOf(header.context.getString(com.android.internal.R.string.status_bar_mobile))
@@ -361,6 +375,7 @@ constructor(
         demoModeController.addCallback(demoModeReceiver)
         statusBarIconController.addIconGroup(iconManager)
         nextAlarmController.addCallback(nextAlarmCallback)
+        updateResources()
         systemIconsHoverContainer.setOnHoverListener(
             statusOverlayHoverListenerFactory.createListener(systemIconsHoverContainer)
         )
