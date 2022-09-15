@@ -149,10 +149,12 @@
         <item name="android:letterSpacing">0.01</item>
     </style>
 
-    <style name="TextAppearance.QS.Status.Carriers" />
+    <style name="TextAppearance.QS.Status.Carriers">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
 
     <style name="TextAppearance.QS.Status.Carriers.NoCarrierText">
-        <item name="android:textColor">?attr/onSurfaceVariant</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
     <style name="TextAppearance.QS.Status.Build">
