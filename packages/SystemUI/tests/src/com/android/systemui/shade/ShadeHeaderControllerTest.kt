@@ -189,6 +189,7 @@ class ShadeHeaderControllerTest : SysuiTestCase() {
                 privacyIconsController,
                 insetsProvider,
                 configurationController,
+                mockedContext,
                 variableDateViewControllerFactory,
                 batteryMeterViewController,
                 dumpManager,
