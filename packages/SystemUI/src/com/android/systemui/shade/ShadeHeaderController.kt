@@ -22,7 +22,10 @@ import android.annotation.IdRes
 import android.app.PendingIntent
 import android.app.StatusBarManager
 import android.content.Intent
+import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Trace
 import android.os.Trace.TRACE_TAG_APP
@@ -91,6 +94,7 @@ constructor(
     private val privacyIconsController: HeaderPrivacyIconsController,
     private val insetsProvider: StatusBarContentInsetsProvider,
     private val configurationController: ConfigurationController,
+    private val context: Context,
     private val variableDateViewControllerFactory: VariableDateViewController.Factory,
     @Named(SHADE_HEADER) private val batteryMeterViewController: BatteryMeterViewController,
     private val dumpManager: DumpManager,
@@ -141,6 +145,7 @@ constructor(
     private var cutout: DisplayCutout? = null
     private var lastInsets: WindowInsets? = null
     private var nextAlarmIntent: PendingIntent? = null
+    private var textColorPrimary = Color.TRANSPARENT
 
     private var qsDisabled = false
     private var visible = false
@@ -283,6 +288,10 @@ constructor(
                 updateCarrierGroupPadding()
                 clock.onDensityOrFontScaleChanged()
             }
+
+            override fun onUiModeChanged() {
+                updateResources()
+            }
         }
 
     private val nextAlarmCallback =
@@ -335,6 +344,7 @@ constructor(
         demoModeController.addCallback(demoModeReceiver)
         statusBarIconController.addIconGroup(iconManager)
         nextAlarmController.addCallback(nextAlarmCallback)
+        updateResources()
         systemIcons.setOnHoverListener(
             statusOverlayHoverListenerFactory.createListener(systemIcons)
         )
@@ -538,6 +548,23 @@ constructor(
         header.setPadding(padding, header.paddingTop, padding, header.paddingBottom)
         updateQQSPaddings()
         qsBatteryModeController.updateResources()
+
+        val fillColor = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
+        iconManager.setTint(fillColor)
+        val textColor = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
+        val colorStateList = Utils.getColorAttr(context, android.R.attr.textColorPrimary)
+        if (textColor != textColorPrimary) {
+            val textColorSecondary = Utils.getColorAttrDefaultColor(context,
+                    android.R.attr.textColorSecondary)
+            textColorPrimary = textColor
+            if (iconManager != null) {
+                iconManager.setTint(textColor)
+            }
+            clock.setTextColor(textColorPrimary)
+            date.setTextColor(textColorPrimary)
+            mShadeCarrierGroup.updateColors(textColorPrimary, colorStateList)
+            batteryIcon.updateColors(textColorPrimary, textColorSecondary, textColorPrimary)
+        }
     }
 
     private fun updateQQSPaddings() {
