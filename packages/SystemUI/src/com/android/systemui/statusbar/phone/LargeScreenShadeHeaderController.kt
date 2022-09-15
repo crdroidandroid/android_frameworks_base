@@ -16,6 +16,9 @@
 
 package com.android.systemui.statusbar.phone
 
+import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.app.StatusBarManager
 import android.view.View
 import android.widget.TextView
@@ -37,6 +40,7 @@ import com.android.systemui.qs.carrier.QSCarrierGroupController
 import com.android.systemui.statusbar.phone.dagger.CentralSurfacesComponent.CentralSurfacesScope
 import com.android.systemui.statusbar.phone.dagger.StatusBarViewModule.LARGE_SCREEN_BATTERY_CONTROLLER
 import com.android.systemui.statusbar.phone.dagger.StatusBarViewModule.LARGE_SCREEN_SHADE_HEADER
+import com.android.systemui.statusbar.policy.Clock
 import com.android.systemui.statusbar.policy.ConfigurationController
 import java.io.PrintWriter
 import javax.inject.Inject
@@ -48,6 +52,7 @@ class LargeScreenShadeHeaderController @Inject constructor(
     private val statusBarIconController: StatusBarIconController,
     private val privacyIconsController: HeaderPrivacyIconsController,
     private val configurationController: ConfigurationController,
+    private val context: Context,
     qsCarrierGroupControllerBuilder: QSCarrierGroupController.Builder,
     featureFlags: FeatureFlags,
     @Named(LARGE_SCREEN_BATTERY_CONTROLLER) batteryMeterViewController: BatteryMeterViewController,
@@ -72,10 +77,12 @@ class LargeScreenShadeHeaderController @Inject constructor(
     private val combinedHeaders = featureFlags.isEnabled(Flags.COMBINED_QS_HEADERS)
     private val iconManager: StatusBarIconController.TintedIconManager
     private val iconContainer: StatusIconContainer
+    private var textColorPrimary = Color.TRANSPARENT
     private val carrierIconSlots: List<String>
     private val qsCarrierGroupController: QSCarrierGroupController
     private val clock: TextView = header.findViewById(R.id.clock)
     private val date: TextView = header.findViewById(R.id.date)
+    private val batteryIcon: BatteryMeterView = header.findViewById(R.id.batteryRemainingIcon)
     private val qsCarrierGroup: QSCarrierGroup = header.findViewById(R.id.carrier_group)
 
     private var qsDisabled = false
@@ -160,7 +167,6 @@ class LargeScreenShadeHeaderController @Inject constructor(
         bindConfigurationListener()
 
         batteryMeterViewController.init()
-        val batteryIcon: BatteryMeterView = header.findViewById(R.id.batteryRemainingIcon)
 
         // battery settings same as in QS icons
         batteryMeterViewController.ignoreTunerUpdates()
@@ -183,10 +189,37 @@ class LargeScreenShadeHeaderController @Inject constructor(
                 .setQSCarrierGroup(header.findViewById(R.id.carrier_group))
                 .build()
 
+        val configurationChangedListener = object : ConfigurationController.ConfigurationListener {
+            override fun onUiModeChanged() {
+                updateResources()
+            }
+        }
+        configurationController.addCallback(configurationChangedListener)
+
         dumpManager.registerDumpable(this)
 
         updateVisibility()
         updateConstraints()
+        updateResources()
+    }
+
+    private fun updateResources() {
+        val fillColor = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
+        iconManager.setTint(fillColor)
+        val textColor = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
+        val colorStateList = Utils.getColorAttr(context, android.R.attr.textColorPrimary)
+        if (textColor != textColorPrimary) {
+            val textColorSecondary = Utils.getColorAttrDefaultColor(context,
+                    android.R.attr.textColorSecondary)
+            textColorPrimary = textColor
+            if (iconManager != null) {
+                iconManager.setTint(textColor)
+            }
+            clock.setTextColor(textColorPrimary)
+            date.setTextColor(textColorPrimary)
+            qsCarrierGroup.updateColors(textColorPrimary, colorStateList)
+            batteryIcon.updateColors(textColorPrimary, textColorSecondary, textColorPrimary)
+        }
     }
 
     fun disable(state1: Int, state2: Int, animate: Boolean) {
@@ -222,6 +255,7 @@ class LargeScreenShadeHeaderController @Inject constructor(
         }
         updateVisibility()
         updatePosition()
+        updateResources()
     }
 
     private fun onHeaderStateChanged() {
@@ -232,6 +266,7 @@ class LargeScreenShadeHeaderController @Inject constructor(
         }
         updateVisibility()
         updateConstraints()
+        updateResources()
     }
 
     private fun updateVisibility() {
