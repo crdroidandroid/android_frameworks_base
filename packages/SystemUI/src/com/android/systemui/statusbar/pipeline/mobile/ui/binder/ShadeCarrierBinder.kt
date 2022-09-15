@@ -24,6 +24,8 @@ import com.android.systemui.statusbar.pipeline.mobile.ui.viewmodel.ShadeCarrierG
 import com.android.systemui.util.AutoMarqueeTextView
 import kotlinx.coroutines.launch
 
+import com.android.systemui.res.R
+
 object ShadeCarrierBinder {
     /** Binds the view to the view-model, continuing to update the former based on the latter */
     @JvmStatic
@@ -32,6 +34,7 @@ object ShadeCarrierBinder {
         viewModel: ShadeCarrierGroupMobileIconViewModel,
     ) {
         carrierTextView.isVisible = true
+        carrierTextView.setTextAppearance(R.style.TextAppearance_QS_Status_Carriers)
 
         carrierTextView.repeatWhenAttached {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
