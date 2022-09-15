@@ -473,10 +473,13 @@ public final class ProcessState {
                 }
             }
             mCurCombinedState = state;
-            final UidState uidState = mStats.mUidStates.get(mUid);
-            if (uidState != null) {
-                uidState.updateCombinedState(state, now);
+            UidState uidState = mStats.mUidStates.get(mUid);
+            if (uidState == null) {
+                // This is not expected, log a warning and construct a new UID state.
+                uidState = new UidState(mStats, mUid);
+                mStats.mUidStates.put(mUid, uidState);
             }
+            uidState.updateCombinedState(state, now);
         }
     }
 
