@@ -316,6 +316,7 @@ constructor(
             Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
         val bgColor =
             Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse)
+        val colorStateList = Utils.getColorAttr(context, android.R.attr.textColorPrimary)
 
         iconManager.setTint(fgColor, bgColor)
 
@@ -324,6 +325,10 @@ constructor(
             bgColor, // background
             fgColor  // single tone (default)
         )
+
+        clock.setTextColor(fgColor)
+        date.setTextColor(fgColor)
+        mShadeCarrierGroup.updateColors(fgColor, colorStateList)
     }
 
     private val nextAlarmCallback =
