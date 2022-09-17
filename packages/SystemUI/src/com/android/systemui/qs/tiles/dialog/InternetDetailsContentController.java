@@ -40,8 +40,10 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.net.wifi.SoftApConfiguration;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.net.wifi.WifiSsid;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
@@ -97,6 +99,8 @@ import com.android.systemui.shade.ShadeDisplayAware;
 import com.android.systemui.shade.domain.interactor.ShadeDialogContextInteractor;
 import com.android.systemui.statusbar.connectivity.AccessPointController;
 import com.android.systemui.statusbar.core.NewStatusBarIcons;
+import com.android.systemui.statusbar.policy.DataSaverController;
+import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.toast.SystemUIToast;
@@ -111,6 +115,10 @@ import com.android.wifitrackerlib.WifiEntry;
 
 import kotlinx.coroutines.CoroutineScope;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -221,6 +229,8 @@ public class InternetDetailsContentController implements AccessPointController.A
     private boolean mIsMobileDataEnabled = false;
     private UserRepository mUserRepository;
     private boolean mHasMultipleFullUsers = false;
+    private final HotspotController mHotspotController;
+    private final DataSaverController mDataSaverController;
 
     @VisibleForTesting
     Map<Integer, ServiceState> mSubIdServiceState = new HashMap<>();
@@ -285,6 +295,29 @@ public class InternetDetailsContentController implements AccessPointController.A
                 }
             };
 
+    private final HotspotController.Callback mHotspotCallback =
+            new HotspotController.Callback() {
+                @Override
+                public void onHotspotChanged(boolean enabled, int numDevices) {
+                    if (mCallback != null) {
+                        mCallback.onHotspotChanged();
+                    }
+                }
+
+                @Override
+                public void onHotspotAvailabilityChanged(boolean available) {
+                    if (mCallback != null) {
+                        mCallback.onHotspotChanged();
+                    }
+                }
+            };
+
+    private final DataSaverController.Listener mDataSaverListener = isDataSaving -> {
+        if (mCallback != null) {
+            mCallback.onHotspotChanged();
+        }
+    };
+
     protected List<SubscriptionInfo> getActiveSubscriptionInfoList() {
         return mSubscriptionManager.getActiveSubscriptionInfoList();
     }
@@ -307,6 +340,8 @@ public class InternetDetailsContentController implements AccessPointController.A
             LocationController locationController,
             DialogTransitionAnimator dialogTransitionAnimator, WifiStateWorker wifiStateWorker,
             FeatureFlags featureFlags,
+            HotspotController hotspotController,
+            DataSaverController dataSaverController,
             ShadeDialogContextInteractor shadeDialogContextInteractor,
             UserRepository userRepository
         ) {
@@ -344,6 +379,8 @@ public class InternetDetailsContentController implements AccessPointController.A
         mConnectedWifiInternetMonitor = new ConnectedWifiInternetMonitor();
         mWifiStateWorker = wifiStateWorker;
         mFeatureFlags = featureFlags;
+        mHotspotController = hotspotController;
+        mDataSaverController = dataSaverController;
         mShadeDialogContextInteractor = shadeDialogContextInteractor;
         mUserRepository = userRepository;
     }
@@ -358,6 +395,8 @@ public class InternetDetailsContentController implements AccessPointController.A
         mAccessPointController.addAccessPointCallback(this);
         mBroadcastDispatcher.registerReceiver(mConnectionStateReceiver, mConnectionStateFilter,
                 mExecutor);
+        mHotspotController.addCallback(mHotspotCallback);
+        mDataSaverController.addCallback(mDataSaverListener);
         // Listen the subscription changes
         mOnSubscriptionsChangedListener = new InternetOnSubscriptionChangedListener();
         refreshHasActiveSubIdOnDds();
@@ -420,6 +459,8 @@ public class InternetDetailsContentController implements AccessPointController.A
         mKeyguardUpdateMonitor.removeCallback(mKeyguardUpdateCallback);
         mConnectivityManager.unregisterNetworkCallback(mConnectivityManagerNetworkCallback);
         mConnectedWifiInternetMonitor.unregisterCallback();
+        mHotspotController.removeCallback(mHotspotCallback);
+        mDataSaverController.removeCallback(mDataSaverListener);
         mCallback = null;
 
         if (mSatelliteManager != null) {
@@ -988,6 +1029,12 @@ public class InternetDetailsContentController implements AccessPointController.A
         startActivity(intent, view);
     }
 
+    void launchHotspotSetting(View view) {
+        final Intent intent = new Intent(Settings.ACTION_WIFI_TETHER_SETTING);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent, view);
+    }
+
     /**
      * Enable or disable Wi-Fi.
      *
@@ -1007,6 +1054,89 @@ public class InternetDetailsContentController implements AccessPointController.A
     @AnyThread
     public boolean isWifiEnabled() {
         return mWifiStateWorker.isWifiEnabled();
+    }
+
+    boolean isHotspotAvailable() {
+        return mHotspotController.isHotspotSupported();
+    }
+
+    boolean isHotspotEnabled() {
+        return mHotspotController.isHotspotEnabled();
+    }
+
+    boolean isHotspotTransient() {
+        return mHotspotController.isHotspotTransient();
+    }
+
+    int getHotspotNumDevices() {
+        return mHotspotController.getNumConnectedDevices();
+    }
+
+    @AnyThread
+    void setHotspotEnabled(boolean enabled) {
+        mWorkerHandler.post(() -> mHotspotController.setHotspotEnabled(enabled));
+    }
+
+    boolean isDataSaverEnabled() {
+        return mDataSaverController.isDataSaverEnabled();
+    }
+
+    @Nullable
+    CharSequence getHotspotSsid() {
+        if (mWifiManager == null) {
+            return null;
+        }
+        final SoftApConfiguration softApConfig = mWifiManager.getSoftApConfiguration();
+        if (softApConfig == null) {
+            return null;
+        }
+        final WifiSsid wifiSsid = softApConfig.getWifiSsid();
+        return wifiSsid == null ? null : decodeUtf8Ssid(wifiSsid.getBytes());
+    }
+
+    @Nullable
+    private static CharSequence decodeUtf8Ssid(@Nullable byte[] ssidBytes) {
+        if (ssidBytes == null || ssidBytes.length == 0) {
+            return null;
+        }
+        try {
+            return StandardCharsets.UTF_8.newDecoder()
+                    .onMalformedInput(CodingErrorAction.REPORT)
+                    .onUnmappableCharacter(CodingErrorAction.REPORT)
+                    .decode(ByteBuffer.wrap(ssidBytes))
+                    .toString();
+        } catch (CharacterCodingException e) {
+            if (DEBUG) {
+                Log.d(TAG, "SoftAp SSID is not valid UTF-8");
+            }
+            return null;
+        }
+    }
+
+    CharSequence getHotspotTitle() {
+        final CharSequence ssid = getHotspotSsid();
+        return TextUtils.isEmpty(ssid) ? mContext.getText(R.string.quick_settings_hotspot_label)
+                : ssid;
+    }
+
+    CharSequence getHotspotSummary() {
+        if (isDataSaverEnabled()) {
+            return mContext.getText(
+                    R.string.quick_settings_hotspot_secondary_label_data_saver_enabled);
+        }
+        if (isHotspotTransient()) {
+            return mContext.getText(R.string.quick_settings_hotspot_secondary_label_transient);
+        }
+        if (isHotspotEnabled()) {
+            final int numDevices = getHotspotNumDevices();
+            if (numDevices > 0) {
+                return mContext.getResources().getQuantityString(
+                        R.plurals.quick_settings_internet_hotspot_summary_num_devices,
+                        numDevices, numDevices);
+            }
+            return mContext.getText(R.string.switch_bar_on);
+        }
+        return mContext.getText(R.string.switch_bar_off);
     }
 
     void connectCarrierNetwork() {
@@ -1355,6 +1485,9 @@ public class InternetDetailsContentController implements AccessPointController.A
 
     @Override
     public void onWifiScan(boolean isScan) {
+        if (mCallback == null) {
+            return;
+        }
         if (!isWifiEnabled() || isDeviceLocked()) {
             mCallback.onWifiScan(false);
             return;
@@ -1569,7 +1702,9 @@ public class InternetDetailsContentController implements AccessPointController.A
             mTelephonyManager = mTelephonyManager.createForSubscriptionId(defaultDataSubId);
             mSubIdTelephonyManagerMap.put(defaultDataSubId, mTelephonyManager);
             registerInternetTelephonyCallback(mTelephonyManager, defaultDataSubId);
-            mCallback.onSubscriptionsChanged(defaultDataSubId);
+            if (mCallback != null) {
+                mCallback.onSubscriptionsChanged(defaultDataSubId);
+            }
         }
         mDefaultDataSubId = defaultDataSubId;
     }
@@ -1615,6 +1750,9 @@ public class InternetDetailsContentController implements AccessPointController.A
         void onWifiScan(boolean isScan);
 
         void onSatelliteModemStateChanged(int state);
+
+        default void onHotspotChanged() {
+        }
     }
 
     void makeOverlayToast(int stringId) {
