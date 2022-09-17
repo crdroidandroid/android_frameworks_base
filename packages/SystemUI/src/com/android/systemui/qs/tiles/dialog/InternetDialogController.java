@@ -693,6 +693,12 @@ public class InternetDialogController implements AccessPointController.AccessPoi
         startActivity(intent, view);
     }
 
+    void launchMobileNetworkSetting(View view) {
+        final Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        intent.putExtra(Settings.EXTRA_SUB_ID, mDefaultDataSubId);
+        startActivity(intent, view);
+    }
+
     /**
      * Enable or disable Wi-Fi.
      *
