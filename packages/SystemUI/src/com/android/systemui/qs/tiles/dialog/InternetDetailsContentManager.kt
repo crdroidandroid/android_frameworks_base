@@ -1033,6 +1033,10 @@ constructor(
                 updateContent(shouldUpdateMobileNetwork = true)
             }
 
+            override fun onHotspotChanged() {
+                updateContent(shouldUpdateMobileNetwork = true)
+            }
+
             override fun dismissDialog() {
                 // With the dialog, this would be implemented to close the internet dialog. As this
                 // details view is embedded within the QS panel, collapsing is handled by System UI.
