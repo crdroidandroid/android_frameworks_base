@@ -23,6 +23,7 @@ interface IParallelSpaceManager {
     int create(String name, boolean shareMedia);
     int remove(int userId);
     UserInfo[] getUsers();
+    UserInfo getOwner();
     int duplicatePackage(String packageName, int userId);
     int removePackage(String packageName, int userId);
 }
