@@ -142,6 +142,8 @@ import com.android.server.wm.WindowProcessController;
 
 import dalvik.system.VMRuntime;
 
+import ink.kaleidoscope.server.ParallelSpaceManagerService;
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileDescriptor;
@@ -1616,6 +1618,22 @@ public final class ProcessList {
             // EmulatedVolumes: /data/media and /mnt/expand/<volume>/data/media
             // PublicVolumes: /mnt/media_rw/<volume>
             gidList.add(Process.MEDIA_RW_GID);
+
+            // HACK: For legacy devices running fuse above sdcardfs. We have to grant it
+            // gids of other users to make the cross-user file management possible.
+            // This is dirty. But I can't come up with a better idea which doesn't need
+            // to hack the kernel.
+            for (int userId : ParallelSpaceManagerService.getCurrentParallelUserIds()) {
+                gidList.add(UserHandle.getUserGid(userId));
+                // Not needed in theory. Add it just in case. This could happened when
+                // dropping sdcardfs without wiping data and things get broken.
+                gidList.add(UserHandle.getUid(userId, Process.MEDIA_RW_GID));
+            }
+            // Make sure parallel spaces are ready to visit the owner too.
+            if (ParallelSpaceManagerService.isCurrentParallelUser(UserHandle.getUserId(uid))) {
+                int ownerId = ParallelSpaceManagerService.getCurrentParallelOwnerId();
+                gidList.add(UserHandle.getUserGid(ownerId));
+            }
         }
         if (externalStorageAccess) {
             // Apps with MANAGE_EXTERNAL_STORAGE PERMISSION need the external_storage gid to access

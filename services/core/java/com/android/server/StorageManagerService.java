@@ -4517,6 +4517,10 @@ class StorageManagerService extends IStorageManager.Stub
                 return StorageManager.MOUNT_MODE_EXTERNAL_PASS_THROUGH;
             }
 
+            if (Arrays.asList(packagesForUid).contains("com.android.externalstorage")) {
+                return StorageManager.MOUNT_MODE_EXTERNAL_PASS_THROUGH;
+            }
+
             if ((mDownloadsAuthorityAppId == UserHandle.getAppId(uid)
                     || mExternalStorageAuthorityAppId == UserHandle.getAppId(uid))) {
                 // DownloadManager can write in app-private directories on behalf of apps;
