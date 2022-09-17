@@ -184,11 +184,16 @@ public final class ParallelSpaceManagerService extends SystemService {
         }
     }
 
+    // Get user id of currently foreground parallel space owner.
+    public static int getCurrentParallelOwnerId() {
+        synchronized (mLock) {
+            return mCurrentUserId;
+        }
+    }
+
     // Check whether target user is the parallel owner.
     public static boolean isCurrentParallelOwner(int userId) {
-        synchronized (mLock) {
-            return userId == mCurrentUserId;
-        }
+            return userId == getCurrentParallelOwnerId();
     }
 
     // Return a list of current parallel user ids.
@@ -614,6 +619,14 @@ public final class ParallelSpaceManagerService extends SystemService {
                 if (mCurrentParallelUsers != null)
                     return mCurrentParallelUsers.toArray(new UserInfo[0]);
                 return new UserInfo[0];
+            }
+        }
+
+        @Override
+        public UserInfo getOwner() {
+            enforceCallingPermission(Binder.getCallingUid());
+            synchronized (mLock) {
+                return mCurrentUser;
             }
         }
 
