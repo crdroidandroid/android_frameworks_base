@@ -37,8 +37,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.ConnectivityManager;
+import android.net.INetworkPolicyListener;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.net.NetworkPolicyManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -93,6 +95,7 @@ import com.android.systemui.res.R;
 import com.android.systemui.shade.ShadeDisplayAware;
 import com.android.systemui.shade.domain.interactor.ShadeDialogContextInteractor;
 import com.android.systemui.statusbar.connectivity.AccessPointController;
+import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.toast.SystemUIToast;
@@ -212,6 +215,9 @@ public class InternetDetailsContentController implements AccessPointController.A
     private boolean mHasActiveSubIdOnDds;
     private boolean mIsMobileDataEnabled = false;
 
+    private final HotspotController mHotspotController;
+    private final NetworkPolicyManager mPolicyManager;
+
     @VisibleForTesting
     Map<Integer, ServiceState> mSubIdServiceState = new HashMap<>();
     @VisibleForTesting
@@ -275,6 +281,26 @@ public class InternetDetailsContentController implements AccessPointController.A
                 }
             };
 
+    private final HotspotController.Callback mHotspotCallback =
+            new HotspotController.Callback() {
+                @Override
+                public void onHotspotChanged(boolean enabled, int numDevices) {
+                    mCallback.onHotspotChanged();
+                }
+
+                @Override
+                public void onHotspotAvailabilityChanged(boolean available) {
+                    mCallback.onHotspotChanged();
+                }
+            };
+
+    private final INetworkPolicyListener mPolicyListener = new NetworkPolicyManager.Listener() {
+        @Override
+        public void onRestrictBackgroundChanged(final boolean isDataSaving) {
+            mCallback.onHotspotChanged();
+        }
+    };
+
     protected List<SubscriptionInfo> getActiveSubscriptionInfoList() {
         return mSubscriptionManager.getActiveSubscriptionInfoList();
     }
@@ -297,6 +323,7 @@ public class InternetDetailsContentController implements AccessPointController.A
             LocationController locationController,
             DialogTransitionAnimator dialogTransitionAnimator, WifiStateWorker wifiStateWorker,
             FeatureFlags featureFlags,
+            HotspotController hotspotController,
             ShadeDialogContextInteractor shadeDialogContextInteractor
         ) {
         if (DEBUG) {
@@ -333,6 +360,8 @@ public class InternetDetailsContentController implements AccessPointController.A
         mConnectedWifiInternetMonitor = new ConnectedWifiInternetMonitor();
         mWifiStateWorker = wifiStateWorker;
         mFeatureFlags = featureFlags;
+        mHotspotController = hotspotController;
+        mPolicyManager = NetworkPolicyManager.from(context);
         mShadeDialogContextInteractor = shadeDialogContextInteractor;
     }
 
@@ -345,6 +374,8 @@ public class InternetDetailsContentController implements AccessPointController.A
         mAccessPointController.addAccessPointCallback(this);
         mBroadcastDispatcher.registerReceiver(mConnectionStateReceiver, mConnectionStateFilter,
                 mExecutor);
+        mHotspotController.addCallback(mHotspotCallback);
+        mPolicyManager.registerListener(mPolicyListener);
         // Listen the subscription changes
         mOnSubscriptionsChangedListener = new InternetOnSubscriptionChangedListener();
         refreshHasActiveSubIdOnDds();
@@ -399,6 +430,8 @@ public class InternetDetailsContentController implements AccessPointController.A
         mConnectivityManager.unregisterNetworkCallback(mConnectivityManagerNetworkCallback);
         mConnectedWifiInternetMonitor.unregisterCallback();
         mCallback = null;
+        mHotspotController.removeCallback(mHotspotCallback);
+        mPolicyManager.unregisterListener(mPolicyListener);
 
         if (mSatelliteManager != null) {
             try {
@@ -940,6 +973,12 @@ public class InternetDetailsContentController implements AccessPointController.A
         startActivity(intent, view);
     }
 
+    void launchHotspotSetting(View view) {
+        final Intent intent = new Intent(Settings.ACTION_WIFI_TETHER_SETTING);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent, view);
+    }
+
     /**
      * Enable or disable Wi-Fi.
      *
@@ -1194,6 +1233,30 @@ public class InternetDetailsContentController implements AccessPointController.A
             return false;
         }
         return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
+    }
+
+    boolean isHotspotAvailable() {
+        return mHotspotController.isHotspotSupported();
+    }
+
+    boolean isHotspotEnabled() {
+        return mHotspotController.isHotspotEnabled();
+    }
+
+    boolean isHotspotTransient() {
+        return mHotspotController.isHotspotTransient();
+    }
+
+    int getHotspotNumDevices() {
+        return mHotspotController.getNumConnectedDevices();
+    }
+
+    void setHotspotEnabled(boolean enabled) {
+        mHandler.post(() -> mHotspotController.setHotspotEnabled(enabled));
+    }
+
+    boolean isDataSaverEnabled() {
+        return mPolicyManager.getRestrictBackground();
     }
 
     boolean connect(WifiEntry ap) {
@@ -1567,6 +1630,8 @@ public class InternetDetailsContentController implements AccessPointController.A
         void onWifiScan(boolean isScan);
 
         void onSatelliteModemStateChanged(int state);
+
+        void onHotspotChanged();
     }
 
     void makeOverlayToast(int stringId) {
