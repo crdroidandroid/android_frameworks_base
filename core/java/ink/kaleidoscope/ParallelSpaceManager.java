@@ -111,6 +111,32 @@ public final class ParallelSpaceManager {
     }
 
     /**
+     * Get UserInfo of currently foreground parallel space owner.
+     */
+    public UserInfo getParallelOwner() {
+        try {
+            return mParallelSpaceManager.getOwner();
+        } catch (RemoteException e) {
+            throw new RuntimeException("Failed when getParallelOwner(): " + e);
+        }
+    }
+
+    /**
+     * Get user id of currently foreground parallel space owner.
+     */
+    public int getParallelOwnerId() {
+        UserInfo owner = getParallelOwner();
+        return owner != null ? owner.id : 0;
+    }
+
+    /**
+     * Get UserHandle of currently foreground parallel space owner.
+     */
+    public UserHandle getParallelOwnerHandle() {
+        return UserHandle.of(getParallelOwnerId());
+    }
+
+    /**
      * Install an existing package to target user. Returns 0 on success.
      */
     public int duplicatePackage(String packageName, int userId) {
