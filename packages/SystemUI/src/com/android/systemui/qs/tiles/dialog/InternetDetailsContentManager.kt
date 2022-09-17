@@ -898,6 +898,10 @@ constructor(
                 updateContent(shouldUpdateMobileNetwork = true)
             }
 
+            override fun onHotspotChanged() {
+                updateContent(shouldUpdateMobileNetwork = true)
+            }
+
             override fun dismissDialog() {
                 if (DEBUG) {
                     Log.d(TAG, "dismissDialog")
