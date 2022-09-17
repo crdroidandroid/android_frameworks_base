@@ -324,6 +324,21 @@ public final class ParallelSpaceManagerService extends SystemService {
         return 0;
     }
 
+    private void killExternalStorageProvider() {
+        List<Integer> victimUsers;
+        synchronized (mLock) {
+            victimUsers = new ArrayList<>(mCurrentParallelUserIds);
+        }
+        victimUsers.add(mCurrentUserId);
+        for (int userId : victimUsers) {
+            try {
+                mActivityManager.forceStopPackage("com.android.externalstorage", userId);
+            } catch (RemoteException e) {
+                Slog.e(TAG, "Failed when killing ExternalStorageProvider for user " + userId);
+            }
+        }
+    }
+
     private synchronized int createSpaceInternal(String name, boolean shareMedia) {
         final int userId;
         // Make a copy here because I don't want to call into
@@ -357,6 +372,10 @@ public final class ParallelSpaceManagerService extends SystemService {
         // List of users has been updated. Start them.
         mHandler.removeMessages(MSG_START_SPACES);
         mHandler.sendMessage(mHandler.obtainMessage(MSG_START_SPACES));
+
+        // HACK: For legacy devices running fuse above sdcardfs.
+        // Kill ExternalStorageProvider to make it restart with new gids.
+        killExternalStorageProvider();
 
         return result.id;
     }
