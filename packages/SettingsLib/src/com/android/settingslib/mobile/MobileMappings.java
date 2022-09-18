@@ -212,7 +212,7 @@ public class MobileMappings {
         public boolean showAtLeast3G = false;
         public boolean show4gFor3g = false;
         public boolean alwaysShowCdmaRssi = false;
-        public boolean show4gForLte = false;
+        public boolean show4gForLte = true;
         public boolean show4glteForLte = false;
         public boolean hideLtePlus = false;
         public boolean hspaDataDistinguishable;
