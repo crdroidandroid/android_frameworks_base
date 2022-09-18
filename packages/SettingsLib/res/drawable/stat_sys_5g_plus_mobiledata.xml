@@ -1,0 +1,4 @@
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="-2dp"
+    android:insetRight="0dp"
+    android:drawable="@drawable/ic_5g_plus_mobiledata" />
