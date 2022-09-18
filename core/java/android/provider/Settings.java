@@ -5760,6 +5760,25 @@ public final class Settings {
         public static final String FLASHLIGHT_ON_CALL = "flashlight_on_call";
 
         /**
+         * Which Vibration Pattern to use
+         * 0: dzzz-dzzz
+         * 1: dzzz-da
+         * 2: mm-mm-mm
+         * 3: da-da-dzzz
+         * 4: da-dzzz-da
+         * 5: custom
+         * @hide
+         */
+        public static final String RINGTONE_VIBRATION_PATTERN = "ringtone_vibration_pattern";
+
+        /**
+         * Custom vibration pattern
+         * format: ms,ms,ms each a range from 0 to 1000 ms
+         * @hide
+         */
+        public static final String CUSTOM_RINGTONE_VIBRATION_PATTERN = "custom_ringtone_vibration_pattern";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
