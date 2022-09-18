@@ -40,6 +40,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
+import android.util.DisplayUtils;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
@@ -573,10 +574,13 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                     }
                     mDialogPosition = positionY2;
                 }
+
+                final float scaleFactor = DisplayUtils.getScaleFactor(mContext);
+
                 positionY = res.getDimensionPixelSize(R.dimen.tri_state_dialog_padding);
                 mWindowLayoutParams.gravity = gravity;
-                mWindowLayoutParams.y = positionY2 - positionY;
-                mWindowLayoutParams.x = positionX - positionY;
+                mWindowLayoutParams.y = (int) ((positionY2 - positionY) * scaleFactor);
+                mWindowLayoutParams.x = (int) ((positionX - positionY) * scaleFactor);
                 mWindow.setAttributes(mWindowLayoutParams);
                 mHandler.sendEmptyMessageDelayed(MSG_RESET_SCHEDULE, DIALOG_TIMEOUT);
             }
