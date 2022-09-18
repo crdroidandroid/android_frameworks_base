@@ -38,8 +38,6 @@ import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.BluetoothIconSt
 
 import com.android.settingslib.Utils;
 
-import java.util.ArrayList;
-
 public class StatusBarBluetoothView extends FrameLayout implements StatusIconDisplayable {
     private static final String TAG = "StatusBarBluetoothView";
 
@@ -231,8 +229,8 @@ public class StatusBarBluetoothView extends FrameLayout implements StatusIconDis
     }
 
     @Override
-    public void onDarkChanged(ArrayList<Rect> areas, float darkIntensity, int tint) {
-        int areaTint = getTint(areas, this, tint);
+    public void onDarkChanged(Rect area, float darkIntensity, int tint) {
+        int areaTint = getTint(area, this, tint);
         ColorStateList color = ColorStateList.valueOf(areaTint);
         mBatteryColor = color;
         updateBatteryColor();
