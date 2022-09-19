@@ -15,5 +15,8 @@
      limitations under the License.
 -->
 <resources>
+
     <color name="reticker_background_color">@android:color/system_neutral1_900</color>
+
+    <color name="footer_actions_bg">@android:color/system_neutral1_900</color>
 </resources>
