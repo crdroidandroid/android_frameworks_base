@@ -16,4 +16,5 @@
 -->
 <resources>
 
+    <color name="footer_actions_bg">@android:color/system_neutral1_900</color>
 </resources>
