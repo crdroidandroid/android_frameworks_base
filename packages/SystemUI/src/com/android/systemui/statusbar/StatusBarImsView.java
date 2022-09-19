@@ -126,7 +126,7 @@ public class StatusBarImsView extends FrameLayout implements
     public void applyImsState(ImsIconState state) {
         mState = state;
         if (state == null) {
-            setVisibility(View.INVISIBLE);
+            setVisibility(View.GONE);
         } else {
             initViewState(state);
         }
