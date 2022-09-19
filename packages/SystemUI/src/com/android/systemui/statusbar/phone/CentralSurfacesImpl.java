@@ -3321,7 +3321,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
                 // lock screen where users can use the UDFPS affordance to enter the device
                 mStatusBarKeyguardViewManager.reset(true);
             } else if (mState == StatusBarState.KEYGUARD
-                    && !mStatusBarKeyguardViewManager.primaryBouncerIsOrWillBeShowing()) {
+                    && !mStatusBarKeyguardViewManager.primaryBouncerIsOrWillBeShowing()
+                    && isKeyguardSecure()) {
                 mStatusBarKeyguardViewManager.showBouncer(true /* scrimmed */);
             }
         }
