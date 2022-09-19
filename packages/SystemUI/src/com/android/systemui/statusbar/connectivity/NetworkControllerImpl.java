@@ -107,8 +107,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
     // additional diagnostics, but not logspew
     static final boolean CHATTY =  Log.isLoggable(TAG + "Chat", Log.DEBUG);
 
-    private static final String IMS_STATUS_CHANGED = "android.intent.action.IMS_REGISTRATION_CHANGED";
-
     private static final int EMERGENCY_NO_CONTROLLERS = 0;
     private static final int EMERGENCY_FIRST_CONTROLLER = 100;
     private static final int EMERGENCY_VOICE_CONTROLLER = 200;
@@ -499,7 +497,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
         filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         filter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
         filter.addAction(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
-        filter.addAction(IMS_STATUS_CHANGED);
         mBroadcastDispatcher.registerReceiverWithHandler(this, filter, mReceiverHandler);
         mListening = true;
 
@@ -901,9 +898,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 mMainHandler.post(() -> mInternetDialogFactory.create(true,
                         mAccessPoints.canConfigMobileData(), mAccessPoints.canConfigWifi(),
                         null /* view */));
-                break;
-            case IMS_STATUS_CHANGED:
-                updateImsIcon();
                 break;
             default:
                 int subId = intent.getIntExtra(SubscriptionManager.EXTRA_SUBSCRIPTION_INDEX,
