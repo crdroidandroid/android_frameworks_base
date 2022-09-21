@@ -157,6 +157,7 @@ public class QuickQSPanel extends QSPanel implements TunerService.Tunable {
         mColumns = TileUtils.getQSColumnsCount(mContext,
             getResources().getInteger(NUM_COLUMNS_ID));
         if (mColumns == 2) maxTiles = getResources().getInteger(R.integer.quick_qs_panel_max_tiles);
+        if (mColumns == 3) maxTiles = TUNER_MAX_TILES_FALLBACK;
         if (maxTiles > mColumns && (maxTiles % mColumns != 0)) {
             maxTiles--;
             setMaxTiles(maxTiles);
