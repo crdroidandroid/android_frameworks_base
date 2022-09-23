@@ -82,7 +82,7 @@ import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.util.concurrency.DelayableExecutor;
 import com.android.systemui.util.concurrency.Execution;
 import com.android.systemui.util.time.SystemClock;
-import com.android.systemui.util.settings.SystemSettings;
+import com.android.systemui.util.settings.SecureSettings;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -174,7 +174,7 @@ public class UdfpsController implements DozeReceiver {
     private boolean mFrameworkDimming;
     private int[][] mBrightnessAlphaArray;
 
-    private final SystemSettings mSystemSettings;
+    private final SecureSettings mSecureSettings;
     private boolean mScreenOffUdfps;
 
     private UdfpsAnimation mUdfpsAnimation;
@@ -615,7 +615,7 @@ public class UdfpsController implements DozeReceiver {
             @Main Handler mainHandler,
             @NonNull ConfigurationController configurationController,
             @NonNull SystemClock systemClock,
-            @NonNull SystemSettings systemSettings,
+            @NonNull SecureSettings secureSettings,
             @NonNull UnlockedScreenOffAnimationController unlockedScreenOffAnimationController,
             @NonNull SystemUIDialogManager dialogManager) {
         mContext = context;
@@ -689,13 +689,13 @@ public class UdfpsController implements DozeReceiver {
             mUdfpsAnimation = new UdfpsAnimation(mContext, mWindowManager, mSensorProps);
         }
 
-        mSystemSettings = systemSettings;
+        mSecureSettings = secureSettings;
         updateScreenOffUdfpsState();
-        mSystemSettings.registerContentObserver(Settings.System.SCREEN_OFF_UDFPS,
+        mSecureSettings.registerContentObserver(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED,
             new ContentObserver(mainHandler) {
                 @Override
                 public void onChange(boolean selfChange, Uri uri) {
-                    if (uri.getLastPathSegment().equals(Settings.System.SCREEN_OFF_UDFPS)) {
+                    if (uri.getLastPathSegment().equals(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED)) {
                         updateScreenOffUdfpsState();
                     }
                 }
@@ -704,7 +704,7 @@ public class UdfpsController implements DozeReceiver {
     }
 
     private void updateScreenOffUdfpsState() {
-        mScreenOffUdfps = mSystemSettings.getIntForUser(Settings.System.SCREEN_OFF_UDFPS, 0, UserHandle.USER_CURRENT) != 0;
+        mScreenOffUdfps = mSecureSettings.getIntForUser(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
     }
 
     /**
