@@ -82,6 +82,8 @@ import com.android.server.ServiceThread;
 import com.android.server.SystemService;
 import com.android.server.wm.WindowManagerInternal;
 
+import ink.kaleidoscope.server.ParallelSpaceManagerService;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -347,6 +349,7 @@ public class CameraServiceProxy extends SystemService
                 case Intent.ACTION_USER_INFO_CHANGED:
                 case Intent.ACTION_MANAGED_PROFILE_ADDED:
                 case Intent.ACTION_MANAGED_PROFILE_REMOVED:
+                case Intent.ACTION_PARALLEL_SPACE_CHANGED:
                     synchronized(mLock) {
                         // Return immediately if we haven't seen any users start yet
                         if (mEnabledCameraUsers == null) return;
@@ -716,6 +719,7 @@ public class CameraServiceProxy extends SystemService
         filter.addAction(Intent.ACTION_MANAGED_PROFILE_REMOVED);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        filter.addAction(Intent.ACTION_PARALLEL_SPACE_CHANGED);
         mContext.registerReceiver(mIntentReceiver, filter);
 
         publishBinderService(CAMERA_SERVICE_PROXY_BINDER_NAME, mCameraServiceProxy);
@@ -959,6 +963,7 @@ public class CameraServiceProxy extends SystemService
         for (int id : userProfiles) {
             handles.add(id);
         }
+        handles.addAll(ParallelSpaceManagerService.getCurrentParallelUserIds());
 
         return handles;
     }
