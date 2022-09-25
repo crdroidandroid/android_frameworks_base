@@ -136,6 +136,8 @@ import com.android.server.wm.BackgroundActivityStartController.BalCode;
 import com.android.server.wm.LaunchParamsController.LaunchParams;
 import com.android.server.wm.TaskFragment.EmbeddingCheckResult;
 
+import ink.kaleidoscope.server.ParallelSpaceManagerService;
+
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.util.Date;
@@ -646,6 +648,12 @@ class ActivityStarter {
      */
     int execute() {
         try {
+            if (ParallelSpaceManagerService.isCurrentParallelUser(mRequest.userId) &&
+                    Intent.ACTION_MAIN.equals(mRequest.intent.getAction()) &&
+                    mRequest.intent.hasCategory(Intent.CATEGORY_HOME)) {
+                mRequest.userId = ParallelSpaceManagerService.getCurrentParallelOwnerId();
+            }
+
             onExecutionStarted();
 
             // Refuse possible leaked file descriptors
