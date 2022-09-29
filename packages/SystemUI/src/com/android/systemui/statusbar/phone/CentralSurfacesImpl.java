@@ -4408,27 +4408,35 @@ public class CentralSurfacesImpl extends CoreStartable implements
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (FORCE_SHOW_NAVBAR.equals(key) && mDisplayId == Display.DEFAULT_DISPLAY &&
-                mWindowManagerService != null) {
-            boolean forcedVisibility = mNeedsNavigationBar ||
+        switch (key) {
+            case FORCE_SHOW_NAVBAR:
+                if (mDisplayId != Display.DEFAULT_DISPLAY || mWindowManagerService == null)
+                    return;
+                boolean forcedVisibility = mNeedsNavigationBar ||
                     TunerService.parseIntegerSwitch(newValue, false);
-            boolean hasNavbar = getNavigationBarView() != null;
-            if (forcedVisibility) {
-                if (!hasNavbar) {
-                    mNavigationBarController.onDisplayReady(mDisplayId);
+                boolean hasNavbar = getNavigationBarView() != null;
+                if (forcedVisibility) {
+                    if (!hasNavbar) {
+                            mNavigationBarController.onDisplayReady(mDisplayId);
+                    }
+                } else {
+                    if (hasNavbar) {
+                        mNavigationBarController.onDisplayRemoved(mDisplayId);
+                    }
                 }
-            } else {
-                if (hasNavbar) {
-                    mNavigationBarController.onDisplayRemoved(mDisplayId);
-                }
-            }
-        } else if (SCREEN_BRIGHTNESS_MODE.equals(key)) {
-            mAutomaticBrightness = Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC ==
-                    TunerService.parseInteger(newValue,
+                break;
+            case SCREEN_BRIGHTNESS_MODE:
+                mAutomaticBrightness = Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC ==
+                        TunerService.parseInteger(newValue,
                             Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-        } else if (STATUS_BAR_BRIGHTNESS_CONTROL.equals(key)) {
-            mBrightnessControl = TunerService.parseIntegerSwitch(newValue, false);
-        }
+                break;
+            case STATUS_BAR_BRIGHTNESS_CONTROL:
+                mBrightnessControl =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                break;
+            default:
+                break;
+         }
     }
 
     // End Extra BaseStatusBarMethods.
