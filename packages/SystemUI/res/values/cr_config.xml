@@ -68,9 +68,6 @@
 
     <!-- Charging info current divider, if needed -->
     <integer name="config_currentInfoDivider" translatable="false">1000</integer>
-
-    <!-- Whether usage of the proximity sensor during doze is supported -->
-    <bool name="doze_proximity_sensor_supported">true</bool>
  
     <!-- If not empty, sets the AVC codec profile level used for the internal screen recorder.
          Possible values: 3, 3.1, 3.2, 4, 4.1, 4.2
