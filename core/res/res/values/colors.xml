@@ -174,7 +174,7 @@
     <color name="system_notification_accent_color">#00000000</color>
 
     <!-- Default user icon colors -->
-    <color name="user_icon_1">#ffe46962</color><!-- red -->
+    <color name="user_icon_1">@color/system_accent1_600</color>
     <color name="user_icon_2">#ffaf5cf7</color><!-- purple -->
     <color name="user_icon_3">#ff4c8df6</color><!-- blue -->
     <color name="user_icon_4">#fff439a0</color><!-- pink -->
