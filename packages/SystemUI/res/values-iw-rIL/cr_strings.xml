@@ -18,7 +18,7 @@
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">מחק</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Screen recording deleted</string>
+    <string name="screenrecord_delete_description">הקלטת המסך נמחקה</string>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">צליל</string>
     <string name="quick_settings_sound_ring">צלצול</string>
@@ -36,7 +36,7 @@
     <!-- Button to restart the device into download mode, within the Restart Options dialog -->
     <string name="global_action_restart_download">מצב הורדה (Download)</string>
     <!-- Button to restart the device into fastboot mode, within the Restart Options dialog -->
-    <string name="global_action_restart_fastboot">Fastbootd</string>
+    <string name="global_action_restart_fastboot">הפעלה מחדש במצב Fastboot</string>
     <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_progress">מאתחל...\u2026</string>
     <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
@@ -48,8 +48,8 @@
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_fastboot_progress">מפעיל מחדש למצב fastbootd\u2026</string>
     <!-- Label for current user in power menu options dialog -->
-    <string name="global_action_current_user">Current</string>
-    <string name="global_action_users">Users</string>
+    <string name="global_action_current_user">הנוכחי</string>
+    <string name="global_action_users">משתמשים</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">על-הדרך הופעל</string>
     <string name="onthego_notif_title">על-הדרך מופעל כעת</string>
@@ -68,12 +68,12 @@
     <string name="accessibility_quick_settings_onthego_off">מצב \"על-הדרך\" כבוי</string>
     <string name="accessibility_quick_settings_onthego_on">מצב \"על-הדרך\" פועל</string>
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb/s</string>
-    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="kilobitspersecond_short">קילוביט/שניה</string>
+    <string name="megabitspersecond_short">מגהביט/שניה</string>
     <string name="gigabitspersecond_short">Kb/s</string>
-    <string name="kilobytespersecond_short">kB/s</string>
-    <string name="megabytespersecond_short">MB/s</string>
-    <string name="gigabytespersecond_short">GB/s</string>
+    <string name="kilobytespersecond_short">קילובייט/שניה</string>
+    <string name="megabytespersecond_short">מגהבייט/שניה</string>
+    <string name="gigabytespersecond_short">גיגהבייט/שניה</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">פרטי המעבד</string>
     <!-- FPS Info tile -->
@@ -98,7 +98,7 @@
     <string name="quick_settings_compass_W">מערב</string>
     <string name="quick_settings_compass_NW">צפון מערב</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
+    <string name="qs_data_switch_label">החלפת כרטיס נתונים</string>
     <string name="qs_data_switch_changed_1">השתמש בכרטיס SIM 1 לנתונים ניידים</string>
     <string name="qs_data_switch_changed_2">השתמש בכרטיס SIM 2 לנתונים ניידים</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
