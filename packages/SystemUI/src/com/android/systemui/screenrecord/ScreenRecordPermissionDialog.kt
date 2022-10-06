@@ -62,6 +62,7 @@ class ScreenRecordPermissionDialog(
     private lateinit var lowQualitySwitch: Switch
     private lateinit var longerDurationSwitch: Switch
     private lateinit var skipTimeSwitch: Switch
+    private lateinit var hevcSwitch: Switch
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setDialogTitle(R.string.screenrecord_start_label)
@@ -104,6 +105,7 @@ class ScreenRecordPermissionDialog(
         stopDotSwitch = findViewById(R.id.screenrecord_stopdot_switch)
         lowQualitySwitch = findViewById(R.id.screenrecord_lowquality_switch)
         longerDurationSwitch = findViewById(R.id.screenrecord_longer_timeout_switch)
+        hevcSwitch = findViewById(R.id.screenrecord_hevc_switch)
         val a: ArrayAdapter<*> =
             ScreenRecordingAdapter(context, android.R.layout.simple_spinner_dropdown_item, MODES)
         a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -136,6 +138,7 @@ class ScreenRecordPermissionDialog(
         val showStopDot = stopDotSwitch.isChecked
         val lowQuality = lowQualitySwitch.isChecked
         val longerDuration = longerDurationSwitch.isChecked
+        val hevc = hevcSwitch.isChecked
         val startIntent =
             PendingIntent.getForegroundService(
                 userContext,
@@ -148,7 +151,8 @@ class ScreenRecordPermissionDialog(
                     captureTarget,
                     showStopDot,
                     lowQuality,
-                    longerDuration
+                    longerDuration,
+                    hevc
                 ),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
