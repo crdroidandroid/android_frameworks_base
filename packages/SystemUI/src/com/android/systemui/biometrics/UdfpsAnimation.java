@@ -95,7 +95,7 @@ public class UdfpsAnimation extends ImageView {
 
         mUdfpsAnimationPackage = "com.crdroid.udfps.animations";
 
-        mAnimationSize = (int) (mContext.getResources().getDimensionPixelSize(R.dimen.udfps_animation_size) * scaleFactor);
+        mAnimationSize = mContext.getResources().getDimensionPixelSize(R.dimen.udfps_animation_size);
         mAnimationOffset = (int) (mContext.getResources().getDimensionPixelSize(R.dimen.udfps_animation_offset) * scaleFactor);
 
         mAnimParams.height = mAnimationSize;
