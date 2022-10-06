@@ -37,4 +37,5 @@
     <string name="screenrecord_longer_timeout_switch_summary">Limit recording size to 15 GB</string>
     <string name="screenrecord_skip_time_label">Skip timer</string>
     <string name="screenrecord_skip_time_summary">Remove 3 second wait</string>
+    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
 </resources>
