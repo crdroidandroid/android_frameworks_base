@@ -81,6 +81,8 @@ class ScreenRecordPermissionDialogDelegate(
     private lateinit var longerDurationSwitchContainer: ViewGroup
     private lateinit var skipTimeSwitch: Switch
     private lateinit var skipTimeSwitchContainer: ViewGroup
+    private lateinit var hevcSwitch: Switch
+    private lateinit var hevcSwitchContainer: ViewGroup
 
     override fun createDialog(): SystemUIDialog {
         return systemUIDialogFactory.create(this)
@@ -145,15 +147,18 @@ class ScreenRecordPermissionDialogDelegate(
         lowQualitySwitch = dialog.requireViewById(R.id.screenrecord_lowquality_switch)
         longerDurationSwitch = dialog.requireViewById(R.id.screenrecord_longer_timeout_switch)
         skipTimeSwitch = dialog.requireViewById(R.id.screenrecord_skip_time_switch)
+        hevcSwitch = dialog.requireViewById(R.id.screenrecord_hevc_switch)
         stopDotSwitchContainer = dialog.requireViewById(R.id.screenrecord_stopdot_switch_container)
         lowQualitySwitchContainer = dialog.requireViewById(R.id.screenrecord_lowquality_switch_container)
         longerDurationSwitchContainer = dialog.requireViewById(R.id.screenrecord_longer_timeout_switch_container)
         skipTimeSwitchContainer = dialog.requireViewById(R.id.screenrecord_skip_time_switch_container)
+        hevcSwitchContainer = dialog.requireViewById(R.id.screenrecord_hevc_switch_container)
 
         stopDotSwitchContainer.setOnClickListener { stopDotSwitch.toggle() }
         lowQualitySwitchContainer.setOnClickListener { lowQualitySwitch.toggle() }
         longerDurationSwitchContainer.setOnClickListener { longerDurationSwitch.toggle() }
         skipTimeSwitchContainer.setOnClickListener { skipTimeSwitch.toggle() }
+        hevcSwitchContainer.setOnClickListener { hevcSwitch.toggle() }
 
         val a: ArrayAdapter<*> =
             ScreenRecordingAdapter(
@@ -205,6 +210,7 @@ class ScreenRecordPermissionDialogDelegate(
         val showStopDot = stopDotSwitch.isChecked
         val lowQuality = lowQualitySwitch.isChecked
         val longerDuration = longerDurationSwitch.isChecked
+        val hevc = hevcSwitch.isChecked
         val startIntent =
             PendingIntent.getForegroundService(
                 userContext,
@@ -217,7 +223,8 @@ class ScreenRecordPermissionDialogDelegate(
                     captureTarget,
                     showStopDot,
                     lowQuality,
-                    longerDuration
+                    longerDuration,
+                    hevc
                 ),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
