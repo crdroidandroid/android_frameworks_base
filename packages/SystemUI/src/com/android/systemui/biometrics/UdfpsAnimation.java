@@ -74,6 +74,8 @@ public class UdfpsAnimation extends ImageView {
 
     private Resources mApkResources;
 
+    private final float mScaleFactor;
+
     public UdfpsAnimation(Context context, WindowManager windowManager,
            FingerprintSensorPropertiesInternal props) {
         super(context);
@@ -82,21 +84,21 @@ public class UdfpsAnimation extends ImageView {
         mContext.getDisplay().getDisplayInfo(displayInfo);
         final Display.Mode maxDisplayMode =
                 DisplayUtils.getMaximumResolutionDisplayMode(displayInfo.supportedModes);
-        final float scaleFactor = DisplayUtils.getPhysicalPixelDisplaySizeRatio(
+        mScaleFactor = DisplayUtils.getPhysicalPixelDisplaySizeRatio(
                 maxDisplayMode.getPhysicalWidth(), maxDisplayMode.getPhysicalHeight(),
                 displayInfo.getNaturalWidth(), displayInfo.getNaturalHeight());
 
         mWindowManager = windowManager;
 
-        mMaxBurnInOffsetX = (int) (context.getResources()
-            .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_x) * scaleFactor);
-        mMaxBurnInOffsetY = (int) (context.getResources()
-            .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_y) * scaleFactor);
+        mMaxBurnInOffsetX = context.getResources()
+            .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_x);
+        mMaxBurnInOffsetY = context.getResources()
+            .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_y);
 
         mUdfpsAnimationPackage = "com.crdroid.udfps.animations";
 
-        mAnimationSize = (int) (mContext.getResources().getDimensionPixelSize(R.dimen.udfps_animation_size) * scaleFactor);
-        mAnimationOffset = (int) (mContext.getResources().getDimensionPixelSize(R.dimen.udfps_animation_offset) * scaleFactor);
+        mAnimationSize = mContext.getResources().getDimensionPixelSize(R.dimen.udfps_animation_size);
+        mAnimationOffset = mContext.getResources().getDimensionPixelSize(R.dimen.udfps_animation_offset);
 
         mAnimParams.height = mAnimationSize;
         mAnimParams.width = mAnimationSize;
@@ -107,8 +109,8 @@ public class UdfpsAnimation extends ImageView {
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         mAnimParams.gravity = Gravity.TOP | Gravity.CENTER;
-        mAnimParams.y = (int) (props.getLocation().sensorLocationY * scaleFactor) - (int) (props.getLocation().sensorRadius * scaleFactor)
-                - (mAnimationSize / 2) + mAnimationOffset;
+        mAnimParams.y = (int) ((props.getLocation().sensorLocationY - props.getLocation().sensorRadius
+                - (mAnimationSize / 2) + mAnimationOffset) * mScaleFactor);
 
         try {
             PackageManager pm = mContext.getPackageManager();
@@ -187,7 +189,7 @@ public class UdfpsAnimation extends ImageView {
         float mBurnInOffsetY = MathUtils.lerp(0f,
                 getBurnInOffset(mMaxBurnInOffsetY * 2, false /* xAxis */)
                 - mMaxBurnInOffsetY, amt);
-        setTranslationX(mBurnInOffsetX);
-        setTranslationY(mBurnInOffsetY);
+        setTranslationX(mBurnInOffsetX * mScaleFactor);
+        setTranslationY(mBurnInOffsetY * mScaleFactor);
     }
 }
