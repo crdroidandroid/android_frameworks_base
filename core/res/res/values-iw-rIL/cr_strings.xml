@@ -32,12 +32,12 @@
     <string name="pocket_lock_message_long_press">לחץ והחזק את כפתור ההפעלה לביטול הנעילה</string>
     <string name="pocket_view_title">מצב כיס מופעל</string>
     <string name="pocket_view_title_cancel">כדי להשתמש בטלפון שלך:</string>
-    <string name="pocket_view_top_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
+    <string name="pocket_view_top_tag_cancel">יש לבצע בדיקה אם האזור הכחול במכשיר שלך נקי מהפרעות ולנקות כל לכלוך או אבק.</string>
     <string name="pocket_view_top_tag_cancel2">לחיצה ארוכה על כפתור ההפעלה כדי לצאת ממצב כיס.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Face unlock -->
-    <string name="face_unlock_disabled_idle">Face unlock disabled due to inactivity</string>
+    <string name="face_unlock_disabled_idle">ביטול נעילת באמצעות זיהוי פנים הפך לא-זמין בשל חוסר פעילות</string>
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">העתק את כתובת ה- URL של דו\"ח הקריסה</string>
     <string name="url_copy_success">כתובת ה- URL הועתקה בהצלחה</string>
