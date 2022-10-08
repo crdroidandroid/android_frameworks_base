@@ -83,11 +83,7 @@ public class WirelessChargingLayout extends FrameLayout {
 
         // amount of battery:
         final TextView percentage = findViewById(R.id.wireless_charging_percentage);
-
-        if (batteryLevel != UNKNOWN_BATTERY_LEVEL) {
-            percentage.setText(NumberFormat.getPercentInstance().format(batteryLevel / 100f));
-            percentage.setAlpha(0);
-        }
+        final ImageView chargingIcon = findViewById(R.id.wireless_charging_icon);
 
         final long chargingAnimationFadeStartOffset = context.getResources().getInteger(
                 R.integer.wireless_charging_fade_offset);
@@ -98,6 +94,17 @@ public class WirelessChargingLayout extends FrameLayout {
         final float batteryLevelTextSizeEnd = context.getResources().getFloat(
                 R.dimen.wireless_charging_anim_battery_level_text_size_end) * (
                 showTransmittingBatteryLevel ? 0.75f : 1.0f);
+        final float batteryPadding = context.getResources().getFloat(
+                R.dimen.wireless_charging_padding);
+        final int sidePadding = Math.round(
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, batteryPadding,
+                        getResources().getDisplayMetrics()));
+
+        if (batteryLevel != UNKNOWN_BATTERY_LEVEL) {
+            percentage.setText(NumberFormat.getPercentInstance().format(batteryLevel / 100f));
+            percentage.setAlpha(0);
+            chargingIcon.setPadding(sidePadding, 0, 0, 0);
+        }
 
         // Animation Scale: battery percentage text scales from 0% to 100%
         ValueAnimator textSizeAnimator = ObjectAnimator.ofFloat(percentage, "textSize",
@@ -123,6 +130,31 @@ public class WirelessChargingLayout extends FrameLayout {
         // play all animations together
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(textSizeAnimator, textOpacityAnimator, textFadeAnimator);
+
+        // Animation Scale: battery icon scales from 0% to 100%
+        ValueAnimator battSizeAnimator = ObjectAnimator.ofFloat(chargingIcon, "batterySize",
+                batteryLevelTextSizeStart, batteryLevelTextSizeEnd);
+        battSizeAnimator.setInterpolator(new PathInterpolator(0, 0, 0, 1));
+        battSizeAnimator.setDuration(context.getResources().getInteger(
+                R.integer.wireless_charging_battery_level_text_scale_animation_duration));
+
+        // Animation Opacity: battery icon transitions from 0 to 1 opacity
+        ValueAnimator OpacityAnimatorBattIcon = ObjectAnimator.ofFloat(chargingIcon, "alpha", 0, 1);
+        OpacityAnimatorBattIcon.setInterpolator(Interpolators.LINEAR);
+        OpacityAnimatorBattIcon.setDuration(context.getResources().getInteger(
+                R.integer.wireless_charging_battery_level_text_opacity_duration));
+        OpacityAnimatorBattIcon.setStartDelay(context.getResources().getInteger(
+                R.integer.wireless_charging_anim_opacity_offset));
+
+        // Animation Opacity: battery icon fades from 1 to 0 opacity
+        ValueAnimator FadeAnimatorBattIcon = ObjectAnimator.ofFloat(chargingIcon, "alpha", 1, 0);
+        FadeAnimatorBattIcon.setDuration(chargingAnimationFadeDuration);
+        FadeAnimatorBattIcon.setInterpolator(Interpolators.LINEAR);
+        FadeAnimatorBattIcon.setStartDelay(chargingAnimationFadeStartOffset);
+
+        // play all animations together
+        AnimatorSet animatorSetBattIcon = new AnimatorSet();
+        animatorSetBattIcon.playTogether(battSizeAnimator, OpacityAnimatorBattIcon, FadeAnimatorBattIcon);
 
         ValueAnimator scrimFadeInAnimator = ObjectAnimator.ofArgb(this,
                 "backgroundColor", Color.TRANSPARENT, SCRIM_COLOR);
