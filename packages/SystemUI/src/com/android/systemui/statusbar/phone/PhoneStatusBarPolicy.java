@@ -47,6 +47,7 @@ import android.provider.Settings.Global;
 import android.service.notification.ZenModeConfig;
 import android.telecom.TelecomManager;
 import android.text.format.DateFormat;
+import android.util.ArraySet;
 import android.util.Log;
 import android.view.View;
 
@@ -187,6 +188,7 @@ public class PhoneStatusBarPolicy
     private final Context mContext;
 
     private boolean mShowBluetoothBattery;
+    private boolean mHideBluetooth;
 
     @Inject
     public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController,
@@ -266,7 +268,8 @@ public class PhoneStatusBarPolicy
         mDateFormatUtil = dateFormatUtil;
 
         Dependency.get(TunerService.class).addTunable(this,
-                BLUETOOTH_SHOW_BATTERY);
+                BLUETOOTH_SHOW_BATTERY,
+                StatusBarIconController.ICON_HIDE_LIST);
     }
 
     /** Initialize the object after construction. */
@@ -418,6 +421,14 @@ public class PhoneStatusBarPolicy
                         TunerService.parseIntegerSwitch(newValue, true);
                 updateBluetooth();
                 break;
+            case StatusBarIconController.ICON_HIDE_LIST:
+                ArraySet<String> hideList = StatusBarIconController.getIconHideList(mContext, newValue);
+                boolean hideBluetooth = hideList.contains(mSlotBluetooth);
+                if (hideBluetooth != mHideBluetooth) {
+                    mHideBluetooth = hideBluetooth;
+                    updateBluetooth();
+                }
+                break;
             default:
                 break;
         }
@@ -539,7 +550,7 @@ public class PhoneStatusBarPolicy
         }
 
         mIconController.setBluetoothIcon(mSlotBluetooth,
-                new BluetoothIconState(bluetoothVisible, batteryLevel, contentDescription));
+                new BluetoothIconState(!mHideBluetooth && bluetoothVisible, batteryLevel, contentDescription));
     }
 
     private final void updateTTY() {
