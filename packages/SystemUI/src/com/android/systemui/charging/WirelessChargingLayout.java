@@ -232,7 +232,7 @@ public class WirelessChargingLayout extends FrameLayout {
             int height = getMeasuredHeight();
             mRippleView.setColor(
                     Utils.getColorAttr(mRippleView.getContext(),
-                            android.R.attr.colorAccent).getDefaultColor());
+                            R.attr.wallpaperTextColorAccent).getDefaultColor());
             mRippleView.setOrigin(new PointF(width / 2, height / 2));
             mRippleView.setRadius(Math.max(width, height) * 0.5f);
         }
