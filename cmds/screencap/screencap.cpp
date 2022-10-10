@@ -97,6 +97,7 @@ static status_t notifyMediaScanner(const char* fileName) {
         (char*) "android.intent.action.MEDIA_SCANNER_SCAN_FILE",
         (char*) "-d",
         &filePath[0],
+        (char*) "--async",
         nullptr
     };
 
