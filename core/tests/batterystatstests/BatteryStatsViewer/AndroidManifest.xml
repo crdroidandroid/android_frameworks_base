@@ -30,12 +30,18 @@
         android:label="@string/app_name">
         <activity android:name=".BatteryConsumerPickerActivity"
                   android:label="@string/header"
-                  android:launchMode="singleTop"
                   android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="com.android.settings.action.IA_SETTINGS"/>
             </intent-filter>
+            <meta-data android:name="com.android.settings.category"
+                android:value="com.android.settings.category.ia.battery" />
+            <meta-data android:name="com.android.settings.summary"
+                android:resource="@string/display_dashboard_summary" />
+            <meta-data android:name="com.android.settings.profile"
+                android:value="primary_profile_only" />
+            <meta-data android:name="com.android.settings.order"
+                android:value="255" />
         </activity>
 
         <activity android:name=".BatteryStatsViewerActivity"
