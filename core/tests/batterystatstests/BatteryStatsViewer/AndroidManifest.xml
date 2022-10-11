@@ -29,12 +29,14 @@
         <activity android:name=".BatteryConsumerPickerActivity"
                   android:label="Battery Stats"
                   android:icon="@mipmap/ic_launcher"
-                  android:launchMode="singleTop"
                   android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="com.android.settings.action.IA_SETTINGS"/>
             </intent-filter>
+            <meta-data android:name="com.android.settings.category"
+                android:value="com.android.settings.category.ia.other" />
+            <meta-data android:name="com.android.settings.profile"
+                android:value="primary_profile_only"/>
         </activity>
 
         <activity android:name=".BatteryStatsViewerActivity"
