@@ -78,6 +78,10 @@ public class FullscreenTaskListener implements ShellTaskOrganizer.TaskListener {
         mDataByTaskId.put(taskInfo.taskId, new TaskData(leash, positionInParent));
         if (Transitions.ENABLE_SHELL_TRANSITIONS) return;
         mSyncQueue.runInSync(t -> {
+            if (!leash.isValid()) {
+                Slog.e(TAG, "The leash has been released.");
+                return;
+            }
             // Reset several properties back to fullscreen (PiP, for example, leaves all these
             // properties in a bad state).
             t.setWindowCrop(leash, null);
