@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/settingslib_toolbar_layout_height"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:titleCollapseMode="scale"
             app:toolbarId="@id/action_bar"
             style="@style/CollapsingToolbarLayoutStyle.SettingsLib">
 
