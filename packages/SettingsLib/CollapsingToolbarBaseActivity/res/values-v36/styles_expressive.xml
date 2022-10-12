@@ -28,7 +28,7 @@
         <item name="scrimAnimationDuration">50</item>
         <item name="collapsedTitleTextColor">@color/settingslib_materialColorOnSurface</item>
         <item name="expandedTitleTextColor">@color/settingslib_materialColorOnSurface</item>
-        <item name="titleCollapseMode">fade</item>
+        <item name="titleCollapseMode">scale</item>
         <item name="extraMultilineHeightEnabled">true</item>
     </style>
     <style name="SettingsLibCollapsingToolbarLayoutStyle.Expressive">
