@@ -160,6 +160,7 @@ public class KeyguardSliceProvider extends SliceProvider implements
     private OmniJawsClient.WeatherInfo mWeatherData;
     private SettingsObserver mSettingsObserver;
     private boolean mShowWeatherSlice;
+    private boolean mShowWeatherSliceLocation;
 
     /**
      * Receiver responsible for time ticking and updating the date format.
@@ -208,6 +209,9 @@ public class KeyguardSliceProvider extends SliceProvider implements
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_WEATHER_ENABLED), false, this,
                     UserHandle.USER_ALL);
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_WEATHER_LOCATION), false, this,
+                    UserHandle.USER_ALL);
             updateShowWeatherSlice();
         }
 
@@ -218,6 +222,9 @@ public class KeyguardSliceProvider extends SliceProvider implements
         void updateShowWeatherSlice() {
             mShowWeatherSlice = Settings.System.getIntForUser(mContentResolver,
                     Settings.System.LOCKSCREEN_WEATHER_ENABLED,
+                    0, UserHandle.USER_CURRENT) != 0;
+            mShowWeatherSliceLocation = Settings.System.getIntForUser(mContentResolver,
+                    Settings.System.LOCKSCREEN_WEATHER_LOCATION,
                     0, UserHandle.USER_CURRENT) != 0;
         }
 
@@ -326,8 +333,10 @@ public class KeyguardSliceProvider extends SliceProvider implements
             return;
         }
         IconCompat weatherIcon = SliceViewUtil.createIconFromDrawable(mWeatherClient.getWeatherConditionImage(mWeatherData.conditionCode));
+        String weatherText = mWeatherData.temp + " " + mWeatherData.tempUnits;
+        if (mShowWeatherSliceLocation) weatherText = weatherText + " " + mWeatherData.city;
         RowBuilder weatherRowBuilder = new RowBuilder(mWeatherUri)
-                .setTitle(mWeatherData.temp + " " + mWeatherData.tempUnits + " " + mWeatherData.city)
+                .setTitle(weatherText)
                 .addEndItem(weatherIcon, ListBuilder.ICON_IMAGE);
         builder.addRow(weatherRowBuilder);
     }
