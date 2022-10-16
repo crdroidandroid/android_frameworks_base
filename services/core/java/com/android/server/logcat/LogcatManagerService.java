@@ -419,6 +419,11 @@ public final class LogcatManagerService extends SystemService {
             return;
         }
 
+        if (client.mPackageName.equals("org.omnirom.logcat")) {
+            onAccessApprovedForClient(client);
+            return;
+        }
+
         if (!shouldShowConfirmationDialog(client)) {
             onAccessDeclinedForClient(client);
             return;
