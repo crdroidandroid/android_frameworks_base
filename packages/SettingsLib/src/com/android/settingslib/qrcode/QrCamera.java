@@ -189,11 +189,7 @@ public class QrCamera extends Handler {
         mCamera.setParameters(mParameters);
     }
 
-    private boolean startPreview() {
-        if (mContext.get() == null) {
-            return false;
-        }
-
+    private void startPreview() {
         final WindowManager winManager =
                 (WindowManager) mContext.get().getSystemService(Context.WINDOW_SERVICE);
         final int rotation = winManager.getDefaultDisplay().getRotation();
@@ -219,7 +215,6 @@ public class QrCamera extends Handler {
             mCamera.autoFocus(/* Camera.AutoFocusCallback */ null);
             sendMessageDelayed(obtainMessage(MSG_AUTO_FOCUS), AUTOFOCUS_INTERVAL_MS);
         }
-        return true;
     }
 
     private class DecodingTask extends AsyncTask<Void, Void, String> {
@@ -279,6 +274,15 @@ public class QrCamera extends Handler {
             }
         }
 
+        /**
+         * We init camera in 3 steps:
+         *
+         * 1. Find an available camera and trying to open it (The front facing camera first).
+         *
+         * 2. Set parameters and configs, make sure everything is ready for starting a preview.
+         *
+         * 3. Trying to start preview.
+         */
         private boolean initCamera(SurfaceTexture surface) {
             final int numberOfCameras = Camera.getNumberOfCameras();
             Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
@@ -313,11 +317,20 @@ public class QrCamera extends Handler {
                 mCamera.setPreviewTexture(surface);
                 setCameraParameter();
                 setTransformationMatrix();
-                if (!startPreview()) {
+                if (mContext.get() == null) {
                     throw new IOException("Lost contex");
                 }
-            } catch (IOException ioe) {
-                Log.e(TAG, "Fail to startPreview camera: " + ioe);
+            } catch (IOException | RuntimeException e) {
+                Log.e(TAG, "Fail to config camera: " + e);
+                mCamera = null;
+                mScannerCallback.handleCameraFailure();
+                return false;
+            }
+
+            try {
+                startPreview();
+            } catch (RuntimeException e) {
+                Log.e(TAG, "Fail to startPreview camera: " + e);
                 mCamera = null;
                 mScannerCallback.handleCameraFailure();
                 return false;
