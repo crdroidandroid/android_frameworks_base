@@ -224,13 +224,17 @@ class DozeLogger @Inject constructor(
         })
     }
 
-    fun logPulseDropped(pulsePending: Boolean, state: DozeMachine.State, blocked: Boolean) {
+    fun logPulseDropped(pulsePending: Boolean, state: DozeMachine.State?, blocked: Boolean) {
         buffer.log(TAG, INFO, {
             bool1 = pulsePending
-            str1 = state.name
+            str1 = state?.name
             bool2 = blocked
         }, {
-            "Pulse dropped, pulsePending=$bool1 state=$str1 blocked=$bool2"
+            "Pulse dropped, pulsePending=$bool1 blocked=$bool2".plus(
+                str1?.let {
+                    " state=$str1"
+                } ?: ""
+            )
         })
     }
 
