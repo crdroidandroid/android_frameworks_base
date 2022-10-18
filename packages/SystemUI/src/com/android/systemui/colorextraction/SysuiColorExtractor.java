@@ -48,6 +48,7 @@ public class SysuiColorExtractor extends ColorExtractor implements Dumpable,
     private boolean mHasMediaArtwork;
     private final GradientColors mNeutralColorsLock;
     private final GradientColors mBackdropColors;
+    private int mMediaBackgroundColor = 0;
 
     @Inject
     public SysuiColorExtractor(
@@ -159,5 +160,13 @@ public class SysuiColorExtractor extends ColorExtractor implements Dumpable,
         pw.println("  Neutral colors: " + mNeutralColorsLock);
         pw.println("  Has media backdrop: " + mHasMediaArtwork);
 
+    }
+
+    public void setMediaBackgroundColor(int color) {
+        mMediaBackgroundColor = color;
+    }
+
+    public int getMediaBackgroundColor() {
+        return mMediaBackgroundColor;
     }
 }
