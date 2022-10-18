@@ -42,6 +42,7 @@ public class ColorController extends ContentObserver
     public static final int COLOR_TYPE_ACCENT = 0;
     public static final int COLOR_TYPE_USER = 1;
     public static final int COLOR_TYPE_LAVALAMP = 2;
+    public static final int COLOR_TYPE_AUTO = 3;
     public static final int LAVA_LAMP_SPEED_DEF = 10000;
 
     private Context mContext;
@@ -50,6 +51,7 @@ public class ColorController extends ContentObserver
     private int mColorType;
     private int mAccentColor;
     private int mColor;
+    private int mAlbumColor;
 
     public ColorController(Context context, Handler handler) {
         super(handler);
@@ -57,6 +59,7 @@ public class ColorController extends ContentObserver
         mLavaLamp = new ColorAnimator();
         mLavaLamp.setColorAnimatorListener(this);
         mAccentColor = getAccentColor();
+        mAlbumColor = mAccentColor;
         updateSettings();
         startListening();
         Dependency.get(ConfigurationController.class).addCallback(this);
@@ -107,6 +110,8 @@ public class ColorController extends ContentObserver
                 mRenderer.onUpdateColor(mColor);
             } else if (mColorType == COLOR_TYPE_LAVALAMP && mRenderer.isValidStream()) {
                 startLavaLamp();
+            } else if (mColorType == COLOR_TYPE_AUTO) {
+                mRenderer.onUpdateColor(mAlbumColor);
             }
         }
     }
@@ -148,6 +153,21 @@ public class ColorController extends ContentObserver
     public void onColorChanged(ColorAnimator colorAnimator, int color) {
         if (mRenderer != null) {
             mRenderer.onUpdateColor(color);
+        }
+    }
+
+    public void setMediaNotificationColor(int color) {
+        if (color != 0) {
+            // be sure the color has an acceptable contrast against black navbar
+            mAlbumColor = ContrastColorUtil.findContrastColorAgainstDark(color, 0x000000, true, 2);
+            // now be sure the color also has an acceptable contrast against white navbar
+            mAlbumColor = ContrastColorUtil.findContrastColor(mAlbumColor, 0xffffff, true, 2);
+        } else {
+            // fallback to accent color if the media notification isn't colorized
+            mAlbumColor = mAccentColor;
+        }
+        if (mRenderer != null && mColorType == COLOR_TYPE_AUTO) {
+            mRenderer.onUpdateColor(mAlbumColor);
         }
     }
 }
