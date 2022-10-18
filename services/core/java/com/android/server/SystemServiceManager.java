@@ -125,8 +125,8 @@ public final class SystemServiceManager implements Dumpable {
 
     SystemServiceManager(Context context) {
         mContext = context;
-        mServices = new ArrayList<>();
-        mServiceClassnames = new ArraySet<>();
+        mServices = Collections.synchronizedList(new ArrayList<>());
+        mServiceClassnames = Collections.synchronizedSet(new ArraySet<>());
         mNumUserPoolThreads = Math.min(Runtime.getRuntime().availableProcessors(),
                 DEFAULT_MAX_USER_POOL_THREADS);
     }
