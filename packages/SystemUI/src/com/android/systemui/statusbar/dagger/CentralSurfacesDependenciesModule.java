@@ -30,6 +30,7 @@ import com.android.systemui.animation.ActivityTransitionAnimator;
 import com.android.systemui.animation.AnimationFeatureFlags;
 import com.android.systemui.animation.DialogTransitionAnimator;
 import com.android.systemui.bouncer.domain.interactor.AlternateBouncerInteractor;
+import com.android.systemui.colorextraction.SysuiColorExtractor;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dump.DumpHandler;
 import com.android.systemui.dump.DumpManager;
@@ -90,14 +91,16 @@ public interface CentralSurfacesDependenciesModule {
             NotifPipeline notifPipeline,
             NotifCollection notifCollection,
             MediaDataManager mediaDataManager,
-            DumpManager dumpManager) {
+            DumpManager dumpManager,
+            SysuiColorExtractor colorExtractor) {
         return new NotificationMediaManager(
                 context,
                 visibilityProvider,
                 notifPipeline,
                 notifCollection,
                 mediaDataManager,
-                dumpManager);
+                dumpManager,
+                colorExtractor);
     }
 
     /** */
