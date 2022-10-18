@@ -81,11 +81,13 @@ import com.android.internal.logging.InstanceId;
 import com.android.internal.widget.CachingIconView;
 import com.android.settingslib.widget.AdaptiveIcon;
 import com.android.systemui.ActivityIntentHelper;
+import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.animation.ActivityLaunchAnimator;
 import com.android.systemui.animation.GhostedViewLaunchAnimatorController;
 import com.android.systemui.bluetooth.BroadcastDialogController;
 import com.android.systemui.broadcast.BroadcastSender;
+import com.android.systemui.colorextraction.SysuiColorExtractor;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.flags.FeatureFlags;
@@ -251,6 +253,8 @@ public class MediaControlPanel {
     private TurbulenceNoiseAnimationConfig mTurbulenceNoiseAnimationConfig;
     private boolean mWasPlaying = false;
     private boolean mButtonClicked = false;
+
+    private final SysuiColorExtractor mColorExtractor = Dependency.get(SysuiColorExtractor.class);
 
     /**
      * Initialize a new control panel
@@ -889,6 +893,7 @@ public class MediaControlPanel {
                         appIconView.setImageResource(R.drawable.ic_music_note);
                     }
                 }
+                mColorExtractor.setMediaBackgroundColor(mColorSchemeTransition.getAccentPrimary().getTargetColor());
                 Trace.endAsyncSection(traceName, traceCookie);
             });
         });
