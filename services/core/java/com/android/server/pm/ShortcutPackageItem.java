@@ -228,9 +228,11 @@ abstract class ShortcutPackageItem {
     }
 
     public boolean waitForBitmapSaves() {
-        synchronized (mLock) {
-            return mShortcutBitmapSaver.waitForAllSavesLocked();
-        }
+        synchronized (mShortcutUser.mService.mLock) {
+	    synchronized (mLock) {
+                return mShortcutBitmapSaver.waitForAllSavesLocked();
+	    }
+	}
     }
 
     public void saveBitmap(ShortcutInfo shortcut,
