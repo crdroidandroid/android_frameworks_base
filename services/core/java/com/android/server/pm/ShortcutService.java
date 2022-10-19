@@ -278,7 +278,7 @@ public class ShortcutService extends IShortcutService.Stub {
 
     final Context mContext;
 
-    private final Object mLock = new Object();
+    final Object mLock = new Object();
     private final Object mNonPersistentUsersLock = new Object();
 
     private static List<ResolveInfo> EMPTY_RESOLVE_INFO = new ArrayList<>(0);
