@@ -33,8 +33,6 @@ public class CaptureResultExtras implements Parcelable {
     private long lastCompletedRegularFrameNumber;
     private long lastCompletedReprocessFrameNumber;
     private long lastCompletedZslFrameNumber;
-    private boolean hasReadoutTimestamp;
-    private long readoutTimestamp;
 
     public static final @android.annotation.NonNull Parcelable.Creator<CaptureResultExtras> CREATOR =
             new Parcelable.Creator<CaptureResultExtras>() {
@@ -58,8 +56,7 @@ public class CaptureResultExtras implements Parcelable {
                                int partialResultCount, int errorStreamId,
                                String errorPhysicalCameraId, long lastCompletedRegularFrameNumber,
                                long lastCompletedReprocessFrameNumber,
-                               long lastCompletedZslFrameNumber, boolean hasReadoutTimestamp,
-                               long readoutTimestamp) {
+                               long lastCompletedZslFrameNumber) {
         this.requestId = requestId;
         this.subsequenceId = subsequenceId;
         this.afTriggerId = afTriggerId;
@@ -71,8 +68,6 @@ public class CaptureResultExtras implements Parcelable {
         this.lastCompletedRegularFrameNumber = lastCompletedRegularFrameNumber;
         this.lastCompletedReprocessFrameNumber = lastCompletedReprocessFrameNumber;
         this.lastCompletedZslFrameNumber = lastCompletedZslFrameNumber;
-        this.hasReadoutTimestamp = hasReadoutTimestamp;
-        this.readoutTimestamp = readoutTimestamp;
     }
 
     // Backwards-compatible constructor
@@ -112,10 +107,6 @@ public class CaptureResultExtras implements Parcelable {
         dest.writeLong(lastCompletedRegularFrameNumber);
         dest.writeLong(lastCompletedReprocessFrameNumber);
         dest.writeLong(lastCompletedZslFrameNumber);
-        dest.writeBoolean(hasReadoutTimestamp);
-        if (hasReadoutTimestamp) {
-            dest.writeLong(readoutTimestamp);
-        }
     }
 
     public void readFromParcel(Parcel in) {
@@ -133,10 +124,6 @@ public class CaptureResultExtras implements Parcelable {
         lastCompletedRegularFrameNumber = in.readLong();
         lastCompletedReprocessFrameNumber = in.readLong();
         lastCompletedZslFrameNumber = in.readLong();
-        hasReadoutTimestamp = in.readBoolean();
-        if (hasReadoutTimestamp) {
-            readoutTimestamp = in.readLong();
-        }
     }
 
     public String getErrorPhysicalCameraId() {
@@ -181,13 +168,5 @@ public class CaptureResultExtras implements Parcelable {
 
     public long getLastCompletedZslFrameNumber() {
         return lastCompletedZslFrameNumber;
-    }
-
-    public boolean hasReadoutTimestamp() {
-        return hasReadoutTimestamp;
-    }
-
-    public long getReadoutTimestamp() {
-        return readoutTimestamp;
     }
 }
