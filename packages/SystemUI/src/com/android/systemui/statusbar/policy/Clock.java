@@ -533,13 +533,6 @@ public class Clock extends TextView implements
         mCachedWidth = -1;
 
         FontSizeUtils.updateFontSize(this, R.dimen.status_bar_clock_size);
-        setPaddingRelative(
-                mContext.getResources().getDimensionPixelSize(
-                        R.dimen.status_bar_clock_starting_padding),
-                0,
-                mContext.getResources().getDimensionPixelSize(
-                        R.dimen.status_bar_clock_end_padding),
-                0);
 
         float fontHeight = getPaint().getFontMetricsInt(null);
         setLineHeight(TypedValue.COMPLEX_UNIT_PX, fontHeight);
