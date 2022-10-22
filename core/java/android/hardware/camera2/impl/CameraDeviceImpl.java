@@ -2066,16 +2066,12 @@ public class CameraDeviceImpl extends CameraDevice
                     resultExtras.getLastCompletedReprocessFrameNumber();
             final long lastCompletedZslFrameNumber =
                     resultExtras.getLastCompletedZslFrameNumber();
-            final boolean hasReadoutTimestamp = resultExtras.hasReadoutTimestamp();
-            final long readoutTimestamp = resultExtras.getReadoutTimestamp();
 
             if (DEBUG) {
                 Log.d(TAG, "Capture started for id " + requestId + " frame number " + frameNumber
                         + ": completedRegularFrameNumber " + lastCompletedRegularFrameNumber
                         + ", completedReprocessFrameNUmber " + lastCompletedReprocessFrameNumber
-                        + ", completedZslFrameNumber " + lastCompletedZslFrameNumber
-                        + ", hasReadoutTimestamp " + hasReadoutTimestamp
-                        + (hasReadoutTimestamp ? ", readoutTimestamp " + readoutTimestamp : "")) ;
+                        + ", completedZslFrameNumber " + lastCompletedZslFrameNumber);
             }
             final CaptureCallbackHolder holder;
 
@@ -2127,26 +2123,14 @@ public class CameraDeviceImpl extends CameraDevice
                                                 CameraDeviceImpl.this,
                                                 holder.getRequest(i),
                                                 timestamp - (subsequenceId - i) *
-                                                NANO_PER_SECOND / fpsRange.getUpper(),
+                                                NANO_PER_SECOND/fpsRange.getUpper(),
                                                 frameNumber - (subsequenceId - i));
-                                            if (hasReadoutTimestamp) {
-                                                holder.getCallback().onReadoutStarted(
-                                                    CameraDeviceImpl.this,
-                                                    holder.getRequest(i),
-                                                    readoutTimestamp - (subsequenceId - i) *
-                                                    NANO_PER_SECOND / fpsRange.getUpper(),
-                                                    frameNumber - (subsequenceId - i));
-                                            }
                                         }
                                     } else {
                                         holder.getCallback().onCaptureStarted(
-                                            CameraDeviceImpl.this, request,
+                                            CameraDeviceImpl.this,
+                                            holder.getRequest(resultExtras.getSubsequenceId()),
                                             timestamp, frameNumber);
-                                        if (hasReadoutTimestamp) {
-                                            holder.getCallback().onReadoutStarted(
-                                                CameraDeviceImpl.this, request,
-                                                readoutTimestamp, frameNumber);
-                                        }
                                     }
                                 }
                             }
