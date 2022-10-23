@@ -113,6 +113,9 @@ public class PulseControllerImpl
     private boolean mDozing;
     private boolean mKeyguardGoingAway;
 
+    private boolean mNavPulseAttached;
+    private boolean mLsPulseAttached;
+
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -244,20 +247,27 @@ public class PulseControllerImpl
             && mNavPulseEnabled && !mKeyguardShowing;
 
         if (mKeyguardGoingAway) {
-            detachPulseFrom(vv, allowNavPulse/*keep linked*/);
+            if (mLsPulseAttached) {
+                detachPulseFrom(vv, allowNavPulse/*keep linked*/);
+                mLsPulseAttached = false;
+            }
             return;
         }
-        if (!allowNavPulse) {
+        if (!allowNavPulse && mNavPulseAttached) {
             detachPulseFrom(nv, allowLsPulse || allowAmbPulse/*keep linked*/);
+            mNavPulseAttached = false;
         }
-        if (!allowLsPulse && !allowAmbPulse) {
+        if (!allowLsPulse && !allowAmbPulse && mLsPulseAttached) {
             detachPulseFrom(vv, allowNavPulse/*keep linked*/);
+            mLsPulseAttached = false;
         }
 
-        if (allowLsPulse || allowAmbPulse) {
+        if ((allowLsPulse || allowAmbPulse) && !mLsPulseAttached) {
             attachPulseTo(vv);
-        } else if (allowNavPulse) {
+            mLsPulseAttached = true;
+        } else if (allowNavPulse && !mNavPulseAttached) {
             attachPulseTo(nv);
+            mNavPulseAttached = true;
         }
     }
 
@@ -320,7 +330,7 @@ public class PulseControllerImpl
         if (parent == null) return;
         View v = parent.findViewWithTag(PulseView.TAG);
         if (v != null) {
-            parent.removeView(v);
+            parent.removeView(mPulseView);
             mAttached = keepLinked;
             log("detachPulseFrom() ");
             doLinkage();
