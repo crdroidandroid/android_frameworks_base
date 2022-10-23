@@ -31,6 +31,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.UserHandle;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -87,6 +88,10 @@ public class ClipboardListener implements
 
     @Override
     public void onPrimaryClipChanged() {
+        if (Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.SHOW_CLIPBOARD_OVERLAY, 1, UserHandle.USER_CURRENT) == 0) {
+            return;
+        }
         if (!mClipboardManager.hasPrimaryClip()) {
             return;
         }
