@@ -134,6 +134,10 @@ public class ClipboardListener implements
         if (!mClipboardManagerForUser.hasPrimaryClip()) {
             return;
         }
+        if (Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.SHOW_CLIPBOARD_OVERLAY, 1, UserHandle.USER_CURRENT) == 0) {
+            return;
+        }
 
         String clipSource = mClipboardManagerForUser.getPrimaryClipSource();
         ClipData clipData = mClipboardManagerForUser.getPrimaryClip();
