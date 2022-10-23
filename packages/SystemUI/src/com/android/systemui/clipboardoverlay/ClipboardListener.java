@@ -24,7 +24,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.provider.DeviceConfig;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -49,6 +51,7 @@ public class ClipboardListener extends CoreStartable
     static final String EXTRA_SUPPRESS_OVERLAY =
             "com.android.systemui.SUPPRESS_CLIPBOARD_OVERLAY";
 
+    private final Context mContext;
     private final DeviceConfigProxy mDeviceConfig;
     private final ClipboardOverlayControllerFactory mOverlayFactory;
     private final ClipboardManager mClipboardManager;
@@ -60,6 +63,7 @@ public class ClipboardListener extends CoreStartable
             ClipboardOverlayControllerFactory overlayFactory, ClipboardManager clipboardManager,
             UiEventLogger uiEventLogger) {
         super(context);
+        mContext = context;
         mDeviceConfig = deviceConfigProxy;
         mOverlayFactory = overlayFactory;
         mClipboardManager = clipboardManager;
@@ -76,6 +80,10 @@ public class ClipboardListener extends CoreStartable
 
     @Override
     public void onPrimaryClipChanged() {
+        if (Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.SHOW_CLIPBOARD_OVERLAY, 1, UserHandle.USER_CURRENT) == 0) {
+            return;
+        }
         if (!mClipboardManager.hasPrimaryClip()) {
             return;
         }
