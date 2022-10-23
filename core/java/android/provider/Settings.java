@@ -14082,6 +14082,13 @@ public final class Settings {
         public static final String NAVBAR_IME_SPACE = "navbar_ime_space";
 
         /**
+         * Whether to show an overlay in the bottom corner of the screen on copying stuff
+         * into the clipboard.
+         * @hide
+         */
+        public static final String SHOW_CLIPBOARD_OVERLAY = "show_clipboard_overlay";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
