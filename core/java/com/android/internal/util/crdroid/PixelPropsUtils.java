@@ -87,6 +87,7 @@ public class PixelPropsUtils {
             "com.google.android.UltraCVM",
             "com.google.android.apps.cameralite",
             "com.google.android.dialer",
+            "com.google.android.euicc",
             "com.google.ar.core",
             "com.google.android.youtube",
             "com.google.android.apps.youtube.kids",
