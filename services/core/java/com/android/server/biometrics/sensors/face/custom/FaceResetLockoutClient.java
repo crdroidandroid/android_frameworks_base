@@ -22,14 +22,19 @@ import android.util.Slog;
 
 import com.android.internal.util.custom.faceunlock.IFaceService;
 import com.android.server.biometrics.sensors.BaseClientMonitor;
+import com.android.server.biometrics.sensors.ClientMonitorCallback;
 import com.android.server.biometrics.sensors.HalClientMonitor;
+import com.android.server.biometrics.log.BiometricContext;
+import com.android.server.biometrics.log.BiometricLogger;
+
+import java.util.function.Supplier;
 
 class FaceResetLockoutClient extends HalClientMonitor<IFaceService> {
     private static final String TAG = "FaceResetLockoutClient";
     private final byte[] mHardwareAuthToken;
 
-    FaceResetLockoutClient(Context context, HalClientMonitor.LazyDaemon<IFaceService> lazyDaemon, int userId, String owner, int sensorId, byte[] hardwareAuthToken) {
-        super(context, lazyDaemon, null, null, userId, owner, 0, sensorId, 0, 0, 0);
+    FaceResetLockoutClient(Context context, Supplier<IFaceService> lazyDaemon, int userId, String owner, int sensorId, BiometricLogger biometricLogger, BiometricContext biometricContext, byte[] hardwareAuthToken) {
+        super(context, lazyDaemon, null, null, userId, owner, 0, sensorId, biometricLogger, biometricContext);
         mHardwareAuthToken = hardwareAuthToken.clone();
     }
 
@@ -38,7 +43,7 @@ class FaceResetLockoutClient extends HalClientMonitor<IFaceService> {
     }
 
     @Override
-    public void start(BaseClientMonitor.Callback callback) {
+    public void start(ClientMonitorCallback callback) {
         super.start(callback);
         startHalOperation();
     }
@@ -57,5 +62,10 @@ class FaceResetLockoutClient extends HalClientMonitor<IFaceService> {
     @Override
     public int getProtoEnum() {
         return 12;
+    }
+
+    @Override
+    public boolean interruptsPrecedingClients() {
+        return true;
     }
 }
