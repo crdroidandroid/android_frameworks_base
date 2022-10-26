@@ -24,16 +24,18 @@ import android.util.Slog;
 
 import com.android.internal.util.custom.faceunlock.IFaceService;
 import com.android.server.biometrics.sensors.BiometricUtils;
-import com.android.server.biometrics.sensors.HalClientMonitor;
 import com.android.server.biometrics.sensors.InternalEnumerateClient;
+import com.android.server.biometrics.log.BiometricContext;
+import com.android.server.biometrics.log.BiometricLogger;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 class FaceInternalEnumerateClient extends InternalEnumerateClient<IFaceService> {
     private static final String TAG = "FaceInternalEnumerateClient";
 
-    FaceInternalEnumerateClient(Context context, HalClientMonitor.LazyDaemon<IFaceService> lazyDaemon, IBinder token, int userId, String owner, List<Face> enrolledList, BiometricUtils<Face> utils, int sensorId) {
-        super(context, lazyDaemon, token, userId, owner, enrolledList, utils, sensorId, 4);
+    FaceInternalEnumerateClient(Context context, Supplier<IFaceService> lazyDaemon, IBinder token, int userId, String owner, List<Face> enrolledList, BiometricUtils<Face> utils, int sensorId, BiometricLogger biometricLogger, BiometricContext biometricContext) {
+        super(context, lazyDaemon, token, userId, owner, enrolledList, utils, sensorId, biometricLogger, biometricContext);
     }
 
     @Override
