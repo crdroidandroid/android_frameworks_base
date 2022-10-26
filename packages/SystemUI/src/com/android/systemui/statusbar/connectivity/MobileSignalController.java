@@ -276,6 +276,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
 
         Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
         Dependency.get(TunerService.class).addTunable(this, SHOW_FOURG_ICON);
+        Dependency.get(TunerService.class).addTunable(this, DATA_DISABLED_ICON);
     }
 
     @Override
