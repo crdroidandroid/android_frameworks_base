@@ -25,17 +25,19 @@ import android.util.Slog;
 import com.android.internal.util.custom.faceunlock.IFaceService;
 import com.android.server.biometrics.sensors.BiometricUtils;
 import com.android.server.biometrics.sensors.ClientMonitorCallbackConverter;
-import com.android.server.biometrics.sensors.HalClientMonitor;
 import com.android.server.biometrics.sensors.RemovalClient;
+import com.android.server.biometrics.log.BiometricContext;
+import com.android.server.biometrics.log.BiometricLogger;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 class FaceRemovalClient extends RemovalClient<Face, IFaceService> {
     private static final String TAG = "FaceRemovalClient";
     private final int mBiometricId;
 
-    FaceRemovalClient(Context context, HalClientMonitor.LazyDaemon<IFaceService> lazyDaemon, IBinder token, ClientMonitorCallbackConverter listener, int biometricId, int userId, String owner, BiometricUtils<Face> utils, int sensorId, Map<Integer, Long> authenticatorIds) {
-        super(context, lazyDaemon, token, listener, userId, owner, utils, sensorId, authenticatorIds, 4);
+    FaceRemovalClient(Context context, Supplier<IFaceService> lazyDaemon, IBinder token, ClientMonitorCallbackConverter listener, int biometricId, int userId, String owner, BiometricUtils<Face> utils, int sensorId, BiometricLogger biometricLogger, BiometricContext biometricContext, Map<Integer, Long> authenticatorIds) {
+        super(context, lazyDaemon, token, listener, userId, owner, utils, sensorId, biometricLogger, biometricContext, authenticatorIds);
         mBiometricId = biometricId;
     }
 
