@@ -25,24 +25,27 @@ import android.util.Slog;
 import com.android.internal.util.Preconditions;
 import com.android.internal.util.custom.faceunlock.IFaceService;
 import com.android.server.biometrics.sensors.BaseClientMonitor;
+import com.android.server.biometrics.sensors.ClientMonitorCallback;
 import com.android.server.biometrics.sensors.ClientMonitorCallbackConverter;
 import com.android.server.biometrics.sensors.GenerateChallengeClient;
-import com.android.server.biometrics.sensors.HalClientMonitor;
+import com.android.server.biometrics.log.BiometricContext;
+import com.android.server.biometrics.log.BiometricLogger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 class FaceGenerateChallengeClient extends GenerateChallengeClient<IFaceService> {
     static final int CHALLENGE_TIMEOUT_SEC = 600;
-    private static final BaseClientMonitor.Callback EMPTY_CALLBACK = new BaseClientMonitor.Callback() {
+    private static final ClientMonitorCallback EMPTY_CALLBACK = new ClientMonitorCallback() {
     };
     private static final String TAG = "FaceGenerateChallengeClient";
     private final long mCreatedAt;
     private Long mChallengeResult;
     private List<IFaceServiceReceiver> mWaiting = new ArrayList();
 
-    FaceGenerateChallengeClient(Context context, HalClientMonitor.LazyDaemon<IFaceService> lazyDaemon, IBinder token, ClientMonitorCallbackConverter listener, int userId, String owner, int sensorId, long now) {
-        super(context, lazyDaemon, token, listener, userId, owner, sensorId);
+    FaceGenerateChallengeClient(Context context, Supplier<IFaceService> lazyDaemon, IBinder token, ClientMonitorCallbackConverter listener, int userId, String owner, int sensorId, BiometricLogger biometricLogger, BiometricContext biometricContext, long now) {
+        super(context, lazyDaemon, token, listener, userId, owner, sensorId, biometricLogger, biometricContext);
         mCreatedAt = now;
     }
 
@@ -78,7 +81,7 @@ class FaceGenerateChallengeClient extends GenerateChallengeClient<IFaceService> 
         }
     }
 
-    private void sendChallengeResult(ClientMonitorCallbackConverter receiver, BaseClientMonitor.Callback ownerCallback) {
+    private void sendChallengeResult(ClientMonitorCallbackConverter receiver, ClientMonitorCallback ownerCallback) {
         Preconditions.checkState(mChallengeResult != null, "result not available");
         try {
             receiver.onChallengeGenerated(getSensorId(), getTargetUserId(), mChallengeResult);
