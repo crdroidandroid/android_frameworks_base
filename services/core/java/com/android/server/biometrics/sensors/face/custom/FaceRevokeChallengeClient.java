@@ -22,14 +22,17 @@ import android.os.RemoteException;
 import android.util.Slog;
 
 import com.android.internal.util.custom.faceunlock.IFaceService;
-import com.android.server.biometrics.sensors.HalClientMonitor;
 import com.android.server.biometrics.sensors.RevokeChallengeClient;
+import com.android.server.biometrics.log.BiometricContext;
+import com.android.server.biometrics.log.BiometricLogger;
+
+import java.util.function.Supplier;
 
 class FaceRevokeChallengeClient extends RevokeChallengeClient<IFaceService> {
     private static final String TAG = "FaceRevokeChallengeClient";
 
-    FaceRevokeChallengeClient(Context context, HalClientMonitor.LazyDaemon<IFaceService> lazyDaemon, IBinder token, int userId, String owner, int sensorId) {
-        super(context, lazyDaemon, token, userId, owner, sensorId);
+    FaceRevokeChallengeClient(Context context, Supplier<IFaceService> lazyDaemon, IBinder token, int userId, String owner, int sensorId, BiometricLogger biometricLogger, BiometricContext biometricContext) {
+        super(context, lazyDaemon, token, userId, owner, sensorId, biometricLogger, biometricContext);
     }
 
     @Override
