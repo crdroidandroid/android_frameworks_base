@@ -179,6 +179,7 @@ public final class BatteryService extends SystemService {
     private boolean mDashCharger;
     private boolean mHasDashCharger;
     private boolean mLastDashCharger;
+    private String mOpDashChargerPath;
 
     private boolean mWarpCharger;
     private boolean mHasWarpCharger;
@@ -892,8 +893,9 @@ public final class BatteryService extends SystemService {
     }
 
     private boolean isDashCharger() {
+        mOpDashChargerPath = mContext.getResources().getString(com.android.internal.R.string.config_DashChargerStatusPath);
         try {
-            FileReader file = new FileReader("/sys/class/power_supply/battery/fastchg_status");
+            FileReader file = new FileReader(mOpDashChargerPath);
             BufferedReader br = new BufferedReader(file);
             String state = br.readLine();
             br.close();
