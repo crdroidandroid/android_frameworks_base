@@ -95,4 +95,7 @@
 
     <!-- Maximum vertical offset of statusbar for burn-in protection -->
     <dimen name="status_bar_offset_max_y">4dp</dimen>
+
+    <!-- Bluetooth dialog -->
+    <dimen name="bluetooth_dialog_active_device_bottom_margin">4dp</dimen>
 </resources>
