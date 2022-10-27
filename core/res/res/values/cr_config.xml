@@ -27,6 +27,8 @@
 
     <!-- Whether device has dash charging support -->
     <bool name="config_hasDashCharger">false</bool>
+    <!-- Path to dash charging status file -->
+    <string name="config_DashChargerStatusPath">/sys/class/power_supply/battery/fastchg_status</string>
 
     <!-- Whether device has warp charging support -->
     <bool name="config_hasWarpCharger">false</bool>
