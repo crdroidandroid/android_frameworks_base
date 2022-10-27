@@ -26,6 +26,9 @@
     <!-- Whether device has dash charging support -->
     <java-symbol type="bool" name="config_hasDashCharger" />
 
+    <!-- Path to warp charging status file -->
+    <java-symbol type="string" name="config_DashChargerStatusPath" />
+
     <!-- Whether device has warp charging support -->
     <java-symbol type="bool" name="config_hasWarpCharger" />
 
