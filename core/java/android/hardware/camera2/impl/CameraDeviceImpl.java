@@ -643,7 +643,11 @@ public class CameraDeviceImpl extends CameraDevice
         if (!checkSurfaceSizesCompatible(outputs)) {
             return false;
         }
-        checkInputConfiguration(inputConfig);
+        try {
+            checkInputConfiguration(inputConfig);
+        } catch (IllegalArgumentException e) {
+            Log.w(TAG, "Check input configuration failed due to: " + e.getMessage());
+        }
 
         boolean success = false;
 
