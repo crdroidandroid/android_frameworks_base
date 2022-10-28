@@ -25,6 +25,7 @@ import android.os.PowerManager;
 import android.os.RemoteException;
 import android.util.Slog;
 
+import com.android.internal.annotations.GuardedBy;
 import com.android.internal.annotations.VisibleForTesting;
 
 import java.util.ArrayList;
@@ -41,7 +42,9 @@ public class LockoutResetDispatcher implements IBinder.DeathRecipient {
     private static final String TAG = "LockoutResetTracker";
 
     private final Context mContext;
+    private final Object mMutex = new Object();
     @VisibleForTesting
+    @GuardedBy("mMutex")
     final List<ClientCallback> mClientCallbacks = new ArrayList<>();
 
     private static class ClientCallback {
@@ -89,16 +92,18 @@ public class LockoutResetDispatcher implements IBinder.DeathRecipient {
     }
 
     public void addCallback(IBiometricServiceLockoutResetCallback callback, String opPackageName) {
-        if (callback == null) {
-            Slog.w(TAG, "Callback from : " + opPackageName + " is null");
-            return;
-        }
+        synchronized (mMutex) {
+            if (callback == null) {
+                Slog.w(TAG, "Callback from : " + opPackageName + " is null");
+                return;
+            }
 
-        mClientCallbacks.add(new ClientCallback(mContext, callback, opPackageName));
-        try {
-            callback.asBinder().linkToDeath(this, 0 /* flags */);
-        } catch (RemoteException e) {
-            Slog.e(TAG, "Failed to link to death", e);
+            mClientCallbacks.add(new ClientCallback(mContext, callback, opPackageName));
+            try {
+                callback.asBinder().linkToDeath(this, 0 /* flags */);
+            } catch (RemoteException e) {
+                Slog.e(TAG, "Failed to link to death", e);
+            }
         }
     }
 
@@ -109,21 +114,25 @@ public class LockoutResetDispatcher implements IBinder.DeathRecipient {
 
     @Override
     public void binderDied(IBinder who) {
-        Slog.e(TAG, "Callback binder died: " + who);
-        final Iterator<ClientCallback> iterator = mClientCallbacks.iterator();
-        while (iterator.hasNext()) {
-            final ClientCallback callback = iterator.next();
-            if (callback.mCallback.asBinder().equals(who)) {
-                Slog.e(TAG, "Removing dead callback for: " + callback.mOpPackageName);
-                callback.releaseWakelock();
-                iterator.remove();
+        synchronized (mMutex) {
+            Slog.e(TAG, "Callback binder died: " + who);
+            final Iterator<ClientCallback> iterator = mClientCallbacks.iterator();
+            while (iterator.hasNext()) {
+                final ClientCallback callback = iterator.next();
+                if (callback.mCallback.asBinder().equals(who)) {
+                    Slog.e(TAG, "Removing dead callback for: " + callback.mOpPackageName);
+                    callback.releaseWakelock();
+                    iterator.remove();
+                }
             }
         }
     }
 
     public void notifyLockoutResetCallbacks(int sensorId) {
-        for (ClientCallback callback : mClientCallbacks) {
-            callback.sendLockoutReset(sensorId);
+        synchronized (mMutex) {
+            for (ClientCallback callback : mClientCallbacks) {
+                callback.sendLockoutReset(sensorId);
+            }
         }
     }
 }
