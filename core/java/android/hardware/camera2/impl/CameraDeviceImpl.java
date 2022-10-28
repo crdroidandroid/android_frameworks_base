@@ -453,7 +453,11 @@ public class CameraDeviceImpl extends CameraDevice
                     "any output streams");
         }
 
-        checkInputConfiguration(inputConfig);
+        try {
+            checkInputConfiguration(inputConfig);
+        } catch (IllegalArgumentException e) {
+            Log.w(TAG, "Check input configuration failed due to: " + e.getMessage());
+        }
 
         boolean success = false;
 
