@@ -27,11 +27,11 @@
     <string name="permgrouprequest_fake_package_signature">Cho phép
         &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; giả mạo gói chữ ký?</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Bấm và giữ nút nguồn để mở khoá</string>
+    <string name="pocket_lock_message_long_press">Nhấn giữ nút nguồn để mở khoá</string>
     <string name="pocket_view_title">Chế độ bỏ túi đang bật</string>
     <string name="pocket_view_title_cancel">Để sử dụng điện thoại của bạn:</string>
     <string name="pocket_view_top_tag_cancel">Đảm bảo không có vật cản nào trên vùng màu xanh của điện thoại và làm sạch bụi bẩn.</string>
-    <string name="pocket_view_top_tag_cancel2">Nhấn giữ nút nguồn để buộc thoát khỏi chế độ bỏ túi.</string>
+    <string name="pocket_view_top_tag_cancel2">Ấn giữ nút nguồn để bắt buộc thoát chế độ bỏ túi.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Face unlock -->
