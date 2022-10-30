@@ -148,8 +148,8 @@
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Panell de volum</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="force_stop_dlg_title">Forçar l\'aturada?</string>
+    <string name="force_stop_dlg_text">Si es força l\'aturada d\'una app, és possible que no funcioni correctament.</string>
     <!-- Smart Pixels QS Tile -->
     <string name="quick_settings_smart_pixels">Smart Pixels</string>
     <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled Smart Pixels</string>
