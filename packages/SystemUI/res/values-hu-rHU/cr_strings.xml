@@ -24,18 +24,18 @@
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">Törlés</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">A képernyővideó törölve</string>
+    <string name="screenrecord_delete_description">Képernyőfelvétel törölve</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Látható megállítógomb</string>
+    <string name="screenrecord_stopdot_label">Megállítógomb megjelenítése</string>
     <string name="screenrecord_stopdot_summary">Eltávolítás hosszannyomással</string>
-    <string name="screenrecord_lowquality_label">Gyengébb minőség, hogy kisebbek legyenek a fájlok</string>
+    <string name="screenrecord_lowquality_label">Gyengébb minőség</string>
     <string name="screenrecord_lowquality_summary">Kisebb fájlméretért</string>
-    <string name="screenrecord_longer_timeout_switch_label">A fájlméret felső határa</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Max.15GB felvételi fájlméret</string>
+    <string name="screenrecord_longer_timeout_switch_label">Magasabb fajlméret korlát</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Max. 15GB felvételi fájlméret</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Törlés</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Képernyőkép-törlés</string>
+    <string name="screenshot_delete_description">Képernyőkép törlése</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
@@ -55,25 +55,25 @@
     <string name="usage_data_default_suffix">Adat</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Erőteljes töltés (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> a teljes töltésig)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Erőteljes töltés</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • \"Dash\" töltés (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> a teljes töltésig)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • \"Dash\" töltés</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Lánctöltés (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> a teljes töltöttségig)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Lánctöltés</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> \"Warp\" töltés (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> a teljes töltöttségig)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • \"Warp\" töltés</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Töltés (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> a teljes feltöltésig)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g>• VOOC Töltés</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo Charging</string>
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbó töltés (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> a teljes töltöttségig)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbó töltés</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">Menet közben (On-The-Go) aktiválva</string>
-    <string name="onthego_notif_title">A Menet közben (On-The-Go) aktív</string>
+    <string name="onthego_notif_ticker">On-The-Go aktiválva</string>
+    <string name="onthego_notif_title">On-The-Go aktív</string>
     <string name="onthego_notif_stop">Leállítás</string>
     <string name="onthego_notif_options">Beállítások</string>
     <string name="onthego_notif_error">Nem lehet elindítani a Menet közben módot (On-The-Go)</string>
     <string name="onthego_notif_restart">A Menet közben mód (On-The-Go) újraindítása</string>
-    <string name="onthego_notif_camera_changed">A Kameramód megváltoztatva</string>
+    <string name="onthego_notif_camera_changed">A Kameramód megváltozott</string>
     <string name="onthego_transparency">Átlátszóság</string>
     <string name="onthego_front_camera">Az előlapi kamera használata</string>
     <string name="onthego_service_toggle">Automatikusan indítsa újra a szolgáltatást</string>
