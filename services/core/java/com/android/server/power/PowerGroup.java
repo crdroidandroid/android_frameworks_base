@@ -223,6 +223,7 @@ public class PowerGroup {
             // The instrument will be timed out automatically after 2 seconds.
             latencyTracker.onActionStart(ACTION_TURN_ON_SCREEN, String.valueOf(mGroupId));
 
+            setSandmanSummonedLocked(/* isSandmanSummoned= */ false);
             setWakefulnessLocked(WAKEFULNESS_AWAKE, eventTime, uid, reason, opUid,
                     opPackageName, details);
         } finally {
