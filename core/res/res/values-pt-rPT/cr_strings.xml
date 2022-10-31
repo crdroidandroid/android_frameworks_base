@@ -27,15 +27,15 @@
     <string name="permgrouprequest_fake_package_signature">Permitir que
         &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; falsifique a assinatura do pacote?</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Para desbloquear pressione e mantenha pressionado o botão de ligar</string>
+    <string name="pocket_lock_message_long_press">Prima e segure o botão de energia para desbloquear</string>
     <string name="pocket_view_title">Modo de bolso ativado</string>
     <string name="pocket_view_title_cancel">Para utilizar o seu telefone:</string>
     <string name="pocket_view_top_tag_cancel">Verifique se a área azul do seu telefone está desobstruída e limpe qualquer sujidade ou pó.</string>
-    <string name="pocket_view_top_tag_cancel2">Pressione longamente o botão de energia para forçar a saída do modo de bolso.</string>
+    <string name="pocket_view_top_tag_cancel2">Mantenha premido o botão de energia para forçar a saída do modo de bolso.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
     <string name="aerr_copy">Copiar URL do registo de falhas</string>
     <string name="url_copy_success">URL copiado com sucesso</string>
-    <string name="url_copy_failed">Ocorreu um erro ao enviar o registo para o dogbin</string>
+    <string name="url_copy_failed">Ocorreu um erro ao enviar o registo para o Pasty</string>
 </resources>
