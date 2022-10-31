@@ -64,8 +64,8 @@
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC 闪充中 (还需 <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 充满)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC 闪充中</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo Charging</string>
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • 快速充电中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 后充满)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • 快速充电中</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">行走模式已激活</string>
     <string name="onthego_notif_title">行走模式处于活动状态</string>
