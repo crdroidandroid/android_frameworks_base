@@ -143,6 +143,7 @@ public final class NotificationChannel implements Parcelable {
     private static final String ATT_LIGHTS = "lights";
     private static final String ATT_LIGHT_COLOR = "light_color";
     private static final String ATT_VIBRATION = "vibration";
+    private static final String ATT_CUSTOM_VIBRATION = "custom_vibration";
     private static final String ATT_VIBRATION_ENABLED = "vibration_enabled";
     private static final String ATT_SOUND = "sound";
     private static final String ATT_USAGE = "usage";
@@ -246,6 +247,7 @@ public final class NotificationChannel implements Parcelable {
     private boolean mLights;
     private int mLightColor = DEFAULT_LIGHT_COLOR;
     private long[] mVibration;
+    private long[] mCustomVibration;
     // Bitwise representation of fields that have been changed by the user, preventing the app from
     // making changes to these fields.
     private int mUserLockedFields;
@@ -316,6 +318,10 @@ public final class NotificationChannel implements Parcelable {
         if (mVibration != null && mVibration.length > MAX_VIBRATION_LENGTH) {
             mVibration = Arrays.copyOf(mVibration, MAX_VIBRATION_LENGTH);
         }
+        mCustomVibration = in.createLongArray();
+        if (mCustomVibration != null && mCustomVibration.length > MAX_VIBRATION_LENGTH) {
+            mCustomVibration = Arrays.copyOf(mCustomVibration, MAX_VIBRATION_LENGTH);
+        }
         mUserLockedFields = in.readInt();
         mFgServiceShown = in.readByte() != 0;
         mVibrationEnabled = in.readByte() != 0;
@@ -370,6 +376,7 @@ public final class NotificationChannel implements Parcelable {
         }
         dest.writeByte(mLights ? (byte) 1 : (byte) 0);
         dest.writeLongArray(mVibration);
+        dest.writeLongArray(mCustomVibration);
         dest.writeInt(mUserLockedFields);
         dest.writeByte(mFgServiceShown ? (byte) 1 : (byte) 0);
         dest.writeByte(mVibrationEnabled ? (byte) 1 : (byte) 0);
@@ -585,6 +592,17 @@ public final class NotificationChannel implements Parcelable {
     }
 
     /**
+     * Sets a custom vibration pattern for notifications posted to this channel. If the provided
+     * pattern is valid (non-null, non-empty) and the app hasn't set any pattern
+     * via {@link setVibrationPattern} this will override default vibration pattern
+     * @hide
+     */
+    public void setCustomVibrationPattern(long[] vibrationPattern) {
+        this.mVibrationEnabled = vibrationPattern != null && vibrationPattern.length > 0;
+        this.mCustomVibration = vibrationPattern;
+    }
+
+    /**
      * Sets the level of interruption of this notification channel.
      *
      * Only modifiable before the channel is submitted to
@@ -755,6 +773,16 @@ public final class NotificationChannel implements Parcelable {
      */
     public long[] getVibrationPattern() {
         return mVibration;
+    }
+
+    /**
+     * Returns the vibration pattern for notifications posted to this channel. Will be ignored if
+     * vibration is not enabled ({@link #shouldVibrate()}
+     * or if the app has any other vibration pattern set via {@link setVibrationPattern}
+     * @hide
+     */
+    public long[] getCustomVibrationPattern() {
+        return mCustomVibration;
     }
 
     /**
@@ -956,6 +984,7 @@ public final class NotificationChannel implements Parcelable {
         enableLights(safeBool(parser, ATT_LIGHTS, false));
         setLightColor(safeInt(parser, ATT_LIGHT_COLOR, DEFAULT_LIGHT_COLOR));
         setVibrationPattern(safeLongArray(parser, ATT_VIBRATION, null));
+        setCustomVibrationPattern(safeLongArray(parser, ATT_CUSTOM_VIBRATION, null));
         enableVibration(safeBool(parser, ATT_VIBRATION_ENABLED, false));
         setShowBadge(safeBool(parser, ATT_SHOW_BADGE, false));
         setDeleted(safeBool(parser, ATT_DELETED, false));
@@ -1067,6 +1096,9 @@ public final class NotificationChannel implements Parcelable {
         if (getVibrationPattern() != null) {
             out.attribute(null, ATT_VIBRATION, longArrayToString(getVibrationPattern()));
         }
+        if (getCustomVibrationPattern() != null) {
+            out.attribute(null, ATT_CUSTOM_VIBRATION, longArrayToString(getCustomVibrationPattern()));
+        }
         if (getUserLockedFields() != 0) {
             out.attributeInt(null, ATT_USER_LOCKED, getUserLockedFields());
         }
@@ -1147,6 +1179,7 @@ public final class NotificationChannel implements Parcelable {
         record.put(ATT_USER_LOCKED, Integer.toString(getUserLockedFields()));
         record.put(ATT_FG_SERVICE_SHOWN, Boolean.toString(isFgServiceShown()));
         record.put(ATT_VIBRATION, longArrayToString(getVibrationPattern()));
+        record.put(ATT_CUSTOM_VIBRATION, longArrayToString(getCustomVibrationPattern()));
         record.put(ATT_SHOW_BADGE, Boolean.toString(canShowBadge()));
         record.put(ATT_DELETED, Boolean.toString(isDeleted()));
         record.put(ATT_DELETED_TIME_MS, Long.toString(getDeletedTimeMs()));
@@ -1301,6 +1334,7 @@ public final class NotificationChannel implements Parcelable {
                 + ", mLights=" + mLights
                 + ", mLightColor=" + mLightColor
                 + ", mVibration=" + Arrays.toString(mVibration)
+                + ", mCustomVibration=" + Arrays.toString(mCustomVibration)
                 + ", mUserLockedFields=" + Integer.toHexString(mUserLockedFields)
                 + ", mFgServiceShown=" + mFgServiceShown
                 + ", mVibrationEnabled=" + mVibrationEnabled
