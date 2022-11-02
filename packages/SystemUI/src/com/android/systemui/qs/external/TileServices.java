@@ -128,7 +128,13 @@ public class TileServices extends IQSService.Stub {
             service.handleDestroy();
             mServices.remove(tile);
             mTokenMap.remove(service.getToken());
-            mTiles.remove(tile.getComponent());
+            // When new user`s createTile is already done by user changing, mTiles` tile info is
+            // already updated as new user`s tile object in getTileWrapper API.
+            // At that case, the object shouldn`t be removed by old user`s freeService.
+            // So, object is checked.
+            if (mTiles.get(tile.getComponent()) == tile) {
+                mTiles.remove(tile.getComponent());
+            }
             final String slot = tile.getComponent().getClassName();
             // TileServices doesn't know how to add more than 1 icon per slot, so remove all
             mMainHandler.post(() -> mHost.getIconController()
