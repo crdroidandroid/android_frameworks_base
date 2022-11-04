@@ -67,20 +67,20 @@
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc siêu nhanh (<xliff:g id="charging_time_left" example="4 giờ và 2 phút">%1$s</xliff:g> nữa sẽ đầy)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Sạc siêu nhanh</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">Đã kích hoạt On-The-Go</string>
-    <string name="onthego_notif_title">On-The-Go đang hoạt động</string>
+    <string name="onthego_notif_ticker">Trên đường đi đã bật</string>
+    <string name="onthego_notif_title">Trên đường đi đang hoạt động</string>
     <string name="onthego_notif_stop">Dừng</string>
     <string name="onthego_notif_options">Tùy chọn</string>
-    <string name="onthego_notif_error">Không thể khởi động On-The-Go</string>
-    <string name="onthego_notif_restart">Khởi động lại On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Đã thay đổi chế độ camera</string>
+    <string name="onthego_notif_error">Không thể khởi động</string>
+    <string name="onthego_notif_restart">Khởi động lại trên đường đi</string>
+    <string name="onthego_notif_camera_changed">Chế độ máy ảnh đã thay đổi</string>
     <string name="onthego_transparency">Độ trong suốt</string>
-    <string name="onthego_front_camera">Sử dụng camera trước</string>
+    <string name="onthego_front_camera">Sử dụng máy ảnh trước</string>
     <string name="onthego_service_toggle">Tự động khởi động lại dịch vụ</string>
     <string name="onthego_channel_name">Chính</string>
-    <string name="global_action_onthego">On-The-Go</string>
+    <string name="global_action_onthego">Trên đường đi</string>
     <!-- OnTheGo Tile -->
-    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="quick_settings_onthego_label">Trên đường đi</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Thông tin CPU</string>
     <!-- FPS Info tile -->
@@ -91,14 +91,14 @@
     <string name="quick_settings_compass_label">La bàn</string>
     <string name="quick_settings_compass_value"><xliff:g id="độ">%1$.0f</xliff:g>\u00b0 <xliff:g id="hướng">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Đang khởi tạo\u2026</string>
-    <string name="quick_settings_compass_N">B</string>
-    <string name="quick_settings_compass_NE">ĐB</string>
-    <string name="quick_settings_compass_E">Đ</string>
-    <string name="quick_settings_compass_SE">ĐN</string>
-    <string name="quick_settings_compass_S">N</string>
-    <string name="quick_settings_compass_SW">TN</string>
-    <string name="quick_settings_compass_W">T</string>
-    <string name="quick_settings_compass_NW">TB</string>
+    <string name="quick_settings_compass_N">Bắc</string>
+    <string name="quick_settings_compass_NE">Đông Bắc</string>
+    <string name="quick_settings_compass_E">Đông</string>
+    <string name="quick_settings_compass_SE">Đông Nam</string>
+    <string name="quick_settings_compass_S">Nam</string>
+    <string name="quick_settings_compass_SW">Tây Nam</string>
+    <string name="quick_settings_compass_W">Tây</string>
+    <string name="quick_settings_compass_NW">Tây Bắc</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Chuyển SIM dữ liệu</string>
     <!-- Volume panel QS tile -->
@@ -106,7 +106,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Ưu Tiên</string>
     <string name="volume_ringer_alarms_only">Báo thức</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">Không làm phiền</string>
     <string name="tristate_flashlight">Đèn pin</string>
     <string name="tristate_flashlight_on">Bật đèn pin</string>
     <string name="tristate_flashlight_off">Tắt đèn pin</string>
