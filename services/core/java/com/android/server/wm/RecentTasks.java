@@ -25,8 +25,10 @@ import static android.app.WindowConfiguration.ACTIVITY_TYPE_DREAM;
 import static android.app.WindowConfiguration.ACTIVITY_TYPE_HOME;
 import static android.app.WindowConfiguration.ACTIVITY_TYPE_RECENTS;
 import static android.app.WindowConfiguration.ACTIVITY_TYPE_UNDEFINED;
+import static android.app.WindowConfiguration.WINDOWING_MODE_FULLSCREEN;
 import static android.app.WindowConfiguration.WINDOWING_MODE_MULTI_WINDOW;
 import static android.app.WindowConfiguration.WINDOWING_MODE_PINNED;
+import static android.app.WindowConfiguration.WINDOWING_MODE_SPLIT_SCREEN_SECONDARY;
 import static android.app.WindowConfiguration.WINDOWING_MODE_UNDEFINED;
 import static android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS;
 import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
@@ -1944,6 +1946,14 @@ class RecentTasks {
         final boolean isCompatibleMode = windowingMode == otherWindowingMode
                 || isUndefinedMode || isOtherUndefinedMode;
 
-        return isCompatibleType && isCompatibleMode;
+        // If a task has been removed in split window mode or in multi window mode, we should remove
+        // its recent task first before adding a new one with fullscreen mode.
+        final boolean isSplitOrMultiToFull = windowingMode == WINDOWING_MODE_FULLSCREEN
+                && (otherWindowingMode == WINDOWING_MODE_SPLIT_SCREEN_SECONDARY
+                || otherWindowingMode == WINDOWING_MODE_MULTI_WINDOW);
+        final boolean isEmptyOldTask = t2.getTaskInfo() == null
+                || t2.getTaskInfo().baseActivity == null;
+
+        return (isCompatibleType && isCompatibleMode) || (isSplitOrMultiToFull && isEmptyOldTask);
     }
 }
