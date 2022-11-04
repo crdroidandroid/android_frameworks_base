@@ -1161,7 +1161,7 @@ public class Instrumentation {
         app.attach(context);
         String patchCrDroid = Build.VERSION.SECURITY_PATCH_CRDROID;
         if ("".equals(patchCrDroid)) {
-            String packageName = app.getPackageName();
+            String packageName = context.getPackageName();
             PixelPropsUtils.setProps(packageName);
         }
         return app;
@@ -1183,7 +1183,7 @@ public class Instrumentation {
         app.attach(context);
         String patchCrDroid = Build.VERSION.SECURITY_PATCH_CRDROID;
         if ("".equals(patchCrDroid)) {
-            String packageName = app.getPackageName();
+            String packageName = context.getPackageName();
             PixelPropsUtils.setProps(packageName);
         }
         return app;
