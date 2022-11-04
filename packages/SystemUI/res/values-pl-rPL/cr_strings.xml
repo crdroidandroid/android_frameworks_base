@@ -64,8 +64,8 @@
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Szybkie ładowanie (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> do pełnego naładowania)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="Percentage">%s</xliff:g> • Szybkie ładowanie</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo Charging</string>
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Szybkie ładowanie (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> do naładowania)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Szybkie ładowanie</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Tryb \"W ruchu\" aktywowany</string>
     <string name="onthego_notif_title">Tryb \"W ruchu\" jest aktywny</string>
@@ -89,7 +89,7 @@
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Kompas</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="stopni">%1$.0f</xliff:g>\u00b0 <xliff:g id="kierunek">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Inicjowanie\u2026</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">Pn-Wsch</string>
