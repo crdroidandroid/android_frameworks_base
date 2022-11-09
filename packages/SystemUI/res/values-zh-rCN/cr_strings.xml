@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">加载天气数据时出错</string>
     <string name="omnijaws_service_unknown">没有天气数据</string>
     <string name="omnijaws_label_default">天气</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">正在识别面部...</string>
 </resources>
