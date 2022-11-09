@@ -38,4 +38,6 @@
     <string name="aerr_copy">Копиране на URL адреса на регистъра за сривове</string>
     <string name="url_copy_success">URL aдресът е копиран успешно</string>
     <string name="url_copy_failed">Възникна грешка при качването на лога в Pasty</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Лицевото отключване е деактивирано поради неактивност</string>
 </resources>
