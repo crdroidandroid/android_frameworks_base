@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Error al cargar datos del clima</string>
     <string name="omnijaws_service_unknown">No hay datos del clima</string>
     <string name="omnijaws_label_default">Clima</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Reconociendo rostro...</string>
 </resources>
