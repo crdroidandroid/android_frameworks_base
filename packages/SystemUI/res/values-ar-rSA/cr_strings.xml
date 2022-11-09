@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">حدث خطأ أثناء تحميل بيانات الطقس</string>
     <string name="omnijaws_service_unknown">لا يوجد بيانات للطقس</string>
     <string name="omnijaws_label_default">الطقس</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
 </resources>
