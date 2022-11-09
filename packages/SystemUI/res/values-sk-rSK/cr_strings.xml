@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Chyba pri načítavaní údajov o počasí</string>
     <string name="omnijaws_service_unknown">Žiadne údaje o počasí</string>
     <string name="omnijaws_label_default">Počasie</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Prebieha rozpoznávanie...</string>
 </resources>
