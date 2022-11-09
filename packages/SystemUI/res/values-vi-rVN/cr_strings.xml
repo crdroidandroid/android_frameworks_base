@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Lỗi khi tải dữ liệu thời tiết</string>
     <string name="omnijaws_service_unknown">Không có dữ liệu thời tiết</string>
     <string name="omnijaws_label_default">Thời tiết</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Đang nhận diện khuôn mặt...</string>
 </resources>
