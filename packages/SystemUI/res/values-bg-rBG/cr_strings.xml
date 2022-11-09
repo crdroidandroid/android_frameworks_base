@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Грешка при зареждане на данни за времето</string>
     <string name="omnijaws_service_unknown">Няма данни за времето</string>
     <string name="omnijaws_label_default">Времето</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Recognizing face...</string>
 </resources>
