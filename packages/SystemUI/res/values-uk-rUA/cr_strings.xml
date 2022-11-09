@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Помилка завантаження даних про погоду</string>
     <string name="omnijaws_service_unknown">Немає даних про погоду</string>
     <string name="omnijaws_label_default">Погода</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Розпізнавання обличчя...</string>
 </resources>
