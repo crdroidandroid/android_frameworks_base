@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Error carregant la informació de l\'oratge</string>
     <string name="omnijaws_service_unknown">No hi ha informació de l\'oratge</string>
     <string name="omnijaws_label_default">Oratge</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Reconeixent rostre...</string>
 </resources>
