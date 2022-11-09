@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">خطا در بارگیری اطلاعات آب و هوا</string>
     <string name="omnijaws_service_unknown">بدون اطلاعات آب و هوا</string>
     <string name="omnijaws_label_default">آب و هوا</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
 </resources>
