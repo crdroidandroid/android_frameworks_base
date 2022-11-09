@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">کێشە لە بارکردنی کەش هەیە</string>
     <string name="omnijaws_service_unknown">زانیاری لەسەر کەش نییە</string>
     <string name="omnijaws_label_default">کەش</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Recognizing face...</string>
 </resources>
