@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Błąd ładowania danych o pogodzie</string>
     <string name="omnijaws_service_unknown">Brak danych o pogodzie</string>
     <string name="omnijaws_label_default">Pogoda</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Rozpoznawanie twarzy...</string>
 </resources>
