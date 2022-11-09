@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Σφάλμα κατά τη φόρτωση δεδομένων καιρού</string>
     <string name="omnijaws_service_unknown">Δεν υπάρχουν δεδομένα καιρού</string>
     <string name="omnijaws_label_default">Καιρός</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Αναγνώριση προσώπου...</string>
 </resources>
