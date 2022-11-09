@@ -38,4 +38,6 @@
     <string name="aerr_copy">لەبەرگرتنەوەی بەستەری کڕاشبوون</string>
     <string name="url_copy_success">بەسەرکەوتوویی لەبەرگیرایەوە</string>
     <string name="url_copy_failed">Di dema barkirina têketinê li Pasty de xeletiyek derket</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Ji ber bêçalaktiyê vekirina rû hat astengkirin</string>
 </resources>
