@@ -28,6 +28,7 @@ import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
+import android.provider.Settings;
 import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -59,6 +60,9 @@ import javax.inject.Inject;
 @QSScope
 public class QSFooterViewController extends ViewController<QSFooterView>
         implements QSFooter, TunerService.Tunable {
+
+    private static final String QS_SHOW_DATA_USAGE =
+            "system:" + Settings.System.QS_SHOW_DATA_USAGE;
 
     private final UserTracker mUserTracker;
     private final QSPanelController mQsPanelController;
@@ -144,7 +148,8 @@ public class QSFooterViewController extends ViewController<QSFooterView>
         mWifiTracker.fetchInitialState();
         mWifiTracker.setListening(true);
         mNetworkController.addCallback(mSignalCallback);
-        mTunerService.addTunable(this, QS_TILES);
+        mTunerService.addTunable(this, QS_TILES,
+                QS_SHOW_DATA_USAGE);
         mGlobalSettings.registerContentObserver(MULTI_SIM_DATA_CALL_SUBSCRIPTION,
                 mDataSwitchObserver);
 
@@ -173,6 +178,8 @@ public class QSFooterViewController extends ViewController<QSFooterView>
             mView.setShowSuffix(!Arrays.stream(newValue.split(","))
                                        .limit(rows * cols)
                                        .anyMatch(INTERNET_TILE::equals));
+         } else if (key.equals(QS_SHOW_DATA_USAGE)) {
+            mView.setShowDataUsage(TunerService.parseIntegerSwitch(newValue, false));
          }
     }
 
