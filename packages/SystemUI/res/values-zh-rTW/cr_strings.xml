@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">載入天氣資訊時發生錯誤</string>
     <string name="omnijaws_service_unknown">沒有天氣資訊</string>
     <string name="omnijaws_label_default">天氣</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">臉部辨識中...</string>
 </resources>
