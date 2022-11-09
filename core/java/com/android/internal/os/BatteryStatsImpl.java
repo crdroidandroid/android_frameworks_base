@@ -13660,17 +13660,17 @@ public class BatteryStatsImpl extends BatteryStats {
                     // We store the power drain as mAms.
                     controllerMaMs = info.getControllerEnergyUsedMicroJoules() / opVolt;
                     mWifiActivity.getPowerCounter().addCountLocked((long) controllerMaMs);
+                    // Converting uWs to mAms.
+                    // Conversion: (uWs * (1000ms / 1s) * (1mW / 1000uW)) / mV = mAms
+                    long monitoredRailChargeConsumedMaMs =
+                            (long) (mTmpRailStats.getWifiTotalEnergyUseduWs() / opVolt);
+                    mWifiActivity.getMonitoredRailChargeConsumedMaMs().addCountLocked(
+                            monitoredRailChargeConsumedMaMs);
+                    mHistoryCur.wifiRailChargeMah +=
+                            (monitoredRailChargeConsumedMaMs / MILLISECONDS_IN_HOUR);
+                    addHistoryRecordLocked(elapsedRealtimeMs, uptimeMs);
+                    mTmpRailStats.resetWifiTotalEnergyUsed();
                 }
-                // Converting uWs to mAms.
-                // Conversion: (uWs * (1000ms / 1s) * (1mW / 1000uW)) / mV = mAms
-                long monitoredRailChargeConsumedMaMs =
-                        (long) (mTmpRailStats.getWifiTotalEnergyUseduWs() / opVolt);
-                mWifiActivity.getMonitoredRailChargeConsumedMaMs().addCountLocked(
-                        monitoredRailChargeConsumedMaMs);
-                mHistoryCur.wifiRailChargeMah +=
-                        (monitoredRailChargeConsumedMaMs / MILLISECONDS_IN_HOUR);
-                addHistoryRecordLocked(elapsedRealtimeMs, uptimeMs);
-                mTmpRailStats.resetWifiTotalEnergyUsed();
 
                 if (uidEstimatedConsumptionMah != null) {
                     totalEstimatedConsumptionMah = Math.max(controllerMaMs / MILLISECONDS_IN_HOUR,
