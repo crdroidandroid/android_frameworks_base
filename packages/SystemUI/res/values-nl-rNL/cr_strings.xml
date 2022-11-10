@@ -129,5 +129,5 @@
     <string name="omnijaws_service_unknown">Geen weergegevens</string>
     <string name="omnijaws_label_default">Weer</string>
     <!-- Face Unlock -->
-    <string name="face_unlock_recognizing">Herkenning van gezicht...</string>
+    <string name="face_unlock_recognizing">Gezicht herkennen...</string>
 </resources>
