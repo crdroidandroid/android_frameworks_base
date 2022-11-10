@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Errore durante il caricamento dei dati meteo</string>
     <string name="omnijaws_service_unknown">Dati meteo non disponibili</string>
     <string name="omnijaws_label_default">Meteo</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Riconoscimento volto...</string>
 </resources>

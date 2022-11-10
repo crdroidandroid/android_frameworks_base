@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Памылка загрузкі дадзеных аб надвор\'і</string>
     <string name="omnijaws_service_unknown">Няма дадзеных аб надвор\'і</string>
     <string name="omnijaws_label_default">Надвор\'е</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Распазнаванне асобы...</string>
 </resources>

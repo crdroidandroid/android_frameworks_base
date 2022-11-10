@@ -38,4 +38,6 @@
     <string name="aerr_copy">复制崩溃日志链接</string>
     <string name="url_copy_success">已成功复制链接</string>
     <string name="url_copy_failed">将日志上传到 Pasty 时出错</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">面部解锁因不活跃被禁用</string>
 </resources>

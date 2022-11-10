@@ -37,4 +37,6 @@
     <string name="aerr_copy">نسخ رابط سجل العُطل</string>
     <string name="url_copy_success">تم نسخ الرابط بنجاح</string>
     <string name="url_copy_failed">حدث خطأ أثناء نسخ رابط السجل</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">تم تعطيل \"فتح القُفْل بالوجه\" بسبب عدم النشاط</string>
 </resources>

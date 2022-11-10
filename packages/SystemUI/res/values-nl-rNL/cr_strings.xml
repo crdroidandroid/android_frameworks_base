@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Fout bij het laden van weergegevens</string>
     <string name="omnijaws_service_unknown">Geen weergegevens</string>
     <string name="omnijaws_label_default">Weer</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Gezicht herkennen...</string>
 </resources>

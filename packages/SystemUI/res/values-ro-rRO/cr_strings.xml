@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">Eroare la incărcare data vreme</string>
     <string name="omnijaws_service_unknown">Fară informatii vreme</string>
     <string name="omnijaws_label_default">Vremea</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Recunoașterea feței...</string>
 </resources>

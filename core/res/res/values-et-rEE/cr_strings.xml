@@ -38,4 +38,6 @@
     <string name="aerr_copy">Kopeeri rikke logi URL</string>
     <string name="url_copy_success">URL kopeeritud</string>
     <string name="url_copy_failed">Logi Pasty\'sse üleslaadimisel esines viga</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_disabled_idle">Näotuvastus on passiivsuse tõttu keelatud</string>
 </resources>

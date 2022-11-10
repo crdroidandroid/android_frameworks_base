@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">ᱯᱚᱜᱚ ᱰᱟᱴᱟ ᱞᱟᱫᱮ ᱰᱤᱜᱟᱹᱣ</string>
     <string name="omnijaws_service_unknown">ᱚᱠᱟ ᱯᱟᱜᱚ ᱰᱟᱴᱟ ᱵᱟᱹᱱᱩᱜᱼᱟ</string>
     <string name="omnijaws_label_default">ᱯᱟᱜᱚ</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Recognizing face...</string>
 </resources>

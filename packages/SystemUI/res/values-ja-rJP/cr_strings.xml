@@ -128,4 +128,6 @@
     <string name="omnijaws_service_error">気象データの読み込みエラー</string>
     <string name="omnijaws_service_unknown">気象データがありません</string>
     <string name="omnijaws_label_default">天気</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">顔を認識中...</string>
 </resources>
