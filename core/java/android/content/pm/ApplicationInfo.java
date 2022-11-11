@@ -47,6 +47,7 @@ import com.android.internal.util.Parcelling;
 import com.android.internal.util.Parcelling.BuiltIn.ForBoolean;
 import com.android.server.SystemConfig;
 
+import java.io.File;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.Collator;
@@ -2768,5 +2769,10 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         } else {
             privateFlagsExt &= ~PRIVATE_FLAG_EXT_ENABLE_ON_BACK_INVOKED_CALLBACK;
         }
+    }
+
+    /** {@hide} */
+    public boolean baseCodePathExists() {
+        return new File(sourceDir).exists();
     }
 }
