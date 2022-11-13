@@ -282,7 +282,7 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
         if (matched) {
             mPasswordEntry.setEnabled(false);
             mCallback.reportUnlockAttempt(userId, true, 0);
-            mCallback.dismiss(true, userId);
+            mCallback.dismiss(true, userId, SecurityMode.PIN);
             resetPasswordText(true, true);
         }
     }
