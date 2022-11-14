@@ -742,6 +742,11 @@ public final class DexOptHelper {
             // No historical info. Take all.
             remainingPredicate = pkgSetting -> true;
         }
+
+        // Override the "don't compile apps that weren't used in the last 7 days" policy:
+        // JIT is disabled, apps that aren't compiled would run via the slow interpreter
+        remainingPredicate = pkgSetting -> true;
+
         applyPackageFilter(snapshot, remainingPredicate, result, remainingPkgSettings, sortTemp,
                 packageManagerService);
 
