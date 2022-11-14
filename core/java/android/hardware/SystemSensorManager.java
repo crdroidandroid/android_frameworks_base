@@ -23,15 +23,20 @@ import android.compat.annotation.ChangeId;
 import android.compat.annotation.EnabledAfter;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.MemoryFile;
 import android.os.MessageQueue;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -124,6 +129,9 @@ public class SystemSensorManager extends SensorManager {
 
     private Optional<Boolean> mHasHighSamplingRateSensorsPermission = Optional.empty();
 
+    private String mBlockedPackageList;
+    private ArrayList<String> mBlockedApp = new ArrayList<String>();
+
     /** {@hide} */
     public SystemSensorManager(Context context, Looper mainLooper) {
         synchronized (sLock) {
@@ -147,6 +155,12 @@ public class SystemSensorManager extends SensorManager {
             mFullSensorsList.add(sensor);
             mHandleToSensor.put(sensor.getHandle(), sensor);
         }
+
+        parsePackageList();
+
+        SettingsObserver observer = new SettingsObserver(
+                new Handler(mMainLooper));
+        observer.observe();
     }
 
     /** @hide */
@@ -163,6 +177,83 @@ public class SystemSensorManager extends SensorManager {
         setupDynamicSensorBroadcastReceiver();
         updateDynamicSensorList();
         return mFullDynamicSensorsList;
+    }
+
+    private void parsePackageList() {
+        String blockedApp = Settings.System.getString(mContext.getContentResolver(),
+                    Settings.System.SENSOR_BLOCKED_APP);
+        if (blockedApp == null) {
+            blockedApp = TextUtils.join("|", mContext.getResources().getStringArray(
+                    com.android.internal.R.array.config_blockPackagesSensorDrain));
+            Settings.System.putString(mContext.getContentResolver(),
+                    Settings.System.SENSOR_BLOCKED_APP, blockedApp);
+        }
+        splitAndAddToArrayList(mBlockedApp, blockedApp, "\\|");
+    }
+
+    private void savePackageList(ArrayList<String> arrayList) {
+        String setting = Settings.System.SENSOR_BLOCKED_APP;
+
+        List<String> settings = new ArrayList<String>();
+        for (String app : arrayList) {
+            settings.add(app.toString());
+        }
+        final String value = TextUtils.join("|", settings);
+            if (TextUtils.equals(setting, Settings.System.SENSOR_BLOCKED_APP)) {
+                mBlockedPackageList = value;
+            }
+        Settings.System.putString(mContext.getContentResolver(),
+                setting, value);
+    }
+
+    private void addBlockedApp(String packageName) {
+        if (!mBlockedApp.contains(packageName)) {
+            mBlockedApp.add(packageName);
+            savePackageList(mBlockedApp);
+        }
+    }
+
+    private boolean isBlockedApp(String packageName) {
+        return (mBlockedApp.contains(packageName));
+    }
+
+    public void notePackageUninstalled(String pkgName) {
+        // remove from list
+        if (mBlockedApp.remove(pkgName)) {
+            savePackageList(mBlockedApp);
+        }
+    }
+
+    private void splitAndAddToArrayList(ArrayList<String> arrayList,
+            String baseString, String separator) {
+        // clear first
+        arrayList.clear();
+        if (baseString != null) {
+            final String[] array = TextUtils.split(baseString, separator);
+            for (String item : array) {
+                arrayList.add(item.trim());
+            }
+        }
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SENSOR_BLOCKED_APP), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.SENSOR_BLOCKED_APP))) {
+                parsePackageList();
+            }
+        }
     }
 
     /** @hide */
@@ -186,6 +277,20 @@ public class SystemSensorManager extends SensorManager {
             throw new IllegalStateException("register failed, "
                 + "the sensor listeners size has exceeded the maximum limit "
                 + MAX_LISTENER_COUNT);
+        }
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SENSOR_BLOCK, 0) == 1) {
+            int sensortype = sensor.getType();
+            if (sensortype == Sensor.TYPE_SIGNIFICANT_MOTION ||
+                    sensortype == Sensor.TYPE_ACCELEROMETER ||
+                    sensortype == Sensor.TYPE_LINEAR_ACCELERATION) {
+                String pkgName = mContext.getPackageName();
+                if (isBlockedApp(pkgName)) {
+                    Log.w(TAG, "Preventing " + pkgName + " from draining battery using " +
+                            sensor.getStringType());
+                    return false;
+                }
+            }
         }
 
         // Invariants to preserve:
