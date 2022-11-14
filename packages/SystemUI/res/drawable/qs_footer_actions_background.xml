@@ -17,6 +17,8 @@
     <shape>
         <solid android:color="@color/footer_actions_bg"/>
         <corners android:topLeftRadius="@dimen/qs_corner_radius"
-                 android:topRightRadius="@dimen/qs_corner_radius"/>
+                 android:topRightRadius="@dimen/qs_corner_radius"
+                 android:bottomLeftRadius="@dimen/qs_corner_radius"
+                 android:bottomRightRadius="@dimen/qs_corner_radius"/>
     </shape>
 </inset>
