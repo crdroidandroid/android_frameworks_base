@@ -31,36 +31,27 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import androidx.annotation.MainThread;
-import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
-import androidx.annotation.WorkerThread;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.settingslib.Utils;
 import com.android.settingslib.bluetooth.CachedBluetoothDevice;
-import com.android.systemui.Prefs;
 import com.android.systemui.R;
 import com.android.systemui.animation.ActivityLaunchAnimator;
 import com.android.systemui.animation.DialogLaunchAnimator;
 import com.android.systemui.dagger.SysUISingleton;
-import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
@@ -68,8 +59,6 @@ import com.android.systemui.statusbar.policy.BluetoothController;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.Executor;
 
 /**
  * Dialog for bluetooth
@@ -77,33 +66,29 @@ import java.util.concurrent.Executor;
 @SysUISingleton
 public class BluetoothDialog extends SystemUIDialog implements Window.Callback {
     private static final String TAG = "BluetoothDialog";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
-    public static final int MAX_DEVICES_COUNT = 4;
     private static final String SAVED_DEVICES_INTENT = "android.settings.SAVED_DEVICES";
+    protected static final int MAX_DEVICES_COUNT = 4;
 
-    private BluetoothViewAdapter mAdapter;
-    private BluetoothController mBluetoothController;
-    private BluetoothDialogFactory mBluetoothDialogFactory;
-    private Context mContext;
-    private Handler mHandler;
+    private final BluetoothViewAdapter mAdapter;
+    private final BluetoothController mBluetoothController;
+    private final BluetoothDialogFactory mBluetoothDialogFactory;
+    private final Context mContext;
+    private final Handler mHandler;
+    private final DialogLaunchAnimator mDialogLaunchAnimator;
+    private final ActivityStarter mActivityStarter;
+
     private View mDialogView;
-    private TextView mBluetoothDialogTitle;
-    private TextView mBluetoothDialogSubTitle;
-    private TextView mBluetoothToggleText;
+    private TextView mBluetoothDialogTitle, mBluetoothDialogSubTitle, mBluetoothToggleText;
     private Switch mBluetoothToggle;
     private ProgressBar mProgressBar;
     private View mDivider;
-    private LinearLayout mTurnOnLayout;
-    private LinearLayout mSeeAllLayout;
+    private LinearLayout mTurnOnLayout, mSeeAllLayout;
     private RecyclerView mBluetoothRecyclerView;
-    private Button mDoneButton;
-    private Button mSettingsButton;
-    private DialogLaunchAnimator mDialogLaunchAnimator;
-    private ActivityStarter mActivityStarter;
+    private Button mDoneButton, mSettingsButton;
 
-    private Drawable mBackgroundOn;
-    private Drawable mBackgroundOff;
+    private Drawable mBackgroundOn, mBackgroundOff;
 
     private final BluetoothController.Callback mCallback = new BluetoothController.Callback() {
         @Override
@@ -170,12 +155,9 @@ public class BluetoothDialog extends SystemUIDialog implements Window.Callback {
         mSettingsButton = mDialogView.requireViewById(R.id.settings_button);
         mBackgroundOn = mContext.getDrawable(R.drawable.settingslib_switch_bar_bg_on);
 
-        TypedArray typedArray = mContext.obtainStyledAttributes(
-                new int[]{android.R.attr.selectableItemBackground});
-        try {
+        try (final TypedArray typedArray = mContext.obtainStyledAttributes(
+                new int[]{android.R.attr.selectableItemBackground})) {
             mBackgroundOff = typedArray.getDrawable(0 /* index */);
-        } finally {
-            typedArray.recycle();
         }
 
         mBluetoothToggle.setOnCheckedChangeListener(
@@ -240,39 +222,40 @@ public class BluetoothDialog extends SystemUIDialog implements Window.Callback {
     /**
      * Update the bluetooth dialog when receiving the callback.
      */
-    void updateDialog() {
+    private void updateDialog() {
         if (DEBUG) {
             Log.d(TAG, "updateDialog");
         }
+        final boolean enabled = mBluetoothController.isBluetoothEnabled();
+        final boolean connecting = mBluetoothController.isBluetoothConnecting();
+        final boolean turningOn = mBluetoothController.getBluetoothState() == BluetoothAdapter.STATE_TURNING_ON;
         // subtitle
-        int subtitle = R.string.bluetooth_is_off;
-        boolean enabled = mBluetoothController.isBluetoothEnabled();
-        boolean connecting = mBluetoothController.isBluetoothConnecting();
-        boolean turningOn =
-                mBluetoothController.getBluetoothState() == BluetoothAdapter.STATE_TURNING_ON;
+        final int subtitle;
         if (connecting) {
             subtitle = R.string.quick_settings_connecting;
         } else if (turningOn) {
             subtitle = R.string.quick_settings_bluetooth_secondary_label_transient;
         } else if (enabled) {
             subtitle = R.string.tap_a_device_to_connect;
+        } else {
+            subtitle = R.string.bluetooth_is_off;
         }
         mBluetoothDialogSubTitle.setText(mContext.getString(subtitle));
 
         // progress bar
-        boolean showProgress = connecting || turningOn;
+        final boolean showProgress = connecting || turningOn;
         mProgressBar.setVisibility(showProgress ? View.VISIBLE : View.GONE);
         mDivider.setVisibility(showProgress ? View.GONE : View.VISIBLE);
 
         // devices
-        Collection<CachedBluetoothDevice> devices = mBluetoothController.getDevices();
+        final Collection<CachedBluetoothDevice> devices = mBluetoothController.getDevices();
         if (!enabled || devices == null) {
             mBluetoothRecyclerView.setVisibility(View.GONE);
             mSeeAllLayout.setVisibility(View.GONE);
             updateTurnOnLayout(true);
             return;
         }
-        boolean isOnCall = Utils.isAudioModeOngoingCall(mContext);
+        final boolean isOnCall = Utils.isAudioModeOngoingCall(mContext);
         CachedBluetoothDevice activeDevice =
                 devices.stream()
                         .filter(device ->
