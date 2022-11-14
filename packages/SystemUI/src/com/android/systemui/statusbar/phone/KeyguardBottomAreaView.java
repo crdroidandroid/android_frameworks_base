@@ -581,7 +581,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         if (mDozing
                 || !hasFavorites
                 || !mControlServicesAvailable
-                || mControlsComponent.getVisibility() != AVAILABLE) {
+                || !mControlsComponent.getLockedVisibility()) {
             mControlsButton.setVisibility(GONE);
             if (mWalletButton.getVisibility() == GONE) {
                 mIndicationArea.setPadding(0, 0, 0, 0);
