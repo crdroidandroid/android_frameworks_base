@@ -182,7 +182,7 @@ public class KeyguardPinViewController
         if (matched) {
             mPasswordEntry.setEnabled(false);
             mKeyguardSecurityCallback.reportUnlockAttempt(userId, true, 0);
-            mKeyguardSecurityCallback.dismiss(true, userId);
+            mKeyguardSecurityCallback.dismiss(true, userId, SecurityMode.PIN);
             mView.resetPasswordText(true, true);
         }
     }
