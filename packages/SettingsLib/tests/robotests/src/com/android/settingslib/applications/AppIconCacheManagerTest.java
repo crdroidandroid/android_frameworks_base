@@ -21,6 +21,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 import android.graphics.drawable.Drawable;
+import android.util.LruCache;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,12 +35,25 @@ import org.robolectric.RobolectricTestRunner;
 public class AppIconCacheManagerTest {
 
     private static final String APP_PACKAGE_NAME = "com.test.app";
+    private static final String APP_PACKAGE_NAME2 = "com.test.app2";
+    private static final String APP_PACKAGE_NAME3 = "com.test.app3";
     private static final int APP_UID = 9999;
 
     @Mock
     private Drawable mIcon;
+    @Mock
+    private Drawable mIcon2;
+    @Mock
+    private Drawable mIcon3;
 
     private AppIconCacheManager mAppIconCacheManager;
+
+    private LruCache<String, Drawable> mMockLruCache = new LruCache<String, Drawable>(3) {
+        @Override
+        protected int sizeOf(String key, Drawable drawable) {
+            return 1;
+        }
+    };
 
     @Before
     public void setUp() {
@@ -48,6 +62,14 @@ public class AppIconCacheManagerTest {
         doReturn(10).when(mIcon).getIntrinsicHeight();
         doReturn(10).when(mIcon).getIntrinsicWidth();
         doReturn(mIcon).when(mIcon).mutate();
+
+        doReturn(10).when(mIcon2).getIntrinsicHeight();
+        doReturn(10).when(mIcon2).getIntrinsicWidth();
+        doReturn(mIcon2).when(mIcon2).mutate();
+
+        doReturn(10).when(mIcon3).getIntrinsicHeight();
+        doReturn(10).when(mIcon3).getIntrinsicWidth();
+        doReturn(mIcon3).when(mIcon3).mutate();
     }
 
     @After
@@ -106,4 +128,44 @@ public class AppIconCacheManagerTest {
 
         assertThat(mAppIconCacheManager.get(APP_PACKAGE_NAME, APP_UID)).isNull();
     }
+
+    @Test
+    public void trimMemory_levelSatisfied_shouldNotCacheIcon() {
+        // We mock the maxSize is 3, and the size of each element is 1
+        mAppIconCacheManager.mockLruCache(mMockLruCache);
+
+        mAppIconCacheManager.put(APP_PACKAGE_NAME, APP_UID, mIcon);
+        mAppIconCacheManager.put(APP_PACKAGE_NAME2, APP_UID, mIcon2);
+        mAppIconCacheManager.put(APP_PACKAGE_NAME3, APP_UID, mIcon3);
+
+        // Trim size to 0
+        final int level = android.content.ComponentCallbacks2.TRIM_MEMORY_BACKGROUND;
+        mAppIconCacheManager.trimMemory(level);
+
+        assertThat(mAppIconCacheManager.get(APP_PACKAGE_NAME, APP_UID)).isNull();
+        assertThat(mAppIconCacheManager.get(APP_PACKAGE_NAME2, APP_UID)).isNull();
+        assertThat(mAppIconCacheManager.get(APP_PACKAGE_NAME3, APP_UID)).isNull();
+    }
+
+    @Test
+    public void trimMemory_levelSatisfied_shouldCacheAtLeastHalf() {
+        // We mock the maxSize is 3, and the size of each element is 1
+        mAppIconCacheManager.mockLruCache(mMockLruCache);
+
+        mAppIconCacheManager.put(APP_PACKAGE_NAME, APP_UID, mIcon);
+        mAppIconCacheManager.put(APP_PACKAGE_NAME2, APP_UID, mIcon2);
+        mAppIconCacheManager.put(APP_PACKAGE_NAME3, APP_UID, mIcon3);
+
+        // Get the last item
+        mAppIconCacheManager.get(APP_PACKAGE_NAME, APP_UID);
+
+        // Trim size to int( 3 / 2 ) = 1
+        final int level = android.content.ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL;
+        mAppIconCacheManager.trimMemory(level);
+
+        assertThat(mAppIconCacheManager.get(APP_PACKAGE_NAME, APP_UID)).isNotNull();
+        assertThat(mAppIconCacheManager.get(APP_PACKAGE_NAME2, APP_UID)).isNull();
+        assertThat(mAppIconCacheManager.get(APP_PACKAGE_NAME3, APP_UID)).isNull();
+    }
+
 }
