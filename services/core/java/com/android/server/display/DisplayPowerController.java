@@ -2563,6 +2563,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
 
     private void ignoreProximitySensorUntilChangedInternal() {
         if (!mIgnoreProximityUntilChanged
+                && mPowerRequest.useProximitySensor
                 && mProximity == PROXIMITY_POSITIVE) {
             // Only ignore if it is still reporting positive (near)
             mIgnoreProximityUntilChanged = true;
