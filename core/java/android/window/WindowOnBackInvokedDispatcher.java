@@ -33,6 +33,9 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import android.os.Message;
+import android.view.ViewRootImpl;
+
 /**
  * Provides window based implementation of {@link OnBackInvokedDispatcher}.
  * <p>
@@ -64,9 +67,15 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
     private final TreeMap<Integer, ArrayList<OnBackInvokedCallback>>
             mOnBackInvokedCallbacks = new TreeMap<>();
     private final Checker mChecker;
-
+    private ViewRootImpl.BackFocusKeeper mBackFocusKeeper;
     public WindowOnBackInvokedDispatcher(boolean applicationCallBackEnabled) {
         mChecker = new Checker(applicationCallBackEnabled);
+    }
+
+    public WindowOnBackInvokedDispatcher(boolean applicationCallBackEnabled,
+                                         ViewRootImpl.BackFocusKeeper backFocusKeeper) {
+        mChecker = new Checker(applicationCallBackEnabled);
+        mBackFocusKeeper = backFocusKeeper;
     }
 
     /**
@@ -189,7 +198,7 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
                                     .ImeOnBackInvokedCallback
                                 ? ((ImeOnBackInvokedDispatcher.ImeOnBackInvokedCallback)
                                         callback).getIOnBackInvokedCallback()
-                                : new OnBackInvokedCallbackWrapper(callback);
+                                : new OnBackInvokedCallbackWrapper(callback, mBackFocusKeeper);
                 callbackInfo = new OnBackInvokedCallbackInfo(iCallback, priority);
             }
             mWindowSession.setOnBackInvokedCallbackInfo(mWindow, callbackInfo);
@@ -221,11 +230,15 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
 
     static class OnBackInvokedCallbackWrapper extends IOnBackInvokedCallback.Stub {
         private final WeakReference<OnBackInvokedCallback> mCallback;
-
+        private  ViewRootImpl.BackFocusKeeper mBackFocusKeeper;
         OnBackInvokedCallbackWrapper(@NonNull OnBackInvokedCallback callback) {
             mCallback = new WeakReference<>(callback);
         }
-
+        OnBackInvokedCallbackWrapper(@NonNull OnBackInvokedCallback callback,
+                                     ViewRootImpl.BackFocusKeeper backFocusKeeper) {
+            mCallback = new WeakReference<>(callback);
+            mBackFocusKeeper = backFocusKeeper;
+        }
         @Override
         public void onBackStarted() {
             Handler.getMain().post(() -> {
@@ -258,14 +271,26 @@ public class WindowOnBackInvokedDispatcher implements OnBackInvokedDispatcher {
 
         @Override
         public void onBackInvoked() throws RemoteException {
-            Handler.getMain().post(() -> {
+            Runnable r = () -> {
                 final OnBackInvokedCallback callback = mCallback.get();
                 if (callback == null) {
                     return;
                 }
 
                 callback.onBackInvoked();
-            });
+            };
+
+            if (mBackFocusKeeper == null || mBackFocusKeeper.hasWindowFocus()) {
+                Handler.getMain().post(r);
+                return;
+            }
+
+            mBackFocusKeeper.mOnBackInvokedCallback = r;
+            if (!Handler.getMain().hasMessages(ViewRootImpl.MSG_BACK_FOCUS_TIMEOUT)) {
+                Message message = Message.obtain();
+                message.what = ViewRootImpl.MSG_BACK_FOCUS_TIMEOUT;
+                Handler.getMain().sendMessageDelayed(message, ViewRootImpl.BACK_FOCUS_TIMEOUT);
+            }
         }
 
         @Nullable
