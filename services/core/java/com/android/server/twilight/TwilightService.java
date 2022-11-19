@@ -16,6 +16,8 @@
 
 package com.android.server.twilight;
 
+import static android.location.LocationManager.FUSED_PROVIDER;
+
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.AlarmManager;
@@ -163,7 +165,7 @@ public final class TwilightService extends SystemService
                 .setQuality(LocationRequest.QUALITY_LOW_POWER)
                 .build();
         final Handler handler = new Handler(Looper.getMainLooper());
-        mLocationManager.requestLocationUpdates(locationRequest.getProvider(), locationRequest,
+        mLocationManager.requestLocationUpdates(FUSED_PROVIDER, locationRequest,
                 new HandlerExecutor(handler), this);
 
         // Request the device's location immediately if a previous location isn't available.
