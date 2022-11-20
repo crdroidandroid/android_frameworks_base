@@ -64,23 +64,23 @@
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Sạc nhanh VOOC (<xliff:g id="charging_time_left" example="4 giờ và 2 phút">%1$s</xliff:g> nữa sẽ đầy)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="Percentage">%s</xliff:g> • Sạc nhanh VOOC</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc siêu nhanh (<xliff:g id="charging_time_left" example="4 giờ và 2 phút">%1$s</xliff:g> nữa sẽ đầy)</string>
-    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Sạc siêu nhanh</string>
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc nhanh Turbo (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> nữa sẽ đầy)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Sạc nhanh Turbo</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">Trên đường đi đã bật</string>
-    <string name="onthego_notif_title">Trên đường đi đang hoạt động</string>
+    <string name="onthego_notif_ticker">Chế độ đi bộ đã bật</string>
+    <string name="onthego_notif_title">Chế độ đi bộ đang hoạt động</string>
     <string name="onthego_notif_stop">Dừng</string>
     <string name="onthego_notif_options">Tùy chọn</string>
-    <string name="onthego_notif_error">Không thể khởi động</string>
-    <string name="onthego_notif_restart">Khởi động lại trên đường đi</string>
-    <string name="onthego_notif_camera_changed">Chế độ máy ảnh đã thay đổi</string>
+    <string name="onthego_notif_error">Không thể mở chế độ đi bộ</string>
+    <string name="onthego_notif_restart">Khởi động lại chế độ đi bộ</string>
+    <string name="onthego_notif_camera_changed">Đã thay đổi chế độ máy ảnh</string>
     <string name="onthego_transparency">Độ trong suốt</string>
     <string name="onthego_front_camera">Sử dụng máy ảnh trước</string>
     <string name="onthego_service_toggle">Tự động khởi động lại dịch vụ</string>
     <string name="onthego_channel_name">Chính</string>
-    <string name="global_action_onthego">Trên đường đi</string>
+    <string name="global_action_onthego">Chế độ đi bộ</string>
     <!-- OnTheGo Tile -->
-    <string name="quick_settings_onthego_label">Trên đường đi</string>
+    <string name="quick_settings_onthego_label">Chế độ đi bộ</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Thông tin CPU</string>
     <!-- FPS Info tile -->
@@ -89,7 +89,7 @@
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">La bàn</string>
-    <string name="quick_settings_compass_value"><xliff:g id="độ">%1$.0f</xliff:g>\u00b0 <xliff:g id="hướng">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Đang khởi tạo\u2026</string>
     <string name="quick_settings_compass_N">Bắc</string>
     <string name="quick_settings_compass_NE">Đông Bắc</string>
