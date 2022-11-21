@@ -35,6 +35,7 @@ import static com.android.server.backup.internal.BackupHandler.MSG_RUN_BACKUP;
 import static com.android.server.backup.internal.BackupHandler.MSG_RUN_CLEAR;
 import static com.android.server.backup.internal.BackupHandler.MSG_RUN_RESTORE;
 import static com.android.server.backup.internal.BackupHandler.MSG_SCHEDULE_BACKUP_PACKAGE;
+import static com.android.server.backup.internal.BackupHandler.BACKUP_D2D_PROPERTY;
 
 import android.annotation.Nullable;
 import android.annotation.UserIdInt;
@@ -88,6 +89,7 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.os.SELinux;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.WorkSource;
 import android.provider.Settings;
@@ -563,7 +565,7 @@ public class UserBackupManagerService {
         mActivityManager = ActivityManager.getService();
         mActivityManagerInternal = LocalServices.getService(ActivityManagerInternal.class);
         mScheduledBackupEligibility = getEligibilityRules(mPackageManager, userId, mContext,
-                BackupDestination.CLOUD);
+                getBackupDestination());
 
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -2398,7 +2400,7 @@ public class UserBackupManagerService {
                             /* monitor */ null,
                             /* userInitiated */ false,
                             "BMS.beginFullBackup()",
-                            getEligibilityRulesForOperation(BackupDestination.CLOUD));
+                            getEligibilityRulesForOperation(getBackupDestination()));
                 } catch (IllegalStateException e) {
                     Slog.w(TAG, "Failed to start backup", e);
                     runBackup = false;
@@ -2951,7 +2953,7 @@ public class UserBackupManagerService {
                         /* monitor */ null,
                         /* userInitiated */ false,
                         "BMS.fullTransportBackup()",
-                        getEligibilityRulesForOperation(BackupDestination.CLOUD));
+                        getEligibilityRulesForOperation(getBackupDestination()));
                 // Acquiring wakelock for PerformFullTransportBackupTask before its start.
                 mWakelock.acquire();
                 (new Thread(task, "full-transport-master")).start();
@@ -4373,5 +4375,11 @@ public class UserBackupManagerService {
 
     public IBackupManager getBackupManagerBinder() {
         return mBackupManagerBinder;
+    }
+
+    @BackupDestination public int getBackupDestination() {
+        // Fake D2D if the property is set to true
+        return SystemProperties.getBoolean(BACKUP_D2D_PROPERTY, false)
+                ? BackupDestination.DEVICE_TRANSFER : BackupDestination.CLOUD;
     }
 }
