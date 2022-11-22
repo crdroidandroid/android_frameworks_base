@@ -63,6 +63,7 @@
             android:layout_gravity="center_vertical"
             android:paddingStart="2.5dp"
             android:paddingEnd="1.5dp"
+            android:scaleType="centerInside"
             android:visibility="gone" />
         <Space
             android:id="@+id/mobile_roaming_space"
