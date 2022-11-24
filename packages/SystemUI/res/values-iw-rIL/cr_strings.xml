@@ -125,12 +125,12 @@
     <string name="quick_settings_smart_pixels">פיקסלים חכמים</string>
     <string name="quick_settings_smart_pixels_on_power_save">פיקסלים חכמים מופעלים אוטומטית</string>
     <!-- Weather Tile -->
-    <string name="omnijaws_service_error">Error loading weather data</string>
-    <string name="omnijaws_service_unknown">No weather data</string>
-    <string name="omnijaws_label_default">Weather</string>
+    <string name="omnijaws_service_error">שגיאה בטעינת נתוני מזג האויר</string>
+    <string name="omnijaws_service_unknown">אין נתוני מזג אוויר</string>
+    <string name="omnijaws_label_default">מזג־אוויר</string>
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">מזהה פנים...</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Refresh rate</string>
-    <string name="auto_mode_label">Auto</string>
+    <string name="refresh_rate_tile_label">קצב רענון</string>
+    <string name="auto_mode_label">אוטומטי</string>
 </resources>
