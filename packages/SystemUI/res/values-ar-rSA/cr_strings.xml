@@ -130,4 +130,7 @@
     <string name="omnijaws_label_default">الطقس</string>
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
+    <!-- Refresh Rate Tile -->
+    <string name="refresh_rate_tile_label">Refresh rate</string>
+    <string name="auto_mode_label">Auto</string>
 </resources>
