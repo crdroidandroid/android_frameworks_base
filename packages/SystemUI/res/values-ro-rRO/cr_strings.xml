@@ -130,4 +130,7 @@
     <string name="omnijaws_label_default">Vremea</string>
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Recunoașterea feței...</string>
+    <!-- Refresh Rate Tile -->
+    <string name="refresh_rate_tile_label">Frecvența de reîmprospătare</string>
+    <string name="auto_mode_label">Auto</string>
 </resources>
