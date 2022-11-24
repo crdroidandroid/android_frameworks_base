@@ -131,6 +131,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Yüz tanınıyor...</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Refresh rate</string>
-    <string name="auto_mode_label">Auto</string>
+    <string name="refresh_rate_tile_label">Yenileme hızı</string>
+    <string name="auto_mode_label">Otomatik</string>
 </resources>
