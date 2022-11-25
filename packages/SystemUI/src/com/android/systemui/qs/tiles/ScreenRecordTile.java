@@ -88,7 +88,6 @@ public class ScreenRecordTile extends QSTileImpl<QSTile.BooleanState>
     public BooleanState newTileState() {
         BooleanState state = new BooleanState();
         state.label = mContext.getString(R.string.quick_settings_screen_record_label);
-        state.handlesLongClick = false;
         return state;
     }
 
@@ -99,8 +98,14 @@ public class ScreenRecordTile extends QSTileImpl<QSTile.BooleanState>
         } else if (mController.isRecording()) {
             stopRecording();
         } else {
-            mUiHandler.post(() -> showPrompt(view));
+            mUiHandler.post(() -> startRecording());
         }
+        refreshState();
+    }
+
+    @Override
+    public void handleLongClick(@Nullable View view) {
+        mUiHandler.post(() -> showPrompt(view));
         refreshState();
     }
 
@@ -169,6 +174,19 @@ public class ScreenRecordTile extends QSTileImpl<QSTile.BooleanState>
             } else {
                 dialog.show();
             }
+            return false;
+        };
+
+        mKeyguardDismissUtil.executeWhenUnlocked(dismissAction, false /* requiresShadeOpen */,
+                true /* afterKeyguardDone */);
+    }
+
+    private void startRecording() {
+        ScreenRecordDialog dialog = mController.createScreenRecordDialog(mContext, null);
+
+        ActivityStarter.OnDismissAction dismissAction = () -> {
+            getHost().collapsePanels();
+            dialog.requestScreenCapture();
             return false;
         };
 
