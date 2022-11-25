@@ -131,6 +131,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">正在识别面部...</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Refresh rate</string>
-    <string name="auto_mode_label">Auto</string>
+    <string name="refresh_rate_tile_label">刷新率</string>
+    <string name="auto_mode_label">自动</string>
 </resources>
