@@ -129,6 +129,8 @@ public class ScreenRecordDialog extends SystemUIDialog {
         mOptions.setAdapter(a);
         mOptions.setOnItemClickListenerInt((parent, view, position, id) -> {
             mAudioSwitch.setChecked(true);
+            Prefs.putInt(mUserContext, PREFS + PREF_AUDIO, 1);
+            Prefs.putInt(mUserContext, PREFS + PREF_AUDIO_SOURCE, position);
         });
 
         mTapsSwitch.setChecked(Prefs.getInt(mUserContext, PREFS + PREF_TAPS, 0) == 1);
@@ -139,18 +141,42 @@ public class ScreenRecordDialog extends SystemUIDialog {
         mOptions.setSelection(Prefs.getInt(mUserContext, PREFS + PREF_AUDIO_SOURCE, 0));
         mSkipSwitch.setChecked(Prefs.getInt(mUserContext, PREFS + PREF_SKIP, 0) == 1);
         mHEVCSwitch.setChecked(Prefs.getInt(mUserContext, PREFS + PREF_HEVC, 1) == 1);
+
+        mTapsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Prefs.putInt(mUserContext, PREFS + PREF_TAPS, isChecked ? 1 : 0);
+        });
+        mStopDotSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Prefs.putInt(mUserContext, PREFS + PREF_DOT, isChecked ? 1 : 0);
+        });
+        mLowQualitySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Prefs.putInt(mUserContext, PREFS + PREF_LOW, isChecked ? 1 : 0);
+        });
+        mLongerSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Prefs.putInt(mUserContext, PREFS + PREF_LONGER, isChecked ? 1 : 0);
+        });
+        mAudioSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Prefs.putInt(mUserContext, PREFS + PREF_AUDIO, isChecked ? 1 : 0);
+        });
+        mSkipSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Prefs.putInt(mUserContext, PREFS + PREF_SKIP, isChecked ? 1 : 0);
+        });
+        mHEVCSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Prefs.putInt(mUserContext, PREFS + PREF_HEVC, isChecked ? 1 : 0);
+        });
     }
 
-    private void requestScreenCapture() {
-        boolean showTaps = mTapsSwitch.isChecked();
-        boolean showStopDot = mStopDotSwitch.isChecked();
-        boolean lowQuality = mLowQualitySwitch.isChecked();
-        boolean longerDuration = mLongerSwitch.isChecked();
-        boolean skipTime = mSkipSwitch.isChecked();
-        boolean audioSwitch = mAudioSwitch.isChecked();
-        boolean hevc = mHEVCSwitch.isChecked();
+    public void requestScreenCapture() {
+        boolean showTaps = Prefs.getInt(mUserContext, PREFS + PREF_TAPS, 0) == 1;
+        boolean showStopDot = Prefs.getInt(mUserContext, PREFS + PREF_DOT, 0) == 1;
+        boolean lowQuality = Prefs.getInt(mUserContext, PREFS + PREF_LOW, 0) == 1;
+        boolean longerDuration = Prefs.getInt(mUserContext, PREFS + PREF_LONGER, 0) == 1;
+        boolean skipTime = Prefs.getInt(mUserContext, PREFS + PREF_SKIP, 0) == 1;
+        boolean audioSwitch = Prefs.getInt(mUserContext, PREFS + PREF_AUDIO, 0) == 1;
+        ScreenRecordingAudioSource option = ScreenRecordingAudioSource.values()[Prefs.getInt(mUserContext, PREFS + PREF_AUDIO_SOURCE, 0)+1];
+        boolean hevc = Prefs.getInt(mUserContext, PREFS + PREF_HEVC, 1) == 1;
+
         ScreenRecordingAudioSource audioMode = audioSwitch
-                ? (ScreenRecordingAudioSource) mOptions.getSelectedItem() : NONE;
+                ? option : NONE;
         PendingIntent startIntent = PendingIntent.getForegroundService(mUserContext,
                 RecordingService.REQUEST_CODE,
                 RecordingService.getStartIntent(
@@ -162,14 +188,6 @@ public class ScreenRecordDialog extends SystemUIDialog {
                 RecordingService.REQUEST_CODE,
                 RecordingService.getStopIntent(mUserContext),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        Prefs.putInt(mUserContext, PREFS + PREF_TAPS, showTaps ? 1 : 0);
-        Prefs.putInt(mUserContext, PREFS + PREF_DOT, showStopDot ? 1 : 0);
-        Prefs.putInt(mUserContext, PREFS + PREF_LOW, lowQuality ? 1 : 0);
-        Prefs.putInt(mUserContext, PREFS + PREF_LONGER, longerDuration ? 1 : 0);
-        Prefs.putInt(mUserContext, PREFS + PREF_AUDIO, audioSwitch ? 1 : 0);
-        Prefs.putInt(mUserContext, PREFS + PREF_AUDIO_SOURCE, mOptions.getSelectedItemPosition());
-        Prefs.putInt(mUserContext, PREFS + PREF_SKIP, skipTime ? 1 : 0);
-        Prefs.putInt(mUserContext, PREFS + PREF_HEVC, mHEVCSwitch.isChecked() ? 1 : 0);
         mController.startCountdown(skipTime ? NO_DELAY : DELAY_MS, INTERVAL_MS, startIntent, stopIntent);
     }
 }
