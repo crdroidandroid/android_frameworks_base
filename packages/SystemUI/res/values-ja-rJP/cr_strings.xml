@@ -49,6 +49,7 @@
     <string name="status_bar_data_saver">データセーバー</string>
     <string name="status_bar_call_strength">電波強度</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
+    <string name="status_bar_firewall">Firewall</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Data usage info in QS footer -->
     <string name="usage_data">今日の使用量</string>
