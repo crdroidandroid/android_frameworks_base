@@ -86,5 +86,6 @@
         <permission name="android.permission.SET_UNRESTRICTED_KEEP_CLEAR_AREAS" />
         <permission name="android.permission.READ_SEARCH_INDEXABLES" />
         <permission name="android.permission.WRITE_APN_SETTINGS" />
+        <permission name="android.permission.MANAGE_PARALLEL_SPACES" />
     </privapp-permissions>
 </permissions>
