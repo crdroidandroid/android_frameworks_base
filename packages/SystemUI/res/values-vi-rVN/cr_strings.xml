@@ -49,6 +49,7 @@
     <string name="status_bar_data_saver">Tiết kiệm dữ liệu</string>
     <string name="status_bar_call_strength">Cường độ cuộc gọi</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
+    <string name="status_bar_firewall">Tường lửa</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Data usage info in QS footer -->
     <string name="usage_data">đã dùng hôm nay</string>
@@ -131,6 +132,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Đang nhận diện khuôn mặt...</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Refresh rate</string>
-    <string name="auto_mode_label">Auto</string>
+    <string name="refresh_rate_tile_label">Tần số quét</string>
+    <string name="auto_mode_label">Tự động</string>
 </resources>

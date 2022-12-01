@@ -49,6 +49,7 @@
     <string name="status_bar_data_saver">Penghemat Data</string>
     <string name="status_bar_call_strength">Kekuatan panggilan</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
+    <string name="status_bar_firewall">Firewall</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Data usage info in QS footer -->
     <string name="usage_data">digunakan hari ini</string>
@@ -131,6 +132,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Mengenali wajah...</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Refresh rate</string>
-    <string name="auto_mode_label">Auto</string>
+    <string name="refresh_rate_tile_label">Kecepatan refresh</string>
+    <string name="auto_mode_label">Otomatis</string>
 </resources>

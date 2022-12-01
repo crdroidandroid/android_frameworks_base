@@ -49,6 +49,7 @@
     <string name="status_bar_data_saver">Économiseur de données</string>
     <string name="status_bar_call_strength">Puissance du réseau</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
+    <string name="status_bar_firewall">Firewall</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Data usage info in QS footer -->
     <string name="usage_data">utilisé aujourd\'hui</string>

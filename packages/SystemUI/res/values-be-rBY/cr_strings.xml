@@ -49,6 +49,7 @@
     <string name="status_bar_data_saver">Эканомія трафіка</string>
     <string name="status_bar_call_strength">Узровень сігналу</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
+    <string name="status_bar_firewall">Брандмаўэр</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Data usage info in QS footer -->
     <string name="usage_data">выкарыстоўваецца сёння</string>
@@ -131,6 +132,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Распазнаванне асобы...</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Refresh rate</string>
-    <string name="auto_mode_label">Auto</string>
+    <string name="refresh_rate_tile_label">Частата экрана</string>
+    <string name="auto_mode_label">Аўтаматычна</string>
 </resources>
