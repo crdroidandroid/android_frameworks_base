@@ -32,6 +32,10 @@
     <string name="screenrecord_lowquality_summary">Daha küçük dosya boyutu için</string>
     <string name="screenrecord_longer_timeout_switch_label">Daha büyük dosya boyutu sınırı</string>
     <string name="screenrecord_longer_timeout_switch_summary">Kayıt boyutunu 15 GB ile sınırlayın</string>
+    <string name="screenrecord_skip_time_label">Zamanlayıcıyı atla</string>
+    <string name="screenrecord_skip_time_summary">3 saniye beklemeyi kaldır</string>
+    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Sil</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
