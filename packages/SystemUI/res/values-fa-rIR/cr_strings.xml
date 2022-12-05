@@ -32,6 +32,10 @@
     <string name="screenrecord_lowquality_summary">برای انداره کوچیک تر فایل</string>
     <string name="screenrecord_longer_timeout_switch_label">Bigger file size limit\nLimit recording size to 15GiB</string>
     <string name="screenrecord_longer_timeout_switch_summary">محدود کردن اندازه ضبط به ۱۵ گیگابایت</string>
+    <string name="screenrecord_skip_time_label">رد کردن زمان‌سنج</string>
+    <string name="screenrecord_skip_time_summary">حذف صبر ۳ ثانیه‌ای</string>
+    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">حذف</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
