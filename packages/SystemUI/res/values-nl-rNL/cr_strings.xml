@@ -32,6 +32,10 @@
     <string name="screenrecord_lowquality_summary">Voor kleinere bestandsgrootte</string>
     <string name="screenrecord_longer_timeout_switch_label">Grotere bestandsgrootte limiet</string>
     <string name="screenrecord_longer_timeout_switch_summary">Beperk opnamegrootte tot 15 GB</string>
+    <string name="screenrecord_skip_time_label">Timer overslaan</string>
+    <string name="screenrecord_skip_time_summary">Verwijder 3 seconden wachten</string>
+    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Verwijderen</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
