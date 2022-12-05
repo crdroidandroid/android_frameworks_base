@@ -38,6 +38,7 @@
     <string name="screenrecord_skip_time_label">Skip timer</string>
     <string name="screenrecord_skip_time_summary">Remove 3 second wait</string>
     <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
 
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Delete</string>
