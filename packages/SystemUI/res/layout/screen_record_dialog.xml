@@ -314,18 +314,26 @@
                         android:tint="?android:attr/textColorSecondary"
                         android:layout_gravity="center"
                         android:layout_marginRight="@dimen/screenrecord_option_padding"/>
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:minHeight="48dp"
                         android:layout_weight="1"
-                        android:layout_gravity="fill_vertical"
-                        android:gravity="center_vertical"
-                        android:text="@string/screenrecord_hevc_switch_label"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:fontFamily="@*android:string/config_headlineFontFamily"
-                        android:textColor="?android:attr/textColorPrimary"
-                        android:importantForAccessibility="no"/>
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:importantForAccessibility="no"
+                            android:text="@string/screenrecord_hevc_switch_label"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="?android:attr/textColorPrimary" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:importantForAccessibility="no"
+                            android:text="@string/screenrecord_hevc_switch_summary"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="?android:textColorSecondary" />
+                    </LinearLayout>
                     <Switch
                         android:layout_width="wrap_content"
                         android:minWidth="48dp"
