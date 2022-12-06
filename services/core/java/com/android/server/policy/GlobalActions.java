@@ -16,7 +16,6 @@ package com.android.server.policy;
 
 import android.content.Context;
 import android.os.Handler;
-import android.provider.Settings;
 import android.util.Slog;
 
 import com.android.server.LocalServices;
@@ -65,7 +64,7 @@ class GlobalActions implements GlobalActionsProvider.GlobalActionsListener {
         mKeyguardShowing = keyguardShowing;
         mDeviceProvisioned = deviceProvisioned;
         mShowing = true;
-        if (mGlobalActionsAvailable && Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.POWER_MENU_TYPE, 0) != 4) {
+        if (mGlobalActionsAvailable) {
             mHandler.postDelayed(mShowTimeout, 5000);
             mGlobalActionsProvider.showGlobalActions();
         } else {

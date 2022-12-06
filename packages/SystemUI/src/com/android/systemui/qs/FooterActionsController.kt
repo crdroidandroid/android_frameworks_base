@@ -150,10 +150,7 @@ internal class FooterActionsController @Inject constructor(
             startServicesActivity()
         } else if (v === powerMenuLite) {
             uiEventLogger.log(GlobalActionsDialogLite.GlobalActionsEvent.GA_OPEN_QS)
-    	    if (Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.POWER_MENU_TYPE, 0) == 0)
-                globalActionsDialog?.showOrHideDialog(false, true, v)
-	        else
-                context.sendBroadcast(Intent("android.intent.action.POWER_MENU"))
+            globalActionsDialog?.showOrHideDialog(false, true, v)
         }
     }
 
