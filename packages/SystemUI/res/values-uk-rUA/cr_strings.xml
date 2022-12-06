@@ -34,8 +34,8 @@
     <string name="screenrecord_longer_timeout_switch_summary">Обмежити розмір запису до 15 ГБ</string>
     <string name="screenrecord_skip_time_label">Пропустити таймер</string>
     <string name="screenrecord_skip_time_summary">Видалити 3 секундне очікування</string>
-    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
+    <string name="screenrecord_hevc_switch_label">Увімкнути HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Використовувати більш ефективне розширення відео кодування</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Видалити</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
