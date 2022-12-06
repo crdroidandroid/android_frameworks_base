@@ -34,8 +34,8 @@
     <string name="screenrecord_longer_timeout_switch_summary">限制录屏文件大小为 15GB</string>
     <string name="screenrecord_skip_time_label">跳过倒计时</string>
     <string name="screenrecord_skip_time_summary">移除 3 秒等待</string>
-    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
+    <string name="screenrecord_hevc_switch_label">启用 HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">使用效率更高的 HEVC 视频编码</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">删除</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
@@ -53,7 +53,7 @@
     <string name="status_bar_data_saver">数据保存</string>
     <string name="status_bar_call_strength">通话强度</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <string name="status_bar_firewall">Firewall</string>
+    <string name="status_bar_firewall">防火墙</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Data usage info in QS footer -->
     <string name="usage_data">今日使用</string>
