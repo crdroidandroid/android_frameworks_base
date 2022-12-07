@@ -32,6 +32,10 @@
     <string name="screenrecord_lowquality_summary">Para archivo más pequeño</string>
     <string name="screenrecord_longer_timeout_switch_label">Tamaño límite más grande</string>
     <string name="screenrecord_longer_timeout_switch_summary">Limitar tamaño de grabación a 15GB</string>
+    <string name="screenrecord_skip_time_label">Omitir temporizador</string>
+    <string name="screenrecord_skip_time_summary">Elimina la espera de 3 segundos</string>
+    <string name="screenrecord_hevc_switch_label">Habilitar HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Usar codificación de vídeo HEVC más eficiente</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Eliminar</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->

@@ -32,6 +32,10 @@
     <string name="screenrecord_lowquality_summary">לגודל קובץ קטן יותר</string>
     <string name="screenrecord_longer_timeout_switch_label">מגבלת גודל קובץ גדול יותר</string>
     <string name="screenrecord_longer_timeout_switch_summary">הגבלת גודל ההקלטה ל-15 גיגהבייט</string>
+    <string name="screenrecord_skip_time_label">תזמון הדילוג</string>
+    <string name="screenrecord_skip_time_summary">הסרת המתנת 3 השניות</string>
+    <string name="screenrecord_hevc_switch_label">תמיכה ב-HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">שימוש בקידוד וידאו HEVC היעיל יותר</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">מחיקה</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
