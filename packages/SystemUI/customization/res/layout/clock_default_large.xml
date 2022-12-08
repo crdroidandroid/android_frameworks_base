@@ -24,7 +24,6 @@
     android:gravity="center_horizontal"
     android:textSize="@dimen/large_clock_text_size"
     android:fontFamily="@*android:string/config_clockFontFamily"
-    android:typeface="monospace"
     android:textAlignment="center"
     android:includeFontPadding="false"
     android:elegantTextHeight="false"
