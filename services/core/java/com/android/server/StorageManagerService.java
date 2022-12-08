@@ -3292,6 +3292,14 @@ class StorageManagerService extends IStorageManager.Stub
                         + "; device may be insecure!");
                 return;
             }
+	
+            StorageManager storage = mContext.getSystemService(StorageManager.class);
+            VolumeInfo info = storage.findVolumeByUuid(volumeUuid);
+            if (info == null || info.getState() != VolumeInfo.STATE_MOUNTED) {
+                Slog.w(TAG, "ignoring error preparing storage for existing user " + userId
+                        + "; device may be not exist or not mounted!");
+                return;
+            }
             throw e;
         }
     }
