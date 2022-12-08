@@ -4416,7 +4416,7 @@ public class UserManagerService extends IUserManager.Stub {
         MetricsLogger.count(mContext, userInfo.isGuest() ? TRON_GUEST_CREATED
                 : (userInfo.isDemo() ? TRON_DEMO_CREATED : TRON_USER_CREATED), 1);
 
-        if (!userInfo.isProfile()) {
+        if (!userInfo.isProfile() && !userInfo.isParallel()) {
             // If the user switch hasn't been explicitly toggled on or off by the user, turn it on.
             if (android.provider.Settings.Global.getString(mContext.getContentResolver(),
                     android.provider.Settings.Global.USER_SWITCHER_ENABLED) == null) {
