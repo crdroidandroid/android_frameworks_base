@@ -764,10 +764,10 @@ class UserController implements Handler.Callback {
         final UserInfo info = getUserInfo(userId);
         if (!Objects.equals(info.lastLoggedInFingerprint, Build.VERSION.INCREMENTAL)
                 || SystemProperties.getBoolean("persist.pm.mock-upgrade", false)) {
-            // Suppress double notifications for managed profiles that
-            // were unlocked automatically as part of their parent user being
+            // Suppress double notifications for managed profiles and parallel space
+            // that were unlocked automatically as part of their parent user being
             // unlocked.  TODO(b/217442918): this code doesn't work correctly.
-            final boolean quiet = info.isManagedProfile();
+            final boolean quiet = info.isManagedProfile() || info.isParallel();
             mInjector.sendPreBootBroadcast(userId, quiet,
                     () -> finishUserUnlockedCompleted(uss));
         } else {
