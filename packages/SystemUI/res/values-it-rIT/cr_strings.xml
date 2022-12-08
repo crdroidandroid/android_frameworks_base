@@ -34,8 +34,8 @@
     <string name="screenrecord_longer_timeout_switch_summary">Limita la dimensione della registrazione a 15 GB</string>
     <string name="screenrecord_skip_time_label">Salta timer</string>
     <string name="screenrecord_skip_time_summary">Rimuovi 3 secondi di attesa</string>
-    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
+    <string name="screenrecord_hevc_switch_label">Attiva Codificazione video ad alta efficienza</string>
+    <string name="screenrecord_hevc_switch_summary">Utilizza una codificazione video HEVC più efficiente</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Elimina</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
