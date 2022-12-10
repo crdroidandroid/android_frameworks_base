@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.telecom.TelecomManager;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.util.Slog;
@@ -82,10 +83,11 @@ public class PocketManager {
      */
     public static final int REASON_RESET = 2;
 
-    private Context mContext;
-    private IPocketService mService;
-    private PowerManager mPowerManager;
-    private Handler mHandler;
+    private final Context mContext;
+    private final IPocketService mService;
+    private final PowerManager mPowerManager;
+    private final TelecomManager mTelecomManager;
+    private final Handler mHandler;
     private boolean mPocketViewTimerActive;
 
     public PocketManager(Context context, IPocketService service) {
@@ -95,6 +97,7 @@ public class PocketManager {
             Slog.v(TAG, "PocketService was null");
         }
         mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+        mTelecomManager = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
         mHandler = new Handler();
     }
 
@@ -199,7 +202,8 @@ public class PocketManager {
     class PocketLockTimeout implements Runnable {
         @Override
         public void run() {
-            mPowerManager.goToSleep(SystemClock.uptimeMillis());
+            if (!mTelecomManager.isInCall())
+                mPowerManager.goToSleep(SystemClock.uptimeMillis());
             mPocketViewTimerActive = false;
         }
     }
