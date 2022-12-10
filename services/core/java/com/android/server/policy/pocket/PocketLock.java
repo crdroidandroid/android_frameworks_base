@@ -28,7 +28,7 @@ import android.view.WindowManager;
  * This class provides a fullscreen overlays view, displaying itself
  * even on top of lock screen. While this view is displaying touch
  * inputs are not passed to the the views below.
- * @see android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+ * @see android.view.WindowManager.LayoutParams.TYPE_SECURE_SYSTEM_OVERLAY
  * @author Carlo Savignano
  */
 public class PocketLock {
@@ -180,7 +180,7 @@ public class PocketLock {
         mLayoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         mLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         mLayoutParams.gravity = Gravity.CENTER;
-        mLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+        mLayoutParams.type = WindowManager.LayoutParams.TYPE_SECURE_SYSTEM_OVERLAY;
         mLayoutParams.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         mLayoutParams.flags = WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
