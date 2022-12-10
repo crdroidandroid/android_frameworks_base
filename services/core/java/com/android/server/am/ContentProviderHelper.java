@@ -1368,6 +1368,18 @@ public class ContentProviderHelper {
                                     final boolean splitInstalled = pi.splitName == null
                                             || ArrayUtils.contains(pi.applicationInfo.splitNames,
                                                     pi.splitName);
+                                    final ProcessProviderRecord pr = app.mProviders;
+                                    boolean singleton = mService.isSingleton(pi.processName, pi.applicationInfo,
+                                                                pi.name, pi.flags);
+                                    ComponentName comp = new ComponentName(pi.packageName, pi.name);
+                                    ContentProviderRecord cpr = mProviderMap.getProviderByClass(comp, app.userId);
+                                    if (cpr == null) {
+                                        cpr = new ContentProviderRecord(mService, pi, app.info, comp, singleton);
+                                        mProviderMap.putProviderByClass(comp, cpr);
+                                    }
+                                    if (!pr.hasProvider(pi.name)) {
+                                        pr.installProvider(pi.name, cpr);
+                                    }
                                     if (processMatch && userMatch
                                             && (!isInstantApp || splitInstalled)) {
                                         Log.v(TAG, "Installing " + pi);
