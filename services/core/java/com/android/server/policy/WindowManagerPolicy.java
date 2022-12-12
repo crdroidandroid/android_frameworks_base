@@ -58,7 +58,6 @@ import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_FINGERPRINT;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_FINGERPRINT_HIGH_LIGHT;
 import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
 import static android.view.WindowManager.LayoutParams.TYPE_TOAST;
-import static android.view.WindowManager.LayoutParams.TYPE_TRUSTED_APPLICATION_OVERLAY;
 import static android.view.WindowManager.LayoutParams.TYPE_VOICE_INTERACTION;
 import static android.view.WindowManager.LayoutParams.TYPE_VOICE_INTERACTION_STARTING;
 import static android.view.WindowManager.LayoutParams.TYPE_VOLUME_OVERLAY;
@@ -798,7 +797,6 @@ public interface WindowManagerPolicy extends WindowManagerPolicyConstants {
                 // in a higher layer than TYPE_APPLICATION_OVERLAY.
                 return  canAddInternalSystemWindow ? 13 : 10;
             case TYPE_APPLICATION_OVERLAY:
-            case TYPE_TRUSTED_APPLICATION_OVERLAY:
                 return  12;
             case TYPE_INPUT_METHOD:
                 // on-screen keyboards and other such input method user interfaces go here.
