@@ -1860,4 +1860,18 @@ public class LockPatternUtils {
             re.rethrowFromSystemServer();
         }
     }
+
+    /**
+     * Returns the length of current credential.
+     *
+     * @return length of the current credential or -1, if the user hasn't authenticated yet.
+     */
+    public int getCredentialLength(int userId) {
+        try {
+            return getLockSettings().getCredentialLength(userId);
+        } catch (RemoteException e) {
+            e.rethrowFromSystemServer();
+        }
+        return -1;
+    }
 }
