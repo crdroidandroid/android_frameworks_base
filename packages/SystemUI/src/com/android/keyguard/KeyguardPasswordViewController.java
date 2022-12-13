@@ -101,9 +101,8 @@ public class KeyguardPasswordViewController
             if (!TextUtils.isEmpty(s)) {
                 onUserInput();
                 if (quickUnlock) {
-                    LockscreenCredential entry = mView.getEnteredCredential();
-                    if (entry.size() == keyguardPinPasswordLength()) {
-                        validateQuickUnlock(mLockPatternUtils, entry, userId);
+                    if (s.length() == mLockPatternUtils.getCredentialLength(userId)) {
+                        validateQuickUnlock(mLockPatternUtils, mView.getEnteredCredential(), userId);
                     }
 
                 }
@@ -356,15 +355,5 @@ public class KeyguardPasswordViewController
             mKeyguardSecurityCallback.dismiss(true, userId, SecurityMode.Password);
             mView.resetPasswordText(true, true);
         }
-    }
-
-    private int keyguardPinPasswordLength() {
-        int pinPasswordLength = -1;
-        try {
-            pinPasswordLength = (int) mLockPatternUtils.getLockSettings().getLong("lockscreen.pin_password_length", 0, userId);
-        } catch (Exception e) {
-            // do nothing
-        }
-        return pinPasswordLength >= 4 ? pinPasswordLength : -1;
     }
 }
