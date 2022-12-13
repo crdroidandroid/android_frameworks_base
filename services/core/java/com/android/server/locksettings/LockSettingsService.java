@@ -1308,6 +1308,17 @@ public class LockSettingsService extends ILockSettings.Stub {
         return getCredentialTypeInternal(userId);
     }
 
+    /**
+     * Returns the length of current credential.
+     * @return length of the current credential or -1, if the user hasn't authenticated yet.
+     */
+    @Override
+    public int getCredentialLength(int userId) {
+        checkPasswordHavePermission(userId);
+        final PasswordMetrics passwordMetrics = getUserPasswordMetrics(userId);
+        return passwordMetrics != null ? passwordMetrics.length : -1;
+    }
+
     // TODO: this is a hot path, can we optimize it?
     /**
      * Returns the credential type of the user, can be one of {@link #CREDENTIAL_TYPE_NONE},
