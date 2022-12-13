@@ -396,12 +396,13 @@ public class QSTileHost implements QSHost, Tunable, PluginListener<QSFactory>, P
      */
     @Override
     public void removeTile(String spec) {
-        if (spec.startsWith(CustomTile.PREFIX)) {
+        if (spec != null && spec.startsWith(CustomTile.PREFIX)) {
             // If the tile is removed (due to it not actually existing), mark it as removed. That
             // way it will be marked as newly added if it appears in the future.
             setTileAdded(CustomTile.getComponentFromSpec(spec), mCurrentUser, false);
         }
-        mMainExecutor.execute(() -> changeTileSpecs(tileSpecs-> tileSpecs.remove(spec)));
+        if (spec != null)
+            mMainExecutor.execute(() -> changeTileSpecs(tileSpecs-> tileSpecs.remove(spec)));
     }
 
     /**
