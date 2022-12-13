@@ -130,7 +130,7 @@ public class PocketService extends SystemService implements IBinder.DeathRecipie
     private static final float POCKET_LIGHT_MAX_THRESHOLD = 3.0f;
 
     private final ArrayList<IPocketCallback> mCallbacks = new ArrayList<>();
-    private final TelephonyManager mTelephonyManager;
+    private TelephonyManager mTelephonyManager;
 
     private Context mContext;
     private boolean mEnabled;
@@ -200,10 +200,14 @@ public class PocketService extends SystemService implements IBinder.DeathRecipie
             mObserver.register();
         }
 
-        mTelephonyManager = (TelephonyManager)
+        final boolean disableOnCall = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_pocketJudgeDisableOnCall);
+        if (disableOnCall && mSupportedByDevice) {
+            mTelephonyManager = (TelephonyManager)
                 context.getSystemService(Context.TELEPHONY_SERVICE);
-        if (mSupportedByDevice) {
-            mTelephonyManager.listen(mOnCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+            if (mSupportedByDevice) {
+                mTelephonyManager.listen(mOnCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+            }
         }
     }
 
@@ -354,7 +358,8 @@ public class PocketService extends SystemService implements IBinder.DeathRecipie
         }
         unregisterSensorListeners();
         mObserver.unregister();
-        mTelephonyManager.listen(mOnCallStateListener, PhoneStateListener.LISTEN_NONE);
+        if (mTelephonyManager != null)
+            mTelephonyManager.listen(mOnCallStateListener, PhoneStateListener.LISTEN_NONE);
     }
 
     private final class PocketServiceWrapper extends IPocketService.Stub {
