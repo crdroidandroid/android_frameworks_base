@@ -275,8 +275,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     }
 
     private boolean shouldHeadsUpWhenAwake(NotificationEntry entry) {
-        StatusBarNotification sbn = entry.getSbn();
-
         if (!mUseHeadsUp) {
             mLogger.logNoHeadsUpFeatureDisabled();
             return false;
@@ -299,7 +297,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
             return false;
         }
 
-        if (isSnoozedPackage(sbn)) {
+        if (isSnoozedPackage(entry)) {
             mLogger.logNoHeadsUpPackageSnoozed(entry);
             return false;
         }
@@ -471,7 +469,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
         return true;
     }
 
-    private boolean isSnoozedPackage(StatusBarNotification sbn) {
-        return mHeadsUpManager.isSnoozed(sbn.getPackageName());
+    private boolean isSnoozedPackage(NotificationEntry entry) {
+        return mHeadsUpManager.isSnoozed(entry.getSbn().getPackageName());
     }
 }
