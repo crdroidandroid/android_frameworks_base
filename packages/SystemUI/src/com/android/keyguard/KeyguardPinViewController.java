@@ -159,7 +159,7 @@ public class KeyguardPinViewController
             mPasswordEntry.setQuickUnlockListener(new QuickUnlockListener() {
                 public void onValidateQuickUnlock(String password) {
                     int userId = KeyguardUpdateMonitor.getCurrentUser();
-                    if (password != null && password.length() == keyguardPinPasswordLength(userId)) {
+                    if (password != null && password.length() == mLockPatternUtils.getPinLength(userId)) {
                         validateQuickUnlock(mLockPatternUtils, password, userId);
                     }
                 }
@@ -287,15 +287,5 @@ public class KeyguardPinViewController
             mKeyguardSecurityCallback.dismiss(true, userId, SecurityMode.PIN);
             mView.resetPasswordText(true, true);
         }
-    }
-
-    private int keyguardPinPasswordLength(int userId) {
-        int pinPasswordLength = -1;
-        try {
-            pinPasswordLength = (int) mLockPatternUtils.getLockSettings().getLong("lockscreen.pin_password_length", -1, userId);
-        } catch (Exception e) {
-            // do nothing
-        }
-        return pinPasswordLength >= 4 ? pinPasswordLength : -1;
     }
 }
