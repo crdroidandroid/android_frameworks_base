@@ -52,13 +52,9 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Datensparmodus</string>
     <string name="status_bar_call_strength">Anruf-Signalstärke</string>
-    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <string name="status_bar_firewall">Firewall</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">heute verbraucht</string>
-    <string name="usage_data_default_suffix">Daten</string>
-    <string name="usage_wifi_default_suffix">WLAN</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Schnellladen (<xliff:g id="charging_time_left" example="4 Stunden und 2 Minuten">%1$s</xliff:g> bis voll)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Schnellladen</string>
@@ -71,6 +67,10 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Schnellladen (Voll in <xliff:g id="charging_time_left" example="4 Stunden und 2 Minuten">%1$s</xliff:g>)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Schnellladen</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">heute verbraucht</string>
+    <string name="usage_data_default_suffix">Daten</string>
+    <string name="usage_wifi_default_suffix">WLAN</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go aktiviert</string>
     <string name="onthego_notif_title">On-The-Go ist aktiv</string>
