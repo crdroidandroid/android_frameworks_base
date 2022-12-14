@@ -40,4 +40,5 @@
     <string name="url_copy_failed">上傳紀錄至 Pasty 時發生錯誤</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">因為無活動，臉部解鎖已停用</string>
+    <!-- Parallel space badge -->
 </resources>
