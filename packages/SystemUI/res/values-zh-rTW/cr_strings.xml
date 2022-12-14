@@ -52,13 +52,9 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">數據節省模式</string>
     <string name="status_bar_call_strength">訊號強度</string>
-    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <string name="status_bar_firewall">防火牆</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">今日已用</string>
-    <string name="usage_data_default_suffix">行動數據</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash 閃充中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash 閃充中</string>
@@ -71,6 +67,10 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • 渦輪閃充中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • 渦輪閃充中</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">今日已用</string>
+    <string name="usage_data_default_suffix">行動數據</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">行走模式已啟動</string>
     <string name="onthego_notif_title">行走模式正處於啟用狀態</string>
