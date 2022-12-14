@@ -40,4 +40,5 @@
     <string name="url_copy_failed">Une erreur est survenue pendant l\'envoi du rapport</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Déverrouillage facial désactivé en raison de l\'inactivité</string>
+    <!-- Parallel space badge -->
 </resources>
