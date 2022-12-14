@@ -52,13 +52,9 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Economizor date</string>
     <string name="status_bar_call_strength">Putere apel</string>
-    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <string name="status_bar_firewall">Firewall</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">utilizat azi</string>
-    <string name="usage_data_default_suffix">Date</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Încărcare DASH (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> până la finalizare)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Încărcare DASH</string>
@@ -71,6 +67,10 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Încărcare Turbo (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> până la finalizare)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Încărcare Turbo</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">utilizat azi</string>
+    <string name="usage_data_default_suffix">Date</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go activat</string>
     <string name="onthego_notif_title">On-The-Go este activ</string>
