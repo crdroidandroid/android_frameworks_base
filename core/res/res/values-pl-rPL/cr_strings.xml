@@ -39,4 +39,6 @@
     <string name="url_copy_failed">Wystąpił błąd podczas przesyłania dziennika do serwisu Pasty</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Rozpoznawanie twarzy wyłączone z powodu braku aktywności</string>
+    <!-- Parallel space badge -->
+    <string name="parallel_space_badge_label">%1$s</string>
 </resources>
