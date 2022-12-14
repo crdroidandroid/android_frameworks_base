@@ -40,4 +40,5 @@
     <string name="url_copy_failed">Произошла ошибка во время загрузки лога на Pasty</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Разблокировка по лицу отключена из-за бездействия</string>
+    <!-- Parallel space badge -->
 </resources>
