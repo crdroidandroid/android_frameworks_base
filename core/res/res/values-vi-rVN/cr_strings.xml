@@ -40,4 +40,5 @@
     <string name="url_copy_failed">Đã xảy ra lỗi khi tải nhật ký lên máy chủ</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Mở khóa bằng khuôn mặt bị tắt do không hoạt động</string>
+    <!-- Parallel space badge -->
 </resources>
