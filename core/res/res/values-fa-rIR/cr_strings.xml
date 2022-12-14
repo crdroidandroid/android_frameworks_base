@@ -40,4 +40,5 @@
     <string name="url_copy_failed">هنگام بارگزاری گزارش در Pasty خطایی روی داد</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">باز کردن قفل با چهره به دلیل بی حرکتی غیرفعال شد</string>
+    <!-- Parallel space badge -->
 </resources>
