@@ -40,4 +40,6 @@ example=\"Gmail\"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; paket imzasını taklit etme
     <string name="url_copy_failed">Günlük Pasty\'ye yüklenirken bir hata oluştu</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Hareketsizlik nedeniyle yüz kilidi devre dışı bırakıldı</string>
+    <!-- Parallel space badge -->
+    <string name="parallel_space_badge_label">%1$s</string>
 </resources>
