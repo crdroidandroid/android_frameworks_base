@@ -52,13 +52,9 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Tiết kiệm dữ liệu</string>
     <string name="status_bar_call_strength">Cường độ cuộc gọi</string>
-    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <string name="status_bar_firewall">Tường lửa</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">đã dùng hôm nay</string>
-    <string name="usage_data_default_suffix">Dữ liệu</string>
-    <string name="usage_wifi_default_suffix">Wifi</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc nhanh (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> đến khi đầy)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> • Đang sạc nhanh</string>
@@ -71,6 +67,10 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc nhanh Turbo (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> nữa sẽ đầy)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Sạc nhanh Turbo</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">đã dùng hôm nay</string>
+    <string name="usage_data_default_suffix">Dữ liệu</string>
+    <string name="usage_wifi_default_suffix">Wifi</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Chế độ đi bộ đã bật</string>
     <string name="onthego_notif_title">Chế độ đi bộ đang hoạt động</string>
