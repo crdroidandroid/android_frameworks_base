@@ -34,8 +34,8 @@
     <string name="screenrecord_longer_timeout_switch_summary">Ограничить размер записи до 15 ГБ</string>
     <string name="screenrecord_skip_time_label">Пропустить таймер</string>
     <string name="screenrecord_skip_time_summary">Убрать 3-х секундное ожидание</string>
-    <string name="screenrecord_hevc_switch_label">Использовать HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Использовать более эффективное HEVC кодирование</string>
+    <string name="screenrecord_hevc_switch_label">Включить HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Использовать более эффективное кодирование видео в формате HEVC</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Удалить</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
@@ -43,7 +43,7 @@
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">кбит/с</string>
     <string name="megabitspersecond_short">Мбит/с</string>
-    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="gigabitspersecond_short">Гбит/с</string>
     <string name="kilobytespersecond_short">кБ/с</string>
     <string name="megabytespersecond_short">МБ/с</string>
     <string name="gigabytespersecond_short">ГБ/с</string>
@@ -53,7 +53,7 @@
     <string name="status_bar_data_saver">Экономия трафика</string>
     <string name="status_bar_call_strength">Уровень сигнала</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <string name="status_bar_firewall">Фаервол</string>
+    <string name="status_bar_firewall">Брандмауэр</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Data usage info in QS footer -->
     <string name="usage_data">использовано сегодня</string>
@@ -91,7 +91,7 @@
     <!-- FPS Info tile -->
     <string name="quick_settings_fpsinfo_label">Информация о FPS</string>
     <!-- FPS view text placeholder -->
-    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" примерно="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Компас</string>
     <string name="quick_settings_compass_value"><xliff:g id="градусы">%1$.0f</xliff:g>\u00b0 <xliff:g id="направление">%2$s</xliff:g></string>
@@ -101,7 +101,7 @@
     <string name="quick_settings_compass_E">В</string>
     <string name="quick_settings_compass_SE">ЮВ</string>
     <string name="quick_settings_compass_S">Юг</string>
-    <string name="quick_settings_compass_SW">ЮВ</string>
+    <string name="quick_settings_compass_SW">ЮЗ</string>
     <string name="quick_settings_compass_W">З</string>
     <string name="quick_settings_compass_NW">СЗ</string>
     <!-- DataSwitch Tile -->
@@ -123,6 +123,13 @@
     <string name="tristate_rotation_0">Портрет</string>
     <string name="tristate_rotation_90">Ландшафт (90°)</string>
     <string name="tristate_rotation_270">Ландшафт (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d устройство подключено</item>
+        <item quantity="few">Подключено устройств: %d</item>
+        <item quantity="many">Подключено устройств: %d</item>
+        <item quantity="other">Подключено устройств: %d</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Остановить принудительно?</string>
     <string name="force_stop_dlg_text">Принудительное закрытие приложения может негативно отразиться на его функциональности.</string>

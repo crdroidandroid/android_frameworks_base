@@ -123,6 +123,13 @@
     <string name="tristate_rotation_0">Портретна</string>
     <string name="tristate_rotation_90">Ландшафт (90°)</string>
     <string name="tristate_rotation_270">Ландшафт (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">Пристрій під\'єднано</item>
+        <item quantity="few">Підключено пристроїв: %1$d</item>
+        <item quantity="many">Підключено пристроїв: %1$d</item>
+        <item quantity="other">%d пристрій підключено</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Примусово припинити?</string>
     <string name="force_stop_dlg_text">Примусове закриття додатку може призвести до збою в його роботі.</string>

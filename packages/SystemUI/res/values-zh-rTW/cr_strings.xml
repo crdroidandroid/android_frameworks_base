@@ -123,6 +123,10 @@
     <string name="tristate_rotation_0">縱向顯示</string>
     <string name="tristate_rotation_90">橫向 (90°)</string>
     <string name="tristate_rotation_270">橫向 (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="other">%d 台裝置</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">是否強制停止？</string>
     <string name="force_stop_dlg_text">如果您強制停止應用程式，應用程式可能會無法正常運作。</string>

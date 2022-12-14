@@ -123,6 +123,11 @@
     <string name="tristate_rotation_0">Állókép-mód</string>
     <string name="tristate_rotation_90">Fekvőkép-mód</string>
     <string name="tristate_rotation_270">Fejreállított fekvőkép-mód</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d készülék csatlakoztatva</item>
+        <item quantity="other">%d készülék csatlakoztatva</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Kényszeríti a leállítást?</string>
     <string name="force_stop_dlg_text">Ha egy alkalmazást leállásra kényszerít, lehetséges, hogy az hibásan fog működni.</string>

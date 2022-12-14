@@ -30,8 +30,8 @@
     <string name="screenrecord_stopdot_summary">Mantener pulsado para moverlo</string>
     <string name="screenrecord_lowquality_label">Menor calidad</string>
     <string name="screenrecord_lowquality_summary">Para archivo más pequeño</string>
-    <string name="screenrecord_longer_timeout_switch_label">Tamaño límite más grande</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Limitar tamaño de grabación a 15GB</string>
+    <string name="screenrecord_longer_timeout_switch_label">Límite de tamaño más grande</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Limitar tamaño de grabación a 15 GB</string>
     <string name="screenrecord_skip_time_label">Omitir temporizador</string>
     <string name="screenrecord_skip_time_summary">Elimina la espera de 3 segundos</string>
     <string name="screenrecord_hevc_switch_label">Habilitar HEVC</string>
@@ -39,9 +39,9 @@
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Eliminar</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Borrar captura</string>
+    <string name="screenshot_delete_description">Borrar captura de pantalla</string>
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="kilobitspersecond_short">Kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
     <string name="gigabitspersecond_short">Gb/s</string>
     <string name="kilobytespersecond_short">kB/s</string>
@@ -53,7 +53,7 @@
     <string name="status_bar_data_saver">Ahorro de datos</string>
     <string name="status_bar_call_strength">Intensidad de llamada</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <string name="status_bar_firewall">Firewall</string>
+    <string name="status_bar_firewall">Cortafuegos</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Data usage info in QS footer -->
     <string name="usage_data">usado hoy</string>
@@ -123,6 +123,11 @@
     <string name="tristate_rotation_0">Vertical</string>
     <string name="tristate_rotation_90">Paisaje (90°)</string>
     <string name="tristate_rotation_270">Paisaje (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d dispositivo conectado</item>
+        <item quantity="other">%d dispositivos conectados</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">¿Forzar Finalización?</string>
     <string name="force_stop_dlg_text">Si se finaliza una aplicación, es posible que no funcione correctamente.</string>

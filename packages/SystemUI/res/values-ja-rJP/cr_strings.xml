@@ -123,6 +123,10 @@
     <string name="tristate_rotation_0">縦向き</string>
     <string name="tristate_rotation_90">横向き (90°)</string>
     <string name="tristate_rotation_270">横向き (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="other">%d個のデバイスが接続中</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">強制停止しますか？</string>
     <string name="force_stop_dlg_text">アプリを強制停止すると、正常に機能しないことがあります。</string>

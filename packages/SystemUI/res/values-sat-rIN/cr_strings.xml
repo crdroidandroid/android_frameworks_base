@@ -123,6 +123,11 @@
     <string name="tristate_rotation_0">ᱯᱚᱴᱨᱮᱴ</string>
     <string name="tristate_rotation_90">ᱞᱮᱸᱰᱥᱠᱮᱯ (᱙᱐°)</string>
     <string name="tristate_rotation_270">ᱞᱮᱸᱰᱥᱠᱮᱯ (᱒᱗᱐°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d device connected</item>
+        <item quantity="other">%d devices connected</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Force stop?</string>
     <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>

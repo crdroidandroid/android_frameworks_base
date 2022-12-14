@@ -34,8 +34,8 @@
     <string name="screenrecord_longer_timeout_switch_summary">Абмяжуйце памер запісу да 15 ГБ</string>
     <string name="screenrecord_skip_time_label">Прапусціць таймер</string>
     <string name="screenrecord_skip_time_summary">Прыбраць ​​3 секунды чакання</string>
-    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
+    <string name="screenrecord_hevc_switch_label">Уключыць HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Выкарыстоўваць больш эфектыўнае кадзіраванне відэа HEVC</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Выдаліць</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
@@ -123,6 +123,13 @@
     <string name="tristate_rotation_0">Партрэт</string>
     <string name="tristate_rotation_90">Ландшафт (90°)</string>
     <string name="tristate_rotation_270">Ландшафт (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d device connected</item>
+        <item quantity="few">%d devices connected</item>
+        <item quantity="many">%d devices connected</item>
+        <item quantity="other">%d devices connected</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Спынiць прымусова?</string>
     <string name="force_stop_dlg_text">Прымусовае закрыццё праграмы можа адбіцца на яе функцыянальнасці.</string>

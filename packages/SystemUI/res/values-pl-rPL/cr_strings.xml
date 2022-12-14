@@ -123,6 +123,13 @@
     <string name="tristate_rotation_0">Pionowo</string>
     <string name="tristate_rotation_90">Poziomo (90°)</string>
     <string name="tristate_rotation_270">Poziomo (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d połączone urządzenie</item>
+        <item quantity="few">%d połączone urządzenia</item>
+        <item quantity="many">%d połączonych urządzeń</item>
+        <item quantity="other">%d połączonych urządzeń</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Wymusić zatrzymanie?</string>
     <string name="force_stop_dlg_text">Wymuszenie zatrzymania aplikacji może spowodować jej nieprawidłowe działanie.</string>

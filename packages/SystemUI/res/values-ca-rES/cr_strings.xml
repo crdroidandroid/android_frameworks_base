@@ -123,6 +123,11 @@
     <string name="tristate_rotation_0">Vertical</string>
     <string name="tristate_rotation_90">Horitzontal (90º)</string>
     <string name="tristate_rotation_270">Horitzontal (270º)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d device connected</item>
+        <item quantity="other">%d devices connected</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Forçar l\'aturada?</string>
     <string name="force_stop_dlg_text">Si es força l\'aturada d\'una app, és possible que no funcioni correctament.</string>

@@ -123,6 +123,11 @@
     <string name="tristate_rotation_0">Staand</string>
     <string name="tristate_rotation_90">Liggend (90°)</string>
     <string name="tristate_rotation_270">Liggend (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d apparaat verbonden</item>
+        <item quantity="other">%d apparaten verbonden</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Gedwongen stoppen?</string>
     <string name="force_stop_dlg_text">Als je een app gedwongen stopt, kan deze onverwacht gedrag vertonen.</string>

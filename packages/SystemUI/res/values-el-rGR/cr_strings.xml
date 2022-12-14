@@ -123,6 +123,11 @@
     <string name="tristate_rotation_0">Κατακόρυφα</string>
     <string name="tristate_rotation_90">Οριζόντια (90°)</string>
     <string name="tristate_rotation_270">Οριζόντια (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d συσκευή συνδέθηκε</item>
+        <item quantity="other">%d συσκευές συνδέθηκαν</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Αναγκαστική διακοπή;</string>
     <string name="force_stop_dlg_text">Αν επιβάλετε τη διακοπή μιας εφαρμογής, ενδέχεται να μην λειτουργήσει σωστά.</string>

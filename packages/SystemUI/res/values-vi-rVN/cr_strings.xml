@@ -32,7 +32,7 @@
     <string name="screenrecord_lowquality_summary">Để có kích cỡ tập tin nhỏ hơn</string>
     <string name="screenrecord_longer_timeout_switch_label">Giới hạn kích thước tệp lớn hơn</string>
     <string name="screenrecord_longer_timeout_switch_summary">Giới hạn kích cỡ quay hình tối đa 15 GB</string>
-    <string name="screenrecord_skip_time_label">Không đếm ngược</string>
+    <string name="screenrecord_skip_time_label">Bỏ qua bộ đếm</string>
     <string name="screenrecord_skip_time_summary">Bỏ qua 3 giây đếm ngược</string>
     <string name="screenrecord_hevc_switch_label">Bật HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Sử dụng định dạng mã hoá video HEVC hiệu quả</string>
@@ -123,6 +123,10 @@
     <string name="tristate_rotation_0">Màn hình dọc</string>
     <string name="tristate_rotation_90">Ngang (90°)</string>
     <string name="tristate_rotation_270">Ngang (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="other">%d thiết bị kết nối</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Buộc dừng?</string>
     <string name="force_stop_dlg_text">Nếu bạn buộc dừng một ứng dụng, ứng dụng đó có thể hoạt động sai.</string>

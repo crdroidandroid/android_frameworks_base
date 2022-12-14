@@ -123,6 +123,12 @@
     <string name="tristate_rotation_0">Portret</string>
     <string name="tristate_rotation_90">Peisaj (90°)</string>
     <string name="tristate_rotation_270">Peisaj (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d device connected</item>
+        <item quantity="few">%d devices connected</item>
+        <item quantity="other">%d devices connected</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Oprire forțată?</string>
     <string name="force_stop_dlg_text">Dacă forțați oprirea unei aplicații, aceasta se poate comporta necorespunzător.</string>

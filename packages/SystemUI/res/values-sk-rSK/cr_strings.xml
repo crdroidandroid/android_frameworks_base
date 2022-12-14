@@ -123,6 +123,13 @@
     <string name="tristate_rotation_0">Na výšku</string>
     <string name="tristate_rotation_90">Na šírku (90°)</string>
     <string name="tristate_rotation_270">Na šírku (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d device connected</item>
+        <item quantity="few">%d devices connected</item>
+        <item quantity="many">%d devices connected</item>
+        <item quantity="other">%d devices connected</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Vynútiť zastavenie?</string>
     <string name="force_stop_dlg_text">Vynútené ukončenie môže spôsobiť nepredvídateľné správanie aplikácie.</string>

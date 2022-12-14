@@ -95,7 +95,7 @@
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Kompass</string>
     <string name="quick_settings_compass_value"><xliff:g id="Grad">%1$.0f</xliff:g>\u00b0 <xliff:g id="Richtung">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initialisiere\u2026</string>
+    <string name="quick_settings_compass_init">Vorbereitung läuft \u2026</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">NO</string>
     <string name="quick_settings_compass_E">O</string>
@@ -105,17 +105,17 @@
     <string name="quick_settings_compass_W">W</string>
     <string name="quick_settings_compass_NW">NW</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Datenkarte wechseln</string>
+    <string name="qs_data_switch_label">SIM-Karte für mobile Daten wechseln</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Lautstärkeregler</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Wichtig</string>
+    <string name="volume_ringer_priority_only">Wichtige</string>
     <string name="volume_ringer_alarms_only">Wecker</string>
     <string name="volume_ringer_dnd">Bitte nicht stören</string>
     <string name="tristate_flashlight">Taschenlampe</string>
     <string name="tristate_flashlight_on">Taschenlampe ein</string>
     <string name="tristate_flashlight_off">Taschenlampe aus</string>
-    <string name="tristate_flashlight_blink">Taschenlampe blinken</string>
+    <string name="tristate_flashlight_blink">Taschenlampe blinken lassen</string>
     <string name="tristate_brightness_bright">Maximale Helligkeit</string>
     <string name="tristate_brightness_dark">Minimale Helligkeit</string>
     <string name="tristate_brightness_auto">Automatische Helligkeit</string>
@@ -123,6 +123,11 @@
     <string name="tristate_rotation_0">Hochformat</string>
     <string name="tristate_rotation_90">Querformat (90°)</string>
     <string name="tristate_rotation_270">Querformat (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d Gerät verbunden</item>
+        <item quantity="other">%d Geräte verbunden</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Beenden erzwingen?</string>
     <string name="force_stop_dlg_text">Das Beenden einer App zu erzwingen, kann zu unerwünschtem Verhalten führen.</string>

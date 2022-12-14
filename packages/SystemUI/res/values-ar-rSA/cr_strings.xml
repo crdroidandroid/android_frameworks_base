@@ -34,8 +34,8 @@
     <string name="screenrecord_longer_timeout_switch_summary">الحد من حجم التسجيل إلى 15 جيجابايت</string>
     <string name="screenrecord_skip_time_label">تخطي المؤقت</string>
     <string name="screenrecord_skip_time_summary">إزالة 3 ثانية انتظار</string>
-    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
+    <string name="screenrecord_hevc_switch_label">تمكين HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">استخدام ترميز فيديو HEVC أكثر كفاءة</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">حذف</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
@@ -53,7 +53,7 @@
     <string name="status_bar_data_saver">موفِّر البيانات</string>
     <string name="status_bar_call_strength">قوة الاتصال</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <string name="status_bar_firewall">Firewall</string>
+    <string name="status_bar_firewall">جدار الحماية</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Data usage info in QS footer -->
     <string name="usage_data">المستخدم اليوم</string>
@@ -123,6 +123,15 @@
     <string name="tristate_rotation_0">الوضع الرأسي</string>
     <string name="tristate_rotation_90">عرضي (90 درجة)</string>
     <string name="tristate_rotation_270">عرضي (270 درجة)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="zero">‏عدد الأجهزة المتصلة ‎%d</item>
+        <item quantity="one">%d device connected</item>
+        <item quantity="two">%d devices connected</item>
+        <item quantity="few">%d devices connected</item>
+        <item quantity="many">%d devices connected</item>
+        <item quantity="other">%d devices connected</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">فرض إيقاف؟</string>
     <string name="force_stop_dlg_text">في حالة فرض إيقاف التطبيق، ربما لا يعمل بشكل صحيح.</string>
@@ -136,6 +145,6 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Refresh rate</string>
-    <string name="auto_mode_label">Auto</string>
+    <string name="refresh_rate_tile_label"> معدل التحديث</string>
+    <string name="auto_mode_label">تلقائي</string>
 </resources>
