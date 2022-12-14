@@ -52,13 +52,8 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Oszczędzanie danych</string>
     <string name="status_bar_call_strength">Siła połączenia</string>
-    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <string name="status_bar_firewall">Zapora sieciowa</string>
     <!-- Text to use when the number in a notification info is too large -->
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">użyto dzisiaj</string>
-    <string name="usage_data_default_suffix">Dane</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Szybkie ładowanie (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> do pełnego naładowania)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • Szybkie ładowanie</string>
@@ -71,6 +66,10 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Szybkie ładowanie (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> do naładowania)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Szybkie ładowanie</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">użyto dzisiaj</string>
+    <string name="usage_data_default_suffix">Dane</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Tryb \"W ruchu\" aktywowany</string>
     <string name="onthego_notif_title">Tryb \"W ruchu\" jest aktywny</string>
@@ -123,6 +122,13 @@
     <string name="tristate_rotation_0">Pionowo</string>
     <string name="tristate_rotation_90">Poziomo (90°)</string>
     <string name="tristate_rotation_270">Poziomo (270°)</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d device connected</item>
+        <item quantity="few">%d devices connected</item>
+        <item quantity="many">%d devices connected</item>
+        <item quantity="other">%d devices connected</item>
+    </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Wymusić zatrzymanie?</string>
     <string name="force_stop_dlg_text">Wymuszenie zatrzymania aplikacji może spowodować jej nieprawidłowe działanie.</string>
