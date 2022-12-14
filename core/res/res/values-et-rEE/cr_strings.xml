@@ -40,4 +40,6 @@
     <string name="url_copy_failed">Logi Pasty\'sse üleslaadimisel esines viga</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Näotuvastus on passiivsuse tõttu keelatud</string>
+    <!-- Parallel space badge -->
+    <string name="parallel_space_badge_label">%1$s</string>
 </resources>
