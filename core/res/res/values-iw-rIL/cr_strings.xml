@@ -42,4 +42,6 @@
     <string name="url_copy_failed">התרחשה שגיאה במהלך העלאת דו\"ח הקריסה</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">ביטול נעילת באמצעות זיהוי פנים הושבת בשל חוסר פעילות</string>
+    <!-- Parallel space badge -->
+    <string name="parallel_space_badge_label">%1$s</string>
 </resources>
