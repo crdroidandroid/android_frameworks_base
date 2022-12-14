@@ -39,4 +39,6 @@
     <string name="url_copy_failed">Se ha producido un error cargando el registro a Pasty</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Desbloqueo facial desactivado debido a inactividad</string>
+    <!-- Parallel space badge -->
+    <string name="parallel_space_badge_label">%1$s</string>
 </resources>
