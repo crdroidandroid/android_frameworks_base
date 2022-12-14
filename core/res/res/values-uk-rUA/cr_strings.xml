@@ -40,4 +40,6 @@
     <string name="url_copy_failed">Сталася помилка під час завантаження журналу до Pasty</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Розблокування обличчям вимкнено через неактивність</string>
+    <!-- Parallel space badge -->
+    <string name="parallel_space_badge_label">%1$s</string>
 </resources>
