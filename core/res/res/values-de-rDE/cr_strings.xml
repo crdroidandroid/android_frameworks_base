@@ -39,4 +39,6 @@
     <string name="url_copy_failed">Beim Hochladen des Absturzberichts zu Pasty ist ein Fehler aufgetreten</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Gesichtserkennung wegen Inaktivität deaktiviert</string>
+    <!-- Parallel space badge -->
+    <string name="parallel_space_badge_label">%1$s</string>
 </resources>
