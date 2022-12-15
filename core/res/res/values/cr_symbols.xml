@@ -128,4 +128,7 @@
 
     <!-- Parallel space max count. -->
     <java-symbol type="integer" name="config_parallelSpaceMaxCount" />
+
+    <!-- Smart Pixels UDFPS -->
+    <java-symbol type="bool" name="disable_smart_pixels_on_udfps"/>
 </resources>
