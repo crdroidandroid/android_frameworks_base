@@ -244,6 +244,10 @@ public class UdfpsController implements DozeReceiver, Dumpable {
     private UdfpsAnimation mUdfpsAnimation;
     private boolean mKeyguardCallbackRegistered = false;
 
+    private boolean mDisableSmartPixels;
+    private boolean mSmartPixelsFlag;
+    private boolean mSmartPixelsEnabled;
+
     @VisibleForTesting
     public static final VibrationAttributes UDFPS_VIBRATION_ATTRIBUTES =
             new VibrationAttributes.Builder()
@@ -265,6 +269,9 @@ public class UdfpsController implements DozeReceiver, Dumpable {
     private final ScreenLifecycle.Observer mScreenObserver = new ScreenLifecycle.Observer() {
         @Override
         public void onScreenTurnedOn() {
+            if (mDisableSmartPixels) {
+                isSmartPixelsEnabled();
+            }
             mScreenOn = true;
             if (mAodInterruptRunnable != null) {
                 mAodInterruptRunnable.run();
@@ -874,6 +881,8 @@ public class UdfpsController implements DozeReceiver, Dumpable {
             mWakefulnessLifecycle.addObserver(mWakefulnessLifecycleObserver);
         }
 
+        mDisableSmartPixels = mContext.getResources().getBoolean(com.android.systemui.res.R.bool.config_disableSmartPixelsOnUDFPS);
+
         if (com.android.internal.util.crdroid.Utils.isPackageInstalled(mContext,
                 "com.crdroid.udfps.animations")) {
             updateUdfpsAnimation();
@@ -889,6 +898,30 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         mUdfpsAnimation = new UdfpsAnimation(mContext, mWindowManager, mSensorProps, mAuthController);
         if (mUdfpsAnimation != null) {
             mUdfpsAnimation.updatePosition();
+        }
+    }
+
+    private void isSmartPixelsEnabled() {
+        if (!mSmartPixelsFlag) {
+            mSmartPixelsEnabled = Settings.Secure.getIntForUser(
+                    mContext.getContentResolver(), Settings.Secure.SMART_PIXEL_FILTER_ENABLED,
+                    0, mContext.getUserId()) != 0;
+        }
+    }
+
+    private void disableSmartPixels() {
+        if (mSmartPixelsEnabled) {
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.SMART_PIXEL_FILTER_ENABLED,
+                    0, mContext.getUserId());
+        }
+    }
+
+    private void enableSmartPixels() {
+        if (mSmartPixelsEnabled) {
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.SMART_PIXEL_FILTER_ENABLED,
+                    1, mContext.getUserId());
         }
     }
 
@@ -1191,6 +1224,12 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                     + " current: " + mOverlay.getRequestId());
             return;
         }
+        if (mDisableSmartPixels) {
+            if (!mSmartPixelsFlag && mSmartPixelsEnabled) {
+                disableSmartPixels();
+            }
+            mSmartPixelsFlag = true;
+        }
         if (isOptical()) {
             mLatencyTracker.onActionStart(ACTION_UDFPS_ILLUMINATE);
         }
@@ -1260,6 +1299,14 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         mExecution.assertIsMainThread();
         mActivePointerId = MotionEvent.INVALID_POINTER_ID;
         mAcquiredReceived = false;
+
+        if (mDisableSmartPixels) {
+            if (mSmartPixelsFlag && mSmartPixelsEnabled) {
+                enableSmartPixels();
+            }
+            mSmartPixelsFlag = false;
+        }
+
         if (mOnFingerDown) {
             mFingerprintManager.onPointerUp(requestId, mSensorProps.sensorId, pointerId, x,
                     y, minor, major, orientation, time, gestureStart, isAod);
