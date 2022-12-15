@@ -154,4 +154,7 @@
 
     <!-- Parallel space blocklist -->
     <string-array name="config_parallelSpaceBlocklist" />
+
+    <!-- Smart Pixels UDFPS -->
+    <bool name="disable_smart_pixels_on_udfps">false</bool>
 </resources>
