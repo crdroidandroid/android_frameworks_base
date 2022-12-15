@@ -47,4 +47,7 @@
 
     <!-- FPS measure interval in milliseconds, default 1000 -->
     <integer name="config_fpsReadInterval">1000</integer>
+
+    <!-- Whether to disable Smart Pixels on UDFPS -->
+    <bool name="config_disableSmartPixelsOnUDFPS">false</bool>
 </resources>
