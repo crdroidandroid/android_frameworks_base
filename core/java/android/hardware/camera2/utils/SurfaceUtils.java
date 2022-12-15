@@ -20,11 +20,14 @@ import static android.system.OsConstants.EINVAL;
 
 import static com.android.internal.util.Preconditions.checkNotNull;
 
+import android.app.ActivityThread;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.hardware.HardwareBuffer;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.os.SystemProperties;
+import android.text.TextUtils;
 import android.util.Range;
 import android.util.Size;
 import android.view.Surface;
