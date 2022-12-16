@@ -150,6 +150,11 @@ public class BootReceiver extends BroadcastReceiver {
     private static final int MAX_ERROR_REPORTS = 8;
     private static int sSentReports = 0;
 
+    public boolean fileExists(String fileName) {
+       final File file = new File(fileName);
+        return file.exists();
+    }
+
     // Max tombstone file size to add to dropbox.
     private static final long MAX_TOMBSTONE_SIZE_BYTES =
             DropBoxManagerService.DEFAULT_QUOTA_KB * 1024;
@@ -180,6 +185,7 @@ public class BootReceiver extends BroadcastReceiver {
 
         FileDescriptor tracefd = null;
         try {
+            if (!fileExists(ERROR_REPORT_TRACE_PIPE)) return;
             tracefd = Os.open(ERROR_REPORT_TRACE_PIPE, O_RDONLY, 0600);
         } catch (ErrnoException e) {
             Slog.wtf(TAG, "Could not open " + ERROR_REPORT_TRACE_PIPE, e);
