@@ -16,6 +16,7 @@ package com.android.systemui.shared.clocks
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.icu.text.NumberFormat
 import android.util.TypedValue
@@ -135,9 +136,17 @@ class DefaultClock(
             clocks.forEach { it.onTimeZoneChanged(timeZone) }
 
         override fun onFontSettingChanged() {
+            smallClock.setTypeface(
+                Typeface.create(
+                resources.getString(com.android.internal.R.string.config_headlineFontFamily), Typeface.NORMAL)
+            )
             smallClock.setTextSize(
                 TypedValue.COMPLEX_UNIT_PX,
                 resources.getDimensionPixelSize(R.dimen.small_clock_text_size).toFloat()
+            )
+            largeClock.setTypeface(
+                Typeface.create(
+                resources.getString(com.android.internal.R.string.config_headlineFontFamily), Typeface.NORMAL)
             )
             largeClock.setTextSize(
                 TypedValue.COMPLEX_UNIT_PX,
