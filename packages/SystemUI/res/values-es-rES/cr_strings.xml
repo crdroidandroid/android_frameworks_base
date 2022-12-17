@@ -52,25 +52,25 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Ahorro de datos</string>
     <string name="status_bar_call_strength">Intensidad de llamada</string>
-    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <string name="status_bar_firewall">Cortafuegos</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">usado hoy</string>
-    <string name="usage_data_default_suffix">Datos</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga rápida Dash (<xliff:g id="charging_time_left" example="4 horas y 2 minutos">%1$s</xliff:g> hasta que esté llena)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Carga rápida Dash</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga rápida(<xliff:g id="charging_time_left" example="4 horas y 2 minutos">%1$s</xliff:g> para carga total)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Carga rápida</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga rápida (<xliff:g id="charging_time_left" example="4 horas y 2 minutos">%1$s</xliff:g> hasta carga completa)</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga rápida (<xliff:g id="charging_time_left" example="4 horas y 2 minutos">%1$s</xliff:g> para carga completa)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Carga rápida</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga VOOC (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> hasta carga completa)</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga VOOC (<xliff:g id="charging_time_left" example="4 horas y 2 minutes">%1$s</xliff:g> para carga completa)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Carga VOOC</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga rápida (<xliff:g id="charging_time_left" example="4 horas y 2 minutos">%1$s</xliff:g> para carga completa)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Carga rápida</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">Usado hoy</string>
+    <string name="usage_data_default_suffix">Datos</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go activado</string>
     <string name="onthego_notif_title">On-The-Go está activo</string>
@@ -95,7 +95,7 @@
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Brújula</string>
     <string name="quick_settings_compass_value"><xliff:g id="grados">%1$.0f</xliff:g>\u00b0 <xliff:g id="dirección">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Iniciando\u2026</string>
+    <string name="quick_settings_compass_init">Inicializando\u2026</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">NE</string>
     <string name="quick_settings_compass_E">E</string>
@@ -115,7 +115,7 @@
     <string name="tristate_flashlight">Linterna</string>
     <string name="tristate_flashlight_on">Linterna activada</string>
     <string name="tristate_flashlight_off">Linterna desactivada</string>
-    <string name="tristate_flashlight_blink">Linterna parpadear</string>
+    <string name="tristate_flashlight_blink">Parpadeo de linterna</string>
     <string name="tristate_brightness_bright">Brillo máximo</string>
     <string name="tristate_brightness_dark">Brillo mínimo</string>
     <string name="tristate_brightness_auto">Brillo automático</string>
@@ -129,8 +129,8 @@
         <item quantity="other">%d dispositivos conectados</item>
     </plurals>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">¿Forzar Finalización?</string>
-    <string name="force_stop_dlg_text">Si se finaliza una aplicación, es posible que no funcione correctamente.</string>
+    <string name="force_stop_dlg_title">¿Forzar cierre?</string>
+    <string name="force_stop_dlg_text">Si fuerzas la detención de una app, podría no funcionar correctamente.</string>
     <!-- Smart Pixels QS Tile -->
     <string name="quick_settings_smart_pixels">Píxeles inteligentes</string>
     <string name="quick_settings_smart_pixels_on_power_save">Habilitar automáticamente los píxeles inteligentes</string>

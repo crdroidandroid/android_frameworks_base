@@ -40,4 +40,5 @@
     <string name="url_copy_failed">Er is een fout opgetreden tijdens het uploaden van het logboek naar Pasty</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Gezichtsontgrendeling is uitgeschakeld door inactiviteit</string>
+    <!-- Parallel space badge -->
 </resources>

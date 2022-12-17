@@ -39,4 +39,5 @@
     <string name="url_copy_failed">Si è verificato un errore durante il caricamento del log su pasty</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Sblocco con il viso disabilitato per inattività</string>
+    <!-- Parallel space badge -->
 </resources>

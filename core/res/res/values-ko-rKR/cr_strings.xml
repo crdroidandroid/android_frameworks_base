@@ -39,4 +39,5 @@
     <string name="url_copy_failed">로그를 Pastey에 업로드하는 동안 오류가 발생했습니다.</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">장시간 인식하지 않아 얼굴 인식이 비활성화되었습니다</string>
+    <!-- Parallel space badge -->
 </resources>

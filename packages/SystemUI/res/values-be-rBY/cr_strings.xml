@@ -52,13 +52,9 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Эканомія трафіка</string>
     <string name="status_bar_call_strength">Узровень сігналу</string>
-    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <string name="status_bar_firewall">Брандмаўэр</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">выкарыстоўваецца сёння</string>
-    <string name="usage_data_default_suffix">Дадзеныя</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Хуткая зарадкаа (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> да поўнай зарадкі)</string>
     <string name="keyguard_plugged_in_dash_charging">Ідзе зарадка (<xliff:g id="Percentage">%s</xliff:g>)</string>
@@ -71,6 +67,10 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Турба зарадка (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> да поўный зарадкі)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Турба зарадка</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">выкарыстоўваецца сёння</string>
+    <string name="usage_data_default_suffix">Дадзеныя</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Рэжым «На хаду» уключаны</string>
     <string name="onthego_notif_title">Рэжым «На хаду» актыўны</string>
@@ -125,10 +125,10 @@
     <string name="tristate_rotation_270">Ландшафт (270°)</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="one">%d device connected</item>
-        <item quantity="few">%d devices connected</item>
-        <item quantity="many">%d devices connected</item>
-        <item quantity="other">%d devices connected</item>
+        <item quantity="one">%d прылада падключана</item>
+        <item quantity="few">%d прылады падключана</item>
+        <item quantity="many">%d прылад падключана</item>
+        <item quantity="other">%d прылады падключана</item>
     </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Спынiць прымусова?</string>

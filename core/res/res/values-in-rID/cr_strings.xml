@@ -40,4 +40,5 @@ Aplikasi jahat mungkin dapat menggunakan ini untuk mengakses data aplikasi priba
     <string name="url_copy_failed">Terjadi kesalahan pada saat mengunggah log ke Pasty</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Face unlock dinonaktifkan karena tidak aktif</string>
+    <!-- Parallel space badge -->
 </resources>
