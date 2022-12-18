@@ -181,7 +181,7 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                 mShowStopDot = intent.getBooleanExtra(EXTRA_SHOW_STOP_DOT, false);
                 mLowQuality = intent.getBooleanExtra(EXTRA_LOW_QUALITY, false);
                 mLongerDuration = intent.getBooleanExtra(EXTRA_LONGER_DURATION, false);
-                mHEVC = intent.getBooleanExtra(EXTRA_HEVC, true);
+                mHEVC = intent.getBooleanExtra(EXTRA_HEVC, false);
 
                 MediaProjectionCaptureTarget captureTarget =
                         intent.getParcelableExtra(EXTRA_CAPTURE_TARGET,
