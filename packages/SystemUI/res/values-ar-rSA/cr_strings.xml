@@ -147,4 +147,6 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label"> معدل التحديث</string>
     <string name="auto_mode_label">تلقائي</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Long press - selected region</string>
 </resources>
