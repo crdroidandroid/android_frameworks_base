@@ -28,13 +28,13 @@
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">إظهار نقطة التوقف</string>
     <string name="screenrecord_stopdot_summary">الضغط المطول لتحريكه</string>
-    <string name="screenrecord_lowquality_label">تخفيض الدقة لحجم ملف أقل</string>
+    <string name="screenrecord_lowquality_label">دقة أقل</string>
     <string name="screenrecord_lowquality_summary">لحجم الملف الأصغر</string>
     <string name="screenrecord_longer_timeout_switch_label">حجم الملف أكبر</string>
     <string name="screenrecord_longer_timeout_switch_summary">الحد من حجم التسجيل إلى 15 جيجابايت</string>
     <string name="screenrecord_skip_time_label">تخطي المؤقت</string>
     <string name="screenrecord_skip_time_summary">إزالة 3 ثانية انتظار</string>
-    <string name="screenrecord_hevc_switch_label">تمكين HEVC</string>
+    <string name="screenrecord_hevc_switch_label">تمكين ترميز HEVC</string>
     <string name="screenrecord_hevc_switch_summary">استخدام ترميز فيديو HEVC أكثر كفاءة</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">حذف</string>
@@ -79,7 +79,7 @@
     <string name="onthego_notif_error">غير قادر على بدء وضع المشي</string>
     <string name="onthego_notif_restart">إعادة تشغيل وضع المشي</string>
     <string name="onthego_notif_camera_changed">تم تغيير وضع الكاميرا</string>
-    <string name="onthego_transparency">الشفافيه</string>
+    <string name="onthego_transparency">الشفافية</string>
     <string name="onthego_front_camera">استخدام الكاميرا الأمامية</string>
     <string name="onthego_service_toggle">إعادة تشغيل الخدمة تلقائيا</string>
     <string name="onthego_channel_name">الرئيسية</string>
