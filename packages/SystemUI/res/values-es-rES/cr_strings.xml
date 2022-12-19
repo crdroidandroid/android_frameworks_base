@@ -144,5 +144,5 @@
     <string name="refresh_rate_tile_label">Tasa de refresco</string>
     <string name="auto_mode_label">Automático</string>
     <!-- Screenshot Tile -->
-    <string name="screenshot_long_press">Long press - selected region</string>
+    <string name="screenshot_long_press">Pulsación larga - región seleccionada</string>
 </resources>
