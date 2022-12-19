@@ -18,7 +18,7 @@
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_fakePackageSignature">Falsificar a assinatura do pacote</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Permite que a aplicação finja ser uma aplicação diferente. Aplicações maliciosas podem ser capazes de usar isto para aceder a dados das aplicações. Conceda essa permissão com cautela!</string>
+    <string name="permdesc_fakePackageSignature">Permite que a aplicação finja ser uma aplicação diferente. Aplicações maliciosas podem usar isto para aceder a dados privados das aplicações. Conceda essa permissão com cuidado!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_fake_package_signature">Falsificar a assinatura do pacote</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
