@@ -145,4 +145,6 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Частота экрана</string>
     <string name="auto_mode_label">Авто</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Long press - selected region</string>
 </resources>
