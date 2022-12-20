@@ -96,6 +96,7 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
     private final Handler mHandler;
     private int mMaxRefreshRate;
     private String mAvcProfileLevel;
+    private boolean mIsHEVCSupported;
 
     private boolean mLowQuality;
     private boolean mLongerDuration;
@@ -118,6 +119,8 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
                 R.integer.config_screenRecorderMaxFramerate);
         mAvcProfileLevel = mContext.getResources().getString(
                 R.string.config_screenRecorderAVCProfileLevel);
+        mIsHEVCSupported = mContext.getResources().getBoolean(
+                R.bool.config_screenRecorderHEVCSupported);
     }
 
     public void setLowQuality(boolean low) {
@@ -180,7 +183,7 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
         long maxFilesize = mLongerDuration ? MAX_FILESIZE_BYTES_LONGER : MAX_FILESIZE_BYTES;
         /* PS: HEVC can be set too, to reduce file size without quality loss (h265 is more efficient than h264),
         but at the same time the cpu load is 8-10 times higher and some devices don't support it yet */
-        if (!mHEVC) {
+        if (!mIsHEVCSupported || !mHEVC) {
             mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mMediaRecorder.setVideoEncodingProfileLevel(
                     MediaCodecInfo.CodecProfileLevel.AVCProfileMain,

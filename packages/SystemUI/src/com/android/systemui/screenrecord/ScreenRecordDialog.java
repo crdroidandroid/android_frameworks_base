@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -188,7 +189,16 @@ public class ScreenRecordDialog extends SystemUIDialog {
         mAudioSwitch.setChecked(Prefs.getInt(mUserContext, PREFS + PREF_AUDIO, 0) == 1);
         mOptions.setSelection(Prefs.getInt(mUserContext, PREFS + PREF_AUDIO_SOURCE, 0));
         mSkipSwitch.setChecked(Prefs.getInt(mUserContext, PREFS + PREF_SKIP, 0) == 1);
-        mHEVCSwitch.setChecked(Prefs.getInt(mUserContext, PREFS + PREF_HEVC, 1) == 1);
+
+        final boolean isHEVCSupported = mUserContext.getResources().getBoolean(
+                R.bool.config_screenRecorderHEVCSupported);
+        if (isHEVCSupported) {
+            mHEVCSwitch.setChecked(Prefs.getInt(mUserContext, PREFS + PREF_HEVC, 1) == 1);
+        } else {
+            final LinearLayout hevcContainer =
+                (LinearLayout) findViewById(R.id.screenrecord_hevc_container);
+            hevcContainer.setVisibility(View.GONE);
+        }
     }
 
     /**
