@@ -143,5 +143,5 @@
     <string name="refresh_rate_tile_label">Kecepatan refresh</string>
     <string name="auto_mode_label">Otomatis</string>
     <!-- Screenshot Tile -->
-    <string name="screenshot_long_press">Long press - selected region</string>
+    <string name="screenshot_long_press">Tekan lama - wilayah yang dipilih</string>
 </resources>
