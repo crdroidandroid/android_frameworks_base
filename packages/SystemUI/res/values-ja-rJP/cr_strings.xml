@@ -143,5 +143,5 @@
     <string name="refresh_rate_tile_label">リフレッシュレート</string>
     <string name="auto_mode_label">自動</string>
     <!-- Screenshot Tile -->
-    <string name="screenshot_long_press">Long press - selected region</string>
+    <string name="screenshot_long_press">長押し - 選択した範囲</string>
 </resources>
