@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
+import android.os.UserHandle;
 import android.util.Log;
 import android.view.View;
 
@@ -52,7 +53,9 @@ public class ClockController implements TunerService.Tunable {
         mLeftClock = statusBar.findViewById(R.id.clock);
         mRightClock = statusBar.findViewById(R.id.clock_right);
 
-        mActiveClock = mLeftClock;
+        mClockPosition = LineageSettings.System.getIntForUser(mContext.getContentResolver(),
+                    STATUS_BAR_CLOCK, CLOCK_POSITION_LEFT, UserHandle.USER_CURRENT);
+        updateActiveClock();
 
         Dependency.get(TunerService.class).addTunable(this,
                 STATUS_BAR_CLOCK);
