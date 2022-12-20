@@ -97,7 +97,7 @@
                     <com.android.systemui.statusbar.policy.Clock
                         android:id="@+id/clock"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.StatusBar.Clock"
                         android:singleLine="true"
                         android:paddingStart="@dimen/status_bar_left_clock_starting_padding"
@@ -191,7 +191,7 @@
             android:id="@+id/clock_center"
             android:textAppearance="@style/TextAppearance.StatusBar.Clock"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:singleLine="true"
             android:gravity="center"
             android:visibility="gone"
