@@ -30,7 +30,7 @@
     <string name="screenrecord_stopdot_summary">Premi a lungo per spostarlo</string>
     <string name="screenrecord_lowquality_label">Qualità inferiore per un file più piccolo</string>
     <string name="screenrecord_lowquality_summary">Per dimensioni di file più piccoli</string>
-    <string name="screenrecord_longer_timeout_switch_label">Limite del file maggiore\nLimita la dimensione della registrazione a 15GB</string>
+    <string name="screenrecord_longer_timeout_switch_label">Limite del file maggiore</string>
     <string name="screenrecord_longer_timeout_switch_summary">Limita la dimensione della registrazione a 15 GB</string>
     <string name="screenrecord_skip_time_label">Salta timer</string>
     <string name="screenrecord_skip_time_summary">Rimuovi 3 secondi di attesa</string>
