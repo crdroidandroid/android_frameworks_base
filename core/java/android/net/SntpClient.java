@@ -52,7 +52,7 @@ import java.util.function.Supplier;
  */
 public class SntpClient {
     private static final String TAG = "SntpClient";
-    private static final boolean DBG = true;
+    private static final boolean DBG = false;
 
     private static final int REFERENCE_TIME_OFFSET = 16;
     private static final int ORIGINATE_TIME_OFFSET = 24;
