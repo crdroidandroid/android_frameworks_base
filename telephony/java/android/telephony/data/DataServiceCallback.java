@@ -42,7 +42,7 @@ public class DataServiceCallback {
 
     private static final String TAG = DataServiceCallback.class.getSimpleName();
 
-    private static final boolean DBG = true;
+    private static final boolean DBG = false;
 
     /**
      * Result of data requests
