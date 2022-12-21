@@ -130,7 +130,7 @@
         <item quantity="two">%d devices connected</item>
         <item quantity="few">%d devices connected</item>
         <item quantity="many">%d devices connected</item>
-        <item quantity="other">%d devices connected</item>
+        <item quantity="other">%d اجهزة متصلة</item>
     </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">فرض إيقاف؟</string>
