@@ -262,6 +262,11 @@ public class UserManagerService extends IUserManager.Stub {
     private static final String RESTRICTIONS_FILE_PREFIX = "res_";
     private static final String XML_SUFFIX = ".xml";
 
+    // Whether or not to allow the creation of multiple work profiles per parent
+    private static final String MULTIPLE_WORK_PROFILES_PROPERTY =
+            "persist.testing.multiple_work_profiles";
+    private static final int MULTIPLE_WORK_PROFILES_MAX = 3;
+
     private static final int ALLOWED_FLAGS_FOR_CREATE_USERS_PERMISSION =
             UserInfo.FLAG_MANAGED_PROFILE
             | UserInfo.FLAG_PROFILE
@@ -7357,6 +7362,11 @@ public class UserManagerService extends IUserManager.Stub {
      */
     private static int getMaxUsersOfTypePerParent(UserTypeDetails userTypeDetails) {
         final int defaultMax = userTypeDetails.getMaxAllowedPerParent();
+        if (userTypeDetails.isManagedProfile()
+                && SystemProperties.getBoolean(MULTIPLE_WORK_PROFILES_PROPERTY, false)) {
+            // Allow at least MULTIPLE_WORK_PROFILES_MAX managed profiles when property is set.
+            return Math.max(defaultMax, MULTIPLE_WORK_PROFILES_MAX);
+        }
         if (!Build.IS_DEBUGGABLE) {
             return defaultMax;
         } else {
