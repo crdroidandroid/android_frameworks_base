@@ -176,6 +176,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -2137,19 +2138,27 @@ class StorageManagerService extends IStorageManager.Stub
     private void snapshotAndMonitorLegacyStorageAppOp(UserHandle user) {
         int userId = user.getIdentifier();
 
-        // TODO(b/149391976): Use mIAppOpsService.getPackagesForOps instead of iterating below
-        // It should improve performance but the AppOps method doesn't return any app here :(
-        // This operation currently takes about ~20ms on a freshly flashed device
+        List<AppOpsManager.PackageOps> pkgs = null;
+        try {
+            pkgs = mIAppOpsService.getPackagesForOps(new int[] { OP_LEGACY_STORAGE });
+        } catch(RemoteException e) {
+            Slog.e(TAG, "Failed to getPackagesForOps", e);
+        }
+        Set<String> legacyStoragePackages = new HashSet<>();
+        if (pkgs != null) {
+            for (AppOpsManager.PackageOps pkg : pkgs) {
+                for (AppOpsManager.OpEntry op : pkg.getOps()) {
+                    if (op.getMode() == MODE_ALLOWED) {
+                        legacyStoragePackages.add(pkg.getPackageName());
+                    }
+                }
+            }
+        }
         for (ApplicationInfo ai : mPmInternal.getInstalledApplications(MATCH_DIRECT_BOOT_AWARE
                         | MATCH_DIRECT_BOOT_UNAWARE | MATCH_UNINSTALLED_PACKAGES | MATCH_ANY_USER,
                         userId, Process.myUid())) {
-            try {
-                boolean hasLegacy = mIAppOpsService.checkOperation(OP_LEGACY_STORAGE, ai.uid,
-                        ai.packageName) == MODE_ALLOWED;
-                updateLegacyStorageApps(ai.packageName, ai.uid, hasLegacy);
-            } catch (RemoteException e) {
-                Slog.e(TAG, "Failed to check legacy op for package " + ai.packageName, e);
-            }
+            boolean hasLegacy = legacyStoragePackages.contains(ai.packageName);
+            updateLegacyStorageApps(ai.packageName, ai.uid, hasLegacy);
         }
 
         if (mPackageMonitorsForUser.get(userId) == null) {
