@@ -147,5 +147,5 @@
     <string name="screenshot_long_press">Pulsación larga - región seleccionada</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Buscar sonido</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Lo sentimos, pero esto no funciona si no tienes una aplicación de Busqueda de sonido.</string>
 </resources>
