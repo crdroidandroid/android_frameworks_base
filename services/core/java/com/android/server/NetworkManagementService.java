@@ -129,7 +129,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
     }
 
     private static final String TAG = "NetworkManagement";
-    private static final boolean DBG = Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean DBG = false;
 
     private static final int MAX_UID_RANGES_PER_COMMAND = 10;
 
