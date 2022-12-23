@@ -37,7 +37,7 @@ import java.util.List;
 @android.ravenwood.annotation.RavenwoodKeepWholeClass
 public class TimingsTraceLog {
     // Debug boot time for every step if it's non-user build.
-    private static final boolean DEBUG_BOOT_TIME = !Build.IS_USER;
+    private static final boolean DEBUG_BOOT_TIME = false;
 
     // Maximum number of nested calls that are stored
     private static final int MAX_NESTED_CALLS = 10;
