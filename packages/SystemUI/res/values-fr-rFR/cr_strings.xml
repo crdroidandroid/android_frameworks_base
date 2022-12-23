@@ -147,5 +147,5 @@
     <string name="screenshot_long_press">Appui long - région sélectionnée</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Recherche audio</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Désolé, mais cela ne fonctionne que si vous n\'avez pas d\'application de recherche audio.</string>
 </resources>
