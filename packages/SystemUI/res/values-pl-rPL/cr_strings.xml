@@ -149,5 +149,5 @@
     <string name="screenshot_long_press">Długie dotknięcie - wybrany obszar</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Wyszukiwanie głosowe</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Przepraszamy, ale to nie zadziała, jeśli nie masz aplikacji do wyszukiwania głosem.</string>
 </resources>
