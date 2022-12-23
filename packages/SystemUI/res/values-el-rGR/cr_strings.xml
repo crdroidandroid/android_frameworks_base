@@ -145,4 +145,7 @@
     <string name="auto_mode_label">Αυτόματα</string>
     <!-- Screenshot Tile -->
     <string name="screenshot_long_press">Παρατεταμένο πάτημα - επιλεγμένη περιοχή</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Ηχητική αναζήτηση</string>
+    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
 </resources>
