@@ -146,5 +146,5 @@
     <string name="screenshot_long_press">長按 - 局部選取</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">聽聲辨曲</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">抱歉，這項功能需要安裝支援的語音搜尋應用程式才能使用。</string>
 </resources>
