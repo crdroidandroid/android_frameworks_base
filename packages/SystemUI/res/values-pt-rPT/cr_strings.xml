@@ -147,5 +147,5 @@
     <string name="screenshot_long_press">Toque longo - região selecionada</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Pesquisa de som</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Desculpe, mas isto não funciona se não tiver uma app de pesquisa de som.</string>
 </resources>
