@@ -30,7 +30,7 @@ import com.android.internal.annotations.VisibleForTesting;
  */
 public class NotificationIntrusivenessExtractor implements NotificationSignalExtractor {
     private static final String TAG = "IntrusivenessExtractor";
-    private static final boolean DBG = Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean DBG = false;
 
     /** Length of time (in milliseconds) that an intrusive or noisy notification will stay at
     the top of the ranking order, before it falls back to its natural position. */
