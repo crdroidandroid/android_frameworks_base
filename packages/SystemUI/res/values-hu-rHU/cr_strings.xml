@@ -147,5 +147,5 @@
     <string name="screenshot_long_press">Hosszannyomás - kijelölt terület</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Hangalapú keresés</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Sajnáljuk, de ez nem működhet, ha nincs hangalapú keresőalkalmazás telepítve.</string>
 </resources>
