@@ -149,5 +149,5 @@
     <string name="screenshot_long_press">Довге натискання — виділена область</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Пошук музики</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Вибачте, але ця функція недоступна, якщо немає програми для пошуку музики.</string>
 </resources>
