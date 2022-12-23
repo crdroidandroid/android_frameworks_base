@@ -146,6 +146,6 @@
     <!-- Screenshot Tile -->
     <string name="screenshot_long_press">Παρατεταμένο πάτημα - επιλεγμένη περιοχή</string>
     <!-- SoundSearch Tile -->
-    <string name="quick_settings_sound_search">Ηχητική αναζήτηση</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search">Αναζήτηση ήχου</string>
+    <string name="quick_settings_sound_search_no_app">Λυπούμαστε, αλλά αυτό δεν λειτουργεί αν δεν έχετε εφαρμογή αναζήτησης Ήχου.</string>
 </resources>
