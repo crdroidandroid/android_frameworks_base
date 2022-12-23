@@ -90,7 +90,7 @@ public class ZygoteInit {
 
     private static final String TAG = "Zygote";
 
-    private static final boolean LOGGING_DEBUG = Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean LOGGING_DEBUG = false;
 
     private static final String PROPERTY_DISABLE_GRAPHICS_DRIVER_PRELOADING =
             "ro.zygote.disable_gl_preload";
