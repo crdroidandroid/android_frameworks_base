@@ -146,5 +146,5 @@
     <string name="screenshot_long_press">長押し - 選択した範囲</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">音声検索</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">申し訳ありませんが、音声検索アプリをお持ちでない場合は動作しません。</string>
 </resources>
