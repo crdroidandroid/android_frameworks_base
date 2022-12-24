@@ -120,6 +120,7 @@ public class DozeSensors {
     private boolean mListeningTouchScreenSensors;
     private boolean mListeningProxSensors;
     private boolean mUdfpsEnrolled;
+    private boolean mEnableProx;
 
     @DevicePostureController.DevicePostureInt
     private int mDevicePosture;
@@ -170,6 +171,7 @@ public class DozeSensors {
         mProximitySensor.setTag(TAG);
         mSelectivelyRegisterProxSensors = dozeParameters.getSelectivelyRegisterSensorsUsingProx();
         mListeningProxSensors = !mSelectivelyRegisterProxSensors;
+        mEnableProx = context.getResources().getBoolean(R.bool.doze_proximity_sensor_supported);
         mScreenOffUdfpsEnabled =
                 config.screenOffUdfpsEnabled(KeyguardUpdateMonitor.getCurrentUser());
         mDevicePostureController = devicePostureController;
@@ -263,7 +265,7 @@ public class DozeSensors {
                         false /* ignoresSetting */,
                         false /* requiresProx */),
         };
-        if (context.getResources().getBoolean(R.bool.doze_proximity_sensor_supported)) {
+        if (mEnableProx) {
             setProxListening(false);  // Don't immediately start listening when we register.
             mProximitySensor.register(
                     proximityEvent -> {
@@ -478,14 +480,15 @@ public class DozeSensors {
         for (TriggerSensor s : mTriggerSensors) {
             idpw.println("Sensor: " + s.toString());
         }
-        idpw.println("ProxSensor: " + mProximitySensor.toString());
+        if (mEnableProx) // Useless
+            idpw.println("ProxSensor: " + mProximitySensor.toString());
     }
 
     /**
      * @return true if prox is currently near, false if far or null if unknown.
      */
     public Boolean isProximityCurrentlyNear() {
-        return mProximitySensor.isNear();
+        return mEnableProx ? mProximitySensor.isNear() : null;
     }
 
     @VisibleForTesting
