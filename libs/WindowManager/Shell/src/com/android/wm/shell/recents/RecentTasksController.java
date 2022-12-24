@@ -75,9 +75,9 @@ public class RecentTasksController implements TaskStackListenerCallback,
     private final TaskStackListenerImpl mTaskStackListener;
     private final RecentTasks mImpl = new RecentTasksImpl();
     private final ActivityTaskManager mActivityTaskManager;
-    private IRecentTasksListener mListener;
     private final boolean mIsDesktopMode;
 
+    private final ArrayList<IRecentTasksListener> mListeners = new ArrayList<>();
     // Mapping of split task ids, mappings are symmetrical (ie. if t1 is the taskid of a task in a
     // pair, then mSplitTasks[t1] = t2, and mSplitTasks[t2] = t1)
     private final SparseIntArray mSplitTasks = new SparseIntArray();
@@ -229,13 +229,12 @@ public class RecentTasksController implements TaskStackListenerCallback,
     @VisibleForTesting
     void notifyRecentTasksChanged() {
         ProtoLog.v(ShellProtoLogGroup.WM_SHELL_RECENT_TASKS, "Notify recent tasks changed");
-        if (mListener == null) {
-            return;
-        }
-        try {
-            mListener.onRecentTasksChanged();
-        } catch (RemoteException e) {
-            Slog.w(TAG, "Failed call notifyRecentTasksChanged", e);
+        for (int i = 0; i < mListeners.size(); i++) {
+            try {
+                mListeners.get(i).onRecentTasksChanged();
+            } catch (RemoteException e) {
+                Slog.w(TAG, "Failed call notifyRecentTasksChanged", e);
+            }
         }
     }
 
@@ -243,13 +242,15 @@ public class RecentTasksController implements TaskStackListenerCallback,
      * Notify the running task listener that a task appeared on desktop environment.
      */
     private void notifyRunningTaskAppeared(ActivityManager.RunningTaskInfo taskInfo) {
-        if (mListener == null || !mIsDesktopMode || taskInfo.realActivity == null) {
+        if (!mIsDesktopMode || taskInfo.realActivity == null) {
             return;
         }
-        try {
-            mListener.onRunningTaskAppeared(taskInfo);
-        } catch (RemoteException e) {
-            Slog.w(TAG, "Failed call onRunningTaskAppeared", e);
+        for (int i = 0; i < mListeners.size(); i++) {
+            try {
+                mListeners.get(i).onRunningTaskAppeared(taskInfo);
+            } catch (RemoteException e) {
+                Slog.w(TAG, "Failed call onRunningTaskAppeared", e);
+            }
         }
     }
 
@@ -257,22 +258,26 @@ public class RecentTasksController implements TaskStackListenerCallback,
      * Notify the running task listener that a task was removed on desktop environment.
      */
     private void notifyRunningTaskVanished(ActivityManager.RunningTaskInfo taskInfo) {
-        if (mListener == null || !mIsDesktopMode || taskInfo.realActivity == null) {
+        if (!mIsDesktopMode || taskInfo.realActivity == null) {
             return;
         }
-        try {
-            mListener.onRunningTaskVanished(taskInfo);
-        } catch (RemoteException e) {
-            Slog.w(TAG, "Failed call onRunningTaskVanished", e);
+        for (int i = 0; i < mListeners.size(); i++) {
+            try {
+                mListeners.get(i).onRunningTaskVanished(taskInfo);
+            } catch (RemoteException e) {
+                Slog.w(TAG, "Failed call onRunningTaskVanished", e);
+            }
         }
     }
 
     private void registerRecentTasksListener(IRecentTasksListener listener) {
-        mListener = listener;
+        if (!mListeners.contains(listener)) {
+            mListeners.add(listener);
+        }
     }
 
-    private void unregisterRecentTasksListener() {
-        mListener = null;
+    private void unregisterRecentTasksListener(IRecentTasksListener listener) {
+        mListeners.remove(listener);
     }
 
     @VisibleForTesting
@@ -418,7 +423,7 @@ public class RecentTasksController implements TaskStackListenerCallback,
             mController = controller;
             mListener = new SingleInstanceRemoteListener<>(controller,
                     c -> c.registerRecentTasksListener(mRecentTasksListener),
-                    c -> c.unregisterRecentTasksListener());
+                    c -> c.unregisterRecentTasksListener(mRecentTasksListener));
         }
 
         /**
