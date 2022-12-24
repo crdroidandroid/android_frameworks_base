@@ -147,5 +147,5 @@
     <string name="screenshot_long_press">Uzun basma - seçilen bölge</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Ses arama</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Üzgünüz, eğer bir Ses arama uygulamanız yoksa bu çalışmayacaktır.</string>
 </resources>
