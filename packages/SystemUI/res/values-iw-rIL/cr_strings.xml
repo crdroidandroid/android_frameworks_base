@@ -148,6 +148,6 @@
     <!-- Screenshot Tile -->
     <string name="screenshot_long_press">לחיצה ארוכה - תיחום נבחר</string>
     <!-- SoundSearch Tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search">חיפוש קולי</string>
+    <string name="quick_settings_sound_search_no_app">למרבה הצער, לא ניתן להפעיל אפשרות זו ללא יישום חיפוש קולי.</string>
 </resources>
