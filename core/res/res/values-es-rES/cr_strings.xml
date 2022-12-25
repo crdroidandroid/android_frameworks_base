@@ -16,7 +16,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_fakePackageSignature">Burlar firma del paquete</string>
+    <string name="permlab_fakePackageSignature">Falsificar firma del paquete</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_fakePackageSignature">Permite que la aplicación pretenda ser una aplicación diferente. Las aplicaciones maliciosas pueden usar esto para acceder a datos personales. Hay usos legítimos, como un emulador pretendiendo ser lo que emula. ¡Conceda este permiso con cuidado!</string>
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
@@ -40,4 +40,8 @@
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Desbloqueo facial desactivado debido a inactividad</string>
     <!-- Parallel space badge -->
+    <!-- Message for updating an existing app -->
+    <string name="old_version_number">Versión instalada: <xliff:g id="old_version">%1$s</xliff:g></string>
+    <!-- Message for updating an existing system app -->
+    <string name="new_version_number">Versión a instalar: <xliff:g id="new_version">%1$s</xliff:g></string>
 </resources>

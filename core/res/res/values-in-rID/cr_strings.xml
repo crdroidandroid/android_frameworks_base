@@ -41,4 +41,8 @@ Aplikasi jahat mungkin dapat menggunakan ini untuk mengakses data aplikasi priba
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Face unlock dinonaktifkan karena tidak aktif</string>
     <!-- Parallel space badge -->
+    <!-- Message for updating an existing app -->
+    <string name="old_version_number">Versi terpasang: <xliff:g id="old_version">%1$s</xliff:g></string>
+    <!-- Message for updating an existing system app -->
+    <string name="new_version_number">Yang akan dipasang: <xliff:g id="new_version">%1$s</xliff:g></string>
 </resources>

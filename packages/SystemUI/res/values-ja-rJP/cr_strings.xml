@@ -142,4 +142,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">リフレッシュレート</string>
     <string name="auto_mode_label">自動</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">長押し - 選択した範囲</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">音声検索</string>
+    <string name="quick_settings_sound_search_no_app">申し訳ありませんが、音声検索アプリをお持ちでない場合は動作しません。</string>
 </resources>

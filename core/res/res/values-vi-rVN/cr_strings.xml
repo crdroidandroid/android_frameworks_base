@@ -41,4 +41,8 @@
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Mở khóa bằng khuôn mặt bị tắt do không hoạt động</string>
     <!-- Parallel space badge -->
+    <!-- Message for updating an existing app -->
+    <string name="old_version_number">Phiên bản đã cài đặt: <xliff:g id="old_version">%1$s</xliff:g></string>
+    <!-- Message for updating an existing system app -->
+    <string name="new_version_number">Sẽ cài đặt: <xliff:g id="new_version">%1$s</xliff:g></string>
 </resources>

@@ -143,4 +143,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Vernieuwingsfrequentie</string>
     <string name="auto_mode_label">Automatisch</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Lang indrukken - geselecteerde regio</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Geluid zoeken</string>
+    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
 </resources>

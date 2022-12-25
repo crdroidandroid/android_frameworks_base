@@ -145,4 +145,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Частота оновлення</string>
     <string name="auto_mode_label">Автоматично</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Довге натискання — виділена область</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Пошук музики</string>
+    <string name="quick_settings_sound_search_no_app">Вибачте, але ця функція недоступна, якщо немає програми для пошуку музики.</string>
 </resources>

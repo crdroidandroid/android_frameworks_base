@@ -145,4 +145,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Częstotliwość odświeżania</string>
     <string name="auto_mode_label">Automatycznie</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Długie dotknięcie - wybrany obszar</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Wyszukiwanie głosowe</string>
+    <string name="quick_settings_sound_search_no_app">Przepraszamy, ale to nie zadziała, jeśli nie masz aplikacji do wyszukiwania głosem.</string>
 </resources>

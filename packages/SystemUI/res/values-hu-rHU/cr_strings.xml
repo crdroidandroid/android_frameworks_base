@@ -143,4 +143,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Frissítési gyakoriság</string>
     <string name="auto_mode_label">Automatikus</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Hosszannyomás - kijelölt terület</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Hangalapú keresés</string>
+    <string name="quick_settings_sound_search_no_app">Sajnáljuk, de ez nem működhet, ha nincs hangalapú keresőalkalmazás telepítve.</string>
 </resources>

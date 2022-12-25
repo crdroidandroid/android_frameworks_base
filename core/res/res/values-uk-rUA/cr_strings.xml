@@ -41,4 +41,8 @@
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Розблокування обличчям вимкнено через неактивність</string>
     <!-- Parallel space badge -->
+    <!-- Message for updating an existing app -->
+    <string name="old_version_number">Встановлена версія: <xliff:g id="old_version">%1$s</xliff:g></string>
+    <!-- Message for updating an existing system app -->
+    <string name="new_version_number">Буде встановлено: <xliff:g id="new_version">%1$s</xliff:g></string>
 </resources>

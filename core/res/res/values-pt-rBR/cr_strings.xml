@@ -35,10 +35,14 @@
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Copiar URL do log de erro</string>
+    <string name="aerr_copy">Copiar URL do registro de falhas</string>
     <string name="url_copy_success">URL copiado com sucesso</string>
     <string name="url_copy_failed">Ocorreu um erro durante o upload do log para o Pasty</string>
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">Desbloqueio facial desativado devido à inatividade</string>
     <!-- Parallel space badge -->
+    <!-- Message for updating an existing app -->
+    <string name="old_version_number">Versão instalada: <xliff:g id="old_version">%1$s</xliff:g></string>
+    <!-- Message for updating an existing system app -->
+    <string name="new_version_number">A ser instalado: <xliff:g id="new_version">%1$s</xliff:g></string>
 </resources>

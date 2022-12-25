@@ -145,4 +145,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Частота экрана</string>
     <string name="auto_mode_label">Авто</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Долгое нажатие - выбранный регион</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Поиск музыки</string>
+    <string name="quick_settings_sound_search_no_app">Извините, это не работает без приложения для поиска музыки.</string>
 </resources>

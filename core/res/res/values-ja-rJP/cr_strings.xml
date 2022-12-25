@@ -40,4 +40,8 @@
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">顔認証でのロック解除は無効です</string>
     <!-- Parallel space badge -->
+    <!-- Message for updating an existing app -->
+    <string name="old_version_number">インストール済みバージョン: <xliff:g id="old_version">%1$s</xliff:g></string>
+    <!-- Message for updating an existing system app -->
+    <string name="new_version_number">新しいバージョン: <xliff:g id="new_version">%1$s</xliff:g></string>
 </resources>

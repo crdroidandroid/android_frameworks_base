@@ -41,4 +41,8 @@
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">因為無活動，臉部解鎖已停用</string>
     <!-- Parallel space badge -->
+    <!-- Message for updating an existing app -->
+    <string name="old_version_number">已安裝版本：<xliff:g id="old_version">%1$s</xliff:g></string>
+    <!-- Message for updating an existing system app -->
+    <string name="new_version_number">將要安裝的版本：<xliff:g id="new_version">%1$s</xliff:g></string>
 </resources>

@@ -28,13 +28,13 @@
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">إظهار نقطة التوقف</string>
     <string name="screenrecord_stopdot_summary">الضغط المطول لتحريكه</string>
-    <string name="screenrecord_lowquality_label">تخفيض الدقة لحجم ملف أقل</string>
+    <string name="screenrecord_lowquality_label">دقة أقل</string>
     <string name="screenrecord_lowquality_summary">لحجم الملف الأصغر</string>
     <string name="screenrecord_longer_timeout_switch_label">حجم الملف أكبر</string>
     <string name="screenrecord_longer_timeout_switch_summary">الحد من حجم التسجيل إلى 15 جيجابايت</string>
     <string name="screenrecord_skip_time_label">تخطي المؤقت</string>
     <string name="screenrecord_skip_time_summary">إزالة 3 ثانية انتظار</string>
-    <string name="screenrecord_hevc_switch_label">تمكين HEVC</string>
+    <string name="screenrecord_hevc_switch_label">تمكين ترميز HEVC</string>
     <string name="screenrecord_hevc_switch_summary">استخدام ترميز فيديو HEVC أكثر كفاءة</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">حذف</string>
@@ -79,7 +79,7 @@
     <string name="onthego_notif_error">غير قادر على بدء وضع المشي</string>
     <string name="onthego_notif_restart">إعادة تشغيل وضع المشي</string>
     <string name="onthego_notif_camera_changed">تم تغيير وضع الكاميرا</string>
-    <string name="onthego_transparency">الشفافيه</string>
+    <string name="onthego_transparency">الشفافية</string>
     <string name="onthego_front_camera">استخدام الكاميرا الأمامية</string>
     <string name="onthego_service_toggle">إعادة تشغيل الخدمة تلقائيا</string>
     <string name="onthego_channel_name">الرئيسية</string>
@@ -89,11 +89,11 @@
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">معلومات المعالج</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">معلومات معدَّل العرض</string>
+    <string name="quick_settings_fpsinfo_label">معلومات الـFPS</string>
     <!-- FPS view text placeholder -->
     <string name="fps_text_placeholder">إطار: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">بوصلة</string>
+    <string name="quick_settings_compass_label">البوصلة</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">تهيئة/u2026</string>
     <string name="quick_settings_compass_N">ش</string>
@@ -130,13 +130,13 @@
         <item quantity="two">%d devices connected</item>
         <item quantity="few">%d devices connected</item>
         <item quantity="many">%d devices connected</item>
-        <item quantity="other">%d devices connected</item>
+        <item quantity="other">%d اجهزة متصلة</item>
     </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">فرض إيقاف؟</string>
     <string name="force_stop_dlg_text">في حالة فرض إيقاف التطبيق، ربما لا يعمل بشكل صحيح.</string>
     <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">الدقة الذكية</string>
+    <string name="quick_settings_smart_pixels">البكسلات الذكية</string>
     <string name="quick_settings_smart_pixels_on_power_save">تمكين الدقة الذكية تلقائياً</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">حدث خطأ أثناء تحميل بيانات الطقس</string>
@@ -147,4 +147,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label"> معدل التحديث</string>
     <string name="auto_mode_label">تلقائي</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Long press - selected region</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">البحث الصوتي</string>
+    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
 </resources>

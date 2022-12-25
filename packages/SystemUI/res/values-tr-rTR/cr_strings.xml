@@ -143,4 +143,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Yenileme hızı</string>
     <string name="auto_mode_label">Otomatik</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Uzun basma - seçilen bölge</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Ses arama</string>
+    <string name="quick_settings_sound_search_no_app">Üzgünüz, eğer bir Ses arama uygulamanız yoksa bu çalışmayacaktır.</string>
 </resources>

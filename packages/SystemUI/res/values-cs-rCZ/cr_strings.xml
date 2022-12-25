@@ -145,4 +145,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Obnovovací frekvence</string>
     <string name="auto_mode_label">Auto</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Dlouhým stiskem – vybraná oblast</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Zvukové vyhledávání</string>
+    <string name="quick_settings_sound_search_no_app">Je nám to líto, ale toto nefunguje, pokud nemáte aplikaci Zvukové vyhledávání.</string>
 </resources>

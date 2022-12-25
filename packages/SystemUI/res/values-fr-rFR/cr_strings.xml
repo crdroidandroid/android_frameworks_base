@@ -34,8 +34,8 @@
     <string name="screenrecord_longer_timeout_switch_summary">Limiter la taille de l\'enregistrement à 15 Go</string>
     <string name="screenrecord_skip_time_label">Passer la minuterie</string>
     <string name="screenrecord_skip_time_summary">Retirer 3 secondes d\'attente</string>
-    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
+    <string name="screenrecord_hevc_switch_label">Activer HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Utiliser un encodage vidéo HEVC plus efficace</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Supprimer</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
@@ -52,7 +52,7 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Économiseur de données</string>
     <string name="status_bar_call_strength">Puissance du réseau</string>
-    <string name="status_bar_firewall">Firewall</string>
+    <string name="status_bar_firewall">Pare-Feu</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -125,7 +125,7 @@
     <string name="tristate_rotation_270">Paysage (270°)</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="one">%d device connected</item>
+        <item quantity="one">%d appareil connecté</item>
         <item quantity="other">%d devices connected</item>
     </plurals>
     <!-- Kill button in notification guts -->
@@ -141,6 +141,11 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Reconnaissance faciale...</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Refresh rate</string>
+    <string name="refresh_rate_tile_label">Fréquence de rafraîchissement</string>
     <string name="auto_mode_label">Auto</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Appui long - région sélectionnée</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Recherche audio</string>
+    <string name="quick_settings_sound_search_no_app">Désolé, mais cela ne fonctionne que si vous n\'avez pas d\'application de recherche audio.</string>
 </resources>

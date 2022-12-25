@@ -142,4 +142,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Kecepatan refresh</string>
     <string name="auto_mode_label">Otomatis</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Tekan lama - wilayah yang dipilih</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Pencarian suara</string>
+    <string name="quick_settings_sound_search_no_app">Maaf, ini tidak berfungsi jika Anda tidak memiliki aplikasi penelusuran suara.</string>
 </resources>

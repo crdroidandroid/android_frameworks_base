@@ -143,4 +143,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Ρυθμός ανανέωσης</string>
     <string name="auto_mode_label">Αυτόματα</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Παρατεταμένο πάτημα - επιλεγμένη περιοχή</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Αναζήτηση ήχου</string>
+    <string name="quick_settings_sound_search_no_app">Λυπούμαστε, αλλά αυτό δεν λειτουργεί αν δεν έχετε εφαρμογή αναζήτησης Ήχου.</string>
 </resources>

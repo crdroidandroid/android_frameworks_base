@@ -143,4 +143,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Tasa de refresco</string>
     <string name="auto_mode_label">Automático</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Pulsación larga - región seleccionada</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Buscar sonido</string>
+    <string name="quick_settings_sound_search_no_app">Lo sentimos, pero esto no funciona si no tienes una aplicación de Busqueda de sonido.</string>
 </resources>

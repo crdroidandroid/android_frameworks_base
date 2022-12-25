@@ -142,4 +142,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">螢幕更新率</string>
     <string name="auto_mode_label">自動</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">長按 - 局部選取</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">聽聲辨曲</string>
+    <string name="quick_settings_sound_search_no_app">抱歉，這項功能需要安裝支援的語音搜尋應用程式才能使用。</string>
 </resources>

@@ -40,4 +40,8 @@
     <!-- Face unlock -->
     <string name="face_unlock_disabled_idle">장시간 인식하지 않아 얼굴 인식이 비활성화되었습니다</string>
     <!-- Parallel space badge -->
+    <!-- Message for updating an existing app -->
+    <string name="old_version_number">Installed version: <xliff:g id="old_version">%1$s</xliff:g></string>
+    <!-- Message for updating an existing system app -->
+    <string name="new_version_number">To be installed: <xliff:g id="new_version">%1$s</xliff:g></string>
 </resources>

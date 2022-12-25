@@ -34,8 +34,8 @@
     <string name="screenrecord_longer_timeout_switch_summary">Limitează dimensiunea înregistrării la 15 GB</string>
     <string name="screenrecord_skip_time_label">Omite cronometrul</string>
     <string name="screenrecord_skip_time_summary">Elimină cele 3 secunde așteptare</string>
-    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
+    <string name="screenrecord_hevc_switch_label">Activează HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Utilizați o codificare video HEVC mai eficientă</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Șterge</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
@@ -125,9 +125,9 @@
     <string name="tristate_rotation_270">Peisaj (270°)</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="one">%d device connected</item>
-        <item quantity="few">%d devices connected</item>
-        <item quantity="other">%d devices connected</item>
+        <item quantity="one">%d dispozitiv conectat</item>
+        <item quantity="few">%d dispozitiv conectat</item>
+        <item quantity="other">%d dispozitive conectate</item>
     </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Oprire forțată?</string>
@@ -144,4 +144,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Frecvența de reîmprospătare</string>
     <string name="auto_mode_label">Auto</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Apăsare lungă - regiunea selectată</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Căutare sonoră</string>
+    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
 </resources>

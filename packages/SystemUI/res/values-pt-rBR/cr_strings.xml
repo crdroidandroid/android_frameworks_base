@@ -143,4 +143,9 @@
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Taxa de atualização</string>
     <string name="auto_mode_label">Automático</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Toque longo - região selecionada</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Pesquisa de som</string>
+    <string name="quick_settings_sound_search_no_app">Desculpe, mas isso não funciona se você não tiver um aplicativo de pesquisa de som.</string>
 </resources>
