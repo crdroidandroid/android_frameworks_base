@@ -111,7 +111,9 @@ public final class ParallelSpaceManagerService extends SystemService {
 
     private static final List<String> SPACE_BLACKLIST_PACKAGES = Arrays.asList(
         // To avoid third party apps starting it accidentally.
-        "com.android.launcher3"
+        "com.android.launcher3",
+        "org.lineageos.settings.DeviceExtras",
+        "org.lineageos.settings.OPlusExtras"
     );
 
     /**
