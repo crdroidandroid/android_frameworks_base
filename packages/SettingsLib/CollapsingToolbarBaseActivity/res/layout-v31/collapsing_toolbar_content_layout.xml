@@ -35,7 +35,7 @@
             android:clipToPadding="false"
             app:forceApplySystemWindowInsetTop="true"
             app:extraMultilineHeightEnabled="true"
-            app:contentScrim="@color/settingslib_colorSurfaceHeader"
+            app:contentScrim="@color/settingslib_colorPrimaryBackground"
             app:maxLines="3"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:scrimAnimationDuration="50"
