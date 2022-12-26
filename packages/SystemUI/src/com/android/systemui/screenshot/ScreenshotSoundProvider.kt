@@ -46,7 +46,7 @@ class ScreenshotSoundProviderImpl @Inject constructor(private val context: Conte
     override fun getScreenshotSound(): MediaPlayer {
         return MediaPlayer.create(
             context,
-            Uri.fromFile(File(context.resources.getString(R.string.config_cameraShutterSound))),
+            Uri.fromFile(File(context.resources.getString(R.string.config_screenshotSound))),
             /* holder = */ null,
             AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
