@@ -34,8 +34,8 @@
     <string name="screenrecord_longer_timeout_switch_summary">Obmedziť veľkosť nahrávania na 15\u00a0GB</string>
     <string name="screenrecord_skip_time_label">Preskočiť časovač</string>
     <string name="screenrecord_skip_time_summary">Odstrániť 3\u00a0sekundy čakania</string>
-    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
+    <string name="screenrecord_hevc_switch_label">Povoliť HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Použite efektívnejšie kódovanie videa HEVC</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Odstrániť</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
@@ -146,8 +146,8 @@
     <string name="refresh_rate_tile_label">Obnovovacia frekvencia</string>
     <string name="auto_mode_label">Automaticky</string>
     <!-- Screenshot Tile -->
-    <string name="screenshot_long_press">Long press - selected region</string>
+    <string name="screenshot_long_press">Dlhé stlačenie - vybraný región</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Zvukové vyhľadávanie</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Prepáčte, nefunguje to, ak nemáte aplikáciu Zvukové vyhľadávanie.</string>
 </resources>
