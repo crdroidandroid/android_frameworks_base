@@ -30,3 +30,5 @@ PRODUCT_COPY_FILES += $(foreach fn,$(EFFECT_FILES),\
 	$(LOCAL_PATH)/effects/ogg/$(fn).ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/ui/$(fn).ogg)
 PRODUCT_COPY_FILES += $(foreach fn,$(MATERIAL_EFFECT_FILES),\
 	$(LOCAL_PATH)/effects/material/ogg/$(fn).ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/ui/$(fn).ogg)
+	
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/effects/ogg/screenshot.ogg:$(TARGET_COPY_OUT_PRODUCT)/media/audio/ui/screenshot.ogg
