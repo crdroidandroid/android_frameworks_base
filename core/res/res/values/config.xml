@@ -4995,6 +4995,8 @@
     <!-- URI for camera shutter sound -->
     <string translatable="false" name="config_cameraShutterSound">/product/media/audio/ui/camera_click.ogg</string>
 
+    <string translatable="false" name="config_screenshotSound">/product/media/audio/ui/screenshot.ogg</string>
+
     <!-- @deprecated This configuration is no longer used. -->
     <string translatable="false" name="config_defaultRingtoneVibrationSound"></string>
 
