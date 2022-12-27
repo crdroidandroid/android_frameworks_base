@@ -404,7 +404,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
                         .toString();
                 recordLastNetworkCallback(callback);
                 updateConnectivity();
-                updateImsIcon();
             }
 
             @Override
@@ -441,7 +440,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
                         .toString();
                 recordLastNetworkCallback(callback);
                 updateConnectivity();
-                updateImsIcon();
             }
         };
         // Even though this callback runs on the receiver handler thread which also processes the
@@ -467,7 +465,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 }
                 mActiveMobileDataSubscription = subId;
                 doUpdateMobileControllers();
-                updateImsIcon();
             });
         };
 
@@ -480,7 +477,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
         if (DEBUG) Log.d(TAG, ": mClearForceValidated");
         mForceCellularValidated = false;
         updateConnectivity();
-        updateImsIcon();
     };
 
     boolean isInGroupDataSwitch(int subId1, int subId2) {
@@ -853,7 +849,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
         mCurrentUserId = newUserId;
         mAccessPoints.onUserSwitched(newUserId);
         updateConnectivity();
-        updateImsIcon();
     }
 
     @Override
@@ -876,7 +871,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
         switch (action) {
             case ConnectivityManager.CONNECTIVITY_ACTION:
                 updateConnectivity();
-                updateImsIcon();
                 break;
             case Intent.ACTION_AIRPLANE_MODE_CHANGED:
                 refreshLocale();
@@ -968,7 +962,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
             return;
         }
         doUpdateMobileControllers();
-        updateImsIcon();
     }
 
     private void filterMobileSubscriptionInSameGroup(List<SubscriptionInfo> subscriptions) {
@@ -1017,6 +1010,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         }
         updateNoSims();
         recalculateEmergency();
+        updateImsIcon();
     }
 
     @VisibleForTesting
@@ -1244,6 +1238,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 && !mConnectedTransports.get(NetworkCapabilities.TRANSPORT_ETHERNET);
         mCallbackHandler.setConnectivityStatus(mNoDefaultNetwork, !mInetCondition,
                 mNoNetworksAvailable);
+        updateImsIcon();
     }
 
     /**
