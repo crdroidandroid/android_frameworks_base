@@ -425,10 +425,7 @@ public class StatusBarSignalPolicy implements SignalCallback,
 
     @Override
     public void setImsIcon(ImsIconState icon) {
-        boolean showIms = icon.visible && !mHideIms;
-        String description = icon.contentDescription;
-
-        if (showIms) {
+        if (icon.visible && !mHideIms) {
             mIconController.setImsIcon(mSlotIms, icon);
             mIconController.setIconVisibility(mSlotIms, true);
         } else {
