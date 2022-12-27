@@ -40,6 +40,7 @@ import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.StatusIconDisplayable;
 import com.android.systemui.statusbar.connectivity.ImsIconState;
 import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.BluetoothIconState;
+import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.NetworkTrafficState;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.CallIndicatorIconState;
 import com.android.systemui.statusbar.pipeline.StatusBarPipelineFlags;
 import com.android.systemui.statusbar.policy.ConfigurationController;
@@ -190,6 +191,23 @@ public class StatusBarIconControllerImpl implements Tunable,
             setIcon(slot, holder);
         } else {
             holder.setImsState(state);
+            handleSet(slot, holder);
+        }
+    }
+
+    @Override
+    public void setNetworkTraffic(String slot, NetworkTrafficState state) {
+        if (state == null) {
+            removeIcon(slot, 0);
+            return;
+        }
+
+        StatusBarIconHolder holder = mStatusBarIconList.getIconHolder(slot, 0);
+        if (holder == null) {
+            holder = StatusBarIconHolder.fromNetworkTrafficState(state);
+            setIcon(slot, holder);
+        } else {
+            holder.setNetworkTrafficState(state);
             handleSet(slot, holder);
         }
     }
