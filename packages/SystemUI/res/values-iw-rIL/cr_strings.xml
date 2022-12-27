@@ -40,13 +40,6 @@
     <string name="screenshot_delete_label">מחיקה</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">מחיקת צילומי מסך</string>
-    <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">קילוביט/שניה</string>
-    <string name="megabitspersecond_short">מגהביט/שניה</string>
-    <string name="gigabitspersecond_short">גיגהביט/שניה</string>
-    <string name="kilobytespersecond_short">קילובייט/שניה</string>
-    <string name="megabytespersecond_short">מגהבייט/שניה</string>
-    <string name="gigabytespersecond_short">גיגהבייט/שניה</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
@@ -150,4 +143,11 @@
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">חיפוש קולי</string>
     <string name="quick_settings_sound_search_no_app">למרבה הצער, לא ניתן להפעיל אפשרות זו ללא יישום חיפוש קולי.</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">קילוביט/שניה</string>
+    <string name="megabitspersecond_short">מגהביט/שניה</string>
+    <string name="gigabitspersecond_short">גיגהביט/שניה</string>
+    <string name="kilobytespersecond_short">קילובייט/שניה</string>
+    <string name="megabytespersecond_short">מגהבייט/שניה</string>
+    <string name="gigabytespersecond_short">גיגהבייט/שניה</string>
 </resources>
