@@ -225,6 +225,17 @@ public class StatusBarIconControllerImpl implements Tunable,
         }
     }
 
+    @Override
+    public void setNetworkTraffic(String slot) {
+        StatusBarIconHolder holder = mStatusBarIconList.getIconHolder(slot, 0);
+        if (holder == null) {
+            holder = StatusBarIconHolder.fromNetworkTraffic();
+            setIcon(slot, holder);
+        } else {
+            handleSet(slot, holder);
+        }
+    }
+
     private void addSystemIcon(String slot, StatusBarIconHolder holder) {
         int viewIndex = mStatusBarIconList.getViewIndex(slot, holder.getTag());
         boolean hidden = mIconHideList.contains(slot);
