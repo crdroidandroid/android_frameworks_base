@@ -44,6 +44,7 @@
             android:textAppearance="@style/TextAppearance.QS.Status"
             systemui:longDatePattern="@string/abbrev_wday_month_day_no_year_alarm"
             systemui:shortDatePattern="@string/abbrev_month_day_no_year"
+            systemui:showDark="false"
         />
     </FrameLayout>
 
