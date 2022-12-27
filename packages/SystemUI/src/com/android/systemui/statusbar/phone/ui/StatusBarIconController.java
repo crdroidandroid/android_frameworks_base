@@ -81,6 +81,9 @@ public interface StatusBarIconController {
      */
     void setNewWifiIcon();
 
+    /** */
+    void setNetworkTraffic(String slot);
+
     /**
      * Notify this class that there is a new set of mobile icons to display, keyed off of this list
      * of subIds. The icons will be added and bound to the mobile data pipeline via
