@@ -1287,7 +1287,7 @@ public final class NotificationPanelViewController extends PanelViewController {
         mView.removeView(mKeyguardStatusBar);
         mKeyguardStatusBar = (KeyguardStatusBarView) mLayoutInflater.inflate(
                 R.layout.keyguard_status_bar, mView, false);
-        mView.addView(mKeyguardStatusBar);
+        mView.addView(mKeyguardStatusBar, statusIndex);
         mKeyguardStatusBar.setVisibility(isOnKeyguard() ? View.VISIBLE : View.INVISIBLE);
 
         // When it's reinflated, this is centered by default. If it shouldn't be, this will update
