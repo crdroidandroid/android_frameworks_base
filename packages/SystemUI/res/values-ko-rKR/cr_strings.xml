@@ -40,13 +40,6 @@
     <string name="screenshot_delete_label">삭제</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">스크린샷 삭제</string>
-    <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb/초</string>
-    <string name="megabitspersecond_short">Mb/초</string>
-    <string name="gigabitspersecond_short">Gb/초</string>
-    <string name="kilobytespersecond_short">kB/초</string>
-    <string name="megabytespersecond_short">MB/초</string>
-    <string name="gigabytespersecond_short">GB/초</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
@@ -147,4 +140,11 @@
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">사운드 검색</string>
     <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/초</string>
+    <string name="megabitspersecond_short">Mb/초</string>
+    <string name="gigabitspersecond_short">Gb/초</string>
+    <string name="kilobytespersecond_short">kB/초</string>
+    <string name="megabytespersecond_short">MB/초</string>
+    <string name="gigabytespersecond_short">GB/초</string>
 </resources>
