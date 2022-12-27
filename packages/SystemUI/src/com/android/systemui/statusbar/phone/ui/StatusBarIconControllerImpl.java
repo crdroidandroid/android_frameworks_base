@@ -45,6 +45,7 @@ import com.android.systemui.dump.DumpManager;
 import com.android.systemui.modes.shared.ModesUiIcons;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.StatusIconDisplayable;
+import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.NetworkTrafficState;
 import com.android.systemui.statusbar.phone.StatusBarIconHolder;
 import com.android.systemui.statusbar.phone.StatusBarIconHolder.BindableIconHolder;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.CallIndicatorIconState;
@@ -205,6 +206,23 @@ public class StatusBarIconControllerImpl implements Tunable,
             for (StatusBarIconHolder holder : iconsForSlot) {
                 setIcon(item.getName(), holder);
             }
+        }
+    }
+
+    @Override
+    public void setNetworkTraffic(String slot, NetworkTrafficState state) {
+        if (state == null) {
+            removeIcon(slot, 0);
+            return;
+        }
+
+        StatusBarIconHolder holder = mStatusBarIconList.getIconHolder(slot, 0);
+        if (holder == null) {
+            holder = StatusBarIconHolder.fromNetworkTrafficState(state);
+            setIcon(slot, holder);
+        } else {
+            holder.setNetworkTrafficState(state);
+            handleSet(slot, holder);
         }
     }
 
