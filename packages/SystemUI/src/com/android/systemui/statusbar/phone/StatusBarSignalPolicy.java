@@ -158,13 +158,16 @@ public class StatusBarSignalPolicy implements SignalCallback,
         boolean hideVpn = hideList.contains(mSlotVpn);
         boolean hideIms = hideList.contains(mSlotIms);
 
+        if (hideVpn != mHideVpn) {
+            mHideVpn = hideVpn;
+            mHandler.post(this::updateVpn);
+        }
         if (hideAirplane != mHideAirplane || hideMobile != mHideMobile
                 || hideEthernet != mHideEthernet
-                || hideVpn != mHideVpn || hideIms != mHideIms) {
+                || hideIms != mHideIms) {
             mHideAirplane = hideAirplane;
             mHideMobile = hideMobile;
             mHideEthernet = hideEthernet;
-            mHideVpn = hideVpn;
             mHideIms = hideIms;
             // Re-register to get new callbacks.
             mNetworkController.removeCallback(this);
