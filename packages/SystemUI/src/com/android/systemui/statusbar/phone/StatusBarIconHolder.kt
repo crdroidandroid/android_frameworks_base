@@ -22,12 +22,13 @@ import android.os.UserHandle
 import com.android.internal.statusbar.StatusBarIcon
 import com.android.systemui.statusbar.connectivity.ImsIconState
 import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.BluetoothIconState
+import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.NetworkTrafficState
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.CallIndicatorIconState
 import com.android.systemui.statusbar.pipeline.icons.shared.model.ModernStatusBarViewCreator
 
 /** Wraps [com.android.internal.statusbar.StatusBarIcon] so we can still have a uniform list */
 open class StatusBarIconHolder private constructor() {
-    @IntDef(TYPE_ICON, TYPE_MOBILE_NEW, TYPE_WIFI_NEW, TYPE_BINDABLE, TYPE_BLUETOOTH, TYPE_IMS)
+    @IntDef(TYPE_ICON, TYPE_MOBILE_NEW, TYPE_WIFI_NEW, TYPE_BINDABLE, TYPE_BLUETOOTH, TYPE_IMS, TYPE_NETWORK_TRAFFIC)
     @Retention(AnnotationRetention.SOURCE)
     internal annotation class IconType
 
@@ -52,7 +53,8 @@ open class StatusBarIconHolder private constructor() {
                 TYPE_MOBILE_NEW,
                 TYPE_WIFI_NEW,
                 TYPE_BLUETOOTH,
-                TYPE_IMS -> true
+                TYPE_IMS,
+                TYPE_NETWORK_TRAFFIC -> true
                 else -> true
             }
         set(visible) {
@@ -65,7 +67,8 @@ open class StatusBarIconHolder private constructor() {
                 TYPE_MOBILE_NEW,
                 TYPE_WIFI_NEW,
                 TYPE_BLUETOOTH,
-                TYPE_IMS -> {}
+                TYPE_IMS,
+                TYPE_NETWORK_TRAFFIC -> {}
             }
         }
 
@@ -82,6 +85,12 @@ open class StatusBarIconHolder private constructor() {
         }
 
     var imsState: ImsIconState? = null
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    var networkTrafficState: NetworkTrafficState? = null
         get() = field
         set(value) {
             field = value
@@ -122,6 +131,8 @@ open class StatusBarIconHolder private constructor() {
 
         const val TYPE_IMS = 7
 
+        const val TYPE_NETWORK_TRAFFIC = 8
+
         /** Returns a human-readable string representing the given type. */
         fun getTypeString(@IconType type: Int): String {
             return when (type) {
@@ -130,6 +141,7 @@ open class StatusBarIconHolder private constructor() {
                 TYPE_WIFI_NEW -> "WIFI_NEW"
                 TYPE_BLUETOOTH -> "BLUETOOTH"
                 TYPE_IMS -> "IMS"
+                TYPE_NETWORK_TRAFFIC -> "NETWORK_TRAFFIC"
                 else -> "UNKNOWN"
             }
         }
@@ -174,6 +186,14 @@ open class StatusBarIconHolder private constructor() {
             val holder = StatusBarIconHolder()
             holder.type = TYPE_IMS
             holder.imsState = state
+            return holder
+        }
+
+        @JvmStatic
+        fun fromNetworkTrafficState(state: NetworkTrafficState): StatusBarIconHolder {
+            val holder = StatusBarIconHolder()
+            holder.type = TYPE_NETWORK_TRAFFIC
+            holder.networkTrafficState = state
             return holder
         }
 
