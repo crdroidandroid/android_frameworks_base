@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -184,11 +185,10 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
             mMobileGroup.setVisibility(View.VISIBLE);
         }
         mMobileDrawable.setLevel(mState.strengthId);
-        boolean showRoamingSpace = false;
+        boolean showRoamingSpace = mOldStyleType ? true : false;
         if (mState.typeId > 0) {
             if (mOldStyleType) {
                 showOldStyle(mState);
-                showRoamingSpace = true;
             } else {
                 showNewStyle(mState);
             }
@@ -209,19 +209,14 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
     }
 
     private void setMobileSignalWidth(boolean small) {
-        if (!small) {
-            final int paddingLimit = mContext.getResources().getDimensionPixelSize(
-                R.dimen.status_bar_mobile_type_padding_limit);
-            final int padding = mMobileTypeSmall.getWidth() < paddingLimit
-                ? mContext.getResources().getDimensionPixelSize(
-                    R.dimen.status_bar_mobile_type_padding)
-                : 0;
-            mMobileTypeSmall.setPadding(padding, 0, 0, 0);
+        ViewGroup.LayoutParams p = mMobileSignalType.getLayoutParams();
+        if (small) {
+            p.width = mContext.getResources().getDimensionPixelSize(
+                        R.dimen.status_bar_mobile_signal_width);
+        } else {
+            p.width = mContext.getResources().getDimensionPixelSize(
+                    R.dimen.status_bar_mobile_signal_with_type_width);
         }
-        final ViewGroup.LayoutParams p = mMobileSignalType.getLayoutParams();
-        p.width = mContext.getResources().getDimensionPixelSize(small
-            ? R.dimen.status_bar_mobile_signal_width
-            : R.dimen.status_bar_mobile_signal_with_type_width);
         mMobileSignalType.setLayoutParams(p);
     }
 
@@ -237,13 +232,12 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         if (mState.strengthId != state.strengthId) {
             mMobileDrawable.setLevel(state.strengthId);
         }
-        boolean showRoamingSpace = false;
+        boolean showRoamingSpace = mOldStyleType ? true : false;
         if (mState.typeId != state.typeId) {
             needsLayout |= state.typeId == 0 || mState.typeId == 0;
             if (state.typeId != 0) {
                 if (mOldStyleType) {
                     showOldStyle(state);
-                    showRoamingSpace = true;
                 } else {
                     showNewStyle(state);
                 }
@@ -379,13 +373,12 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
 
     public void updateDisplayType(boolean oldStyleType) {
         boolean needsLayout = false;
-        boolean showRoamingSpace = false;
+        boolean showRoamingSpace = oldStyleType ? true : false;
 
         if (mOldStyleType != oldStyleType) {
             if (mState.typeId != 0) {
                 if (oldStyleType) {
                     showOldStyle(mState);
-                    showRoamingSpace = true;
                 } else {
                     showNewStyle(mState);
                 }
