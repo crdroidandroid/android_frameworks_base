@@ -96,6 +96,8 @@ static bindernetlink::BinderNetlink binderNetlink;
 // before starting next VMA batch
 static std::atomic<bool> cancelRunningCompaction;
 
+static bool inSystemCompaction = false;
+
 // A VmaBatch represents a set of VMAs that can be processed
 // as VMAs are processed by client code it is expected that the
 // VMAs get consumed which means they are discarded as they are
@@ -345,6 +347,10 @@ static int getAnonPageAdvice(const Vma& vma) {
     return -1;
 }
 static int getAnyPageAdvice(const Vma& vma) {
+    if (inSystemCompaction == true) {
+        return MADV_PAGEOUT;
+    }
+
     if (vma.inode == 0 && !vma.is_shared) {
         return MADV_PAGEOUT;
     }
@@ -472,6 +478,7 @@ static void compactMemcg(int uid, int pid, int compactionFlags) {
 static void com_android_server_am_CachedAppOptimizer_compactSystem(JNIEnv *, jobject) {
     std::unique_ptr<DIR, decltype(&closedir)> proc(opendir("/proc"), closedir);
     struct dirent* current;
+    inSystemCompaction = true;
     while ((current = readdir(proc.get()))) {
         if (current->d_type != DT_DIR) {
             continue;
@@ -526,6 +533,7 @@ static void com_android_server_am_CachedAppOptimizer_compactSystemWithMemcg(JNIE
     if (!reclaim_file) {
         LOG(ERROR) << "Could not write to system memory.reclaim";
     }
+    inSystemCompaction = false;
 }
 
 static void com_android_server_am_CachedAppOptimizer_cancelCompaction(JNIEnv*, jobject) {
