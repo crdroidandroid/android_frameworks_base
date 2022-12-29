@@ -1101,7 +1101,7 @@ public class KeyguardIndicationController {
 
                 mTopIndicationView.switchIndication(newIndication,
                         builder.build(),
-                        true, () -> mWakeLock.setAcquired(false));
+                        animate, () -> mWakeLock.setAcquired(false));
             }
             return;
         }
