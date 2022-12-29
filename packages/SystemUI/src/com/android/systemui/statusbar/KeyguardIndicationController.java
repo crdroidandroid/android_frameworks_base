@@ -1036,7 +1036,7 @@ public class KeyguardIndicationController {
                                                 ? mContext.getColor(R.color.misalignment_text_color)
                                                 : Color.WHITE))
                                 .build(),
-                        true, () -> mWakeLock.setAcquired(false));
+                        animate, () -> mWakeLock.setAcquired(false));
             }
             return;
         }
