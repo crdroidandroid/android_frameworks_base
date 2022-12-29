@@ -879,7 +879,7 @@ public class KeyguardIndicationController {
             if (!TextUtils.equals(mTopIndicationView.getText(), newIndication)) {
                 mWakeLock.setAcquired(true);
                 mTopIndicationView.switchIndication(newIndication, null,
-                        true, () -> mWakeLock.setAcquired(false));
+                        animate, () -> mWakeLock.setAcquired(false));
             }
             return;
         }
