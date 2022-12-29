@@ -171,13 +171,6 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
     private FloatingRotationButton mFloatingRotationButton;
     private RotationButtonController mRotationButtonController;
 
-    private int mBasePaddingBottom;
-    private int mBasePaddingLeft;
-    private int mBasePaddingRight;
-    private int mBasePaddingTop;
-
-    private ViewGroup mNavigationBarContents;
-
     private boolean mHomeHandleForceHidden;
 
     /**
@@ -921,14 +914,16 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
     }
 
     public void shiftNavigationBarItems(int horizontalShift, int verticalShift) {
-        if (mNavigationBarContents == null) {
+        ViewGroup navButtons = (ViewGroup) findViewById(R.id.nav_buttons);
+
+        if (navButtons == null) {
             return;
         }
 
-        mNavigationBarContents.setPaddingRelative(mBasePaddingLeft + horizontalShift,
-                mBasePaddingTop + verticalShift,
-                mBasePaddingRight + horizontalShift,
-                mBasePaddingBottom - verticalShift);
+        navButtons.setPaddingRelative(navButtons.getPaddingStart() + horizontalShift,
+                navButtons.getPaddingTop() + verticalShift,
+                navButtons.getPaddingEnd() + horizontalShift,
+                navButtons.getPaddingBottom() - verticalShift);
         invalidate();
     }
 
@@ -938,13 +933,6 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
         mNavigationInflaterView = findViewById(R.id.navigation_inflater);
         mNavigationInflaterView.setButtonDispatchers(mButtonDispatchers);
 
-
-        mNavigationBarContents = (ViewGroup) findViewById(R.id.nav_buttons);
-
-        mBasePaddingLeft = mNavigationBarContents.getPaddingStart();
-        mBasePaddingTop = mNavigationBarContents.getPaddingTop();
-        mBasePaddingRight = mNavigationBarContents.getPaddingEnd();
-        mBasePaddingBottom = mNavigationBarContents.getPaddingBottom();
         updateOrientationViews();
         reloadNavIcons();
     }
