@@ -40,13 +40,6 @@
     <string name="screenshot_delete_label">Видалити</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">Видалити скріншот</string>
-    <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">кб/с</string>
-    <string name="megabitspersecond_short">Мб/с</string>
-    <string name="gigabitspersecond_short">Гб/с</string>
-    <string name="kilobytespersecond_short">кБ/с</string>
-    <string name="megabytespersecond_short">МБ/с</string>
-    <string name="gigabytespersecond_short">ГБ/с</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
@@ -150,4 +143,11 @@
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Пошук музики</string>
     <string name="quick_settings_sound_search_no_app">Вибачте, але ця функція недоступна, якщо немає програми для пошуку музики.</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">кб/с</string>
+    <string name="megabitspersecond_short">Мб/с</string>
+    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="kilobytespersecond_short">кБ/с</string>
+    <string name="megabytespersecond_short">МБ/с</string>
+    <string name="gigabytespersecond_short">ГБ/с</string>
 </resources>

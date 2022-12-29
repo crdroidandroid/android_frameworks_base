@@ -40,13 +40,6 @@
     <string name="screenshot_delete_label">حذف</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">احذف لقطة الشاشة</string>
-    <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">ك. ب/ث</string>
-    <string name="megabitspersecond_short">م. ب/ث</string>
-    <string name="gigabitspersecond_short">ج. ب/ث</string>
-    <string name="kilobytespersecond_short">ك. بايت/ث</string>
-    <string name="megabytespersecond_short">م. بايت/ث</string>
-    <string name="gigabytespersecond_short">ج. بايت/ث</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
@@ -148,8 +141,15 @@
     <string name="refresh_rate_tile_label"> معدل التحديث</string>
     <string name="auto_mode_label">تلقائي</string>
     <!-- Screenshot Tile -->
-    <string name="screenshot_long_press">Long press - selected region</string>
+    <string name="screenshot_long_press">الضغط المطول - المنطقة المحددة</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">البحث الصوتي</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">عذراً، ولكن هذا لن يعمل إذا لم يكن لديك تطبيق بحث صوتي.</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">ك. ب/ث</string>
+    <string name="megabitspersecond_short">م. ب/ث</string>
+    <string name="gigabitspersecond_short">ج. ب/ث</string>
+    <string name="kilobytespersecond_short">ك. بايت/ث</string>
+    <string name="megabytespersecond_short">م. بايت/ث</string>
+    <string name="gigabytespersecond_short">ج. بايت/ث</string>
 </resources>

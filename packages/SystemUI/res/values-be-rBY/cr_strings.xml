@@ -40,13 +40,6 @@
     <string name="screenshot_delete_label">Выдаліць</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
     <string name="screenshot_delete_description">Выдаліць здымак экрана</string>
-    <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">кбіт/с</string>
-    <string name="megabitspersecond_short">Мб/с</string>
-    <string name="gigabitspersecond_short">Гб/с</string>
-    <string name="kilobytespersecond_short">кБ/с</string>
-    <string name="megabytespersecond_short">МБ/с</string>
-    <string name="gigabytespersecond_short">Гб/с</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
@@ -149,5 +142,12 @@
     <string name="screenshot_long_press">Доўгі націск - выбраны рэгіён</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Пошук музыкі</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Выбачайце, але гэта не працуе без праграмы для пошуку музыкі.</string>
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">кбіт/с</string>
+    <string name="megabitspersecond_short">Мб/с</string>
+    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="kilobytespersecond_short">кБ/с</string>
+    <string name="megabytespersecond_short">МБ/с</string>
+    <string name="gigabytespersecond_short">Гб/с</string>
 </resources>
