@@ -141,7 +141,7 @@
     <string name="screenshot_long_press">Apăsare lungă - regiunea selectată</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Căutare sonoră</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Ne pare rău, dar nu funcționează dacă nu aveți o aplicație pentru identificare muzică.</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
