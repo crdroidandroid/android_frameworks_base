@@ -113,7 +113,9 @@ public final class ParallelSpaceManagerService extends SystemService {
         // To avoid third party apps starting it accidentally.
         "com.android.launcher3",
         "org.lineageos.settings.DeviceExtras",
-        "org.lineageos.settings.OPlusExtras"
+        "org.lineageos.settings.OPlusExtras",
+        "com.realme.dirac",
+        "com.realmeparts"
     );
 
     /**
