@@ -3996,7 +3996,7 @@
          PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT feature to your device specification.
          The duplication is necessary, because this information is used before the features are
          available to the system.-->
-    <bool name="config_freeformWindowManagement">false</bool>
+    <bool name="config_freeformWindowManagement">true</bool>
 
     <!-- If set, this will force all windows to draw the status bar background, including the apps
          that have not requested doing so (via the WindowManager.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
