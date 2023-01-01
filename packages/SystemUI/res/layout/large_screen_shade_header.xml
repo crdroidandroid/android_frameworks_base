@@ -37,6 +37,7 @@
         android:paddingStart="@dimen/status_bar_left_clock_starting_padding"
         android:paddingEnd="@dimen/status_bar_left_clock_end_padding"
         android:singleLine="true"
+        systemui:showDark="false"
         android:textAppearance="@style/TextAppearance.QS.Status" />
 
     <com.android.systemui.statusbar.policy.DateView
