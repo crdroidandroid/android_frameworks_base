@@ -296,7 +296,7 @@
     <dimen name="keyguard_indication_bottom_padding">16sp</dimen>
 
     <!-- The padding at start and end of indication text shown on AOD -->
-    <dimen name="keyguard_indication_text_padding">16dp</dimen>
+    <dimen name="keyguard_indication_text_padding">12dp</dimen>
 
     <!-- The min height on the indication text shown on AOD -->
     <dimen name="keyguard_indication_text_min_height">48dp</dimen>
