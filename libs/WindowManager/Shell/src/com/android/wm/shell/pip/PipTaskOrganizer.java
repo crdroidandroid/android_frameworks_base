@@ -653,8 +653,13 @@ public class PipTaskOrganizer implements ShellTaskOrganizer.TaskListener,
 
         if (mOneShotAnimationType == ANIM_TYPE_BOUNDS) {
             mPipMenuController.attach(mLeash);
-            final Rect sourceHintRect = PipBoundsAlgorithm.getValidSourceHintRect(
+            Rect sourceHintRect = PipBoundsAlgorithm.getValidSourceHintRect(
                     info.pictureInPictureParams, currentBounds);
+            if (sourceHintRect != null && currentBounds != null
+                    && sourceHintRect.width() < currentBounds.width() / 2
+                    && sourceHintRect.height() < currentBounds.height() / 3) {
+                sourceHintRect = null;
+            }
             scheduleAnimateResizePip(currentBounds, destinationBounds, 0 /* startingAngle */,
                     sourceHintRect, TRANSITION_DIRECTION_TO_PIP, mEnterAnimationDuration,
                     null /* updateBoundsCallback */);
