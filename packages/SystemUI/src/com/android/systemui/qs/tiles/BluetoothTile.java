@@ -107,12 +107,21 @@ public class BluetoothTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleClick(@Nullable View view) {
+        // Secondary clicks are header clicks, just toggle.
+        final boolean isEnabled = mState.value;
+        // Immediately enter transient enabling state when turning bluetooth on.
+        refreshState(isEnabled ? null : ARG_SHOW_TRANSIENT_ENABLING);
+        mController.setBluetoothEnabled(!isEnabled);
+    }
+
+    @Override
+    protected void handleLongClick(@Nullable View view) {
         mHandler.post(() -> mBluetoothDialogFactory.create(true, view));
     }
 
     @Override
     public Intent getLongClickIntent() {
-        return new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+        return null;
     }
 
     @Override
