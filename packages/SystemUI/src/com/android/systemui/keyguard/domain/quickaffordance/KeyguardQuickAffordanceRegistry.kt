@@ -33,17 +33,21 @@ constructor(
     homeControls: HomeControlsKeyguardQuickAffordanceConfig,
     quickAccessWallet: QuickAccessWalletKeyguardQuickAffordanceConfig,
     qrCodeScanner: QrCodeScannerKeyguardQuickAffordanceConfig,
+    camera: CameraKeyguardQuickAffordanceConfig,
+    flashlight: FlashlightKeyguardQuickAffordanceConfig,
 ) : KeyguardQuickAffordanceRegistry<KeyguardQuickAffordanceConfig> {
     private val configsByPosition =
         mapOf(
             KeyguardQuickAffordancePosition.BOTTOM_START to
                 listOf(
                     homeControls,
+                    flashlight
                 ),
             KeyguardQuickAffordancePosition.BOTTOM_END to
                 listOf(
                     quickAccessWallet,
                     qrCodeScanner,
+                    camera
                 ),
         )
     private val configByClass =
