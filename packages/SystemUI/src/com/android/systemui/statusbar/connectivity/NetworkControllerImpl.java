@@ -958,6 +958,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
     private void updateMobileControllers() {
         if (!mListening) {
+            updateImsIcon();
             return;
         }
         doUpdateMobileControllers();
@@ -1002,6 +1003,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
             // Such as on boot, don't need any controllers, because there are no sims,
             // but we still need to update the no sim state.
             updateNoSims();
+            updateImsIcon();
             return;
         }
         synchronized (mLock) {
