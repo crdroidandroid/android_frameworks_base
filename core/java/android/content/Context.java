@@ -2332,7 +2332,8 @@ public abstract class Context {
     @SystemApi
     public void sendBroadcastMultiplePermissions(@NonNull Intent intent,
             @NonNull String[] receiverPermissions, @Nullable BroadcastOptions options) {
-       sendBroadcastMultiplePermissions(intent, receiverPermissions, options.toBundle());
+        sendBroadcastMultiplePermissions(intent, receiverPermissions,
+                (options == null ? null : options.toBundle()));
     }
 
     /**
