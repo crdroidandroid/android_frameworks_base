@@ -409,6 +409,7 @@ public class PixelPropsUtils {
         setPropValue("FINGERPRINT", "Hisense/F30/HS6735MT:6.0/MRA58K/L1228.6.01.01:user/release-keys");
         setPropValue("MODEL", "Hisense F30");
         setPropValue("PRODUCT", "F30");
+        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.S);
         setVersionFieldString("SECURITY_PATCH", "2016-02-01");
     }
 
