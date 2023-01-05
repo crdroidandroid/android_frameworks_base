@@ -88,7 +88,7 @@
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">指南针</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">正在初始化\u2026</string>
+    <string name="quick_settings_compass_init">初始化中\u2026</string>
     <string name="quick_settings_compass_N">北</string>
     <string name="quick_settings_compass_NE">东北</string>
     <string name="quick_settings_compass_E">东</string>
@@ -104,7 +104,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">优先级</string>
     <string name="volume_ringer_alarms_only">闹钟</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">勿扰</string>
     <string name="tristate_flashlight">手电筒</string>
     <string name="tristate_flashlight_on">手电筒开启</string>
     <string name="tristate_flashlight_off">手电筒关闭</string>
@@ -118,10 +118,10 @@
     <string name="tristate_rotation_270">横向 (270°)</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="other">已连接 %d 台设备。</item>
+        <item quantity="other">已连接 %d 台设备</item>
     </plurals>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">要强行停止吗？</string>
+    <string name="force_stop_dlg_title">强行停止？</string>
     <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
     <!-- Smart Pixels QS Tile -->
     <string name="quick_settings_smart_pixels">智能像素</string>
