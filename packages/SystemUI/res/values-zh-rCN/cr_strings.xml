@@ -29,7 +29,7 @@
     <string name="screenrecord_stopdot_label">显示停止按钮</string>
     <string name="screenrecord_stopdot_summary">长按移除</string>
     <string name="screenrecord_lowquality_label">低画质</string>
-    <string name="screenrecord_lowquality_summary">来减少文件大小</string>
+    <string name="screenrecord_lowquality_summary">压缩录屏文件</string>
     <string name="screenrecord_longer_timeout_switch_label">更大的文件大小限制</string>
     <string name="screenrecord_longer_timeout_switch_summary">限制录屏文件大小为 15GB</string>
     <string name="screenrecord_skip_time_label">跳过倒计时</string>
