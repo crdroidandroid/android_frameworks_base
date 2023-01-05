@@ -17,9 +17,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">声音</string>
-    <string name="quick_settings_sound_ring">铃声</string>
+    <string name="quick_settings_sound_ring">响铃</string>
     <string name="quick_settings_sound_vibrate">振动</string>
-    <string name="quick_settings_sound_dnd">请勿打扰</string>
+    <string name="quick_settings_sound_dnd">勿扰</string>
     <!-- Screen record delete action -->
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
     <string name="screenrecord_delete_label">删除</string>
@@ -29,7 +29,7 @@
     <string name="screenrecord_stopdot_label">显示停止按钮</string>
     <string name="screenrecord_stopdot_summary">长按移除</string>
     <string name="screenrecord_lowquality_label">低画质</string>
-    <string name="screenrecord_lowquality_summary">压缩录屏文件</string>
+    <string name="screenrecord_lowquality_summary">来减少文件大小</string>
     <string name="screenrecord_longer_timeout_switch_label">更大的文件大小限制</string>
     <string name="screenrecord_longer_timeout_switch_summary">限制录屏文件大小为 15GB</string>
     <string name="screenrecord_skip_time_label">跳过倒计时</string>
@@ -43,7 +43,7 @@
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
-    <string name="status_bar_data_saver">数据保存</string>
+    <string name="status_bar_data_saver">流量节省程序</string>
     <string name="status_bar_call_strength">通话强度</string>
     <string name="status_bar_firewall">防火墙</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
