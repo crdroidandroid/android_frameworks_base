@@ -88,8 +88,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -1031,6 +1031,19 @@ public class CameraMetadataNative implements Parcelable {
         return fixedFaceRectangles;
     }
 
+    private boolean setLensShadingMap(LensShadingMap lensShadingMap) {
+        if (lensShadingMap == null) {
+            return false;
+        }
+        float[] lsmArray = new float[lensShadingMap.getGainFactorCount()];
+        lensShadingMap.copyGainFactors(lsmArray, 0);
+        setBase(CaptureResult.STATISTICS_LENS_SHADING_MAP, lsmArray);
+
+        Size s = new Size(lensShadingMap.getRowCount(), lensShadingMap.getColumnCount());
+        setBase(CameraCharacteristics.LENS_INFO_SHADING_MAP_SIZE, s);
+        return true;
+    }
+
     private LensShadingMap getLensShadingMap() {
         float[] lsmArray = getBase(CaptureResult.STATISTICS_LENS_SHADING_MAP);
         Size s = get(CameraCharacteristics.LENS_INFO_SHADING_MAP_SIZE);
@@ -1855,6 +1868,13 @@ public class CameraMetadataNative implements Parcelable {
                 metadata.setAERegions(value);
             }
         });
+        sSetCommandMap.put(CaptureResult.STATISTICS_LENS_SHADING_CORRECTION_MAP.getNativeKey(),
+                new SetCommand() {
+                    @Override
+                    public <T> void setValue(CameraMetadataNative metadata, T value) {
+                        metadata.setLensShadingMap((LensShadingMap) value);
+                    }
+                });
     }
 
     private boolean setAvailableFormats(int[] value) {
