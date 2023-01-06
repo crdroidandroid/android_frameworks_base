@@ -560,7 +560,7 @@ public class TtsEngines {
             for (String value : prefValues) {
                 final int delimiter = value.indexOf(':');
                 if (delimiter > 0) {
-                    if (key.equals(value.substring(0, delimiter))) {
+                    if (value.substring(0, delimiter).equals(key)) {
                         if (first) {
                             first = false;
                         } else {
