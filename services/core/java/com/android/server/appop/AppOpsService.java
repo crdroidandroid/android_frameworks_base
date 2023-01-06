@@ -4715,6 +4715,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                     String lastPkg = null;
                     for (int i=0; i<allOps.size(); i++) {
                         AppOpsManager.PackageOps pkg = allOps.get(i);
+                        if (pkg.getPackageName() == null) {
+                            continue;
+                        }
                         if (!pkg.getPackageName().equals(lastPkg)) {
                             if (lastPkg != null) {
                                 out.endTag(null, "pkg");
