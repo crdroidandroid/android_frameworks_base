@@ -88,6 +88,7 @@ import android.content.pm.InstrumentationInfo;
 import android.content.pm.KeySet;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageInfoList;
+import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManagerInternal;
 import android.content.pm.ParceledListSlice;
@@ -426,6 +427,11 @@ public class ComputerEngine implements Computer {
     private final DomainVerificationManagerInternal mDomainVerificationManager;
     private final PackageManagerInternal.ExternalSourcesPolicy mExternalSourcesPolicy;
     private final CrossProfileIntentResolverEngine mCrossProfileIntentResolverEngine;
+
+    // Installers whose installs are reported to apps as coming from the Play Store.
+    private static final String AURORA_SERVICES = "com.aurora.services";
+    private static final String AURORA_STORE = "com.aurora.store";
+    private static final String PLAY_STORE = "com.android.vending";
 
     // PackageManagerService attributes that are primitives are referenced through the
     // pms object directly.  Primitives are the only attributes so referenced.
@@ -5160,7 +5166,50 @@ public class ComputerEngine implements Computer {
             return null;
         }
 
-        return ps.getInstallSource();
+        final InstallSource installSource = ps.getInstallSource();
+        final InstallSource spoofed = maybeSpoofAuroraInstallSource(installSource, callingUid);
+        return spoofed != null ? spoofed : installSource;
+    }
+
+    private static boolean isAuroraPackage(@Nullable String packageName) {
+        return AURORA_STORE.equals(packageName) || AURORA_SERVICES.equals(packageName);
+    }
+
+    /**
+     * Report apps installed through Aurora Store / Aurora Services as installed by the Play
+     * Store, so that apps checking their installer (e.g. license or integrity checks) behave
+     * as they would for a Play install. The system and the Aurora apps themselves still see
+     * the real install source.
+     *
+     * @return the spoofed {@link InstallSource}, or {@code null} if no spoofing applies.
+     */
+    @Nullable
+    private InstallSource maybeSpoofAuroraInstallSource(@Nullable InstallSource installSource,
+            int callingUid) {
+        if (installSource == null || !isAuroraPackage(installSource.mInstallerPackageName)) {
+            return null;
+        }
+        final int callingAppId = UserHandle.getAppId(callingUid);
+        if (callingAppId == Process.SYSTEM_UID || callingAppId == Process.ROOT_UID
+                || isCallerSameApp(AURORA_STORE, callingUid)
+                || isCallerSameApp(AURORA_SERVICES, callingUid)) {
+            return null;
+        }
+        final PackageStateInternal playStore = mSettings.getPackage(PLAY_STORE);
+        if (playStore == null) {
+            return null;
+        }
+        final String updateOwnerPackageName =
+                isAuroraPackage(installSource.mUpdateOwnerPackageName)
+                        ? PLAY_STORE : installSource.mUpdateOwnerPackageName;
+        return InstallSource.create(PLAY_STORE, PLAY_STORE, PLAY_STORE,
+                        installSource.mInstallerPackageUid,
+                        installSource.mOriginalInstallerUid,
+                        updateOwnerPackageName,
+                        installSource.mInstallerAttributionTag,
+                        PackageInstaller.PACKAGE_SOURCE_STORE)
+                .setInitiatingPackageSignatures(
+                        new PackageSignatures(playStore.getSigningDetails()));
     }
 
     @Override
