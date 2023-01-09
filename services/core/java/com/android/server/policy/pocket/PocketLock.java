@@ -19,9 +19,6 @@ import android.animation.Animator;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Handler;
-import android.telecom.TelecomManager;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,14 +28,12 @@ import android.view.WindowManager;
  * This class provides a fullscreen overlays view, displaying itself
  * even on top of lock screen. While this view is displaying touch
  * inputs are not passed to the the views below.
- * @see android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ERROR
+ * @see android.view.WindowManager.LayoutParams.TYPE_SECURE_SYSTEM_OVERLAY
  * @author Carlo Savignano
  */
 public class PocketLock {
 
     private final Context mContext;
-    private TelephonyManager mTelephonyManager;
-    private TelecomManager mTelecomManager;
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams mLayoutParams;
     private Handler mHandler;
@@ -47,24 +42,6 @@ public class PocketLock {
 
     private boolean mAttached;
     private boolean mAnimating;
-    private boolean mIsOnCall = false;
-    private boolean mRegistered = false;
-
-    final PhoneStateListener mOnCallStateListener = new OnCallStateListener();
-    private class OnCallStateListener extends PhoneStateListener {
-        @Override
-        public void onCallStateChanged(int state, String incomingNumber) {
-            final boolean onCall = state != TelephonyManager.CALL_STATE_IDLE;
-            final boolean changed = mIsOnCall != onCall;
-            mIsOnCall = onCall;
-            if (mIsOnCall) {
-                hide(false);
-            } else if (changed) {
-                mTelephonyManager.listen(mOnCallStateListener, PhoneStateListener.LISTEN_NONE);
-                mRegistered = false;
-            }
-        }
-    }
 
     /**
      * Creates pocket lock objects, inflate view and set layout parameters.
@@ -77,22 +54,13 @@ public class PocketLock {
         mLayoutParams = getLayoutParams();
         mView = LayoutInflater.from(mContext).inflate(
                 com.android.internal.R.layout.pocket_lock_view, null);
-
-        final boolean disableOnCall = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_pocketJudgeDisableOnCall);
-        if (disableOnCall) {
-            mTelephonyManager = (TelephonyManager)
-                    context.getSystemService(Context.TELEPHONY_SERVICE);
-            mTelecomManager = (TelecomManager)
-                    context.getSystemService(Context.TELECOM_SERVICE);
-        }
     }
 
     public void show(final boolean animate) {
         final Runnable r = new Runnable() {
             @Override
             public void run() {
-                if (mAttached || mIsOnCall) {
+                if (mAttached) {
                     return;
                 }
 
@@ -136,14 +104,6 @@ public class PocketLock {
                 }
             }
         };
-
-        if (mTelecomManager != null && mTelephonyManager != null) {
-            mIsOnCall = mTelecomManager.isInCall();
-            if (!mRegistered) {
-                mTelephonyManager.listen(mOnCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-                mRegistered = true;
-            }
-        }
 
         mHandler.post(r);
     }
@@ -192,11 +152,6 @@ public class PocketLock {
             }
         };
 
-        if (mTelephonyManager != null && mRegistered && !mIsOnCall) {
-            mTelephonyManager.listen(mOnCallStateListener, PhoneStateListener.LISTEN_NONE);
-            mRegistered = false;
-        }
-
         mHandler.post(r);
     }
 
@@ -225,7 +180,7 @@ public class PocketLock {
         mLayoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         mLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         mLayoutParams.gravity = Gravity.CENTER;
-        mLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+        mLayoutParams.type = WindowManager.LayoutParams.TYPE_SECURE_SYSTEM_OVERLAY;
         mLayoutParams.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         mLayoutParams.flags = WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
