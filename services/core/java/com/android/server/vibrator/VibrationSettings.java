@@ -380,7 +380,8 @@ final class VibrationSettings {
     public Vibration.Status shouldIgnoreVibration(@NonNull Vibration.CallerInfo callerInfo) {
         final int usage = callerInfo.attrs.getUsage();
         synchronized (mLock) {
-            if (!mUidObserver.isUidForeground(callerInfo.uid)
+            // Don't check foreground for shell. Necessary e.g. for dumpstate's end vibrations.
+            if (callerInfo.uid != Process.SHELL_UID && !mUidObserver.isUidForeground(callerInfo.uid)
                     && !BACKGROUND_PROCESS_USAGE_ALLOWLIST.contains(usage)) {
                 return Vibration.Status.IGNORED_BACKGROUND;
             }
