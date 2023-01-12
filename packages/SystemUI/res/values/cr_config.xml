@@ -83,4 +83,8 @@
     <bool name="config_themedBatteryPillIconLeading">true</bool>
     <bool name="config_themedBatteryPillOutline">false</bool>
     <bool name="config_themedBatteryPillNub">true</bool>
+
+    <!-- Update battery info every second when device is charging -->
+    <bool name="config_alternateFastchargeInfoUpdate">false</bool>
+
 </resources>
