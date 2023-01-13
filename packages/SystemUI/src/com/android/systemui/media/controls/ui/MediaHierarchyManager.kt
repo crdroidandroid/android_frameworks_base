@@ -341,6 +341,13 @@ constructor(
     }
 
     /**
+     * Returns whether the user decided to show the media player on lockscreen
+     */
+    fun getShouldShowOnLockScreen(): Boolean {
+        return allowMediaPlayerOnLockScreen
+    }
+
+    /**
      * Is the shade currently collapsing from the expanded qs? If we're on the lockscreen and in qs,
      * we wouldn't want to transition in that case.
      */
