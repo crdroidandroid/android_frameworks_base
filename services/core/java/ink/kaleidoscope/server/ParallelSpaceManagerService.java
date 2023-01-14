@@ -83,6 +83,26 @@ public final class ParallelSpaceManagerService extends SystemService {
     private static final String TAG = "ParallelSpaceManagerService";
 
     /**
+     * By default, only non-launchable system apps will be initially installed in
+     * a new space. Here you can explicitly configure for this.
+     */
+    private static final List<String> SPACE_WHITELIST_PACKAGES = Arrays.asList(
+        // For granting permissions.
+        "com.android.settings",
+        // For managing files.
+        "com.android.documentsui",
+        "com.android.google.documentsui"
+    );
+
+    private static final List<String> SPACE_BLOCKLIST_PACKAGES = Arrays.asList(
+        // To avoid third party apps starting it accidentally.
+        "com.android.launcher3",
+        "com.google.android.apps.nexuslauncher",
+        "org.lineageos.setupwizard",
+        "com.crdroid.updater"
+    );
+
+    /**
      * Components should be disabled on space setup.
      */
     private static final List<String> SPACE_BLACKLIST_COMPONENTS = Arrays.asList(
@@ -431,10 +451,12 @@ public final class ParallelSpaceManagerService extends SystemService {
         for (ResolveInfo resolveInfo : resolveInfos) {
             apps.add(resolveInfo.activityInfo.packageName);
         }
+        apps.removeAll(SPACE_WHITELIST_PACKAGES);
         apps.removeAll(Arrays.asList(getContext().getResources().getStringArray(
                 com.android.internal.R.array.config_parallelSpaceWhitelist)));
         // Those packages should be handled by GmsManagerService, always install them.
         apps.removeAll(Arrays.asList(GmsManagerService.GMS_PACKAGES));
+        apps.addAll(SPACE_BLOCKLIST_PACKAGES);
         apps.addAll(Arrays.asList(getContext().getResources().getStringArray(
                 com.android.internal.R.array.config_parallelSpaceBlocklist)));
 
