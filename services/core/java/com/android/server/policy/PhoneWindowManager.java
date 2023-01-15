@@ -7246,9 +7246,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         switch (behavior) {
             case NavbarUtilities.KEY_ACTION_NOTHING:
                 break;
-            case NavbarUtilities.KEY_ACTION_HOME:
-                launchHomeFromHotKey(DEFAULT_DISPLAY);
-                break;
             case NavbarUtilities.KEY_ACTION_MENU:
                 triggerVirtualKeypress(KeyEvent.KEYCODE_MENU, false, false);
                 break;
