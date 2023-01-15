@@ -55,10 +55,6 @@ public class NavbarUtilities {
     public static final int KEY_ACTION_QS_PANEL = 16;
     public static final int KEY_ACTION_RINGER_MODES = 17;
 
-    // Special values, used internal only.
-    public static final int KEY_ACTION_HOME = 100;
-    public static final int KEY_ACTION_BACK = 101;
-
     /**
      * List of key codes to intercept with our custom policy.
      */
