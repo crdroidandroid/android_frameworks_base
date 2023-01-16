@@ -40,6 +40,7 @@ Do NOT include any apps that are updatable via Play Store!
   <hidden-api-whitelisted-app package="com.android.dreams.basic" />
   <hidden-api-whitelisted-app package="com.android.gallery" />
   <hidden-api-whitelisted-app package="com.android.launcher3" />
+  <hidden-api-whitelisted-app package="com.android.deskclock" />
   <hidden-api-whitelisted-app package="com.android.mtp" />
   <hidden-api-whitelisted-app package="com.android.musicfx" />
   <hidden-api-whitelisted-app package="com.android.permissioncontroller" />
