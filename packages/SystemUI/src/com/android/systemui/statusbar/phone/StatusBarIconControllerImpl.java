@@ -117,11 +117,12 @@ public class StatusBarIconControllerImpl implements Tunable,
     /** */
     @Override
     public void addIconGroup(IconManager group) {
-        // Remove existing icon group if present
-        mIconGroups.stream()
-                .filter(i -> i.mGroup == group.mGroup)
-                .findFirst()
-                .ifPresent(i -> removeIconGroup(i));
+        for (IconManager existingIconManager : mIconGroups) {
+            if (existingIconManager.mGroup == group.mGroup) {
+                Log.e(TAG, "Adding new IconManager for the same ViewGroup. This could cause "
+                        + "unexpected results.");
+            }
+        }
 
         group.setController(this);
         group.setMobileSignalStyle(mIsOldSignalStyle);
