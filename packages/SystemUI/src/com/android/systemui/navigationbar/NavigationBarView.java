@@ -953,7 +953,7 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
 
         navButtons.setPaddingRelative(navButtons.getPaddingStart() + horizontalShift,
                 navButtons.getPaddingTop() + verticalShift,
-                navButtons.getPaddingEnd() + horizontalShift,
+                navButtons.getPaddingEnd() - horizontalShift,
                 navButtons.getPaddingBottom() - verticalShift);
         invalidate();
     }
