@@ -99,7 +99,7 @@ public class BurnInProtectionController {
         NavigationBarView navigationBarView = mStatusBar.getNavigationBarView();
 
         if (navigationBarView != null) {
-            navigationBarView.shiftNavigationBarItems(mHorizontalShift, mVerticalShift);
+            navigationBarView.shiftNavigationBarItems(mHorizontalShift, 0);
         }
         if (DEBUG) Log.d(TAG, "Shifting items\u2026");
     }
