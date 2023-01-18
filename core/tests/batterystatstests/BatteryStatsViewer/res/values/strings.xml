@@ -6,4 +6,5 @@
 <resources>
     <string name="app_name">Battery Stats Viewer</string>
     <string name="header">Battery stats</string>
+    <string name="display_dashboard_summary">View detailed battery usage stats</string>
 </resources>
