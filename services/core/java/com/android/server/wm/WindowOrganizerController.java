@@ -837,8 +837,11 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
                 final WindowContainer wc = WindowContainer.fromBinder(hop.getContainer());
                 final Task task = wc != null ? wc.asTask() : null;
                 if (task != null) {
-                    task.getDisplayArea().setLaunchRootTask(task,
-                            hop.getWindowingModes(), hop.getActivityTypes());
+                    final TaskDisplayArea taskDisplayArea = task.getDisplayArea();
+                    if (taskDisplayArea != null) {
+                        taskDisplayArea.setLaunchRootTask(task,
+                                hop.getWindowingModes(), hop.getActivityTypes());
+                    }
                 } else {
                     throw new IllegalArgumentException("Cannot set non-task as launch root: " + wc);
                 }
@@ -857,8 +860,10 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
                     throw new UnsupportedOperationException(
                             "Cannot set non-adjacent task as adjacent flag root: " + wc);
                 }
-
-                task.getDisplayArea().setLaunchAdjacentFlagRootTask(clearRoot ? null : task);
+                final TaskDisplayArea taskDisplayArea = task.getDisplayArea();
+                if (taskDisplayArea != null) {
+                    taskDisplayArea.setLaunchAdjacentFlagRootTask(clearRoot ? null : task);
+                }
                 break;
             }
             case HIERARCHY_OP_TYPE_SET_ADJACENT_ROOTS: {
@@ -1415,9 +1420,12 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
                     final Task rootTask = (Task) (
                             (newParent != null && !(newParent instanceof TaskDisplayArea))
                                     ? newParent : task.getRootTask());
-                    as.getDisplayArea().positionChildAt(
-                            hop.getToTop() ? POSITION_TOP : POSITION_BOTTOM, rootTask,
-                            false /* includingParents */);
+                    final TaskDisplayArea taskDisplayArea = as.getDisplayArea();
+                    if (taskDisplayArea != null) {
+                        taskDisplayArea.positionChildAt(
+                                hop.getToTop() ? POSITION_TOP : POSITION_BOTTOM, rootTask,
+                                false /* includingParents */);
+                    }
                 }
             } else {
                 throw new RuntimeException("Reparenting leaf Tasks is not supported now. " + task);
@@ -1483,7 +1491,7 @@ class WindowOrganizerController extends IWindowOrganizerController.Stub
 
         final boolean newParentInMultiWindow = newParent.inMultiWindowMode();
         final TaskDisplayArea newParentTda = newParent.asTask() != null
-                ? newParent.asTask().getDisplayArea()
+                ? newParent.asTask().getDisplayArea() //null is accepted according to reference
                 : newParent.asTaskDisplayArea();
         final WindowContainer finalCurrentParent = currentParent;
         final WindowContainer finalNewParent = newParent;
