@@ -79,14 +79,6 @@ public class BatteryConsumerPickerActivity extends AppCompatActivity {
         mBatteryConsumerListAdapter =
                 new BatteryConsumerListAdapter((this::setSelectedBatteryConsumer));
         mAppList.setAdapter(mBatteryConsumerListAdapter);
-
-        if (icicle == null) {
-            final String batteryConsumerId = getPreferences(Context.MODE_PRIVATE)
-                    .getString(PREF_SELECTED_BATTERY_CONSUMER, null);
-            if (batteryConsumerId != null) {
-                startBatteryStatsActivity(batteryConsumerId);
-            }
-        }
     }
 
     public void setSelectedBatteryConsumer(String batteryConsumerId) {
