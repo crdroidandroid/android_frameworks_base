@@ -27,9 +27,9 @@
         android:theme="@style/Theme"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:label="Battery Stats Viewer">
+        android:label="@string/app_name">
         <activity android:name=".BatteryConsumerPickerActivity"
-                  android:label="Battery Stats"
+                  android:label="@string/header"
                   android:exported="true">
             <intent-filter>
                 <action android:name="com.android.settings.action.IA_SETTINGS"/>
@@ -41,7 +41,7 @@
         </activity>
 
         <activity android:name=".BatteryStatsViewerActivity"
-                  android:label="Battery Stats"
+                  android:label="@string/header"
                   android:parentActivityName=".BatteryConsumerPickerActivity"/>
     </application>
 </manifest>
