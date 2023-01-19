@@ -40,6 +40,7 @@ constructor(
     private val qrCodeScanner: QrCodeScannerKeyguardQuickAffordanceConfig,
     private val camera: CameraKeyguardQuickAffordanceConfig,
     private val flashlight: FlashlightKeyguardQuickAffordanceConfig,
+    private val remoteControls: RemoteControlsKeyguardQuickAffordanceConfig,
 ) : KeyguardQuickAffordanceRegistry<KeyguardQuickAffordanceConfig> {
 
     private val configsBySetting: Map<String, KeyguardQuickAffordanceConfig> =
@@ -48,7 +49,8 @@ constructor(
             "wallet" to quickAccessWallet,
             "qr" to qrCodeScanner,
             "camera" to camera,
-            "flashlight" to flashlight
+            "flashlight" to flashlight,
+            "remote" to remoteControls,
         )
 
     private var configsByPosition: Map<KeyguardQuickAffordancePosition, MutableList<KeyguardQuickAffordanceConfig>>
