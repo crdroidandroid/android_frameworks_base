@@ -36,8 +36,10 @@ private const val TAG = "SeekBarObserver"
  *
  * <p>Updates the seek bar views in response to changes to the model.
  */
-open class SeekBarObserver(private val holder: MediaViewHolder) :
-    Observer<SeekBarViewModel.Progress> {
+open class SeekBarObserver(
+    private val holder: MediaViewHolder,
+    private var alwaysOnTime: Boolean
+) : Observer<SeekBarViewModel.Progress> {
 
     companion object {
         @JvmStatic val RESET_ANIMATION_DURATION_MS: Int = 750
@@ -127,7 +129,7 @@ open class SeekBarObserver(private val holder: MediaViewHolder) :
         }
 
         holder.seekBar.setMax(data.duration)
-        if (data.scrubbing) {
+        if (data.scrubbing || alwaysOnTime) {
             holder.scrubbingTotalTimeView.text = formatTimeLabel(data.duration)
         }
 
@@ -146,7 +148,8 @@ open class SeekBarObserver(private val holder: MediaViewHolder) :
                 }
             }
 
-            if (data.scrubbing) {
+
+            if (data.scrubbing || alwaysOnTime) {
                 holder.scrubbingElapsedTimeView.text = formatTimeLabel(it)
             }
         }
@@ -191,5 +194,9 @@ open class SeekBarObserver(private val holder: MediaViewHolder) :
         val rightPadding = holder.seekBar.paddingRight
         val bottomPadding = holder.seekBar.paddingBottom
         holder.seekBar.setPadding(leftPadding, padding, rightPadding, bottomPadding)
+    }
+
+    fun setAlwaysOnTime(enabled: Boolean) {
+        alwaysOnTime = enabled
     }
 }

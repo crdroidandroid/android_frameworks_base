@@ -623,7 +623,7 @@ constructor(
         val viewHolder = MediaViewHolder.create(LayoutInflater.from(context), mediaContent)
         viewController.widthInSceneContainerPx = widthInSceneContainerPx
         viewController.heightInSceneContainerPx = heightInSceneContainerPx
-        viewController.attachPlayer(viewHolder)
+        viewController.attachPlayer(viewHolder, getAlwaysShowTimeSetting())
         viewController.mediaViewHolder?.player?.layoutParams = lp
         if (configChanged) {
             controlViewModel.onMediaConfigChanged()
@@ -699,6 +699,14 @@ constructor(
                 UserHandle.USER_CURRENT,
             )
         }
+    }
+
+    private fun getAlwaysShowTimeSetting(): Boolean {
+        return secureSettings.getBoolForUser(
+            Settings.Secure.MEDIA_CONTROLS_ALWAYS_SHOW_TIME,
+            false,
+            UserHandle.USER_CURRENT
+        )
     }
 
     fun setSceneContainerSize(width: Int, height: Int) {
@@ -884,7 +892,7 @@ constructor(
         }
     }
 
-    private fun updatePlayers(recreateMedia: Boolean) {
+    public fun updatePlayers(recreateMedia: Boolean) {
         if (SceneContainerFlag.isEnabled) {
             updateMediaPlayers(recreateMedia)
             return

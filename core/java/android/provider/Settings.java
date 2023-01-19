@@ -14387,6 +14387,24 @@ public final class Settings {
                 "otp_redaction_lock_time";
 
         /**
+         * Whether to always show the time on media controls
+         * @hide
+         */
+        public static final String MEDIA_CONTROLS_ALWAYS_SHOW_TIME = "media_controls_always_show_time";
+
+        /**
+         * Whether to show the time instead iof the next & previous buttons
+         * @hide
+         */
+        public static final String MEDIA_CONTROLS_TIME_AS_NEXT = "media_controls_time_as_next";
+
+        /**
+         * The amount of custom actions that apps are allowed to add in the player UI
+         * @hide
+         */
+        public static final String MEDIA_CONTROLS_ACTIONS = "media_controls_actions";
+
+        /**
          * These entries are considered common between the personal and the managed profile,
          * since the managed profile doesn't get to change them.
          */

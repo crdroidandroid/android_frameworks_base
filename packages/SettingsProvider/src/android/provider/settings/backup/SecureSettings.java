@@ -305,5 +305,8 @@ public class SecureSettings {
         Settings.Secure.SELECTED_SPELL_CHECKER,
         // SELECTED_SPELL_CHECKER_SUBTYPE needs to be restored after SELECTED_SPELL_CHECKER
         Settings.Secure.SELECTED_SPELL_CHECKER_SUBTYPE,
+        Settings.Secure.MEDIA_CONTROLS_ALWAYS_SHOW_TIME,
+        Settings.Secure.MEDIA_CONTROLS_TIME_AS_NEXT,
+        Settings.Secure.MEDIA_CONTROLS_ACTIONS,
     };
 }
