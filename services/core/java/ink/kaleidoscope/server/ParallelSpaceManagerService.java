@@ -98,6 +98,7 @@ public final class ParallelSpaceManagerService extends SystemService {
         // To avoid third party apps starting it accidentally.
         "com.android.launcher3",
         "com.google.android.apps.nexuslauncher",
+        "com.google.android.projection.gearhead",
         "org.lineageos.setupwizard",
         "com.crdroid.updater"
     );
