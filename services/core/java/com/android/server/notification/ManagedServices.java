@@ -1024,6 +1024,12 @@ abstract public class ManagedServices {
         return null;
     }
 
+    protected boolean isServiceTokenValid(IInterface service) {
+        synchronized (mMutex) {
+            return isServiceTokenValidLocked(service);
+        }
+    }
+
     protected boolean isServiceTokenValidLocked(IInterface service) {
         if (service == null) {
             return false;
