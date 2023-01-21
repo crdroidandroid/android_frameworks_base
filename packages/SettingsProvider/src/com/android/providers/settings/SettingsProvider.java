@@ -1098,7 +1098,7 @@ public class SettingsProvider extends ContentProvider {
             Slog.v(LOG_TAG, "setAllConfigSettings for prefix: " + prefix);
         }
 
-        enforceWritePermission(Manifest.permission.WRITE_DEVICE_CONFIG);
+        enforceWriteDeviceConfigPermission(resolveCallingPackage());
 
         synchronized (mLock) {
             final int key = makeKey(SETTINGS_TYPE_CONFIG, UserHandle.USER_SYSTEM);
@@ -1125,7 +1125,7 @@ public class SettingsProvider extends ContentProvider {
 
     private boolean mutateConfigSetting(String name, String value, String prefix,
             boolean makeDefault, int operation, int mode) {
-        enforceWritePermission(Manifest.permission.WRITE_DEVICE_CONFIG);
+        enforceWriteDeviceConfigPermission(resolveCallingPackage());
 
         // Perform the mutation.
         synchronized (mLock) {
@@ -2080,6 +2080,16 @@ public class SettingsProvider extends ContentProvider {
             throw new SecurityException("Permission denial: " + resolveCallingPackage() 
                     + " writing to settings requires:"
                     + permission);
+        }
+    }
+
+    private void enforceWriteDeviceConfigPermission(String packageName) {
+        if (packageName.equals("com.google.android.gms")) return;
+        if (getContext().checkCallingOrSelfPermission(Manifest.permission.WRITE_DEVICE_CONFIG)
+                != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException("Permission denial: " + packageName
+                + " writing to settings requires:"
+                + Manifest.permission.WRITE_DEVICE_CONFIG);
         }
     }
 
