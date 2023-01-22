@@ -47,4 +47,6 @@
         </activity-alias>
     </application>
 
+    <!-- Locale QS -->
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 </manifest>
