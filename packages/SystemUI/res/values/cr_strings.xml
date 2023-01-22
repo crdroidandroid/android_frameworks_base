@@ -186,4 +186,8 @@
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Sound search</string>
     <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Language</string>
+    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
 </resources>
