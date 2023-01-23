@@ -253,8 +253,7 @@ public class PixelPropsUtils {
                 final String processName = Application.getProcessName();
                 if (processName.equals("com.google.android.gms.unstable")) {
                     sIsGms = true;
-                    setPropValue("FINGERPRINT", "google/angler/angler:6.0/MDB08L/2343525:user/release-keys");
-                    setPropValue("MODEL", "angler");
+                    spoofBuildGms();
                 }
                 return;
             }
@@ -316,6 +315,28 @@ public class PixelPropsUtils {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             Log.e(TAG, "Failed to set prop " + key, e);
         }
+    }
+
+    private static void setBuildField(String key, String value) {
+        try {
+            // Unlock
+            Field field = Build.class.getDeclaredField(key);
+            field.setAccessible(true);
+
+            // Edit
+            field.set(null, value);
+
+            // Lock
+            field.setAccessible(false);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Log.e(TAG, "Failed to spoof Build." + key, e);
+        }
+    }
+
+    private static void spoofBuildGms() {
+        // Alter model name and fingerprint to avoid hardware attestation enforcement
+        setBuildField("FINGERPRINT", "google/angler/angler:6.0/MDB08L/2343525:user/release-keys");
+        setBuildField("MODEL", "angler");
     }
 
     private static boolean isCallerSafetyNet() {
