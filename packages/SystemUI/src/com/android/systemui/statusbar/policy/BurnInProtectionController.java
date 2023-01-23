@@ -78,7 +78,6 @@ public class BurnInProtectionController {
     public void stopShiftTimer(boolean enabled) {
         if (!enabled) return;
         mHandler.removeCallbacks(mRunnable);
-        resetShiftItems();
         if (DEBUG) Log.d(TAG, "Canceled shift timer");
     }
 
@@ -102,9 +101,5 @@ public class BurnInProtectionController {
             navigationBarView.shiftNavigationBarItems(mHorizontalShift, mVerticalShift);
         }
         if (DEBUG) Log.d(TAG, "Shifting items\u2026");
-    }
-
-    private void resetShiftItems() {
-        mPhoneStatusBarView.updateResources();
     }
 }

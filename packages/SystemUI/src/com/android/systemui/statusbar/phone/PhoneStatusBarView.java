@@ -61,6 +61,13 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
     private final CommandQueue mCommandQueue;
     private final StatusBarContentInsetsProvider mContentInsetsProvider;
 
+    private int mBasePaddingBottom;
+    private int mBasePaddingLeft;
+    private int mBasePaddingRight;
+    private int mBasePaddingTop;
+
+    private ViewGroup mStatusBarContents;
+
     private DarkReceiver mBattery;
     private int mRotationOrientation = -1;
     private RotationButtonController mRotationButtonController;
@@ -133,16 +140,14 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
     }
 
     public void shiftStatusBarItems(int horizontalShift, int verticalShift) {
-        View sbContents = findViewById(R.id.status_bar_contents);
-
-        if (sbContents == null) {
+        if (mStatusBarContents == null) {
             return;
         }
 
-        sbContents.setPaddingRelative(sbContents.getPaddingStart() + horizontalShift,
-                sbContents.getPaddingTop() + verticalShift,
-                sbContents.getPaddingEnd() + horizontalShift,
-                sbContents.getPaddingBottom() - verticalShift);
+        mStatusBarContents.setPaddingRelative(mBasePaddingLeft + horizontalShift,
+                mBasePaddingTop + verticalShift,
+                mBasePaddingRight + horizontalShift,
+                mBasePaddingBottom - verticalShift);
         invalidate();
     }
 
@@ -151,6 +156,13 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
         super.onFinishInflate();
         mBattery = findViewById(R.id.battery);
         mCutoutSpace = findViewById(R.id.cutout_space_view);
+
+        mStatusBarContents = (ViewGroup) findViewById(R.id.status_bar_contents);
+
+        mBasePaddingLeft = mStatusBarContents.getPaddingStart();
+        mBasePaddingTop = mStatusBarContents.getPaddingTop();
+        mBasePaddingRight = mStatusBarContents.getPaddingEnd();
+        mBasePaddingBottom = mStatusBarContents.getPaddingBottom();
 
         updateResources();
     }
@@ -183,6 +195,13 @@ public class PhoneStatusBarView extends FrameLayout implements Callbacks {
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+
+        mStatusBarContents = (ViewGroup) findViewById(R.id.status_bar_contents);
+
+        mBasePaddingLeft = mStatusBarContents.getPaddingStart();
+        mBasePaddingTop = mStatusBarContents.getPaddingTop();
+        mBasePaddingRight = mStatusBarContents.getPaddingEnd();
+        mBasePaddingBottom = mStatusBarContents.getPaddingBottom();
 
         updateResources();
 
