@@ -210,11 +210,7 @@ public class PixelPropsUtils {
                 final String processName = Application.getProcessName();
                 if (processName.equals("com.google.android.gms.unstable")) {
                     sIsGms = true;
-                    setPropValue("FINGERPRINT", "google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys");
-                    setPropValue("PRODUCT", "marlin");
-                    setPropValue("DEVICE", "marlin");
-                    setPropValue("MODEL", "Pixel XL");
-                    setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
+                    spoofBuildGms();
                 }
                 return;
             }
@@ -277,6 +273,15 @@ public class PixelPropsUtils {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             Log.e(TAG, "Failed to set version field " + key, e);
         }
+    }
+
+    private static void spoofBuildGms() {
+        // Alter model name and fingerprint to avoid hardware attestation enforcement
+        setPropValue("FINGERPRINT", "google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys");
+        setPropValue("PRODUCT", "marlin");
+        setPropValue("DEVICE", "marlin");
+        setPropValue("MODEL", "Pixel XL");
+        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
     }
 
     private static boolean isCallerSafetyNet() {
