@@ -16400,6 +16400,12 @@ public class ActivityManagerService extends IActivityManager.Stub
         }
     }
 
+    @Override
+    public void enableBinderTracing() {
+        // Stub to prevent crashes in Pixel Launcher
+        // TODO: Remove when a Pixel Launcher without a call to this releases
+    }
+
     @VisibleForTesting
     public final class LocalService extends ActivityManagerInternal
             implements ActivityManagerLocal {
