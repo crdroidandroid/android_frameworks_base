@@ -12588,7 +12588,11 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
 
     private @UserIdInt int getLogoutUserIdUnchecked() {
         synchronized (getLockObject()) {
-            return mLogoutUserId;
+            final int logoutUserId = mLogoutUserId;
+            if (logoutUserId == UserHandle.USER_NULL) {
+                return UserHandle.USER_SYSTEM;
+            }
+            return logoutUserId;
         }
     }
 
