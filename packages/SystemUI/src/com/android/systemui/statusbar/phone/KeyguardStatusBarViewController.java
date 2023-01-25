@@ -461,8 +461,9 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
      * controllers provide.
      */
     public void updateViewState() {
-        if (!isKeyguardShowing()) {
-            mView.setVisibility(View.GONE);
+        boolean keyguard = isKeyguardShowing();
+        mView.setVisibility(keyguard ? View.VISIBLE : View.GONE);
+        if (!keyguard) {
             return;
         }
 
