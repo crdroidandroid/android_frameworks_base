@@ -568,7 +568,7 @@ class ContextImpl extends Context {
                 if (getApplicationInfo().targetSdkVersion >= android.os.Build.VERSION_CODES.O) {
                     if (isCredentialProtectedStorage()
                             && !getSystemService(UserManager.class)
-                                    .isUserUnlockingOrUnlocked(UserHandle.myUserId())) {
+                                    .isUserUnlockingOrUnlocked(getUserId())) {
                         throw new IllegalStateException("SharedPreferences in credential encrypted "
                                 + "storage are not available until after user is unlocked");
                     }
