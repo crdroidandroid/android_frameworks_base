@@ -1106,16 +1106,13 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                     ACTION_CARRIER_CONFIG_CHANGED);
             mContext.registerReceiver(mCarrierConfigReceiver, carrierConfigFilter, null, mHandler);
 
-            // Listen for VPN and other transport changes to update the restricted mode
-            // allowlist in response to availability. Uses mUidEventHandler for responsiveness.
-            // Sets uids to null to to receive callbacks for network changes affecting any uid
-            // (needed to detect VPN connect/disconnect in other users or work profiles).
-            final NetworkRequest networkRequestAll = new NetworkRequest.Builder()
-                    .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
-                    .setUids(null)
-                    .build();
-            mConnManager.registerNetworkCallback(networkRequestAll,
-                    mNetworkAvailabilityCallback, mUidEventHandler);
+            for (UserInfo userInfo : mUserManager.getAliveUsers()) {
+                mConnManager.registerDefaultNetworkCallbackForUid(
+                        UserHandle.getUid(userInfo.id, Process.myUid()),
+                        mDefaultNetworkCallback,
+                        mUidEventHandler
+                );
+            }
 
             // listen for meteredness changes
             mConnManager.registerNetworkCallback(
@@ -1307,6 +1304,11 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                                 ConnectivitySettingsManager.getUidsAllowedOnRestrictedNetworks(
                                         mContext);
                         if (action == ACTION_USER_ADDED) {
+                            mConnManager.registerDefaultNetworkCallbackForUid(
+                                    UserHandle.getUid(userId, Process.myUid()),
+                                    mDefaultNetworkCallback,
+                                    mUidEventHandler
+                            );
                             // Add apps that are allowed by default.
                             addDefaultRestrictBackgroundAllowlistUidsUL(userId);
                             try {
@@ -1442,24 +1444,19 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         return changed;
     }
 
-    private final NetworkCallback mNetworkAvailabilityCallback = new NetworkCallback() {
+    private final NetworkCallback mDefaultNetworkCallback = new NetworkCallback() {
+        @Override
+        public void onAvailable(@NonNull Network network) {
+            updateRestrictedModeAllowlistUL();
+        }
+
         @Override
         public void onCapabilitiesChanged(@NonNull Network network,
                 @NonNull NetworkCapabilities networkCapabilities) {
-            // onCapabilitiesChanged is also called immediately after onAvailable, starting in O.
             final int[] newTransports = networkCapabilities.getTransportTypes();
             final boolean transportsChanged = updateTransportChange(
                     mNetworkTransports, newTransports, network);
             if (transportsChanged) {
-                synchronized (mUidRulesFirstLock) {
-                    updateRestrictedModeAllowlistUL();
-                }
-            }
-        }
-
-        @Override
-        public void onLost(@NonNull Network network) {
-            synchronized (mUidRulesFirstLock) {
                 updateRestrictedModeAllowlistUL();
             }
         }
