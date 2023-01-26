@@ -249,7 +249,7 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
         switch (key) {
             case LOCKSCREEN_MEDIA_METADATA:
                 mShowMediaMetadata =
-                        TunerService.parseIntegerSwitch(newValue, true);
+                        TunerService.parseIntegerSwitch(newValue, false);
                 dispatchUpdateMediaMetaData(false /* changed */, true /* allowAnimation */);
                 break;
             case LOCKSCREEN_ALBUMART_FILTER:
