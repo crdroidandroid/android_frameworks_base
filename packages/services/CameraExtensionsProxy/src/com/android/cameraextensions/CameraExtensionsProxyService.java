@@ -539,6 +539,10 @@ public class CameraExtensionsProxyService extends Service {
                 sz.height = size.getHeight();
                 sizeList.sizes.add(sz);
             }
+
+            if (!sizeList.sizes.isEmpty()) {
+                ret.add(sizeList);
+            }
         }
 
         return ret;
