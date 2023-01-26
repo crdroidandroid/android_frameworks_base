@@ -6,6 +6,7 @@ import android.app.smartspace.SmartspaceTarget;
 import android.app.smartspace.SmartspaceTargetEvent;
 import android.app.smartspace.uitemplatedata.TapAction;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class BcSmartSpaceUtil {
+    private static final String GSA_PACKAGE = "com.google.android.googlequicksearchbox";
+    private static final String GSA_WEATHER_ACTIVITY = "com.google.android.apps.search.weather.WeatherExportedActivity";
     public static final Map<Integer, Integer> FEATURE_TYPE_TO_SECONDARY_CARD_RESOURCE_MAP;
     public static FalsingManager sFalsingManager;
 
@@ -62,6 +65,21 @@ public abstract class BcSmartSpaceUtil {
             }
             return true;
         }
+    }
+
+    // Workaround for Google weather
+    private static boolean hijackIntent(SmartspaceTarget target, BcSmartspaceDataPlugin.IntentStarter intentStarter, View view) {
+        if (view instanceof IcuDateTextView) {
+            // Ensure we don't change date view
+            return false;
+        }
+        if (target != null && target.getFeatureType() == target.FEATURE_WEATHER) {
+            Intent intent = new Intent().setComponent(new ComponentName(GSA_PACKAGE, GSA_WEATHER_ACTIVITY))
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intentStarter.startIntent(view, intent, true);
+            return true;
+        }
+        return false;
     }
 
     public static class DefaultIntentStarter implements BcSmartspaceDataPlugin.IntentStarter {
@@ -180,7 +198,7 @@ public abstract class BcSmartSpaceUtil {
                 BcSmartspaceCardLogger.log(BcSmartspaceEvent.SMARTSPACE_CARD_CLICK, loggingInfo);
             }
 
-            if (!isNoIntent) {
+            if (!isNoIntent && !hijackIntent(target, intentStarter, v)) {
                 intentStarter.startFromAction(action, v, showOnLockscreen);
             }
 
@@ -216,7 +234,7 @@ public abstract class BcSmartSpaceUtil {
             }
 
             BcSmartspaceDataPlugin.IntentStarter intentStarter = getIntentStarter(eventNotifier, tag);
-            if (tapAction.getIntent() != null || tapAction.getPendingIntent() != null) {
+            if ((tapAction.getIntent() != null || tapAction.getPendingIntent() != null) && !hijackIntent(target, intentStarter, v)) {
                 intentStarter.startFromAction(tapAction, v, showOnLockscreen);
             }
 
