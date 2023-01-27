@@ -611,7 +611,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private int mAppSwitchShortPressAction;
     private int mMenuShortPressAction;
     private int mAssistShortPressAction;
-    private Action mEdgeLongSwipeAction;
+    private int mEdgeLongSwipeAction;
 
     // Custom policy for #SUPPORTED_KEYCODES_LIST key codes.
     public static SparseBooleanArray mKeyPressed = new SparseBooleanArray(NavbarUtilities.SUPPORTED_KEYCODE_LIST.length);
@@ -2732,7 +2732,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mAppSwitchShortPressAction = NavbarUtilities.KEY_ACTION_APP_SWITCH;
         mMenuShortPressAction = NavbarUtilities.KEY_ACTION_MENU;
         mAssistShortPressAction = NavbarUtilities.KEY_ACTION_SEARCH;
-        mEdgeLongSwipeAction = Action.NOTHING;
 
         mLongPressOnHomeBehavior = res.getInteger(
                 com.android.internal.R.integer.config_longPressOnHomeBehavior);
@@ -2814,9 +2813,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mKeyDoubleTapBehavior.get(KeyEvent.KEYCODE_ASSIST)));
         }
 
-        mEdgeLongSwipeAction = Action.fromSettings(resolver,
+        mEdgeLongSwipeAction = NavbarUtilities.fromSettings(resolver,
                 LineageSettings.System.KEY_EDGE_LONG_SWIPE_ACTION,
-                mEdgeLongSwipeAction);
+                NavbarUtilities.KEY_ACTION_NOTHING);
 
         mShortPressOnWindowBehavior = SHORT_PRESS_WINDOW_NOTHING;
         if (mPackageManager.hasSystemFeature(FEATURE_PICTURE_IN_PICTURE)) {
@@ -4577,6 +4576,23 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // Handle special keys.
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK: {
+                boolean isLongSwipe = (event.getFlags() & KeyEvent.FLAG_LONG_SWIPE) != 0;
+                if (mLongSwipeDown && isLongSwipe && !down) {
+                    // Trigger long swipe action
+                    runBehaviorAction(keyCode, mEdgeLongSwipeAction);
+                    // Reset long swipe state
+                    mLongSwipeDown = false;
+                    // Don't pass back press to app
+                    result &= ~ACTION_PASS_TO_USER;
+                    break;
+                }
+                mLongSwipeDown = isLongSwipe && down;
+                if (mLongSwipeDown) {
+                    // Don't pass back press to app
+                    result &= ~ACTION_PASS_TO_USER;
+                    break;
+                }
+
                 if (down) {
                     interceptBackKeyDown(event);
 
