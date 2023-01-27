@@ -83,15 +83,23 @@ public class NavigationHandle extends View implements ButtonInterface {
         final Resources res = mContext.getResources();
         switch (radiusType) {
             case 0:
-                mRadius = res.getDimensionPixelSize(R.dimen.navigation_handle_radius);
+                mRadius = res.getDimensionPixelSize(R.dimen.navigation_handle_radius0);
                 break;
             case 1:
-                mRadius = res.getDimensionPixelSize(R.dimen.navigation_handle_radius2);
+                mRadius = res.getDimensionPixelSize(R.dimen.navigation_handle_radius1);
                 break;
             case 2:
-                mRadius = res.getDimensionPixelSize(R.dimen.navigation_handle_radius3);
+                mRadius = res.getDimensionPixelSize(R.dimen.navigation_handle_radius2);
+                break;
             case 3:
+                mRadius = res.getDimensionPixelSize(R.dimen.navigation_handle_radius);
+                break;
+            case 4:
+                mRadius = res.getDimensionPixelSize(R.dimen.navigation_handle_radius3);
+                break;
+            case 5:
                 mRadius = res.getDimensionPixelSize(R.dimen.navigation_handle_radius4);
+                break;
         }
         float height = mRadius * 2;
         float y = (navHeight - mBottom - height);
