@@ -1123,9 +1123,11 @@ class KeyguardUnlockAnimationController @Inject constructor(
          * transitions!
          */
         fun isNexusLauncherUnderneath(): Boolean {
-            return ActivityManagerWrapper.getInstance()
-                    .runningTask?.topActivity?.className?.equals(
-                            QuickStepContract.LAUNCHER_ACTIVITY_CLASS_NAME) ?: false
+            return when (ActivityManagerWrapper.getInstance().runningTask?.topActivity?.className) {
+                QuickStepContract.LAUNCHER_ACTIVITY_CLASS_NAME,
+                QuickStepContract.NEXUS_LAUNCHER_ACTIVITY_CLASS_NAME -> true
+                else -> false
+            }
         }
 
         fun isFoldable(context: Context): Boolean {
