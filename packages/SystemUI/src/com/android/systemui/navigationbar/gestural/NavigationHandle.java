@@ -75,11 +75,10 @@ public class NavigationHandle extends View implements ButtonInterface {
         // Draw that bar
         int navHeight = getHeight();
         int radiusType = Settings.System.getIntForUser(getContext().getContentResolver(),
-            Settings.System.GESTURE_NAVBAR_RADIUS, 0, UserHandle.USER_CURRENT);
+            Settings.System.GESTURE_NAVBAR_RADIUS, 3, UserHandle.USER_CURRENT);
         switch (radiusType) {
             case 0:
-            default:
-                mRadius = getResources().getDimensionPixelSize(R.dimen.navigation_handle_radius);
+                mRadius = getResources().getDimensionPixelSize(R.dimen.navigation_handle_radius1);
                 break;
             case 1:
                 mRadius = getResources().getDimensionPixelSize(R.dimen.navigation_handle_radius2);
@@ -88,7 +87,14 @@ public class NavigationHandle extends View implements ButtonInterface {
                 mRadius = getResources().getDimensionPixelSize(R.dimen.navigation_handle_radius3);
                 break;
             case 3:
+            default:
+                mRadius = getResources().getDimensionPixelSize(R.dimen.navigation_handle_radius);
+                break;
+            case 4:
                 mRadius = getResources().getDimensionPixelSize(R.dimen.navigation_handle_radius4);
+                break;
+            case 5:
+                mRadius = getResources().getDimensionPixelSize(R.dimen.navigation_handle_radius5);
                 break;
         }
         float height = mRadius * 2;
