@@ -40,6 +40,9 @@ public class QuickStepContract {
     // Fully qualified name of the Launcher activity.
     public static final String LAUNCHER_ACTIVITY_CLASS_NAME =
             "com.android.launcher3.Launcher";
+    // Fully qualified name of the Pixel Launcher activity.
+    public static final String NEXUS_LAUNCHER_ACTIVITY_CLASS_NAME =
+            "com.google.android.apps.nexuslauncher.NexusLauncherActivity";
 
     public static final String KEY_EXTRA_SYSUI_PROXY = "extra_sysui_proxy";
     public static final String KEY_EXTRA_UNFOLD_ANIMATION_FORWARDER = "extra_unfold_animation";
