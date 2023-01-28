@@ -774,4 +774,7 @@
         <item>@color/dream_overlay_aqi_very_unhealthy</item>
         <item>@color/dream_overlay_aqi_hazardous</item>
     </integer-array>
+
+    <!-- Preferred max refresh rate at AOD & Ambient Display, if supported by the display. -->
+    <integer name="config_aodMaxRefreshRate">-1</integer>
 </resources>
