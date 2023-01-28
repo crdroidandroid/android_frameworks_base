@@ -200,7 +200,7 @@
     <string name="tristate_rotation_90">Maastik (90°)</string>
     <string name="tristate_rotation_270">Maastik (270°)</string>
     <!-- Screenrecorder -->
-    <string name="screenrecord_stopdot_label">Show stop dot\nLongpress to move it</string>
+    <string name="screenrecord_stopdot_label">Kuva peatamispunkti\nLiigutamiseks hoia all</string>
     <string name="screenrecord_lowquality_label">Madal kvaliteet väiksema failisuuruse jaoks</string>
     <!-- Biometric Dialog - Use Face -->
     <string name="biometric_dialog_button_use_face">Kasuta näotuvastust</string>
