@@ -315,45 +315,6 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
                 return TextUtils.concat(spanSpeedString, "\n", spanUnitString);
             }
         };
-
-        // Network tracking related variables
-        final NetworkRequest request = new NetworkRequest.Builder()
-                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
-                .build();
-        ConnectivityManager.NetworkCallback networkCallback =
-                new ConnectivityManager.NetworkCallback() {
-                    @Override
-                    public void onLinkPropertiesChanged(Network network,
-                            LinkProperties linkProperties) {
-                        Message msg = new Message();
-                        msg.what = MESSAGE_TYPE_ADD_NETWORK;
-                        msg.obj = new LinkPropertiesHolder(network, linkProperties);
-                        mTrafficHandler.sendMessage(msg);
-                    }
-
-                    @Override
-                    public void onLost(Network network) {
-                        Message msg = new Message();
-                        msg.what = MESSAGE_TYPE_REMOVE_NETWORK;
-                        msg.obj = network;
-                        mTrafficHandler.sendMessage(msg);
-                    }
-                };
-        ConnectivityManager.NetworkCallback defaultNetworkCallback =
-                new ConnectivityManager.NetworkCallback() {
-            @Override
-            public void onAvailable(Network network) {
-                updateViews();
-            }
-
-            @Override
-            public void onLost(Network network) {
-                updateViews();
-            }
-        };
-        mConnectivityManager.registerNetworkCallback(request, networkCallback);
-        mConnectivityManager.registerDefaultNetworkCallback(defaultNetworkCallback);
     }
 
     @Override
@@ -370,6 +331,50 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
             tunerService.addTunable(this, NETWORK_TRAFFIC_UNITS);
             tunerService.addTunable(this, NETWORK_TRAFFIC_REFRESH_INTERVAL);
             tunerService.addTunable(this, NETWORK_TRAFFIC_HIDEARROW);
+
+            // Network tracking related variables
+            final NetworkRequest request = new NetworkRequest.Builder()
+                    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                    .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+                    .build();
+            ConnectivityManager.NetworkCallback networkCallback =
+                    new ConnectivityManager.NetworkCallback() {
+                        @Override
+                        public void onLinkPropertiesChanged(Network network,
+                                LinkProperties linkProperties) {
+                            Message msg = new Message();
+                            msg.what = MESSAGE_TYPE_ADD_NETWORK;
+                            msg.obj = new LinkPropertiesHolder(network, linkProperties);
+                            mTrafficHandler.sendMessage(msg);
+                        }
+
+                        @Override
+                        public void onLost(Network network) {
+                            Message msg = new Message();
+                            msg.what = MESSAGE_TYPE_REMOVE_NETWORK;
+                            msg.obj = network;
+                            mTrafficHandler.sendMessage(msg);
+                        }
+                    };
+            ConnectivityManager.NetworkCallback defaultNetworkCallback =
+                    new ConnectivityManager.NetworkCallback() {
+                @Override
+                public void onAvailable(Network network) {
+                    updateViews();
+                }
+
+                @Override
+                public void onLost(Network network) {
+                    updateViews();
+                }
+            };
+
+            try {
+                mConnectivityManager.registerNetworkCallback(request, networkCallback);
+                mConnectivityManager.registerDefaultNetworkCallback(defaultNetworkCallback);
+            } catch (Exception e) {
+                // Do nothing
+            }
 
             mConnectionAvailable = mConnectivityManager.getActiveNetworkInfo() != null;
 
