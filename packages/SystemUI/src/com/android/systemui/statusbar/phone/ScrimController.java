@@ -988,6 +988,9 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
 
     public void setCustomScrimAlpha(int value) {
         mCustomScrimAlpha = (float) value / 100f;
+        for (ScrimState state : ScrimState.values()) {
+            state.setCustomScrimAlpha(mCustomScrimAlpha);
+        }
         applyState();
     }
 
