@@ -26,16 +26,16 @@
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Ekraanisalvestus kustutatud</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Show stop dot</string>
-    <string name="screenrecord_stopdot_summary">Longpress to move it</string>
-    <string name="screenrecord_lowquality_label">Lower quality</string>
-    <string name="screenrecord_lowquality_summary">For smaller file size</string>
-    <string name="screenrecord_longer_timeout_switch_label">Bigger file size limit</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Limit recording size to 15 GB</string>
-    <string name="screenrecord_skip_time_label">Skip timer</string>
-    <string name="screenrecord_skip_time_summary">Remove 3 second wait</string>
-    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
+    <string name="screenrecord_stopdot_label">Kuva peatamispunkti</string>
+    <string name="screenrecord_stopdot_summary">Liigutamiseks hoia all</string>
+    <string name="screenrecord_lowquality_label">Madalam kvaliteet</string>
+    <string name="screenrecord_lowquality_summary">Väiksema failisuuruse jaoks</string>
+    <string name="screenrecord_longer_timeout_switch_label">Suurema failisuuruse piirang</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Piira salvestuse suurus 15GBle</string>
+    <string name="screenrecord_skip_time_label">Jäta taimer vahele</string>
+    <string name="screenrecord_skip_time_summary">Eemalda 3 sekundi viide</string>
+    <string name="screenrecord_hevc_switch_label">Luba HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Kasuta efektiivsemat HEVC videokodeerimist</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Kustuta</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
@@ -45,7 +45,7 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Andmesäästja</string>
     <string name="status_bar_call_strength">Kõne tugevus</string>
-    <string name="status_bar_firewall">Firewall</string>
+    <string name="status_bar_firewall">Tulemüür</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -58,11 +58,11 @@
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC laadimine (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> täitumiseni)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC laadimine</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo Charging</string>
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo-laadimine (täitumiseni <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g>)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo-laadimine</string>
     <!-- Data usage info in QS footer -->
-    <string name="usage_data">used today</string>
-    <string name="usage_data_default_suffix">Data</string>
+    <string name="usage_data">täna kasutatud</string>
+    <string name="usage_data_default_suffix">Andmeside</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Liikumisrežiim aktiveeritud</string>
@@ -118,8 +118,8 @@
     <string name="tristate_rotation_270">Maastik (270°)</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="one">%d device connected</item>
-        <item quantity="other">%d devices connected</item>
+        <item quantity="one">%d seade ühendatud</item>
+        <item quantity="other">%d seadet ühendatud</item>
     </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Sundpeatad?</string>
@@ -134,13 +134,13 @@
     <!-- Face Unlock -->
     <string name="face_unlock_recognizing">Näotuvastus...</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Refresh rate</string>
-    <string name="auto_mode_label">Auto</string>
+    <string name="refresh_rate_tile_label">Värskendussagedus</string>
+    <string name="auto_mode_label">Automaatne</string>
     <!-- Screenshot Tile -->
-    <string name="screenshot_long_press">Long press - selected region</string>
+    <string name="screenshot_long_press">Hoia pikalt - valitud ala</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Heli otsing</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Vabandame, kuid see ei tööta, kui teil puudub heliotsingu rakendus.</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>

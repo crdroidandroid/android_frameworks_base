@@ -119,7 +119,7 @@
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d appareil connecté</item>
-        <item quantity="other">%d devices connected</item>
+        <item quantity="other">%d appareils connectés</item>
     </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Forcer l\'arrêt ?</string>
