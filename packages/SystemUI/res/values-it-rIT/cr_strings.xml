@@ -137,10 +137,10 @@
     <string name="refresh_rate_tile_label">Frequenza di aggiornamento</string>
     <string name="auto_mode_label">Automatico</string>
     <!-- Screenshot Tile -->
-    <string name="screenshot_long_press">Long press - selected region</string>
+    <string name="screenshot_long_press">Tieni premuto per selezionare la porzione di schermo</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Ricerca sonora</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">Spiacenti, la funzione non è disponibile se non si dispone di un app di Ricerca sonora.</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
