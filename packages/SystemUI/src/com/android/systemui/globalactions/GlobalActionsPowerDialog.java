@@ -19,12 +19,16 @@ import android.annotation.NonNull;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.CrossWindowBlurListeners;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListAdapter;
+
+import com.android.systemui.statusbar.BlurUtils;
+import com.android.systemui.dump.DumpManager;
 
 import androidx.constraintlayout.helper.widget.Flow;
 
@@ -51,9 +55,13 @@ public class GlobalActionsPowerDialog {
 
         Resources res = context.getResources();
 
-        Dialog dialog = new Dialog(context);
+        Dialog dialog = new Dialog(context,
+                com.android.systemui.R.style.Theme_SystemUI_Dialog_GlobalActionsLite);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(listView);
+
+        BlurUtils blurUtils = new BlurUtils(context.getResources(),
+                CrossWindowBlurListeners.getInstance(), new DumpManager());
 
         Window window = dialog.getWindow();
         window.setType(WindowManager.LayoutParams.TYPE_VOLUME_OVERLAY);
@@ -62,6 +70,7 @@ public class GlobalActionsPowerDialog {
                 com.android.systemui.R.drawable.global_actions_lite_background,
                 context.getTheme()));
         window.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        window.setDimAmount(blurUtils.supportsBlursOnWindows() ? 0.54f : 0.88f);
 
         return dialog;
     }
