@@ -1684,6 +1684,12 @@ class ActivityStarter {
                         intentGrants);
             } finally {
                 Trace.traceEnd(Trace.TRACE_TAG_WINDOW_MANAGER);
+
+                if (ActivityManager.isStartResultSuccessful(result) &&
+                        mService.mWindowManager.getRecentsAnimationController() != null) {
+                        mService.mWindowManager.getRecentsAnimationController().notifyActivityStarting();
+                }
+
                 startedActivityRootTask = handleStartResult(r, options, result, newTransition,
                         remoteTransition);
             }
