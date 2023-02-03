@@ -5257,6 +5257,7 @@ public final class NotificationPanelViewController extends PanelViewController {
             StatusBarNotification sbn = mHeadsUpManager.getTopEntry().getRow().getEntry().getSbn();
             Notification notification = sbn.getNotification();
             String pkgname = sbn.getPackageName();
+            mCentralSurfaces.updateDismissAllVisibility(false);
             Drawable icon = null;
             try {
                 if (pkgname.equals("com.android.systemui")) {
