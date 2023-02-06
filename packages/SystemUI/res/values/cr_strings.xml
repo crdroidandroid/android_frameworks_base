@@ -9,4 +9,7 @@
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_data_saver">Data saver</string>
     <string name="status_bar_call_strength">Call strength</string>
+
+    <!-- Button to restart SystemUI, within the Restart Options dialog -->
+    <string name="global_action_restart_systemui">SystemUI</string>
 </resources>
