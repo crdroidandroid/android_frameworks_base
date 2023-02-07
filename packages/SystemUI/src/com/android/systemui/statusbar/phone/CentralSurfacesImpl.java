@@ -1521,74 +1521,29 @@ public class CentralSurfacesImpl extends CoreStartable implements
     @Override
     public void updateDismissAllVisibility(boolean visible) {
         if (mDismissAllButton == null) return;
-        if (!mShowDimissButton || !mStackScrollerController.hasActiveClearableNotifications(ROWS_ALL)
-                     || !visible || mState == StatusBarState.KEYGUARD || mQSPanelController.isExpanded()) {
-            mDismissAllButton.setAlpha(0);
-            mDismissAllButton.getBackground().setAlpha(0);
-            mDismissAllButton.setVisibility(View.GONE);
-        } else {
-            updateDismissAllButton();
-            int alpha = Math.round(mNotificationPanelViewController.getExpandedFraction() * 255.0f);
-            mDismissAllButton.setAlpha(alpha);
-            mDismissAllButton.getBackground().setAlpha(alpha);
-            mDismissAllButton.setVisibility(View.VISIBLE);
-        }
+            boolean isDismissButtonVisible =  mDismissAllButton.getVisibility() == View.VISIBLE;
+            boolean shouldHideDismissButton = !mShowDimissButton || !mStackScrollerController.hasActiveClearableNotifications(ROWS_ALL)
+                             || !visible || mState == StatusBarState.KEYGUARD || mQSPanelController.isExpanded();
+
+	    int alpha = Math.round(mNotificationPanelViewController.getExpandedFraction() * 255.0f);
+            mDismissAllButton.setAlpha(shouldHideDismissButton ? 0 :alpha);
+            mDismissAllButton.getBackground().setAlpha(shouldHideDismissButton ? 0 : alpha);
+            mDismissAllButton.setVisibility(shouldHideDismissButton && isDismissButtonVisible ? View.GONE : View.VISIBLE);
     }
 
     @Override
     public void updateDismissAllButton() {
         if (mDismissAllButton == null) return;
-        switch (mClearAllButtonStyle) {
-            case 1:
-                mDismissAllButton.setImageResource(R.drawable.dismiss_all_icon1);
-                break;
-            case 2:
-                mDismissAllButton.setImageResource(R.drawable.dismiss_all_icon2);
-                break;
-            case 3:
-                mDismissAllButton.setImageResource(R.drawable.dismiss_all_icon3);
-                break;
-            case 4:
-                mDismissAllButton.setImageResource(R.drawable.dismiss_all_icon4);
-                break;
-            case 5:
-                mDismissAllButton.setImageResource(R.drawable.dismiss_all_icon5);
-                break;
-            case 6:
-                mDismissAllButton.setImageResource(R.drawable.dismiss_all_icon6);
-                break;
-            case 7:
-                mDismissAllButton.setImageResource(R.drawable.dismiss_all_icon7);
-                break;
-            case 8:
-                mDismissAllButton.setImageResource(R.drawable.dismiss_all_icon8);
-                break;
-            case 9:
-                mDismissAllButton.setImageResource(R.drawable.dismiss_all_icon9);
-                break;
-            default:
-                mDismissAllButton.setImageResource(R.drawable.dismiss_all_icon);
-                break;
-        }
-        mDismissAllButton.setElevation(mContext.getResources().getDimension(R.dimen.dismiss_all_button_elevation));
-        mDismissAllButton.setColorFilter(mContext.getColor(R.color.notif_pill_text));
-        switch (mClearAllBgStyle) {
-            case 1:
-                mDismissAllButton.setBackground(mContext.getTheme().getDrawable(R.drawable.dismiss_all_background1));
-                break;
-            case 2:
-                mDismissAllButton.setBackground(mContext.getTheme().getDrawable(R.drawable.dismiss_all_background2));
-                break;
-            case 3:
-                mDismissAllButton.setBackground(mContext.getTheme().getDrawable(R.drawable.dismiss_all_background3));
-                break;
-            case 4:
-                mDismissAllButton.setBackground(mContext.getTheme().getDrawable(R.drawable.dismiss_all_background4));
-                break;
-            default:
-                mDismissAllButton.setBackground(mContext.getTheme().getDrawable(R.drawable.dismiss_all_background));
-                break;
-        }
+             boolean nightMode = (mContext.getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+             String clearAllButtonUri = "dismiss_all" + (nightMode? "_icon_dark" : "_icon") + String.valueOf(mClearAllButtonStyle);
+             int clearAllButtonResId = mContext.getResources().getIdentifier(clearAllButtonUri, "drawable", "com.android.systemui");
+             String clearAllBGButtonUri = "dismiss_all" + (nightMode? "_background_dark" : "_background") + String.valueOf(mClearAllBgStyle);
+             int clearAllBGButtonResId = mContext.getResources().getIdentifier(clearAllBGButtonUri, "drawable", "com.android.systemui");
+
+             mDismissAllButton.setImageResource(clearAllButtonResId);
+             mDismissAllButton.setBackgroundResource(clearAllBGButtonResId);
+             mDismissAllButton.setElevation(mContext.getResources().getDimension(R.dimen.dismiss_all_button_elevation));
     }
 
     @Override
@@ -4827,6 +4782,7 @@ public class CentralSurfacesImpl extends CoreStartable implements
                     Trace.beginSection("CentralSurfaces#updateKeyguardState");
                     if (mState == StatusBarState.KEYGUARD) {
                         mNotificationPanelViewController.cancelPendingPanelCollapse();
+                        updateDismissAllVisibility(false);
                     }
                     updateDozingState();
                     checkBarModes();

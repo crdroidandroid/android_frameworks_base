@@ -23,13 +23,13 @@
             <item android:bottom="3dp">
                 <shape android:shape="rectangle">
                     <corner android:topLeftRadius="20dp" android:topRightRadius="20dp"/>
-                    <solid android:color="@*android:color/system_neutral1_0"/>
+                    <solid android:color="@*android:color/system_neutral1_800"/>
                 </shape>
             </item>
             <item android:left="-2dp" android:top="-2dp" android:right="-2dp">
                 <shape>
                     <solid android:color="@android:color/transparent"/>
-                    <stroke android:width="2dp" android:color="@*android:color/system_neutral1_0" android:dashWidth="10px" android:dashGap="10px"/>
+                    <stroke android:width="2dp" android:color="@*android:color/system_neutral1_800" android:dashWidth="10px" android:dashGap="10px"/>
                 </shape>
             </item>
         </layer-list>
