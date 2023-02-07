@@ -4668,8 +4668,15 @@ class Task extends TaskFragment {
             if (topActivity != null && currentMode == WINDOWING_MODE_FULLSCREEN
                     && windowingMode == WINDOWING_MODE_PINNED
                     && !mTransitionController.isShellTransitionsEnabled()) {
-                mDisplayContent.mPinnedTaskController
-                        .deferOrientationChangeForEnteringPipFromFullScreenIfNeeded();
+                // For exclude this case:
+                // In landscape, if topActivity from split-screen to pip,
+                // it will change onFixedRotationStarted(PipTaskOrganizer) value to be true,
+                // who makes the pip-bounds error. We avoid it and hope pip do animator directly.
+                if (!(topActivity.getLastParentBeforePip() != null
+                        && topActivity.getLastParentBeforePip().inMultiWindowMode())) {
+                    mDisplayContent.mPinnedTaskController
+                            .deferOrientationChangeForEnteringPipFromFullScreenIfNeeded();
+                }
             }
         } finally {
             mAtmService.continueWindowLayout();
