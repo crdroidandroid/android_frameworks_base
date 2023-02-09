@@ -92,4 +92,7 @@
 
     <!-- Whether to cancel fingerprint operation if not idle -->
     <java-symbol type="bool" name="config_fpCancelIfNotIdle" />
+
+    <!-- Build properties from a GMS certified device -->
+    <java-symbol type="array" name="config_certifiedBuildProperties" />
 </resources>
