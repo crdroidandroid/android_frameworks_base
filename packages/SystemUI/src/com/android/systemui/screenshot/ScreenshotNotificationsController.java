@@ -25,6 +25,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.UserHandle;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
@@ -92,5 +93,38 @@ public class ScreenshotNotificationsController {
                 .bigText(errorMsg)
                 .build();
         mNotificationManager.notify(SystemMessageProto.SystemMessage.NOTE_GLOBAL_SCREENSHOT, n);
+    }
+
+    /**
+     * Shows a notification containing the screenshot and the chip actions
+     * @param imageData for actions, uri. cannot be null
+     * @param bitmap for image preview. can be null
+     */
+    public void showPostActionNotification(
+            ScreenshotController.SavedImageData imageData, Bitmap bitmap) {
+        Resources res = mContext.getResources();
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setDataAndType(imageData.uri, "image/*");
+        PendingIntent pi = PendingIntent.getActivity(
+                mContext, 0, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        Notification.Builder b = new Notification.Builder(mContext, NotificationChannels.SCREENSHOTS_HEADSUP)
+                .setTicker(res.getString(R.string.screenshot_saved_title))
+                .setContentTitle(res.getString(R.string.screenshot_saved_title))
+                .setContentText(res.getString(R.string.screenrecord_save_text))
+                .setSmallIcon(R.drawable.screenshot_image)
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true)
+                .setStyle(new Notification.BigPictureStyle()
+                        .bigPicture(bitmap).bigLargeIcon(bitmap))
+                .setColor(mContext.getColor(
+                        com.android.internal.R.color.system_notification_accent_color))
+                .setContentIntent(pi);
+
+        // notification channel ID is the URI hash as string - to allow notifications to pile up
+        // and still be able to get the same ID someplace else for dismiss
+        mNotificationManager.notify(imageData.uri.toString().hashCode(), b.build());
     }
 }
