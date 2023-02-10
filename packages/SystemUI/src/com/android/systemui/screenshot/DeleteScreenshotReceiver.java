@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The Android Open Source Project
+ * Copyright (C) 2024 Yet Another AOSP Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,12 @@
 
 package com.android.systemui.screenshot;
 
-import static com.android.systemui.screenshot.DeleteScreenshotReceiver.EXTRA_SCREENSHOT_URI_ID;
-import static com.android.systemui.screenshot.SmartActionsReceiver.EXTRA_ACTION_TYPE;
-import static com.android.systemui.screenshot.SmartActionsReceiver.EXTRA_ID;
-import static com.android.systemui.screenshot.SmartActionsReceiver.EXTRA_SMART_ACTIONS_ENABLED;
-
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.Display;
 
 import com.android.systemui.dagger.qualifiers.Background;
 
@@ -33,38 +29,30 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
-/**
- * Removes the file at a provided URI.
- */
 public class DeleteScreenshotReceiver extends BroadcastReceiver {
-    public static final String EXTRA_SCREENSHOT_URI_ID = "android:screenshot_uri_id";
-
-    private final ScreenshotSmartActions mScreenshotSmartActions;
     private final Executor mBackgroundExecutor;
+    private final ScreenshotNotificationsController mNotificationsController;
 
     @Inject
-    public DeleteScreenshotReceiver(ScreenshotSmartActions screenshotSmartActions,
-            @Background Executor backgroundExecutor) {
-        mScreenshotSmartActions = screenshotSmartActions;
+    public DeleteScreenshotReceiver(@Background Executor backgroundExecutor,
+            ScreenshotNotificationsController.Factory notificationsControllerFactory) {
         mBackgroundExecutor = backgroundExecutor;
+        mNotificationsController = notificationsControllerFactory.create(Display.DEFAULT_DISPLAY);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (!intent.hasExtra(EXTRA_SCREENSHOT_URI_ID)) {
+        final Uri data = intent.getData();
+        if (data == null) {
             return;
         }
 
-        // And delete the image from the media store
-        final Uri uri = Uri.parse(intent.getStringExtra(EXTRA_SCREENSHOT_URI_ID));
         mBackgroundExecutor.execute(() -> {
             ContentResolver resolver = context.getContentResolver();
-            resolver.delete(uri, null, null);
+            resolver.delete(data, null, null);
         });
-        if (intent.getBooleanExtra(EXTRA_SMART_ACTIONS_ENABLED, false)) {
-            mScreenshotSmartActions.notifyScreenshotAction(
-                    intent.getStringExtra(EXTRA_ID), intent.getStringExtra(EXTRA_ACTION_TYPE),
-                    false, null);
-        }
+
+        // dismiss the notification if any
+        mNotificationsController.dismissPostActionNotification(data.toString().hashCode());
     }
 }
