@@ -2062,16 +2062,15 @@ class ActivityStarter {
             }
         }
 
-        // Do not allow background activity start in new task or in a task that uid is not present.
-        // Also do not allow pinned window to start single instance activity in background,
-        // as it will recreate the window and makes it to foreground.
-        boolean blockBalInTask = (newTask
-                || !targetTask.isUidPresent(mCallingUid)
-                || (LAUNCH_SINGLE_INSTANCE == mLaunchMode && targetTask.inPinnedWindowingMode()));
-
-        if (mRestrictedBgActivity && blockBalInTask && handleBackgroundActivityAbort(r)) {
-            Slog.e(TAG, "Abort background activity starts from " + mCallingUid);
-            return START_ABORTED;
+        if (mRestrictedBgActivity && handleBackgroundActivityAbort(r)) {
+            if (LAUNCH_SINGLE_INSTANCE != mLaunchMode && targetTask.inPinnedWindowingMode()) {
+                // Allow pinned window to start bg activity except for single instance mode,
+                Slog.d(TAG, "Allow bg activity start in pinned window mode. "
+                            + "launch mode: " + mLaunchMode + ", target task: " + targetTask);
+            } else {
+                Slog.e(TAG, "Abort background activity starts from " + mCallingUid);
+                return START_ABORTED;
+            }
         }
 
         // When the flags NEW_TASK and CLEAR_TASK are set, then the task gets reused but still
