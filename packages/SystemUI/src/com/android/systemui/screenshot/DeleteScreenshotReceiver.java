@@ -21,6 +21,7 @@ import static com.android.systemui.screenshot.ScreenshotController.EXTRA_ID;
 import static com.android.systemui.screenshot.ScreenshotController.EXTRA_SMART_ACTIONS_ENABLED;
 import static com.android.systemui.screenshot.ScreenshotController.SCREENSHOT_URI_ID;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -54,8 +55,10 @@ public class DeleteScreenshotReceiver extends BroadcastReceiver {
             return;
         }
 
+        final String uriStr = intent.getStringExtra(SCREENSHOT_URI_ID);
+
         // And delete the image from the media store
-        final Uri uri = Uri.parse(intent.getStringExtra(SCREENSHOT_URI_ID));
+        final Uri uri = Uri.parse(uriStr);
         mBackgroundExecutor.execute(() -> {
             ContentResolver resolver = context.getContentResolver();
             resolver.delete(uri, null, null);
@@ -64,5 +67,10 @@ public class DeleteScreenshotReceiver extends BroadcastReceiver {
             mScreenshotSmartActions.notifyScreenshotAction(
                     intent.getStringExtra(EXTRA_ID), ACTION_TYPE_DELETE, false, null);
         }
+
+        // dismiss the notification if any
+        NotificationManager nm = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.cancel(uriStr.hashCode());
     }
 }
