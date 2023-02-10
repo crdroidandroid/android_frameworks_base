@@ -264,7 +264,7 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     // Remove notification
                     final int id = intent.getIntExtra(EXTRA_ID, mNotificationId);
-                    mNotificationManager.cancelAsUser(null, id, currentUser);
+                    mNotificationManager.cancelAsUser(TAG, id, currentUser);
                     maybeDismissGroup(currentUser);
                     return false;
                 }, false, false);
@@ -284,7 +284,7 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
 
                 // Remove notification
                 final int id = intent.getIntExtra(EXTRA_ID, mNotificationId);
-                mNotificationManager.cancelAsUser(null, id, currentUser);
+                mNotificationManager.cancelAsUser(TAG, id, currentUser);
                 maybeDismissGroup(currentUser);
                 Log.d(getTag(), "Deleted recording " + uri);
 
@@ -513,9 +513,10 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
         StatusBarNotification[] notifications = mNotificationManager.getActiveNotifications();
         int count = 0;
         for (StatusBarNotification notification : notifications) {
+            final String tag = notification.getTag();
+            if (tag == null || !tag.equals(TAG)) continue;
             final int id = notification.getId();
-            if (id != NOTIF_BASE_ID && id != PROGRESS_NOTIF_ID && id != ERROR_NOTIF_ID)
-                count++;
+            if (id != NOTIF_BASE_ID) count++;
         }
         return count;
     }
@@ -569,7 +570,7 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                 postGroupNotification(currentUser);
                 Notification notification = createSaveNotification(getRecorder().save());
                 mNotificationManager.cancelAsUser(null, PROGRESS_NOTIF_ID, currentUser);
-                mNotificationManager.notifyAsUser(null, mNotificationId, notification,
+                mNotificationManager.notifyAsUser(TAG, mNotificationId, notification,
                         currentUser);
             } catch (IOException | IllegalStateException e) {
                 Log.e(getTag(), "Error saving screen recording: " + e.getMessage());
