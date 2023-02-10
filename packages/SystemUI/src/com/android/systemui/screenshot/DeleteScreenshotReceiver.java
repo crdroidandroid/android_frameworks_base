@@ -26,6 +26,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.Display;
 
 import com.android.systemui.dagger.qualifiers.Background;
 
@@ -40,12 +41,15 @@ public class DeleteScreenshotReceiver extends BroadcastReceiver {
 
     private final ScreenshotSmartActions mScreenshotSmartActions;
     private final Executor mBackgroundExecutor;
+    private final ScreenshotNotificationsController mNotificationsController;
 
     @Inject
     public DeleteScreenshotReceiver(ScreenshotSmartActions screenshotSmartActions,
-            @Background Executor backgroundExecutor) {
+            @Background Executor backgroundExecutor,
+            ScreenshotNotificationsController.Factory notificationsControllerFactory) {
         mScreenshotSmartActions = screenshotSmartActions;
         mBackgroundExecutor = backgroundExecutor;
+        mNotificationsController = notificationsControllerFactory.create(Display.DEFAULT_DISPLAY);
     }
 
     @Override
@@ -54,8 +58,10 @@ public class DeleteScreenshotReceiver extends BroadcastReceiver {
             return;
         }
 
+        final String uriStr = intent.getStringExtra(SCREENSHOT_URI_ID);
+
         // And delete the image from the media store
-        final Uri uri = Uri.parse(intent.getStringExtra(SCREENSHOT_URI_ID));
+        final Uri uri = Uri.parse(uriStr);
         mBackgroundExecutor.execute(() -> {
             ContentResolver resolver = context.getContentResolver();
             resolver.delete(uri, null, null);
@@ -64,5 +70,8 @@ public class DeleteScreenshotReceiver extends BroadcastReceiver {
             mScreenshotSmartActions.notifyScreenshotAction(
                     intent.getStringExtra(EXTRA_ID), ACTION_TYPE_DELETE, false, null);
         }
+
+        // dismiss the notification if any
+        mNotificationsController.dismissPostActionNotification(uriStr.hashCode());
     }
 }
