@@ -56,6 +56,8 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.ext.settings.ExtSettings;
+import android.ext.settings.Setting;
 import android.location.ILocationManager;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -3689,6 +3691,17 @@ public final class Settings {
                         keysWithMaxTargetSdk.put(key, maxTargetSdk);
                     }
                 }
+            }
+
+            Setting.Scope extSettingsScope = null;
+            if (callerClass == Global.class) {
+                extSettingsScope = Setting.Scope.GLOBAL;
+            } else if (callerClass == Secure.class) {
+                extSettingsScope = Setting.Scope.PER_USER;
+            }
+
+            if (extSettingsScope != null) {
+                ExtSettings.getKeys(extSettingsScope, allKeys);
             }
         } catch (IllegalAccessException ignored) {
         }
