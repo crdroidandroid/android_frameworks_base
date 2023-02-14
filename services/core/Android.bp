@@ -229,6 +229,7 @@ java_library_static {
         "dreams_flags_lib",
         "aconfig_new_storage_flags_lib",
         "powerstats_flags_lib",
+        "vendor.aac.hardware.richtap.vibrator",
     ],
     javac_shard_size: 50,
     javacflags: [
