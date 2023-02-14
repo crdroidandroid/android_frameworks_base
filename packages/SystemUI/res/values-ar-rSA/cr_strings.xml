@@ -154,5 +154,5 @@
     <string name="gigabytespersecond_short">ج. بايت/ث</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">اللغة</string>
-    <string name="quick_settings_locale_more_locales_toast">Please, configure multiple languages</string>
+    <string name="quick_settings_locale_more_locales_toast">الرجاء، ضبط إعدادات اللغات</string>
 </resources>
