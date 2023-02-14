@@ -188,6 +188,7 @@ java_library_static {
         "ImmutabilityAnnotation",
         "securebox",
         "vendor.aospa.biometrics.face",
+        "vendor.aac.hardware.richtap.vibrator",
     ],
     javac_shard_size: 50,
     javacflags: [
