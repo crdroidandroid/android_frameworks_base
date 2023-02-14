@@ -17,6 +17,7 @@
 <com.android.systemui.util.NoRemeasureMotionLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:systemui="http://schemas.android.com/apk/res-auto"
     android:id="@+id/split_shade_status_bar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -77,6 +78,7 @@
         android:transformPivotY="20sp"
         android:scaleX="1"
         android:scaleY="1"
+        systemui:showDark="false"
     />
 
     <com.android.systemui.statusbar.policy.VariableDateView
