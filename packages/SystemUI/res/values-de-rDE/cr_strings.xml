@@ -150,5 +150,5 @@
     <string name="gigabytespersecond_short">GB/s</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Sprache</string>
-    <string name="quick_settings_locale_more_locales_toast">Bitte mehr als eine Sprache konfigurieren</string>
+    <string name="quick_settings_locale_more_locales_toast">Bitte mehr als eine Sprache einrichten</string>
 </resources>
