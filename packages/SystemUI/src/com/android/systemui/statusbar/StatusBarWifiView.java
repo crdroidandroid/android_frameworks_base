@@ -24,6 +24,9 @@ import static com.android.systemui.statusbar.StatusBarIconView.STATE_ICON;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.AttributeSet;
@@ -62,6 +65,7 @@ public class StatusBarWifiView extends BaseStatusBarFrameLayout implements DarkR
     private int mVisibleState = STATE_HIDDEN;
     private boolean mShowWifiStandard;
     private WifiManager mWifiManager;
+    private ConnectivityManager mConnectivityManager;
 
     public static StatusBarWifiView fromContext(Context context, String slot) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -83,6 +87,7 @@ public class StatusBarWifiView extends BaseStatusBarFrameLayout implements DarkR
     public StatusBarWifiView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mWifiManager = context.getSystemService(WifiManager.class);
+        mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     public void setSlot(String slot) {
@@ -200,7 +205,7 @@ public class StatusBarWifiView extends BaseStatusBarFrameLayout implements DarkR
 
     private boolean updateState(WifiIconState state) {
         setContentDescription(state.contentDescription);
-        if (mShowWifiStandard) {
+        if (mShowWifiStandard && isWifiConnected()) {
             mWifiStandard.setVisibility(View.VISIBLE);
             setWifiStandard();
         } else {
@@ -231,7 +236,7 @@ public class StatusBarWifiView extends BaseStatusBarFrameLayout implements DarkR
 
     private void initViewState() {
         setContentDescription(mState.contentDescription);
-        if (mShowWifiStandard) {
+        if (mShowWifiStandard && isWifiConnected()) {
             mWifiStandard.setVisibility(View.VISIBLE);
             setWifiStandard();
         } else {
@@ -286,7 +291,7 @@ public class StatusBarWifiView extends BaseStatusBarFrameLayout implements DarkR
     public void updateWifiState(boolean showWifiStandard) {
         boolean needsLayout = false;
         if (mShowWifiStandard != showWifiStandard) {
-            if (showWifiStandard) {
+            if (showWifiStandard && isWifiConnected()) {
                 mWifiStandard.setVisibility(View.VISIBLE);
                 setWifiStandard();
             } else {
@@ -307,6 +312,17 @@ public class StatusBarWifiView extends BaseStatusBarFrameLayout implements DarkR
 
         if (needsLayout) {
             requestLayout();
+        }
+    }
+
+    private boolean isWifiConnected() {
+        final Network network = mConnectivityManager.getActiveNetwork();
+        if (network != null) {
+            NetworkCapabilities capabilities = mConnectivityManager.getNetworkCapabilities(network);
+            return capabilities != null &&
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+        } else {
+            return false;
         }
     }
 }
