@@ -28,7 +28,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.widget.Toast;
 
 import com.android.internal.util.crdroid.Utils;
 
@@ -56,7 +55,7 @@ public class LensScreenshotReceiver extends BroadcastReceiver {
         mBackgroundExecutor = backgroundExecutor;
     }
 
-    private boolean doesGoogleEnabled(Context context) {
+    public static boolean isGSAEnabled(Context context) {
         return Utils.isPackageInstalled(context, GSA_PACKAGE, false /* ignoreState */);
     }
 
@@ -69,10 +68,6 @@ public class LensScreenshotReceiver extends BroadcastReceiver {
         final Uri uri = Uri.parse(intent.getStringExtra(SCREENSHOT_URI_ID));
         mBackgroundExecutor.execute(() -> {
             // action to execute goes here
-            if (!doesGoogleEnabled(context)) {
-                Toast.makeText(context, "Google Lens is not installed", Toast.LENGTH_SHORT).show();
-                return;
-            }
             ClipData clipdata = new ClipData(new ClipDescription("content",
                     new String[]{"image/png"}),
                     new ClipData.Item(uri));
