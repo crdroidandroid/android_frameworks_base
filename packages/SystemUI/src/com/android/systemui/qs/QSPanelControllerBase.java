@@ -254,7 +254,9 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
                     getContext().getResources().getConfiguration()
             );
         }
-        setTiles();
+        if (mView.getTileLayout() != null) {
+           setTiles();
+        }
         mLastOrientation = getResources().getConfiguration().orientation;
         mLastScreenLayout = getResources().getConfiguration().screenLayout;
         mQSLogger.logOnViewAttached(mLastOrientation, mView.getDumpableTag());
