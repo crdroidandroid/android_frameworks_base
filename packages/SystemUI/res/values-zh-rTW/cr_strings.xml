@@ -150,4 +150,10 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">語言</string>
     <string name="quick_settings_locale_more_locales_toast">請先設定想要使用的其他語言</string>
+    <!-- Google lens screenshot notification -->
+    <string name="lens">智慧鏡頭</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">使用藍牙</string>
+    <string name="bluetooth_is_off">藍牙已關閉</string>
+    <string name="tap_a_device_to_connect">輕觸以連接裝置</string>
 </resources>

@@ -151,4 +151,10 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Taal</string>
     <string name="quick_settings_locale_more_locales_toast">Configureer meerdere talen</string>
+    <!-- Google lens screenshot notification -->
+    <string name="lens">Lens</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">Bluetooth gebruiken</string>
+    <string name="bluetooth_is_off">Bluetooth is uitgeschakeld</string>
+    <string name="tap_a_device_to_connect">Tik op een apparaat om te verbinden</string>
 </resources>

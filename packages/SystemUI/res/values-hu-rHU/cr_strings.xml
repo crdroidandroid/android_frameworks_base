@@ -151,4 +151,10 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Nyelv</string>
     <string name="quick_settings_locale_more_locales_toast">Kérjük, állítson be több nyelvet</string>
+    <!-- Google lens screenshot notification -->
+    <string name="lens">Google Lens</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">Bluetooth-használat</string>
+    <string name="bluetooth_is_off">A Bluetooth ki van kapcsolva</string>
+    <string name="tap_a_device_to_connect">Kapcsolódáshoz koppintson a kívánt készülékre</string>
 </resources>

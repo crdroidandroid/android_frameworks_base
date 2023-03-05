@@ -118,7 +118,7 @@
     <string name="tristate_rotation_270">Paysage (270°)</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="one">%d appareil connecté</item>
+        <item quantity="one">%d Appareils connectés</item>
         <item quantity="other">%d appareils connectés</item>
     </plurals>
     <!-- Kill button in notification guts -->
@@ -150,5 +150,11 @@
     <string name="gigabytespersecond_short">Go/s</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Langue</string>
-    <string name="quick_settings_locale_more_locales_toast">Please, configure multiple languages</string>
+    <string name="quick_settings_locale_more_locales_toast">Veuillez configurer plusieurs langues</string>
+    <!-- Google lens screenshot notification -->
+    <string name="lens">Lens</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">Use Bluetooth</string>
+    <string name="bluetooth_is_off">Bluetooth is off</string>
+    <string name="tap_a_device_to_connect">Tap a device to connect</string>
 </resources>

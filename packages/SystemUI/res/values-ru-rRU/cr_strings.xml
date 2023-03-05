@@ -153,4 +153,10 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Язык</string>
     <string name="quick_settings_locale_more_locales_toast">Пожалуйста, настройте несколько языков</string>
+    <!-- Google lens screenshot notification -->
+    <string name="lens">Объектив</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">Использовать Bluetooth</string>
+    <string name="bluetooth_is_off">Bluetooth отключен</string>
+    <string name="tap_a_device_to_connect">Коснитесь устройства для подключения</string>
 </resources>

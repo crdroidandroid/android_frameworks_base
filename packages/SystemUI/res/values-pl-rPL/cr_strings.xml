@@ -98,7 +98,7 @@
     <string name="quick_settings_compass_W">Zach.</string>
     <string name="quick_settings_compass_NW">Płn. Zach.</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Przełączanie karty pamięci</string>
+    <string name="qs_data_switch_label">Przełączanie karty danych</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Panel głośności</string>
     <!-- Alert slide extras -->
@@ -153,4 +153,10 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Język</string>
     <string name="quick_settings_locale_more_locales_toast">Proszę skonfigurować wiele języków</string>
+    <!-- Google lens screenshot notification -->
+    <string name="lens">Lens</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">Use Bluetooth</string>
+    <string name="bluetooth_is_off">Bluetooth is off</string>
+    <string name="tap_a_device_to_connect">Tap a device to connect</string>
 </resources>

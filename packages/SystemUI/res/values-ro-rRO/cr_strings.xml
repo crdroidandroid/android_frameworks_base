@@ -151,5 +151,11 @@
     <string name="gigabytespersecond_short">GB/s</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Limba</string>
-    <string name="quick_settings_locale_more_locales_toast">Please, configure multiple languages</string>
+    <string name="quick_settings_locale_more_locales_toast">Configurează mai multe limbi</string>
+    <!-- Google lens screenshot notification -->
+    <string name="lens">Obiectiv</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">Folosiți Bluetooth</string>
+    <string name="bluetooth_is_off">Bluetooth este dezactivat</string>
+    <string name="tap_a_device_to_connect">Atingeți un dispozitiv pentru conectare</string>
 </resources>

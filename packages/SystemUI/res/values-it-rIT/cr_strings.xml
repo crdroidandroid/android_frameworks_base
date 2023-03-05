@@ -26,13 +26,13 @@
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Registrazione schermo eliminata</string>
     <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Mostra un punto di arresto</string>
-    <string name="screenrecord_stopdot_summary">Premi a lungo per spostarlo</string>
-    <string name="screenrecord_lowquality_label">Qualità inferiore per un file più piccolo</string>
-    <string name="screenrecord_lowquality_summary">Per dimensioni di file più piccoli</string>
+    <string name="screenrecord_stopdot_label">Mostra un pulsante per fermare la registrazione</string>
+    <string name="screenrecord_stopdot_summary">Tieni premuto per muoverlo</string>
+    <string name="screenrecord_lowquality_label">Il file di registrazione occuperà meno spazio</string>
+    <string name="screenrecord_lowquality_summary">Il file di registrazione occuperà meno spazio</string>
     <string name="screenrecord_longer_timeout_switch_label">Limite del file maggiore</string>
     <string name="screenrecord_longer_timeout_switch_summary">Limita la dimensione della registrazione a 15 GB</string>
-    <string name="screenrecord_skip_time_label">Salta timer</string>
+    <string name="screenrecord_skip_time_label">Registrazione immediata</string>
     <string name="screenrecord_skip_time_summary">Rimuovi 3 secondi di attesa</string>
     <string name="screenrecord_hevc_switch_label">Attiva Codificazione video ad alta efficienza</string>
     <string name="screenrecord_hevc_switch_summary">Utilizza una codificazione video HEVC più efficiente</string>
@@ -49,10 +49,10 @@
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time">Dash charge</string>
+    <string name="keyguard_indication_dash_charging_time">&lt;xliff:g id="percentage"&gt;%2$s&lt;/xliff:g&gt; • Ricarica Ultrarapida (&lt;xliff:g id="charging_time_left" example="4 hours and 2 minutes"&gt;%1$s&lt;/xliff:g alla carica completa)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Animazione di carica</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carica Rapida(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Ricarica Rapida(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> alla carica completa)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Carica Rapida</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Ricarica VOOC (<xliff:g id="charging_time_left" example="2 ore e 2 minuti">%1$s</xliff:g> fino al completamento della carica)</string>
@@ -61,7 +61,7 @@
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Ricarica Turbo (<xliff:g id="charging_time_left" example="4 ore e 2 minuti">%1$s</xliff:g> al completamento)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Ricarica Turbo</string>
     <!-- Data usage info in QS footer -->
-    <string name="usage_data">utilizzo di oggi</string>
+    <string name="usage_data">utilizzati oggi</string>
     <string name="usage_data_default_suffix">Dati</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- On The Go -->
@@ -150,5 +150,11 @@
     <string name="gigabytespersecond_short">GB/s</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Lingua</string>
-    <string name="quick_settings_locale_more_locales_toast">Please, configure multiple languages</string>
+    <string name="quick_settings_locale_more_locales_toast">Per favore, configura più lingue</string>
+    <!-- Google lens screenshot notification -->
+    <string name="lens">Lenti</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">Usa il Bluetooth</string>
+    <string name="bluetooth_is_off">Bluetooth disattivato</string>
+    <string name="tap_a_device_to_connect">Tocca un dispositivo per connetterti</string>
 </resources>
