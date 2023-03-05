@@ -155,6 +155,6 @@
     <string name="lens">Lens</string>
     <!-- Bluetooth dialog -->
     <string name="turn_on_bluetooth">Usar o Bluetooth</string>
-    <string name="bluetooth_is_off">O Bluetooth está desligado</string>
+    <string name="bluetooth_is_off">O Bluetooth está desativado</string>
     <string name="tap_a_device_to_connect">Selecione um dispositivo para conectar</string>
 </resources>
