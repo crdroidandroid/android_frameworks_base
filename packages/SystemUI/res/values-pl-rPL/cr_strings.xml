@@ -98,7 +98,7 @@
     <string name="quick_settings_compass_W">Zach.</string>
     <string name="quick_settings_compass_NW">Płn. Zach.</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Przełączanie karty pamięci</string>
+    <string name="qs_data_switch_label">Przełączanie karty danych</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Panel głośności</string>
     <!-- Alert slide extras -->
