@@ -1115,6 +1115,10 @@ public class CameraMetadataNative implements Parcelable {
 
     private boolean setGpsLocation(Location l) {
         if (l == null) {
+            // If Location value being set is null, remove corresponding keys
+            setBase(CaptureRequest.JPEG_GPS_TIMESTAMP, null);
+            setBase(CaptureRequest.JPEG_GPS_COORDINATES, null);
+            setBase(CaptureRequest.JPEG_GPS_PROCESSING_METHOD, null);
             return false;
         }
 
