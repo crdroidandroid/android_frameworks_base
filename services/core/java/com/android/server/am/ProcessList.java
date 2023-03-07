@@ -2603,6 +2603,10 @@ public final class ProcessList {
                 app.mPredecessor = predecessor;
                 predecessor.mSuccessor = app;
             }
+            if ((info.flags & PERSISTENT_MASK) == PERSISTENT_MASK) {
+                app.setPersistent(true);
+                app.mState.setMaxAdj(ProcessList.PERSISTENT_PROC_ADJ);
+            }
             checkSlow(startTime, "startProcess: done creating new process record");
         } else {
             // If this is a new package in the process, add the package to the list
