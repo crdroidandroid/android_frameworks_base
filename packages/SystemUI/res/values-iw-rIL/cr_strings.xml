@@ -156,7 +156,7 @@
     <!-- Google lens screenshot notification -->
     <string name="lens">Lens</string>
     <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Use Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth is off</string>
-    <string name="tap_a_device_to_connect">Tap a device to connect</string>
+    <string name="turn_on_bluetooth">‏שימוש ב-Bluetooth</string>
+    <string name="bluetooth_is_off">Bluetooth מופסק</string>
+    <string name="tap_a_device_to_connect">נגיעה לבחירת ההתקן להתחברות</string>
 </resources>

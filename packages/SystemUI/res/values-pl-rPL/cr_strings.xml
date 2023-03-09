@@ -154,9 +154,9 @@
     <string name="quick_settings_locale_label">Język</string>
     <string name="quick_settings_locale_more_locales_toast">Proszę skonfigurować wiele języków</string>
     <!-- Google lens screenshot notification -->
-    <string name="lens">Lens</string>
+    <string name="lens">Obiektyw</string>
     <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Use Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth is off</string>
-    <string name="tap_a_device_to_connect">Tap a device to connect</string>
+    <string name="turn_on_bluetooth">Użyj Bluetooth</string>
+    <string name="bluetooth_is_off">Bluetooth jest wyłączony</string>
+    <string name="tap_a_device_to_connect">Dotknij urządzenia, aby się z nim połączyć</string>
 </resources>
