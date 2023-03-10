@@ -267,6 +267,9 @@ class ConfigurationController {
      * original LocaleList.
      */
     void updateLocaleListFromAppContext(@NonNull Context context) {
+        if (context.getResources() == null || context.getResources().getConfiguration() == null ||
+                mResourcesManager == null || mResourcesManager.getConfiguration() == null)
+            return;
         final Locale bestLocale = context.getResources().getConfiguration().getLocales().get(0);
         final LocaleList newLocaleList = mResourcesManager.getConfiguration().getLocales();
         final int newLocaleListSize = newLocaleList.size();
