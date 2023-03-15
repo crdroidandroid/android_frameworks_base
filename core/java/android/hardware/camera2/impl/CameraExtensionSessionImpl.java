@@ -727,7 +727,7 @@ public final class CameraExtensionSessionImpl extends CameraExtensionSession {
 
             if (mExtensionClientId >= 0) {
                 CameraExtensionCharacteristics.unregisterClient(mExtensionClientId);
-                if (mInitialized) {
+                if (mInitialized || (mCaptureSession != null)) {
                     notifyClose = true;
                     CameraExtensionCharacteristics.releaseSession();
                 }
