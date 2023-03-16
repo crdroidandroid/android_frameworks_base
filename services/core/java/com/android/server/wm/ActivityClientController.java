@@ -808,6 +808,14 @@ class ActivityClientController extends IActivityClientController.Stub {
                 final ActivityRecord under = r.getTask().getActivityBelow(r);
                 if (under != null) {
                     under.returningOptions = safeOptions != null ? safeOptions.getOptions(r) : null;
+                    if (!under.occludesParent()) {
+                        final ActivityRecord underInSameProcess = r.getTask().getActivity(
+                                (ar) -> ar.app == r.app && ar != r && ar != under);
+                        if (underInSameProcess != null) {
+                            underInSameProcess.returningOptions =
+                                    safeOptions != null ? safeOptions.getOptions(r) : null;
+                        }
+                    }
                 }
                 // Create a transition to make sure the activity change is collected.
                 final Transition transition = r.mTransitionController.isShellTransitionsEnabled()
