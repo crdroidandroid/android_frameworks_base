@@ -38,6 +38,10 @@ cc_defaults {
         "-Wunused",
         "-Wunreachable-code",
     ],
+    lto: {
+        full: true,
+    },
+    whole_program_vtables: true, // Requires LTO
 }
 
 cc_library_shared {
