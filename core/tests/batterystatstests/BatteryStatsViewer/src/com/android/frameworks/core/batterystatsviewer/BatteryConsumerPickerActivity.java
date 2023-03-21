@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -38,6 +37,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
 import com.android.settingslib.utils.AsyncLoaderCompat;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ import java.util.Locale;
  * Picker, showing a sorted lists of applications and other types of entities consuming power.
  * Opens BatteryStatsViewerActivity upon item selection.
  */
-public class BatteryConsumerPickerActivity extends ComponentActivity {
+public class BatteryConsumerPickerActivity extends CollapsingToolbarBaseActivity {
     private static final String PREF_SELECTED_BATTERY_CONSUMER = "batteryConsumerId";
     private static final int BATTERY_STATS_REFRESH_RATE_MILLIS = 60 * 1000;
     private static final String FORCE_FRESH_STATS = "force_fresh_stats";
@@ -70,7 +70,6 @@ public class BatteryConsumerPickerActivity extends ComponentActivity {
         setContentView(R.layout.battery_consumer_picker_layout);
 
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh);
-        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_light);
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this::onRefresh);
         mAppList = findViewById(R.id.list_view);
