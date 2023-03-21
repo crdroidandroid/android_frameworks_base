@@ -75,17 +75,17 @@ public final class CameraAdvancedExtensionSessionImpl extends CameraExtensionSes
     private static final String TAG = "CameraAdvancedExtensionSessionImpl";
 
     private final Executor mExecutor;
-    private final CameraDevice mCameraDevice;
+    private CameraDevice mCameraDevice;
     private final long mExtensionClientId;
     private final Handler mHandler;
     private final HandlerThread mHandlerThread;
     private final CameraExtensionSession.StateCallback mCallbacks;
-    private final IAdvancedExtenderImpl mAdvancedExtender;
+    private IAdvancedExtenderImpl mAdvancedExtender;
     // maps registered camera surfaces to extension output configs
     private final HashMap<Surface, CameraOutputConfig> mCameraConfigMap = new HashMap<>();
     // maps camera extension output ids to camera registered image readers
     private final HashMap<Integer, ImageReader> mReaderMap = new HashMap<>();
-    private final RequestProcessor mRequestProcessor = new RequestProcessor();
+    private RequestProcessor mRequestProcessor = new RequestProcessor();
     private final int mSessionId;
 
     private Surface mClientRepeatingRequestSurface;
@@ -444,6 +444,7 @@ public final class CameraAdvancedExtensionSessionImpl extends CameraExtensionSes
 
             if (mSessionProcessor != null) {
                 try {
+                    mSessionProcessor.onCaptureSessionEnd();
                     mSessionProcessor.deInitSession();
                 } catch (RemoteException e) {
                     Log.e(TAG, "Failed to de-initialize session processor, extension service"
@@ -468,6 +469,10 @@ public final class CameraAdvancedExtensionSessionImpl extends CameraExtensionSes
 
             mClientRepeatingRequestSurface = null;
             mClientCaptureSurface = null;
+            mCaptureSession = null;
+            mRequestProcessor = null;
+            mCameraDevice = null;
+            mAdvancedExtender = null;
         }
 
         if (notifyClose && !skipCloseNotification) {
