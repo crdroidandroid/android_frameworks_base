@@ -17,13 +17,11 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipe_refresh"
-    android:paddingTop="?attr/actionBarSize"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
-        android:paddingTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -48,9 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:minHeight="80dp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp">
+                    android:minHeight="80dp">
 
                     <include layout="@layout/battery_consumer_info_layout"/>
                 </LinearLayout>
@@ -80,11 +76,6 @@
                     android:paddingEnd="20dp"
                     android:text="Apps"/>
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
