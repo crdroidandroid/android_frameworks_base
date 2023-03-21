@@ -21,6 +21,8 @@ import com.android.systemui.statusbar.notification.collection.PipelineDumpable
 import com.android.systemui.statusbar.notification.collection.PipelineDumper
 import com.android.systemui.statusbar.notification.collection.coordinator.dagger.CoordinatorScope
 import com.android.systemui.statusbar.notification.collection.listbuilder.pluggable.NotifSectioner
+import com.android.systemui.statusbar.notification.collection.render.GroupExpansionManager
+import com.android.systemui.statusbar.notification.collection.render.GroupExpansionManagerImpl
 import javax.inject.Inject
 
 /**
@@ -55,6 +57,7 @@ class NotifCoordinatorsImpl @Inject constructor(
     viewConfigCoordinator: ViewConfigCoordinator,
     visualStabilityCoordinator: VisualStabilityCoordinator,
     sensitiveContentCoordinator: SensitiveContentCoordinator,
+    groupExpansionManager: GroupExpansionManager,
 ) : NotifCoordinators {
 
     private val mCoordinators: MutableList<Coordinator> = ArrayList()
@@ -93,6 +96,9 @@ class NotifCoordinatorsImpl @Inject constructor(
         mCoordinators.add(gutsCoordinator)
         mCoordinators.add(preparationCoordinator)
         mCoordinators.add(remoteInputCoordinator)
+        if (groupExpansionManager is GroupExpansionManagerImpl) {
+            mCoordinators.add(groupExpansionManager)
+        }
 
         // Manually add Ordered Sections
         // HeadsUp > FGS > People > Alerting > Silent > Minimized > Unknown/Default
