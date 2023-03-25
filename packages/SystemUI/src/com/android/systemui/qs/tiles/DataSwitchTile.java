@@ -195,17 +195,17 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
                 break;
             case 1:
                 state.icon = ResourceIcon.get(activeSIMZero
-                        ? R.drawable.ic_qs_data_switch_2
-                        : R.drawable.ic_qs_data_switch_1);
+                        ? R.drawable.ic_qs_data_switch_1
+                        : R.drawable.ic_qs_data_switch_2);
                 state.value = false;
                 state.secondaryLabel = mContext.getString(R.string.tile_unavailable);
                 break;
             case 2:
                 state.icon = ResourceIcon.get(activeSIMZero
-                        ? R.drawable.ic_qs_data_switch_2
-                        : R.drawable.ic_qs_data_switch_1);
+                        ? R.drawable.ic_qs_data_switch_1
+                        : R.drawable.ic_qs_data_switch_2);
                 state.value = true;
-                state.secondaryLabel = getInactiveSlotName();
+                state.secondaryLabel = getActiveSlotName();
                 break;
             default:
                 state.icon = ResourceIcon.get(R.drawable.ic_qs_data_switch_1);
@@ -256,7 +256,7 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
         }
     }
 
-    private String getInactiveSlotName() {
+    private String getActiveSlotName() {
         TelephonyManager telephonyManager;
         String mInitialState = mContext.getString(R.string.tile_unavailable);
         List<SubscriptionInfo> subInfoList =
@@ -265,8 +265,8 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
             for (SubscriptionInfo subInfo : subInfoList) {
                 telephonyManager =
                         mTelephonyManager.createForSubscriptionId(subInfo.getSubscriptionId());
-                if (!telephonyManager.getDataEnabled()) {
-                    // Inactive SIM found
+                if (telephonyManager.getDataEnabled()) {
+                    // Active SIM found
                     return subInfo.getDisplayName().toString();
                 }
             }
