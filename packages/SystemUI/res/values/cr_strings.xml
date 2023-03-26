@@ -139,10 +139,10 @@
     <string name="tristate_rotation_270">Landscape (270°)</string>
 
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
-    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="one">%d device connected</item>
-        <item quantity="other">%d devices connected</item>
-    </plurals>
+     <string name="quick_settings_internet_hotspot_summary_num_devices">{count, plural,
+        =1 {# device connected}
+        other {# devices connected}
+    }</string>
 
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Force stop?</string>
