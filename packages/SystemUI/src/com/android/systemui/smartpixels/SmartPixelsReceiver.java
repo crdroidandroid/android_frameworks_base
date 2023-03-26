@@ -28,13 +28,19 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 
-public class SmartPixelsReceiver extends BroadcastReceiver {
+import com.android.systemui.CoreStartable;
+import com.android.systemui.dagger.SysUISingleton;
+
+import javax.inject.Inject;
+
+@SysUISingleton
+public class SmartPixelsReceiver extends BroadcastReceiver implements CoreStartable {
    private static final String TAG = "SmartPixelsReceiver";
 
    private Context mContext;
-   private Handler mHandler;
+   private Handler mHandler = new Handler();
    private ContentResolver mResolver;
-   private final PowerManager mPowerManager;
+   private PowerManager mPowerManager;
    private SettingsObserver mSettingsObserver;
    private Intent mSmartPixelsService;
    private IntentFilter mFilter;
@@ -45,10 +51,17 @@ public class SmartPixelsReceiver extends BroadcastReceiver {
    private boolean mServiceRunning = false;
    private boolean mRegisteredReceiver = false;
 
-   public SmartPixelsReceiver() {
-       mHandler = new Handler();
-       mResolver = mContext.getContentResolver();
-       mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+   @Inject
+   public SmartPixelsReceiver(Context context) {
+       mContext = context;
+   }
+
+    @Override
+    public void start() {
+        if (!mContext.getResources().
+                getBoolean(com.android.internal.R.bool.config_supportSmartPixels))
+            return;
+
        mSmartPixelsService = new Intent(mContext,
                com.android.systemui.smartpixels.SmartPixelsService.class);
 
@@ -70,6 +83,7 @@ public class SmartPixelsReceiver extends BroadcastReceiver {
    }
 
    private void initiateSettingsObserver() {
+       mResolver = mContext.getContentResolver();
        mSettingsObserver = new SettingsObserver(mHandler);
        mSettingsObserver.observe();
        mSettingsObserver.update();
@@ -78,6 +92,7 @@ public class SmartPixelsReceiver extends BroadcastReceiver {
    private class SettingsObserver extends ContentObserver {
        SettingsObserver(Handler handler) {
            super(handler);
+           mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
        }
 
        void observe() {
@@ -93,7 +108,6 @@ public class SmartPixelsReceiver extends BroadcastReceiver {
            mResolver.registerContentObserver(Settings.System.getUriFor(
                    Settings.System.SMART_PIXELS_SHIFT_TIMEOUT),
                    false, this, UserHandle.USER_ALL);
-           update();
        }
 
        @Override
