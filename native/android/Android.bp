@@ -38,9 +38,6 @@ cc_defaults {
         "-Wunused",
         "-Wunreachable-code",
     ],
-    lto: {
-        thin: true,
-    },
 }
 
 cc_library_shared {
