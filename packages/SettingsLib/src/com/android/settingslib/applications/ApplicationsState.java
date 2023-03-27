@@ -478,7 +478,9 @@ public class ApplicationsState {
                 ApplicationInfo info = getAppInfoLocked(packageName, userId);
                 if (info == null) {
                     try {
-                        info = mIpm.getApplicationInfo(packageName, 0, userId);
+                        info = mIpm.getApplicationInfo(packageName,
+                                mUm.isUserAdmin(userId) ? mAdminRetrieveFlags : mRetrieveFlags,
+                                userId);
                     } catch (RemoteException e) {
                         Log.w(TAG, "getEntry couldn't reach PackageManager", e);
                         return null;
