@@ -39,6 +39,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Provider
 import kotlin.math.max
+import kotlin.math.min
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -181,18 +182,18 @@ class FooterActionsViewModel(
     }
 
     /** Called when the expansion of the Quick Settings changed. */
-    fun onQuickSettingsExpansionChanged(expansion: Float, isInSplitShade: Boolean) {
+    fun onQuickSettingsExpansionChanged(expansion: Float, isInSplitShade: Boolean, customAlpha: Float) {
         if (isInSplitShade) {
             // In split shade, we want to fade in the background only at the very end (see
             // b/240563302).
             val delay = 0.99f
             _alpha.value = expansion
-            _backgroundAlpha.value = max(0f, expansion - delay) / (1f - delay)
+            _backgroundAlpha.value = min(customAlpha, max(0f, expansion - delay) / (1f - delay))
         } else {
             // Only start fading in the footer actions when we are at least 90% expanded.
             val delay = 0.9f
             _alpha.value = max(0f, expansion - delay) / (1 - delay)
-            _backgroundAlpha.value = 1f
+            _backgroundAlpha.value = customAlpha
         }
     }
 

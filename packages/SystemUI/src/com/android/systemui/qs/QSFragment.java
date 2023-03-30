@@ -28,6 +28,7 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Trace;
+import android.provider.Settings;
 import android.util.IndentingPrintWriter;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -71,6 +72,7 @@ import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
 import com.android.systemui.statusbar.policy.SecureLockscreenQSDisabler;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.LifecycleFragment;
 import com.android.systemui.util.Utils;
 
@@ -82,12 +84,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Callbacks,
-        StatusBarStateController.StateListener, Dumpable {
+        StatusBarStateController.StateListener, Dumpable, TunerService.Tunable  {
     private static final String TAG = "QS";
     private static final boolean DEBUG = false;
     private static final String EXTRA_EXPANDED = "expanded";
     private static final String EXTRA_LISTENING = "listening";
     private static final String EXTRA_VISIBLE = "visible";
+
+    private static final String QS_TRANSPARENCY =
+            "system:" + Settings.System.QS_TRANSPARENCY;
 
     private final Rect mQsBounds = new Rect();
     private final SysuiStatusBarStateController mStatusBarStateController;
@@ -169,6 +174,10 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
 
     private boolean mIsSmallScreen;
 
+    private final TunerService mTunerService;
+
+    private float mCustomAlpha = 1f;
+
     @Inject
     public QSFragment(RemoteInputQuickSettingsDisabler remoteInputQsDisabler,
             SysuiStatusBarStateController statusBarStateController, CommandQueue commandQueue,
@@ -183,7 +192,8 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
             FooterActionsViewBinder footerActionsViewBinder,
             LargeScreenShadeInterpolator largeScreenShadeInterpolator,
             FeatureFlags featureFlags,
-            SecureLockscreenQSDisabler secureLockscreenQSDisabler) {
+            SecureLockscreenQSDisabler secureLockscreenQSDisabler,
+            TunerService tunerService) {
         mRemoteInputQuickSettingsDisabler = remoteInputQsDisabler;
         mQsMediaHost = qsMediaHost;
         mQqsMediaHost = qqsMediaHost;
@@ -201,6 +211,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
         mFooterActionsViewBinder = footerActionsViewBinder;
         mListeningAndVisibilityLifecycleOwner = new ListeningAndVisibilityLifecycleOwner();
         mSecureLockscreenQSDisabler = secureLockscreenQSDisabler;
+        mTunerService = tunerService;
     }
 
     @Override
@@ -285,6 +296,8 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
                     mQSPanelController.getMediaHost().getHostView().setAlpha(1.0f);
                     mQSAnimator.requestAnimatorUpdate();
                 });
+
+        mTunerService.addTunable(this, QS_TRANSPARENCY);
     }
 
     private void bindFooterActionsView(View root) {
@@ -417,6 +430,18 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
     @Override
     public void setCollapsedMediaVisibilityChangedListener(Consumer<Boolean> listener) {
         mQuickQSPanelController.setMediaVisibilityChangedListener(listener);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QS_TRANSPARENCY:
+                mCustomAlpha =
+                        TunerService.parseInteger(newValue, 100) / 100f;
+                break;
+            default:
+                break;
+         }
     }
 
     private void setEditLocation(View view) {
@@ -674,7 +699,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
         float footerActionsExpansion =
                 onKeyguardAndExpanded ? 1 : mInSplitShade ? alphaProgress : expansion;
         mQSFooterActionsViewModel.onQuickSettingsExpansionChanged(footerActionsExpansion,
-                mInSplitShade);
+                mInSplitShade, mCustomAlpha);
         mQSPanelController.setRevealExpansion(expansion);
         mQSPanelController.getTileLayout().setExpansion(expansion, proposedTranslation);
         mQuickQSPanelController.getTileLayout().setExpansion(expansion, proposedTranslation);
