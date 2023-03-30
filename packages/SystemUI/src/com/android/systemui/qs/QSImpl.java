@@ -30,6 +30,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.IndentingPrintWriter;
 import android.util.Log;
 import android.view.View;
@@ -68,6 +69,7 @@ import com.android.systemui.statusbar.notification.stack.StackStateAnimator;
 import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
 import com.android.systemui.statusbar.policy.SecureLockscreenQSDisabler;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.Utils;
 
 import dalvik.annotation.optimization.NeverCompile;
@@ -80,12 +82,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateController.StateListener,
-        Dumpable {
+        Dumpable, TunerService.Tunable  {
     private static final String TAG = "QS";
     private static final boolean DEBUG = false;
     private static final String EXTRA_EXPANDED = "expanded";
     private static final String EXTRA_LISTENING = "listening";
     private static final String EXTRA_VISIBLE = "visible";
+
+    private static final String QS_TRANSPARENCY =
+            "system:" + Settings.System.QS_TRANSPARENCY;
 
     private final Rect mQsBounds = new Rect();
     private final SysuiStatusBarStateController mStatusBarStateController;
@@ -174,6 +179,10 @@ public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateControl
     @Nullable
     private ComposeView mFooterActionsView;
 
+    private final TunerService mTunerService;
+
+    private float mCustomAlpha = 1f;
+
     @Inject
     public QSImpl(RemoteInputQuickSettingsDisabler remoteInputQsDisabler,
             SysuiStatusBarStateController statusBarStateController, CommandQueue commandQueue,
@@ -185,7 +194,8 @@ public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateControl
             FooterActionsController footerActionsController,
             FooterActionsViewModel.Factory footerActionsViewModelFactory,
             LargeScreenShadeInterpolator largeScreenShadeInterpolator,
-            SecureLockscreenQSDisabler secureLockscreenQSDisabler) {
+            SecureLockscreenQSDisabler secureLockscreenQSDisabler,
+            TunerService tunerService) {
         mRemoteInputQuickSettingsDisabler = remoteInputQsDisabler;
         mQsMediaHost = qsMediaHost;
         mQqsMediaHost = qqsMediaHost;
@@ -203,6 +213,7 @@ public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateControl
             mStatusBarState = StatusBarState.SHADE;
         }
         mSecureLockscreenQSDisabler = secureLockscreenQSDisabler;
+        mTunerService = tunerService;
     }
 
     /**
@@ -289,6 +300,8 @@ public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateControl
 
         // This will immediately call disable, so it needs to be added after setting up the fields.
         mCommandQueue.addCallback(this);
+
+        mTunerService.addTunable(this, QS_TRANSPARENCY);
     }
 
     private void bindFooterActionsView(View root) {
@@ -328,6 +341,7 @@ public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateControl
         if (parent != null) {
             parent.removeView(getView());
         }
+        mTunerService.removeTunable(this);
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -399,6 +413,18 @@ public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateControl
     @Override
     public void setCollapsedMediaVisibilityChangedListener(Consumer<Boolean> listener) {
         mQuickQSPanelController.setMediaVisibilityChangedListener(listener);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QS_TRANSPARENCY:
+                mCustomAlpha =
+                        TunerService.parseInteger(newValue, 100) / 100f;
+                break;
+            default:
+                break;
+         }
     }
 
     private void setEditLocation(View view) {
@@ -682,7 +708,7 @@ public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateControl
                 onKeyguardAndExpanded ? 1 : mInSplitShade ? alphaProgress : expansion;
         if (mQSFooterActionsViewModel != null) {
             mQSFooterActionsViewModel.onQuickSettingsExpansionChanged(footerActionsExpansion,
-                    mInSplitShade);
+                    mInSplitShade, mCustomAlpha);
         }
         mQSPanelController.setRevealExpansion(expansion);
         mQSPanelController.getTileLayout().setExpansion(expansion, proposedTranslation);
