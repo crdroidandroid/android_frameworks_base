@@ -98,4 +98,7 @@
 
     <!-- Bluetooth dialog -->
     <dimen name="bluetooth_dialog_active_device_bottom_margin">4dp</dimen>
+
+    <!-- QS Header height full -->
+    <dimen name="qs_header_height_full">200dp</dimen>
 </resources>
