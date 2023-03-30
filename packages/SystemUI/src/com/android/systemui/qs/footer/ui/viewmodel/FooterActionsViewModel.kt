@@ -42,6 +42,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Provider
 import kotlin.math.max
+import kotlin.math.min
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.awaitCancellation
@@ -93,18 +94,18 @@ class FooterActionsViewModel(
     val backgroundAlpha: StateFlow<Float> = _backgroundAlpha.asStateFlow()
 
     /** Called when the expansion of the Quick Settings changed. */
-    fun onQuickSettingsExpansionChanged(expansion: Float, isInSplitShade: Boolean) {
+    fun onQuickSettingsExpansionChanged(expansion: Float, isInSplitShade: Boolean, customAlpha: Float) {
         if (isInSplitShade) {
             // In split shade, we want to fade in the background when the QS background starts to
             // show.
             val delay = 0.15f
             _alpha.value = expansion
-            _backgroundAlpha.value = max(0f, expansion - delay) / (1f - delay)
+            _backgroundAlpha.value = min(customAlpha, max(0f, expansion - delay) / (1f - delay))
         } else {
             // Only start fading in the footer actions when we are at least 90% expanded.
             val delay = 0.9f
             _alpha.value = max(0f, expansion - delay) / (1 - delay)
-            _backgroundAlpha.value = 1f
+            _backgroundAlpha.value = customAlpha
         }
     }
 
