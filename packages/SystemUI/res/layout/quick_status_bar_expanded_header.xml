@@ -33,6 +33,35 @@
     android:paddingStart="0dp"
     android:elevation="4dp" >
 
+    <!-- header image -->
+    <LinearLayout
+        android:id="@+id/layout_header"
+        android:layout_width="match_parent"          
+        android:layout_height="200dp"
+        android:background="#00000000" >
+
+        <LinearLayout
+          android:id="@+id/layout_inner_header"
+          android:layout_width="match_parent"          
+          android:layout_height="match_parent"
+          android:layout_marginLeft="0dp"
+          android:layout_marginRight="0dp"  
+          android:background="#00000000" >
+
+          <ImageView 
+              android:id="@+id/qs_header_image_view"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"    
+              android:layout_marginTop="0dp"
+              android:layout_marginBottom="0dp"
+              android:scaleType="centerCrop"
+              android:visibility="gone"
+              android:background="@drawable/qs_header_image_view_outline" />
+
+        </LinearLayout>    
+
+    </LinearLayout>
+
     <!-- Date and privacy. Only visible in QS when not in split shade -->
     <include layout="@layout/quick_status_bar_header_date_privacy"/>
 

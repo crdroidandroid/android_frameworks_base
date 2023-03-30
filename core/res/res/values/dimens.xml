@@ -56,8 +56,9 @@
     <dimen name="status_bar_height_landscape">@dimen/status_bar_height_portrait</dimen>
     <!-- Height of area above QQS where battery/time go.
          Do not read this dimen directly. Use {@link SystemBarUtils#getQuickQsOffsetHeight} instead.
+         QS HEADERS edit: account display_cutout_touchable_region_size.
          -->
-    <dimen name="quick_qs_offset_height">48dp</dimen>
+    <dimen name="quick_qs_offset_height">60dp</dimen>
     <!-- Height of the bottom navigation / system bar. -->
     <dimen name="navigation_bar_height">48dp</dimen>
     <!-- Height of the bottom navigation bar in portrait; often the same as @dimen/navigation_bar_height -->
