@@ -6751,16 +6751,6 @@ public class PackageManagerService implements PackageSender, TestUtilityService 
                 SparseArray<String> profileOwnerPackages) {
             mProtectedPackages.setDeviceAndProfileOwnerPackages(
                     deviceOwnerUserId, deviceOwnerPackage, profileOwnerPackages);
-            final ArraySet<Integer> usersWithPoOrDo = new ArraySet<>();
-            if (deviceOwnerPackage != null) {
-                usersWithPoOrDo.add(deviceOwnerUserId);
-            }
-            final int sz = profileOwnerPackages.size();
-            for (int i = 0; i < sz; i++) {
-                if (profileOwnerPackages.valueAt(i) != null) {
-                    removeAllNonSystemPackageSuspensions(profileOwnerPackages.keyAt(i));
-                }
-            }
         }
 
         @Override
