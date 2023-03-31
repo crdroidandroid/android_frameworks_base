@@ -269,9 +269,6 @@ constructor(
         variableDateViewControllerFactory.create(date as VariableDateView).init()
         batteryMeterViewController.init()
 
-        // battery settings same as in QS icons
-        batteryMeterViewController.ignoreTunerUpdates()
-
         iconManager = tintedIconManagerFactory.create(iconContainer, StatusBarLocation.QS)
         iconManager.setTint(
             Utils.getColorAttrDefaultColor(header.context, android.R.attr.textColorPrimary)
