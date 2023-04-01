@@ -335,7 +335,7 @@ constructor(
         val fgColor =
             Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
         val bgColor =
-            Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse)
+            Utils.getColorAttrDefaultColor(context, android.R.attr.textColorTertiary)
         val colorStateList = Utils.getColorAttr(context, android.R.attr.textColorPrimary)
 
         iconManager.setTint(fgColor, bgColor)
