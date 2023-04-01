@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="?android:attr/colorControlHighlight">
+    android:color="@color/qs_tile_ripple_color">
     <item android:id="@id/background"
         android:drawable="@drawable/qs_tile_background_shape_a11"/>
 </ripple>
