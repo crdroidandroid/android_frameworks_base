@@ -17,4 +17,9 @@
 <resources>
 
     <color name="footer_actions_bg">@android:color/system_neutral1_50</color>
+
+    <!-- QS Panel Style -->
+    <color name="qs_ripple_color">@android:color/system_accent1_400</color>
+    <color name="qs_translucent_bg">#59FFFFFF</color>
+    <color name="qs_white_bg">@android:color/system_neutral1_0</color>
 </resources>
