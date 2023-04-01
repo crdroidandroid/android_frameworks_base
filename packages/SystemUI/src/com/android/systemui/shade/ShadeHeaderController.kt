@@ -332,10 +332,16 @@ constructor(
     private fun updateIconManagerColors() {
         val fgColor =
             Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
-        val bgColor =
+        var bgColor =
             Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse)
+        val currentBatteryStyle = batteryIcon.getBatteryStyle()
 
         iconManager.setTint(fgColor, bgColor)
+
+        if (currentBatteryStyle == 1 || currentBatteryStyle == 2 || currentBatteryStyle == 3) {
+            bgColor =
+                Utils.getColorAttrDefaultColor(context, android.R.attr.textColorHint)
+        }
 
         batteryIcon.updateColors(
             fgColor /* foreground */,
