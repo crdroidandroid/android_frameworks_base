@@ -141,6 +141,7 @@ constructor(
     private val mShadeCarrierGroup: ShadeCarrierGroup = header.requireViewById(R.id.carrier_group)
     private val systemIcons: View = header.requireViewById(R.id.shade_header_system_icons)
 
+    private var batteryStyle = batteryIcon.getBatteryStyle()
     private var roundedCorners = 0
     private var cutout: DisplayCutout? = null
     private var lastInsets: WindowInsets? = null
@@ -555,9 +556,14 @@ constructor(
         iconManager.setTint(fillColor)
         val textColor = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
         val colorStateList = Utils.getColorAttr(context, android.R.attr.textColorPrimary)
-        if (textColor != textColorPrimary) {
-            val textColorSecondary = Utils.getColorAttrDefaultColor(context,
+        val currentBatteryStyle = batteryIcon.getBatteryStyle()
+        if (textColor != textColorPrimary || batteryStyle != currentBatteryStyle) {
+            var textColorSecondary = Utils.getColorAttrDefaultColor(context,
                     android.R.attr.textColorSecondary)
+            batteryStyle = currentBatteryStyle
+            if (batteryStyle == 1 || batteryStyle == 2 || batteryStyle == 3) {
+                textColorSecondary = Utils.getColorAttrDefaultColor(header.context, android.R.attr.textColorHint)
+            }
             textColorPrimary = textColor
             if (iconManager != null) {
                 iconManager.setTint(textColor)
