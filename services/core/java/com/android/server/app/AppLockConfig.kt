@@ -244,7 +244,7 @@ internal class AppLockConfig(dataDir: File) {
                 false
             }
         } ?: run {
-            Slog.e(TAG, "Attempt to hide package that is not in list")
+            Slog.e(TAG, "Attempt to hide app for package $packageName that is not in list")
             false
         }
     }
