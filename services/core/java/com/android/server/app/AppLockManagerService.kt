@@ -729,7 +729,11 @@ class AppLockManagerService(
      *     [Manifest.permissions.MANAGE_APP_LOCK].
      */
     @RequiresPermission(Manifest.permission.MANAGE_APP_LOCK)
-    override fun setPackageHidden(packageName: String, hide: Boolean, userId: Int) {
+    override fun setPackageHidden(
+        packageName: String,
+        hide: Boolean,
+        userId: Int,
+    ) {
         logD {
             "setPackageHidden: packageName = $packageName, hide = $hide, userId = $userId"
         }
@@ -738,13 +742,15 @@ class AppLockManagerService(
         serviceScope.launch {
             mutex.withLock {
                 val config = userConfigMap[actualUserId] ?: run {
-                    Slog.e(TAG, "setPackageHidden requested by unknown user id $userId")
+                    Slog.e(TAG, "setPackageHidden requested by unknown " +
+                        "user id $actualUserId")
                     return@withLock
                 }
-                if (config.hidePackage(packageName, hide)) {
-                    withContext(Dispatchers.IO) {
-                        config.write()
-                    }
+                if (!config.hidePackage(packageName, hide)) {
+                    return@withLock
+                }
+                withContext(Dispatchers.IO) {
+                    config.write()
                 }
             }
         }
@@ -866,10 +872,7 @@ class AppLockManagerService(
             PackageManager.MATCH_ALL.toLong(),
             currentUserId,
             Process.myUid()
-        ).filter {
-            Utils.launchablePackages(context).contains(it.packageName) ||
-                whiteListedSystemApps.contains(it.packageName)
-        }.map { it.packageName }
+        ).map { it.packageName }
         var changed = false
         logD {
             "Current packages = $currentPackages"
