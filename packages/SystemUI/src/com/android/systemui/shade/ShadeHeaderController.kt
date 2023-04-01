@@ -331,11 +331,7 @@ constructor(
         iconManager = tintedIconManagerFactory.create(iconContainer, StatusBarLocation.QS)
         iconManager.setTint(fgColor, bgColor)
 
-        batteryIcon.updateColors(
-            fgColor /* foreground */,
-            bgColor /* background */,
-            fgColor, /* single tone (current default) */
-        )
+        batteryIcon.setColorsFromContext(header.context)
 
         carrierIconSlots =
             listOf(header.context.getString(com.android.internal.R.string.status_bar_mobile))
@@ -593,7 +589,7 @@ constructor(
             clock.setTextColor(textColorPrimary)
             date.setTextColor(textColorPrimary)
             mShadeCarrierGroup.updateColors(textColorPrimary, colorStateList)
-            batteryIcon.updateColors(textColorPrimary, textColorSecondary, textColorPrimary)
+            batteryIcon.setColorsFromContext(header.context)
         }
     }
 
