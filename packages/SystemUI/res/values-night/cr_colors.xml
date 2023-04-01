@@ -19,4 +19,8 @@
     <color name="reticker_background_color">@android:color/system_neutral1_900</color>
 
     <color name="footer_actions_bg">@android:color/system_neutral1_900</color>
+
+    <!-- QS Panel Style -->
+    <color name="qs_translucent_bg">#0FFFFFFF</color>
+    <color name="qs_white_bg">@android:color/system_neutral1_0</color>
 </resources>
