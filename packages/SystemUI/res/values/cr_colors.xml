@@ -18,4 +18,8 @@
 
     <!-- QS Surface Color -->
     <color name="qs_surface_color">@*android:color/system_neutral1_50</color>
+
+    <!-- QS Panel Style -->
+    <color name="qs_translucent_bg">#59FFFFFF</color>
+    <color name="qs_white_bg">@android:color/system_neutral1_0</color>
 </resources>
