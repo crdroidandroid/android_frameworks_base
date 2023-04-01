@@ -27,4 +27,9 @@
     <color name="edge_light_green">#ff3aa853</color>
     <color name="edge_light_red">#ffea4234</color>
     <color name="edge_light_yellow">#fffbbc06</color>
+
+    <!-- QS Panel Style -->
+    <color name="qs_ripple_color">@android:color/system_accent1_400</color>
+    <color name="qs_translucent_bg">#59FFFFFF</color>
+    <color name="qs_white_bg">@android:color/system_neutral1_0</color>
 </resources>
