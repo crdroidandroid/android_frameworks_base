@@ -288,7 +288,14 @@ public class AmbientDisplayConfiguration {
         if (alwaysOnChargingEnabledSetting(user)) {
             final Intent intent = mContext.registerReceiver(null, sIntentFilter, Context.RECEIVER_NOT_EXPORTED);
             if (intent != null) {
-                return intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
+                int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+                boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                            status == BatteryManager.BATTERY_STATUS_FULL;
+                int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+                boolean isPlugged = plugged == BatteryManager.BATTERY_PLUGGED_AC || 
+                            plugged == BatteryManager.BATTERY_PLUGGED_USB ||
+                            plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS;
+                return isPlugged && isCharging;
             }
         }
         return false;
