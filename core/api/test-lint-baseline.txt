@@ -2037,6 +2037,10 @@ UnflaggedApi: android.content.pm.UserInfo#isPrivateProfile():
     New API must be flagged with @FlaggedApi: method android.content.pm.UserInfo.isPrivateProfile()
 UnflaggedApi: android.credentials.CredentialProviderInfo#isPrimary():
     New API must be flagged with @FlaggedApi: method android.credentials.CredentialProviderInfo.isPrimary()
+UnflaggedApi: android.hardware.display.AmbientDisplayConfiguration#alwaysOnChargingEnabledSetting(int):
+    New API must be flagged with @FlaggedApi: method android.hardware.display.AmbientDisplayConfiguration.alwaysOnChargingEnabledSetting(int)
+UnflaggedApi: android.hardware.display.AmbientDisplayConfiguration#alwaysOnEnabledSetting(int):
+    New API must be flagged with @FlaggedApi: method android.hardware.display.AmbientDisplayConfiguration.alwaysOnEnabledSetting(int)
 UnflaggedApi: android.hardware.input.InputManager#addUniqueIdAssociationByPort(String, String):
     New API must be flagged with @FlaggedApi: method android.hardware.input.InputManager.addUniqueIdAssociationByPort(String,String)
 UnflaggedApi: android.hardware.input.InputManager#removeUniqueIdAssociationByPort(String):
