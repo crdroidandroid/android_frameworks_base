@@ -553,13 +553,16 @@ class AppWidgetServiceImpl extends IAppWidgetService.Stub implements WidgetBacku
                 showBadge = mUserManager.hasBadge(appUserId);
                 final String suspendingPackage = mPackageManagerInternal.getSuspendingPackage(
                         appInfo.packageName, appUserId);
-                if (PLATFORM_PACKAGE_NAME.equals(suspendingPackage)) {
+                final SuspendDialogInfo dialogInfo =
+                        mPackageManagerInternal.getSuspendedDialogInfo(
+                                appInfo.packageName, suspendingPackage, appUserId);
+                final boolean isUnpauseDialog = dialogInfo != null &&
+                        dialogInfo.getNeutralButtonAction()
+                                == SuspendDialogInfo.BUTTON_ACTION_UNSUSPEND;
+                if (PLATFORM_PACKAGE_NAME.equals(suspendingPackage) && !isUnpauseDialog) {
                     onClickIntent = mDevicePolicyManagerInternal.createShowAdminSupportIntent(
                             appUserId, true);
                 } else {
-                    final SuspendDialogInfo dialogInfo =
-                            mPackageManagerInternal.getSuspendedDialogInfo(
-                                    appInfo.packageName, suspendingPackage, appUserId);
                     // onUnsuspend is null because we don't want to start any activity on
                     // unsuspending from a suspended widget.
                     onClickIntent = SuspendedAppActivity.createSuspendedAppInterceptIntent(

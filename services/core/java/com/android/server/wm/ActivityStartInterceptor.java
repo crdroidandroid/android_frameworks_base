@@ -323,11 +323,13 @@ class ActivityStartInterceptor {
         }
         final String suspendedPackage = mAInfo.applicationInfo.packageName;
         final String suspendingPackage = pmi.getSuspendingPackage(suspendedPackage, mUserId);
-        if (PLATFORM_PACKAGE_NAME.equals(suspendingPackage)) {
-            return interceptSuspendedByAdminPackage();
-        }
         final SuspendDialogInfo dialogInfo = pmi.getSuspendedDialogInfo(suspendedPackage,
                 suspendingPackage, mUserId);
+        final boolean isUnpauseDialog = dialogInfo != null && dialogInfo.getNeutralButtonAction()
+                == SuspendDialogInfo.BUTTON_ACTION_UNSUSPEND;
+        if (PLATFORM_PACKAGE_NAME.equals(suspendingPackage) && !isUnpauseDialog) {
+            return interceptSuspendedByAdminPackage();
+        }
         final Bundle crossProfileOptions = hasCrossProfileAnimation()
                 ? ActivityOptions.makeOpenCrossProfileAppsAnimation().toBundle()
                 : null;
