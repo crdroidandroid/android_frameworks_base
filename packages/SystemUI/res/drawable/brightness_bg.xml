@@ -16,7 +16,7 @@
   -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="24dp" />
+    <corners android:radius="@dimen/rounded_slider_corner_radius" />
     <solid android:color="?android:attr/colorAccent" />
-    <size android:width="48dp" android:height="48dp" />
+    <size android:width="@dimen/rounded_slider_height" android:height="@dimen/rounded_slider_height" />
 </shape>
