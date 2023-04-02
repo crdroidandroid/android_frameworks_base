@@ -3105,8 +3105,26 @@ public class PackageManagerService implements PackageSender, TestUtilityService 
 
         mContext.enforceCallingOrSelfPermission(android.Manifest.permission.SUSPEND_APPS,
                 callingMethod);
-        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.INTERACT_ACROSS_USERS,
-                callingMethod);
+
+        final int packageUid = snapshot.getPackageUid(callingPackage, 0, userId);
+        if (packageUid == callingUid) {
+            return;
+        }
+
+        final String callerMismatchMessage = "Calling package " + callingPackage + " in user "
+                + userId + " does not belong to calling uid " + callingUid;
+        if (!UserHandle.isSameApp(packageUid, callingUid)) {
+            throw new SecurityException(callerMismatchMessage);
+        }
+
+        final UserManagerService ums = UserManagerService.getInstance();
+        final UserInfo parent = ums != null ? ums.getProfileParent(userId) : null;
+
+        // If calling from a parent, we only need INTERACT_ACROSS_USERS, not full.
+        final boolean requireFullPermission = parent == null
+                || callingUid != snapshot.getPackageUid(callingPackage, 0, parent.id);
+        snapshot.enforceCrossUserPermission(callingUid, userId, requireFullPermission,
+                false /* checkShell */, callerMismatchMessage);
     }
 
     void unsuspendForSuspendingPackage(@NonNull Computer computer, String suspendingPackage,
