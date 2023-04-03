@@ -59,8 +59,7 @@ public class Shades {
         shades[1] = ColorUtils.CAMToColor(hue, Math.min(40f, chroma), 95);
         for (int i = 2; i < 12; i++) {
             float lStar = (i == 6) ? MIDDLE_LSTAR : 100 - 10 * (i - 1);
-            final float shadeChroma = (lStar >= 90) ? Math.min(40f, chroma) : chroma;
-            shades[i] = ColorUtils.CAMToColor(hue, shadeChroma, lStar);
+            shades[i] = ColorUtils.CAMToColor(hue, chroma, lStar);
         }
         return shades;
     }
