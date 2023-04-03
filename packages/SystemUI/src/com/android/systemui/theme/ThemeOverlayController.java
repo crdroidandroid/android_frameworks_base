@@ -126,7 +126,7 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
     private final Executor mMainExecutor;
     private final Handler mBgHandler;
     private final boolean mIsMonochromaticEnabled;
-    protected final Context mContext;
+    private final Context mContext;
     private final boolean mIsMonetEnabled;
     private final UserTracker mUserTracker;
     private final ConfigurationController mConfigurationController;
@@ -542,7 +542,7 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
         });
     }
 
-    protected void reevaluateSystemTheme(boolean forceReload) {
+    private void reevaluateSystemTheme(boolean forceReload) {
         final WallpaperColors currentColors = mCurrentColors.get(mUserTracker.getUserId());
         final int mainColor;
         if (currentColors == null) {
