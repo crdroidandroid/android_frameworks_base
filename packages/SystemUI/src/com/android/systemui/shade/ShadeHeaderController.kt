@@ -339,6 +339,8 @@ constructor(
             v.pivotY = v.height.toFloat() / 2
         }
         clock.setOnClickListener { launchClockActivity() }
+        clock.setQsHeader()
+
         batteryIcon.setOnClickListener {
             activityStarter.postStartActivityDismissingKeyguard(
                 Intent(Intent.ACTION_POWER_USAGE_SUMMARY), 0
