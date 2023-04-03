@@ -1825,10 +1825,13 @@ public final class CachedAppOptimizer {
 
         private boolean shouldOomAdjThrottleCompaction(ProcessRecord proc) {
             final String name = proc.processName;
+            final ProcessCachedOptimizerRecord opt = proc.mOptRecord;
+            CompactSource compactSource = opt.getReqCompactSource();
 
             // don't compact if the process has returned to perceptible
             // and this is only a cached/home/prev compaction
-            if (proc.mState.getSetAdj() <= ProcessList.PERCEPTIBLE_APP_ADJ) {
+            if (compactSource == CompactSource.APP
+                    && proc.mState.getSetAdj() <= ProcessList.PERCEPTIBLE_APP_ADJ) {
                 if (DEBUG_COMPACTION) {
                     Slog.d(TAG_AM,
                             "Skipping compaction as process " + name + " is "
