@@ -158,6 +158,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
         mClockContainer = findViewById(R.id.clock_container);
         mClockView = findViewById(R.id.clock);
+        mClockView.setQsHeader();
         mClockView.setOnClickListener(
                 v -> mActivityStarter.postStartActivityDismissingKeyguard(
                         new Intent(AlarmClock.ACTION_SHOW_ALARMS), 0));
