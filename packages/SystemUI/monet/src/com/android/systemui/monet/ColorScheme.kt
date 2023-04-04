@@ -140,10 +140,10 @@ internal class ChromaSource : Chroma {
 }
 
 internal class TonalSpec(val hue: Hue = HueSource(), val chroma: Chroma) {
-    fun shades(sourceColor: Cam): List<Int> {
+    fun shades(sourceColor: Cam, luminanceFactor: Float = 1f, chromaFactor: Float = 1f): List<Int> {
         val hue = hue.get(sourceColor)
         val chroma = chroma.get(sourceColor)
-        return Shades.of(hue.toFloat(), chroma.toFloat()).toList()
+        return Shades.of(hue.toFloat(), chroma.toFloat(), luminanceFactor, chromaFactor).toList()
     }
 }
 
@@ -217,7 +217,12 @@ enum class Style(internal val coreSpec: CoreSpec) {
 class ColorScheme(
     @ColorInt val seed: Int,
     val darkTheme: Boolean,
-    val style: Style = Style.TONAL_SPOT
+    val style: Style = Style.TONAL_SPOT,
+    val luminanceFactor: Float = 1f,
+    val chromaFactor: Float = 1f,
+    val tintBackground: Boolean = false,
+    @ColorInt val customSeed: Int? = null,
+    @ColorInt val bgSeed: Int? = null
 ) {
 
     val accent1: List<Int>
@@ -233,9 +238,16 @@ class ColorScheme(
     constructor(
         wallpaperColors: WallpaperColors,
         darkTheme: Boolean,
-        style: Style = Style.TONAL_SPOT
-    ) :
-            this(getSeedColor(wallpaperColors, style != Style.CONTENT), darkTheme, style)
+        style: Style = Style.TONAL_SPOT,
+        luminanceFactor: Float = 1f,
+        chromaFactor: Float = 1f,
+        tintBackground: Boolean = false,
+        customSeed: Int? = null,
+        bgSeed: Int? = null
+    ):
+            this(getSeedColor(wallpaperColors, style != Style.CONTENT),
+                    darkTheme, style, luminanceFactor, chromaFactor, tintBackground,
+                    customSeed, bgSeed)
 
     val allAccentColors: List<Int>
         get() {
@@ -261,20 +273,37 @@ class ColorScheme(
         get() = ColorUtils.setAlphaComponent(if (darkTheme) accent1[2] else accent1[6], 0xFF)
 
     init {
-        val proposedSeedCam = Cam.fromInt(seed)
-        val seedArgb = if (seed == Color.TRANSPARENT) {
+        val proposedSeedCam = Cam.fromInt(if (customSeed == null) seed else customSeed)
+        val seedArgb = if (customSeed == null) {
+            seed
+        } else if (customSeed == Color.TRANSPARENT) {
             GOOGLE_BLUE
         } else if (style != Style.CONTENT && proposedSeedCam.chroma < 5) {
             GOOGLE_BLUE
         } else {
-            seed
+            customSeed
         }
+
+        val proposedBgSeedCam = Cam.fromInt(if (bgSeed == null) seed else bgSeed)
+        val bgSeedArgb = if (bgSeed == null) {
+            seedArgb
+        } else if (bgSeed == Color.TRANSPARENT) {
+            GOOGLE_BLUE
+        } else if (style != Style.CONTENT && proposedBgSeedCam.chroma < 5) {
+            GOOGLE_BLUE
+        } else {
+            bgSeed
+        }
+
         val camSeed = Cam.fromInt(seedArgb)
-        accent1 = style.coreSpec.a1.shades(camSeed)
+        accent1 = style.coreSpec.a1.shades(camSeed, luminanceFactor, chromaFactor)
         accent2 = style.coreSpec.a2.shades(camSeed)
         accent3 = style.coreSpec.a3.shades(camSeed)
-        neutral1 = style.coreSpec.n1.shades(camSeed)
-        neutral2 = style.coreSpec.n2.shades(camSeed)
+        val camBgSeed = Cam.fromInt(bgSeedArgb)
+        neutral1 = style.coreSpec.n1.shades(camBgSeed,
+                if (tintBackground) luminanceFactor else 1f,
+                if (tintBackground) chromaFactor else 1f)
+        neutral2 = style.coreSpec.n2.shades(camBgSeed)
     }
 
     override fun toString(): String {
