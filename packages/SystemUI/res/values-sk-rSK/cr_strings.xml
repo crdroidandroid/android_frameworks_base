@@ -45,7 +45,6 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Šetrič dát</string>
     <string name="status_bar_call_strength">Sila hovorov</string>
-    <string name="status_bar_firewall">Firewall</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -118,10 +117,10 @@
     <string name="tristate_rotation_270">Na šírku (270°)</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="one">%d pripojených zariadení</item>
-        <item quantity="few">%d devices connected</item>
-        <item quantity="many">%d devices connected</item>
-        <item quantity="other">%d devices connected</item>
+        <item quantity="one">%d pripojené zariadenie</item>
+        <item quantity="few">%d pripojené zariadenia</item>
+        <item quantity="many">%d pripojených zariadení</item>
+        <item quantity="other">%d pripojených zariadení</item>
     </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Vynútiť zastavenie?</string>
@@ -156,9 +155,9 @@
     <!-- Google lens screenshot notification -->
     <string name="lens">Lens</string>
     <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Use Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth is off</string>
-    <string name="tap_a_device_to_connect">Tap a device to connect</string>
+    <string name="turn_on_bluetooth">Použiť Bluetooth</string>
+    <string name="bluetooth_is_off">Bluetooth je vypnutý</string>
+    <string name="tap_a_device_to_connect">Na pripojenie kliknite na zariadenie</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">SystemUI</string>
 </resources>
