@@ -4906,4 +4906,8 @@
   <java-symbol type="id" name="language_picker_header" />
 
   <java-symbol type="dimen" name="status_bar_height_default" />
+
+  <!-- InputFilter Class-->
+  <java-symbol type="string" name="config_deviceInputFilterLibs" />
+  <java-symbol type="string" name="config_deviceInputFilterClasses" />
 </resources>

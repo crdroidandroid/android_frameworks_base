@@ -6088,4 +6088,8 @@
     <!-- Whether the lock screen is allowed to run its own live wallpaper,
          different from the home screen wallpaper. -->
     <bool name="config_independentLockscreenLiveWallpaper">false</bool>
+
+    <!-- InputFilter Class-->
+    <string name="config_deviceInputFilterLibs" translatable="false"></string>
+    <string name="config_deviceInputFilterClasses" translatable="false"></string>
 </resources>
