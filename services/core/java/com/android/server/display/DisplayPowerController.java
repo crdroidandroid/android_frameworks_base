@@ -1866,7 +1866,6 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             // they are transient.
             newEvent.adjustmentFlags = brightnessAdjustmentFlags;
             newEvent.flags |= (userSetBrightnessChanged ? BrightnessEvent.FLAG_USER_SET : 0);
-            Slog.i(TAG, newEvent.toString(/* includeTime= */ false));
 
             if (userSetBrightnessChanged) {
                 logManualBrightnessEvent(newEvent);
