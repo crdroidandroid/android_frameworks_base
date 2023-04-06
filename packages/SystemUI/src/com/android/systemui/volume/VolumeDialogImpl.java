@@ -311,6 +311,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     // Variable to track the default row with which the panel is initially shown
     private VolumeRow mDefaultRow = null;
 
+    // Variable to track if we need to add separate notification volume row
+    private final boolean mLinkedRingNotif;
+
     private FrameLayout mRoundedBorderBottom;
 
     // Volume panel expand state
@@ -359,6 +362,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         mUseBackgroundBlur =
             mContext.getResources().getBoolean(R.bool.config_volumeDialogUseBackgroundBlur);
         mInteractionJankMonitor = interactionJankMonitor;
+        mLinkedRingNotif =
+            mContext.getResources().getBoolean(com.android.internal.R.bool.config_alias_ring_notif_stream_types);
 
         dumpManager.registerDumpable("VolumeDialogImpl", this);
 
@@ -712,8 +717,15 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             addRow(AudioManager.STREAM_MUSIC,
                     R.drawable.ic_volume_media, R.drawable.ic_volume_media_mute, true, true);
             if (!AudioSystem.isSingleVolume(mContext)) {
-                addRow(AudioManager.STREAM_RING,
-                        R.drawable.ic_volume_ringer, R.drawable.ic_volume_ringer_mute, true, false);
+                if (!mLinkedRingNotif) {
+                    addRow(AudioManager.STREAM_RING,
+                            R.drawable.ic_ring_volume, R.drawable.ic_ring_volume_off, true, false);
+                    addRow(AudioManager.STREAM_NOTIFICATION,
+                            R.drawable.ic_volume_notification, R.drawable.ic_volume_notification_mute, true, false);
+                } else {
+                    addRow(AudioManager.STREAM_RING,
+                            R.drawable.ic_volume_ringer, R.drawable.ic_volume_ringer_mute, true, false);
+                }
                 addRow(STREAM_ALARM,
                         R.drawable.ic_alarm, R.drawable.ic_volume_alarm_mute, true, false);
                 addRow(AudioManager.STREAM_VOICE_CALL,
@@ -2156,19 +2168,22 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         final boolean isSystemStream = row.stream == AudioManager.STREAM_SYSTEM;
         final boolean isAlarmStream = row.stream == STREAM_ALARM;
         final boolean isMusicStream = row.stream == AudioManager.STREAM_MUSIC;
-        final boolean isRingVibrate = isRingStream
-                && mState.ringerModeInternal == AudioManager.RINGER_MODE_VIBRATE;
+        final boolean isNotificationStream = row.stream == AudioManager.STREAM_NOTIFICATION;
+        final boolean isVibrate = mState.ringerModeInternal == AudioManager.RINGER_MODE_VIBRATE;
+        final boolean isRingVibrate = isRingStream && isVibrate;
         final boolean isRingSilent = isRingStream
                 && mState.ringerModeInternal == AudioManager.RINGER_MODE_SILENT;
         final boolean isZenPriorityOnly = mState.zenMode == Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
         final boolean isZenAlarms = mState.zenMode == Global.ZEN_MODE_ALARMS;
         final boolean isZenNone = mState.zenMode == Global.ZEN_MODE_NO_INTERRUPTIONS;
-        final boolean zenMuted = isZenAlarms ? (isRingStream || isSystemStream)
-                : isZenNone ? (isRingStream || isSystemStream || isAlarmStream || isMusicStream)
+        final boolean zenMuted =
+                isZenAlarms ? (isRingStream || isSystemStream || isNotificationStream)
+                : isZenNone ? (isRingStream || isSystemStream || isAlarmStream || isMusicStream || isNotificationStream)
                 : isZenPriorityOnly ? ((isAlarmStream && mState.disallowAlarms) ||
                         (isMusicStream && mState.disallowMedia) ||
                         (isRingStream && mState.disallowRinger) ||
                         (isSystemStream && mState.disallowSystem))
+                : isVibrate ? isNotificationStream
                 : false;
 
         // update slider max
