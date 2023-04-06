@@ -302,6 +302,9 @@ public class NotificationMenuRow implements NotificationMenuRowPlugin, View.OnCl
             return;
         }
         List<MenuItem> menuItems = mOnLeft ? mLeftMenuItems : mRightMenuItems;
+        if (menuItems.isEmpty()) {
+           return;
+        }
         for (int i = 0; i < menuItems.size(); i++) {
             addMenuView(menuItems.get(i), mMenuContainer);
         }
