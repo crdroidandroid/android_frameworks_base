@@ -188,8 +188,12 @@ constructor(
         }
 
         metricsLogger.action(MetricsProto.MetricsEvent.ACTION_QS_EXPANDED_SETTINGS_LAUNCH)
+
+        val intent = Intent()
+        intent.setClassName("com.android.settings",
+                "com.android.settings.Settings\$crDroidSettingsLayoutActivity")
         activityStarter.startActivity(
-            Intent("com.android.settings.Settings\$crDroidSettingsLayoutActivity"),
+            intent,
             true /* dismissShade */,
             expandable.activityLaunchController(
                 InteractionJankMonitor.CUJ_SHADE_APP_LAUNCH_FROM_SETTINGS_BUTTON
