@@ -61,6 +61,7 @@ class ScreenRecordPermissionDialog(
     private lateinit var stopDotSwitch: Switch
     private lateinit var lowQualitySwitch: Switch
     private lateinit var longerDurationSwitch: Switch
+    private lateinit var skipTimeSwitch: Switch
     private lateinit var hevcSwitch: Switch
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +98,7 @@ class ScreenRecordPermissionDialog(
     private fun initRecordOptionsView() {
         audioSwitch = findViewById(R.id.screenrecord_audio_switch)
         tapsSwitch = findViewById(R.id.screenrecord_taps_switch)
+        skipTimeSwitch = findViewById(R.id.screenrecord_skip_time_switch)
         tapsView = findViewById(R.id.show_taps)
         updateTapsViewVisibility()
         options = findViewById(R.id.screen_recording_options)
@@ -161,7 +163,8 @@ class ScreenRecordPermissionDialog(
                 RecordingService.getStopIntent(userContext),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
-        controller.startCountdown(DELAY_MS, INTERVAL_MS, startIntent, stopIntent)
+        controller.startCountdown(if (skipTimeSwitch.isChecked) NO_DELAY else DELAY_MS,
+                                                    INTERVAL_MS, startIntent, stopIntent)
     }
 
     private inner class CaptureTargetResultReceiver() :
@@ -188,6 +191,7 @@ class ScreenRecordPermissionDialog(
                 ScreenRecordingAudioSource.MIC_AND_INTERNAL
             )
         private const val DELAY_MS: Long = 3000
+        private const val NO_DELAY: Long = 100
         private const val INTERVAL_MS: Long = 1000
         private fun createOptionList(): List<ScreenShareOption> {
             return listOf(
