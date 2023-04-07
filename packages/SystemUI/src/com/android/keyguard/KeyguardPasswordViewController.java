@@ -64,8 +64,7 @@ public class KeyguardPasswordViewController
     private ImageView mSwitchImeButton;
     private boolean mPaused;
 
-    private final boolean quickUnlock = (Settings.System.getIntForUser(getContext().getContentResolver(),
-            Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0, UserHandle.USER_CURRENT) == 1);
+    private boolean mQuickUnlock;
     private final int userId = KeyguardUpdateMonitor.getCurrentUser();
 
     private LockPatternUtils mLockPatternUtils;
@@ -90,6 +89,8 @@ public class KeyguardPasswordViewController
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             mKeyguardSecurityCallback.userActivity();
+            mQuickUnlock = Settings.System.getIntForUser(getContext().getContentResolver(),
+                        Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0, UserHandle.USER_CURRENT) == 1;
         }
 
         @Override
@@ -100,7 +101,7 @@ public class KeyguardPasswordViewController
         public void afterTextChanged(Editable s) {
             if (!TextUtils.isEmpty(s)) {
                 onUserInput();
-                if (quickUnlock) {
+                if (mQuickUnlock) {
                     if (s.length() == mLockPatternUtils.getCredentialLength(userId)) {
                         validateQuickUnlock(mLockPatternUtils, mView.getEnteredCredential(), userId);
                     }
