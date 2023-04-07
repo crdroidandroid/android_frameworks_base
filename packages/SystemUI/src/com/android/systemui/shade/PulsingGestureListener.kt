@@ -34,7 +34,7 @@ import com.android.systemui.statusbar.phone.CentralSurfaces
 import com.android.systemui.statusbar.phone.dagger.CentralSurfacesComponent
 import com.android.systemui.tuner.TunerService
 import com.android.systemui.tuner.TunerService.Tunable
-import lineageos.providers.LineageSettings;
+import lineageos.providers.LineageSettings
 import java.io.PrintWriter
 import javax.inject.Inject
 
