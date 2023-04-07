@@ -408,9 +408,12 @@ public final class WindowManagerGlobal {
             try {
                 root.setView(view, wparams, panelParentView, userId);
             } catch (RuntimeException e) {
+                final int viewIndex = findViewLocked(view, false);
                 // BadTokenException or InvalidDisplayException, clean up.
-                if (index >= 0) {
-                    removeViewLocked(index, true);
+                if (viewIndex >= 0) {
+                    removeViewLocked(viewIndex, true);
+                } else {
+                    removeView(view, true);
                 }
                 throw e;
             }

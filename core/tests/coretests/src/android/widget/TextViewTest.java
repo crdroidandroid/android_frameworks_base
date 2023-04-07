@@ -333,6 +333,24 @@ public class TextViewTest {
         assertEquals("", mTextView.getTransformed().toString());
     }
 
+
+    @Test(expected = NullPointerException.class)
+    @UiThreadTest
+    public void setTextCharArrayNullThrows() {
+        mTextView = new TextView(mActivity);
+        mTextView.setText((char[]) null, 0, 0);
+    }
+
+    @Test
+    @UiThreadTest
+    public void setTextCharArrayValidAfterSetTextString() {
+        mTextView = new TextView(mActivity);
+        mTextView.setText(new char[] { 'h', 'i'}, 0, 2);
+        CharSequence charWrapper = mTextView.getText();
+        mTextView.setText("null out char wrapper");
+        assertEquals("hi", charWrapper.toString());
+    }
+
     private String createLongText() {
         int size = 600 * 1000;
         final StringBuilder builder = new StringBuilder(size);

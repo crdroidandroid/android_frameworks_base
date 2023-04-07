@@ -125,6 +125,7 @@ public class NotificationHistoryDatabaseTest extends UiServiceTestCase {
         for (long i = cal.getTimeInMillis(); i >= 5; i--) {
             File file = mock(File.class);
             when(file.getName()).thenReturn(String.valueOf(i));
+            when(file.getAbsolutePath()).thenReturn(String.valueOf(i));
             AtomicFile af = new AtomicFile(file);
             expectedFiles.add(af);
             mDataBase.mHistoryFiles.addLast(af);
@@ -135,6 +136,7 @@ public class NotificationHistoryDatabaseTest extends UiServiceTestCase {
         for (int i = 5; i >= 0; i--) {
             File file = mock(File.class);
             when(file.getName()).thenReturn(String.valueOf(cal.getTimeInMillis() - i));
+            when(file.getAbsolutePath()).thenReturn(String.valueOf(cal.getTimeInMillis() - i));
             AtomicFile af = new AtomicFile(file);
             mDataBase.mHistoryFiles.addLast(af);
         }
@@ -160,6 +162,7 @@ public class NotificationHistoryDatabaseTest extends UiServiceTestCase {
         for (long i = cal.getTimeInMillis(); i >= 5; i--) {
             File file = mock(File.class);
             when(file.getName()).thenReturn(i + ".bak");
+            when(file.getAbsolutePath()).thenReturn(i + ".bak");
             AtomicFile af = new AtomicFile(file);
             mDataBase.mHistoryFiles.addLast(af);
         }
@@ -370,5 +373,37 @@ public class NotificationHistoryDatabaseTest extends UiServiceTestCase {
         assertThat(mDataBase.mHistoryFiles.size()).isEqualTo(1);
         assertThat(mDataBase.mBuffer).isNotEqualTo(nh);
         verify(mAlarmManager, times(1)).setExactAndAllowWhileIdle(anyInt(), anyLong(), any());
+    }
+
+    @Test
+    public void testRemoveFilePathFromHistory_hasMatch() throws Exception {
+        for (int i = 0; i < 5; i++) {
+            AtomicFile af = mock(AtomicFile.class);
+            when(af.getBaseFile()).thenReturn(new File(mRootDir, "af" + i));
+            mDataBase.mHistoryFiles.addLast(af);
+        }
+        // Baseline size of history files
+        assertThat(mDataBase.mHistoryFiles.size()).isEqualTo(5);
+
+        // Remove only file number 3
+        String filePathToRemove = new File(mRootDir, "af3").getAbsolutePath();
+        mDataBase.removeFilePathFromHistory(filePathToRemove);
+        assertThat(mDataBase.mHistoryFiles.size()).isEqualTo(4);
+    }
+
+    @Test
+    public void testRemoveFilePathFromHistory_noMatch() throws Exception {
+        for (int i = 0; i < 5; i++) {
+            AtomicFile af = mock(AtomicFile.class);
+            when(af.getBaseFile()).thenReturn(new File(mRootDir, "af" + i));
+            mDataBase.mHistoryFiles.addLast(af);
+        }
+        // Baseline size of history files
+        assertThat(mDataBase.mHistoryFiles.size()).isEqualTo(5);
+
+        // Attempt to remove a filename that doesn't exist, expect nothing to break or change
+        String filePathToRemove = new File(mRootDir, "af.thisfileisfake").getAbsolutePath();
+        mDataBase.removeFilePathFromHistory(filePathToRemove);
+        assertThat(mDataBase.mHistoryFiles.size()).isEqualTo(5);
     }
 }
