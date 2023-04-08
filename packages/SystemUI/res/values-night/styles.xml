@@ -34,6 +34,8 @@
         <item name="underSurfaceColor">@android:color/system_neutral1_900</item>
         <item name="android:colorBackground">@android:color/system_neutral1_900</item>
         <item name="android:itemTextAppearance">@style/Control.MenuItem</item>
+        <item name="android:colorPrimary">@*android:color/system_neutral1_0</item>
+        <item name="android:colorSecondary">@*android:color/system_neutral1_50</item>
     </style>
 
     <!-- Screenshots -->
