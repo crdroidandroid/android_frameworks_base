@@ -6090,7 +6090,7 @@ public final class ActivityThread extends ClientTransactionHandler
         final boolean movedToDifferentDisplay = isDifferentDisplay(activity.getDisplayId(),
                 displayId);
         final Configuration currentResConfig = activity.getResources().getConfiguration();
-        final int diff = currentResConfig.diffPublicOnly(newConfig);
+        final int diff = currentResConfig != null ? currentResConfig.diffPublicOnly(newConfig) : 0xffffffff;
         final boolean hasPublicResConfigChange = diff != 0;
         // TODO(b/173090263): Use diff instead after the improvement of AssetManager and
         // ResourcesImpl constructions.
