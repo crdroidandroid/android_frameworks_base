@@ -74,7 +74,7 @@ public enum ScrimState {
                 mAnimationDuration = ScrimController.ANIMATION_DURATION;
             }
             mFrontTint = Color.BLACK;
-            mBehindTint = Color.TRANSPARENT;
+            mBehindTint = Color.BLACK;
             mNotifTint = mClipQsScrim ? Color.BLACK : Color.TRANSPARENT;
 
             mFrontAlpha = 0;
