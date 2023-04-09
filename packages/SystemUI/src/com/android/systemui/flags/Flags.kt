@@ -378,7 +378,7 @@ object Flags {
     @JvmField val DREAM_MEDIA_TAP_TO_OPEN = unreleasedFlag(906, "dream_media_tap_to_open")
 
     // TODO(b/254513168): Tracking Bug
-    @JvmField val UMO_SURFACE_RIPPLE = unreleasedFlag(907, "umo_surface_ripple")
+    @JvmField val UMO_SURFACE_RIPPLE = releasedFlag(907, "umo_surface_ripple")
 
     @JvmField val MEDIA_FALSING_PENALTY = releasedFlag(908, "media_falsing_media")
 
