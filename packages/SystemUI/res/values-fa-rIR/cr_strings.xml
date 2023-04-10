@@ -34,7 +34,7 @@
     <string name="screenrecord_longer_timeout_switch_summary">محدود کردن اندازه ضبط به ۱۵ گیگابایت</string>
     <string name="screenrecord_skip_time_label">رد کردن زمان‌سنج</string>
     <string name="screenrecord_skip_time_summary">حذف صبر ۳ ثانیه‌ای</string>
-    <string name="screenrecord_hevc_switch_label">Enable HEVC</string>
+    <string name="screenrecord_hevc_switch_label">فعال سازی انکد سخت افزاری ویدیو</string>
     <string name="screenrecord_hevc_switch_summary">Use more efficient HEVC video encoding</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">حذف</string>
@@ -45,6 +45,7 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">ذخیره‌کننده داده</string>
     <string name="status_bar_call_strength">قدرت تماس</string>
+    <string name="status_bar_firewall">Firewall</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
