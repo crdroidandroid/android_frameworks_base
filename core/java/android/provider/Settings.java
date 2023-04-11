@@ -13600,6 +13600,19 @@ public final class Settings {
         public static final String SHOW_FPS_OVERLAY = "show_fps_overlay";
 
         /**
+         * Whether to show ambient instead of waking for the tap gesture
+         * @hide
+         */
+        public static final String DOZE_TAP_GESTURE_AMBIENT = "doze_tap_gesture_ambient";
+
+        /**
+         * Whether to show ambient instead of waking for the pickup gesture
+         * Do note quick pickup (device sensor) is already configured to do that
+         * @hide
+         */
+        public static final String DOZE_PICK_UP_GESTURE_AMBIENT = "doze_pick_up_gesture_ambient";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
