@@ -1051,7 +1051,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
                         interpolatedFraction);
             }
         } else if (mState == ScrimState.AUTH_SCRIMMED_SHADE) {
-            mNotificationsAlpha = (float) Math.pow(getInterpolatedFraction(), 0.8f);
+            mNotificationsAlpha = (float) Math.pow(getInterpolatedFraction(), 0.8f) * mCustomScrimAlpha;
         } else if (mState == ScrimState.KEYGUARD || mState == ScrimState.SHADE_LOCKED
                 || mState == ScrimState.PULSING || mState == ScrimState.GLANCEABLE_HUB) {
             Pair<Integer, Float> result = calculateBackStateForState(mState);
@@ -1085,10 +1085,11 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
                 mBehindAlpha = behindAlpha;
                 if (mState == ScrimState.KEYGUARD && mTransitionToFullShadeProgress > 0.0f) {
                     mNotificationsAlpha = MathUtils
-                            .saturate(mTransitionToLockScreenFullShadeNotificationsProgress);
+                            .saturate(mTransitionToLockScreenFullShadeNotificationsProgress)
+                            * mCustomScrimAlpha;
                 } else if (mState == ScrimState.SHADE_LOCKED) {
                     // going from KEYGUARD to SHADE_LOCKED state
-                    mNotificationsAlpha = getInterpolatedFraction();
+                    mNotificationsAlpha = getInterpolatedFraction() * mCustomScrimAlpha;
                 } else if (mState == ScrimState.GLANCEABLE_HUB
                         && mTransitionToFullShadeProgress == 0.0f) {
                     // Notification scrim should not be visible on the glanceable hub unless the
@@ -1097,7 +1098,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
                     // closes.
                     mNotificationsAlpha = 0;
                 } else {
-                    mNotificationsAlpha = Math.max(1.0f - getInterpolatedFraction(), mQsExpansion);
+                    mNotificationsAlpha = Math.max(1.0f - getInterpolatedFraction(), mQsExpansion) * mCustomScrimAlpha;
                 }
                 mNotificationsTint = mState.getNotifTint();
                 mBehindTint = behindTint;
