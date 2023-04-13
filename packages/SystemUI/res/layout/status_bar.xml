@@ -79,7 +79,7 @@
                     android:gravity="center_vertical"
                     android:clipChildren="false">
                     <ViewStub
-                        android:id="@+id/operator_name"
+                        android:id="@+id/operator_name_stub"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout="@layout/operator_name" />
