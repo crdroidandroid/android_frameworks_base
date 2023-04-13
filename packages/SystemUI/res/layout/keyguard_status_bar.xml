@@ -71,7 +71,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="@dimen/status_bar_padding_top"
-        android:layout_marginStart="@dimen/keyguard_carrier_text_margin"
+        android:paddingStart="@dimen/keyguard_carrier_text_margin"
         android:layout_toStartOf="@id/system_icons_container"
         android:gravity="center_vertical"
         android:ellipsize="marquee"
