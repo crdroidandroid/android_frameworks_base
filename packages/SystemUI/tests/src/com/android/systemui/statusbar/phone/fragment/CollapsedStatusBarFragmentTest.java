@@ -33,7 +33,6 @@ import android.app.Fragment;
 import android.app.StatusBarManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.UserHandle;
 import android.platform.test.annotations.DisableFlags;
 import android.platform.test.annotations.EnableFlags;
 import android.provider.Settings;
@@ -86,9 +85,9 @@ import com.android.systemui.statusbar.window.StatusBarWindowController;
 import com.android.systemui.statusbar.window.StatusBarWindowControllerStore;
 import com.android.systemui.statusbar.window.StatusBarWindowStateController;
 import com.android.systemui.statusbar.window.StatusBarWindowStateListener;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.CarrierConfigTracker;
 import com.android.systemui.util.concurrency.FakeExecutor;
-import com.android.systemui.util.settings.SecureSettings;
 import com.android.systemui.util.time.FakeSystemClock;
 
 import org.junit.Before;
@@ -115,7 +114,6 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
     private final CommandQueue mCommandQueue = mock(CommandQueue.class);
     private OperatorNameViewController.Factory mOperatorNameViewControllerFactory;
     private OperatorNameViewController mOperatorNameViewController;
-    private SecureSettings mSecureSettings;
     private FakeExecutor mExecutor = new FakeExecutor(new FakeSystemClock());
     private final CarrierConfigTracker mCarrierConfigTracker = mock(CarrierConfigTracker.class);
 
@@ -151,6 +149,8 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
     @Mock private DarkIconDispatcher mDarkIconDispatcher;
     @Rule
     public final AnimatorTestRule mAnimatorTestRule = new AnimatorTestRule(this);
+    @Mock
+    private TunerService mTunerService;
 
     private List<StatusBarWindowStateListener> mStatusBarWindowStateListeners = new ArrayList<>();
 
@@ -1027,7 +1027,7 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
         String str = mContext.getString(com.android.internal.R.string.status_bar_volume);
 
         // GIVEN the setting is off
-        when(mSecureSettings.getInt(Settings.Secure.STATUS_BAR_SHOW_VIBRATE_ICON, 0))
+        when(mTunerService.getValue(Settings.Secure.STATUS_BAR_SHOW_VIBRATE_ICON, 0))
                 .thenReturn(0);
 
         // WHEN CollapsedStatusBarFragment builds the blocklist
@@ -1044,8 +1044,7 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
         String str = mContext.getString(com.android.internal.R.string.status_bar_volume);
 
         // GIVEN the setting is ON
-        when(mSecureSettings.getIntForUser(Settings.Secure.STATUS_BAR_SHOW_VIBRATE_ICON, 0,
-                UserHandle.USER_CURRENT))
+        when(mTunerService.getValue(Settings.Secure.STATUS_BAR_SHOW_VIBRATE_ICON, 0))
                 .thenReturn(1);
 
         // WHEN CollapsedStatusBarFragment builds the blocklist
@@ -1145,7 +1144,6 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
         when(mOperatorNameViewControllerFactory.create(any(), any()))
                 .thenReturn(mOperatorNameViewController);
         when(mIconManagerFactory.create(any(), any(), any())).thenReturn(mIconManager);
-        mSecureSettings = mock(SecureSettings.class);
 
         mShadeExpansionStateManager = new ShadeExpansionStateManager();
         mCollapsedStatusBarViewModel = new FakeHomeStatusBarViewModel(
@@ -1182,7 +1180,7 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
                         new DisableFlagsLogger()
                         ),
                 mOperatorNameViewControllerFactory,
-                mSecureSettings,
+                mTunerService,
                 mExecutor,
                 mDumpManager,
                 mStatusBarWindowStateController,
