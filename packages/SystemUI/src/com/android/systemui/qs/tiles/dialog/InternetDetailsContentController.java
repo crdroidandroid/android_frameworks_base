@@ -317,7 +317,11 @@ public class InternetDetailsContentController implements AccessPointController.A
         mSubIdTelephonyManagerMap.put(mDefaultDataSubId, mTelephonyManager);
         registerInternetTelephonyCallback(mTelephonyManager, mDefaultDataSubId);
         // Listen the connectivity changes
-        mConnectivityManager.registerDefaultNetworkCallback(mConnectivityManagerNetworkCallback);
+        try {
+            mConnectivityManager.registerDefaultNetworkCallback(mConnectivityManagerNetworkCallback);
+        } catch (Exception e) {
+            // Do nothing
+        }
         mCanConfigWifi = canConfigWifi;
         scanWifiAccessPoints();
     }
