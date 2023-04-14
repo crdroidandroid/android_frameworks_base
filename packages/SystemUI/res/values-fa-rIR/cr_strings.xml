@@ -137,10 +137,10 @@
     <string name="refresh_rate_tile_label">نرخ تازه‌سازی</string>
     <string name="auto_mode_label">خودکار</string>
     <!-- Screenshot Tile -->
-    <string name="screenshot_long_press">Long press - selected region</string>
+    <string name="screenshot_long_press">فشار طولانی - منطقه انتخاب شده</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">جستجوی صدا</string>
-    <string name="quick_settings_sound_search_no_app">Sorry, but this doesn\'t work if you don\'t have a Sound search app.</string>
+    <string name="quick_settings_sound_search_no_app">متاسفیم، ولی بدون برنامه جستجو موسیقی این قابلیت کار نمیکند.</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">ک‌ب/ث</string>
     <string name="megabitspersecond_short">م‌ب/ث</string>
@@ -150,13 +150,13 @@
     <string name="gigabytespersecond_short">گ‌ب/ث</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">زبان</string>
-    <string name="quick_settings_locale_more_locales_toast">Please, configure multiple languages</string>
+    <string name="quick_settings_locale_more_locales_toast">لطفاً چندین زبان را پیکربندی کنید</string>
     <!-- Google lens screenshot notification -->
-    <string name="lens">Lens</string>
+    <string name="lens">لنز</string>
     <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Use Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth is off</string>
-    <string name="tap_a_device_to_connect">Tap a device to connect</string>
+    <string name="turn_on_bluetooth">استفاده از بلوتوث</string>
+    <string name="bluetooth_is_off">بلوتوث خاموش است</string>
+    <string name="tap_a_device_to_connect">برای اتصال به شبکه روی آن ضربه بزنید</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">رابط کاربری</string>
 </resources>
