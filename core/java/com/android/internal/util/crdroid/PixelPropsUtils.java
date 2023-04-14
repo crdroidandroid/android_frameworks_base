@@ -109,7 +109,8 @@ public class PixelPropsUtils {
     // Packages to Spoof as ROG Phone 3
     private static final String[] packagesToChangeROG3 = {
             "com.pearlabyss.blackdesertm",
-            "com.pearlabyss.blackdesertm.gl"
+            "com.pearlabyss.blackdesertm.gl",
+            "com.gameloft.android.ANMP.GloftA9HM"
     };
 
     // Packages to Spoof as Xperia 5
