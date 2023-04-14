@@ -35,7 +35,6 @@ import android.app.Fragment;
 import android.app.StatusBarManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper.RunWithLooper;
@@ -68,9 +67,9 @@ import com.android.systemui.statusbar.phone.StatusBarLocationPublisher;
 import com.android.systemui.statusbar.phone.fragment.dagger.StatusBarFragmentComponent;
 import com.android.systemui.statusbar.phone.ongoingcall.OngoingCallController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.CarrierConfigTracker;
 import com.android.systemui.util.concurrency.FakeExecutor;
-import com.android.systemui.util.settings.SecureSettings;
 import com.android.systemui.util.time.FakeSystemClock;
 
 import org.junit.Before;
@@ -98,7 +97,6 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
     private final CommandQueue mCommandQueue = mock(CommandQueue.class);
     private OperatorNameViewController.Factory mOperatorNameViewControllerFactory;
     private OperatorNameViewController mOperatorNameViewController;
-    private SecureSettings mSecureSettings;
     private FakeExecutor mExecutor = new FakeExecutor(new FakeSystemClock());
     private final CarrierConfigTracker mCarrierConfigTracker = mock(CarrierConfigTracker.class);
 
@@ -120,6 +118,8 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
     private StatusBarHideIconsForBouncerManager mStatusBarHideIconsForBouncerManager;
     @Mock
     private DumpManager mDumpManager;
+    @Mock
+    private TunerService mTunerService;
 
     public CollapsedStatusBarFragmentTest() {
         super(CollapsedStatusBarFragment.class);
@@ -387,7 +387,7 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
         String str = mContext.getString(com.android.internal.R.string.status_bar_volume);
 
         // GIVEN the setting is off
-        when(mSecureSettings.getInt(Settings.Secure.STATUS_BAR_SHOW_VIBRATE_ICON, 0))
+        when(mTunerService.getValue(Settings.Secure.STATUS_BAR_SHOW_VIBRATE_ICON, 0))
                 .thenReturn(0);
 
         // WHEN CollapsedStatusBarFragment builds the blocklist
@@ -404,8 +404,7 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
         String str = mContext.getString(com.android.internal.R.string.status_bar_volume);
 
         // GIVEN the setting is ON
-        when(mSecureSettings.getIntForUser(Settings.Secure.STATUS_BAR_SHOW_VIBRATE_ICON, 0,
-                UserHandle.USER_CURRENT))
+        when(mTunerService.getValue(Settings.Secure.STATUS_BAR_SHOW_VIBRATE_ICON, 0))
                 .thenReturn(1);
 
         // WHEN CollapsedStatusBarFragment builds the blocklist
@@ -432,7 +431,6 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
         when(mOperatorNameViewControllerFactory.create(any()))
                 .thenReturn(mOperatorNameViewController);
         when(mIconManagerFactory.create(any(), any())).thenReturn(mIconManager);
-        mSecureSettings = mock(SecureSettings.class);
 
         setUpNotificationIconAreaController();
         return new CollapsedStatusBarFragment(
@@ -457,9 +455,9 @@ public class CollapsedStatusBarFragmentTest extends SysuiBaseFragmentTest {
                         new DisableFlagsLogger()
                         ),
                 mOperatorNameViewControllerFactory,
-                mSecureSettings,
                 mExecutor,
-                mDumpManager);
+                mDumpManager,
+                mTunerService);
     }
 
     private void setUpDaggerComponent() {
