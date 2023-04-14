@@ -332,7 +332,11 @@ public class InternetDialogController implements AccessPointController.AccessPoi
         mSubIdTelephonyCallbackMap.put(mDefaultDataSubId, telephonyCallback);
         mTelephonyManager.registerTelephonyCallback(mExecutor, telephonyCallback);
         // Listen the connectivity changes
-        mConnectivityManager.registerDefaultNetworkCallback(mConnectivityManagerNetworkCallback);
+        try {
+            mConnectivityManager.registerDefaultNetworkCallback(mConnectivityManagerNetworkCallback);
+        } catch (Exception e) {
+            // Do nothing
+        }
         mCanConfigWifi = canConfigWifi;
         scanWifiAccessPoints();
     }
