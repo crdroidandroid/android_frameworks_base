@@ -37,7 +37,6 @@ import com.android.app.animation.Interpolators;
 import com.android.app.animation.InterpolatorsAndroidX;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.systemui.Dumpable;
-import com.android.systemui.battery.BatteryMeterView;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.demomode.DemoMode;
 import com.android.systemui.demomode.DemoModeController;
@@ -108,6 +107,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             Settings.Secure.STATUS_BAR_SHOW_VIBRATE_ICON;
     private static final String STATUSBAR_CLOCK_CHIP =
             "system:" + Settings.System.STATUSBAR_CLOCK_CHIP;
+    private static final String STATUS_BAR_BATTERY_STYLE =
+            "system:" + Settings.System.STATUS_BAR_BATTERY_STYLE;
 
     public static final String TAG = "CollapsedStatusBarFragment";
     private static final String EXTRA_PANEL_STATE = "panel_state";
@@ -162,7 +163,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     private ClockController mClockController;
     private boolean mShowSBClockBg;
-    private BatteryMeterView mBatteryMeterView;
     private StatusIconContainer mStatusIcons;
     private int mSignalClusterEndPadding = 0;
 
@@ -230,16 +230,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mTransitionFromLockscreenToDreamStarted = false;
     };
     private DisposableHandle mNicBindingDisposable;
-
-    private BatteryMeterView.BatteryMeterViewCallbacks mBatteryMeterViewCallback =
-            new BatteryMeterView.BatteryMeterViewCallbacks() {
-        @Override
-        public void onHiddenBattery(boolean hidden) {
-            mStatusIcons.setPadding(
-                    mStatusIcons.getPaddingLeft(), mStatusIcons.getPaddingTop(),
-                    (hidden ? 0 : mSignalClusterEndPadding), mStatusIcons.getPaddingBottom());
-        }
-    };
 
     @Inject
     public CollapsedStatusBarFragment(
@@ -375,12 +365,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mClockController = mStatusBar.getClockController();
         mSignalClusterEndPadding = getResources().getDimensionPixelSize(R.dimen.signal_cluster_battery_padding);
         mStatusIcons = mStatusBar.findViewById(R.id.statusIcons);
-        int batteryStyle = Settings.System.getInt(getContext().getContentResolver(),
-                Settings.System.STATUS_BAR_BATTERY_STYLE, 0);
-        mStatusIcons.setPadding(mStatusIcons.getPaddingLeft(), mStatusIcons.getPaddingTop(),
-               (batteryStyle == 5/*hidden*/ ? 0 : mSignalClusterEndPadding), mStatusIcons.getPaddingBottom());
-        mBatteryMeterView = mStatusBar.findViewById(R.id.battery);
-        mBatteryMeterView.addCallback(mBatteryMeterViewCallback);
         mOngoingCallChip = mStatusBar.findViewById(R.id.ongoing_call_chip);
         mClockView = mStatusBar.findViewById(R.id.clock);
         mCenterClockView = mStatusBar.findViewById(R.id.clock_center);
@@ -398,6 +382,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
         mTunerService.addTunable(this, STATUS_BAR_SHOW_VIBRATE_ICON);
         mTunerService.addTunable(this, STATUSBAR_CLOCK_CHIP);
+        mTunerService.addTunable(this, STATUS_BAR_BATTERY_STYLE);
     }
 
     @Override
@@ -464,9 +449,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         super.onDestroyView();
         mTunerService.removeTunable(this);
         mStatusBarIconController.removeIconGroup(mDarkIconManager);
-        if (mBatteryMeterView != null) {
-            mBatteryMeterView.removeCallback(mBatteryMeterViewCallback);
-        }
         mCarrierConfigTracker.removeCallback(mCarrierConfigCallback);
         mCarrierConfigTracker.removeDataSubscriptionChangedListener(mDefaultDataListener);
 
@@ -496,6 +478,13 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                 mShowSBClockBg = 
                         TunerService.parseIntegerSwitch(newValue, false);
                 updateStatusBarClock();
+                break;
+            case STATUS_BAR_BATTERY_STYLE:
+                int batteryStyle = 
+                        TunerService.parseInteger(newValue, 0);
+                mStatusIcons.setPadding(mStatusIcons.getPaddingLeft(), mStatusIcons.getPaddingTop(),
+                        (batteryStyle == 5/*hidden*/ ? 0 : mSignalClusterEndPadding),
+                        mStatusIcons.getPaddingBottom());
                 break;
             default:
                 break;
