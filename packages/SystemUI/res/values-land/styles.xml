@@ -38,20 +38,20 @@
     </style>
 
     <style name="TextAppearance.AuthNonBioCredential.Title">
-        <item name="android:fontFamily">google-sans</item>
+        <item name="android:fontFamily">@*android:string/config_headlineFontFamily</item>
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:textSize">36dp</item>
         <item name="android:focusable">true</item>
     </style>
 
     <style name="TextAppearance.AuthNonBioCredential.Subtitle">
-        <item name="android:fontFamily">google-sans</item>
+        <item name="android:fontFamily">@*android:string/config_bodyFontFamily</item>
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:textSize">18sp</item>
     </style>
 
     <style name="TextAppearance.AuthNonBioCredential.Description">
-        <item name="android:fontFamily">google-sans</item>
+        <item name="android:fontFamily">@*android:string/config_bodyFontFamily</item>
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:textSize">18sp</item>
     </style>
