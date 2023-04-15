@@ -1032,8 +1032,6 @@ public class OomAdjuster {
         }
     }
 
-    private long mNextNoKillDebugMessageTime;
-
     private double mLastFreeSwapPercent = 1.00;
 
     private static double getFreeSwapPercent() {
@@ -1046,13 +1044,7 @@ public class OomAdjuster {
         ArrayList<ProcessRecord> lruList = mProcessList.getLruProcessesLOSP();
         final int numLru = lruList.size();
 
-        final boolean doKillExcessiveProcesses = shouldKillExcessiveProcesses(now);
-        if (!doKillExcessiveProcesses) {
-            if (mNextNoKillDebugMessageTime < now) {
-                Slog.d(TAG, "Not killing cached processes"); // STOPSHIP Remove it b/222365734
-                mNextNoKillDebugMessageTime = now + 5000; // Every 5 seconds
-            }
-        }
+        final boolean doKillExcessiveProcesses = true;
         final int emptyProcessLimit = doKillExcessiveProcesses
                 ? mConstants.CUR_MAX_EMPTY_PROCESSES : Integer.MAX_VALUE;
         final int cachedProcessLimit = doKillExcessiveProcesses
