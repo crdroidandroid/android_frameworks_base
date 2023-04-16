@@ -2559,15 +2559,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final String deviceInputFilterLibs = res.getString(R.string.config_deviceInputFilterLibs);
         final String deviceInputFilterClasses = res.getString(R.string.config_deviceInputFilterClasses);
 
-        try {
-            PathClassLoader loader = new PathClassLoader(deviceInputFilterLibs, getClass().getClassLoader());
-            Class<?> klass = loader.loadClass(deviceInputFilterClasses);
-            Constructor<?> constructor = klass.getConstructor(Context.class);
-            mInputFilter = (InputFilter) constructor.newInstance(mContext);
-        } catch (Exception e) {
-            Slog.w(TAG, "Could not instantiate device input filter "
-                    + deviceInputFilterLibs + " from class "
-                    + deviceInputFilterClasses, e);
+        if (deviceInputFilterLibs != null && !deviceInputFilterLibs.isEmpty()) {
+            try {
+                PathClassLoader loader = new PathClassLoader(deviceInputFilterLibs, getClass().getClassLoader());
+                Class<?> klass = loader.loadClass(deviceInputFilterClasses);
+                Constructor<?> constructor = klass.getConstructor(Context.class);
+                mInputFilter = (InputFilter) constructor.newInstance(mContext);
+            } catch (Exception e) {
+                Slog.w(TAG, "Could not instantiate device input filter "
+                        + deviceInputFilterLibs + " from class "
+                        + deviceInputFilterClasses, e);
+            }
         }
     }
 
