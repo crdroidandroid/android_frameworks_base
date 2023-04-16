@@ -24,4 +24,7 @@
 
     <!-- Status bar avatar backgroud chip color -->
     <color name="statusbar_avatar_bg">@color/material_dynamic_neutral20</color>
+
+    <!-- SFPS colors -->
+    <color name="sfps_chevron_fill">@color/material_dynamic_secondary20</color>
 </resources>
