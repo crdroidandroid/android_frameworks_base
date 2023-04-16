@@ -55,6 +55,7 @@ import android.hardware.input.IInputDevicesChangedListener;
 import android.hardware.input.IInputManager;
 import android.hardware.input.IInputSensorEventListener;
 import android.hardware.input.ITabletModeChangedListener;
+import android.hardware.input.ISmartSwitchChangedListener;
 import android.hardware.input.InputDeviceIdentifier;
 import android.hardware.input.InputManager;
 import android.hardware.input.InputManagerInternal;
@@ -173,6 +174,7 @@ public class InputManagerService extends IInputManager.Stub
     private static final int MSG_RELOAD_DEVICE_ALIASES = 5;
     private static final int MSG_DELIVER_TABLET_MODE_CHANGED = 6;
     private static final int MSG_POINTER_DISPLAY_ID_CHANGED = 7;
+    private static final int MSG_DELIVER_SMART_SWITCH_CHANGED = 8;
 
     private static final int DEFAULT_VIBRATION_MAGNITUDE = 192;
     private static final AdditionalDisplayInputProperties
@@ -201,6 +203,8 @@ public class InputManagerService extends IInputManager.Stub
 
     private final File mDoubleTouchGestureEnableFile;
 
+    private final Object mSmartSwitchLock = new Object();
+
     private WindowManagerCallbacks mWindowManagerCallbacks;
     private WiredAccessoryCallbacks mWiredAccessoryCallbacks;
     private boolean mSystemReady;
@@ -212,6 +216,11 @@ public class InputManagerService extends IInputManager.Stub
     private final SparseArray<TabletModeChangedListenerRecord> mTabletModeChangedListeners =
             new SparseArray<>();
     private final List<TabletModeChangedListenerRecord> mTempTabletModeChangedListenersToNotify =
+            new ArrayList<>();
+
+    private final SparseArray<SmartSwitchChangedListenerRecord> mSmartSwitchChangedListeners = 
+            new SparseArray<>();
+    private final List<SmartSwitchChangedListenerRecord> mTempSmartSwitchChangedListenersToNotify = 
             new ArrayList<>();
 
     private final Object mSensorEventLock = new Object();
@@ -385,6 +394,11 @@ public class InputManagerService extends IInputManager.Stub
     /** Switch code: Microphone. When set it is off. */
     public static final int SW_MUTE_DEVICE = 0x0e;
 
+    /** Switch code: BlackShark Switch Key bit */
+    public static final int SW_SHARK_KEY = 0x0a;
+    public static final int SW_LIFT_KEY_LEFT = 0x0b;
+    public static final int SW_LIFT_KEY_RIGHT = 0x0c;
+
     public static final int SW_LID_BIT = 1 << SW_LID;
     public static final int SW_TABLET_MODE_BIT = 1 << SW_TABLET_MODE;
     public static final int SW_KEYPAD_SLIDE_BIT = 1 << SW_KEYPAD_SLIDE;
@@ -396,6 +410,10 @@ public class InputManagerService extends IInputManager.Stub
             SW_HEADPHONE_INSERT_BIT | SW_MICROPHONE_INSERT_BIT | SW_JACK_PHYSICAL_INSERT_BIT | SW_LINEOUT_INSERT_BIT;
     public static final int SW_CAMERA_LENS_COVER_BIT = 1 << SW_CAMERA_LENS_COVER;
     public static final int SW_MUTE_DEVICE_BIT = 1 << SW_MUTE_DEVICE;
+
+    public static final int SW_SHARK_KEY_BIT = 1 << SW_SHARK_KEY;
+    public static final int SW_LIFT_KEY_LEFT_BIT = 1 << SW_LIFT_KEY_LEFT;
+    public static final int SW_LIFT_KEY_RIGHT_BIT = 1 << SW_LIFT_KEY_RIGHT;
 
     /** Whether to use the dev/input/event or uevent subsystem for the audio jack. */
     final boolean mUseDevInputEventForAudioJack;
@@ -3028,6 +3046,23 @@ public class InputManagerService extends IInputManager.Stub
 
             setSensorPrivacy(Sensors.MICROPHONE, micMute);
         }
+
+        if ((switchMask & SW_SHARK_KEY_BIT) != 0 || (switchMask & SW_LIFT_KEY_LEFT_BIT) != 0 || (switchMask & SW_LIFT_KEY_RIGHT_BIT) != 0) {
+            SomeArgs args2 = SomeArgs.obtain();
+            args2.argi1 = (int) (whenNanos & 0xFFFFFFFF);
+            args2.argi2 = (int) (whenNanos >> 32);
+            if ((switchMask & SW_SHARK_KEY_BIT) != 0) {    
+                args2.argi3 = 0;
+                args2.arg1 = Boolean.valueOf((switchValues & SW_SHARK_KEY_BIT) != 0 );
+            } else if (((switchMask & SW_LIFT_KEY_LEFT_BIT) != 0)) {
+                args2.argi3 = 1;
+                args2.arg1 = Boolean.valueOf((switchValues & SW_LIFT_KEY_LEFT_BIT) != 0 ); 
+            } else if (((switchMask & SW_LIFT_KEY_RIGHT_BIT) != 0)) {
+                args2.argi3 = 2;
+                args2.arg1 = Boolean.valueOf((switchValues & SW_LIFT_KEY_RIGHT_BIT) != 0 );
+            }
+            mHandler.obtainMessage(MSG_DELIVER_SMART_SWITCH_CHANGED, args2).sendToTarget();
+        }
     }
 
     // Set the sensor privacy state based on the hardware toggles switch states
@@ -3627,6 +3662,10 @@ public class InputManagerService extends IInputManager.Stub
                 case MSG_POINTER_DISPLAY_ID_CHANGED:
                     handlePointerDisplayIdChanged((PointerDisplayIdChangedArgs) msg.obj);
                     break;
+                case MSG_DELIVER_SMART_SWITCH_CHANGED:
+                    SomeArgs arg = (SomeArgs) msg.obj;
+                    deliverSmartSwitchChanged((long) arg.argi3, (boolean) arg.arg1);
+                    break;
             }
         }
     }
@@ -4053,4 +4092,71 @@ public class InputManagerService extends IInputManager.Stub
             applyAdditionalDisplayInputPropertiesLocked(properties);
         }
     }
+
+    @Override
+    public void registerSmartSwitchChangedListener(ISmartSwitchChangedListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("listener must not be null");
+        }
+        synchronized (mSmartSwitchLock) {
+            final int callingPid = Binder.getCallingPid();
+            if (mSmartSwitchChangedListeners.get(callingPid) != null) {
+                throw new IllegalStateException("The calling process has already registered a SmartSwitchChangedListener.");
+            }
+            SmartSwitchChangedListenerRecord record = 
+                    new SmartSwitchChangedListenerRecord(callingPid, listener);
+            try {
+                listener.asBinder().linkToDeath(record, 0);
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
+            mSmartSwitchChangedListeners.put(callingPid, record);
+        }
+    }
+
+    private void onSmartSwitchChangedListenerDied(int pid) {
+        synchronized (mSmartSwitchLock) {
+            mSmartSwitchChangedListeners.remove(pid);
+        }
+    }
+
+    private void deliverSmartSwitchChanged(long whenNanos, boolean smartSwitchState) {
+        mTempSmartSwitchChangedListenersToNotify.clear();
+        final int numListeners;
+        synchronized (mSmartSwitchLock) {
+            numListeners = mSmartSwitchChangedListeners.size();
+            for (int i = 0; i < numListeners; i++) {
+                mTempSmartSwitchChangedListenersToNotify.add(
+                        mSmartSwitchChangedListeners.valueAt(i));
+            }
+        }
+        for (int i = 0; i < numListeners; i++) {
+            mTempSmartSwitchChangedListenersToNotify.get(i).notifySmartSwitchChanged(
+                    whenNanos, smartSwitchState);
+        }
+    }
+
+    public final class SmartSwitchChangedListenerRecord implements IBinder.DeathRecipient {
+        private final int mPid;
+        private final ISmartSwitchChangedListener mListener;
+
+        public SmartSwitchChangedListenerRecord(int pid, ISmartSwitchChangedListener listener) {
+            mPid = pid;
+            mListener = listener;
+        }
+
+        public void binderDied() {
+            onSmartSwitchChangedListenerDied(mPid);
+        }
+
+        public void notifySmartSwitchChanged(long whenNanos, boolean smartSwitchState) {
+            try {
+                mListener.onSmartSwitchChanged(whenNanos, smartSwitchState);
+            } catch (RemoteException ex) {
+                Slog.w(TAG, "Failed to notify process " + mPid + " that Smart Switch changed, assuming it died.", ex);
+                binderDied();
+            }
+        }
+    }
+
 }
