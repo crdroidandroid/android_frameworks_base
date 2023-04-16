@@ -45,7 +45,6 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Penghemat Data</string>
     <string name="status_bar_call_strength">Kekuatan panggilan</string>
-    <string name="status_bar_firewall">Firewall</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
