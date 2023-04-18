@@ -47,6 +47,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.VibrationEffect;
+import android.provider.DeviceConfig;
 import android.provider.Settings;
 import android.service.notification.Condition;
 import android.service.notification.ZenModeConfig;
@@ -64,6 +65,7 @@ import com.android.settingslib.volume.MediaSessions;
 import com.android.systemui.Dumpable;
 import com.android.systemui.R;
 import com.android.systemui.broadcast.BroadcastDispatcher;
+import com.android.internal.config.sysui.SystemUiDeviceConfigFlags;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dump.DumpManager;
 import com.android.systemui.keyguard.WakefulnessLifecycle;
@@ -528,6 +530,7 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         updateRingerModeExternalW(mRingerModeObservers.mRingerMode.getValue());
         updateZenModeW();
         updateZenConfig();
+        updateLinkNotificationConfigW();
         updateEffectsSuppressorW(mNoMan.getEffectsSuppressor());
         mCallbacks.onStateChanged(mState);
     }
@@ -598,6 +601,18 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
 
     private static boolean isRinger(int stream) {
         return stream == AudioManager.STREAM_RING || stream == AudioManager.STREAM_NOTIFICATION;
+    }
+
+    private boolean updateLinkNotificationConfigW() {
+        boolean separateNotification = DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_SYSTEMUI,
+                SystemUiDeviceConfigFlags.VOLUME_SEPARATE_NOTIFICATION, false);
+        boolean linkNotificationWithVolume = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.VOLUME_LINK_NOTIFICATION, !separateNotification ? 1 : 0) == 1;
+        if (mState.linkedNotification == linkNotificationWithVolume) {
+            return false;
+        }
+        mState.linkedNotification = linkNotificationWithVolume;
+        return true;
     }
 
     private boolean updateEffectsSuppressorW(ComponentName effectsSuppressor) {
@@ -1065,6 +1080,8 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
                 Settings.System.getUriFor(Settings.System.ADAPTIVE_PLAYBACK_ENABLED);
         private final Uri ADAPTIVE_PLAYBACK_TIMEOUT_URI =
                 Settings.System.getUriFor(Settings.System.ADAPTIVE_PLAYBACK_TIMEOUT);
+        private final Uri VOLUME_LINK_NOTIFICATION_URI =
+                Settings.Secure.getUriFor(Settings.Secure.VOLUME_LINK_NOTIFICATION);
 
         public SettingObserver(Handler handler) {
             super(handler);
@@ -1076,6 +1093,8 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
             mContext.getContentResolver().registerContentObserver(ADAPTIVE_PLAYBACK_ENABLED_URI,
                     false, this);
             mContext.getContentResolver().registerContentObserver(ADAPTIVE_PLAYBACK_TIMEOUT_URI,
+                    false, this);
+            mContext.getContentResolver().registerContentObserver(VOLUME_LINK_NOTIFICATION_URI,
                     false, this);
         }
 
@@ -1091,6 +1110,9 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
             }
             if (ZEN_MODE_CONFIG_URI.equals(uri)) {
                 changed |= updateZenConfig();
+            }
+            if (VOLUME_LINK_NOTIFICATION_URI.equals(uri)) {
+                changed = updateLinkNotificationConfigW();
             }
             if (ADAPTIVE_PLAYBACK_ENABLED_URI.equals(uri)) {
                 mAdaptivePlaybackEnabled = Settings.System.getIntForUser(
