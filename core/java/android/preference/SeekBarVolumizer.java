@@ -113,6 +113,7 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
     @UnsupportedAppUsage
     private final int mStreamType;
     private final int mMaxStreamVolume;
+    private final boolean mVoiceCapable;
     private boolean mAffectedByRingerMode;
     private boolean mNotificationOrRing;
     private final boolean mNotifAliasRing;
@@ -182,6 +183,8 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
         }
         mNotifAliasRing = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_alias_ring_notif_stream_types);
+        mVoiceCapable = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_voice_capable);
         mZenMode = mNotificationManager.getZenMode();
 
         if (hasAudioProductStrategies()) {
@@ -257,6 +260,11 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
         return stream == AudioManager.STREAM_MUSIC;
     }
 
+    private boolean isNotificationStreamLinked() {
+        return mVoiceCapable && Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.VOLUME_LINK_NOTIFICATION, mNotifAliasRing ? 1 : 0) == 1;
+    }
+
     public void setSeekBar(SeekBar seekBar) {
         if (mSeekBar != null) {
             mSeekBar.setOnSeekBarChangeListener(null);
@@ -288,15 +296,21 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
              * so that when user attempts to slide the notification seekbar out of vibrate the
              * seekbar doesn't wrongly snap back to 0 when the streams aren't aliased
              */
-            if (mNotifAliasRing || mStreamType == AudioManager.STREAM_RING
+            if (isNotificationStreamLinked() || mStreamType == AudioManager.STREAM_RING
                     || (mStreamType == AudioManager.STREAM_NOTIFICATION && mMuted)) {
                 mSeekBar.setProgress(0, true);
+                mSeekBar.setEnabled(isSeekBarEnabled());
             }
         } else if (mMuted) {
             mSeekBar.setProgress(0, true);
         } else {
+            mSeekBar.setEnabled(isSeekBarEnabled());
             mSeekBar.setProgress(mLastProgress > -1 ? mLastProgress : mOriginalStreamVolume, true);
         }
+    }
+
+    private boolean isSeekBarEnabled() {
+        return !(mStreamType == AudioManager.STREAM_NOTIFICATION && isNotificationStreamLinked());
     }
 
     @Override
@@ -365,7 +379,7 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
         // set the time of stop volume
         if ((mStreamType == AudioManager.STREAM_VOICE_CALL
                 || mStreamType == AudioManager.STREAM_RING
-                || (!mNotifAliasRing && mStreamType == AudioManager.STREAM_NOTIFICATION)
+                || (!isNotificationStreamLinked() && mStreamType == AudioManager.STREAM_NOTIFICATION)
                 || mStreamType == AudioManager.STREAM_ALARM)) {
             sStopVolumeTime = java.lang.System.currentTimeMillis();
         }
@@ -446,7 +460,7 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
     }
 
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) {
-        if (fromTouch) {
+        if (fromTouch && isSeekBarEnabled()) {
             postSetVolume(progress);
         }
         if (mCallback != null) {
@@ -644,8 +658,8 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
         }
 
         private void updateVolumeSlider(int streamType, int streamValue) {
-            final boolean streamMatch = mNotifAliasRing && mNotificationOrRing
-                    ? isNotificationOrRing(streamType) : streamType == mStreamType;
+            final boolean streamMatch = mNotificationOrRing ? isNotificationOrRing(streamType)
+                    : (streamType == mStreamType);
             if (mSeekBar != null && streamMatch && streamValue != -1) {
                 final boolean muted = mAudioManager.isStreamMute(mStreamType)
                         || streamValue == 0;
