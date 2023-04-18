@@ -105,6 +105,7 @@ public class PixelPropsUtils {
     private static final String[] packagesToChangeROG3 = {
             "com.pearlabyss.blackdesertm",
             "com.pearlabyss.blackdesertm.gl",
+            "com.ea.gp.fifamobile",
             "com.gameloft.android.ANMP.GloftA9HM"
     };
 
