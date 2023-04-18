@@ -560,7 +560,7 @@ public final class ModemActivityInfo implements Parcelable {
             }
             return isTxPowerValid
                     && isRxPowerValid
-                    && ((getIdleTimeMillis() >= 0) && (getSleepTimeMillis() >= 0) && !isEmpty());
+                    && ((getIdleTimeMillis() >= 0) && (getSleepTimeMillis() >= 0));
         }
     }
 
