@@ -232,11 +232,12 @@ public class PixelPropsUtils {
         if (packageName == null || packageName.isEmpty()) {
             return;
         }
-        if (Arrays.asList(packagesToKeep).contains(packageName)) {
-            return;
-        }
         if (packageName.startsWith("com.google.")
                 || Arrays.asList(extraPackagesToChange).contains(packageName)) {
+
+            if (Arrays.asList(packagesToKeep).contains(packageName)) {
+                return;
+            }
 
             Map<String, Object> propsToChange = new HashMap<>();
             boolean isPixelDevice = Arrays.asList(pixelCodenames).contains(SystemProperties.get(DEVICE));
