@@ -646,7 +646,7 @@
     <integer name="config_dialogShowAnimationDurationMs">300</integer>
 
     <!-- The duraction of the hide animation for the volume dialog in milliseconds -->
-    <integer name="config_dialogHideAnimationDurationMs">250</integer>
+    <integer name="config_dialogHideAnimationDurationMs">300</integer>
 
     <!-- Whether or not to show a notification for an unknown battery state -->
     <bool name="config_showNotificationForUnknownBatteryState">false</bool>
