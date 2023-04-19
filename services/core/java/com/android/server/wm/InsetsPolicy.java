@@ -380,8 +380,10 @@ class InsetsPolicy {
                 state.removeSource(ITYPE_CAPTION_BAR);
             }
         }
-        for (WindowContainerInsetsSourceProvider otherProvider
-                : mStateController.getSourceProviders().values()) {
+        ArrayMap<Integer, WindowContainerInsetsSourceProvider> providers = mStateController
+                .getSourceProviders();
+        for (int i = providers.size() - 1; i >= 0; i--) {
+            WindowContainerInsetsSourceProvider otherProvider = providers.valueAt(i);
             if (otherProvider.overridesFrame(windowType)) {
                 if (!stateCopied) {
                     state = new InsetsState(state);
