@@ -650,11 +650,11 @@ public class PhoneStatusBarPolicy
                     mLastResumedActivityUid = uid;
                     try {
                         mConnectivityManager.unregisterNetworkCallback(mNetworkCallback);
-                    } catch (IllegalArgumentException e) {
+                        mConnectivityManager.registerDefaultNetworkCallbackForUid(uid,
+                                mNetworkCallback, mHandler);
+                    } catch (Exception e) {
                         // Ignore
                     }
-                    mConnectivityManager.registerDefaultNetworkCallbackForUid(uid, mNetworkCallback,
-                            mHandler);
                 }
                 final boolean isRestricted =
                         mNetworkPolicyManager.isUidNetworkingBlocked(uid, false /*meteredNetwork*/);
