@@ -406,10 +406,9 @@ cc_library_shared {
         },
     },
 
-    //Workaround two ThinLTO bugs: one runtime due to mangled symbol,
-    //one lld crash
+    // Workaround Clang LTO crash.
     lto: {
-        full: true,
+        never: true,
     },
 }
 
