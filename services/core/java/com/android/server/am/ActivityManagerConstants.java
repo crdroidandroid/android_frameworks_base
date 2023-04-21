@@ -845,7 +845,7 @@ final class ActivityManagerConstants extends ContentObserver {
      */
     private static final long DEFAULT_MIN_ASSOC_LOG_DURATION = 5 * 60 * 1000; // 5 mins
 
-    private static final boolean DEFAULT_PROACTIVE_KILLS_ENABLED = true;
+    private static final boolean DEFAULT_PROACTIVE_KILLS_ENABLED = false;
 
     private static final float DEFAULT_LOW_SWAP_THRESHOLD_PERCENT = 0.10f;
 
