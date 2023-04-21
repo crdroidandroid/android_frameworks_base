@@ -997,6 +997,7 @@ public class QuickSettingsController {
         mShadeHeaderController.setQsExpandedFraction(qsExpansionFraction);
         mShadeHeaderController.setQsVisible(mVisible);
         mPanelViewControllerLazy.get().reTickerViewVisibility();
+        mPanelViewControllerLazy.get().updateDismissAllVisibility();
     }
 
     /** */
