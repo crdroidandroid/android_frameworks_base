@@ -291,8 +291,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
             "lineagesystem:" + LineageSettings.System.FORCE_SHOW_NAVBAR;
     private static final String QS_TRANSPARENCY =
             "system:" + Settings.System.QS_TRANSPARENCY;
-    private static final String NOTIFICATION_MATERIAL_DISMISS =
-            "system:" + Settings.System.NOTIFICATION_MATERIAL_DISMISS;
     private static final String PULSE_ON_NEW_TRACKS =
             Settings.Secure.PULSE_ON_NEW_TRACKS;
     private static final String LESS_BORING_HEADS_UP =
@@ -585,7 +583,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
     private final MetricsLogger mMetricsLogger;
 
     private ImageButton mDismissAllButton;
-    private boolean mShowDimissButton;
 
     // ensure quick settings is disabled until the current user makes it through the setup wizard
     @VisibleForTesting
@@ -949,7 +946,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
 
         mTunerService.addTunable(this, FORCE_SHOW_NAVBAR);
         mTunerService.addTunable(this, QS_TRANSPARENCY);
-        mTunerService.addTunable(this, NOTIFICATION_MATERIAL_DISMISS);
         mTunerService.addTunable(this, PULSE_ON_NEW_TRACKS);
         mTunerService.addTunable(this, LESS_BORING_HEADS_UP);
         mTunerService.addTunable(this, RETICKER_STATUS);
@@ -1537,8 +1533,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
     @Override
     public void updateDismissAllVisibility(boolean visible) {
         if (mDismissAllButton == null) return;
-        if (!mShowDimissButton || !mStackScrollerController.hasActiveClearableNotifications(ROWS_ALL)
-                     || !visible || mState == StatusBarState.KEYGUARD || mQSPanelController.isExpanded()) {
+        if (!visible || !mStackScrollerController.hasActiveClearableNotifications(ROWS_ALL)
+                || (mQSPanelController != null && mQSPanelController.isExpanded())) {
             mDismissAllButton.setAlpha(0);
             mDismissAllButton.getBackground().setAlpha(0);
             mDismissAllButton.setVisibility(View.GONE);
@@ -4220,10 +4216,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
             case QS_TRANSPARENCY:
                 mScrimController.setCustomScrimAlpha(
                         TunerService.parseInteger(newValue, 100));
-                break;
-            case NOTIFICATION_MATERIAL_DISMISS:
-                mShowDimissButton =
-                        TunerService.parseIntegerSwitch(newValue, false);
                 break;
             case PULSE_ON_NEW_TRACKS:
                 boolean showPulseOnNewTracks =
