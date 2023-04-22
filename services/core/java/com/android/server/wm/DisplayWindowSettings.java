@@ -132,7 +132,7 @@ class DisplayWindowSettings {
         // No record is present so use default windowing mode policy.
         if (windowingMode == WindowConfiguration.WINDOWING_MODE_UNDEFINED) {
             windowingMode = mService.mAtmService.mSupportsFreeformWindowManagement
-                    && (mService.mIsPc || dc.getDisplayId() != Display.DEFAULT_DISPLAY)
+                    && (mService.mIsPc || dc.forceDesktopMode())
                     ? WindowConfiguration.WINDOWING_MODE_FREEFORM
                     : WindowConfiguration.WINDOWING_MODE_FULLSCREEN;
         }
