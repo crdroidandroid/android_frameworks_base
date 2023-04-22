@@ -103,4 +103,8 @@
     <!-- Dynamic Island Notification -->
     <dimen name="island_icon_size">36dp</dimen>
     <dimen name="island_side_margin">12dp</dimen>
+
+    <!-- QS A11 Style -->
+    <dimen name="custom_qs_panel_padding_top">0dp</dimen>
+    <dimen name="custom_notification_row_padding">16dp</dimen>
 </resources>
