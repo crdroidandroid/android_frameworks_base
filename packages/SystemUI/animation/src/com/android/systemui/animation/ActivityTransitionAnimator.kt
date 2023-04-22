@@ -521,7 +521,12 @@ constructor(
                     )
                 }
 
-                if (view.parent !is ViewGroup) {
+                var animatedView = view
+                if (view.getAnimatedView() is View) {
+                    animatedView = view.getAnimatedView() as View
+                }
+
+                if (animatedView.parent !is ViewGroup) {
                     Log.e(
                         TAG,
                         "Skipping animation as view $view is not attached to a ViewGroup",
@@ -531,7 +536,7 @@ constructor(
                 }
 
                 return GhostedViewTransitionAnimatorController(
-                    view,
+                    animatedView,
                     cujType,
                     cookie,
                     component,
