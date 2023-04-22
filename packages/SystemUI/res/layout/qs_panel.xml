@@ -38,6 +38,7 @@
             android:background="@android:color/transparent"
             android:focusable="false"
             android:importantForAccessibility="yes"
+            android:paddingTop="@dimen/custom_qs_panel_padding_top"
             android:clipToPadding="false"
             android:clipChildren="false">
 

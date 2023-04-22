@@ -45,6 +45,15 @@ interface LaunchableView {
 
     /** Provide an optional correction applied to the visible area during a launch animation */
     fun getPaddingForLaunchAnimation(): Rect = Rect()
+
+    /**
+     * Allows to override the animated view based on certain conditions
+     *
+     * @return The view that should actually be animated
+     */
+    fun getAnimatedView(): LaunchableView {
+        return this
+    }
 }
 
 /** A delegate that can be used by views to make the implementation of [LaunchableView] easier. */
