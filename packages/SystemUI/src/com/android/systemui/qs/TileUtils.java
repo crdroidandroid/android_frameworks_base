@@ -74,4 +74,10 @@ public class TileUtils {
                 Settings.System.QS_TILE_VERTICAL_LAYOUT,
                 defaultValue, UserHandle.USER_CURRENT) != 0;
     }
+
+   public static int getQsUiStyle(Context context) {
+       return Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.QS_TILE_UI_STYLE,
+                0, UserHandle.USER_CURRENT);
+   }
 }
