@@ -6372,6 +6372,11 @@ public final class Settings {
         /**
          * @hide
          */
+        public static final String QS_TILE_UI_STYLE = "qs_tile_ui_style";
+
+        /**
+         * @hide
+         */
         public static final String QS_LAYOUT_COLUMNS_LANDSCAPE = "qs_layout_columns_landscape";
 
         /**
