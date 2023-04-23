@@ -3112,6 +3112,11 @@ public class PackageManagerService implements PackageSender, TestUtilityService 
             return;
         }
 
+        final int callingUserId = UserHandle.getUserId(callingUid);
+        if (ParallelSpaceManagerService.canInteract(callingUserId, userId)) {
+            return;
+        }
+ 
         final String callerMismatchMessage = "Calling package " + callingPackage + " in user "
                 + userId + " does not belong to calling uid " + callingUid;
         if (!UserHandle.isSameApp(packageUid, callingUid)) {
