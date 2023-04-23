@@ -2251,7 +2251,7 @@ public class AudioService extends IAudioService.Stub
                     mStreamVolumeAlias = STREAM_VOLUME_ALIAS_DEFAULT;
                     dtmfStreamAlias = AudioSystem.STREAM_MUSIC;
             }
-            if (!mLinkNotificationWithVolume && mVoiceCapable) {
+            if (!mNotifAliasRing) {
                 mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] =
                         AudioSystem.STREAM_NOTIFICATION;
             }
@@ -2271,6 +2271,15 @@ public class AudioService extends IAudioService.Stub
         mStreamVolumeAlias[AudioSystem.STREAM_DTMF] = dtmfStreamAlias;
         mStreamVolumeAlias[AudioSystem.STREAM_ACCESSIBILITY] = a11yStreamAlias;
         mStreamVolumeAlias[AudioSystem.STREAM_ASSISTANT] = assistantStreamAlias;
+
+        if (mVoiceCapable) {
+            if (mLinkNotificationWithVolume) {
+                mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_RING;
+            } else {
+                mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] =
+                        AudioSystem.STREAM_NOTIFICATION;
+            }
+        }
 
         if (updateVolumes && mStreamStates != null) {
             updateDefaultVolumes();
