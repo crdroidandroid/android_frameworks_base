@@ -105,10 +105,10 @@ class WiredChargingRippleController @Inject constructor(
                     return
                 }
 
-                if (!pluggedIn && nowPluggedIn) {
+               /* if (!pluggedIn && nowPluggedIn) {
                     startRippleWithDebounce()
                 }
-                pluggedIn = nowPluggedIn
+                pluggedIn = nowPluggedIn */
             }
         }
         batteryController.addCallback(batteryStateChangeCallback)
