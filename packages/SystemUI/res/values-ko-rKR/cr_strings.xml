@@ -45,7 +45,6 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">데이터 절약 모드</string>
     <string name="status_bar_call_strength">통화 세기</string>
-    <string name="status_bar_firewall">Firewall</string>
     <string name="status_bar_ims">VoLTE/voWiFI</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
