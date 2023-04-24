@@ -45,7 +45,6 @@
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">Penghemat Data</string>
     <string name="status_bar_call_strength">Kekuatan panggilan</string>
-    <string name="status_bar_firewall">Firewall</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -153,9 +152,9 @@
     <!-- Google lens screenshot notification -->
     <string name="lens">Lens</string>
     <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Use Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth is off</string>
-    <string name="tap_a_device_to_connect">Tap a device to connect</string>
+    <string name="turn_on_bluetooth">Gunakan Bluetooth</string>
+    <string name="bluetooth_is_off">Bluetooth nonaktif</string>
+    <string name="tap_a_device_to_connect">Ketuk perangkat untuk menghubungkan</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Sistem UI</string>
 </resources>

@@ -42,7 +42,7 @@
     <string name="face_unlock_disabled_idle">باز کردن قفل با چهره به دلیل بی حرکتی غیرفعال شد</string>
     <!-- Parallel space badge -->
     <!-- Message for updating an existing app -->
-    <string name="old_version_number">نسخه فعلی</string>
+    <string name="old_version_number">نسخه فعلی: <xliff:g id="old_version">%1$s</xliff:g></string>
     <!-- Message for updating an existing system app -->
     <string name="new_version_number">این نسخه نصب خواهد شد: <xliff:g id="new_version">%1$s</xliff:g></string>
     <!-- App lock -->
