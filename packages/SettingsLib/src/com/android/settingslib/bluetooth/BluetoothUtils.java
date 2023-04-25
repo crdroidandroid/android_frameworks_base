@@ -169,7 +169,7 @@ public class BluetoothUtils {
     /**
      * Build Bluetooth device icon with rainbow
      */
-    public static Drawable buildBtRainbowDrawable(Context context, Drawable drawable,
+    private static Drawable buildBtRainbowDrawable(Context context, Drawable drawable,
             int hashCode) {
         final Resources resources = context.getResources();
 
