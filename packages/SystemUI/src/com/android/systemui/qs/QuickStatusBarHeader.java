@@ -231,8 +231,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (mDatePrivacyView.getMeasuredHeight() != mTopViewMeasureHeight) {
             mTopViewMeasureHeight = mDatePrivacyView.getMeasuredHeight();
+            updateAnimators();
         }
-        updateAnimators();
     }
 
     @Override
@@ -325,31 +325,33 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         }
         mHeaderQsPanel.setLayoutParams(qqsLP);
 
+        updateQSHeaderImage();
+
         updateHeadersPadding();
         updateAnimators();
 
         updateClockDatePadding();
-        updateQSHeaderImage();
     }
 
     private void updateQSHeaderImage() {
-        boolean mIsNightMode = (mContext.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
-        int orientation = getResources().getConfiguration().orientation;
-        if (mHeaderImageEnabled && orientation != Configuration.ORIENTATION_LANDSCAPE) {
-            int fadeFilter = ColorUtils.blendARGB(Color.TRANSPARENT, mIsNightMode ? Color.BLACK : Color.WHITE, 30 / 100f);
-            int resId = getResources().getIdentifier("qs_header_image_" + String.valueOf(mHeaderImageValue), "drawable", "com.android.systemui");
+        if (!mHeaderImageEnabled) {
+            mQsHeaderLayout.setVisibility(View.GONE);
+            return;
+        }
+        Configuration config = mContext.getResources().getConfiguration();
+        if (config.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+            boolean mIsNightMode = (mContext.getResources().getConfiguration().uiMode &
+                Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+            int fadeFilter = ColorUtils.blendARGB(Color.TRANSPARENT, mIsNightMode ?
+                Color.BLACK : Color.WHITE, 30 / 100f);
+            int resId = getResources().getIdentifier("qs_header_image_" +
+                String.valueOf(mHeaderImageValue), "drawable", "com.android.systemui");
             mQsHeaderImageView.setImageResource(resId);
             mQsHeaderImageView.setColorFilter(fadeFilter, PorterDuff.Mode.SRC_ATOP);
-            mQsHeaderImageView.setVisibility(View.VISIBLE);
+            mQsHeaderLayout.setVisibility(View.VISIBLE);
         } else {
-            mQsHeaderImageView.setVisibility(View.GONE);
+            mQsHeaderLayout.setVisibility(View.GONE);
         }
-
-        ViewGroup.MarginLayoutParams qsHeaderLayout = (ViewGroup.MarginLayoutParams) mQsHeaderLayout.getLayoutParams(); 
-        qsHeaderLayout.height = mHeaderImageEnabled && orientation != Configuration.ORIENTATION_LANDSCAPE ? 
-            mContext.getResources().getDimensionPixelSize(R.dimen.qs_header_height_full) : 0;
-        qsHeaderLayout.setMargins(-50, 0, -50, 0);
-        mQsHeaderLayout.setLayoutParams(qsHeaderLayout); 
     }
 
     private void updateClockDatePadding() {
