@@ -20,11 +20,16 @@
     android:layout_height="match_parent"
     android:visibility="gone">
 
-    <View
+    <android.widget.WallpaperView
         android:id="@+id/scrim_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000" />
+        android:scaleType="centerCrop"
+        android:gravity="center"
+        android:elevation="0dp"
+        android:foreground="@drawable/wallpaper_scrim"
+        android:background="@drawable/wallpaper_scrim"
+        android:orientation="vertical" />
 
     <LinearLayout
         android:id="@+id/pocket_mode_inner_view"
