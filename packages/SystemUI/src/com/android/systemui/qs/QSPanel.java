@@ -334,7 +334,7 @@ public class QSPanel extends LinearLayout implements Tunable {
     }
 
     private void updateViewPositions() {
-        if (mChildrenLayoutTop == null || mChildrenLayoutTop.isEmpty()) {
+        if (mChildrenLayoutTop == null || mChildrenLayoutTop.isEmpty() || mTileLayout == null) {
             return;
         }
         // Adjust view positions based on tile squishing
