@@ -128,11 +128,12 @@ constructor(
                 ConstraintSet.BOTTOM,
             )
 
+            // Weather area (if any) sits below the slice; ids not in the layout are ignored.
             createBarrier(
                 R.id.smart_space_barrier_bottom,
                 Barrier.BOTTOM,
                 0,
-                *intArrayOf(R.id.keyguard_slice_view),
+                *intArrayOf(R.id.keyguard_slice_view, R.id.keyguard_weather_area),
             )
         }
     }
