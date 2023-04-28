@@ -387,6 +387,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
             }
         } else if (!isBtScoRequested && wasBtScoRequested) {
             mBtHelper.stopBluetoothSco(eventSource);
+        } else if (isBluetoothLeHeadsetRequested()) {
+            // In BT classic for communication, the device changes from a2dp to sco device, but for
+            // LE Audio it stays the same and we must trigger the proper stream volume alignment, if
+            // LE Audio device was activated after the audio system has already switched to
+            // MODE_IN_CALL mode.
+            final int streamType = mAudioService.getBluetoothContextualVolumeStream();
+            final int leAudioVolIndex = getVssVolumeForDevice(streamType, device.getInternalType());
+            final int leAudioMaxVolIndex = getMaxVssVolumeForStream(streamType);
+            if (AudioService.DEBUG_COMM_RTE) {
+                Log.v(TAG, "setCommunicationRouteForClient restoring LE Audio device volume lvl.");
+            }
+            postSetLeAudioVolumeIndex(leAudioVolIndex, leAudioMaxVolIndex, streamType);
         }
 
         sendLMsgNoDelay(MSG_L_UPDATE_COMMUNICATION_ROUTE, SENDMSG_QUEUE, eventSource);
@@ -535,6 +547,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
      */
     /*package*/ boolean isBluetoothScoRequested() {
         return isDeviceRequestedForCommunication(AudioDeviceInfo.TYPE_BLUETOOTH_SCO);
+    }
+
+    /**
+     * Helper method on top of isDeviceRequestedForCommunication() indicating if
+     * Bluetooth LE Headset communication device is currently requested or not.
+     * @return true if Bluetooth LE Headset device is requested, false otherwise.
+     */
+    /*package*/ boolean isBluetoothLeHeadsetRequested() {
+        return isDeviceRequestedForCommunication(AudioDeviceInfo.TYPE_BLE_HEADSET);
     }
 
     /**
