@@ -56,6 +56,12 @@
                android:layout_width="match_parent"
                android:layout_height="wrap_content" />
 
+        <include layout="@layout/current_weather_view"
+            android:id="@+id/weather_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
       <com.android.systemui.statusbar.phone.NotificationIconContainer
           android:id="@+id/left_aligned_notification_icon_container"
           android:layout_width="match_parent"
