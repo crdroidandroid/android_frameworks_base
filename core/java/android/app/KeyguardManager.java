@@ -40,6 +40,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.IUserManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.ServiceManager.ServiceNotFoundException;
@@ -86,6 +87,7 @@ public class KeyguardManager {
     private final IActivityManager mAm;
     private final ITrustManager mTrustManager;
     private final INotificationManager mNotificationManager;
+    private final IUserManager mUserManager;
     private final ArrayMap<WeakEscrowTokenRemovedListener, IWeakEscrowTokenRemovedListener>
             mListeners = new ArrayMap<>();
 
@@ -274,7 +276,7 @@ public class KeyguardManager {
         intent.putExtra(EXTRA_DESCRIPTION, description);
 
         // explicitly set the package for security
-        intent.setPackage(getSettingsPackageForIntent(intent));
+        intent.setPackage(getSettingsPackageForIntent(intent, UserHandle.USER_CURRENT));
         return intent;
     }
 
@@ -297,7 +299,7 @@ public class KeyguardManager {
         intent.putExtra(Intent.EXTRA_USER_ID, userId);
 
         // explicitly set the package for security
-        intent.setPackage(getSettingsPackageForIntent(intent));
+        intent.setPackage(getSettingsPackageForIntent(intent, userId));
 
         return intent;
     }
@@ -383,7 +385,7 @@ public class KeyguardManager {
         intent.putExtra(EXTRA_ALTERNATE_BUTTON_LABEL, alternateButtonLabel);
 
         // explicitly set the package for security
-        intent.setPackage(getSettingsPackageForIntent(intent));
+        intent.setPackage(getSettingsPackageForIntent(intent, UserHandle.USER_CURRENT));
 
         return intent;
     }
@@ -422,7 +424,7 @@ public class KeyguardManager {
                 .putExtra(EXTRA_ALTERNATE_BUTTON_LABEL, alternateButtonLabel);
 
         // explicitly set the package for security
-        intent.setPackage(getSettingsPackageForIntent(intent));
+        intent.setPackage(getSettingsPackageForIntent(intent, UserHandle.USER_CURRENT));
 
         return intent;
     }
@@ -468,14 +470,26 @@ public class KeyguardManager {
         }
     }
 
-    private String getSettingsPackageForIntent(Intent intent) {
-        List<ResolveInfo> resolveInfos = mContext.getPackageManager()
-                .queryIntentActivities(intent, PackageManager.MATCH_SYSTEM_ONLY);
+    private String getSettingsPackageForIntent(Intent intent, final int userId) {
+        final int currentUserIdOrParentUserId = userId == UserHandle.USER_CURRENT
+                ? userId : getProfileParentId(userId);
+        List<ResolveInfo> resolveInfos = mContext.getPackageManager().queryIntentActivitiesAsUser(
+                intent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_SYSTEM_ONLY),
+                currentUserIdOrParentUserId);
         for (int i = 0; i < resolveInfos.size(); i++) {
             return resolveInfos.get(i).activityInfo.packageName;
         }
 
         return "com.android.settings";
+    }
+
+    private int getProfileParentId(final int userId) {
+        try {
+            return mUserManager.getProfileParentId(userId);
+        } catch (RemoteException ex) {
+            Log.e(TAG, "getProfileParentId failed for userId " + userId + "; using " + userId, ex);
+            return userId;
+        }
     }
 
     /**
@@ -617,6 +631,8 @@ public class KeyguardManager {
                 ServiceManager.getServiceOrThrow(Context.TRUST_SERVICE));
         mNotificationManager = INotificationManager.Stub.asInterface(
                 ServiceManager.getServiceOrThrow(Context.NOTIFICATION_SERVICE));
+        mUserManager = IUserManager.Stub.asInterface(
+                ServiceManager.getServiceOrThrow(Context.USER_SERVICE));
     }
 
     /**
