@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.systemui.weather.WeatherInfoView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:systemui="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/keyguard_weather_area"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp">
+
+    <!-- Weather Info -->
+    <ImageView
+        android:id="@+id/weather_icon"
+        android:layout_width="@dimen/weather_image_max_size"
+        android:layout_height="@dimen/weather_image_max_size"
+        android:visibility="gone"
+        systemui:layout_constraintStart_toStartOf="parent"
+        systemui:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/weather_temp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Keyguard.Secondary"
+        android:textColor="?attr/wallpaperTextColor"
+        android:visibility="gone"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollHorizontally="true"
+        android:freezesText="true"
+        systemui:layout_constraintStart_toEndOf="@id/weather_icon"
+        systemui:layout_constraintTop_toTopOf="@id/weather_icon"
+        systemui:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp" />
+
+</com.android.systemui.weather.WeatherInfoView>
