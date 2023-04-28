@@ -739,9 +739,15 @@ public class LockSettingsService extends ILockSettings.Stub {
 
         unlockIntent.setFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        PendingIntent intent = PendingIntent.getActivity(
-                mContext, user.getIdentifier(), unlockIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE_UNAUDITED);
+        final UserHandle parentUser = mUserManager.getProfileParent(user);
+        if (parentUser == null) {
+            Slog.w(TAG, "somehow no parent user for profile with id " + user.getIdentifier());
+        }
+        final UserHandle userOrParent = parentUser == null ? user : parentUser;
+        PendingIntent intent = PendingIntent.getActivityAsUser(
+                mContext, user.getIdentifier() /* requestCode */, unlockIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE_UNAUDITED,
+                null /* options */, userOrParent);
 
         Slogf.d(TAG, "Showing encryption notification for user %d; reason: %s",
                 user.getIdentifier(), reason);
