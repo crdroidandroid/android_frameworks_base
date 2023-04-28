@@ -201,6 +201,7 @@ object KeyguardRootViewBinder {
                             view.alpha = alpha
                             childViews[burnInLayerId]?.alpha = alpha
                             childViews[sliceViewId]?.alpha = alpha
+                            childViews[weatherAreaId]?.alpha = alpha
                         }
                     }
 
@@ -230,6 +231,7 @@ object KeyguardRootViewBinder {
                         viewModel.translationY.collect { y ->
                             childViews[burnInLayerId]?.translationY = y
                             childViews[sliceViewId]?.translationY = y
+                            childViews[weatherAreaId]?.translationY = y
                             childViews[largeClockId]?.translationY = y
                             if (com.android.systemui.shared.Flags.clockReactiveSmartspaceLayout()) {
                                 childViews[largeClockDateId]?.translationY = y
@@ -247,6 +249,7 @@ object KeyguardRootViewBinder {
                                     // Large Clock is not translated in the x direction
                                     childViews[burnInLayerId]?.translationX = px
                                     childViews[sliceViewId]?.translationX = px
+                                    childViews[weatherAreaId]?.translationX = px
                                     childViews[aodPromotedNotificationId]?.translationX = px
                                     childViews[aodNotificationIconContainerId]?.translationX = px
                                 }
@@ -296,6 +299,7 @@ object KeyguardRootViewBinder {
                         viewModel.burnInLayerVisibility.collect { visibility ->
                             childViews[burnInLayerId]?.visibility = visibility
                             childViews[sliceViewId]?.visibility = visibility
+                            childViews[weatherAreaId]?.visibility = visibility
                         }
                     }
 
@@ -583,6 +587,7 @@ object KeyguardRootViewBinder {
 
     private val burnInLayerId = R.id.burn_in_layer
     private val sliceViewId = R.id.keyguard_slice_view
+    private val weatherAreaId = R.id.keyguard_weather_area
     private val aodPromotedNotificationId = AodPromotedNotificationSection.viewId
     private val aodNotificationIconContainerId = R.id.aod_notification_icon_container
     private val largeClockId = ClockViewIds.LOCKSCREEN_CLOCK_VIEW_LARGE
