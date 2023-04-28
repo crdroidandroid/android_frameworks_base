@@ -220,6 +220,7 @@ public class KeyguardStatusViewController extends ViewController<KeyguardStatusV
             if (visible) {
                 if (DEBUG) Slog.v(TAG, "refresh statusview visible:true");
                 refreshTime();
+                mKeyguardClockSwitchController.updateWeatherView();
             }
         }
     };
