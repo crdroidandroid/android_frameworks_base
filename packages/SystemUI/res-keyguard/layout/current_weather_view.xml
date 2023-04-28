@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2023 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<com.android.systemui.crdroid.CurrentWeatherView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="start"
+    android:gravity="center_vertical"
+    android:clipToPadding="false"
+    android:paddingStart="@dimen/below_clock_padding_start">
+
+    <LinearLayout
+        android:id="@+id/current"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/left_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/wallpaperTextColor"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:paddingEnd="8dp"
+            style="@style/TextAppearance.Keyguard.Secondary" />
+
+        <ImageView
+            android:id="@+id/current_image"
+            android:layout_width="@dimen/widget_icon_size"
+            android:layout_height="@dimen/widget_icon_size"
+            android:scaleType="centerInside"/>
+
+        <TextView
+            android:id="@+id/right_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/wallpaperTextColor"
+            android:singleLine="true"
+            android:paddingStart="8dp"
+            style="@style/TextAppearance.Keyguard.Secondary" />
+    </LinearLayout>
+
+</com.android.systemui.crdroid.CurrentWeatherView>
