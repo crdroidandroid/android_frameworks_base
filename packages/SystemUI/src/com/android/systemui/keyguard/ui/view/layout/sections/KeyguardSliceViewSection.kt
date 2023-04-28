@@ -124,12 +124,21 @@ constructor(
                 ConstraintSet.BOTTOM,
             )
 
-            createBarrier(
-                R.id.smart_space_barrier_bottom,
-                Barrier.BOTTOM,
-                0,
-                *intArrayOf(R.id.keyguard_slice_view),
-            )
+            if (!smartspaceController.isOmniWeatherEnabled) {
+                createBarrier(
+                    R.id.smart_space_barrier_bottom,
+                    Barrier.BOTTOM,
+                    0,
+                    *intArrayOf(R.id.keyguard_slice_view),
+                )
+            } else {
+                createBarrier(
+                    R.id.keyguard_weather_area,
+                    Barrier.BOTTOM,
+                    0,
+                    *intArrayOf(R.id.keyguard_slice_view),
+                )
+            }
         }
     }
 
