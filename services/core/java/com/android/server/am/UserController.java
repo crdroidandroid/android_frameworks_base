@@ -482,8 +482,8 @@ class UserController implements Handler.Callback {
     void finishUserSwitch(UserState uss) {
         // This call holds the AM lock so we post to the handler.
         mHandler.post(() -> {
-            finishUserBoot(uss);
             startProfiles();
+            finishUserBoot(uss);
             synchronized (mLock) {
                 stopRunningUsersLU(mMaxRunningUsers);
             }
