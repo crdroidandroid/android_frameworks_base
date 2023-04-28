@@ -35,4 +35,8 @@
 
     <!-- QS A11 Style -->
     <dimen name="custom_qs_panel_padding_top">0dp</dimen>
+
+    <!-- Weather -->  
+    <dimen name="weather_image_max_size">24dp</dimen>
+    <dimen name="weather_humidity_margin_start">16dp</dimen>
 </resources>
