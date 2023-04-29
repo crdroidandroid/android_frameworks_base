@@ -224,7 +224,9 @@ final class InputManagerCallback implements InputManagerService.WindowManagerCal
                     return displayContent.getDisplayId();
                 }
 
-                if (firstExternalDisplayId == DEFAULT_DISPLAY
+                // If desktop mode is not enabled, show on the default display.
+                if (displayContent.forceDesktopMode()
+                        && firstExternalDisplayId == DEFAULT_DISPLAY
                         && displayContent.getDisplayId() != DEFAULT_DISPLAY) {
                     firstExternalDisplayId = displayContent.getDisplayId();
                 }
