@@ -28131,10 +28131,12 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
             Log.e(VIEW_LOG_TAG, "Unable to initiate drag", e);
             return false;
         } finally {
-            if (token == null) {
+            if (session != null) {
+                session.kill();
+            }
+            if (token == null && surface != null) {
                 surface.destroy();
             }
-            session.kill();
         }
     }
 
