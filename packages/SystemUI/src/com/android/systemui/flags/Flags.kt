@@ -543,7 +543,8 @@ object Flags {
         sysPropBooleanFlag(1202, "persist.wm.debug.predictive_back_always_enforce", default = false)
 
     // TODO(b/254512728): Tracking Bug
-    @JvmField val NEW_BACK_AFFORDANCE = unreleasedFlag(1203, "new_back_affordance", teamfood = true)
+    @JvmField
+    val NEW_BACK_AFFORDANCE = releasedFlag(1203, "new_back_affordance")
 
     // TODO(b/255854141): Tracking Bug
     @JvmField
