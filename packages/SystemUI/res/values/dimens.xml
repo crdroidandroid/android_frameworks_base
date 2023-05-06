@@ -1079,7 +1079,7 @@
     <dimen name="default_gear_space">18dp</dimen>
 
     <!-- Global actions power menu -->
-    <dimen name="global_actions_translate">9dp</dimen>
+    <dimen name="global_actions_translate">0dp</dimen>
 
     <!-- Distance from the top of screen in pixels, to position the power menu near the button. -->
     <dimen name="global_actions_top_padding">330px</dimen>
