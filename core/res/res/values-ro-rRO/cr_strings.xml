@@ -29,8 +29,8 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Apăsați și țineți apăsat butonul de alimentare pentru a debloca</string>
     <string name="pocket_view_title">Modul buzunar este pornit</string>
-    <string name="pocket_view_title_cancel">To activate your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Please do not cover the blue area of your phone and clear any dirt or dust off it.</string>
+    <string name="pocket_view_title_cancel">Pentru a activa telefonul:</string>
+    <string name="pocket_view_top_tag_cancel">Verifică dacă zona albastră a telefonului nu are nici un fel de obstrucții și șterge orice noroi sau praf.</string>
     <string name="pocket_view_top_tag_cancel2">Apăsați lung butonul de pornire pentru a forța ieșirea din modul buzunar.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
