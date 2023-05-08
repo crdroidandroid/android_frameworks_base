@@ -29,8 +29,8 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Stlačte a podržte tlačidlo napájania pre odomknutie</string>
     <string name="pocket_view_title">Vreckový režim je zapnutý</string>
-    <string name="pocket_view_title_cancel">To activate your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Please do not cover the blue area of your phone and clear any dirt or dust off it.</string>
+    <string name="pocket_view_title_cancel">Pre aktiváciu vášho telefónu:</string>
+    <string name="pocket_view_top_tag_cancel">Skontrolujte, či sa v modrej oblasti telefónu nenachádzajú žiadne prekážky, a očistite ju od nečistôt a prachu.</string>
     <string name="pocket_view_top_tag_cancel2">Dlhým stlačením tlačidla napájania vynútite ukončenie vreckového režimu.</string>
     <string name="pocket_view_top_tag_number1">\u0020</string>
     <string name="pocket_view_top_tag_number2">\u0020</string>
