@@ -18,6 +18,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Rect
 import android.icu.text.NumberFormat
+import android.os.UserHandle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +36,8 @@ import java.io.PrintWriter
 import java.util.Locale
 import java.util.TimeZone
 
+import android.provider.Settings.Secure
+
 private val TAG = DefaultClockController::class.simpleName
 
 /**
@@ -44,7 +47,7 @@ private val TAG = DefaultClockController::class.simpleName
  * existing lockscreen clock.
  */
 class DefaultClockController(
-    ctx: Context,
+    val ctx: Context,
     private val layoutInflater: LayoutInflater,
     private val resources: Resources,
     private val settings: ClockSettings?,
@@ -168,12 +171,10 @@ class DefaultClockController(
             // We center the view within the targetRegion instead of within the parent
             // view by computing the difference and adding that to the padding.
             val parent = view.parent
-            val yDiff =
-                if (targetRegion != null && parent is View && parent.isLaidOut())
-                    targetRegion.centerY() - parent.height / 2f
-                else 0f
             val lp = view.getLayoutParams() as FrameLayout.LayoutParams
-            lp.topMargin = (-0.5f * view.bottom + yDiff).toInt()
+            val customTopMargin = Secure.getIntForUser(ctx.getContentResolver(),
+                Secure.KG_CUSTOM_CLOCK_TOP_MARGIN, 280, UserHandle.USER_CURRENT)
+            lp.topMargin = (-1f * customTopMargin).toInt()
             view.setLayoutParams(lp)
         }
 
