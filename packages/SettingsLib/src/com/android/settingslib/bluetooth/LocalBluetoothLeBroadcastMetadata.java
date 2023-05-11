@@ -25,6 +25,7 @@ import android.bluetooth.BluetoothLeBroadcastMetadata;
 import android.bluetooth.BluetoothLeBroadcastSubgroup;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -223,7 +224,17 @@ public class LocalBluetoothLeBroadcastMetadata {
             mBroadcastId = Integer.parseInt(resultList.get(3));
             mPaSyncInterval = Integer.parseInt(resultList.get(4));
             mIsEncrypted = Boolean.valueOf(resultList.get(5));
-            mBroadcastCode = resultList.get(6).getBytes();
+            String bcode = resultList.get(6);
+            mBroadcastCode = null;
+            if (!bcode.equals("[]")) {
+                mBroadcastCode = Arrays.stream(bcode.substring(1, bcode.length()-1).split(","))
+                        .map(String::trim)
+                        .map(v->Byte.parseByte(v))
+                        .collect(ByteArrayOutputStream::new,
+                                (b, i)->b.write(i),
+                                (b1, b2)->b1.write(b2.toByteArray(), 0, b2.size()))
+                        .toByteArray();
+            }
             mPresentationDelayMicros = Integer.parseInt(resultList.get(7));
             mSubgroup = convertToSubgroup(resultList.get(8));
 
