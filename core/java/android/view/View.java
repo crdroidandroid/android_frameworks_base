@@ -16893,13 +16893,17 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         if (hovered) {
             if ((mPrivateFlags & PFLAG_HOVERED) == 0) {
                 mPrivateFlags |= PFLAG_HOVERED;
-                refreshDrawableState();
+                if (!isFocused()) {
+                    refreshDrawableState();
+                }
                 onHoverChanged(true);
             }
         } else {
             if ((mPrivateFlags & PFLAG_HOVERED) != 0) {
                 mPrivateFlags &= ~PFLAG_HOVERED;
-                refreshDrawableState();
+                if (!isFocused()) {
+                    refreshDrawableState();
+                }
                 onHoverChanged(false);
             }
         }
