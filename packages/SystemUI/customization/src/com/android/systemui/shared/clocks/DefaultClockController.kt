@@ -137,9 +137,9 @@ class DefaultClockController(
 
                 override fun onFontSettingChanged(fontSizePx: Float) {
                     val smallClockTextSize = Secure.getIntForUser(ctx.getContentResolver(),
-                    Secure.KG_SMALL_CLOCK_TEXT_SIZE, 80, UserHandle.USER_CURRENT)
+                    Secure.KG_SMALL_CLOCK_TEXT_SIZE, 86, UserHandle.USER_CURRENT)
                     val largeClockTextSize = Secure.getIntForUser(ctx.getContentResolver(),
-                    Secure.KG_LARGE_CLOCK_TEXT_SIZE, 86, UserHandle.USER_CURRENT)
+                    Secure.KG_LARGE_CLOCK_TEXT_SIZE, 180, UserHandle.USER_CURRENT)
                     val finalSmallTextSize = smallClockTextSize.dp
                     val finalLargeClockTextSize = largeClockTextSize.dp
                     setClockFontSize(smallClock.view, finalSmallTextSize.px.toFloat() *  2.5f)
