@@ -76,5 +76,5 @@
          when media is not showing. -->
     <dimen name="lockscreen_shade_keyguard_transition_vertical_offset">83dp</dimen>
 
-    <dimen name="notification_panel_margin_horizontal">24dp</dimen>
+    <dimen name="notification_panel_margin_horizontal">0dp</dimen>
 </resources>
