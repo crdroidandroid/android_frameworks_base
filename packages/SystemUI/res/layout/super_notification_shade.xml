@@ -32,6 +32,7 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         sysui:ignoreRightInset="true"
+        sysui:ignoreLeftInset="true"
     >
         <ImageView android:id="@+id/backdrop_back"
                    android:layout_width="match_parent"
@@ -50,6 +51,7 @@
         android:layout_height="match_parent"
         android:importantForAccessibility="no"
         sysui:ignoreRightInset="true"
+        sysui:ignoreLeftInset="true"
     />
 
     <com.android.systemui.scrim.ScrimView
