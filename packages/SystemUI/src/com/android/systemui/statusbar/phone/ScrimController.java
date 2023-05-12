@@ -30,6 +30,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.IntDef;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.provider.Settings;
 import android.os.Handler;
@@ -267,6 +268,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
     private Callback mCallback;
     private boolean mScreenOn;
     private boolean mTransparentScrimBackground;
+    private boolean mIsLandscape;
 
     // Scrim blanking callbacks
     private Runnable mPendingFrameCallback;
@@ -288,6 +290,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
 
                 mNotificationsAlpha = alphas.getNotificationsAlpha();
                 mNotificationsScrim.setViewAlpha(mNotificationsAlpha);
+                updateNotificationScrimVisibility();
 
                 mBehindAlpha = alphas.getBehindAlpha();
                 mScrimBehind.setViewAlpha(mBehindAlpha);
@@ -378,6 +381,13 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
             @Override
             public void onUiModeChanged() {
                 ScrimController.this.onThemeChanged();
+            }
+
+            @Override
+            public void onConfigChanged(Configuration newConfig) {
+                int orientation = newConfig.orientation;
+                mIsLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
+                updateNotificationScrimVisibility();
             }
         });
         mColors = new GradientColors();
@@ -967,11 +977,9 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
                     mBehindAlpha = mCustomScrimAlpha;
                     mNotificationsAlpha = behindFraction * mCustomScrimAlpha;
                 } else {
-                    mBehindAlpha = mLargeScreenShadeInterpolator.getBehindScrimAlpha(
-                            mPanelExpansionFraction * mDefaultScrimAlpha);
+                    mBehindAlpha = mPanelExpansionFraction * mCustomScrimAlpha;
                     mNotificationsAlpha =
-                            mLargeScreenShadeInterpolator.getNotificationScrimAlpha(
-                                    mPanelExpansionFraction);
+                            mPanelExpansionFraction * mCustomScrimAlpha;
                 }
                 mBehindTint = mState.getBehindTint();
                 mInFrontAlpha = 0;
@@ -1577,10 +1585,12 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
             state.setSurfaceColor(surface);
         }
 
-        mBehindColors.setMainColor(mUseDualToneColor ? surface : background);
+        // hide the surface on landscape 
+        final boolean showSurface = mUseDualToneColor && !mIsLandscape;
+        mBehindColors.setMainColor(showSurface ? surface : background);
         mBehindColors.setSecondaryColor(accent);
         final boolean isSurfaceBackgroundLight = !ContrastColorUtil.isColorDark(surface);
-        mBehindColors.setSupportsDarkText(mUseDualToneColor ? isSurfaceBackgroundLight : isBackgroundLight);
+        mBehindColors.setSupportsDarkText(showSurface ? isSurfaceBackgroundLight : isBackgroundLight);
 
         mNeedsDrawableColorUpdate = true;
     }
@@ -1675,6 +1685,12 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
         for (ScrimState state : ScrimState.values()) {
             state.setLaunchingAffordanceWithPreview(launchingAffordanceWithPreview);
         }
+    }
+    
+    private void updateNotificationScrimVisibility() {
+        if (mNotificationsScrim == null) return;
+        mNotificationsScrim.setVisibility(
+            mIsLandscape ? View.GONE : View.VISIBLE);
     }
 
     public interface Callback {
