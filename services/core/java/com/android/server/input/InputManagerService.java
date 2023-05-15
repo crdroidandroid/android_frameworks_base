@@ -848,6 +848,10 @@ public class InputManagerService extends IInputManager.Stub
     }
 
     private void removeSpyWindowGestureMonitor(IBinder inputChannelToken) {
+        if (inputChannelToken == null) {
+            return; // Handle the null inputChannelToken gracefully
+        }
+        
         final GestureMonitorSpyWindow monitor;
         synchronized (mInputMonitors) {
             monitor = mInputMonitors.remove(inputChannelToken);
