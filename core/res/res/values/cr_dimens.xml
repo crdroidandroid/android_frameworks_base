@@ -27,4 +27,7 @@
     <dimen name="pocket_view_cancel_margin_horizontal">24dp</dimen>
     <dimen name="pocket_view_top_tag_size">13sp</dimen>
     <dimen name="pocket_view_top_tag_margin_top">8dp</dimen>
+
+    <!-- Default line spacing multiplier between hours and minutes of the keyguard clock -->
+    <item name="keyguard_clock_line_spacing_scale" type="dimen" format="float">.7</item>
 </resources>
