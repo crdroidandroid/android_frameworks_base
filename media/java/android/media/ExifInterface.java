@@ -4011,10 +4011,12 @@ public class ExifInterface {
 
     private void parseTiffHeaders(ByteOrderedDataInputStream dataInputStream,
             int exifBytesLength) throws IOException {
-        // Read byte order
-        mExifByteOrder = readByteOrder(dataInputStream);
-        // Set byte order
-        dataInputStream.setByteOrder(mExifByteOrder);
+        try {
+            // Read byte order
+            mExifByteOrder = readByteOrder(dataInputStream);
+            // Set byte order
+            dataInputStream.setByteOrder(mExifByteOrder);
+        } catch (IOException e) {}
 
         // Check start code
         int startCode = dataInputStream.readUnsignedShort();
