@@ -1,16 +1,23 @@
 package com.android.systemui;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.PropertyValuesHolder;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 
 public class RetickerAnimations {
 
     static boolean mIsAnimatingTicker;
+    
+    private static AnimatorSet animatorSet;
 
     public static void doBounceAnimationIn(View targetView) {
         ObjectAnimator animator = ObjectAnimator.ofFloat(targetView, "translationY", -100, 0, 0);
@@ -49,43 +56,91 @@ public class RetickerAnimations {
         });
     }
 
-
     public static void revealAnimation(View targetView) {
-        int cx = targetView.getWidth() / 2;
-        int cy = targetView.getHeight() / 2;
+	if (animatorSet != null && animatorSet.isRunning()) {
+	    animatorSet.cancel();
+	}
 
-        float finalRadius = (float) Math.hypot(cx, cy);
+	float centerX = targetView.getWidth() / 2f;
+	float centerY = targetView.getHeight() / 2f;
+	float maxRadius = (float) Math.hypot(centerX, centerY);
 
-        Animator anim = ViewAnimationUtils.createCircularReveal(targetView, cx, cy, 0f, finalRadius);
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
-        anim.setDuration(500);
+	final float initialRadius = 0f;
+	final float finalRadius = maxRadius;
 
-        anim.start();
-        targetView.setVisibility(View.VISIBLE);
+	final float initialTranslationY = -maxRadius;
+	final float finalTranslationY = 0f;
+
+	final long animationDuration = 1000;
+
+	Animator circularRevealAnimator = ViewAnimationUtils.createCircularReveal(
+		targetView,
+		(int) centerX,
+		(int) centerY,
+		initialRadius,
+		finalRadius
+	);
+
+	circularRevealAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+	circularRevealAnimator.setDuration(animationDuration);
+
+	// Add the bounce effect
+	ObjectAnimator bounceAnimator = ObjectAnimator.ofFloat(
+		targetView,
+		"translationY",
+		initialTranslationY,
+		finalTranslationY
+	);
+	bounceAnimator.setInterpolator(new BounceInterpolator());
+	bounceAnimator.setDuration(animationDuration);
+
+	targetView.setVisibility(View.VISIBLE);
+
+	animatorSet = new AnimatorSet();
+	animatorSet.playTogether(circularRevealAnimator, bounceAnimator);
+
+	animatorSet.start();
     }
 
     public static void revealAnimationHide(View targetView, View notificationStackScroller) {
-        int cx = targetView.getWidth() / 2;
-        int cy = targetView.getHeight() / 2;
+        if (animatorSet != null && animatorSet.isRunning()) {
+            animatorSet.cancel();
+        }
 
-        float initialRadius = (float) Math.hypot(cx, cy);
+        float centerX = targetView.getWidth() / 2f;
+        float centerY = targetView.getHeight() / 2f;
+        float startRadius = Math.max(centerX, centerY);
+        float endRadius = 0f;
 
-        Animator anim = ViewAnimationUtils.createCircularReveal(targetView, cx, cy, initialRadius, 0f);
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
-        anim.setDuration(350);
-        anim.start();
-        anim.addListener(new AnimatorListenerAdapter() {
+        final long animationDuration = 350;
+
+        Animator circularHideAnimator = ViewAnimationUtils.createCircularReveal(
+                targetView,
+                (int) centerX,
+                (int) centerY,
+                startRadius,
+                endRadius
+        );
+
+        circularHideAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        circularHideAnimator.setDuration(animationDuration);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.play(circularHideAnimator);
+
+        animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 notificationStackScroller.setVisibility(View.VISIBLE);
                 targetView.setVisibility(View.GONE);
-                mIsAnimatingTicker = false;
             }
         });
+
+        animatorSet.start();
     }
 
     public static boolean isTickerAnimating() {
-        return mIsAnimatingTicker;
+	return mIsAnimatingTicker;
     }
 
 }
