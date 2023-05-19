@@ -75,32 +75,24 @@ void AnimatorManager::pushStaging() {
             return;
         }
 
-        // Prevent multiple threads from accessing the list
-        std::mutex mNewAnimatorsMutex;
-
-        // Acquire the lock 
-        std::lock_guard<std::mutex> lock(mNewAnimatorsMutex);
-
         // Only add new animators that are not already in the mAnimators list
-        if (mNewAnimators.size()) {
-            for (auto& anim : mNewAnimators) {
-                // Safety check for null pointer
-                if (anim != nullptr && anim->target() != &mParent) {
-                    mAnimators.push_back(std::move(anim));
-                }
+        for (auto& anim : mNewAnimators) {
+            if (anim && anim->target() != &mParent) {
+                mAnimators.push_back(std::move(anim));
             }
-            // Clear the list.
-            mNewAnimators.clear();
         }
+        mNewAnimators.clear();
     }
 
     if (mCancelAllAnimators) {
         for (auto& animator : mAnimators) {
+            if (animator)
                 animator->forceEndNow(mAnimationHandle->context());
         }
         mCancelAllAnimators = false;
     } else {
         for (auto& animator : mAnimators) {
+            if (animator)
                 animator->pushStaging(mAnimationHandle->context());
         }
     }
