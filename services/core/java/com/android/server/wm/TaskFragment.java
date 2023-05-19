@@ -1295,6 +1295,9 @@ class TaskFragment extends WindowContainer<WindowContainer> {
         // appropriate for it.
         mTaskSupervisor.mStoppingActivities.remove(next);
 
+        if (!next.translucentWindowLaunch)
+            next.launching = true;
+
         if (DEBUG_SWITCH) Slog.v(TAG_SWITCH, "Resuming " + next);
 
         mTaskSupervisor.setLaunchSource(next.info.applicationInfo.uid);
