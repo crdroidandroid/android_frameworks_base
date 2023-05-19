@@ -98,8 +98,7 @@ public:
         ctx << (value != nullptr ? ScopedUtfChars(env, value).c_str() : "NULL");
         return ctx.write(LogID);
     }
-    static jint writeEventArray(JNIEnv* env, jobject clazz ATTRIBUTE_UNUSED, jint tag,
-            jobjectArray value) {
+    static jint writeEventArray(JNIEnv* env, jobject clazz ATTRIBUTE_UNUSED, jint tag, jobjectArray value) {
         android_log_event_list ctx(tag);
 
         if (value == nullptr) {
@@ -107,25 +106,40 @@ public:
             return ctx.write(LogID);
         }
 
-        jsize copied = 0, num = env->GetArrayLength(value);
-        for (; copied < num && copied < 255; ++copied) {
+        const jsize num = env->GetArrayLength(value);
+        const jsize limit = num < 255 ? num : 255;  // Determine the iteration limit once
+
+        jstring stringItem = nullptr;
+        const char* utfChars = nullptr;
+        jint intValue = 0;
+        jlong longValue = 0;
+        jfloat floatValue = 0;
+
+        for (jsize copied = 0; copied < limit; ++copied) {
             if (ctx.status()) break;
+
             ScopedLocalRef<jobject> item(env, env->GetObjectArrayElement(value, copied));
             if (item == nullptr) {
                 ctx << "NULL";
-            } else if (env->IsInstanceOf(item.get(), gStringClass)) {
-                ctx << ScopedUtfChars(env, (jstring) item.get()).c_str();
-            } else if (env->IsInstanceOf(item.get(), gIntegerClass)) {
-                ctx << (int32_t)env->GetIntField(item.get(), gIntegerValueID);
-            } else if (env->IsInstanceOf(item.get(), gLongClass)) {
-                ctx << (int64_t)env->GetLongField(item.get(), gLongValueID);
-            } else if (env->IsInstanceOf(item.get(), gFloatClass)) {
-                ctx << (float)env->GetFloatField(item.get(), gFloatValueID);
             } else {
-                jniThrowException(env,
-                        "java/lang/IllegalArgumentException",
-                        "Invalid payload item type");
-                return -1;
+                if (env->IsInstanceOf(item.get(), gStringClass)) {
+                    stringItem = static_cast<jstring>(item.get());
+                    utfChars = env->GetStringUTFChars(stringItem, nullptr);
+                    ctx << utfChars;
+                    env->ReleaseStringUTFChars(stringItem, utfChars);
+                } else if (env->IsInstanceOf(item.get(), gIntegerClass)) {
+                    intValue = env->GetIntField(item.get(), gIntegerValueID);
+                    ctx << static_cast<int32_t>(intValue);
+                } else if (env->IsInstanceOf(item.get(), gLongClass)) {
+                    longValue = env->GetLongField(item.get(), gLongValueID);
+                    ctx << static_cast<int64_t>(longValue);
+                } else if (env->IsInstanceOf(item.get(), gFloatClass)) {
+                    floatValue = env->GetFloatField(item.get(), gFloatValueID);
+                    ctx << static_cast<float>(floatValue);
+                } else {
+                    jniThrowException(env, "java/lang/IllegalArgumentException", "Invalid payload item type");
+                    return -1;
+                }
             }
         }
         return ctx.write(LogID);
