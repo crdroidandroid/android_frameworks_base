@@ -823,49 +823,46 @@ public class TextUtils {
      */
     public static void writeToParcel(@Nullable CharSequence cs, @NonNull Parcel p,
             int parcelableFlags) {
+        if (cs == null) {
+            p.writeInt(1);
+            p.writeString8(null);
+            return;
+        }
         if (cs instanceof Spanned) {
             p.writeInt(0);
-            p.writeString8(cs.toString());
-
-            Spanned sp = (Spanned) cs;
-            Object[] os = sp.getSpans(0, cs.length(), Object.class);
-
-            // note to people adding to this: check more specific types
-            // before more generic types.  also notice that it uses
-            // "if" instead of "else if" where there are interfaces
-            // so one object can be several.
-
-            for (int i = 0; i < os.length; i++) {
-                Object o = os[i];
-                Object prop = os[i];
-
-                if (prop instanceof CharacterStyle) {
-                    prop = ((CharacterStyle) prop).getUnderlying();
-                }
-
-                if (prop instanceof ParcelableSpan) {
-                    final ParcelableSpan ps = (ParcelableSpan) prop;
-                    final int spanTypeId = ps.getSpanTypeIdInternal();
-                    if (spanTypeId < FIRST_SPAN || spanTypeId > LAST_SPAN) {
-                        Log.e(TAG, "External class \"" + ps.getClass().getSimpleName()
-                                + "\" is attempting to use the frameworks-only ParcelableSpan"
-                                + " interface");
-                    } else {
-                        p.writeInt(spanTypeId);
-                        ps.writeToParcelInternal(p, parcelableFlags);
-                        writeWhere(p, sp, o);
+            StringBuilder csStringBuilder = new StringBuilder(cs.length());
+            csStringBuilder.append(cs);
+            p.writeString8(csStringBuilder.toString());
+            final Spanned sp = (Spanned) cs;
+            final Object[] os = sp.getSpans(0, cs.length(), Object.class);
+            if (os.length > 0) {
+                for (final Object o : os) {
+                    Object prop = o;
+                    if (prop instanceof CharacterStyle) {
+                        prop = ((CharacterStyle) prop).getUnderlying();
+                    }
+                    if (prop instanceof ParcelableSpan) {
+                        final ParcelableSpan ps = (ParcelableSpan) prop;
+                        final int spanTypeId = ps.getSpanTypeIdInternal();
+                        if (spanTypeId < FIRST_SPAN || spanTypeId > LAST_SPAN) {
+                            StringBuilder errorMessage = new StringBuilder("External class \"")
+                                    .append(ps.getClass().getSimpleName())
+                                    .append("\" is attempting to use the frameworks-only ParcelableSpan interface");
+                            Log.e(TAG, errorMessage.toString());
+                        } else {
+                            p.writeInt(spanTypeId);
+                            ps.writeToParcelInternal(p, parcelableFlags);
+                            writeWhere(p, sp, o);
+                        }
                     }
                 }
             }
-
             p.writeInt(0);
         } else {
             p.writeInt(1);
-            if (cs != null) {
-                p.writeString8(cs.toString());
-            } else {
-                p.writeString8(null);
-            }
+            StringBuilder csStringBuilder = new StringBuilder(cs.length());
+            csStringBuilder.append(cs);
+            p.writeString8(csStringBuilder.toString());
         }
     }
 
