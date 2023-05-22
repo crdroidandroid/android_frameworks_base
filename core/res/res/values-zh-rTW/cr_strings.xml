@@ -29,7 +29,7 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">長按電源按鈕以解鎖</string>
     <string name="pocket_view_title">防誤觸模式已開啟</string>
-    <string name="pocket_view_title_cancel">若要繼續使用您的手機：</string>
+    <string name="pocket_view_title_cancel">啟用您的手機：</string>
     <string name="pocket_view_top_tag_cancel">請確保螢幕上的藍色區域沒有被遮擋，並清除上方的污垢及灰塵</string>
     <string name="pocket_view_top_tag_cancel2">長按電源鍵來強制退出防誤觸模式</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
