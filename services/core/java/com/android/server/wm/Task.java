@@ -3372,7 +3372,7 @@ class Task extends TaskFragment {
             @TransitionOldType int transit, boolean isVoiceInteraction,
             @Nullable ArrayList<WindowContainer> sources) {
         final RecentsAnimationController control = mWmService.getRecentsAnimationController();
-        if (control != null) {
+        if (control != null && sources != null) {
             // We let the transition to be controlled by RecentsAnimation, and callback task's
             // RemoteAnimationTarget for remote runner to animate.
             if (enter && !isActivityTypeHomeOrRecents()) {
