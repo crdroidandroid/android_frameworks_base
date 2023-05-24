@@ -266,7 +266,7 @@ public final class BackupPasswordManager {
         @Override
         public void serialize(Integer integer, DataOutputStream dataOutputStream)
                 throws IOException {
-            dataOutputStream.write(integer);
+            dataOutputStream.writeInt(integer.intValue());
         }
 
         @Override
