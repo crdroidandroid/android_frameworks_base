@@ -2728,9 +2728,12 @@ public final class SystemServer implements Dumpable {
             mSystemServiceManager.startService(AttestationService.class);
             t.traceEnd();
 
-            t.traceBegin("StartLinearmotorVibratorService");
-            mSystemServiceManager.startService(LinearmotorVibratorService.class);
-            t.traceEnd();
+            if (context.getResources().getBoolean(
+                    com.android.internal.R.bool.config_mockOplusLinearmotorVibratorService)) {
+                t.traceBegin("StartLinearmotorVibratorService");
+                mSystemServiceManager.startService(LinearmotorVibratorService.class);
+                t.traceEnd();
+            }
         }
 
         t.traceBegin("StartMediaProjectionManager");
