@@ -154,4 +154,7 @@
     <!-- InputFilter Class-->
     <string name="config_deviceInputFilterLibs" translatable="false"></string>
     <string name="config_deviceInputFilterClasses" translatable="false"></string>
+
+    <!-- Mock Oplus LinearmotorVibratorService -->
+    <bool name="config_mockOplusLinearmotorVibratorService">false</bool>
 </resources>
