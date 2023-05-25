@@ -1616,14 +1616,19 @@ public final class SystemServiceRegistry {
                     }
                 });
 
-        registerService(Context.LINEARMOTOR_VIBRATOR_SERVICE, LinearmotorVibrator.class,
-                new CachedServiceFetcher<LinearmotorVibrator>() {
-            @Override
-            public LinearmotorVibrator createService(ContextImpl ctx) {
-                IBinder binder = ServiceManager.getService(Context.LINEARMOTOR_VIBRATOR_SERVICE);
-                ILinearmotorVibratorService service = ILinearmotorVibratorService.Stub.asInterface(binder);
-                return new LinearmotorVibrator(ctx.getOuterContext(), service);
-            }});
+        boolean mockOplus = Resources.getSystem()
+            .getBoolean(com.android.internal.R.bool.config_mockOplusLinearmotorVibratorService);
+
+        if (mockOplus) {
+            registerService(Context.LINEARMOTOR_VIBRATOR_SERVICE, LinearmotorVibrator.class,
+                    new CachedServiceFetcher<LinearmotorVibrator>() {
+                @Override
+                public LinearmotorVibrator createService(ContextImpl ctx) {
+                    IBinder binder = ServiceManager.getService(Context.LINEARMOTOR_VIBRATOR_SERVICE);
+                    ILinearmotorVibratorService service = ILinearmotorVibratorService.Stub.asInterface(binder);
+                    return new LinearmotorVibrator(ctx.getOuterContext(), service);
+                }});
+        }
 
         sInitializing = true;
         try {
