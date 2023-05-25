@@ -143,4 +143,7 @@
     <java-symbol type="anim" name="activity_freeform_open_exit" />
     <java-symbol type="anim" name="activity_freeform_close_enter" />
     <java-symbol type="anim" name="activity_freeform_close_exit" />
+
+    <!-- Mock Oplus LinearmotorVibratorService -->
+    <java-symbol type="bool" name="config_mockOplusLinearmotorVibratorService" />
 </resources>
