@@ -301,6 +301,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             "system:" + Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL;
     private static final String QS_TRANSPARENCY =
             "system:" + Settings.System.QS_TRANSPARENCY;
+    private static final String QS_DUAL_TONE =
+            "system:" + Settings.System.QS_DUAL_TONE;
 
     private static final int MSG_LAUNCH_TRANSITION_TIMEOUT = 1003;
     private static final int MSG_LONG_PRESS_BRIGHTNESS_CHANGE = 1004;
@@ -959,6 +961,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         mTunerService.addTunable(this, FORCE_SHOW_NAVBAR);
         mTunerService.addTunable(this, STATUS_BAR_BRIGHTNESS_CONTROL);
         mTunerService.addTunable(this, QS_TRANSPARENCY);
+        mTunerService.addTunable(this, QS_DUAL_TONE);
 
         // Set up the initial notification state. This needs to happen before CommandQueue.disable()
         setUpPresenter();
@@ -3041,6 +3044,10 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             case QS_TRANSPARENCY:
                 mScrimController.setCustomScrimAlpha(
                         TunerService.parseInteger(newValue, 100));
+                break;
+            case QS_DUAL_TONE:
+                mScrimController.setDualToneColor(
+                        TunerService.parseIntegerSwitch(newValue, true));
                 break;
             default:
                 break;
