@@ -48,5 +48,5 @@
     <!-- App lock -->
     <string name="unlock_application">Mở khóa <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Assisted GPS -->
-    <string name="location_agps_access_summary">When location is on, <b>download satellite assistance data from the internet</b>, which can greatly improve the GPS startup performance.</string>
+    <string name="location_agps_access_summary">Khi vị trí được bật, hãy <b>tải xuống dữ liệu hỗ trợ vệ tinh từ internet</b>, dữ liệu này có thể cải thiện đáng kể hiệu suất khởi động GPS.</string>
 </resources>
