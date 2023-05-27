@@ -6087,11 +6087,11 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     }
 
     private void addSdkSandboxUidsIfNeeded(SparseIntArray uidRules) {
-        final int size = uidRules.size();
+        final SparseIntArray rules = uidRules.clone();
         final SparseIntArray sdkSandboxUids = new SparseIntArray();
-        for (int index = 0; index < size; index++) {
-            final int uid = uidRules.keyAt(index);
-            final int rule = uidRules.valueAt(index);
+        for (int index = 0; index < rules.size(); index++) {
+            final int uid = rules.keyAt(index);
+            final int rule = rules.valueAt(index);
             if (Process.isApplicationUid(uid)) {
                 sdkSandboxUids.put(Process.toSdkSandboxUid(uid), rule);
             }
@@ -6110,8 +6110,8 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
      * specified here.
      */
     private void setUidFirewallRulesUL(int chain, SparseIntArray uidRules) {
-        addSdkSandboxUidsIfNeeded(uidRules);
         try {
+            addSdkSandboxUidsIfNeeded(uidRules);
             int size = uidRules.size();
             int[] uids = new int[size];
             int[] rules = new int[size];
