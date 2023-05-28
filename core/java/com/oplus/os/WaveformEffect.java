@@ -28,6 +28,7 @@ public class WaveformEffect implements Parcelable {
 
     private int mEffectType;
     private boolean mEffectLoop;
+    private boolean mStrengthSettingEnabled;
 
     private WaveformEffect() {
         mEffectType = -1;
@@ -42,34 +43,47 @@ public class WaveformEffect implements Parcelable {
         return mEffectLoop;
     }
 
+    public boolean getStrengthSettingEnabled() {
+        return mStrengthSettingEnabled;
+    }
+
     public static class Builder {
         private int mEffectType;
         private boolean mEffectLoop;
+        private boolean mStrengthSettingEnabled;
 
         public Builder() {
-            mEffectType = -1;
-            mEffectLoop = false;
+            this.mEffectType = -1;
+            this.mEffectLoop = false;
+            this.mStrengthSettingEnabled = false;
         }
 
         public Builder(WaveformEffect effect) {
-            mEffectType = -1;
-            mEffectLoop = false;
+            this.mEffectType = -1;
+            this.mEffectLoop = false;
+            this.mStrengthSettingEnabled = false;
         }
 
         public WaveformEffect build() {
             WaveformEffect effect = new WaveformEffect();
-            effect.mEffectType = mEffectType;
-            effect.mEffectLoop = mEffectLoop;
+            effect.mEffectType = this.mEffectType;
+            effect.mEffectLoop = this.mEffectLoop;
+            effect.mStrengthSettingEnabled = this.mStrengthSettingEnabled;
             return effect;
         }
 
         public Builder setEffectType(int type) {
-            mEffectType = type;
+            this.mEffectType = type;
             return this;
         }
 
         public Builder setEffectLoop(boolean loop) {
-            mEffectLoop = loop;
+            this.mEffectLoop = loop;
+            return this;
+        }
+
+        public Builder setStrengthSettingEnabled(boolean enabled) {
+            this.mStrengthSettingEnabled = enabled;
             return this;
         }
     }
@@ -83,11 +97,13 @@ public class WaveformEffect implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mEffectType);
         dest.writeBoolean(mEffectLoop);
+        dest.writeBoolean(mStrengthSettingEnabled);
     }
 
     private WaveformEffect(Parcel in) {
         mEffectType = in.readInt();
         mEffectLoop = in.readBoolean();
+        mStrengthSettingEnabled = in.readBoolean();
     }
 
     @Override
