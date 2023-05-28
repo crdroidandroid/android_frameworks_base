@@ -47,5 +47,5 @@
     <!-- App lock -->
     <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> をロック解除</string>
     <!-- Assisted GPS -->
-    <string name="location_agps_access_summary">When location is on, <b>download satellite assistance data from the internet</b>, which can greatly improve the GPS startup performance.</string>
+    <string name="location_agps_access_summary">位置情報がオンの場合、<b>インターネットから衛星支援データをダウンロード</b>して GPS の起動性能を大幅に向上させます。</string>
 </resources>
