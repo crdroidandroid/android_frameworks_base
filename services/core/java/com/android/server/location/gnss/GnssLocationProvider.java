@@ -1800,12 +1800,12 @@ public class GnssLocationProvider extends AbstractLocationProvider implements
     }
 
     private boolean isAssistedGpsEnabled() {
-        final Boolean isEmergency = mNIHandler.getInEmergency();
-        if (isEmergency) {
+        if (mNIHandler.getInEmergency()) {
             Log.i(TAG, "Forcing Assisted GPS due to emergency");
+            return true;
         }
-        return (Settings.Global.getInt(mContext.getContentResolver(),
-                        Settings.Global.ASSISTED_GPS_ENABLED, 0) != 0) || isEmergency;
+        return Settings.Global.getInt(mContext.getContentResolver(),
+                        Settings.Global.ASSISTED_GPS_ENABLED, 1) != 0;
     }
 
     private void toggleXtraDaemon() {
