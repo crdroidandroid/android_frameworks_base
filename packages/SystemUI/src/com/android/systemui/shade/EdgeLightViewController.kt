@@ -39,6 +39,9 @@ import com.android.systemui.statusbar.EdgeLightView
 import com.android.systemui.statusbar.NotificationListener
 import com.android.systemui.statusbar.phone.DozeParameters
 import com.android.systemui.statusbar.policy.ConfigurationController
+import com.android.systemui.statusbar.policy.KeyguardStateController
+import com.android.systemui.statusbar.StatusBarState
+import com.android.systemui.statusbar.SysuiStatusBarStateController
 import com.android.systemui.util.settings.SystemSettings
 
 import javax.inject.Inject
@@ -58,10 +61,13 @@ class EdgeLightViewController @Inject constructor(
     dozeParameters: DozeParameters,
     configurationController: ConfigurationController,
     userTracker: UserTracker,
+    private val sysuiStatusBarStateController: SysuiStatusBarStateController,
+    private val keyguardStateController: KeyguardStateController
 ) : ScreenLifecycle.Observer,
     NotificationListener.NotificationHandler,
     ConfigurationController.ConfigurationListener,
-    UserTracker.Callback {
+    UserTracker.Callback,
+    KeyguardStateController.Callback {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val wallpaperManager = context.getSystemService(WallpaperManager::class.java)
@@ -129,6 +135,9 @@ class EdgeLightViewController @Inject constructor(
                 it.run()
             }
         }
+        
+        // Listen for keyguard changes
+        keyguardStateController.addCallback(this)
     }
 
     private fun register(vararg keys: String) {
@@ -152,6 +161,10 @@ class EdgeLightViewController @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun canPulse(): Boolean {
+        return sysuiStatusBarStateController.isDozing() && sysuiStatusBarStateController.getState() == StatusBarState.KEYGUARD && !keyguardStateController.isUnlocked
     }
 
     private suspend fun isEdgeLightEnabled(): Boolean {
@@ -292,7 +305,6 @@ class EdgeLightViewController @Inject constructor(
     }
 
     fun setPulsing(pulsing: Boolean, reason: Int) {
-        logD("setPulsing, pulsing = $pulsing, reason = $reason")
         coroutineScope.launch {
             settingsMutex.withLock {
                 if (pulsing && (alwaysTriggerOnPulse ||
@@ -316,15 +328,29 @@ class EdgeLightViewController @Inject constructor(
     }
 
     private fun show() {
-        coroutineScope.launch {
-            settingsMutex.withLock {
-                if (edgeLightEnabled) edgeLightView?.show()
+        if (canPulse()) {
+            coroutineScope.launch {
+                settingsMutex.withLock {
+                    if (edgeLightEnabled) edgeLightView?.show()
+                }
             }
         }
     }
 
     private fun hide() {
         edgeLightView?.hide()
+    }
+
+    override fun onKeyguardGoingAwayChanged() {
+        if (!canPulse()) {
+            hide()
+        }
+    }
+
+    override fun onKeyguardFadingAwayChanged() {
+        if (!canPulse()) {
+            hide()
+        }
     }
 
     companion object {
