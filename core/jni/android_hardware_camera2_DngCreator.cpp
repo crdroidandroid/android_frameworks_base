@@ -1513,6 +1513,19 @@ static sp<TiffWriter> DngCreator_setup(JNIEnv* env, jobject thiz, uint32_t image
                 writer);
     }
 
+    // MIUI ADD START
+    {
+        // market name
+        // Use "" to represent unknown productname as suggested in XiaoMi spec.
+        std::string productname = GetProperty("ro.product.marketname", "");
+        uint32_t count = static_cast<uint32_t>(productname.size()) + 1;
+
+        BAIL_IF_INVALID_RET_NULL_SP(writer->addEntry(TAG_XIAOMI_PRODUCT, count,
+                reinterpret_cast<const uint8_t*>(productname.c_str()), TIFF_IFD_0), env, TAG_XIAOMI_PRODUCT,
+                writer);
+    }
+    // END
+
     {
         // x resolution
         uint32_t xres[] = { 72, 1 }; // default 72 ppi
@@ -1657,6 +1670,38 @@ static sp<TiffWriter> DngCreator_setup(JNIEnv* env, jobject thiz, uint32_t image
         uint32_t focalLength[] = { static_cast<uint32_t>(*(entry.data.f) * 100), 100 };
         BAIL_IF_INVALID_RET_NULL_SP(writer->addEntry(TAG_FOCALLENGTH, 1, focalLength,
                 TIFF_IFD_0), env, TAG_FOCALLENGTH, writer);
+    }
+
+    {
+        // FocalLengthIn35mmFilm
+        uint16_t focalLengthIn35mmFilm = 0;
+        uint32_t tag = 0;
+        sp<VendorTagDescriptor> vTags;
+        sp<VendorTagDescriptorCache> cache = VendorTagDescriptorCache::getGlobalVendorTagCache();
+        if (cache) {
+            auto vendorId = results.getVendorId();
+            cache->getVendorTagDescriptor(vendorId, &vTags);
+        }
+
+        if (vTags != NULL) {
+            const char *section = "com.xiaomi.sensor.info";
+            const char *TagName = "focalLength35mm";
+            const String8 sectionName(section);
+            const String8 tagName(TagName);
+            status_t ret = vTags->lookupTag(tagName, sectionName, &tag);
+            if (ret == 0) {
+                camera_metadata_entry entry = results.find(tag);
+                if (entry.count != 0) {
+                    focalLengthIn35mmFilm =static_cast<uint16_t> (entry.data.f[0] + 0.5f);
+                    BAIL_IF_INVALID_RET_NULL_SP(writer->addEntry(TAG_FOCALLLENGTHIN35MMFILM, 1, &focalLengthIn35mmFilm,
+                            TIFF_IFD_0), env, TAG_FOCALLLENGTHIN35MMFILM, writer);
+                } else {
+                    ALOGW("%s: get focalLength35mm failed.", __FUNCTION__);
+                }
+            }
+        } else {
+            ALOGW("%s:com.xiaomi.sensor.info.focalLength35mm vTags is null.", __FUNCTION__);
+        }
     }
 
     {
