@@ -119,11 +119,6 @@ public class ThemeOverlayApplier implements Dumpable {
     static final String OVERLAY_CATEGORY_LOCK_CLOCK_FONT =
             "android.theme.customization.lockscreen_clock_font";
 
-    static final String OVERLAY_BRIGHTNESS_SLIDER_FILLED =
-            "com.android.systemui.brightness_slider.filled";
-    static final String OVERLAY_BRIGHTNESS_SLIDER_THIN =
-            "com.android.systemui.brightness_slider.thin";
-
     /*
      * All theme customization categories used by the system, in order that they should be applied,
      * starts with launcher and grouped by target package.
@@ -154,12 +149,6 @@ public class ThemeOverlayApplier implements Dumpable {
             OVERLAY_CATEGORY_ICON_SYSUI,
             OVERLAY_CATEGORY_NAVBAR,
             OVERLAY_CATEGORY_LOCK_CLOCK_FONT);
-
-    /* Brightness slider overlays */
-    static final List<String> BRIGHTNESS_SLIDER_OVERLAYS = Lists.newArrayList(
-            "",
-            OVERLAY_BRIGHTNESS_SLIDER_FILLED,
-            OVERLAY_BRIGHTNESS_SLIDER_THIN);
 
     /* Allowed overlay categories for each target package. */
     private final Map<String, Set<String>> mTargetPackageToCategories = new ArrayMap<>();
@@ -269,21 +258,6 @@ public class ThemeOverlayApplier implements Dumpable {
                 mOverlayManager.commit(transaction.build());
             } catch (SecurityException | IllegalStateException e) {
                 Log.e(TAG, "setEnabled failed", e);
-            }
-        });
-    }
-
-    /* Set brightness slider styles */
-    public void setBrightnessSliderStyle(int brightnessSliderStyle) {
-        mBgExecutor.execute(() -> {
-            try {
-                for (int i = 1; i < BRIGHTNESS_SLIDER_OVERLAYS.size(); i++) {
-                    String overlay = BRIGHTNESS_SLIDER_OVERLAYS.get(i);
-                    boolean enable = (i == brightnessSliderStyle);
-                    mOverlayManager.setEnabled(overlay, enable, UserHandle.SYSTEM);
-                }
-            } catch (SecurityException | IllegalStateException e) {
-                Log.e(TAG, "Failed to set brightness slider style", e);
             }
         });
     }

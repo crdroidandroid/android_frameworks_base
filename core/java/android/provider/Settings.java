@@ -12038,12 +12038,6 @@ public final class Settings {
         public static final String DOZE_ON_CHARGE = "doze_on_charge";
 
         /**
-         * Brightness slider styles
-         * @hide
-         */
-        public static final String BRIGHTNESS_SLIDER_STYLE = "brightness_slider_style";
-
-        /**
          * These entries are considered common between the personal and the managed profile,
          * since the managed profile doesn't get to change them.
          */
