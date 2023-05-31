@@ -1061,25 +1061,23 @@ class RootWindowContainer extends WindowContainer<DisplayContent>
      * manager may choose to mirror or blank the display.
      */
     boolean handleNotObscuredLocked(WindowState w, boolean obscured, boolean syswin) {
-        final WindowManager.LayoutParams attrs = w.mAttrs;
-        final int attrFlags = attrs.flags;
         final boolean onScreen = w.isOnScreen();
-        final boolean canBeSeen = w.isDisplayed();
-        final int privateflags = attrs.privateFlags;
         boolean displayHasContent = false;
 
         ProtoLog.d(WM_DEBUG_KEEP_SCREEN_ON,
                 "handleNotObscuredLocked w: %s, w.mHasSurface: %b, w.isOnScreen(): %b, w"
                         + ".isDisplayedLw(): %b, w.mAttrs.userActivityTimeout: %d",
                 w, w.mHasSurface, onScreen, w.isDisplayed(), w.mAttrs.userActivityTimeout);
-        if (w.mHasSurface && onScreen) {
-            if (!syswin && w.mAttrs.userActivityTimeout >= 0 && mUserActivityTimeout < 0) {
-                mUserActivityTimeout = w.mAttrs.userActivityTimeout;
-                ProtoLog.d(WM_DEBUG_KEEP_SCREEN_ON, "mUserActivityTimeout set to %d",
-                        mUserActivityTimeout);
-            }
+        if (!onScreen) {
+            return false;
         }
-        if (w.mHasSurface && canBeSeen) {
+        if (!syswin && w.mAttrs.userActivityTimeout >= 0 && mUserActivityTimeout < 0) {
+            mUserActivityTimeout = w.mAttrs.userActivityTimeout;
+            ProtoLog.d(WM_DEBUG_KEEP_SCREEN_ON, "mUserActivityTimeout set to %d",
+                    mUserActivityTimeout);
+        }
+        if (w.isDrawn() || (w.mActivityRecord != null && w.mActivityRecord.firstWindowDrawn
+                && w.mActivityRecord.isVisibleRequested())) {
             if (!syswin && w.mAttrs.buttonBrightness >= 0
                     && Float.isNaN(mButtonBrightnessOverride)) {
                 mButtonBrightnessOverride = w.mAttrs.buttonBrightness;
@@ -1089,7 +1087,6 @@ class RootWindowContainer extends WindowContainer<DisplayContent>
                 mScreenBrightnessOverride = w.mAttrs.screenBrightness;
             }
 
-            final int type = attrs.type;
             // This function assumes that the contents of the default display are processed first
             // before secondary displays.
             final DisplayContent displayContent = w.getDisplayContent();
@@ -1107,11 +1104,10 @@ class RootWindowContainer extends WindowContainer<DisplayContent>
             } else if (displayContent != null &&
                     !mObscureApplicationContentOnSecondaryDisplaysDueToDream &&
                     (!mObscureApplicationContentOnSecondaryDisplaysDueToKeyguard
-                            || (obscured && type == TYPE_KEYGUARD_DIALOG))) {
-                // Allow full screen keyguard presentation dialogs to be seen.
+                            || (obscured && w.mAttrs.type == TYPE_KEYGUARD_DIALOG))) {
                 displayHasContent = true;
             }
-            if ((privateflags & PRIVATE_FLAG_SUSTAINED_PERFORMANCE_MODE) != 0) {
+            if ((w.mAttrs.privateFlags & PRIVATE_FLAG_SUSTAINED_PERFORMANCE_MODE) != 0) {
                 mSustainedPerformanceModeCurrent = true;
             }
         }
