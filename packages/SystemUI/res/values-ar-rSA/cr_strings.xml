@@ -155,11 +155,11 @@
     <string name="quick_settings_locale_label">اللغة</string>
     <string name="quick_settings_locale_more_locales_toast">الرجاء، ضبط إعدادات اللغات</string>
     <!-- Google lens screenshot notification -->
-    <string name="lens">Lens</string>
+    <string name="lens">العدسة</string>
     <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Use Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth is off</string>
-    <string name="tap_a_device_to_connect">Tap a device to connect</string>
+    <string name="turn_on_bluetooth">استخدام البلوتوث</string>
+    <string name="bluetooth_is_off">تم إيقاف البلوتوث</string>
+    <string name="tap_a_device_to_connect">انقر على جهاز للاتصال</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">واجهة النظام</string>
 </resources>
