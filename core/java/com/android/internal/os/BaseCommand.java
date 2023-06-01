@@ -66,7 +66,11 @@ public abstract class BaseCommand {
             System.err.println("Error: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace(System.err);
+            mArgs.getErrPrintWriter().flush();
             System.exit(1);
+        } finally {
+            mArgs.getOutPrintWriter().flush();
+            mArgs.getErrPrintWriter().flush();
         }
     }
 
