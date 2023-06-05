@@ -871,8 +871,14 @@ public final class AssetManager implements AutoCloseable {
 
     @Nullable
     CharSequence getPooledStringForCookie(int cookie, int id) {
-        // Cookies map to ApkAssets starting at 1.
-        return getApkAssets()[cookie - 1].getStringFromPool(id);
+        ApkAssets[] apkAssets = getApkAssets();
+
+        if (cookie > 0 && cookie <= apkAssets.length) {
+            // map cookies starting at 1.
+            return apkAssets[cookie - 1].getStringFromPool(id);
+        }
+
+        return null;
     }
 
     /**
