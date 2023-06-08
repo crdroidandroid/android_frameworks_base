@@ -5048,13 +5048,16 @@ public final class ActiveServices {
         }
         try {
             boolean shouldDelay = false;
+            boolean isVisible = false;
             ActivityRecord top_rc = mAm.mTaskSupervisor.getTopResumedActivity();
-
+            ProcessRecord pRec = mAm.getProcessRecordLocked(r.serviceInfo.applicationInfo.processName,r.serviceInfo.applicationInfo.uid);
             boolean isPersistent
                         = !((r.serviceInfo.applicationInfo.flags&ApplicationInfo.FLAG_PERSISTENT) == 0);
+            if (pRec != null)
+                    isVisible = ((pRec.mProfile.getCurRawAdj()) ==  ProcessList.VISIBLE_APP_ADJ);
             if(top_rc != null) {
                if(top_rc.launching && !r.shortInstanceName.contains(top_rc.packageName)
-                            && !isPersistent && r.isForeground == false) {
+                            && !isPersistent && r.isForeground == false && !isVisible) {
                    shouldDelay = true;
                }
             }
