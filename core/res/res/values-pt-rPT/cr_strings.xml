@@ -29,8 +29,8 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Prima e segure o botão de energia para desbloquear</string>
     <string name="pocket_view_title">Modo de bolso ativado</string>
-    <string name="pocket_view_title_cancel">To activate your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Please do not cover the blue area of your phone and clear any dirt or dust off it.</string>
+    <string name="pocket_view_title_cancel">Para ativar o seu telemóvel:</string>
+    <string name="pocket_view_top_tag_cancel">Por favor, não cubra a área azul do seu telemóvel e limpe o pó e sujeira.</string>
     <string name="pocket_view_top_tag_cancel2">Mantenha premido o botão de energia para forçar a saída do modo de bolso.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
