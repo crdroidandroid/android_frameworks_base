@@ -783,6 +783,8 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
     @Nullable
     private ActivityRecord mTracedResumedActivity;
 
+    boolean toastWindow = false;
+
     /** If non-null, we are tracking the time the user spends in the currently focused app. */
     AppTimeTracker mCurAppTimeTracker;
 
@@ -5467,6 +5469,18 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
 
     CompatibilityInfo compatibilityInfoForPackageLocked(ApplicationInfo ai) {
         return mCompatModePackages.compatibilityInfoForPackageLocked(ai);
+    }
+
+    void setToastWindow() {
+        toastWindow = true;
+    }
+
+    void resetToastWindow() {
+        toastWindow = false;
+    }
+
+    boolean getToastWindow() {
+        return toastWindow;
     }
 
     /**
