@@ -151,11 +151,11 @@
     <string name="quick_settings_locale_label">Langue</string>
     <string name="quick_settings_locale_more_locales_toast">Veuillez configurer plusieurs langues</string>
     <!-- Google lens screenshot notification -->
-    <string name="lens">Lens</string>
+    <string name="lens">Objectif</string>
     <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Use Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth is off</string>
+    <string name="turn_on_bluetooth">Utiliser Bluetooth</string>
+    <string name="bluetooth_is_off">Bluetooth est désactivé</string>
     <string name="tap_a_device_to_connect">Tap a device to connect</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Interface utilisateur</string>
 </resources>
