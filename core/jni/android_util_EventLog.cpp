@@ -68,16 +68,16 @@ static void android_util_EventLog_readEventsOnWrapping(JNIEnv* env, jobject claz
  */
 static const JNINativeMethod gRegisterMethods[] = {
     /* name, signature, funcPtr */
-    { "nativeWriteEvent", "(II)I", (void*) ELog::writeEventInteger },
-    { "nativeWriteEvent", "(IJ)I", (void*) ELog::writeEventLong },
-    { "nativeWriteEvent", "(IF)I", (void*) ELog::writeEventFloat },
-    { "nativeWriteEvent", "(ILjava/lang/String;)I", (void*) ELog::writeEventString },
-    { "nativeWriteEvent", "(I[Ljava/lang/Object;)I", (void*) ELog::writeEventArray },
-    { "nativeReadEvents",
+    { "writeEvent", "(II)I", (void*) ELog::writeEventInteger },
+    { "writeEvent", "(IJ)I", (void*) ELog::writeEventLong },
+    { "writeEvent", "(IF)I", (void*) ELog::writeEventFloat },
+    { "writeEvent", "(ILjava/lang/String;)I", (void*) ELog::writeEventString },
+    { "writeEvent", "(I[Ljava/lang/Object;)I", (void*) ELog::writeEventArray },
+    { "readEvents",
       "([ILjava/util/Collection;)V",
       (void*) android_util_EventLog_readEvents
     },
-    { "nativeReadEventsOnWrapping",
+    { "readEventsOnWrapping",
       "([IJLjava/util/Collection;)V",
       (void*) android_util_EventLog_readEventsOnWrapping
     },
