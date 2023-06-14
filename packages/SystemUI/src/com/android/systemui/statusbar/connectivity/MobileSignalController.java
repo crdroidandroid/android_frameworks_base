@@ -374,16 +374,6 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         return getCurrentIconId();
     }
 
-    private int getVolteResId() {
-        int resId = 0;
-
-        if ((mCurrentState.voiceCapable || mCurrentState.videoCapable)
-                && mCurrentState.imsRegistered) {
-            resId = R.drawable.ic_volte;
-        }
-        return resId;
-    }
-
     private void setListeners() {
         try {
             Log.d(mTag, "setListeners: register CapabilitiesCallback and RegistrationCallback");
