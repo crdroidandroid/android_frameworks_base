@@ -5376,7 +5376,9 @@ public final class ActivityThread extends ClientTransactionHandler
             // {@link Activity#enterPictureInPictureMode(PictureInPictureParams)}.
             r.activity.mIsInPictureInPictureMode = true;
         }
-        performPauseActivity(r, finished, reason, pendingActions);
+        try {
+            performPauseActivity(r, finished, reason, pendingActions);
+        } catch (Exception e) {}
 
         // Make sure any pending writes are now committed.
         if (r.isPreHoneycomb()) {
