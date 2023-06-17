@@ -5568,8 +5568,9 @@ public class WindowManagerService extends IWindowManager.Stub
                     synchronized (mGlobalLock) {
                         ProtoLog.w(WM_ERROR, "App freeze timeout expired.");
                         mWindowsFreezingScreen = WINDOWS_FREEZING_SCREENS_TIMEOUT;
-                        for (int i = mAppFreezeListeners.size() - 1; i >= 0; --i) {
-                            mAppFreezeListeners.get(i).onAppFreezeTimeout();
+                        List<AppFreezeListener> listenersCopy = new ArrayList<>(mAppFreezeListeners);
+                        for (int i = listenersCopy.size() - 1; i >= 0; --i) {
+                            listenersCopy.get(i).onAppFreezeTimeout();
                         }
                     }
                     break;
