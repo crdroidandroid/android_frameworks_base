@@ -117,9 +117,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private LinearLayout mEndSideContent;
     private View mOngoingCallChip;
     private View mNotificationIconAreaInner;
-    private View mNetworkTrafficHolderStart;
-    private View mNetworkTrafficHolderCenter;
-    private View mNetworkTrafficHolderEnd;
+    private View mNetworkTrafficHolder;
     private int mDisabled1;
     private int mDisabled2;
     private DarkIconManager mDarkIconManager;
@@ -291,9 +289,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         updateBlockedIcons();
         mStatusBarIconController.addIconGroup(mDarkIconManager);
         mEndSideContent = mStatusBar.findViewById(R.id.status_bar_end_side_content);
-        mNetworkTrafficHolderStart = mStatusBar.findViewById(R.id.network_traffic_holder_start);
-        mNetworkTrafficHolderCenter = mStatusBar.findViewById(R.id.network_traffic_holder_center);
-        mNetworkTrafficHolderEnd = mStatusBar.findViewById(R.id.network_traffic_holder_end);
+        mNetworkTrafficHolder = mStatusBar.findViewById(R.id.network_traffic_holder);
         mClockController = mStatusBar.getClockController();
         mOngoingCallChip = mStatusBar.findViewById(R.id.ongoing_call_chip);
         showEndSideContent(false);
@@ -572,9 +568,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     private void hideEndSideContent(boolean animate) {
         animateHide(mEndSideContent, animate);
-        animateHide(mNetworkTrafficHolderStart, animate);
-        animateHide(mNetworkTrafficHolderCenter, animate);
-        animateHide(mNetworkTrafficHolderEnd, animate);
+        animateHide(mNetworkTrafficHolder, animate);
     }
 
     private void showEndSideContent(boolean animate) {
@@ -582,16 +576,12 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         int state = mAnimationScheduler.getAnimationState();
         if (state == IDLE || state == SHOWING_PERSISTENT_DOT) {
             animateShow(mEndSideContent, animate);
-            animateShow(mNetworkTrafficHolderStart, animate);
-            animateShow(mNetworkTrafficHolderCenter, animate);
-            animateShow(mNetworkTrafficHolderEnd, animate);
+            animateShow(mNetworkTrafficHolder, animate);
         } else {
             // We are in the middle of a system status event animation, which will animate the
             // alpha (but not the visibility). Allow the view to become visible again
             mEndSideContent.setVisibility(View.VISIBLE);
-            mNetworkTrafficHolderStart.setVisibility(View.VISIBLE);
-            mNetworkTrafficHolderCenter.setVisibility(View.VISIBLE);
-            mNetworkTrafficHolderEnd.setVisibility(View.VISIBLE);
+            mNetworkTrafficHolder.setVisibility(View.VISIBLE);
         }
     }
 
