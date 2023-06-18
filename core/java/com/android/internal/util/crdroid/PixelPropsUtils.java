@@ -95,10 +95,14 @@ public class PixelPropsUtils {
             "com.vng.codmvn"
     };
 
+    private static final Map<String, Object> propsToChangeK30U;
+    private static final String[] packagesToChangeK30U = {
+            "com.pubg.imobile"
+    };
+
     private static final Map<String, Object> propsToChangeOP8P;
     private static final String[] packagesToChangeOP8P = {
             "com.tencent.ig",
-            "com.pubg.imobile",
             "com.pubg.krmobile",
             "com.pubg.newstate",
             "com.vng.pubgmobile",
@@ -147,6 +151,9 @@ public class PixelPropsUtils {
         propsToChangeOP8P = new HashMap<>();
         propsToChangeOP8P.put("MODEL", "IN2020");
         propsToChangeOP8P.put("MANUFACTURER", "OnePlus");
+        propsToChangeK30U = new HashMap<>();
+        propsToChangeK30U.put("MODEL", "M2006J10C");
+        propsToChangeK30U.put("MANUFACTURER", "Xiaomi");
     }
 
     public static void setProps(String packageName) {
@@ -196,6 +203,13 @@ public class PixelPropsUtils {
             } else if (Arrays.asList(packagesToChangeXP5).contains(packageName)) {
                 if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
                 for (Map.Entry<String, Object> prop : propsToChangeXP5.entrySet()) {
+                    String key = prop.getKey();
+                    Object value = prop.getValue();
+                    setPropValue(key, value);
+                }
+            } else if (Arrays.asList(packagesToChangeK30U).contains(packageName)) {
+                if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
+                for (Map.Entry<String, Object> prop : propsToChangeK30U.entrySet()) {
                     String key = prop.getKey();
                     Object value = prop.getValue();
                     setPropValue(key, value);
