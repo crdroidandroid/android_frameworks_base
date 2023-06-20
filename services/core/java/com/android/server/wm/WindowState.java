@@ -1499,7 +1499,7 @@ class WindowState extends WindowContainer<WindowState> implements WindowManagerP
             if ((configChanged || getOrientationChanging() || dragResizingChanged)
                     && isVisibleRequested()) {
                 winAnimator.mDrawState = DRAW_PENDING;
-                if (mActivityRecord != null) {
+                if (mActivityRecord != null && !mIsChildWindow) {
                     mActivityRecord.clearAllDrawn();
                     if (mAttrs.type == TYPE_APPLICATION_STARTING
                             && mActivityRecord.mStartingData != null) {
