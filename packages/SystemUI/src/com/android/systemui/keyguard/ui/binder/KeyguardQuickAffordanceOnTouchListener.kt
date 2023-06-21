@@ -128,7 +128,12 @@ class KeyguardQuickAffordanceOnTouchListener(
                                         )
                                     shakeAnimator.start()
 
-                                    vibratorHelper?.vibrate(KeyguardBottomAreaVibrations.Shake)
+                                    vibratorHelper?.vibrate(
+                                        if (KeyguardBottomAreaVibrations.areAllPrimitivesSupported) {
+                                            KeyguardBottomAreaVibrations.Shake
+                                        } else {
+                                            KeyguardBottomAreaVibrations.ShakeAlt
+                                        })
                                 }
                             } else {
                                 null
