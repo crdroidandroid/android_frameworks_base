@@ -855,26 +855,8 @@ public class KeyguardIndicationController {
             return;
         }
 
-        String faceUnlockMessage = mContext.getResources().getString(
-                                    R.string.face_unlock_recognizing);
-        mBiometricMessage = faceUnlockMessage;
-
-        mHandler.removeMessages(MSG_SHOW_ACTION_TO_UNLOCK);
-        mHandler.removeMessages(MSG_HIDE_BIOMETRIC_MESSAGE);
-
-        mRotateTextViewController.updateIndication(
-                INDICATION_TYPE_BIOMETRIC_MESSAGE,
-                new KeyguardIndication.Builder()
-                        .setMessage(mBiometricMessage)
-                        .setMinVisibilityMillis(6000L) // 6 seconds
-                        .setTextColor(mInitialTextColorState)
-                        .build(),
-                true
-        );
-
-        if (mDozing) {
-            updateDeviceEntryIndication(false);
-        }
+        showBiometricMessage(mContext.getResources().getString(
+                                    R.string.face_unlock_recognizing));
     }
 
     private void hideFaceUnlockRecognizingMessage() {
@@ -886,8 +868,7 @@ public class KeyguardIndicationController {
             R.string.face_unlock_recognizing);
         if (mBiometricMessage != null && mBiometricMessage == faceUnlockMessage) {
             mBiometricMessage = null;
-            mHandler.removeMessages(MSG_HIDE_BIOMETRIC_MESSAGE);
-            updateBiometricMessage();
+            hideBiometricMessage();
         }
     }
 
