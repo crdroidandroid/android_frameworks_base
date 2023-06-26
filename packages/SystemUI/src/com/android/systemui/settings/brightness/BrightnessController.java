@@ -386,7 +386,7 @@ public class BrightnessController implements ToggleSlider.Listener, MirroredBrig
         setBrightness(valFloat);
 
         // Give haptic feedback only if brightness is changed manually
-        if (tracking)
+        if (mVibrator != null && tracking)
             mVibrator.vibrate(BRIGHTNESS_SLIDER_HAPTIC);
 
         if (!tracking) {
