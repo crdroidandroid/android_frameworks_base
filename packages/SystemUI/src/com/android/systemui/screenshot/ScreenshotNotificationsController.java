@@ -17,6 +17,7 @@
 package com.android.systemui.screenshot;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static com.android.systemui.screenshot.ScreenshotController.SCREENSHOT_URI_ID;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -26,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.UserHandle;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
@@ -42,6 +44,7 @@ import javax.inject.Inject;
  */
 public class ScreenshotNotificationsController {
     private static final String TAG = "ScreenshotNotificationManager";
+    private static final String MIME = "image/*";
 
     private final Context mContext;
     private final Resources mResources;
@@ -102,13 +105,34 @@ public class ScreenshotNotificationsController {
      */
     public void showPostActionNotification(
             ScreenshotController.SavedImageData imageData, Bitmap bitmap) {
+        Uri uri = imageData.uri;
+        // notification channel ID is the URI hash as string - to allow notifications to pile up
+        // and still be able to get the same ID someplace else for dismiss
+        int requestCode = uri.toString().hashCode();
         Resources res = mContext.getResources();
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setDataAndType(imageData.uri, "image/*");
+        intent.setDataAndType(uri, MIME);
         PendingIntent pi = PendingIntent.getActivity(
                 mContext, 0, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        PendingIntent shareIntent = PendingIntent.getActivity(mContext, requestCode,
+                new Intent(Intent.ACTION_SEND)
+                        .putExtra(Intent.EXTRA_STREAM, uri)
+                        .setType(MIME)
+                        .addFlags(Intent.FLAG_RECEIVER_FOREGROUND),
+                        PendingIntent.FLAG_IMMUTABLE);
+        Notification.Action.Builder actionShare = new Notification.Action.Builder(0 /* no icon */,
+                res.getText(R.string.screenrecord_share_label), shareIntent);
+
+        PendingIntent deleteIntent = PendingIntent.getBroadcast(mContext, requestCode,
+                new Intent(mContext, DeleteScreenshotReceiver.class)
+                        .putExtra(SCREENSHOT_URI_ID, uri.toString())
+                        .addFlags(Intent.FLAG_RECEIVER_FOREGROUND),
+                        PendingIntent.FLAG_IMMUTABLE);
+        Notification.Action.Builder actionDelete = new Notification.Action.Builder(0 /* no icon */,
+                res.getText(R.string.screenshot_delete_label), deleteIntent);
 
         Notification.Builder b = new Notification.Builder(mContext, NotificationChannels.SCREENSHOTS_HEADSUP)
                 .setTicker(res.getString(R.string.screenshot_saved_title))
@@ -121,10 +145,10 @@ public class ScreenshotNotificationsController {
                         .bigPicture(bitmap).bigLargeIcon(bitmap))
                 .setColor(mContext.getColor(
                         com.android.internal.R.color.system_notification_accent_color))
+                .addAction(actionShare.build())
+                .addAction(actionDelete.build())
                 .setContentIntent(pi);
 
-        // notification channel ID is the URI hash as string - to allow notifications to pile up
-        // and still be able to get the same ID someplace else for dismiss
-        mNotificationManager.notify(imageData.uri.toString().hashCode(), b.build());
+        mNotificationManager.notify(requestCode, b.build());
     }
 }
