@@ -91,11 +91,14 @@ public class PixelPropsUtils {
             "com.google.android.youtube",
             "com.google.android.apps.youtube.kids",
             "com.google.android.apps.youtube.music",
+            "com.google.android.apps.pixelmigrate",
             "com.google.android.apps.recorder",
+            "com.google.android.apps.restore",
             "com.google.android.apps.wearables.maestro.companion",
             "com.google.android.apps.subscriptions.red",
             "com.google.android.apps.tachyon",
-            "com.google.android.apps.tycho"
+            "com.google.android.apps.tycho",
+            "com.google.android.setupwizard"
     };
 
     // Packages to Spoof as ROG Phone 6
