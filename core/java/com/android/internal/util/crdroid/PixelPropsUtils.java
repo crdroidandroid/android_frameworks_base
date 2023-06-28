@@ -294,7 +294,9 @@ public class PixelPropsUtils {
             }
             if (packageName.equals("com.google.android.gms")) {
                 final String processName = Application.getProcessName();
-                if (processName.equals("com.google.android.gms.unstable")) {
+                if (processName.toLowerCase().contains("unstable")
+                    || processName.toLowerCase().contains("pixelmigrate")
+                    || processName.toLowerCase().contains("instrumentation")) {
                     sIsGms = true;
                     spoofBuildGms();
                 }
