@@ -5069,7 +5069,7 @@
     <bool name="config_faceAuthDismissesKeyguard">true</bool>
 
     <!-- Default value for performant auth feature. -->
-    <bool name="config_performantAuthDefault">false</bool>
+    <bool name="config_performantAuthDefault">@bool/config_is_powerbutton_fps</bool>
 
     <!-- The component name for the default profile supervisor, which can be set as a profile owner
     even after user setup is complete. The defined component should be used for supervision purposes
