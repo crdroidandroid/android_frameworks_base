@@ -19,6 +19,7 @@ package com.android.systemui.brightness.ui.compose
 import android.content.Context
 import android.graphics.PorterDuff
 import android.os.UserHandle
+import android.provider.Settings
 import android.view.MotionEvent
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -156,6 +157,16 @@ fun BrightnessSlider(
         }
     }
 
+    val hapticsEnabled = remember {
+        try {
+            Settings.System.getIntForUser(
+                cr, Settings.System.QS_BRIGHTNESS_SLIDER_HAPTIC, 0, UserHandle.USER_CURRENT
+            ) != 0
+        } catch (_: Throwable) {
+            false
+        }
+    }
+
     var value by remember(gammaValue) { mutableIntStateOf(gammaValue) }
     val animatedValue by
         animateFloatAsState(targetValue = value.toFloat(), label = "BrightnessSliderAnimatedValue")
@@ -164,7 +175,7 @@ fun BrightnessSlider(
     val enabled = !isRestricted
     val interactionSource = remember { MutableInteractionSource() }
     val hapticsViewModel: SliderHapticsViewModel? =
-        if (Flags.hapticsForComposeSliders()) {
+        if (hapticsEnabled) {
             rememberViewModel(traceName = "SliderHapticsViewModel") {
                 hapticsViewModelFactory.create(
                     interactionSource,
