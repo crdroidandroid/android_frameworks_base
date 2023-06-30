@@ -18,6 +18,7 @@ package com.android.systemui.brightness.ui.compose
 
 import android.content.Context
 import android.graphics.PorterDuff
+import android.provider.Settings
 import android.view.MotionEvent
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -146,12 +147,23 @@ fun BrightnessSlider(
 ) {
     val QS_SHOW_AUTO_BRIGHTNESS =
         "lineagesecure:" + LineageSettings.Secure.QS_SHOW_AUTO_BRIGHTNESS
+    val QS_BRIGHTNESS_SLIDER_HAPTIC =
+        "system:" + Settings.System.QS_BRIGHTNESS_SLIDER_HAPTIC
 
     val showAutoBrightness = remember {
         mutableStateOf(
             TunerService.parseIntegerSwitch(
                 tunerService.getValue(QS_SHOW_AUTO_BRIGHTNESS),
                 true
+            )
+        )
+    }
+
+    val hapticsEnabled = remember {
+        mutableStateOf(
+            TunerService.parseIntegerSwitch(
+                tunerService.getValue(QS_BRIGHTNESS_SLIDER_HAPTIC),
+                false
             )
         )
     }
@@ -164,7 +176,7 @@ fun BrightnessSlider(
     val enabled = !isRestricted
     val interactionSource = remember { MutableInteractionSource() }
     val hapticsViewModel: SliderHapticsViewModel? =
-        if (Flags.hapticsForComposeSliders()) {
+        if (hapticsEnabled.value) {
             rememberViewModel(traceName = "SliderHapticsViewModel") {
                 hapticsViewModelFactory.create(
                     interactionSource,
@@ -226,9 +238,13 @@ fun BrightnessSlider(
             if (key == QS_SHOW_AUTO_BRIGHTNESS) {
                 showAutoBrightness.value =
                     TunerService.parseIntegerSwitch(newValue, true)
+            } else if (key == QS_BRIGHTNESS_SLIDER_HAPTIC) {
+                hapticsEnabled.value =
+                    TunerService.parseIntegerSwitch(newValue, false)
             }
         }
         tunerService.addTunable(tunable, QS_SHOW_AUTO_BRIGHTNESS)
+        tunerService.addTunable(tunable, QS_BRIGHTNESS_SLIDER_HAPTIC)
 
         onDispose {
             tunerService.removeTunable(tunable)
