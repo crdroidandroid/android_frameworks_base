@@ -19,6 +19,7 @@ package com.android.systemui.settings.brightness;
 import android.annotation.StringRes;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -41,6 +42,7 @@ import com.android.systemui.res.R;
 import com.android.systemui.settings.brightness.ui.BrightnessWarningToast;
 import com.android.systemui.statusbar.VibratorHelper;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.ViewController;
 import com.android.systemui.util.time.SystemClock;
 import com.google.android.msdl.domain.MSDLPlayer;
@@ -57,7 +59,10 @@ import javax.inject.Inject;
  * @see BrightnessMirrorController
  */
 public class BrightnessSliderController extends ViewController<BrightnessSliderView> implements
-        ToggleSlider {
+        ToggleSlider, TunerService.Tunable {
+
+    private static final String QS_BRIGHTNESS_SLIDER_HAPTIC =
+            "system:" + Settings.System.QS_BRIGHTNESS_SLIDER_HAPTIC;
 
     private Listener mListener;
     @Nullable
@@ -73,6 +78,10 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
     private final ActivityStarter mActivityStarter;
 
     private final BrightnessWarningToast mBrightnessWarningToast;
+
+    private final TunerService mTunerService;
+
+    private boolean mBrightnessSliderHaptic;
 
     private final Gefingerpoken mOnInterceptListener = new Gefingerpoken() {
         @Override
@@ -97,7 +106,8 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
             UiEventLogger uiEventLogger,
             HapticSliderPlugin brightnessSliderHapticPlugin,
             ActivityStarter activityStarter,
-            BrightnessWarningToast brightnessWarningToast) {
+            BrightnessWarningToast brightnessWarningToast,
+            TunerService tunerService) {
         super(brightnessSliderView);
         mFalsingManager = falsingManager;
         mUiEventLogger = uiEventLogger;
@@ -105,6 +115,7 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
         mActivityStarter = activityStarter;
         mBrightnessWarningToast = brightnessWarningToast;
         mIcon = mView.findViewById(R.id.brightness_icon);
+        mTunerService = tunerService;
     }
 
     /**
@@ -125,13 +136,27 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
         if (mMirror != null) {
             mView.setOnDispatchTouchEventListener(this::mirrorTouchEvent);
         }
+        mTunerService.addTunable(this, QS_BRIGHTNESS_SLIDER_HAPTIC);
     }
 
     @Override
     protected void onViewDetached() {
+        mTunerService.removeTunable(this);
         mView.setOnSeekBarChangeListener(null);
         mView.setOnDispatchTouchEventListener(null);
         mView.setOnInterceptListener(null);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case QS_BRIGHTNESS_SLIDER_HAPTIC:
+                mBrightnessSliderHaptic =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                break;
+            default:
+                break;
+         }
     }
 
     @Override
@@ -259,7 +284,7 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if (mListener != null) {
                 mListener.onChanged(mTracking, progress, false);
-                if (fromUser) {
+                if (fromUser && mBrightnessSliderHaptic) {
                     mBrightnessSliderHapticPlugin.onProgressChanged(progress, true);
                 }
             }
@@ -271,7 +296,9 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
             mUiEventLogger.log(BrightnessSliderEvent.BRIGHTNESS_SLIDER_STARTED_TRACKING_TOUCH);
             if (mListener != null) {
                 mListener.onChanged(mTracking, getValue(), false);
-                mBrightnessSliderHapticPlugin.onStartTrackingTouch();
+                if (mBrightnessSliderHaptic) {
+                    mBrightnessSliderHapticPlugin.onStartTrackingTouch();
+                }
             }
 
             if (mMirrorController != null) {
@@ -286,7 +313,9 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
             mUiEventLogger.log(BrightnessSliderEvent.BRIGHTNESS_SLIDER_STOPPED_TRACKING_TOUCH);
             if (mListener != null) {
                 mListener.onChanged(mTracking, getValue(), true);
-                mBrightnessSliderHapticPlugin.onStopTrackingTouch();
+                if (mBrightnessSliderHaptic) {
+                    mBrightnessSliderHapticPlugin.onStopTrackingTouch();
+                }
             }
 
             if (mMirrorController != null) {
@@ -307,6 +336,7 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
         private final ActivityStarter mActivityStarter;
         private final MSDLPlayer mMSDLPlayer;
         private final BrightnessWarningToast mBrightnessWarningToast;
+        private final TunerService mTunerService;
 
         @Inject
         public Factory(
@@ -316,7 +346,8 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
                 MSDLPlayer msdlPlayer,
                 SystemClock clock,
                 ActivityStarter activityStarter,
-                BrightnessWarningToast brightnessWarningToast
+                BrightnessWarningToast brightnessWarningToast,
+                TunerService tunerService
         ) {
             mFalsingManager = falsingManager;
             mUiEventLogger = uiEventLogger;
@@ -325,6 +356,7 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
             mActivityStarter = activityStarter;
             mMSDLPlayer = msdlPlayer;
             mBrightnessWarningToast = brightnessWarningToast;
+            mTunerService = tunerService;
         }
 
         /**
@@ -347,7 +379,7 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
                     new HapticSlider.SeekBar(root.requireViewById(R.id.slider)));
             HapticSliderViewBinder.bind(viewRoot, plugin);
             return new BrightnessSliderController(root, mFalsingManager, mUiEventLogger, plugin,
-                    mActivityStarter, mBrightnessWarningToast);
+                    mActivityStarter, mBrightnessWarningToast, mTunerService);
         }
 
         /** Get the layout to inflate based on what slider to use */
