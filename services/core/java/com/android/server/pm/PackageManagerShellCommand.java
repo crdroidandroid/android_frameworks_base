@@ -3031,9 +3031,7 @@ class PackageManagerShellCommand extends ShellCommand {
     private static class InstallParams {
         SessionParams sessionParams;
         String installerPackageName;
-        // Make sure it won't be installed into parallel users
-        // via `adb install` command by default.
-        int userId = UserHandle.USER_CURRENT;
+        int userId = UserHandle.USER_ALL;
         long stagedReadyTimeoutMs = DEFAULT_STAGED_READY_TIMEOUT_MS;
     }
 
