@@ -5872,12 +5872,6 @@ public final class Settings {
         public static final String QS_TRANSPARENCY = "qs_transparency";
 
         /**
-         * Whether to show data usage in qs footer
-         * @hide
-         */
-        public static final String QS_FOOTER_DATA_USAGE = "qs_footer_data_usage";
-
-        /**
          * Whether to show material Dismiss All Button for notifications
          * @hide
          */
@@ -6238,6 +6232,7 @@ public final class Settings {
          * @hide
          */
         public static final String QS_BRIGHTNESS_SLIDER_HAPTIC = "qs_brightness_slider_haptic";
+
         /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.

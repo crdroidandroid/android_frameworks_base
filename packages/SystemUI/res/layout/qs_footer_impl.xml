@@ -32,27 +32,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/qs_footer_height"
-            android:layout_gravity="center_vertical"
-            android:paddingHorizontal="@dimen/qs_tile_margin_horizontal">
+            android:layout_gravity="center_vertical">
 
             <TextView
                 android:id="@+id/build"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:paddingEnd="4dp"
-                android:layout_weight="3"
+                android:layout_weight="1"
+                android:clickable="true"
                 android:ellipsize="marquee"
+                android:focusable="true"
                 android:gravity="center_vertical"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.QS.Status.Build"
                 android:visibility="gone" />
-
-            <View
-                android:id="@+id/spacer"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
 
             <com.android.systemui.qs.PageIndicator
                 android:id="@+id/footer_page_indicator"
