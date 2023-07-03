@@ -666,8 +666,7 @@ public class KeyguardIndicationController {
     }
 
     private void updateLockScreenLogoutView() {
-        final boolean shouldShowLogout = mKeyguardUpdateMonitor.isLogoutEnabled()
-                && getCurrentUser() != UserHandle.USER_SYSTEM;
+        final boolean shouldShowLogout = false;
         if (shouldShowLogout) {
             mRotateTextViewController.updateIndication(
                     INDICATION_TYPE_LOGOUT,
