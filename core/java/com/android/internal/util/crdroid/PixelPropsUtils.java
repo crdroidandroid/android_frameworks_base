@@ -164,21 +164,6 @@ public class PixelPropsUtils {
             "com.pubg.imobile"
     };
 
-    // Codenames for currently supported Pixels by Google
-    private static final String[] pixelCodenames = {
-            "tangorpro",
-            "lynx",
-            "cheetah",
-            "panther",
-            "bluejay",
-            "oriole",
-            "raven",
-            "barbet",
-            "redfin",
-            "bramble",
-            "sunfish"
-    };
-
     private static volatile boolean sIsGms = false;
     private static volatile boolean sIsFinsky = false;
 
@@ -253,21 +238,17 @@ public class PixelPropsUtils {
             }
 
             Map<String, Object> propsToChange = new HashMap<>();
-            boolean isPixelDevice = Arrays.asList(pixelCodenames).contains(SystemProperties.get(DEVICE));
 
             if (packageName.equals("com.google.android.apps.photos")) {
                 if (SystemProperties.getBoolean("persist.sys.pixelprops.gphotos", true)) {
                     propsToChange.putAll(propsToChangePixelXL);
                 } else {
-                    if (isPixelDevice) return;
                     propsToChange.putAll(propsToChangePixel5);
                 }
             } else if (packageName.equals("com.netflix.mediaclient") && 
                         !SystemProperties.getBoolean("persist.sys.pixelprops.netflix", false)) {
                     if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by system prop");
                     return;
-            } else if (isPixelDevice) {
-                return;
             } else if (packageName.equals("com.android.vending")) {
                 sIsFinsky = true;
                 return;
