@@ -452,7 +452,7 @@ public class KeyguardSliceView extends LinearLayout {
             int iconPadding = (int) mContext.getResources()
                     .getDimension(R.dimen.widget_icon_padding);
             // orientation is vertical, so add padding to top & bottom
-            setPadding(!isDate ? iconPadding : 0, padding, 0, hasText ? padding : 0);
+            setPadding(0, padding, 0, hasText ? padding : 0);
 
             setCompoundDrawablePadding(iconPadding);
         }
