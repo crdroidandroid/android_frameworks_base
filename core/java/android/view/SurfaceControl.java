@@ -493,6 +493,8 @@ public final class SurfaceControl implements Parcelable {
     private int mWidth;
     @GuardedBy("mLock")
     private int mHeight;
+    
+    private static final Object transactionLock = new Object();
 
     private TrustedPresentationCallback mTrustedPresentationCallback;
 
@@ -4305,12 +4307,14 @@ public final class SurfaceControl implements Parcelable {
             if (this == other) {
                 return this;
             }
-            mResizedSurfaces.putAll(other.mResizedSurfaces);
-            other.mResizedSurfaces.clear();
-            mReparentedSurfaces.putAll(other.mReparentedSurfaces);
-            other.mReparentedSurfaces.clear();
-            nativeMergeTransaction(mNativeObject, other.mNativeObject);
-            return this;
+            synchronized(transactionLock) {
+                mResizedSurfaces.putAll(other.mResizedSurfaces);
+                other.mResizedSurfaces.clear();
+                mReparentedSurfaces.putAll(other.mReparentedSurfaces);
+                other.mReparentedSurfaces.clear();
+                nativeMergeTransaction(mNativeObject, other.mNativeObject);
+                return this;
+            }
         }
 
         /**
