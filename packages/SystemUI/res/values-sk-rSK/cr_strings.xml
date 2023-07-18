@@ -59,10 +59,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percent">%2$s</xliff:g> • Turbo Nabíjanie (<xliff:g id="charging_time_left" príklad="4 hodiny a 2 minúty">%1$s</xliff:g> do nabitia)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo nabíjanie</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">Využité dnes</string>
-    <string name="usage_data_default_suffix">Dáta</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Režim On-The-Go aktivovaný</string>
     <string name="onthego_notif_title">Režim On-The-Go je aktívny</string>
