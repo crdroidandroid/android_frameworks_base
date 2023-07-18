@@ -48,5 +48,5 @@
     <!-- App lock -->
     <string name="unlock_application">Розблокувати <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Assisted GPS -->
-    <string name="location_agps_access_summary">When location is on, <b>download satellite assistance data from the internet</b>, which can greatly improve the GPS startup performance.</string>
+    <string name="location_agps_access_summary">Коли визначення місцезнаходження ввімкнено, <b>завантажуйте допоміжні супутникові дані з Інтернету</b>, що може значно покращити продуктивність запуску GPS.</string>
 </resources>
