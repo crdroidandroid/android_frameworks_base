@@ -46,6 +46,4 @@
     <string name="new_version_number">Nuova versione da installare: <xliff:g id="new_version">%1$s</xliff:g></string>
     <!-- App lock -->
     <string name="unlock_application">Sblocca <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
-    <!-- Assisted GPS -->
-    <string name="location_agps_access_summary">Quando la posizione è attiva, <b>scarica i dati di assistenza satellitare da internet</b>, il che può migliorare notevolmente le prestazioni di avvio del GPS.</string>
 </resources>
