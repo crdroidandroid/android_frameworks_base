@@ -59,7 +59,4 @@
 
     <!-- App lock -->
     <string name="unlock_application">Unlock <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
-
-    <!-- Assisted GPS -->
-    <string name="location_agps_access_summary">When location is on, <b>download satellite assistance data from the internet</b>, which can greatly improve the GPS startup performance.</string>
 </resources>
