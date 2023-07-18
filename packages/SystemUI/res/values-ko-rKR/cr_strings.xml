@@ -59,10 +59,6 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time">&lt;xliff:g id=\"percentage\"&gt;급속 충전&lt;xliff:g id=\"charging_time_left\" example=\"4 hours and 2 minutes\"&gt;%1$s&lt;/xliff:g&gt; until full)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • 급속 충전중</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">오늘 사용됨</string>
-    <string name="usage_data_default_suffix">데이터</string>
-    <string name="usage_wifi_default_suffix">와이파이</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go 활성화됨</string>
     <string name="onthego_notif_title">On-The-Go가 활성화 되었습니다</string>
