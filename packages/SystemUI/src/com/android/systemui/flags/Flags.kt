@@ -443,7 +443,7 @@ object Flags {
     @Keep
     @JvmField
     val WM_ENABLE_PARTIAL_SCREEN_SHARING =
-        releasedFlag(
+        unreleasedFlag(
             1102,
             name = "record_task_content",
             namespace = DeviceConfig.NAMESPACE_WINDOW_MANAGER,
