@@ -62,7 +62,7 @@
     <!-- Data usage info in QS footer -->
     <string name="usage_data">مصرف امروز</string>
     <string name="usage_data_default_suffix">داده</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <string name="usage_wifi_default_suffix">وای فای</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">ویژگی در حرکت فعال شد</string>
     <string name="onthego_notif_title">ویژگی در حرکت فعال است</string>
