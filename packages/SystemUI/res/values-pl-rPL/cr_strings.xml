@@ -40,13 +40,13 @@
     <!-- Restart progress dialog. This is shown if the user chooses to restart the device. -->
     <string name="global_action_restart_progress">Uruchamiam ponownie\u2026</string>
     <!-- Restart to recovery mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_recovery_progress">Ponowne uruchamianie w trybie recovery\u2026</string>
+    <string name="global_action_restart_recovery_progress">Uruchamianie w trybie recovery\u2026</string>
     <!-- Restart to bootloader mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_bootloader_progress">Ponowne uruchamianie w trybie bootloader\u2026</string>
+    <string name="global_action_restart_bootloader_progress">Uruchamianie w trybie bootloader\u2026</string>
     <!-- Restart to download mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_download_progress">Ponowne uruchamianie w trybie pobierania\u2026</string>
+    <string name="global_action_restart_download_progress">Uruchamianie w trybie pobierania\u2026</string>
     <!-- Restart to fastboot mode progress dialog. This is shown if the user chooses to restart the device. -->
-    <string name="global_action_restart_fastboot_progress">Ponowne uruchamianie w trybie fastbootd\u2026</string>
+    <string name="global_action_restart_fastboot_progress">Uruchamianie w trybie fastbootd\u2026</string>
     <!-- Label for current user in power menu options dialog -->
     <string name="global_action_current_user">Bieżący</string>
     <string name="global_action_users">Użytkownicy</string>
