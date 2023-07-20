@@ -138,7 +138,7 @@
     <string name="screenshot_long_press">Nhấn giữ - vùng đã chọn</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Tìm kiếm âm thanh</string>
-    <string name="quick_settings_sound_search_no_app">Rất tiếc, nhưng tính năng này không hoạt động nếu bạn không có ứng dụng Tìm kiếm nhạc.</string>
+    <string name="quick_settings_sound_search_no_app">Tính năng này sẽ không hoạt động nếu không có ứng dụng tìm kiếm âm thanh.</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
