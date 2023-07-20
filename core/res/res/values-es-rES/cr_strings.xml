@@ -47,5 +47,5 @@
     <!-- App lock -->
     <string name="unlock_application">Desbloquear <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Assisted GPS -->
-    <string name="location_agps_access_summary">When location is on, <b>download satellite assistance data from the internet</b>, which can greatly improve the GPS startup performance.</string>
+    <string name="location_agps_access_summary">Cuando la función de ubicación está activada, <b>el teléfono descarga datos de asistencia satelital desde internet, </b>lo que puede mejorar significativamente el rendimiento del inicio del GPS.</string>
 </resources>
