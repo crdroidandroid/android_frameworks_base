@@ -196,6 +196,9 @@ public class BrightnessController implements ToggleSlider.Listener, MirroredBrig
             mUpdateModeRunnable.run();
             mUpdateSliderRunnable.run();
 
+            mBrightnessSliderHaptic = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.QS_BRIGHTNESS_SLIDER_HAPTIC, 0, UserHandle.USER_CURRENT) == 1;
+
             mHandler.sendEmptyMessage(MSG_ATTACH_LISTENER);
         }
     };
@@ -346,9 +349,6 @@ public class BrightnessController implements ToggleSlider.Listener, MirroredBrig
                     Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL :
                     Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC,
                 UserHandle.USER_CURRENT));
-
-        mBrightnessSliderHaptic = Settings.System.getIntForUser(mContext.getContentResolver(),
-            Settings.System.QS_BRIGHTNESS_SLIDER_HAPTIC, 0, UserHandle.USER_CURRENT) == 1;
     }
 
     public void registerCallbacks() {
