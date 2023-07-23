@@ -59,6 +59,7 @@
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Pengisian Turbo (<xliff:g id="charging_time_left" example="4 jam 2 menit">%1$s</xliff:g> hingga penuh)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Pengisian Turbo</string>
+    <!-- Data usage info in QS footer -->
     <!-- On The Go -->
     <string name="onthego_notif_ticker">On-The-Go diaktifkan</string>
     <string name="onthego_notif_title">On-The-Go sedang aktif</string>
