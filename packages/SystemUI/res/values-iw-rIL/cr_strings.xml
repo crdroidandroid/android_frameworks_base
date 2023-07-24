@@ -70,20 +70,20 @@
     <string name="onthego_transparency">שקיפות</string>
     <string name="onthego_front_camera">שימוש במצלמה הקדמית</string>
     <string name="onthego_service_toggle">הפעלת השירות מחדש אוטומטית</string>
-    <string name="onthego_channel_name">Main</string>
-    <string name="global_action_onthego">On-The-Go</string>
+    <string name="onthego_channel_name">ראשי</string>
+    <string name="global_action_onthego">\"על-הדרך\"</string>
     <!-- OnTheGo Tile -->
-    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="quick_settings_onthego_label">\"על-הדרך\"</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <string name="quick_settings_cpuinfo_label">פרטי המעבד</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
+    <string name="quick_settings_fpsinfo_label">מידע על FPS</string>
     <!-- FPS view text placeholder -->
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">מצפן</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
+    <string name="quick_settings_compass_init">מאתחל\u2026</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">NE</string>
     <string name="quick_settings_compass_E">E</string>
@@ -97,30 +97,30 @@
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">לוח עוצמת קול</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Priority</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_priority_only">עדיפות</string>
+    <string name="volume_ringer_alarms_only">התרעות</string>
+    <string name="volume_ringer_dnd">נא לא להפריע</string>
     <string name="tristate_flashlight">פנס</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="tristate_flashlight_on">פנס דלוק</string>
+    <string name="tristate_flashlight_off">פנס כבוי</string>
+    <string name="tristate_flashlight_blink">פנס מהבהב</string>
+    <string name="tristate_brightness_bright">בהירות מקסימלית</string>
+    <string name="tristate_brightness_dark">בהירות מינימלית</string>
+    <string name="tristate_brightness_auto">בהירות אוטומטית</string>
+    <string name="tristate_rotation_auto">סיבוב אוטומטי</string>
+    <string name="tristate_rotation_0">אנכי</string>
+    <string name="tristate_rotation_90">אופקי (90°)</string>
+    <string name="tristate_rotation_270">אופקי (270°)</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
-        <item quantity="one">%d device connected</item>
+        <item quantity="one">‏%d מכשירים מחוברים</item>
         <item quantity="two">%d devices connected</item>
         <item quantity="many">%d devices connected</item>
         <item quantity="other">‏%1$d מכשירים מחוברים</item>
     </plurals>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="force_stop_dlg_title">אילוץ עצירה?</string>
+    <string name="force_stop_dlg_text">כפיית הפסקת פעילות היישום עלולה לגרום לכך שלא יפעל כהלכה.</string>
     <!-- Smart Pixels QS Tile -->
     <string name="quick_settings_smart_pixels">פיקסלים חכמים</string>
     <string name="quick_settings_smart_pixels_on_power_save">פיקסלים חכמים מופעלים אוטומטית</string>
