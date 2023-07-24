@@ -23,57 +23,57 @@
     <string name="megabytespersecond_short">MB/s</string>
     <string name="gigabytespersecond_short">GB/s</string>
     <!-- Omnijaws Weather -->
-    <string name="omnijaws_service_error">Error</string>
-    <string name="omnijaws_service_unkown">No weather data</string>
-    <string name="omnijaws_service_error_long">Error loading weather data</string>
-    <string name="omnijaws_service_disabled">Service is disabled</string>
-    <string name="omnijaws_detail_header">Weather</string>
-    <string name="omnijaws_label_default">Weather</string>
-    <string name="omnijaws_current_text">Now</string>
-    <string name="omnijaws_package_not_available">OmniJaws not available</string>
-    <string name="omnijaws_service_last_update">Last update:</string>
+    <string name="omnijaws_service_error">שגיאה</string>
+    <string name="omnijaws_service_unkown">אין נתוני מזג אוויר</string>
+    <string name="omnijaws_service_error_long">שגיאה בטעינת נתוני מזג האויר</string>
+    <string name="omnijaws_service_disabled">השירות מושבת</string>
+    <string name="omnijaws_detail_header">מזג אוויר</string>
+    <string name="omnijaws_label_default">מזג־אוויר</string>
+    <string name="omnijaws_current_text">עכשיו</string>
+    <string name="omnijaws_package_not_available">OmniJaws אינו זמין</string>
+    <string name="omnijaws_service_last_update">עדכון אחרון:</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Always on display</string>
+    <string name="quick_settings_always_on_display_label">תצוגה תמידית</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Switch data card</string>
-    <string name="qs_data_switch_changed_1">Using SIM 1 for Mobile data</string>
-    <string name="qs_data_switch_changed_2">Using SIM 2 for Mobile data</string>
+    <string name="qs_data_switch_label">החלפת כרטיס נתונים</string>
+    <string name="qs_data_switch_changed_1">השתמש בכרטיס SIM 1 לנתונים ניידים</string>
+    <string name="qs_data_switch_changed_2">השתמש בכרטיס SIM 2 לנתונים ניידים</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • טעינת Dash (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> עד למצב מלא)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • טעינת Dash</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • טעינת Warp (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> עד למצב מלא)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • טעינת Warp</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • טעינת VOOC (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> עד למצב מלא)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • טעינת VOOC</string>
     <!-- CPUInfo tile -->
-    <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <string name="quick_settings_cpuinfo_label">פרטי המעבד</string>
     <!-- FPS Info tile -->
-    <string name="quick_settings_fpsinfo_label">FPS Info</string>
+    <string name="quick_settings_fpsinfo_label">מידע על FPS</string>
     <!-- Gaming mode -->
-    <string name="gaming_mode_not_enabled">Gaming mode is disabled in settings</string>
+    <string name="gaming_mode_not_enabled">מצב משחק מושבת בהגדרות</string>
     <string name="quick_settings_gaming_mode_label">מצב משחק</string>
     <!-- Smart pixels QS tile -->
-    <string name="quick_settings_smart_pixels">Smart pixels</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
+    <string name="quick_settings_smart_pixels">פיקסלים חכמים</string>
+    <string name="quick_settings_smart_pixels_on_power_save">הפעלה אוטומטית של פיקסלים חכמים</string>
     <!-- Reboot/Recovery/PowerOff QS tile -->
-    <string name="quick_settings_reboot_label">Reboot</string>
-    <string name="quick_settings_reboot_recovery_label">Recovery</string>
-    <string name="quick_settings_poweroff_label">Power off</string>
+    <string name="quick_settings_reboot_label">אתחול</string>
+    <string name="quick_settings_reboot_recovery_label">מצב שחזור (Recovery)</string>
+    <string name="quick_settings_poweroff_label">כיבוי</string>
     <!-- Sound Search tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">חיפוש קולי</string>
     <!-- Sound QS tile -->
-    <string name="quick_settings_sound_label">Sound</string>
-    <string name="quick_settings_sound_ring">Ring</string>
-    <string name="quick_settings_sound_vibrate">Vibrate</string>
-    <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <string name="quick_settings_sound_label">צליל</string>
+    <string name="quick_settings_sound_ring">צלצול</string>
+    <string name="quick_settings_sound_vibrate">רטט</string>
+    <string name="quick_settings_sound_dnd">נא לא להפריע</string>
     <!-- Compass QS Tile -->
-    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_label">מצפן</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
-    <string name="quick_settings_compass_init">Initializing\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Compass off.</string>
-    <string name="accessibility_quick_settings_compass_on">Compass on.</string>
+    <string name="quick_settings_compass_init">מאתחל\u2026</string>
+    <string name="accessibility_quick_settings_compass_off">מצפן כבוי.</string>
+    <string name="accessibility_quick_settings_compass_on">מצפן פועל.</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">NE</string>
     <string name="quick_settings_compass_E">E</string>
