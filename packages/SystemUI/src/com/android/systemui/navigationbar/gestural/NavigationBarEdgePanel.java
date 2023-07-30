@@ -573,6 +573,10 @@ public class NavigationBarEdgePanel extends View implements NavigationEdgeBackPl
             canvas.drawPath(arrowPath, mProtectionPaint);
         }
 
+        if (mIsLeftPanel) {
+            canvas.scale(-1f, 1f, x / 2f, y / 2f);
+        }
+
         canvas.drawPath(arrowPath, mPaint);
         canvas.restore();
         if (mTrackingBackArrowLatency) {
