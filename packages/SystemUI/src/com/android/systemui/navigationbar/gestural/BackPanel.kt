@@ -512,6 +512,9 @@ class BackPanel(
         val arrowPath = calculateArrowPath(dx = dx, dy = dy)
         val arrowPaint = arrowPaint
                 .apply { alpha = (255 * min(arrowAlpha.pos, backgroundAlpha.pos)).toInt() }
+        if (isLeftPanel) {
+            canvas.scale(-1f, 1f, dx / 2f, dy / 2f);
+        }
         canvas.drawPath(arrowPath, arrowPaint)
         canvas.restore()
 
