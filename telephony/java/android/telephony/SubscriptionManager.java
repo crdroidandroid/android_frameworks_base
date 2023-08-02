@@ -2694,6 +2694,20 @@ public class SubscriptionManager {
     }
 
     /**
+     * Returns a constant indicating the state of sim for the slot index.
+     *
+     * @param slotIndex Logical SIM slot index.
+     *
+     * @see TelephonyManager.SimState
+     *
+     * @hide
+     */
+    @TelephonyManager.SimState
+    public static int getSimStateForSlotIndex(int slotIndex) {
+        return TelephonyManager.getSimStateForSlotIndex(slotIndex);
+    }
+
+    /**
      * Set a field in the subscription database. Note not all fields are supported.
      *
      * @param subscriptionId Subscription Id of Subscription.
