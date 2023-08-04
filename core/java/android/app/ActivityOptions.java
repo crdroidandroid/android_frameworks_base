@@ -20,6 +20,8 @@ import static android.Manifest.permission.CONTROL_REMOTE_APP_TRANSITION_ANIMATIO
 import static android.Manifest.permission.START_TASKS_FROM_RECENTS;
 import static android.app.WindowConfiguration.ACTIVITY_TYPE_UNDEFINED;
 import static android.app.WindowConfiguration.WINDOWING_MODE_UNDEFINED;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.content.Intent.FLAG_RECEIVER_FOREGROUND;
 import static android.view.Display.INVALID_DISPLAY;
 
 import android.annotation.IntDef;
@@ -69,7 +71,7 @@ import java.util.ArrayList;
  * {@link android.content.Context#startActivity(android.content.Intent, android.os.Bundle)
  * Context.startActivity(Intent, Bundle)} and related methods.
  */
-public class ActivityOptions {
+public class ActivityOptions extends ComponentOptions {
     private static final String TAG = "ActivityOptions";
 
     /**
@@ -1081,13 +1083,12 @@ public class ActivityOptions {
     }
 
     private ActivityOptions() {
+        super();
     }
 
     /** @hide */
     public ActivityOptions(Bundle opts) {
-        // If the remote side sent us bad parcelables, they won't get the
-        // results they want, which is their loss.
-        opts.setDefusable(true);
+        super(opts);
 
         mPackageName = opts.getString(KEY_PACKAGE_NAME);
         try {
@@ -1554,7 +1555,9 @@ public class ActivityOptions {
      * @hide
      */
     public int getPendingIntentLaunchFlags() {
-        return mPendingIntentLaunchFlags;
+        // b/243794108: Ignore all flags except the new task flag, to be reconsidered in b/254490217
+        return mPendingIntentLaunchFlags &
+                (FLAG_ACTIVITY_NEW_TASK | FLAG_RECEIVER_FOREGROUND);
     }
 
     /**
@@ -1832,8 +1835,9 @@ public class ActivityOptions {
      * object; you must not modify it, but can supply it to the startActivity
      * methods that take an options Bundle.
      */
+    @Override
     public Bundle toBundle() {
-        Bundle b = new Bundle();
+        Bundle b = super.toBundle();
         if (mPackageName != null) {
             b.putString(KEY_PACKAGE_NAME, mPackageName);
         }

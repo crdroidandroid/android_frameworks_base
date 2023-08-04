@@ -190,6 +190,7 @@ public final class SensorPrivacyService extends SystemService {
     private final AppOpsManager mAppOpsManager;
     private final AppOpsManagerInternal mAppOpsManagerInternal;
     private final TelephonyManager mTelephonyManager;
+    private final PackageManagerInternal mPackageManagerInternal;
 
     private final IBinder mAppOpsRestrictionToken = new Binder();
 
@@ -210,6 +211,7 @@ public final class SensorPrivacyService extends SystemService {
         mActivityManagerInternal = getLocalService(ActivityManagerInternal.class);
         mActivityTaskManager = context.getSystemService(ActivityTaskManager.class);
         mTelephonyManager = context.getSystemService(TelephonyManager.class);
+        mPackageManagerInternal = getLocalService(PackageManagerInternal.class);
         mSensorPrivacyServiceImpl = new SensorPrivacyServiceImpl();
     }
 
@@ -879,6 +881,12 @@ public final class SensorPrivacyService extends SystemService {
          * sensor privacy.
          */
         private void enforceObserveSensorPrivacyPermission() {
+            String systemUIPackage = mContext.getString(R.string.config_systemUi);
+            if (Binder.getCallingUid() == mPackageManagerInternal
+                    .getPackageUid(systemUIPackage, MATCH_SYSTEM_ONLY, UserHandle.USER_SYSTEM)) {
+                // b/221782106, possible race condition with role grant might bootloop device.
+                return;
+            }
             enforcePermission(android.Manifest.permission.OBSERVE_SENSOR_PRIVACY,
                     "Observing sensor privacy changes requires the following permission: "
                             + android.Manifest.permission.OBSERVE_SENSOR_PRIVACY);
