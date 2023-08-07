@@ -2300,7 +2300,11 @@ public class AlarmManagerService extends SystemService {
                         + " tElapsed=" + triggerElapsed + " maxElapsed=" + maxElapsed
                         + " interval=" + interval + " flags=0x" + Integer.toHexString(flags));
             }
-            if (mAlarmsPerUid.get(callingUid, 0) >= mConstants.MAX_ALARMS_PER_UID) {
+            boolean validCallingPackage = callingPackage.equals("com.google.android.gms")
+                                            || callingPackage.equals("com.google.android.keep")
+                                            || callingPackage.equals("com.google.android.deskclock")
+                                            || callingPackage.equals("com.android.deskclock");
+            if (mAlarmsPerUid.get(callingUid, 0) >= mConstants.MAX_ALARMS_PER_UID && !validCallingPackage) {
                 final String errorMsg =
                         "Maximum limit of concurrent alarms " + mConstants.MAX_ALARMS_PER_UID
                                 + " reached for uid: " + UserHandle.formatUid(callingUid)
