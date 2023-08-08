@@ -113,12 +113,13 @@ class ControlsListingControllerImpl @VisibleForTesting constructor(
     }
 
     private fun updateServices(newServices: List<ControlsServiceInfo>) {
-        if (featureFlags.isEnabled(Flags.USE_APP_PANELS)) {
-            val allowAllApps = featureFlags.isEnabled(Flags.APP_PANELS_ALL_APPS_ALLOWED)
+        val useAppPanels = featureFlags.isEnabled(Flags.USE_APP_PANELS)
+        val allowAllApps = featureFlags.isEnabled(Flags.APP_PANELS_ALL_APPS_ALLOWED)
+        if (useAppPanels == true) {
             newServices.forEach {
-                it.resolvePanelActivity(allowAllApps) }
+                it.resolvePanelActivity(allowAllApps == true)
+            }
         }
-
         if (newServices != availableServices) {
             availableServices = newServices
             callbacks.forEach {
