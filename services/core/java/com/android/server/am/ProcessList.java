@@ -4787,7 +4787,8 @@ public final class ProcessList {
     }
 
     @GuardedBy("mService")
-    ProcessChangeItem enqueueProcessChangeItemLocked(int pid, int uid) {
+    ProcessChangeItem enqueueProcessChangeItemLocked(int pid, int uid, int changes,
+            boolean foregroundActivities, int foregroundServiceTypes) {
         synchronized (mProcessChangeLock) {
             int i = mPendingProcessChanges.size() - 1;
             ActivityManagerService.ProcessChangeItem item = null;
@@ -4802,6 +4803,7 @@ public final class ProcessList {
                 i--;
             }
 
+            boolean needNotify = false;
             if (i < 0) {
                 // No existing item in pending changes; need a new one.
                 final int num = mAvailProcessChanges.size();
@@ -4820,13 +4822,20 @@ public final class ProcessList {
                 item.pid = pid;
                 item.uid = uid;
                 if (mPendingProcessChanges.size() == 0) {
-                    if (DEBUG_PROCESS_OBSERVERS) {
-                        Slog.i(TAG_PROCESS_OBSERVERS, "*** Enqueueing dispatch processes changed!");
-                    }
-                    mService.mUiHandler.obtainMessage(DISPATCH_PROCESSES_CHANGED_UI_MSG)
-                            .sendToTarget();
+                    needNotify = true;
                 }
                 mPendingProcessChanges.add(item);
+            }
+
+            item.changes |= changes;
+            item.foregroundActivities = foregroundActivities;
+            item.foregroundServiceTypes = foregroundServiceTypes;
+            if (needNotify) {
+                if (DEBUG_PROCESS_OBSERVERS) {
+                    Slog.i(TAG_PROCESS_OBSERVERS, "*** Enqueueing dispatch processes changed!");
+                }
+                mService.mUiHandler.obtainMessage(DISPATCH_PROCESSES_CHANGED_UI_MSG)
+                        .sendToTarget();
             }
 
             return item;
