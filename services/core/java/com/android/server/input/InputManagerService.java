@@ -1179,7 +1179,8 @@ public class InputManagerService extends IInputManager.Stub
                 deviceIdAndGeneration[i * 2] = inputDevice.getId();
                 deviceIdAndGeneration[i * 2 + 1] = inputDevice.getGeneration();
 
-                if (!inputDevice.isVirtual() && inputDevice.isFullKeyboard()) {
+                if (!inputDevice.isVirtual() && inputDevice.isFullKeyboard()
+                        && isInputDeviceEnabled(inputDevice.getId())) {
                     if (!containsInputDeviceWithDescriptor(oldInputDevices,
                             inputDevice.getDescriptor())) {
                         mTempFullKeyboards.add(numFullKeyboardsAdded++, inputDevice);
