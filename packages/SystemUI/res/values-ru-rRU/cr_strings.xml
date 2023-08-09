@@ -35,7 +35,7 @@
     <string name="screenrecord_skip_time_label">Пропустить таймер</string>
     <string name="screenrecord_skip_time_summary">Убрать 3-х секундное ожидание</string>
     <string name="screenrecord_hevc_switch_label">Включить HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Использовать более эффективное кодирование видео в формате HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Использовать более эффективное HEVC кодирование</string>
     <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_delete_label">Удалить</string>
     <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
