@@ -126,6 +126,8 @@ import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
+import com.android.internal.util.crdroid.DeviceConfigUtils;
+
 /**
  * The Settings provider contains global system-level device preferences.
  */
@@ -22580,6 +22582,9 @@ public final class Settings {
         @RequiresPermission(Manifest.permission.WRITE_DEVICE_CONFIG)
         public static boolean putString(@NonNull String namespace,
                 @NonNull String name, @Nullable String value, boolean makeDefault) {
+            if (DeviceConfigUtils.shouldDenyDeviceConfigControl(namespace, name)) {
+                return true;
+            }
             ContentResolver resolver = getContentResolver();
             return sNameValueCache.putStringForUser(resolver, createCompositeName(namespace, name),
                     value, null, makeDefault, resolver.getUserId(),
@@ -22601,7 +22606,9 @@ public final class Settings {
         public static boolean setStrings(@NonNull String namespace,
                 @NonNull Map<String, String> keyValues)
                 throws DeviceConfig.BadConfigException {
-            return setStrings(getContentResolver(), namespace, keyValues);
+            boolean result = setStrings(getContentResolver(), namespace, keyValues);
+            DeviceConfigUtils.setDefaultProperties(namespace, null);
+            return result;
         }
 
         /**
@@ -22651,6 +22658,9 @@ public final class Settings {
         @RequiresPermission(Manifest.permission.WRITE_DEVICE_CONFIG)
         public static boolean deleteString(@NonNull String namespace,
                 @NonNull String name) {
+            if (DeviceConfigUtils.shouldDenyDeviceConfigControl(namespace, name)) {
+                return true;
+            }
             ContentResolver resolver = getContentResolver();
             return sNameValueCache.deleteStringForUser(resolver,
                     createCompositeName(namespace, name), resolver.getUserId());
@@ -22692,6 +22702,7 @@ public final class Settings {
             } catch (RemoteException e) {
                 Log.w(TAG, "Can't reset to defaults for " + CONTENT_URI, e);
             }
+            DeviceConfigUtils.setDefaultProperties(null, null);
         }
 
         /**
