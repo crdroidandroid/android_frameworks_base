@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">Verwijder 3 seconden wachten</string>
     <string name="screenrecord_hevc_switch_label">HEVC inschakelen</string>
     <string name="screenrecord_hevc_switch_summary">Gebruik efficiëntere HEVC video codering</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">Verwijderen</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Screenshot verwijderen</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
