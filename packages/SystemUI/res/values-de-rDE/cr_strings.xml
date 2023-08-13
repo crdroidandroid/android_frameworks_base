@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">Dreisekündige Wartezeit deaktivieren</string>
     <string name="screenrecord_hevc_switch_label">HEVC aktivieren</string>
     <string name="screenrecord_hevc_switch_summary">HEVC als Videocodec verwenden (effizienter)</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">Löschen</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Screenshot löschen</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
