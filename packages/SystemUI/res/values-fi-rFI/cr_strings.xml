@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">Poista 3 sekunnin odotusaika</string>
     <string name="screenrecord_hevc_switch_label">Ota HEVC käyttöön</string>
     <string name="screenrecord_hevc_switch_summary">Käytä tehokkaampaa HEVC-videokoodausta</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">Poista</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Poista kuvakaappaus</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
