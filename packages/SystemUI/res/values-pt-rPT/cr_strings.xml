@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">Remover espera de 3 segundos</string>
     <string name="screenrecord_hevc_switch_label">Ativar HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Usar codificação de vídeo HEVC mais eficiente</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">Eliminar</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Eliminar captura de ecrã</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
