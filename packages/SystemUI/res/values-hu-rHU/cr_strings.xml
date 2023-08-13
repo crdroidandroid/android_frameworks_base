@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">A 3mp-s késleltetés elhagyása</string>
     <string name="screenrecord_hevc_switch_label">HEVC-kodek be</string>
     <string name="screenrecord_hevc_switch_summary">Használjon hatékonyabb HEVC-videókódolást</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">Törlés</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Képernyőkép törlése</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
