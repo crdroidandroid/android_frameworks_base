@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">הסרת המתנת 3 השניות</string>
     <string name="screenrecord_hevc_switch_label">תמיכה ב-HEVC</string>
     <string name="screenrecord_hevc_switch_summary">שימוש בקידוד וידאו HEVC היעיל יותר</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">מחיקה</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">מחיקת צילומי מסך</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
