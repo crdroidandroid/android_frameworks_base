@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">Odstranit 3\u00a0sekundy čekání</string>
     <string name="screenrecord_hevc_switch_label">Povolit HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Použít účinnější kódování videa typu HEVC</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">Odstranit</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Odstranit snímek obrazovky</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
