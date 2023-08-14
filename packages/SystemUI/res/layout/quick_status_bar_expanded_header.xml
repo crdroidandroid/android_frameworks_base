@@ -36,18 +36,29 @@
     <!-- Header image -->
     <LinearLayout
         android:id="@+id/layout_header"
-        android:layout_width="match_parent"          
+        android:layout_width="match_parent"
         android:layout_height="@dimen/qs_header_height_full"
         android:layout_marginLeft="-50dp"
         android:layout_marginRight="-50dp"
+        android:background="#00000000"
         android:visibility="gone" >
 
-        <ImageView 
-            android:id="@+id/qs_header_image_view"
+        <LinearLayout
+            android:id="@+id/layout_inner_header"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"    
-            android:scaleType="centerCrop"
-            android:background="@drawable/qs_header_image_view_outline" />
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/qs_header_image_side_margin"
+            android:background="#00000000" >
+
+            <ImageView
+                android:id="@+id/qs_header_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/qs_header_image_top_margin"
+                android:layout_marginBottom="@dimen/qs_header_image_bottom_margin"
+                android:scaleType="centerCrop"
+                android:background="@drawable/qs_header_image_view_outline" />
+        </LinearLayout>
     </LinearLayout>
 
     <com.android.systemui.qs.QuickQSPanel
