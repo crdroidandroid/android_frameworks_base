@@ -104,6 +104,10 @@
     <dimen name="dismiss_all_button_width">55dp</dimen>
     <dimen name="dismiss_all_button_margin_bottom">48dp</dimen>
 
-    <!-- QS Header height full -->
+    <!-- QS header image -->
     <dimen name="qs_header_height_full">200dp</dimen>
+    <dimen name="qs_header_image_side_margin">0dp</dimen>
+    <dimen name="qs_header_image_top_margin">0dp</dimen>
+    <dimen name="qs_header_image_bottom_margin">0dp</dimen>
+    <dimen name="qs_header_image_min_height">50dp</dimen>
 </resources>
