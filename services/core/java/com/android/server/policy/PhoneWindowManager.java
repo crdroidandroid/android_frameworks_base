@@ -3550,7 +3550,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                 }
 
-                return key_consumed;
+                break;
             case KeyEvent.KEYCODE_APP_SWITCH:
                 if (!keyguardOn) {
                     if (down && repeatCount == 0) {
