@@ -92,6 +92,7 @@ public class PixelPropsUtils {
             "com.google.android.apps.cameralite",
             "com.google.android.dialer",
             "com.google.android.euicc",
+            "com.google.android.as",
             "com.google.ar.core",
             "com.google.android.youtube",
             "com.google.android.apps.youtube.kids",
