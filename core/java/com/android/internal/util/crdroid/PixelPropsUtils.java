@@ -275,13 +275,30 @@ public class PixelPropsUtils {
         }
     }
 
+    private static void setVersionFieldString(String key, String value) {
+        try {
+            Field field = Build.VERSION.class.getDeclaredField(key);
+            field.setAccessible(true);
+            field.set(null, value);
+            field.setAccessible(false);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Log.e(TAG, "Failed to spoof Build." + key, e);
+        }
+    }
+
     private static void spoofBuildGms() {
         // Alter model name and fingerprint to Pixel 2 to avoid hardware attestation enforcement
+        setPropValue("BRAND", "google");
+        setPropValue("PRODUCT", "walleye");
+        setPropValue("MODEL", "Pixel 2");
+        setPropValue("MANUFACTURER", "Google");
         setPropValue("DEVICE", "walleye");
         setPropValue("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
-        setPropValue("MODEL", "Pixel 2");
-        setPropValue("PRODUCT", "walleye");
-        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.O);
+        setPropValue("ID", "OPM1.171019.011");
+        setPropValue("TYPE", "user");
+        setPropValue("TAGS", "release-keys");
+        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.O_MR1);
+        setVersionFieldString("SECURITY_PATCH", "2017-12-05");
     }
 
     private static boolean isCallerSafetyNet() {
