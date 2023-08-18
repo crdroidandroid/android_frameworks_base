@@ -2289,15 +2289,20 @@ class WindowState extends WindowContainer<WindowState> implements WindowManagerP
 
     boolean matchesDisplayAreaBounds() {
         final Rect rotatedDisplayBounds = mToken.getFixedRotationTransformDisplayBounds();
+        Rect currentBounds = getBounds();
+        final Task task = getTask();
+        if (areAppWindowBoundsLetterboxed() && task != null) {
+            currentBounds = getTask().getBounds();
+        }
         if (rotatedDisplayBounds != null) {
             // If the rotated display bounds are available, the window bounds are also rotated.
-            return rotatedDisplayBounds.equals(getBounds());
+            return rotatedDisplayBounds.equals(currentBounds);
         }
         final DisplayArea displayArea = getDisplayArea();
         if (displayArea == null) {
-            return getDisplayContent().getBounds().equals(getBounds());
+            return getDisplayContent().getBounds().equals(currentBounds);
         }
-        return displayArea.getBounds().equals(getBounds());
+        return displayArea.getBounds().equals(currentBounds);
     }
 
     /**
