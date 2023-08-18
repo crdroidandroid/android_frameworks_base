@@ -17,6 +17,8 @@
 package com.android.systemui.qs.footer.ui.viewmodel
 
 import android.content.Context
+import android.os.UserHandle
+import android.provider.Settings
 import android.util.Log
 import android.view.ContextThemeWrapper
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -36,6 +38,7 @@ import com.android.systemui.qs.footer.data.model.UserSwitcherStatusModel
 import com.android.systemui.qs.footer.domain.interactor.FooterActionsInteractor
 import com.android.systemui.qs.footer.domain.model.SecurityButtonConfig
 import com.android.systemui.res.R
+import com.android.systemui.statusbar.policy.KeyguardStateController
 import com.android.systemui.util.icuMessageFormat
 import javax.inject.Inject
 import javax.inject.Named
@@ -113,6 +116,7 @@ class FooterActionsViewModel(
         private val globalActionsDialogLiteProvider: Provider<GlobalActionsDialogLite>,
         private val activityStarter: ActivityStarter,
         @Named(PM_LITE_ENABLED) private val showPowerButton: Boolean,
+        private val keyguardStateController: KeyguardStateController
     ) {
         /** Create a [FooterActionsViewModel] bound to the lifecycle of [lifecycleOwner]. */
         fun create(lifecycleOwner: LifecycleOwner): FooterActionsViewModel {
@@ -139,6 +143,7 @@ class FooterActionsViewModel(
                 globalActionsDialogLite,
                 activityStarter,
                 showPowerButton,
+                keyguardStateController,
             )
         }
     }
@@ -151,6 +156,7 @@ fun FooterActionsViewModel(
     globalActionsDialogLite: GlobalActionsDialogLite,
     activityStarter: ActivityStarter,
     showPowerButton: Boolean,
+    keyguardStateController: KeyguardStateController
 ): FooterActionsViewModel {
     suspend fun observeDeviceMonitoringDialogRequests(quickSettingsContext: Context) {
         footerActionsInteractor.deviceMonitoringDialogRequests.collect {
@@ -210,6 +216,11 @@ fun FooterActionsViewModel(
     }
 
     fun onPowerButtonClicked(expandable: Expandable) {
+        if (keyguardStateController.isShowing() && keyguardStateController.isMethodSecure() 
+                && Settings.System.getIntForUser(appContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_ENABLE_POWER_MENU, 1, UserHandle.USER_CURRENT) == 0) {
+            return
+        }
         if (falsingManager.isFalseTap(FalsingManager.LOW_PENALTY)) {
             return
         }
