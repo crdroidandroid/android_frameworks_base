@@ -1112,6 +1112,17 @@ bool ResourceParser::ParseSymbolImpl(xml::XmlPullParser* parser,
     return false;
   }
 
+  if (std::optional<StringPiece> maybe_id_str = xml::FindNonEmptyAttribute(parser, "id")) {
+    std::optional<ResourceId> maybe_id = ResourceUtils::ParseResourceId(maybe_id_str.value());
+    if (!maybe_id) {
+      diag_->Error(android::DiagMessage(out_resource->source)
+                   << "invalid resource ID '" << maybe_id_str.value() << "' in <"
+                   << parser->element_name() << "> tag");
+      return false;
+    }
+    out_resource->id = maybe_id.value();
+  }
+
   out_resource->name.type = parsed_type->ToResourceNamedType();
   return true;
 }
