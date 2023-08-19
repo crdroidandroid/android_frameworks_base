@@ -107,10 +107,7 @@ static bool MergeEntry(IAaptContext* context, const android::Source& src, Resour
 
   // Copy over the strongest visibility.
   if (src_entry->visibility.level > dst_entry->visibility.level) {
-    // Only copy the ID if the source is public, or else the ID is meaningless.
-    if (src_entry->visibility.level == Visibility::Level::kPublic) {
-      dst_entry->id = src_entry->id;
-    }
+    dst_entry->id = src_entry->id;
     dst_entry->visibility = std::move(src_entry->visibility);
   } else if (src_entry->visibility.level == Visibility::Level::kPublic &&
              dst_entry->visibility.level == Visibility::Level::kPublic && dst_entry->id &&
