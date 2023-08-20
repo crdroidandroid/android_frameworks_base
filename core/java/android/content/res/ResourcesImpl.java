@@ -894,10 +894,16 @@ public class ResourcesImpl {
             }
         } catch (Exception | StackOverflowError e) {
             Trace.traceEnd(Trace.TRACE_TAG_RESOURCES);
-            final NotFoundException rnf = new NotFoundException(
-                    "File " + file + " from drawable resource ID #0x" + Integer.toHexString(id));
-            rnf.initCause(e);
-            throw rnf;
+            if (file.contains("drawable") && file.contains("ic_app_icon")&& file.endsWith(".xml")) {
+                return wrapper.getDrawable(com.android.internal.R.drawable.ic_app_icon);
+            } else if (file.contains("drawable") && file.endsWith(".xml")) {
+                return wrapper.getDrawable(com.android.internal.R.drawable.ic_android);
+            } else {
+                final NotFoundException rnf = new NotFoundException(
+                        "File " + file + " from drawable resource ID #0x" + Integer.toHexString(id));
+                rnf.initCause(e);
+                throw rnf;
+            }
         }
         Trace.traceEnd(Trace.TRACE_TAG_RESOURCES);
 
