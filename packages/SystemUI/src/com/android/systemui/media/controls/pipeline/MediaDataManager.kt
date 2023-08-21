@@ -1075,9 +1075,10 @@ class MediaDataManager(
         val playOrPause =
             if (isConnectingState(state.state)) {
                 // Spinner needs to be animating to render anything. Start it here.
-                val drawable =
-                    context.getDrawable(com.android.internal.R.drawable.progress_small_material)
-                (drawable as Animatable).start()
+                val drawable = context.getDrawable(com.android.internal.R.drawable.progress_small_material)
+                if (drawable is Animatable) {
+                    (drawable as Animatable).start()
+                }
                 MediaAction(
                     drawable,
                     null, // no action to perform when clicked
