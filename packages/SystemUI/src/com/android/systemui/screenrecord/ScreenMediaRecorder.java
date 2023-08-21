@@ -264,11 +264,13 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
             throws IOException {
         String videoType = MediaFormat.MIMETYPE_VIDEO_AVC;
 
-        // Get max size from the decoder, to ensure recordings will be playable on device
-        MediaCodec decoder = MediaCodec.createDecoderByType(videoType);
-        MediaCodecInfo.VideoCapabilities vc = decoder.getCodecInfo()
+        // Get max size from the encoder,
+        // implicitly decoder supports this size and
+        // ensure recordings will be playable on device
+        MediaCodec encoder = MediaCodec.createEncoderByType(videoType);
+        MediaCodecInfo.VideoCapabilities vc = encoder.getCodecInfo()
                 .getCapabilitiesForType(videoType).getVideoCapabilities();
-        decoder.release();
+        encoder.release();
 
         // Check if we can support screen size as-is
         int width = vc.getSupportedWidths().getUpper();
