@@ -3887,8 +3887,14 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     private final ActivityLaunchAnimator.Listener mActivityLaunchAnimatorListener =
             new ActivityLaunchAnimator.Listener() {
                 @Override
-                public void onLaunchAnimationStart() {
-                    mKeyguardViewMediator.setBlursDisabledForAppLaunch(true);
+                public void onLaunchAnimationProgress(float progress) {
+                    // as per ActivityLaunchAnimator.kt TIMINGS object,
+                    // contentBeforeFadeOutDuration of 150ms and total duration of
+                    // totalDuration of 500ms means that fade out starts at 150 / 500 = 0.3f
+                    // don't call in if progress is 0.4f+ as microoptimization, it's already set
+                    if (progress >= 0.3f && progress < 0.4f) {
+                        mKeyguardViewMediator.setBlursDisabledForAppLaunch(true);
+                    }
                 }
 
                 @Override
