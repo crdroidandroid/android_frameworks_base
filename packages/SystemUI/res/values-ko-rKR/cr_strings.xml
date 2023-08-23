@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">3초타이머 제거</string>
     <string name="screenrecord_hevc_switch_label">H. 265 활성화</string>
     <string name="screenrecord_hevc_switch_summary">HEVC(h. 265) 더 효율적인 비디오 인코딩을 사용</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">삭제</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">스크린샷 삭제</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>

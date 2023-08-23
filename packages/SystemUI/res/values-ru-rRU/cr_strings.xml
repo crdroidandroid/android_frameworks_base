@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">Убрать 3-х секундное ожидание</string>
     <string name="screenrecord_hevc_switch_label">Включить HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Использовать более эффективное HEVC кодирование</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">Удалить</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Удалить снимок экрана</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
@@ -57,8 +53,8 @@
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC зарядка (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до конца)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC зарядка</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Турбо Зарядка (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до полной зарядки)</string>
-    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Турбо Зарядка</string>
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo зарядка (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до полной зарядки)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo зарядка</string>
     <!-- On The Go -->
     <string name="onthego_notif_ticker">Режим «На ходу» включен</string>
     <string name="onthego_notif_title">Режим «На ходу» активен</string>
@@ -120,10 +116,10 @@
     </plurals>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Остановить принудительно?</string>
-    <string name="force_stop_dlg_text">Принудительное закрытие приложения может негативно отразиться на его функциональности.</string>
+    <string name="force_stop_dlg_text">Принудительное закрытие приложения может негативно отразиться на его функциональности</string>
     <!-- Smart Pixels QS Tile -->
     <string name="quick_settings_smart_pixels">Умные пиксели</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Автовключение «Умные пиксели»</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Автовключение «Умных пикселей»</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Ошибка при загрузке данных о погоде</string>
     <string name="omnijaws_service_unknown">Нет данных о погоде</string>
@@ -137,7 +133,7 @@
     <string name="screenshot_long_press">Долгое нажатие - выбранный регион</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Поиск музыки</string>
-    <string name="quick_settings_sound_search_no_app">Извините, это не работает без приложения для поиска музыки.</string>
+    <string name="quick_settings_sound_search_no_app">Извините, это не работает без приложения для поиска музыки</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">кбит/с</string>
     <string name="megabitspersecond_short">Мбит/с</string>

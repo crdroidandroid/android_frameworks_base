@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">إزالة 3 ثانية انتظار</string>
     <string name="screenrecord_hevc_switch_label">تمكين ترميز HEVC</string>
     <string name="screenrecord_hevc_switch_summary">استخدام ترميز فيديو HEVC أكثر كفاءة</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">حذف</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">احذف لقطة الشاشة</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>

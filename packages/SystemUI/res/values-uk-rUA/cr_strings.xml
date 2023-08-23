@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">Видалити 3 секундне очікування</string>
     <string name="screenrecord_hevc_switch_label">Увімкнути HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Використовувати більш ефективне розширення відео кодування</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">Видалити</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">Видалити скріншот</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>

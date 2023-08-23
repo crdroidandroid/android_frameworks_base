@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">跳過三秒的倒數時間</string>
     <string name="screenrecord_hevc_switch_label">使用 HEVC 編碼</string>
     <string name="screenrecord_hevc_switch_summary">以更有效率的 HEVC 編碼格式來錄製螢幕錄影</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">刪除</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">刪除螢幕截圖</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>

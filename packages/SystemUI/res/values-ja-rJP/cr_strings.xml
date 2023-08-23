@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">3秒間の待機を削除します</string>
     <string name="screenrecord_hevc_switch_label">HEVC を有効化</string>
     <string name="screenrecord_hevc_switch_summary">より効率的な HEVC 動画エンコーディングを使用します</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">削除</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">スクリーンショットを削除</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>

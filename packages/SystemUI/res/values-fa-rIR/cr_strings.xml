@@ -36,10 +36,6 @@
     <string name="screenrecord_skip_time_summary">حذف صبر ۳ ثانیه‌ای</string>
     <string name="screenrecord_hevc_switch_label">فعال سازی انکد سخت افزاری ویدیو</string>
     <string name="screenrecord_hevc_switch_summary">از کدگذاری ویدیویی HEVC کارآمدتر استفاده کنید</string>
-    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
-    <string name="screenshot_delete_label">حذف</string>
-    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
-    <string name="screenshot_delete_description">حذف عکس‌های صفحه</string>
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
