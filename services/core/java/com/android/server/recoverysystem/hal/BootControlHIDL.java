@@ -21,6 +21,7 @@ import android.hardware.boot.V1_0.CommandResult;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Slog;
+import java.util.NoSuchElementException;
 
 public class BootControlHIDL implements IBootControl {
     private static final String TAG = "BootControlHIDL";
@@ -41,7 +42,7 @@ public class BootControlHIDL implements IBootControl {
     public static boolean isV1_2ServicePresent() {
         try {
             android.hardware.boot.V1_2.IBootControl.getService(true);
-        } catch (RemoteException e) {
+        } catch (NoSuchElementException | RemoteException e) {
             return false;
         }
         return true;
