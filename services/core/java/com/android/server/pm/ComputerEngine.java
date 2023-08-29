@@ -1651,9 +1651,10 @@ public class ComputerEngine implements Computer {
 
         final PackageUserStateInternal state = ps.getUserStateOrDefault(userId);
         if ((flags & MATCH_UNINSTALLED_PACKAGES) != 0) {
-            if (state.isHidden() && (mSettings.getSettingBase(
-                    UserHandle.getAppId(callingUid)).getFlags() & ApplicationInfo.FLAG_SYSTEM)
-                    != ApplicationInfo.FLAG_SYSTEM) {
+            final SettingBase callingSetting =
+                    mSettings.getSettingBase(UserHandle.getAppId(callingUid));
+            if (state.isHidden() && callingSetting != null && (callingSetting.getFlags() &
+                    ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
                 return null;
             } else if (ps.isSystem()) {
                 flags |= MATCH_ANY_USER;
