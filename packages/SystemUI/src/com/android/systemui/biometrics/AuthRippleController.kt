@@ -218,8 +218,8 @@ class AuthRippleController @Inject constructor(
                     addUpdateListener { animator ->
                         if (lightRevealScrim.revealEffect != circleReveal) {
                             // if something else took over the reveal, let's cancel ourselves
-                            // When the animator is almost done, fully reveal the scrim.
-                            if (animator.animatedValue as Float >= 0.9999f) {
+                            // The animator should end here, fully reveal the scrim.
+                            if (animator.animatedValue as Float != 1f) {
                                 lightRevealScrim.revealAmount = 1f
                             }
                             cancel()
