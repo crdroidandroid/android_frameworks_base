@@ -344,11 +344,13 @@ public class BluetoothControllerImpl implements BluetoothController, BluetoothCa
             if (mConnectedDevices.isEmpty()) {
                 return BluetoothDevice.BATTERY_LEVEL_UNKNOWN;
             }
-            return mConnectedDevices.stream()
-                .mapToInt(device -> device.getBatteryLevel())
-                .filter(level -> level != BluetoothDevice.BATTERY_LEVEL_UNKNOWN)
-                .findFirst()
-                .orElse(BluetoothDevice.BATTERY_LEVEL_UNKNOWN);
+            for (CachedBluetoothDevice device : mConnectedDevices) {
+                int level = device.getBatteryLevel();
+                if (level != BluetoothDevice.BATTERY_LEVEL_UNKNOWN) {
+                    return level;
+                }
+            }
+            return BluetoothDevice.BATTERY_LEVEL_UNKNOWN;
         }
     }
 
