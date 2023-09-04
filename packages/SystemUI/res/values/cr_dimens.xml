@@ -110,4 +110,7 @@
     <dimen name="qs_header_image_top_margin">0dp</dimen>
     <dimen name="qs_header_image_bottom_margin">0dp</dimen>
     <dimen name="qs_header_image_min_height">50dp</dimen>
+
+    <!-- A11 QS style -->
+    <dimen name="custom_qs_panel_padding_top">0dp</dimen>
 </resources>
