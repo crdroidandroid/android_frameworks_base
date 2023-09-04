@@ -113,4 +113,5 @@
 
     <!-- QS A11 Style -->
     <dimen name="custom_notification_row_padding">16dp</dimen>
+    <dimen name="custom_qs_panel_padding_top">0dp</dimen>
 </resources>
