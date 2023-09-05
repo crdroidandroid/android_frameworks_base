@@ -2899,7 +2899,20 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                 mBackgroundDrawable = new ScrimDrawable();
             }
 
-            getWindow().setDimAmount(mBlurUtils.supportsBlursOnWindows() ? 0.54f : 0.88f);
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            if (mBlurUtils.supportsBlursOnWindows()) {
+                // Enable blur behind
+                // Enable dim behind since we are setting some amount dim for the blur.
+                window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+                // Set blur behind radius
+                int blurBehindRadius = mContext.getResources()
+                        .getDimensionPixelSize(com.android.systemui.R.dimen.max_window_blur_radius);
+                window.getAttributes().setBlurBehindRadius(blurBehindRadius);
+                window.setDimAmount(0.54f);
+            } else {
+                window.setDimAmount(0.88f);
+            }
 
             // If user entered from the lock screen and smart lock was enabled, disable it
             int user = KeyguardUpdateMonitor.getCurrentUser();
