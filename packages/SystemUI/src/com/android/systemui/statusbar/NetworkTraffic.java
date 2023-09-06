@@ -49,9 +49,13 @@ import com.android.systemui.tuner.TunerService;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 public class NetworkTraffic extends TextView implements TunerService.Tunable {
     private static final String TAG = "NetworkTraffic";
+
+    // This must match the interface prefix in Connectivity's clatd.c.
+    private static final String CLAT_PREFIX = "v4-";
 
     private static final int MODE_UPSTREAM_AND_DOWNSTREAM = 0;
     private static final int MODE_UPSTREAM_ONLY = 1;
@@ -174,12 +178,13 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
                 // Sum tx and rx bytes from all sources of interest
                 long txBytes = 0;
                 long rxBytes = 0;
-                // Add interface stats
-                for (LinkProperties linkProperties : mLinkPropertiesMap.values()) {
-                    final String iface = linkProperties.getInterfaceName();
-                    if (iface == null) {
-                        continue;
-                    }
+                // Add interface stats, including stats from Clat's IPv4 interface
+                // (for applicable IPv6 networks). Stats are 0 if it doesn't exist.
+                final String[] ifaces = mLinkPropertiesMap.values().stream()
+                        .map(link -> link.getInterfaceName()).filter(iface -> iface != null)
+                        .flatMap(iface -> Stream.of(iface, CLAT_PREFIX + iface))
+                        .toArray(String[]::new);
+                for (String iface : ifaces) {
                     final long ifaceTxBytes = TrafficStats.getTxBytes(iface);
                     final long ifaceRxBytes = TrafficStats.getRxBytes(iface);
                     txBytes += ifaceTxBytes;
