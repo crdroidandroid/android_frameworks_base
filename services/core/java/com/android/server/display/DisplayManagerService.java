@@ -4063,6 +4063,10 @@ public final class DisplayManagerService extends SystemService {
             mContext.enforceCallingOrSelfPermission(
                     Manifest.permission.CONTROL_DISPLAY_BRIGHTNESS,
                     "Permission required to set the display's auto brightness adjustment");
+            if (adjustment == 0.0f) {
+                Slog.w(TAG, "Invalid auto brightness adjustment 0.0f, use Float.NaN instead!");
+                adjustment = Float.NaN;
+            }
             final long token = Binder.clearCallingIdentity();
             try {
                 synchronized (mSyncRoot) {
