@@ -4289,6 +4289,10 @@ public final class DisplayManagerService extends SystemService {
         @Override // Binder call
         public void setTemporaryAutoBrightnessAdjustment(float adjustment) {
             setTemporaryAutoBrightnessAdjustment_enforcePermission();
+            if (adjustment == 0.0f) {
+                Slog.w(TAG, "Invalid auto brightness adjustment 0.0f, use Float.NaN instead!");
+                adjustment = Float.NaN;
+            }
             final long token = Binder.clearCallingIdentity();
             try {
                 synchronized (mSyncRoot) {
