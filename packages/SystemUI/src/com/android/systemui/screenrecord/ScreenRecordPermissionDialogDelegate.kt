@@ -83,6 +83,8 @@ class ScreenRecordPermissionDialogDelegate(
     private lateinit var skipTimeSwitchContainer: ViewGroup
     private lateinit var hevcSwitch: Switch
     private lateinit var hevcSwitchContainer: ViewGroup
+    private lateinit var keepScreenAwakeSwitch: Switch
+    private lateinit var keepScreenAwakeSwitchContainer: ViewGroup
     private lateinit var options: Spinner
 
     override fun createDialog(): SystemUIDialog {
@@ -134,6 +136,7 @@ class ScreenRecordPermissionDialogDelegate(
         longerDurationSwitch = dialog.requireViewById(R.id.screenrecord_longer_timeout_switch)
         skipTimeSwitch = dialog.requireViewById(R.id.screenrecord_skip_time_switch)
         hevcSwitch = dialog.requireViewById(R.id.screenrecord_hevc_switch)
+        keepScreenAwakeSwitch = dialog.requireViewById(R.id.screenrecord_keep_screen_awake_switch)
         audioSwitchContainer = dialog.requireViewById(R.id.screenrecord_audio_switch_container)
         tapsSwitchContainer = dialog.requireViewById(R.id.screenrecord_taps_switch_container)
         stopDotSwitchContainer = dialog.requireViewById(R.id.screenrecord_stopdot_switch_container)
@@ -144,6 +147,8 @@ class ScreenRecordPermissionDialogDelegate(
         skipTimeSwitchContainer =
             dialog.requireViewById(R.id.screenrecord_skip_time_switch_container)
         hevcSwitchContainer = dialog.requireViewById(R.id.screenrecord_hevc_switch_container)
+        keepScreenAwakeSwitchContainer =
+            dialog.requireViewById(R.id.screenrecord_keep_screen_awake_switch_container)
 
         // Add these listeners so that the switch only responds to movement
         // within its target region, to meet accessibility requirements
@@ -154,6 +159,7 @@ class ScreenRecordPermissionDialogDelegate(
         longerDurationSwitch.setOnTouchListener { _, event -> event.action == ACTION_MOVE }
         skipTimeSwitch.setOnTouchListener { _, event -> event.action == ACTION_MOVE }
         hevcSwitch.setOnTouchListener { _, event -> event.action == ACTION_MOVE }
+        keepScreenAwakeSwitch.setOnTouchListener { _, event -> event.action == ACTION_MOVE }
 
         audioSwitchContainer.setOnClickListener { audioSwitch.toggle() }
         tapsSwitchContainer.setOnClickListener { tapsSwitch.toggle() }
@@ -162,6 +168,7 @@ class ScreenRecordPermissionDialogDelegate(
         longerDurationSwitchContainer.setOnClickListener { longerDurationSwitch.toggle() }
         skipTimeSwitchContainer.setOnClickListener { skipTimeSwitch.toggle() }
         hevcSwitchContainer.setOnClickListener { hevcSwitch.toggle() }
+        keepScreenAwakeSwitchContainer.setOnClickListener { keepScreenAwakeSwitch.toggle() }
 
         tapsView = dialog.requireViewById(R.id.show_taps)
         updateTapsViewVisibility()
@@ -220,6 +227,7 @@ class ScreenRecordPermissionDialogDelegate(
         val lowQuality = lowQualitySwitch.isChecked
         val longerDuration = longerDurationSwitch.isChecked
         val hevc = hevcSwitch.isChecked
+        val keepScreenAwake = keepScreenAwakeSwitch.isChecked
         val startIntent =
             PendingIntent.getForegroundService(
                 userContext,
@@ -233,7 +241,8 @@ class ScreenRecordPermissionDialogDelegate(
                     showStopDot,
                     lowQuality,
                     longerDuration,
-                    hevc
+                    hevc,
+                    keepScreenAwake
                 ),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
@@ -259,6 +268,8 @@ class ScreenRecordPermissionDialogDelegate(
         Prefs.putInt(userContext, PREF_AUDIO_SOURCE, options.selectedItemPosition)
         Prefs.putInt(userContext, PREF_SKIP, if (skipTimeSwitch.isChecked) 1 else 0)
         Prefs.putInt(userContext, PREF_HEVC, if (hevcSwitch.isChecked) 1 else 0)
+        Prefs.putInt(userContext, PREF_KEEP_SCREEN_AWAKE,
+                if (keepScreenAwakeSwitch.isChecked) 1 else 0)
     }
 
     private fun loadPrefs() {
@@ -271,6 +282,7 @@ class ScreenRecordPermissionDialogDelegate(
         options.setSelection(Prefs.getInt(userContext, PREF_AUDIO_SOURCE, 0))
         skipTimeSwitch.isChecked = Prefs.getInt(userContext, PREF_SKIP, 0) == 1
         hevcSwitch.isChecked = Prefs.getInt(userContext, PREF_HEVC, 1) == 1
+        keepScreenAwakeSwitch.isChecked = Prefs.getInt(userContext, PREF_KEEP_SCREEN_AWAKE, 0) == 1
     }
 
     private inner class CaptureTargetResultReceiver() :
@@ -308,6 +320,7 @@ class ScreenRecordPermissionDialogDelegate(
         private const val PREF_AUDIO = "screenrecord_use_audio"
         private const val PREF_AUDIO_SOURCE = "screenrecord_audio_source"
         private const val PREF_SKIP = "screenrecord_skip_timer"
+        private const val PREF_KEEP_SCREEN_AWAKE = "screenrecord_keep_screen_awake"
 
         private fun createOptionList(): List<ScreenShareOption> {
             return listOf(
