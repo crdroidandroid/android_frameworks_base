@@ -72,6 +72,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
     private static final String PREF_AUDIO = "use_audio";
     private static final String PREF_AUDIO_SOURCE = "audio_source";
     private static final String PREF_SKIP = "skip_timer";
+    private static final String PREF_KEEP_SCREEN_AWAKE = "keep_screen_awake";
 
     private final RecordingController mController;
     private final UserContextProvider mUserContextProvider;
@@ -85,6 +86,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
     private Switch mAudioSwitch;
     private Switch mSkipSwitch;
     private Spinner mOptions;
+    private Switch mKeepScreenAwakeSwitch;
 
     public ScreenRecordDialog(Context context,
                               RecordingController controller,
@@ -131,6 +133,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
         mLowQualitySwitch = findViewById(R.id.screenrecord_lowquality_switch);
         mLongerSwitch = findViewById(R.id.screenrecord_longer_timeout_switch);
         mHEVCSwitch = findViewById(R.id.screenrecord_hevc_switch);
+        mKeepScreenAwakeSwitch = findViewById(R.id.screenrecord_keep_screen_awake_switch);
         mOptions = findViewById(R.id.screen_recording_options);
         ArrayAdapter a = new ScreenRecordingAdapter(getContext().getApplicationContext(),
                 android.R.layout.simple_spinner_dropdown_item,
@@ -169,6 +172,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
         boolean longerDuration = mLongerSwitch.isChecked();
         boolean skipTime = mSkipSwitch.isChecked();
         boolean hevc = mHEVCSwitch.isChecked();
+        boolean keepScreenAwake = mKeepScreenAwakeSwitch.isChecked();
         ScreenRecordingAudioSource audioMode = mAudioSwitch.isChecked()
                 ? (ScreenRecordingAudioSource) mOptions.getSelectedItem()
                 : NONE;
@@ -177,7 +181,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
                 RecordingService.getStartIntent(
                         userContext, Activity.RESULT_OK,
                         audioMode.ordinal(), showTaps, captureTarget,
-                        showStopDot, lowQuality, longerDuration, hevc),
+                        showStopDot, lowQuality, longerDuration, hevc, keepScreenAwake),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         PendingIntent stopIntent = PendingIntent.getService(userContext,
                 RecordingService.REQUEST_CODE,
@@ -215,6 +219,8 @@ public class ScreenRecordDialog extends SystemUIDialog {
         Prefs.putInt(userContext, PREFS + PREF_AUDIO_SOURCE, mOptions.getSelectedItemPosition());
         Prefs.putInt(userContext, PREFS + PREF_SKIP, mSkipSwitch.isChecked() ? 1 : 0);
         Prefs.putInt(userContext, PREFS + PREF_HEVC, mHEVCSwitch.isChecked() ? 1 : 0);
+        Prefs.putInt(userContext,
+                PREFS + PREF_KEEP_SCREEN_AWAKE, mKeepScreenAwakeSwitch.isChecked() ? 1 : 0);
     }
 
     private void loadPrefs() {
@@ -227,5 +233,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
         mOptions.setSelection(Prefs.getInt(userContext, PREFS + PREF_AUDIO_SOURCE, 0));
         mSkipSwitch.setChecked(Prefs.getInt(userContext, PREFS + PREF_SKIP, 0) == 1);
         mHEVCSwitch.setChecked(Prefs.getInt(userContext, PREFS + PREF_HEVC, 1) == 1);
+        mKeepScreenAwakeSwitch.setChecked(
+                Prefs.getInt(userContext, PREFS + PREF_KEEP_SCREEN_AWAKE, 0) == 1);
     }
 }
