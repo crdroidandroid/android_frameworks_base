@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemClock;
@@ -90,6 +91,7 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
     private static final String EXTRA_LOW_QUALITY = "extra_lowQuality";
     private static final String EXTRA_LONGER_DURATION = "extra_longerDuration";
     private final static String EXTRA_HEVC = "extra_HEVC";
+    private static final String EXTRA_KEEP_SCREEN_AWAKE = "extra_keepScreenAwake";
 
     protected static final String ACTION_START = "com.android.systemui.screenrecord.START";
     protected static final String ACTION_STOP = "com.android.systemui.screenrecord.STOP";
@@ -122,8 +124,11 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
     private boolean mShowStopDot;
     private boolean mIsDotAtRight;
     private boolean mDotShowing;
+    private boolean mKeepScreenAwake;
     private FrameLayout mFrameLayout;
     private WindowManager mWindowManager;
+
+    private PowerManager.WakeLock mWakeLock;
 
     @Inject
     public RecordingService(RecordingController controller, @LongRunning Executor executor,
@@ -157,7 +162,8 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
     public static Intent getStartIntent(Context context, int resultCode,
             int audioSource, boolean showTaps,
             @Nullable MediaProjectionCaptureTarget captureTarget,
-            boolean showStopDot, boolean lowQuality, boolean longerDuration, boolean hevc) {
+            boolean showStopDot, boolean lowQuality, boolean longerDuration, boolean hevc,
+            boolean keepScreenAwake) {
         return new Intent(context, RecordingService.class)
                 .setAction(ACTION_START)
                 .putExtra(EXTRA_RESULT_CODE, resultCode)
@@ -167,7 +173,8 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                 .putExtra(EXTRA_SHOW_STOP_DOT, showStopDot)
                 .putExtra(EXTRA_LOW_QUALITY, lowQuality)
                 .putExtra(EXTRA_LONGER_DURATION, longerDuration)
-                .putExtra(EXTRA_HEVC, hevc);
+                .putExtra(EXTRA_HEVC, hevc)
+                .putExtra(EXTRA_KEEP_SCREEN_AWAKE, keepScreenAwake);
     }
 
     @Override
@@ -200,6 +207,7 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                 mLowQuality = intent.getBooleanExtra(EXTRA_LOW_QUALITY, false);
                 mLongerDuration = intent.getBooleanExtra(EXTRA_LONGER_DURATION, false);
                 mHEVC = intent.getBooleanExtra(EXTRA_HEVC, true);
+                mKeepScreenAwake = intent.getBooleanExtra(EXTRA_KEEP_SCREEN_AWAKE, false);
 
                 MediaProjectionCaptureTarget captureTarget =
                         intent.getParcelableExtra(EXTRA_CAPTURE_TARGET,
@@ -309,11 +317,17 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
     public void onCreate() {
         super.onCreate();
         mController.addCallback((RecordingController.RecordingStateChangeCallback) mBinder);
+        mWakeLock = getSystemService(PowerManager.class).newWakeLock(
+                            PowerManager.FULL_WAKE_LOCK, "ScreenRecord");
     }
 
     @Override
     public void onDestroy() {
         mController.removeCallback((RecordingController.RecordingStateChangeCallback) mBinder);
+        // Try to release wakelock once on service destroy.
+        if (mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
         super.onDestroy();
     }
 
@@ -332,6 +346,18 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
             intent.putExtra(RecordingController.EXTRA_STATE, state);
             intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
             sendBroadcast(intent, PERMISSION_SELF);
+        }
+        // We want to keep screen awake while recording.
+        // So acquire wakelock while record is running.
+        // and relase it on record stopped
+        if (mKeepScreenAwake) {
+            if (state && !mWakeLock.isHeld()) {
+                mWakeLock.acquire();
+            } else {
+                if (mWakeLock.isHeld()) {
+                    mWakeLock.release();
+                }
+            }
         }
     }
 
