@@ -423,7 +423,16 @@ public final class DisplayManagerService extends SystemService {
                         for (int i = 0; i < size; i++) {
                             final int displayState = i == index ? state : mDisplayStates.valueAt(i);
                             if (displayState != Display.STATE_OFF) {
-                                allOff = false;
+                                final LogicalDisplay display =
+                                        mLogicalDisplayMapper
+                                                .getDisplayLocked(mDisplayStates.keyAt(i));
+                                if (display.getDisplayInfoLocked() != null) {
+                                    int displayType = display.getDisplayInfoLocked().type;
+                                    if (displayType != Display.TYPE_VIRTUAL
+                                            && displayType != Display.TYPE_OVERLAY) {
+                                        allOff = false;
+                                    }
+                                }
                             }
                             if (Display.isActiveState(displayState)) {
                                 allInactive = false;
