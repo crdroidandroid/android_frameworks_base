@@ -307,16 +307,15 @@ public class BubbleController implements ConfigurationChangeListener {
                 new OneHandedTransitionCallback() {
                     @Override
                     public void onStartFinished(Rect bounds) {
-                        mMainExecutor.execute(() -> {
+                        mMainHandler.post(() -> {
                             if (mStackView != null) {
                                 mStackView.onVerticalOffsetChanged(bounds.top);
                             }
                         });
                     }
-
                     @Override
                     public void onStopFinished(Rect bounds) {
-                        mMainExecutor.execute(() -> {
+                        mMainHandler.post(() -> {
                             if (mStackView != null) {
                                 mStackView.onVerticalOffsetChanged(bounds.top);
                             }
