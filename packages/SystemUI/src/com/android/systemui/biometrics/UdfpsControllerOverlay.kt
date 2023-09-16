@@ -126,6 +126,11 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
         private val powerInteractor: PowerInteractor,
         @Application private val scope: CoroutineScope,
 ) {
+    var frame: View? = null
+        private set
+    private var isDimmed = false
+    private var hideOnUndim = false
+
     private val currentStateUpdatedToOffAodOrDozing: Flow<Unit> =
         transitionInteractor.currentKeyguardState
             .filter {
@@ -171,22 +176,35 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
         layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
         flags = (Utils.FINGERPRINT_OVERLAY_LAYOUT_PARAM_FLAGS or
                 WindowManager.LayoutParams.FLAG_SPLIT_TOUCH)
-        if (frameworkDimming) {
-            flags = flags or WindowManager.LayoutParams.FLAG_DIM_BEHIND
-        }
         privateFlags = WindowManager.LayoutParams.PRIVATE_FLAG_TRUSTED_OVERLAY
-        dimAmount = 0.0f
         // Avoid announcing window title.
         accessibilityTitle = " "
         inputFeatures = WindowManager.LayoutParams.INPUT_FEATURE_SPY
     }
 
-    var dimAmount
-        get() = coreLayoutParams.dimAmount
+    var dimAmount: Float = 0f
         set(value) {
-            coreLayoutParams.dimAmount = value
-            windowManager.updateViewLayout(getTouchOverlay(), coreLayoutParams)
+            frame?.setBackgroundColor((value * 255).toInt() shl 24)
+            isDimmed = value > 0
+            if (hideOnUndim) {
+                hideFrame()
+            }
         }
+
+    private val frameLayoutParams = WindowManager.LayoutParams(
+        WindowManager.LayoutParams.TYPE_NAVIGATION_BAR_PANEL,
+        Utils.FINGERPRINT_OVERLAY_LAYOUT_PARAM_FLAGS
+            or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            or WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        PixelFormat.TRANSLUCENT
+    ).apply {
+        fitInsetsTypes = 0
+        gravity = android.view.Gravity.TOP or android.view.Gravity.LEFT
+        layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+        privateFlags = WindowManager.LayoutParams.PRIVATE_FLAG_TRUSTED_OVERLAY
+        // Avoid announcing window title.
+        accessibilityTitle = " "
+    }
 
     /** If the overlay is currently showing. */
     val isShowing: Boolean
@@ -220,6 +238,8 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
             overlayParams = params
             sensorBounds = Rect(params.sensorBounds)
             try {
+                frame = View(context)
+                dimAmount = 0f
                 if (DeviceEntryUdfpsRefactor.isEnabled) {
                     overlayTouchView = (inflater.inflate(
                             R.layout.udfps_touch_overlay, null, false
@@ -299,6 +319,7 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
         if (udfpsViewPerformance()) {
             addViewRunnable = kotlinx.coroutines.Runnable {
                 Trace.setCounter("UdfpsAddView", 1)
+                windowManager.addView(frame, frameLayoutParams)
                 windowManager.addView(
                         view,
                         coreLayoutParams.updateDimensions(animation)
@@ -316,6 +337,7 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
                 }
             }
         } else {
+            windowManager.addView(frame, frameLayoutParams)
             windowManager.addView(
                     view,
                     coreLayoutParams.updateDimensions(animation)
@@ -420,6 +442,7 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
     /** Hide the overlay or return false and do nothing if it is already hidden. */
     fun hide(): Boolean {
         val wasShowing = isShowing
+        hideOnUndim = isDimmed
 
         overlayViewLegacy?.apply {
             if (isDisplayConfigured) {
@@ -451,7 +474,15 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
         overlayTouchListener = null
         listenForCurrentKeyguardState?.cancel()
 
+        if (!hideOnUndim) hideFrame()
         return wasShowing
+    }
+
+    private fun hideFrame() {
+        frame?.apply {
+            windowManager.removeView(this)
+        }
+        frame = null
     }
 
     /** Cancel this request. */
