@@ -1064,8 +1064,8 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         return brightness;
     }
 
-    private void updateViewDimAmount() {
-        if (mOverlay == null || !mUseFrameworkDimming) {
+    private void updateViewDimAmount(UdfpsControllerOverlay overlay) {
+        if (overlay == null || !mUseFrameworkDimming) {
             return;
         } else if (isFingerDown()) {
             int curBrightness = getBrightness();
@@ -1082,9 +1082,9 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                         mBrightnessAlphaArray[i][0], mBrightnessAlphaArray[i-1][0],
                         mBrightnessAlphaArray[i][1], mBrightnessAlphaArray[i-1][1]);
             }
-            mOverlay.setDimAmount(dimAmount / 255.0f);
+            overlay.setDimAmount(dimAmount / 255.0f);
         } else {
-            mOverlay.setDimAmount(0.0f);
+            overlay.setDimAmount(0.0f);
         }
     }
 
@@ -1096,7 +1096,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         mFingerprintManager.onUdfpsUiEvent(FingerprintManager.UDFPS_UI_READY, requestId,
                 mSensorProps.sensorId);
         mLatencyTracker.onActionEnd(LatencyTracker.ACTION_UDFPS_ILLUMINATE);
-        updateViewDimAmount();
+        updateViewDimAmount(mOverlay);
     }
 
     private void onFingerDown(
@@ -1225,15 +1225,12 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         final int delay = mContext.getResources().getInteger(
                 com.android.systemui.res.R.integer.config_udfpsDimmingDisableDelay);
         if (delay > 0) {
+            UdfpsControllerOverlay overlay = mOverlay;
             mFgExecutor.executeDelayed(() -> {
-                // A race condition exists where the overlay is destroyed before the dim amount
-                // is updated. This check ensures that the overlay is still valid.
-                if (mOverlay != null && mOverlay.matchesRequestId(requestId)) {
-                    updateViewDimAmount();
-                }
+                updateViewDimAmount(overlay);
             }, delay);
         } else {
-            updateViewDimAmount();
+            updateViewDimAmount(mOverlay);
         }
     }
 
