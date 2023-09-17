@@ -830,23 +830,23 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         mUdfpsVendorCode = mContext.getResources().getInteger(R.integer.config_udfpsVendorCode);
 
         mAmbientDisplayConfiguration = new AmbientDisplayConfiguration(mContext);
-        updateScreenOffFodState();
-        mSecureSettings.registerContentObserver(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED,
-            new ContentObserver(mainHandler) {
-                @Override
-                public void onChange(boolean selfChange, Uri uri) {
-                    if (uri.getLastPathSegment().equals(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED)) {
-                        updateScreenOffFodState();
+        boolean screenOffFodSupported = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_supportScreenOffUdfps);
+        if (screenOffFodSupported) {
+            mScreenOffFod = mSecureSettings.getIntForUser(
+                Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+            mSecureSettings.registerContentObserver(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED,
+                new ContentObserver(mainHandler) {
+                    @Override
+                    public void onChange(boolean selfChange, Uri uri) {
+                        if (uri.getLastPathSegment().equals(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED)) {
+                            mScreenOffFod = mSecureSettings.getIntForUser(
+                                Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+                        }
                     }
                 }
-            }
-        );
-    }
-
-    private void updateScreenOffFodState() {
-        boolean isSupported = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_supportScreenOffUdfps);
-        mScreenOffFod = isSupported && mSecureSettings.getInt(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 1) == 1;
+            );
+        }
     }
 
     /**
