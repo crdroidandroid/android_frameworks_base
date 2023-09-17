@@ -78,6 +78,11 @@
           -->
     </string-array>
 
+    <!-- The amount of delay to add when disabling the dimming.
+         This is used to prevent flickers due to the dimming being disabled
+         before the screen has had chance to switch out of HBM mode -->
+    <integer name="config_udfpsDimmingDisableDelay">0</integer>
+
     <!-- Whether show refresh rate QS tile -->
     <bool name="config_showRefreshRateQsTile">false</bool>
 
