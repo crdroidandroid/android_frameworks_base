@@ -590,6 +590,10 @@ public final class Magnifier {
         if (mWindow == null) {
             return null;
         }
+        if (mParentSurface ==  SurfaceInfo.NULL) {
+            Log.e(TAG, "Invalid main window surfce or surface view surface.");
+            return null;
+        }
         final Point position = getCurrentClampedWindowCoordinates();
         position.offset(-mParentSurface.mInsets.left, -mParentSurface.mInsets.top);
         return new Point(position);
