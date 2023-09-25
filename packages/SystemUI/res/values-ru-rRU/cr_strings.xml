@@ -72,8 +72,8 @@
     <string name="quick_settings_compass_label">Компас</string>
     <string name="quick_settings_compass_value"><xliff:g id="градусы">%1$.0f</xliff:g>\u00b0 <xliff:g id="направление">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Инициализация\u2026</string>
-    <string name="accessibility_quick_settings_compass_off">Компас выкл.</string>
-    <string name="accessibility_quick_settings_compass_on">Компас вкл.</string>
+    <string name="accessibility_quick_settings_compass_off">Компас отключен</string>
+    <string name="accessibility_quick_settings_compass_on">Компас включен</string>
     <string name="quick_settings_compass_N">C</string>
     <string name="quick_settings_compass_NE">СВ</string>
     <string name="quick_settings_compass_E">В</string>
@@ -192,7 +192,7 @@
     <string name="volume_ringer_alarms_only">Будильник</string>
     <string name="volume_ringer_dnd">Не беспокоить</string>
     <string name="tristate_flashlight_on">Фонарик включен</string>
-    <string name="tristate_flashlight_off">Фонарик выключен</string>
+    <string name="tristate_flashlight_off">Фонарик отключен</string>
     <string name="tristate_flashlight_blink">Мигание фонарика</string>
     <string name="tristate_brightness_bright">Максимальная яркость</string>
     <string name="tristate_brightness_dark">Минимальная яркость</string>
@@ -232,7 +232,7 @@
     <string name="status_bar_data_saver">Экономия трафика</string>
     <string name="status_bar_vpn">VPN</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">Режим «На ходу» включен</string>
+    <string name="onthego_notif_ticker">Режим «На ходу» активирован</string>
     <string name="onthego_notif_title">Режим «На ходу» активен</string>
     <string name="onthego_notif_stop">Остановить</string>
     <string name="onthego_notif_options">Настройки</string>
@@ -246,8 +246,8 @@
     <string name="global_action_onthego">Режим \"На ходу\"</string>
     <!-- OnTheGo Tile -->
     <string name="quick_settings_onthego_label">Режим \"На ходу\"</string>
-    <string name="accessibility_quick_settings_onthego_off">Режим \"На ходу\" выкл</string>
-    <string name="accessibility_quick_settings_onthego_on">Режим \"На ходу\" вкл</string>
+    <string name="accessibility_quick_settings_onthego_off">Режим \"На ходу\" отключен</string>
+    <string name="accessibility_quick_settings_onthego_on">Режим \"На ходу\" включен</string>
     <!-- FPS view text placeholder -->
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
 </resources>
