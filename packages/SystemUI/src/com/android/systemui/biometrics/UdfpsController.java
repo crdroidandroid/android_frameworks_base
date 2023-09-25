@@ -50,6 +50,7 @@ import android.os.VibrationAttributes;
 import android.os.VibrationEffect;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.RotationUtils;
 import android.view.LayoutInflater;
@@ -827,17 +828,19 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         udfpsShell.setUdfpsOverlayController(mUdfpsOverlayController);
         mUdfpsVendorCode = mContext.getResources().getInteger(R.integer.config_udfpsVendorCode);
         boolean screenOffFodSupported = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_supportScreenOffUdfps);
+                com.android.internal.R.bool.config_supportScreenOffUdfps) ||
+                !TextUtils.isEmpty(mContext.getResources().getString(
+                    com.android.internal.R.string.config_dozeUdfpsLongPressSensorType));
         if (screenOffFodSupported) {
             mScreenOffFod = mSecureSettings.getIntForUser(
-                Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+                Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
             mSecureSettings.registerContentObserver(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED,
                 new ContentObserver(mainHandler) {
                     @Override
                     public void onChange(boolean selfChange, Uri uri) {
                         if (uri.getLastPathSegment().equals(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED)) {
                             mScreenOffFod = mSecureSettings.getIntForUser(
-                                Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 1, UserHandle.USER_CURRENT) == 1;
+                                Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
                         }
                     }
                 }
