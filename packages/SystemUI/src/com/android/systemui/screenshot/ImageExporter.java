@@ -404,19 +404,8 @@ public class ImageExporter {
 
     static void updateExifAttributes(ExifInterface exif, UUID uniqueId, int width, int height,
             ZonedDateTime captureTime) {
-        exif.setAttribute(ExifInterface.TAG_IMAGE_UNIQUE_ID, uniqueId.toString());
-
-        exif.setAttribute(ExifInterface.TAG_SOFTWARE, "Android " + Build.DISPLAY);
         exif.setAttribute(ExifInterface.TAG_IMAGE_WIDTH, Integer.toString(width));
         exif.setAttribute(ExifInterface.TAG_IMAGE_LENGTH, Integer.toString(height));
-
-        String dateTime = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss").format(captureTime);
-        String subSec = DateTimeFormatter.ofPattern("SSS").format(captureTime);
-        String timeZone = DateTimeFormatter.ofPattern("xxx").format(captureTime);
-
-        exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, dateTime);
-        exif.setAttribute(ExifInterface.TAG_SUBSEC_TIME_ORIGINAL, subSec);
-        exif.setAttribute(ExifInterface.TAG_OFFSET_TIME_ORIGINAL, timeZone);
     }
 
     static String getMimeType(CompressFormat format) {
