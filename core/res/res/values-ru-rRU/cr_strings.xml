@@ -30,7 +30,7 @@
     <string name="notification_channel_gaming">Игровой режим</string>
     <string name="gaming_mode_notification_title">Игровой режим включен</string>
     <string name="gaming_mode_notification_content">Нажмите, чтобы отключить игровой режим</string>
-    <string name="gaming_mode_enabled_toast">Включен Игровой режим</string>
+    <string name="gaming_mode_enabled_toast">Игровой режим включен</string>
     <string name="gaming_mode_disabled_toast">Игровой режим отключен</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Нажмите и удерживайте кнопку питания, чтобы разблокировать</string>
