@@ -31,13 +31,13 @@
     <string name="gaming_mode_notification_title">Игровой режим включен</string>
     <string name="gaming_mode_notification_content">Нажмите, чтобы отключить игровой режим</string>
     <string name="gaming_mode_enabled_toast">Игровой режим включен</string>
-    <string name="gaming_mode_disabled_toast">Игровой режим выключен</string>
+    <string name="gaming_mode_disabled_toast">Игровой режим отключен</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Нажмите и удерживайте кнопку питания, чтобы разблокировать</string>
     <string name="pocket_view_title">Режим \"В кармане\" включен</string>
     <string name="pocket_view_title_cancel">Для использования Вашего телефона:</string>
     <string name="pocket_view_top_tag_cancel">Проверьте, чтобы синяя зона Вашего телефона была очищена от каких-либо предметов или протрите её.</string>
-    <string name="pocket_view_top_tag_cancel2">Долгое нажатие на кнопку включения для принудительного выхода из режима \"В кармане\".</string>
+    <string name="pocket_view_top_tag_cancel2">Долгое нажатие на кнопку включения для принудительного выхода из режима \"В кармане\"</string>
     <string name="pocket_view_top_tag_number1">\u0020</string>
     <string name="pocket_view_top_tag_number2">\u0020</string>
     <!-- Button that copies the url to the log of a crashed application -->
