@@ -45,6 +45,7 @@ import static android.view.WindowManager.TRANSIT_OPEN;
 
 import static com.android.internal.protolog.ProtoLogGroup.WM_DEBUG_BACK_PREVIEW;
 import static com.android.internal.protolog.ProtoLogGroup.WM_DEBUG_STATES;
+import static com.android.server.wm.ActivityRecord.State.DESTROYED;
 import static com.android.server.wm.ActivityRecord.State.PAUSED;
 import static com.android.server.wm.ActivityRecord.State.PAUSING;
 import static com.android.server.wm.ActivityRecord.State.RESUMED;
@@ -1285,7 +1286,13 @@ class TaskFragment extends WindowContainer<WindowContainer> {
                                 : HostingRecord.HOSTING_TYPE_NEXT_ACTIVITY);
             }
             if (lastResumed != null) {
-                lastResumed.setWillCloseOrEnterPip(true);
+                int state = lastResumed.getState().ordinal();
+                if (lastResumed.inFreeformWindowingMode()
+                        && !(state >= PAUSING.ordinal() && state <= DESTROYED.ordinal())) {
+                    // do nothing
+                } else {
+                    lastResumed.setWillCloseOrEnterPip(true);
+                }
             }
             return true;
         } else if (mResumedActivity == next && next.isState(RESUMED)
