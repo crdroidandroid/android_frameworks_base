@@ -375,6 +375,10 @@
     <protected-broadcast android:name="com.android.systemui.STARTED" />
     <protected-broadcast android:name="com.android.systemui.doze.pulse" />
 
+    <!-- Permission required to bind to the wm shell proxy service. -->
+    <permission android:name="com.android.systemui.permission.BIND_WM_SHELL_PROXY_SERVICE"
+        android:protectionLevel="signature" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
@@ -405,6 +409,12 @@
         <service android:name=".wallet.controller.WalletContextualLocationsService"
             android:exported="true"
             />
+
+        <service
+            android:name=".wmshell.WMShellProxyService"
+            android:exported="true"
+            android:permission="com.android.systemui.permission.BIND_WM_SHELL_PROXY_SERVICE"
+            android:singleUser="true" />
 
         <!-- Service for dumping extremely verbose content during a bug report -->
         <service android:name=".dump.SystemUIAuxiliaryDumpService"
