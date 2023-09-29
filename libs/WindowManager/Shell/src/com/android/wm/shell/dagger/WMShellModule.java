@@ -57,6 +57,7 @@ import com.android.wm.shell.desktopmode.EnterDesktopTaskTransitionHandler;
 import com.android.wm.shell.desktopmode.ExitDesktopTaskTransitionHandler;
 import com.android.wm.shell.draganddrop.DragAndDropController;
 import com.android.wm.shell.freeform.FreeformComponents;
+import com.android.wm.shell.freeform.FreeformController;
 import com.android.wm.shell.freeform.FreeformTaskListener;
 import com.android.wm.shell.freeform.FreeformTaskTransitionHandler;
 import com.android.wm.shell.freeform.FreeformTaskTransitionObserver;
@@ -237,9 +238,13 @@ public abstract class WMShellModule {
     static FreeformComponents provideFreeformComponents(
             FreeformTaskListener taskListener,
             FreeformTaskTransitionHandler transitionHandler,
-            FreeformTaskTransitionObserver transitionObserver) {
+            FreeformTaskTransitionObserver transitionObserver,
+            FreeformController freeformController) {
         return new FreeformComponents(
-                taskListener, Optional.of(transitionHandler), Optional.of(transitionObserver));
+                taskListener,
+                Optional.of(transitionHandler),
+                Optional.of(transitionObserver),
+                freeformController);
     }
 
     @WMSingleton
@@ -277,6 +282,27 @@ public abstract class WMShellModule {
             WindowDecorViewModel windowDecorViewModel) {
         return new FreeformTaskTransitionObserver(
                 context, shellInit, transitions, windowDecorViewModel);
+    }
+
+    @WMSingleton
+    @Provides
+    static FreeformController provideFreeformController(
+            Context context,
+            ShellCommandHandler shellCommandHandler,
+            ShellInit shellInit,
+            @ShellMainThread ShellExecutor mainExecutor,
+            ShellController shellController,
+            ShellTaskOrganizer shellTaskOrganizer,
+            FreeformTaskTransitionHandler freeformTaskTransitionHandler,
+            FreeformTaskListener freeformTaskListener) {
+        return new FreeformController(context,
+                shellCommandHandler,
+                shellInit,
+                mainExecutor,
+                shellController,
+                shellTaskOrganizer,
+                freeformTaskTransitionHandler,
+                freeformTaskListener);
     }
 
     //

@@ -161,6 +161,9 @@ public class Transitions implements RemoteCallable<Transitions>,
     public static final int TRANSIT_CANCEL_ENTERING_DESKTOP_MODE =
             WindowManager.TRANSIT_FIRST_CUSTOM + 13;
 
+    /** Transition type for exiting freeform via the Shell */
+    public static final int TRANSIT_EXIT_FREEFORM = WindowManager.TRANSIT_FIRST_CUSTOM + 14;
+
     private final WindowOrganizer mOrganizer;
     private final Context mContext;
     private final ShellExecutor mMainExecutor;

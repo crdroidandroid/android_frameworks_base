@@ -98,6 +98,18 @@ public class FreeformTaskTransitionHandler
     }
 
     @Override
+    public void startOpenTransition(WindowContainerTransaction wct) {
+        final int type = WindowManager.TRANSIT_OPEN;
+        mPendingTransitionTokens.add(mTransitions.startTransition(type, wct, this));
+    }
+
+    @Override
+    public void startExitTransition(WindowContainerTransaction wct) {
+        final int type = Transitions.TRANSIT_EXIT_FREEFORM;
+        mPendingTransitionTokens.add(mTransitions.startTransition(type, wct, this));
+    }
+
+    @Override
     public boolean startAnimation(@NonNull IBinder transition, @NonNull TransitionInfo info,
             @NonNull SurfaceControl.Transaction startT,
             @NonNull SurfaceControl.Transaction finishT,
@@ -119,7 +131,12 @@ public class FreeformTaskTransitionHandler
                             transition, info.getType(), change);
                     break;
                 case WindowManager.TRANSIT_TO_BACK:
-                    transitionHandled |= startMinimizeTransition(transition);
+                    transitionHandled |= startToBackTransition(transition, info.getType(), change);
+                    break;
+                case WindowManager.TRANSIT_OPEN:
+                    if (change.getTaskInfo().getWindowingMode() == WINDOWING_MODE_FREEFORM) {
+                        transitionHandled |= startOpenTransition(transition);
+                    }
                     break;
             }
         }
@@ -161,7 +178,34 @@ public class FreeformTaskTransitionHandler
         return handled;
     }
 
-    private boolean startMinimizeTransition(IBinder transition) {
+    private boolean startToBackTransition(
+            IBinder transition,
+            int type,
+            TransitionInfo.Change change) {
+        if (!mPendingTransitionTokens.contains(transition)) {
+            return false;
+        }
+        boolean handled = false;
+        if (type == Transitions.TRANSIT_EXIT_FREEFORM) {
+            handled = handleExitTransition();
+        } else if (change.getTaskInfo().getWindowingMode() == WINDOWING_MODE_FREEFORM) {
+            handled = handleMinimizeTransition();
+        }
+        return handled;
+    }
+
+    private boolean handleExitTransition() {
+        // TODO animation
+        return true;
+    }
+
+    private boolean handleMinimizeTransition() {
+        // TODO animation
+        return true;
+    }
+
+    private boolean startOpenTransition(IBinder transition) {
+        // TODO animation
         return mPendingTransitionTokens.contains(transition);
     }
 

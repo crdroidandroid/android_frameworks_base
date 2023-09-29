@@ -32,6 +32,8 @@ import com.android.wm.shell.transition.Transitions;
 import com.android.wm.shell.windowdecor.WindowDecorViewModel;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -47,6 +49,7 @@ public class FreeformTaskListener implements ShellTaskOrganizer.TaskListener,
     private final WindowDecorViewModel mWindowDecorationViewModel;
 
     private final SparseArray<State> mTasks = new SparseArray<>();
+    private final List<FreeformListener> mListeners = new ArrayList<>();
 
     private static class State {
         RunningTaskInfo mTaskInfo;
@@ -70,6 +73,37 @@ public class FreeformTaskListener implements ShellTaskOrganizer.TaskListener,
         mShellTaskOrganizer.addListenerForType(this, TASK_LISTENER_TYPE_FREEFORM);
         if (DesktopModeStatus.isAnyEnabled()) {
             mShellTaskOrganizer.addFocusListener(this);
+        }
+    }
+
+    void registerFreeformListener(FreeformListener listener) {
+        if (mListeners.contains(listener)) return;
+        mListeners.add(listener);
+        // Send the current status upon registration.
+        sendStatusToListener(listener);
+    }
+
+    void unregisterFreeformListener(FreeformListener listener) {
+        mListeners.remove(listener);
+    }
+
+    private void sendStatusToListener(FreeformListener listener) {
+        for (int i = 0; i < mTasks.size(); i++) {
+            listener.onTaskEnteredFreeform(mTasks.valueAt(i).mTaskInfo);
+        }
+    }
+
+    private void sendOnTaskEnteredFreeform(RunningTaskInfo taskInfo) {
+        for (int i = mListeners.size() - 1; i >= 0; --i) {
+            final FreeformListener listener = mListeners.get(i);
+            listener.onTaskEnteredFreeform(taskInfo);
+        }
+    }
+
+    private void sendOnTaskExitedFreeform(RunningTaskInfo taskInfo) {
+        for (int i = mListeners.size() - 1; i >= 0; --i) {
+            final FreeformListener listener = mListeners.get(i);
+            listener.onTaskExitedFreeform(taskInfo);
         }
     }
 
@@ -103,6 +137,8 @@ public class FreeformTaskListener implements ShellTaskOrganizer.TaskListener,
                 }
             });
         }
+
+        sendOnTaskEnteredFreeform(taskInfo);
     }
 
     @Override
@@ -125,6 +161,8 @@ public class FreeformTaskListener implements ShellTaskOrganizer.TaskListener,
         if (!Transitions.ENABLE_SHELL_TRANSITIONS) {
             mWindowDecorationViewModel.destroyWindowDecoration(taskInfo);
         }
+
+        sendOnTaskExitedFreeform(taskInfo);
     }
 
     @Override

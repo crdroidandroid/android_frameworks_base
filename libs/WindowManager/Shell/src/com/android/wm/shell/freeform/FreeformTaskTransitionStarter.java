@@ -48,4 +48,16 @@ public interface FreeformTaskTransitionStarter {
      *
      */
     void startRemoveTransition(WindowContainerTransaction wct);
+
+    /**
+     * Starts a transition for cold-launching a freeform task.
+     * @param wct the {@link WindowContainerTransaction} that opens the task.
+     */
+    void startOpenTransition(WindowContainerTransaction wct);
+
+    /**
+     * Starts an exit transition.
+     * @param wct the {@link WindowContainerTransaction} that exits freeform.
+     */
+    void startExitTransition(WindowContainerTransaction wct);
 }
