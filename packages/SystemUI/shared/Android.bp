@@ -98,3 +98,12 @@ java_library {
     java_version: "1.8",
     min_sdk_version: "current",
 }
+
+filegroup {
+    name: "systemui_shared_wm_shell-sources",
+    srcs: [
+        "src/com/android/systemui/shared/wmshell/*.java",
+        "src/com/android/systemui/shared/wmshell/*.aidl",
+    ],
+    path: "src",
+}
