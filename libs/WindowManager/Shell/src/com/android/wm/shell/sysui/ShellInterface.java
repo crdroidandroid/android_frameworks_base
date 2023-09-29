@@ -80,4 +80,8 @@ public interface ShellInterface {
      * Dumps the shell state.
      */
     default void dump(PrintWriter pw) {}
+
+    default ExternalInterfaceProvider getExternalInterfaceProvider() {
+        return null;
+    }
 }

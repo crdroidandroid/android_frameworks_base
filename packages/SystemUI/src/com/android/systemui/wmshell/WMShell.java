@@ -222,6 +222,14 @@ public final class WMShell implements
         mDesktopModeOptional.ifPresent(this::initDesktopMode);
 
         mNoteTaskInitializer.initialize();
+
+        initializeWMShellProxyService();
+    }
+
+    private void initializeWMShellProxyService() {
+        // TODO is there a better way to initialize the service with the necessary dependencies?
+        WMShellProxyService.Companion.initialize(mContext.getApplicationContext(),
+                mShell.getExternalInterfaceProvider());
     }
 
     @VisibleForTesting
