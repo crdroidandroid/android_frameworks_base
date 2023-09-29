@@ -31,13 +31,12 @@ import android.hardware.display.AmbientDisplayConfiguration;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.provider.Telephony.Sms;
 import android.service.notification.StatusBarNotification;
-import android.telecom.TelecomManager;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.logging.UiEvent;
 import com.android.internal.logging.UiEventLogger;
+import com.android.systemui.R;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
@@ -83,7 +82,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
 
     private boolean mLessBoringHeadsUp = false;
     private boolean mReTicker = false;
-    private TelecomManager mTm;
     private Context mContext;
 
     public enum NotificationInterruptEvent implements UiEventLogger.UiEventEnum {
@@ -131,7 +129,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
             UiEventLogger uiEventLogger,
             UserTracker userTracker) {
         mContext = context;
-        mTm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
         mContentResolver = contentResolver;
         mPowerManager = powerManager;
         mBatteryController = batteryController;
@@ -573,28 +570,12 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
 
         String notificationPackageName = entry.getSbn().getPackageName();
 
-        // List of packages allowed to show headsup notification
-        List<String> headsUpWhitelistPackages = Arrays.asList(
-            getDefaultDialerPackage(mTm).toLowerCase(),
-            getDefaultSmsPackage(mContext).toLowerCase(),
-            "dialer",
-            "messaging",
-            "messenger",
-            "clock"
-        );
+        List<String> headsUpWhitelist =
+                    Arrays.asList(mContext.getResources().getStringArray(R.array.heads_up_whitelist_packages));
 
-        boolean shouldSkip = !headsUpWhitelistPackages.contains(notificationPackageName.toLowerCase());
+        boolean shouldSkip = !headsUpWhitelist.contains(notificationPackageName.toLowerCase());
 
         return shouldSkip;
-    }
-
-    private static String getDefaultSmsPackage(Context ctx) {
-        // for reference, there's also a new RoleManager api with getDefaultSmsPackage(context, userid)
-        return Sms.getDefaultSmsPackage(ctx);
-    }
-
-    private static String getDefaultDialerPackage(TelecomManager tm) {
-        return tm != null ? tm.getDefaultDialerPackage() : "";
     }
 
     /**

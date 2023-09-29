@@ -91,4 +91,17 @@
 
     <!-- Preferred max refresh rate at AOD & Ambient Display, if supported by the display. -->
     <integer name="config_aodMaxRefreshRate">-1</integer>
+
+    <!-- Boring headsup whitelist -->
+    <string-array name="heads_up_whitelist_packages">
+        <item>com.android.dialer</item>
+        <item>com.google.android.dialer</item>
+        <item>com.google.android.apps.messaging</item>
+        <item>com.android.messaging</item>
+        <item>dialer</item>
+        <item>messaging</item>
+        <item>messenger</item>
+        <item>clock</item>
+    </string-array>
+
 </resources>
