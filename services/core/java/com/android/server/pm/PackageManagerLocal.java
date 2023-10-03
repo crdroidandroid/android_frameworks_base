@@ -189,4 +189,6 @@ public interface PackageManagerLocal {
         @Override
         void close();
     }
+
+    void showDexoptProgressBootMessage(int percentage, int current, int total);
 }

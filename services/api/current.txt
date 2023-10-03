@@ -61,6 +61,7 @@ package com.android.server.pm {
 
   public interface PackageManagerLocal {
     method public void reconcileSdkData(@Nullable String, @NonNull String, @NonNull java.util.List<java.lang.String>, int, int, int, @NonNull String, int) throws java.io.IOException;
+    method public void showDexoptProgressBootMessage(int, int, int);
     method @NonNull public com.android.server.pm.PackageManagerLocal.FilteredSnapshot withFilteredSnapshot();
     method @NonNull public com.android.server.pm.PackageManagerLocal.FilteredSnapshot withFilteredSnapshot(int, @NonNull android.os.UserHandle);
     method @NonNull public com.android.server.pm.PackageManagerLocal.UnfilteredSnapshot withUnfilteredSnapshot();
