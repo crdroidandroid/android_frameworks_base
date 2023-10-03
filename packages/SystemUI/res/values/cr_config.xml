@@ -92,8 +92,9 @@
     <!-- Preferred max refresh rate at AOD & Ambient Display, if supported by the display. -->
     <integer name="config_aodMaxRefreshRate">-1</integer>
 
-    <!-- Boring headsup whitelist -->
-    <string-array name="heads_up_whitelist_packages">
+    <!-- The list of packages that are allowed to show headsup when using
+         Boring headsup mode -->
+    <string-array name="config_boringHeadsUpPackageAllowList">
         <item>com.android.dialer</item>
         <item>com.google.android.dialer</item>
         <item>com.google.android.apps.messaging</item>
@@ -103,5 +104,4 @@
         <item>messenger</item>
         <item>clock</item>
     </string-array>
-
 </resources>
