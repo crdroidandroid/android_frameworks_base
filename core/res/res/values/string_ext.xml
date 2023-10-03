@@ -1,0 +1,5 @@
+<resources>
+    <string name="dexopt_progress_msg">Optimizing apps: %1$d%% (%2$d of %3$d)</string>
+    <java-symbol type="string" name="dexopt_progress_msg" />
+
+</resources>
