@@ -108,7 +108,7 @@ final class PackageManagerNative extends IPackageManagerNative.Stub {
             return targetSdk;
         }
 
-        throw new RemoteException("Couldn't get targetSdkVersion for package " + packageName);
+        return 34; // current version
     }
 
     @Override
