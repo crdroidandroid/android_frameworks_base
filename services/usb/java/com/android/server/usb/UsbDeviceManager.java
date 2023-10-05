@@ -37,6 +37,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -64,6 +65,7 @@ import android.os.Environment;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.HwBinder;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
@@ -555,6 +557,7 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
         private boolean mAudioAccessorySupported;
         private boolean mConnectedToDataDisabledPort;
         private int mPowerBrickConnectionStatus;
+        private boolean mMtpServiceBindStarted;
 
         private UsbAccessory mCurrentAccessory;
         private int mUsbNotificationId;
@@ -584,6 +587,7 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
         private final Context mContext;
         private final UsbAlsaManager mUsbAlsaManager;
         private final UsbPermissionManager mPermissionManager;
+        private final MtpServiceConnection mMtpServiceConn = new MtpServiceConnection();
         private NotificationManager mNotificationManager;
 
         /**
@@ -943,13 +947,46 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
             mBroadcastedIntent = intent;
         }
 
+        private void updateMtpServiceConnection() {
+            long functions = getAppliedFunctions(mCurrentFunctions);
+            // These conditions mirror the logic in MtpReceiver, so that we keep MtpService bound
+            // while running.
+            if (mConfigured && isUsbDataTransferActive(functions)) {
+                if (!mMtpServiceBindStarted) {
+                    Intent intent = new Intent();
+                    intent.setClassName("com.android.mtp", "com.android.mtp.MtpService");
+                    mMtpServiceBindStarted = mContext.bindServiceAsUser(intent, mMtpServiceConn,
+                            Context.BIND_AUTO_CREATE | Context.BIND_IMPORTANT, UserHandle.SYSTEM);
+                    if (!mMtpServiceBindStarted) {
+                        Slog.e(TAG, "Failed to bind to " + intent.getComponent().getClassName());
+                        mContext.unbindService(mMtpServiceConn);
+                    }
+                }
+            } else if (mMtpServiceBindStarted
+                    && (!mConnected || !isUsbDataTransferActive(functions))) {
+                // The conditions to get here mirror the logic in MtpReceiver.
+                mMtpServiceBindStarted = false;
+                mContext.unbindService(mMtpServiceConn);
+            }
+        }
+
+        private static class MtpServiceConnection implements ServiceConnection {
+            public void onServiceConnected(ComponentName componentName, IBinder service) {
+                if (DEBUG) Slog.i(TAG, "Connected to " + componentName.getClassName());
+            }
+            public void onServiceDisconnected(ComponentName componentName) {
+                if (DEBUG) Slog.i(TAG, "Disconnected from " + componentName.getClassName());
+            }
+        }
+
         protected void sendStickyBroadcast(Intent intent) {
             mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
             sEventLogger.enqueue(new EventLogger.StringEvent("USB intent: " + intent));
         }
 
-        private void updateUsbFunctions() {
+        protected void updateUsbFunctions() {
             updateMidiFunction();
+            updateMtpServiceConnection();
         }
 
         private void updateMidiFunction() {
@@ -1113,6 +1150,7 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
                     if (mBootCompleted) {
                         if (mHostConnected || prevHostConnected || isDataForcedOff) {
                             updateUsbStateBroadcastIfNeeded(getAppliedFunctions(mCurrentFunctions));
+                            updateUsbFunctions();
                         }
                     } else {
                         mPendingBootBroadcast = true;
@@ -1991,6 +2029,7 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
                      * Start up dependent services.
                      */
                     updateUsbStateBroadcastIfNeeded(getAppliedFunctions(mCurrentFunctions));
+                    updateUsbFunctions();
                 }
 
                 if (!waitForState(oemFunctions)) {
@@ -2395,6 +2434,7 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
                 if (mBootCompleted && isUsbDataTransferActive(functions)) {
                     // Start up dependent services.
                     updateUsbStateBroadcastIfNeeded(functions);
+                    updateUsbFunctions();
                 }
             }
         }
