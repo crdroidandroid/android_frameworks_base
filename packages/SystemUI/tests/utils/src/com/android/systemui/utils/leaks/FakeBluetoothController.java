@@ -21,6 +21,7 @@ import com.android.settingslib.bluetooth.CachedBluetoothDevice;
 import com.android.systemui.statusbar.policy.BluetoothController;
 import com.android.systemui.statusbar.policy.BluetoothController.Callback;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -69,6 +70,11 @@ public class FakeBluetoothController extends BaseLeakChecker<Callback> implement
 
     @Override
     public String getConnectedDeviceName() {
+        return null;
+    }
+
+    @Override
+    public Collection<CachedBluetoothDevice> getDevices() {
         return null;
     }
 
