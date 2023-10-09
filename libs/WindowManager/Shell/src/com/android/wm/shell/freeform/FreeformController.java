@@ -33,6 +33,7 @@ import android.window.WindowContainerTransaction;
 
 import androidx.annotation.BinderThread;
 
+import com.android.wm.shell.R;
 import com.android.wm.shell.ShellTaskOrganizer;
 import com.android.wm.shell.common.ExecutorUtils;
 import com.android.wm.shell.common.ExternalInterfaceBinder;
@@ -40,6 +41,7 @@ import com.android.wm.shell.common.RemoteCallable;
 import com.android.wm.shell.common.ShellExecutor;
 import com.android.wm.shell.common.SingleInstanceRemoteListener;
 import com.android.wm.shell.common.annotations.ShellMainThread;
+import com.android.wm.shell.desktopmode.DesktopModeStatus;
 import com.android.wm.shell.sysui.ShellCommandHandler;
 import com.android.wm.shell.sysui.ShellController;
 import com.android.wm.shell.sysui.ShellInit;
@@ -47,7 +49,8 @@ import com.android.wm.shell.sysui.ShellInit;
 /**
  * A controller for freeform tasks.
  */
-public final class FreeformController implements RemoteCallable<FreeformController> {
+public final class FreeformController implements RemoteCallable<FreeformController>,
+        FreeformListener {
 
     private final Context mContext;
     private final ShellCommandHandler mShellCommandHandler;
@@ -57,6 +60,7 @@ public final class FreeformController implements RemoteCallable<FreeformControll
     private final FreeformTaskTransitionStarter mFreeformTaskTransitionStarter;
     private final FreeformTaskListener mFreeformTaskListener;
     private final FreeformShellCommandHandler mFreeformShellCommandHandler;
+    private final boolean mAlwaysOnTop;
 
     public FreeformController(
             Context context,
@@ -76,6 +80,8 @@ public final class FreeformController implements RemoteCallable<FreeformControll
         mFreeformTaskTransitionStarter = freeformTaskTransitionStarter;
         mFreeformTaskListener = freeformTaskListener;
         mFreeformShellCommandHandler = new FreeformShellCommandHandler(this, context);
+        mAlwaysOnTop = context.getResources().getBoolean(R.bool.config_freeformAlwaysOnTop)
+                && !DesktopModeStatus.isAnyEnabled();
     }
 
     @Override
@@ -88,10 +94,21 @@ public final class FreeformController implements RemoteCallable<FreeformControll
         return mMainExecutor;
     }
 
+    @Override
+    public void onTaskEnteredFreeform(RunningTaskInfo taskInfo) {
+        if (mAlwaysOnTop && !taskInfo.configuration.windowConfiguration.isAlwaysOnTop()) {
+            // A freeform task appeared that was not started by the Shell, make it always-on-top.
+            final WindowContainerTransaction wct = new WindowContainerTransaction();
+            wct.setAlwaysOnTop(taskInfo.token, true);
+            mShellTaskOrganizer.applyTransaction(wct);
+        }
+    }
+
     private void onInit() {
         mShellCommandHandler.addCommandCallback("freeform", mFreeformShellCommandHandler, this);
         mShellController.addExternalInterface(KEY_EXTRA_SHELL_FREEFORM,
                 this::createExternalInterface, this);
+        mFreeformTaskListener.registerFreeformListener(this);
     }
 
     private ExternalInterfaceBinder createExternalInterface() {
@@ -108,6 +125,9 @@ public final class FreeformController implements RemoteCallable<FreeformControll
         wct.setWindowingMode(taskInfo.token, WINDOWING_MODE_FREEFORM);
         if (bounds != null) {
             wct.setBounds(taskInfo.token, bounds);
+        }
+        if (mAlwaysOnTop) {
+            wct.setAlwaysOnTop(taskInfo.token, true);
         }
         wct.startTask(taskInfo.taskId, null /* options */);
         if (ENABLE_SHELL_TRANSITIONS) {
@@ -126,6 +146,9 @@ public final class FreeformController implements RemoteCallable<FreeformControll
                 ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED);
         if (bounds != null) {
             options.setLaunchBounds(bounds);
+        }
+        if (mAlwaysOnTop) {
+            options.setTaskAlwaysOnTop(true);
         }
         final WindowContainerTransaction wct = new WindowContainerTransaction();
         wct.sendPendingIntent(intent, null /* intent */, options.toBundle());
