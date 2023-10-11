@@ -1235,7 +1235,7 @@ class AppWidgetServiceImpl extends IAppWidgetService.Stub implements WidgetBacku
 
             final ActivityOptions options =
                     ActivityOptions.makeBasic().setPendingIntentCreatorBackgroundActivityStartMode(
-                            ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_DENIED);
+                            ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED);
 
             // All right, create the sender.
             final long identity = Binder.clearCallingIdentity();
