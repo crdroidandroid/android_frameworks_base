@@ -118,7 +118,7 @@ public class ResizeVeil {
             mParentSurface = parentSurface;
         }
 
-        int backgroundColorId = getBackgroundColorId();
+        int backgroundColorId = getBackgroundColorId(mContext);
         mViewHost.getView().setBackgroundColor(mContext.getColor(backgroundColorId));
 
         relayout(taskBounds, t);
@@ -194,8 +194,8 @@ public class ResizeVeil {
     }
 
     @ColorRes
-    private int getBackgroundColorId() {
-        Configuration configuration = mContext.getResources().getConfiguration();
+    public static int getBackgroundColorId(Context context) {
+        Configuration configuration = context.getResources().getConfiguration();
         if ((configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK)
                 == Configuration.UI_MODE_NIGHT_YES) {
             return R.color.resize_veil_dark;

@@ -115,6 +115,11 @@ public class CaptionWindowDecorViewModel implements WindowDecorViewModel {
         final CaptionWindowDecoration decoration = mWindowDecorByTaskId.get(taskInfo.taskId);
 
         if (decoration == null) return;
+        if (!shouldShowWindowDecor(taskInfo)) {
+            // The task should no longer have a decoration (e.g. its windowing mode changed).
+            destroyWindowDecoration(taskInfo);
+            return;
+        }
 
         decoration.relayout(taskInfo);
         setupCaptionColor(taskInfo, decoration);

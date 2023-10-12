@@ -47,6 +47,7 @@ import com.android.wm.shell.common.SystemWindows;
 import com.android.wm.shell.common.TabletopModeController;
 import com.android.wm.shell.common.TaskStackListenerImpl;
 import com.android.wm.shell.common.TransactionPool;
+import com.android.wm.shell.common.annotations.ShellAnimationThread;
 import com.android.wm.shell.common.annotations.ShellBackgroundThread;
 import com.android.wm.shell.common.annotations.ShellMainThread;
 import com.android.wm.shell.desktopmode.DesktopModeController;
@@ -269,8 +270,12 @@ public abstract class WMShellModule {
     static FreeformTaskTransitionHandler provideFreeformTaskTransitionHandler(
             ShellInit shellInit,
             Transitions transitions,
-            WindowDecorViewModel windowDecorViewModel) {
-        return new FreeformTaskTransitionHandler(shellInit, transitions, windowDecorViewModel);
+            WindowDecorViewModel windowDecorViewModel,
+            Context context,
+            @ShellMainThread ShellExecutor mainExecutor,
+            @ShellAnimationThread ShellExecutor animExecutor) {
+        return new FreeformTaskTransitionHandler(shellInit, transitions, windowDecorViewModel,
+                context, mainExecutor, animExecutor);
     }
 
     @WMSingleton
