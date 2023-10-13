@@ -96,10 +96,13 @@ internal class AppListRepositoryImpl(private val context: Context) : AppListRepo
     ): List<ApplicationInfo> {
         val regularFlags = ApplicationInfoFlags.of(
             (PackageManager.MATCH_DISABLED_COMPONENTS or
-                PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS).toLong()
+                PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS or
+                    PackageManager.MATCH_UNINSTALLED_PACKAGES).toLong()
         )
         return if (!matchAnyUserForAdmin || !userManager.getUserInfo(userId).isAdmin) {
-            packageManager.getInstalledApplicationsAsUser(regularFlags, userId)
+            packageManager.getInstalledApplicationsAsUser(regularFlags, userId).filter {
+                it.installed
+            }
         } else {
             coroutineScope {
                 val deferredPackageNamesInChildProfiles =
