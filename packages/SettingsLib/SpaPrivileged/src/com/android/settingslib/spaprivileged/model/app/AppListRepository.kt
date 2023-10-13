@@ -113,9 +113,11 @@ class AppListRepositoryImpl(
             PackageManager.MATCH_UNINSTALLED_PACKAGES).toLong()
         val archivedPackagesFlag: Long = if (featureFlags.archiving())
             PackageManager.MATCH_ARCHIVED_PACKAGES else 0L
+        val uninstalledPackagesFlag: Long = (PackageManager.MATCH_UNINSTALLED_PACKAGES).toLong()
         val regularFlags = ApplicationInfoFlags.of(
             disabledComponentsFlag or
-                archivedPackagesFlag
+                archivedPackagesFlag or
+                    uninstalledPackagesFlag
         )
         return if (!matchAnyUserForAdmin || !userManager.getUserInfo(userId).isAdmin) {
             packageManager.getInstalledApplicationsAsUser(regularFlags, userId).filter {
