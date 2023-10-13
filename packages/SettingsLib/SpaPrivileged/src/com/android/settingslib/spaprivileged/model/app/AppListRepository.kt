@@ -113,15 +113,16 @@ internal class AppListRepositoryImplHelper(
         userId: Int,
         matchAnyUserForAdmin: Boolean,
     ): List<ApplicationInfo> {
-        val disabledComponentsFlag =
-            (PackageManager.MATCH_DISABLED_COMPONENTS or
-                    PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS)
-                .toLong()
+        val disabledComponentsFlag = (PackageManager.MATCH_DISABLED_COMPONENTS or
+            PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS or
+            PackageManager.MATCH_UNINSTALLED_PACKAGES).toLong()
         val archivedPackagesFlag: Long =
-            if (isArchivingEnabled(featureFlags)) PackageManager.MATCH_ARCHIVED_PACKAGES else 0L
+            if (featureFlags.archiving()) PackageManager.MATCH_ARCHIVED_PACKAGES else 0L
         val regularFlags = ApplicationInfoFlags.of(disabledComponentsFlag or archivedPackagesFlag)
         return if (!matchAnyUserForAdmin || !userManager.getUserInfo(userId).isAdmin) {
-            packageManager.getInstalledApplicationsAsUser(regularFlags, userId)
+            packageManager.getInstalledApplicationsAsUser(regularFlags, userId).filter {
+                it.installed
+            }
         } else {
             coroutineScope {
                 val deferredPackageNamesInChildProfiles =
