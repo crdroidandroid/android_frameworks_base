@@ -3872,6 +3872,18 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         }
     };
 
+    public void startActivity(Intent intent, boolean dismissShade) {
+        mActivityStarter.startActivityDismissingKeyguard(intent, false /* onlyProvisioned */, dismissShade);
+    }
+    
+    public void startPendingIntentDismissingKeyguard(PendingIntent intent) {
+        mActivityStarter.startPendingIntentDismissingKeyguard(intent);
+    }
+    
+    public NotificationPanelViewController getNotificationPanelViewController() {
+        return mCentralSurfacesComponent.getNotificationPanelViewController();
+    }
+
     @Override
     public void setNotificationSnoozed(StatusBarNotification sbn, SnoozeOption snoozeOption) {
         mNotificationsController.setNotificationSnoozed(sbn, snoozeOption);
