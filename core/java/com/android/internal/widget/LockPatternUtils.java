@@ -125,7 +125,7 @@ public class LockPatternUtils {
     public static final int PIN_LENGTH_UNAVAILABLE = -1;
 
     // This is the minimum pin length at which auto confirmation is supported
-    public static final int MIN_AUTO_PIN_REQUIREMENT_LENGTH = 6;
+    public static final int MIN_AUTO_PIN_REQUIREMENT_LENGTH = 4;
 
     /**
      * Header used for the encryption and decryption of the device credential for
