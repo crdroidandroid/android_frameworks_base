@@ -200,9 +200,21 @@ public class PackageUtil {
      */
     public static AppSnippet getAppSnippet(
             Activity pContext, ApplicationInfo appInfo, File sourceFile) {
-        final String archiveFilePath = sourceFile.getAbsolutePath();
         PackageManager pm = pContext.getPackageManager();
-        appInfo.publicSourceDir = archiveFilePath;
+        if (sourceFile.exists()) {
+            appInfo.publicSourceDir = sourceFile.getAbsolutePath();
+        } else {
+            // Try to reload a latest ApplicationInfo. This is a fallback if passed-in appInfo
+            // was broken due to a non-existent sourceFile (e.g. Updating an already-installed app).
+            Log.w(LOG_TAG, "sourceFile does not exist, fallback to reload applicationInfo");
+            try {
+                appInfo = pm.getApplicationInfo(
+                        appInfo.packageName,
+                        PackageManager.MATCH_DISABLED_COMPONENTS
+                                | PackageManager.MATCH_ANY_USER);
+            } catch (PackageManager.NameNotFoundException e) {
+            }
+        }
 
         CharSequence label = null;
         // Try to load the label from the package's resources. If an app has not explicitly
@@ -228,7 +240,7 @@ public class PackageUtil {
                 }
             }
             if (icon == null) {
-                icon = pContext.getPackageManager().getDefaultActivityIcon();
+                icon = pm.getDefaultActivityIcon();
             }
         } catch (OutOfMemoryError e) {
             Log.i(LOG_TAG, "Could not load app icon", e);
