@@ -163,6 +163,66 @@ public final class StreamConfigurationMap {
      *        {@link StreamConfigurationDuration}
      * @param heicStallDurations a non-{@code null} array of heic
      *        {@link StreamConfigurationDuration}
+     * @param highSpeedVideoConfigurations an array of {@link HighSpeedVideoConfiguration}, null if
+     *        camera device does not support high speed video recording
+     * @param listHighResolution a flag indicating whether the device supports BURST_CAPTURE
+     *        and thus needs a separate list of slow high-resolution output sizes
+     * @throws NullPointerException if any of the arguments except highSpeedVideoConfigurations
+     *         were {@code null} or any subelements were {@code null}
+     *
+     * @hide
+     */
+    public StreamConfigurationMap(
+            StreamConfiguration[] configurations,
+            StreamConfigurationDuration[] minFrameDurations,
+            StreamConfigurationDuration[] stallDurations,
+            StreamConfiguration[] depthConfigurations,
+            StreamConfigurationDuration[] depthMinFrameDurations,
+            StreamConfigurationDuration[] depthStallDurations,
+            StreamConfiguration[] dynamicDepthConfigurations,
+            StreamConfigurationDuration[] dynamicDepthMinFrameDurations,
+            StreamConfigurationDuration[] dynamicDepthStallDurations,
+            StreamConfiguration[] heicConfigurations,
+            StreamConfigurationDuration[] heicMinFrameDurations,
+            StreamConfigurationDuration[] heicStallDurations,
+            HighSpeedVideoConfiguration[] highSpeedVideoConfigurations,
+            ReprocessFormatsMap inputOutputFormatsMap,
+            boolean listHighResolution) {
+        this(configurations, minFrameDurations, stallDurations,
+                    depthConfigurations, depthMinFrameDurations, depthStallDurations,
+                    dynamicDepthConfigurations, dynamicDepthMinFrameDurations,
+                    dynamicDepthStallDurations,
+                    heicConfigurations, heicMinFrameDurations, heicStallDurations,
+                    null /*jpegRConfigurations*/, null /*jpegRMinFrameDurations*/, null /*jpegRStallDurations*/,
+                    highSpeedVideoConfigurations, inputOutputFormatsMap, listHighResolution,
+                    /*enforceImplementationDefined*/ true);
+    }
+
+    /**
+     * Create a new {@link StreamConfigurationMap}.
+     *
+     * <p>The array parameters ownership is passed to this object after creation; do not
+     * write to them after this constructor is invoked.</p>
+     *
+     * @param configurations a non-{@code null} array of {@link StreamConfiguration}
+     * @param minFrameDurations a non-{@code null} array of {@link StreamConfigurationDuration}
+     * @param stallDurations a non-{@code null} array of {@link StreamConfigurationDuration}
+     * @param depthConfigurations a non-{@code null} array of depth {@link StreamConfiguration}
+     * @param depthMinFrameDurations a non-{@code null} array of depth
+     *        {@link StreamConfigurationDuration}
+     * @param depthStallDurations a non-{@code null} array of depth
+     *        {@link StreamConfigurationDuration}
+     * @param dynamicDepthConfigurations a non-{@code null} array of dynamic depth
+     *        {@link StreamConfiguration}
+     * @param dynamicDepthMinFrameDurations a non-{@code null} array of dynamic depth
+     *        {@link StreamConfigurationDuration}
+     * @param dynamicDepthStallDurations a non-{@code null} array of dynamic depth
+     *        {@link StreamConfigurationDuration}
+     * @param heicConfigurations a non-{@code null} array of heic {@link StreamConfiguration}
+     * @param heicMinFrameDurations a non-{@code null} array of heic
+     *        {@link StreamConfigurationDuration}
+     * @param heicStallDurations a non-{@code null} array of heic
+     *        {@link StreamConfigurationDuration}
      * @param jpegRConfigurations a non-{@code null} array of Jpeg/R {@link StreamConfiguration}
      * @param jpegRMinFrameDurations a non-{@code null} array of Jpeg/R
      *        {@link StreamConfigurationDuration}
