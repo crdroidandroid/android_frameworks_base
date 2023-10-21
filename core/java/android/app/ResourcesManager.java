@@ -503,6 +503,10 @@ public class ResourcesManager {
             for (final String libDir : key.mLibDirs) {
                 // Avoid opening files we know do not have resources, like code-only .jar files.
                 if (libDir.endsWith(".apk")) {
+                    if (key.mOverlayPaths != null &&
+                            ArrayUtils.contains(key.mOverlayPaths, libDir)) {
+                        continue;
+                    }
                     apkKeys.add(new ApkKey(libDir, true /*sharedLib*/, false /*overlay*/));
                 }
             }
