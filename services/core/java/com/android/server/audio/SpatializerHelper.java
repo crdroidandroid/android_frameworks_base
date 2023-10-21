@@ -1015,15 +1015,22 @@ public class SpatializerHelper {
         if (mSpat == null) {
             mSpatCallback = new SpatializerCallback();
             mSpat = AudioSystem.getSpatializer(mSpatCallback);
-            try {
-                //TODO: register heatracking callback only when sensors are registered
-                if (mIsHeadTrackingSupported) {
-                    mActualHeadTrackingMode =
-                            headTrackingModeTypeToSpatializerInt(mSpat.getActualHeadTrackingMode());
-                    mSpat.registerHeadTrackingCallback(mSpatHeadTrackingCallback);
+            if (mSpat != null) {
+                try {
+                    //TODO: register heatracking callback only when sensors are registered
+                    if (mIsHeadTrackingSupported) {
+                        mActualHeadTrackingMode =
+                                headTrackingModeTypeToSpatializerInt(mSpat.getActualHeadTrackingMode());
+                        mSpat.registerHeadTrackingCallback(mSpatHeadTrackingCallback);
+                    }
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Can't configure head tracking", e);
+                    mState = STATE_NOT_SUPPORTED;
+                    mCapableSpatLevel = Spatializer.SPATIALIZER_IMMERSIVE_LEVEL_NONE;
+                    mActualHeadTrackingMode = Spatializer.HEAD_TRACKING_MODE_UNSUPPORTED;
                 }
-            } catch (RemoteException e) {
-                Log.e(TAG, "Can't configure head tracking", e);
+            } else {
+                Log.d(TAG, "Spatializer is null or not supported");
                 mState = STATE_NOT_SUPPORTED;
                 mCapableSpatLevel = Spatializer.SPATIALIZER_IMMERSIVE_LEVEL_NONE;
                 mActualHeadTrackingMode = Spatializer.HEAD_TRACKING_MODE_UNSUPPORTED;
