@@ -210,9 +210,29 @@ public class StatusBarBluetoothView extends FrameLayout implements StatusIconDis
         mBatteryLevel = batteryLevel;
         if (batteryLevel >= 0 && batteryLevel <= 100) {
             mBatteryIcon.setVisibility(View.VISIBLE);
-            mBatteryIcon.setImageDrawable(mContext.getDrawable(
-                mContext.getResources().getIdentifier("ic_bluetooth_battery_"
-                + batteryLevel/10, "drawable", mContext.getPackageName())));
+            int iconId = R.drawable.ic_bluetooth_battery_0;
+            if (mBatteryLevel == 100) {
+                iconId = R.drawable.ic_bluetooth_battery_10;
+            } else if (mBatteryLevel >= 90) {
+                iconId = R.drawable.ic_bluetooth_battery_9;
+            } else if (mBatteryLevel >= 80) {
+                iconId = R.drawable.ic_bluetooth_battery_8;
+            } else if (mBatteryLevel >= 70) {
+                iconId = R.drawable.ic_bluetooth_battery_7;
+            } else if (mBatteryLevel >= 60) {
+                iconId = R.drawable.ic_bluetooth_battery_6;
+            } else if (mBatteryLevel >= 50) {
+                iconId = R.drawable.ic_bluetooth_battery_5;
+            } else if (mBatteryLevel >= 40) {
+                iconId = R.drawable.ic_bluetooth_battery_4;
+            } else if (mBatteryLevel >= 30) {
+                iconId = R.drawable.ic_bluetooth_battery_3;
+            } else if (mBatteryLevel >= 20) {
+                iconId = R.drawable.ic_bluetooth_battery_2;
+            } else if (mBatteryLevel >= 10) {
+                iconId = R.drawable.ic_bluetooth_battery_1;
+            }
+            mBatteryIcon.setImageDrawable(mContext.getDrawable(iconId));
             updateBatteryColor();
         } else {
             mBatteryIcon.setVisibility(View.GONE);
