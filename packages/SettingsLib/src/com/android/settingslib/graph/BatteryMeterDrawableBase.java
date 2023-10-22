@@ -159,7 +159,7 @@ public class BatteryMeterDrawableBase extends Drawable {
 
         mPlusPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPlusPaint.setColor(Utils.getColorStateListDefaultColor(mContext,
-                R.color.batterymeter_plus_color));
+                R.color.batterymeter_saver_color));
         mPlusPoints = loadPoints(res, R.array.batterymeter_plus_points);
 
         mPowersavePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
