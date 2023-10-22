@@ -142,7 +142,7 @@ open class RLandscapeBatteryDrawable(private val context: Context, frameColor: I
     }
 
     private val errorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->
-        p.color = Utils.getColorStateListDefaultColor(context, R.color.batterymeter_plus_color)
+        p.color = Utils.getColorStateListDefaultColor(context, R.color.batterymeter_saver_color)
         p.alpha = 255
         p.isDither = true
         p.strokeWidth = 0f
