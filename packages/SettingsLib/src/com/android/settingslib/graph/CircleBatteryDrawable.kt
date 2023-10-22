@@ -326,7 +326,7 @@ class CircleBatteryDrawable(private val context: Context, frameColor: Int) : Dra
         plusPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         plusPaint.color = Utils.getColorStateListDefaultColor(
             context,
-            R.color.batterymeter_plus_color
+            R.color.batterymeter_saver_color
         )
         powerSavePaint = Paint(Paint.ANTI_ALIAS_FLAG)
         powerSavePaint.color = plusPaint.color
