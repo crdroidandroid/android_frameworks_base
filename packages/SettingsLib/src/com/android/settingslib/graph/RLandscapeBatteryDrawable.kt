@@ -250,7 +250,7 @@ open class RLandscapeBatteryDrawable(private val context: Context, frameColor: I
             fillPaint.color = levelColor
 
             // Show colorError below this level
-            if (batteryLevel <= Companion.CRITICAL_LEVEL && !charging) {
+            if (batteryLevel <= criticalLevel && !charging) {
                 c.save()
                 c.clipPath(scaledFill)
                 c.drawPath(levelPath, fillPaint)
@@ -459,7 +459,6 @@ open class RLandscapeBatteryDrawable(private val context: Context, frameColor: I
         private const val TAG = "RLandscapeBatteryDrawable"
         private const val WIDTH = 24f
         private const val HEIGHT = 12f
-        private const val CRITICAL_LEVEL = 15
         // On a 12x20 grid, how wide to make the fill protection stroke.
         // Scales when our size changes
         private const val PROTECTION_STROKE_WIDTH = 3f
