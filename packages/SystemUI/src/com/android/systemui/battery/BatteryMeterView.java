@@ -359,13 +359,13 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
 
         if (mBatteryEstimateFetcher != null && mShowPercentMode == MODE_ESTIMATE && !mCharging) {
                 mBatteryEstimateFetcher.fetchBatteryTimeRemainingEstimate(
-                        (String estimate) -> {
+                    (String estimate) -> {
                 if (mBatteryPercentView == null) {
                     return;
                 }
-                if (estimate != null) {
+                if (estimate != null && mShowPercentMode == MODE_ESTIMATE) {
                     mEstimateText = estimate;
-                    if (!TextUtils.equals(mBatteryPercentView.getText(), text)) {
+                    if (!TextUtils.equals(mBatteryPercentView.getText(), estimate)) {
                        mBatteryPercentView.setText(estimate);
                     }
                 } else {
