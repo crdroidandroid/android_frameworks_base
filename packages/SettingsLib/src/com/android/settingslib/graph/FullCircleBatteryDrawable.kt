@@ -303,7 +303,7 @@ class FullCircleBatteryDrawable(private val context: Context, frameColor: Int) :
         powerSavePaint = Paint(Paint.ANTI_ALIAS_FLAG)
         powerSavePaint.color = Utils.getColorStateListDefaultColor(
             context,
-            R.color.batterymeter_plus_color
+            R.color.batterymeter_saver_color
         )
         powerSavePaint.style = Paint.Style.STROKE
         powerSavePaint.strokeWidth = 3f
