@@ -1,5 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="dexopt_progress_msg">Optimizing apps: %1$d%% (%2$d of %3$d)</string>
     <java-symbol type="string" name="dexopt_progress_msg" />
+
+    <string name="bg_dexopt_notif_ch_title">Optimizing apps</string>
+    <java-symbol type="string" name="bg_dexopt_notif_ch_title" />
+
+    <string name="bg_dexopt_notif_title">Optimizing apps (%1$d of %2$d)</string>
+    <java-symbol type="string" name="bg_dexopt_notif_title" />
+    <string name="bg_dexopt_notif_text">Device performance might be slower until app optimization completes</string>
+    <java-symbol type="string" name="bg_dexopt_notif_text" />
+
+    <string name="bg_dexopt_completed_notif_ch_title">App optimization has completed</string>
+    <java-symbol type="string" name="bg_dexopt_completed_notif_ch_title" />
+
+    <string name="bg_dexopt_completed_notif_title">App restart is required</string>
+    <java-symbol type="string" name="bg_dexopt_completed_notif_title" />
+    <string name="bg_dexopt_completed_notif_text">App optimization has completed. Tap to restart apps that were optimized.</string>
+    <java-symbol type="string" name="bg_dexopt_completed_notif_text" />
 
 </resources>

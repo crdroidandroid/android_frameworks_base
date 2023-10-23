@@ -254,4 +254,25 @@ public class SystemNotificationChannels {
     }
 
     private SystemNotificationChannels() {}
+
+    public static final String BACKGROUND_DEXOPT_PROGRESS = "BACKGROUND_DEXOPT";
+    public static final String BACKGROUND_DEXOPT_COMPLETED = "BACKGROUND_DEXOPT_COMPLETED";
+
+    private static void extraChannels(Context ctx, List<NotificationChannel> dest) {
+        channel(ctx, BACKGROUND_DEXOPT_PROGRESS, R.string.bg_dexopt_notif_ch_title,
+            NotificationManager.IMPORTANCE_DEFAULT, true, dest);
+
+        channel(ctx, BACKGROUND_DEXOPT_COMPLETED, R.string.bg_dexopt_completed_notif_ch_title,
+            NotificationManager.IMPORTANCE_HIGH, true, dest);
+    }
+
+    private static NotificationChannel channel(Context ctx, String id, int nameRes, int importance, boolean silent, List<NotificationChannel> dest) {
+        var c = new NotificationChannel(id, ctx.getText(nameRes), importance);
+        if (silent) {
+            c.setSound(null, null);
+            c.enableVibration(false);
+        }
+        dest.add(c);
+        return c;
+    }
 }
