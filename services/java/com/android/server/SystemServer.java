@@ -178,7 +178,6 @@ import com.android.server.pm.DexOptHelper;
 import com.android.server.pm.DynamicCodeLoggingService;
 import com.android.server.pm.Installer;
 import com.android.server.pm.LauncherAppsService;
-import com.android.server.pm.OtaDexoptService;
 import com.android.server.pm.PackageManagerService;
 import com.android.server.pm.ShortcutService;
 import com.android.server.pm.UserManagerService;
@@ -1322,21 +1321,6 @@ public final class SystemServer implements Dumpable {
                     FrameworkStatsLog
                             .BOOT_TIME_EVENT_ELAPSED_TIME__EVENT__PACKAGE_MANAGER_INIT_READY,
                     SystemClock.elapsedRealtime());
-        }
-        // Manages A/B OTA dexopting. This is a bootstrap service as we need it to rename
-        // A/B artifacts after boot, before anything else might touch/need them.
-        boolean disableOtaDexopt = SystemProperties.getBoolean("config.disable_otadexopt", false);
-        if (!disableOtaDexopt) {
-            t.traceBegin("StartOtaDexOptService");
-            try {
-                Watchdog.getInstance().pauseWatchingCurrentThread("moveab");
-                OtaDexoptService.main(mSystemContext, mPackageManagerService);
-            } catch (Throwable e) {
-                reportWtf("starting OtaDexOptService", e);
-            } finally {
-                Watchdog.getInstance().resumeWatchingCurrentThread("moveab");
-                t.traceEnd();
-            }
         }
 
         if (Build.IS_ARC) {
