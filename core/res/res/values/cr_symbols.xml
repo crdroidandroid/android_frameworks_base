@@ -106,4 +106,13 @@
 
     <!-- Dexopt -->
     <java-symbol type="string" name="dexopt_progress_msg" />
+    <java-symbol type="string" name="bg_dexopt_notif_ch_title" />
+    <java-symbol type="string" name="bg_dexopt_notif_title" />
+    <java-symbol type="string" name="bg_dexopt_notif_text" />
+    <java-symbol type="string" name="bg_dexopt_completed_notif_ch_title" />
+    <java-symbol type="string" name="bg_dexopt_completed_notif_title" />
+    <java-symbol type="string" name="bg_dexopt_completed_notif_text" />
+    <java-symbol type="drawable" name="ic_update" />
+    <java-symbol type="drawable" name="ic_pending" />
+    <java-symbol type="drawable" name="ic_error" />
 </resources>
