@@ -174,6 +174,7 @@ public class PixelPropsUtils {
         final String patchCrDroid = Build.VERSION.SECURITY_PATCH_CRDROID;
         if (!"".equals(patchCrDroid)) {
             if (packageName.equals("com.google.android.gms")) {
+                setPropValue("TIME", System.currentTimeMillis());
                 final String processName = Application.getProcessName();
                 if (processName.equals("com.google.android.gms.unstable")) {
                     sIsGms = true;
@@ -217,6 +218,7 @@ public class PixelPropsUtils {
                 setPropValue(key, value);
             }
             if (packageName.equals("com.google.android.gms")) {
+                setPropValue("TIME", System.currentTimeMillis());
                 final String processName = Application.getProcessName();
                 if (processName.equals("com.google.android.gms.unstable")) {
                     sIsGms = true;
