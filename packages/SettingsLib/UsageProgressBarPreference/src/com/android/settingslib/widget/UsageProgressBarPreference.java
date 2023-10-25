@@ -16,6 +16,7 @@
 
 package com.android.settingslib.widget;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -182,7 +183,7 @@ public class UsageProgressBarPreference extends Preference {
             progressBar.setIndeterminate(true);
         } else {
             progressBar.setIndeterminate(false);
-            progressBar.setProgress(mPercent);
+            animateBatteryLevel(progressBar, 0, mPercent);
         }
 
         final FrameLayout customLayout = (FrameLayout) holder.findViewById(R.id.custom_content);
@@ -209,5 +210,18 @@ public class UsageProgressBarPreference extends Preference {
             return spannableSummary;
         }
         return summary;
+    }
+    
+    private void animateBatteryLevel(final ProgressBar progressbar, final int startValue, final int endValue) {
+        final ValueAnimator animator = ValueAnimator.ofInt(startValue, endValue);
+        animator.setDuration(1000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int animatedValue = (int) animation.getAnimatedValue();
+                progressbar.setProgress(animatedValue);
+            }
+        });
+        animator.start();
     }
 }
