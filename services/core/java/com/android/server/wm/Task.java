@@ -6544,7 +6544,7 @@ class Task extends TaskFragment {
                 mActivityType = ACTIVITY_TYPE_STANDARD;
             }
 
-            if (mActivityType != ACTIVITY_TYPE_STANDARD
+            if (!DisplayContent.alwaysCreateRootTask(tda.getWindowingMode(), mActivityType)
                     && mActivityType != ACTIVITY_TYPE_UNDEFINED) {
                 // For now there can be only one root task of a particular non-standard activity
                 // type on a display. So, get that ignoring whatever windowing mode it is
