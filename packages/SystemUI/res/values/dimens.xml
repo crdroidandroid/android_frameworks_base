@@ -951,10 +951,10 @@
     <dimen name="go_to_full_shade_appearing_translation">200dp</dimen>
 
     <!-- The width/height of the keyguard bottom area icon view on keyguard. -->
-    <dimen name="keyguard_affordance_fixed_height">48dp</dimen>
-    <dimen name="keyguard_affordance_fixed_width">48dp</dimen>
-    <dimen name="keyguard_affordance_fixed_radius">24dp</dimen>
-    <dimen name="keyguard_affordance_fixed_padding">12dp</dimen>
+    <dimen name="keyguard_affordance_fixed_height">56dp</dimen>
+    <dimen name="keyguard_affordance_fixed_width">56dp</dimen>
+    <dimen name="keyguard_affordance_fixed_radius">28dp</dimen>
+    <dimen name="keyguard_affordance_fixed_padding">16dp</dimen>
 
     <!--  The width/height/padding of the keyguard settings popup menu  -->
     <dimen name="keyguard_settings_popup_menu_icon_height">24dp</dimen>
