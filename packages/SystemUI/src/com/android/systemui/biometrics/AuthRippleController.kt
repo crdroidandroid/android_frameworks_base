@@ -377,15 +377,13 @@ class AuthRippleController @Inject constructor(
             override fun onFingerDown() {
                 // only show dwell ripple for device entry
                 if (keyguardUpdateMonitor.isFingerprintDetectionRunning &&
-                        Settings.System.getInt(sysuiContext.contentResolver,
-                        Settings.System.UDFPS_ANIM, 0) == 0) {
+                        udfpsController?.isAnimationEnabled() == false) {
                     showDwellRipple()
                 }
             }
 
             override fun onFingerUp() {
-                if (Settings.System.getInt(sysuiContext.contentResolver,
-                        Settings.System.UDFPS_ANIM, 0) == 0) {
+                if (udfpsController?.isAnimationEnabled() == false) {
                     mView.retractDwellRipple()
                 }
             }
