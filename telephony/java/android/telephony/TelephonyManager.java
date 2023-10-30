@@ -15128,7 +15128,8 @@ public class TelephonyManager {
                     return new Pair<Integer, Integer>(version / 100, version % 100);
                 }
             } else {
-                throw new IllegalStateException("telephony service is null.");
+                Log.d(TAG, "telephony service is null.");
+                return HAL_VERSION_UNKNOWN;
             }
         } catch (RemoteException e) {
             Log.e(TAG, "getHalVersion() RemoteException", e);
