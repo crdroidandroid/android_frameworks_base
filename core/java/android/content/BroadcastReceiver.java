@@ -300,7 +300,8 @@ public abstract class BroadcastReceiver {
         public void sendFinished(IActivityManager am) {
             synchronized (this) {
                 if (mFinished) {
-                    throw new IllegalStateException("Broadcast already finished");
+                    Log.d("BroadcastReceiver: ", "attempt to perform sendFinished on a broadcast that is already finished");
+                    return;
                 }
                 mFinished = true;
 
