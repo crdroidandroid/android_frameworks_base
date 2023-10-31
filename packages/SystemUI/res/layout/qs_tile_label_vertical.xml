@@ -21,9 +21,11 @@
     android:clipChildren="false"
     android:clipToPadding="false"
     android:orientation="vertical"
+    android:focusable="false"
+    android:importantForAccessibility="no"
     android:layout_gravity="center_horizontal">
 
-    <TextView
+    <com.android.systemui.util.DelayableMarqueeTextView
         android:id="@+id/tile_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,10 +34,12 @@
         android:textDirection="locale"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="1"
-        android:maxLines="1"
+        android:singleLine="true"
+        android:focusable="false"
+        android:importantForAccessibility="no"
         android:textAppearance="@style/TextAppearance.QS.TileLabel"/>
 
-    <TextView
+    <com.android.systemui.util.DelayableMarqueeTextView
         android:id="@+id/app_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,8 +48,10 @@
         android:textDirection="locale"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="1"
-        android:maxLines="1"
+        android:singleLine="true"
         android:visibility="gone"
+        android:focusable="false"
+        android:importantForAccessibility="no"
         android:textAppearance="@style/TextAppearance.QS.TileLabel.Secondary"
         android:textColor="?android:attr/textColorSecondary"/>
 
