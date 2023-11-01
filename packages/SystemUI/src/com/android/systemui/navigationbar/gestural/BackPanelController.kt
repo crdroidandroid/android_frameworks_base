@@ -195,6 +195,8 @@ class BackPanelController internal constructor(
 
     private var backArrowVisibility = false
 
+    private var edgeHapticEnabled = false
+
     internal enum class GestureState {
         /* Arrow is off the screen and invisible */
         GONE,
@@ -693,10 +695,14 @@ class BackPanelController internal constructor(
         backArrowVisibility = enabled
     }
 
+    override fun setEdgeHapticEnabled(enabled: Boolean) {
+        edgeHapticEnabled = enabled
+    }
+
     private fun setTriggerLongSwipe(enabled: Boolean) {
         if (triggerLongSwipe != enabled) {
             triggerLongSwipe = enabled
-            vibratorHelper.vibrate(VIBRATE_DOUBLE_ACTIVATED_EFFECT)
+            if (edgeHapticEnabled) vibratorHelper.vibrate(VIBRATE_DOUBLE_ACTIVATED_EFFECT)
             updateRestingArrowDimens()
             // Whenever the trigger back state changes
             // the existing translation animation should be cancelled
@@ -963,9 +969,10 @@ class BackPanelController internal constructor(
                 previousXTranslationOnActiveOffset = previousXTranslation
                 updateRestingArrowDimens()
                 vibratorHelper.cancel()
-                mainHandler.postDelayed(10L) {
-                    vibratorHelper.vibrate(VIBRATE_ACTIVATED_EFFECT)
-                }
+                if (edgeHapticEnabled) 
+                    mainHandler.postDelayed(10L) {
+                        vibratorHelper.vibrate(VIBRATE_ACTIVATED_EFFECT)
+                    }
                 val popVelocity = if (previousState == GestureState.INACTIVE) {
                     POP_ON_INACTIVE_TO_ACTIVE_VELOCITY
                 } else {
@@ -986,7 +993,7 @@ class BackPanelController internal constructor(
 
                 mView.popOffEdge(POP_ON_INACTIVE_VELOCITY)
 
-                vibratorHelper.vibrate(VIBRATE_DEACTIVATED_EFFECT)
+                if (edgeHapticEnabled) vibratorHelper.vibrate(VIBRATE_DEACTIVATED_EFFECT)
                 updateRestingArrowDimens()
             }
             GestureState.FLUNG -> {
