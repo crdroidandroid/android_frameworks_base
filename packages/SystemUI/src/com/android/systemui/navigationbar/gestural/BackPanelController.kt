@@ -197,6 +197,8 @@ internal constructor(
 
     private var backArrowVisibility = false
 
+    private var edgeHapticEnabled = false
+
     internal enum class GestureState {
         /* Arrow is off the screen and invisible */
         GONE,
@@ -703,10 +705,14 @@ internal constructor(
         backArrowVisibility = enabled
     }
 
+    override fun setEdgeHapticEnabled(enabled: Boolean) {
+        edgeHapticEnabled = enabled
+    }
+
     private fun setTriggerLongSwipe(enabled: Boolean) {
         if (triggerLongSwipe != enabled) {
             triggerLongSwipe = enabled
-            vibratorHelper.vibrate(VIBRATE_DOUBLE_ACTIVATED_EFFECT)
+            if (edgeHapticEnabled) vibratorHelper.vibrate(VIBRATE_DOUBLE_ACTIVATED_EFFECT)
             updateRestingArrowDimens()
             // Whenever the trigger back state changes
             // the existing translation animation should be cancelled
@@ -975,15 +981,17 @@ internal constructor(
                 previousXTranslationOnActiveOffset = previousXTranslation
                 updateRestingArrowDimens()
                 if (featureFlags.isEnabled(ONE_WAY_HAPTICS_API_MIGRATION)) {
-                    vibratorHelper.performHapticFeedback(
-                        mView,
-                        HapticFeedbackConstants.GESTURE_THRESHOLD_ACTIVATE
-                    )
+                    if (edgeHapticEnabled)
+                        vibratorHelper.performHapticFeedback(
+                            mView,
+                            HapticFeedbackConstants.GESTURE_THRESHOLD_ACTIVATE
+                        )
                 } else {
                     vibratorHelper.cancel()
-                    mainHandler.postDelayed(10L) {
-                        vibratorHelper.vibrate(VIBRATE_ACTIVATED_EFFECT)
-                    }
+                    if (edgeHapticEnabled)
+                        mainHandler.postDelayed(10L) {
+                            vibratorHelper.vibrate(VIBRATE_ACTIVATED_EFFECT)
+                        }
                 }
                 val popVelocity =
                     if (previousState == GestureState.INACTIVE) {
@@ -1006,12 +1014,17 @@ internal constructor(
                 mView.popOffEdge(POP_ON_INACTIVE_VELOCITY)
 
                 if (featureFlags.isEnabled(ONE_WAY_HAPTICS_API_MIGRATION)) {
-                    vibratorHelper.performHapticFeedback(
-                        mView,
-                        HapticFeedbackConstants.GESTURE_THRESHOLD_DEACTIVATE
-                    )
+                    if (edgeHapticEnabled)
+                        vibratorHelper.performHapticFeedback(
+                            mView,
+                            HapticFeedbackConstants.GESTURE_THRESHOLD_DEACTIVATE
+                        )
                 } else {
-                    vibratorHelper.vibrate(VIBRATE_DEACTIVATED_EFFECT)
+                    vibratorHelper.cancel()
+                    if (edgeHapticEnabled)
+                        mainHandler.postDelayed(0L) {
+                            vibratorHelper.vibrate(VIBRATE_DEACTIVATED_EFFECT)
+                        }
                 }
                 updateRestingArrowDimens()
             }
