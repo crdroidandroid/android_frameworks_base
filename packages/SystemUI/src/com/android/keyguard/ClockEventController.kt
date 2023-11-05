@@ -100,6 +100,7 @@ constructor(
                 if (!regionSamplingEnabled) {
                     updateColors()
                 }
+                updateFontSizes()
                 updateTimeListeners()
                 cachedWeatherData?.let {
                     if (WeatherData.DEBUG) {
@@ -215,7 +216,6 @@ constructor(
         object : ConfigurationController.ConfigurationListener {
             override fun onThemeChanged() {
                 clock?.run { events.onColorPaletteChanged(resources) }
-                updateFontSizes()
                 updateColors()
             }
 
