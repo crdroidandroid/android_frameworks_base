@@ -163,37 +163,45 @@ public class UsageProgressBarPreference extends Preference {
         holder.setDividerAllowedBelow(false);
 
         final TextView usageSummary = (TextView) holder.findViewById(R.id.usage_summary);
-        usageSummary.setText(enlargeFontOfNumber(mUsageSummary));
+        if (usageSummary != null && mUsageSummary != null) {
+            usageSummary.setText(enlargeFontOfNumber(mUsageSummary));
+        }
 
         final TextView totalSummary = (TextView) holder.findViewById(R.id.total_summary);
-        if (mTotalSummary != null) {
+        if (totalSummary != null && mTotalSummary != null) {
             totalSummary.setText(mTotalSummary);
         }
 
         final TextView bottomSummary = (TextView) holder.findViewById(R.id.bottom_summary);
-        if (TextUtils.isEmpty(mBottomSummary)) {
-            bottomSummary.setVisibility(View.GONE);
-        } else {
-            bottomSummary.setVisibility(View.VISIBLE);
-            bottomSummary.setText(mBottomSummary);
+        if (bottomSummary != null) {
+            if (TextUtils.isEmpty(mBottomSummary)) {
+                bottomSummary.setVisibility(View.GONE);
+            } else {
+                bottomSummary.setVisibility(View.VISIBLE);
+                bottomSummary.setText(mBottomSummary);
+            }
         }
 
         final ProgressBar progressBar = (ProgressBar) holder.findViewById(android.R.id.progress);
-        if (mPercent < 0) {
-            progressBar.setIndeterminate(true);
-        } else {
-            progressBar.setIndeterminate(false);
-            animateBatteryLevel(progressBar, 0, mPercent);
+        if (progressBar != null) {
+            if (mPercent < 0) {
+                progressBar.setIndeterminate(true);
+            } else {
+                progressBar.setIndeterminate(false);
+                animateBatteryLevel(progressBar, 0, mPercent);
+            }
         }
 
         final FrameLayout customLayout = (FrameLayout) holder.findViewById(R.id.custom_content);
-        if (mCustomImageView == null) {
-            customLayout.removeAllViews();
-            customLayout.setVisibility(View.GONE);
-        } else {
-            customLayout.removeAllViews();
-            customLayout.addView(mCustomImageView);
-            customLayout.setVisibility(View.VISIBLE);
+        if (customLayout != null) {
+            if (mCustomImageView == null) {
+                customLayout.removeAllViews();
+                customLayout.setVisibility(View.GONE);
+            } else {
+                customLayout.removeAllViews();
+                customLayout.addView(mCustomImageView);
+                customLayout.setVisibility(View.VISIBLE);
+            }
         }
     }
 
