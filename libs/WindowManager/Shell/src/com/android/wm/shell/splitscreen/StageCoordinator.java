@@ -1548,6 +1548,10 @@ public class StageCoordinator implements SplitLayout.SplitLayoutHandler,
         if (!mMainStage.isActive()) return;
         mSideStage.removeAllTasks(wct, stageToTop == STAGE_TYPE_SIDE);
         mMainStage.deactivate(wct, stageToTop == STAGE_TYPE_MAIN);
+        mRecentTasks.ifPresent(recentTasks -> {
+            recentTasks.removeSplitPair(mMainStage.getTopVisibleChildTaskId());
+            recentTasks.removeSplitPair(mSideStage.getTopVisibleChildTaskId());
+        });
     }
 
     private void prepareEnterSplitScreen(WindowContainerTransaction wct) {
