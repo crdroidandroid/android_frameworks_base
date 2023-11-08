@@ -454,6 +454,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     @Override
     public void onUiModeChanged() {
         mContext.getTheme().applyStyle(mContext.getThemeResId(), true);
+        mConfigChanged = true;
     }
 
     public void init(int windowType, Callback callback) {
@@ -582,6 +583,13 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     private void initDialog(int lockTaskModeState) {
         Log.d(TAG, "initDialog: called!");
+        if (mDialog != null) {
+            mDialog.dismiss();
+            mDialog = null;
+        }
+        if (mConfigurableTexts != null) {
+            mConfigurableTexts = null;
+        }
         mDialog = new CustomDialog(mContext);
         initDimens();
         adjustPositionOnScreen();
