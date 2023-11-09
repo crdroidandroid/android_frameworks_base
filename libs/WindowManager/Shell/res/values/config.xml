@@ -130,5 +130,5 @@
     <bool name="config_enableShellDragDrop">true</bool>
 
     <!-- Whether freeform tasks are always on top -->
-    <bool name="config_freeformAlwaysOnTop">false</bool>
+    <bool name="config_freeformAlwaysOnTop">true</bool>
 </resources>
