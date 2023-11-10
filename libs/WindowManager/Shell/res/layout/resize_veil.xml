@@ -17,7 +17,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@drawable/desktop_mode_resize_veil_background">
+              android:background="@drawable/resize_veil_background">
 
     <ImageView
         android:id="@+id/veil_application_icon"

@@ -811,7 +811,7 @@ public class DesktopModeWindowDecorViewModel implements WindowDecorViewModel {
         incrementEventReceiverTasks(taskInfo.displayId);
     }
     private DragPositioningCallback createDragPositioningCallback(
-            @NonNull DesktopModeWindowDecoration windowDecoration,
+            @NonNull WindowDecoration windowDecoration,
             @NonNull RunningTaskInfo taskInfo) {
         final int screenWidth = mDisplayController.getDisplayLayout(taskInfo.displayId).width();
         final Rect disallowedAreaForEndBounds = new Rect(0, 0, screenWidth,
@@ -824,7 +824,7 @@ public class DesktopModeWindowDecorViewModel implements WindowDecorViewModel {
             windowDecoration.createResizeVeil();
             return new VeiledResizeTaskPositioner(mTaskOrganizer, windowDecoration,
                     mDisplayController, disallowedAreaForEndBounds, mDragStartListener,
-                    mTransitions);
+                    mTransitions, true /* fadeInVeil */);
         }
     }
 

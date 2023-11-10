@@ -44,7 +44,7 @@ import java.util.function.Supplier;
 public class VeiledResizeTaskPositioner implements DragPositioningCallback,
         Transitions.TransitionHandler {
 
-    private DesktopModeWindowDecoration mDesktopWindowDecoration;
+    private final WindowDecoration<?> mWindowDecoration;
     private ShellTaskOrganizer mTaskOrganizer;
     private DisplayController mDisplayController;
     private DragPositioningCallbackUtility.DragStartListener mDragStartListener;
@@ -55,48 +55,51 @@ public class VeiledResizeTaskPositioner implements DragPositioningCallback,
     private final Rect mRepositionTaskBounds = new Rect();
     // If a task move (not resize) finishes in this region, the positioner will not attempt to
     // finalize the bounds there using WCT#setBounds
-    private final Rect mDisallowedAreaForEndBounds = new Rect();
+    private final Rect mDisallowedAreaForEndBounds;
     private final Supplier<SurfaceControl.Transaction> mTransactionSupplier;
+    private final boolean mFadeInVeil;
     private int mCtrlType;
 
     public VeiledResizeTaskPositioner(ShellTaskOrganizer taskOrganizer,
-            DesktopModeWindowDecoration windowDecoration, DisplayController displayController,
+            WindowDecoration<?> windowDecoration, DisplayController displayController,
             Rect disallowedAreaForEndBounds,
             DragPositioningCallbackUtility.DragStartListener dragStartListener,
-            Transitions transitions) {
+            Transitions transitions, boolean fadeInVeil) {
         this(taskOrganizer, windowDecoration, displayController, disallowedAreaForEndBounds,
-                dragStartListener, SurfaceControl.Transaction::new, transitions);
+                dragStartListener, SurfaceControl.Transaction::new, transitions, fadeInVeil);
     }
 
     public VeiledResizeTaskPositioner(ShellTaskOrganizer taskOrganizer,
-            DesktopModeWindowDecoration windowDecoration, DisplayController displayController,
+            WindowDecoration<?> windowDecoration, DisplayController displayController,
             Rect disallowedAreaForEndBounds,
             DragPositioningCallbackUtility.DragStartListener dragStartListener,
-            Supplier<SurfaceControl.Transaction> supplier, Transitions transitions) {
+            Supplier<SurfaceControl.Transaction> supplier, Transitions transitions,
+            boolean fadeInVeil) {
         mTaskOrganizer = taskOrganizer;
-        mDesktopWindowDecoration = windowDecoration;
+        mWindowDecoration = windowDecoration;
         mDisplayController = displayController;
         mDragStartListener = dragStartListener;
-        mDisallowedAreaForEndBounds.set(disallowedAreaForEndBounds);
+        mDisallowedAreaForEndBounds = new Rect(disallowedAreaForEndBounds);
         mTransactionSupplier = supplier;
         mTransitions = transitions;
+        mFadeInVeil = fadeInVeil;
     }
 
     @Override
     public void onDragPositioningStart(int ctrlType, float x, float y) {
         mCtrlType = ctrlType;
         mTaskBoundsAtDragStart.set(
-                mDesktopWindowDecoration.mTaskInfo.configuration.windowConfiguration.getBounds());
+                mWindowDecoration.mTaskInfo.configuration.windowConfiguration.getBounds());
         mRepositionStartPoint.set(x, y);
         if (isResizing()) {
-            mDesktopWindowDecoration.showResizeVeil(mTaskBoundsAtDragStart);
-            if (!mDesktopWindowDecoration.mTaskInfo.isFocused) {
+            mWindowDecoration.showResizeVeil(mTaskBoundsAtDragStart, mFadeInVeil);
+            if (!mWindowDecoration.mTaskInfo.isFocused) {
                 WindowContainerTransaction wct = new WindowContainerTransaction();
-                wct.reorder(mDesktopWindowDecoration.mTaskInfo.token, true);
+                wct.reorder(mWindowDecoration.mTaskInfo.token, true);
                 mTaskOrganizer.applyTransaction(wct);
             }
         }
-        mDragStartListener.onDragStart(mDesktopWindowDecoration.mTaskInfo.taskId);
+        mDragStartListener.onDragStart(mWindowDecoration.mTaskInfo.taskId);
         mRepositionTaskBounds.set(mTaskBoundsAtDragStart);
     }
 
@@ -105,11 +108,11 @@ public class VeiledResizeTaskPositioner implements DragPositioningCallback,
         PointF delta = DragPositioningCallbackUtility.calculateDelta(x, y, mRepositionStartPoint);
         if (isResizing() && DragPositioningCallbackUtility.changeBounds(mCtrlType,
                 mRepositionTaskBounds, mTaskBoundsAtDragStart, mStableBounds, delta,
-                mDisplayController, mDesktopWindowDecoration)) {
-            mDesktopWindowDecoration.updateResizeVeil(mRepositionTaskBounds);
+                mDisplayController, mWindowDecoration)) {
+            mWindowDecoration.updateResizeVeil(mRepositionTaskBounds);
         } else if (mCtrlType == CTRL_TYPE_UNDEFINED) {
             final SurfaceControl.Transaction t = mTransactionSupplier.get();
-            DragPositioningCallbackUtility.setPositionOnDrag(mDesktopWindowDecoration,
+            DragPositioningCallbackUtility.setPositionOnDrag(mWindowDecoration,
                     mRepositionTaskBounds, mTaskBoundsAtDragStart, mRepositionStartPoint, t,
                     x, y);
             t.apply();
@@ -124,10 +127,10 @@ public class VeiledResizeTaskPositioner implements DragPositioningCallback,
             if (!mTaskBoundsAtDragStart.equals(mRepositionTaskBounds)) {
                 DragPositioningCallbackUtility.changeBounds(
                         mCtrlType, mRepositionTaskBounds, mTaskBoundsAtDragStart, mStableBounds,
-                        delta, mDisplayController, mDesktopWindowDecoration);
-                mDesktopWindowDecoration.updateResizeVeil(mRepositionTaskBounds);
+                        delta, mDisplayController, mWindowDecoration);
+                mWindowDecoration.updateResizeVeil(mRepositionTaskBounds);
                 final WindowContainerTransaction wct = new WindowContainerTransaction();
-                wct.setBounds(mDesktopWindowDecoration.mTaskInfo.token, mRepositionTaskBounds);
+                wct.setBounds(mWindowDecoration.mTaskInfo.token, mRepositionTaskBounds);
                 if (Transitions.ENABLE_SHELL_TRANSITIONS) {
                     mTransitions.startTransition(TRANSIT_CHANGE, wct, this);
                 } else {
@@ -136,13 +139,13 @@ public class VeiledResizeTaskPositioner implements DragPositioningCallback,
             } else {
                 // If bounds haven't changed, perform necessary veil reset here as startAnimation
                 // won't be called.
-                mDesktopWindowDecoration.hideResizeVeil();
+                mWindowDecoration.hideResizeVeil();
             }
         } else if (!mDisallowedAreaForEndBounds.contains((int) x, (int) y)) {
             DragPositioningCallbackUtility.updateTaskBounds(mRepositionTaskBounds,
                     mTaskBoundsAtDragStart, mRepositionStartPoint, x, y);
             DragPositioningCallbackUtility.applyTaskBoundsChange(new WindowContainerTransaction(),
-                    mDesktopWindowDecoration, mRepositionTaskBounds, mTaskOrganizer);
+                    mWindowDecoration, mRepositionTaskBounds, mTaskOrganizer);
         }
 
         mCtrlType = CTRL_TYPE_UNDEFINED;
@@ -161,7 +164,7 @@ public class VeiledResizeTaskPositioner implements DragPositioningCallback,
             @NonNull SurfaceControl.Transaction finishTransaction,
             @NonNull Transitions.TransitionFinishCallback finishCallback) {
         startTransaction.apply();
-        mDesktopWindowDecoration.hideResizeVeil();
+        mWindowDecoration.hideResizeVeil();
         mCtrlType = CTRL_TYPE_UNDEFINED;
         finishCallback.onTransitionFinished(null, null);
         return true;

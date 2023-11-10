@@ -97,7 +97,8 @@ class VeiledResizeTaskPositionerTest : ShellTestCase() {
                 DISALLOWED_AREA_FOR_END_BOUNDS,
                 mockDragStartListener,
                 mockTransactionFactory,
-                mockTransitions
+                mockTransitions,
+                false
             )
 
         whenever(taskToken.asBinder()).thenReturn(taskBinder)
@@ -128,7 +129,7 @@ class VeiledResizeTaskPositionerTest : ShellTestCase() {
             STARTING_BOUNDS.left.toFloat(),
             STARTING_BOUNDS.top.toFloat()
         )
-        verify(mockDesktopWindowDecoration).showResizeVeil(STARTING_BOUNDS)
+        verify(mockDesktopWindowDecoration).showResizeVeil(STARTING_BOUNDS, false)
 
         taskPositioner.onDragPositioningEnd(
             STARTING_BOUNDS.left.toFloat(),
@@ -191,7 +192,7 @@ class VeiledResizeTaskPositionerTest : ShellTestCase() {
             STARTING_BOUNDS.right.toFloat(),
             STARTING_BOUNDS.top.toFloat()
         )
-        verify(mockDesktopWindowDecoration).showResizeVeil(STARTING_BOUNDS)
+        verify(mockDesktopWindowDecoration).showResizeVeil(STARTING_BOUNDS, false)
 
         taskPositioner.onDragPositioningMove(
             STARTING_BOUNDS.right.toFloat() + 10,
@@ -232,7 +233,7 @@ class VeiledResizeTaskPositionerTest : ShellTestCase() {
             STARTING_BOUNDS.left.toFloat(),
             STARTING_BOUNDS.top.toFloat()
         )
-        verify(mockDesktopWindowDecoration).showResizeVeil(STARTING_BOUNDS)
+        verify(mockDesktopWindowDecoration).showResizeVeil(STARTING_BOUNDS, false)
 
         taskPositioner.onDragPositioningMove(
             STARTING_BOUNDS.left.toFloat(),

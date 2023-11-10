@@ -20,13 +20,17 @@ import static android.app.WindowConfiguration.WINDOWING_MODE_FREEFORM;
 
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Binder;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.SurfaceControl;
@@ -40,6 +44,7 @@ import android.window.SurfaceSyncGroup;
 import android.window.TaskConstants;
 import android.window.WindowContainerTransaction;
 
+import com.android.launcher3.icons.IconProvider;
 import com.android.wm.shell.ShellTaskOrganizer;
 import com.android.wm.shell.common.DisplayController;
 
@@ -62,6 +67,8 @@ import java.util.function.Supplier;
  */
 public abstract class WindowDecoration<T extends View & TaskFocusStateConsumer>
         implements AutoCloseable {
+
+    private static final String TAG = "WindowDecoration";
 
     /**
      * System-wide context. Only used to create context with overridden configurations.
@@ -102,6 +109,10 @@ public abstract class WindowDecoration<T extends View & TaskFocusStateConsumer>
     private final Rect mCaptionInsetsRect = new Rect();
     private final float[] mTmpColor = new float[3];
 
+    private ResizeVeil mResizeVeil;
+    protected Drawable mAppIcon;
+    protected CharSequence mAppName;
+
     WindowDecoration(
             Context context,
             DisplayController displayController,
@@ -136,6 +147,8 @@ public abstract class WindowDecoration<T extends View & TaskFocusStateConsumer>
         mDisplay = mDisplayController.getDisplay(mTaskInfo.displayId);
         mDecorWindowContext = mContext.createConfigurationContext(
                 getConfigurationWithOverrides(mTaskInfo));
+
+        loadAppInfo();
     }
 
     /**
@@ -350,6 +363,7 @@ public abstract class WindowDecoration<T extends View & TaskFocusStateConsumer>
 
     @Override
     public void close() {
+        disposeResizeVeil();
         mDisplayController.removeDisplayWindowListener(mOnDisplaysChangedListener);
         releaseViews();
     }
@@ -411,6 +425,57 @@ public abstract class WindowDecoration<T extends View & TaskFocusStateConsumer>
         ssg.add(viewHost.getSurfacePackage(), () -> viewHost.setView(v, lp));
         return new AdditionalWindow(windowSurfaceControl, viewHost,
                 mSurfaceControlTransactionSupplier);
+    }
+
+    private void loadAppInfo() {
+        String packageName = mTaskInfo.realActivity.getPackageName();
+        PackageManager pm = mContext.getApplicationContext().getPackageManager();
+        try {
+            IconProvider provider = new IconProvider(mContext);
+            mAppIcon = provider.getIcon(pm.getActivityInfo(mTaskInfo.baseActivity,
+                    PackageManager.ComponentInfoFlags.of(0)));
+            ApplicationInfo applicationInfo = pm.getApplicationInfo(packageName,
+                    PackageManager.ApplicationInfoFlags.of(0));
+            mAppName = pm.getApplicationLabel(applicationInfo);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.w(TAG, "Package not found: " + packageName, e);
+        }
+    }
+
+    /**
+     * Create the resize veil for this task. Note the veil's visibility is View.GONE by default
+     * until a resize event calls showResizeVeil below.
+     */
+    void createResizeVeil() {
+        mResizeVeil = new ResizeVeil(mContext, mAppIcon, mTaskInfo,
+                mSurfaceControlBuilderSupplier, mDisplay, mSurfaceControlTransactionSupplier);
+    }
+
+    /**
+     * Show the resize veil.
+     */
+    public void showResizeVeil(Rect taskBounds, boolean fadeIn) {
+        mResizeVeil.showVeil(mTaskSurface, taskBounds, fadeIn);
+    }
+
+    /**
+     * Set new bounds for the resize veil
+     */
+    public void updateResizeVeil(Rect newBounds) {
+        mResizeVeil.updateResizeVeil(newBounds);
+    }
+
+    /**
+     * Fade the resize veil out.
+     */
+    public void hideResizeVeil() {
+        mResizeVeil.hideVeil();
+    }
+
+    private void disposeResizeVeil() {
+        if (mResizeVeil == null) return;
+        mResizeVeil.dispose();
+        mResizeVeil = null;
     }
 
     static class RelayoutParams {

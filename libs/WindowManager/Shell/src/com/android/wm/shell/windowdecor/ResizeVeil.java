@@ -78,7 +78,7 @@ public class ResizeVeil {
                 .setContainerLayer()
                 .build();
         View v = LayoutInflater.from(mContext)
-                .inflate(R.layout.desktop_mode_resize_veil, null);
+                .inflate(R.layout.resize_veil, null);
 
         t.setPosition(mVeilSurface, 0, 0)
             .setLayer(mVeilSurface, TaskConstants.TASK_CHILD_LAYER_RESIZE_VEIL)
@@ -102,11 +102,17 @@ public class ResizeVeil {
     }
 
     /**
-     * Animate veil's alpha to 1, fading it in.
+     * Shows the veil surface/view.
+     *
+     * @param t the transaction to apply in sync with the veil draw
+     * @param parentSurface the surface that the veil should be a child of
+     * @param taskBounds the bounds of the task that owns the veil
+     * @param fadeIn if true, the veil will fade-in with an animation, if false, it will be shown
+     *               immediately
      */
-    public void showVeil(SurfaceControl parentSurface, Rect taskBounds) {
+    public void showVeil(SurfaceControl.Transaction t, SurfaceControl parentSurface,
+            Rect taskBounds, boolean fadeIn) {
         // Parent surface can change, ensure it is up to date.
-        SurfaceControl.Transaction t = mSurfaceControlTransactionSupplier.get();
         if (!parentSurface.equals(mParentSurface)) {
             t.reparent(mVeilSurface, parentSurface);
             mParentSurface = parentSurface;
@@ -115,19 +121,32 @@ public class ResizeVeil {
         int backgroundColorId = getBackgroundColorId();
         mViewHost.getView().setBackgroundColor(mContext.getColor(backgroundColorId));
 
-        final ValueAnimator animator = new ValueAnimator();
-        animator.setFloatValues(0f, 1f);
-        animator.setDuration(RESIZE_ALPHA_DURATION);
-        animator.addUpdateListener(animation -> {
-            t.setAlpha(mVeilSurface, animator.getAnimatedFraction());
-            t.apply();
-        });
-
         relayout(taskBounds, t);
-        t.show(mVeilSurface)
-                .addTransactionCommittedListener(mContext.getMainExecutor(), () -> animator.start())
-                .setAlpha(mVeilSurface, 0);
+        if (fadeIn) {
+            final ValueAnimator animator = new ValueAnimator();
+            animator.setFloatValues(0f, 1f);
+            animator.setDuration(RESIZE_ALPHA_DURATION);
+            animator.addUpdateListener(animation -> {
+                t.setAlpha(mVeilSurface, animator.getAnimatedFraction());
+                t.apply();
+            });
+            t.show(mVeilSurface)
+                    .addTransactionCommittedListener(mContext.getMainExecutor(), animator::start)
+                    .setAlpha(mVeilSurface, 0);
+        } else {
+            // Show the veil immediately at full opacity.
+            t.show(mVeilSurface).setAlpha(mVeilSurface, 1);
+        }
         mViewHost.getView().getViewRootImpl().applyTransactionOnDraw(t);
+    }
+
+    /**
+     * Shows the veil. If fadeIn is true the veil's alpha is animated to 1, fading it in, otherwise
+     * it will be shown immediately.
+     */
+    public void showVeil(SurfaceControl parentSurface, Rect taskBounds, boolean fadeIn) {
+        SurfaceControl.Transaction t = mSurfaceControlTransactionSupplier.get();
+        showVeil(t, parentSurface, taskBounds, fadeIn);
     }
 
     /**
@@ -179,9 +198,9 @@ public class ResizeVeil {
         Configuration configuration = mContext.getResources().getConfiguration();
         if ((configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK)
                 == Configuration.UI_MODE_NIGHT_YES) {
-            return R.color.desktop_mode_resize_veil_dark;
+            return R.color.resize_veil_dark;
         } else {
-            return R.color.desktop_mode_resize_veil_light;
+            return R.color.resize_veil_light;
         }
     }
 

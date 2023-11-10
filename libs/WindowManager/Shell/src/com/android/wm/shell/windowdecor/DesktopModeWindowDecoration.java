@@ -80,11 +80,6 @@ public class DesktopModeWindowDecoration extends WindowDecoration<WindowDecorLin
     private final Point mPositionInParent = new Point();
     private HandleMenu mHandleMenu;
 
-    private ResizeVeil mResizeVeil;
-
-    private Drawable mAppIcon;
-    private CharSequence mAppName;
-
     private TaskCornersListener mCornersListener;
 
     private final Set<IBinder> mTransitionsPausingRelayout = new HashSet<>();
@@ -104,8 +99,6 @@ public class DesktopModeWindowDecoration extends WindowDecoration<WindowDecorLin
         mHandler = handler;
         mChoreographer = choreographer;
         mSyncQueue = syncQueue;
-
-        loadAppInfo();
     }
 
     @Override
@@ -261,63 +254,12 @@ public class DesktopModeWindowDecoration extends WindowDecoration<WindowDecorLin
         return mHandleMenu != null;
     }
 
-    private void loadAppInfo() {
-        String packageName = mTaskInfo.realActivity.getPackageName();
-        PackageManager pm = mContext.getApplicationContext().getPackageManager();
-        try {
-            IconProvider provider = new IconProvider(mContext);
-            mAppIcon = provider.getIcon(pm.getActivityInfo(mTaskInfo.baseActivity,
-                    PackageManager.ComponentInfoFlags.of(0)));
-            ApplicationInfo applicationInfo = pm.getApplicationInfo(packageName,
-                    PackageManager.ApplicationInfoFlags.of(0));
-            mAppName = pm.getApplicationLabel(applicationInfo);
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.w(TAG, "Package not found: " + packageName, e);
-        }
-    }
-
     private void closeDragResizeListener() {
         if (mDragResizeListener == null) {
             return;
         }
         mDragResizeListener.close();
         mDragResizeListener = null;
-    }
-
-    /**
-     * Create the resize veil for this task. Note the veil's visibility is View.GONE by default
-     * until a resize event calls showResizeVeil below.
-     */
-    void createResizeVeil() {
-        mResizeVeil = new ResizeVeil(mContext, mAppIcon, mTaskInfo,
-                mSurfaceControlBuilderSupplier, mDisplay, mSurfaceControlTransactionSupplier);
-    }
-
-    /**
-     * Fade in the resize veil
-     */
-    void showResizeVeil(Rect taskBounds) {
-        mResizeVeil.showVeil(mTaskSurface, taskBounds);
-    }
-
-    /**
-     * Set new bounds for the resize veil
-     */
-    void updateResizeVeil(Rect newBounds) {
-        mResizeVeil.updateResizeVeil(newBounds);
-    }
-
-    /**
-     * Fade the resize veil out.
-     */
-    void hideResizeVeil() {
-        mResizeVeil.hideVeil();
-    }
-
-    private void disposeResizeVeil() {
-        if (mResizeVeil == null) return;
-        mResizeVeil.dispose();
-        mResizeVeil = null;
     }
 
     /**
@@ -447,7 +389,6 @@ public class DesktopModeWindowDecoration extends WindowDecoration<WindowDecorLin
         closeDragResizeListener();
         closeHandleMenu();
         mCornersListener.onTaskCornersRemoved(mTaskInfo.taskId);
-        disposeResizeVeil();
         super.close();
     }
 
