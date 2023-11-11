@@ -1168,6 +1168,9 @@
     <item name="wireless_charging_anim_battery_level_text_size_start" format="float" type="dimen">
         0
     </item>
+    <!-- padding size in sp of batteryIcon for wireless charging animation -->
+    <item name="wireless_charging_padding" format="float" type="dimen">8
+    </item>
     <!-- Ending text size in sp of batteryLevel for wireless charging animation -->
     <item name="wireless_charging_anim_battery_level_text_size_end" format="float" type="dimen">48
     </item>
