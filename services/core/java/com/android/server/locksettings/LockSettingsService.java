@@ -1239,7 +1239,8 @@ public class LockSettingsService extends ILockSettings.Stub {
     public int getPinLength(int userId) {
         checkPasswordHavePermission();
         PasswordMetrics passwordMetrics = getUserPasswordMetrics(userId);
-        if (passwordMetrics != null && passwordMetrics.credType == CREDENTIAL_TYPE_PIN) {
+        if (passwordMetrics != null && (passwordMetrics.credType == CREDENTIAL_TYPE_PIN || 
+                passwordMetrics.credType == CREDENTIAL_TYPE_PASSWORD)) {
             return passwordMetrics.length;
         }
         synchronized (mSpManager) {
