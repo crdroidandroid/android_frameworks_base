@@ -31,6 +31,7 @@ import static android.os.UserHandle.USER_ALL;
 import static android.os.UserHandle.USER_SYSTEM;
 
 import static com.android.internal.widget.LockPatternUtils.CREDENTIAL_TYPE_NONE;
+import static com.android.internal.widget.LockPatternUtils.CREDENTIAL_TYPE_PASSWORD;
 import static com.android.internal.widget.LockPatternUtils.CREDENTIAL_TYPE_PASSWORD_OR_PIN;
 import static com.android.internal.widget.LockPatternUtils.CREDENTIAL_TYPE_PIN;
 import static com.android.internal.widget.LockPatternUtils.CURRENT_LSKF_BASED_PROTECTOR_ID_KEY;
@@ -1251,7 +1252,8 @@ public class LockSettingsService extends ILockSettings.Stub {
     public int getPinLength(int userId) {
         checkPasswordHavePermission();
         PasswordMetrics passwordMetrics = getUserPasswordMetrics(userId);
-        if (passwordMetrics != null && passwordMetrics.credType == CREDENTIAL_TYPE_PIN) {
+        if (passwordMetrics != null && (passwordMetrics.credType == CREDENTIAL_TYPE_PIN || 
+                passwordMetrics.credType == CREDENTIAL_TYPE_PASSWORD)) {
             return passwordMetrics.length;
         }
         synchronized (mSpManager) {

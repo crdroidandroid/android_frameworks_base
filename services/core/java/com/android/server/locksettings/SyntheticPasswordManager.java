@@ -17,6 +17,7 @@
 package com.android.server.locksettings;
 
 import static com.android.internal.widget.LockPatternUtils.CREDENTIAL_TYPE_NONE;
+import static com.android.internal.widget.LockPatternUtils.CREDENTIAL_TYPE_PASSWORD;
 import static com.android.internal.widget.LockPatternUtils.CREDENTIAL_TYPE_PASSWORD_OR_PIN;
 import static com.android.internal.widget.LockPatternUtils.CREDENTIAL_TYPE_PIN;
 import static com.android.internal.widget.LockPatternUtils.EscrowTokenStateChangeCallback;
@@ -1463,7 +1464,8 @@ class SyntheticPasswordManager {
 
         PasswordData pwd = PasswordData.fromBytes(pwdDataBytes);
         int pinLength = derivePinLength(passwordMetrics.length,
-                passwordMetrics.credType == CREDENTIAL_TYPE_PIN, userId);
+                (passwordMetrics.credType == CREDENTIAL_TYPE_PIN ||
+                passwordMetrics.credType == CREDENTIAL_TYPE_PASSWORD), userId);
         if (pwd.pinLength != pinLength) {
             pwd.pinLength = pinLength;
             saveState(PASSWORD_DATA_NAME, pwd.toBytes(), protectorId, userId);
