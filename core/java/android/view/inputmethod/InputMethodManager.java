@@ -3336,6 +3336,7 @@ public final class InputMethodManager {
             @SoftInputModeFlags int softInputMode,
             @WindowManager.LayoutParams.Flags int windowFlags) {
         final View view;
+        final ViewRootImpl viewRoot;
         synchronized (mH) {
             view = getServedViewLocked();
 
@@ -3374,13 +3375,14 @@ public final class InputMethodManager {
 
         if (windowGainingFocus == null) {
             windowGainingFocus = view.getWindowToken();
-            if (windowGainingFocus == null) {
+            viewRoot = view.getViewRootImpl();
+            if (windowGainingFocus == null && viewRoot == null) {
                 Log.e(TAG, "ABORT input: ServedView must be attached to a Window");
                 return false;
             }
             startInputFlags = getStartInputFlags(view, startInputFlags);
-            softInputMode = view.getViewRootImpl().mWindowAttributes.softInputMode;
-            windowFlags = view.getViewRootImpl().mWindowAttributes.flags;
+            softInputMode = viewRoot.mWindowAttributes.softInputMode;
+            windowFlags = viewRoot.mWindowAttributes.flags;
         }
 
         // Okay we are now ready to call into the served view and have it
