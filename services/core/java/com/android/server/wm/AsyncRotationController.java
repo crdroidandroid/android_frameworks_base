@@ -22,7 +22,9 @@ import static android.view.WindowManager.LayoutParams.TYPE_NAVIGATION_BAR;
 import static com.android.server.wm.SurfaceAnimator.ANIMATION_TYPE_TOKEN_TRANSFORM;
 
 import android.annotation.IntDef;
+import android.hardware.power.Mode;
 import android.os.HandlerExecutor;
+import android.os.PowerManagerInternal;
 import android.util.ArrayMap;
 import android.util.Slog;
 import android.view.SurfaceControl;
@@ -32,6 +34,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.android.internal.R;
+import com.android.server.LocalServices;
 
 import java.io.PrintWriter;
 import java.lang.annotation.Retention;
@@ -338,6 +341,7 @@ class AsyncRotationController extends FadeAnimationController implements Consume
             finishOp(token);
             if (mTargetWindowTokens.isEmpty()) {
                 onAllCompleted();
+                setActivityBoost(false);
                 return true;
             }
         }
@@ -346,11 +350,19 @@ class AsyncRotationController extends FadeAnimationController implements Consume
         return false;
     }
 
+    protected void setActivityBoost(boolean enable) {
+        PowerManagerInternal mPowerManagerInternal = LocalServices.getService(PowerManagerInternal.class);
+        if (mPowerManagerInternal != null) {
+            mPowerManagerInternal.setPowerMode(Mode.LAUNCH, enable);
+        }
+    }
+
     /**
      * Prepares the corresponding operations (e.g. hide animation) for the window tokens which may
      * be seamlessly rotated later.
      */
     void start() {
+        setActivityBoost(true);
         for (int i = mTargetWindowTokens.size() - 1; i >= 0; i--) {
             final WindowToken windowToken = mTargetWindowTokens.keyAt(i);
             final Operation op = mTargetWindowTokens.valueAt(i);
