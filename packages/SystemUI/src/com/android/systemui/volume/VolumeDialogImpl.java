@@ -1544,6 +1544,16 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 updateRowsH(mDefaultRow, true);
                 mExpandRows.setExpanded(mExpansionState == ExpansionState.EXPANDED);
             });
+            mExpandRows.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Events.writeEvent(Events.EVENT_SETTINGS_CLICK);
+                    dismissH(DISMISS_REASON_SETTINGS_CLICKED);
+                    mVolumeNavigator.openVolumePanel(
+                            mVolumePanelNavigationInteractor.getVolumePanelRoute());
+                    return true;
+                }
+            });
         }
     }
 
