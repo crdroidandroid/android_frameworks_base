@@ -22,13 +22,17 @@ import static android.view.WindowManager.LayoutParams.TYPE_NAVIGATION_BAR;
 import static com.android.server.wm.SurfaceAnimator.ANIMATION_TYPE_TOKEN_TRANSFORM;
 
 import android.annotation.IntDef;
+import android.hardware.power.Boost;
 import android.os.HandlerExecutor;
+import android.os.PowerManagerInternal;
 import android.util.ArrayMap;
 import android.util.Slog;
 import android.view.SurfaceControl;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+
+import com.android.server.LocalServices;
 
 import java.io.PrintWriter;
 import java.lang.annotation.Retention;
@@ -106,10 +110,13 @@ class AsyncRotationController extends FadeAnimationController implements Consume
     private int mOriginalRotation;
     private final boolean mHasScreenRotationAnimation;
 
+    private final PowerManagerInternal mPowerManagerInternal;
+
     AsyncRotationController(DisplayContent displayContent) {
         super(displayContent);
         mService = displayContent.mWmService;
         mOriginalRotation = displayContent.getWindowConfiguration().getRotation();
+        mPowerManagerInternal = LocalServices.getService(PowerManagerInternal.class);
         final int transitionType =
                 displayContent.mTransitionController.getCollectingTransitionType();
         if (transitionType == WindowManager.TRANSIT_CHANGE) {
@@ -360,11 +367,19 @@ class AsyncRotationController extends FadeAnimationController implements Consume
         return false;
     }
 
+    private void setActivityBoost() {
+        if (mPowerManagerInternal != null) {
+            mPowerManagerInternal.setPowerBoost(Boost.INTERACTION, 80);
+            mPowerManagerInternal.setPowerBoost(Boost.DISPLAY_UPDATE_IMMINENT, 80);
+        }
+    }
+
     /**
      * Prepares the corresponding operations (e.g. hide animation) for the window tokens which may
      * be seamlessly rotated later.
      */
     void start() {
+        setActivityBoost();
         for (int i = mTargetWindowTokens.size() - 1; i >= 0; i--) {
             final WindowToken windowToken = mTargetWindowTokens.keyAt(i);
             final Operation op = mTargetWindowTokens.valueAt(i);
