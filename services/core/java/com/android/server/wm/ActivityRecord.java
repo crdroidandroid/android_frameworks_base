@@ -290,6 +290,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.gui.DropInputMode;
 import android.hardware.HardwareBuffer;
+import android.hardware.power.Boost;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -298,6 +299,7 @@ import android.os.Debug;
 import android.os.IBinder;
 import android.os.IRemoteCallback;
 import android.os.PersistableBundle;
+import android.os.PowerManagerInternal;
 import android.os.Process;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
@@ -913,6 +915,8 @@ public final class ActivityRecord extends WindowToken {
 
     /** Non-zero to pause dispatching configuration changes to the client. */
     int mPauseConfigurationDispatchCount = 0;
+
+    private final PowerManagerInternal mPowerManagerInternal;
 
     private final Runnable mPauseTimeoutRunnable = new Runnable() {
         @Override
@@ -2066,6 +2070,8 @@ public final class ActivityRecord extends WindowToken {
                             return appContext;
                         });
         mCallerState = new ActivityCallerState(mAtmService);
+
+        mPowerManagerInternal = LocalServices.getService(PowerManagerInternal.class);
     }
 
     private boolean isAppActivityEmbeddingSplitsEnabled() {
@@ -6057,7 +6063,7 @@ public final class ActivityRecord extends WindowToken {
                 Slog.v(TAG_VISIBILITY, "Start visible activity, " + this);
             }
             setState(STARTED, "makeActiveIfNeeded");
-
+            setActivityBoost();
             final StartActivityItem item = new StartActivityItem(token, takeSceneTransitionInfo());
             try {
                 mAtmService.getLifecycleManager().scheduleTransactionItem(app.getThread(), item);
@@ -6545,6 +6551,13 @@ public final class ActivityRecord extends WindowToken {
                 mDisplayContent.updateOrientation();
             }
             mDisplayContent.executeAppTransition();
+        }
+    }
+
+    protected void setActivityBoost() {
+        if (mPowerManagerInternal != null) {
+            mPowerManagerInternal.setPowerBoost(Boost.INTERACTION, 80);
+            mPowerManagerInternal.setPowerBoost(Boost.DISPLAY_UPDATE_IMMINENT, 80);
         }
     }
 
