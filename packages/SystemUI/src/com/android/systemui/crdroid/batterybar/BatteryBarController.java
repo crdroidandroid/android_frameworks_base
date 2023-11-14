@@ -17,7 +17,6 @@
 package com.android.systemui.crdroid.batterybar;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -26,7 +25,6 @@ import android.os.BatteryManager;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -38,9 +36,6 @@ public class BatteryBarController extends LinearLayout implements TunerService.T
 
     private static final String TAG = "BatteryBarController";
 
-    BatteryBar mainBar;
-    BatteryBar alternateStyleBar;
-
     public static final int STYLE_REGULAR = 0;
     public static final int STYLE_SYMMETRIC = 1;
     public static final int STYLE_REVERSE = 2;
@@ -48,8 +43,6 @@ public class BatteryBarController extends LinearLayout implements TunerService.T
     int mStyle;
     int mLocation;
     int mThickness;
-
-    protected final static int CURRENT_LOC = 1;
 
     private boolean mAttached = false;
     private int mBatteryLevel = 0;
@@ -81,7 +74,7 @@ public class BatteryBarController extends LinearLayout implements TunerService.T
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        getContext().registerReceiver(mIntentReceiver, filter);
+        getContext().registerReceiver(mIntentReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
 
         Dependency.get(TunerService.class).addTunable(this,
                 STATUSBAR_BATTERY_BAR,

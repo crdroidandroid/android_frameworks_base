@@ -17,7 +17,6 @@
 package com.android.systemui.crdroid.batterybar;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -27,7 +26,6 @@ import android.os.BatteryManager;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -158,7 +156,7 @@ public class BatteryBar extends RelativeLayout implements Animatable, TunerServi
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
-        getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
+        getContext().registerReceiver(mIntentReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
 
         Dependency.get(TunerService.class).addTunable(this,
                 STATUSBAR_BATTERY_BAR,
