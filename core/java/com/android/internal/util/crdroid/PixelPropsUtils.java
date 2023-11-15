@@ -248,10 +248,15 @@ public class PixelPropsUtils {
                 final String processName = Application.getProcessName();
                 if (processName.equals("com.google.android.gms.unstable")) {
                     sIsGms = true;
-                    setPropValue("FINGERPRINT", "google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys");
-                    setPropValue("PRODUCT", "marlin");
-                    setPropValue("DEVICE", "marlin");
-                    setPropValue("MODEL", "Pixel XL");
+                    setPropValue("FINGERPRINT", "asus/WW_Phone/ASUS_X00HD_4:7.1.1/NMF26F/14.2016.1801.372-20180119:user/release-keys");
+                    setPropValue("PRODUCT", "WW_Phone");
+                    setPropValue("DEVICE", "ASUS_X00HD_4");
+                    setPropValue("MANUFACTURER", "Asus");
+                    setPropValue("BRAND", "Asus");
+                    setPropValue("MODEL", "ASUS_X00HD");
+                    setPropValue("ID", "NMF26F");
+                    setPropValue("TYPE", "user");
+                    setPropValue("TAGS", "release-keys");
                     setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
                 }
                 return;
