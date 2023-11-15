@@ -147,11 +147,16 @@ public class EmergencyNumberUtils {
      * Whether or not emergency gesture is enabled.
      */
     public boolean getEmergencyGestureEnabled() {
-        final Bundle bundle = mContext.getContentResolver().call(
-                EMERGENCY_NUMBER_OVERRIDE_AUTHORITY,
-                METHOD_NAME_GET_EMERGENCY_GESTURE_ENABLED, null /* args */, null /* bundle */);
-        return bundle == null ? true : bundle.getInt(EMERGENCY_SETTING_VALUE, EMERGENCY_SETTING_ON)
-                == EMERGENCY_SETTING_ON;
+        try {
+            final Bundle bundle = mContext.getContentResolver().call(
+                    EMERGENCY_NUMBER_OVERRIDE_AUTHORITY,
+                    METHOD_NAME_GET_EMERGENCY_GESTURE_ENABLED, null /* args */, null /* bundle */);
+            return bundle != null && bundle.getInt(EMERGENCY_SETTING_VALUE, EMERGENCY_SETTING_ON)
+                    == EMERGENCY_SETTING_ON;
+        } catch (Exception e) {
+            Log.e("EmergencyGesture", "Failed to get emergency gesture status", e);
+            return false;
+        }
     }
 
     /**
