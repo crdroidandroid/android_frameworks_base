@@ -301,17 +301,18 @@ public class PixelPropsUtils {
     }
 
     private static void spoofBuildGms() {
-        // Alter model name and fingerprint to Asus Zenfone 4 to avoid hardware attestation enforcement
-        setPropValue("PRODUCT", "WW_Phone");
-        setPropValue("DEVICE", "ASUS_X00HD_4");
-        setPropValue("MANUFACTURER", "Asus");
-        setPropValue("BRAND", "Asus");
-        setPropValue("MODEL", "ASUS_X00HD");
-        setPropValue("FINGERPRINT", "asus/WW_Phone/ASUS_X00HD_4:7.1.1/NMF26F/14.2016.1801.372-20180119:user/release-keys");
-        setPropValue("ID", "NMF26F");
+        // Alter model name and fingerprint to Pixel 2 to avoid hardware attestation enforcement
+        setPropValue("BRAND", "google");
+        setPropValue("PRODUCT", "walleye");
+        setPropValue("MODEL", "Pixel 2");
+        setPropValue("MANUFACTURER", "Google");
+        setPropValue("DEVICE", "walleye");
+        setPropValue("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
+        setPropValue("ID", "OPM1.171019.011");
         setPropValue("TYPE", "user");
         setPropValue("TAGS", "release-keys");
-        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
+        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.O_MR1);
+        setVersionFieldString("SECURITY_PATCH", "2017-12-05");
     }
 
     private static boolean isCallerSafetyNet() {
