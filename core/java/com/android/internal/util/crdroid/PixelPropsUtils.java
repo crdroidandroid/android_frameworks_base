@@ -301,7 +301,7 @@ public class PixelPropsUtils {
     }
 
     private static void spoofBuildGms() {
-        // Alter build parameters to Nexus 6P for avoiding hardware attestation enforcement
+        // Alter build parameters to Nexus 5X for avoiding hardware attestation enforcement
         setPropValue("DEVICE", "bullhead");
         setPropValue("ID", "OPR6.170623.013");
         setPropValue("FINGERPRINT", "google/bullhead/bullhead:8.0.0/OPR6.170623.013/4283548:user/release-keys");
