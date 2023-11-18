@@ -109,6 +109,9 @@ interface ShadeViewController {
     /** Blocks gestural navigation */
     fun setBlockedGesturalNavigation(blocked: Boolean)
 
+    /** island visibility  */
+    fun showIsland(show: Boolean)
+
     companion object {
         /**
          * Returns a multiplicative factor to use when determining the falsing threshold for touches

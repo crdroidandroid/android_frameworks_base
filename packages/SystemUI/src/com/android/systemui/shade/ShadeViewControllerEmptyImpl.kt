@@ -100,6 +100,8 @@ open class ShadeViewControllerEmptyImpl @Inject constructor() :
     override val udfpsTransitionToFullShadeProgress = MutableStateFlow(0f)
 
     override fun setBlockedGesturalNavigation(blocked: Boolean) {}
+
+    override fun showIsland(show: Boolean) {}
 }
 
 class ShadeHeadsUpTrackerEmptyImpl : ShadeHeadsUpTracker {
