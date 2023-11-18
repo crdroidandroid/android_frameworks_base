@@ -229,6 +229,9 @@ interface ShadeViewController {
      */
     fun showAodUi()
 
+    /** island visibility  */
+    fun showIsland(show: Boolean)
+
     /**
      * This method should not be used anymore, you should probably use [.isShadeFullyOpen] instead.
      * It was overused as indicating if shade is open or we're on keyguard/AOD. Moving forward we
