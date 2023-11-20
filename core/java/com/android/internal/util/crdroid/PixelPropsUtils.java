@@ -307,7 +307,7 @@ public class PixelPropsUtils {
         setPropValue("FINGERPRINT", "google/bullhead/bullhead:8.0.0/OPR6.170623.013/4283548:user/release-keys");
         setPropValue("MODEL", "Nexus 5X");
         setPropValue("PRODUCT", "bullhead");
-        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N);
+        setVersionField("FIRST_SDK_INT", Build.VERSION_CODES.N);
         setVersionFieldString("SECURITY_PATCH", "2017-08-05");
     }
 
