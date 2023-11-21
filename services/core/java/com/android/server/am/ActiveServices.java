@@ -241,6 +241,7 @@ import com.android.server.am.LowMemDetector.MemFactor;
 import com.android.server.am.ServiceRecord.ShortFgsInfo;
 import com.android.server.pm.KnownPackages;
 import com.android.server.uri.NeededUriGrants;
+import com.android.server.wm.ActivityRecord;
 import com.android.server.wm.ActivityServiceConnectionsHolder;
 
 import java.io.FileDescriptor;
@@ -5011,8 +5012,27 @@ public final class ActiveServices {
             return;
         }
         try {
-            bringUpServiceLocked(r, r.intent.getIntent().getFlags(), r.createdFromFg, true, false,
-                    false, true);
+            boolean shouldDelay = false;
+            ActivityRecord top_rc = mAm.mTaskSupervisor.getTopResumedActivity();
+
+            boolean isPersistent
+                        = !((r.serviceInfo.applicationInfo.flags&ApplicationInfo.FLAG_PERSISTENT) == 0);
+            if(top_rc != null) {
+               if(top_rc.launching && !r.shortInstanceName.contains(top_rc.packageName)
+                            && !isPersistent && r.isForeground == false) {
+                   shouldDelay = true;
+               }
+            }
+            if(!shouldDelay) {
+               bringUpServiceLocked(r, r.intent.getIntent().getFlags(), r.createdFromFg, true, false, false, true);
+            } else {
+                    if (DEBUG_DELAYED_SERVICE) {
+                        Slog.v(TAG, "Reschedule service restart due to app launch"
+                              +" r.shortInstanceName "+r.shortInstanceName+" r.app = "+r.app);
+                    }
+               r.resetRestartCounter();
+               scheduleServiceRestartLocked(r, true);
+            }
         } catch (TransactionTooLargeException e) {
             // Ignore, it's been logged and nothing upstack cares.
         } finally {
