@@ -497,7 +497,7 @@ constructor(
         hideCurrentMedia: Boolean,
         hidePulsing: Boolean,
     ) {
-        val toShow = ArrayList<StatusBarIconView>(notificationEntries.size)
+        val toShowAll = ArrayList<StatusBarIconView>(notificationEntries.size)
         // Filter out ambient notifications and notification children.
         for (i in notificationEntries.indices) {
             val entry = notificationEntries[i].representativeEntry
@@ -515,11 +515,13 @@ constructor(
                 ) {
                     val iconView = function.apply(entry)
                     if (iconView != null) {
-                        toShow.add(iconView)
+                        toShowAll.add(iconView)
                     }
                 }
             }
         }
+
+        val toShow = toShowAll.distinctBy { it.sourceIcon }
 
         // In case we are changing the suppression of a group, the replacement shouldn't flicker
         // and it should just be replaced instead. We therefore look for notifications that were
