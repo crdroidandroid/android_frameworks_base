@@ -2568,7 +2568,7 @@ public class ActivityManagerService extends IActivityManager.Stub
                     Process.THREAD_GROUP_SYSTEM);
             Process.setThreadGroupAndCpuset(
                     mCachedAppOptimizer.mCachedAppOptimizerThread.getThreadId(),
-                    Process.THREAD_GROUP_SYSTEM);
+                    Process.THREAD_GROUP_BACKGROUND);
         } catch (Exception e) {
             Slog.w(TAG, "Setting background thread cpuset failed");
         }
@@ -5372,6 +5372,7 @@ public class ActivityManagerService extends IActivityManager.Stub
                             // Defer the full Pss collection as the system is really busy now.
                             mHandler.postDelayed(() -> {
                                 synchronized (mProcLock) {
+                                    mCachedAppOptimizer.compactAllSystem();
                                     mAppProfiler.requestPssAllProcsLPr(
                                             SystemClock.uptimeMillis(), true, false);
                                 }
