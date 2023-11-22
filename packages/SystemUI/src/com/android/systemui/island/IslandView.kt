@@ -17,15 +17,18 @@ package com.android.systemui.island
 
 import android.app.ActivityOptions
 import android.app.Notification
-import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.Region
 import android.graphics.Typeface
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.service.notification.StatusBarNotification
+import android.telecom.TelecomManager
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -47,7 +50,6 @@ class IslandView : ExtendedFloatingActionButton {
     private var isIslandAnimating: Boolean = false
     private var isDismissed: Boolean = true
     private var isTouchInsetsRemoved: Boolean = true
-    private var islandText: String = "";
     private var notificationStackScroller: NotificationStackScrollLayout? = null
     private var headsUpManager: HeadsUpManagerPhone? = null
     private var subtitleColor = Color.parseColor("#66000000")
@@ -172,7 +174,6 @@ class IslandView : ExtendedFloatingActionButton {
         val notifContent = notification.extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
         val notifSubContent = notification.extras.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString() ?: ""
         val islandIntent = notification.contentIntent ?: notification.fullScreenIntent
-        setOnClickListenerForIsland(islandIntent)
         val titleSpannable = SpannableString(notifTitle).apply {
             setSpan(StyleSpan(Typeface.BOLD), 0, notifTitle.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
@@ -202,6 +203,8 @@ class IslandView : ExtendedFloatingActionButton {
         this.maxLines = 4
         this.ellipsize = android.text.TextUtils.TruncateAt.END
         this.text = notifText
+        this.bringToFront()
+        setOnClickListener(sbn.packageName)
     }
 
     private fun getNotificationIcon(sbn: StatusBarNotification, notification: Notification): Drawable? {
@@ -217,16 +220,37 @@ class IslandView : ExtendedFloatingActionButton {
         }
     }
 
-    private fun setOnClickListenerForIsland(islandIntent: PendingIntent?) {
-        islandIntent?.let {
-            this.setOnClickListener {
+    private fun setOnClickListener(packageName: String) {
+        this.setOnClickListener {
+            val telecomManager = context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+            if (telecomManager.isRinging) {
+                telecomManager.acceptRingingCall()
+                val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+            } else {
+                val intent = context.packageManager.getLaunchIntentForPackage(packageName)?.apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
                 try {
-                    val options = ActivityOptions.makeBasic()
-                    options.setPendingIntentBackgroundActivityStartMode(
-                            ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED)
-                    islandIntent.send(options.toBundle());
-               } catch (e: PendingIntent.CanceledException) {}
+                    context.startActivity(intent)
+                } catch (e: Exception) {}
+            }
+            hide()
+        }
+
+        this.setOnLongClickListener {
+            val telecomManager = context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+            if (telecomManager.isRinging) {
+                telecomManager.endCall()
+                val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
+                hide()
+                true
+            } else {
+                hide()
+                false
             }
         }
     }
+
 }
