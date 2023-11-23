@@ -24,7 +24,7 @@ import android.content.res.Configuration;
 import android.os.BatteryManager;
 import android.provider.Settings;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
+import android.util.DisplayUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -122,16 +122,10 @@ public class BatteryBarController extends LinearLayout implements TunerService.T
     }
 
     public void configThickness() {
-        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        int pixels = (int) ((metrics.density * mThickness) + 0.5);
+        final float scaleFactor = DisplayUtils.getScaleFactor(mContext);
+        int pixels = (int) (scaleFactor * ((float) mThickness + 0.5));
 
         ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) getLayoutParams();
-
-        if (isVertical)
-            params.width = pixels;
-        else
-            params.height = pixels;
-        setLayoutParams(params);
 
         if (isVertical)
             params.width = pixels;
