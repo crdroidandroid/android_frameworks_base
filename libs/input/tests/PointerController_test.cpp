@@ -323,7 +323,9 @@ public:
           : PointerController(
                     new MockPointerControllerPolicyInterface(), looper,
                     new NiceMock<MockSpriteController>(looper),
-                    [&registeredListener](const sp<android::gui::WindowInfosListener>& listener) {
+                    [&registeredListener](const sp<android::gui::WindowInfosListener>& listener,
+                                          std::pair<std::vector<gui::WindowInfo>,
+                                                    std::vector<gui::DisplayInfo>>*) {
                         // Register listener
                         registeredListener = listener;
                     },

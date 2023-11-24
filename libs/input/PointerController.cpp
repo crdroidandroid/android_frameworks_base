@@ -89,8 +89,11 @@ PointerController::PointerController(const sp<PointerControllerPolicyInterface>&
                                      const sp<SpriteController>& spriteController)
       : PointerController(
                 policy, looper, spriteController,
-                [](const sp<android::gui::WindowInfosListener>& listener) {
-                    SurfaceComposerClient::getDefault()->addWindowInfosListener(listener);
+                [](const sp<android::gui::WindowInfosListener>& listener,
+                   std::pair<std::vector<gui::WindowInfo>, std::vector<gui::DisplayInfo>>*
+                           outInitialInfo) {
+                    SurfaceComposerClient::getDefault()->addWindowInfosListener(listener,
+                                                                                outInitialInfo);
                 },
                 [](const sp<android::gui::WindowInfosListener>& listener) {
                     SurfaceComposerClient::getDefault()->removeWindowInfosListener(listener);
@@ -99,15 +102,18 @@ PointerController::PointerController(const sp<PointerControllerPolicyInterface>&
 PointerController::PointerController(const sp<PointerControllerPolicyInterface>& policy,
                                      const sp<Looper>& looper,
                                      const sp<SpriteController>& spriteController,
-                                     WindowListenerConsumer registerListener,
-                                     WindowListenerConsumer unregisterListener)
+                                     const WindowListenerRegisterConsumer& registerListener,
+                                     WindowListenerUnregisterConsumer unregisterListener)
       : mContext(policy, looper, spriteController, *this),
         mCursorController(mContext),
         mDisplayInfoListener(new DisplayInfoListener(this)),
         mUnregisterWindowInfosListener(std::move(unregisterListener)) {
     std::scoped_lock lock(getLock());
     mLocked.presentation = Presentation::SPOT;
-    registerListener(mDisplayInfoListener);
+    auto initialWindowInfo =
+            std::make_pair(std::vector<gui::WindowInfo>{}, std::vector<gui::DisplayInfo>{});
+    registerListener(mDisplayInfoListener, &initialWindowInfo);
+    onDisplayInfosChangedLocked(initialWindowInfo.second);
 }
 
 PointerController::~PointerController() {
