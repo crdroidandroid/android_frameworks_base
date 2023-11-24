@@ -24,6 +24,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -279,8 +280,12 @@ public abstract class WindowDecoration<T extends View & TaskFocusStateConsumer>
         finishT.setPosition(mTaskSurface, taskPosition.x, taskPosition.y)
                 .setWindowCrop(mTaskSurface, outResult.mWidth, outResult.mHeight);
         if (mTaskInfo.getWindowingMode() == WINDOWING_MODE_FREEFORM) {
-            startT.setCornerRadius(mTaskSurface, params.mCornerRadius);
-            finishT.setCornerRadius(mTaskSurface, params.mCornerRadius);
+            final TypedArray ta = mContext.obtainStyledAttributes(
+                    new int[]{android.R.attr.dialogCornerRadius});
+            int cornerRadius = ta.getDimensionPixelSize(0, 0);
+            ta.recycle();
+            startT.setCornerRadius(mTaskSurface, cornerRadius);
+            finishT.setCornerRadius(mTaskSurface, cornerRadius);
         }
 
         if (mCaptionWindowManager == null) {
