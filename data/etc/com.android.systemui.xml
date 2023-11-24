@@ -97,5 +97,8 @@
         <permission name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND" />
         <permission name="android.permission.OVERRIDE_SYSTEM_KEY_BEHAVIOR_IN_FOCUSED_WINDOW"/>
         <permission name="android.permission.WRITE_APN_SETTINGS" />
+        <permission name="android.permission.ACCESS_CONTEXT_HUB" />
+        <permission name="android.permission.REGISTER_STATS_PULL_ATOM" />
+        <permission name="android.permission.SET_WALLPAPER_COMPONENT" />
     </privapp-permissions>
 </permissions>
