@@ -22,11 +22,9 @@ import android.annotation.Nullable;
 import android.app.ActivityManager;
 import android.app.SynchronousUserSwitchObserver;
 import android.app.UserSwitchObserver;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -37,20 +35,15 @@ import android.hardware.biometrics.BiometricsProtoEnums;
 import android.hardware.biometrics.ITestSession;
 import android.hardware.biometrics.ITestSessionCallback;
 import android.hardware.biometrics.face.V1_0.IBiometricsFace;
-import android.hardware.biometrics.face.V1_0.IBiometricsFaceClientCallback;
 import android.hardware.face.Face;
 import android.hardware.face.FaceAuthenticateOptions;
 import android.hardware.face.FaceSensorPropertiesInternal;
 import android.hardware.face.IFaceServiceReceiver;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.IHwBinder;
 import android.os.Looper;
-import android.os.NativeHandle;
 import android.os.RemoteException;
-import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
@@ -60,7 +53,6 @@ import android.util.proto.ProtoOutputStream;
 import android.view.Surface;
 
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.util.FrameworkStatsLog;
 import com.android.server.biometrics.AuthenticationStatsCollector;
 import com.android.server.biometrics.SensorServiceStateProto;
 import com.android.server.biometrics.SensorStateProto;
@@ -94,12 +86,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.Clock;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -153,16 +142,6 @@ public class SenseProvider implements ServiceProvider {
         @Override
         public void onUserSwitching(int newUserId) {
             mCurrentUserId = newUserId;
-            ISenseService service = getDaemon();
-            if (service == null) {
-                bindService(mCurrentUserId);
-            }
-        }
-    };
-
-    private final BroadcastReceiver mUserUnlockReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
             ISenseService service = getDaemon();
             if (service == null) {
                 bindService(mCurrentUserId);
@@ -237,7 +216,7 @@ public class SenseProvider implements ServiceProvider {
                 final AuthenticationConsumer authenticationConsumer =
                         (AuthenticationConsumer) client;
                 final boolean authenticated = faceId != 0;
-                final Face face = new Face("", faceId, Long.valueOf(DEVICE_ID));
+                final Face face = new Face("", faceId, DEVICE_ID);
                 authenticationConsumer.onAuthenticated(face, authenticated, SenseUtils.toByteArrayList(token));
             });
         }
@@ -400,7 +379,6 @@ public class SenseProvider implements ServiceProvider {
         } catch (RemoteException e) {
             Slog.e(TAG, "Unable to register user switch observer");
         }
-        context.registerReceiver(mUserUnlockReceiver, new IntentFilter(Intent.ACTION_USER_UNLOCKED));
     }
 
     public SenseProvider(Context context, BiometricStateCallback biometricStateCallback, FaceSensorPropertiesInternal sensorProps, LockoutResetDispatcher lockoutResetDispatcher) {
@@ -526,16 +504,10 @@ public class SenseProvider implements ServiceProvider {
             mScheduler.scheduleClientMonitor(client, new ClientMonitorCallback() {
                 @Override
                 public void onClientStarted(@NonNull BaseClientMonitor clientMonitor) {
-                    mBiometricStateCallback.onClientStarted(clientMonitor);
                     if (client != clientMonitor) {
                         Slog.e(TAG, "scheduleGenerateChallenge onClientStarted, mismatched client."
                                 + " Expecting: " + client + ", received: " + clientMonitor);
                     }
-                }
-
-                @Override
-                public void onBiometricAction(int action) {
-                    mBiometricStateCallback.onBiometricAction(action);
                 }
             });
         });
@@ -568,7 +540,6 @@ public class SenseProvider implements ServiceProvider {
                 @Override
                 public void onClientFinished(@NonNull BaseClientMonitor clientMonitor,
                         boolean success) {
-                    mBiometricStateCallback.onClientFinished(clientMonitor, success);
                     if (client != clientMonitor) {
                         Slog.e(TAG, "scheduleRevokeChallenge, mismatched client."
                                 + "Expecting: " + client + ", received: " + clientMonitor);
@@ -609,8 +580,19 @@ public class SenseProvider implements ServiceProvider {
 
             mScheduler.scheduleClientMonitor(client, new ClientMonitorCallback() {
                 @Override
+                public void onClientStarted(@NonNull BaseClientMonitor clientMonitor) {
+                    mBiometricStateCallback.onClientStarted(clientMonitor);
+                }
+
+                @Override
+                public void onBiometricAction(int action) {
+                    mBiometricStateCallback.onBiometricAction(action);
+                }
+
+                @Override
                 public void onClientFinished(@NonNull BaseClientMonitor clientMonitor,
                         boolean success) {
+                    mBiometricStateCallback.onClientFinished(clientMonitor, success);
                     if (success) {
                         // Update authenticatorIds
                         scheduleUpdateActiveUserWithoutHandler(client.getTargetUserId());
@@ -748,8 +730,10 @@ public class SenseProvider implements ServiceProvider {
         mHandler.post(() -> {
             if (getDaemon() == null) {
                 bindService(mCurrentUserId);
-            } else if (getEnrolledFaces(sensorId, userId).isEmpty()) {
+            }
+            if (getEnrolledFaces(sensorId, userId).isEmpty()) {
                 Slog.w(TAG, "Ignoring lockout reset, no templates enrolled for user: " + userId);
+                return;
             }
 
             scheduleUpdateActiveUserWithoutHandler(userId);
