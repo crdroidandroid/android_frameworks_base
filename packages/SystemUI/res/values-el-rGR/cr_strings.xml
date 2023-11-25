@@ -50,7 +50,7 @@
     <string name="quick_settings_sound_label">Ήχος</string>
     <string name="quick_settings_sound_ring">Κουδούνισμα</string>
     <string name="quick_settings_sound_vibrate">Δόνηση</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">Σίγαση</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/δ</string>
@@ -142,8 +142,8 @@
     <string name="screenshot_long_press">Παρατεταμένο πάτημα - επιλεγμένη περιοχή</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Ηχητική αναζήτηση</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Εγκαταστήστε πρώτα μια εφαρμογή αναζήτησης ήχου</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Γλώσσα</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">Διαμορφώστε πρώτα πολλαπλές γλώσσες</string>
 </resources>
