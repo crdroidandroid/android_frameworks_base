@@ -16,7 +16,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Naciśnij i przytrzymaj przycisk zasilania aby odblokować</string>
+    <string name="pocket_lock_message_long_press">Naciśnij i przytrzymaj przycisk zasilania, aby odblokować</string>
     <string name="pocket_view_title">Tryb kieszeniowy jest włączony</string>
     <string name="pocket_view_title_cancel">Aby aktywować swój telefon:</string>
     <string name="pocket_view_top_tag_cancel">Nie zakrywaj niebieskiego obszaru Twojego telefonu, i usuń wszelkie zabrudzenia lub kurz.</string>
