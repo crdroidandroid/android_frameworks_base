@@ -379,6 +379,13 @@ public final class DisplayManagerService extends SystemService {
             if (state != Display.STATE_OFF) {
                 requestDisplayStateInternal(displayId, state, brightness, sdrBrightness);
             }
+
+            if (stateChanged) {
+                Intent intent = new Intent(Intent.ACTION_DISPLAY_STATE_CHANGED)
+                        .addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY
+                                | Intent.FLAG_RECEIVER_FOREGROUND);
+                mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
+            }
         }
     };
 

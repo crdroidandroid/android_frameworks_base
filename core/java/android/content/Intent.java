@@ -4279,6 +4279,13 @@ public class Intent implements Parcelable, Cloneable {
     public static final String ACTION_OVERLAY_CHANGED = "android.intent.action.OVERLAY_CHANGED";
 
     /**
+     * Broadcast Action: Display power state has changed.
+     * @hide
+     */
+    public static final String ACTION_DISPLAY_STATE_CHANGED =
+            "android.intent.action.DISPLAY_STATE_CHANGED";
+
+    /**
      * Activity Action: Allow the user to select and return one or more existing
      * documents. When invoked, the system will display the various
      * {@link DocumentsProvider} instances installed on the device, letting the
