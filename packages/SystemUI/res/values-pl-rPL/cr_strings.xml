@@ -52,7 +52,7 @@
     <string name="quick_settings_sound_label">Dźwięk</string>
     <string name="quick_settings_sound_ring">Dzwonek</string>
     <string name="quick_settings_sound_vibrate">Wibracje</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">Wycisz</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -130,8 +130,8 @@
     <string name="screenshot_long_press">Długie dotknięcie - wybrany obszar</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Wyszukiwanie głosowe</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Zainstaluj najpierw aplikację do wyszukiwania dźwięku</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Język</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">Najpierw skonfiguruj wiele języków</string>
 </resources>
