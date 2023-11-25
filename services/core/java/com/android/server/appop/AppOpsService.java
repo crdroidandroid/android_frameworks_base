@@ -3877,7 +3877,7 @@ public class AppOpsService extends IAppOpsService.Stub {
             Binder.restoreCallingIdentity(ident);
         }
 
-        if (pkgUid != uid) {
+        if (pkgUid != Process.INVALID_UID && pkgUid != uid) {
             if (!suppressErrorLogs) {
                 Slog.e(TAG, "Bad call made by uid " + callingUid + ". "
                         + "Package \"" + packageName + "\" does not belong to uid " + uid + ".");
