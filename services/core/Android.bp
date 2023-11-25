@@ -206,6 +206,7 @@ java_library_static {
         "com.android.server.utils_aconfig-java",
         "service-jobscheduler-deviceidle.flags-aconfig-java",
         "vendor.aac.hardware.richtap.vibrator",
+        "vendor.aospa.biometrics.face",
     ],
     javac_shard_size: 50,
     javacflags: [
