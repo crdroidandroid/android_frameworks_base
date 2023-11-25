@@ -707,7 +707,7 @@ public class BiometricUnlockController extends KeyguardUpdateMonitorCallback imp
         final boolean unlockingAllowed =
                 mUpdateMonitor.isUnlockingWithBiometricAllowed(isStrongBiometric);
         final boolean deviceDreaming = mUpdateMonitor.isDreaming();
-        final boolean bypass = mKeyguardBypassController.getBypassEnabled()
+        final boolean bypass = mKeyguardBypassController.getBypassEnabledBiometric()
                 || mAuthController.isUdfpsFingerDown();
         final boolean isBouncerShowing = isBouncerShowing();
 
