@@ -25,6 +25,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.Region
 import android.graphics.Typeface
+import android.os.UserHandle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.service.notification.StatusBarNotification
@@ -38,11 +39,16 @@ import android.text.style.StyleSpan
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.android.systemui.R
 import com.android.systemui.statusbar.phone.HeadsUpManagerPhone
 import com.android.systemui.statusbar.notification.stack.NotificationStackScrollLayout
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+
+import kotlin.text.Regex
 
 class IslandView : ExtendedFloatingActionButton {
 
@@ -67,11 +73,17 @@ class IslandView : ExtendedFloatingActionButton {
         ))
     }
 
-    constructor(context: Context) : super(context)
+    constructor(context: Context) : super(context) {
+        this.visibility = View.GONE
+    }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        this.visibility = View.GONE
+    }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        this.visibility = View.GONE
+    }
 
     fun setIslandEnabled(enable: Boolean) {
         this.useIslandNotification = enable
@@ -114,12 +126,12 @@ class IslandView : ExtendedFloatingActionButton {
     }
 
     fun animateDismissIsland() {
+        resetLayout()
         shrink()
         postOnAnimationDelayed({
             hide()
             isIslandAnimating = false
             isDismissed = true
-            this.isSelected = false
             if (!isTouchInsetsRemoved) {
                 viewTreeObserver.removeOnComputeInternalInsetsListener(insetsListener)
                 isTouchInsetsRemoved = true
@@ -169,8 +181,27 @@ class IslandView : ExtendedFloatingActionButton {
         val sbn = headsUpManager?.topEntry?.row?.entry?.sbn ?: return
         val notification = sbn.notification
         val icon = getNotificationIcon(sbn, notification) ?: return
-        val notifTitle = notification.extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: ""
-        if (notifTitle.isEmpty()) return
+        var notifTitle = ""
+        var extraTitle = notification.extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: ""
+        if (extraTitle.isBlank()) return
+        val allPhrases = linkedSetOf<String>()
+        val extraTitlePhrases = extraTitle.split(Regex("\\s+")).filterNot { it.isBlank() }
+        val filteredTitleParts = extraTitlePhrases.mapNotNull { phrase ->
+            val alphanumericPhrase = phrase.replace(Regex("[^A-Za-z0-9]"), "")
+            if (allPhrases.contains(alphanumericPhrase.toLowerCase())) {
+                null
+            } else {
+                allPhrases.add(alphanumericPhrase.toLowerCase())
+                phrase
+            }
+        }
+        val filteredTitle = filteredTitleParts.joinToString(" ") { it }
+            .replace(Regex("(:)\\s+"), "$1 ")
+            .replace(Regex("\\s+(:)"), " $1")
+            .replace(Regex("\\s+(\\n)"), "$1")
+            .trim()
+        notifTitle = filteredTitle
+        if (notifTitle.isBlank()) return
         val notifContent = notification.extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
         val notifSubContent = notification.extras.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString() ?: ""
         val islandIntent = notification.contentIntent ?: notification.fullScreenIntent
@@ -197,13 +228,11 @@ class IslandView : ExtendedFloatingActionButton {
             }
         }
         this.icon = icon
-        this.iconSize = resources.getDimensionPixelSize(R.dimen.island_icon_size)
         this.iconTint = null
-        this.isSingleLine = false
-        this.maxLines = 4
-        this.ellipsize = android.text.TextUtils.TruncateAt.END
         this.text = notifText
+        this.isSelected = true
         this.bringToFront()
+        animateIslandText()
         setOnClickListener(sbn.packageName)
     }
 
@@ -221,6 +250,9 @@ class IslandView : ExtendedFloatingActionButton {
     }
 
     private fun setOnClickListener(packageName: String) {
+        this.isClickable = true
+        this.isFocusable = true
+        this.isFocusableInTouchMode = true
         this.setOnClickListener {
             val telecomManager = context.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
             if (telecomManager.isRinging) {
@@ -229,10 +261,10 @@ class IslandView : ExtendedFloatingActionButton {
                 vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
             } else {
                 val intent = context.packageManager.getLaunchIntentForPackage(packageName)?.apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 }
                 try {
-                    context.startActivity(intent)
+                    context.startActivityAsUser(intent, UserHandle.CURRENT)
                 } catch (e: Exception) {}
             }
             hide()
@@ -247,10 +279,40 @@ class IslandView : ExtendedFloatingActionButton {
                 hide()
                 true
             } else {
-                hide()
-                false
+                expandIslandView()
+                true
             }
         }
     }
+    
+    fun resetLayout() {
+        val params = this.layoutParams as ViewGroup.MarginLayoutParams
+        params.width = ViewGroup.LayoutParams.WRAP_CONTENT
+        val margin = 0
+        params.setMargins(margin, params.topMargin, margin, params.bottomMargin)
+        this.layoutParams = params
+    }
+    
+    fun animateIslandText() {
+        this.iconSize = resources.getDimensionPixelSize(R.dimen.island_icon_size) / 2
+        this.isSingleLine = true
+        this.maxLines = 1
+        this.ellipsize = TextUtils.TruncateAt.MARQUEE
+        this.marqueeRepeatLimit = -1
+        this.setHorizontallyScrolling(true)
+    }
 
+    fun expandIslandView() {
+        TransitionManager.beginDelayedTransition(parent as ViewGroup, AutoTransition())
+        this.iconSize = resources.getDimensionPixelSize(R.dimen.island_icon_size)
+        this.isSingleLine = false
+        this.maxLines = 4
+        this.ellipsize = TextUtils.TruncateAt.END
+        this.setHorizontallyScrolling(false)
+        val params = this.layoutParams as ViewGroup.MarginLayoutParams
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT
+        val margin = resources.getDimensionPixelSize(R.dimen.island_side_margin)
+        params.setMargins(margin, params.topMargin, margin, params.bottomMargin)
+        this.layoutParams = params
+    }
 }

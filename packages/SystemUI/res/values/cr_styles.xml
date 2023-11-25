@@ -33,12 +33,9 @@
     <!-- Dynamic Island Notification -->
     <style name="Theme.Island.SystemUI" parent="@style/Theme.MaterialComponents.DayNight">
         <item name="android:fontFamily">@*android:string/config_bodyFontFamily</item>
-        <item name="android:focusable">true</item>
-        <item name="android:focusableInTouchMode">true</item>
-        <item name="android:scrollHorizontally">true</item>
     </style>
     <style name="islandBackgroundOverlay" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">33dp</item>
+        <item name="cornerSize">48dp</item>
     </style>
 </resources>
