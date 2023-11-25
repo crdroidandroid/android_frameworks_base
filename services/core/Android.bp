@@ -266,6 +266,7 @@ java_library_static {
         "android.adpf.sessionmanager_aidl-java",
         "uprobestats_flags_java_lib",
         "clipboard_flags_lib",
+        "vendor.aospa.biometrics.face",
     ],
     javac_shard_size: 50,
     javacflags: [
