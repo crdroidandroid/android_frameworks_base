@@ -18,8 +18,11 @@
 package com.android.internal.util.crdroid;
 
 import android.app.Application;
+import android.content.res.Resources;
 import android.os.Build;
 import android.util.Log;
+
+import com.android.internal.R;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -32,6 +35,9 @@ public class PixelPropsUtils {
 
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final boolean DEBUG = false;
+
+    private static final String[] spoofBuildGms =
+            Resources.getSystem().getStringArray(R.array.config_spoofBuildGms);
 
     private static final Map<String, Object> propsToChangeGeneric;
     private static final Map<String, Object> propsToChangePixel5;
@@ -301,14 +307,22 @@ public class PixelPropsUtils {
     }
 
     private static void spoofBuildGms() {
-        // Alter build parameters to Nexus 5X for avoiding hardware attestation enforcement
-        setPropValue("DEVICE", "bullhead");
-        setPropValue("ID", "OPR6.170623.013");
-        setPropValue("FINGERPRINT", "google/bullhead/bullhead:8.0.0/OPR6.170623.013/4283548:user/release-keys");
-        setPropValue("MODEL", "Nexus 5X");
-        setPropValue("PRODUCT", "bullhead");
-        setVersionField("FIRST_SDK_INT", Build.VERSION_CODES.N);
-        setVersionFieldString("SECURITY_PATCH", "2017-08-05");
+        // Alter build parameters for avoiding hardware attestation enforcement
+        for (String spoof : spoofBuildGms) {
+            String[] range = spoof.split(";");
+
+            String type = range[0];
+            String name = range[1];
+            String value = range[2];
+
+            if (type.equals("PropValue")) {
+                setPropValue(name, value);
+            } else if (type.equals("VersionField")) {
+                setVersionField(name, Integer.valueOf(value));
+            } else if (type.equals("VersionFieldString")) {
+                setVersionFieldString(name, value);
+            }
+        }
     }
 
     private static boolean isCallerSafetyNet() {
