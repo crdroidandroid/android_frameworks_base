@@ -60,7 +60,8 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
     private OmniJawsClient.WeatherInfo mWeatherData;
     private boolean mEnabled;
     private final ActivityStarter mActivityStarter;
- 
+    private String mFormattedCondition; 
+
     private static final String[] ALTERNATIVE_WEATHER_APPS = {
             "cz.martykan.forecastie",
             "com.accuweather.android",
@@ -189,7 +190,8 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
             } else {
                 state.icon = new DrawableIcon(mWeatherImage);
                 state.label = mWeatherData.city;
-                state.secondaryLabel = mWeatherData.temp + mWeatherData.tempUnits;
+                state.secondaryLabel = mWeatherData.temp + mWeatherData.tempUnits +
+                    " · " + mFormattedCondition;
             }
         }
     }
@@ -206,6 +208,22 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
             if (mEnabled) {
                 mWeatherClient.queryWeather();
                 mWeatherData = mWeatherClient.getWeatherInfo();
+                mFormattedCondition = mWeatherData.condition;
+                if (mFormattedCondition.toLowerCase().contains("clouds")) {
+                    mFormattedCondition = mContext.getResources().getString(R.string.weather_condition_clouds);
+                } else if (mFormattedCondition.toLowerCase().contains("rain")) {
+                    mFormattedCondition = mContext.getResources().getString(R.string.weather_condition_rain);
+                } else if (mFormattedCondition.toLowerCase().contains("clear")) {
+                    mFormattedCondition = mContext.getResources().getString(R.string.weather_condition_clear);
+                } else if (mFormattedCondition.toLowerCase().contains("storm")) {
+                    mFormattedCondition = mContext.getResources().getString(R.string.weather_condition_storm);
+                } else if (mFormattedCondition.toLowerCase().contains("snow")) {
+                    mFormattedCondition = mContext.getResources().getString(R.string.weather_condition_snow);
+                } else if (mFormattedCondition.toLowerCase().contains("wind")) {
+                    mFormattedCondition = mContext.getResources().getString(R.string.weather_condition_wind);
+                } else if (mFormattedCondition.toLowerCase().contains("mist")) {
+                    mFormattedCondition = mContext.getResources().getString(R.string.weather_condition_mist);
+                }
                 if (mWeatherData != null) {
                     mWeatherImage = mWeatherClient.getWeatherConditionImage(mWeatherData.conditionCode);
                     mWeatherImage = mWeatherImage.mutate();
