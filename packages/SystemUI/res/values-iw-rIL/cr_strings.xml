@@ -18,14 +18,14 @@
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_vpn">VPN</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">חסכון בנתונים</string>
     <string name="status_bar_call_strength">עוצמת השיחה</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- Screen record delete action -->
     <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Delete</string>
+    <string name="screenrecord_delete_label">מחיקה</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Screen recording deleted</string>
+    <string name="screenrecord_delete_description">הקלטת המסך נמחקה</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">הצגת נקודת העצירה</string>
     <string name="screenrecord_stopdot_summary">לחיצה ארוכה להזזתה</string>
@@ -52,7 +52,7 @@
     <string name="quick_settings_sound_label">צליל</string>
     <string name="quick_settings_sound_ring">צלצול</string>
     <string name="quick_settings_sound_vibrate">רטט</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">השתקה</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -68,24 +68,24 @@
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • טעינת Turbo (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> עד למצב מלא)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • טעינת Turbo</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">On-The-Go activated</string>
-    <string name="onthego_notif_title">On-The-Go is active</string>
-    <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
-    <string name="onthego_notif_error">Unable to start On-The-Go</string>
-    <string name="onthego_notif_restart">Restart On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
-    <string name="onthego_front_camera">Use front camera</string>
-    <string name="onthego_service_toggle">Automatically restart service</string>
-    <string name="onthego_channel_name">Main</string>
+    <string name="onthego_notif_ticker">On-The-Go מופעל</string>
+    <string name="onthego_notif_title">On-The-Go פעיל</string>
+    <string name="onthego_notif_stop">עצירה</string>
+    <string name="onthego_notif_options">אפשרויות</string>
+    <string name="onthego_notif_error">לא ניתן להפעיל את On-The-Go</string>
+    <string name="onthego_notif_restart">הפעלה מחדש של On-The-Go</string>
+    <string name="onthego_notif_camera_changed">תצורת המצלמה שונתה</string>
+    <string name="onthego_transparency">שקיפות</string>
+    <string name="onthego_front_camera">שימוש במצלמה הקדמית</string>
+    <string name="onthego_service_toggle">הפעלה מחדש אוטומטית של השירות</string>
+    <string name="onthego_channel_name">ראשי</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">ממשק המשתמש של המערכת</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Priority</string>
-    <string name="volume_ringer_alarms_only">Alarms</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_priority_only">עדיפות</string>
+    <string name="volume_ringer_alarms_only">התרעות</string>
+    <string name="volume_ringer_dnd">נא לא להפריע</string>
     <string name="tristate_flashlight">פנס</string>
     <string name="tristate_flashlight_on">Torch on</string>
     <string name="tristate_flashlight_off">Torch off</string>
