@@ -57,32 +57,32 @@
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> • Đang sạc nhanh</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc nhanh (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> nữa sẽ đầy)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="Percentage">%s</xliff:g> • Sạc thần tốc</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Đang sạc nhanh</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Sạc nhanh VOOC (<xliff:g id="charging_time_left" example="4 giờ và 2 phút">%1$s</xliff:g> nữa sẽ đầy)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="Percentage">%s</xliff:g> • Sạc nhanh VOOC</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Sạc nhanh (<xliff:g id="charging_time_left" example="4 giờ và 2 phút">%1$s</xliff:g> đến khi đầy)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> • Đang sạc nhanh</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc nhanh Turbo (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> nữa sẽ đầy)</string>
-    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Sạc nhanh Turbo</string>
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Đang sạc siêu nhanh (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> nữa sẽ đầy)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Sạc siêu nhanh</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">Đã kích hoạt On-The-Go</string>
-    <string name="onthego_notif_title">On-The-Go đang hoạt động</string>
+    <string name="onthego_notif_ticker">Đã bật chế độ trên đường đi</string>
+    <string name="onthego_notif_title">Trên đường đi đang hoạt động</string>
     <string name="onthego_notif_stop">Dừng</string>
     <string name="onthego_notif_options">Tùy chọn</string>
-    <string name="onthego_notif_error">Không thể khởi động On-The-Go</string>
-    <string name="onthego_notif_restart">Khởi động lại On-The-Go</string>
-    <string name="onthego_notif_camera_changed">Đã thay đổi chế độ camera</string>
+    <string name="onthego_notif_error">Không thể khởi động trên đường đi</string>
+    <string name="onthego_notif_restart">Khởi động lại trên đường đi</string>
+    <string name="onthego_notif_camera_changed">Đã thay đổi chế độ máy ảnh</string>
     <string name="onthego_transparency">Độ trong suốt</string>
-    <string name="onthego_front_camera">Sử dụng camera trước</string>
-    <string name="onthego_service_toggle">Tự động khởi động lại dịch vụ</string>
+    <string name="onthego_front_camera">Sử dụng máy ảnh trước</string>
+    <string name="onthego_service_toggle">Tự khởi động lại dịch vụ</string>
     <string name="onthego_channel_name">Chính</string>
-    <string name="global_action_onthego">On-The-Go</string>
+    <string name="global_action_onthego">Trên đường đi</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">Giao diện người dùng hệ thống</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Ưu Tiên</string>
+    <string name="volume_ringer_priority_only">Ưu tiên</string>
     <string name="volume_ringer_alarms_only">Báo thức</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">Không làm phiền</string>
     <string name="tristate_flashlight">Đèn pin</string>
     <string name="tristate_flashlight_on">Bật đèn pin</string>
     <string name="tristate_flashlight_off">Tắt đèn pin</string>
@@ -96,7 +96,7 @@
     <string name="tristate_rotation_270">Ngang (270°)</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Buộc dừng?</string>
-    <string name="force_stop_dlg_text">Nếu bạn buộc dừng một ứng dụng, ứng dụng đó có thể hoạt động sai.</string>
+    <string name="force_stop_dlg_text">Nếu buộc dừng một ứng dụng nó có thể hoạt động sai.</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Thông tin CPU</string>
     <!-- FPS Info tile -->
@@ -115,13 +115,13 @@
     <string name="screenshot_lens_label">Ống kính</string>
     <!-- Smart Pixels QS Tile -->
     <string name="quick_settings_smart_pixels">Điểm ảnh thông minh</string>
-    <string name="quick_settings_smart_pixels_on_power_save">Tự động bật Điểm ảnh thông minh</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Tự động bật điểm ảnh thông minh</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Lỗi khi tải dữ liệu thời tiết</string>
     <string name="omnijaws_service_unknown">Không có dữ liệu thời tiết</string>
     <string name="omnijaws_label_default">Thời tiết</string>
     <!-- Refresh Rate Tile -->
-    <string name="refresh_rate_tile_label">Tần số quét</string>
+    <string name="refresh_rate_tile_label">Tốc độ làm mới</string>
     <string name="auto_mode_label">Tự động</string>
     <!-- Screenshot Tile -->
     <string name="screenshot_long_press">Nhấn giữ - vùng đã chọn</string>
