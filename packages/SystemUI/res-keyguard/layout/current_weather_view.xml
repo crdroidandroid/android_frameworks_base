@@ -54,6 +54,14 @@
             android:singleLine="true"
             android:paddingStart="8dp"
             style="@style/TextAppearance.Keyguard.Secondary" />
+
+        <TextView
+            android:id="@+id/weather_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/wallpaperTextColor"
+            android:singleLine="true"
+            style="@style/TextAppearance.Keyguard.Secondary" />
     </LinearLayout>
 
 </com.android.systemui.crdroid.CurrentWeatherView>
