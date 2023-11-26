@@ -33,8 +33,8 @@
     <string name="screenrecord_lowquality_summary">Để có kích cỡ tập tin nhỏ hơn</string>
     <string name="screenrecord_longer_timeout_switch_label">Giới hạn kích thước tệp lớn hơn</string>
     <string name="screenrecord_longer_timeout_switch_summary">Giới hạn kích cỡ quay hình tối đa 15 GB</string>
-    <string name="screenrecord_skip_time_label">Bỏ qua bộ đếm</string>
-    <string name="screenrecord_skip_time_summary">Loại bỏ 3 giây chờ</string>
+    <string name="screenrecord_skip_time_label">Không đếm ngược</string>
+    <string name="screenrecord_skip_time_summary">Bỏ qua 3 giây đếm ngược</string>
     <string name="screenrecord_hevc_switch_label">Bật HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Sử dụng định dạng mã hoá video HEVC hiệu quả</string>
     <!-- Bluetooth dialog -->
@@ -49,7 +49,7 @@
     <string name="quick_settings_sound_label">Âm thanh</string>
     <string name="quick_settings_sound_ring">Chuông</string>
     <string name="quick_settings_sound_vibrate">Rung</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">Tắt âm thanh</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -105,7 +105,7 @@
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">La bàn</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="độ">%1$.0f</xliff:g>\u00b0 <xliff:g id="hướng">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Đang khởi tạo\u2026</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Chuyển SIM dữ liệu</string>
@@ -127,8 +127,8 @@
     <string name="screenshot_long_press">Nhấn giữ - vùng đã chọn</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Tìm kiếm âm thanh</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Trước tiên hãy cài đặt ứng dụng tìm kiếm âm thanh</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Ngôn ngữ</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">Vui lòng thiết lập nhiều ngôn ngữ để kích hoạt chức năng chuyển đổi</string>
 </resources>
