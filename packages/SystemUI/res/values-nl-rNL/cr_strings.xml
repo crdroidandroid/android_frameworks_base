@@ -128,8 +128,8 @@
     <string name="screenshot_long_press">Lang indrukken - geselecteerde regio</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Geluid zoeken</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Installeer eerst een geluid zoekapp</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Taal</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">Eerst meerdere talen configureren</string>
 </resources>
