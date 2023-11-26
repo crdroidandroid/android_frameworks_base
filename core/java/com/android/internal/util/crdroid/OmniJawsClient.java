@@ -77,7 +77,7 @@ public class OmniJawsClient {
             "pin_wheel"
     };
 
-    final String[] SETTINGS_PROJECTION = new String[] {
+    public static final String[] SETTINGS_PROJECTION = new String[] {
             "enabled",
             "units",
             "provider",
@@ -370,27 +370,6 @@ public class OmniJawsClient {
         return false;
     }
 
-    public boolean isOmniJawsSetupDone() {
-        if (!isOmniJawsServiceInstalled()) {
-            return false;
-        }
-        try {
-            final Cursor c = mContext.getContentResolver().query(SETTINGS_URI, SETTINGS_PROJECTION,
-                    null, null, null);
-            if (c != null) {
-                int count = c.getCount();
-                if (count == 1) {
-                    c.moveToPosition(0);
-                    boolean setupDone = c.getInt(3) == 1;
-                    return setupDone;
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "isOmniJawsSetupDone", e);
-        }
-        return false;
-    }
-
     private String getTemperatureUnit() {
         return "\u00b0" + (mMetric ? "C" : "F");
     }
@@ -434,7 +413,7 @@ public class OmniJawsClient {
             filter.addAction(WEATHER_UPDATE);
             filter.addAction(WEATHER_ERROR);
             if (DEBUG) Log.d(TAG, "registerReceiver");
-            mContext.registerReceiver(mReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            mContext.registerReceiver(mReceiver, filter, Context.RECEIVER_EXPORTED);
         }
         mObserver.add(observer);
     }
@@ -449,5 +428,9 @@ public class OmniJawsClient {
             }
             mReceiver = null;
         }
+    }
+
+    public boolean isDefaultIconPackage() {
+        return mIconPrefix.equals(ICON_PREFIX_DEFAULT);
     }
 }
