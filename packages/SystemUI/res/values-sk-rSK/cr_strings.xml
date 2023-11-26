@@ -123,6 +123,13 @@
     <string name="omnijaws_service_error">Chyba pri načítavaní údajov o počasí</string>
     <string name="omnijaws_service_unknown">Žiadne údaje o počasí</string>
     <string name="omnijaws_label_default">Počasie</string>
+    <string name="weather_condition_clouds">Cloudy</string>
+    <string name="weather_condition_rain">Rainy</string>
+    <string name="weather_condition_clear">Sunny</string>
+    <string name="weather_condition_storm">Stormy</string>
+    <string name="weather_condition_snow">Snowy</string>
+    <string name="weather_condition_wind">Windy</string>
+    <string name="weather_condition_mist">Misty</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Obnovovacia frekvencia</string>
     <string name="auto_mode_label">Automaticky</string>
