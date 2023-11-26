@@ -123,6 +123,13 @@
     <string name="omnijaws_service_error">Памылка загрузкі дадзеных аб надвор\'і</string>
     <string name="omnijaws_service_unknown">Няма дадзеных аб надвор\'і</string>
     <string name="omnijaws_label_default">Надвор\'е</string>
+    <string name="weather_condition_clouds">Cloudy</string>
+    <string name="weather_condition_rain">Rainy</string>
+    <string name="weather_condition_clear">Sunny</string>
+    <string name="weather_condition_storm">Stormy</string>
+    <string name="weather_condition_snow">Snowy</string>
+    <string name="weather_condition_wind">Windy</string>
+    <string name="weather_condition_mist">Misty</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Частата экрана</string>
     <string name="auto_mode_label">Аўтаматычна</string>
