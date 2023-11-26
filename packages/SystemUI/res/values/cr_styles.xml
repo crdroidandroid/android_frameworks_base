@@ -25,12 +25,6 @@
         <item name="android:alpha">@null</item>
     </style>
 
-    <!-- reTicker -->
-    <style name="TextAppearance.Notifications.reTicker" parent="@*android:style/TextAppearance.StatusBar.Icon">
-        <item name="android:textSize">14dp</item>
-        <item name="android:fontFamily">@*android:string/config_bodyFontFamily</item>
-    </style>
-
     <!-- Tri-state UI -->
     <style name="qs_theme" parent="Theme.SystemUI.QuickSettings">
         <item name="android:windowIsFloating">true</item>

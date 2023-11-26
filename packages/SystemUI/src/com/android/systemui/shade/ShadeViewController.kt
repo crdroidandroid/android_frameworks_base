@@ -161,9 +161,6 @@ interface ShadeViewController {
     /** Ensures that the touchable region is updated. */
     fun updateTouchableRegion()
 
-    /** Sets reticker view on notification */
-    fun reTickerView(visibility: Boolean)
-
     // ******* Begin Keyguard Section *********
     /** Animate to expanded shade after a delay in ms. Used for lockscreen to shade transition. */
     fun transitionToExpandedShade(delay: Long)

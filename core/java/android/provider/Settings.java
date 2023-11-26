@@ -6242,18 +6242,6 @@ public final class Settings {
         public static final String ON_THE_GO_CAMERA = "on_the_go_camera";
 
         /**
-         * reTicker Status
-         * @hide
-         */
-        public static final String RETICKER_STATUS = "reticker_status";
-
-        /**
-         * reTicker Colored
-         * @hide
-         */
-        public static final String RETICKER_COLORED = "reticker_colored";
-
-        /**
          * Whether to show or hide alert slider notifications on supported devices
          * @hide
          */
