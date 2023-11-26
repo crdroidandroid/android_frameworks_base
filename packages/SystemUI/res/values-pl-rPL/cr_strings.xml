@@ -123,13 +123,13 @@
     <string name="omnijaws_service_error">Błąd ładowania danych o pogodzie</string>
     <string name="omnijaws_service_unknown">Brak danych o pogodzie</string>
     <string name="omnijaws_label_default">Pogoda</string>
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">Pochmurno</string>
+    <string name="weather_condition_rain">Deszczowo</string>
+    <string name="weather_condition_clear">Słonecznie</string>
+    <string name="weather_condition_storm">Burzowo</string>
+    <string name="weather_condition_snow">Śnieżnie</string>
+    <string name="weather_condition_wind">Wietrznie</string>
+    <string name="weather_condition_mist">Mgliście</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Częstotliwość odświeżania</string>
     <string name="auto_mode_label">Automatycznie</string>
