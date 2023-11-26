@@ -121,13 +121,13 @@
     <string name="omnijaws_service_error">Fehler beim Laden der Wetterdaten</string>
     <string name="omnijaws_service_unknown">Keine Wetterdaten</string>
     <string name="omnijaws_label_default">Wetter</string>
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">Bewölkt</string>
+    <string name="weather_condition_rain">Regen</string>
+    <string name="weather_condition_clear">Sonnig</string>
+    <string name="weather_condition_storm">Stürmisch</string>
+    <string name="weather_condition_snow">Schnee</string>
+    <string name="weather_condition_wind">Wind</string>
+    <string name="weather_condition_mist">Nebel</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Aktualisierungsrate</string>
     <string name="auto_mode_label">Automatisch</string>
