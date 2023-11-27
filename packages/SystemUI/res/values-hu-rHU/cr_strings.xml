@@ -50,7 +50,7 @@
     <string name="quick_settings_sound_label">Hang</string>
     <string name="quick_settings_sound_ring">Csengés</string>
     <string name="quick_settings_sound_vibrate">Rezgés</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">Némítás</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -135,8 +135,8 @@
     <string name="screenshot_long_press">Hosszannyomás - kijelölt terület</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Hangalapú keresés</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Előbb telepítsen egy hangalapú-kereső alkalmazást</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Nyelv</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">A kapcsolónak csak több nyelv esetén van értelme, állítson be többet</string>
 </resources>
