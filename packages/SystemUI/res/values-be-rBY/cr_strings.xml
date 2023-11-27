@@ -141,4 +141,8 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Мова</string>
     <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">выкарыстоўваецца сёння</string>
+    <string name="usage_data_default_suffix">Дадзеныя</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
 </resources>
