@@ -120,13 +120,13 @@
     <string name="omnijaws_service_error">Kesalahan ketika memuat data cuaca</string>
     <string name="omnijaws_service_unknown">Tidak ada data cuaca</string>
     <string name="omnijaws_label_default">Cuaca</string>
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">Berawan</string>
+    <string name="weather_condition_rain">Hujan</string>
+    <string name="weather_condition_clear">Cerah</string>
+    <string name="weather_condition_storm">Badai</string>
+    <string name="weather_condition_snow">Bersalju</string>
+    <string name="weather_condition_wind">Berangin</string>
+    <string name="weather_condition_mist">Berkabut</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Kecepatan refresh</string>
     <string name="auto_mode_label">Otomatis</string>
