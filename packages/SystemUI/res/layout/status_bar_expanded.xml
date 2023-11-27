@@ -36,6 +36,7 @@
         android:layout_marginTop="@dimen/status_bar_header_height_keyguard"
         android:layout_gravity="top|center"
         android:theme="@style/Theme.Island.SystemUI"
+        style="?attr/floatingActionButtonSmallStyle"
         systemui:shapeAppearanceOverlay="@style/islandBackgroundOverlay"/>
 
     <com.android.systemui.common.ui.view.LongPressHandlingView
