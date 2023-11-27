@@ -139,4 +139,8 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Γλώσσα</string>
     <string name="quick_settings_locale_more_locales_toast">Διαμορφώστε πρώτα πολλαπλές γλώσσες</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">χρησιμοποιήθηκαν σήμερα</string>
+    <string name="usage_data_default_suffix">Δεδομένα</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
 </resources>
