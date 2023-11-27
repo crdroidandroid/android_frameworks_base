@@ -139,4 +139,8 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Taal</string>
     <string name="quick_settings_locale_more_locales_toast">Eerst meerdere talen configureren</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">vandaag gebruikt</string>
+    <string name="usage_data_default_suffix">Gegevens</string>
+    <string name="usage_wifi_default_suffix">Wifi</string>
 </resources>
