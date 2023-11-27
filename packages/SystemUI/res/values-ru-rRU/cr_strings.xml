@@ -151,5 +151,5 @@
     <string name="bluetooth_is_off">Bluetooth отключен</string>
     <string name="tap_a_device_to_connect">Коснитесь устройства для подключения</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">Интерфейс системы</string>
+    <string name="global_action_restart_systemui">Интерфейс</string>
 </resources>
