@@ -138,4 +138,8 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Ngôn ngữ</string>
     <string name="quick_settings_locale_more_locales_toast">Vui lòng thiết lập nhiều ngôn ngữ để kích hoạt chức năng chuyển đổi</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">đã dùng hôm nay</string>
+    <string name="usage_data_default_suffix">Dữ liệu</string>
+    <string name="usage_wifi_default_suffix">Wifi</string>
 </resources>
