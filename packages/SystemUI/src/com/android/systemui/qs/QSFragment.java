@@ -91,8 +91,8 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
     private static final String EXTRA_LISTENING = "listening";
     private static final String EXTRA_VISIBLE = "visible";
 
-    private static final String QS_TRANSPARENCY =
-            "system:" + Settings.System.QS_TRANSPARENCY;
+    private static final String QS_FOOTER_TRANSPARENCY =
+            "system:" + Settings.System.QS_FOOTER_TRANSPARENCY;
 
     private final Rect mQsBounds = new Rect();
     private final SysuiStatusBarStateController mStatusBarStateController;
@@ -297,7 +297,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
                     mQSAnimator.requestAnimatorUpdate();
                 });
 
-        mTunerService.addTunable(this, QS_TRANSPARENCY);
+        mTunerService.addTunable(this, QS_FOOTER_TRANSPARENCY);
     }
 
     private void bindFooterActionsView(View root) {
@@ -435,7 +435,7 @@ public class QSFragment extends LifecycleFragment implements QS, CommandQueue.Ca
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
-            case QS_TRANSPARENCY:
+            case QS_FOOTER_TRANSPARENCY:
                 mCustomAlpha =
                         TunerService.parseInteger(newValue, 100) / 100f;
                 break;
