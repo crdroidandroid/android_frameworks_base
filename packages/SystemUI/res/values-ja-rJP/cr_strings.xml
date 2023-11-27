@@ -138,4 +138,8 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">言語</string>
     <string name="quick_settings_locale_more_locales_toast">まず複数の言語を設定してください</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">今日の使用量</string>
+    <string name="usage_data_default_suffix">データ</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
 </resources>
