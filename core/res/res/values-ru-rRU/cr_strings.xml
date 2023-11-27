@@ -34,7 +34,7 @@
     <string name="gaming_mode_disabled_toast">Игровой режим отключен</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Нажмите и удерживайте кнопку питания, чтобы разблокировать</string>
-    <string name="pocket_view_title">Режим \"В кармане\" включен</string>
+    <string name="pocket_view_title">Режим «В кармане» включен</string>
     <string name="pocket_view_title_cancel">Для использования Вашего телефона:</string>
     <string name="pocket_view_top_tag_cancel">Проверьте, чтобы синяя зона Вашего телефона была очищена от каких-либо предметов или протрите её.</string>
     <string name="pocket_view_top_tag_cancel2">Долгое нажатие на кнопку включения для принудительного выхода из режима \"В кармане\"</string>
