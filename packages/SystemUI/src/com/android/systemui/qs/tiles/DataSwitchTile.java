@@ -245,19 +245,26 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
         TelephonyManager telephonyManager;
         boolean dataEnabled = false;
         boolean foundActive = false;
+        int subId;
         List<SubscriptionInfo> subInfoList =
                 mSubscriptionManager.getActiveSubscriptionInfoList(true);
         if (subInfoList != null) {
             for (SubscriptionInfo subInfo : subInfoList) {
+                subId = subInfo.getSubscriptionId();
                 telephonyManager =
-                    mTelephonyManager.createForSubscriptionId(subInfo.getSubscriptionId());
+                    mTelephonyManager.createForSubscriptionId(subId);
                 dataEnabled = telephonyManager.getDataEnabled();
-                if (!subInfo.isOpportunistic() || !dataEnabled) {
-                    telephonyManager.setDataEnabled(!dataEnabled && !foundActive);
+                if (subInfo.isOpportunistic() && dataEnabled) {
+                    // We never disable mobile data for opportunistic subscriptions.
+                    continue;
+                } else {
+                    dataEnabled = !dataEnabled && !foundActive;
+                    telephonyManager.setDataEnabled(dataEnabled);
+                    if (dataEnabled) mSubscriptionManager.setDefaultDataSubId(subId);
                     // Indicate we found sim with active data, disable data on remaining sim.
-                    if (!foundActive) foundActive = !dataEnabled;
+                    if (!foundActive) foundActive = dataEnabled;
                 }
-                Log.d(TAG, "Changed subID " + subInfo.getSubscriptionId() + " to "
+                Log.d(TAG, "Changed subID " + subId + " to "
                     + !dataEnabled);
             }
         }
