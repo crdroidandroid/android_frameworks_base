@@ -28,7 +28,7 @@
     <string name="screenrecord_delete_description">Запись экрана удалена</string>
     <!-- Screen record -->
     <string name="screenrecord_stopdot_label">Показывать кнопку остановки</string>
-    <string name="screenrecord_stopdot_summary">Длительное нажатие для перемещения</string>
+    <string name="screenrecord_stopdot_summary">Удерживайте для перемещения</string>
     <string name="screenrecord_lowquality_label">Низкое качество</string>
     <string name="screenrecord_lowquality_summary">Для меньшего размера файла</string>
     <string name="screenrecord_longer_timeout_switch_label">Большой размер файла</string>
@@ -74,17 +74,17 @@
     <string name="onthego_notif_options">Настройки</string>
     <string name="onthego_notif_error">Не удается включить режим «На ходу»</string>
     <string name="onthego_notif_restart">Перезапустить режим «На ходу»</string>
-    <string name="onthego_notif_camera_changed">Режим камеры изменен</string>
+    <string name="onthego_notif_camera_changed">Режим камеры изменён</string>
     <string name="onthego_transparency">Прозрачность</string>
     <string name="onthego_front_camera">Использовать переднюю камеру</string>
     <string name="onthego_service_toggle">Автоматически перезапускать службу</string>
     <string name="onthego_channel_name">Основной</string>
-    <string name="global_action_onthego">Режим \"На ходу\"</string>
+    <string name="global_action_onthego">Режим «На ходу»</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">Интерфейс системы</string>
+    <string name="global_action_restart_systemui">Интерфейс</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Приоритет</string>
-    <string name="volume_ringer_alarms_only">Будильник</string>
+    <string name="volume_ringer_priority_only">Приоритетные</string>
+    <string name="volume_ringer_alarms_only">Будильники</string>
     <string name="volume_ringer_dnd">Не беспокоить</string>
     <string name="tristate_flashlight">Фонарик</string>
     <string name="tristate_flashlight_on">Фонарик включен</string>
@@ -94,12 +94,12 @@
     <string name="tristate_brightness_dark">Минимальная яркость</string>
     <string name="tristate_brightness_auto">Автоматическая яркость</string>
     <string name="tristate_rotation_auto">Автоповорот</string>
-    <string name="tristate_rotation_0">Портрет</string>
-    <string name="tristate_rotation_90">Ландшафт (90°)</string>
-    <string name="tristate_rotation_270">Ландшафт (270°)</string>
+    <string name="tristate_rotation_0">Вертикально</string>
+    <string name="tristate_rotation_90">Горизонтально (90°)</string>
+    <string name="tristate_rotation_270">Горизонтально (270°)</string>
     <!-- Kill button in notification guts -->
     <string name="force_stop_dlg_title">Остановить принудительно?</string>
-    <string name="force_stop_dlg_text">Принудительное закрытие приложения может негативно отразиться на его функциональности.</string>
+    <string name="force_stop_dlg_text">Принудительная остановка приложения может отразиться на его функциональности.</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Информация о CPU</string>
     <!-- FPS Info tile -->
@@ -111,13 +111,13 @@
     <string name="quick_settings_compass_value"><xliff:g id="градусы">%1$.0f</xliff:g>\u00b0 <xliff:g id="направление">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Инициализация\u2026</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Поменять SIM для передачи данных</string>
+    <string name="qs_data_switch_label">Переключить SIM</string>
     <!-- Volume panel QS tile -->
     <string name="quick_settings_volume_panel_label">Панель громкости</string>
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Объектив</string>
     <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Умные пиксели</string>
+    <string name="quick_settings_smart_pixels">«Умные пиксели»</string>
     <string name="quick_settings_smart_pixels_on_power_save">Автовключение «Умных пикселей»</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Ошибка при загрузке данных о погоде</string>
