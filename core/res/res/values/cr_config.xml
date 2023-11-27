@@ -147,4 +147,7 @@
 
     <!-- Whether to show settings for hiding notch fill -->
     <bool name="config_showHideNotchSettings">false</bool>
+
+    <!-- Alter build parameters for avoiding hardware attestation enforcement -->
+    <string-array name="config_spoofBuildGms" translatable="false"></string-array>
 </resources>

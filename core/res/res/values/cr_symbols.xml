@@ -119,4 +119,7 @@
 
   <!-- Whether to show settings for hiding notch fill -->
   <java-symbol type="bool" name="config_showHideNotchSettings" />
+
+  <!-- Alter build parameters for avoiding hardware attestation enforcement -->
+  <java-symbol type="array" name="config_spoofBuildGms" />
 </resources>
