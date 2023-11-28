@@ -87,19 +87,19 @@
     <string name="volume_ringer_alarms_only">התרעות</string>
     <string name="volume_ringer_dnd">נא לא להפריע</string>
     <string name="tristate_flashlight">פנס</string>
-    <string name="tristate_flashlight_on">Torch on</string>
-    <string name="tristate_flashlight_off">Torch off</string>
-    <string name="tristate_flashlight_blink">Torch blink</string>
-    <string name="tristate_brightness_bright">Max-brightness</string>
-    <string name="tristate_brightness_dark">Min-brightness</string>
-    <string name="tristate_brightness_auto">Auto-brightness</string>
-    <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
-    <string name="tristate_rotation_90">Landscape (90°)</string>
-    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <string name="tristate_flashlight_on">הפנס מופעל</string>
+    <string name="tristate_flashlight_off">הפנס כבוי</string>
+    <string name="tristate_flashlight_blink">פנס מהבהב</string>
+    <string name="tristate_brightness_bright">בהירות מירבית</string>
+    <string name="tristate_brightness_dark">בהירות מזערית</string>
+    <string name="tristate_brightness_auto">בהירות אוטומטית</string>
+    <string name="tristate_rotation_auto">סיבוב אוטומטי</string>
+    <string name="tristate_rotation_0">דיוקן (אנכי)</string>
+    <string name="tristate_rotation_90">אופקי (90°)</string>
+    <string name="tristate_rotation_270">אופקי (270°)</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="force_stop_dlg_title">לאלץ עצירה?</string>
+    <string name="force_stop_dlg_text">אם תיכפה עצירת יישום, ייתכן שהוא לא יפעל כהלכה.</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">פרטי המעבד</string>
     <!-- FPS Info tile -->
@@ -108,7 +108,7 @@
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">מצפן</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="מעלות">%1$.0f</xliff:g>\u00b0 <xliff:g id="כיוון">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">מאתחל\u2026</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">החלפת כרטיס נתונים</string>
@@ -137,10 +137,10 @@
     <string name="screenshot_long_press">לחיצה ארוכה - תיחום נבחר</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">חיפוש קולי</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">ראשית יש להתקין יישום לחיפוש קולי</string>
     <!-- Language toggle tile -->
-    <string name="quick_settings_locale_label">Language</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_label">שפה</string>
+    <string name="quick_settings_locale_more_locales_toast">הגדרת שפות מרובות תחילה</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">נוצלו היום</string>
     <string name="usage_data_default_suffix">נתונים</string>
