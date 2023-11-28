@@ -52,7 +52,7 @@
     <string name="quick_settings_sound_label">Zvuk</string>
     <string name="quick_settings_sound_ring">Zvonenie</string>
     <string name="quick_settings_sound_vibrate">Vibrácie</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">Stlmiť</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -108,7 +108,7 @@
     <string name="fps_text_placeholder">Priečinok: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Kompas</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0<xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Inicializácia\u2026</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Prepnúť SIM pre dáta</string>
@@ -123,13 +123,13 @@
     <string name="omnijaws_service_error">Chyba pri načítavaní údajov o počasí</string>
     <string name="omnijaws_service_unknown">Žiadne údaje o počasí</string>
     <string name="omnijaws_label_default">Počasie</string>
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">Zamračené</string>
+    <string name="weather_condition_rain">Daždivo</string>
+    <string name="weather_condition_clear">Slnečno</string>
+    <string name="weather_condition_storm">Búrka</string>
+    <string name="weather_condition_snow">Sneženie</string>
+    <string name="weather_condition_wind">Veterno</string>
+    <string name="weather_condition_mist">Hmlisto</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Obnovovacia frekvencia</string>
     <string name="auto_mode_label">Automaticky</string>
@@ -137,10 +137,10 @@
     <string name="screenshot_long_press">Dlhé stlačenie - vybraný región</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Zvukové vyhľadávanie</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Najskôr nainštalujte aplikáciu na vyhľadávanie zvuku</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Jazyk</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">Najskôr nastavte viac jazykov</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">Využité dnes</string>
     <string name="usage_data_default_suffix">Dáta</string>
