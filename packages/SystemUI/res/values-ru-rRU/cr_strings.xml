@@ -142,7 +142,7 @@
     <string name="quick_settings_locale_label">Язык</string>
     <string name="quick_settings_locale_more_locales_toast">Сначала настройте несколько языков</string>
     <!-- Data usage info in QS footer -->
-    <string name="usage_data">использовано сегодня</string>
-    <string name="usage_data_default_suffix">Мобильные</string>
+    <string name="usage_data">за сегодня</string>
+    <string name="usage_data_default_suffix">Данные</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
 </resources>
