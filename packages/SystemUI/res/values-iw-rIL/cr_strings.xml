@@ -123,13 +123,13 @@
     <string name="omnijaws_service_error">שגיאה בטעינת נתוני מזג האויר</string>
     <string name="omnijaws_service_unknown">אין נתוני מזג אוויר</string>
     <string name="omnijaws_label_default">מזג אוויר</string>
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">מעונן</string>
+    <string name="weather_condition_rain">גשום</string>
+    <string name="weather_condition_clear">שמשי</string>
+    <string name="weather_condition_storm">סוער</string>
+    <string name="weather_condition_snow">מושלג</string>
+    <string name="weather_condition_wind">משבי רוח</string>
+    <string name="weather_condition_mist">מעורפל</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">קצב רענון</string>
     <string name="auto_mode_label">אוטומטי</string>
