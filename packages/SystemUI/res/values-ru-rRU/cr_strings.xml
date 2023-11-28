@@ -68,9 +68,9 @@
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo зарядка (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до полной зарядки)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo зарядка</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">Режим «На ходу» активирован</string>
+    <string name="onthego_notif_ticker">Режим «На ходу» включен</string>
     <string name="onthego_notif_title">Режим «На ходу» активен</string>
-    <string name="onthego_notif_stop">Остановить</string>
+    <string name="onthego_notif_stop">Стоп</string>
     <string name="onthego_notif_options">Настройки</string>
     <string name="onthego_notif_error">Не удается включить режим «На ходу»</string>
     <string name="onthego_notif_restart">Перезапустить режим «На ходу»</string>
