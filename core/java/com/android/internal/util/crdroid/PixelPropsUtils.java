@@ -381,13 +381,13 @@ public class PixelPropsUtils {
 
     private static void spoofBuildGms() {
         // Alter build parameters to avoid hardware attestation enforcement
-        setPropValue("DEVICE", "sailfish");
-        setPropValue("ID", "OPM2.171019.029");
-        setPropValue("FINGERPRINT", "google/sailfish/sailfish:8.1.0/OPM2.171019.029/4657601:user/release-keys");
-        setPropValue("MODEL", "Pixel");
-        setPropValue("PRODUCT", "sailfish");
-        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.O_MR1);
-        setVersionFieldString("SECURITY_PATCH", "2018-04-05");
+        setPropValue("BRAND", "NVIDIA");
+        setPropValue("MANUFACTURER", "NVIDIA");
+        setPropValue("DEVICE", "foster");
+        setPropValue("FINGERPRINT", "NVIDIA/foster_e/foster:7.0/NRD90M/2427173_1038.2788:user/release-keys");
+        setPropValue("MODEL", "SHIELD Android TV");
+        setPropValue("PRODUCT", "foster_e");
+        setVersionFieldString("SECURITY_PATCH", "2018-01-05");
     }
 
     private static boolean isCallerSafetyNet() {
