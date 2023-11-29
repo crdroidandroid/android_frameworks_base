@@ -17,7 +17,6 @@
 package com.android.systemui.qs;
 
 import static android.provider.Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION;
-import static android.provider.Settings.Secure.QS_TILES;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -148,8 +147,7 @@ public class QSFooterViewController extends ViewController<QSFooterView>
         mWifiTracker.fetchInitialState();
         mWifiTracker.setListening(true);
         mNetworkController.addCallback(mSignalCallback);
-        mTunerService.addTunable(this, QS_TILES,
-                QS_SHOW_DATA_USAGE);
+        mTunerService.addTunable(this, QS_SHOW_DATA_USAGE);
         mGlobalSettings.registerContentObserver(MULTI_SIM_DATA_CALL_SUBSCRIPTION,
                 mDataSwitchObserver);
 
@@ -168,17 +166,7 @@ public class QSFooterViewController extends ViewController<QSFooterView>
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (key.equals(QS_TILES)) {
-            if (TextUtils.isEmpty(newValue)) {
-                newValue = mContext.getString(R.string.quick_settings_tiles_default);
-            }
-            int rows = mContext.getResources().getInteger(R.integer.quick_settings_max_rows);
-            int cols = mContext.getResources().getInteger(R.integer.quick_settings_num_columns);
-            // Don't show the suffix if we have internet tile in the first page.
-            mView.setShowSuffix(!Arrays.stream(newValue.split(","))
-                                       .limit(rows * cols)
-                                       .anyMatch(INTERNET_TILE::equals));
-         } else if (key.equals(QS_SHOW_DATA_USAGE)) {
+         if (key.equals(QS_SHOW_DATA_USAGE)) {
             mView.setShowDataUsage(TunerService.parseIntegerSwitch(newValue, false));
          }
     }
