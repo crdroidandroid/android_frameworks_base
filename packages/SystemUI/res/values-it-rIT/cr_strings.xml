@@ -50,7 +50,7 @@
     <string name="quick_settings_sound_label">Suono</string>
     <string name="quick_settings_sound_ring">Suoneria</string>
     <string name="quick_settings_sound_vibrate">Vibrazione</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">Silenzioso</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -106,7 +106,7 @@
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Bussola</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="gradi">%1$.0f</xliff:g>\u00b0 <xliff:g id="direzione">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Inizializzazione\u2026</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Switcha scheda dati</string>
@@ -135,10 +135,10 @@
     <string name="screenshot_long_press">Tieni premuto per selezionare la porzione di schermo</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Ricerca sonora</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Installa prima un\'app di ricerca audio</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Lingua</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">Configura prima più lingue</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">utilizzo di oggi</string>
     <string name="usage_data_default_suffix">Dati</string>
