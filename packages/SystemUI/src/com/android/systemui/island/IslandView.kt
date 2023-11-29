@@ -262,11 +262,17 @@ class IslandView : ExtendedFloatingActionButton {
         setOnTouchListener(sbn.notification.contentIntent, sbn.packageName)
     }
 
+    fun getApplicationInfo(sbn: StatusBarNotification): ApplicationInfo {
+        return context.packageManager.getApplicationInfoAsUser(
+                sbn.packageName,
+                PackageManager.ApplicationInfoFlags.of(PackageManager.GET_META_DATA.toLong()),
+                sbn.getUser().getIdentifier())
+    }
+
     fun getAppLabel(sbn: StatusBarNotification, context: Context): String {
         val packageManager = context.packageManager
         return try {
-            val appInfo = packageManager.getApplicationInfo(sbn.packageName, 0)
-            val appLabel = packageManager.getApplicationLabel(appInfo).toString()
+            val appLabel = packageManager.getApplicationLabel(getApplicationInfo(sbn)).toString()
             appLabel.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         } catch (e: PackageManager.NameNotFoundException) {
             sbn.packageName
@@ -286,17 +292,11 @@ class IslandView : ExtendedFloatingActionButton {
 
     private fun getNotificationIcon(sbn: StatusBarNotification, notification: Notification): Drawable? {
         return try {
-            val pkgname = sbn?.packageName
-            val uid = sbn.getUser().getIdentifier()
-            val appInfo: ApplicationInfo = context.packageManager.getApplicationInfoAsUser(
-                    pkgname,
-                    PackageManager.ApplicationInfoFlags.of(PackageManager.GET_META_DATA.toLong()),
-                    uid)
-            if ("com.android.systemui" == pkgname) {
+            if ("com.android.systemui" == sbn?.packageName) {
                 context.getDrawable(notification.icon)
             } else {
                 val iconFactory: IconDrawableFactory = IconDrawableFactory.newInstance(context)
-                iconFactory.getBadgedIcon(appInfo, uid)
+                iconFactory.getBadgedIcon(getApplicationInfo(sbn), sbn.getUser().getIdentifier())
             }
         } catch (e: PackageManager.NameNotFoundException) {
             null
