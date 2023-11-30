@@ -130,6 +130,7 @@ import com.android.server.connectivity.PacProxyService;
 import com.android.server.contentcapture.ContentCaptureManagerInternal;
 import com.android.server.coverage.CoverageService;
 import com.android.server.cpu.CpuMonitorService;
+import com.android.server.crdroid.AttestationService;
 import com.android.server.criticalevents.CriticalEventLog;
 import com.android.server.devicepolicy.DevicePolicyManagerService;
 import com.android.server.devicestate.DeviceStateManagerService;
@@ -2671,6 +2672,11 @@ public final class SystemServer implements Dumpable {
 
             t.traceBegin("StartBackgroundInstallControlService");
             mSystemServiceManager.startService(BackgroundInstallControlService.class);
+            t.traceEnd();
+
+            // AttestationService
+            t.traceBegin("AttestationService");
+            mSystemServiceManager.startService(AttestationService.class);
             t.traceEnd();
         }
 
