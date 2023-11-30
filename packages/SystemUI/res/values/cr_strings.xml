@@ -191,4 +191,7 @@
 
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Roaming indicator</string>
+    
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">Recognizing face...</string>
 </resources>
