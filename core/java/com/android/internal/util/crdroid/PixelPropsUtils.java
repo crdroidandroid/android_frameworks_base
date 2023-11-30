@@ -21,18 +21,28 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.os.Environment;
 import android.os.SystemProperties;
+import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.Log;
 
 import com.android.internal.R;
 import com.android.internal.util.crdroid.KeyProviderManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +53,7 @@ public final class PixelPropsUtils {
 
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
+    private static final String DATA_FILE = "gms_certified_props.json";
 
     private static final String SPOOF_PIXEL_PI = "persist.sys.pixelprops.pi";
     private static final String SPOOF_PIXEL_GMS_CERT_CHAIN = "persist.sys.pixelprops.gmscertchain";
@@ -228,6 +239,7 @@ public final class PixelPropsUtils {
     }
 
     private static volatile List<String> sCertifiedProps;
+    private static volatile long sCertPropsMtime = -1;
 
     public static void setProps(Context context) {
         final String packageName = context.getPackageName();
@@ -351,9 +363,39 @@ public final class PixelPropsUtils {
         if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
             return;
 
-        List<String> fresh = Arrays.asList(context.getResources()
-                 .getStringArray(R.array.config_certifiedBuildProperties));
+        File dataFile = new File(Environment.getDataSystemDirectory(), DATA_FILE);
+        long mtime = dataFile.exists() ? dataFile.lastModified() : -1;
+
+        if (mtime == sCertPropsMtime && sCertifiedProps != null && !sCertifiedProps.isEmpty()) {
+            applyCertifiedProps();
+            return;
+        }
+
+        String savedProps = readFromFile(dataFile);
+        List<String> fresh = new ArrayList<>();
+        if (TextUtils.isEmpty(savedProps)) {
+            if (DEBUG) Log.d(TAG, "Parsing props locally - data file unavailable");
+            fresh = Arrays.asList(context.getResources()
+                     .getStringArray(R.array.config_certifiedBuildProperties));
+        } else {
+            if (DEBUG) Log.d(TAG, "Parsing props fetched by attestation service");
+            try {
+                JSONObject parsedProps = new JSONObject(savedProps);
+                Iterator<String> keys = parsedProps.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    String value = parsedProps.getString(key);
+                    fresh.add(key + ":" + value);
+                }
+            } catch (JSONException e) {
+                Log.e(TAG, "Error parsing JSON data", e);
+                Log.d(TAG, "Parsing props locally as fallback");
+                fresh = Arrays.asList(context.getResources()
+                         .getStringArray(R.array.config_certifiedBuildProperties));
+            }
+        }
         sCertifiedProps = new ArrayList<>(fresh);
+        sCertPropsMtime = mtime;
         if (sCertifiedProps != null && !sCertifiedProps.isEmpty()) {
             applyCertifiedProps();
         }
@@ -364,6 +406,23 @@ public final class PixelPropsUtils {
             String[] kv = entry.split(":", 2);
             if (kv.length == 2) setPropValue(kv[0], kv[1]);
         }
+    }
+
+    private static String readFromFile(File file) {
+        StringBuilder content = new StringBuilder();
+
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    content.append(line);
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Error reading from file", e);
+            }
+        }
+        return content.toString();
     }
 
     private static boolean isCallerSafetyNet() {
