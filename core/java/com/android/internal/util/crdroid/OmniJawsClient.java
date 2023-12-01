@@ -55,6 +55,7 @@ public class OmniJawsClient {
 
     private static final String ICON_PACKAGE_DEFAULT = "org.omnirom.omnijaws";
     private static final String ICON_PREFIX_DEFAULT = "google";
+    private static final String ICON_PREFIX_OUTLINE = "outline";
     private static final String EXTRA_ERROR = "error";
     public static final int EXTRA_ERROR_NETWORK = 0;
     public static final int EXTRA_ERROR_LOCATION = 1;
@@ -430,7 +431,7 @@ public class OmniJawsClient {
         }
     }
 
-    public boolean isDefaultIconPackage() {
-        return mIconPrefix.equals(ICON_PREFIX_DEFAULT);
+    public boolean isOutlineIconPackage() {
+        return mIconPrefix.equals(ICON_PREFIX_OUTLINE);
     }
 }
