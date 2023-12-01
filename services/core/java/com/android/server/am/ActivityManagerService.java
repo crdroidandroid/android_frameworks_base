@@ -12350,7 +12350,7 @@ public class ActivityManagerService extends IActivityManager.Stub
                         continue;
                     }
                     endTime = SystemClock.currentThreadTimeMillis();
-                    hasSwapPss = mi.hasSwappedOutPss;
+                    hasSwapPss = hasSwapPss || mi.hasSwappedOutPss;
                     memtrackGraphics = mi.getOtherPrivate(Debug.MemoryInfo.OTHER_GRAPHICS);
                     memtrackGl = mi.getOtherPrivate(Debug.MemoryInfo.OTHER_GL);
                 } else {
@@ -13026,7 +13026,7 @@ public class ActivityManagerService extends IActivityManager.Stub
                     continue;
                 }
                 endTime = SystemClock.currentThreadTimeMillis();
-                hasSwapPss = mi.hasSwappedOutPss;
+                hasSwapPss = hasSwapPss || mi.hasSwappedOutPss;
             } else {
                 reportType = ProcessStats.ADD_PSS_EXTERNAL;
                 startTime = SystemClock.currentThreadTimeMillis();
