@@ -144,5 +144,5 @@
     <string name="usage_data_default_suffix">Données</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">Indicateur d\'itinérance</string>
 </resources>
