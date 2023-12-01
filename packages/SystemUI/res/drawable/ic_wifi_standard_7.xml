@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2023 The LibreMobileOS Foundation
+
+     SPDX-License-Identifier: Apache-2.0
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="26dp"
+    android:height="24dp"
+    android:viewportWidth="26"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M0.639,15.061L4.909,15.061L4.909,15.42L2.498,21.3L1.559,21.3L3.828,15.771L0.639,15.771Z"
+      android:strokeWidth="1"
+      android:fillColor="@android:color/white"/>
+</vector>
