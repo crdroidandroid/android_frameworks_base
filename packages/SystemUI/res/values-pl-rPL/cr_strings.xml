@@ -35,7 +35,7 @@
     <!-- Always on Display tile -->
     <string name="quick_settings_always_on_display_label">Aktywny wyświetlacz</string>
     <!-- DataSwitch Tile -->
-    <string name="qs_data_switch_label">Przełączanie karty pamięci</string>
+    <string name="qs_data_switch_label">Przełączanie SIM dla danych</string>
     <string name="qs_data_switch_changed_1">Używanie karty SIM 1 dla danych mobilnych</string>
     <string name="qs_data_switch_changed_2">Używanie karty SIM 2 dla danych mobilnych</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -141,8 +141,7 @@
     <string name="text_clock_m_twenty">Dwadzieścia</string>
     <string name="text_clock_m_twenty_one">Dwadzieścia
 jeden</string>
-    <string name="text_clock_m_twenty_two">Dwadzieścia
-dwa</string>
+    <string name="text_clock_m_twenty_two">Dwudziesta druga</string>
     <string name="text_clock_m_twenty_three">Dwadzieścia
 trzy</string>
     <string name="text_clock_m_twenty_four">Dwadzieścia cztery</string>
@@ -223,7 +222,7 @@ dziewięć</string>
     <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
     <string name="screenrecord_delete_description">Usunięto nagranie ekranu</string>
     <!-- Alert slide extras -->
-    <string name="volume_ringer_priority_only">Priorytet</string>
+    <string name="volume_ringer_priority_only">Priorytetowe</string>
     <string name="volume_ringer_alarms_only">Alarmy</string>
     <string name="volume_ringer_dnd">Nie przeszkadzać</string>
     <string name="tristate_flashlight_on">Latarka włączona</string>
@@ -232,7 +231,7 @@ dziewięć</string>
     <string name="tristate_brightness_bright">Maksymalna jasność</string>
     <string name="tristate_brightness_dark">Minimalna jasność</string>
     <string name="tristate_brightness_auto">Automatyczna jasność</string>
-    <string name="tristate_rotation_auto">Autoobracanie</string>
+    <string name="tristate_rotation_auto">Automatyczne obracanie</string>
     <string name="tristate_rotation_0">Pionowo</string>
     <string name="tristate_rotation_90">Poziomo (90°)</string>
     <string name="tristate_rotation_270">Poziomo (270°)</string>
@@ -244,11 +243,11 @@ dziewięć</string>
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Dzisiejsze użycie</string>
     <!-- App Lock -->
-    <string name="applock_locked">&#160;jest zablokowany</string>
+    <string name="applock_locked">&#160;jest zablokowana</string>
     <string name="applock_fingerprint_face">, odcisk palca lub Twoją twarz, by odblokować</string>
-    <string name="applock_face">&#160;lub Twoją twarz, by odblokować</string>
+    <string name="applock_face">&#160;lub swoją twarz, aby odblokować</string>
     <string name="applock_fingerprint">&#160;lub odcisk palca, aby odblokować</string>
-    <string name="applock_credential">&#160;odblokować</string>
+    <string name="applock_credential">&#160;, aby odblokować</string>
     <string name="applock_unlock">Odblokuj</string>
     <!-- Power menu QS tile -->
     <string name="quick_settings_power_menu_label">Menu zasilania</string>
@@ -273,9 +272,9 @@ dziewięć</string>
     <string name="onthego_notif_options">Opcje</string>
     <string name="onthego_notif_error">Nie można uruchomić trybu \"W ruchu\"</string>
     <string name="onthego_notif_restart">Uruchom ponownie tryb \"W ruchu\"</string>
-    <string name="onthego_notif_camera_changed">Zmieniono tryb pracy kamery</string>
+    <string name="onthego_notif_camera_changed">Zmieniono tryb pracy aparatu</string>
     <string name="onthego_transparency">Przezroczystość</string>
-    <string name="onthego_front_camera">Użyj przedniej kamery</string>
+    <string name="onthego_front_camera">Użyj przedniego aparatu</string>
     <string name="onthego_service_toggle">Automatycznie uruchom ponownie usługę</string>
     <string name="onthego_channel_name">Główny</string>
     <string name="global_action_onthego">W ruchu</string>
