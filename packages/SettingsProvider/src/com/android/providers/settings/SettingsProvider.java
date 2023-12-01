@@ -1794,7 +1794,8 @@ public class SettingsProvider extends ContentProvider {
             cacheName = Settings.System.ALARM_ALERT_CACHE;
         }
         if (cacheName != null) {
-            if (!isValidAudioUri(name, value)) {
+            if (!name.equals(Settings.System.RINGTONE_VIBRATION_PATTERN)
+                    && !isValidAudioUri(name, value)) {
                 return false;
             }
             final File cacheFile = new File(
