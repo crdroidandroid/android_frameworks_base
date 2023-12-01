@@ -52,15 +52,9 @@
     <string name="quick_settings_sound_label">Мелодії</string>
     <string name="quick_settings_sound_ring">Кільце</string>
     <string name="quick_settings_sound_vibrate">Вібрація</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">Приглушити</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">кб/с</string>
-    <string name="megabitspersecond_short">Мб/с</string>
-    <string name="gigabitspersecond_short">Гб/с</string>
-    <string name="kilobytespersecond_short">кБ/с</string>
-    <string name="megabytespersecond_short">МБ/с</string>
-    <string name="gigabytespersecond_short">ГБ/с</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> Швидке заряджання (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> до кінця зарядки)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • Швидке заряджання</string>
@@ -116,14 +110,6 @@
     <string name="quick_settings_compass_label">Компас</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Ініціалізація\u2026</string>
-    <string name="quick_settings_compass_N">Пн.</string>
-    <string name="quick_settings_compass_NE">Пн. Сх.</string>
-    <string name="quick_settings_compass_E">Сх.</string>
-    <string name="quick_settings_compass_SE">Пд. Сх.</string>
-    <string name="quick_settings_compass_S">Пд.</string>
-    <string name="quick_settings_compass_SW">Пд. Зх.</string>
-    <string name="quick_settings_compass_W">Зх.</string>
-    <string name="quick_settings_compass_NW">Пн. Зх.</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Змінити картку для передачі даних</string>
     <!-- Volume panel QS tile -->
@@ -137,6 +123,13 @@
     <string name="omnijaws_service_error">Помилка завантаження даних про погоду</string>
     <string name="omnijaws_service_unknown">Немає даних про погоду</string>
     <string name="omnijaws_label_default">Погода</string>
+    <string name="weather_condition_clouds">Хмарно</string>
+    <string name="weather_condition_rain">Дощова</string>
+    <string name="weather_condition_clear">Сонячно</string>
+    <string name="weather_condition_storm">Гроза</string>
+    <string name="weather_condition_snow">Йде сніг</string>
+    <string name="weather_condition_wind">Вітряно</string>
+    <string name="weather_condition_mist">Димка</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Частота оновлення</string>
     <string name="auto_mode_label">Автоматично</string>
@@ -144,8 +137,14 @@
     <string name="screenshot_long_press">Довге натискання — виділена область</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Пошук музики</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Спочатку встановіть додаток для голосового пошуку</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Мова</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">Будь ласка, налаштуйте кілька мов, щоб увімкнути функцію перемикання</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">використане сьогодні</string>
+    <string name="usage_data_default_suffix">Дані</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Індикатор роумінгу</string>
 </resources>

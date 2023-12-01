@@ -16,7 +16,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Tekan dan tahan tombol power untuk membuka kunci</string>
+    <string name="pocket_lock_message_long_press">Tekan dan tahan tombol daya untuk membuka kunci</string>
     <string name="pocket_view_title">Mode saku aktif</string>
     <string name="pocket_view_title_cancel">Untuk mengaktifkan ponsel Anda:</string>
     <string name="pocket_view_top_tag_cancel">Jangan tutup area biru pada ponsel Anda, dan bersihkan dari kotoran atau debu.</string>
