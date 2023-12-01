@@ -142,4 +142,6 @@
     <string name="usage_data">今日の使用量</string>
     <string name="usage_data_default_suffix">データ</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Roaming indicator</string>
 </resources>
