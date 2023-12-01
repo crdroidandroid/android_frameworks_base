@@ -147,4 +147,6 @@
     <string name="usage_data">المستخدم اليوم</string>
     <string name="usage_data_default_suffix">البيانات</string>
     <string name="usage_wifi_default_suffix">واي-فاي</string>
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Roaming indicator</string>
 </resources>
