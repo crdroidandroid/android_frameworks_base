@@ -188,6 +188,10 @@ public class PixelPropsUtils {
                     spoofBuildGms();
                 }
             }
+
+            if (packageName.equals("com.android.vending")) {
+                sIsFinsky = true;
+            }
             return;
         }
         if (packageName.startsWith("com.google.")
