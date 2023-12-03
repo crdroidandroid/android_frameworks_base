@@ -320,7 +320,7 @@ constructor(
        execution.assertIsMainThread()
        val showWeather = secureSettings.getIntForUser(
            LOCK_SCREEN_WEATHER_ENABLED,
-           1,
+           0,
            userTracker.userId) == 1
        return showWeather
     }
