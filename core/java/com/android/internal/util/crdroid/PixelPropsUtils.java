@@ -289,24 +289,25 @@ public class PixelPropsUtils {
 
     private static void setVersionField(String key, Object value) {
         try {
-            if (DEBUG) Log.d(TAG, "Defining version field " + key + " to " + value.toString());
+            if (DEBUG) Log.d(TAG, "Defining prop " + key + " to " + value.toString());
             Field field = Build.VERSION.class.getDeclaredField(key);
             field.setAccessible(true);
             field.set(null, value);
             field.setAccessible(false);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            Log.e(TAG, "Failed to set version field " + key, e);
+            Log.e(TAG, "Failed to set prop " + key, e);
         }
     }
 
     private static void setVersionFieldString(String key, String value) {
         try {
+            if (DEBUG) Log.d(TAG, "Defining prop " + key + " to " + value.toString());
             Field field = Build.VERSION.class.getDeclaredField(key);
             field.setAccessible(true);
             field.set(null, value);
             field.setAccessible(false);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            Log.e(TAG, "Failed to spoof Build." + key, e);
+            Log.e(TAG, "Failed to set prop " + key, e);
         }
     }
 
