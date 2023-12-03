@@ -322,6 +322,8 @@ public class PixelPropsUtils {
 
             if (type.equals("PropValue")) {
                 setPropValue(name, value);
+            } else if (type.equals("PropValueLong")) {
+                setPropValue(name, Long.valueOf(value));
             } else if (type.equals("VersionField")) {
                 setVersionField(name, Integer.valueOf(value));
             } else if (type.equals("VersionFieldString")) {
