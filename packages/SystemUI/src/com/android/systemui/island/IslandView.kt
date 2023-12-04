@@ -263,6 +263,7 @@ class IslandView : ExtendedFloatingActionButton {
         this.icon = roundedIcon
         this.iconTint = null
         this.bringToFront()
+        if (sbn.notification.contentIntent == null) return
         setOnTouchListener(sbn.notification.contentIntent, sbn.packageName)
     }
 
