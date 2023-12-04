@@ -1841,12 +1841,16 @@ class WindowContainer<E extends WindowContainer> extends ConfigurationContainer<
     boolean forAllActivities(Predicate<ActivityRecord> callback, boolean traverseTopToBottom) {
         if (traverseTopToBottom) {
             for (int i = mChildren.size() - 1; i >= 0; --i) {
-                if (mChildren.get(i).forAllActivities(callback, traverseTopToBottom)) return true;
+                if (mChildren.get(i) != null && mChildren.get(i).hasActivity()) {
+                    if (mChildren.get(i).forAllActivities(callback, traverseTopToBottom)) return true;
+                }
             }
         } else {
             final int count = mChildren.size();
             for (int i = 0; i < count; i++) {
-                if (mChildren.get(i).forAllActivities(callback, traverseTopToBottom)) return true;
+                if (mChildren.get(i) != null && mChildren.get(i).hasActivity()) {
+                    if (mChildren.get(i).forAllActivities(callback, traverseTopToBottom)) return true;
+                }
             }
         }
 
