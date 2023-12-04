@@ -49,7 +49,7 @@
     <string name="quick_settings_sound_label">音效</string>
     <string name="quick_settings_sound_ring">鈴聲</string>
     <string name="quick_settings_sound_vibrate">震動</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">靜音</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -120,13 +120,13 @@
     <string name="omnijaws_service_error">載入天氣資訊時發生錯誤</string>
     <string name="omnijaws_service_unknown">沒有天氣資訊</string>
     <string name="omnijaws_label_default">天氣</string>
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">多雲</string>
+    <string name="weather_condition_rain">雨天</string>
+    <string name="weather_condition_clear">晴天</string>
+    <string name="weather_condition_storm">風暴</string>
+    <string name="weather_condition_snow">雪天</string>
+    <string name="weather_condition_wind">颳風</string>
+    <string name="weather_condition_mist">霧</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">螢幕更新率</string>
     <string name="auto_mode_label">自動</string>
@@ -134,14 +134,16 @@
     <string name="screenshot_long_press">長按 - 局部選取</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">聽聲辨曲</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">先安裝聲音搜尋應用</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">語言</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">先配置多種語言</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">今日已用</string>
     <string name="usage_data_default_suffix">行動數據</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">漫遊圖示</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">臉部辨識中...</string>
 </resources>

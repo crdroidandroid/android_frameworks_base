@@ -143,5 +143,7 @@
     <string name="usage_data_default_suffix">Dữ liệu</string>
     <string name="usage_wifi_default_suffix">Wifi</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">Chỉ báo chuyển vùng</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">Đang nhận diện khuôn mặt...</string>
 </resources>

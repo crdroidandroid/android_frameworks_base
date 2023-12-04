@@ -121,13 +121,13 @@
     <string name="omnijaws_service_error">Hava durumu verisi yüklenemedi</string>
     <string name="omnijaws_service_unknown">Hava durumu verisi yok</string>
     <string name="omnijaws_label_default">Hava durumu</string>
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">Bulutlu</string>
+    <string name="weather_condition_rain">Yağmurlu</string>
+    <string name="weather_condition_clear">Güneşli</string>
+    <string name="weather_condition_storm">Fırtınalı</string>
+    <string name="weather_condition_snow">Karlı</string>
+    <string name="weather_condition_wind">Rüzgarlı</string>
+    <string name="weather_condition_mist">Sisli</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Yenileme hızı</string>
     <string name="auto_mode_label">Otomatik</string>
@@ -135,14 +135,16 @@
     <string name="screenshot_long_press">Uzun basma - seçilen bölge</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Ses arama</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Öncelikle bir ses arama uygulaması yükleyin</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Dil</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">Öncelikle birden fazla dili yapılandırın</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">bugün kullanılan</string>
     <string name="usage_data_default_suffix">Veri</string>
     <string name="usage_wifi_default_suffix">Kablosuz</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">Dolaşım göstergesi</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">Yüz tanınıyor...</string>
 </resources>
