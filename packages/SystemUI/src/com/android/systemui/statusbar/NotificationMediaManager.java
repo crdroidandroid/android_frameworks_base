@@ -77,6 +77,7 @@ import com.android.systemui.statusbar.phone.ScrimController;
 import com.android.systemui.statusbar.phone.ScrimState;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.tuner.TunerService;
+import com.android.systemui.util.NotificationUtils;
 import com.android.systemui.util.concurrency.DelayableExecutor;
 
 import lineageos.providers.LineageSettings;
@@ -108,6 +109,8 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
             "lineagesecure:" + LineageSettings.Secure.LOCKSCREEN_MEDIA_METADATA;
     private static final String LOCKSCREEN_ALBUMART_FILTER =
             "system:" + Settings.System.LOCKSCREEN_ALBUMART_FILTER;
+    private static final String ISLAND_NOTIFICATION =
+            "system:" + Settings.System.ISLAND_NOTIFICATION;
 
     private static final String NOWPLAYING_SERVICE = "com.google.android.as";
     private final StatusBarStateController mStatusBarStateController;
@@ -174,6 +177,9 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
     private boolean mShowMediaMetadata;
     private int mAlbumArtFilter;
 
+    private boolean mIslandEnabled;
+    private NotificationUtils notifUtils;
+
     private final MediaController.Callback mMediaListener = new MediaController.Callback() {
         @Override
         public void onPlaybackStateChanged(PlaybackState state) {
@@ -182,6 +188,13 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
                 Log.v(TAG, "DEBUG_MEDIA: onPlaybackStateChanged: " + state);
             }
             if (state != null) {
+                if (mIslandEnabled) {
+                    if (PlaybackState.STATE_PLAYING == getMediaControllerPlaybackState(mMediaController) && mMediaMetadata != null) {
+                        notifUtils.showNowPlayingNotification(mMediaMetadata);
+                    } else {
+                        notifUtils.cancelNowPlayingNotification();
+                    }
+                }
                 if (!isPlaybackActive(state.getState())) {
                     clearCurrentMediaNotification();
                 }
@@ -197,6 +210,10 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
             }
             mMediaArtworkProcessor.clearCache();
             mMediaMetadata = metadata;
+            if (mIslandEnabled) {
+                notifUtils.cancelNowPlayingNotification();
+                notifUtils.showNowPlayingNotification(metadata);
+            }
             dispatchUpdateMediaMetaData(true /* changed */, true /* allowAnimation */);
         }
     };
@@ -244,6 +261,8 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
 
         dumpManager.registerDumpable(this);
 
+        notifUtils = new NotificationUtils(mContext);
+
         mTunerService = tunerService;
         mTunerService.addTunable(this, LOCKSCREEN_MEDIA_METADATA);
         mTunerService.addTunable(this, LOCKSCREEN_ALBUMART_FILTER);
@@ -261,6 +280,10 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
                 mAlbumArtFilter =
                         TunerService.parseInteger(newValue, 0);
                 dispatchUpdateMediaMetaData(false /* changed */, true /* allowAnimation */);
+                break;
+            case ISLAND_NOTIFICATION:
+                mIslandEnabled =
+                        TunerService.parseIntegerSwitch(newValue, false);
                 break;
             default:
                 break;
