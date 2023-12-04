@@ -147,4 +147,6 @@
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Индикатор роуминга</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">Распознавание лица...</string>
 </resources>
