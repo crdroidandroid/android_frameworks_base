@@ -144,4 +144,6 @@
     <string name="usage_wifi_default_suffix">와이파이</string>
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">Roaming indicator</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">얼굴 인식 중...</string>
 </resources>
