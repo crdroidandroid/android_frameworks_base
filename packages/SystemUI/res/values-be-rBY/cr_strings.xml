@@ -146,7 +146,7 @@
     <string name="usage_data_default_suffix">Дадзеныя</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">Індыкатар роўмінгу</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Распазнаванне асобы...</string>
 </resources>
