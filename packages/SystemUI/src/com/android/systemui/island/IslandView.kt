@@ -15,9 +15,11 @@
  */
 package com.android.systemui.island
 
+import android.app.ActivityTaskManager
 import android.app.ActivityOptions
 import android.app.Notification
 import android.app.PendingIntent
+import android.app.TaskStackListener
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
@@ -78,12 +80,14 @@ class IslandView : ExtendedFloatingActionButton {
     private var notifTitle: String = ""
     private var notifContent: String = ""
     private var notifSubContent: String = ""
+    private var notifPackage: String = ""
     
     private var useIslandNotification = false
     private var isIslandAnimating = false
     private var isDismissed = true
     private var isTouchInsetsRemoved = true
     private var isExpanded = false
+    private var isNowPlaying = false
     
     private val effectClick: VibrationEffect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
     private val effectTick: VibrationEffect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
@@ -141,15 +145,15 @@ class IslandView : ExtendedFloatingActionButton {
             return
         }
         post({
+            notificationStackScroller?.visibility = View.GONE
+            setIslandContents(true)
+            if (!shouldShowIslandNotification()) return@post
             if (isIslandAnimating) {
-                notificationStackScroller?.visibility = View.GONE
                 shrink()
                 postOnAnimationDelayed({
                     hide()
                 }, 150L)
             }
-            setIslandContents(true)
-            notificationStackScroller?.visibility = View.GONE
             show()
             isDismissed = false
             isIslandAnimating = true
@@ -236,10 +240,11 @@ class IslandView : ExtendedFloatingActionButton {
          .firstOrNull { it != null }
          ?: getNotificationIcon(sbn, notification) ?: return 
         val appLabel = getAppLabel(sbn, context)
-        val isNowPlaying = sbn.packageName == "com.android.systemui" && notificationTitle.contains("Now Playing")
-        val isSystem = sbn.packageName == "android" || sbn.packageName == "com.android.systemui"
+        isNowPlaying = sbn?.packageName == "com.android.systemui" && notificationTitle.contains("Now Playing")
+        val isSystem = sbn?.packageName == "android" || sbn?.packageName == "com.android.systemui"
+        val hasExtrasIcon = iconDrawable != null && !isSystem
         notifTitle = when {
-            iconDrawable != null && !isSystem -> 
+            hasExtrasIcon -> 
                 { appLabel.takeIf { it.isNotBlank() } ?: notificationTitle.takeIf { it.isNotBlank() } ?: return } // meant for messaging apps
             isNowPlaying -> 
                 { notificationText.takeIf { it.isNotBlank() } ?: return } // island now playing 
@@ -249,9 +254,10 @@ class IslandView : ExtendedFloatingActionButton {
             }
         }
         notifContent = when {
-            isNowPlaying -> ""
-            notificationTitle.isNotBlank() && notificationText.isNotBlank() -> "$notificationTitle : $notificationText" // meant for messaging apps
-            else -> notificationText.takeIf { it.isNotBlank() } ?: "" // normal apps
+            isNowPlaying -> { "" }
+            notificationTitle.isNotBlank() && notificationText.isNotBlank() && !hasExtrasIcon -> { "$notificationTitle : $notificationText" } // meant for messaging apps
+            hasExtrasIcon -> { "$notificationText" }
+            else -> { notificationText.takeIf { it.isNotBlank() } ?: "" } // normal apps
         }
         notifSubContent = notification.extras.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString().orEmpty()
         titleSpannable = SpannableString(notifTitle.ifEmpty { notifContent }).apply {
@@ -263,8 +269,14 @@ class IslandView : ExtendedFloatingActionButton {
         this.icon = roundedIcon
         this.iconTint = null
         this.bringToFront()
+        if (isNowPlaying) {
+            notifPackage = getActiveAppVolumePackage()
+            notifSubContent = ""
+        } else {
+            notifPackage = sbn.packageName
+        }
         if (sbn.notification.contentIntent == null) return
-        setOnTouchListener(sbn.notification.contentIntent, sbn.packageName)
+        setOnTouchListener(sbn.notification.contentIntent, notifPackage)
     }
 
     fun getApplicationInfo(sbn: StatusBarNotification): ApplicationInfo {
@@ -398,11 +410,6 @@ class IslandView : ExtendedFloatingActionButton {
                         ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED)
                 pendingIntent.send(context, 0, appIntent, null, null, null, options.toBundle())
             } catch (e: Exception) {
-                if (getActiveAppVolumePackage() != "" && packageName == "com.android.systemui") {
-                    appIntent = context.packageManager.getLaunchIntentForPackage(getActiveAppVolumePackage())?.apply {
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    }
-                }
                 try {
                     context.startActivityAsUser(appIntent, UserHandle.CURRENT)
                 } catch (e: Exception) {}
@@ -478,4 +485,32 @@ class IslandView : ExtendedFloatingActionButton {
         for (span in spans) { builder.removeSpan(span) }
         builder.clear()
     }
+
+    private fun shouldShowIslandNotification(): Boolean {
+        var shouldShowNotification = !isCurrentNotifActivityOnTop(notifPackage) or !isCurrentNotifActivityOnTop(getActiveAppVolumePackage())
+        val taskStackListener = object : TaskStackListener() {
+            override fun onTaskStackChanged() {
+                shouldShowNotification = !isCurrentNotifActivityOnTop(notifPackage) or !isCurrentNotifActivityOnTop(getActiveAppVolumePackage())
+            }
+        }
+        try {
+            ActivityTaskManager.getService().registerTaskStackListener(taskStackListener)
+        } catch (e: Exception) {}
+        if (shouldShowNotification) {
+            try {
+                ActivityTaskManager.getService().unregisterTaskStackListener(taskStackListener)
+            } catch (e: Exception) {}
+        }
+        return shouldShowNotification
+    }
+
+    fun isCurrentNotifActivityOnTop(packageName: String): Boolean {
+        try {
+            val focusedTaskInfo = ActivityTaskManager.getService().getFocusedRootTaskInfo()
+            val topActivityPackageName = focusedTaskInfo?.topActivity?.packageName
+            return topActivityPackageName == packageName
+        } catch (e: Exception) {}
+        return false
+    }
+
 }
