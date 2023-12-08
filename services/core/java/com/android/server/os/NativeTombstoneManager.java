@@ -96,12 +96,12 @@ public final class NativeTombstoneManager {
         mHandler = thread.getThreadHandler();
 
         mWatcher = new TombstoneWatcher();
-        mWatcher.startWatching();
     }
 
     void onSystemReady() {
         registerForUserRemoval();
         registerForPackageRemoval();
+        mWatcher.startWatching();
 
         BootReceiver.initDropboxRateLimiter();
 
