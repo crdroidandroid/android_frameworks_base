@@ -232,12 +232,21 @@ class AvatarPhotoController {
                         Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(croppedImage);
                 Bitmap fullImage;
+                InputStream imageStream = null;
                 try {
-                    InputStream imageStream = mContextInjector.getContentResolver()
+                    imageStream = mContextInjector.getContentResolver()
                             .openInputStream(data);
                     fullImage = BitmapFactory.decodeStream(imageStream);
                 } catch (FileNotFoundException fe) {
                     return;
+                } finally {
+                    if (imageStream != null) {
+                        try {
+                            imageStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
                 if (fullImage != null) {
                     int rotation = getRotation(data);
