@@ -148,6 +148,10 @@ final class TextToSpeechManagerPerUserService extends
         protected void onServiceConnectionStatusChanged(
                 ITextToSpeechService service, boolean connected) {
             if (!connected) {
+                if (mCallback == null) {
+                    Slog.w(TAG, "Client disconnected, not sending engine disconnect callback!");
+                    return;
+                }
                 Slog.w(TAG, "Disconnected from TTS engine");
                 runSessionCallbackMethod(mCallback::onDisconnected);
 
