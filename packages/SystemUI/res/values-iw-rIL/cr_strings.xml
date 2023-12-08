@@ -16,8 +16,8 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Statusbar Icons -->
-    <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_nfc">NFC תקשורת טווח אפס</string>
+    <string name="status_bar_vpn">VPN רשת פרטית וירטואלית</string>
     <string name="status_bar_data_saver">חסכון בנתונים</string>
     <string name="status_bar_call_strength">עוצמת השיחה</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
@@ -46,7 +46,7 @@
         <item quantity="one">‏%d מכשירים מחוברים</item>
         <item quantity="two">%d devices connected</item>
         <item quantity="many">%d devices connected</item>
-        <item quantity="other">‏%1$d מכשירים מחוברים</item>
+        <item quantity="other">%d devices connected</item>
     </plurals>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">צליל</string>
