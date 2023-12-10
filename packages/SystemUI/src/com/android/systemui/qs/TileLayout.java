@@ -94,7 +94,8 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     }
 
     @Override
-    public boolean setMinRows(int minRows) {
+    public boolean setMinRows(int rows) {
+        int minRows = Math.min(getResourceRows(), rows);
         if (mMinRows != minRows) {
             mMinRows = minRows;
             updateResources();
@@ -140,7 +141,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         mCellMarginHorizontal = res.getDimensionPixelSize(R.dimen.qs_tile_margin_horizontal);
         mSidePadding = useSidePadding() ? mCellMarginHorizontal / 2 : 0;
         mCellMarginVertical= res.getDimensionPixelSize(R.dimen.qs_tile_margin_vertical);
-        mMaxAllowedRows = Math.max(1, res.getInteger(R.integer.quick_settings_max_rows));
+        mMaxAllowedRows = Math.max(getResourceRows(), res.getInteger(R.integer.quick_settings_max_rows));
         if (mLessRows) {
             mMaxAllowedRows = Math.max(mMinRows, mMaxAllowedRows - 1);
         }
@@ -352,8 +353,13 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         return TileUtils.getQSColumnsCount(mContext, columns);
     }
 
+    public int getResourceRows() {
+        return TileUtils.getQSRowsCount(mContext);
+    }
+
     @Override
     public void updateSettings() {
         updateResources();
+        requestLayout();
     }
 }
