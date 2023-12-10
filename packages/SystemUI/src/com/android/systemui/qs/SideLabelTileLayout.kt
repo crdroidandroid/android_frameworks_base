@@ -20,6 +20,7 @@ import android.content.Context
 import android.util.AttributeSet
 import com.android.systemui.flags.Flags
 import com.android.systemui.flags.RefactorFlag
+import com.android.systemui.qs.TileUtils
 import com.android.systemui.res.R
 
 open class SideLabelTileLayout(
@@ -40,12 +41,13 @@ open class SideLabelTileLayout(
                     isSmallLandscapeLockscreenEnabled &&
                     mContext.resources.getBoolean(R.bool.is_small_screen_landscape)
 
-            mMaxAllowedRows = if (useSmallLandscapeLockscreenResources) {
+            val maxAllowedRows = if (useSmallLandscapeLockscreenResources) {
                 context.resources.getInteger(
                         R.integer.small_land_lockscreen_quick_settings_max_rows)
                 } else {
                     context.resources.getInteger(R.integer.quick_settings_max_rows)
                 }
+            mMaxAllowedRows = Math.max(TileUtils.getQSRowsCount(context), maxAllowedRows)
         }
     }
 

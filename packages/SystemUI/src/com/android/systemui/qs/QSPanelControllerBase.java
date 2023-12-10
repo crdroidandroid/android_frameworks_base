@@ -218,6 +218,8 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
         mTunerService.addTunable(this, QSPanel.QS_TILE_LABEL_HIDE);
         mTunerService.addTunable(this, QSPanel.QS_LAYOUT_COLUMNS);
         mTunerService.addTunable(this, QSPanel.QS_LAYOUT_COLUMNS_LANDSCAPE);
+        mTunerService.addTunable(this, QSPanel.QQS_LAYOUT_ROWS);
+        mTunerService.addTunable(this, QSPanel.QQS_LAYOUT_ROWS_LANDSCAPE);
     }
 
     @Override
@@ -532,6 +534,8 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
             case QSPanel.QS_TILE_LABEL_HIDE:
             case QSPanel.QS_LAYOUT_COLUMNS:
             case QSPanel.QS_LAYOUT_COLUMNS_LANDSCAPE:
+            case QSPanel.QQS_LAYOUT_ROWS:
+            case QSPanel.QQS_LAYOUT_ROWS_LANDSCAPE:
                 if (mView.getTileLayout() != null) {
                     mView.getTileLayout().updateSettings();
                     mForceUpdate = true;
