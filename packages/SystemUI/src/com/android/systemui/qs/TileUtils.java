@@ -41,6 +41,22 @@ public class TileUtils {
         return Math.max(QS_COLUMNS_MIN, value);
     }
 
+    public static int getQSRowsCount(Context context) {
+        final int QS_ROWS_MIN = 1;
+        final Resources res = context.getResources();
+        int value = QS_ROWS_MIN;
+        if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            value = Settings.System.getIntForUser(
+                    context.getContentResolver(), Settings.System.QQS_LAYOUT_ROWS,
+                    2, UserHandle.USER_CURRENT);
+        } else {
+            value = Settings.System.getIntForUser(
+                    context.getContentResolver(), Settings.System.QQS_LAYOUT_ROWS_LANDSCAPE,
+                    2, UserHandle.USER_CURRENT);
+        }
+        return Math.max(QS_ROWS_MIN, value);
+    }
+
     public static boolean getQSTileLabelHide(Context context) {
         return Settings.System.getIntForUser(context.getContentResolver(),
                 Settings.System.QS_TILE_LABEL_HIDE,
