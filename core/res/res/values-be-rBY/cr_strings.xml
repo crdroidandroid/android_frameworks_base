@@ -18,8 +18,8 @@
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Націсніце і ўтрымлівайце кнопку сілкавання, каб разблакаваць</string>
     <string name="pocket_view_title">Рэжым \"У кішэні\" уключаны</string>
-    <string name="pocket_view_title_cancel">To activate your phone:</string>
-    <string name="pocket_view_top_tag_cancel">Please do not cover the blue area of your phone and clear any dirt or dust off it.</string>
+    <string name="pocket_view_title_cancel">Для выкарыстання тэлефона:</string>
+    <string name="pocket_view_top_tag_cancel">Праверце, ці не закрыта сіняя вобласць вашага тэлефона якімі-небудзь прадметамі, і ачысціце ад бруду або пылу.</string>
     <string name="pocket_view_top_tag_cancel2">Доўгі націск кнопкі сілкавання для прымусовага выхаду з рэжыму \"У кішэні\".</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
