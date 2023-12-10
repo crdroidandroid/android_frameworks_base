@@ -19,6 +19,7 @@ package com.android.systemui.qs
 import android.content.Context
 import android.util.AttributeSet
 import com.android.systemui.R
+import com.android.systemui.qs.TileUtils;
 
 open class SideLabelTileLayout(
     context: Context,
@@ -27,7 +28,8 @@ open class SideLabelTileLayout(
 
     override fun updateResources(): Boolean {
         return super.updateResources().also {
-            mMaxAllowedRows = context.resources.getInteger(R.integer.quick_settings_max_rows)
+            mMaxAllowedRows = Math.max(TileUtils.getQSRowsCount(context), 
+                    context.resources.getInteger(R.integer.quick_settings_max_rows))
         }
     }
 
