@@ -31,6 +31,7 @@ import com.android.systemui.R;
 import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.qs.QSPanel.QSTileLayout;
 import com.android.systemui.qs.QSPanelControllerBase.TileRecord;
+import com.android.systemui.qs.TileUtils;
 import com.android.systemui.qs.logging.QSLogger;
 
 import java.util.ArrayList;
@@ -431,7 +432,7 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
 
     @Override
     public boolean setMinRows(int minRows) {
-        mMinRows = minRows;
+        mMinRows = Math.min(minRows, TileUtils.getQSRowsCount(getContext()));
         boolean changed = false;
         for (int i = 0; i < mPages.size(); i++) {
             if (mPages.get(i).setMinRows(minRows)) {
@@ -444,10 +445,10 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
 
     @Override
     public boolean setMaxColumns(int maxColumns) {
-        mMaxColumns = maxColumns;
+        mMaxColumns = TileUtils.getQSColumnsCount(getContext(), maxColumns);
         boolean changed = false;
         for (int i = 0; i < mPages.size(); i++) {
-            if (mPages.get(i).setMaxColumns(maxColumns)) {
+            if (mPages.get(i).setMaxColumns(mMaxColumns)) {
                 changed = true;
                 forceTilesRedistribution("maxColumns in pages changed");
             }
@@ -559,6 +560,13 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
         if (mPages.size() == 0) return TileLayout.NO_MAX_COLUMNS;
         TileLayout currentPage = mPages.get(getCurrentPageNumber());
         return currentPage.getResourceColumns();
+    }
+
+    @Override
+    public int getResourceRows() {
+        if (mPages.size() == 0) return 1;
+        TileLayout currentPage = mPages.get(getCurrentPageNumber());
+        return currentPage.getResourceRows();
     }
 
     @Override
