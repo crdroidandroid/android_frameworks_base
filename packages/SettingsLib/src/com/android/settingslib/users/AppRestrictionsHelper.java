@@ -38,6 +38,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.VisibleForTesting;
 
+import com.android.settingslib.RestrictedLockUtilsInternal;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -112,6 +114,17 @@ public class AppRestrictionsHelper {
         if (enabled) {
             // Enable selected apps
             try {
+                if (mUserManager.isManagedProfile(userId)) {
+                    final boolean installBlocked = RestrictedLockUtilsInternal
+                            .checkIfRestrictionEnforced(
+                                    mContext,
+                                    UserManager.DISALLOW_INSTALL_APPS,
+                                    userId) != null;
+                    if (installBlocked) {
+                        Log.w(TAG, "Installling apps is blocked for user " + userId);
+                        return;
+                    }
+                }
                 ApplicationInfo info = mIPm.getApplicationInfo(packageName,
                         PackageManager.MATCH_ANY_USER, userId);
                 if (info == null || !info.enabled
@@ -137,6 +150,14 @@ public class AppRestrictionsHelper {
         } else {
             // Denylist all other apps, system or downloaded
             try {
+                if (mUserManager.isManagedProfile(userId)) {
+                    final boolean uninstallBlocked = RestrictedLockUtilsInternal
+                            .checkIfUninstallBlocked(mContext, packageName, userId) != null;
+                    if (uninstallBlocked) {
+                        Log.w(TAG, "Uninstall blocked for user " + userId + ": " + packageName);
+                        return;
+                    }
+                }
                 ApplicationInfo info = mIPm.getApplicationInfo(packageName, 0, userId);
                 if (info != null) {
                     if (mRestrictedProfile) {
