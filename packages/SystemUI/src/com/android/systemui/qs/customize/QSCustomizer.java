@@ -23,6 +23,7 @@ import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,13 +71,15 @@ public class QSCustomizer extends LinearLayout {
     public QSCustomizer(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        LayoutInflater.from(getContext()).inflate(R.layout.qs_customize_panel_content, this);
+        Context themedContext =
+                new ContextThemeWrapper(context, R.style.Theme_SystemUI_QuickSettings);
+        LayoutInflater.from(themedContext).inflate(R.layout.qs_customize_panel_content, this);
         mClipper = new QSDetailClipper(findViewById(R.id.customize_container));
         mToolbar = findViewById(com.android.internal.R.id.action_bar);
         TypedValue value = new TypedValue();
-        mContext.getTheme().resolveAttribute(android.R.attr.homeAsUpIndicator, value, true);
+        themedContext.getTheme().resolveAttribute(android.R.attr.homeAsUpIndicator, value, true);
         mToolbar.setNavigationIcon(
-                getResources().getDrawable(value.resourceId, mContext.getTheme()));
+                getResources().getDrawable(value.resourceId, themedContext.getTheme()));
 
         mToolbar.getMenu().add(Menu.NONE, MENU_RESET, 0, com.android.internal.R.string.reset)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
