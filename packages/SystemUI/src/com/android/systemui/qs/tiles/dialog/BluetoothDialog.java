@@ -23,6 +23,7 @@
 package com.android.systemui.qs.tiles.dialog;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
@@ -59,6 +60,8 @@ import com.android.systemui.statusbar.policy.BluetoothController;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Dialog for bluetooth
@@ -248,7 +251,7 @@ public class BluetoothDialog extends SystemUIDialog implements Window.Callback {
         mDivider.setVisibility(showProgress ? View.GONE : View.VISIBLE);
 
         // devices
-        final Collection<CachedBluetoothDevice> devices = mBluetoothController.getDevices();
+        final Collection<CachedBluetoothDevice> devices = sortDevices(mBluetoothController.getDevices());
         if (!enabled || devices == null) {
             mBluetoothRecyclerView.setVisibility(View.GONE);
             mSeeAllLayout.setVisibility(View.GONE);
@@ -282,5 +285,25 @@ public class BluetoothDialog extends SystemUIDialog implements Window.Callback {
         mBluetoothToggleText.setTextAppearance(showBackground
                     ? R.style.TextAppearance_InternetDialog_Active
                     : R.style.TextAppearance_InternetDialog);
+    }
+
+    private Collection<CachedBluetoothDevice> sortDevices(Collection<CachedBluetoothDevice> devices) {
+        if (devices == null) return null;
+        if (devices.size() <= 1) return devices;
+        Collection<CachedBluetoothDevice> sorted = new ArrayList<>();
+        devices.stream().sorted(new BtDeviceComparator()).forEach(sorted::add);
+        return sorted;
+    }
+
+    private static class BtDeviceComparator implements Comparator<CachedBluetoothDevice> {
+        final List<BluetoothDevice> sortedDevices =
+                BluetoothAdapter.getDefaultAdapter().getMostRecentlyConnectedDevices();
+
+        @Override
+        public int compare(CachedBluetoothDevice o1, CachedBluetoothDevice o2) {
+            final int i1 = sortedDevices.indexOf(o1.getDevice());
+            final int i2 = sortedDevices.indexOf(o2.getDevice());
+            return i1 - i2;
+        }
     }
 }
