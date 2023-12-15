@@ -147,6 +147,7 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel> 
         });
 
         mBrightnessMirrorHandler.onQsPanelAttached();
+        mBrightnessController.addListeners();
     }
 
     @Override
@@ -155,6 +156,7 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel> 
         mTunerService.removeTunable(mView);
         mView.setBrightnessRunnable(null);
         mBrightnessMirrorHandler.onQsPanelDettached();
+        mBrightnessController.removeListeners();
     }
 
     private void updateBrightnessMirror() {
