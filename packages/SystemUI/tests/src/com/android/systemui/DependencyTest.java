@@ -48,7 +48,8 @@ public class DependencyTest extends SysuiTestCase {
     @Test
     public void testInitDependency() throws ExecutionException, InterruptedException {
         Dependency.clearDependencies();
-        SystemUIInitializer initializer = new SystemUIInitializerImpl(mContext);
+        SystemUIInitializer initializer =
+                SystemUIInitializerFactory.createFromConfigNoAssert(mContext);
         initializer.init(true);
         Dependency dependency = initializer.getSysUIComponent().createDependency();
         dependency.start();
