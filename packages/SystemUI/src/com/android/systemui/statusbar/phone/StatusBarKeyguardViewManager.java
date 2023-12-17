@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.hardware.biometrics.BiometricSourceType;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Trace;
 import android.util.Log;
@@ -84,6 +85,7 @@ import com.android.systemui.navigationbar.TaskbarDelegate;
 import com.android.systemui.navigationbar.views.NavigationBarView;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
+import com.android.systemui.res.R;
 import com.android.systemui.scene.domain.interactor.SceneInteractor;
 import com.android.systemui.scene.shared.flag.SceneContainerFlag;
 import com.android.systemui.scene.shared.model.Scenes;
@@ -101,6 +103,7 @@ import com.android.systemui.statusbar.SysuiStatusBarStateController;
 import com.android.systemui.statusbar.domain.interactor.StatusBarKeyguardViewManagerInteractor;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
+import com.android.systemui.statusbar.phone.FaceUnlockImageView;
 import com.android.systemui.unfold.FoldAodAnimationController;
 import com.android.systemui.unfold.SysUIUnfoldComponent;
 import com.android.systemui.user.domain.interactor.SelectedUserInteractor;
@@ -193,6 +196,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
             public void onFullyShown() {
                 mPrimaryBouncerAnimating = false;
                 updateStates();
+                showFaceRecognizingMessage();
             }
 
             @Override
@@ -349,6 +353,8 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
     @Nullable private OccludingAppBiometricUI mOccludingAppBiometricUI;
 
     @Nullable private TaskbarDelegate mTaskbarDelegate;
+    private Handler mFaceRecognizingHandler;
+    private boolean mFaceRecognitionRunning = false;
     private final KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
             new KeyguardUpdateMonitorCallback() {
                 @Override
@@ -367,6 +373,47 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
             // the bouncer goes away.
             if (mKeyguardStateController.isOccluded()) {
                 reset(true /* hideBouncerWhenShowing */);
+            }
+        }
+        
+        @Override
+        public void onBiometricRunningStateChanged(boolean running,
+                BiometricSourceType biometricSourceType) {
+            if (biometricSourceType == BiometricSourceType.FACE &&
+                    mKeyguardUpdateManager.isUnlockWithFacePossible()){
+                mFaceRecognitionRunning = running;
+                if (!mFaceRecognitionRunning) {
+                    mFaceRecognizingHandler.removeCallbacksAndMessages(null);
+                }else{
+                    mFaceRecognizingHandler.postDelayed(() -> showFaceRecognizingMessage(), 100);
+                }
+            }
+        }
+        
+        @Override
+        public void onBiometricAuthenticated(int userId, BiometricSourceType biometricSourceType,
+                boolean isStrongBiometric) {
+            super.onBiometricAuthenticated(userId, biometricSourceType, isStrongBiometric);
+            if (biometricSourceType == BiometricSourceType.FACE) {
+                FaceUnlockImageView.setBouncerState(FaceUnlockImageView.State.SUCCESS);
+            }
+        }
+
+        @Override
+        public void onBiometricAcquired(BiometricSourceType biometricSourceType,
+                int acquireInfo) {
+            if (biometricSourceType == BiometricSourceType.FACE) {
+                mFaceRecognitionRunning = true;
+                mFaceRecognizingHandler.postDelayed(() -> showFaceRecognizingMessage(), 100);
+                FaceUnlockImageView.setBouncerState(FaceUnlockImageView.State.SCANNING);
+            }
+        }
+
+        @Override
+        public void onBiometricHelp(int msgId, String helpString,
+                BiometricSourceType biometricSourceType) {
+            if (biometricSourceType == BiometricSourceType.FACE && mContext.getString(R.string.kg_face_not_recognized).equals(helpString)) {
+                FaceUnlockImageView.setBouncerState(FaceUnlockImageView.State.NOT_VERIFIED);
             }
         }
     };
@@ -409,7 +456,8 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
             @Main DelayableExecutor executor,
             Lazy<DeviceEntryInteractor> deviceEntryInteractorLazy,
             DismissCallbackRegistry dismissCallbackRegistry,
-            Lazy<BouncerInteractor> bouncerInteractor
+            Lazy<BouncerInteractor> bouncerInteractor,
+            @Main Handler faceRecognizingHandler
     ) {
         mContext = context;
         mExecutor = executor;
@@ -447,6 +495,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
         mStatusBarKeyguardViewManagerInteractor = statusBarKeyguardViewManagerInteractor;
         mDeviceEntryInteractorLazy = deviceEntryInteractorLazy;
         mDismissCallbackRegistry = dismissCallbackRegistry;
+        mFaceRecognizingHandler = faceRecognizingHandler;
     }
 
     KeyguardTransitionInteractor mKeyguardTransitionInteractor;
@@ -1637,11 +1686,25 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
         }
     }
 
+    private void showFaceRecognizingMessage(){
+        if (mFaceRecognitionRunning &&
+                mKeyguardUpdateManager.isUnlockWithFacePossible()) {
+            setKeyguardMessage(mContext.getString(R.string.face_unlock_recognizing), null, BiometricSourceType.FACE);
+        }
+    }
+
     /** Display security message to relevant KeyguardMessageArea. */
     public void setKeyguardMessage(String message, ColorStateList colorState,
             BiometricSourceType biometricSourceType) {
         if (!mAlternateBouncerInteractor.isVisibleState()) {
             mPrimaryBouncerInteractor.showMessage(message, colorState);
+        }
+        if (mContext.getString(R.string.face_unlock_recognizing).equals(message)) {
+            FaceUnlockImageView.setBouncerState(FaceUnlockImageView.State.SCANNING);
+        } else if (mContext.getString(R.string.kg_face_not_recognized).equals(message)) {
+            FaceUnlockImageView.setBouncerState(FaceUnlockImageView.State.NOT_VERIFIED);
+        } else if (mContext.getString(R.string.keyguard_face_successful_unlock).equals(message)) {
+            FaceUnlockImageView.setBouncerState(FaceUnlockImageView.State.SUCCESS);
         }
     }
 
