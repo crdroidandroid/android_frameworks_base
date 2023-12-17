@@ -57,7 +57,8 @@ public abstract class SysuiBaseFragmentTest extends BaseFragmentTest {
 
     @Before
     public void sysuiSetup() throws ExecutionException, InterruptedException {
-        SystemUIInitializer initializer = new SystemUIInitializerImpl(mContext);
+        SystemUIInitializer initializer =
+                SystemUIInitializerFactory.createFromConfigNoAssert(mContext);
         initializer.init(true);
         mDependency = new TestableDependency(initializer.getSysUIComponent().createDependency());
         Dependency.setInstance(mDependency);
