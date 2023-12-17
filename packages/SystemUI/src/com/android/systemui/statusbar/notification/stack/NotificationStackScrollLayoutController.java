@@ -874,6 +874,10 @@ public class NotificationStackScrollLayoutController implements Dumpable {
         return row.getVisibility() == View.VISIBLE;
     }
 
+    public View getNotificationStackScrollLayoutView() {
+        return mView;
+    }
+
     public void addOnExpandedHeightChangedListener(BiConsumer<Float, Float> listener) {
         mView.addOnExpandedHeightChangedListener(listener);
     }
