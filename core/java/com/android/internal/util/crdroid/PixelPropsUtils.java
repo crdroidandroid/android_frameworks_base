@@ -256,13 +256,13 @@ public class PixelPropsUtils {
                 if (processName.equals("com.google.android.gms.unstable")) {
                     sIsGms = true;
                     // Alter build parameters to Nexus 6P for avoiding hardware attestation enforcement
-                    setPropValue("DEVICE", "bullhead");
-                    setPropValue("ID", "OPR6.170623.013");
-                    setPropValue("FINGERPRINT", "google/bullhead/bullhead:8.0.0/OPR6.170623.013/4283548:user/release-keys");
-                    setPropValue("MODEL", "Nexus 5X");
-                    setPropValue("PRODUCT", "bullhead");
-                    setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N);
-                    setVersionFieldString("SECURITY_PATCH", "2017-08-05");                }
+                    setPropValue("BRAND", "Xiaomi");
+                    setPropValue("MANUFACTURER", "Xiaomi");
+                    setPropValue("DEVICE", "ferrari");
+                    setPropValue("FINGERPRINT", "Xiaomi/ferrari/ferrari:5.0.2/LRX22G/V6.4.10.0.LXIMICB:user/release-keys");
+                    setPropValue("MODEL", "Mi 4i");
+                    setPropValue("PRODUCT", "ferrari");
+                    setVersionFieldString("SECURITY_PATCH", "2019-08-05");
                 return;
             }
             // Set proper indexing fingerprint
