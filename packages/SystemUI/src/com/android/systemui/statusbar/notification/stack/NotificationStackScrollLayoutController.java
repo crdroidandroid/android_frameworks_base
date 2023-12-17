@@ -852,6 +852,10 @@ public class NotificationStackScrollLayoutController {
         return row.getVisibility() == View.VISIBLE;
     }
 
+    public View getNotificationStackScrollLayoutView() {
+        return mView;
+    }
+
     public boolean isViewAffectedBySwipe(ExpandableView expandableView) {
         return mNotificationRoundnessManager.isViewAffectedBySwipe(expandableView);
     }

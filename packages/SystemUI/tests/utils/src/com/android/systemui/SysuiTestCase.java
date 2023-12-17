@@ -98,7 +98,8 @@ public abstract class SysuiTestCase {
         if (isRobolectricTest()) {
             mContext = mContext.createDefaultDisplayContext();
         }
-        SystemUIInitializer initializer = new SystemUIInitializerImpl(mContext);
+        SystemUIInitializer initializer =
+                SystemUIInitializerFactory.createFromConfigNoAssert(mContext);
         initializer.init(true);
         mDependency = new TestableDependency(initializer.getSysUIComponent().createDependency());
         Dependency.setInstance(mDependency);
