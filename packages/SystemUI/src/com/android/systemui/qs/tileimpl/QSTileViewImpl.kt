@@ -50,9 +50,9 @@ import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
 import androidx.annotation.VisibleForTesting
-import com.android.app.animation.Interpolators
 import com.android.settingslib.Utils
 import com.android.systemui.R
+import com.android.systemui.animation.Interpolators;
 import com.android.systemui.animation.LaunchableView
 import com.android.systemui.animation.LaunchableViewDelegate
 import com.android.systemui.plugins.qs.QSIconView
