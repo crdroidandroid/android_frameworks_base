@@ -905,7 +905,7 @@ public class KeyguardIndicationController {
                 && TextUtils.equals(biometricMessageFollowUp, mBiometricMessageFollowUp)) {
             return;
         }
-        
+
         if (TextUtils.equals(biometricMessage, mContext.getString(R.string.keyguard_face_successful_unlock))) {
             mFaceIconView.setState(FaceUnlockImageView.State.SUCCESS);
         } else if (TextUtils.equals(biometricMessage, mContext.getString(R.string.keyguard_face_failed))) {
@@ -947,11 +947,11 @@ public class KeyguardIndicationController {
     private void hideFaceUnlockRecognizingMessage() {
         String faceUnlockMessage = mContext.getResources().getString(
             R.string.face_unlock_recognizing);
-        if (mBiometricMessage != null && mBiometricMessage == faceUnlockMessage) {
+        if (TextUtils.equals(faceUnlockMessage, mBiometricMessage)) {
             mBiometricMessage = null;
             hideBiometricMessage();
-            mFaceIconView.setState(FaceUnlockImageView.State.HIDDEN);
         }
+        mFaceIconView.setState(FaceUnlockImageView.State.HIDDEN);
     }
 
     /**
