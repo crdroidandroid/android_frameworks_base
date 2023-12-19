@@ -21,7 +21,6 @@ import static com.android.systemui.screenshot.ScreenshotController.EXTRA_ID;
 import static com.android.systemui.screenshot.ScreenshotController.EXTRA_SMART_ACTIONS_ENABLED;
 import static com.android.systemui.screenshot.ScreenshotController.SCREENSHOT_URI_ID;
 
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -41,12 +40,15 @@ public class DeleteScreenshotReceiver extends BroadcastReceiver {
 
     private final ScreenshotSmartActions mScreenshotSmartActions;
     private final Executor mBackgroundExecutor;
+    private final ScreenshotNotificationsController mNotificationsController;
 
     @Inject
     public DeleteScreenshotReceiver(ScreenshotSmartActions screenshotSmartActions,
-            @Background Executor backgroundExecutor) {
+            @Background Executor backgroundExecutor,
+            ScreenshotNotificationsController notificationsController) {
         mScreenshotSmartActions = screenshotSmartActions;
         mBackgroundExecutor = backgroundExecutor;
+        mNotificationsController = notificationsController;
     }
 
     @Override
@@ -69,8 +71,6 @@ public class DeleteScreenshotReceiver extends BroadcastReceiver {
         }
 
         // dismiss the notification if any
-        NotificationManager nm = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.cancel(uriStr.hashCode());
+        mNotificationsController.dismissPostActionNotification(uriStr.hashCode());
     }
 }
