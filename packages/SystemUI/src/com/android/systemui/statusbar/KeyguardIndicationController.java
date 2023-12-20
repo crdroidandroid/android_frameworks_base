@@ -416,6 +416,7 @@ public class KeyguardIndicationController {
             R.id.keyguard_indication_text_bottom);
         mInitialTextColorState = mTopIndicationView != null
                 ? mTopIndicationView.getTextColors() : ColorStateList.valueOf(Color.WHITE);
+        mFaceIconView.setKeyguardColorState(mInitialTextColorState);
         if (mRotateTextViewController != null) {
             mRotateTextViewController.destroy();
         }
@@ -912,8 +913,6 @@ public class KeyguardIndicationController {
             mFaceIconView.setState(FaceUnlockImageView.State.NOT_VERIFIED);
         } else if (TextUtils.equals(biometricMessage, mContext.getString(R.string.face_unlock_recognizing))) {
             mFaceIconView.setState(FaceUnlockImageView.State.SCANNING);
-        } else {
-            mFaceIconView.setState(FaceUnlockImageView.State.HIDDEN);
         }
 
         mBiometricMessage = biometricMessage;
