@@ -381,14 +381,14 @@ public class PixelPropsUtils {
 
     private static void spoofBuildGms() {
         // Alter build parameters to avoid hardware attestation enforcement
-        setPropValue("BRAND", "GIONEE");
-        setPropValue("MANUFACTURER", "GIONEE");
-        setPropValue("DEVICE", "GIONEE_SW17G12");
-        setPropValue("ID", "N6F26Q");
-        setPropValue("FINGERPRINT", "GIONEE/S11S/GIONEE_SW17G12:7.1.1/N6F26Q/1509594663:user/release-keys");
-        setPropValue("MODEL", "GIONEE S11S");
-        setPropValue("PRODUCT", "S11S");
-        setVersionFieldString("SECURITY_PATCH", "2017-11-05");
+        setPropValue("BRAND", "YU nitrogen");
+        setPropValue("MANUFACTURER", "YU");
+        setPropValue("DEVICE", "YUREKA");
+        setPropValue("ID", "LMY49J");
+        setPropValue("FINGERPRINT", "YU/YUREKA/YUREKA:5.1.1/LMY49J/YOG4PAS8A4:user/release-keys");
+        setPropValue("MODEL", "YU5510");
+        setPropValue("PRODUCT", "YUREKA");
+        setVersionFieldString("SECURITY_PATCH", "2015-11-01");
     }
 
     private static boolean isCallerSafetyNet() {
