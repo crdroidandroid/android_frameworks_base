@@ -363,7 +363,8 @@ open class QSTileViewImpl @JvmOverloads constructor(
 
     private fun createAndAddLabels() {
         labelContainer = LayoutInflater.from(context)
-                .inflate(if (isA11Style) R.layout.qs_tile_label_a11 else (if (vertical)  R.layout.qs_tile_label_vertical else R.layout.qs_tile_label), this, false) as IgnorableChildLinearLayout
+                .inflate(if (isA11Style || vertical) R.layout.qs_tile_label_vertical else R.layout.qs_tile_label, this, false)
+                as IgnorableChildLinearLayout
         label = labelContainer.requireViewById(R.id.tile_label)
         secondaryLabel = labelContainer.requireViewById(R.id.app_label)
         if (isA11Style) {
