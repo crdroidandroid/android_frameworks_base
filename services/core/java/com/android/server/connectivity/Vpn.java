@@ -19,6 +19,7 @@ package com.android.server.connectivity;
 import static android.Manifest.permission.BIND_VPN_SERVICE;
 import static android.Manifest.permission.CONTROL_VPN;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.net.ConnectivitySettingsManager.PRIVATE_DNS_MODE_OFF;
 import static android.net.NetworkCapabilities.NET_CAPABILITY_NOT_METERED;
 import static android.net.NetworkCapabilities.NET_CAPABILITY_NOT_VPN;
 import static android.net.NetworkCapabilities.TRANSPORT_CELLULAR;
@@ -56,6 +57,7 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.UserInfo;
 import android.net.ConnectivityDiagnosticsManager;
 import android.net.ConnectivityManager;
+import android.net.ConnectivitySettingsManager;
 import android.net.INetd;
 import android.net.INetworkManagementEventObserver;
 import android.net.Ikev2VpnProfile;
@@ -709,12 +711,14 @@ public class Vpn {
                     mNetworkAgent.unregister();
                     mNetworkAgent = null;
                 }
+                maybeRestoreDNS();
                 break;
             case CONNECTING:
                 if (null != mNetworkAgent) {
                     throw new IllegalStateException("VPN can only go to CONNECTING state when"
                             + " the agent is null.");
                 }
+                maybeRestrictDNS();
                 break;
             default:
                 throw new IllegalArgumentException("Illegal state argument " + detailedState);
@@ -1680,6 +1684,34 @@ public class Vpn {
 
     private void agentDisconnect() {
         updateState(DetailedState.DISCONNECTED, "agentDisconnect");
+    }
+
+    @GuardedBy("this")
+    private void maybeRestrictDNS() {
+        BinderUtils.withCleanCallingIdentity(() -> {
+            final boolean isEnforceDns = mSystemServices.settingsSecureGetIntForUser(
+                    Settings.Secure.VPN_ENFORCE_DNS, 0, mUserId) == 1;
+            final int mode = ConnectivitySettingsManager.getPrivateDnsMode(mUserIdContext);
+            if (!isEnforceDns || mode == PRIVATE_DNS_MODE_OFF) return;
+            // Store current private DNS mode
+            mSystemServices.settingsSecurePutIntForUser(
+                    Settings.Secure.VPN_ENFORCE_DNS_STORE, mode, mUserId);
+            // Disable private DNS
+            ConnectivitySettingsManager.setPrivateDnsMode(mUserIdContext, PRIVATE_DNS_MODE_OFF);
+        });
+    }
+
+    @GuardedBy("this")
+    private void maybeRestoreDNS() {
+        BinderUtils.withCleanCallingIdentity(() -> {
+            final int mode = mSystemServices.settingsSecureGetIntForUser(
+                    Settings.Secure.VPN_ENFORCE_DNS_STORE, -1, mUserId);
+            if (mode == -1) return;
+            // Restore previous private DNS mode
+            ConnectivitySettingsManager.setPrivateDnsMode(mUserIdContext, mode);
+            mSystemServices.settingsSecurePutIntForUser(
+                    Settings.Secure.VPN_ENFORCE_DNS_STORE, -1, mUserId);
+        });
     }
 
     @GuardedBy("this")
