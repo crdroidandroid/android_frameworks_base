@@ -43,9 +43,6 @@
     <dimen name="qs_bottom_brightness_margin_top">8dp</dimen>
     <dimen name="qs_bottom_brightness_margin_bottom">4dp</dimen>
 
-    <!-- QS A11 Style -->
-    <dimen name="custom_qs_panel_padding_top">0dp</dimen>
-
     <!-- Pixel navbar -->
     <dimen name="opa_diamond_translation">16dp</dimen>
     <dimen name="opa_disabled_home_diameter">@dimen/navigation_icon_size</dimen>
