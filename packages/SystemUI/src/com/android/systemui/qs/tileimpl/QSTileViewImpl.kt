@@ -406,7 +406,8 @@ open class QSTileViewImpl @JvmOverloads constructor(
 
     private fun createAndAddSideView() {
         sideView = LayoutInflater.from(context)
-                .inflate(if (isA11Style) R.layout.qs_tile_side_icon else R.layout.qs_tile_side_icon_a11, this, false) as ViewGroup
+                .inflate(if (isA11Style) R.layout.qs_tile_side_icon_a11 else R.layout.qs_tile_side_icon, this, false)
+                as ViewGroup
         customDrawableView = sideView.requireViewById(R.id.customDrawable)
         chevronView = sideView.requireViewById(R.id.chevron)
         setChevronColor(getChevronColorForState(QSTile.State.DEFAULT_STATE))
