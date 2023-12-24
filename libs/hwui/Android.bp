@@ -173,6 +173,7 @@ cc_defaults {
             },
         },
     },
+    whole_program_vtables: true,
     cflags: [
         "-O3",
     ],
