@@ -887,7 +887,8 @@ public class WindowProcessController extends ConfigurationContainer<Configuratio
 
         if (canUpdate) {
             // Make sure the previous top activity in the process no longer be resumed.
-            if (mPreQTopResumedActivity != null && mPreQTopResumedActivity.isState(RESUMED)) {
+            if (mPreQTopResumedActivity != null && mPreQTopResumedActivity != activity
+                    && mPreQTopResumedActivity.isState(RESUMED)) {
                 final TaskFragment taskFrag = mPreQTopResumedActivity.getTaskFragment();
                 if (taskFrag != null) {
                     boolean userLeaving = taskFrag.shouldBeVisible(null);
