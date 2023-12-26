@@ -108,12 +108,22 @@ class WifiStandardImageView @JvmOverloads constructor(
             post { visibility = GONE }
             return
         }
-        val identifier = resources.getIdentifier("ic_wifi_standard_$wifiStandard", "drawable", context.packageName)
-        if (identifier > 0) {
+        val drawableId = getDrawableForWifiStandard(wifiStandard)
+        if (drawableId > 0) {
             post {
-                setImageDrawable(context.getDrawable(identifier))
+                setImageResource(drawableId)
                 visibility = VISIBLE
             }
+        }
+    }
+
+    private fun getDrawableForWifiStandard(wifiStandard: Int): Int {
+        return when (wifiStandard) {
+            4 -> R.drawable.ic_wifi_standard_4
+            5 -> R.drawable.ic_wifi_standard_5
+            6 -> R.drawable.ic_wifi_standard_6
+            7 -> R.drawable.ic_wifi_standard_7
+            else -> 0
         }
     }
 
