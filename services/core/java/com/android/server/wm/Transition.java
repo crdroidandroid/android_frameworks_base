@@ -2904,7 +2904,20 @@ class Transition implements BLASTSyncEngine.TransactionReadyListener {
             // If it's invisible and hasn't changed visibility, always return false since even if
             // something changed, it wouldn't be a visible change.
             final boolean currVisible = mContainer.isVisibleRequested();
-            if (currVisible == mVisible && !mVisible) return false;
+            if (currVisible == mVisible && !mVisible) {
+                final Task task = mContainer.asTask();
+                if (task != null && task.mDisplayContent != null
+                        && task.mDisplayContent.isSleeping()
+                        && mWindowingMode != task.getWindowingMode()
+                        && task.inPinnedWindowingMode()
+                        && task.isOrganized()) {
+                    // When display is sleeping, add invisible pip task to transitions
+                    // for initializing the pip task.
+                    mVisible = true;
+                } else {
+                    return false;
+                }
+            }
             return currVisible != mVisible
                     || mKnownConfigChanges != 0
                     // if mWindowingMode is 0, this container wasn't attached at collect time, so
