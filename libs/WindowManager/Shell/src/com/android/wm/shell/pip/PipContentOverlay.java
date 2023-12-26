@@ -191,7 +191,7 @@ public abstract class PipContentOverlay {
             final int maxAppIconSizePx = (int) TypedValue.applyDimension(COMPLEX_UNIT_DIP,
                     MAX_APP_ICON_SIZE_DP, context.getResources().getDisplayMetrics());
             mAppIconSizePx = Math.min(maxAppIconSizePx, appIconSizePx);
-            mAppBounds = new Rect(appBounds);
+            mAppBounds = new Rect(0, 0, appBounds.width(), appBounds.height());
             mBitmap = Bitmap.createBitmap(appBounds.width(), appBounds.height(),
                     Bitmap.Config.ARGB_8888);
             prepareAppIconOverlay(appIcon);
@@ -217,8 +217,8 @@ public abstract class PipContentOverlay {
             mTmpTransform.reset();
             // Scale back the bitmap with the pivot point at center.
             mTmpTransform.postScale(
-                    (float) mAppBounds.width() / currentBounds.width(),
-                    (float) mAppBounds.height() / currentBounds.height(),
+                    Math.max((float) mAppBounds.width() / currentBounds.width(), 1.0f),
+                    Math.max((float) mAppBounds.height() / currentBounds.height(), 1.0f),
                     mAppBounds.centerX(),
                     mAppBounds.centerY());
             atomicTx.setMatrix(mLeash, mTmpTransform, mTmpFloat9)
