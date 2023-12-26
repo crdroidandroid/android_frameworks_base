@@ -263,6 +263,7 @@ public class PixelPropsUtils {
                     setPropValue("MODEL", "Mi 4i");
                     setPropValue("PRODUCT", "ferrari");
                     setVersionFieldString("SECURITY_PATCH", "2019-08-05");
+                }
                 return;
             }
             // Set proper indexing fingerprint
