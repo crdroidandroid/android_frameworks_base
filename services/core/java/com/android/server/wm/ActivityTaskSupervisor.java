@@ -2629,7 +2629,7 @@ public class ActivityTaskSupervisor implements RecentTasks.Callbacks {
         mPipModeChangedTargetRootTaskBounds = targetRootTaskBounds;
 
         if (!mHandler.hasMessages(REPORT_PIP_MODE_CHANGED_MSG)) {
-            mHandler.sendEmptyMessage(REPORT_PIP_MODE_CHANGED_MSG);
+            mHandler.sendEmptyMessageDelayed(REPORT_PIP_MODE_CHANGED_MSG, 300);
         }
     }
 
