@@ -1085,9 +1085,13 @@ class Transition implements BLASTSyncEngine.TransactionReadyListener {
 
         try {
             // If not going auto-pip, the activity should be paused with user-leaving.
+            ActivityRecord resuming = null;
+            if (mParallelCollectType == Transition.PARALLEL_TYPE_RECENTS && hasTransientLaunch()) {
+                resuming = mTransientLaunches.keyAt(0);
+            }
             mController.mAtm.mTaskSupervisor.mUserLeaving = true;
             ar.getTaskFragment().startPausing(false /* uiSleeping */,
-                    null /* resuming */, "finishTransition");
+                    resuming, "finishTransition");
         } finally {
             mController.mAtm.mTaskSupervisor.mUserLeaving = false;
         }
