@@ -92,7 +92,9 @@ import android.content.res.Configuration;
 import android.graphics.Insets;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.hardware.power.Boost;
 import android.os.IBinder;
+import android.os.PowerManagerInternal;
 import android.os.UserHandle;
 import android.util.DisplayMetrics;
 import android.util.Slog;
@@ -108,6 +110,7 @@ import android.window.TaskFragmentOrganizerToken;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.protolog.ProtoLog;
 import com.android.internal.util.ToBooleanFunction;
+import com.android.server.LocalServices;
 import com.android.server.am.HostingRecord;
 import com.android.server.pm.pkg.AndroidPackage;
 import com.android.window.flags.Flags;
@@ -413,6 +416,8 @@ class TaskFragment extends WindowContainer<WindowContainer> {
     private final EnsureActivitiesVisibleHelper mEnsureActivitiesVisibleHelper =
             new EnsureActivitiesVisibleHelper(this);
 
+     private final PowerManagerInternal mPowerManagerInternal;
+
     /** Creates an embedded task fragment. */
     TaskFragment(ActivityTaskManagerService atmService, IBinder fragmentToken,
             boolean createdByOrganizer) {
@@ -433,6 +438,7 @@ class TaskFragment extends WindowContainer<WindowContainer> {
                 mAtmService.mWindowOrganizerController.mTaskFragmentOrganizerController;
         mFragmentToken = fragmentToken;
         mRemoteToken = new RemoteToken(this);
+        mPowerManagerInternal = LocalServices.getService(PowerManagerInternal.class);
     }
 
     @NonNull
@@ -1538,6 +1544,9 @@ class TaskFragment extends WindowContainer<WindowContainer> {
                 dc.prepareAppTransition(TRANSIT_NONE);
             } else {
                 dc.prepareAppTransition(TRANSIT_OPEN);
+                if (mPowerManagerInternal != null) {
+                    mPowerManagerInternal.setPowerBoost(Boost.DISPLAY_UPDATE_IMMINENT, 80);
+                }
             }
         }
 
