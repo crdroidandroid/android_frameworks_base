@@ -52,7 +52,7 @@
     <string name="quick_settings_sound_label">Гук</string>
     <string name="quick_settings_sound_ring">Званок</string>
     <string name="quick_settings_sound_vibrate">Вібрацыя</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">Выключыць гук</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
@@ -123,13 +123,13 @@
     <string name="omnijaws_service_error">Памылка загрузкі дадзеных аб надвор\'і</string>
     <string name="omnijaws_service_unknown">Няма дадзеных аб надвор\'і</string>
     <string name="omnijaws_label_default">Надвор\'е</string>
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">Воблачна</string>
+    <string name="weather_condition_rain">Дождж</string>
+    <string name="weather_condition_clear">Сонечна</string>
+    <string name="weather_condition_storm">Навальніца</string>
+    <string name="weather_condition_snow">Снег</string>
+    <string name="weather_condition_wind">Ветрана</string>
+    <string name="weather_condition_mist">Туман</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Частата экрана</string>
     <string name="auto_mode_label">Аўтаматычна</string>
