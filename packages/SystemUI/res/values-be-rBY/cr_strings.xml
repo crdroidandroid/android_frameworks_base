@@ -137,10 +137,10 @@
     <string name="screenshot_long_press">Доўгі націск - выбраны рэгіён</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Пошук музыкі</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Спачатку ўсталюйце праграму для пошуку музыкі</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Мова</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">Спачатку наладзьце некалькі моў</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">выкарыстоўваецца сёння</string>
     <string name="usage_data_default_suffix">Дадзеныя</string>
