@@ -33,7 +33,7 @@
     <string name="omnijaws_package_not_available">OmniJaws nie jest dostępny</string>
     <string name="omnijaws_service_last_update">Ostatnia aktualizacja:</string>
     <!-- Always on Display tile -->
-    <string name="quick_settings_always_on_display_label">Aktywny wyświetlacz</string>
+    <string name="quick_settings_always_on_display_label">Ekran zawsze włączony</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Przełączanie SIM dla danych</string>
     <string name="qs_data_switch_changed_1">Używanie karty SIM 1 dla danych mobilnych</string>
