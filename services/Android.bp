@@ -109,6 +109,7 @@ filegroup {
     name: "services-non-updatable-sources",
     srcs: [
         ":incremental_aidl",
+        ":services.applock-sources",
         ":services.core-aidl-sources",
         ":services.core-sources",
         ":services.core-sources-am-wm",
@@ -212,6 +213,7 @@ system_java_library {
 
     // The convention is to name each service module 'services.$(module_name)'
     static_libs: [
+        "services.applock",
         "services.core",
         "services.accessibility",
         "services.appprediction",
