@@ -19,10 +19,7 @@ filegroup {
 
 filegroup {
     name: "services.core-sources",
-    srcs: [
-        "java/**/*.java",
-        "java/**/*.kt",
-    ],
+    srcs: ["java/**/*.java"],
     exclude_srcs: [
         ":services.core-sources-am-wm",
     ],
@@ -178,9 +175,6 @@ java_library_static {
         "overlayable_policy_aidl-java",
         "com.android.sysprop.watchdog",
         "faceunlock_framework",
-        "kotlin-stdlib",
-        "kotlinx_coroutines_android",
-        "kotlinx_coroutines",
     ],
     javac_shard_size: 50,
 }
