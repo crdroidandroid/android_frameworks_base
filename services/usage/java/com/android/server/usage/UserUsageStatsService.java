@@ -299,32 +299,7 @@ class UserUsageStatsService {
         event.mTimeStamp = Math.max(0, event.mTimeStamp - mRealTimeSnapshot) + mSystemTimeSnapshot;
     }
 
-    private boolean isEventInQuota(Event event, int userId) {
-        if (!UsageStatsService.hasInit) {
-            Slog.w(TAG, "UsageStatsServiceImpl not init, so can't do isEventInQuota.", new Throwable());
-            return true;
-        }
-
-        int et = event.mEventType;
-        String pkg = event.mPackage;
-        String tag = UsageStatsService.QUOTA_CATEGORY_TAGS[et];
-        return UsageStatsService.mQuotaTracker.noteEvent(userId, pkg, tag);
-    }
-
-    public boolean isLimitExceed(List<Event> events) {
-        if (events.size() < UsageStatsService.SHRINK_THRESHOLD) return false;
-
-        Slog.w(TAG, "Events exceed 100000! Reserved event end at timeStamp: " +
-                events.get(events.size() - 1).getTimeStamp() + " to avoid OOM.");
-        return true;
-    }
-
     void reportEvent(Event event) {
-        if (isEventInQuota(event, mUserId)) {
-            Slog.i(TAG, "Event is not in quota! " + event);
-            return;
-        }
-
         if (DEBUG) {
             Slog.d(TAG, mLogPrefix + "Got usage event for " + event.mPackage
                     + "[" + event.mTimeStamp + "]: "
@@ -573,10 +548,6 @@ class UserUsageStatsService {
                         final int startIndex = stats.events.firstIndexOnOrAfter(beginTime);
                         final int size = stats.events.size();
                         for (int i = startIndex; i < size; i++) {
-                            if (isLimitExceed(accumulatedResult)) {
-                                return true;
-                            }
-
                             Event event = stats.events.get(i);
                             if (event.mTimeStamp >= endTime) {
                                 return false;
@@ -693,10 +664,6 @@ class UserUsageStatsService {
                     final int startIndex = stats.events.firstIndexOnOrAfter(beginTime);
                     final int size = stats.events.size();
                     for (int i = startIndex; i < size; i++) {
-                        if (isLimitExceed(accumulatedResult)) {
-                            return true;
-                        }
-
                         final Event event = stats.events.get(i);
                         if (event.mTimeStamp >= endTime) {
                             return false;

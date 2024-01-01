@@ -109,9 +109,6 @@ import com.android.server.LocalServices;
 import com.android.server.SystemService;
 import com.android.server.usage.AppStandbyInternal.AppIdleStateChangeListener;
 import com.android.server.utils.AlarmQueue;
-import com.android.server.utils.quota.Category;
-import com.android.server.utils.quota.Categorizer;
-import com.android.server.utils.quota.CountQuotaTracker;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -189,24 +186,6 @@ public class UsageStatsService extends SystemService implements
     private static final String GLOBAL_COMPONENT_USAGE_FILE_NAME = "globalcomponentusage";
 
     private static final char TOKEN_DELIMITER = '/';
-
-    /*
-     * The maximum count of each type event of one application is set to 10000 within 24 hours,
-     * which prevent some applications reporting too many events under abnormal circumstances and causing OOM.
-     */
-    private static final int LIMIT_COUNT = 10000;
-    private static final int WINDOW_MS = 24 * 60 * 60 * 1000;
-
-    private static final int QUOTA_CATEGORY_NUM = Event.MAX_EVENT_TYPE + 1;
-
-    // Each event retains about 100 bytes. 100 K events retains 10 MB, which can't be larger any more.
-    static final int SHRINK_THRESHOLD = 100000;
-
-    static final String[] QUOTA_CATEGORY_TAGS = new String[QUOTA_CATEGORY_NUM];
-    static final Category[] QUOTA_CATEGORIES = new Category[QUOTA_CATEGORY_NUM];
-    static final HashMap<String, Integer> QUOTA_CATEGORY_TAGS_MAP = new HashMap<>(QUOTA_CATEGORY_NUM);
-    static CountQuotaTracker mQuotaTracker;
-    static boolean hasInit = false;
 
     // Handler message types.
     static final int MSG_REPORT_EVENT = 0;
@@ -407,26 +386,7 @@ public class UsageStatsService extends SystemService implements
                 Slog.w(TAG, "Missing procfs interface: " + KERNEL_COUNTER_FILE);
             }
             readUsageSourceSetting();
-
-            initQuotaTracker(this.getContext());
         }
-    }
-
-    private void initQuotaTracker(Context context) {
-        for (int i = 0; i < QUOTA_CATEGORY_NUM; i++) {
-            QUOTA_CATEGORY_TAGS[i] = "UsageEvent_Quota_Category_" + i;
-            QUOTA_CATEGORIES[i] = new Category(QUOTA_CATEGORY_TAGS[i]);
-            QUOTA_CATEGORY_TAGS_MAP.put(QUOTA_CATEGORY_TAGS[i], i);
-        }
-        final Categorizer quotaCategorizer = (userId, packageName, tag) -> {
-            int catIdx = QUOTA_CATEGORY_TAGS_MAP.get(tag);
-            return QUOTA_CATEGORIES[catIdx];
-        };
-        mQuotaTracker = new CountQuotaTracker(context, quotaCategorizer);
-        for (int i = 0; i < QUOTA_CATEGORY_NUM; i++) {
-            mQuotaTracker.setCountLimit(QUOTA_CATEGORIES[i], LIMIT_COUNT, WINDOW_MS);
-        }
-        hasInit = true;
     }
 
     @Override
@@ -1938,8 +1898,6 @@ public class UsageStatsService extends SystemService implements
 
             idpw.println();
             mResponseStatsTracker.dump(idpw);
-
-            dumpCountQuotaTracker(idpw);
         }
 
         mAppStandby.dumpUsers(idpw, userIds, pkgs);
@@ -1948,16 +1906,6 @@ public class UsageStatsService extends SystemService implements
             pw.println();
             mAppStandby.dumpState(args, pw);
         }
-    }
-
-    private void dumpCountQuotaTracker(IndentingPrintWriter idpw) {
-        if (!hasInit) {
-            Slog.w(TAG, "UsageStatsServiceImpl not init, so can't dumpCountQuotaTracker.");
-            return;
-        }
-
-        idpw.println();
-        mQuotaTracker.dump(idpw);
     }
 
     private int parseUserIdFromArgs(String[] args, int index, IndentingPrintWriter ipw) {
