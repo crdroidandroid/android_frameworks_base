@@ -19,10 +19,7 @@ filegroup {
 
 filegroup {
     name: "services.core-sources",
-    srcs: [
-        "java/**/*.java",
-        "java/**/*.kt",
-    ],
+    srcs: ["java/**/*.java"],
     exclude_srcs: [
         ":services.core-sources-am-wm",
     ],
@@ -210,9 +207,6 @@ java_library_static {
         "service-jobscheduler-deviceidle.flags-aconfig-java",
         "vendor.aac.hardware.richtap.vibrator",
         "vendor.aospa.biometrics.face",
-        "kotlin-stdlib",
-        "kotlinx_coroutines_android",
-        "kotlinx_coroutines",
     ],
     javac_shard_size: 50,
     javacflags: [
