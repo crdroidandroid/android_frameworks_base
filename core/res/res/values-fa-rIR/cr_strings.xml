@@ -27,4 +27,6 @@
     <string name="aerr_copy">کپی کردن آدرس گزارش خرابی</string>
     <string name="url_copy_success">آدرس با موفقیت کپی شد</string>
     <string name="url_copy_failed">هنگام بارگزاری گزارش در Pasty خطایی روی داد</string>
+    <!-- App lock -->
+    <string name="unlock_application">بازگشایی <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>
