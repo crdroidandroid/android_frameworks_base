@@ -19,10 +19,7 @@ filegroup {
 
 filegroup {
     name: "services.core-sources",
-    srcs: [
-        "java/**/*.java",
-        "java/**/*.kt",
-    ],
+    srcs: ["java/**/*.java"],
     exclude_srcs: [
         ":services.core-sources-am-wm",
     ],
@@ -253,9 +250,6 @@ java_library_static {
         "android.adpf.sessionmanager_aidl-java",
         "uprobestats_flags_java_lib",
         "vendor.aospa.biometrics.face",
-        "kotlin-stdlib",
-        "kotlinx_coroutines_android",
-        "kotlinx_coroutines",
     ],
     javac_shard_size: 50,
     javacflags: [
