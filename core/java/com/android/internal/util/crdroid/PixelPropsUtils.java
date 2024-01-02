@@ -88,6 +88,8 @@ public class PixelPropsUtils {
     // Packages to Keep with original device
     private static final String[] packagesToKeep = {
             "com.google.android.MTCL83",
+             "com.google.android.as",
+        "com.google.android.apps.motionsense.bridge"
             "com.google.android.UltraCVM",
             "com.google.android.apps.cameralite",
             "com.google.android.dialer",
@@ -103,7 +105,9 @@ public class PixelPropsUtils {
             "com.google.android.apps.subscriptions.red",
             "com.google.android.apps.tachyon",
             "com.google.android.apps.tycho",
-            "com.google.android.setupwizard"
+              "com.google.oslo",
+            "com.google.android.setupwizard",
+            "it.ingdirect.app"
     };
 
     // Packages to Spoof as ROG Phone 6
