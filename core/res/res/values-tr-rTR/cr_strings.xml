@@ -28,5 +28,5 @@
     <string name="url_copy_success">URL başarıyla kopyalandı</string>
     <string name="url_copy_failed">Günlük Pasty\'ye yüklenirken bir hata oluştu</string>
     <!-- App lock -->
-    <string name="unlock_application">Kilidi aç <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> kilidini aç</string>
 </resources>
