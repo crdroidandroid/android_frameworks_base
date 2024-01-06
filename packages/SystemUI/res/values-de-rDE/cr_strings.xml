@@ -135,10 +135,10 @@
     <string name="screenshot_long_press">Gedrückt halten - ausgewählter Bereich</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Sound Search</string>
-    <string name="quick_settings_sound_search_no_app">Bitte erst eine Musikerkennungs-App installieren</string>
+    <string name="quick_settings_sound_search_no_app">Bitte zunächst eine Musikerkennungs-App installieren</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Sprache</string>
-    <string name="quick_settings_locale_more_locales_toast">Bitte erst mehr als eine Sprache hinzufügen</string>
+    <string name="quick_settings_locale_more_locales_toast">Bitte zunächst mehr als eine Sprache hinzufügen</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">heute verbraucht</string>
     <string name="usage_data_default_suffix">Daten</string>

@@ -27,4 +27,6 @@
     <string name="aerr_copy">Copiază URL-ul jurnalului de eroare</string>
     <string name="url_copy_success">URL-ul a fost copiat cu succes</string>
     <string name="url_copy_failed">A apărut o eroare la încărcarea registrului în pasty</string>
+    <!-- App lock -->
+    <string name="unlock_application">Deblocare <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>
