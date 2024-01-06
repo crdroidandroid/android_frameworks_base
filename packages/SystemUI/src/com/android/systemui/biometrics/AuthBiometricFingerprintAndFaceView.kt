@@ -35,7 +35,7 @@ class AuthBiometricFingerprintAndFaceView(
 
     override fun getConfirmationPrompt() = R.string.biometric_dialog_tap_confirm_with_face
 
-    override fun forceRequireConfirmation(@Modality modality: Int) = modality == TYPE_FACE
+    override fun supportsRequireConfirmation() = true
 
     override fun ignoreUnsuccessfulEventsFrom(@Modality modality: Int, unsuccessfulReason: String) =
         modality == TYPE_FACE && !(isFaceClass3 && isLockoutErrorString(unsuccessfulReason))
