@@ -121,13 +121,13 @@
     <string name="omnijaws_service_error">خطا در بارگیری اطلاعات آب و هوا</string>
     <string name="omnijaws_service_unknown">بدون اطلاعات آب و هوا</string>
     <string name="omnijaws_label_default">آب و هوا</string>
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">ابری</string>
+    <string name="weather_condition_rain">بارانی</string>
+    <string name="weather_condition_clear">آفتابی</string>
+    <string name="weather_condition_storm">طوفانی</string>
+    <string name="weather_condition_snow">برفی</string>
+    <string name="weather_condition_wind">باد</string>
+    <string name="weather_condition_mist">مه آلود</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">نرخ تازه‌سازی</string>
     <string name="auto_mode_label">خودکار</string>
@@ -144,7 +144,7 @@
     <string name="usage_data_default_suffix">داده</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">نشانگر رومینگ</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
 </resources>
