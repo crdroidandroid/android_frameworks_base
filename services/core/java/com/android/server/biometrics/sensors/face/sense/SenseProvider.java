@@ -779,7 +779,7 @@ public class SenseProvider implements ServiceProvider {
             final int faceId = faces.get(0).getBiometricId();
             final FaceSetFeatureClient client = new FaceSetFeatureClient(mContext,
                     mLazyDaemon, token, new ClientMonitorCallbackConverter(receiver), userId,
-                    opPackageName, mSensorId, BiometricLogger.ofUnknown(mContext),
+                    opPackageName, mSensorId, BiometricLogger.ofUnknown(mContext, mHandler),
                     mBiometricContext,
                     feature, enabled, hardwareAuthToken, faceId);
             mScheduler.scheduleClientMonitor(client, mBiometricStateCallback);
@@ -814,7 +814,7 @@ public class SenseProvider implements ServiceProvider {
             final int faceId = faces.get(0).getBiometricId();
             final FaceGetFeatureClient client = new FaceGetFeatureClient(mContext, mLazyDaemon,
                     token, listener, userId, opPackageName, mSensorId,
-                    BiometricLogger.ofUnknown(mContext), mBiometricContext,
+                    BiometricLogger.ofUnknown(mContext, mHandler), mBiometricContext,
                     feature, faceId);
             mScheduler.scheduleClientMonitor(client, new ClientMonitorCallback() {
                 @Override
@@ -1090,7 +1090,7 @@ public class SenseProvider implements ServiceProvider {
     }
 
     private BiometricLogger createLogger(int statsAction, int statsClient) {
-        return new BiometricLogger(mContext, BiometricsProtoEnums.MODALITY_FACE,
+        return new BiometricLogger(mContext, mHandler, BiometricsProtoEnums.MODALITY_FACE,
                 statsAction, statsClient, mAuthenticationStatsCollector);
     }
 
