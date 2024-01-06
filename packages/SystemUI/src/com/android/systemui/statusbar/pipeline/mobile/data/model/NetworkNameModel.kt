@@ -119,7 +119,7 @@ fun Intent.toNetworkNameModel(separator: String): NetworkNameModel? {
     if (showPlmn && plmn != null) {
         str.append(plmn)
     }
-    if (showSpn && spn != null) {
+    if (showSpn && spn != null && !str.toString().lowercase().contains(spn.lowercase())) {
         if (str.isNotEmpty()) {
             str.append(separator)
         }
