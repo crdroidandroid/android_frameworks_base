@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2024 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Statusbar Icons -->
+    <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_data_saver">Эканомія трафіка</string>
+    <string name="status_bar_call_strength">Узровень сігналу</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
+    <!-- Screen record delete action -->
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">Выдаліць</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">Запіс экрана выдалены</string>
+    <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">Паказаць кнопку спынення</string>
+    <string name="screenrecord_stopdot_summary">Доўгі націск, каб перамясціць</string>
+    <string name="screenrecord_lowquality_label">Нізкая якасць для меншага памеру файла</string>
+    <string name="screenrecord_lowquality_summary">Для меншага памеру файла</string>
+    <string name="screenrecord_longer_timeout_switch_label">Большы памер файла</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Абмяжуйце памер запісу да 15 ГБ</string>
+    <string name="screenrecord_skip_time_label">Прапусціць таймер</string>
+    <string name="screenrecord_skip_time_summary">Прыбраць ​​3 секунды чакання</string>
+    <string name="screenrecord_hevc_switch_label">Уключыць HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">Выкарыстоўваць больш эфектыўнае кадзіраванне відэа HEVC</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">Выкарыстоўваць Bluetooth</string>
+    <string name="bluetooth_is_off">Bluetooth адключаны</string>
+    <string name="tap_a_device_to_connect">Выберыце прыладу для падключэння</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d прылада падключана</item>
+        <item quantity="few">%d прылады падключана</item>
+        <item quantity="many">%d прылад падключана</item>
+        <item quantity="other">%d прылады падключана</item>
+    </plurals>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Гук</string>
+    <string name="quick_settings_sound_ring">Званок</string>
+    <string name="quick_settings_sound_vibrate">Вібрацыя</string>
+    <string name="quick_settings_sound_mute">Выключыць гук</string>
+    <!-- Text to use when the number in a notification info is too large -->
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">кбіт/с</string>
+    <string name="megabitspersecond_short">Мб/с</string>
+    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="kilobytespersecond_short">кБ/с</string>
+    <string name="megabytespersecond_short">МБ/с</string>
+    <string name="gigabytespersecond_short">Гб/с</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">выкарыстоўваецца сёння</string>
+    <string name="usage_data_default_suffix">Дадзеныя</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">Воблачна</string>
+    <string name="weather_condition_rain">Дождж</string>
+    <string name="weather_condition_clear">Сонечна</string>
+    <string name="weather_condition_storm">Навальніца</string>
+    <string name="weather_condition_snow">Снег</string>
+    <string name="weather_condition_wind">Ветрана</string>
+    <string name="weather_condition_mist">Туман</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Хуткая зарадкаа (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> да поўнай зарадкі)</string>
+    <string name="keyguard_plugged_in_dash_charging">Ідзе зарадка (<xliff:g id="Percentage">%s</xliff:g>)</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp зарадка • (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> да поўнай зарадкі)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp зарадка</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC зарадка • (<xliff:g id="charging_time_left" example="4 гадзінны і 2 хвіліны">%1$s</xliff:g> да поўнай зарадкі)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC зарадка</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Турба зарадка (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> да поўный зарадкі)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Турба зарадка</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">Рэжым «На хаду» уключаны</string>
+    <string name="onthego_notif_title">Рэжым «На хаду» актыўны</string>
+    <string name="onthego_notif_stop">Спыніць</string>
+    <string name="onthego_notif_options">Опцыі</string>
+    <string name="onthego_notif_error">Немагчыма запусціць рэжым «На хаду»</string>
+    <string name="onthego_notif_restart">Перазапусціць рэжым «На хаду»</string>
+    <string name="onthego_notif_camera_changed">Рэжым камеры зменены</string>
+    <string name="onthego_transparency">Празрыстасць</string>
+    <string name="onthego_front_camera">Выкарыстоўваць франтальную камеру</string>
+    <string name="onthego_service_toggle">Аўтаматычна перазапускаць службу</string>
+    <string name="onthego_channel_name">Галоўны</string>
+    <string name="global_action_onthego">\"На хаду\"</string>
+    <!-- Button to restart SystemUI, within the Restart Options dialog -->
+    <string name="global_action_restart_systemui">Сістэмны інтэрфейс</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Прыярытэт</string>
+    <string name="volume_ringer_alarms_only">Будзільнікі</string>
+    <string name="volume_ringer_dnd">DnD</string>
+    <string name="tristate_flashlight">Ліхтарык</string>
+    <string name="tristate_flashlight_on">Ліхтарык уключаны</string>
+    <string name="tristate_flashlight_off">Ліхтарык выключаны</string>
+    <string name="tristate_flashlight_blink">Ліхтарык</string>
+    <string name="tristate_brightness_bright">Максімальная яркасць</string>
+    <string name="tristate_brightness_dark">Мінімальная яркасць</string>
+    <string name="tristate_brightness_auto">Аўтаматычная яркасць</string>
+    <string name="tristate_rotation_auto">Аўтапаварот</string>
+    <string name="tristate_rotation_0">Партрэт</string>
+    <string name="tristate_rotation_90">Ландшафт (90°)</string>
+    <string name="tristate_rotation_270">Ландшафт (270°)</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Спынiць прымусова?</string>
+    <string name="force_stop_dlg_text">Прымусовае закрыццё праграмы можа адбіцца на яе функцыянальнасці.</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">Інфармацыя аб працэсары</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">Інфармацыя аб FPS</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Компас</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Ініцыялізацыя\u2026</string>
+    <string name="quick_settings_compass_N">Пн</string>
+    <string name="quick_settings_compass_NE">ПнУсх</string>
+    <string name="quick_settings_compass_E">Усх</string>
+    <string name="quick_settings_compass_SE">ПдУсх</string>
+    <string name="quick_settings_compass_S">Пд</string>
+    <string name="quick_settings_compass_SW">ПдЗх</string>
+    <string name="quick_settings_compass_W">Зх</string>
+    <string name="quick_settings_compass_NW">ПнЗх</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Пераключыце карту мабільных дадзеных</string>
+    <!-- Volume panel QS tile -->
+    <string name="quick_settings_volume_panel_label">Панэль гучнасці</string>
+    <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_lens_label">Аб’ектыў</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">Разумныя пікселі</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Аўтаматычнае ўключэнне разумных пікселяў</string>
+    <!-- Weather Tile -->
+    <string name="omnijaws_service_error">Памылка загрузкі дадзеных аб надвор\'і</string>
+    <string name="omnijaws_service_unknown">Няма дадзеных аб надвор\'і</string>
+    <string name="omnijaws_label_default">Надвор\'е</string>
+    <!-- Refresh Rate Tile -->
+    <string name="refresh_rate_tile_label">Частата экрана</string>
+    <string name="auto_mode_label">Аўтаматычна</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Доўгі націск - выбраны рэгіён</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Пошук музыкі</string>
+    <string name="quick_settings_sound_search_no_app">Спачатку ўсталюйце праграму для пошуку музыкі</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Мова</string>
+    <string name="quick_settings_locale_more_locales_toast">Спачатку наладзьце некалькі моў</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">Распазнаванне асобы...</string>
+</resources>

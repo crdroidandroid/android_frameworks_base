@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2024 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Statusbar Icons -->
+    <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_data_saver">数据保存</string>
+    <string name="status_bar_call_strength">通话强度</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
+    <!-- Screen record delete action -->
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">删除</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">屏幕录制已删除</string>
+    <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">显示停止按钮</string>
+    <string name="screenrecord_stopdot_summary">长按移除</string>
+    <string name="screenrecord_lowquality_label">低画质</string>
+    <string name="screenrecord_lowquality_summary">压缩录屏文件</string>
+    <string name="screenrecord_longer_timeout_switch_label">更大的文件大小限制</string>
+    <string name="screenrecord_longer_timeout_switch_summary">限制录屏文件大小为 15GB</string>
+    <string name="screenrecord_skip_time_label">跳过倒计时</string>
+    <string name="screenrecord_skip_time_summary">移除 3 秒等待</string>
+    <string name="screenrecord_hevc_switch_label">启用 HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">使用效率更高的 HEVC 视频编码</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">启用蓝牙</string>
+    <string name="bluetooth_is_off">蓝牙已关闭</string>
+    <string name="tap_a_device_to_connect">点击以连接设备</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="other">已连接 %d 台设备</item>
+    </plurals>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">声音</string>
+    <string name="quick_settings_sound_ring">铃声</string>
+    <string name="quick_settings_sound_vibrate">振动</string>
+    <string name="quick_settings_sound_mute">静音</string>
+    <!-- Text to use when the number in a notification info is too large -->
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">今日使用</string>
+    <string name="usage_data_default_suffix">数据</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">多云</string>
+    <string name="weather_condition_rain">有雨</string>
+    <string name="weather_condition_clear">晴天</string>
+    <string name="weather_condition_storm">暴雨</string>
+    <string name="weather_condition_snow">有雪</string>
+    <string name="weather_condition_wind">有风</string>
+    <string name="weather_condition_mist">有雾</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash 闪充中 (还需 <xliff:g id="charging_time_left">%1$s</xliff:g>充满)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash 闪充</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp 闪充中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 后充满)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp 闪充</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC 闪充中 (还需 <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 充满)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC 闪充中</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • 快速充电中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 后充满)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • 快速充电中</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">行走模式已激活</string>
+    <string name="onthego_notif_title">行走模式处于活动状态</string>
+    <string name="onthego_notif_stop">停止</string>
+    <string name="onthego_notif_options">选项</string>
+    <string name="onthego_notif_error">无法启动行走模式</string>
+    <string name="onthego_notif_restart">重新启动行走模式</string>
+    <string name="onthego_notif_camera_changed">相机模式已更改</string>
+    <string name="onthego_transparency">透明度</string>
+    <string name="onthego_front_camera">使用前置摄像头</string>
+    <string name="onthego_service_toggle">自动重启服务</string>
+    <string name="onthego_channel_name">主要</string>
+    <string name="global_action_onthego">行走模式</string>
+    <!-- Button to restart SystemUI, within the Restart Options dialog -->
+    <string name="global_action_restart_systemui">系统界面</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">优先级</string>
+    <string name="volume_ringer_alarms_only">闹钟</string>
+    <string name="volume_ringer_dnd">DnD</string>
+    <string name="tristate_flashlight">手电筒</string>
+    <string name="tristate_flashlight_on">手电筒开启</string>
+    <string name="tristate_flashlight_off">手电筒关闭</string>
+    <string name="tristate_flashlight_blink">闪光灯</string>
+    <string name="tristate_brightness_bright">最大亮度</string>
+    <string name="tristate_brightness_dark">最小亮度</string>
+    <string name="tristate_brightness_auto">自动亮度</string>
+    <string name="tristate_rotation_auto">自动旋转</string>
+    <string name="tristate_rotation_0">纵向</string>
+    <string name="tristate_rotation_90">横向 (90°)</string>
+    <string name="tristate_rotation_270">横向 (270°)</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">要强行停止吗？</string>
+    <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">CPU 信息</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">FPS 信息</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">指南针</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">正在初始化\u2026</string>
+    <string name="quick_settings_compass_N">北</string>
+    <string name="quick_settings_compass_NE">东北</string>
+    <string name="quick_settings_compass_E">东</string>
+    <string name="quick_settings_compass_SE">东南</string>
+    <string name="quick_settings_compass_S">南</string>
+    <string name="quick_settings_compass_SW">西南</string>
+    <string name="quick_settings_compass_W">西</string>
+    <string name="quick_settings_compass_NW">西北</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">切换数据卡</string>
+    <!-- Volume panel QS tile -->
+    <string name="quick_settings_volume_panel_label">音量面板</string>
+    <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_lens_label">智能镜头</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">智能像素</string>
+    <string name="quick_settings_smart_pixels_on_power_save">自动启用智能像素</string>
+    <!-- Weather Tile -->
+    <string name="omnijaws_service_error">加载天气数据时出错</string>
+    <string name="omnijaws_service_unknown">没有天气数据</string>
+    <string name="omnijaws_label_default">天气</string>
+    <!-- Refresh Rate Tile -->
+    <string name="refresh_rate_tile_label">刷新率</string>
+    <string name="auto_mode_label">自动</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">长按 - 选定区域</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">声音搜索</string>
+    <string name="quick_settings_sound_search_no_app">请先安装语音搜索应用</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">语言</string>
+    <string name="quick_settings_locale_more_locales_toast">请先配置多语言设置</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">正在识别面部...</string>
+</resources>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2024 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Statusbar Icons -->
+    <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_call_strength">Call strength</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
+    <!-- Screen record delete action -->
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">Delete</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">Screen recording deleted</string>
+    <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">Show stop dot</string>
+    <string name="screenrecord_stopdot_summary">Longpress to move it</string>
+    <string name="screenrecord_lowquality_label">Lower quality</string>
+    <string name="screenrecord_lowquality_summary">For smaller file size</string>
+    <string name="screenrecord_longer_timeout_switch_label">Bigger file size limit</string>
+    <string name="screenrecord_longer_timeout_switch_summary">Limit recording size to 15 GB</string>
+    <string name="screenrecord_skip_time_label">Skip timer</string>
+    <string name="screenrecord_skip_time_summary">Remove 3 second wait</string>
+    <string name="screenrecord_hevc_switch_label">Ota HEVC käyttöön</string>
+    <string name="screenrecord_hevc_switch_summary">Käytä tehokkaampaa HEVC-videokoodausta</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">Käytä Bluetoothia</string>
+    <string name="bluetooth_is_off">Bluetooth on pois käytöstä</string>
+    <string name="tap_a_device_to_connect">Muodosta yhteys napauttamalla laitetta</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d laite yhdistettynä</item>
+        <item quantity="other">%d laitetta yhdistettynä</item>
+    </plurals>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sound</string>
+    <string name="quick_settings_sound_ring">Ring</string>
+    <string name="quick_settings_sound_vibrate">Vibrate</string>
+    <string name="quick_settings_sound_mute">Mute</string>
+    <!-- Text to use when the number in a notification info is too large -->
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">used today</string>
+    <string name="usage_data_default_suffix">Data</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">Cloudy</string>
+    <string name="weather_condition_rain">Rainy</string>
+    <string name="weather_condition_clear">Sunny</string>
+    <string name="weather_condition_storm">Stormy</string>
+    <string name="weather_condition_snow">Snowy</string>
+    <string name="weather_condition_wind">Windy</string>
+    <string name="weather_condition_mist">Misty</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash Charging</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp Charging</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo-ladataan (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> kunnes täynnä)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • Turbo-ladataan</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">On-The-Go activated</string>
+    <string name="onthego_notif_title">On-The-Go is active</string>
+    <string name="onthego_notif_stop">Stop</string>
+    <string name="onthego_notif_options">Options</string>
+    <string name="onthego_notif_error">Unable to start On-The-Go</string>
+    <string name="onthego_notif_restart">Restart On-The-Go</string>
+    <string name="onthego_notif_camera_changed">Camera mode changed</string>
+    <string name="onthego_transparency">Transparency</string>
+    <string name="onthego_front_camera">Use front camera</string>
+    <string name="onthego_service_toggle">Automatically restart service</string>
+    <string name="onthego_channel_name">Main</string>
+    <string name="global_action_onthego">On-The-Go</string>
+    <!-- Button to restart SystemUI, within the Restart Options dialog -->
+    <string name="global_action_restart_systemui">Käyttöliittymä</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">Priority</string>
+    <string name="volume_ringer_alarms_only">Alarms</string>
+    <string name="volume_ringer_dnd">DnD</string>
+    <string name="tristate_flashlight">Torch</string>
+    <string name="tristate_flashlight_on">Torch on</string>
+    <string name="tristate_flashlight_off">Torch off</string>
+    <string name="tristate_flashlight_blink">Torch blink</string>
+    <string name="tristate_brightness_bright">Max-brightness</string>
+    <string name="tristate_brightness_dark">Min-brightness</string>
+    <string name="tristate_brightness_auto">Auto-brightness</string>
+    <string name="tristate_rotation_auto">Auto-rotate</string>
+    <string name="tristate_rotation_0">Portrait</string>
+    <string name="tristate_rotation_90">Landscape (90°)</string>
+    <string name="tristate_rotation_270">Landscape (270°)</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">Force stop?</string>
+    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">CPU Info</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">FPS Info</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">Compass</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">Initializing\u2026</string>
+    <string name="quick_settings_compass_N">N</string>
+    <string name="quick_settings_compass_NE">NE</string>
+    <string name="quick_settings_compass_E">E</string>
+    <string name="quick_settings_compass_SE">SE</string>
+    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_SW">SW</string>
+    <string name="quick_settings_compass_W">W</string>
+    <string name="quick_settings_compass_NW">NW</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">Switch data card</string>
+    <!-- Volume panel QS tile -->
+    <string name="quick_settings_volume_panel_label">Volume panel</string>
+    <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_lens_label">Linssi</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">Smart Pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled Smart Pixels</string>
+    <!-- Weather Tile -->
+    <string name="omnijaws_service_error">Error loading weather data</string>
+    <string name="omnijaws_service_unknown">No weather data</string>
+    <string name="omnijaws_label_default">Weather</string>
+    <!-- Refresh Rate Tile -->
+    <string name="refresh_rate_tile_label">Virkistystaajuus</string>
+    <string name="auto_mode_label">Automaattinen</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">Paina pitkään - valittu alue</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">Language</string>
+    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">Recognizing face...</string>
+</resources>
