@@ -425,7 +425,8 @@ public class CarrierTextManager {
                         plmn = i.getStringExtra(TelephonyManager.EXTRA_PLMN);
                     }
                     mLogger.logUpdateFromStickyBroadcast(plmn, spn);
-                    if (Objects.equals(plmn, spn)) {
+                    if (plmn != null && spn != null
+                            && plmn.toLowerCase().contains(spn.toLowerCase())) {
                         text = plmn;
                     } else {
                         text = concatenate(plmn, spn, mSeparator);
