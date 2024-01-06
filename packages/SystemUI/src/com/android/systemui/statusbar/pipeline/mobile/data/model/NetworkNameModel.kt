@@ -101,12 +101,10 @@ fun Intent.toNetworkNameModel(separator: String): NetworkNameModel? {
     val plmn = getStringExtra(EXTRA_PLMN)
 
     val str = StringBuilder()
-    val strData = StringBuilder()
     if (showPlmn && plmn != null) {
         str.append(plmn)
-        strData.append(plmn)
     }
-    if (showSpn && spn != null) {
+    if (showSpn && spn != null && !str.toString().lowercase().contains(spn.lowercase())) {
         if (str.isNotEmpty()) {
             str.append(separator)
         }
