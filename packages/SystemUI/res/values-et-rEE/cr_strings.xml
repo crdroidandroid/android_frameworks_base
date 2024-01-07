@@ -141,13 +141,13 @@
     <string name="gigabytespersecond_short">GB/s</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Keel</string>
-    <string name="quick_settings_locale_more_locales_toast">Please, configure multiple languages</string>
+    <string name="quick_settings_locale_more_locales_toast">Palun seadista mitu keelt</string>
     <!-- Google lens screenshot notification -->
     <string name="lens">Lens</string>
     <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Use Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth is off</string>
-    <string name="tap_a_device_to_connect">Tap a device to connect</string>
+    <string name="turn_on_bluetooth">Kasuta Bluetoothi</string>
+    <string name="bluetooth_is_off">Bluetooth on väljas</string>
+    <string name="tap_a_device_to_connect">Ühendumiseks vajuta seadmele</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Süsteemiliides</string>
 </resources>
