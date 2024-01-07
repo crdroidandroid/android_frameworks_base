@@ -35,7 +35,7 @@ public class Utils {
         if (packageName != null) {
             try {
                 PackageInfo pi = context.getPackageManager().getPackageInfo(packageName, 0);
-                if (!pi.applicationInfo.enabled && !ignoreState) {
+                if ((!pi.applicationInfo.enabled || !pi.applicationInfo.isProduct()) && !ignoreState) {
                     return false;
                 }
             } catch (PackageManager.NameNotFoundException e) {
@@ -52,7 +52,7 @@ public class Utils {
     public static boolean isPackageEnabled(Context context, String packageName) {
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo(packageName, 0);
-            return pi.applicationInfo.enabled;
+            return pi.applicationInfo.enabled && pi.applicationInfo.isProduct();
         } catch (PackageManager.NameNotFoundException notFound) {
             return false;
         }
