@@ -54,15 +54,19 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangeF5;
     private static final Map<String, ArrayList<String>> propsToKeep;
 
-    // Packages to Spoof as Pixel 7 Pro
+    // Packages to Spoof as Pixel 8 Pro
     private static final String[] packagesToChangePixel8Pro = {
+            "com.google.android.apps.customization.pixel",
+            "com.google.android.apps.emojiwallpaper",
             "com.google.android.apps.privacy.wildlife",
+            "com.google.android.apps.subscriptions.red",
             "com.google.android.apps.wallpaper",
             "com.google.android.apps.wallpaper.pixel",
-            "com.google.android.inputmethod.latin"
+            "com.google.android.wallpaper.effects",
+            "com.google.pixel.livewallpaper"
     };
 
-    // Packages to Spoof as Pixel 7 Pro
+    // Extra packages to Spoof as Pixel 8 Pro
     private static final String[] extraPackagesToChange = {
             "com.android.chrome",
             "com.android.vending",
@@ -249,7 +253,8 @@ public class PixelPropsUtils {
                 sIsFinsky = true;
                 return;
             } else {
-                if (Arrays.asList(packagesToChangePixel8Pro).contains(packageName)) {
+                if (Arrays.asList(packagesToChangePixel8Pro).contains(packageName) ||
+                        Arrays.asList(extraPackagesToChange).contains(packageName)) {
                     propsToChange.putAll(propsToChangePixel8Pro);
                 } else {
                     propsToChange.putAll(propsToChangePixel5);
