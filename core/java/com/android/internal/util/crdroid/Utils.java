@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2023 crDroid Android Project
+ * Copyright (C) 2017-2024 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ public class Utils {
         if (packageName != null) {
             try {
                 PackageInfo pi = context.getPackageManager().getPackageInfo(packageName, 0);
-                if (!pi.applicationInfo.enabled && !ignoreState) {
+                if ((!pi.applicationInfo.enabled || !pi.applicationInfo.isProduct()) && !ignoreState) {
                     return false;
                 }
             } catch (PackageManager.NameNotFoundException e) {
@@ -52,7 +52,7 @@ public class Utils {
     public static boolean isPackageEnabled(Context context, String packageName) {
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo(packageName, 0);
-            return pi.applicationInfo.enabled;
+            return pi.applicationInfo.enabled && pi.applicationInfo.isProduct();
         } catch (PackageManager.NameNotFoundException notFound) {
             return false;
         }
