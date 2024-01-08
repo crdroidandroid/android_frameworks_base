@@ -29,6 +29,8 @@ import android.graphics.Rect;
 import android.icu.text.DateTimePatternGenerator;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerExecutor;
+import android.os.HandlerThread;
 import android.os.Parcelable;
 import android.os.SystemClock;
 import android.os.UserHandle;
@@ -150,6 +152,8 @@ public class Clock extends TextView implements
     private final boolean mShowDark;
     private boolean mShowSeconds;
     private Handler mSecondsHandler;
+    private HandlerThread mHandlerThread;
+
     private int mClockDateDisplay = CLOCK_DATE_DISPLAY_GONE;
     private int mClockDateStyle = CLOCK_DATE_STYLE_REGULAR;
     private int mClockDatePosition;
@@ -201,6 +205,8 @@ public class Clock extends TextView implements
         }
         mBroadcastDispatcher = Dependency.get(BroadcastDispatcher.class);
         mUserTracker = Dependency.get(UserTracker.class);
+        mHandlerThread = new HandlerThread("Clock");
+        mHandlerThread.start();
 
         setIncludeFontPadding(false);
     }
@@ -276,7 +282,8 @@ public class Clock extends TextView implements
             if (mShowDark) {
                 Dependency.get(DarkIconDispatcher.class).addDarkReceiver(this);
             }
-            mUserTracker.addCallback(mUserChangedCallback, mContext.getMainExecutor());
+            mUserTracker.addCallback(mUserChangedCallback,
+                       new HandlerExecutor(mHandlerThread.getThreadHandler()));
             mCurrentUserId = mUserTracker.getUserId();
         }
 
