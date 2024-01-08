@@ -36,12 +36,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.graphics.Insets;
 import android.graphics.Rect;
 import android.graphics.Region;
-import android.os.Handler;
-import android.os.UserHandle;
 import android.util.IndentingPrintWriter;
 import android.util.Log;
 import android.util.MathUtils;
@@ -107,7 +104,7 @@ import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
 import com.android.systemui.statusbar.policy.CastController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.SplitShadeStateController;
-import com.android.systemui.user.domain.interactor.SelectedUserInteractor;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.LargeScreenUtils;
 import com.android.systemui.util.kotlin.JavaAdapter;
 import com.android.systemui.utils.windowmanager.WindowManagerProvider;
@@ -131,6 +128,9 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
     public static final String TAG = "QuickSettingsController";
 
     public static final int SHADE_BACK_ANIM_SCALE_MULTIPLIER = 100;
+
+    private static final String STATUS_BAR_QUICK_QS_PULLDOWN =
+            "lineagesystem:" + LineageSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN;
 
     private QS mQs;
     private final Lazy<NotificationPanelViewController> mPanelViewControllerLazy;
@@ -174,6 +174,7 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
     private final AccessibilityManager mAccessibilityManager;
     private final MetricsLogger mMetricsLogger;
     private final Resources mResources;
+    private final TunerService mTunerService;
 
     /** Whether the notifications are displayed full width (no margins on the side). */
     private boolean mIsFullWidth;
@@ -292,7 +293,6 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
     private long mNotificationBoundsAnimationDuration;
 
     private int mOneFingerQuickSettingsIntercept;
-    private final ContentObserver mOneFingerQuickSettingsInterceptObserver;
 
     private final Region mInterceptRegion = new Region();
     /** The end bounds of a clipping animation. */
@@ -362,7 +362,7 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
             Lazy<CommunalTransitionViewModel> communalTransitionViewModelLazy,
             Lazy<LargeScreenHeaderHelper> largeScreenHeaderHelperLazy,
             WindowManagerProvider windowManagerProvider,
-            SelectedUserInteractor selectedUserInteractor
+            TunerService tunerService
     ) {
         SceneContainerFlag.assertInLegacyMode();
         mPanelViewControllerLazy = panelViewControllerLazy;
@@ -410,18 +410,9 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
         mActiveNotificationsInteractor = activeNotificationsInteractor;
         mCommunalTransitionViewModelLazy = communalTransitionViewModelLazy;
         mJavaAdapter = javaAdapter;
+        mTunerService = tunerService;
 
         mLockscreenShadeTransitionController.addCallback(new LockscreenShadeTransitionCallback());
-
-        mOneFingerQuickSettingsInterceptObserver = new ContentObserver(null) {
-            @Override
-            public void onChange(boolean selfChange) {
-                mOneFingerQuickSettingsIntercept = LineageSettings.System.getIntForUser(
-                        mPanelView.getContext().getContentResolver(),
-                        LineageSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN, 0,
-                        selectedUserInteractor.getSelectedUserId());
-            }
-        };
 
         dumpManager.registerDumpable(this);
 
@@ -2251,7 +2242,8 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
     }
 
     /** */
-    public final class QsFragmentListener implements FragmentHostManager.FragmentListener {
+    public final class QsFragmentListener implements FragmentHostManager.FragmentListener,
+            TunerService.Tunable {
 
         private int mLastDisplayIdWithMediaVisibilityChange = Display.DEFAULT_DISPLAY;
 
@@ -2316,12 +2308,7 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
                 mNotificationStackScrollLayoutController.setQsHeader((ViewGroup) mQs.getHeader());
             }
             mQs.setScrollListener(mQsScrollListener);
-            mPanelView.getContext().getContentResolver().registerContentObserver(
-                    LineageSettings.System.getUriFor(
-                            LineageSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN),
-                    false, mOneFingerQuickSettingsInterceptObserver,
-                    UserHandle.USER_ALL);
-            mOneFingerQuickSettingsInterceptObserver.onChange(true);
+            mTunerService.addTunable(this, STATUS_BAR_QUICK_QS_PULLDOWN);
             updateExpansion();
         }
 
@@ -2332,8 +2319,7 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
         /** */
         @Override
         public void onFragmentViewDestroyed(String tag, Fragment fragment) {
-            mPanelView.getContext().getContentResolver().unregisterContentObserver(
-                    mOneFingerQuickSettingsInterceptObserver);
+            mTunerService.removeTunable(this);
             // Manual handling of fragment lifecycle is only required because this bridges
             // non-fragment and fragment code. Once we are using a fragment for the notification
             // panel, mQs will not need to be null cause it will be tied to the same lifecycle.
@@ -2345,6 +2331,13 @@ public class QuickSettingsControllerImpl implements QuickSettingsController, Dum
                     mNotificationStackScrollLayoutController.setQsHeader(null);
                 }
                 mQs = null;
+            }
+        }
+
+        @Override
+        public void onTuningChanged(String key, String newValue) {
+            if (STATUS_BAR_QUICK_QS_PULLDOWN.equals(key)) {
+                mOneFingerQuickSettingsIntercept = TunerService.parseInteger(newValue, 1);
             }
         }
     }
