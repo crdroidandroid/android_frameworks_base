@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2023 crDroid Android Project
+     Copyright (C) 2016-2024 crDroid Android Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -52,6 +52,24 @@
     <string name="quick_settings_sound_mute">음소거</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/초</string>
+    <string name="megabitspersecond_short">Mb/초</string>
+    <string name="gigabitspersecond_short">Gb/초</string>
+    <string name="kilobytespersecond_short">kB/초</string>
+    <string name="megabytespersecond_short">MB/초</string>
+    <string name="gigabytespersecond_short">GB/초</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">오늘 사용됨</string>
+    <string name="usage_data_default_suffix">데이터</string>
+    <string name="usage_wifi_default_suffix">와이파이</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">흐리게</string>
+    <string name="weather_condition_rain">레이니</string>
+    <string name="weather_condition_clear">선니</string>
+    <string name="weather_condition_storm">폭풍의</string>
+    <string name="weather_condition_snow">설운의 모습</string>
+    <string name="weather_condition_wind">바람이 많이 부는</string>
+    <string name="weather_condition_mist">희미한</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • 급속 충전 중 (완전 충전까지 <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 남음)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> • 고속 충전 중</string>
@@ -107,6 +125,14 @@
     <string name="quick_settings_compass_label">나침반</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0<xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">초기화 중\u2026</string>
+    <string name="quick_settings_compass_N">북</string>
+    <string name="quick_settings_compass_NE">북동</string>
+    <string name="quick_settings_compass_E">동</string>
+    <string name="quick_settings_compass_SE">남동</string>
+    <string name="quick_settings_compass_S">남</string>
+    <string name="quick_settings_compass_SW">남서</string>
+    <string name="quick_settings_compass_W">서</string>
+    <string name="quick_settings_compass_NW">북서</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">데이터 카드 전환</string>
     <!-- Volume panel QS tile -->
@@ -120,13 +146,6 @@
     <string name="omnijaws_service_error">날씨 정보 불러오기 오류</string>
     <string name="omnijaws_service_unknown">날씨 정보 없음</string>
     <string name="omnijaws_label_default">날씨</string>
-    <string name="weather_condition_clouds">흐리게</string>
-    <string name="weather_condition_rain">레이니</string>
-    <string name="weather_condition_clear">선니</string>
-    <string name="weather_condition_storm">폭풍의</string>
-    <string name="weather_condition_snow">설운의 모습</string>
-    <string name="weather_condition_wind">바람이 많이 부는</string>
-    <string name="weather_condition_mist">희미한</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">화면 재생률</string>
     <string name="auto_mode_label">자동</string>
@@ -138,12 +157,6 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">언어</string>
     <string name="quick_settings_locale_more_locales_toast">다중랭기지설정먼저해</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">오늘 사용됨</string>
-    <string name="usage_data_default_suffix">데이터</string>
-    <string name="usage_wifi_default_suffix">와이파이</string>
-    <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">로밍인디케이타</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">얼굴 인식 중...</string>
 </resources>
