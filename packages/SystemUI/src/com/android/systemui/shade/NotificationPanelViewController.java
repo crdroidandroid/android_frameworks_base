@@ -229,6 +229,7 @@ import com.android.systemui.statusbar.policy.KeyguardUserSwitcherView;
 import com.android.systemui.statusbar.policy.OnHeadsUpChangedListener;
 import com.android.systemui.statusbar.policy.SplitShadeStateController;
 import com.android.systemui.statusbar.window.StatusBarWindowStateController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.unfold.SysUIUnfoldComponent;
 import com.android.systemui.util.Compile;
 import com.android.systemui.util.Utils;
@@ -287,6 +288,8 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
     private static final String COUNTER_PANEL_OPEN = "panel_open";
     public static final String COUNTER_PANEL_OPEN_QS = "panel_open_qs";
     private static final String COUNTER_PANEL_OPEN_PEEK = "panel_open_peek";
+    private static final String DOUBLE_TAP_SLEEP_GESTURE =
+            "lineagesystem:" + LineageSettings.System.DOUBLE_TAP_SLEEP_GESTURE;
     private static final Rect M_DUMMY_DIRTY_RECT = new Rect(0, 0, 1, 1);
     private static final Rect EMPTY_RECT = new Rect();
     /**
@@ -318,7 +321,6 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             new ShadeHeadsUpChangedListener();
     private final ConfigurationListener mConfigurationListener = new ConfigurationListener();
     private final SettingsChangeObserver mSettingsChangeObserver;
-    private final ContentObserver mDoubleTapToSleepObserver;
     private final StatusBarStateListener mStatusBarStateListener = new StatusBarStateListener();
     private final NotificationPanelView mView;
     private final VibratorHelper mVibratorHelper;
@@ -369,6 +371,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
     private final QuickSettingsController mQsController;
     private final NaturalScrollingSettingObserver mNaturalScrollingSettingObserver;
     private final TouchHandler mTouchHandler = new TouchHandler();
+    private final TunerService mTunerService;
 
     private long mDownTime;
     private boolean mTouchSlopExceededBeforeDown;
@@ -794,6 +797,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             PowerInteractor powerInteractor,
             KeyguardClockPositionAlgorithm keyguardClockPositionAlgorithm,
             NaturalScrollingSettingObserver naturalScrollingSettingObserver,
+            TunerService tunerService,
             Context context) {
         keyguardStateController.addCallback(new KeyguardStateController.Callback() {
             @Override
@@ -900,6 +904,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                 mSplitShadeStateController.shouldUseSplitNotificationShade(mResources);
         mView.setWillNotDraw(!DEBUG_DRAWABLE);
         mShadeHeaderController = shadeHeaderController;
+        mTunerService = tunerService;
         mLayoutInflater = layoutInflater;
         mFeatureFlags = featureFlags;
         mAnimateBack = mFeatureFlags.isEnabled(Flags.WM_SHADE_ANIMATE_BACK_GESTURE);
@@ -952,15 +957,6 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                 return true;
             }
         });
-        mDoubleTapToSleepObserver = new ContentObserver(handler) {
-            @Override
-            public void onChange(boolean selfChange) {
-                mDoubleTapToSleepEnabled = LineageSettings.System.getInt(mContentResolver,
-                        LineageSettings.System.DOUBLE_TAP_SLEEP_GESTURE,
-                        mResources.getBoolean(org.lineageos.platform.internal.R.bool.
-                                config_dt2sGestureEnabledByDefault) ? 1 : 0) != 0;
-            }
-        };
         mConversationNotificationManager = conversationNotificationManager;
         mAuthController = authController;
         mLockIconViewController = lockIconViewController;
@@ -4596,7 +4592,8 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         positionClockAndNotifications(true /* forceUpdate */);
     }
 
-    private final class ShadeAttachStateChangeListener implements View.OnAttachStateChangeListener {
+    private final class ShadeAttachStateChangeListener implements View.OnAttachStateChangeListener,
+            TunerService.Tunable {
         @Override
         public void onViewAttachedToWindow(View v) {
             mFragmentService.getFragmentHostManager(mView)
@@ -4604,10 +4601,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             mStatusBarStateController.addCallback(mStatusBarStateListener);
             mStatusBarStateListener.onStateChanged(mStatusBarStateController.getState());
             mConfigurationController.addCallback(mConfigurationListener);
-            mContentResolver.registerContentObserver(LineageSettings.System.getUriFor(
-                    LineageSettings.System.DOUBLE_TAP_SLEEP_GESTURE), false,
-                    mDoubleTapToSleepObserver);
-            mDoubleTapToSleepObserver.onChange(true);
+            mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_GESTURE);
             // Theme might have changed between inflating this view and attaching it to the
             // window, so
             // force a call to onThemeChanged
@@ -4619,13 +4613,22 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
 
         @Override
         public void onViewDetachedFromWindow(View v) {
-            mContentResolver.unregisterContentObserver(mDoubleTapToSleepObserver);
             mContentResolver.unregisterContentObserver(mSettingsChangeObserver);
             mFragmentService.getFragmentHostManager(mView)
                     .removeTagListener(QS.TAG, mQsController.getQsFragmentListener());
             mStatusBarStateController.removeCallback(mStatusBarStateListener);
             mConfigurationController.removeCallback(mConfigurationListener);
+            mTunerService.removeTunable(this);
             mFalsingManager.removeTapListener(mFalsingTapListener);
+        }
+
+        @Override
+        public void onTuningChanged(String key, String newValue) {
+            if (DOUBLE_TAP_SLEEP_GESTURE.equals(key)) {
+                mDoubleTapToSleepEnabled = TunerService.parseIntegerSwitch(newValue,
+                        mResources.getBoolean(org.lineageos.platform.internal.R.bool.
+                                config_dt2sGestureEnabledByDefault));
+            }
         }
     }
 
