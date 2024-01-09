@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2023 crDroid Android Project
+     Copyright (C) 2016-2024 crDroid Android Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -52,6 +52,24 @@
     <string name="quick_settings_sound_mute">Senyap</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/d</string>
+    <string name="megabitspersecond_short">Mb/d</string>
+    <string name="gigabitspersecond_short">Gb/d</string>
+    <string name="kilobytespersecond_short">kB/d</string>
+    <string name="megabytespersecond_short">MB/d</string>
+    <string name="gigabytespersecond_short">GB/d</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">digunakan hari ini</string>
+    <string name="usage_data_default_suffix">Data</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">Berawan</string>
+    <string name="weather_condition_rain">Hujan</string>
+    <string name="weather_condition_clear">Cerah</string>
+    <string name="weather_condition_storm">Badai</string>
+    <string name="weather_condition_snow">Bersalju</string>
+    <string name="weather_condition_wind">Berangin</string>
+    <string name="weather_condition_mist">Berkabut</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Pengisian Daya Cepat (<xliff:g id="charging_time_left" example="4 jam 2 menit">%1$s</xliff:g> hingga penuh)</string>
     <string name="keyguard_plugged_in_dash_charging">Pengisian Daya Cepat</string>
@@ -107,6 +125,14 @@
     <string name="quick_settings_compass_label">Kompas</string>
     <string name="quick_settings_compass_value"><xliff:g id="derajat">%1$.0f</xliff:g>\u00b0<xliff:g id="arah">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Memulai\u2026</string>
+    <string name="quick_settings_compass_N">U</string>
+    <string name="quick_settings_compass_NE">TL</string>
+    <string name="quick_settings_compass_E">T</string>
+    <string name="quick_settings_compass_SE">TG</string>
+    <string name="quick_settings_compass_S">S</string>
+    <string name="quick_settings_compass_SW">BD</string>
+    <string name="quick_settings_compass_W">B</string>
+    <string name="quick_settings_compass_NW">BL</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Ubah kartu data</string>
     <!-- Volume panel QS tile -->
@@ -120,13 +146,6 @@
     <string name="omnijaws_service_error">Kesalahan ketika memuat data cuaca</string>
     <string name="omnijaws_service_unknown">Tidak ada data cuaca</string>
     <string name="omnijaws_label_default">Cuaca</string>
-    <string name="weather_condition_clouds">Berawan</string>
-    <string name="weather_condition_rain">Hujan</string>
-    <string name="weather_condition_clear">Cerah</string>
-    <string name="weather_condition_storm">Badai</string>
-    <string name="weather_condition_snow">Bersalju</string>
-    <string name="weather_condition_wind">Berangin</string>
-    <string name="weather_condition_mist">Berkabut</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Kecepatan refresh</string>
     <string name="auto_mode_label">Otomatis</string>
@@ -138,12 +157,6 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Bahasa</string>
     <string name="quick_settings_locale_more_locales_toast">Silakan konfigurasikan beberapa bahasa untuk mengaktifkan fungsi tombol</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">digunakan hari ini</string>
-    <string name="usage_data_default_suffix">Data</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
-    <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Indikator Roaming</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Mengenali wajah...</string>
 </resources>
