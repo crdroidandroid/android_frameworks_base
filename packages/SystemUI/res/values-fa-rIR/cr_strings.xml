@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2023 crDroid Android Project
+     Copyright (C) 2016-2024 crDroid Android Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -53,6 +53,24 @@
     <string name="quick_settings_sound_mute">بی‌صدا</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">ک‌ب/ث</string>
+    <string name="megabitspersecond_short">م‌ب/ث</string>
+    <string name="gigabitspersecond_short">گ‌ب/ث</string>
+    <string name="kilobytespersecond_short">ک‌ب/ث</string>
+    <string name="megabytespersecond_short">م‌ب/ث</string>
+    <string name="gigabytespersecond_short">گ‌ب/ث</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">مصرف امروز</string>
+    <string name="usage_data_default_suffix">داده</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">ابری</string>
+    <string name="weather_condition_rain">بارانی</string>
+    <string name="weather_condition_clear">آفتابی</string>
+    <string name="weather_condition_storm">طوفانی</string>
+    <string name="weather_condition_snow">برفی</string>
+    <string name="weather_condition_wind">باد</string>
+    <string name="weather_condition_mist">مه آلود</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ سریع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> مانده تا کامل شود)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Wشارژ بی‌سیم</string>
@@ -108,6 +126,14 @@
     <string name="quick_settings_compass_label">قطب نما</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">مقدار اولیه\u2026</string>
+    <string name="quick_settings_compass_N">شمال</string>
+    <string name="quick_settings_compass_NE">شمال شرقی</string>
+    <string name="quick_settings_compass_E">شرق</string>
+    <string name="quick_settings_compass_SE">جنوب شرقی</string>
+    <string name="quick_settings_compass_S">جنوب</string>
+    <string name="quick_settings_compass_SW">جنوب غربی</string>
+    <string name="quick_settings_compass_W">غرب</string>
+    <string name="quick_settings_compass_NW">شمال غربی</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">تعویض سیم کارت دیتا</string>
     <!-- Volume panel QS tile -->
@@ -121,13 +147,6 @@
     <string name="omnijaws_service_error">خطا در بارگیری اطلاعات آب و هوا</string>
     <string name="omnijaws_service_unknown">بدون اطلاعات آب و هوا</string>
     <string name="omnijaws_label_default">آب و هوا</string>
-    <string name="weather_condition_clouds">ابری</string>
-    <string name="weather_condition_rain">بارانی</string>
-    <string name="weather_condition_clear">آفتابی</string>
-    <string name="weather_condition_storm">طوفانی</string>
-    <string name="weather_condition_snow">برفی</string>
-    <string name="weather_condition_wind">باد</string>
-    <string name="weather_condition_mist">مه آلود</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">نرخ تازه‌سازی</string>
     <string name="auto_mode_label">خودکار</string>
@@ -139,12 +158,6 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">زبان</string>
     <string name="quick_settings_locale_more_locales_toast">ابتدا چندین زبان را پیکربندی کنید</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">مصرف امروز</string>
-    <string name="usage_data_default_suffix">داده</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
-    <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">نشانگر رومینگ</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
 </resources>
