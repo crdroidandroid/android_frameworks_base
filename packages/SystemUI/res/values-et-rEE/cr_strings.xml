@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2023 crDroid Android Project
+     Copyright (C) 2016-2024 crDroid Android Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -53,6 +53,24 @@
     <string name="quick_settings_sound_mute">Vaigista</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">täna kasutatud</string>
+    <string name="usage_data_default_suffix">Andmeside</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">Pilves</string>
+    <string name="weather_condition_rain">Vihmane</string>
+    <string name="weather_condition_clear">Päikeseline</string>
+    <string name="weather_condition_storm">Tormine</string>
+    <string name="weather_condition_snow">Lumine</string>
+    <string name="weather_condition_wind">Tuuline</string>
+    <string name="weather_condition_mist">Niiske</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash-laadimine (täitumiseni <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g>)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash-laadimine</string>
@@ -108,6 +126,14 @@
     <string name="quick_settings_compass_label">Kompass</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Käivitamine\u2026</string>
+    <string name="quick_settings_compass_N">Põhi</string>
+    <string name="quick_settings_compass_NE">Kirre</string>
+    <string name="quick_settings_compass_E">Ida</string>
+    <string name="quick_settings_compass_SE">Kagu</string>
+    <string name="quick_settings_compass_S">Lõuna</string>
+    <string name="quick_settings_compass_SW">Edel</string>
+    <string name="quick_settings_compass_W">Lääs</string>
+    <string name="quick_settings_compass_NW">Loe</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Vaheta andmeside SIMi</string>
     <!-- Volume panel QS tile -->
@@ -121,13 +147,6 @@
     <string name="omnijaws_service_error">Tõrge ilmaandmete laadimisel</string>
     <string name="omnijaws_service_unknown">Ilmaandmed puuduvad</string>
     <string name="omnijaws_label_default">Ilm</string>
-    <string name="weather_condition_clouds">Pilves</string>
-    <string name="weather_condition_rain">Vihmane</string>
-    <string name="weather_condition_clear">Päikeseline</string>
-    <string name="weather_condition_storm">Tormine</string>
-    <string name="weather_condition_snow">Lumine</string>
-    <string name="weather_condition_wind">Tuuline</string>
-    <string name="weather_condition_mist">Niiske</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Värskendussagedus</string>
     <string name="auto_mode_label">Automaatne</string>
@@ -139,12 +158,6 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Keel</string>
     <string name="quick_settings_locale_more_locales_toast">Seadista kõigepealt mitu keelt</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">täna kasutatud</string>
-    <string name="usage_data_default_suffix">Andmeside</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
-    <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Rändlusindikaator</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Näotuvastus...</string>
 </resources>
