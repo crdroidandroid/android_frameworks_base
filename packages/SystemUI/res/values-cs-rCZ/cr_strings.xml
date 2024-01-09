@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2023 crDroid Android Project
+     Copyright (C) 2016-2024 crDroid Android Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -55,6 +55,24 @@
     <string name="quick_settings_sound_mute">Ztlumit</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="megabitspersecond_short">Mb/s</string>
+    <string name="gigabitspersecond_short">Gb/s</string>
+    <string name="kilobytespersecond_short">kB/s</string>
+    <string name="megabytespersecond_short">MB/s</string>
+    <string name="gigabytespersecond_short">GB/s</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">využito dnes</string>
+    <string name="usage_data_default_suffix">Data</string>
+    <string name="usage_wifi_default_suffix">Wi‑Fi</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">Oblačno</string>
+    <string name="weather_condition_rain">Deštivo</string>
+    <string name="weather_condition_clear">Slunečno</string>
+    <string name="weather_condition_storm">Bouřka</string>
+    <string name="weather_condition_snow">Sněžení</string>
+    <string name="weather_condition_wind">Větrno</string>
+    <string name="weather_condition_mist">Mlhavo</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • DASH nabíjení (zbývá <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> do plného nabití)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • DASH nabíjení</string>
@@ -110,6 +128,14 @@
     <string name="quick_settings_compass_label">Kompas</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Inicializuje se\u2026</string>
+    <string name="quick_settings_compass_N">S</string>
+    <string name="quick_settings_compass_NE">SV</string>
+    <string name="quick_settings_compass_E">V</string>
+    <string name="quick_settings_compass_SE">JV</string>
+    <string name="quick_settings_compass_S">J</string>
+    <string name="quick_settings_compass_SW">JZ</string>
+    <string name="quick_settings_compass_W">Z</string>
+    <string name="quick_settings_compass_NW">SZ</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Přepnout SIM pro data</string>
     <!-- Volume panel QS tile -->
@@ -123,13 +149,6 @@
     <string name="omnijaws_service_error">Chyba při načítání údajů o\u00a0počasí</string>
     <string name="omnijaws_service_unknown">Žádné údaje o\u00a0počasí</string>
     <string name="omnijaws_label_default">Počasí</string>
-    <string name="weather_condition_clouds">Oblačno</string>
-    <string name="weather_condition_rain">Deštivo</string>
-    <string name="weather_condition_clear">Slunečno</string>
-    <string name="weather_condition_storm">Bouřka</string>
-    <string name="weather_condition_snow">Sněžení</string>
-    <string name="weather_condition_wind">Větrno</string>
-    <string name="weather_condition_mist">Mlhavo</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Obnovovací frekvence</string>
     <string name="auto_mode_label">Auto</string>
@@ -141,12 +160,6 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Jazyk</string>
     <string name="quick_settings_locale_more_locales_toast">Nejdříve nakonfigurujte více jazyků</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">využito dnes</string>
-    <string name="usage_data_default_suffix">Data</string>
-    <string name="usage_wifi_default_suffix">Wi‑Fi</string>
-    <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Indikátor roamingu</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Rozpoznávání obličeje…</string>
 </resources>
