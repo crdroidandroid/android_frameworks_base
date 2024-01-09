@@ -45,7 +45,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.graphics.Insets;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -60,6 +59,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Trace;
+import android.os.UserHandle;
 import android.provider.DeviceConfig;
 import android.util.ArraySet;
 import android.util.DisplayMetrics;
@@ -106,6 +106,7 @@ import com.android.systemui.shared.system.TaskStackChangeListener;
 import com.android.systemui.shared.system.TaskStackChangeListeners;
 import com.android.systemui.statusbar.phone.LightBarController;
 import com.android.systemui.topui.TopUiController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.concurrency.BackPanelUiThread;
 import com.android.systemui.util.concurrency.UiThreadContext;
 import com.android.systemui.util.kotlin.JavaAdapter;
@@ -142,11 +143,14 @@ import javax.inject.Provider;
 /**
  * Utility class to handle edge swipes for back gesture
  */
-public class EdgeBackGestureHandler {
+public class EdgeBackGestureHandler implements TunerService.Tunable {
 
     private static final String TAG = "EdgeBackGestureHandler";
     private static final int MAX_LONG_PRESS_TIMEOUT = SystemProperties.getInt(
             "gestures.back_timeout", 250);
+
+    private static final String KEY_EDGE_LONG_SWIPE_ACTION =
+            "lineagesystem:" + LineageSettings.System.KEY_EDGE_LONG_SWIPE_ACTION;
 
     private static final int MAX_NUM_LOGGED_PREDICTIONS = 10;
     private static final int MAX_NUM_LOGGED_GESTURES = 10;
@@ -247,6 +251,8 @@ public class EdgeBackGestureHandler {
     private Job mBlockedActivitiesJob = null;
 
     private final JavaAdapter mJavaAdapter;
+
+    private final TunerService mTunerService;
 
     // The left side edge width where touch down is allowed
     private int mEdgeWidthLeft;
@@ -495,7 +501,8 @@ public class EdgeBackGestureHandler {
             JavaAdapter javaAdapter,
             DisplayManager displayManager,
             DisplayBackGestureHandlerImpl.Factory displayBackGestureHandlerFactory,
-            DesktopState desktopState) {
+            DesktopState desktopState,
+            TunerService tunerService) {
         mContext = context;
         mMainDisplayId = context.getDisplayId();
         mUiThreadContext = uiThreadContext;
@@ -521,6 +528,7 @@ public class EdgeBackGestureHandler {
         mDisplayManager = displayManager;
         mDisplayBackGestureHandlerFactory = displayBackGestureHandlerFactory;
         mDesktopState = desktopState;
+        mTunerService = tunerService;
 
         ComponentName recentsComponentName = ComponentName.unflattenFromString(
                 context.getString(com.android.internal.R.string.config_recentsComponentName));
@@ -613,20 +621,11 @@ public class EdgeBackGestureHandler {
         if (mMLEnableWidth > mEdgeWidthRight) mMLEnableWidth = mEdgeWidthRight;
         if (mMLEnableWidth > mEdgeWidthLeft) mMLEnableWidth = mEdgeWidthLeft;
 
-        mContext.getContentResolver().registerContentObserver(
-                LineageSettings.System.getUriFor(LineageSettings.System.KEY_EDGE_LONG_SWIPE_ACTION),
-                false, new ContentObserver(mUiThreadContext.getHandler()) {
-                    @Override
-                    public void onChange(boolean selfChange) {
-                        mIsLongSwipeEnabled = Action.fromIntSafe(
-                                LineageSettings.System.getInt(mContext.getContentResolver(),
-                                        LineageSettings.System.KEY_EDGE_LONG_SWIPE_ACTION,
-                                        Action.NOTHING.ordinal())) != Action.NOTHING;
-                        updateLongSwipeWidth();
-                    }
-                });
-        mContext.getContentResolver().notifyChange(LineageSettings.System.getUriFor(
-                LineageSettings.System.KEY_EDGE_LONG_SWIPE_ACTION), null);
+        mIsLongSwipeEnabled = Action.fromIntSafe(
+                LineageSettings.System.getIntForUser(mContext.getContentResolver(),
+                        LineageSettings.System.KEY_EDGE_LONG_SWIPE_ACTION,
+                        Action.NOTHING.ordinal(), UserHandle.USER_CURRENT)) != Action.NOTHING;
+        updateLongSwipeWidth();
 
         // Reduce the default touch slop to ensure that we can intercept the gesture
         // before the app starts to react to it.
@@ -678,6 +677,7 @@ public class EdgeBackGestureHandler {
         }
         updateIsEnabled();
         mUserTracker.addCallback(mUserChangedCallback, mUiThreadContext.getExecutor());
+        mTunerService.addTunable(this, KEY_EDGE_LONG_SWIPE_ACTION);
     }
 
     /**
@@ -691,6 +691,7 @@ public class EdgeBackGestureHandler {
         mTrackpadsConnected.clear();
         updateIsEnabled();
         mUserTracker.removeCallback(mUserChangedCallback);
+        mTunerService.removeTunable(this);
     }
 
     /**
@@ -926,6 +927,15 @@ public class EdgeBackGestureHandler {
 
     public boolean isButtonForcedVisible() {
         return mIsButtonForcedVisible;
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        if (KEY_EDGE_LONG_SWIPE_ACTION.equals(key)) {
+            mIsLongSwipeEnabled = Action.fromIntSafe(TunerService.parseInteger(
+                    newValue, 0)) != Action.NOTHING;
+            updateLongSwipeWidth();
+        }
     }
 
     private void updateLongSwipeWidth() {
