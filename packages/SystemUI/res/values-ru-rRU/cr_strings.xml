@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2023 crDroid Android Project
+     Copyright (C) 2016-2024 crDroid Android Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -55,6 +55,24 @@
     <string name="quick_settings_sound_mute">Без звука</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">кбит/с</string>
+    <string name="megabitspersecond_short">Мбит/с</string>
+    <string name="gigabitspersecond_short">Гб/с</string>
+    <string name="kilobytespersecond_short">кБ/с</string>
+    <string name="megabytespersecond_short">МБ/с</string>
+    <string name="gigabytespersecond_short">ГБ/с</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">за сегодня</string>
+    <string name="usage_data_default_suffix">Данные</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">Облачно</string>
+    <string name="weather_condition_rain">Дождь</string>
+    <string name="weather_condition_clear">Солнечно</string>
+    <string name="weather_condition_storm">Гроза</string>
+    <string name="weather_condition_snow">Снег</string>
+    <string name="weather_condition_wind">Ветер</string>
+    <string name="weather_condition_mist">Туман</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash зарядка (<xliff:g id="charging_time_left" example="4 часа и 2 минуты">%1$s</xliff:g> до полной)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash зарядка</string>
@@ -110,6 +128,14 @@
     <string name="quick_settings_compass_label">Компас</string>
     <string name="quick_settings_compass_value"><xliff:g id="градусы">%1$.0f</xliff:g>\u00b0 <xliff:g id="направление">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Инициализация\u2026</string>
+    <string name="quick_settings_compass_N">C</string>
+    <string name="quick_settings_compass_NE">СВ</string>
+    <string name="quick_settings_compass_E">В</string>
+    <string name="quick_settings_compass_SE">ЮВ</string>
+    <string name="quick_settings_compass_S">Юг</string>
+    <string name="quick_settings_compass_SW">ЮВ</string>
+    <string name="quick_settings_compass_W">З</string>
+    <string name="quick_settings_compass_NW">СЗ</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Переключить SIM</string>
     <!-- Volume panel QS tile -->
@@ -123,13 +149,6 @@
     <string name="omnijaws_service_error">Ошибка при загрузке данных о погоде</string>
     <string name="omnijaws_service_unknown">Нет данных о погоде</string>
     <string name="omnijaws_label_default">Погода</string>
-    <string name="weather_condition_clouds">Облачно</string>
-    <string name="weather_condition_rain">Дождь</string>
-    <string name="weather_condition_clear">Солнечно</string>
-    <string name="weather_condition_storm">Гроза</string>
-    <string name="weather_condition_snow">Снег</string>
-    <string name="weather_condition_wind">Ветер</string>
-    <string name="weather_condition_mist">Туман</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Частота экрана</string>
     <string name="auto_mode_label">Авто</string>
@@ -141,12 +160,6 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Язык</string>
     <string name="quick_settings_locale_more_locales_toast">Сначала настройте несколько языков</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">за сегодня</string>
-    <string name="usage_data_default_suffix">Данные</string>
-    <string name="usage_wifi_default_suffix">Wi-Fi</string>
-    <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Индикатор роуминга</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Распознавание лица…</string>
 </resources>
