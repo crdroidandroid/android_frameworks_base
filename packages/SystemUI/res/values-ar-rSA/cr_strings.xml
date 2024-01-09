@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2023 crDroid Android Project
+     Copyright (C) 2016-2024 crDroid Android Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -57,6 +57,24 @@
     <string name="quick_settings_sound_mute">Mute</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">ك. ب/ث</string>
+    <string name="megabitspersecond_short">م. ب/ث</string>
+    <string name="gigabitspersecond_short">ج. ب/ث</string>
+    <string name="kilobytespersecond_short">ك. بايت/ث</string>
+    <string name="megabytespersecond_short">م. بايت/ث</string>
+    <string name="gigabytespersecond_short">ج. بايت/ث</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">المستخدم اليوم</string>
+    <string name="usage_data_default_suffix">البيانات</string>
+    <string name="usage_wifi_default_suffix">واي-فاي</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">Cloudy</string>
+    <string name="weather_condition_rain">Rainy</string>
+    <string name="weather_condition_clear">Sunny</string>
+    <string name="weather_condition_storm">Stormy</string>
+    <string name="weather_condition_snow">Snowy</string>
+    <string name="weather_condition_wind">Windy</string>
+    <string name="weather_condition_mist">Misty</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شحن سريع (يتبقى <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> حتى يكتمل)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • شحن سريع</string>
@@ -112,6 +130,14 @@
     <string name="quick_settings_compass_label">بوصلة</string>
     <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">تهيئة/u2026</string>
+    <string name="quick_settings_compass_N">ش</string>
+    <string name="quick_settings_compass_NE">ش. شرق</string>
+    <string name="quick_settings_compass_E">شرق</string>
+    <string name="quick_settings_compass_SE">ج. شرق</string>
+    <string name="quick_settings_compass_S">ج</string>
+    <string name="quick_settings_compass_SW">ج. غرب</string>
+    <string name="quick_settings_compass_W">غ</string>
+    <string name="quick_settings_compass_NW">شمال. غ</string>
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">تبديل بطاقة البيانات</string>
     <!-- Volume panel QS tile -->
@@ -125,13 +151,6 @@
     <string name="omnijaws_service_error">حدث خطأ أثناء تحميل بيانات الطقس</string>
     <string name="omnijaws_service_unknown">لا يوجد بيانات للطقس</string>
     <string name="omnijaws_label_default">الطقس</string>
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label"> معدل التحديث</string>
     <string name="auto_mode_label">تلقائي</string>
@@ -143,12 +162,6 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">اللغة</string>
     <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
-    <!-- Data usage info in QS footer -->
-    <string name="usage_data">المستخدم اليوم</string>
-    <string name="usage_data_default_suffix">البيانات</string>
-    <string name="usage_wifi_default_suffix">واي-فاي</string>
-    <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
 </resources>
