@@ -50,7 +50,7 @@
     <string name="quick_settings_sound_label">Sons</string>
     <string name="quick_settings_sound_ring">Sonnerie</string>
     <string name="quick_settings_sound_vibrate">Vibreur</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">Silence</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
@@ -64,13 +64,13 @@
     <string name="usage_data_default_suffix">Données</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Weather -->
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">Nuageux</string>
+    <string name="weather_condition_rain">Pluvieux</string>
+    <string name="weather_condition_clear">Ensoleillé</string>
+    <string name="weather_condition_storm">Orageux</string>
+    <string name="weather_condition_snow">Neigeux</string>
+    <string name="weather_condition_wind">Venteux</string>
+    <string name="weather_condition_mist">Brumeux</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Charge Rapide (<xliff:g id="charging_time_left" exemple="4 heures et 2 minutes">%1$s</xliff:g> restant jusqu\'à charge complète)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Charge Rapide</string>
@@ -154,10 +154,10 @@
     <string name="screenshot_long_press">Appui long - région sélectionnée</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Recherche audio</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Installez d\'abord une application de recherche sonore</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Langue</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">Configurer plusieurs langues en premier</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Reconnaissance faciale...</string>
 </resources>
