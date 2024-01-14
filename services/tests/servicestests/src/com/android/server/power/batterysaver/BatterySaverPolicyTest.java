@@ -53,7 +53,7 @@ public class BatterySaverPolicyTest extends AndroidTestCase {
     private static final int SOUND_TRIGGER_MODE = 0; // SOUND_TRIGGER_MODE_ALL_ENABLED
     private static final int DEFAULT_SOUND_TRIGGER_MODE =
             PowerManager.SOUND_TRIGGER_MODE_CRITICAL_ONLY;
-    private static final String BATTERY_SAVER_CONSTANTS = "disable_vibration=false,"
+    private static final String BATTERY_SAVER_CONSTANTS = "disable_vibration=true,"
             + "advertise_is_enabled=true,"
             + "disable_animation=false,"
             + "enable_firewall=true,"
@@ -119,7 +119,7 @@ public class BatterySaverPolicyTest extends AndroidTestCase {
     @Suppress
     @SmallTest
     public void testGetBatterySaverPolicy_PolicyVibration_DefaultValueCorrect() {
-        testServiceDefaultValue_Off(ServiceType.VIBRATION);
+        testServiceDefaultValue_On(ServiceType.VIBRATION);
     }
 
     @SmallTest
@@ -214,7 +214,7 @@ public class BatterySaverPolicyTest extends AndroidTestCase {
     private void verifyBatterySaverConstantsUpdated() {
         final PowerSaveState vibrationState =
                 mBatterySaverPolicy.getBatterySaverPolicy(ServiceType.VIBRATION);
-        assertThat(vibrationState.batterySaverEnabled).isFalse();
+        assertThat(vibrationState.batterySaverEnabled).isTrue();
 
         final PowerSaveState animationState =
                 mBatterySaverPolicy.getBatterySaverPolicy(ServiceType.ANIMATION);
