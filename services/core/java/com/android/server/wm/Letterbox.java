@@ -75,6 +75,8 @@ public class Letterbox {
     private final IntConsumer mDoubleTapCallbackX;
     private final IntConsumer mDoubleTapCallbackY;
 
+    private final Object mInputReceiverLock = new Object();
+
     /**
      * Constructs a Letterbox.
      *
@@ -264,8 +266,10 @@ public class Letterbox {
 
         @Override
         public void onInputEvent(InputEvent event) {
-            final MotionEvent motionEvent = (MotionEvent) event;
-            finishInputEvent(event, mDoubleTapDetector.onTouchEvent(motionEvent));
+            synchronized (mInputReceiverLock) {
+                final MotionEvent motionEvent = (MotionEvent) event;
+                finishInputEvent(event, mDoubleTapDetector.onTouchEvent(motionEvent));
+            }
         }
     }
 
@@ -333,9 +337,11 @@ public class Letterbox {
         }
 
         void dispose() {
-            mWmService.mInputManager.removeInputChannel(mToken);
-            mInputEventReceiver.dispose();
-            mClientChannel.dispose();
+            synchronized (mInputReceiverLock) {
+                mWmService.mInputManager.removeInputChannel(mToken);
+                mInputEventReceiver.dispose();
+                mClientChannel.dispose();
+            }
         }
     }
 
