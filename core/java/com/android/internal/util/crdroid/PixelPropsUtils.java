@@ -402,14 +402,14 @@ public class PixelPropsUtils {
 
     private static void spoofBuildGms() {
         // Alter build parameters to avoid hardware attestation enforcement
-        setPropValue("BRAND", "acer");
-        setPropValue("MANUFACTURER", "Acer Inc.");
-        setPropValue("DEVICE", "acer_c01");
-        setPropValue("ID", "NMF26F");
-        setPropValue("FINGERPRINT", "acer/c01_ww/acer_c01:7.1.1/NMF26F/1521514970:user/release-keys");
-        setPropValue("MODEL", "C01");
-        setPropValue("PRODUCT", "c01_ww");
-        setVersionFieldString("SECURITY_PATCH", "2018-04-01");
+        setPropValue("BRAND", "Hisense");
+        setPropValue("MANUFACTURER", "Hisense");
+        setPropValue("DEVICE", "HS6735MT");
+        setPropValue("ID", "MRA58K");
+        setPropValue("FINGERPRINT", "Hisense/F30/HS6735MT:6.0/MRA58K/L1228.6.01.01:user/release-keys");
+        setPropValue("MODEL", "Hisense F30");
+        setPropValue("PRODUCT", "F30");
+        setVersionFieldString("SECURITY_PATCH", "2016-02-01");
     }
 
     private static boolean isCallerSafetyNet() {
