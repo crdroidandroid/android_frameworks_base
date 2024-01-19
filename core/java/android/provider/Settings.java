@@ -6575,6 +6575,60 @@ public final class Settings {
         };
 
         /**
+         * Override max volume for {@link android.media.AudioSystem.STREAM_VOICE_CALL}
+         * see {@link com.android.server.audio.AudioService} for defaults in priority
+         * -1 = disabled
+         * @hide
+         */
+        @Readable
+        public static final String MAX_CALL_VOLUME = "max_call_volume";
+
+        /**
+         * Stores the default max volume for {@link android.media.AudioSystem.STREAM_VOICE_CALL}
+         * see {@link com.android.server.audio.AudioService} for defaults in priority
+         * Used as a fallback for the user settings
+         * @hide
+         */
+        @Readable
+        public static final String DEFAULT_MAX_CALL_VOLUME = "default_max_call_volume";
+
+        /**
+         * Override max volume for {@link android.media.AudioSystem.STREAM_MUSIC}
+         * see {@link com.android.server.audio.AudioService} for defaults in priority
+         * -1 = disabled
+         * @hide
+         */
+        @Readable
+        public static final String MAX_MUSIC_VOLUME = "max_music_volume";
+
+        /**
+         * Stores the default max volume for {@link android.media.AudioSystem.STREAM_MUSIC}
+         * see {@link com.android.server.audio.AudioService} for defaults in priority
+         * Used as a fallback for the user settings
+         * @hide
+         */
+        @Readable
+        public static final String DEFAULT_MAX_MUSIC_VOLUME = "default_max_music_volume";
+
+        /**
+         * Override max volume for {@link android.media.AudioSystem.STREAM_ALARM}
+         * see {@link com.android.server.audio.AudioService} for defaults in priority
+         * -1 = disabled
+         * @hide
+         */
+        @Readable
+        public static final String MAX_ALARM_VOLUME = "max_alarm_volume";
+
+        /**
+         * Stores the default max volume for {@link android.media.AudioSystem.STREAM_ALARM}
+         * see {@link com.android.server.audio.AudioService} for defaults in priority
+         * Used as a fallback for the user settings
+         * @hide
+         */
+        @Readable
+        public static final String DEFAULT_MAX_ALARM_VOLUME = "default_max_alarm_volume";
+
+        /**
          * These are all public system settings
          *
          * @hide
