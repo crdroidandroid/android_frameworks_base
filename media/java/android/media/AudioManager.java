@@ -380,6 +380,16 @@ public class AudioManager {
      */
     public static final String EXTRA_ENCODINGS = "android.media.extra.ENCODINGS";
 
+    /**
+     * @hide Broadcast intent when the max volume for a particular stream type changes.
+     * No extras included
+     * Notes:
+     *  - for internal platform use only, do not make public,
+     *  - never used for "remote" volume changes
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_MAX_CHANGED = "android.media.MAX_CHANGED_ACTION";
+
     /** Used to identify the volume of audio streams for phone calls */
     public static final int STREAM_VOICE_CALL = AudioSystem.STREAM_VOICE_CALL;
     /** Used to identify the volume of audio streams for system sounds */
