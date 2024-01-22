@@ -40,6 +40,7 @@ public class PixelPropsUtils {
     private static final String SPOOF_PIXEL_GAMES = "persist.sys.pixelprops.games";
     private static final String SPOOF_PIXEL_GPHOTOS = "persist.sys.pixelprops.gphotos";
     private static final String SPOOF_PIXEL_NETFLIX = "persist.sys.pixelprops.netflix";
+    private static final String PROP_FIRST_API_LEVEL = "persist.sys.pihooks.first_api_level";
 
     private static final Map<String, Object> propsToChangeGeneric;
     private static final Map<String, Object> propsToChangePixel5;
@@ -400,6 +401,15 @@ public class PixelPropsUtils {
         }
     }
 
+    private static void setSystemProperty(String name, String value) {
+        try {
+            SystemProperties.set(name, value);
+            Log.d(TAG, "Set system prop " + name + "=" + value);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to set system prop " + name + "=" + value, e);
+        }
+    }
+
     private static void spoofBuildGms() {
         // Alter build parameters to avoid hardware attestation enforcement
         setPropValue("BRAND", "Hisense");
@@ -409,6 +419,7 @@ public class PixelPropsUtils {
         setPropValue("FINGERPRINT", "Hisense/F30/HS6735MT:6.0/MRA58K/L1228.6.01.01:user/release-keys");
         setPropValue("MODEL", "Hisense F30");
         setPropValue("PRODUCT", "F30");
+        setSystemProperty(PROP_FIRST_API_LEVEL, String.valueOf(Build.VERSION_CODES.S));
         setVersionFieldString("SECURITY_PATCH", "2016-02-01");
     }
 
