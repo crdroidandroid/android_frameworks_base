@@ -37,7 +37,6 @@ import android.util.Slog;
 import android.util.SparseArray;
 
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.function.QuadFunction;
 import com.android.server.om.OverlayReferenceMapper;
 import com.android.server.pm.pkg.AndroidPackage;
@@ -63,9 +62,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class AppsFilterBase implements AppsFilterSnapshot {
     protected static final String TAG = "AppsFilter";
-
-    private static final String GMS = "com.google.android.gms";
-    private static final String[] GMS_HIDDEN_PACKAGES = {"com.google.android.apps.translate"};
 
     // Logs all filtering instead of enforcing
     protected static final boolean DEBUG_ALLOW_ALL = false;
@@ -512,15 +508,6 @@ public abstract class AppsFilterBase implements AppsFilterSnapshot {
                 if (isForceQueryable(targetAppId)) {
                     if (DEBUG_LOGGING) {
                         log(callingSetting, targetPkgSetting, "force queryable");
-                    }
-                    if (GMS.equals(targetPkgSetting.getPackageName())
-                            && callingPkgSetting != null) {
-                        // HACK: Hide GMS from these packages
-                        // Breaks login but makes them work
-                        if (ArrayUtils.contains(GMS_HIDDEN_PACKAGES,
-                                callingPkgSetting.getPackageName())) {
-                            return true;
-                        }
                     }
                     return false;
                 }
