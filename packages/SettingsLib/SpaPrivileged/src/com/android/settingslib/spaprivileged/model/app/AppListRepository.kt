@@ -29,12 +29,27 @@ import android.os.SystemProperties
 import android.util.Log
 import com.android.internal.R
 import com.android.settingslib.spaprivileged.framework.common.userManager
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.util.concurrent.Executors
+
+/**
+ * The number of threads in the IPC thread pool. If too many threads are used, it can lead to
+ * failed transactions as a result of running out of binder buffer space, for instance if a user
+ * has several child profiles. To avoid this, we deliberately choose a conservative thread count.
+ */
+const val IPC_THREAD_POOL_COUNT = 4
+
+/**
+ * A coroutine dispatcher with a fixed thread pool size, to be used for background tasks
+ */
+val IPC = Executors.newFixedThreadPool(IPC_THREAD_POOL_COUNT).asCoroutineDispatcher()
 
 /**
  * The repository to load the App List data.
@@ -88,7 +103,7 @@ class AppListRepositoryImpl(
         matchAnyUserForAdmin: Boolean,
     ): List<ApplicationInfo> = try {
         coroutineScope {
-            val hiddenSystemModulesDeferred = async { packageManager.getHiddenSystemModules() }
+            val hiddenSystemModulesDeferred = async(IPC) { packageManager.getHiddenSystemModules() }
             val hideWhenDisabledPackagesDeferred = async {
                 context.resources.getStringArray(R.array.config_hideWhenDisabled_packageNames)
             }
@@ -120,8 +135,10 @@ class AppListRepositoryImpl(
                 archivedPackagesFlag
         )
         return if (!matchAnyUserForAdmin || !userManager.getUserInfo(userId).isAdmin) {
-            packageManager.getInstalledApplicationsAsUser(regularFlags, userId).filter {
-                it.installed
+            withContext(IPC) {
+                packageManager.getInstalledApplicationsAsUser(regularFlags, userId).filter {
+                    it.installed
+                }
             }
         } else {
             coroutineScope {
@@ -129,7 +146,7 @@ class AppListRepositoryImpl(
                     userManager.getProfileIdsWithDisabled(userId)
                         .filter { it != userId }
                         .map {
-                            async {
+                            async(IPC) {
                                 packageManager.getInstalledApplicationsAsUser(regularFlags, it)
                                     .map { it.packageName }
                             }
@@ -137,8 +154,9 @@ class AppListRepositoryImpl(
                 val adminFlags = ApplicationInfoFlags.of(
                     PackageManager.MATCH_ANY_USER.toLong() or regularFlags.value
                 )
-                val allInstalledApplications =
+                val allInstalledApplications = withContext(IPC) {
                     packageManager.getInstalledApplicationsAsUser(adminFlags, userId)
+                }
                 val packageNamesInChildProfiles = deferredPackageNamesInChildProfiles
                     .awaitAll()
                     .flatten()
@@ -195,11 +213,13 @@ class AppListRepositoryImpl(
                 PackageManager.MATCH_DIRECT_BOOT_UNAWARE).toLong()
         )
         return coroutineScope {
-            val launcherActivities = async {
+            val launcherActivities = async(IPC) {
                 packageManager.queryIntentActivitiesAsUser(launchIntent, flags, userId)
             }
             val homeActivities = ArrayList<ResolveInfo>()
-            packageManager.getHomeActivities(homeActivities)
+            withContext(IPC) {
+                packageManager.getHomeActivities(homeActivities)
+            }
             (launcherActivities.await() + homeActivities)
                 .map { it.activityInfo.packageName }
                 .toSet()
