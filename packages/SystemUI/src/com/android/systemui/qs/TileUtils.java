@@ -52,7 +52,7 @@ public class TileUtils {
         } else {
             value = Settings.System.getIntForUser(
                     context.getContentResolver(), Settings.System.QQS_LAYOUT_ROWS_LANDSCAPE,
-                    2, UserHandle.USER_CURRENT);
+                    1, UserHandle.USER_CURRENT);
         }
         return Math.max(QS_ROWS_MIN, value);
     }
