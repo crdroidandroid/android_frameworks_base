@@ -87,6 +87,7 @@ public class PixelPropsUtils {
             "com.google.android.as",
             "com.google.ar.core",
             "com.google.android.inputmethod.latin",
+            "com.google.android.quicksearchbox",
             "com.google.android.youtube",
             "com.google.android.apps.youtube.kids",
             "com.google.android.apps.youtube.music",
