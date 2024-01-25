@@ -407,7 +407,9 @@ public class AppRestrictionsHelper {
         }
 
         PackageManager getPackageManager() {
-            return mContext.getPackageManager();
+            // If the context is of a child profile, there is not enough access to do
+            // anything useful, so we need to use the parent user's context.
+            return getParentUserContext().getPackageManager();
         }
 
         IPackageManager getIPackageManager() {
@@ -422,6 +424,12 @@ public class AppRestrictionsHelper {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(
                     Context.INPUT_METHOD_SERVICE);
             return imm.getInputMethodListAsUser(mUser.getIdentifier());
+        }
+
+        private Context getParentUserContext() {
+            return !getUserManager().isProfile() ? mContext : mContext.createContextAsUser(
+                    getUserManager().getProfileParent(UserHandle.of(UserHandle.myUserId())),
+                            0 /* flags */);
         }
     }
 }
