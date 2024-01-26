@@ -83,9 +83,11 @@ public class PixelPropsUtils {
             "com.google.android.UltraCVM",
             "com.google.android.apps.cameralite",
             "com.google.android.dialer",
+            "com.google.android.apps.motionsense.bridge",
             "com.google.android.euicc",
             "com.google.android.as",
             "com.google.ar.core",
+            "com.google.oslo"
             "com.google.android.inputmethod.latin",
             "com.google.android.quicksearchbox",
             "com.google.android.youtube",
