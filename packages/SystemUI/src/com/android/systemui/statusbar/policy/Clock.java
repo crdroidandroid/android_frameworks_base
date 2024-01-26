@@ -286,11 +286,13 @@ public class Clock extends TextView implements
         mDateTimePatternGenerator = null;
 
         // Make sure we update to the current time
-        updateClock();
-        if (!StatusBarRootModernization.isEnabled()) {
-            updateClockVisibility();
-        }
-        updateShowSeconds();
+        mContext.getMainExecutor().execute(() -> {
+            updateClock();
+            if (!StatusBarRootModernization.isEnabled()) {
+                updateClockVisibility();
+            }
+            updateShowSeconds();
+        });
     }
 
     @Override
@@ -497,8 +499,10 @@ public class Clock extends TextView implements
         // Force refresh of dependent variables.
         mContentDescriptionFormatString = "";
         mDateTimePatternGenerator = null;
-        updateClock(true);
-        updateClockVisibility();
+        mContext.getMainExecutor().execute(() -> {
+            updateClock(true);
+            updateClockVisibility();
+        });
     }
 
     @Override
