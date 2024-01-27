@@ -87,7 +87,7 @@ public class FullscreenTaskListener implements ShellTaskOrganizer.TaskListener {
     @Override
     public void onTaskAppeared(RunningTaskInfo taskInfo, SurfaceControl leash) {
         if (mTasks.get(taskInfo.taskId) != null) {
-            throw new IllegalStateException("Task appeared more than once: #" + taskInfo.taskId);
+            mTasks.remove(taskInfo.taskId);
         }
         ProtoLog.v(ShellProtoLogGroup.WM_SHELL_TASK_ORG, "Fullscreen Task Appeared: #%d",
                 taskInfo.taskId);
