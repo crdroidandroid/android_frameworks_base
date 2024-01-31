@@ -649,7 +649,7 @@ object Flags {
 
     // 2200 - biometrics (udfps, sfps, BiometricPrompt, etc.)
     // TODO(b/259264861): Tracking Bug
-    @JvmField val UDFPS_NEW_TOUCH_DETECTION = releasedFlag("udfps_new_touch_detection")
+    @JvmField val UDFPS_NEW_TOUCH_DETECTION = unreleasedFlag("udfps_new_touch_detection")
     @JvmField val UDFPS_ELLIPSE_DETECTION = releasedFlag("udfps_ellipse_detection")
     // TODO(b/278622168): Tracking Bug
     @JvmField val BIOMETRIC_BP_STRONG = releasedFlag("biometric_bp_strong")
