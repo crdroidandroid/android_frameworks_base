@@ -38,6 +38,8 @@ import com.android.systemui.statusbar.pipeline.battery.data.repository.BatteryRe
 import com.android.systemui.statusbar.pipeline.battery.data.repository.BatteryRepositoryImpl
 import com.android.systemui.statusbar.pipeline.icons.shared.BindableIconsRegistry
 import com.android.systemui.statusbar.pipeline.icons.shared.BindableIconsRegistryImpl
+import com.android.systemui.statusbar.pipeline.ims.data.repository.CommonImsRepository
+import com.android.systemui.statusbar.pipeline.ims.data.repository.CommonImsRepositoryImpl
 import com.android.systemui.statusbar.pipeline.mobile.data.repository.CarrierConfigCoreStartable
 import com.android.systemui.statusbar.pipeline.mobile.data.repository.CarrierConfigRepository
 import com.android.systemui.statusbar.pipeline.mobile.data.repository.CarrierConfigRepositoryImpl
@@ -167,6 +169,9 @@ abstract class StatusBarPipelineModule {
     @IntoMap
     @ClassKey(CarrierConfigCoreStartable::class)
     abstract fun bindCarrierConfigStartable(impl: CarrierConfigCoreStartable): CoreStartable
+
+    @Binds
+    abstract fun bindCommonImsRepository(impl: CommonImsRepositoryImpl): CommonImsRepository
 
     companion object {
 
