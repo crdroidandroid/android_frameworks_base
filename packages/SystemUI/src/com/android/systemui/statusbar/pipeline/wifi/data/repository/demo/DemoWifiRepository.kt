@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.pipeline.wifi.data.repository.demo
 
 import com.android.systemui.dagger.qualifiers.Application
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
 import com.android.systemui.statusbar.pipeline.shared.data.model.DataActivityModel
 import com.android.systemui.statusbar.pipeline.shared.data.model.toWifiDataActivityModel
 import com.android.systemui.statusbar.pipeline.wifi.data.repository.WifiRepository
@@ -59,6 +60,10 @@ constructor(
     private val _wifiScanResults: MutableStateFlow<List<WifiScanEntry>> =
         MutableStateFlow(emptyList())
     override val wifiScanResults: StateFlow<List<WifiScanEntry>> = _wifiScanResults
+
+    private val _imsStates: MutableStateFlow<List<ImsStateModel>> =
+        MutableStateFlow(emptyList())
+    override val imsStates: StateFlow<List<ImsStateModel>> = _imsStates
 
     fun startProcessingCommands() {
         demoCommandJob =
