@@ -38,6 +38,8 @@ import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.log.table.TableLogBuffer
 import com.android.systemui.log.table.logDiffsForTable
 import com.android.systemui.statusbar.pipeline.dagger.WifiTableLog
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
+import com.android.systemui.statusbar.pipeline.ims.data.repository.CommonImsRepository
 import com.android.systemui.statusbar.pipeline.shared.data.model.DataActivityModel
 import com.android.systemui.statusbar.pipeline.shared.data.repository.ConnectivityRepository
 import com.android.systemui.statusbar.pipeline.shared.data.repository.ConnectivityRepositoryImpl.Companion.getMainOrUnderlyingWifiInfo
@@ -88,6 +90,7 @@ constructor(
     @Background private val bgDispatcher: CoroutineDispatcher,
     @Application private val scope: CoroutineScope,
     private val wifiManager: WifiManager,
+    private val commonImsRepo: CommonImsRepository,
 ) : WifiRepositoryDagger {
 
     override fun start() {
@@ -240,6 +243,8 @@ constructor(
             logger::logScanResults
         )
 
+    override val imsStates: StateFlow<List<ImsStateModel>> = commonImsRepo.imsStates
+
     companion object {
         // Start out with no known wifi network.
         // Note: [WifiStatusTracker] (the old implementation of connectivity logic) does do an
@@ -307,6 +312,7 @@ constructor(
         @Main private val mainExecutor: Executor,
         @Background private val bgDispatcher: CoroutineDispatcher,
         @Application private val scope: CoroutineScope,
+        private val commonImsRepository: CommonImsRepository
     ) {
         fun create(wifiManager: WifiManager): WifiRepositoryImpl {
             return WifiRepositoryImpl(
@@ -319,6 +325,7 @@ constructor(
                 bgDispatcher,
                 scope,
                 wifiManager,
+                commonImsRepository,
             )
         }
     }
