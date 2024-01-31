@@ -67,9 +67,9 @@
                 />
         </FrameLayout>
         <Space
-            android:id="@+id/mobile_roaming_space"
+            android:id="@+id/mobile_hd_space"
             android:layout_height="match_parent"
-            android:layout_width="@dimen/roaming_icon_start_padding"
+            android:layout_width="2.5dp"
             android:visibility="gone"
             />
         <FrameLayout
@@ -84,13 +84,14 @@
                 systemui:hasOverlappingRendering="false"
                 />
             <ImageView
-                android:id="@+id/mobile_roaming"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/status_bar_mobile_roam_size"
+                android:id="@+id/mobile_hd"
+                android:layout_width="12dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="1dp"
+                android:layout_gravity="start|top"
+                android:src="@drawable/ic_hd_calling"
                 android:adjustViewBounds="true"
-                android:layout_gravity="top|start"
-                android:src="@drawable/stat_sys_roaming"
-                android:contentDescription="@string/data_connection_roaming"
+                android:gravity="start|top"
                 android:visibility="gone" />
         </FrameLayout>
     </com.android.keyguard.AlphaOptimizedLinearLayout>
