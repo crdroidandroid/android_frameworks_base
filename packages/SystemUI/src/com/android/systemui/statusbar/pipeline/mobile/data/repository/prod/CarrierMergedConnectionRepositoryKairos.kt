@@ -30,6 +30,7 @@ import com.android.systemui.kairos.stateOf
 import com.android.systemui.kairos.util.nameTag
 import com.android.systemui.kairosBuilder
 import com.android.systemui.log.table.TableLogBuffer
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
 import com.android.systemui.statusbar.pipeline.mobile.data.model.DataConnectionState
 import com.android.systemui.statusbar.pipeline.mobile.data.model.NetworkNameModel
 import com.android.systemui.statusbar.pipeline.mobile.data.model.ResolvedNetworkType
@@ -194,6 +195,8 @@ class CarrierMergedConnectionRepositoryKairos(
      * [MobileConnectionRepositoryImpl].
      */
     override val hasPrioritizedNetworkCapabilities: State<Boolean> = stateOf(false)
+
+    override val imsState: State<ImsStateModel> = stateOf(ImsStateModel())
 
     override val dataEnabled: State<Boolean>
         get() = isWifiEnabled
