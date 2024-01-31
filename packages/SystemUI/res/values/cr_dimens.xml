@@ -13,4 +13,7 @@
 
     <!-- Width of the landscape battery icon in the status bar. -->
     <dimen name="status_bar_battery_icon_width_landscape">20dp</dimen>
+
+    <!-- HD calling icon -->
+    <dimen name="signal_icon_viewport_size">24dp</dimen>
 </resources>
