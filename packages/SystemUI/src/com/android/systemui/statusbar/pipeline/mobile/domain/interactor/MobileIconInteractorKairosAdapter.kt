@@ -17,12 +17,14 @@
 package com.android.systemui.statusbar.pipeline.mobile.domain.interactor
 
 import com.android.systemui.kairos.BuildScope
+import com.android.systemui.kairos.toColdConflatedFlow
 import com.android.systemui.kairos.util.nameTag
 import com.android.systemui.log.table.TableLogBuffer
 import com.android.systemui.statusbar.pipeline.mobile.data.model.NetworkNameModel
 import com.android.systemui.statusbar.pipeline.mobile.domain.model.NetworkTypeIconModel
 import com.android.systemui.statusbar.pipeline.mobile.domain.model.SignalIconModel
 import com.android.systemui.statusbar.pipeline.shared.data.model.DataActivityModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 fun BuildScope.MobileIconInteractorKairosAdapter(
@@ -136,6 +138,28 @@ fun BuildScope.MobileIconInteractorKairosAdapter(
                         "MobileIconInteractorKairosAdapter(subId=$subscriptionId).isRoamingForceHidden"
                     },
                 ),
+            isMobileHd = isMobileHd.toStateFlow(
+                nameTag {
+                    "MobileIconInteractorKairosAdapter(subId=$subscriptionId).isMobileHd"
+                }
+            ),
+            isMobileHdForceHidden = isMobileHdForceHidden.toColdConflatedFlow(
+                kairosNetwork,
+                nameTag {
+                    "MobileIconInteractorKairosAdapter(subId=$subscriptionId).isMobileHdForceHidden"
+                }
+            ),
+            isVoWifi = isVoWifi.toStateFlow(
+                nameTag {
+                    "MobileIconInteractorKairosAdapter(subId=$subscriptionId).isVoWifi"
+                }
+            ),
+            isVoWifiForceHidden = isVoWifiForceHidden.toColdConflatedFlow(
+                kairosNetwork,
+                nameTag {
+                    "MobileIconInteractorKairosAdapter(subId=$subscriptionId).isVoWifiForceHidden"
+                }
+            ),
             isAllowedDuringAirplaneMode =
                 isAllowedDuringAirplaneMode.toStateFlow(
                     nameTag {
@@ -171,6 +195,10 @@ private class MobileIconInteractorKairosAdapter(
     override val isRoaming: StateFlow<Boolean>,
     override val isForceHidden: StateFlow<Boolean>,
     override val isRoamingForceHidden: Flow<Boolean>,
+    override val isMobileHd: StateFlow<Boolean>,
+    override val isMobileHdForceHidden: Flow<Boolean>,
+    override val isVoWifi: StateFlow<Boolean>,
+    override val isVoWifiForceHidden: Flow<Boolean>,
     override val isAllowedDuringAirplaneMode: StateFlow<Boolean>,
     override val carrierNetworkChangeActive: StateFlow<Boolean>,
 ) : MobileIconInteractor

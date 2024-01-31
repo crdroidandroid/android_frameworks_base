@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.pipeline.wifi.data.repository.prod
 
 import com.android.systemui.dagger.SysUISingleton
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
 import com.android.systemui.statusbar.pipeline.shared.data.model.DataActivityModel
 import com.android.systemui.statusbar.pipeline.shared.ui.model.WifiToggleState
 import com.android.systemui.statusbar.pipeline.wifi.data.repository.RealWifiRepository
@@ -52,6 +53,9 @@ class DisabledWifiRepository @Inject constructor() : RealWifiRepository {
 
     override val wifiToggleState: StateFlow<WifiToggleState> =
         MutableStateFlow<WifiToggleState>(WifiToggleState.Normal).asStateFlow()
+
+    override val imsStates: StateFlow<List<ImsStateModel>> =
+        MutableStateFlow<List<ImsStateModel>>(emptyList()).asStateFlow()
 
     override fun disableWifi() {
         // No-op
