@@ -84,6 +84,7 @@ import com.android.systemui.statusbar.pipeline.mobile.data.model.SubscriptionMod
 import com.android.systemui.statusbar.pipeline.mobile.data.repository.CarrierConfigRepository
 import com.android.systemui.statusbar.pipeline.mobile.data.repository.MobileConnectionRepositoryKairos
 import com.android.systemui.statusbar.pipeline.mobile.data.repository.MobileConnectionsRepositoryKairos
+import com.android.systemui.statusbar.pipeline.ims.data.repository.ImsRepositoryImpl
 import com.android.systemui.statusbar.pipeline.mobile.util.MobileMappingsProxy
 import com.android.systemui.statusbar.pipeline.mobile.util.SubscriptionManagerProxy
 import com.android.systemui.statusbar.pipeline.shared.data.model.DefaultConnectionModel
@@ -653,6 +654,7 @@ constructor(
     private val telephonyManager: TelephonyManager,
     private val mobileRepoFactory: MobileConnectionRepositoryKairosImpl.Factory,
     private val mergedRepoFactory: CarrierMergedConnectionRepositoryKairos.Factory,
+    private val imsRepoFactory: ImsRepositoryImpl.Factory,
 ) : MobileConnectionsRepositoryKairosImpl.ConnectionRepoFactory {
 
     private val networkNameSeparator: String =
@@ -676,6 +678,7 @@ constructor(
                     networkNameSeparator,
                     carrierConfigRepo.getOrCreateConfigForSubId(subId),
                     telephonyManager.createForSubscriptionId(subId),
+		    imsRepoFactory.build(subId),
                 )
             }
             FullMobileConnectionRepositoryKairos(

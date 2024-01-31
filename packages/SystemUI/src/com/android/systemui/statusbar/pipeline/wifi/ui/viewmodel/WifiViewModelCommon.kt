@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.pipeline.wifi.ui.viewmodel
 
+import com.android.systemui.statusbar.pipeline.wifi.ui.model.VoWifiIcon
 import com.android.systemui.statusbar.pipeline.wifi.ui.model.WifiIcon
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,4 +43,7 @@ interface WifiViewModelCommon {
 
     /** True if the spacer between the wifi icon and the RAT icon should be visible. */
     val isSignalSpacerVisible: Flow<Boolean>
+
+    /** The VoWifi icon that should be displayed. */
+    val voWifiIcon: Flow<VoWifiIcon>
 }
