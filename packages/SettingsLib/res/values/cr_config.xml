@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2024 crDroid Android Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Roaming symbol (R) path for SignalDrawable as defined on a 24x24 canvas. -->
+    <string name="config_signalRoamingPath" translatable="false">
+        M 19.436 19.688 L 18.152 19.688 L 18.152 22 L 17 22 L 17 16 L 19.332 16 C 20.097 16 20.687 16.155 21.103 16.466 C 21.519 16.776 21.727 17.225 21.727 17.813 C 21.727 18.214 21.619 18.551 21.403 18.823 C 21.191 19.092 20.893 19.299 20.511 19.445 L 22 21.946 L 22 22 L 20.766 22 L 19.436 19.688 Z M 18.152 18.852 L 19.336 18.852 C 19.725 18.852 20.028 18.764 20.247 18.588 C 20.465 18.409 20.575 18.166 20.575 17.859 C 20.575 17.537 20.473 17.288 20.27 17.113 C 20.069 16.937 19.769 16.846 19.368 16.841 L 18.152 16.841 L 18.152 18.852 Z
+    </string>
+    <!-- config_roamingCutout{Height,Width}Fraction define fraction of the 24x24 canvas that
+         should be cut out to display config_signalRoamingPath. -->
+    <item name="config_roamingCutoutWidthFraction" format="float" type="dimen">8</item>
+    <item name="config_roamingCutoutHeightFraction" format="float" type="dimen">9</item>
+</resources>
