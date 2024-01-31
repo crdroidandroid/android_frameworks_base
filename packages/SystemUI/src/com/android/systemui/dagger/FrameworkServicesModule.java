@@ -101,6 +101,7 @@ import android.telecom.TelecomManager;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.telephony.ims.ImsManager;
 import android.telephony.satellite.SatelliteManager;
 import android.view.CrossWindowBlurListeners;
 import android.view.IWindowManager;
@@ -852,5 +853,11 @@ public class FrameworkServicesModule {
     @Nullable
     static AutofillManager provideAutofillManager(Context context) {
         return context.getSystemService(AutofillManager.class);
+    }
+
+    @Provides
+    @Singleton
+    static ImsManager provideImsManager(Context context) {
+        return context.getSystemService(ImsManager.class);
     }
 }

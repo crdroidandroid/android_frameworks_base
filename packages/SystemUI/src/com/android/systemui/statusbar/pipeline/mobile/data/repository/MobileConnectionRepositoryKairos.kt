@@ -20,6 +20,7 @@ import android.telephony.CellSignalStrength
 import android.telephony.TelephonyManager
 import com.android.systemui.kairos.ExperimentalKairosApi
 import com.android.systemui.kairos.State
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
 import com.android.systemui.log.table.TableLogBuffer
 import com.android.systemui.statusbar.pipeline.mobile.data.model.DataConnectionState
 import com.android.systemui.statusbar.pipeline.mobile.data.model.NetworkNameModel
@@ -166,6 +167,11 @@ interface MobileConnectionRepositoryKairos {
      * network slice
      */
     val hasPrioritizedNetworkCapabilities: State<Boolean>
+
+    /**
+     * The current state of the IMS with its capabilities
+     */
+    val imsState: State<ImsStateModel>
 
     /**
      * True if this connection is in emergency callback mode.
