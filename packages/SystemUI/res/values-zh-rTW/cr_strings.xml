@@ -87,8 +87,8 @@
     <string name="onthego_notif_title">OTG 模式正處於啟用狀態</string>
     <string name="onthego_notif_stop">停止</string>
     <string name="onthego_notif_options">選項</string>
-    <string name="onthego_notif_error">無法啟動行走模式</string>
-    <string name="onthego_notif_restart">重新啟動行走模式</string>
+    <string name="onthego_notif_error">無法啟動 OTG 模式</string>
+    <string name="onthego_notif_restart">重新啟動 OTG 模式</string>
     <string name="onthego_notif_camera_changed">相機模式已變更</string>
     <string name="onthego_transparency">透明度</string>
     <string name="onthego_front_camera">使用前置鏡頭</string>
