@@ -30,7 +30,9 @@ import com.android.systemui.statusbar.pipeline.shared.data.model.DataActivityMod
 import com.android.systemui.statusbar.pipeline.wifi.domain.interactor.WifiInteractor
 import com.android.systemui.statusbar.pipeline.wifi.shared.WifiConstants
 import com.android.systemui.statusbar.pipeline.wifi.shared.model.WifiNetworkModel
+import com.android.systemui.statusbar.pipeline.wifi.ui.model.VoWifiIcon
 import com.android.systemui.statusbar.pipeline.wifi.ui.model.WifiIcon
+import com.android.systemui.statusbar.pipeline.wifi.ui.model.icon
 import java.util.function.Supplier
 import javax.inject.Inject
 import javax.inject.Named
@@ -39,6 +41,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -139,4 +142,16 @@ constructor(
         airplaneModeViewModel.isAirplaneModeIconVisible
 
     override val isSignalSpacerVisible: Flow<Boolean> = shouldShowSignalSpacerProvider.get()
+
+    override val voWifiIcon: Flow<VoWifiIcon> =
+        combine(
+                interactor.voWifiState,
+                interactor.isVoWifiForceHidden
+            ) { state, isHidden ->
+                // If it's force hidden, just hide.
+                // Otherwise follow VoWifi state
+                if (isHidden) VoWifiIcon.Hidden else state.icon
+            }
+            .distinctUntilChanged()
+            .stateIn(scope, SharingStarted.WhileSubscribed(), VoWifiIcon.Hidden)
 }
