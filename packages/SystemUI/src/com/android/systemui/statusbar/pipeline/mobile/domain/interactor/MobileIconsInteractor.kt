@@ -29,6 +29,7 @@ import com.android.systemui.flags.Flags.FILTER_PROVISIONING_NETWORK_SUBSCRIPTION
 import com.android.systemui.log.table.TableLogBuffer
 import com.android.systemui.log.table.logDiffsForTable
 import com.android.systemui.statusbar.pipeline.dagger.MobileSummaryLog
+import com.android.systemui.statusbar.pipeline.ims.data.repository.CommonImsRepository
 import com.android.systemui.statusbar.pipeline.mobile.data.model.SubscriptionModel
 import com.android.systemui.statusbar.pipeline.mobile.data.repository.MobileConnectionRepository
 import com.android.systemui.statusbar.pipeline.mobile.data.repository.MobileConnectionsRepository
@@ -113,6 +114,12 @@ interface MobileIconsInteractor {
     /** True if we're configured to force-hide the roaming and false otherwise. */
     val isRoamingForceHidden: Flow<Boolean>
 
+    /** True if we're configured to force-hide the hd (VoLTE/VoNR) and false otherwise. */
+    val isMobileHdForceHidden: Flow<Boolean>
+
+    /** True if we're configured to force-hide the hd (VoLTE/VoNR) and false otherwise. */
+    val isVoWifiForceHidden: Flow<Boolean>
+
     /**
      * Vends out a [MobileIconInteractor] tracking the [MobileConnectionRepository] for the given
      * subId.
@@ -131,6 +138,7 @@ constructor(
     @MobileSummaryLog private val tableLogger: TableLogBuffer,
     connectivityRepository: ConnectivityRepository,
     userSetupRepo: UserSetupRepository,
+    commonImsRepo: CommonImsRepository,
     @Application private val scope: CoroutineScope,
     private val context: Context,
     private val featureFlagsClassic: FeatureFlagsClassic,
@@ -377,6 +385,16 @@ constructor(
             .map { it.contains(ConnectivitySlot.ROAMING) }
             .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
+    override val isMobileHdForceHidden: Flow<Boolean> =
+        commonImsRepo.imsIconState
+            .map { !it.showHdIcon }
+            .stateIn(scope, SharingStarted.WhileSubscribed(), true)
+
+    override val isVoWifiForceHidden: Flow<Boolean> =
+        commonImsRepo.imsIconState
+            .map { !it.showVowifiIcon }
+            .stateIn(scope, SharingStarted.WhileSubscribed(), true)
+
     /** Vends out new [MobileIconInteractor] for a particular subId */
     override fun getMobileConnectionInteractorForSubId(subId: Int): MobileIconInteractor =
         reuseCache[subId]?.get() ?: createMobileConnectionInteractorForSubId(subId)
@@ -394,6 +412,8 @@ constructor(
                 isDefaultConnectionFailed,
                 isForceHidden,
                 isRoamingForceHidden,
+                isMobileHdForceHidden,
+                isVoWifiForceHidden,
                 mobileConnectionsRepo.getRepoForSubId(subId),
                 context,
             )

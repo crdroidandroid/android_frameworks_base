@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.pipeline.wifi.data.repository.prod
 
 import com.android.systemui.dagger.SysUISingleton
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
 import com.android.systemui.statusbar.pipeline.shared.data.model.DataActivityModel
 import com.android.systemui.statusbar.pipeline.wifi.data.repository.WifiRepositoryDagger
 import com.android.systemui.statusbar.pipeline.wifi.data.repository.WifiRepositoryViaTrackerLibDagger
@@ -52,6 +53,9 @@ class DisabledWifiRepository @Inject constructor() :
 
     override val wifiScanResults: StateFlow<List<WifiScanEntry>> =
         MutableStateFlow<List<WifiScanEntry>>(emptyList()).asStateFlow()
+
+    override val imsStates: StateFlow<List<ImsStateModel>> =
+        MutableStateFlow<List<ImsStateModel>>(emptyList()).asStateFlow()
 
     companion object {
         private val NETWORK = WifiNetworkModel.Unavailable

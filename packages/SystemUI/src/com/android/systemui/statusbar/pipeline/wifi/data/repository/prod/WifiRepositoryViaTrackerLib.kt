@@ -34,6 +34,8 @@ import com.android.systemui.log.table.logDiffsForTable
 import com.android.systemui.statusbar.connectivity.WifiPickerTrackerFactory
 import com.android.systemui.statusbar.pipeline.dagger.WifiTrackerLibInputLog
 import com.android.systemui.statusbar.pipeline.dagger.WifiTrackerLibTableLog
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
+import com.android.systemui.statusbar.pipeline.ims.data.repository.CommonImsRepository
 import com.android.systemui.statusbar.pipeline.shared.data.model.DataActivityModel
 import com.android.systemui.statusbar.pipeline.wifi.data.repository.WifiRepository.Companion.CARRIER_MERGED_INVALID_SUB_ID_REASON
 import com.android.systemui.statusbar.pipeline.wifi.data.repository.WifiRepository.Companion.COL_NAME_IS_DEFAULT
@@ -81,6 +83,7 @@ constructor(
     private val wifiManager: WifiManager,
     @WifiTrackerLibInputLog private val inputLogger: LogBuffer,
     @WifiTrackerLibTableLog private val wifiTrackerLibTableLogBuffer: TableLogBuffer,
+    private val commonImsRepo: CommonImsRepository,
 ) : WifiRepositoryViaTrackerLibDagger, LifecycleOwner {
 
     override val lifecycle =
@@ -327,6 +330,8 @@ constructor(
             this::logScanResults,
         )
 
+    override val imsStates: StateFlow<List<ImsStateModel>> = commonImsRepo.imsStates
+
     private fun logOnWifiEntriesChanged(connectedEntry: WifiEntry?) {
         inputLogger.log(
             TAG,
@@ -379,6 +384,7 @@ constructor(
         private val wifiPickerTrackerFactory: WifiPickerTrackerFactory,
         @WifiTrackerLibInputLog private val inputLogger: LogBuffer,
         @WifiTrackerLibTableLog private val wifiTrackerLibTableLogBuffer: TableLogBuffer,
+        private val commonImsRepository: CommonImsRepository,
     ) {
         fun create(wifiManager: WifiManager): WifiRepositoryViaTrackerLib {
             return WifiRepositoryViaTrackerLib(
@@ -390,6 +396,7 @@ constructor(
                 wifiManager,
                 inputLogger,
                 wifiTrackerLibTableLogBuffer,
+                commonImsRepository,
             )
         }
     }
