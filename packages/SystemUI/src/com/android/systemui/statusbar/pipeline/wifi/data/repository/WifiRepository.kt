@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.pipeline.wifi.data.repository
 
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
 import com.android.systemui.statusbar.pipeline.shared.data.model.DataActivityModel
 import com.android.systemui.statusbar.pipeline.wifi.shared.model.WifiNetworkModel
 import com.android.systemui.statusbar.pipeline.wifi.shared.model.WifiScanEntry
@@ -49,6 +50,11 @@ interface WifiRepository {
      * updated and does not trigger a scan.
      */
     val wifiScanResults: StateFlow<List<WifiScanEntry>>
+
+    /**
+     * The list of IMS state of all subscription Ids
+     */
+    val imsStates: StateFlow<List<ImsStateModel>>
 
     /**
      * Returns true if the device is currently connected to a wifi network with a valid SSID and
