@@ -9,4 +9,7 @@
     <dimen name="chip_corner_radius">28dp</dimen>
     <dimen name="status_bar_clock_chip_tb_padding">0dp</dimen>
     <dimen name="status_bar_clock_chip_lr_padding">8dp</dimen>
+
+    <!-- HD calling icon -->
+    <dimen name="signal_icon_viewport_size">24dp</dimen>
 </resources>
