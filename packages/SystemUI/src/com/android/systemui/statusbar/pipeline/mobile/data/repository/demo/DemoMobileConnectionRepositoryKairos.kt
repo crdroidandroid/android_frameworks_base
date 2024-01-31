@@ -35,6 +35,7 @@ import com.android.systemui.kairos.util.firstOrNull
 import com.android.systemui.kairos.util.nameTag
 import com.android.systemui.kairosBuilder
 import com.android.systemui.log.table.TableLogBuffer
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
 import com.android.systemui.log.table.logDiffsForTable
 import com.android.systemui.statusbar.pipeline.mobile.data.model.DataConnectionState
 import com.android.systemui.statusbar.pipeline.mobile.data.model.NetworkNameModel
@@ -425,6 +426,8 @@ class DemoMobileConnectionRepositoryKairos(
         lastEvent.map { it.firstOrNull()?.slice ?: false }
 
     override val isInEcmMode: State<Boolean> = stateOf(false)
+
+    override val imsState: State<ImsStateModel> = stateOf(ImsStateModel())
 
     private fun TransactionScope.resolvedNetworkTypeForIconGroup(
         iconGroup: SignalIcon.MobileIconGroup?
