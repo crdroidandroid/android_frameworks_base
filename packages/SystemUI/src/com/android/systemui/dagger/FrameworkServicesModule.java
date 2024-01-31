@@ -100,6 +100,7 @@ import android.telecom.TelecomManager;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.telephony.ims.ImsManager;
 import android.telephony.satellite.SatelliteManager;
 import android.view.Choreographer;
 import android.view.CrossWindowBlurListeners;
@@ -820,5 +821,11 @@ public class FrameworkServicesModule {
     @Singleton
     static ViewCapture provideViewCapture(Context context) {
         return ViewCaptureFactory.getInstance(context);
+    }
+
+    @Provides
+    @Singleton
+    static ImsManager provideImsManager(Context context) {
+        return context.getSystemService(ImsManager.class);
     }
 }
