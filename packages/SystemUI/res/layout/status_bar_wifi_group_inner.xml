@@ -26,6 +26,15 @@
         android:gravity="center_vertical"
         android:layout_marginStart="2.5sp"
     >
+
+        <ImageView
+            android:id="@+id/vowifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
+
         <FrameLayout
                 android:id="@+id/inout_container"
                 android:layout_height="@dimen/status_bar_wifi_inout_container_size"
