@@ -18,11 +18,13 @@ package com.android.systemui.statusbar.pipeline.wifi.domain.interactor
 
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
+import com.android.systemui.statusbar.pipeline.ims.data.repository.CommonImsRepository
 import com.android.systemui.statusbar.pipeline.shared.data.model.ConnectivitySlot
 import com.android.systemui.statusbar.pipeline.shared.data.model.DataActivityModel
 import com.android.systemui.statusbar.pipeline.shared.data.repository.ConnectivityRepository
 import com.android.systemui.statusbar.pipeline.shared.ui.model.WifiToggleState
 import com.android.systemui.statusbar.pipeline.wifi.data.repository.WifiRepository
+import com.android.systemui.statusbar.pipeline.wifi.shared.model.VoWifiState
 import com.android.systemui.statusbar.pipeline.wifi.shared.model.WifiNetworkModel
 import com.android.systemui.statusbar.pipeline.wifi.shared.model.WifiScanEntry
 import javax.inject.Inject
@@ -67,6 +69,12 @@ interface WifiInteractor {
 
     /** A flow representing the user's optimistic intent to toggle Wi-Fi. */
     val wifiToggleState: StateFlow<WifiToggleState>
+
+    /** Our current VoWifi state. */
+    val voWifiState: StateFlow<VoWifiState>
+
+    /** True if we're configured to force-hide the VoWifi icon and false otherwise. */
+    val isVoWifiForceHidden: Flow<Boolean>
 }
 
 @SysUISingleton
@@ -75,6 +83,7 @@ class WifiInteractorImpl
 constructor(
     connectivityRepository: ConnectivityRepository,
     wifiRepository: WifiRepository,
+    commonImsRepo: CommonImsRepository,
     @Application scope: CoroutineScope,
 ) : WifiInteractor {
 
@@ -119,6 +128,25 @@ constructor(
             .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
     override val wifiToggleState: StateFlow<WifiToggleState> = wifiRepository.wifiToggleState
+
+    override val voWifiState: StateFlow<VoWifiState> =
+        wifiRepository.imsStates.map { states ->
+            val voWifiEnabled = states.filter { it.isVoWifiAvailable() }
+            if (voWifiEnabled.isNotEmpty()) {
+                // Get the VoWifi enabled slots
+                val slots = voWifiEnabled.map { it.slotIndex }
+                // Get the active subscription count from any one of the states
+                // (All states are being collected at the same time so doesn't matter)
+                val activeSubCount = voWifiEnabled.first().activeSubCount
+                VoWifiState.Enabled(slots, activeSubCount)
+            } else {
+                VoWifiState.Disabled
+            }
+        }
+        .stateIn(scope, SharingStarted.WhileSubscribed(), VoWifiState.Disabled)
+
+    override val isVoWifiForceHidden: Flow<Boolean> =
+        commonImsRepo.imsIconState.map { !it.showVowifiIcon }
 
     private fun anyNonMatchingNetworkExists(
         currentNetwork: WifiNetworkModel.Active,

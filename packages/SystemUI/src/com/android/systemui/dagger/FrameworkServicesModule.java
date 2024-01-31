@@ -104,6 +104,7 @@ import android.telecom.TelecomManager;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.telephony.ims.ImsManager;
 import android.telephony.satellite.SatelliteManager;
 import android.uilatencystats.UiLatencyStatsManager;
 import android.view.CrossWindowBlurListeners;
@@ -883,5 +884,11 @@ public class FrameworkServicesModule {
     @Nullable
     static AxSandboxManager provideAxSandboxManager(Context context) {
         return context.getSystemService(AxSandboxManager.class);
+    }
+
+    @Provides
+    @Singleton
+    static ImsManager provideImsManager(Context context) {
+        return context.getSystemService(ImsManager.class);
     }
 }
