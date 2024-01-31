@@ -24,6 +24,7 @@ import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.dagger.qualifiers.Background
 import com.android.systemui.log.table.TableLogBuffer
+import com.android.systemui.statusbar.pipeline.ims.data.model.ImsStateModel
 import com.android.systemui.statusbar.pipeline.mobile.data.model.DataConnectionState
 import com.android.systemui.statusbar.pipeline.mobile.data.model.NetworkNameModel
 import com.android.systemui.statusbar.pipeline.mobile.data.model.ResolvedNetworkType
@@ -173,6 +174,7 @@ class CarrierMergedConnectionRepository(
     override val isNonTerrestrial = MutableStateFlow(false).asStateFlow()
     override val isGsm = MutableStateFlow(false).asStateFlow()
     override val carrierNetworkChangeActive = MutableStateFlow(false).asStateFlow()
+    override val imsState = MutableStateFlow(ImsStateModel()).asStateFlow()
 
     /**
      * Carrier merged connections happen over wifi but are displayed as a mobile triangle. Because
