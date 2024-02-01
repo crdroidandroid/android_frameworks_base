@@ -128,11 +128,14 @@ public class UdfpsAnimation extends ImageView {
     }
 
     private void updateAnimationStyle(int styleIdx) {
-        Drawable bgDrawable = getBgDrawable(styleIdx);
-        // We have to set even if it's null
-        // to remove animation on 'none' style.
-        setBackgroundDrawable(bgDrawable);
-        recognizingAnim = bgDrawable != null ? (AnimationDrawable) getBackground() : null;
+        if (styleIdx == 0) {
+            recognizingAnim = null;
+            setBackgroundDrawable(null);
+        } else {
+            Drawable bgDrawable = getBgDrawable(styleIdx);
+            setBackgroundDrawable(bgDrawable);
+            recognizingAnim = bgDrawable != null ? (AnimationDrawable) getBackground() : null;
+        }
     }
 
     private Drawable getBgDrawable(int styleIdx) {
