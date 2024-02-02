@@ -27,17 +27,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
 
-    <com.android.systemui.island.IslandView
-        android:id="@+id/notification_island"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAllCaps="false"
-        android:elevation="100dp"
-        android:layout_marginTop="@dimen/status_bar_header_height_keyguard"
-        android:layout_gravity="top|center"
-        android:theme="@style/Theme.Island.SystemUI"
-        style="?attr/floatingActionButtonSmallStyle"
-        systemui:shapeAppearanceOverlay="@style/islandBackgroundOverlay"/>
+    <include layout="@layout/island_status_bar_layout" />
 
     <com.android.systemui.common.ui.view.LongPressHandlingView
         android:id="@+id/keyguard_long_press"
