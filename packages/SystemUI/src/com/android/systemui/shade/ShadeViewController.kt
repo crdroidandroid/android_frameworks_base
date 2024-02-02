@@ -233,7 +233,7 @@ interface ShadeViewController {
 
     /** island visibility  */
     fun showIsland(show: Boolean)
-    
+
     fun getScrollerLayoutController(): NotificationStackScrollLayoutController?
     
     fun getKeyguardBottomAreaView(): KeyguardBottomAreaView?
