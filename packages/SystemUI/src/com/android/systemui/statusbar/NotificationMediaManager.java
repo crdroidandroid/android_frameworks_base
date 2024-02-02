@@ -17,6 +17,7 @@ package com.android.systemui.statusbar;
 
 import static com.android.systemui.Flags.mediaControlsUserInitiatedDeleteintent;
 import static com.android.systemui.Flags.notificationMediaManagerBackgroundExecution;
+import static com.android.systemui.statusbar.StatusBarState.KEYGUARD;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
@@ -28,6 +29,7 @@ import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.os.Handler;
+import android.provider.Settings;
 import android.service.notification.NotificationStats;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
@@ -43,6 +45,7 @@ import com.android.systemui.dump.DumpManager;
 import com.android.systemui.media.controls.domain.pipeline.MediaDataManager;
 import com.android.systemui.media.controls.shared.model.MediaData;
 import com.android.systemui.media.controls.shared.model.SmartspaceMediaData;
+import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.statusbar.dagger.CentralSurfacesModule;
 import com.android.systemui.statusbar.notification.collection.NotifCollection;
 import com.android.systemui.statusbar.notification.collection.NotifPipeline;
@@ -50,6 +53,8 @@ import com.android.systemui.statusbar.notification.collection.NotificationEntry;
 import com.android.systemui.statusbar.notification.collection.notifcollection.DismissedByUserStats;
 import com.android.systemui.statusbar.notification.collection.notifcollection.NotifCollectionListener;
 import com.android.systemui.statusbar.notification.collection.render.NotificationVisibilityProvider;
+import com.android.systemui.tuner.TunerService;
+import com.android.systemui.util.NotificationUtils;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -64,9 +69,14 @@ import java.util.concurrent.Executor;
  * Handles tasks and state related to media notifications. For example, there is a 'current' media
  * notification, which this class keeps track of.
  */
-public class NotificationMediaManager implements Dumpable {
+public class NotificationMediaManager implements Dumpable, TunerService.Tunable {
     private static final String TAG = "NotificationMediaManager";
     public static final boolean DEBUG_MEDIA = false;
+
+    private static final String ISLAND_NOTIFICATION =
+            "system:" + Settings.System.ISLAND_NOTIFICATION;
+    private static final String ISLAND_NOTIFICATION_NOW_PLAYING =
+            "system:" + Settings.System.ISLAND_NOTIFICATION_NOW_PLAYING;
 
     private static final String NOWPLAYING_SERVICE = "com.google.android.as";
     private static final HashSet<Integer> PAUSED_MEDIA_STATES = new HashSet<>();
@@ -101,6 +111,12 @@ public class NotificationMediaManager implements Dumpable {
     private String mNowPlayingTrack;
 
     private final SysuiColorExtractor mColorExtractor;
+    private final TunerService mTunerService;
+    private final NotificationUtils notifUtils;
+    private final StatusBarStateController mStatusBarStateController;
+
+    private boolean mIslandEnabled;
+    private boolean mIslandNowPlayingEnabled;
 
     @VisibleForTesting
     final MediaController.Callback mMediaListener = new MediaController.Callback() {
@@ -111,6 +127,16 @@ public class NotificationMediaManager implements Dumpable {
                 Log.v(TAG, "DEBUG_MEDIA: onPlaybackStateChanged: " + state);
             }
             if (state != null) {
+                if (mIslandEnabled && mIslandNowPlayingEnabled) {
+                    if (mStatusBarStateController.getState() != KEYGUARD 
+                        && !mStatusBarStateController.isDozing()
+                        && PlaybackState.STATE_PLAYING == getMediaControllerPlaybackState(mMediaController)
+                        && mMediaMetadata != null) {
+                        notifUtils.showNowPlayingNotification(mMediaMetadata);
+                    } else {
+                        notifUtils.cancelNowPlayingNotification();
+                    }
+                }
                 if (!isPlaybackActive(state.getState())) {
                     clearCurrentMediaNotification();
                 }
@@ -128,6 +154,13 @@ public class NotificationMediaManager implements Dumpable {
                 mBackgroundExecutor.execute(() -> setMediaMetadata(metadata));
             } else {
                 setMediaMetadata(metadata);
+            }
+            if (mIslandEnabled && mIslandNowPlayingEnabled) {
+                if (mStatusBarStateController.getState() != KEYGUARD 
+                        && !mStatusBarStateController.isDozing()) {
+                    notifUtils.showNowPlayingNotification(metadata);
+                }
+                notifUtils.cancelNowPlayingNotification();
             }
 
             dispatchUpdateMediaMetaData();
@@ -150,7 +183,9 @@ public class NotificationMediaManager implements Dumpable {
             DumpManager dumpManager,
             @Background Executor backgroundExecutor,
             @Main Handler handler,
-            SysuiColorExtractor colorExtractor
+            SysuiColorExtractor colorExtractor,
+            StatusBarStateController statusBarStateController,
+            TunerService tunerService
     ) {
         mContext = context;
         mMediaListeners = new ArrayList<>();
@@ -161,10 +196,30 @@ public class NotificationMediaManager implements Dumpable {
         mBackgroundExecutor = backgroundExecutor;
         mHandler = handler;
         mColorExtractor = colorExtractor;
+        mStatusBarStateController = statusBarStateController;
 
         setupNotifPipeline();
 
         dumpManager.registerDumpable(this);
+
+        notifUtils = new NotificationUtils(mContext);
+        mTunerService = tunerService;
+        mTunerService.addTunable(this, ISLAND_NOTIFICATION);
+        mTunerService.addTunable(this, ISLAND_NOTIFICATION_NOW_PLAYING);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case ISLAND_NOTIFICATION:
+                mIslandEnabled = TunerService.parseIntegerSwitch(newValue, false);
+                break;
+            case ISLAND_NOTIFICATION_NOW_PLAYING:
+                mIslandNowPlayingEnabled = TunerService.parseIntegerSwitch(newValue, true);
+                break;
+            default:
+                break;
+        }
     }
 
     private void setupNotifPipeline() {
@@ -314,6 +369,7 @@ public class NotificationMediaManager implements Dumpable {
         mColorExtractor.setMediaBackgroundColor(0);
         callback.setMediaNotificationColor(0);
         mMediaListeners.remove(callback);
+        mTunerService.removeTunable(this);
     }
 
     public void findAndUpdateMediaNotifications() {
