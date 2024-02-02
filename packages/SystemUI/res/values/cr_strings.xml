@@ -166,4 +166,8 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Language</string>
     <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+
+    <!-- Island notification -->
+    <string name="now_playing_on">Now Playing on %1$s</string>
+    <string name="by_artist">%1$s by %2$s</string>
 </resources>
