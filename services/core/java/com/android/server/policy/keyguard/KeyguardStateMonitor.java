@@ -89,6 +89,12 @@ public class KeyguardStateMonitor extends IKeyguardStateCallback.Stub {
         mIsShowing = showing;
 
         mCallback.onShowingChanged();
+        
+        if (showing) {
+            System.gc();
+            System.runFinalization();
+            System.gc();
+        }
     }
 
     @Override // Binder interface
