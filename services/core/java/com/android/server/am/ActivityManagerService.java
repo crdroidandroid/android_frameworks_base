@@ -1943,7 +1943,12 @@ public class ActivityManagerService extends IActivityManager.Stub
             case PROC_START_TIMEOUT_MSG: {
                 ProcessRecord app = (ProcessRecord) msg.obj;
                 synchronized (ActivityManagerService.this) {
-                    handleProcessStartOrKillTimeoutLocked(app, /* isKillTimeout */ false);
+                    // If app is attached at this moment, we should not kill it
+                    if (app.getDeathRecipient() == null) {
+                        handleProcessStartOrKillTimeoutLocked(app, /* isKillTimeout */ false);
+                    } else {
+                        Slog.i(TAG, app + " is attached now");
+                    }
                 }
             } break;
             case CONTENT_PROVIDER_PUBLISH_TIMEOUT_MSG: {
