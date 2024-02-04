@@ -160,4 +160,7 @@
     <string name="quick_settings_locale_more_locales_toast">ابتدا چندین زبان را پیکربندی کنید</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
+    <!-- Island notification -->
+    <string name="now_playing_on">Now Playing on %1$s</string>
+    <string name="by_artist">%1$s by %2$s</string>
 </resources>
