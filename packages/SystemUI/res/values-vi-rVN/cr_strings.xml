@@ -159,4 +159,7 @@
     <string name="quick_settings_locale_more_locales_toast">Vui lòng thiết lập nhiều ngôn ngữ để kích hoạt chức năng chuyển đổi</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Đang nhận diện khuôn mặt...</string>
+    <!-- Island notification -->
+    <string name="now_playing_on">Now Playing on %1$s</string>
+    <string name="by_artist">%1$s by %2$s</string>
 </resources>
