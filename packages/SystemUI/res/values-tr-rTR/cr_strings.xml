@@ -161,6 +161,6 @@
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Yüz tanınıyor...</string>
     <!-- Island notification -->
-    <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%2$s tarafından %1$s</string>
+    <string name="now_playing_on">Şu anda %1$s üzerinde oynatılıyor</string>
+    <string name="by_artist">%2$s - %1$s</string>
 </resources>
