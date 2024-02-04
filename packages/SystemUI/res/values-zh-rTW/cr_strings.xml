@@ -160,6 +160,6 @@
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">臉部辨識中...</string>
     <!-- Island notification -->
-    <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%1$s by %2$s</string>
+    <string name="now_playing_on">目前正在 %1$s 上播放</string>
+    <string name="by_artist">%2$s 的 %1$s</string>
 </resources>
