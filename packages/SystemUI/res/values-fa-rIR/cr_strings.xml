@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2024 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Statusbar Icons -->
+    <string name="status_bar_nfc">ان‌اف‌سی</string>
+    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_data_saver">ذخیره‌کننده داده</string>
+    <string name="status_bar_call_strength">قدرت تماس</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
+    <!-- Screen record delete action -->
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">حذف</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">فیلم ضبط صفحه حذف شد</string>
+    <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">نشان دادن نقطه توقف</string>
+    <string name="screenrecord_stopdot_summary">برای جابجایی، مدتی نگه دارید</string>
+    <string name="screenrecord_lowquality_label">کیفیت پایین تر</string>
+    <string name="screenrecord_lowquality_summary">برای انداره کوچیک تر فایل</string>
+    <string name="screenrecord_longer_timeout_switch_label">محدودیت اندازه فایل بزرگتر</string>
+    <string name="screenrecord_longer_timeout_switch_summary">محدود کردن اندازه ضبط به ۱۵ گیگابایت</string>
+    <string name="screenrecord_skip_time_label">رد کردن زمان‌سنج</string>
+    <string name="screenrecord_skip_time_summary">حذف صبر ۳ ثانیه‌ای</string>
+    <string name="screenrecord_hevc_switch_label">فعال سازی انکد سخت افزاری ویدیو</string>
+    <string name="screenrecord_hevc_switch_summary">از کدگذاری ویدیویی HEVC کارآمدتر استفاده کنید</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">استفاده از بلوتوث</string>
+    <string name="bluetooth_is_off">بلوتوث خاموش است</string>
+    <string name="tap_a_device_to_connect">برای اتصال به شبکه روی آن ضربه بزنید</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="one">%d دستگاه وصل است</item>
+        <item quantity="other">%d دستگاه های متصل</item>
+    </plurals>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">صدا</string>
+    <string name="quick_settings_sound_ring">زنگ</string>
+    <string name="quick_settings_sound_vibrate">لرزش</string>
+    <string name="quick_settings_sound_mute">بی‌صدا</string>
+    <!-- Text to use when the number in a notification info is too large -->
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">ک‌ب/ث</string>
+    <string name="megabitspersecond_short">م‌ب/ث</string>
+    <string name="gigabitspersecond_short">گ‌ب/ث</string>
+    <string name="kilobytespersecond_short">ک‌ب/ث</string>
+    <string name="megabytespersecond_short">م‌ب/ث</string>
+    <string name="gigabytespersecond_short">گ‌ب/ث</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">مصرف امروز</string>
+    <string name="usage_data_default_suffix">داده</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">ابری</string>
+    <string name="weather_condition_rain">بارانی</string>
+    <string name="weather_condition_clear">آفتابی</string>
+    <string name="weather_condition_storm">طوفانی</string>
+    <string name="weather_condition_snow">برفی</string>
+    <string name="weather_condition_wind">باد</string>
+    <string name="weather_condition_mist">مه آلود</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ سریع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> مانده تا کامل شود)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Wشارژ بی‌سیم</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ نامنظم (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> مانده تا کامل شود)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • شارژ نامنظم</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ فوق سریع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> مانده تا کامل شود)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • شارژ فوق سریع</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • شارژ سریع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> تا کامل شود)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • شارژ سریع</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">ویژگی در حرکت فعال شد</string>
+    <string name="onthego_notif_title">ویژگی در حرکت فعال است</string>
+    <string name="onthego_notif_stop">توقف</string>
+    <string name="onthego_notif_options">گزینه‌ها</string>
+    <string name="onthego_notif_error">امکان فعال شدن ویژگی در حرکت نمی باشد</string>
+    <string name="onthego_notif_restart">راه اندازی مجدد ویژگی در حرکت</string>
+    <string name="onthego_notif_camera_changed">حالت دوربین تغییر کرد</string>
+    <string name="onthego_transparency">شفافیت</string>
+    <string name="onthego_front_camera">استفاده از دوربین جلو</string>
+    <string name="onthego_service_toggle">راه‌اندازی مجدد سرویس به طور خودکار</string>
+    <string name="onthego_channel_name">اصلی</string>
+    <string name="global_action_onthego">در حرکت</string>
+    <!-- Button to restart SystemUI, within the Restart Options dialog -->
+    <string name="global_action_restart_systemui">رابط کاربری</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">اولویت</string>
+    <string name="volume_ringer_alarms_only">زنگ هشدار</string>
+    <string name="volume_ringer_dnd">مزاحم نشو</string>
+    <string name="tristate_flashlight">چراغ قوه</string>
+    <string name="tristate_flashlight_on">روشن کردن چراغ‌قوه</string>
+    <string name="tristate_flashlight_off">خاموش کردن چراغ‌قوه</string>
+    <string name="tristate_flashlight_blink">چشمک زدن چراغ قوه</string>
+    <string name="tristate_brightness_bright">حداکثر روشنایی</string>
+    <string name="tristate_brightness_dark">حداقل روشنایی</string>
+    <string name="tristate_brightness_auto">روشنایی خودکار</string>
+    <string name="tristate_rotation_auto">چرخش خودکار</string>
+    <string name="tristate_rotation_0">عمودی</string>
+    <string name="tristate_rotation_90">افقی(90 درجه)</string>
+    <string name="tristate_rotation_270">افقی(270 درجه)</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">به اجبار متوقف شود؟</string>
+    <string name="force_stop_dlg_text">اگر برنامه‌ای را به اجبار متوقف کنید، ممکن است درست کار نکند.</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">اطلاعات پردازنده</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">اطلاعات FPS</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">قطب نما</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">مقدار اولیه\u2026</string>
+    <string name="quick_settings_compass_N">شمال</string>
+    <string name="quick_settings_compass_NE">شمال شرقی</string>
+    <string name="quick_settings_compass_E">شرق</string>
+    <string name="quick_settings_compass_SE">جنوب شرقی</string>
+    <string name="quick_settings_compass_S">جنوب</string>
+    <string name="quick_settings_compass_SW">جنوب غربی</string>
+    <string name="quick_settings_compass_W">غرب</string>
+    <string name="quick_settings_compass_NW">شمال غربی</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">تعویض سیم کارت دیتا</string>
+    <!-- Volume panel QS tile -->
+    <string name="quick_settings_volume_panel_label">پنل صدا</string>
+    <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_lens_label">لنز</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">پیکسل های هوشمند</string>
+    <string name="quick_settings_smart_pixels_on_power_save">پیکسل های هوشمند درحالت خودکار</string>
+    <!-- Weather Tile -->
+    <string name="omnijaws_service_error">خطا در بارگیری اطلاعات آب و هوا</string>
+    <string name="omnijaws_service_unknown">بدون اطلاعات آب و هوا</string>
+    <string name="omnijaws_label_default">آب و هوا</string>
+    <!-- Refresh Rate Tile -->
+    <string name="refresh_rate_tile_label">نرخ تازه‌سازی</string>
+    <string name="auto_mode_label">خودکار</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">فشار طولانی - منطقه انتخاب شده</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">جستجوی صدا</string>
+    <string name="quick_settings_sound_search_no_app">ابتدا یک برنامه جستجوی صدا را نصب کنید</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">زبان</string>
+    <string name="quick_settings_locale_more_locales_toast">ابتدا چندین زبان را پیکربندی کنید</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
+    <!-- Island notification -->
+    <string name="now_playing_on">Now Playing on %1$s</string>
+    <string name="by_artist">%1$s by %2$s</string>
+</resources>
