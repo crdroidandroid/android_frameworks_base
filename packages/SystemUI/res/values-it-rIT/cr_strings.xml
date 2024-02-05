@@ -160,4 +160,7 @@
     <string name="quick_settings_locale_more_locales_toast">Configura prima più lingue</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Riconoscimento viso...</string>
+    <!-- Island notification -->
+    <string name="now_playing_on">In riproduzione su %1$s</string>
+    <string name="by_artist">%1$s di %2$s</string>
 </resources>

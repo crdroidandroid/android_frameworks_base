@@ -162,4 +162,7 @@
     <string name="quick_settings_locale_more_locales_toast">Будь ласка, налаштуйте кілька мов, щоб увімкнути функцію перемикання</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Розпізнавання обличчя...</string>
+    <!-- Island notification -->
+    <string name="now_playing_on">Зараз відтворюється на %1$s</string>
+    <string name="by_artist">%1$s Від %2$s</string>
 </resources>

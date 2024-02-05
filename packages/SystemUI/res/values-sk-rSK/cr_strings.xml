@@ -162,4 +162,7 @@
     <string name="quick_settings_locale_more_locales_toast">Najskôr nastavte viac jazykov</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Prebieha rozpoznávanie...</string>
+    <!-- Island notification -->
+    <string name="now_playing_on">Práve hrá %1$s</string>
+    <string name="by_artist">%1$s od %2$s</string>
 </resources>

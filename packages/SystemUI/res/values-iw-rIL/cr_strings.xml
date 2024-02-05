@@ -162,4 +162,7 @@
     <string name="quick_settings_locale_more_locales_toast">הגדרת שפות מרובות תחילה</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">מזהה הפנים...</string>
+    <!-- Island notification -->
+    <string name="now_playing_on">מתנגן כעת ב-%1$s</string>
+    <string name="by_artist">%1$s מאת %2$s</string>
 </resources>
