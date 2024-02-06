@@ -32,6 +32,7 @@
         <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back</item>
         <item name="offStateColor">@android:color/system_neutral1_800</item>
         <item name="underSurfaceColor">@android:color/system_neutral1_900</item>
+        <item name="underSurfaceVariant">@android:color/system_neutral1_700</item>
         <item name="android:colorBackground">@android:color/system_neutral1_900</item>
         <item name="android:itemTextAppearance">@style/Control.MenuItem</item>
     </style>
