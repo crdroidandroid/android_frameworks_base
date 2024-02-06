@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="?android:attr/colorBackground"/>
+    <solid android:color="?attr/underSurfaceVariant"/>
     <corners android:topLeftRadius="?android:attr/dialogCornerRadius"
              android:topRightRadius="?android:attr/dialogCornerRadius" />
 </shape>
