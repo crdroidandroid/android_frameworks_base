@@ -74,7 +74,7 @@
     <string name="weather_condition_storm">عاصف</string>
     <string name="weather_condition_snow">مثلج</string>
     <string name="weather_condition_wind">رياح قوية</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_mist">ضبابي</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شحن سريع (يتبقى <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> حتى يكتمل)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • شحن سريع</string>
@@ -158,10 +158,10 @@
     <string name="screenshot_long_press">الضغط المطول - المنطقة المحددة</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">البحث الصوتي</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">قم بتثبيت تطبيق بحث صوتي اولآ</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">اللغة</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
+    <string name="quick_settings_locale_more_locales_toast">قم بتهيئة عدة لغات اولآ</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Island notification -->
