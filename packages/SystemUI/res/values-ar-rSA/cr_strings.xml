@@ -54,7 +54,7 @@
     <string name="quick_settings_sound_label">الصوت</string>
     <string name="quick_settings_sound_ring">نغمة الرنين</string>
     <string name="quick_settings_sound_vibrate">الاهتزاز</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">كتم الصوت</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">ك. ب/ث</string>
@@ -68,12 +68,12 @@
     <string name="usage_data_default_suffix">البيانات</string>
     <string name="usage_wifi_default_suffix">واي-فاي</string>
     <!-- Weather -->
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
+    <string name="weather_condition_clouds">غائم</string>
+    <string name="weather_condition_rain">ماطر</string>
+    <string name="weather_condition_clear">مُشمِس</string>
+    <string name="weather_condition_storm">عاصف</string>
+    <string name="weather_condition_snow">مثلج</string>
+    <string name="weather_condition_wind">رياح قوية</string>
     <string name="weather_condition_mist">Misty</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شحن سريع (يتبقى <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> حتى يكتمل)</string>
