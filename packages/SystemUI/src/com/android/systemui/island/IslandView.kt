@@ -281,18 +281,16 @@ class IslandView : ExtendedFloatingActionButton {
         return Pair(notifTitle.trim(), notifContent.trim())
     }
 
-	fun filterNotifContent(text: String): String {
-		val splitter = "|||"
-		val (title, content) = text.split(splitter, limit = 2)
-		var notifTitle = title.removeSuffix(":").trim()
-		notifTitle = notifTitle.replaceFirstChar {
-		    if (it.isLowerCase()) it.titlecase() else it.toString() 
-		}
-
-		val regexPattern = Regex("\\b" + Regex.escape(notifTitle), setOf(RegexOption.LITERAL, RegexOption.IGNORE_CASE))
-		val notifContent = content.replaceFirst(regexPattern, "").trim()
-		return "$notifTitle$splitter$notifContent"
-	}
+    fun filterNotifContent(text: String): String {
+        val splitter = "|||"
+        val (title, content) = text.split(splitter, limit = 2)
+        var notifTitle = title.removeSuffix(":").trim()
+        notifTitle = notifTitle.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase() else it.toString() 
+        }
+        val filteredContent = content.toLowerCase().replace(notifTitle.toLowerCase(), "").trim().replaceFirst(notifTitle, notifTitle, ignoreCase = true)
+        return "$notifTitle$splitter$filteredContent"
+    }
 
     fun getAppLabel(packageName: String, context: Context): String {
         val packageManager = context.packageManager
