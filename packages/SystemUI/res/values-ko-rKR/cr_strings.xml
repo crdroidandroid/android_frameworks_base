@@ -160,6 +160,6 @@
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">얼굴 인식 중...</string>
     <!-- Island notification -->
-    <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%1$s by %2$s</string>
+    <string name="now_playing_on">지금 %1$s에서 재생 중</string>
+    <string name="by_artist">%2$s의 %1$s</string>
 </resources>
