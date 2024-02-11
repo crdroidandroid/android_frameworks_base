@@ -154,34 +154,21 @@ public class UdfpsAnimation extends ImageView {
         return recognizingAnim != null;
     }
 
-    public void updatePosition(FingerprintSensorPropertiesInternal props) {
-        mAnimParams.y = props.getLocation().sensorLocationY - props.getLocation().sensorRadius
-                - (mAnimationSize / 2) + mAnimationOffset;
-        // Update view if it's showing already.
-        if (mShowing) {
-            showAnimation();
-        }
-    }
-
     public void show() {
         if (!mShowing && mIsKeyguard && isAnimationEnabled()) {
             mShowing = true;
-            showAnimation();
-        }
-    }
-
-    private void showAnimation() {
-        try {
-            if (getWindowToken() == null) {
-                mWindowManager.addView(this, mAnimParams);
-            } else {
-                mWindowManager.updateViewLayout(this, mAnimParams);
+            try {
+                if (getWindowToken() == null) {
+                    mWindowManager.addView(this, mAnimParams);
+                } else {
+                    mWindowManager.updateViewLayout(this, mAnimParams);
+                }
+            } catch (RuntimeException e) {
+                // Ignore
             }
-        } catch (RuntimeException e) {
-            // Ignore
-        }
-        if (recognizingAnim != null) {
-            recognizingAnim.start();
+            if (recognizingAnim != null) {
+                recognizingAnim.start();
+            }
         }
     }
 
