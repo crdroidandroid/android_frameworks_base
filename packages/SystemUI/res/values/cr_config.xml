@@ -50,4 +50,7 @@
 
     <!-- Whether show refresh rate QS tile -->
     <bool name="config_showRefreshRateQsTile">false</bool>
+
+    <!-- Preferred max refresh rate at AOD & Ambient Display, if supported by the display. -->
+    <integer name="config_aodMaxRefreshRate">-1</integer>
 </resources>
