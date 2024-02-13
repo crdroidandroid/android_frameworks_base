@@ -31,7 +31,6 @@ import static com.android.keyguard.KeyguardSecurityContainer.USER_TYPE_WORK_PROF
 import static com.android.keyguard.KeyguardSecurityModel.SecurityMode.SimPin;
 import static com.android.keyguard.KeyguardSecurityModel.SecurityMode.SimPuk;
 import static com.android.systemui.DejankUtils.whitelistIpcs;
-import static com.android.systemui.flags.Flags.LOCKSCREEN_ENABLE_LANDSCAPE;
 
 import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
@@ -385,7 +384,7 @@ public class KeyguardSecurityContainerController extends ViewController<Keyguard
 
                 @Override
                 public void onOrientationChanged(int orientation) {
-                    if (mFeatureFlags.isEnabled(LOCKSCREEN_ENABLE_LANDSCAPE)
+                    if (mKeyguardStateController.isKeyguardScreenRotationAllowed()
                             && getResources().getBoolean(R.bool.update_bouncer_constraints)) {
                         boolean useSplitBouncer = orientation == ORIENTATION_LANDSCAPE;
                         mSecurityViewFlipperController.updateConstraints(useSplitBouncer);
