@@ -54,6 +54,7 @@ import android.bluetooth.BluetoothProfile;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -61,6 +62,8 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Outline;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -194,6 +197,17 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     /** Volume dialog slider animation. */
     private static final String TYPE_UPDATE = "update";
 
+    // Assign next available stream id for app volume
+    private static final int STREAM_APP = AudioSystem.getNumStreamTypes();
+
+    // Drawable color when the app is muted
+    private static final ColorMatrixColorFilter MONOCHROME_COLOR_FILTER;
+    static {
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+        MONOCHROME_COLOR_FILTER = new ColorMatrixColorFilter(matrix);
+    }
+
     /**
      *  TODO(b/290612381): remove lingering animations or tolerate them
      *  When false, this will cause this class to not listen to animator events and not record jank
@@ -281,6 +295,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private View mAppVolumeView;
     private ImageButton mAppVolumeIcon;
     private final List<VolumeRow> mRows = new ArrayList<>();
+    private final List<VolumeRow> mAppRows = new ArrayList<>();
     private ConfigurableTexts mConfigurableTexts;
     private final SparseBooleanArray mDynamic = new SparseBooleanArray();
     private final KeyguardManager mKeyguard;
@@ -328,10 +343,19 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private FrameLayout mRoundedBorderBottom;
 
     // Volume panel expand state
-    private boolean mExpanded;
+    private enum ExpansionState {
+        COLLAPSED,
+        EXPANDED,
+        APPS_EXPANDED
+    }
+    private ExpansionState mExpansionState = ExpansionState.COLLAPSED;
+    private ExpansionState mPrevExpansionState = ExpansionState.COLLAPSED;
 
     // Number of animating rows
     private int mAnimatingRows = 0;
+
+    // Currently expanded app row
+    private String mActiveAppRowPackage;
 
     @VisibleForTesting
     final int mVolumeRingerIconDrawableId = R.drawable.ic_speaker_on;
@@ -531,32 +555,37 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         float xExtraSize = 0;
         float yExtraSize = 0;
 
+        final boolean expanded = mExpansionState == ExpansionState.EXPANDED;
+        final boolean appsExpanded = mExpansionState == ExpansionState.APPS_EXPANDED;
+
         // The ringer and rows container has extra height at the top to fit the expanded ringer
         // drawer. This area should not be touchable unless the ringer drawer is open.
         // In landscape the ringer expands to the left and it has to be ensured that if there
         // are multiple rows they are touchable.
         // The invisible expandable rows reserve space if the panel is not expanded, this space
         // needs to be touchable.
+        // When app rows are expanded, stream rows are invisible and vice versa.
         if (view == mTopContainer) {
+            int extraRowsSize = 0;
+            if (!appsExpanded) {
+                extraRowsSize += getAppRowsExtraSize();
+            }
+            if (!expanded) {
+                extraRowsSize += getExpandableRowsExtraSize();
+            }
             if (!isLandscape()) {
                 if (!mIsRingerDrawerOpen) {
                     yExtraSize = getRingerDrawerOpenExtraSize();
                 }
-                if (!mExpanded) {
-                    xExtraSize = getExpandableRowsExtraSize();
-                }
+                xExtraSize = extraRowsSize;
             } else {
-                if (!mIsRingerDrawerOpen && !mExpanded) {
+                if (!mIsRingerDrawerOpen) {
                     xExtraSize =
-                            Math.max(getRingerDrawerOpenExtraSize(), getExpandableRowsExtraSize());
-                } else if (!mIsRingerDrawerOpen) {
-                    if (getRingerDrawerOpenExtraSize() > getVisibleRowsExtraSize()) {
-                        xExtraSize = getRingerDrawerOpenExtraSize() - getVisibleRowsExtraSize();
-                    }
-                } else if (!mExpanded) {
-                    if ((getVisibleRowsExtraSize() + getExpandableRowsExtraSize())
+                            Math.max(getRingerDrawerOpenExtraSize(), extraRowsSize);
+                } else {
+                    if ((getVisibleRowsExtraSize() + extraRowsSize)
                             > getRingerDrawerOpenExtraSize()) {
-                        xExtraSize = (getVisibleRowsExtraSize() + getExpandableRowsExtraSize())
+                        xExtraSize = (getVisibleRowsExtraSize() + extraRowsSize)
                                 - getRingerDrawerOpenExtraSize();
                     }
                 }
@@ -607,7 +636,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         mConfigurableTexts = new ConfigurableTexts(mContext);
         mHovering = false;
         mShowing = false;
-        mExpanded = false;
+        mExpansionState = mPrevExpansionState = ExpansionState.COLLAPSED;
         mWindow = mDialog.getWindow();
         mWindow.requestFeature(Window.FEATURE_NO_TITLE);
         mWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -843,13 +872,14 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                         R.drawable.ic_volume_system_mute, false, false);
             }
         } else {
+            clearAppVolumes();
             addExistingRows();
         }
 
+        initAppVolumes();
         updateRowsH(getActiveRow());
         initRingerH();
         initSettingsH(lockTaskModeState);
-        initAppVolumeH();
         initODICaptionsH();
         mAccessibility.init();
     }
@@ -930,6 +960,38 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         }
     }
 
+    private void addAppRow(AppVolume av) {
+        ApplicationInfo appInfo;
+        PackageManager pm = mContext.getPackageManager();
+        String packageName = av.getPackageName();
+        if (D.BUG) Slog.d(TAG, "Adding row for app " + av.getPackageName());
+        try {
+            appInfo = pm.getApplicationInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            Slog.e(TAG, "Unable to get app info for " + packageName);
+            return;
+        }
+        Drawable appIcon = pm.getApplicationIcon(appInfo);
+        String appLabel = pm.getApplicationLabel(appInfo).toString();
+        VolumeRow row = new VolumeRow();
+        row.isAppVolume = true;
+        row.appVolume = av;
+        row.packageName = packageName;
+        row.appLabel = appLabel;
+        row.appIcon = appIcon;
+        initRow(row, STREAM_APP, /*iconRes*/ 0, /*iconMuteRes*/ 0,
+                /*important*/ false, /*defaultStream*/ false);
+        Util.setText(row.header, row.appLabel);
+        row.slider.setContentDescription(row.appLabel);
+        row.slider.setEnabled(true);
+        row.slider.setMin(0);
+        row.slider.setMax(100);
+        mDialogRowsView.addView(row.view);
+        mRows.add(row);
+        mAppRows.add(row);
+        updateAppVolumeRow(row, true);
+    }
+
     private void addExistingRows() {
         int N = mRows.size();
         for (int i = 0; i < N; i++) {
@@ -943,6 +1005,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     private VolumeRow getActiveRow() {
         for (VolumeRow row : mRows) {
+            if (row.isAppVolume && row.packageName.equals(mActiveAppRowPackage)) {
+                return row;
+            }
             if (row.stream == mActiveStream) {
                 return row;
             }
@@ -1019,10 +1084,19 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
         row.sliderProgressSolid = seekbarProgressDrawable.findDrawableByLayerId(
                 R.id.volume_seekbar_progress_solid);
-        final Drawable sliderProgressIcon = seekbarProgressDrawable.findDrawableByLayerId(
-                        R.id.volume_seekbar_progress_icon);
-        row.sliderProgressIcon = sliderProgressIcon != null ? (AlphaTintDrawableWrapper)
-                ((RotateDrawable) sliderProgressIcon).getDrawable() : null;
+
+        final RotateDrawable sliderProgressIcon = (RotateDrawable)
+                seekbarProgressDrawable.findDrawableByLayerId(R.id.volume_seekbar_progress_icon);
+
+        if (sliderProgressIcon == null) {
+            // do nothing
+        } else if (row.isAppVolume) {
+            sliderProgressIcon.setDrawable(row.appIcon);
+        } else {
+            row.sliderProgressIcon = (AlphaTintDrawableWrapper) mContext.getDrawable(
+                    R.drawable.volume_row_seekbar_progress_icon);
+            sliderProgressIcon.setDrawable(row.sliderProgressIcon);
+        }
 
         row.slider.setProgressDrawable(seekbarDrawable);
 
@@ -1031,7 +1105,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         row.setIcon(iconRes, mContext.getTheme());
 
         if (row.icon != null) {
-            if (row.stream != AudioSystem.STREAM_ACCESSIBILITY) {
+            if (row.stream != AudioSystem.STREAM_ACCESSIBILITY && !row.isAppVolume) {
                 row.icon.setOnClickListener(v -> {
                     Events.writeEvent(Events.EVENT_ICON_CLICK, row.stream, row.iconState);
                     mController.setActiveStream(row.stream);
@@ -1461,41 +1535,57 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         }
         if (mExpandRows != null) {
             mExpandRows.setOnClickListener(v -> {
-                mExpanded = !mExpanded;
+                // ensure we collapse app rows if expanded
+                if (mExpansionState == ExpansionState.APPS_EXPANDED) {
+                    mPrevExpansionState = mExpansionState;
+                    mExpansionState = ExpansionState.COLLAPSED;
+                    updateRowsH(mDefaultRow, false);
+                }
+                mPrevExpansionState = mExpansionState;
+                mExpansionState = mPrevExpansionState == ExpansionState.EXPANDED
+                        ? ExpansionState.COLLAPSED : ExpansionState.EXPANDED;
                 updateRowsH(mDefaultRow, true);
-                mExpandRows.setExpanded(mExpanded);
+                mExpandRows.setExpanded(mExpansionState == ExpansionState.EXPANDED);
             });
         }
     }
 
-    private boolean shouldShowAppVolume() {
-        ContentResolver cr = mContext.getContentResolver();
-        int showAppVolume = Settings.System.getInt(cr, Settings.System.SHOW_APP_VOLUME, 0);
-        boolean ret = showAppVolume == 1;
-        if (ret) {
-            ret = false;
-            AudioManager audioManager = mController.getAudioManager();
-            for (AppVolume av : audioManager.listAppVolumes()) {
-                if (av.isActive()) {
-                    ret = true;
-            break;
-                }
-            }
-        }
-        return ret;
+    private void clearAppVolumes() {
+        mActiveAppRowPackage = null;
+        mAppVolumeView.setVisibility(GONE);
+        mRows.removeAll(mAppRows);
+        mAppRows.forEach(row -> mDialogRowsView.removeView(row.view));
+        mAppRows.clear();
     }
 
-    public void initAppVolumeH() {
-        if (mAppVolumeView != null) {
-            mAppVolumeView.setVisibility(shouldShowAppVolume() ? VISIBLE : GONE);
+    private void initAppVolumes() {
+        clearAppVolumes();
+        boolean showAppVolume = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SHOW_APP_VOLUME, 0) == 1;
+        if (!showAppVolume || mAppVolumeView == null) {
+            return;
         }
-        if (mAppVolumeIcon != null) {
+        boolean appActive = false;
+        for (AppVolume av : mController.getAudioManager().listAppVolumes()) {
+            if (av.isActive()) {
+                addAppRow(av);
+                appActive = true;
+            }
+        }
+        if (appActive) {
+            mAppVolumeView.setVisibility(VISIBLE);
             mAppVolumeIcon.setOnClickListener(v -> {
-                Events.writeEvent(Events.EVENT_SETTINGS_CLICK);
-                dismissH(DISMISS_REASON_SETTINGS_CLICKED);
-                mMediaOutputDialogFactory.dismiss();
-                mVolumeNavigator.openVolumePanel(
-                        mVolumePanelNavigationInteractor.getAppVolumeRoute());
+                // ensure we collapse stream rows if expanded
+                if (mExpansionState == ExpansionState.EXPANDED) {
+                    mPrevExpansionState = mExpansionState;
+                    mExpansionState = ExpansionState.COLLAPSED;
+                    updateRowsH(mDefaultRow, false);
+                    mExpandRows.setExpanded(false);
+                }
+                mPrevExpansionState = mExpansionState;
+                mExpansionState = mPrevExpansionState == ExpansionState.APPS_EXPANDED
+                        ? ExpansionState.COLLAPSED : ExpansionState.APPS_EXPANDED;
+                updateRowsH(mDefaultRow, true);
             });
         }
     }
@@ -1767,6 +1857,11 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         mHandler.removeMessages(H.DISMISS);
         rescheduleTimeoutH();
 
+        if (mShowing && !mIsAnimatingDismiss) {
+            Log.i(TAG, "volume dialog is already showing");
+            return;
+        }
+
         if (mConfigChanged) {
             initDialog(lockTaskModeState); // resets mShowing to false
             mConfigurableTexts.update();
@@ -1777,8 +1872,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             mDefaultRow = getActiveRow();
         }
 
+        initAppVolumes();
+        updateRowsH(mDefaultRow);
         initSettingsH(lockTaskModeState);
-        initAppVolumeH();
         mShowing = true;
         mIsAnimatingDismiss = false;
         mDialog.show();
@@ -1889,14 +1985,14 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                         mDialog.dismiss();
                     }
                     tryToRemoveCaptionsTooltip();
-                    mExpanded = false;
+                    mExpansionState = mPrevExpansionState = ExpansionState.COLLAPSED;
                     if (mExpandRows != null) {
-                        mExpandRows.setExpanded(mExpanded);
+                        mExpandRows.setExpanded(false);
                     }
+                    mActiveAppRowPackage = null;
                     mAnimatingRows = 0;
                     mDefaultRow = null;
                     mIsAnimatingDismiss = false;
-
                     hideRingerDrawer();
                 }, 50));
         if (!shouldSlideInVolumeTray()) {
@@ -1929,6 +2025,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                         || row.stream == STREAM_ALARM
                         || row.stream == STREAM_MUSIC);
     }
+
     private boolean shouldBeVisibleH(VolumeRow row, VolumeRow activeRow) {
         boolean isActive = row.stream == activeRow.stream;
 
@@ -1948,7 +2045,11 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 return true;
             }
 
-            if (mExpanded && isExpandableRowH(row)) {
+            if (mExpansionState == ExpansionState.EXPANDED && isExpandableRowH(row)) {
+                return true;
+            }
+
+            if (mExpansionState == ExpansionState.APPS_EXPANDED && row.isAppVolume) {
                 return true;
             }
 
@@ -1992,7 +2093,13 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             trimObsoleteH();
         }
 
-        boolean isOutmostIndexMax = isWindowGravityLeft() ? isRtl() : !isRtl();
+        final boolean expanded = mExpansionState == ExpansionState.EXPANDED
+                || mPrevExpansionState == ExpansionState.EXPANDED;
+        final boolean appsExpanded = mExpansionState == ExpansionState.APPS_EXPANDED
+                || mPrevExpansionState == ExpansionState.APPS_EXPANDED;
+        final boolean collapsed = mExpansionState == ExpansionState.COLLAPSED;
+
+        final boolean isOutmostIndexMax = isWindowGravityLeft() ? isRtl() : !isRtl();
 
         // Index of the last row that is actually visible.
         int outmostVisibleRowIndex = isOutmostIndexMax ? -1 : Short.MAX_VALUE;
@@ -2000,12 +2107,17 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         // apply changes to all rows
         for (final VolumeRow row : mRows) {
             final boolean isActive = row == activeRow;
-            final boolean isExpandableRow = isExpandableRowH(row);
+            final boolean isStreamRow = isExpandableRowH(row);
+            final boolean isAppRow = row.isAppVolume;
+            final boolean isExpandableRow = isStreamRow || isAppRow;
             final boolean shouldBeVisible = shouldBeVisibleH(row, activeRow);
+            // Hide stream rows when app rows expanded and vice versa
+            final boolean shouldBeInvisible =
+                    (isStreamRow && appsExpanded) || (isAppRow && expanded) || collapsed;
 
             if (!isExpandableRow) {
                 Util.setVisOrGone(row.view, shouldBeVisible);
-            } else if (!mExpanded) {
+            } else if (shouldBeInvisible) {
                 row.view.setVisibility(View.INVISIBLE);
             }
 
@@ -2076,7 +2188,11 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             int rowWidth = mDialogWidth + mRingerRowsPadding;
 
             for (final VolumeRow row : mRows) {
-                final boolean isExpandableRow = isExpandableRowH(row);
+                final boolean isStreamRow = isExpandableRowH(row);
+                final boolean isAppRow = row.isAppVolume;
+                final boolean isExpandableRow = isStreamRow || isAppRow;
+                final boolean isExpanded = mExpansionState == ExpansionState.EXPANDED
+                        || mExpansionState == ExpansionState.APPS_EXPANDED;
                 final boolean shouldBeVisible = shouldBeVisibleH(row, activeRow);
 
                 if (shouldBeVisible) {
@@ -2095,14 +2211,19 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
                 // Expandable rows need to animate behind the last visible row, an additional
                 // always visible stream animates next to the default stream
-                float translationX = (isWindowGravityLeft() ? -1 : 1) * hiddenRowsCount * rowWidth;
+                final int translationMultiplier = isWindowGravityLeft() ? -1 : 1;
+                float fromTranslationX = translationMultiplier * visibleRowsCount * rowWidth;
+                float toTranslationX = translationMultiplier * hiddenRowsCount * rowWidth;
+                if (isAppRow) {
+                    // Move app rows to take over invisible expandable rows
+                    fromTranslationX += translationMultiplier * getExpandableRowsExtraSize();
+                }
 
                 if (animate) {
                     // If the translation is not set and the panel is expanding start the
                     // animation behind the main row
-                    if (isExpandableRow && mExpanded && row.view.getTranslationX() == 0f) {
-                        row.view.setTranslationX(
-                                (isWindowGravityLeft() ? -1 : 1) * visibleRowsCount * rowWidth);
+                    if (isExpandableRow && isExpanded && row.view.getTranslationX() == 0f) {
+                        row.view.setTranslationX(fromTranslationX);
                     }
 
                     // The elevation should decrease from the outmost row to the inner rows, so that
@@ -2115,10 +2236,10 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                     // if there is still a row animating
                     mAnimatingRows++;
                     row.view.animate()
-                            .translationX(translationX)
-                            .setDuration(mExpanded ? mDialogShowAnimationDurationMs
+                            .translationX(toTranslationX)
+                            .setDuration(isExpanded ? mDialogShowAnimationDurationMs
                                                    : mDialogHideAnimationDurationMs)
-                            .setInterpolator(mExpanded
+                            .setInterpolator(isExpanded
                                             ? new SystemUIInterpolators.LogDecelerateInterpolator()
                                             : new SystemUIInterpolators.LogAccelerateInterpolator())
                             .setListener(new AnimatorListenerAdapter() {
@@ -2144,11 +2265,12 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                                         // already, but setting the active row cancels ongoing
                                         // animations.
                                         mController.setActiveStream(activeRow.stream);
+                                        mActiveAppRowPackage = null;
                                     }
                                 }
                             });
                 } else {
-                    row.view.setTranslationX(translationX);
+                    row.view.setTranslationX(toTranslationX);
                     row.view.setVisibility(shouldBeVisible ? View.VISIBLE : View.INVISIBLE);
                 }
             }
@@ -2300,6 +2422,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         if (mActiveStream != state.activeStream) {
             mPrevActiveStream = mActiveStream;
             mActiveStream = state.activeStream;
+            mActiveAppRowPackage = null;
             VolumeRow activeRow = getActiveRow();
             updateRowsH(activeRow);
             if (mShowing) rescheduleTimeoutH();
@@ -2318,6 +2441,10 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     private void updateVolumeRowH(VolumeRow row) {
         if (D.BUG) Log.i(TAG, "updateVolumeRowH s=" + row.stream);
+        if (row.isAppVolume) {
+            updateAppVolumeRow(row);
+            return;
+        }
         if (mState == null) return;
         final StreamState ss = mState.states.get(row.stream);
         if (ss == null) return;
@@ -2455,6 +2582,32 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         updateVolumeRowSliderH(row, enableSlider, vlevel);
         Trace.endSection();
         if (row.number != null) row.number.setText(Integer.toString(vlevel));
+    }
+
+    private void updateAppVolumeRow(VolumeRow row) {
+        updateAppVolumeRow(row, false);
+    }
+
+    private void updateAppVolumeRow(VolumeRow row, boolean setProgress) {
+        if (D.BUG) Slog.d(TAG, "updateAppVolumeRow: packageName=" + row.packageName);
+
+        // update slider
+        updateVolumeRowTintH(row, row.packageName.equals(mActiveAppRowPackage));
+        if (setProgress) {
+            final int progress = Math.round(row.appVolume.getVolume() * 100f);
+            row.slider.setProgress(progress);
+        }
+
+        // update icon
+        if (row.slider.getProgress() == 0 || row.appVolume.isMuted()) {
+            row.appIcon.setColorFilter(MONOCHROME_COLOR_FILTER);
+        } else {
+            row.appIcon.clearColorFilter();
+        }
+    }
+
+    private void updateAppVolumeRows() {
+        mAppRows.forEach(this::updateAppVolumeRow);
     }
 
     private boolean isStreamMuted(final StreamState streamState) {
@@ -2709,7 +2862,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
      * Expandable rows are invisible while the panel is not expanded.
      */
     private int getExpandableRowsExtraSize() {
-        VolumeRow activeRow = getActiveRow();
         int expandableRows = 0;
         for (final VolumeRow row : mRows) {
             if (isExpandableRowH(row)) {
@@ -2717,6 +2869,16 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             }
         }
         return expandableRows * (mDialogWidth + mRingerRowsPadding);
+    }
+
+    private int getAppRowsExtraSize() {
+        int appRows = 0;
+        for (final VolumeRow row : mRows) {
+            if (row.isAppVolume) {
+                appRows++;
+            }
+        }
+        return appRows * (mDialogWidth + mRingerRowsPadding);
     }
 
     private void updateBackgroundForDrawerClosedAmount() {
@@ -2983,7 +3145,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (mRow.ss == null) return;
             if (getActiveRow().equals(mRow) && mRow.slider.getVisibility() == VISIBLE) {
                 if (fromUser || mRow.animTargetProgress == progress) {
                     // Deliver user-generated slider haptics immediately, or when the animation
@@ -2994,6 +3155,15 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             if (D.BUG) Log.d(TAG, AudioSystem.streamToString(mRow.stream)
                     + " onProgressChanged " + progress + " fromUser=" + fromUser);
             if (!fromUser) return;
+            if (mRow.isAppVolume) {
+                mActiveAppRowPackage = mRow.packageName;
+                final float vol = progress * 0.01f;
+                if (D.BUG) Log.d(TAG, "set app " + mRow.packageName + " volume to " + vol);
+                mController.getAudioManager().setAppVolume(mRow.packageName, vol);
+                updateAppVolumeRows();
+                return;
+            }
+            if (mRow.ss == null) return;
             if (mRow.ss.levelMin > 0) {
                 final int minProgress = getProgressFromVolume(mRow.ss, seekBar, mRow.ss.levelMin);
                 if (progress < minProgress) {
@@ -3005,6 +3175,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             if (mRow.ss.level != userLevel || mRow.ss.muted && userLevel > 0) {
                 mRow.userAttempt = SystemClock.uptimeMillis();
                 if (mRow.requestedLevel != userLevel) {
+                    mActiveAppRowPackage = null;
                     mController.setActiveStream(mRow.stream);
                     mController.setStreamVolume(mRow.stream, userLevel);
                     mRow.requestedLevel = userLevel;
@@ -3021,8 +3192,14 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             if (mRow.mHapticPlugin != null) {
                 mRow.mHapticPlugin.onStartTrackingTouch(seekBar);
             }
-            mController.setActiveStream(mRow.stream);
             mRow.tracking = true;
+            if (mRow.isAppVolume) {
+                mActiveAppRowPackage = mRow.packageName;
+                updateAppVolumeRows();
+                return;
+            }
+            mController.setActiveStream(mRow.stream);
+            mActiveAppRowPackage = null;
         }
 
         @Override
@@ -3033,6 +3210,10 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 mRow.mHapticPlugin.onStopTrackingTouch(seekBar);
             }
             mRow.tracking = false;
+            if (mRow.isAppVolume) {
+                updateAppVolumeRows();
+                return;
+            }
             mRow.userAttempt = SystemClock.uptimeMillis();
             final int userLevel = getVolumeFromProgress(mRow.ss, seekBar, seekBar.getProgress());
             Events.writeEvent(Events.EVENT_TOUCH_LEVEL_DONE, mRow.stream, userLevel);
@@ -3108,6 +3289,12 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         private int animTargetProgress;
         private int lastAudibleLevel = 1;
         private SeekbarHapticPlugin mHapticPlugin;
+        // per-app volume
+        private boolean isAppVolume = false;
+        private AppVolume appVolume;
+        private String packageName;
+        private String appLabel;
+        private Drawable appIcon;
 
         void setIcon(int iconRes, Resources.Theme theme) {
             if (icon != null) {
