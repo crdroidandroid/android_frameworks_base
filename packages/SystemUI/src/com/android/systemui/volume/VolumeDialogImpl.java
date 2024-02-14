@@ -1440,7 +1440,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                     mMediaOutputDialogFactory.dismiss();
                     if (FeatureFlagUtils.isEnabled(mContext,
                             FeatureFlagUtils.SETTINGS_VOLUME_PANEL_IN_SYSTEMUI)) {
-                        mVolumePanelFactory.create(true /* aboveStatusBar */, null);
+                        mVolumePanelFactory.create(true /* aboveStatusBar */, mSettingsView);
                     } else {
                         mActivityStarter.startActivity(new Intent(Settings.Panel.ACTION_VOLUME),
                                 true /* dismissShade */);
