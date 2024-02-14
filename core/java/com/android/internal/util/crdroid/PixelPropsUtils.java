@@ -40,7 +40,7 @@ public class PixelPropsUtils {
             Resources.getSystem().getStringArray(R.array.config_spoofBuildGms);
 
     private static final Map<String, Object> propsToChangeGeneric;
-    private static final Map<String, Object> propsToChangePixel5;
+    private static final Map<String, Object> propsToChangePixel5a;
     private static final Map<String, Object> propsToChangePixel8Pro;
     private static final Map<String, Object> propsToChangePixelXL;
     private static final Map<String, ArrayList<String>> propsToKeep;
@@ -138,17 +138,17 @@ public class PixelPropsUtils {
         propsToChangePixel8Pro.put("PRODUCT", "husky");
         propsToChangePixel8Pro.put("HARDWARE", "husky");
         propsToChangePixel8Pro.put("MODEL", "Pixel 8 Pro");
-        propsToChangePixel8Pro.put("ID", "UQ1A.240105.004");
-        propsToChangePixel8Pro.put("FINGERPRINT", "google/husky/husky:14/UQ1A.240105.004/11206848:user/release-keys");
-        propsToChangePixel5 = new HashMap<>();
-        propsToChangePixel5.put("BRAND", "google");
-        propsToChangePixel5.put("MANUFACTURER", "Google");
-        propsToChangePixel5.put("DEVICE", "redfin");
-        propsToChangePixel5.put("PRODUCT", "redfin");
-        propsToChangePixel5.put("HARDWARE", "redfin");
-        propsToChangePixel5.put("MODEL", "Pixel 5");
-        propsToChangePixel5.put("ID", "UP1A.231105.001");
-        propsToChangePixel5.put("FINGERPRINT", "google/redfin/redfin:14/UP1A.231105.001/10817346:user/release-keys");
+        propsToChangePixel8Pro.put("ID", "UQ1A.240205.004");
+        propsToChangePixel8Pro.put("FINGERPRINT", "google/husky/husky:14/UQ1A.240205.004/11269751:user/release-keys");
+        propsToChangePixel5a = new HashMap<>();
+        propsToChangePixel5a.put("BRAND", "google");
+        propsToChangePixel5a.put("MANUFACTURER", "Google");
+        propsToChangePixel5a.put("DEVICE", "barbet");
+        propsToChangePixel5a.put("PRODUCT", "barbet");
+        propsToChangePixel5a.put("HARDWARE", "barbet");
+        propsToChangePixel5a.put("MODEL", "Pixel 5a");
+        propsToChangePixel5a.put("ID", "UQ1A.240205.002");
+        propsToChangePixel5a.put("FINGERPRINT", "google/barbet/barbet:14/UQ1A.240205.002/11224170:user/release-keys");
         propsToChangePixelXL = new HashMap<>();
         propsToChangePixelXL.put("BRAND", "google");
         propsToChangePixelXL.put("MANUFACTURER", "Google");
@@ -213,7 +213,7 @@ public class PixelPropsUtils {
                 } else if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
                     propsToChange.putAll(propsToChangePixelXL);
                 } else {
-                    propsToChange.putAll(propsToChangePixel5);
+                    propsToChange.putAll(propsToChangePixel5a);
                 }
             }
 
