@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2024 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">לחיצה ארוכה על כפתור ההפעלה לביטול הנעילה</string>
+    <string name="pocket_view_title">מצב כיס מופעל</string>
+    <string name="pocket_view_title_cancel">להפעלת המכשיר שלך:</string>
+    <string name="pocket_view_top_tag_cancel">בבקשה לא לכסות את האזור הכחול של הטלפון שלך ולוודא שיהיה נקי מכל אבק ולכלוך.</string>
+    <string name="pocket_view_top_tag_cancel2">לחיצה ארוכה על כפתור ההפעלה כדי לכפות יציאה ממצב כיס.</string>
+    <string name="pocket_view_top_tag_number1">1.\u0020</string>
+    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">העתק את הקישור של דוח הקריסה</string>
+    <string name="url_copy_success">הקישור הועתק בהצלחה</string>
+    <string name="url_copy_failed">התרחשה שגיאה במהלך העלאת דו\"ח הקריסה</string>
+    <!-- App lock -->
+    <string name="unlock_application">פתיחת הנעילה של <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+</resources>
