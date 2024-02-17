@@ -344,10 +344,11 @@ constructor(
 
         // If animations are disabled system-wide, don't play this one either.
         if (
-            Settings.Global.getString(
+            Settings.Global.getFloat(
                 context.contentResolver,
                 Settings.Global.ANIMATOR_DURATION_SCALE,
-            ) == "0"
+                1f
+            ) == 0f
         ) {
             return false
         }
