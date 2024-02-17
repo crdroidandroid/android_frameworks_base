@@ -511,7 +511,7 @@ object Flags {
     // TODO(b/279405451): Tracking Bug
     @JvmField
     val CLIPBOARD_SHARED_TRANSITIONS =
-            unreleasedFlag("clipboard_shared_transitions", teamfood = true)
+            releasedFlag("clipboard_shared_transitions")
 
     /**
      * Whether the scene container (Flexiglass) is enabled. Note that SceneContainerFlags#isEnabled
@@ -601,7 +601,7 @@ object Flags {
     val LOCKSCREEN_WALLPAPER_DREAM_ENABLED = unreleasedFlag("enable_lockscreen_wallpaper_dream")
 
     // TODO(b/283084712): Tracking Bug
-    @JvmField val IMPROVED_HUN_ANIMATIONS = unreleasedFlag("improved_hun_animations")
+    @JvmField val IMPROVED_HUN_ANIMATIONS = releasedFlag("improved_hun_animations")
 
     // TODO(b/283447257): Tracking bug
     @JvmField
