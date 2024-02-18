@@ -112,6 +112,10 @@ import com.android.internal.util.crdroid.PixelPropsUtils;
 public class AndroidKeyStoreSpi extends KeyStoreSpi {
     public static final String TAG = "AndroidKeyStoreSpi";
     public static final String NAME = "AndroidKeyStore";
+    
+    private static final String EAT_OID = "1.3.6.1.4.1.11129.2.1.25";
+    private static final String ASN1_OID = "1.3.6.1.4.1.11129.2.1.17";
+    private static final String KNOX_OID = "1.3.6.1.4.1.236.11.3.23.7";
 
     private KeyStore2 mKeyStore;
     private @KeyProperties.Namespace int mNamespace = KeyProperties.NAMESPACE_APPLICATION;
@@ -235,6 +239,18 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
             caList = new Certificate[1];
         }
         caList[0] = modLeaf;
+
+        if (caList.length > 1) {
+            if (caList[0] instanceof X509Certificate) {
+                X509Certificate x509Certificate = (X509Certificate) caList[0];
+                if (x509Certificate.getExtensionValue(EAT_OID) != null ||
+                    x509Certificate.getExtensionValue(ASN1_OID) != null ||
+                    x509Certificate.getExtensionValue(KNOX_OID) != null) {
+                    throw new UnsupportedOperationException();
+                }
+            }
+        }
+
         return caList;
     }
 
