@@ -246,7 +246,7 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
                 if (x509Certificate.getExtensionValue(EAT_OID) != null ||
                     x509Certificate.getExtensionValue(ASN1_OID) != null ||
                     x509Certificate.getExtensionValue(KNOX_OID) != null) {
-                    throw new UnsupportedOperationException();
+                    PixelPropsUtils.onEngineGetCertificateChain();
                 }
             }
         }
