@@ -24,6 +24,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.test.filters.SmallTest
+import com.android.keyguard.FaceIconViewController
 import com.android.keyguard.KeyguardMessageAreaController
 import com.android.keyguard.KeyguardSecurityContainerController
 import com.android.keyguard.KeyguardSecurityModel
@@ -170,6 +171,7 @@ class NotificationShadeWindowViewControllerTest : SysuiTestCase() {
     private val notificationLaunchAnimationInteractor =
         NotificationLaunchAnimationInteractor(notificationLaunchAnimationRepository)
     @Mock private lateinit var qqsGestureListener: QQSGestureListener
+    @Mock private lateinit var faceIconViewController: FaceIconViewController
 
     private lateinit var fakeClock: FakeSystemClock
     private lateinit var interactionEventHandlerCaptor: ArgumentCaptor<InteractionEventHandler>
@@ -282,6 +284,7 @@ class NotificationShadeWindowViewControllerTest : SysuiTestCase() {
                 alternateBouncerInteractor,
                 mSelectedUserInteractor,
                 qqsGestureListener,
+                faceIconViewController,
             )
         underTest.setupExpandedStatusBar()
         underTest.setDragDownHelper(dragDownHelper)
