@@ -532,6 +532,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     public void init(int windowType, Callback callback) {
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
         initDialog(mActivityManager.getLockTaskModeState());
 
         mController.addCallback(mControllerCallbackH, mHandler);
@@ -664,7 +667,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         Log.d(TAG, "initDialog: called!");
         if (mDialog != null) {
             mDialog.dismiss();
-            mDialog = null;
         }
         if (mConfigurableTexts != null) {
             mConfigurableTexts = null;
