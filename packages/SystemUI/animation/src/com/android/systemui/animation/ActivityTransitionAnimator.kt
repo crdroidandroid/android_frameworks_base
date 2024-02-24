@@ -391,7 +391,12 @@ class ActivityTransitionAnimator(
                     )
                 }
 
-                if (view.parent !is ViewGroup) {
+                var animatedView = view
+                if (view.getAnimatedView() is View) {
+                    animatedView = view.getAnimatedView() as View
+                }
+
+                if (animatedView.parent !is ViewGroup) {
                     Log.e(
                         TAG,
                         "Skipping animation as view $view is not attached to a ViewGroup",
@@ -400,7 +405,7 @@ class ActivityTransitionAnimator(
                     return null
                 }
 
-                return GhostedViewTransitionAnimatorController(view, cujType)
+                return GhostedViewTransitionAnimatorController(animatedView, cujType)
             }
         }
 
