@@ -38,6 +38,15 @@ interface LaunchableView {
      * @param block whether we should block/postpone all calls to `setVisibility`.
      */
     fun setShouldBlockVisibilityChanges(block: Boolean)
+
+    /**
+     * Allows to override the animated view based on certain conditions
+     *
+     * @return The view that should actually be animated
+     */
+    fun getAnimatedView(): LaunchableView {
+        return this
+    }
 }
 
 /** A delegate that can be used by views to make the implementation of [LaunchableView] easier. */
