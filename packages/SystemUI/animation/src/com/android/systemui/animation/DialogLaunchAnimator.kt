@@ -212,7 +212,12 @@ constructor(
         cuj: DialogCuj? = null,
         animateBackgroundBoundsChange: Boolean = false
     ) {
-        val controller = Controller.fromView(view, cuj)
+        var animatedView = view;
+        if (animatedView is LaunchableView && animatedView.getAnimatedView() is View) {
+            animatedView = animatedView.getAnimatedView() as View
+        }
+
+        val controller = Controller.fromView(animatedView, cuj)
         if (controller == null) {
             dialog.show()
         } else {
