@@ -89,13 +89,16 @@ public abstract class AbstractSleeptimePreferenceController extends AbstractPref
     }
 
     private void updateTimes() {
-        float deepSleepRatio = Math.max((float) (SystemClock.elapsedRealtime() - SystemClock.uptimeMillis()), 0f)
-                / SystemClock.elapsedRealtime();
+        long deepSleepTime = Math.max((SystemClock.elapsedRealtime() - SystemClock.uptimeMillis()), 0);
+        float deepSleepRatio = (float)deepSleepTime / SystemClock.elapsedRealtime();
         int deepSleepPercent = Math.round(deepSleepRatio * 100);
 
         final StringBuilder summary = new StringBuilder();
+
+        summary.append(DateUtils.formatElapsedTime(deepSleepTime / 1000));
+        summary.append(" (");
         summary.append(deepSleepPercent);
-        summary.append("%");
+        summary.append("%)");
 
         mSleeptime.setSummary(summary.toString());
     }
