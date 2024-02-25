@@ -1657,19 +1657,18 @@ public final class LoadedApk {
             if (holder != null) {
                 rd = holder.get(r);
                 if (rd != null) {
-                    RuntimeException ex = rd.getUnregisterLocation();
-                    throw new IllegalArgumentException(
+                    Slog.d(TAG, 
                             "Unregistering Receiver " + r
-                            + " that was already unregistered", ex);
+                            + " that was already unregistered");
                 }
             }
             if (context == null) {
-                throw new IllegalStateException("Unbinding Receiver " + r
+                Slog.d(TAG, "Unbinding Receiver " + r
                         + " from Context that is no longer in use: " + context);
             } else {
-                throw new IllegalArgumentException("Receiver not registered: " + r);
+                Slog.d(TAG, "Receiver not registered: " + r);
             }
-
+            return null;
         }
     }
 
@@ -1996,18 +1995,18 @@ public final class LoadedApk {
             if (holder != null) {
                 sd = holder.get(c);
                 if (sd != null) {
-                    RuntimeException ex = sd.getUnbindLocation();
-                    throw new IllegalArgumentException(
+                    Slog.d(TAG,
                             "Unbinding Service " + c
-                            + " that was already unbound", ex);
+                            + " that was already unbound");
                 }
             }
             if (context == null) {
-                throw new IllegalStateException("Unbinding Service " + c
+                Slog.d(TAG, "Unbinding Service " + c
                         + " from Context that is no longer in use: " + context);
             } else {
-                throw new IllegalArgumentException("Service not registered: " + c);
+                Slog.d(TAG, "Service not registered: " + c);
             }
+            return null;
         }
     }
 
