@@ -399,6 +399,7 @@ static int64_t compactProcess(int pid, VmaToAdviseFunc vmaToAdviseFunc) {
                 ++pageoutVmaIndex;
                 break;
         }
+        return true;
     };
     meminfo.ForEachVmaFromMaps(vmaCollectorCb, mapsBuffer);
     ATRACE_END();
