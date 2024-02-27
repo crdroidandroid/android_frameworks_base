@@ -2064,7 +2064,7 @@ final class ActivityManagerConstants extends ContentObserver {
         // Monitoring is on by default, so if the setting hasn't been set by the user,
         // monitoring should be on.
         final boolean enabled = Settings.Global.getInt(mResolver,
-                Settings.Global.ENABLE_AUTOMATIC_SYSTEM_SERVER_HEAP_DUMPS, 1) == 1;
+                Settings.Global.ENABLE_AUTOMATIC_SYSTEM_SERVER_HEAP_DUMPS, 0) == 1;
 
         // Setting the threshold to 0 stops the checking.
         final long threshold = enabled ? mSystemServerAutomaticHeapDumpPssThresholdBytes : 0;
