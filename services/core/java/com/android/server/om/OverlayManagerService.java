@@ -1498,6 +1498,18 @@ public final class OverlayManagerService extends SystemService {
         }
     }
 
+    public void updatePackageManagerInternal(String targetPackageName, int targetUserId) {
+        synchronized (mLock) {
+            if (targetUserId == UserHandle.USER_ALL) {
+                for (int userId : mUserManager.getUserIds()) {
+                    updatePackageManagerLocked(Set.of(targetPackageName), userId);
+                }
+            } else {
+                updatePackageManagerLocked(Set.of(targetPackageName), targetUserId);
+            }
+        }
+    }
+
     @NonNull
     private SparseArray<List<String>> updatePackageManagerLocked(
             @Nullable Set<UserPackage> targets) {
