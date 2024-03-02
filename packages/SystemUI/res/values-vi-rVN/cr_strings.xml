@@ -157,9 +157,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Ngôn ngữ</string>
     <string name="quick_settings_locale_more_locales_toast">Vui lòng thiết lập nhiều ngôn ngữ để kích hoạt chức năng chuyển đổi</string>
+    <!-- Island notification -->
+    <string name="now_playing_on">Đang phát trên %1$s</string>
+    <string name="by_artist">%1$s bởi %2$s</string>
     <!-- Face unlock -->
     <string name="face_unlock_recognizing">Đang nhận diện khuôn mặt...</string>
-    <!-- Island notification -->
-    <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%1$s by %2$s</string>
 </resources>
