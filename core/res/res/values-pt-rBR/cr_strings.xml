@@ -29,4 +29,12 @@
     <string name="url_copy_failed">Ocorreu um erro durante o upload do log para o Pasty</string>
     <!-- App lock -->
     <string name="unlock_application">Desbloquear <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <!-- Dexopt -->
+    <string name="dexopt_progress_msg">Otimizando aplicativos: %1$d%% (%2$d of %3$d)</string>
+    <string name="bg_dexopt_notif_ch_title">Otimizando aplicativos</string>
+    <string name="bg_dexopt_notif_title">Otimizando aplicativos (%1$d de %2$d)</string>
+    <string name="bg_dexopt_notif_text">O desempenho do dispositivo pode ser mais lento até que o processo de otimização seja concluído</string>
+    <string name="bg_dexopt_completed_notif_ch_title">Otimização de aplicativos concluída</string>
+    <string name="bg_dexopt_completed_notif_title">É necessário reiniciar o aplicativo</string>
+    <string name="bg_dexopt_completed_notif_text">Otimização de aplicativos concluída. Toque para reiniciar os aplicativos que foram otimizados.</string>
 </resources>
