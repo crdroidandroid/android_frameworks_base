@@ -29,4 +29,12 @@
     <string name="url_copy_failed">Произошла ошибка во время загрузки лога на Pasty</string>
     <!-- App lock -->
     <string name="unlock_application">Разблокировать <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <!-- Dexopt -->
+    <string name="dexopt_progress_msg">Оптимизированные приложения: %1$d%% (%2$d of %3$d)</string>
+    <string name="bg_dexopt_notif_ch_title">Оптимизация приложений</string>
+    <string name="bg_dexopt_notif_title">Оптимизация приложений (%1$d of %2$d)</string>
+    <string name="bg_dexopt_notif_text">Производительность устройства может снизиться пока не завершится оптимизация приложения</string>
+    <string name="bg_dexopt_completed_notif_ch_title">Оптимизация приложения завершена</string>
+    <string name="bg_dexopt_completed_notif_title">Требуется перезапуск приложения</string>
+    <string name="bg_dexopt_completed_notif_text">Оптимизация приложений завершена. Нажмите, чтобы перезапустить оптимизированные приложения.</string>
 </resources>
