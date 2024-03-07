@@ -77,6 +77,7 @@ public final class BcSmartspaceTemplateDataUtils {
         if (SmartspaceUtils.isEmpty(text)) {
             Log.w("BcSmartspaceTemplateDataUtils", "Cannot set. The given text is empty");
             updateVisibility(textView, 8);
+            return;
         }
         textView.setText(text.getText());
         textView.setEllipsize(text.getTruncateAtType());
