@@ -102,12 +102,16 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
             "lineagesystem:" + LineageSettings.System.NAVIGATION_BAR_HINT;
     private static final String OVERLAY_NAVIGATION_HIDE_HINT =
             "com.custom.overlay.systemui.gestural.hidden";
+    private static final String OVERLAY_NAVIGATION_HIDE_HINT_IME =
+            "com.custom.overlay.systemui.gestural.hidden_narrow_back";
     private static final String GESTURE_NAVBAR_LENGTH_MODE =
             "system:" + Settings.System.GESTURE_NAVBAR_LENGTH_MODE;
     private static final String GESTURE_NAVBAR_RADIUS =
             "system:" + Settings.System.GESTURE_NAVBAR_RADIUS;
     private static final String ENABLE_TASKBAR =
             "lineagesystem:" + LineageSettings.System.ENABLE_TASKBAR;
+    private static final String KEY_NAVIGATION_SPACE =
+            "system:" + Settings.System.NAVIGATION_BAR_IME_SPACE;
 
     private static class Listener implements NavigationModeController.ModeChangedListener {
         private final WeakReference<NavigationBarInflaterView> mSelf;
@@ -151,6 +155,7 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
     private boolean mIsHintEnabled;
     private int mHomeHandleWidthMode = 0;
     private boolean mIsTaskbarEnabled;
+    private boolean mShowImeSpace;
 
     private TunerService mTunerService;
 
@@ -220,6 +225,7 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
         mTunerService.addTunable(this, GESTURE_NAVBAR_LENGTH_MODE);
         mTunerService.addTunable(this, GESTURE_NAVBAR_RADIUS);
         mTunerService.addTunable(this, ENABLE_TASKBAR);
+        mTunerService.addTunable(this, KEY_NAVIGATION_SPACE);
     }
 
     @Override
@@ -249,6 +255,10 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
         } else if (ENABLE_TASKBAR.equals(key)) {
             mIsTaskbarEnabled =
                 TunerService.parseIntegerSwitch(newValue, isLargeScreen(mContext));
+            updateHint();
+        } else if (KEY_NAVIGATION_SPACE.equals(key)) {
+            mShowImeSpace =
+                TunerService.parseIntegerSwitch(newValue, false);
             updateHint();
         }
     }
@@ -323,16 +333,23 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
         final boolean state = mNavBarMode == NAV_BAR_MODE_GESTURAL && (!mIsHintEnabled ||
             mIsTaskbarEnabled);
         final int userId = ActivityManager.getCurrentUser();
+        String overlay = mShowImeSpace ? OVERLAY_NAVIGATION_HIDE_HINT_IME :
+            OVERLAY_NAVIGATION_HIDE_HINT;
         try {
-            iom.setEnabled(OVERLAY_NAVIGATION_HIDE_HINT, state, userId);
+            if (mShowImeSpace) {
+                iom.setEnabled(OVERLAY_NAVIGATION_HIDE_HINT, false, userId);
+            } else {
+                iom.setEnabled(OVERLAY_NAVIGATION_HIDE_HINT_IME, false, userId);
+            }
+            iom.setEnabled(overlay, state, userId);
             if (state) {
                 // As overlays are also used to apply navigation mode, it is needed to set
                 // our customization overlay to highest priority to ensure it is applied.
-                iom.setHighestPriority(OVERLAY_NAVIGATION_HIDE_HINT, userId);
+                iom.setHighestPriority(overlay, userId);
             }
         } catch (IllegalArgumentException | RemoteException e) {
             Log.e(TAG, "Failed to " + (state ? "enable" : "disable")
-                    + " overlay " + OVERLAY_NAVIGATION_HIDE_HINT + " for user " + userId);
+                    + " overlay " + overlay + " for user " + userId);
         }
     }
 
