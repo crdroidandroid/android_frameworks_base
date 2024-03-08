@@ -104,9 +104,6 @@
     <dimen name="dismiss_all_button_width">55dp</dimen>
     <dimen name="dismiss_all_button_margin_bottom">48dp</dimen>
 
-    <!-- QS Header height full -->
-    <dimen name="qs_header_height_full">200dp</dimen>
-
     <!-- A11 QS style -->
     <dimen name="custom_qs_panel_padding_top">0dp</dimen>
 
