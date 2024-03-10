@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2024 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">Stisknutím a\u00a0podržením tlačítka napájení zapnout obrazovku</string>
+    <string name="pocket_view_title">Režim v\u00a0kapse je zapnutý</string>
+    <string name="pocket_view_title_cancel">Pro aktivaci telefonu:</string>
+    <string name="pocket_view_top_tag_cancel">Zkontrolujte, zda je modrá oblast telefonu bez jakýchkoliv překážek a\u00a0očistěte ji od nečistot nebo prachu.</string>
+    <string name="pocket_view_top_tag_cancel2">Dlouhým stiskem tlačítka Napájení vynutíte ukončení režimu v\u00a0kapse.</string>
+    <string name="pocket_view_top_tag_number1">1.\u0020</string>
+    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Kopírovat URL protokolu o\u00a0selhání</string>
+    <string name="url_copy_success">URL byla úspěšně zkopírována</string>
+    <string name="url_copy_failed">Při nahrávání protokolu o\u00a0selhání na Pasty došlo k\u00a0chybě</string>
+    <!-- App lock -->
+    <string name="unlock_application">Odemknout <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+</resources>

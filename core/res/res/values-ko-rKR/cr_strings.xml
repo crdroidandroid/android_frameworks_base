@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2024 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Pocket Lock -->
+    <string name="pocket_lock_message_long_press">전원 버튼을 길게 눌러 잠금 해제</string>
+    <string name="pocket_view_title">주머니 모드가 켜졌습니다</string>
+    <string name="pocket_view_title_cancel">휴대폰을 활성화하기:</string>
+    <string name="pocket_view_top_tag_cancel">당신의 휴대폰의 파란 부분을 가리지말고 먼지를 제거하세요.</string>
+    <string name="pocket_view_top_tag_cancel2">주머니 감지 모드를 강제 종료하려면 전원 버튼을 길게 누르세요.</string>
+    <string name="pocket_view_top_tag_number1">1.\u0020</string>
+    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">비정상 종료 로그 URL 복사</string>
+    <string name="url_copy_success">링크가 성공적으로 복사되었습니다</string>
+    <string name="url_copy_failed">로그를 Pastey에 업로드하는 동안 오류가 발생했습니다.</string>
+    <!-- App lock -->
+    <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> 열기</string>
+</resources>

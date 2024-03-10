@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2024 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Statusbar Icons -->
+    <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_data_saver">موفِّر البيانات</string>
+    <string name="status_bar_call_strength">قوة الاتصال</string>
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
+    <!-- Screen record delete action -->
+    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
+    <string name="screenrecord_delete_label">حذف</string>
+    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
+    <string name="screenrecord_delete_description">تم حذف تسجيل الشاشة</string>
+    <!-- Screen record -->
+    <string name="screenrecord_stopdot_label">إظهار نقطة التوقف</string>
+    <string name="screenrecord_stopdot_summary">الضغط المطول لتحريكه</string>
+    <string name="screenrecord_lowquality_label">تخفيض الدقة لحجم ملف أقل</string>
+    <string name="screenrecord_lowquality_summary">لحجم الملف الأصغر</string>
+    <string name="screenrecord_longer_timeout_switch_label">حجم الملف أكبر</string>
+    <string name="screenrecord_longer_timeout_switch_summary">الحد من حجم التسجيل إلى 15 جيجابايت</string>
+    <string name="screenrecord_skip_time_label">تخطي المؤقت</string>
+    <string name="screenrecord_skip_time_summary">إزالة 3 ثانية انتظار</string>
+    <string name="screenrecord_hevc_switch_label">تمكين ترميز HEVC</string>
+    <string name="screenrecord_hevc_switch_summary">استخدام ترميز فيديو HEVC أكثر كفاءة</string>
+    <!-- Bluetooth dialog -->
+    <string name="turn_on_bluetooth">استخدام البلوتوث</string>
+    <string name="bluetooth_is_off">تم إيقاف البلوتوث</string>
+    <string name="tap_a_device_to_connect">انقر على جهاز للاتصال</string>
+    <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
+    <plurals name="quick_settings_internet_hotspot_summary_num_devices">
+        <item quantity="zero">‏عدد الأجهزة المتصلة ‎%d</item>
+        <item quantity="one">%d device connected</item>
+        <item quantity="two">%d devices connected</item>
+        <item quantity="few">%d devices connected</item>
+        <item quantity="many">%d devices connected</item>
+        <item quantity="other">%d اجهزة متصلة</item>
+    </plurals>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">الصوت</string>
+    <string name="quick_settings_sound_ring">نغمة الرنين</string>
+    <string name="quick_settings_sound_vibrate">الاهتزاز</string>
+    <string name="quick_settings_sound_mute">كتم الصوت</string>
+    <!-- Text to use when the number in a notification info is too large -->
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short">ك. ب/ث</string>
+    <string name="megabitspersecond_short">م. ب/ث</string>
+    <string name="gigabitspersecond_short">ج. ب/ث</string>
+    <string name="kilobytespersecond_short">ك. بايت/ث</string>
+    <string name="megabytespersecond_short">م. بايت/ث</string>
+    <string name="gigabytespersecond_short">ج. بايت/ث</string>
+    <!-- Data usage info in QS footer -->
+    <string name="usage_data">المستخدم اليوم</string>
+    <string name="usage_data_default_suffix">البيانات</string>
+    <string name="usage_wifi_default_suffix">واي-فاي</string>
+    <!-- Weather -->
+    <string name="weather_condition_clouds">غائم</string>
+    <string name="weather_condition_rain">ماطر</string>
+    <string name="weather_condition_clear">مُشمِس</string>
+    <string name="weather_condition_storm">عاصف</string>
+    <string name="weather_condition_snow">مثلج</string>
+    <string name="weather_condition_wind">رياح قوية</string>
+    <string name="weather_condition_mist">ضبابي</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شحن سريع (يتبقى <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> حتى يكتمل)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="Percentage">%s</xliff:g> • شحن سريع</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شحن سريع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> ليكتمل الشحن)</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • شحن سريع جدا</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
+    <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • شحن سريع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> حتى إكتمال الشحن)</string>
+    <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • شحن سريع</string>
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">وضع المشي مفعل</string>
+    <string name="onthego_notif_title">تم تفعيل وضع المشي</string>
+    <string name="onthego_notif_stop">إيقاف</string>
+    <string name="onthego_notif_options">الخيارات</string>
+    <string name="onthego_notif_error">غير قادر على بدء وضع المشي</string>
+    <string name="onthego_notif_restart">إعادة تشغيل وضع المشي</string>
+    <string name="onthego_notif_camera_changed">تم تغيير وضع الكاميرا</string>
+    <string name="onthego_transparency">الشفافيه</string>
+    <string name="onthego_front_camera">استخدام الكاميرا الأمامية</string>
+    <string name="onthego_service_toggle">إعادة تشغيل الخدمة تلقائيا</string>
+    <string name="onthego_channel_name">الرئيسية</string>
+    <string name="global_action_onthego">وضع المشي</string>
+    <!-- Button to restart SystemUI, within the Restart Options dialog -->
+    <string name="global_action_restart_systemui">واجهة النظام</string>
+    <!-- Alert slide extras -->
+    <string name="volume_ringer_priority_only">الأولويّة</string>
+    <string name="volume_ringer_alarms_only">التنبيهات</string>
+    <string name="volume_ringer_dnd">لا إزعاج</string>
+    <string name="tristate_flashlight">الكشاف</string>
+    <string name="tristate_flashlight_on">الكشاف يعمل</string>
+    <string name="tristate_flashlight_off">الكشاف مغلق</string>
+    <string name="tristate_flashlight_blink">ومض الكشاف</string>
+    <string name="tristate_brightness_bright">أقصى سطوع</string>
+    <string name="tristate_brightness_dark">أقل سطوع</string>
+    <string name="tristate_brightness_auto">سطوع تلقائي</string>
+    <string name="tristate_rotation_auto">دوران تلقائي</string>
+    <string name="tristate_rotation_0">الوضع الرأسي</string>
+    <string name="tristate_rotation_90">عرضي (90 درجة)</string>
+    <string name="tristate_rotation_270">عرضي (270 درجة)</string>
+    <!-- Kill button in notification guts -->
+    <string name="force_stop_dlg_title">فرض إيقاف؟</string>
+    <string name="force_stop_dlg_text">في حالة فرض إيقاف التطبيق، ربما لا يعمل بشكل صحيح.</string>
+    <!-- CPUInfo tile -->
+    <string name="quick_settings_cpuinfo_label">معلومات المعالج</string>
+    <!-- FPS Info tile -->
+    <string name="quick_settings_fpsinfo_label">معلومات معدَّل العرض</string>
+    <!-- FPS view text placeholder -->
+    <string name="fps_text_placeholder">إطار: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
+    <!-- Compass QS Tile -->
+    <string name="quick_settings_compass_label">بوصلة</string>
+    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_init">تهيئة/u2026</string>
+    <string name="quick_settings_compass_N">ش</string>
+    <string name="quick_settings_compass_NE">ش. شرق</string>
+    <string name="quick_settings_compass_E">شرق</string>
+    <string name="quick_settings_compass_SE">ج. شرق</string>
+    <string name="quick_settings_compass_S">ج</string>
+    <string name="quick_settings_compass_SW">ج. غرب</string>
+    <string name="quick_settings_compass_W">غ</string>
+    <string name="quick_settings_compass_NW">شمال. غ</string>
+    <!-- DataSwitch Tile -->
+    <string name="qs_data_switch_label">تبديل بطاقة البيانات</string>
+    <!-- Volume panel QS tile -->
+    <string name="quick_settings_volume_panel_label">لوحة تحكم الصوت</string>
+    <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_lens_label">العدسة</string>
+    <!-- Smart Pixels QS Tile -->
+    <string name="quick_settings_smart_pixels">الدقة الذكية</string>
+    <string name="quick_settings_smart_pixels_on_power_save">تمكين الدقة الذكية تلقائياً</string>
+    <!-- Weather Tile -->
+    <string name="omnijaws_service_error">حدث خطأ أثناء تحميل بيانات الطقس</string>
+    <string name="omnijaws_service_unknown">لا يوجد بيانات للطقس</string>
+    <string name="omnijaws_label_default">الطقس</string>
+    <!-- Refresh Rate Tile -->
+    <string name="refresh_rate_tile_label"> معدل التحديث</string>
+    <string name="auto_mode_label">تلقائي</string>
+    <!-- Screenshot Tile -->
+    <string name="screenshot_long_press">الضغط المطول - المنطقة المحددة</string>
+    <!-- SoundSearch Tile -->
+    <string name="quick_settings_sound_search">البحث الصوتي</string>
+    <string name="quick_settings_sound_search_no_app">قم بتثبيت تطبيق بحث صوتي اولآ</string>
+    <!-- Language toggle tile -->
+    <string name="quick_settings_locale_label">اللغة</string>
+    <string name="quick_settings_locale_more_locales_toast">قم بتهيئة عدة لغات اولآ</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
+    <!-- Island notification -->
+    <string name="now_playing_on">Now Playing on %1$s</string>
+    <string name="by_artist">%1$s by %2$s</string>
+</resources>
