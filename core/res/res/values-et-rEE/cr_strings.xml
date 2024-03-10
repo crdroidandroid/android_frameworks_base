@@ -29,4 +29,12 @@
     <string name="url_copy_failed">Logi Pasty\'sse üleslaadimisel esines viga</string>
     <!-- App lock -->
     <string name="unlock_application">Lukusta <xliff:g id="label" example="Telegram">%1$s</xliff:g> lahti</string>
+    <!-- Dexopt -->
+    <string name="dexopt_progress_msg">Rakenduste optimeerimine: %1$d%% (%2$d/%3$d)</string>
+    <string name="bg_dexopt_notif_ch_title">Rakenduste optimeerimine</string>
+    <string name="bg_dexopt_notif_title">Rakenduste optimeerimine (%1$d/%2$d)</string>
+    <string name="bg_dexopt_notif_text">Seadme jõudlus võib olla aeglasem, kuni rakenduste optimeerimine lõpetab</string>
+    <string name="bg_dexopt_completed_notif_ch_title">Rakenduste optimeerimine on lõppenud</string>
+    <string name="bg_dexopt_completed_notif_title">Vajalik on rakenduste taaskäivitus</string>
+    <string name="bg_dexopt_completed_notif_text">Rakenduste optimeerimine on lõppenud. Koputa optimeeritud rakenduste taaskäivitamiseks.</string>
 </resources>
