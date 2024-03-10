@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -30,8 +29,6 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 
 import com.android.systemui.res.R;
