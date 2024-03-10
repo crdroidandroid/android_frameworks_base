@@ -37,7 +37,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 
-import com.android.internal.util.crdroid.ImageHelper;
 import com.android.systemui.R;
 
 public class FileHeaderProvider implements
@@ -116,7 +115,7 @@ public class FileHeaderProvider implements
         if (file.exists()) {
             if (DEBUG) Log.i(TAG, "Load header image");
             final Bitmap image = BitmapFactory.decodeFile(file.getAbsolutePath());
-            mImage = new BitmapDrawable(mContext.getResources(), ImageHelper.resizeMaxDeviceSize(mContext, image));
+            mImage = new BitmapDrawable(mContext.getResources(), image);
         }
     }
 
