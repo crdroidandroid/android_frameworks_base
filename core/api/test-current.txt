@@ -1533,7 +1533,9 @@ package android.hardware.display {
     ctor public AmbientDisplayConfiguration(android.content.Context);
     method public boolean alwaysOnAvailable();
     method public boolean alwaysOnAvailableForUser(int);
+    method public boolean alwaysOnChargingEnabledSetting(int);
     method public boolean alwaysOnEnabled(int);
+    method public boolean alwaysOnEnabledSetting(int);
     method public void disableDozeSettings(int);
     method public void disableDozeSettings(boolean, int);
     method public void restoreDozeSettings(int);
