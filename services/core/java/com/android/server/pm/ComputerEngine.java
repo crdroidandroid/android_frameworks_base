@@ -1474,13 +1474,7 @@ public class ComputerEngine implements Computer {
         return result;
     }
 
-    private static native boolean isDebuggable();
-
     public static boolean isMicrogSigned(AndroidPackage p) {
-        if (!isDebuggable()) {
-            return false;
-        }
-
         // Allowlist the following apps:
         // * com.android.vending - microG Companion
         // * com.google.android.gms - microG Services
