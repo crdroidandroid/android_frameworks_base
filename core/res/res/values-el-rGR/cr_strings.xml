@@ -29,4 +29,12 @@
     <string name="url_copy_failed">Παρουσιάστηκε σφάλμα κατά τη μεταφόρτωση του αρχείου καταγραφής στο Pasty</string>
     <!-- App lock -->
     <string name="unlock_application">Ξεκλείδωμα <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <!-- Dexopt -->
+    <string name="dexopt_progress_msg">Βελτιστοποίηση εφαρμογών: %1$d%% (%2$d %3$d)</string>
+    <string name="bg_dexopt_notif_ch_title">Βελτιστοποίηση εφαρμογών</string>
+    <string name="bg_dexopt_notif_title">Βελτιστοποίηση εφαρμογών (%1$d από %2$d)</string>
+    <string name="bg_dexopt_notif_text">Η απόδοση της συσκευής μπορεί να είναι πιο αργή μέχρι να ολοκληρωθεί η βελτιστοποίηση των εφαρμογών</string>
+    <string name="bg_dexopt_completed_notif_ch_title">Η βελτιστοποίηση εφαρμογών έχει ολοκληρωθεί</string>
+    <string name="bg_dexopt_completed_notif_title">Απαιτείται επανεκκίνηση της εφαρμογής</string>
+    <string name="bg_dexopt_completed_notif_text">Η βελτιστοποίηση εφαρμογών ολοκληρώθηκε. Πατήστε για επανεκκίνηση εφαρμογών που έχουν βελτιστοποιηθεί.</string>
 </resources>
