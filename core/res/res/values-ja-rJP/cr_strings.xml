@@ -29,4 +29,12 @@
     <string name="url_copy_failed">Pasty へのログのアップロード中にエラーが発生しました</string>
     <!-- App lock -->
     <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> をロック解除</string>
+    <!-- Dexopt -->
+    <string name="dexopt_progress_msg">アプリの最適化中: %1$d%% (%2$d / %3$d)</string>
+    <string name="bg_dexopt_notif_ch_title">アプリの最適化中</string>
+    <string name="bg_dexopt_notif_title">アプリの最適化中 (%1$d / %2$d)</string>
+    <string name="bg_dexopt_notif_text">アプリの最適化が完了するまで、デバイスのパフォーマンスが低下する可能性があります</string>
+    <string name="bg_dexopt_completed_notif_ch_title">アプリの最適化が完了しました</string>
+    <string name="bg_dexopt_completed_notif_title">アプリの再起動が必要です</string>
+    <string name="bg_dexopt_completed_notif_text">アプリの最適化が完了しました。タップすると最適化されたアプリを再起動します。</string>
 </resources>
