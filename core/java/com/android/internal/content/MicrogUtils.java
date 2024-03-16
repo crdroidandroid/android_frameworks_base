@@ -42,12 +42,11 @@ public final class MicrogUtils {
     }
 
     /**
-     * Whether the package is a microG package signed with the real microG key. Always false on
-     * non-debuggable builds.
+     * Whether the package is a microG package signed with the real microG key.
      */
     public static boolean isMicrogSigned(@NonNull AndroidPackage pkg) {
         SigningDetails signingDetails = pkg.getSigningDetails();
-        return isDebuggable() && isMicrogPackageName(pkg.getPackageName())
+        return isMicrogPackageName(pkg.getPackageName())
                 && signingDetails != null
                 && Signature.areExactMatch(signingDetails, new Signature[]{REAL_SIGNATURE});
     }
