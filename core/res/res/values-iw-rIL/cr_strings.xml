@@ -29,4 +29,12 @@
     <string name="url_copy_failed">התרחשה שגיאה במהלך העלאת דו\"ח הקריסה</string>
     <!-- App lock -->
     <string name="unlock_application">פתיחת הנעילה של <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <!-- Dexopt -->
+    <string name="dexopt_progress_msg">מיטוב יישומים: %1$d%% (%2$d מתוך %3$d)</string>
+    <string name="bg_dexopt_notif_ch_title">מיטוב יישומים</string>
+    <string name="bg_dexopt_notif_title">מיטוב יישומים מתבצע (%1$d מתוך %2$d)</string>
+    <string name="bg_dexopt_notif_text">ביצועי המכשיר עלולים להאט עד להשלמת פעולת המיטוב</string>
+    <string name="bg_dexopt_completed_notif_ch_title">מיטוב היישומים הושלם</string>
+    <string name="bg_dexopt_completed_notif_title">דרושה הפעלה מחדש של היישום</string>
+    <string name="bg_dexopt_completed_notif_text">מיטוב היישומים הושלם. ליחצו להפעלה מחדש של היישומים שעברו מיטוב.</string>
 </resources>

@@ -29,4 +29,12 @@
     <string name="url_copy_failed">Сталася помилка під час завантаження журналу до Pasty</string>
     <!-- App lock -->
     <string name="unlock_application">Розблокувати <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <!-- Dexopt -->
+    <string name="dexopt_progress_msg">Оптимізація програм: %1$d%% (%2$d of %3$d)</string>
+    <string name="bg_dexopt_notif_ch_title">Оптимізація програм</string>
+    <string name="bg_dexopt_notif_title">Оптимізація програми %1$d з %2$d</string>
+    <string name="bg_dexopt_notif_text">Продуктивність пристрою може бути повільнішою до завершення оптимізації програми</string>
+    <string name="bg_dexopt_completed_notif_ch_title">Оптимізацію додатка завершено</string>
+    <string name="bg_dexopt_completed_notif_title">Вимагається перезапуск додатку</string>
+    <string name="bg_dexopt_completed_notif_text">Оптимізація додатку завершена. Торкніться, щоб перезапустити оптимізовані програми.</string>
 </resources>

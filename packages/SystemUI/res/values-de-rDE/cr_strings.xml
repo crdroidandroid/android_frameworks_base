@@ -158,9 +158,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Sprache</string>
     <string name="quick_settings_locale_more_locales_toast">Bitte zunächst mehr als eine Sprache hinzufügen</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">Gesichtserkennung …</string>
     <!-- Island notification -->
     <string name="now_playing_on">Läuft gerade auf %1$s</string>
     <string name="by_artist">%1$s von %2$s</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">Gesichtserkennung …</string>
 </resources>

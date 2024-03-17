@@ -157,9 +157,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">語言</string>
     <string name="quick_settings_locale_more_locales_toast">先配置多種語言</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">臉部辨識中...</string>
     <!-- Island notification -->
     <string name="now_playing_on">目前正在 %1$s 上播放</string>
     <string name="by_artist">%2$s 的 %1$s</string>
+    <!-- Face unlock -->
+    <string name="face_unlock_recognizing">臉部辨識中...</string>
 </resources>

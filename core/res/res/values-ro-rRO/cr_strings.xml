@@ -29,4 +29,12 @@
     <string name="url_copy_failed">A apărut o eroare la încărcarea registrului în pasty</string>
     <!-- App lock -->
     <string name="unlock_application">Deblocare <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <!-- Dexopt -->
+    <string name="dexopt_progress_msg">Optimizare aplicații: %1$d%% (%2$d din %3$d)</string>
+    <string name="bg_dexopt_notif_ch_title">Optimizare aplicații</string>
+    <string name="bg_dexopt_notif_title">Optimizare aplicații (%1$d din %2$d)</string>
+    <string name="bg_dexopt_notif_text">Performanța dispozitivului poate fi mai lentă până la finalizarea optimizării aplicației</string>
+    <string name="bg_dexopt_completed_notif_ch_title">Optimizarea aplicației s-a finalizat</string>
+    <string name="bg_dexopt_completed_notif_title">Este necesară repornirea aplicației</string>
+    <string name="bg_dexopt_completed_notif_text">Optimizarea aplicației s-a terminat. Apasă pentru a reporni aplicațiile care au fost optimizate.</string>
 </resources>
