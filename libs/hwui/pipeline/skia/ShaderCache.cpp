@@ -35,10 +35,10 @@ namespace uirenderer {
 namespace skiapipeline {
 
 // Cache size limits.
-static const size_t maxKeySize = 1024;
-static const size_t maxValueSize = 2 * 1024 * 1024;
-static const size_t maxTotalSize = 4 * 1024 * 1024;
-static_assert(maxKeySize + maxValueSize < maxTotalSize);
+static const size_t kMaxKeySize = 1024;
+static const size_t kMaxValueSize = 2 * 1024 * 1024;
+static const size_t kMaxTotalSize = 4 * 1024 * 1024;
+static_assert(kMaxKeySize + kMaxValueSize < kMaxTotalSize);
 
 ShaderCache::ShaderCache() {
     // There is an "incomplete FileBlobCache type" compilation error, if ctor is moved to header.
@@ -89,12 +89,17 @@ void ShaderCache::initShaderDiskCache(const void* identity, ssize_t size) {
     // or snapshot migration. Also, program binaries may not work well on some
     // desktop / laptop GPUs. Thus, disable the shader disk cache for emulator builds.
     if (!Properties::runningInEmulator && mFilename.length() > 0) {
-        mBlobCache.reset(new FileBlobCache(maxKeySize, maxValueSize, maxTotalSize, mFilename));
-        validateCache(identity, size);
-        mInitialized = true;
-        if (identity != nullptr && size > 0 && mIDHash.size()) {
-            set(&sIDKey, sizeof(sIDKey), mIDHash.data(), mIDHash.size());
-        }
+        std::thread deferredInitThread([this, identity, size]() {
+            std::lock_guard lock(mMutex);
+            mBlobCache.reset(
+                new FileBlobCache(kMaxKeySize, kMaxValueSize, kMaxTotalSize, mFilename));
+            validateCache(identity, size);
+            mInitialized = true;
+            if (identity != nullptr && size > 0 && mIDHash.size()) {
+                set(&sIDKey, sizeof(sIDKey), mIDHash.data(), mIDHash.size());
+            }
+        });
+        deferredInitThread.detach();
     }
 }
 
@@ -120,7 +125,7 @@ sk_sp<SkData> ShaderCache::load(const SkData& key) {
     size_t valueSize = mBlobCache->get(key.data(), keySize, valueBuffer, mObservedBlobValueSize);
     int maxTries = 3;
     while (valueSize > mObservedBlobValueSize && maxTries > 0) {
-        mObservedBlobValueSize = std::min(valueSize, maxValueSize);
+        mObservedBlobValueSize = std::min(valueSize, kMaxValueSize);
         void* newValueBuffer = realloc(valueBuffer, mObservedBlobValueSize);
         if (!newValueBuffer) {
             free(valueBuffer);
@@ -199,7 +204,7 @@ void ShaderCache::store(const SkData& key, const SkData& data, const SkString& /
 
     size_t valueSize = data.size();
     size_t keySize = key.size();
-    if (keySize == 0 || valueSize == 0 || valueSize >= maxValueSize) {
+    if (keySize == 0 || valueSize == 0 || valueSize >= kMaxValueSize) {
         ALOGW("ShaderCache::store: sizes %d %d not allowed", (int)keySize, (int)valueSize);
         return;
     }
