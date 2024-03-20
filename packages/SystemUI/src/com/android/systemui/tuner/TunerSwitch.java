@@ -5,20 +5,20 @@ import android.content.res.TypedArray;
 import android.provider.Settings;
 import android.util.AttributeSet;
 
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.Dependency;
 import com.android.systemui.res.R;
 import com.android.systemui.tuner.TunerService.Tunable;
 
-public class TunerSwitch extends SwitchPreference implements Tunable {
+public class TunerSwitch extends SwitchPreferenceCompat implements Tunable {
 
     private final boolean mDefault;
     private final int mAction;
 
     public TunerSwitch(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(context, attrs, androidx.preference.R.attr.switchPreferenceCompatStyle);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TunerSwitch);
         mDefault = a.getBoolean(R.styleable.TunerSwitch_defValue, false);
