@@ -540,12 +540,12 @@ public class ExitTransitionCoordinator extends ActivityTransitionCoordinator {
     /**
      * @hide
      */
-    public static class ActivityExitTransitionCallbacks implements ExitTransitionCallbacks {
+    public abstract static class BaseActivityExitTransitionCallbacks implements ExitTransitionCallbacks {
 
         @NonNull
         final Activity mActivity;
 
-        ActivityExitTransitionCallbacks(@NonNull Activity activity) {
+        BaseActivityExitTransitionCallbacks(@NonNull Activity activity) {
             mActivity = activity;
         }
 
@@ -557,8 +557,40 @@ public class ExitTransitionCoordinator extends ActivityTransitionCoordinator {
         @Override
         public void onFinish() {
             mActivity.mActivityTransitionState.clear();
-            mActivity.finish();
+            this.finish();
             mActivity.overridePendingTransition(0, 0);
+        }
+
+        protected abstract void finish();
+    }
+
+    /**
+     * @hide
+     */
+    public static class ActivityExitTransitionCallbacks extends BaseActivityExitTransitionCallbacks {
+
+        ActivityExitTransitionCallbacks(@NonNull Activity activity) {
+            super(activity);
+        }
+
+        @Override
+        protected void finish() {
+            mActivity.finish();
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public static class TaskRemovingActivityExitTransitionCallbacks extends BaseActivityExitTransitionCallbacks {
+
+        TaskRemovingActivityExitTransitionCallbacks(@NonNull Activity activity) {
+            super(activity);
+        }
+
+        @Override
+        protected void finish() {
+            mActivity.finishAndRemoveTask();
         }
     }
 }

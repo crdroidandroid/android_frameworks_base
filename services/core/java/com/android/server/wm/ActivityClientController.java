@@ -90,6 +90,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.Trace;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.service.voice.VoiceInteractionManagerInternal;
 import android.util.Slog;
 import android.view.RemoteAnimationDefinition;
@@ -119,7 +120,9 @@ class ActivityClientController extends IActivityClientController.Stub {
     private final ActivityTaskSupervisor mTaskSupervisor;
     private final Context mContext;
 
-    /** Wrapper around VoiceInteractionServiceManager. */
+    private Integer mShouldFinishTaskSettingCache = null;
+
+ /** Wrapper around VoiceInteractionServiceManager. */
     private AssistUtils mAssistUtils;
 
     /**
@@ -492,8 +495,9 @@ class ActivityClientController extends IActivityClientController.Stub {
             try {
                 r.setActivityBoost(false);
                 final boolean res;
-                final boolean finishWithRootActivity =
-                        finishTask == Activity.FINISH_TASK_WITH_ROOT_ACTIVITY;
+                final boolean isLastRunningActivity = isTopActivityInTaskFragment(r);
+                final boolean finishWithRootActivity = (isLastRunningActivity && shouldFinishTaskOnBackPressed() == 2)
+                        || finishTask == Activity.FINISH_TASK_WITH_ROOT_ACTIVITY;
                 if (finishTask == Activity.FINISH_TASK_WITH_ACTIVITY
                         || (finishWithRootActivity && r == rootR)) {
                     // If requested, remove the task that is associated to this activity only if it
@@ -1604,9 +1608,9 @@ class ActivityClientController extends IActivityClientController.Stub {
         return activity.getTaskFragment().topRunningActivity() == activity;
     }
 
-    private void requestCallbackFinish(IRequestFinishCallback callback) {
+    private void requestCallbackFinish(IRequestFinishCallback callback, boolean shouldFinishTask) {
         try {
-            callback.requestFinish();
+            callback.requestFinish(shouldFinishTask);
         } catch (RemoteException e) {
             Slog.e(TAG, "Failed to invoke request finish callback", e);
         }
@@ -1619,6 +1623,7 @@ class ActivityClientController extends IActivityClientController.Stub {
             final Intent baseActivityIntent;
             final boolean launchedFromHome;
             final boolean isLastRunningActivity;
+            final boolean finishTask;
             synchronized (mGlobalLock) {
                 final ActivityRecord r = ActivityRecord.isInRootTaskLocked(token);
                 if (r == null) return;
@@ -1636,11 +1641,13 @@ class ActivityClientController extends IActivityClientController.Stub {
                     }
                 } else if (!isRelativeTaskRootActivity(r, root)) {
                     // Finish the Activity if the activity is not the task root or relative root.
-                    requestCallbackFinish(callback);
+                    requestCallbackFinish(callback, false);
                     return;
                 }
 
-                isLastRunningActivity = isTopActivityInTaskFragment(isTaskRoot ? root : r);
+                finishTask = shouldFinishTaskOnBackPressed() >= 1;
+
+                isLastRunningActivity = isTopActivityInTaskFragment(r);
 
                 final boolean isBaseActivity = root.mActivityComponent.equals(task.realActivity);
                 baseActivityIntent = isBaseActivity ? root.intent : null;
@@ -1655,14 +1662,14 @@ class ActivityClientController extends IActivityClientController.Stub {
             //   2. The current activity is the base activity for the task.
             //   3. The activity was launched by the home process, and is one of the main entry
             //      points for the application.
-            if (baseActivityIntent != null && isLastRunningActivity
+            if (!finishTask && baseActivityIntent != null && isLastRunningActivity
                     && launchedFromHome && ActivityRecord.isMainIntent(baseActivityIntent)) {
                 moveActivityTaskToBack(token, true /* nonRoot */);
                 return;
             }
 
             // The default option for handling the back button is to finish the Activity.
-            requestCallbackFinish(callback);
+            requestCallbackFinish(callback, finishTask);
         } finally {
             Binder.restoreCallingIdentity(origId);
         }
@@ -1681,6 +1688,14 @@ class ActivityClientController extends IActivityClientController.Stub {
                 r.getTask().mAlignActivityLocaleWithTask = true;
             }
         }
+    }
+
+    private int shouldFinishTaskOnBackPressed() {
+        if (mShouldFinishTaskSettingCache == null) {
+            mShouldFinishTaskSettingCache = Settings.System.getInt(mContext.getContentResolver(),
+                                                Settings.System.TRANSIENT_TASK_MODE, 0);
+        }
+        return mShouldFinishTaskSettingCache;
     }
 
     /**

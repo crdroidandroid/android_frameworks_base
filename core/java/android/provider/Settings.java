@@ -6221,6 +6221,11 @@ public final class Settings {
         public static final String GAMESPACE_SUPPRESS_FULLSCREEN_INTENT = "gamespace_suppress_fullscreen_intent";
 
         /**
+         * @hide
+         */
+        public static final String TRANSIENT_TASK_MODE = "transient_task_mode";
+
+        /**
          * Whether to enable the pixel navbar animation
          * @hide
          */
