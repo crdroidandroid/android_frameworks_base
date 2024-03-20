@@ -18,7 +18,7 @@ public class TunerSwitch extends SwitchPreferenceCompat implements Tunable {
     private final int mAction;
 
     public TunerSwitch(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(context, attrs, androidx.preference.R.attr.switchPreferenceCompatStyle);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TunerSwitch);
         mDefault = a.getBoolean(R.styleable.TunerSwitch_defValue, false);
