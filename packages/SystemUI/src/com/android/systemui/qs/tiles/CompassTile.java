@@ -18,6 +18,11 @@ package com.android.systemui.qs.tiles;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -37,7 +42,6 @@ import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.FalsingManager;
-import com.android.systemui.plugins.qs.QSIconView;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.qs.QsEventLogger;
@@ -62,9 +66,7 @@ public class CompassTile extends QSTileImpl<BooleanState> implements SensorEvent
     private float[] mAcceleration;
     private float[] mGeomagnetic;
 
-    private ImageView mImage;
     private boolean mListeningSensors;
-    private Handler mHandler;
 
     @Inject
     public CompassTile(QSHost host,
@@ -80,7 +82,6 @@ public class CompassTile extends QSTileImpl<BooleanState> implements SensorEvent
         super(host, uiEventLogger, backgroundLooper, mainHandler, falsingManager, metricsLogger,
                 statusBarStateController, activityStarter, qsLogger);
 
-        mHandler = mainHandler;
         mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
         mAccelerationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGeomagneticFieldSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
@@ -98,14 +99,6 @@ public class CompassTile extends QSTileImpl<BooleanState> implements SensorEvent
         super.handleDestroy();
         setListeningSensors(false);
         mSensorManager = null;
-        mImage = null;
-    }
-
-    @Override
-    public QSIconView createTileView(Context context) {
-        QSIconView iconView = super.createTileView(context);
-        mImage = (ImageView) iconView.findViewById(android.R.id.icon);
-        return iconView;
     }
 
     @Override
@@ -143,40 +136,53 @@ public class CompassTile extends QSTileImpl<BooleanState> implements SensorEvent
         return mContext.getString(R.string.quick_settings_compass_label);
     }
 
+    private Drawable rotateDrawable(Drawable drawable, float degrees) {
+        // Convert drawable to bitmap
+        Bitmap bitmap = drawableToBitmap(drawable);
+
+        // Create matrix for rotation
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degrees);
+
+        // Create rotated bitmap
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+        // Convert rotated bitmap back to drawable
+        return new BitmapDrawable(mContext.getResources(), rotatedBitmap);
+    }
+
+    private Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        // If the drawable is not a BitmapDrawable, create a new bitmap and draw the drawable on a canvas
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         final Float degrees = arg == null ? 0 : (Float) arg;
 
         state.value = mActive;
-        state.icon = ResourceIcon.get(R.drawable.ic_qs_compass);
 
         if (state.value) {
             state.state = Tile.STATE_ACTIVE;
             if (arg != null) {
                 state.label = formatValueWithCardinalDirection(degrees);
-                mHandler.post(() -> {
-                    if (mImage == null)
-                        return;
-                    float target = 360 - degrees;
-                    float relative = target - mImage.getRotation();
-                    if (relative > 180) relative -= 360;
-                    mImage.setRotation(mImage.getRotation() + relative / 2);
-                });
             } else {
                 state.label = mContext.getString(R.string.quick_settings_compass_init);
-                mHandler.post(() -> {
-                    if (mImage != null)
-                        mImage.setRotation(0);
-                });
             }
         } else {
             state.label = mContext.getString(R.string.quick_settings_compass_label);
             state.state = Tile.STATE_INACTIVE;
-            mHandler.post(() -> {
-                if (mImage != null)
-                    mImage.setRotation(0);
-            });
         }
+        state.icon = new DrawableIcon(rotateDrawable(
+                mContext.getResources().getDrawable(R.drawable.ic_qs_compass), degrees));
     }
 
     @Override
