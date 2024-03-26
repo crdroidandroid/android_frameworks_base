@@ -120,11 +120,11 @@ class AppLockManagerService(
     }
 
     private val keyguardManager: KeyguardManager by lazy {
-        context.getSystemService(KeyguardManager::class.java)
+        context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
     }
 
     private val alarmManager: AlarmManager by lazy {
-        context.getSystemService(AlarmManager::class.java)
+        context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
 
     private val userManagerInternal: UserManagerInternal by lazy {
