@@ -35,7 +35,7 @@ import com.android.internal.R
  */
 internal class BiometricUnlocker(private val context: Context) {
 
-    private val biometricManager = context.getSystemService(BiometricManager::class.java)
+    private val biometricManager = context.getSystemService(BiometricManager::class.java)!!
 
     // Set operation must be externally synchronized
     var biometricsAllowed = false
