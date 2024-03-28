@@ -191,28 +191,32 @@ public class NotificationGroupingUtil {
         int timeVisibility = !hasVisibleText
                 || row.getEntry().getSbn().getNotification().showsTime()
                 ? View.VISIBLE : View.GONE;
-        time.setVisibility(timeVisibility);
+        if (time != null) {
+            time.setVisibility(timeVisibility);
+        }
         View left = null;
         View right;
         for (int i = 0; i < childCount; i++) {
             View child = rowHeader.getChildAt(i);
-            if (mDividers.contains(child.getId())) {
+            if (child != null && mDividers.contains(child.getId())) {
                 boolean visible = false;
                 // Lets find the item to the right
                 for (i++; i < childCount; i++) {
                     right = rowHeader.getChildAt(i);
-                    if (mDividers.contains(right.getId())) {
+                    if (right != null && mDividers.contains(right.getId())) {
                         // A divider was found, this needs to be hidden
                         i--;
                         break;
-                    } else if (right.getVisibility() != View.GONE && right instanceof TextView) {
+                    } else if (right != null && right.getVisibility() != View.GONE && right instanceof TextView) {
                         visible = left != null;
                         left = right;
                         break;
                     }
                 }
-                child.setVisibility(visible ? View.VISIBLE : View.GONE);
-            } else if (child.getVisibility() != View.GONE && child instanceof TextView) {
+                if (child != null) {
+                    child.setVisibility(visible ? View.VISIBLE : View.GONE);
+                }
+            } else if (child != null && child.getVisibility() != View.GONE && child instanceof TextView) {
                 left = child;
             }
         }
