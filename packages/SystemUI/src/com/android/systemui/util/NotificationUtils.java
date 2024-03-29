@@ -38,8 +38,12 @@ public class NotificationUtils {
 
     private static final String CHANNEL_ID = "np_playback_service";
     private static final int NOTIFICATION_ID = 7383646;
+    private static final long NOTIFICATION_CANCEL_DELAY = 5000; // 5 seconds
+
     private Context context;
     private NotificationManager notificationManager;
+
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public NotificationUtils(Context context) {
         this.context = context;
@@ -69,6 +73,13 @@ public class NotificationUtils {
         }
         return mAppVolumeActivePackageName;
     }
+
+    private Runnable cancelNotificationTask = new Runnable() {
+        @Override
+        public void run() {
+            cancelNowPlayingNotification();
+        }
+    };
 
     public void showNowPlayingNotification(MediaMetadata metadata) {
         Bitmap albumArt = metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
@@ -104,9 +115,15 @@ public class NotificationUtils {
                 .build();
 
         notificationManager.notify(NOTIFICATION_ID, notification);
+
+        // Schedule the task to cancel the notification after 5 seconds
+        handler.postDelayed(cancelNotificationTask, NOTIFICATION_CANCEL_DELAY);
     }
 
     public void cancelNowPlayingNotification() {
         notificationManager.cancel(NOTIFICATION_ID);
+
+        // Remove any pending callbacks (in case the notification is cancelled manually)
+        handler.removeCallbacks(cancelNotificationTask);
     }
 }
