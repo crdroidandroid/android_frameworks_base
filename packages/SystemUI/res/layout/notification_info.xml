@@ -102,7 +102,7 @@ asked for it -->
             android:contentDescription="@string/notification_app_settings"
             android:src="@drawable/ic_force_stop"
             android:layout_toStartOf="@id/app_settings"
-            android:tint="?android:attr/colorAccent"/>
+            android:tint="?androidprv:attr/materialColorPrimary"/>
 
         <ImageButton
             android:id="@+id/app_settings"
