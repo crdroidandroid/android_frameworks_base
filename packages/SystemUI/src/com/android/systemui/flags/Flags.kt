@@ -325,7 +325,7 @@ object Flags {
 
     // TODO(b/290676905): Tracking Bug
     val NEW_SHADE_CARRIER_GROUP_MOBILE_ICONS =
-        releasedFlag("new_shade_carrier_group_mobile_icons")
+        unreleasedFlag("new_shade_carrier_group_mobile_icons")
 
     // 800 - general visual/theme
     @JvmField val MONET = resourceBooleanFlag(R.bool.flag_monet, "monet")
