@@ -1440,7 +1440,7 @@ public class Typeface {
             Typeface tfHeadlineMedium = sSystemFontMap.get(familyNameHeadlineMedium);
 
             if (tfFamily == null) {
-                return;
+                tfFamily = create("sans-serif", NORMAL);
             }
 
             if (tfMedium == null) {
@@ -1454,27 +1454,41 @@ public class Typeface {
             setDefault(tfFamily);
 
             // Static typefaces in public API
-            setFinalField("DEFAULT", create(getSystemDefaultTypeface(familyName), 0));
-            setFinalField("DEFAULT_BOLD", create(getSystemDefaultTypeface(familyName), Typeface.BOLD));
-            setFinalField("SANS_SERIF", create(familyName, 0));
-            setFinalField("SERIF", create(familyName, 0));
+            setFinalField("DEFAULT", create(getSystemDefaultTypeface(familyName), NORMAL));
+            setFinalField("DEFAULT_BOLD", create(getSystemDefaultTypeface(familyName), BOLD));
+            if (!familyName.equals("sans-serif")) {
+                setFinalField("SANS_SERIF", tfFamily);
+            } else {
+                setFinalField("SANS_SERIF", create("sans-serif", NORMAL));
+            }
+            setFinalField("SERIF", create(familyName, NORMAL));
 
-            // For default aliases used in framework styles
-            sSystemFontOverrides.put("sans-serif", tfFamily);
-            sSystemFontOverrides.put("sans-serif-thin", create(tfFamily, 100, false));
-            sSystemFontOverrides.put("sans-serif-light", create(tfFamily, 300, false));
-            sSystemFontOverrides.put("sans-serif-medium", create(tfHeadlineMedium, 500, false));
-            sSystemFontOverrides.put("sans-serif-black", create(tfFamily, 900, false));
-            sSystemFontOverrides.put("sans-serif-condensed", tfFamily);
-            sSystemFontOverrides.put("sans-serif-condensed-light", create(tfFamily, 300, false));
-            sSystemFontOverrides.put("sans-serif-condensed-medium", create(tfFamily, 500, false));
-            sSystemFontOverrides.put("google-sans", tfFamily);
-            sSystemFontOverrides.put("google-sans-thin", create(tfFamily, 100, false));
-            sSystemFontOverrides.put("google-sans-light", create(tfFamily, 300, false));
-            sSystemFontOverrides.put("google-sans-text", create(tfFamily, 400, false));
-            sSystemFontOverrides.put("google-sans-medium", create(tfHeadlineMedium, 500, false));
-            sSystemFontOverrides.put("google-sans-text-medium", create(tfMedium, 500, false));
-            sSystemFontOverrides.put("google-sans-bold", create(tfFamily, 900, false));
+            if (!familyName.equals("sans-serif")) {
+                // For default aliases used in framework styles
+                sSystemFontOverrides.put("sans-serif", tfFamily);
+                sSystemFontOverrides.put("sans-serif-thin", create(tfFamily, 100, false));
+                sSystemFontOverrides.put("sans-serif-light", create(tfFamily, 300, false));
+                sSystemFontOverrides.put("sans-serif-medium", create(tfHeadlineMedium, 500, false));
+                sSystemFontOverrides.put("sans-serif-black", create(tfFamily, 900, false));
+                sSystemFontOverrides.put("sans-serif-condensed", tfFamily);
+                sSystemFontOverrides.put("sans-serif-condensed-light", create(tfFamily, 300, false));
+                sSystemFontOverrides.put("sans-serif-condensed-medium", create(tfFamily, 500, false));
+            }
+
+            if (!familyName.equals("google-sans")) {
+                sSystemFontOverrides.put("google-sans", tfFamily);
+                sSystemFontOverrides.put("google-sans-thin", create(tfFamily, 100, false));
+                sSystemFontOverrides.put("google-sans-light", create(tfFamily, 300, false));
+                sSystemFontOverrides.put("google-sans-text", create(tfFamily, 400, false));
+                sSystemFontOverrides.put("google-sans-medium", create(tfHeadlineMedium, 500, false));
+                sSystemFontOverrides.put("google-sans-text-medium", create(tfMedium, 500, false));
+                sSystemFontOverrides.put("google-sans-bold", create(tfFamily, 900, false));
+            }
+
+            // We should not override system fonts if its the same font family
+            if (sSystemFontOverrides.containsKey(familyName)) {
+                sSystemFontOverrides.remove(familyName);
+            }
 
             setPublicDefaults(familyName);
         }
