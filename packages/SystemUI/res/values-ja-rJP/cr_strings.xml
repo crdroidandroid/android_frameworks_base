@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">3秒間の待機を削除します</string>
     <string name="screenrecord_hevc_switch_label">HEVC を有効化</string>
     <string name="screenrecord_hevc_switch_summary">より効率的な HEVC 動画エンコーディングを使用します</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Bluetooth を使用</string>
-    <string name="bluetooth_is_off">Bluetooth は OFF です</string>
-    <string name="tap_a_device_to_connect">デバイスをタップして接続</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">%d個のデバイスが接続中</item>
@@ -157,9 +153,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">言語</string>
     <string name="quick_settings_locale_more_locales_toast">まず複数の言語を設定してください</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">顔を認識中...</string>
     <!-- Island notification -->
     <string name="now_playing_on">%1$s で再生中</string>
     <string name="by_artist">%1$s / %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">顔を認識中...</string>
 </resources>
