@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">Αφαιρέστε την αναμονή 3 δευτερολέπτων</string>
     <string name="screenrecord_hevc_switch_label">Ενεργοποίηση HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Χρησιμοποιήστε πιο αποτελεσματική κωδικοποίηση βίντεο HEVC</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Χρήση Bluetooth</string>
-    <string name="bluetooth_is_off">Το Bluetooth είναι απενεργοποιημένο</string>
-    <string name="tap_a_device_to_connect">Πατήστε μια συσκευή για να συνδεθείτε</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d συσκευή συνδέθηκε</item>
@@ -158,9 +154,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Γλώσσα</string>
     <string name="quick_settings_locale_more_locales_toast">Διαμορφώστε πρώτα πολλαπλές γλώσσες</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">Αναγνώριση προσώπου...</string>
     <!-- Island notification -->
     <string name="now_playing_on">Παίζει Τώρα στο %1$s</string>
     <string name="by_artist">%1$s από %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Αναγνώριση προσώπου...</string>
 </resources>
