@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">Elimină cele 3 secunde așteptare</string>
     <string name="screenrecord_hevc_switch_label">Activează HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Utilizați o codificare video HEVC mai eficientă</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Folosiți Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth este dezactivat</string>
-    <string name="tap_a_device_to_connect">Atingeți un dispozitiv pentru conectare</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d dispozitiv conectat</item>
@@ -162,6 +158,6 @@
     <!-- Island notification -->
     <string name="now_playing_on">Acum se redă pe %1$s</string>
     <string name="by_artist">%1$s de către %2$s</string>
-    <!-- Face unlock -->
+    <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Recunoașterea feței...</string>
 </resources>
