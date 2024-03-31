@@ -30,11 +30,11 @@
     <!-- App lock -->
     <string name="unlock_application">Desbloquear <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
     <!-- Dexopt -->
-    <string name="dexopt_progress_msg">Optimizing apps: %1$d%% (%2$d of %3$d)</string>
-    <string name="bg_dexopt_notif_ch_title">Optimizing apps</string>
-    <string name="bg_dexopt_notif_title">Optimizing apps (%1$d of %2$d)</string>
-    <string name="bg_dexopt_notif_text">Device performance might be slower until app optimization completes</string>
-    <string name="bg_dexopt_completed_notif_ch_title">App optimization has completed</string>
-    <string name="bg_dexopt_completed_notif_title">App restart is required</string>
-    <string name="bg_dexopt_completed_notif_text">App optimization has completed. Tap to restart apps that were optimized.</string>
+    <string name="dexopt_progress_msg">Optimización de aplicaciones: %1$d%% (%2$d de %3$d)</string>
+    <string name="bg_dexopt_notif_ch_title">Optimización de aplicaciones</string>
+    <string name="bg_dexopt_notif_title">Optimización de aplicaciones (%1$d of %2$d)</string>
+    <string name="bg_dexopt_notif_text">El rendimiento del dispositivo puede ser más lento hasta que se complete la optimización de la aplicación</string>
+    <string name="bg_dexopt_completed_notif_ch_title">La optimización de la aplicación se ha completado</string>
+    <string name="bg_dexopt_completed_notif_title">Es necesario reiniciar la aplicación</string>
+    <string name="bg_dexopt_completed_notif_text">La optimización de la aplicación se ha completado. Toque para reiniciar las aplicaciones que fueron optimizadas.</string>
 </resources>
