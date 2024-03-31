@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">حذف صبر ۳ ثانیه‌ای</string>
     <string name="screenrecord_hevc_switch_label">فعال سازی انکد سخت افزاری ویدیو</string>
     <string name="screenrecord_hevc_switch_summary">از کدگذاری ویدیویی HEVC کارآمدتر استفاده کنید</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">استفاده از بلوتوث</string>
-    <string name="bluetooth_is_off">بلوتوث خاموش است</string>
-    <string name="tap_a_device_to_connect">برای اتصال به شبکه روی آن ضربه بزنید</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d دستگاه وصل است</item>
@@ -158,9 +154,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">زبان</string>
     <string name="quick_settings_locale_more_locales_toast">ابتدا چندین زبان را پیکربندی کنید</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
     <!-- Island notification -->
     <string name="now_playing_on">در حال پخش در %1$s</string>
     <string name="by_artist">%1$s توسط %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
 </resources>
