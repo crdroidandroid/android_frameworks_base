@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">A 3mp-s késleltetés elhagyása</string>
     <string name="screenrecord_hevc_switch_label">HEVC-kodek be</string>
     <string name="screenrecord_hevc_switch_summary">Használjon hatékonyabb HEVC-videókódolást</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Bluetooth-használat</string>
-    <string name="bluetooth_is_off">A Bluetooth ki van kapcsolva</string>
-    <string name="tap_a_device_to_connect">Kapcsolódáshoz koppintson a kívánt készülékre</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d készülék csatlakoztatva</item>
@@ -158,9 +154,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Nyelv</string>
     <string name="quick_settings_locale_more_locales_toast">A kapcsolónak csak több nyelv esetén van értelme, állítson be többet</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">Arcfelismerés...</string>
     <!-- Island notification -->
     <string name="now_playing_on">Most %1$s hallható</string>
     <string name="by_artist">%1$s – %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Arcfelismerés...</string>
 </resources>
