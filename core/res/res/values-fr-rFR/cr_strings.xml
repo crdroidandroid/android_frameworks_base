@@ -27,14 +27,4 @@
     <string name="aerr_copy">Copier l\'URL du rapport d\'erreur</string>
     <string name="url_copy_success">URL copiée avec succès</string>
     <string name="url_copy_failed">Une erreur est survenue pendant l\'envoi du rapport</string>
-    <!-- App lock -->
-    <string name="unlock_application">Dévérouiller <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
-    <!-- Dexopt -->
-    <string name="dexopt_progress_msg">Optimisation des applications : %1$d%% (%2$d sur %3$d)</string>
-    <string name="bg_dexopt_notif_ch_title">Optimisation des applications</string>
-    <string name="bg_dexopt_notif_title">Optimisation des applications (%1$d sur %2$d)</string>
-    <string name="bg_dexopt_notif_text">L\'appareil peut devenir plus lent jusqu\'à ce que l\'optimisation des applications soit terminée</string>
-    <string name="bg_dexopt_completed_notif_ch_title">L\'optimisation des l\'applications est terminée</string>
-    <string name="bg_dexopt_completed_notif_title">Redémarrage de l\'application requis</string>
-    <string name="bg_dexopt_completed_notif_text">L\'optimisation des l\'applications est terminée. Appuyez pour redémarrer les applications qui ont été optimisées.</string>
 </resources>
