@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">Usuń 3-sekundowe oczekiwanie</string>
     <string name="screenrecord_hevc_switch_label">Włącz HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Użyj bardziej wydajnego kodowania wideo HEVC</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Użyj Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth jest wyłączony</string>
-    <string name="tap_a_device_to_connect">Dotknij urządzenia, aby się z nim połączyć</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d połączone urządzenie</item>
@@ -160,9 +156,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Język</string>
     <string name="quick_settings_locale_more_locales_toast">Najpierw skonfiguruj wiele języków</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">Rozpoznawanie twarzy...</string>
     <!-- Island notification -->
     <string name="now_playing_on">Teraz odtwarzane na %1$s</string>
     <string name="by_artist">%1$s przez %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Rozpoznawanie twarzy...</string>
 </resources>
