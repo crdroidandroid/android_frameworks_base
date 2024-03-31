@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">Eemalda 3 sekundi viide</string>
     <string name="screenrecord_hevc_switch_label">Luba HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Kasuta efektiivsemat HEVC videokodeerimist</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Kasuta Bluetoothi</string>
-    <string name="bluetooth_is_off">Bluetooth on väljas</string>
-    <string name="tap_a_device_to_connect">Ühendumiseks vajuta seadmele</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d seade ühendatud</item>
@@ -158,9 +154,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Keel</string>
     <string name="quick_settings_locale_more_locales_toast">Seadista kõigepealt mitu keelt</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">Näotuvastus...</string>
     <!-- Island notification -->
-    <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%1$s by %2$s</string>
+    <string name="now_playing_on">Hetkel mängib seadmes %1$s</string>
+    <string name="by_artist">%2$s – %1$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Näotuvastus...</string>
 </resources>
