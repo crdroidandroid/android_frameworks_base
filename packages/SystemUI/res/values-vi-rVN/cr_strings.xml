@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">Bỏ qua 3 giây đếm ngược</string>
     <string name="screenrecord_hevc_switch_label">Bật HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Sử dụng định dạng mã hoá video HEVC hiệu quả</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Sử dụng bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth đã tắt</string>
-    <string name="tap_a_device_to_connect">Chọn thiết bị để kết nối</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">%d thiết bị kết nối</item>
@@ -160,6 +156,6 @@
     <!-- Island notification -->
     <string name="now_playing_on">Đang phát trên %1$s</string>
     <string name="by_artist">%1$s bởi %2$s</string>
-    <!-- Face unlock -->
+    <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Đang nhận diện khuôn mặt...</string>
 </resources>
