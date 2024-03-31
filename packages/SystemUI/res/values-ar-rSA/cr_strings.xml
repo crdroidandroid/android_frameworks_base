@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">إزالة 3 ثانية انتظار</string>
     <string name="screenrecord_hevc_switch_label">تمكين ترميز HEVC</string>
     <string name="screenrecord_hevc_switch_summary">استخدام ترميز فيديو HEVC أكثر كفاءة</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">استخدام البلوتوث</string>
-    <string name="bluetooth_is_off">تم إيقاف البلوتوث</string>
-    <string name="tap_a_device_to_connect">انقر على جهاز للاتصال</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="zero">‏عدد الأجهزة المتصلة ‎%d</item>
@@ -162,9 +158,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">اللغة</string>
     <string name="quick_settings_locale_more_locales_toast">قم بتهيئة عدة لغات اولآ</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- Island notification -->
     <string name="now_playing_on">Now Playing on %1$s</string>
     <string name="by_artist">%1$s by %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
 </resources>
