@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">Odstranit 3\u00a0sekundy čekání</string>
     <string name="screenrecord_hevc_switch_label">Povolit HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Použít účinnější kódování videa typu HEVC</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Použít Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth je vypnutý</string>
-    <string name="tap_a_device_to_connect">Klepnutím na zařízení zahájíte připojení</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d zařízení připojeno</item>
@@ -160,9 +156,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Jazyk</string>
     <string name="quick_settings_locale_more_locales_toast">Nejdříve nakonfigurujte více jazyků</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">Rozpoznávání obličeje…</string>
     <!-- Island notification -->
     <string name="now_playing_on">Nyní hraje na %1$s</string>
     <string name="by_artist">%1$s od %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Rozpoznávání obličeje…</string>
 </resources>
