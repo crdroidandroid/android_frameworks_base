@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">הסרת המתנת 3 השניות</string>
     <string name="screenrecord_hevc_switch_label">תמיכה ב-HEVC</string>
     <string name="screenrecord_hevc_switch_summary">שימוש בקידוד וידאו HEVC היעיל יותר</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">‏שימוש ב-Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth מופסק</string>
-    <string name="tap_a_device_to_connect">נגיעה לבחירת ההתקן להתחברות</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">‏%d מכשירים מחוברים</item>
@@ -160,9 +156,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">שפה</string>
     <string name="quick_settings_locale_more_locales_toast">הגדרת שפות מרובות תחילה</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">מזהה הפנים...</string>
     <!-- Island notification -->
     <string name="now_playing_on">מתנגן כעת ב-%1$s</string>
     <string name="by_artist">%1$s מאת %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">מזהה הפנים...</string>
 </resources>
