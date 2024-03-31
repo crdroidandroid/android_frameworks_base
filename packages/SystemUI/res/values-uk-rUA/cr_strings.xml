@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">Видалити 3 секундне очікування</string>
     <string name="screenrecord_hevc_switch_label">Увімкнути HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Використовувати більш ефективне розширення відео кодування</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Використовувати Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth вимкнено</string>
-    <string name="tap_a_device_to_connect">Виберіть пристрій для підключення</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">Пристрій під\'єднано</item>
@@ -160,9 +156,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Мова</string>
     <string name="quick_settings_locale_more_locales_toast">Будь ласка, налаштуйте кілька мов, щоб увімкнути функцію перемикання</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">Розпізнавання обличчя...</string>
     <!-- Island notification -->
     <string name="now_playing_on">Зараз відтворюється на %1$s</string>
     <string name="by_artist">%1$s Від %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Розпізнавання обличчя...</string>
 </resources>
