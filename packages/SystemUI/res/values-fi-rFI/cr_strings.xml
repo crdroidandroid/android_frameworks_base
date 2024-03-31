@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">Remove 3 second wait</string>
     <string name="screenrecord_hevc_switch_label">Ota HEVC käyttöön</string>
     <string name="screenrecord_hevc_switch_summary">Käytä tehokkaampaa HEVC-videokoodausta</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Käytä Bluetoothia</string>
-    <string name="bluetooth_is_off">Bluetooth on pois käytöstä</string>
-    <string name="tap_a_device_to_connect">Muodosta yhteys napauttamalla laitetta</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d laite yhdistettynä</item>
@@ -158,9 +154,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Language</string>
     <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">Recognizing face...</string>
     <!-- Island notification -->
     <string name="now_playing_on">Now Playing on %1$s</string>
     <string name="by_artist">%1$s by %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Recognizing face...</string>
 </resources>
