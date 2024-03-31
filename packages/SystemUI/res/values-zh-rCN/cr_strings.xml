@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">移除 3 秒等待</string>
     <string name="screenrecord_hevc_switch_label">启用 HEVC</string>
     <string name="screenrecord_hevc_switch_summary">使用效率更高的 HEVC 视频编码</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">启用蓝牙</string>
-    <string name="bluetooth_is_off">蓝牙已关闭</string>
-    <string name="tap_a_device_to_connect">点击以连接设备</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">已连接 %d 台设备</item>
@@ -157,9 +153,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">语言</string>
     <string name="quick_settings_locale_more_locales_toast">请先配置多语言设置</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">正在识别面部...</string>
     <!-- Island notification -->
     <string name="now_playing_on">正在 %1$s 上播放</string>
-    <string name="by_artist">%1$s by %2$s</string>
+    <string name="by_artist">%2$s 的 %1$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">正在识别面部...</string>
 </resources>
