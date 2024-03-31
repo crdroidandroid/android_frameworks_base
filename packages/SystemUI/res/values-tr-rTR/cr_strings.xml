@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">3 saniye beklemeyi kaldır</string>
     <string name="screenrecord_hevc_switch_label">HEVC\'yi etkinleştir</string>
     <string name="screenrecord_hevc_switch_summary">Daha verimli HEVC video kodlaması kullanın</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Bluetooth\'u kullan</string>
-    <string name="bluetooth_is_off">Bluetooth kapalı</string>
-    <string name="tap_a_device_to_connect">Bağlanmak için bir cihaza dokunun</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d cihaz bağlandı</item>
@@ -158,9 +154,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Dil</string>
     <string name="quick_settings_locale_more_locales_toast">Öncelikle birden fazla dili yapılandırın</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">Yüz tanınıyor...</string>
     <!-- Island notification -->
     <string name="now_playing_on">Şu anda %1$s üzerinde oynatılıyor</string>
     <string name="by_artist">%2$s - %1$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Yüz tanınıyor...</string>
 </resources>
