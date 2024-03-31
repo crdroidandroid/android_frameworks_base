@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">3초타이머 제거</string>
     <string name="screenrecord_hevc_switch_label">H. 265 활성화</string>
     <string name="screenrecord_hevc_switch_summary">HEVC(h. 265) 더 효율적인 비디오 인코딩을 사용</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">블루투스 사용</string>
-    <string name="bluetooth_is_off">블루투스가 사용 중지됨</string>
-    <string name="tap_a_device_to_connect">기기를 탭하여 연결</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">%d개 장치 연결됨</item>
@@ -157,9 +153,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">언어</string>
     <string name="quick_settings_locale_more_locales_toast">다중랭기지설정먼저해</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">얼굴 인식 중...</string>
     <!-- Island notification -->
     <string name="now_playing_on">지금 %1$s에서 재생 중</string>
     <string name="by_artist">%2$s의 %1$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">얼굴 인식 중...</string>
 </resources>
