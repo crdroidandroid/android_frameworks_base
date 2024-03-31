@@ -25,4 +25,5 @@ java_library_static {
     static_libs: [
         "kotlinx_coroutines"
     ],
+    jarjar_rules: "jarjar-rules.txt",
 }
