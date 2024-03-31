@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">Hapus 3 detik menunggu</string>
     <string name="screenrecord_hevc_switch_label">Aktifkan HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Gunakan enkode video HEVC yang lebih efisien</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Gunakan Bluetooth</string>
-    <string name="bluetooth_is_off">Bluetooth nonaktif</string>
-    <string name="tap_a_device_to_connect">Ketuk perangkat untuk menghubungkan</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">%d perangkat terhubung</item>
@@ -157,9 +153,9 @@
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Bahasa</string>
     <string name="quick_settings_locale_more_locales_toast">Silakan konfigurasikan beberapa bahasa untuk mengaktifkan fungsi tombol</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">Mengenali wajah...</string>
     <!-- Island notification -->
     <string name="now_playing_on">Now Playing on %1$s</string>
     <string name="by_artist">%1$s by %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Mengenali wajah...</string>
 </resources>
