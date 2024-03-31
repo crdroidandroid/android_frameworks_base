@@ -37,10 +37,6 @@
     <string name="screenrecord_skip_time_summary">Remover espera de 3 segundos</string>
     <string name="screenrecord_hevc_switch_label">Ativar HEVC</string>
     <string name="screenrecord_hevc_switch_summary">Usar codificação de vídeo HEVC mais eficiente</string>
-    <!-- Bluetooth dialog -->
-    <string name="turn_on_bluetooth">Usar Bluetooth</string>
-    <string name="bluetooth_is_off">O Bluetooth está desligado</string>
-    <string name="tap_a_device_to_connect">Toque num dispositivo para conectar</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d dispositivo conectado</item>
@@ -50,7 +46,7 @@
     <string name="quick_settings_sound_label">Som</string>
     <string name="quick_settings_sound_ring">Toque</string>
     <string name="quick_settings_sound_vibrate">Vibrar</string>
-    <string name="quick_settings_sound_mute">Mute</string>
+    <string name="quick_settings_sound_mute">Mudo</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
@@ -64,13 +60,13 @@
     <string name="usage_data_default_suffix">Dados</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Weather -->
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">Com nuvens</string>
+    <string name="weather_condition_rain">Chuvoso</string>
+    <string name="weather_condition_clear">Ensolarado</string>
+    <string name="weather_condition_storm">Tempestuoso</string>
+    <string name="weather_condition_snow">Nevado</string>
+    <string name="weather_condition_wind">Ventoso</string>
+    <string name="weather_condition_mist">Enevoado</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentagem">%2$s</xliff:g> • Carregamento Rápido (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até estar completo)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> restante</string>
@@ -154,13 +150,13 @@
     <string name="screenshot_long_press">Toque longo - região selecionada</string>
     <!-- SoundSearch Tile -->
     <string name="quick_settings_sound_search">Pesquisa de som</string>
-    <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
+    <string name="quick_settings_sound_search_no_app">Instale uma aplicação de pesquisa de som primeiro</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">Idioma</string>
-    <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
-    <!-- Face unlock -->
-    <string name="face_unlock_recognizing">A reconhecer rosto...</string>
+    <string name="quick_settings_locale_more_locales_toast">Configure vários idiomas primeiro</string>
     <!-- Island notification -->
-    <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%1$s by %2$s</string>
+    <string name="now_playing_on">A reproduzir agora em %1$s</string>
+    <string name="by_artist">%1$s por %2$s</string>
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">A reconhecer rosto...</string>
 </resources>
