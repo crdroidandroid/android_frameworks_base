@@ -57,25 +57,12 @@ public class QuickQSPanel extends QSPanel implements TunerService.Tunable {
         mHorizontalContentContainer.setClipChildren(false);
     }
 
-
-    @Override
-    public void setBrightnessView(@NonNull View view) {
-        if (mBrightnessView != null) {
-            removeView(mBrightnessView);
-        }
-        mBrightnessView = view;
-        mAutoBrightnessView = view.findViewById(R.id.brightness_icon);
-        setBrightnessViewMargin(mTop);
-        if (mBrightnessView != null) {
-            addView(mBrightnessView);
-        }
-    }
-
     View getBrightnessView() {
         return mBrightnessView;
     }
 
-    private void setBrightnessViewMargin(boolean top) {
+    @Override
+    protected void setBrightnessViewMargin(boolean top) {
         if (mBrightnessView != null) {
             MarginLayoutParams lp = (MarginLayoutParams) mBrightnessView.getLayoutParams();
             if (top) {
