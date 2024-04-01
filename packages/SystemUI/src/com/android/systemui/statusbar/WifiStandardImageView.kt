@@ -16,6 +16,7 @@
 package com.android.systemui.statusbar
 
 import android.content.Context
+import android.content.res.Resources
 import android.provider.Settings
 import android.net.ConnectivityManager
 import android.net.Network
@@ -27,6 +28,8 @@ import android.widget.ImageView
 import com.android.systemui.Dependency
 import com.android.systemui.res.R
 import com.android.systemui.tuner.TunerService
+
+import android.view.ViewGroup.MarginLayoutParams
 
 class WifiStandardImageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -105,7 +108,12 @@ class WifiStandardImageView @JvmOverloads constructor(
 
     private fun updateIcon(wifiStandard: Int) {
         if (!wifiStandardEnabled || wifiStandard < 4) {
-            post { visibility = GONE }
+            post {
+                visibility = GONE
+                layoutParams = (layoutParams as MarginLayoutParams).apply {
+                    marginEnd = 0
+                }
+            }
             return
         }
         val drawableId = getDrawableForWifiStandard(wifiStandard)
@@ -113,6 +121,9 @@ class WifiStandardImageView @JvmOverloads constructor(
             post {
                 setImageResource(drawableId)
                 visibility = VISIBLE
+                layoutParams = (layoutParams as MarginLayoutParams).apply {
+                    marginEnd = resources.getDimensionPixelSize(R.dimen.status_bar_airplane_spacer_width)
+                }
             }
         }
     }
