@@ -481,7 +481,7 @@ systemui_optimized_java_defaults {
                 enabled: true,
                 optimize: true,
                 shrink: true,
-                shrink_resources: true,
+                shrink_resources: false,
                 ignore_warnings: false,
                 proguard_compatibility: false,
             },
