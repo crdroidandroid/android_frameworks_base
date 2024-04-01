@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:textAllCaps="false"
         android:elevation="100dp"
-        android:layout_marginTop="@dimen/status_bar_header_height_keyguard"
+        android:layout_marginTop="@dimen/status_bar_height"
         android:layout_gravity="top|center"
         android:theme="@style/Theme.Island.SystemUI"
         systemui:shapeAppearanceOverlay="@style/islandBackgroundOverlay"/>
