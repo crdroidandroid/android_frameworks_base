@@ -70,6 +70,8 @@ public class MusicFxHelper {
     // The binder token identifying the UidObserver registration.
     private IBinder mUidObserverToken = null;
 
+    private boolean mIsBinded;
+
     // Package name and list of open audio sessions for this package
     private static class PackageSessions {
         String mPackageName;
@@ -110,7 +112,7 @@ public class MusicFxHelper {
                 if (procState > ActivityManager.PROCESS_STATE_IMPORTANT_FOREGROUND) {
                     Intent bindIntent = new Intent().setClassName(mMusicFxPackageName,
                             "com.android.musicfx.KeepAliveService");
-                    mContext.bindServiceAsUser(
+                    mIsBinded = mContext.bindServiceAsUser(
                             bindIntent, mMusicFxBindConnection, Context.BIND_AUTO_CREATE,
                             UserHandle.of(getCurrentUserId()));
                     Log.i(TAG, "bindService to " + mMusicFxPackageName);
@@ -158,9 +160,12 @@ public class MusicFxHelper {
                     Log.e(TAG, "RemoteException with unregisterUidObserver: " + e);
                 }
                 mUidObserverToken = null;
-                mContext.unbindService(mMusicFxBindConnection);
-                Log.i(TAG, "last session closed, unregister UID observer, and unbind "
+                if (mIsBinded) {
+                    mContext.unbindService(mMusicFxBindConnection);
+                    mIsBinded = false;
+                    Log.i(TAG, "last session closed, unregister UID observer, and unbind "
                         + mMusicFxPackageName);
+                }
             }
         }
     }
