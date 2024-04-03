@@ -15,17 +15,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_fakePackageSignature">Falsifica la signatura del paquet</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_fakePackageSignature">Permet que l\'aplicació s\'executi com a una aplicació diferent. Les aplicacions malicioses ho poden utilitzar per accedir a dades personals. Hi ha usos legítims, com un emulador pretenent ser el que emula. Concediu aquest permís amb compte!</string>
-    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgrouplab_fake_package_signature">Falsifica la signatura del paquet</string>
-    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgroupdesc_fake_package_signature">permet la falsificació de la signatura del paquet</string>
-    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
-    <string name="permgrouprequest_fake_package_signature">Voleu permetre que
-        &lt;b&gt;<xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b&gt; falsifiqui la signatura del paquet?</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Prem i mantén el botó d’encesa per desbloquejar</string>
     <string name="pocket_view_title">El mode butxaca està activat</string>
