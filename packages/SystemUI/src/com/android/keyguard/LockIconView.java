@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -37,6 +38,8 @@ import androidx.annotation.NonNull;
 import com.android.internal.graphics.ColorUtils;
 import com.android.settingslib.Utils;
 import com.android.systemui.Dumpable;
+import com.android.systemui.biometrics.UdfpsDrawable;
+import com.android.systemui.biometrics.UdfpsFpDrawable;
 import com.android.systemui.res.R;
 
 import java.io.PrintWriter;
@@ -68,10 +71,14 @@ public class LockIconView extends FrameLayout implements Dumpable {
     private boolean mUseBackground = false;
     private float mDozeAmount = 0f;
 
+    private UdfpsDrawable mFingerprintDrawable; // placeholder
+
     @SuppressLint("ClickableViewAccessibility")
     public LockIconView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mSensorRect = new RectF();
+
+        mFingerprintDrawable = new UdfpsFpDrawable(context);
 
         addBgImageView(context, attrs);
         addLockIconImageView(context, attrs);
@@ -194,9 +201,13 @@ public class LockIconView extends FrameLayout implements Dumpable {
     }
 
     private void addBgImageView(Context context, AttributeSet attrs) {
+        boolean customUdfpsIcon = Settings.System.getInt(
+                context.getContentResolver(), Settings.System.UDFPS_ICON, 0) != 0;
         mBgView = new ImageView(context, attrs);
         mBgView.setId(R.id.lock_icon_bg);
-        mBgView.setImageDrawable(context.getDrawable(R.drawable.fingerprint_bg));
+        mBgView.setImageDrawable(customUdfpsIcon
+                ? mFingerprintDrawable :
+                context.getDrawable(R.drawable.fingerprint_bg));
         mBgView.setVisibility(View.INVISIBLE);
         addView(mBgView);
         LayoutParams lp = (LayoutParams) mBgView.getLayoutParams();
