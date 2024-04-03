@@ -331,13 +331,17 @@ public class UdfpsKeyguardViewLegacy extends UdfpsAnimationView {
                     updateAlpha();
                     updateIcon();
 
-                    final LayoutParams lp = (LayoutParams) view.getLayoutParams();
-                    lp.width = mSensorBounds.width();
-                    lp.height = mSensorBounds.height();
-                    RectF relativeToView = getBoundsRelativeToView(new RectF(mSensorBounds));
-                    lp.setMarginsRelative((int) relativeToView.left, (int) relativeToView.top,
-                            (int) relativeToView.right, (int) relativeToView.bottom);
-                    parent.addView(view, lp);
+                    if (mCustomUdfpsIcon) {
+                        parent.addView(view);
+                    } else {
+                        final LayoutParams lp = (LayoutParams) view.getLayoutParams();
+                        lp.width = mSensorBounds.width();
+                        lp.height = mSensorBounds.height();
+                        RectF relativeToView = getBoundsRelativeToView(new RectF(mSensorBounds));
+                        lp.setMarginsRelative((int) relativeToView.left, (int) relativeToView.top,
+                                (int) relativeToView.right, (int) relativeToView.bottom);
+                        parent.addView(view, lp);
+                    }
 
                     // requires call to invalidate to update the color
                     mLockScreenFp.addValueCallback(new KeyPath("**"), LottieProperty.COLOR_FILTER,
