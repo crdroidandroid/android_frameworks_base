@@ -18,6 +18,7 @@
 package com.android.systemui.keyguard.ui.binder
 
 import android.graphics.RectF
+import android.provider.Settings
 import android.view.View
 import android.widget.FrameLayout
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater
@@ -61,21 +62,27 @@ object UdfpsKeyguardViewBinder {
                     fingerprintViewModel,
                     backgroundViewModel,
                 )
-                val lp = inflatedInternalView.layoutParams as FrameLayout.LayoutParams
-                lp.width = viewModel.sensorBounds.width()
-                lp.height = viewModel.sensorBounds.height()
-                val relativeToView =
-                    getBoundsRelativeToView(
-                        inflatedInternalView,
-                        RectF(viewModel.sensorBounds),
+                val customUdfpsIcon = Settings.System.getInt(view.context.contentResolver,
+                    Settings.System.UDFPS_ICON, 0) != 0
+                if (customUdfpsIcon) {
+                    parent!!.addView(inflatedInternalView)
+                } else {
+                    val lp = inflatedInternalView.layoutParams as FrameLayout.LayoutParams
+                    lp.width = viewModel.sensorBounds.width()
+                    lp.height = viewModel.sensorBounds.height()
+                    val relativeToView =
+                        getBoundsRelativeToView(
+                            inflatedInternalView,
+                            RectF(viewModel.sensorBounds),
+                        )
+                    lp.setMarginsRelative(
+                        relativeToView.left.toInt(),
+                        relativeToView.top.toInt(),
+                        relativeToView.right.toInt(),
+                        relativeToView.bottom.toInt(),
                     )
-                lp.setMarginsRelative(
-                    relativeToView.left.toInt(),
-                    relativeToView.top.toInt(),
-                    relativeToView.right.toInt(),
-                    relativeToView.bottom.toInt(),
-                )
-                parent!!.addView(inflatedInternalView, lp)
+                    parent!!.addView(inflatedInternalView, lp)
+                }
             }
         val inflater = AsyncLayoutInflater(view.context)
         inflater.inflate(R.layout.udfps_keyguard_view_internal, view, layoutInflaterFinishListener)
