@@ -1780,7 +1780,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
 
     @ClockSize
     private int computeDesiredClockSizeForSingleShade() {
-        if (hasVisibleNotifications()) {
+        if (hasVisibleNotifications(true)) {
             return SMALL;
         }
         return LARGE;
@@ -1801,7 +1801,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         // With migrateClocksToBlueprint, weather clock will have behaviors similar to other clocks
         if (!migrateClocksToBlueprint()) {
             if (mKeyguardStatusViewController.isLargeClockBlockingNotificationShelf()
-                    && hasVisibleNotifications() && isOnAod()) {
+                    && hasVisibleNotifications(true) && isOnAod()) {
                 return SMALL;
             }
         }
@@ -1877,14 +1877,22 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
     }
 
     private boolean hasVisibleNotifications() {
-        final boolean mediaVisible = mMediaDataManager.hasActiveMediaOrRecommendation()
+        return hasVisibleNotifications(false);
+    }
+
+    private boolean hasVisibleNotifications(boolean onKeyguard) {
+        final boolean mediaOnKeyguard = !isOnAod()
                 && mMediaHierarchyManager.getShouldShowOnLockScreen();
+        final boolean isMediaVisibleToUser =
+                mMediaDataManager.hasActiveMediaOrRecommendation()
+                && (mediaOnKeyguard || !onKeyguard);
         if (FooterViewRefactor.isEnabled()) {
             return mActiveNotificationsInteractor.getAreAnyNotificationsPresentValue()
-                    || mediaVisible;
+                    || isMediaVisibleToUser;
         } else {
             return mNotificationStackScrollLayoutController
-                    .getVisibleNotificationCount() != 0 || mediaVisible;
+                    .getVisibleNotificationCount() != 0
+                    || isMediaVisibleToUser;
         }
     }
 
