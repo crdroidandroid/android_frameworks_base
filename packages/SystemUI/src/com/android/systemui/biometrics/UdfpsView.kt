@@ -21,6 +21,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
+import android.provider.Settings
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -88,8 +89,25 @@ class UdfpsView(
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
 
+        val customUdfpsIcon = Settings.System.getInt(context.contentResolver,
+            Settings.System.UDFPS_ICON, 0) != 0
+
         // Updates sensor rect in relation to the overlay view
-        animationViewController?.onSensorRectUpdated(RectF(sensorRect))
+        if (!customUdfpsIcon) {
+            animationViewController?.onSensorRectUpdated(RectF(sensorRect))
+        } else {
+            val paddingX = animationViewController?.paddingX ?: 0
+            val paddingY = animationViewController?.paddingY ?: 0
+
+            sensorRect.set(
+                    paddingX,
+                    paddingY,
+                    (overlayParams.sensorBounds.width() + paddingX),
+                    (overlayParams.sensorBounds.height() + paddingY)
+            )
+
+            animationViewController?.onSensorRectUpdated(RectF(sensorRect))
+        }
     }
 
     override fun onAttachedToWindow() {

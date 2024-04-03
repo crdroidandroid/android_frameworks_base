@@ -28,7 +28,7 @@ import androidx.annotation.NonNull;
  */
 public class UdfpsFpDrawable extends UdfpsDrawable {
 
-    UdfpsFpDrawable(@NonNull Context context) {
+    public UdfpsFpDrawable(@NonNull Context context) {
         super(context);
     }
 
