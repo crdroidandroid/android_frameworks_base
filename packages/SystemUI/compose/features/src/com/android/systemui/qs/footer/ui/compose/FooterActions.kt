@@ -171,7 +171,7 @@ fun FooterActions(
             Modifier.fadingBackground(
                 backgroundColor,
                 backgroundAlpha::value,
-                RoundedCornerShape(topStart = backgroundTopRadius, topEnd = backgroundTopRadius),
+                RoundedCornerShape(backgroundTopRadius),
             )
         }
 
