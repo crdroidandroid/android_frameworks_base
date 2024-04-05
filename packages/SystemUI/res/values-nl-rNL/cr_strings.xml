@@ -21,22 +21,6 @@
     <string name="status_bar_data_saver">Databesparing</string>
     <string name="status_bar_call_strength">Netwerk sterkte</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <!-- Screen record delete action -->
-    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Verwijderen</string>
-    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Schermopname verwijderd</string>
-    <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Toon stop stip</string>
-    <string name="screenrecord_stopdot_summary">Lang indrukken om het te verplaatsen</string>
-    <string name="screenrecord_lowquality_label">Lagere kwaliteit voor kleinere bestandsgrootte</string>
-    <string name="screenrecord_lowquality_summary">Voor kleinere bestandsgrootte</string>
-    <string name="screenrecord_longer_timeout_switch_label">Grotere bestandsgrootte limiet</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Beperk opnamegrootte tot 15 GB</string>
-    <string name="screenrecord_skip_time_label">Timer overslaan</string>
-    <string name="screenrecord_skip_time_summary">Verwijder 3 seconden wachten</string>
-    <string name="screenrecord_hevc_switch_label">HEVC inschakelen</string>
-    <string name="screenrecord_hevc_switch_summary">Gebruik efficiëntere HEVC video codering</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d apparaat verbonden</item>
