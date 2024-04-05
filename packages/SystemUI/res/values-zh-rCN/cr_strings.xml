@@ -21,22 +21,6 @@
     <string name="status_bar_data_saver">数据保存</string>
     <string name="status_bar_call_strength">通话强度</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <!-- Screen record delete action -->
-    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">删除</string>
-    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">屏幕录制已删除</string>
-    <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">显示停止按钮</string>
-    <string name="screenrecord_stopdot_summary">长按移除</string>
-    <string name="screenrecord_lowquality_label">低画质</string>
-    <string name="screenrecord_lowquality_summary">压缩录屏文件</string>
-    <string name="screenrecord_longer_timeout_switch_label">更大的文件大小限制</string>
-    <string name="screenrecord_longer_timeout_switch_summary">限制录屏文件大小为 15GB</string>
-    <string name="screenrecord_skip_time_label">跳过倒计时</string>
-    <string name="screenrecord_skip_time_summary">移除 3 秒等待</string>
-    <string name="screenrecord_hevc_switch_label">启用 HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">使用效率更高的 HEVC 视频编码</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">已连接 %d 台设备</item>

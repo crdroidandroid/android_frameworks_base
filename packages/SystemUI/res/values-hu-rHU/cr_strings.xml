@@ -21,22 +21,6 @@
     <string name="status_bar_data_saver">Adatforgalom-csökkentő</string>
     <string name="status_bar_call_strength">Híváserősség</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <!-- Screen record delete action -->
-    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Törlés</string>
-    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">A képernyővideó törölve</string>
-    <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Látható megállítógomb</string>
-    <string name="screenrecord_stopdot_summary">Eltávolítás hosszannyomással</string>
-    <string name="screenrecord_lowquality_label">Gyengébb minőség, hogy kisebbek legyenek a fájlok</string>
-    <string name="screenrecord_lowquality_summary">Kisebb fájlméretért</string>
-    <string name="screenrecord_longer_timeout_switch_label">A fájlméret felső határa</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Max.15GB felvételi fájlméret</string>
-    <string name="screenrecord_skip_time_label">Időzitő kihagyása</string>
-    <string name="screenrecord_skip_time_summary">A 3mp-s késleltetés elhagyása</string>
-    <string name="screenrecord_hevc_switch_label">HEVC-kodek be</string>
-    <string name="screenrecord_hevc_switch_summary">Használjon hatékonyabb HEVC-videókódolást</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d készülék csatlakoztatva</item>

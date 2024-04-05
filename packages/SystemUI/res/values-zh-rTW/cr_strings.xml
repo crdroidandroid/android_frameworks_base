@@ -21,22 +21,6 @@
     <string name="status_bar_data_saver">數據節省模式</string>
     <string name="status_bar_call_strength">訊號強度</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <!-- Screen record delete action -->
-    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">刪除</string>
-    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">螢幕錄影已刪除</string>
-    <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">顯示停止按鈕</string>
-    <string name="screenrecord_stopdot_summary">長按移動</string>
-    <string name="screenrecord_lowquality_label">降低畫質以減少檔案大小</string>
-    <string name="screenrecord_lowquality_summary">降低檔案大小</string>
-    <string name="screenrecord_longer_timeout_switch_label">增加檔案大小限制\n將錄製大小限制為在15 GB</string>
-    <string name="screenrecord_longer_timeout_switch_summary">提升檔案限制至 15 GB</string>
-    <string name="screenrecord_skip_time_label">跳過倒計時</string>
-    <string name="screenrecord_skip_time_summary">跳過三秒的倒數時間</string>
-    <string name="screenrecord_hevc_switch_label">使用 HEVC 編碼</string>
-    <string name="screenrecord_hevc_switch_summary">以更有效率的 HEVC 編碼格式來錄製螢幕錄影</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">%d 台裝置</item>
@@ -73,7 +57,7 @@
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Warp 快速充電中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Warp 快速充電中</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC快速充電中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC 快速充電中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC 快速充電中</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • Turbo 快速充電中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
@@ -90,7 +74,7 @@
     <string name="onthego_front_camera">使用前置鏡頭</string>
     <string name="onthego_service_toggle">自動重新啟動服務</string>
     <string name="onthego_channel_name">主要</string>
-    <string name="global_action_onthego">行走模式</string>
+    <string name="global_action_onthego">OTG 模式</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
     <string name="global_action_restart_systemui">系統使用者介面</string>
     <!-- Alert slide extras -->

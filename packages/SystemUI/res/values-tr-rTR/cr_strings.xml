@@ -21,22 +21,6 @@
     <string name="status_bar_data_saver">Veri tasarrufu</string>
     <string name="status_bar_call_strength">Arama gücü</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <!-- Screen record delete action -->
-    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Sil</string>
-    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Ekran kaydı silindi</string>
-    <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Durdurma noktasını göster</string>
-    <string name="screenrecord_stopdot_summary">Taşımak için uzun basın</string>
-    <string name="screenrecord_lowquality_label">Daha küçük kalite</string>
-    <string name="screenrecord_lowquality_summary">Daha küçük dosya boyutu için</string>
-    <string name="screenrecord_longer_timeout_switch_label">Daha büyük dosya boyutu sınırı</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Kayıt boyutunu 15 GB ile sınırlayın</string>
-    <string name="screenrecord_skip_time_label">Zamanlayıcıyı atla</string>
-    <string name="screenrecord_skip_time_summary">3 saniye beklemeyi kaldır</string>
-    <string name="screenrecord_hevc_switch_label">HEVC\'yi etkinleştir</string>
-    <string name="screenrecord_hevc_switch_summary">Daha verimli HEVC video kodlaması kullanın</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d cihaz bağlandı</item>

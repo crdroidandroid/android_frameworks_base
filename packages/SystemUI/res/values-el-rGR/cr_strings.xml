@@ -21,22 +21,6 @@
     <string name="status_bar_data_saver">Εξοικονόμηση δεδομένων</string>
     <string name="status_bar_call_strength">Ισχύς κλήσης</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <!-- Screen record delete action -->
-    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Διαγραφή</string>
-    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Η εγγραφή οθόνης διαγράφηκε</string>
-    <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Εμφάνιση κουκίδας παύσης</string>
-    <string name="screenrecord_stopdot_summary">Πατήστε παρατεταμένα για να το μετακινήσετε</string>
-    <string name="screenrecord_lowquality_label">Μείωση της ποιότητας για μικρότερο μέγεθος αρχείου</string>
-    <string name="screenrecord_lowquality_summary">Για μικρότερο μέγεθος αρχείου</string>
-    <string name="screenrecord_longer_timeout_switch_label">Μεγαλύτερο όριο μεγέθους αρχείου\nΠεριορίστε το μέγεθος εγγραφής στα 15GiB</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Περιορισμός μεγέθους εγγραφής στα 15 GB</string>
-    <string name="screenrecord_skip_time_label">Παράλειψη χρονομέτρου</string>
-    <string name="screenrecord_skip_time_summary">Αφαιρέστε την αναμονή 3 δευτερολέπτων</string>
-    <string name="screenrecord_hevc_switch_label">Ενεργοποίηση HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Χρησιμοποιήστε πιο αποτελεσματική κωδικοποίηση βίντεο HEVC</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d συσκευή συνδέθηκε</item>
