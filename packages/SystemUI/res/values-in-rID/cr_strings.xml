@@ -21,22 +21,6 @@
     <string name="status_bar_data_saver">Penghemat Data</string>
     <string name="status_bar_call_strength">Kekuatan panggilan</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <!-- Screen record delete action -->
-    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Hapus</string>
-    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Rekaman layar dihapus</string>
-    <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Tampilkan titik berhenti</string>
-    <string name="screenrecord_stopdot_summary">Tekan lama untuk memindahkannya</string>
-    <string name="screenrecord_lowquality_label">Kualitas rendah</string>
-    <string name="screenrecord_lowquality_summary">Untuk ukuran file yang lebih kecil</string>
-    <string name="screenrecord_longer_timeout_switch_label">Batas ukuran file lebih besar</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Batasi ukuran perekaman hingga 15 GB</string>
-    <string name="screenrecord_skip_time_label">Lewati penghitung waktu</string>
-    <string name="screenrecord_skip_time_summary">Hapus 3 detik menunggu</string>
-    <string name="screenrecord_hevc_switch_label">Aktifkan HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Gunakan enkode video HEVC yang lebih efisien</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">%d perangkat terhubung</item>
