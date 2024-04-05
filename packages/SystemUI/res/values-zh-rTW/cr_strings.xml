@@ -56,20 +56,20 @@
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • 渦輪閃充中 (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> 後充滿)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • 渦輪閃充中</string>
     <!-- On The Go -->
-    <string name="onthego_notif_ticker">行走模式已啟動</string>
-    <string name="onthego_notif_title">行走模式正處於啟用狀態</string>
-    <string name="onthego_notif_stop">結束</string>
+    <string name="onthego_notif_ticker">OTG 模式已啟動</string>
+    <string name="onthego_notif_title">OTG模式正處於啟用狀態</string>
+    <string name="onthego_notif_stop">停止</string>
     <string name="onthego_notif_options">選項</string>
-    <string name="onthego_notif_error">無法啟動行走模式</string>
-    <string name="onthego_notif_restart">重新啟動行走模式</string>
+    <string name="onthego_notif_error">無法啟動 OTG 模式</string>
+    <string name="onthego_notif_restart">重新啟動 OTG 模式</string>
     <string name="onthego_notif_camera_changed">相機模式已變更</string>
     <string name="onthego_transparency">透明度</string>
     <string name="onthego_front_camera">使用前置鏡頭</string>
     <string name="onthego_service_toggle">自動重新啟動服務</string>
     <string name="onthego_channel_name">主要</string>
-    <string name="global_action_onthego">行走模式</string>
+    <string name="global_action_onthego">OTG 模式</string>
     <!-- OnTheGo Tile -->
-    <string name="quick_settings_onthego_label">行走模式</string>
+    <string name="quick_settings_onthego_label">OTG 模式</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">處理器資訊</string>
     <!-- FPS Info tile -->
