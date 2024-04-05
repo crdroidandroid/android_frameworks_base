@@ -21,22 +21,6 @@
     <string name="status_bar_data_saver">Šetrič dát</string>
     <string name="status_bar_call_strength">Sila hovorov</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <!-- Screen record delete action -->
-    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Odstrániť</string>
-    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Záznam obrazovky bol odstránený</string>
-    <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Zobraziť bodku zastavenia</string>
-    <string name="screenrecord_stopdot_summary">Dlhým stlačením presunúť</string>
-    <string name="screenrecord_lowquality_label">Nižšia kvalita pre zabezpečenie menšej veľkosti súboru</string>
-    <string name="screenrecord_lowquality_summary">Pre menšiu veľkosť súboru</string>
-    <string name="screenrecord_longer_timeout_switch_label">Väčší limit veľkosti súboru\nObmedzte veľkosť záznamu na 15GiB</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Obmedziť veľkosť nahrávania na 15\u00a0GB</string>
-    <string name="screenrecord_skip_time_label">Preskočiť časovač</string>
-    <string name="screenrecord_skip_time_summary">Odstrániť 3\u00a0sekundy čakania</string>
-    <string name="screenrecord_hevc_switch_label">Povoliť HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Použite efektívnejšie kódovanie videa HEVC</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d pripojené zariadenie</item>
