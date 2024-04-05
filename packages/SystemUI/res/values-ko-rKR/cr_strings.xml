@@ -21,22 +21,6 @@
     <string name="status_bar_data_saver">데이터 절약 모드</string>
     <string name="status_bar_call_strength">통화 세기</string>
     <string name="status_bar_ims">VoLTE/voWiFI</string>
-    <!-- Screen record delete action -->
-    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">삭제</string>
-    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">화면 녹화 영상이 삭제되었습니다.</string>
-    <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">정지 버튼 표시\n길게 눌러서 이동하기</string>
-    <string name="screenrecord_stopdot_summary">길게 눌러서 이동</string>
-    <string name="screenrecord_lowquality_label">보다 작은 파일 크기를 위한 낮은 퀄리티</string>
-    <string name="screenrecord_lowquality_summary">저용량을 위해</string>
-    <string name="screenrecord_longer_timeout_switch_label">더 큰 파일 크기 제한\n녹화 최대 크기를 15GB로 제한합니다</string>
-    <string name="screenrecord_longer_timeout_switch_summary">15GB까지 용량제한</string>
-    <string name="screenrecord_skip_time_label">스킵 타이머</string>
-    <string name="screenrecord_skip_time_summary">3초타이머 제거</string>
-    <string name="screenrecord_hevc_switch_label">H. 265 활성화</string>
-    <string name="screenrecord_hevc_switch_summary">HEVC(h. 265) 더 효율적인 비디오 인코딩을 사용</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">%d개 장치 연결됨</item>
