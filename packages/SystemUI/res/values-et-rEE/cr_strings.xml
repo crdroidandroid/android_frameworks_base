@@ -21,22 +21,6 @@
     <string name="status_bar_data_saver">Andmesäästja</string>
     <string name="status_bar_call_strength">Kõne tugevus</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
-    <!-- Screen record delete action -->
-    <!-- Label for notification action to delete a screen recording file [CHAR LIMIT=35] -->
-    <string name="screenrecord_delete_label">Kustuta</string>
-    <!-- A toast message shown after successfully deleting a screen recording [CHAR LIMIT=NONE] -->
-    <string name="screenrecord_delete_description">Ekraanisalvestus kustutatud</string>
-    <!-- Screen record -->
-    <string name="screenrecord_stopdot_label">Kuva peatamispunkti</string>
-    <string name="screenrecord_stopdot_summary">Liigutamiseks hoia all</string>
-    <string name="screenrecord_lowquality_label">Madalam kvaliteet</string>
-    <string name="screenrecord_lowquality_summary">Väiksema failisuuruse jaoks</string>
-    <string name="screenrecord_longer_timeout_switch_label">Suurema failisuuruse piirang</string>
-    <string name="screenrecord_longer_timeout_switch_summary">Piira salvestuse suurus 15GBle</string>
-    <string name="screenrecord_skip_time_label">Jäta taimer vahele</string>
-    <string name="screenrecord_skip_time_summary">Eemalda 3 sekundi viide</string>
-    <string name="screenrecord_hevc_switch_label">Luba HEVC</string>
-    <string name="screenrecord_hevc_switch_summary">Kasuta efektiivsemat HEVC videokodeerimist</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d seade ühendatud</item>
