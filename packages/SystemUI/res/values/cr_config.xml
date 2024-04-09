@@ -39,7 +39,7 @@
     <string name="config_displayCpus" translatable="false"></string>
 
     <!-- FPSInfoService FPS node file path -->
-    <string name="config_fpsInfoSysNode" translatable="false"></string>
+    <string name="config_fpsInfoSysNode" translatable="false">/sys/class/drm/sde-crtc-0/measured_fps</string>
 
     <!-- FPS measure interval in milliseconds, default 1000 -->
     <integer name="config_fpsReadInterval">1000</integer>
