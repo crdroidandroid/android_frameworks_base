@@ -42,7 +42,7 @@ public class TileUtils {
         return getQSColumnsCount(context, columns);
     }
 
-    public static int getQSColumnsCount(Context context, int resourceCount) {
+    private static int getQSColumnsCount(Context context, int resourceCount) {
         final int QS_COLUMNS_MIN = 2;
         final Resources res = context.getResources();
         int value = QS_COLUMNS_MIN;
