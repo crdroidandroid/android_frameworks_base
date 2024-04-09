@@ -31,5 +31,5 @@ data class FooterActionsButtonViewModel(
     @ColorInt val iconTint: Int?,
     @AttrRes val backgroundColor: Int,
     val onClick: (Expandable) -> Unit,
-    val onLongClick: (Expandable) -> Boolean,
+    val onLongClick: ((Expandable) -> Unit)? = null,
 )
