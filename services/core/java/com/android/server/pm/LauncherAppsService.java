@@ -83,6 +83,7 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IInterface;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
@@ -230,6 +231,7 @@ public class LauncherAppsService extends SystemService {
         private final ExecutorService mOnDumpExecutor = Executors.newSingleThreadExecutor();
 
         private PackageInstallerService mPackageInstallerService;
+        private HandlerThread mHandlerThread;
 
         final LauncherAppsServiceInternal mInternal;
 
@@ -258,7 +260,10 @@ public class LauncherAppsService extends SystemService {
             mShortcutServiceInternal.addListener(mPackageMonitor);
             mShortcutChangeHandler = new ShortcutChangeHandler(mUserManagerInternal);
             mShortcutServiceInternal.addShortcutChangeCallback(mShortcutChangeHandler);
-            mCallbackHandler = BackgroundThread.getHandler();
+            mHandlerThread =
+                    new HandlerThread("LauncherAppsService", Process.THREAD_PRIORITY_BACKGROUND);
+            mHandlerThread.start();
+            mCallbackHandler = new Handler(mHandlerThread.getLooper());
             mDpm = (DevicePolicyManager) mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
             mAppLockManagerInternal = LocalServices.getService(AppLockManagerServiceInternal.class);
             mInternal = new LocalService();
