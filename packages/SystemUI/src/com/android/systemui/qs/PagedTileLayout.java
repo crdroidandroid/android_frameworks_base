@@ -489,7 +489,7 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
 
     @Override
     public boolean setMaxColumns(int maxColumns) {
-        mMaxColumns = TileUtils.getQSColumnsCount(getContext(), maxColumns);
+        mMaxColumns = Math.max(maxColumns, TileUtils.getQSColumnsCount(getContext()));
         boolean changed = false;
         for (int i = 0; i < mPages.size(); i++) {
             if (mPages.get(i).setMaxColumns(mMaxColumns)) {
@@ -601,14 +601,16 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
 
     @Override
     public int getResourceColumns() {
-        if (mPages.size() == 0) return TileLayout.NO_MAX_COLUMNS;
+        if (mPages.size() == 0)
+            return TileUtils.getQSColumnsCount(getContext());
         TileLayout currentPage = mPages.get(getCurrentPageNumber());
         return currentPage.getResourceColumns();
     }
 
     @Override
     public int getResourceRows() {
-        if (mPages.size() == 0) return 1;
+        if (mPages.size() == 0)
+            return TileUtils.getQSRowsCount(getContext());
         TileLayout currentPage = mPages.get(getCurrentPageNumber());
         return currentPage.getResourceRows();
     }
