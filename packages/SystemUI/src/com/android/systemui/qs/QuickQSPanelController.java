@@ -28,7 +28,6 @@ import com.android.systemui.dump.DumpManager;
 import com.android.systemui.media.controls.ui.controller.MediaHierarchyManager;
 import com.android.systemui.media.controls.ui.view.MediaHost;
 import com.android.systemui.plugins.qs.QSTile;
-import com.android.systemui.qs.TileUtils;
 import com.android.systemui.qs.customize.QSCustomizerController;
 import com.android.systemui.qs.dagger.QSScope;
 import com.android.systemui.qs.logging.QSLogger;
@@ -94,7 +93,7 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel>
     @Override
     protected void onInit() {
         super.onInit();
-        updateConfig();
+        setTiles();
         updateMediaExpansion();
         mMediaHost.setShowsOnlyActiveMedia(true);
         mMediaHost.init(MediaHierarchyManager.LOCATION_QQS);
@@ -184,25 +183,21 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel>
 
     @Override
     protected void onConfigurationChanged() {
-        updateConfig();
+        setTiles();
         updateMediaExpansion();
     }
 
     @Override
     public void setTiles() {
+        int numQuickTiles = mView.getNumQuickTiles();
         List<QSTile> tiles = new ArrayList<>();
         for (QSTile tile : mHost.getTiles()) {
             tiles.add(tile);
-            if (tiles.size() == mView.getNumQuickTiles()) {
+            if (tiles.size() == numQuickTiles) {
                 break;
             }
         }
         super.setTiles(tiles, /* collapsedView */ true);
-    }
-
-    private void updateConfig() {
-        mView.setMaxTiles(TileUtils.getQSColumnsCount(getContext()));
-        setTiles();
     }
 
     public void setContentMargins(int marginStart, int marginEnd) {
