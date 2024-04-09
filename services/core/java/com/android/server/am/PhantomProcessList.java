@@ -435,23 +435,19 @@ public final class PhantomProcessList {
                     synchronized (mService.mPidsSelfLocked) {
                         Collections.sort(mTempPhantomProcesses, (a, b) -> {
                             final ProcessRecord ra = mService.mPidsSelfLocked.get(a.mPpid);
-                            if (ra == null) {
-                                // parent is gone, this process should have been killed too
+                            final ProcessRecord rb = mService.mPidsSelfLocked.get(b.mPpid);
+                            if (ra == null && rb == null) {
+                                return 0;
+                            } else if (ra == null) {
+                                return -1;
+                            } else if (rb == null) {
                                 return 1;
                             }
-                            final ProcessRecord rb = mService.mPidsSelfLocked.get(b.mPpid);
-                            if (rb == null) {
-                                // parent is gone, this process should have been killed too
-                                return -1;
+                            int adjComparison = Integer.compare(ra.mState.getCurAdj(), rb.mState.getCurAdj());
+                            if (adjComparison != 0) {
+                                return adjComparison;
                             }
-                            if (ra.mState.getCurAdj() != rb.mState.getCurAdj()) {
-                                return ra.mState.getCurAdj() - rb.mState.getCurAdj();
-                            }
-                            if (a.mKnownSince != b.mKnownSince) {
-                                // In case of identical oom adj, younger one first
-                                return a.mKnownSince < b.mKnownSince ? 1 : -1;
-                            }
-                            return 0;
+                            return Long.compare(b.mKnownSince, a.mKnownSince);
                         });
                     }
                     for (int i = mTempPhantomProcesses.size() - 1;
