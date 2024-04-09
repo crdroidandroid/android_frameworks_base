@@ -237,6 +237,7 @@ private fun IconButton(
         color = colorAttr(model.backgroundColor),
         shape = CircleShape,
         onClick = model.onClick,
+        onLongClick = model.onLongClick,
         modifier = modifier,
     ) {
         val tint = model.iconTint?.let { Color(it) } ?: Color.Unspecified

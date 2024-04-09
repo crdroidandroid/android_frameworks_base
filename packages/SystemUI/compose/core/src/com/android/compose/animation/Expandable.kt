@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.android.compose.animation
 
 import android.content.Context
@@ -21,9 +23,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroupOverlay
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -120,6 +124,7 @@ fun Expandable(
     contentColor: Color = contentColorFor(color),
     borderStroke: BorderStroke? = null,
     onClick: ((Expandable) -> Unit)? = null,
+    onLongClick: ((Expandable) -> Unit)? = null,
     interactionSource: MutableInteractionSource? = null,
     content: @Composable (Expandable) -> Unit,
 ) {
@@ -127,6 +132,7 @@ fun Expandable(
         rememberExpandableController(color, shape, contentColor, borderStroke),
         modifier,
         onClick,
+        onLongClick,
         interactionSource,
         content,
     )
@@ -162,6 +168,7 @@ fun Expandable(
     controller: ExpandableController,
     modifier: Modifier = Modifier,
     onClick: ((Expandable) -> Unit)? = null,
+    onLongClick: ((Expandable) -> Unit)? = null,
     interactionSource: MutableInteractionSource? = null,
     content: @Composable (Expandable) -> Unit,
 ) {
@@ -218,7 +225,7 @@ fun Expandable(
     // If this expandable is expanded when it's being directly clicked on, let's ensure that it has
     // the minimum interactive size followed by all M3 components (48.dp).
     val minInteractiveSizeModifier =
-        if (onClick != null) {
+        if (onClick != null || onLongClick != null) {
             Modifier.minimumInteractiveComponentSize()
         } else {
             Modifier
@@ -263,7 +270,7 @@ fun Expandable(
         }
         else -> {
             val clickModifier =
-                if (onClick != null) {
+                if (onClick != null && onLongClick == null) {
                     if (interactionSource != null) {
                         // If the caller provided an interaction source, then that means that they
                         // will draw the click indication themselves.
@@ -274,6 +281,23 @@ fun Expandable(
                         // If no interaction source is provided, we draw the default indication (a
                         // ripple) and make sure it's clipped by the expandable shape.
                         Modifier.clip(shape).clickable { onClick(controller.expandable) }
+                    }
+                } else if (onLongClick != null) {
+                    if (interactionSource != null) {
+                        // If the caller provided an interaction source, then that means that they
+                        // will draw the click indication themselves.
+                        Modifier.combinedClickable(
+                            interactionSource, indication = null,
+                            onLongClick = { onLongClick(controller.expandable) },
+                            onClick = { onClick?.invoke(controller.expandable) }
+                        )
+                    } else {
+                        // If no interaction source is provided, we draw the default indication (a
+                        // ripple) and make sure it's clipped by the expandable shape.
+                        Modifier.clip(shape).combinedClickable(
+                            onLongClick = { onLongClick(controller.expandable) },
+                            onClick = { onClick?.invoke(controller.expandable) }
+                        )
                     }
                 } else {
                     Modifier
