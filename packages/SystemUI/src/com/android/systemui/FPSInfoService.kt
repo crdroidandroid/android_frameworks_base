@@ -35,7 +35,7 @@ import com.android.systemui.res.R
 import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.keyguard.WakefulnessLifecycle
 
-import java.io.FileNotFoundException
+import java.io.File
 import java.io.IOException
 import java.io.RandomAccessFile
 
@@ -107,10 +107,16 @@ class FPSInfoService @Inject constructor(
         }
 
         val nodePath = getString(R.string.config_fpsInfoSysNode)
-        try {
-            fpsInfoNode = RandomAccessFile(nodePath, "r")
-        } catch (e: FileNotFoundException) {
-            Log.e(TAG, "Sysfs node $nodePath does not exist, stopping service")
+        val file = File(nodePath)
+        if (file.exists() && file.canRead()) {
+            try {
+                fpsInfoNode = RandomAccessFile(nodePath, "r")
+            } catch (e: IOException) {
+                Log.e(TAG, "Sysfs node $nodePath does not exist, stopping service")
+                stopSelf()
+            }
+        } else {
+            Log.e(TAG, "Sysfs node $nodePath does not exist or is not readable")
             stopSelf()
         }
     }
