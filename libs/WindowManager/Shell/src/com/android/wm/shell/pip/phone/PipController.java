@@ -46,6 +46,7 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.os.SystemProperties;
 import android.util.Pair;
 import android.util.Size;
@@ -556,6 +557,8 @@ public class PipController implements PipTransitionController.PipTransitionCallb
                     @Override
                     public void onActivityPinned(String packageName, int userId, int taskId,
                             int stackId) {
+                        if (userId != UserHandle.myUserId()) return;
+
                         ProtoLog.d(ShellProtoLogGroup.WM_SHELL_PICTURE_IN_PICTURE,
                                 "onActivityPinned: %s", packageName);
                         mTouchHandler.onActivityPinned();
