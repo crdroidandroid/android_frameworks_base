@@ -160,7 +160,7 @@ public class RecordingController
                                            DialogLaunchAnimator dialogLaunchAnimator,
                                            ActivityStarter activityStarter,
                                            @Nullable Runnable onStartRecordingClicked) {
-        if (mFlags.isEnabled(Flags.WM_ENABLE_PARTIAL_SCREEN_SHARING_ENTERPRISE_POLICIES)
+        if (mFlags != null && mFlags.isEnabled(Flags.WM_ENABLE_PARTIAL_SCREEN_SHARING_ENTERPRISE_POLICIES)
                 && mDevicePolicyResolver.get()
                         .isScreenCaptureCompletelyDisabled(getHostUserHandle())) {
             return new ScreenCaptureDisabledDialog(mContext);
@@ -169,7 +169,7 @@ public class RecordingController
         mMediaProjectionMetricsLogger.notifyProjectionInitiated(
                 getHostUid(), SessionCreationSource.SYSTEM_UI_SCREEN_RECORDER);
 
-        return flags.isEnabled(Flags.WM_ENABLE_PARTIAL_SCREEN_SHARING)
+        return flags != null && flags.isEnabled(Flags.WM_ENABLE_PARTIAL_SCREEN_SHARING)
                 ? mDialogFactory.create(new ScreenRecordPermissionDialogDelegate(
                 getHostUserHandle(),
                 getHostUid(),
