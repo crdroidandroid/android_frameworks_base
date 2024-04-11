@@ -27,6 +27,7 @@ import com.android.systemui.qs.tiles.AirplaneModeTile
 import com.android.systemui.qs.tiles.BluetoothTile
 import com.android.systemui.qs.tiles.CastTile
 import com.android.systemui.qs.tiles.DataSaverTile
+import com.android.systemui.qs.tiles.DnsTile
 import com.android.systemui.qs.tiles.HotspotTile
 import com.android.systemui.qs.tiles.InternetTile
 import com.android.systemui.qs.tiles.InternetTileNewImpl
@@ -112,6 +113,12 @@ interface ConnectivityModule {
     fun provideInternetAvailabilityInteractor(
         impl: InternetTileDataInteractor
     ): QSTileAvailabilityInteractor
+
+    /** Inject DnsTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(DnsTile.TILE_SPEC)
+    fun bindDnsTile(dnsTile: DnsTile): QSTileImpl<*>
 
     companion object {
 
