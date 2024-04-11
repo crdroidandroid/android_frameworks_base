@@ -3166,6 +3166,21 @@ public final class Settings {
     public static final String ACTION_SHOW_RESTRICTED_CONTENT =
             "android.settings.SHOW_RESTRICTED_CONTENT";
 
+    /**
+     * Activity Action: Show screen that lets user configure private DNS
+     * <p>
+     * In some cases, a matching Activity may not exist, so ensure you safeguard against this.
+     * <p>
+     * Input: Nothing
+     * <p>
+     * Output: Nothing
+     *
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_PRIVATE_DNS_SETTING =
+            "com.android.settings.PRIVATE_DNS_SETTINGS";
+
     // End of Intent actions for Settings
 
     /**
