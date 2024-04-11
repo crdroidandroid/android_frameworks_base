@@ -2623,7 +2623,8 @@ public class KeyguardViewMediator implements CoreStartable,
         Trace.beginSection("KeyguardViewMediator#showKeyguard acquiring mShowKeyguardWakeLock");
         if (DEBUG) Log.d(TAG, "showKeyguard");
         // ensure we stay awake until we are finished displaying the keyguard
-        mShowKeyguardWakeLock.acquire();
+        if (mShowKeyguardWakeLock != null)
+            mShowKeyguardWakeLock.acquire();
         Message msg = mHandler.obtainMessage(SHOW, options);
         // Treat these messages with priority - This call can originate from #doKeyguardTimeout,
         // meaning the device may lock, so it shouldn't wait for other messages on the thread to
@@ -3077,7 +3078,8 @@ public class KeyguardViewMediator implements CoreStartable,
             userActivity();
             mUpdateMonitor.setKeyguardGoingAway(false);
             mKeyguardViewControllerLazy.get().setKeyguardGoingAwayState(false);
-            mShowKeyguardWakeLock.release();
+            if (mShowKeyguardWakeLock != null)
+                mShowKeyguardWakeLock.release();
         }
         mKeyguardDisplayManager.show();
 
