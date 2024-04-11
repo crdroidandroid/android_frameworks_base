@@ -162,7 +162,7 @@ public class RecordingController
                                            DialogTransitionAnimator dialogTransitionAnimator,
                                            ActivityStarter activityStarter,
                                            @Nullable Runnable onStartRecordingClicked) {
-        if (mFlags.isEnabled(Flags.WM_ENABLE_PARTIAL_SCREEN_SHARING_ENTERPRISE_POLICIES)
+        if (mFlags != null && mFlags.isEnabled(Flags.WM_ENABLE_PARTIAL_SCREEN_SHARING_ENTERPRISE_POLICIES)
                 && mDevicePolicyResolver.get()
                         .isScreenCaptureCompletelyDisabled(getHostUserHandle())) {
             return mScreenCaptureDisabledDialogDelegate.createSysUIDialog();
