@@ -193,6 +193,9 @@ public class AppStandbyControllerTests {
                 boolean idle, int bucket, int reason) {
             // Ignore events not related to mLatchPkgName, if set.
             if (mLatchPkgName != null && !mLatchPkgName.equals(packageName)) return;
+            // Ignore events not related to mLatchUserId, if set.
+            if (mLatchUserId != -1 && mLatchUserId != userId) return;
+
             mStateChangedLatch.countDown();
         }
 
@@ -2120,6 +2123,24 @@ public class AppStandbyControllerTests {
         assertEquals(BatteryStats.HistoryItem.EVENT_PACKAGE_ACTIVE, mInjector.mLastNoteEvent);
     }
 
+    /*
+     * Test that listeners are informed of bucket changes when system apps are initialized
+     * for a user ID.
+     */
+    @Test
+    public void testListenerOnInitializeSystemApps() throws Exception {
+        mController.addListener(mListener);
+
+        rearmLatch(PACKAGE_SYSTEM_HEADFULL, USER_ID2);
+
+        // A broadcast is send out to the listeners only if BUCKET change
+        // So this assumes it's the first time we call the method on USER_ID2
+        mController.initializeDefaultsForSystemApps(USER_ID2);
+
+        assertTrue(mStateChangedLatch.await(1000, TimeUnit.MILLISECONDS));
+        assertBucket(STANDBY_BUCKET_ACTIVE, PACKAGE_SYSTEM_HEADFULL);
+    }
+
     private String getAdminAppsStr(int userId) {
         return getAdminAppsStr(userId, mController.getActiveAdminAppsForTest(userId));
     }
@@ -2192,9 +2213,17 @@ public class AppStandbyControllerTests {
     }
 
     private void rearmLatch(String pkgName) {
+        rearmLatch(pkgName, -1);
         mLatchPkgName = pkgName;
         mStateChangedLatch = new CountDownLatch(1);
     }
+
+    private void rearmLatch(String pkgName, int userId) {
+        mLatchPkgName = pkgName;
+        mLatchUserId = userId;
+        mStateChangedLatch = new CountDownLatch(1);
+    }
+
 
     private void rearmLatch() {
         rearmLatch(null);

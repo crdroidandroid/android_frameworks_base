@@ -2332,9 +2332,16 @@ public class AppStandbyController
                 if (pi.applicationInfo != null && pi.applicationInfo.isSystemApp()) {
                     // Mark app as used for 2 hours. After that it can timeout to whatever the
                     // past usage pattern was.
-                    mAppIdleHistory.reportUsage(packageName, userId, STANDBY_BUCKET_ACTIVE,
+                    final AppUsageHistory appUsage = mAppIdleHistory.reportUsage(
+                            packageName, userId, STANDBY_BUCKET_ACTIVE,
                             REASON_SUB_USAGE_SYSTEM_UPDATE, 0,
                             elapsedRealtime + mSystemUpdateUsageTimeoutMillis);
+                    mHandler.sendMessageDelayed(
+                            mHandler.obtainMessage(MSG_CHECK_PACKAGE_IDLE_STATE,
+                                                   userId, -1, packageName),
+                            mSystemUpdateUsageTimeoutMillis);
+                    maybeInformListeners(packageName, userId, elapsedRealtime,
+                            appUsage.currentBucket, REASON_SUB_USAGE_SYSTEM_UPDATE, false);
                 }
             }
             // Immediately persist defaults to disk
