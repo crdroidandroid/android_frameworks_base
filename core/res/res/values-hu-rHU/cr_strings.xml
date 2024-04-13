@@ -28,5 +28,5 @@
     <string name="url_copy_success">Az URL sikeresen másolva</string>
     <string name="url_copy_failed">Hiba történt a napló feltöltése során</string>
     <!-- App lock -->
-    <string name="unlock_application">Feloldja a következőt: <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
+    <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> feloldása</string>
 </resources>
