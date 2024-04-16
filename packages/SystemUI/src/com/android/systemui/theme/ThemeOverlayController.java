@@ -763,44 +763,6 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
         });
     }
 
-    /**
-     * Checks if the color scheme in mColorScheme matches the current system palettes.
-     * @param managedProfiles List of managed profiles for this user.
-     */
-    private boolean colorSchemeIsApplied(Set<UserHandle> managedProfiles) {
-        final ArraySet<UserHandle> allProfiles = new ArraySet<>(managedProfiles);
-        allProfiles.add(UserHandle.SYSTEM);
-        for (UserHandle userHandle : allProfiles) {
-            Resources res = userHandle.isSystem()
-                    ? mResources : mContext.createContextAsUser(userHandle, 0).getResources();
-            Resources.Theme theme = mContext.getTheme();
-            MaterialDynamicColors dynamicColors = new MaterialDynamicColors(mIsFidelityEnabled);
-            if (!(res.getColor(android.R.color.system_accent1_500, theme)
-                    == mColorScheme.getAccent1().getS500()
-                    && res.getColor(android.R.color.system_accent2_500, theme)
-                    == mColorScheme.getAccent2().getS500()
-                    && res.getColor(android.R.color.system_accent3_500, theme)
-                    == mColorScheme.getAccent3().getS500()
-                    && res.getColor(android.R.color.system_neutral1_500, theme)
-                    == mColorScheme.getNeutral1().getS500()
-                    && res.getColor(android.R.color.system_neutral2_500, theme)
-                    == mColorScheme.getNeutral2().getS500()
-                    && res.getColor(android.R.color.system_outline_variant_dark, theme)
-                    == dynamicColors.outlineVariant().getArgb(mDynamicSchemeDark)
-                    && res.getColor(android.R.color.system_outline_variant_light, theme)
-                    == dynamicColors.outlineVariant().getArgb(mDynamicSchemeLight)
-                    && res.getColor(android.R.color.system_primary_container_dark, theme)
-                    == dynamicColors.primaryContainer().getArgb(mDynamicSchemeDark)
-                    && res.getColor(android.R.color.system_primary_container_light, theme)
-                    == dynamicColors.primaryContainer().getArgb(mDynamicSchemeLight)
-                    && res.getColor(android.R.color.system_primary_fixed, theme)
-                    == dynamicColors.primaryFixed().getArgb(mDynamicSchemeLight))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     private void updateThemeOverlays() {
         final int currentUser = mUserTracker.getUserId();
         final String overlayPackageJson = mSecureSettings.getStringForUser(
