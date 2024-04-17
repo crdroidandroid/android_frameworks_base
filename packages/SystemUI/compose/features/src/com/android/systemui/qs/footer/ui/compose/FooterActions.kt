@@ -162,7 +162,7 @@ fun FooterActions(
         }
     }
 
-    val backgroundColor = colorAttr(R.attr.underSurface)
+    val backgroundColor = Color.Transparent
     val contentColor = LocalAndroidColorScheme.current.onSurface
     val backgroundTopRadius = dimensionResource(R.dimen.qs_corner_radius)
     val backgroundModifier =
@@ -362,7 +362,7 @@ private fun TextButton(
 ) {
     Expandable(
         shape = CircleShape,
-        color = colorAttr(R.attr.underSurface),
+        color = Color.Transparent,
         contentColor = LocalAndroidColorScheme.current.onSurfaceVariant,
         borderStroke = BorderStroke(1.dp, colorAttr(R.attr.shadeInactive)),
         modifier = modifier.padding(horizontal = 4.dp),
