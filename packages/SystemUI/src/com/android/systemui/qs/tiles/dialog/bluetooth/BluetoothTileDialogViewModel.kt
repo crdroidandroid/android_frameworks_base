@@ -82,14 +82,14 @@ constructor(
      * @param view The view from which the dialog is shown.
      */
     @kotlinx.coroutines.ExperimentalCoroutinesApi
-    fun showDialog(context: Context, view: View?) {
+    fun showDialog(context: Context, view: View?, isAutoOn: Boolean = false) {
         cancelJob()
 
         job =
             coroutineScope.launch(mainDispatcher) {
                 var updateDeviceItemJob: Job?
                 var updateDialogUiJob: Job? = null
-                val dialogDelegate = createBluetoothTileDialog(context)
+                val dialogDelegate = createBluetoothTileDialog(context, isAutoOn)
                 val dialog = dialogDelegate.createDialog()
 
                 view?.let {
@@ -206,7 +206,8 @@ constructor(
             }
     }
 
-    private suspend fun createBluetoothTileDialog(context: Context): BluetoothTileDialogDelegate {
+    private suspend fun createBluetoothTileDialog(context: Context,
+            isAutoOn: Boolean = false): BluetoothTileDialogDelegate {
         val cachedContentHeight =
             withContext(backgroundDispatcher) {
                 sharedPreferences.getInt(
@@ -224,7 +225,8 @@ constructor(
             cachedContentHeight,
             bluetoothStateInteractor.isBluetoothEnabled,
             this@BluetoothTileDialogViewModel,
-            { cancelJob() }
+            { cancelJob() },
+            isAutoOn
         )
     }
 
