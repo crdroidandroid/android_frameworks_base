@@ -1111,8 +1111,7 @@
         <provider android:name=".keyguard.KeyguardSliceProvider"
                   android:authorities="com.android.systemui.keyguard"
                   android:grantUriPermissions="true"
-                  android:exported="true"
-                  android:enabled="false">
+                  android:exported="true">
         </provider>
 
         <receiver android:name=".media.dialog.MediaOutputDialogReceiver"
