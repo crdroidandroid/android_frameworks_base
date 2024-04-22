@@ -16,8 +16,6 @@
 
 package com.android.systemui.statusbar.notification.row;
 
-import static com.android.systemui.Flags.notificationBackgroundTintOptimization;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -311,10 +309,6 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     protected void setBackgroundTintColor(int color) {
         if (color != mCurrentBackgroundTint) {
             mCurrentBackgroundTint = color;
-            if (notificationBackgroundTintOptimization() && color == mNormalColor) {
-                // We don't need to tint a normal notification
-                color = 0;
-            }
             mBackgroundNormal.setTint(color);
         }
     }
