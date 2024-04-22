@@ -62,6 +62,7 @@ constructor(
     private val uiEventLogger: UiEventLogger,
     private val logger: BluetoothTileDialogLogger,
     context: Context,
+    private val isAutoOn: Boolean = false,
 ) : SystemUIDialog(context, DEFAULT_THEME, DEFAULT_DISMISS_ON_DEVICE_LOCK) {
 
     private val mutableBluetoothStateToggle: MutableStateFlow<Boolean> =
@@ -126,6 +127,10 @@ constructor(
 
     override fun start() {
         lastUiUpdateMs = systemClock.elapsedRealtime()
+        if (isAutoOn && !bluetoothToggleInitialValue) {
+            toggleView.isChecked = true
+            mutableBluetoothStateToggle.value = true
+        }
     }
 
     override fun dismiss() {
