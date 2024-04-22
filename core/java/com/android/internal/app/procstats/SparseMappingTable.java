@@ -24,6 +24,7 @@ import libcore.util.EmptyArray;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import com.android.internal.util.GrowingArrayUtils;
 
@@ -64,6 +65,7 @@ public class SparseMappingTable {
     private int mSequence;
     private int mNextIndex;
     private final ArrayList<long[]> mLongs = new ArrayList<long[]>();
+    private final ArrayList<Table> mChildTables = new ArrayList<Table>();
 
     /**
      * A table of data as stored in a SparseMappingTable.
@@ -76,6 +78,7 @@ public class SparseMappingTable {
 
         public Table(SparseMappingTable parent) {
             mParent = parent;
+            mParent.mChildTables.add(this);
             mSequence = parent.mSequence;
         }
 
@@ -305,6 +308,13 @@ public class SparseMappingTable {
         }
 
         /**
+         *  Return the raw storage int[] that have been added to this Table
+         */
+        public int[] getMTable() {
+            return mTable;
+        }
+
+        /**
          * Write the keys stored in the table to the parcel. The parent must
          * be separately written. Does not save the actual data.
          */
@@ -444,6 +454,8 @@ public class SparseMappingTable {
             sb.append(mSequence);
             sb.append(" mParent.mSequence=");
             sb.append(mParent.mSequence);
+            sb.append(" mParent.mChildTables.size=");
+            sb.append(mParent.mChildTables.size());
             sb.append(" mParent.mLongs.size()=");
             sb.append(mParent.mLongs.size());
             sb.append(" mSize=");
@@ -487,6 +499,15 @@ public class SparseMappingTable {
         // Clear out mLongs, and prime it with a new array of data
         mLongs.clear();
         mLongs.add(new long[ARRAY_SIZE]);
+        final Iterator<Table> iterator = mChildTables.iterator();
+        while (iterator.hasNext()) {
+            final Table table = iterator.next();
+            if (table == null) {
+                iterator.remove();
+            } else {
+                table.resetTable();
+            }
+        }
         mNextIndex = 0;
 
         // Increment out sequence counter, because all of the tables will
@@ -546,6 +567,8 @@ public class SparseMappingTable {
         sb.append(mSequence);
         sb.append(" mNextIndex=");
         sb.append(mNextIndex);
+        sb.append(" mChildTables.size=");
+        sb.append(mChildTables.size());
         sb.append(" mLongs.size=");
         final int N = mLongs.size();
         sb.append(N);
