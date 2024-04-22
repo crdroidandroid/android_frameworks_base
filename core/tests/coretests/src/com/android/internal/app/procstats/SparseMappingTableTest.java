@@ -171,6 +171,7 @@ public class SparseMappingTableTest extends TestCase {
         Assert.assertEquals(VALUE1, table.getValue(key));
 
         data.reset();
+        Assert.assertNull(table.getMTable());
 
         try {
             table.getValue(key);
