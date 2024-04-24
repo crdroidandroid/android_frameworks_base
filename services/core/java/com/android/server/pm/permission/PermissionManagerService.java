@@ -1412,7 +1412,10 @@ public class PermissionManagerService extends IPermissionManager.Stub {
                 if (startDataDelivery) {
                     RegisteredAttribution registered = new RegisteredAttribution(context, op,
                             current, fromDatasource);
-                    sRunningAttributionSources.put(current.getToken(), registered);
+                    RegisteredAttribution tokenAttr = sRunningAttributionSources.put(current.getToken(), registered);
+                    if (tokenAttr != null) {
+                       tokenAttr.unregister();
+                    }
                 }
 
                 if (next == null || next.getNext() == null) {
