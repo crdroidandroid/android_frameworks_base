@@ -15,10 +15,11 @@
     limitations under the License.
 -->
 <layer-list
-  xmlns:android="http://schemas.android.com/apk/res/android">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
     <item>
         <shape>
-            <solid android:color="#ff1d1d1d" />
+            <solid android:color="?androidprv:attr/colorSurface" />
             <corners
                 android:topLeftRadius="@dimen/tri_state_mid_top_left_radius"
                 android:topRightRadius="@dimen/tri_state_mid_top_right_radius"
