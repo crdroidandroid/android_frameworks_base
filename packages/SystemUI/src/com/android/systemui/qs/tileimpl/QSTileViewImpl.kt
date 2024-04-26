@@ -116,8 +116,8 @@ constructor(
             updateHeight()
         }
 
-    private val colorActive = Utils.getColorAttrDefaultColor(context, R.attr.shadeActive)
-    private val colorInactive = Utils.getColorAttrDefaultColor(context, R.attr.shadeInactive)
+    private val colorActive = Utils.getColorAttrDefaultColor(context, com.android.internal.R.attr.colorAccent)
+    private val colorInactive = Utils.getColorAttrDefaultColor(context, com.android.internal.R.attr.colorSurface)
     private val colorUnavailable = Utils.applyAlpha(UNAVAILABLE_ALPHA, colorInactive)
 
     private val overlayColorActive =

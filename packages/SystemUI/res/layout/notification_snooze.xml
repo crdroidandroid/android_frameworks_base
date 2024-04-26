@@ -23,7 +23,7 @@
     android:orientation="vertical"
     android:paddingTop="2dp"
     android:paddingBottom="2dp"
-    android:background="?androidprv:attr/materialColorSurfaceContainerHigh"
+    android:background="?androidprv:attr/colorSurface"
     android:theme="@style/Theme.SystemUI">
 
     <RelativeLayout

@@ -35,7 +35,7 @@
 
         <item name="surfaceBright">?androidprv:attr/materialColorSurfaceBright</item>
         <item name="android:colorBackground">?attr/surfaceBright</item>
-        <item name="scHigh">?androidprv:attr/materialColorSurfaceContainerHigh</item>
+        <item name="scHigh">?androidprv:attr/colorSurface</item>
         <item name="primary">?androidprv:attr/materialColorPrimary</item>
         <item name="tertiary">?androidprv:attr/materialColorTertiary</item>
         <item name="onSurface">?androidprv:attr/materialColorOnSurface</item>
