@@ -73,7 +73,7 @@ public class NotificationBackgroundView extends View implements Dumpable {
         mDarkColoredStatefulColors = getResources().getColorStateList(
                 R.color.notification_state_color_dark);
         mNormalColor = Utils.getColorAttrDefaultColor(mContext,
-                com.android.internal.R.attr.materialColorSurfaceContainerHigh);
+                com.android.internal.R.attr.colorSurface);
     }
 
     @Override
