@@ -137,11 +137,13 @@ public class NotificationBackgroundView extends View implements Dumpable {
      * hover states, pressed states or other similar states is activated.
      */
     private void setStatefulColors() {
+        /*
         if (mTintColor != mNormalColor) {
             ColorStateList newColor = ContrastColorUtil.isColorDark(mTintColor)
                     ? mDarkColoredStatefulColors : mLightColoredStatefulColors;
             ((GradientDrawable) getStatefulBackgroundLayer().mutate()).setColor(newColor);
         }
+        */
     }
 
     /**
