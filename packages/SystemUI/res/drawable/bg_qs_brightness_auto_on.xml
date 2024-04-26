@@ -17,6 +17,6 @@
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <corners android:radius="24dp" />
-    <solid android:color="?attr/shadeActive" />
+    <solid android:color="?android:attr/colorAccent" />
     <size android:width="48dp" android:height="48dp" />
 </shape>
