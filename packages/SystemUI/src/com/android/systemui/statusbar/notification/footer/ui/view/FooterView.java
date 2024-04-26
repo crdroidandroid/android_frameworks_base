@@ -394,7 +394,7 @@ public class FooterView extends StackScrollerDecorView {
         final @ColorInt int scHigh;
         if (!notificationBackgroundTintOptimization()) {
             scHigh = Utils.getColorAttrDefaultColor(mContext,
-                    com.android.internal.R.attr.materialColorSurfaceContainerHigh);
+                    com.android.internal.R.attr.colorSurface);
             if (scHigh != 0) {
                 final ColorFilter bgColorFilter = new PorterDuffColorFilter(scHigh, SRC_ATOP);
                 clearAllBg.setColorFilter(bgColorFilter);
