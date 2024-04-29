@@ -724,6 +724,10 @@ final class AppBatteryTracker extends BaseAppStateTracker<AppBatteryPolicy>
                 if (sharedAppId > 0) {
                     uid = UserHandle.getUid(UserHandle.USER_SYSTEM, sharedAppId);
                 }
+                if (uid < 0) {
+                    //uid should be greater than or equal to 0 
+                    continue;
+                }
                 final BatteryUsage bgUsage = new BatteryUsage(uidConsumer, bgPolicy)
                         .scale(scale);
                 int index = buf.indexOfKey(uid);
