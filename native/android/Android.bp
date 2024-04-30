@@ -40,6 +40,10 @@ cc_defaults {
         "-Wunreachable-code",
         "-Wthread-safety",
     ],
+    lto: {
+        thin: true,
+    },
+    whole_program_vtables: true, // Requires LTO
 }
 
 cc_library_shared {
