@@ -43,6 +43,7 @@ import android.graphics.Rect;
 import com.android.systemui.Dependency;
 import com.android.systemui.res.R;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
+import com.android.systemui.statusbar.policy.KeyguardStateController;
 
 public class UdfpsAnimation extends ImageView {
 
@@ -68,6 +69,8 @@ public class UdfpsAnimation extends ImageView {
     private static final String UDFPS_ANIMATIONS_PACKAGE = "com.crdroid.udfps.animations";
 
     private Resources mApkResources;
+    
+    private final KeyguardStateController mKeyguardStateController;
 
     public UdfpsAnimation(Context context, WindowManager windowManager,
            FingerprintSensorPropertiesInternal props) {
@@ -75,6 +78,8 @@ public class UdfpsAnimation extends ImageView {
         mContext = context;
 
         mWindowManager = windowManager;
+        
+        mKeyguardStateController = Dependency.get(KeyguardStateController.class);
 
         final float scaleFactor = DisplayUtils.getScaleFactor(mContext);
 
@@ -125,6 +130,17 @@ public class UdfpsAnimation extends ImageView {
         mContext.getContentResolver().registerContentObserver(
                 udfpsAnimStyle, false, contentObserver, UserHandle.USER_CURRENT);
         contentObserver.onChange(true, udfpsAnimStyle);
+        
+        mKeyguardStateController.addCallback(new KeyguardStateController.Callback() {
+            @Override
+            public void onKeyguardFadingAwayChanged() {
+                removeAnimation();
+            }
+            @Override
+            public void onKeyguardGoingAwayChanged() {
+                removeAnimation();
+            }
+        });
     }
 
     private void updateAnimationStyle(int styleIdx) {
@@ -174,16 +190,20 @@ public class UdfpsAnimation extends ImageView {
 
     public void hide() {
         if (mShowing) {
-            mShowing = false;
-            if (recognizingAnim != null) {
-                clearAnimation();
-                recognizingAnim.stop();
-                recognizingAnim.selectDrawable(0);
-            }
-            if (getWindowToken() != null) {
-                mWindowManager.removeView(this);
-            }
+            removeAnimation();
         }
+    }
+    
+    private void removeAnimation() {
+        if (recognizingAnim != null) {
+            clearAnimation();
+            recognizingAnim.stop();
+            recognizingAnim.selectDrawable(0);
+        }
+        if (getWindowToken() != null) {
+            mWindowManager.removeView(this);
+        }
+        mShowing = false;
     }
 
     public void setIsKeyguard(boolean isKeyguard) {
