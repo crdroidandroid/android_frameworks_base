@@ -47,6 +47,7 @@ public class StatusBarBluetoothView extends FrameLayout implements StatusIconDis
     private StatusBarIconView mDotView;
 
     /// Contains the main icon layout
+    private boolean mBlocked;
     private LinearLayout mBluetoothGroup;
     private ImageView mBluetoothIcon;
     private ImageView mBatteryIcon;
@@ -56,12 +57,13 @@ public class StatusBarBluetoothView extends FrameLayout implements StatusIconDis
     private int mBatteryLevel = -1;
     private ColorStateList mBatteryColor;
 
-    public static StatusBarBluetoothView fromContext(Context context, String slot) {
+    public static StatusBarBluetoothView fromContext(
+            Context context, String slot, boolean blocked) {
         StatusBarBluetoothView v = (StatusBarBluetoothView)
                 LayoutInflater.from(context).inflate(R.layout.status_bar_bluetooth_group, null);
         v.setSlot(slot);
-        v.init();
-        v.setVisibleState(STATE_ICON);
+        v.init(blocked);
+        v.setVisibleState(blocked ? STATE_HIDDEN : STATE_ICON);
         return v;
     }
 
@@ -111,6 +113,11 @@ public class StatusBarBluetoothView extends FrameLayout implements StatusIconDis
     }
 
     @Override
+    public boolean isIconBlocked() {
+        return mBlocked;
+    }
+
+    @Override
     public void setVisibleState(int state, boolean animate) {
         if (state == mVisibleState) {
             return;
@@ -150,7 +157,8 @@ public class StatusBarBluetoothView extends FrameLayout implements StatusIconDis
         outRect.bottom += translationY;
     }
 
-    private void init() {
+    private void init(boolean blocked) {
+        mBlocked = blocked;
         mBluetoothGroup = findViewById(R.id.bluetooth_group);
         mBluetoothIcon = findViewById(R.id.bluetooth_icon);
         mBatteryIcon = findViewById(R.id.bluetooth_battery);
@@ -197,7 +205,7 @@ public class StatusBarBluetoothView extends FrameLayout implements StatusIconDis
 
         boolean needsLayout = mState.batteryLevel != state.batteryLevel;
 
-        if (mState.visible != state.visible) {
+        if (mState.visible != state.visible && !mBlocked) {
             needsLayout |= true;
             setVisibility(state.visible ? View.VISIBLE : View.GONE);
         }
@@ -208,7 +216,7 @@ public class StatusBarBluetoothView extends FrameLayout implements StatusIconDis
 
     private void updateBatteryIcon(int batteryLevel) {
         mBatteryLevel = batteryLevel;
-        if (batteryLevel >= 0 && batteryLevel <= 100) {
+        if (batteryLevel >= 0 && batteryLevel <= 100 && !mBlocked) {
             mBatteryIcon.setVisibility(View.VISIBLE);
             int iconId = R.drawable.ic_bluetooth_battery_0;
             if (mBatteryLevel == 100) {
@@ -247,7 +255,7 @@ public class StatusBarBluetoothView extends FrameLayout implements StatusIconDis
     private void initViewState() {
         setContentDescription(mState.contentDescription);
         updateBatteryIcon(mState.batteryLevel);
-        setVisibility(mState.visible ? View.VISIBLE : View.GONE);
+        setVisibility(mState.visible && !mBlocked ? View.VISIBLE : View.GONE);
     }
 
     @Override
