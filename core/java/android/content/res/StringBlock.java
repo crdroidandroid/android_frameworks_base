@@ -105,7 +105,7 @@ public final class StringBlock implements Closeable {
     @Nullable
     public CharSequence getSequence(int idx) {
         synchronized (this) {
-            if (mStrings != null) {
+            if (mStrings != null && idx < mStrings.length) {
                 CharSequence res = mStrings[idx];
                 if (res != null) {
                     return res;
