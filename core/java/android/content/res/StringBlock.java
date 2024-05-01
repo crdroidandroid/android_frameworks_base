@@ -109,7 +109,7 @@ public final class StringBlock implements Closeable {
     public CharSequence getSequence(int idx) {
         CharSequence sparseStringRes = null;
         synchronized (this) {
-            if (mStrings != null) {
+            if (mStrings != null && idx < mStrings.length) {
                 CharSequence res = mStrings[idx];
                 if (res != null) {
                     return res;
@@ -195,7 +195,7 @@ public final class StringBlock implements Closeable {
                 res = applyStyles(str, style, mStyleIDs);
             }
             if (res != null) {
-                if (mStrings != null) mStrings[idx] = res;
+                if (mStrings != null && idx < mStrings.length) mStrings[idx] = res;
                 else mSparseStrings.put(idx, res);
             }
             return res;
