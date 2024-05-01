@@ -143,7 +143,7 @@ public interface WakeLock {
                 if (logger != null) {
                     logger.logRelease(inner, why, count);
                 }
-                if (inner.isHeld()) {
+                if (inner != null && inner.isHeld()) {
                     inner.release();
                 }
             }
