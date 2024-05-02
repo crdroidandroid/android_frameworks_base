@@ -321,10 +321,14 @@
     <!-- These are the standard packages that are white-listed to always have internet
          access while in power save mode, even if they aren't in the foreground. -->
     <allow-in-power-save package="com.android.providers.downloads" />
+    <allow-in-power-save package="com.android.rkpdapp" />
+    <allow-in-power-save package="com.google.android.rkpdapp" />
 
     <!-- These are the standard packages that are white-listed to always have internet
          access while in data mode, even if they aren't in the foreground. -->
     <allow-in-data-usage-save package="com.android.providers.downloads" />
+    <allow-in-data-usage-save package="com.android.rkpdapp" />
+    <allow-in-data-usage-save package="com.google.android.rkpdapp" />
 
     <!-- This is a core platform component that needs to freely run in the background -->
     <allow-in-power-save package="com.android.cellbroadcastreceiver.module" />
