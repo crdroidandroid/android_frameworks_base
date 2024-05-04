@@ -26,6 +26,7 @@ import android.os.Handler
 import android.os.PowerManager
 import android.provider.Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED
 import android.provider.Settings.Global.HEADS_UP_OFF
+import android.provider.Settings.Global.HEADS_UP_ON
 import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.plugins.statusbar.StatusBarStateController
 import com.android.systemui.settings.UserTracker
@@ -58,7 +59,7 @@ class PeekDisabledSuppressor(
                     val wasEnabled = isEnabled
 
                     isEnabled =
-                        globalSettings.getInt(HEADS_UP_NOTIFICATIONS_ENABLED, HEADS_UP_OFF) !=
+                        globalSettings.getInt(HEADS_UP_NOTIFICATIONS_ENABLED, HEADS_UP_ON) !=
                             HEADS_UP_OFF
 
                     // QQQ: Do we want to log this even if it hasn't changed?
