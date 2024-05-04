@@ -18,6 +18,7 @@ package com.android.systemui.statusbar.notification.interruption;
 
 import static android.provider.Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED;
 import static android.provider.Settings.Global.HEADS_UP_OFF;
+import static android.provider.Settings.Global.HEADS_UP_ON;
 
 import static com.android.systemui.statusbar.StatusBarState.SHADE;
 import static com.android.systemui.statusbar.notification.interruption.NotificationInterruptStateProviderImpl.NotificationInterruptEvent.FSI_SUPPRESSED_NO_HUN_OR_KEYGUARD;
@@ -158,7 +159,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
             public void onChange(boolean selfChange) {
                 final boolean wasUsing = mUseHeadsUp;
                 final boolean settingEnabled = HEADS_UP_OFF
-                        != mGlobalSettings.getInt(HEADS_UP_NOTIFICATIONS_ENABLED, HEADS_UP_OFF);
+                        != mGlobalSettings.getInt(HEADS_UP_NOTIFICATIONS_ENABLED, HEADS_UP_ON);
                 mUseHeadsUp = ENABLE_HEADS_UP && settingEnabled;
                 mLogger.logHeadsUpFeatureChanged(mUseHeadsUp);
                 if (wasUsing != mUseHeadsUp) {
