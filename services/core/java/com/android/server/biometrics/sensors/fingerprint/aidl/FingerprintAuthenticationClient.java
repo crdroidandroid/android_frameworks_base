@@ -449,7 +449,9 @@ public class FingerprintAuthenticationClient
                     .Builder(BiometricSourceType.FINGERPRINT, getRequestReason(),
                     getErrorString(getContext(), error, 0), error).build()
             );
-            getListener().onError(getSensorId(), getCookie(), error, 0 /* vendorCode */);
+            if (getListener() != null) {
+                getListener().onError(getSensorId(), getCookie(), error, 0 /* vendorCode */);
+            }
         } catch (RemoteException e) {
             Slog.e(TAG, "Remote exception", e);
         }
@@ -483,7 +485,9 @@ public class FingerprintAuthenticationClient
                     .Builder(BiometricSourceType.FINGERPRINT, getRequestReason(),
                     getErrorString(getContext(), error, 0), error).build()
             );
-            getListener().onError(getSensorId(), getCookie(), error, 0 /* vendorCode */);
+            if (getListener() != null) {
+                getListener().onError(getSensorId(), getCookie(), error, 0 /* vendorCode */);
+            }
         } catch (RemoteException e) {
             Slog.e(TAG, "Remote exception", e);
         }
