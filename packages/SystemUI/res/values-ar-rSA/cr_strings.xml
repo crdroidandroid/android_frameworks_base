@@ -110,7 +110,7 @@
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="zero">‏عدد الأجهزة المتصلة ‎%d</item>
-        <item quantity="one">%d device connected</item>
+        <item quantity="one">%d جهاز متصل</item>
         <item quantity="two">%d devices connected</item>
         <item quantity="few">%d devices connected</item>
         <item quantity="many">%d devices connected</item>
