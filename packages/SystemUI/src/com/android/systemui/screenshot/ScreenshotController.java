@@ -54,7 +54,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Insets;
 import android.graphics.Rect;
-import android.hardware.camera2.CameraManager;
 import android.hardware.display.DisplayManager;
 import android.media.AudioManager;
 import android.media.MediaActionSound;
@@ -274,8 +273,6 @@ public class ScreenshotController {
     private final ScreenshotSoundController mScreenshotSoundController;
     private final AudioManager mAudioManager;
     private final Vibrator mVibrator;
-    private final CameraManager mCameraManager;
-    private int mCamsInUse = 0;
     private final ScrollCaptureClient mScrollCaptureClient;
     private final PhoneWindow mWindow;
     private final DisplayManager mDisplayManager;
@@ -443,9 +440,6 @@ public class ScreenshotController {
         // Grab system services needed for screenshot sound
         mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-        mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
-        mCameraManager.registerAvailabilityCallback(mCamCallback,
-                new Handler(Looper.getMainLooper()));
 
         mCopyBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -1308,7 +1302,7 @@ public class ScreenshotController {
     }
 
     private void playShutterSound() {
-       boolean playSound = readCameraSoundForced() && mCamsInUse > 0;
+       boolean playSound = false;
         switch (mAudioManager.getRingerMode()) {
             case AudioManager.RINGER_MODE_SILENT:
                 // do nothing
@@ -1330,24 +1324,5 @@ public class ScreenshotController {
                 Settings.System.SCREENSHOT_SHUTTER_SOUND, 1, UserHandle.USER_CURRENT) == 1) {
             playCameraSoundIfNeeded();
         }
-    }
-
-    private CameraManager.AvailabilityCallback mCamCallback =
-            new CameraManager.AvailabilityCallback() {
-        @Override
-        public void onCameraOpened(String cameraId, String packageId) {
-            mCamsInUse++;
-        }
-
-        @Override
-        public void onCameraClosed(String cameraId) {
-            mCamsInUse--;
-        }
-    };
-
-    private boolean readCameraSoundForced() {
-        return SystemProperties.getBoolean("audio.camerasound.force", false) ||
-                mContext.getResources().getBoolean(
-                        com.android.internal.R.bool.config_camera_sound_forced);
     }
 }
