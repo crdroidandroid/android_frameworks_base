@@ -413,12 +413,12 @@ public class PixelPropsUtils {
         // Alter build parameters to avoid hardware attestation enforcement
         setPropValue("BRAND", "motorola");
         setPropValue("MANUFACTURER", "motorola");
-        setPropValue("DEVICE", "griffin");
-        setPropValue("ID", "MCC24.246-37");
-        setPropValue("FINGERPRINT", "motorola/griffin_retcn/griffin:6.0.1/MCC24.246-37/42:user/release-keys");
-        setPropValue("MODEL", "XT1650-05");
-        setPropValue("PRODUCT", "griffin_retcn");
-        setVersionFieldString("SECURITY_PATCH", "2016-07-01");
+        setPropValue("DEVICE", "clark");
+        setPropValue("ID", "MPHS24.49-18-8");
+        setPropValue("FINGERPRINT", "motorola/clark_retus/clark:6.0/MPHS24.49-18-8/4:user/release-keys");
+        setPropValue("MODEL", "XT1575");
+        setPropValue("PRODUCT", "clark_retus");
+        setVersionFieldString("SECURITY_PATCH", "2016-09-01");
     }
 
     private static boolean isCallerSafetyNet() {
