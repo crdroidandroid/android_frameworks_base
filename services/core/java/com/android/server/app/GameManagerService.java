@@ -2375,25 +2375,27 @@ public final class GameManagerService extends IGameManagerService.Stub {
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            String newValue = Settings.Secure.getString(mContentResolver,
-                    Settings.Secure.GAME_OVERLAY);
-            // We write key and value of the device_config property as a single string
-            // from our GameSpace.
-            // ';;' is the separator betweeen key and value.
-            // Example: com.libremobileos.game;;mode=2,downscaleFactor=0.7:mode=3,downscaleFactor=0.8
-            // So split the key and value from the string
-            // and set the device_config propery.
-            String[] parsedValues = newValue.split(";;");
-            // Value should contain both package name and config.
-            // Otherwise don't do anything.
-            if (parsedValues.length < 2) return;
-            // We don't need to care about any format and all.
-            // It will be handled by the GamePackageConfiguration while
-            // parsing the device_config property.
-            String packageName = parsedValues[0];
-            String configValue = parsedValues[1];
-            DeviceConfig.setProperty(DeviceConfig.NAMESPACE_GAME_OVERLAY,
-                    packageName, configValue, false);
+            synchronized (mDeviceConfigLock) {
+                String newValue = Settings.Secure.getString(mContentResolver,
+                        Settings.Secure.GAME_OVERLAY);
+                // We write key and value of the device_config property as a single string
+                // from our GameSpace.
+                // ';;' is the separator betweeen key and value.
+                // Example: com.libremobileos.game;;mode=2,downscaleFactor=0.7:mode=3,downscaleFactor=0.8
+                // So split the key and value from the string
+                // and set the device_config propery.
+                String[] parsedValues = newValue.split(";;");
+                // Value should contain both package name and config.
+                // Otherwise don't do anything.
+                if (parsedValues.length < 2) return;
+                // We don't need to care about any format and all.
+                // It will be handled by the GamePackageConfiguration while
+                // parsing the device_config property.
+                String packageName = parsedValues[0];
+                String configValue = parsedValues[1];
+                DeviceConfig.setProperty(DeviceConfig.NAMESPACE_GAME_OVERLAY,
+                        packageName, configValue, false);
+            }
         }
     }
 
