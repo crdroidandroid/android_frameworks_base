@@ -1301,10 +1301,8 @@ public class OomAdjuster {
                 mNextNoKillDebugMessageTime = now + 5000; // Every 5 seconds
             }
         }
-        final int emptyProcessLimit = doKillExcessiveProcesses
-                ? mConstants.CUR_MAX_EMPTY_PROCESSES : Integer.MAX_VALUE;
-        final int cachedProcessLimit = doKillExcessiveProcesses
-                ? (mConstants.CUR_MAX_CACHED_PROCESSES - emptyProcessLimit) : Integer.MAX_VALUE;
+        final int emptyProcessLimit = mConstants.CUR_MAX_EMPTY_PROCESSES;
+        final int cachedProcessLimit = (mConstants.CUR_MAX_CACHED_PROCESSES - emptyProcessLimit);
         int lastCachedGroup = 0;
         int lastCachedGroupUid = 0;
         int numCached = 0;
