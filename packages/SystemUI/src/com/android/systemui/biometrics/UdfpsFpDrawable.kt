@@ -26,6 +26,9 @@ class UdfpsFpDrawable(context: Context) : UdfpsDrawable(context) {
         if (isDisplayConfigured) {
             return
         }
-        getUdfpsDrawable().draw(canvas)
+        val udfpsDrawable = getUdfpsDrawable()
+        if (canvas != null && udfpsDrawable != null) {
+            udfpsDrawable.draw(canvas)
+        }
     }
 }

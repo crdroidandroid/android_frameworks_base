@@ -22,6 +22,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.provider.Settings
+import android.os.UserHandle;
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -89,8 +90,8 @@ class UdfpsView(
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
 
-        val customUdfpsIcon = Settings.System.getInt(context.contentResolver,
-            Settings.System.UDFPS_ICON, 0) != 0
+        val customUdfpsIcon = Settings.System.getIntForUser(context.contentResolver, 
+            Settings.System.UDFPS_ICON, 0, UserHandle.USER_CURRENT) != 0
 
         // Updates sensor rect in relation to the overlay view
         if (!customUdfpsIcon) {

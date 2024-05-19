@@ -30,8 +30,10 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.provider.Settings;
+import android.os.UserHandle;
 import android.util.AttributeSet;
 import android.util.MathUtils;
+import android.util.Slog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -135,8 +137,8 @@ public class UdfpsKeyguardViewLegacy extends UdfpsAnimationView {
     }
 
     private void updateIcon() {
-        mCustomUdfpsIcon = mPackageInstalled && (Settings.System.getInt(
-                mContext.getContentResolver(), Settings.System.UDFPS_ICON, 0) != 0);
+        mCustomUdfpsIcon = mPackageInstalled && (Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.UDFPS_ICON, 0, UserHandle.USER_CURRENT) != 0);
         mBgProtection.setImageDrawable(mCustomUdfpsIcon
                 ? mFingerprintDrawable :
                 getContext().getDrawable(R.drawable.fingerprint_bg));
