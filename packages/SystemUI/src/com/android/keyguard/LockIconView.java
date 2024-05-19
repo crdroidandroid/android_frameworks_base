@@ -26,6 +26,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.provider.Settings;
+import android.os.UserHandle;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -201,8 +202,8 @@ public class LockIconView extends FrameLayout implements Dumpable {
     }
 
     private void addBgImageView(Context context, AttributeSet attrs) {
-        boolean customUdfpsIcon = Settings.System.getInt(
-                context.getContentResolver(), Settings.System.UDFPS_ICON, 0) != 0;
+        boolean customUdfpsIcon = Settings.System.getIntForUser(
+                context.getContentResolver(), Settings.System.UDFPS_ICON, 0, UserHandle.USER_CURRENT) != 0;
         mBgView = new ImageView(context, attrs);
         mBgView.setId(R.id.lock_icon_bg);
         mBgView.setImageDrawable(customUdfpsIcon
