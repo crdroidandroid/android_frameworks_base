@@ -31,6 +31,7 @@ import android.hardware.biometrics.BiometricRequestConstants.RequestReason
 import android.hardware.fingerprint.IUdfpsOverlayControllerCallback
 import android.os.Build
 import android.os.RemoteException
+import android.os.UserHandle;
 import android.provider.Settings
 import android.util.Log
 import android.util.RotationUtils
@@ -428,9 +429,9 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
             REASON_ENROLL_FIND_SENSOR, REASON_ENROLL_ENROLLING -> true
             else -> false
         }
-
-        val customUdfpsIcon = Settings.System.getInt(context.contentResolver,
-            Settings.System.UDFPS_ICON, 0) != 0
+        
+        val customUdfpsIcon = Settings.System.getIntForUser(context.contentResolver, 
+            Settings.System.UDFPS_ICON, 0, UserHandle.USER_CURRENT) != 0
 
         // Use expanded overlay unless touchExploration enabled
         var rotatedBounds =

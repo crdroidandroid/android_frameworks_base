@@ -19,6 +19,7 @@ package com.android.systemui.keyguard.ui.binder
 
 import android.graphics.RectF
 import android.provider.Settings
+import android.os.UserHandle;
 import android.view.View
 import android.widget.FrameLayout
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater
@@ -62,8 +63,8 @@ object UdfpsKeyguardViewBinder {
                     fingerprintViewModel,
                     backgroundViewModel,
                 )
-                val customUdfpsIcon = Settings.System.getInt(view.context.contentResolver,
-                    Settings.System.UDFPS_ICON, 0) != 0
+                val customUdfpsIcon = Settings.System.getIntForUser(view.context.contentResolver, 
+                    Settings.System.UDFPS_ICON, 0, UserHandle.USER_CURRENT) != 0
                 if (customUdfpsIcon) {
                     parent!!.addView(inflatedInternalView)
                 } else {
