@@ -2412,7 +2412,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
                 mHandler, UserHandle.ALL);
 
         mSubscriptionManager.addOnSubscriptionsChangedListener(mSubscriptionListener);
-        mUserTracker.addCallback(mUserChangedCallback, mMainExecutor);
+        mUserTracker.addCallback(mUserChangedCallback, mBackgroundExecutor);
 
         mTrustManager.registerTrustListener(this);
 
@@ -2559,8 +2559,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         @Override
         public void onUserChanging(int newUser, @NonNull Context userContext,
                 @NonNull Runnable resultCallback) {
-            mHandler.sendMessage(mHandler.obtainMessage(MSG_USER_SWITCHING,
-                    newUser, 0, resultCallback));
+            handleUserSwitching(newUser, resultCallback);
         }
 
         @Override
@@ -3142,7 +3141,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
     void handleUserSwitching(int userId, Runnable resultCallback) {
         mLogger.logUserSwitching(userId, "from UserTracker");
         Assert.isMainThread();
-        setForceIsDismissibleKeyguard(false);
         clearFingerprintRecognized();
         boolean trustUsuallyManaged = mTrustManager.isTrustUsuallyManaged(userId);
         mLogger.logTrustUsuallyManagedUpdated(userId, mUserTrustIsUsuallyManaged.get(userId),
@@ -3722,7 +3720,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
     }
 
     private void clearFingerprintRecognized(int unlockedUser) {
-        Assert.isMainThread();
         mUserFingerprintAuthenticated.clear();
         mTrustManager.clearAllBiometricRecognized(FINGERPRINT, unlockedUser);
         mLogger.d("clearFingerprintRecognized");
