@@ -64,6 +64,8 @@ import com.android.server.wm.SurfaceAnimator.OnAnimationFinishedCallback;
 
 import java.io.PrintWriter;
 
+import android.util.RisingBoostFramework;
+
 /**
  * This class handles the rotation animation when the device is rotated.
  *
@@ -94,6 +96,9 @@ import java.io.PrintWriter;
  */
 class ScreenRotationAnimation {
     private static final String TAG = TAG_WITH_CLASS_NAME ? "ScreenRotationAnimation" : TAG_WM;
+
+    private RisingBoostFramework mPerf = null;
+    private boolean mIsPerfLockAcquired = false;
 
     private final Context mContext;
     private final DisplayContent mDisplayContent;
@@ -143,6 +148,8 @@ class ScreenRotationAnimation {
         final Rect currentBounds = displayContent.getBounds();
         final int width = currentBounds.width();
         final int height = currentBounds.height();
+        
+        mPerf = RisingBoostFramework.getInstance();
 
         // Screenshot does NOT include rotation!
         final DisplayInfo displayInfo = displayContent.getDisplayInfo();
@@ -506,6 +513,10 @@ class ScreenRotationAnimation {
                     finalWidth, finalHeight);
             startAnimation(t, maxAnimationDuration, animationScale, finalWidth, finalHeight,
                     exitAnim, enterAnim);
+            if (mPerf != null && !mIsPerfLockAcquired) {
+                mPerf.perfBoost(RisingBoostFramework.WorkloadType.ANIMATION);
+                mIsPerfLockAcquired = true;
+            }
         }
         if (!mStarted) {
             return false;
@@ -571,6 +582,9 @@ class ScreenRotationAnimation {
         if (mRotateAlphaAnimation != null) {
             mRotateAlphaAnimation.cancel();
             mRotateAlphaAnimation = null;
+        }
+        if (mPerf != null && mIsPerfLockAcquired) {
+            mIsPerfLockAcquired = false;
         }
     }
 

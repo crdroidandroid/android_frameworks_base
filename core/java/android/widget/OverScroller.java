@@ -25,6 +25,8 @@ import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 
+import android.util.RisingBoostFramework;
+
 /**
  * This class encapsulates scrolling with the ability to overshoot the bounds
  * of a scrolling operation. This class is a drop-in replacement for
@@ -361,6 +363,8 @@ public class OverScroller {
      * @param duration Duration of the scroll in milliseconds.
      */
     public void startScroll(int startX, int startY, int dx, int dy, int duration) {
+        RisingBoostFramework perf_ux = RisingBoostFramework.getInstance();
+        perf_ux.perfBoost(RisingBoostFramework.WorkloadType.SCROLLING);
         mMode = SCROLL_MODE;
         mScrollerX.startScroll(startX, dx, duration);
         mScrollerY.startScroll(startY, dy, duration);

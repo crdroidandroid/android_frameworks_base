@@ -30,6 +30,8 @@ import android.view.MotionEvent;
 import android.view.WindowManagerPolicyConstants.PointerEventListener;
 
 import com.android.server.wm.WindowManagerService.H;
+import com.android.server.am.ActivityManagerService;
+import android.util.RisingBoostFramework;
 
 /**
  * 1. Adjust the top most focus display if touch down on some display.
@@ -42,6 +44,7 @@ public class TaskTapPointerEventListener implements PointerEventListener {
     private final DisplayContent mDisplayContent;
     private final Rect mTmpRect = new Rect();
     private int mPointerIconType = TYPE_NOT_SPECIFIED;
+    public RisingBoostFramework mPerfObj = null;
 
     public TaskTapPointerEventListener(WindowManagerService service,
             DisplayContent displayContent) {
@@ -51,6 +54,7 @@ public class TaskTapPointerEventListener implements PointerEventListener {
         }
         mService = service;
         mDisplayContent = displayContent;
+        mPerfObj = RisingBoostFramework.getInstance();
     }
 
     private void restorePointerIcon(int x, int y) {
@@ -133,6 +137,14 @@ public class TaskTapPointerEventListener implements PointerEventListener {
                 restorePointerIcon(x, y);
             }
             break;
+        }
+        if (ActivityTaskSupervisor.mPerfSendTapHint && (mPerfObj != null)) {
+            mPerfObj.perfBoost(RisingBoostFramework.WorkloadType.TAP_EVENT);
+            ActivityTaskSupervisor.mPerfSendTapHint = false;
+        }
+        if (RootWindowContainer.mPerfSendTapHint && (mPerfObj != null)) {
+            mPerfObj.perfBoost(RisingBoostFramework.WorkloadType.TAP_EVENT);
+            RootWindowContainer.mPerfSendTapHint = false;
         }
     }
 

@@ -382,6 +382,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import android.util.RisingBoostFramework;
+
 /** {@hide} */
 public class WindowManagerService extends IWindowManager.Stub
         implements Watchdog.Monitor, WindowManagerPolicy.WindowManagerFuncs {
@@ -473,6 +475,8 @@ public class WindowManagerService extends IWindowManager.Stub
     final TransitionTracer mTransitionTracer;
 
     private final DisplayAreaPolicy.Provider mDisplayAreaPolicyProvider;
+
+    private RisingBoostFramework mPerf = null;
 
     final private KeyguardDisableHandler mKeyguardDisableHandler;
 
@@ -6331,6 +6335,10 @@ public class WindowManagerService extends IWindowManager.Stub
         }
 
         mLatencyTracker.onActionStart(ACTION_ROTATE_SCREEN);
+        mPerf = RisingBoostFramework.getInstance();
+        if (mPerf != null) {
+            mPerf.perfBoost(RisingBoostFramework.WorkloadType.VENDOR_HINT_ROTATION_LATENCY_BOOST);
+        }
         mExitAnimId = exitAnim;
         mEnterAnimId = enterAnim;
 

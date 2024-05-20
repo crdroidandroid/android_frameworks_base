@@ -239,6 +239,8 @@ import com.android.wm.shell.animation.FlingAnimationUtils;
 
 import lineageos.providers.LineageSettings;
 
+import android.util.RisingBoostFramework;
+
 import dalvik.annotation.optimization.NeverCompile;
 
 import kotlin.Unit;
@@ -431,6 +433,8 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
     private int mDisplayTopInset = 0; // in pixels
     private int mDisplayRightInset = 0; // in pixels
     private int mDisplayLeftInset = 0; // in pixels
+    
+    private RisingBoostFramework mPerf = RisingBoostFramework.getInstance();
 
     @VisibleForTesting
     KeyguardClockPositionAlgorithm mClockPositionAlgorithm;
@@ -2227,6 +2231,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                 }
             });
         }
+        mPerf.perfBoost(RisingBoostFramework.WorkloadType.ANIMATION);
         animator.addListener(new AnimatorListenerAdapter() {
             private boolean mCancelled;
 

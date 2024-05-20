@@ -646,6 +646,9 @@ class Transition implements BLASTSyncEngine.TransactionReadyListener {
             return;
         }
         mState = STATE_STARTED;
+        if (mType == TRANSIT_CHANGE) {
+            android.util.RisingBoostFramework.getInstance().perfBoost(android.util.RisingBoostFramework.WorkloadType.ANIMATION);
+        }
         ProtoLog.v(ProtoLogGroup.WM_DEBUG_WINDOW_TRANSITIONS, "Starting Transition %d",
                 mSyncId);
         applyReady();

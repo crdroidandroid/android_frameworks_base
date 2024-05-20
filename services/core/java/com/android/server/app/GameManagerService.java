@@ -124,6 +124,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import android.util.RisingBoostFramework;
+
 /**
  * Service to manage game related features.
  *
@@ -370,8 +372,8 @@ public final class GameManagerService extends IGameManagerService.Stub {
                     final int userId = data.getInt(USER_ID_MSG_KEY);
 
                     // Restrict to games only. Requires performance mode to be enabled.
-                    final boolean boostEnabled =
-                            getGameMode(packageName, userId) == GameManager.GAME_MODE_PERFORMANCE;
+                    final boolean boostEnabled = 
+                        RisingBoostFramework.getInstance().isPackageOnGameList(packageName);
                     int uid;
                     try {
                         uid = mPackageManager.getPackageUidAsUser(packageName, userId);

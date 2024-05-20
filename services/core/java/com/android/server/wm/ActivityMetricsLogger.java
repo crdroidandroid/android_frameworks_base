@@ -86,6 +86,7 @@ import static com.android.server.wm.EventLogTags.WM_ACTIVITY_LAUNCH_TIME;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.ActivityOptions.SourceInfo;
 import android.app.AppCompatTaskInfo.CameraCompatControlState;
@@ -122,6 +123,8 @@ import com.android.server.apphibernation.AppHibernationService;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
+import android.util.RisingBoostFramework;
 
 /**
  * Listens to activity launches, transitions, visibility changes and window drawn callbacks to
@@ -188,6 +191,9 @@ class ActivityMetricsLogger {
 
     private ArtManagerInternal mArtManagerInternal;
     private final StringBuilder mStringBuilder = new StringBuilder();
+
+    public static RisingBoostFramework mPerfBoost = RisingBoostFramework.getInstance();
+    private static ActivityRecord mLaunchedActivity;
 
     /**
      * Due to the global single concurrent launch sequence, all calls to this observer must be made
@@ -1059,6 +1065,8 @@ class ActivityMetricsLogger {
 
     private void logAppTransitionFinished(@NonNull TransitionInfo info, boolean isHibernating) {
         if (DEBUG_METRICS) Slog.i(TAG, "logging finished transition " + info);
+        
+        mLaunchedActivity = info.mLastLaunchedActivity;
 
         // Take a snapshot of the transition info before sending it to the handler for logging.
         // This will avoid any races with other operations that modify the ActivityRecord.
@@ -1213,7 +1221,28 @@ class ActivityMetricsLogger {
         sb.append(info.userId);
         sb.append(": ");
         TimeUtils.formatDuration(info.windowsDrawnDelayMs, sb);
+        
+        if (mPerfBoost != null) {
+            if (info.processRecord != null) {
+                mPerfBoost.perfBoost(RisingBoostFramework.WorkloadType.ANIMATION);
+            }
+        }
+
         Log.i(TAG, sb.toString());
+
+        if (mPerfBoost !=  null) {
+            int isGame;
+            isGame = mLaunchedActivity.isAppInfoGame();
+            if (mLaunchedActivity.processName != null) {
+                if (!mLaunchedActivity.processName.equals(info.packageName)) {
+                    isGame = 1;
+                    mPerfBoost.addPackageToGameList(info.packageName);
+                }
+            }
+            if (isGame == 1) {
+                mPerfBoost.perfBoost(RisingBoostFramework.WorkloadType.GAME);
+            }
+        }
     }
 
     private void logRecentsAnimationLatency(TransitionInfo info) {
