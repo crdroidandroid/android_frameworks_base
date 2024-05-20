@@ -16,6 +16,12 @@
 -->
 <resources>
 
+    <!-- Data usage -->
+    <style name="TextAppearance.QS.TileLabel.DataUsage">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@*android:string/config_bodyFontFamily</item>
+    </style>
+
     <!-- Pixel navbar -->
     <style name="DotStyle">
         <item name="android:layout_width">wrap_content</item>
