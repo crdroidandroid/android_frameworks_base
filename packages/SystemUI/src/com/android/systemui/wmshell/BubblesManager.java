@@ -439,6 +439,7 @@ public class BubblesManager {
         mNotifPipeline.addCollectionListener(new NotifCollectionListener() {
             @Override
             public void onEntryAdded(NotificationEntry entry) {
+                if (entry == null) return;
                 BubblesManager.this.onEntryAdded(entry);
             }
 
@@ -687,6 +688,7 @@ public class BubblesManager {
     }
 
     private boolean shouldBubbleUp(NotificationEntry e) {
+        if (e == null) return false;
         return mVisualInterruptionDecisionProvider.makeAndLogBubbleDecision(e).getShouldInterrupt();
     }
 
