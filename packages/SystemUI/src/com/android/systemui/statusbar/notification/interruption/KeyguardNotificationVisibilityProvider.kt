@@ -173,18 +173,19 @@ class KeyguardNotificationVisibilityProviderImpl @Inject constructor(
         onStateChangedListeners.forEach { it.accept(reason) }
     }
 
-    override fun shouldHideNotification(entry: NotificationEntry): Boolean = when {
+    override fun shouldHideNotification(entry: NotificationEntry): Boolean {
+        if (entry == null) return false
         // Keyguard state doesn't matter if the keyguard is not showing.
-        !isLockedOrLocking -> false
+        if (!isLockedOrLocking) return false
         // Notifications not allowed on the lockscreen, always hide.
-        !lockscreenUserManager.shouldShowLockscreenNotifications() -> true
+        if (!lockscreenUserManager.shouldShowLockscreenNotifications()) return true
         // User settings do not allow this notification on the lockscreen, so hide it.
-        userSettingsDisallowNotification(entry) -> true
+        if (userSettingsDisallowNotification(entry)) return true
         // Entry is explicitly marked SECRET, so hide it.
-        entry.sbn.notification.visibility == VISIBILITY_SECRET -> true
+        if (entry.sbn.notification.visibility == VISIBILITY_SECRET) return true
         // if entry is silent, apply custom logic to see if should hide
-        shouldHideIfEntrySilent(entry) -> true
-        else -> false
+        if (shouldHideIfEntrySilent(entry)) return true
+        return false
     }
 
     private fun shouldHideIfEntrySilent(entry: ListEntry): Boolean = when {
@@ -201,16 +202,19 @@ class KeyguardNotificationVisibilityProviderImpl @Inject constructor(
         else -> false
     }
 
-    private fun userSettingsDisallowNotification(entry: NotificationEntry): Boolean {
-        fun disallowForUser(user: Int) = when {
-            // user is in lockdown, always disallow
-            keyguardUpdateMonitor.isUserInLockdown(user) -> true
-            // device isn't public, no need to check public-related settings, so allow
-            !lockscreenUserManager.isLockscreenPublicMode(user) -> false
-            // entry is meant to be secret on the lockscreen, disallow
-            isRankingVisibilitySecret(entry) -> true
-            // disallow if user disallows notifications in public
-            else -> !lockscreenUserManager.userAllowsNotificationsInPublic(user)
+    private fun userSettingsDisallowNotification(entry: NotificationEntry?): Boolean {
+        if (entry == null) return false
+        fun disallowForUser(user: Int): Boolean {
+            return when {
+                // user is in lockdown, always disallow
+                keyguardUpdateMonitor.isUserInLockdown(user) -> true
+                // device isn't public, no need to check public-related settings, so allow
+                !lockscreenUserManager.isLockscreenPublicMode(user) -> false
+                // entry is meant to be secret on the lockscreen, disallow
+                isRankingVisibilitySecret(entry) -> true
+                // disallow if user disallows notifications in public
+                else -> !lockscreenUserManager.userAllowsNotificationsInPublic(user)
+            }
         }
         val currentUser = lockscreenUserManager.currentUserId
         val notifUser = entry.sbn.user.identifier
@@ -222,7 +226,9 @@ class KeyguardNotificationVisibilityProviderImpl @Inject constructor(
         }
     }
 
-    private fun isRankingVisibilitySecret(entry: NotificationEntry): Boolean {
+    private fun isRankingVisibilitySecret(entry: NotificationEntry?): Boolean {
+        if (entry == null || entry.ranking == null || entry.ranking.channel == null) return false
+
         return if (featureFlags.isEnabled(Flags.NOTIF_LS_BACKGROUND_THREAD)) {
             // ranking.lockscreenVisibilityOverride contains possibly out of date DPC and Setting
             // info, and NotificationLockscreenUserManagerImpl is already listening for updates
