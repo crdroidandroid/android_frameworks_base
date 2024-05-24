@@ -18,12 +18,16 @@ package com.android.server.job.controllers;
 
 import static com.android.server.job.JobSchedulerService.sElapsedRealtimeClock;
 
+import android.annotation.NonNull;
+import android.annotation.Nullable;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.UserHandle;
 import android.util.ArraySet;
 import android.util.IndentingPrintWriter;
 import android.util.proto.ProtoOutputStream;
+
+import com.android.internal.annotations.GuardedBy;
 
 import com.android.server.job.JobSchedulerService;
 import com.android.server.job.StateControllerProto;
@@ -46,6 +50,7 @@ public final class IdleController extends RestrictingController implements Idlen
     private static final String TAG = "JobScheduler.IdleController";
     // Policy: we decide that we're "idle" if the device has been unused /
     // screen off or dreaming or wireless charging dock idle for at least this long
+    @GuardedBy("mLock")
     final ArraySet<JobStatus> mTrackedTasks = new ArraySet<>();
     IdlenessTracker mIdleTracker;
 
@@ -99,8 +104,10 @@ public final class IdleController extends RestrictingController implements Idlen
             for (int i = mTrackedTasks.size()-1; i >= 0; i--) {
                 mTrackedTasks.valueAt(i).setIdleConstraintSatisfied(nowElapsed, isIdle);
             }
+            if (!mTrackedTasks.isEmpty()) {
+                mStateChangedListener.onControllerStateChanged(mTrackedTasks);
+            }
         }
-        mStateChangedListener.onControllerStateChanged(mTrackedTasks);
     }
 
     /**
