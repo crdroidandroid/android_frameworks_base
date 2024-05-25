@@ -34,6 +34,8 @@ import static java.util.Objects.requireNonNull;
 
 import android.annotation.MainThread;
 import android.annotation.Nullable;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Trace;
 import android.service.notification.StatusBarNotification;
 import android.util.ArrayMap;
@@ -371,6 +373,15 @@ public class ShadeListBuilder implements Dumpable, PipelineDumpable {
     }
 
     private void onFinalizeFilterInvalidated(NotifFilter filter, @Nullable String reason) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            performFinalizeFilterInvalidation(filter, reason);
+        } else {
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler.post(() -> performFinalizeFilterInvalidation(filter, reason));
+        }
+    }
+
+    private void performFinalizeFilterInvalidation(NotifFilter filter, @Nullable String reason) {
         Assert.isMainThread();
 
         mLogger.logFinalizeFilterInvalidated(filter, mPipelineState.getState(), reason);
