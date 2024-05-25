@@ -29,6 +29,8 @@ import android.content.res.Resources;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.IndentingPrintWriter;
 import android.view.View;
@@ -209,7 +211,20 @@ public class FooterView extends StackScrollerDecorView {
     }
 
     /** Show a message instead of the footer buttons. */
-    public void setFooterLabelVisible(boolean isVisible) {
+    public void setFooterLabelVisible(final boolean isVisible) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            updateFooterLabelVisibility(isVisible);
+        } else {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    updateFooterLabelVisibility(isVisible);
+                }
+            });
+        }
+    }
+
+    private void updateFooterLabelVisibility(boolean isVisible) {
         if (isVisible) {
             mManageButton.setVisibility(View.GONE);
             mClearAllButton.setVisibility(View.GONE);
