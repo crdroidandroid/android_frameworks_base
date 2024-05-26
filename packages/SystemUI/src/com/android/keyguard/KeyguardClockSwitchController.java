@@ -345,22 +345,24 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
     }
 
     private void updateViews() {
-        if (mSmartspaceController.isEnabled()) {
-            removeViewsFromStatusArea();
+        mUiExecutor.execute(() -> {
+            if (mSmartspaceController.isEnabled()) {
+                removeViewsFromStatusArea();
 
-            View ksv = mView.findViewById(R.id.keyguard_slice_view);
-            int viewIndex = mStatusArea.indexOfChild(ksv);
-            ksv.setVisibility(mShowWeather ? View.VISIBLE : View.GONE);
+                View ksv = mView.findViewById(R.id.keyguard_slice_view);
+                int viewIndex = mStatusArea.indexOfChild(ksv);
+                ksv.setVisibility(mShowWeather ? View.VISIBLE : View.GONE);
 
-            if (!mShowWeather) {
-                addSmartspaceView();
-                if (mSmartspaceController.isDateWeatherDecoupled() && !MigrateClocksToBlueprint.isEnabled()) {
-                    addDateWeatherView();
-                    setDateWeatherVisibility();
-                    setWeatherVisibility();
+                if (!mShowWeather) {
+                    addSmartspaceView();
+                    if (mSmartspaceController.isDateWeatherDecoupled() && !MigrateClocksToBlueprint.isEnabled()) {
+                        addDateWeatherView();
+                        setDateWeatherVisibility();
+                        setWeatherVisibility();
+                    }
                 }
             }
-        }
+        });
     }
 
     int getNotificationIconAreaHeight() {
