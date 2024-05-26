@@ -543,13 +543,15 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
                 if (mView.getTileLayout() != null) {
                     mView.getTileLayout().updateSettings();
                     mForceUpdate = true;
-                    setTiles();
-                    mForceUpdate = false;
+                    getContext().getMainExecutor().execute(() -> {
+                        setTiles();
+                        mForceUpdate = false;
+                    });
                 }
                 break;
             default:
                 break;
-         }
+        }
     }
 
     /** */
