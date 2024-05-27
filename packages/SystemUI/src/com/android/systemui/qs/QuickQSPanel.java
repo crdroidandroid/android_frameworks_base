@@ -152,7 +152,9 @@ public class QuickQSPanel extends QSPanel implements TunerService.Tunable {
             setMaxTiles(maxTiles);
             return;
         }
-        mMaxTiles = maxTiles;
+        if (mMaxTiles != maxTiles) {
+            mMaxTiles = maxTiles;
+        }
     }
 
     @Override
