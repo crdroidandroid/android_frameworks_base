@@ -53,6 +53,10 @@ class ModernShadeCarrierGroupMobileView(context: Context, attrs: AttributeSet?) 
             "viewString=${super.toString()}"
     }
 
+    fun updateTextAppearance(resId: Int) {
+        requireViewById<AutoMarqueeTextView>(R.id.mobile_carrier_text).setTextAppearance(resId)
+    }
+
     companion object {
 
         /**
