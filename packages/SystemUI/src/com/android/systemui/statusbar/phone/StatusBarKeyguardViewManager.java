@@ -817,7 +817,9 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
         if (mKeyguardStateController.isShowing() && !bouncerIsAnimatingAway()) {
             final boolean isOccluded = mKeyguardStateController.isOccluded();
             // Hide quick settings.
-            mShadeViewController.resetViews(/* animate= */ !isOccluded);
+            if (mShadeViewController != null) {
+                mShadeViewController.resetViews(/* animate= */ !isOccluded);
+            }
             // Hide bouncer and quick-quick settings.
             if (isOccluded && !mDozing) {
                 mCentralSurfaces.hideKeyguard();
