@@ -380,7 +380,7 @@ public class BtHelper {
                         && mScoAudioState != SCO_STATE_DEACTIVATE_REQ) {
                     mScoAudioState = SCO_STATE_ACTIVE_EXTERNAL;
                 } else if (mDeviceBroker.isBluetoothScoRequested()) {
-                    // broadcast intent if the connection was initated by AudioService
+                    // broadcast intent if the connection was initiated by AudioService
                     broadcast = true;
                 }
                 mDeviceBroker.setBluetoothScoOn(true, "BtHelper.onScoAudioStateChanged");
@@ -548,6 +548,9 @@ public class BtHelper {
                 mHearingAid = null;
                 break;
             case BluetoothProfile.LE_AUDIO:
+                if (mLeAudio != null) {
+                    mLeAudio.unregisterCallback(mLeAudioCallback);
+                }
                 mLeAudio = null;
                 break;
             case BluetoothProfile.A2DP_SINK:
@@ -564,12 +567,9 @@ public class BtHelper {
 
     // BluetoothLeAudio callback used to update the list of addresses in the same group as a
     // connected LE Audio device
-    MyLeAudioCallback mLeAudioCallback = null;
-
-    class MyLeAudioCallback implements BluetoothLeAudio.Callback {
+    final BluetoothLeAudio.Callback mLeAudioCallback = new BluetoothLeAudio.Callback() {
         @Override
-        public void onCodecConfigChanged(int groupId,
-                                  @NonNull BluetoothLeAudioCodecStatus status) {
+        public void onCodecConfigChanged(int groupId, @NonNull BluetoothLeAudioCodecStatus status) {
             // Do nothing
         }
 
@@ -586,7 +586,7 @@ public class BtHelper {
         public void onGroupStatusChanged(int groupId, int groupStatus) {
             mDeviceBroker.postUpdateLeAudioGroupAddresses(groupId);
         }
-    }
+    };
 
     // @GuardedBy("mDeviceBroker.mSetModeLock")
     @GuardedBy("AudioDeviceBroker.this.mDeviceStateLock")
@@ -610,7 +610,6 @@ public class BtHelper {
                 break;
             case BluetoothProfile.LE_AUDIO:
                 if (mLeAudio == null) {
-                    mLeAudioCallback = new MyLeAudioCallback();
                     ((BluetoothLeAudio) proxy).registerCallback(
                             mContext.getMainExecutor(), mLeAudioCallback);
                 }
