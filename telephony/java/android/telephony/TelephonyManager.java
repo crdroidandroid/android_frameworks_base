@@ -10150,7 +10150,8 @@ public class TelephonyManager {
             if (telephony != null) {
                 return telephony.getAllowedNetworkTypesForReason(getSubId(), reason);
             } else {
-                throw new IllegalStateException("telephony service is null.");
+                Rlog.d(TAG, "telephony service is null.");
+                return -1; // NETWORK_MODE_UNKNOWN
             }
         } catch (RemoteException ex) {
             Rlog.e(TAG, "getAllowedNetworkTypesForReason RemoteException", ex);
