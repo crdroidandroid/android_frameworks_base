@@ -27,4 +27,6 @@
     <string name="aerr_copy">Copiar URL del registre d\'errors</string>
     <string name="url_copy_success">URL copiada amb èxit</string>
     <string name="url_copy_failed">Hi ha hagut un error mentre es carregava el registre a Pasty</string>
+    <!-- App lock -->
+    <string name="unlock_application">Desbloqueja <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>
