@@ -24,7 +24,7 @@
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d cihaz bağlandı</item>
-        <item quantity="other">%d cihazlar bağlandı</item>
+        <item quantity="other">%d cihaz bağlandı</item>
     </plurals>
     <!-- Sound QS Tile -->
     <string name="quick_settings_sound_label">Ses</string>
@@ -42,14 +42,14 @@
     <!-- Data usage info in QS footer -->
     <string name="usage_data">bugün kullanılan</string>
     <string name="usage_data_default_suffix">Veri</string>
-    <string name="usage_wifi_default_suffix">Kablosuz</string>
+    <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Weather -->
     <string name="weather_condition_clouds">Bulutlu</string>
     <string name="weather_condition_rain">Yağmurlu</string>
     <string name="weather_condition_clear">Güneşli</string>
     <string name="weather_condition_storm">Fırtınalı</string>
-    <string name="weather_condition_snow">Kar yağışlı</string>
-    <string name="weather_condition_wind">Rüzgarlı</string>
+    <string name="weather_condition_snow">Karlı</string>
+    <string name="weather_condition_wind">Rüzgârlı</string>
     <string name="weather_condition_mist">Sisli</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash Şarj Oluyor (tam dolmasına <xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> kaldı)</string>

@@ -85,7 +85,7 @@
     <string name="tristate_flashlight">Zseblámpa</string>
     <string name="tristate_flashlight_on">Zseblámpa be</string>
     <string name="tristate_flashlight_off">Zseblámpa ki</string>
-    <string name="tristate_flashlight_blink">Zseblámps villogás</string>
+    <string name="tristate_flashlight_blink">Zseblámpa-villogás</string>
     <string name="tristate_brightness_bright">Teljes fényerő</string>
     <string name="tristate_brightness_dark">Alacsony fényerő</string>
     <string name="tristate_brightness_auto">Automatikus fényerő</string>

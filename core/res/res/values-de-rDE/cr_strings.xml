@@ -16,7 +16,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Zum Entsperren Power-Taste drücken und halten</string>
+    <string name="pocket_lock_message_long_press">Zum Entsperren Ein-/Aus-Taste gedrückt halten</string>
     <string name="pocket_view_title">Taschenmodus aktiviert</string>
     <string name="pocket_view_title_cancel">Zum Aktivieren des Telefons:</string>
     <string name="pocket_view_top_tag_cancel">Bitte den blau hinterlegten Bereich freihalten und ggf. Schmutz und Staub entfernen.</string>
