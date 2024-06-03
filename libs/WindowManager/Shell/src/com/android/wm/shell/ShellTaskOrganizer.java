@@ -539,7 +539,7 @@ public class ShellTaskOrganizer extends TaskOrganizer implements
 
             final TaskAppearedInfo data = mTasks.get(taskInfo.taskId);
             final TaskListener oldListener = getTaskListener(data.getTaskInfo());
-            final TaskListener newListener = getTaskListener(taskInfo);
+            final TaskListener newListener = getTaskListener(taskInfo, true);
             mTasks.put(taskInfo.taskId, new TaskAppearedInfo(taskInfo, data.getLeash()));
             final boolean updated = updateTaskListenerIfNeeded(
                     taskInfo, data.getLeash(), oldListener, newListener);
