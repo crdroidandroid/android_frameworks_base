@@ -140,6 +140,7 @@ class MobileIconViewModelTest : SysuiTestCase() {
                 iconsInteractor.defaultMobileIconGroup,
                 iconsInteractor.isDefaultConnectionFailed,
                 iconsInteractor.isForceHidden,
+                iconsInteractor.isRoamingForceHidden,
                 repository,
                 context,
                 MobileIconCarrierIdOverridesFake()
@@ -673,6 +674,7 @@ class MobileIconViewModelTest : SysuiTestCase() {
                 NUM_LEVELS,
                 showExclamationMark = false,
                 carrierNetworkChange = false,
+                showRoaming = false,
             )
         }
 
@@ -682,6 +684,7 @@ class MobileIconViewModelTest : SysuiTestCase() {
                 numberOfLevels = NUM_LEVELS,
                 showExclamationMark = true,
                 carrierNetworkChange = false,
+                showRoaming = false,
             )
     }
 }
