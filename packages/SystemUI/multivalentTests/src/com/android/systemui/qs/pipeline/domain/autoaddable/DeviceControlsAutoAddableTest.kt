@@ -70,7 +70,7 @@ class DeviceControlsAutoAddableTest : SysuiTestCase() {
         runCurrent()
 
         verify(deviceControlsController).setCallback(capture(callbackCaptor))
-        callbackCaptor.value.onControlsUpdate(position)
+        callbackCaptor.value.onControlsAvailable(position)
 
         assertThat(signal).isEqualTo(AutoAddSignal.Add(SPEC, position))
         verify(deviceControlsController).removeCallback()
@@ -82,7 +82,7 @@ class DeviceControlsAutoAddableTest : SysuiTestCase() {
         runCurrent()
 
         verify(deviceControlsController).setCallback(capture(callbackCaptor))
-        callbackCaptor.value.onControlsUpdate(null)
+        callbackCaptor.value.onControlsAvailable(0)
 
         assertThat(signal).isNull()
         verify(deviceControlsController).removeCallback()
