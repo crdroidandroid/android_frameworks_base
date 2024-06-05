@@ -195,6 +195,7 @@ open class ClockRegistry(
                 plugin.initialize(clockBuffers)
 
                 var isClockListChanged = false
+                plugin ?: return
                 for (clock in plugin.getClocks()) {
                     val id = clock.clockId
                     val info =
@@ -232,6 +233,7 @@ open class ClockRegistry(
                 plugin: ClockProviderPlugin,
                 manager: PluginLifecycleManager<ClockProviderPlugin>,
             ) {
+                plugin ?: return
                 for (clock in plugin.getClocks()) {
                     val id = clock.clockId
                     val info = availableClocks[id]
