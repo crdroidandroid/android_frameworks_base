@@ -22,7 +22,7 @@ import static android.view.WindowManager.TRANSIT_CLOSE;
 import static android.view.WindowManager.TRANSIT_FLAG_IS_RECENTS;
 import static android.view.WindowManager.TRANSIT_NONE;
 import static android.view.WindowManager.TRANSIT_OPEN;
-
+import static android.view.WindowManager.TRANSIT_TO_FRONT;
 import static com.android.server.wm.ActivityTaskManagerService.POWER_MODE_REASON_CHANGE_DISPLAY;
 
 import android.annotation.NonNull;
@@ -942,14 +942,26 @@ class TransitionController {
     }
 
     /** Called by {@link Transition#finishTransition} if it committed invisible to any activities */
-    void onCommittedInvisibles() {
-        if (mCollectingTransition != null) {
+    void onCommittedInvisibles(ActivityRecord ar) {
+        if (isInTransitionOpenMode(mCollectingTransition, ar)) {
             mCollectingTransition.mPriorVisibilityMightBeDirty = true;
         }
         for (int i = mWaitingTransitions.size() - 1; i >= 0; --i) {
-            mWaitingTransitions.get(i).mPriorVisibilityMightBeDirty = true;
+            if (isInTransitionOpenMode(mWaitingTransitions.get(i), ar)) {
+                mWaitingTransitions.get(i).mPriorVisibilityMightBeDirty = true;
+            }
         }
     }
+
+    private boolean isInTransitionOpenMode(Transition transition, ActivityRecord ar) {
+        if (transition == null || !transition.isInTransition(ar)
+                || transition.mChanges.get(ar) == null) {
+            return false;
+        }
+        int transitMode = transition.mChanges.get(ar).getTransitMode(ar);
+        return transitMode == TRANSIT_OPEN || transitMode == TRANSIT_TO_FRONT;
+    }
+
 
     private void validateStates() {
         for (int i = 0; i < mStateValidators.size(); ++i) {
