@@ -321,16 +321,14 @@ public final class ProfcollectForwardingService extends SystemService {
                 "dex2oat_trace_freq", 25);
         int randomNum = ThreadLocalRandom.current().nextInt(100);
         if (randomNum < traceFrequency) {
-            BackgroundThread.get().getThreadHandler().post(() -> {
+            // Dex2oat could take a while before it starts. Add a short delay before start tracing.
+            BackgroundThread.get().getThreadHandler().postDelayed(() -> {
                 try {
-                    // Dex2oat could take a while before it starts. Add a short delay before start
-                    // tracing.
-                    Thread.sleep(1000);
                     mIProfcollect.trace_once("dex2oat");
-                } catch (RemoteException | InterruptedException e) {
+                } catch (RemoteException e) {
                     Log.e(LOG_TAG, "Failed to initiate trace: " + e.getMessage());
                 }
-            });
+            }, 1000);
         }
     }
 
