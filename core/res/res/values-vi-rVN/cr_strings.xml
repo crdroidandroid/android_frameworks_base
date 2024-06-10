@@ -16,8 +16,8 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Bấm và giữ nút nguồn để mở khoá</string>
-    <string name="pocket_view_title">Chế độ bỏ túi đang bật</string>
+    <string name="pocket_lock_message_long_press">Nhấn giữ nút nguồn để mở khoá</string>
+    <string name="pocket_view_title">Chế độ bỏ túi đang được bật</string>
     <string name="pocket_view_title_cancel">Để sử dụng thiết bị này:</string>
     <string name="pocket_view_top_tag_cancel">Đừng che phần cảm biến của thiết bị cùng với lau sạch bụi bẩn.</string>
     <string name="pocket_view_top_tag_cancel2">Nhấn giữ nút nguồn để buộc thoát khỏi chế độ bỏ túi.</string>
