@@ -2684,6 +2684,20 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
                 WallpaperData wallpaper = mWallpaperMap.get(mCurrentUserId);
                 WallpaperData lockWallpaper = mLockWallpaperMap.get(mCurrentUserId);
 
+                // remove gone UIDs from the map
+                boolean arrayChanged = false;
+                final int uidCount = wallpaper.mUidToDimAmount.size();
+                int[] uids = new int[uidCount];
+                for (int i = 0; i < uidCount; i++) {
+                    uids[i] = wallpaper.mUidToDimAmount.keyAt(i);
+                }
+                for (Integer u : uids) {
+                    final String cname = mPackageManagerInternal.getNameForUid(u);
+                    if (cname != null && !cname.isEmpty()) continue;
+                    wallpaper.mUidToDimAmount.remove(u);
+                    arrayChanged = true;
+                }
+
                 if (dimAmount == 0.0f) {
                     wallpaper.mUidToDimAmount.remove(uid);
                 } else {
@@ -2718,7 +2732,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
                         changed = true;
                     }
                 }
-                if (changed) {
+                if (changed || arrayChanged) {
                     saveSettingsLocked(wallpaper.userId);
                 }
             }
