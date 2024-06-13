@@ -2378,6 +2378,7 @@ public final class GameManagerService extends IGameManagerService.Stub {
             synchronized (mDeviceConfigLock) {
                 String newValue = Settings.Secure.getString(mContentResolver,
                         Settings.Secure.GAME_OVERLAY);
+                if (newValue == null) return;
                 // We write key and value of the device_config property as a single string
                 // from our GameSpace.
                 // ';;' is the separator betweeen key and value.
