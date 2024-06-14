@@ -17,7 +17,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">데이터 절약 모드</string>
     <string name="status_bar_call_strength">통화 세기</string>
     <string name="status_bar_ims">VoLTE/voWiFI</string>
