@@ -17,7 +17,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">ان‌اف‌سی</string>
-    <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">ذخیره‌کننده داده</string>
     <string name="status_bar_call_strength">قدرت تماس</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
