@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2024 The risingOS Android Project
+ * Copyright (C) 2023 The risingOS Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,10 +39,10 @@ class WifiStandardImageView @JvmOverloads constructor(
     private var wifiStandardEnabled = false
     private var isTunerRegistered = false
     private var isRegistered = false
-    private var currentWifiStandard = -1
 
     init {
         registerTunerService()
+        showWifiStandard()
     }
 
     override fun onAttachedToWindow() {
@@ -69,21 +69,19 @@ class WifiStandardImageView @JvmOverloads constructor(
     }
 
     private fun showWifiStandard() {
-        if (!wifiStandardEnabled) return
-        if (networkCallback == null) {
-            networkCallback = object : ConnectivityManager.NetworkCallback() {
-                override fun onAvailable(network: Network) {
+        if (!wifiStandardEnabled || networkCallback != null) return
+        networkCallback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                updateWifiStandard(network)
+            }
+
+            override fun onUnavailable() {
+                updateWifiStandard(null)
+            }
+
+            override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+                if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                     updateWifiStandard(network)
-                }
-
-                override fun onUnavailable() {
-                    updateWifiStandard(null)
-                }
-
-                override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
-                    if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                        updateWifiStandard(network)
-                    }
                 }
             }
         }
@@ -92,10 +90,7 @@ class WifiStandardImageView @JvmOverloads constructor(
 
     private fun updateWifiStandard(network: Network?) {
         val wifiStandard = if (network != null) getWifiStandard(network) else -1
-        if (wifiStandard != currentWifiStandard) {
-            currentWifiStandard = wifiStandard
-            updateIcon(wifiStandard)
-        }
+        updateIcon(wifiStandard)
     }
 
     private fun getWifiStandard(network: Network): Int {
@@ -104,7 +99,7 @@ class WifiStandardImageView @JvmOverloads constructor(
             val wifiInfo = wifiManager.connectionInfo
             wifiInfo.wifiStandard
         } else {
-            -1
+            -1 
         }
     }
 
@@ -134,13 +129,11 @@ class WifiStandardImageView @JvmOverloads constructor(
 
     private fun registerNetworkCallback() {
         if (isRegistered || networkCallback == null) return
-        try {
-            val networkRequest = NetworkRequest.Builder()
-                .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-                .build()
-            connectivityManager.registerNetworkCallback(networkRequest, networkCallback!!)
-            isRegistered = true
-        } catch (e: RuntimeException) {}
+        val networkRequest = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .build()
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback!!)
+        isRegistered = true
     }
 
     private fun unregisterNetworkCallback() {
