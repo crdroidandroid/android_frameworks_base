@@ -62,10 +62,10 @@ class ToggleButtonComponent(
                 shape = RoundedCornerShape(28.dp),
                 colors =
                     IconButtonDefaults.outlinedIconToggleButtonColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        checkedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                        checkedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        checkedContainerColor = MaterialTheme.colorScheme.secondary,
+                        checkedContentColor = MaterialTheme.colorScheme.onSecondary,
                     ),
                 border = BorderStroke(8.dp, MaterialTheme.colorScheme.surface),
             ) {
