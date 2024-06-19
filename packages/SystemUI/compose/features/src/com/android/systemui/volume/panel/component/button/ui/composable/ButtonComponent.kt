@@ -60,10 +60,10 @@ class ButtonComponent(
         ) {
             Expandable(
                 modifier = Modifier.height(64.dp).fillMaxWidth(),
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.primary,
                 shape = RoundedCornerShape(28.dp),
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                borderStroke = BorderStroke(8.dp, MaterialTheme.colorScheme.surface),
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                borderStroke = BorderStroke(8.dp, MaterialTheme.colorScheme.primary),
                 onClick = onClick,
             ) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
