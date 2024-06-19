@@ -300,10 +300,10 @@ object PlatformSliderDefaults {
 @Composable
 private fun lightThemePlatformSliderColors() =
     PlatformSliderColors(
-        trackColor = MaterialTheme.colorScheme.tertiaryContainer,
-        indicatorColor = LocalAndroidColorScheme.current.tertiaryFixedDim,
-        iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
-        labelColor = MaterialTheme.colorScheme.onTertiaryContainer,
+        trackColor = MaterialTheme.colorScheme.primaryContainer,
+        indicatorColor = LocalAndroidColorScheme.current.primaryFixedDim,
+        iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        labelColor = MaterialTheme.colorScheme.onPrimaryContainer,
         disabledTrackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         disabledIndicatorColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         disabledIconColor = MaterialTheme.colorScheme.outline,
@@ -314,10 +314,10 @@ private fun lightThemePlatformSliderColors() =
 @Composable
 private fun darkThemePlatformSliderColors() =
     PlatformSliderColors(
-        trackColor = MaterialTheme.colorScheme.onTertiary,
-        indicatorColor = LocalAndroidColorScheme.current.onTertiaryFixedVariant,
-        iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
-        labelColor = MaterialTheme.colorScheme.onTertiaryContainer,
+        trackColor = MaterialTheme.colorScheme.onPrimary,
+        indicatorColor = LocalAndroidColorScheme.current.onPrimaryFixedVariant,
+        iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        labelColor = MaterialTheme.colorScheme.onPrimaryContainer,
         disabledTrackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         disabledIndicatorColor = MaterialTheme.colorScheme.surfaceContainerHighest,
         disabledIconColor = MaterialTheme.colorScheme.outline,
