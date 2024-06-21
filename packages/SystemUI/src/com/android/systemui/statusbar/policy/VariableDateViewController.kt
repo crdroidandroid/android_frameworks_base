@@ -139,7 +139,7 @@ class VariableDateViewController(
                     Intent.ACTION_TIMEZONE_CHANGED == action ||
                     Intent.ACTION_LOCALE_CHANGED == action
             ) {
-                handler.post(::updateClock)
+                handler.postDelayed(::updateClock, 200)
             }
         }
     }
