@@ -134,11 +134,18 @@ public class MenuPopupWindow extends ListPopupWindow implements MenuItemHoverLis
                 }
                 return true;
             } else if (selectedItem != null && keyCode == mRetreatKey) {
+                final MenuAdapter menuAdapter;
+                final ListAdapter adapter = getAdapter();
                 setSelectedPositionInt(INVALID_POSITION);
                 setNextSelectedPositionInt(INVALID_POSITION);
-
+                if (adapter instanceof HeaderViewListAdapter) {
+                    final HeaderViewListAdapter headerAdapter = (HeaderViewListAdapter) adapter;
+                    menuAdapter = (MenuAdapter) headerAdapter.getWrappedAdapter();
+                } else {
+                    menuAdapter = (MenuAdapter) adapter;
+                }
                 // Close only the top-level menu.
-                ((MenuAdapter) getAdapter()).getAdapterMenu().close(false /* closeAllMenus */);
+                menuAdapter.getAdapterMenu().close(false /* closeAllMenus */);
                 return true;
             }
             return super.onKeyDown(keyCode, event);
