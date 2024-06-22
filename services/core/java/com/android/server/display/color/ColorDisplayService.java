@@ -125,6 +125,7 @@ public final class ColorDisplayService extends SystemService {
     private static final int MSG_APPLY_GLOBAL_SATURATION = 4;
     private static final int MSG_APPLY_DISPLAY_WHITE_BALANCE = 5;
     private static final int MSG_APPLY_REDUCE_BRIGHT_COLORS = 6;
+    private static final int MSG_APPLY_UPDATE_DISPLAY_ENGINE = 7;
 
     /**
      * Return value if a setting has not been set.
@@ -179,6 +180,8 @@ public final class ColorDisplayService extends SystemService {
     private final TintController mGlobalSaturationTintController =
             new GlobalSaturationTintController();
     private final ReduceBrightColorsTintController mReduceBrightColorsTintController;
+    private final DisplayEngineController mDisplayEngineController =
+            new DisplayEngineController();
 
     @VisibleForTesting
     final Handler mHandler;
@@ -489,6 +492,9 @@ public final class ColorDisplayService extends SystemService {
                                 onReduceBrightColorsStrengthLevelChanged();
                                 mHandler.sendEmptyMessage(MSG_APPLY_REDUCE_BRIGHT_COLORS);
                                 break;
+                            case Secure.DISPLAY_ENGINE_MODE:
+                                mHandler.sendEmptyMessage(MSG_APPLY_UPDATE_DISPLAY_ENGINE);
+                                break;
                         }
                     }
                 }
@@ -525,6 +531,8 @@ public final class ColorDisplayService extends SystemService {
                     Secure.getUriFor(Secure.ACCESSIBILITY_DISPLAY_DALTONIZER_SATURATION_LEVEL),
                     false /* notifyForDescendants */, mContentObserver, mCurrentUser);
         }
+        cr.registerContentObserver(Secure.getUriFor(Secure.DISPLAY_ENGINE_MODE),
+                false /* notifyForDescendants */, mContentObserver, mCurrentUser);
 
         // Apply the accessibility settings first, since they override most other settings.
         setUpColorInversionAccessibility();
@@ -573,6 +581,10 @@ public final class ColorDisplayService extends SystemService {
                 onReduceBrightColorsActivationChanged(/*userInitiated*/ false);
                 mHandler.sendEmptyMessage(MSG_APPLY_REDUCE_BRIGHT_COLORS);
             }
+        }
+
+        if (mDisplayEngineController.isAvailable(getContext())) {
+            mHandler.sendEmptyMessage(MSG_APPLY_UPDATE_DISPLAY_ENGINE);
         }
     }
 
@@ -1962,6 +1974,10 @@ public final class ColorDisplayService extends SystemService {
                     break;
                 case MSG_APPLY_DISPLAY_WHITE_BALANCE:
                     applyTintByCct(mDisplayWhiteBalanceTintController, false);
+                    break;
+                case MSG_APPLY_UPDATE_DISPLAY_ENGINE:
+                    mDisplayEngineController.updateBalance(getContext(), mCurrentUser);
+                    applyTint(mDisplayEngineController, true);
                     break;
             }
         }
