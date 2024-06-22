@@ -13105,6 +13105,12 @@ public final class Settings {
                 "night_display_last_activated_time";
 
         /**
+         * Control display engine mode.
+         * @hide
+         */
+        public static final String DISPLAY_ENGINE_MODE = "display_engine_mode";
+
+        /**
          * Control whether display white balance is currently enabled.
          * @hide
          */
