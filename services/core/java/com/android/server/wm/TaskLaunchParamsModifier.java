@@ -401,6 +401,7 @@ class TaskLaunchParamsModifier implements LaunchParamsModifier {
         return task != null
                 && task.getRequestedOverrideWindowingMode() != WINDOWING_MODE_UNDEFINED
                 && task.getRequestedOverrideWindowingMode() != WINDOWING_MODE_PINNED
+                && task.getRequestedOverrideWindowingMode() != WINDOWING_MODE_FREEFORM
                 && launchMode != task.getRequestedOverrideWindowingMode();
     }
 

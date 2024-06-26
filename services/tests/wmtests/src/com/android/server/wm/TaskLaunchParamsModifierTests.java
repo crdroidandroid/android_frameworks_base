@@ -649,6 +649,28 @@ public class TaskLaunchParamsModifierTests extends WindowTestsBase {
     }
 
     @Test
+    public void testNotSetWindowingModeIfFreeformTaskExist() {
+        final TestDisplayContent fullscreenDisplay = createNewDisplayContent(
+                WINDOWING_MODE_FULLSCREEN);
+
+        final ActivityRecord activity = createSourceActivity(fullscreenDisplay);
+        final Task task = activity.getTask();
+        task.setWindowingMode(WINDOWING_MODE_FREEFORM);
+        final ActivityRecord source = createSourceActivity(fullscreenDisplay);
+        source.getTask().setWindowingMode(WINDOWING_MODE_FULLSCREEN);
+        final ActivityOptions options = ActivityOptions.makeBasic();
+
+        assertEquals(RESULT_CONTINUE,
+                new CalculateRequestBuilder()
+                        .setTask(task)
+                        .setSource(source)
+                        .setOptions(options)
+                        .calculate());
+
+        assertEquals(WINDOWING_MODE_UNDEFINED, mResult.mWindowingMode);
+    }
+
+    @Test
     public void testBoundsInOptionsInfersFreeformWithResizeableActivity() {
         final ActivityOptions options = ActivityOptions.makeBasic();
         options.setLaunchBounds(new Rect(0, 0, 100, 100));
