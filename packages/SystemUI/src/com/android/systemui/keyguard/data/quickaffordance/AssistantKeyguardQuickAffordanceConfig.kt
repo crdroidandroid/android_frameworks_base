@@ -71,7 +71,7 @@ constructor(
     override fun onTriggered(
         expandable: Expandable?,
     ): KeyguardQuickAffordanceConfig.OnTriggeredResult {
-        val intent = Intent().setClassName("com.openai.chatgpt", "com.openai.voice.VoiceModeActivity")
+        val intent = Intent().setClassName("com.openai.chatgpt", "com.openai.voice.assistant.AssistantActivity")
         return KeyguardQuickAffordanceConfig.OnTriggeredResult.StartActivity(
             intent = intent,
             canShowWhileLocked = true,
