@@ -2398,6 +2398,12 @@ public final class CameraManager {
         }
 
         private static void sortCameraIds(String[] cameraIds) {
+            // Check if the cameraIds array is null to avoid NullPointerException
+            if (cameraIds == null) {
+                Log.e("CameraManagerGlobal", "Camera ID array is null");
+                return;
+            }
+
             // The sort logic must match the logic in
             // libcameraservice/common/CameraProviderManager.cpp::getAPI1CompatibleCameraDeviceIds
             Arrays.sort(cameraIds, new Comparator<String>() {
