@@ -79,7 +79,11 @@ public class LensScreenshotReceiver extends BroadcastReceiver {
                     .setType("image/png")
                     .putExtra(Intent.EXTRA_STREAM, uri)
                     .setClipData(clipdata);
-            context.startActivity(share);
+            try {
+                context.startActivity(share);
+            } catch (Exception e) {
+                return;
+            }
         });
 
         if (intent.getBooleanExtra(EXTRA_SMART_ACTIONS_ENABLED, false)) {
