@@ -2168,37 +2168,43 @@ public final class CameraManager {
         }
 
         private static void sortCameraIds(String[] cameraIds) {
+            // Check if the cameraIds array is null to avoid NullPointerException
+            if (cameraIds == null) {
+                Log.e("CameraManagerGlobal", "Camera ID array is null");
+                return; // Exit the method early
+            }
+            
             // The sort logic must match the logic in
             // libcameraservice/common/CameraProviderManager.cpp::getAPI1CompatibleCameraDeviceIds
             Arrays.sort(cameraIds, new Comparator<String>() {
-                    @Override
-                    public int compare(String s1, String s2) {
-                        int s1Int = 0, s2Int = 0;
-                        try {
-                            s1Int = Integer.parseInt(s1);
-                        } catch (NumberFormatException e) {
-                            s1Int = -1;
-                        }
-
-                        try {
-                            s2Int = Integer.parseInt(s2);
-                        } catch (NumberFormatException e) {
-                            s2Int = -1;
-                        }
-
-                        // Uint device IDs first
-                        if (s1Int >= 0 && s2Int >= 0) {
-                            return s1Int - s2Int;
-                        } else if (s1Int >= 0) {
-                            return -1;
-                        } else if (s2Int >= 0) {
-                            return 1;
-                        } else {
-                            // Simple string compare if both id are not uint
-                            return s1.compareTo(s2);
-                        }
-                    }});
-
+                @Override
+                public int compare(String s1, String s2) {
+                    int s1Int = 0, s2Int = 0;
+                    try {
+                        s1Int = Integer.parseInt(s1);
+                    } catch (NumberFormatException e) {
+                        s1Int = -1;
+                    }
+        
+                    try {
+                        s2Int = Integer.parseInt(s2);
+                    } catch (NumberFormatException e) {
+                        s2Int = -1;
+                    }
+        
+                    // Uint device IDs first
+                    if (s1Int >= 0 && s2Int >= 0) {
+                        return s1Int - s2Int;
+                    } else if (s1Int >= 0) {
+                        return -1;
+                    } else if (s2Int >= 0) {
+                        return 1;
+                    } else {
+                        // Simple string compare if both id are not uint
+                        return s1.compareTo(s2);
+                    }
+                }
+            });
         }
 
         public static boolean cameraStatusesContains(CameraStatus[] cameraStatuses, String id) {
@@ -2301,7 +2307,14 @@ public final class CameraManager {
                 connectCameraServiceLocked();
                 cameraIds = extractCameraIdListLocked();
             }
-            sortCameraIds(cameraIds);
+        
+            // Check if the cameraIds array is null to avoid NullPointerException
+            if (cameraIds != null) {
+                sortCameraIds(cameraIds);
+            } else {
+                Log.e("CameraManagerGlobal", "Camera ID array is null after extraction");
+            }
+        
             return cameraIds;
         }
 
