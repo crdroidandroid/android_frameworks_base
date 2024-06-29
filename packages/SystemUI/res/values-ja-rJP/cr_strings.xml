@@ -79,7 +79,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">優先</string>
     <string name="volume_ringer_alarms_only">アラーム</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">マナー</string>
     <string name="tristate_flashlight">ライト</string>
     <string name="tristate_flashlight_on">ライト ON</string>
     <string name="tristate_flashlight_off">ライト OFF</string>
