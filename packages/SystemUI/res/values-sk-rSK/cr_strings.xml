@@ -67,9 +67,9 @@
     <string name="onthego_front_camera">Použiť prednú kameru</string>
     <string name="onthego_service_toggle">Automaticky reštartovať službu</string>
     <string name="onthego_channel_name">Hlavné</string>
-    <string name="global_action_onthego">On-The-Go</string>
+    <string name="global_action_onthego">Režim na cestách</string>
     <!-- OnTheGo Tile -->
-    <string name="quick_settings_onthego_label">On-The-Go</string>
+    <string name="quick_settings_onthego_label">Režim na cestách</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">Informácie o CPU</string>
     <!-- FPS Info tile -->
