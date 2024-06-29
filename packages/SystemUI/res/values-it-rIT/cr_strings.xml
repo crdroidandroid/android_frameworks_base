@@ -51,7 +51,7 @@
     <string name="weather_condition_wind">Ventoso</string>
     <string name="weather_condition_mist">Nebbioso</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time">Dash charge</string>
+    <string name="keyguard_indication_dash_charging_time">&lt;xliff:g id="percentage"&gt;%2$s&lt;/xliff:g&gt; • Ricarica Ultrarapida (&lt;xliff:g id="charging_time_left" example="4 hours and 2 minutes"&gt;%1$s&lt;/xliff:g alla carica completa)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Animazione di carica</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carica Rapida(<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
@@ -80,7 +80,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Priorità</string>
     <string name="volume_ringer_alarms_only">Sveglie</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">Non Disturbare</string>
     <string name="tristate_flashlight">Torcia</string>
     <string name="tristate_flashlight_on">Torcia accesa</string>
     <string name="tristate_flashlight_off">Torcia spenta</string>
