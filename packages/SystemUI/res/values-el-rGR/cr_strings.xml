@@ -80,7 +80,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Προτεραιότητα</string>
     <string name="volume_ringer_alarms_only">Ξυπνητήρια</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">\"Μην Ενοχλείτε\"</string>
     <string name="tristate_flashlight">Φακός</string>
     <string name="tristate_flashlight_on">Φακός ενεργός</string>
     <string name="tristate_flashlight_off">Φακός ανενεργός</string>
