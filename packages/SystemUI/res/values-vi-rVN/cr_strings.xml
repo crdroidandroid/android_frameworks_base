@@ -31,12 +31,12 @@
     <string name="quick_settings_sound_mute">Tắt âm thanh</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb / giây</string>
-    <string name="megabitspersecond_short">Mb / giây</string>
-    <string name="gigabitspersecond_short">Gb / giây</string>
-    <string name="kilobytespersecond_short">kB / giây</string>
-    <string name="megabytespersecond_short">MB / giây</string>
-    <string name="gigabytespersecond_short">GB / giây</string>
+    <string name="kilobitspersecond_short">kb/giây</string>
+    <string name="megabitspersecond_short">Mb/giây</string>
+    <string name="gigabitspersecond_short">Gb/giây</string>
+    <string name="kilobytespersecond_short">kB/giây</string>
+    <string name="megabytespersecond_short">MB/giây</string>
+    <string name="gigabytespersecond_short">GB/giây</string>
     <!-- Data usage info in QS footer -->
     <string name="usage_data">hôm nay dùng</string>
     <string name="usage_data_default_suffix">Dữ liệu</string>
