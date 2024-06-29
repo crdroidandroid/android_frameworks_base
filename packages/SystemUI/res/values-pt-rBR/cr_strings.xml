@@ -52,9 +52,9 @@
     <string name="weather_condition_mist">Nevoeiro</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Dash (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até a carga completa)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> • Carregando rapidamente</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Carregamento Dash</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Rapido (<xliff:g id="charging_time_left" example="4 horas e 2 minutos">%1$s</xliff:g> até conclusão)</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Warp (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até concluir)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Carregando Rapidamente</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento rápido (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até concluir)</string>
@@ -103,7 +103,7 @@
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" exemplo="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Bússola</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="graus">%1$.0f</xliff:g>\u00b0 <xliff:g id="direção">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Inicializando\u2026</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">NE</string>
