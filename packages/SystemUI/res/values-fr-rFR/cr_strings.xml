@@ -32,7 +32,7 @@
     <string name="quick_settings_sound_mute">Silence</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="kilobitspersecond_short">Kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
     <string name="gigabitspersecond_short">Gb/s</string>
     <string name="kilobytespersecond_short">ko/s</string>
