@@ -81,7 +81,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Prioritate</string>
     <string name="volume_ringer_alarms_only">Alarme</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">Nu deranjați</string>
     <string name="tristate_flashlight">Lanternă</string>
     <string name="tristate_flashlight_on">Lanternă activată</string>
     <string name="tristate_flashlight_off">Lanternă oprită</string>
