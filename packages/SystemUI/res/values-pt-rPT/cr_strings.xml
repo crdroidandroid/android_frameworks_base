@@ -51,11 +51,11 @@
     <string name="weather_condition_wind">Ventoso</string>
     <string name="weather_condition_mist">Enevoado</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentagem">%2$s</xliff:g> • Carregamento Rápido (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até estar completo)</string>
-    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> restante</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Dash (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até estar completo)</string>
+    <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Carregamento Dash</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Rápido (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até esta completo)</string>
-    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="PERCENTAGE">%s</xliff:g> restante</string>
+    <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Carregamento Warp</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carregamento Rápido (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> até estar completo)</string>
     <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • Carregamento Rápido</string>
@@ -80,7 +80,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Prioridade</string>
     <string name="volume_ringer_alarms_only">Alarmes</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">Não incomodar</string>
     <string name="tristate_flashlight">Lanterna</string>
     <string name="tristate_flashlight_on">Lanterna ligada</string>
     <string name="tristate_flashlight_off">Lanterna desligada</string>
