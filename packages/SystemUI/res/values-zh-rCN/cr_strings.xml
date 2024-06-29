@@ -16,7 +16,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Statusbar Icons -->
-    <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_nfc">NFC 近场通讯</string>
     <string name="status_bar_data_saver">数据保存</string>
     <string name="status_bar_call_strength">通话强度</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
@@ -79,7 +79,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">优先级</string>
     <string name="volume_ringer_alarms_only">闹钟</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">勿扰</string>
     <string name="tristate_flashlight">手电筒</string>
     <string name="tristate_flashlight_on">手电筒开启</string>
     <string name="tristate_flashlight_off">手电筒关闭</string>
