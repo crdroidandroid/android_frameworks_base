@@ -82,7 +82,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Прыярытэт</string>
     <string name="volume_ringer_alarms_only">Будзільнікі</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">Не турбаваць</string>
     <string name="tristate_flashlight">Ліхтарык</string>
     <string name="tristate_flashlight_on">Ліхтарык уключаны</string>
     <string name="tristate_flashlight_off">Ліхтарык выключаны</string>
