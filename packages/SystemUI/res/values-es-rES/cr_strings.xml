@@ -32,7 +32,7 @@
     <string name="quick_settings_sound_mute">Silenciar</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="kilobitspersecond_short">Kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
     <string name="gigabitspersecond_short">Gb/s</string>
     <string name="kilobytespersecond_short">kB/s</string>
@@ -51,10 +51,10 @@
     <string name="weather_condition_wind">Ventoso</string>
     <string name="weather_condition_mist">Neblina</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga rápida Dash (<xliff:g id="charging_time_left" example="4 horas y 2 minutos">%1$s</xliff:g> hasta que esté llena)</string>
+    <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga rápida(<xliff:g id="charging_time_left" example="4 horas y 2 minutos">%1$s</xliff:g> para carga total)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Carga rápida Dash</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a warp charger. Should match keyguard_plugged_in_warp_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga rápida (<xliff:g id="charging_time_left" example="4 horas y 2 minutos">%1$s</xliff:g> hasta carga completa)</string>
+    <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga rápida (<xliff:g id="charging_time_left" example="4 horas y 2 minutos">%1$s</xliff:g> para carga completa)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • Carga rápida</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Carga VOOC (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> hasta carga completa)</string>
@@ -80,7 +80,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Prioridad</string>
     <string name="volume_ringer_alarms_only">Alarmas</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">No Molestar</string>
     <string name="tristate_flashlight">Linterna</string>
     <string name="tristate_flashlight_on">Linterna activada</string>
     <string name="tristate_flashlight_off">Linterna desactivada</string>
@@ -103,7 +103,7 @@
     <string name="fps_text_placeholder">FPS: <xliff:g id="fps" example="90">%1$d</xliff:g></string>
     <!-- Compass QS Tile -->
     <string name="quick_settings_compass_label">Brújula</string>
-    <string name="quick_settings_compass_value"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_value"><xliff:g id="grados">%1$.0f</xliff:g>\u00b0 <xliff:g id="dirección">%2$s</xliff:g></string>
     <string name="quick_settings_compass_init">Iniciando\u2026</string>
     <string name="quick_settings_compass_N">N</string>
     <string name="quick_settings_compass_NE">NE</string>
