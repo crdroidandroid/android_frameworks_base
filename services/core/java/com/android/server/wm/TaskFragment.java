@@ -408,6 +408,8 @@ class TaskFragment extends WindowContainer<WindowContainer> {
     private final EnsureActivitiesVisibleHelper mEnsureActivitiesVisibleHelper =
             new EnsureActivitiesVisibleHelper(this);
 
+     private final PowerManagerInternal mPowerManagerInternal;
+
     /** Creates an embedded task fragment. */
     TaskFragment(ActivityTaskManagerService atmService, IBinder fragmentToken,
             boolean createdByOrganizer) {
@@ -428,6 +430,7 @@ class TaskFragment extends WindowContainer<WindowContainer> {
                 mAtmService.mWindowOrganizerController.mTaskFragmentOrganizerController;
         mFragmentToken = fragmentToken;
         mRemoteToken = new RemoteToken(this);
+        mPowerManagerInternal = LocalServices.getService(PowerManagerInternal.class);
     }
 
     @NonNull
@@ -1502,8 +1505,8 @@ class TaskFragment extends WindowContainer<WindowContainer> {
                 dc.prepareAppTransition(TRANSIT_NONE);
             } else {
                 dc.prepareAppTransition(TRANSIT_OPEN);
-                if (next != null) {
-                    doActivityBoost();
+                if (mPowerManagerInternal != null) {
+                    mPowerManagerInternal.setPowerBoost(Boost.DISPLAY_UPDATE_IMMINENT, 80);
                 }
             }
         }
@@ -1697,13 +1700,6 @@ class TaskFragment extends WindowContainer<WindowContainer> {
         }
 
         return true;
-    }
-
-    protected void doActivityBoost() {
-        PowerManagerInternal mPowerManagerInternal = LocalServices.getService(PowerManagerInternal.class);
-        if (mPowerManagerInternal != null) {
-            mPowerManagerInternal.setPowerBoost(Boost.DISPLAY_UPDATE_IMMINENT, 80);
-        }
     }
 
     boolean shouldSleepOrShutDownActivities() {
