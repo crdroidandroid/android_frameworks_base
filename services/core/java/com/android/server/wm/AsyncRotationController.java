@@ -112,10 +112,13 @@ class AsyncRotationController extends FadeAnimationController implements Consume
     private int mOriginalRotation;
     private final boolean mHasScreenRotationAnimation;
 
+    private final PowerManagerInternal mPowerManagerInternal;
+
     AsyncRotationController(DisplayContent displayContent) {
         super(displayContent);
         mService = displayContent.mWmService;
         mOriginalRotation = displayContent.getWindowConfiguration().getRotation();
+        mPowerManagerInternal = LocalServices.getService(PowerManagerInternal.class);
         final int transitionType =
                 displayContent.mTransitionController.getCollectingTransitionType();
         if (transitionType == WindowManager.TRANSIT_CHANGE) {
@@ -362,7 +365,6 @@ class AsyncRotationController extends FadeAnimationController implements Consume
     }
 
     protected void setActivityBoost(boolean enable) {
-        PowerManagerInternal mPowerManagerInternal = LocalServices.getService(PowerManagerInternal.class);
         if (mPowerManagerInternal != null) {
             mPowerManagerInternal.setPowerMode(Mode.LAUNCH, enable);
         }
