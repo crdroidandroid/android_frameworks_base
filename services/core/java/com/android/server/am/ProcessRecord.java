@@ -74,8 +74,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import android.util.RisingBoostFramework;
-
 /**
  * Full information about a particular process that
  * is currently running.
@@ -1251,7 +1249,6 @@ class ProcessRecord implements WindowProcessListener {
                     && mErrorState.getAnrAnnotation() != null) {
                 description = description + ": " + mErrorState.getAnrAnnotation();
             }
-            RisingBoostFramework ux_perf = RisingBoostFramework.getInstance();
             if (mService != null && (noisy || info.uid == mService.mCurOomAdjUid)) {
                 mService.reportUidInfoMessageLocked(TAG,
                         "Killing " + toShortString() + " (adj " + mState.getSetAdj()
@@ -1275,12 +1272,6 @@ class ProcessRecord implements WindowProcessListener {
                     mKilledByAm = true;
                     mKillTime = SystemClock.uptimeMillis();
                 }
-            }
-            if (ux_perf != null && !mService.mForceStopKill && !mErrorState.isNotResponding()
-                && !mErrorState.isCrashing()) {
-                ux_perf.perfBoost(RisingBoostFramework.WorkloadType.VENDOR_HINT_KILL);
-            } else {
-                mService.mForceStopKill = false;
             }
             Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
         }

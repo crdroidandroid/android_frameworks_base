@@ -279,8 +279,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-import android.util.RisingBoostFramework;
-
 /**
  * This manages the execution of the main thread in an
  * application process, scheduling and executing activities,
@@ -7091,8 +7089,6 @@ public final class ActivityThread extends ClientTransactionHandler
 
     @UnsupportedAppUsage
     private void handleBindApplication(AppBindData data) {
-        long st_bindApp = SystemClock.uptimeMillis();
-        RisingBoostFramework ux_perf = null;
         mDdmSyncStageUpdater.next(Stage.Bind);
 
         // Register the UI Thread as a sensitive thread to the runtime.
@@ -7299,16 +7295,6 @@ public final class ActivityThread extends ClientTransactionHandler
         } finally {
             Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
         }
-        
-
-        if (!Process.isIsolated()) {
-            final int old_mask = StrictMode.allowThreadDiskWritesMask();
-            try {
-                ux_perf = RisingBoostFramework.getInstance();
-            } finally {
-                 StrictMode.setThreadPolicyMask(old_mask);
-            }
-        }
 
         if (!Process.isIsolated()) {
             final int oldMask = StrictMode.allowThreadDiskWritesMask();
@@ -7447,16 +7433,6 @@ public final class ActivityThread extends ClientTransactionHandler
             } catch (RemoteException e) {
                 throw e.rethrowFromSystemServer();
             }
-        }
-
-        long end_bindApp = SystemClock.uptimeMillis();
-        int bindApp_dur = (int) (end_bindApp - st_bindApp);
-        String pkg_name = null;
-        if (appContext != null) {
-            pkg_name = appContext.getPackageName();
-        }
-        if (ux_perf != null && !Process.isIsolated() && pkg_name != null) {
-            ux_perf.perfBoost(RisingBoostFramework.WorkloadType.LAUNCH, bindApp_dur);
         }
 
         try {

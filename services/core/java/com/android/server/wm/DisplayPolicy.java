@@ -16,11 +16,8 @@
 
 package com.android.server.wm;
 
-import static android.app.WindowConfiguration.ACTIVITY_TYPE_RECENTS;
 import static android.app.WindowConfiguration.WINDOWING_MODE_FREEFORM;
-import static android.app.WindowConfiguration.WINDOWING_MODE_UNDEFINED;
 import static android.inputmethodservice.InputMethodService.ENABLE_HIDE_IME_CAPTION_BAR;
-import static android.view.Display.INVALID_DISPLAY;
 import static android.view.Display.TYPE_INTERNAL;
 import static android.view.InsetsFrameProvider.SOURCE_ARBITRARY_RECTANGLE;
 import static android.view.InsetsFrameProvider.SOURCE_CONTAINER_BOUNDS;
@@ -87,14 +84,12 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.Px;
 import android.app.ActivityManager;
-import android.app.ActivityTaskManager;
 import android.app.ActivityThread;
 import android.app.LoadedApk;
 import android.app.ResourcesManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Insets;
@@ -161,8 +156,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import android.util.RisingBoostFramework;
-
 /**
  * The policy that provides the basic behaviors and states of a display to show UI.
  */
@@ -210,12 +203,6 @@ public class DisplayPolicy {
     private final AccessibilityManager mAccessibilityManager;
     private final ImmersiveModeConfirmation mImmersiveModeConfirmation;
     private final ScreenshotHelper mScreenshotHelper;
-
-    /*
-     * @hide
-     */
-    RisingBoostFramework mPerf = RisingBoostFramework.getInstance();
-    private boolean wasScrollingStarted = false;
 
     private final Object mServiceAcquireLock = new Object();
     private long mPanicTime;
@@ -435,33 +422,6 @@ public class DisplayPolicy {
         }
     }
 
-    private String getAppPackageName() {
-        String currentPackage;
-        try {
-            ActivityManager.RunningTaskInfo rti = ActivityTaskManager.getService().getTasks(
-                1, false /* filterVisibleRecents */, false /*keepIntentExtra */, INVALID_DISPLAY /*don't filter display */).get(0);
-            currentPackage = rti.topActivity.getPackageName();
-        } catch (Exception e) {
-            currentPackage = null;
-        }
-        return currentPackage;
-    }
-
-    private boolean isTopAppGame(String currentPackage) {
-        boolean isGame = false;
-        try {
-            ApplicationInfo ai = mContext.getPackageManager().getApplicationInfo(currentPackage, 0);
-            if(ai != null) {
-                isGame = (ai.category == ApplicationInfo.CATEGORY_GAME) ||
-                        ((ai.flags & ApplicationInfo.FLAG_IS_GAME) ==
-                            ApplicationInfo.FLAG_IS_GAME);
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        return isGame;
-    }
-
     DisplayPolicy(WindowManagerService service, DisplayContent displayContent) {
         mService = service;
         mContext = displayContent.isDefaultDisplay ? service.mContext
@@ -570,7 +530,10 @@ public class DisplayPolicy {
 
                 @Override
                 public void onFling(int duration) {
-                    mPerf.perfBoost(RisingBoostFramework.WorkloadType.SCROLLING, duration);
+                    if (mService.mPowerManagerInternal != null) {
+                        mService.mPowerManagerInternal.setPowerBoost(
+                                Boost.INTERACTION, duration);
+                    }
                 }
 
                 @Override
@@ -588,43 +551,6 @@ public class DisplayPolicy {
                     final WindowOrientationListener listener = getOrientationListener();
                     if (listener != null) {
                         listener.onTouchStart();
-                    }
-                }
-
-                @Override
-                public void onVerticalFling(int duration) {
-                    String currentPackage = getAppPackageName();
-                    if (currentPackage == null) {
-                        return;
-                    }
-                    boolean isGame = isTopAppGame(currentPackage);
-                    if (!isGame) {
-                        mPerf.perfBoost(RisingBoostFramework.WorkloadType.SCROLLING, duration + 160);
-                   }
-                }
-
-                @Override
-                public void onHorizontalFling(int duration) {
-                    String currentPackage = getAppPackageName();
-                    if (currentPackage == null) {
-                        return;
-                    }
-                    boolean isGame = isTopAppGame(currentPackage);
-                    if (!isGame) {
-                        mPerf.perfBoost(RisingBoostFramework.WorkloadType.SCROLLING, duration + 160);
-                   }
-                }
-
-                @Override
-                public void onScroll(boolean started) {
-                    String currentPackage = getAppPackageName();
-                    if (currentPackage == null) {
-                        return;
-                    }
-                    boolean isGame = isTopAppGame(currentPackage);
-                    if (wasScrollingStarted != started && !isGame)  {
-                        mPerf.perfBoost(RisingBoostFramework.WorkloadType.SCROLLING, started);
-                        wasScrollingStarted = started;
                     }
                 }
 

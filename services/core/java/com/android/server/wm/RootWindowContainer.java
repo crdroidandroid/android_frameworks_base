@@ -47,7 +47,6 @@ import static com.android.internal.protolog.ProtoLogGroup.WM_SHOW_SURFACE_ALLOC;
 import static com.android.server.policy.PhoneWindowManager.SYSTEM_DIALOG_REASON_ASSIST;
 import static com.android.server.policy.WindowManagerPolicy.FINISH_LAYOUT_REDO_LAYOUT;
 import static com.android.server.policy.WindowManagerPolicy.FINISH_LAYOUT_REDO_WALLPAPER;
-import static com.android.server.wm.ActivityRecord.State.DESTROYED;
 import static com.android.server.wm.ActivityRecord.State.FINISHING;
 import static com.android.server.wm.ActivityRecord.State.PAUSED;
 import static com.android.server.wm.ActivityRecord.State.RESUMED;
@@ -168,10 +167,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import android.util.RisingBoostFramework;
-
 /** Root {@link WindowContainer} for the device. */
-public class RootWindowContainer extends WindowContainer<DisplayContent>
+class RootWindowContainer extends WindowContainer<DisplayContent>
         implements DisplayManager.DisplayListener {
     private static final String TAG = TAG_WITH_CLASS_NAME ? "RootWindowContainer" : TAG_WM;
 
@@ -251,9 +248,6 @@ public class RootWindowContainer extends WindowContainer<DisplayContent>
     private final DeviceStateController mDeviceStateController;
     @NonNull
     private final DisplayRotationCoordinator mDisplayRotationCoordinator;
-
-    public static boolean mPerfSendTapHint = false;
-    public RisingBoostFramework mPerfBoost = null;
 
     /** Reference to default display so we can quickly look it up. */
     private DisplayContent mDefaultDisplay;
@@ -1847,7 +1841,7 @@ public class RootWindowContainer extends WindowContainer<DisplayContent>
     }
 
     @Nullable
-    public Task getTopDisplayFocusedRootTask() {
+    Task getTopDisplayFocusedRootTask() {
         for (int i = getChildCount() - 1; i >= 0; --i) {
             final Task focusedRootTask = getChildAt(i).getFocusedRootTask();
             if (focusedRootTask != null) {
@@ -2319,42 +2313,15 @@ public class RootWindowContainer extends WindowContainer<DisplayContent>
         }
     }
 
-    void acquireAppLaunchPerfLock(ActivityRecord r) {
-        /* Acquire perf lock during new app launch */
-        mPerfBoost = RisingBoostFramework.getInstance();
-        if (mPerfBoost != null) {
-            int wpcPid = -1;
-            if (mService != null && r != null && r.info != null && r.info.applicationInfo !=null) {
-                final WindowProcessController wpc =
-                        mService.getProcessController(r.processName, r.info.applicationInfo.uid);
-                if (wpc != null && wpc.hasThread()) {
-                   //If target process didn't start yet,
-                   // this operation will be done when app call attach
-                   wpcPid = wpc.getPid();
-                }
-            }
-            mPerfBoost.perfBoost(RisingBoostFramework.WorkloadType.LAUNCH);
-            mPerfSendTapHint = true;
-            if (wpcPid != -1) {
-                mPerfBoost.perfBoost(RisingBoostFramework.WorkloadType.LOADING);
-            }
-            if (mPerfBoost.isPackageOnGameList(r.packageName)) {
-                mPerfBoost.perfBoost(RisingBoostFramework.WorkloadType.GAME);
-            } else {
-                mPerfBoost.perfBoost(RisingBoostFramework.WorkloadType.ANIMATION);
-            }
-        }
-    }
-
     @Nullable
     ActivityRecord findTask(ActivityRecord r, TaskDisplayArea preferredTaskDisplayArea) {
         return findTask(r.getActivityType(), r.taskAffinity, r.intent, r.info,
-                preferredTaskDisplayArea, r);
+                preferredTaskDisplayArea);
     }
 
     @Nullable
     ActivityRecord findTask(int activityType, String taskAffinity, Intent intent, ActivityInfo info,
-            TaskDisplayArea preferredTaskDisplayArea, ActivityRecord r) {
+            TaskDisplayArea preferredTaskDisplayArea) {
         ProtoLog.d(WM_DEBUG_TASKS, "Looking for task of type=%s, taskAffinity=%s, intent=%s"
                         + ", info=%s, preferredTDA=%s", activityType, taskAffinity, intent, info,
                 preferredTaskDisplayArea);
@@ -2365,31 +2332,9 @@ public class RootWindowContainer extends WindowContainer<DisplayContent>
         if (preferredTaskDisplayArea != null) {
             mTmpFindTaskResult.process(preferredTaskDisplayArea);
             if (mTmpFindTaskResult.mIdealRecord != null) {
-                if(mTmpFindTaskResult.mIdealRecord.getState() == DESTROYED) {
-                    /*It's a new app launch */
-                    acquireAppLaunchPerfLock(r);
-                }
-
-                if(mTmpFindTaskResult.mIdealRecord.getState() == STOPPED) {
-                     /*Warm launch */
-                     mPerfBoost = RisingBoostFramework.getInstance();
-                     if (mPerfBoost != null) {
-                         mPerfBoost.perfBoost(RisingBoostFramework.WorkloadType.LAUNCH);
-                     }
-                }
                 return mTmpFindTaskResult.mIdealRecord;
             } else if (mTmpFindTaskResult.mCandidateRecord != null) {
                 candidateActivity = mTmpFindTaskResult.mCandidateRecord;
-            }
-        }
-
-        /* Acquire perf lock *only* during new app launch */
-        if ((mTmpFindTaskResult.mIdealRecord == null) ||
-            (mTmpFindTaskResult.mIdealRecord.getState() == DESTROYED)) {
-            if (r != null && r.isMainIntent(r.intent)) {
-                acquireAppLaunchPerfLock(r);
-            } else if (r == null) {
-                Slog.w(TAG, "Should not happen! Didn't apply launch boost");
             }
         }
 

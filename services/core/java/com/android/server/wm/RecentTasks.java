@@ -93,8 +93,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import android.util.RisingBoostFramework;
-
 /**
  * Class for managing the recent tasks list. The list is ordered by most recent (index 0) to the
  * least recent.
@@ -211,7 +209,6 @@ class RecentTasks {
     private final HashMap<ComponentName, ActivityInfo> mTmpAvailActCache = new HashMap<>();
     private final HashMap<String, ApplicationInfo> mTmpAvailAppCache = new HashMap<>();
     private final SparseBooleanArray mTmpQuietProfileUserIds = new SparseBooleanArray();
-    private final RisingBoostFramework mUxPerf = RisingBoostFramework.getInstance();
 
     // TODO(b/127498985): This is currently a rough heuristic for interaction inside an app
     private final PointerEventListener mListener = new PointerEventListener() {
@@ -1301,17 +1298,6 @@ class RecentTasks {
     void remove(Task task) {
         mTasks.remove(task);
         notifyTaskRemoved(task, false /* wasTrimmed */, false /* killProcess */);
-        if (task != null) {
-            final Intent intent = task.getBaseIntent();
-            if (intent == null) return;
-            final ComponentName componentName = intent.getComponent();
-            if (componentName == null) return;
-
-            final String taskPkgName = componentName.getPackageName();
-            if (mUxPerf != null) {
-                mUxPerf.perfBoost(RisingBoostFramework.WorkloadType.VENDOR_HINT_KILL);
-            }
-        }
     }
 
     /**

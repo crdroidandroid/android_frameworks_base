@@ -411,8 +411,6 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import android.util.RisingBoostFramework;
-
 /**
  * An entry in the history task, representing an activity.
  */
@@ -6322,13 +6320,12 @@ public final class ActivityRecord extends WindowToken implements WindowManagerSe
                 Slog.v(TAG_VISIBILITY, "Start visible activity, " + this);
             }
             setState(STARTED, "makeActiveIfNeeded");
-            RisingBoostFramework.getInstance().perfBoost(RisingBoostFramework.WorkloadType.LAUNCH, true);
+
             try {
                 mAtmService.getLifecycleManager().scheduleTransactionItem(app.getThread(),
                         StartActivityItem.obtain(token, takeSceneTransitionInfo()));
             } catch (Exception e) {
                 Slog.w(TAG, "Exception thrown sending start: " + intent.getComponent(), e);
-                RisingBoostFramework.getInstance().perfBoost(RisingBoostFramework.WorkloadType.LAUNCH, false);
             }
             // The activity may be waiting for stop, but that is no longer appropriate if we are
             // starting the activity again
@@ -6959,7 +6956,6 @@ public final class ActivityRecord extends WindowToken implements WindowManagerSe
 
     /** Called when the windows associated app window container are drawn. */
     private void onWindowsDrawn() {
-        RisingBoostFramework.getInstance().perfBoost(RisingBoostFramework.WorkloadType.LAUNCH, false);
         final TransitionInfoSnapshot info = mTaskSupervisor
                 .getActivityMetricsLogger().notifyWindowsDrawn(this);
         final boolean validInfo = info != null;
@@ -7701,15 +7697,6 @@ public final class ActivityRecord extends WindowToken implements WindowManagerSe
     @VisibleForTesting
     boolean shouldAnimate() {
         return task == null || task.shouldAnimate();
-    }
-
-    public int isAppInfoGame() {
-        int isGame = 0;
-        if (info.applicationInfo != null) {
-            isGame = (info.applicationInfo.category == ApplicationInfo.CATEGORY_GAME ||
-                      (info.applicationInfo.flags & ApplicationInfo.FLAG_IS_GAME) == ApplicationInfo.FLAG_IS_GAME) ? 1 : 0;
-        }
-        return isGame;
     }
 
     /**

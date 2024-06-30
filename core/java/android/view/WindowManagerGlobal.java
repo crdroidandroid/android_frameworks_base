@@ -57,8 +57,6 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
-import android.util.RisingBoostFramework;
-
 /**
  * Provides low-level communication with the system window manager for
  * operations that are not associated with any particular context.
@@ -400,12 +398,10 @@ public final class WindowManagerGlobal {
                 // The previous removeView() had not completed executing. Now it has.
             }
 
-            boolean isSubWindow = false;
             // If this is a panel window, then find the window it is being
             // attached to for future reference.
             if (wparams.type >= WindowManager.LayoutParams.FIRST_SUB_WINDOW &&
                     wparams.type <= WindowManager.LayoutParams.LAST_SUB_WINDOW) {
-                isSubWindow = true;
                 final int count = mViews.size();
                 for (int i = 0; i < count; i++) {
                     if (mRoots.get(i).mWindow.asBinder() == wparams.token) {
@@ -435,16 +431,6 @@ public final class WindowManagerGlobal {
             }
 
             view.setLayoutParams(wparams);
-
-            int visibleRootCount = 0;
-            if (!isSubWindow) {
-                for (int i = mRoots.size() - 1; i >= 0; --i) {
-                    View root_view = mRoots.get(i).getView();
-                    if (root_view != null && root_view.getVisibility() == View.VISIBLE) {
-                        visibleRootCount++;
-                    }
-                }
-            }
 
             mViews.add(view);
             mRoots.add(root);
@@ -572,19 +558,6 @@ public final class WindowManagerGlobal {
                 final View view = mViews.remove(index);
                 mDyingViews.remove(view);
             }
-
-            int visibleRootCount = 0;
-            RisingBoostFramework perf_ux = RisingBoostFramework.getInstance();
-            for (int i = mRoots.size() - 1; i >= 0; --i) {
-                View root_view = mRoots.get(i).getView();
-                if (root_view != null && root_view.getVisibility() == View.VISIBLE) {
-                    visibleRootCount++;
-                }
-            }
-            if (visibleRootCount == 1) {
-                perf_ux.perfBoost(RisingBoostFramework.WorkloadType.ANIMATION);
-            }
-
             allViewsRemoved = mRoots.isEmpty();
         }
 

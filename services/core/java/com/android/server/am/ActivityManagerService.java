@@ -528,8 +528,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import android.util.RisingBoostFramework;
-
 public class ActivityManagerService extends IActivityManager.Stub
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback, ActivityManagerGlobalLock {
 
@@ -633,10 +631,6 @@ public class ActivityManagerService extends IActivityManager.Stub
     // the notification will not be legible to the user.
     private static final int MAX_BUGREPORT_TITLE_SIZE = 100;
     private static final int MAX_BUGREPORT_DESCRIPTION_SIZE = 150;
-
-    /* UX perf event object */
-    public static RisingBoostFramework mUxPerf = RisingBoostFramework.getInstance();
-    public static boolean mForceStopKill = false;
 
     OomAdjuster mOomAdjuster;
 
@@ -3566,11 +3560,6 @@ public class ActivityManagerService extends IActivityManager.Stub
                 mAppProfiler.setAllowLowerMemLevelLocked(false);
                 doLowMem = false;
             }
-
-            if (mUxPerf != null && !mForceStopKill && !app.mErrorState.isNotResponding() && !app.mErrorState.isCrashing()) {
-                mUxPerf.perfBoost(RisingBoostFramework.WorkloadType.VENDOR_HINT_KILL);
-            }
-
             EventLogTags.writeAmProcDied(app.userId, pid, app.processName, setAdj, setProcState);
             if (DEBUG_CLEANUP) Slog.v(TAG_CLEANUP,
                 "Dying app: " + app + ", pid: " + pid + ", thread: " + thread.asBinder());
@@ -4352,7 +4341,6 @@ public class ActivityManagerService extends IActivityManager.Stub
         // A specific subset of the work done in forceStopPackageLocked(), because we are
         // intentionally not rendering the app nonfunctional; we're just halting its current
         // execution.
-        mForceStopKill = true;
         final int appId = UserHandle.getAppId(uid);
         synchronized (this) {
             synchronized (mProcLock) {
@@ -4414,7 +4402,6 @@ public class ActivityManagerService extends IActivityManager.Stub
 
             mAppErrors.resetProcessCrashTime(packageName == null, appId, userId);
         }
-        mForceStopKill = true;
 
         synchronized (mProcLock) {
             // Notify first that the package is stopped, so its process won't be restarted
@@ -4673,10 +4660,6 @@ public class ActivityManagerService extends IActivityManager.Stub
         }
 
         EventLogTags.writeAmProcBound(app.userId, pid, app.processName);
-
-        if (mUxPerf != null && app.getHostingRecord() != null && app.getHostingRecord().isTopApp()) {
-            mUxPerf.perfBoost(RisingBoostFramework.WorkloadType.LAUNCH);
-        }
 
         synchronized (mProcLock) {
             mOomAdjuster.setAttachingProcessStatesLSP(app);

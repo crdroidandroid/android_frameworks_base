@@ -38,8 +38,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.function.Consumer;
 
-import android.util.RisingBoostFramework;
-
 /**
  * Controller to handle the appearance of non-activity windows which can update asynchronously when
  * the display rotation is changing. This is an optimization to reduce the latency to start screen
@@ -351,7 +349,6 @@ class AsyncRotationController extends FadeAnimationController implements Consume
             finishOp(token);
             if (mTargetWindowTokens.isEmpty()) {
                 onAllCompleted();
-                RisingBoostFramework.getInstance().perfBoost(RisingBoostFramework.WorkloadType.DISPLAY_CHANGE, false);
                 return true;
             }
         }
@@ -365,7 +362,6 @@ class AsyncRotationController extends FadeAnimationController implements Consume
      * be seamlessly rotated later.
      */
     void start() {
-        RisingBoostFramework.getInstance().perfBoost(RisingBoostFramework.WorkloadType.DISPLAY_CHANGE, true);
         for (int i = mTargetWindowTokens.size() - 1; i >= 0; i--) {
             final WindowToken windowToken = mTargetWindowTokens.keyAt(i);
             final Operation op = mTargetWindowTokens.valueAt(i);
