@@ -8014,8 +8014,11 @@ public class WindowManagerService extends IWindowManager.Stub
         @Override
         public void waitForAllWindowsDrawn(Message message, long timeout, int displayId) {
             Objects.requireNonNull(message.getTarget());
-            final WindowContainer<?> container = displayId == INVALID_DISPLAY
+            final WindowContainer<?> container;
+            synchronized (mGlobalLock) {
+                container = displayId == INVALID_DISPLAY
                     ? mRoot : mRoot.getDisplayContent(displayId);
+            }
             if (container == null) {
                 // The waiting container doesn't exist, no need to wait to run the callback. Run and
                 // return;
