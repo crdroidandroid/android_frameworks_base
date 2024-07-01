@@ -47,6 +47,7 @@ public class PluginManagerImpl extends BroadcastReceiver implements PluginManage
 
     private static final String TAG = PluginManagerImpl.class.getSimpleName();
     static final String DISABLE_PLUGIN = "com.android.systemui.action.DISABLE_PLUGIN";
+    private static final String CLOCK_PLUGINS_PREFIX = "com.android.systemui.clocks";
 
     private final ArrayMap<PluginListener<?>, PluginActionManager<?>> mPluginMap
             = new ArrayMap<>();
@@ -235,10 +236,12 @@ public class PluginManagerImpl extends BroadcastReceiver implements PluginManage
         for (String componentNameOrPackage : mPrivilegedPlugins) {
             ComponentName componentName = ComponentName.unflattenFromString(componentNameOrPackage);
             if (componentName != null) {
-                if (componentName.equals(pluginName)) {
+                if (componentName.equals(pluginName) 
+                    || componentName.getPackageName().startsWith(CLOCK_PLUGINS_PREFIX)) {
                     return true;
                 }
-            } else if (componentNameOrPackage.equals(pluginName.getPackageName())) {
+            } else if (componentNameOrPackage.equals(pluginName.getPackageName())
+                || componentNameOrPackage.startsWith(CLOCK_PLUGINS_PREFIX)) {
                 return true;
             }
         }
