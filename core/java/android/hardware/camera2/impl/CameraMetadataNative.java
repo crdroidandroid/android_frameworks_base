@@ -1914,30 +1914,34 @@ public class CameraMetadataNative implements Parcelable {
     }
 
     private <T> void setBase(Key<T> key, T value) {
-        int tag;
-        if (key.hasTag()) {
-            tag = key.getTag();
-        } else {
-            tag = nativeGetTagFromKeyLocal(mMetadataPtr, key.getName());
-            key.cacheTag(tag);
+        try {
+            int tag;
+            if (key.hasTag()) {
+                tag = key.getTag();
+            } else {
+                tag = nativeGetTagFromKeyLocal(mMetadataPtr, key.getName());
+                key.cacheTag(tag);
+            }
+            if (value == null) {
+                // Erase the entry
+                writeValues(tag, /*src*/null);
+                return;
+            } // else update the entry to a new value
+
+            int nativeType = nativeGetTypeFromTagLocal(mMetadataPtr, tag);
+            Marshaler<T> marshaler = getMarshalerForKey(key, nativeType);
+            int size = marshaler.calculateMarshalSize(value);
+
+            // TODO: Optimization. Cache the byte[] and reuse if the size is big enough.
+            byte[] values = new byte[size];
+
+            ByteBuffer buffer = ByteBuffer.wrap(values).order(ByteOrder.nativeOrder());
+            marshaler.marshal(value, buffer);
+
+            writeValues(tag, values);
+        } catch (Exception e) {
+                // Do nothing
         }
-        if (value == null) {
-            // Erase the entry
-            writeValues(tag, /*src*/null);
-            return;
-        } // else update the entry to a new value
-
-        int nativeType = nativeGetTypeFromTagLocal(mMetadataPtr, tag);
-        Marshaler<T> marshaler = getMarshalerForKey(key, nativeType);
-        int size = marshaler.calculateMarshalSize(value);
-
-        // TODO: Optimization. Cache the byte[] and reuse if the size is big enough.
-        byte[] values = new byte[size];
-
-        ByteBuffer buffer = ByteBuffer.wrap(values).order(ByteOrder.nativeOrder());
-        marshaler.marshal(value, buffer);
-
-        writeValues(tag, values);
     }
 
     // Use Command pattern here to avoid lots of expensive if/equals checks in get for overridden
