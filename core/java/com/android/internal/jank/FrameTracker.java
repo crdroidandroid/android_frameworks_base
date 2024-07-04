@@ -57,6 +57,7 @@ import com.android.internal.util.FrameworkStatsLog;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -103,7 +104,7 @@ public class FrameTracker extends SurfaceControl.OnJankDataListener
     private final ThreadedRendererWrapper mRendererWrapper;
     private final FrameMetricsWrapper mMetricsWrapper;
     private final SparseArray<JankInfo> mJankInfos = new SparseArray<>();
-    private final Configuration mConfig;
+    private final WeakReference<Configuration> mConfig;
     private final ViewRootWrapper mViewRoot;
     private final SurfaceControlWrapper mSurfaceControlWrapper;
     private final int mDisplayId;
@@ -204,7 +205,7 @@ public class FrameTracker extends SurfaceControl.OnJankDataListener
             int traceThresholdMissedFrames, int traceThresholdFrameTimeMillis,
             @Nullable FrameTrackerListener listener) {
         mSurfaceOnly = config.isSurfaceOnly();
-        mConfig = config;
+        mConfig = new WeakReference<>(config);
         mHandler = config.getHandler();
         mChoreographer = choreographer;
         mSurfaceControlWrapper = surfaceControlWrapper;
@@ -312,7 +313,8 @@ public class FrameTracker extends SurfaceControl.OnJankDataListener
             return;
         }
         mTracingStarted = true;
-        String name = mConfig.getSessionName();
+        final Configuration config = mConfig.get();
+        final String name = config != null ? config.getSessionName() : "";
         Trace.asyncTraceForTrackBegin(Trace.TRACE_TAG_APP, name, name, (int) mBeginVsyncId);
         markEvent("FT#beginVsync", mBeginVsyncId);
         markEvent("FT#layerId", mSurfaceControl.getLayerId());
@@ -337,7 +339,8 @@ public class FrameTracker extends SurfaceControl.OnJankDataListener
         } else if (mEndVsyncId <= mBeginVsyncId) {
             return cancel(REASON_CANCEL_SAME_VSYNC);
         } else {
-            final String name = mConfig.getSessionName();
+            final Configuration config = mConfig.get();
+            final String name = config != null ? config.getSessionName() : "";
             markEvent("FT#end", reason);
             markEvent("FT#endVsync", mEndVsyncId);
             Trace.asyncTraceForTrackEnd(Trace.TRACE_TAG_APP, name, (int) mBeginVsyncId);
@@ -392,8 +395,10 @@ public class FrameTracker extends SurfaceControl.OnJankDataListener
         markEvent("FT#cancel", reason);
         // We don't need to end the trace section if it has never begun.
         if (mTracingStarted) {
+            final Configuration config = mConfig.get();
+            final String name = config != null ? config.getSessionName() : "";
             Trace.asyncTraceForTrackEnd(
-                    Trace.TRACE_TAG_APP, mConfig.getSessionName(), (int) mBeginVsyncId);
+                    Trace.TRACE_TAG_APP, name, (int) mBeginVsyncId);
         }
 
         // Always remove the observers in cancel call to avoid leakage.
@@ -420,7 +425,9 @@ public class FrameTracker extends SurfaceControl.OnJankDataListener
                         "The length of the trace event description <%s> exceeds %d",
                         event, MAX_LENGTH_EVENT_DESC));
             }
-            Trace.instantForTrack(Trace.TRACE_TAG_APP, mConfig.getSessionName(), event);
+            final Configuration config = mConfig.get();
+            final String name = config != null ? config.getSessionName() : "";
+            Trace.instantForTrack(Trace.TRACE_TAG_APP, name, event);
         }
     }
 
@@ -559,7 +566,8 @@ public class FrameTracker extends SurfaceControl.OnJankDataListener
         // The tracing has been ended, remove the observer, see if need to trigger perfetto.
         removeObservers();
 
-        final String name = mConfig.getSessionName();
+        final Configuration config = mConfig.get();
+        final String name = config != null ? config.getSessionName() : "";
 
         int totalFramesCount = 0;
         long maxFrameTimeNanos = 0;
@@ -641,14 +649,16 @@ public class FrameTracker extends SurfaceControl.OnJankDataListener
         // Trigger perfetto if necessary.
         if (mListener != null
                 && shouldTriggerPerfetto(missedFramesCount, (int) maxFrameTimeNanos)) {
-            mListener.triggerPerfetto(mConfig);
+            if (mConfig.get() != null) {
+                mListener.triggerPerfetto(mConfig.get());
+            }
         }
-        if (mConfig.logToStatsd()) {
+        if (mConfig.get() != null && mConfig.get().logToStatsd()) {
             mStatsLog.write(
                     FrameworkStatsLog.UI_INTERACTION_FRAME_INFO_REPORTED,
                     mDisplayId,
                     refreshRate,
-                    mConfig.getStatsdInteractionType(),
+                    mConfig.get().getStatsdInteractionType(),
                     totalFramesCount,
                     missedFramesCount,
                     maxFrameTimeNanos, /* will be 0 if mSurfaceOnly == true */
