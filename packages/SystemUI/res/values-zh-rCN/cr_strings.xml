@@ -37,7 +37,7 @@
     <string name="screenrecord_hevc_switch_label">启用 HEVC</string>
     <string name="screenrecord_hevc_switch_summary">使用效率更高的 HEVC 视频编码</string>
     <!-- Statusbar Icons -->
-    <string name="status_bar_nfc">NFC</string>
+    <string name="status_bar_nfc">NFC 近场通讯</string>
     <string name="status_bar_vpn">VPN</string>
     <string name="status_bar_data_saver">流量节省程序</string>
     <string name="status_bar_call_strength">通话强度</string>

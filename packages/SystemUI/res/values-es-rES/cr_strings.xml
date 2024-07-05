@@ -95,7 +95,7 @@
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Prioridad</string>
     <string name="volume_ringer_alarms_only">Alarmas</string>
-    <string name="volume_ringer_dnd">DnD</string>
+    <string name="volume_ringer_dnd">No Molestar</string>
     <string name="tristate_flashlight">Linterna</string>
     <string name="tristate_flashlight_on">Linterna activada</string>
     <string name="tristate_flashlight_off">Linterna desactivada</string>

@@ -133,7 +133,7 @@
     <string name="quick_settings_sound_search">Recherche audio</string>
     <string name="quick_settings_sound_search_no_app">Désolé, mais cela ne fonctionne que si vous n\'avez pas d\'application de recherche audio.</string>
     <!-- Status bar network traffic monitor strings -->
-    <string name="kilobitspersecond_short">kb/s</string>
+    <string name="kilobitspersecond_short">Kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
     <string name="gigabitspersecond_short">Gb/s</string>
     <string name="kilobytespersecond_short">ko/s</string>

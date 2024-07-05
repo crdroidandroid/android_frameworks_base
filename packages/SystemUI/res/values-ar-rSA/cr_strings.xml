@@ -37,8 +37,8 @@
     <string name="screenrecord_hevc_switch_label">تمكين ترميز HEVC</string>
     <string name="screenrecord_hevc_switch_summary">استخدام ترميز فيديو HEVC أكثر كفاءة</string>
     <!-- Statusbar Icons -->
-    <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_vpn">VPN</string>
+    <string name="status_bar_nfc">‏الاتصالات القريبة المدى (NFC)</string>
+    <string name="status_bar_vpn">‏شبكة افتراضية خاصة (VPN)</string>
     <string name="status_bar_data_saver">موفِّر البيانات</string>
     <string name="status_bar_call_strength">قوة الاتصال</string>
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
@@ -50,8 +50,8 @@
     <string name="keyguard_indication_warp_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شحن سريع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> ليكتمل الشحن)</string>
     <string name="keyguard_plugged_in_warp_charging"><xliff:g id="percentage">%s</xliff:g> • شحن سريع جدا</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a VOOC charger. Should match keyguard_plugged_in_vooc_charging [CHAR LIMIT=40]-->
-    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • VOOC Charging (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> until full)</string>
-    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • VOOC Charging</string>
+    <string name="keyguard_indication_vooc_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • شحن سريع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> حتى يمتلئ الشحن)</string>
+    <string name="keyguard_plugged_in_vooc_charging"><xliff:g id="percentage">%s</xliff:g> • شحن سريع</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a turbo power charger. Should match keyguard_plugged_in_turbo_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_turbo_power_time"><xliff:g id="percentage">%2$s</xliff:g> • شحن سريع (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> حتى إكتمال الشحن)</string>
     <string name="keyguard_plugged_in_turbo_charging"><xliff:g id="percentage">%s</xliff:g> • شحن سريع</string>
