@@ -19,6 +19,7 @@ package com.android.server.policy.keyguard;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.RemoteException;
+import android.os.StrictMode;
 import android.util.Slog;
 
 import com.android.internal.policy.IKeyguardService;
@@ -91,9 +92,12 @@ public class KeyguardStateMonitor extends IKeyguardStateCallback.Stub {
         mCallback.onShowingChanged();
         
         if (showing) {
+            final int oldMask = StrictMode.getThreadPolicyMask();
+            StrictMode.setThreadPolicyMask(0);
             System.gc();
             System.runFinalization();
             System.gc();
+            StrictMode.setThreadPolicyMask(oldMask);
         }
     }
 
