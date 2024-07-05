@@ -3633,7 +3633,7 @@ class Transition implements BLASTSyncEngine.TransactionReadyListener {
         /** Takes a screenshot and puts it at the top of the container's surface. */
         @Override
         public boolean freeze(@NonNull WindowContainer wc, @NonNull Rect bounds) {
-            if (!wc.isVisibleRequested()) return false;
+            if (!wc.isVisibleRequested() || mController.isPlaying()) return false;
 
             // Check if any parents have already been "frozen". If so, `wc` is already part of that
             // snapshot, so just skip it.
