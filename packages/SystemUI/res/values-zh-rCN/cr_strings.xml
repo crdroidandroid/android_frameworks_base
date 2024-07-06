@@ -141,4 +141,6 @@
     <string name="by_artist">%2$s 的 %1$s</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">正在识别面部...</string>
+    <!-- AI Assistant affordance [CHAR LIMIT=32] -->
+    <string name="accessibility_assistant_button">AI Assistant</string>
 </resources>
