@@ -447,9 +447,10 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             ContentObserver volumePanelOnLeftObserver = new ContentObserver(null) {
                 @Override
                 public void onChange(boolean selfChange) {
-                    final boolean volumePanelOnLeft = LineageSettings.Secure.getInt(
+                    final boolean volumePanelOnLeft = LineageSettings.Secure.getIntForUser(
                             mContext.getContentResolver(),
-                            LineageSettings.Secure.VOLUME_PANEL_ON_LEFT, 0) != 0;
+                            LineageSettings.Secure.VOLUME_PANEL_ON_LEFT, 0,
+                            UserHandle.USER_CURRENT) != 0;
                     if (mVolumePanelOnLeft != volumePanelOnLeft) {
                         mVolumePanelOnLeft = volumePanelOnLeft;
                         mHandler.post(mControllerCallbackH::onConfigurationChanged);
