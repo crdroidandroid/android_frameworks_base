@@ -146,4 +146,6 @@
     <string name="by_artist">%1$s by %2$s</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
+    <!-- AI Assistant affordance [CHAR LIMIT=32] -->
+    <string name="accessibility_assistant_button">AI Assistant</string>
 </resources>
