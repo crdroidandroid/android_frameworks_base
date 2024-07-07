@@ -24,6 +24,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
@@ -229,12 +230,12 @@ public abstract class LogoImage extends ImageView implements DarkReceiver {
     }
 
     public void updateSettings() {
-        mShowLogo = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_LOGO, 0) != 0;
-        mLogoPosition = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_LOGO_POSITION, 0);
-        mLogoStyle = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_LOGO_STYLE, 0);
+        mShowLogo = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_LOGO, 0, UserHandle.USER_CURRENT) != 0;
+        mLogoPosition = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_LOGO_POSITION, 0, UserHandle.USER_CURRENT);
+        mLogoStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_LOGO_STYLE, 0, UserHandle.USER_CURRENT);
         if (!mShowLogo || !isLogoVisible()) {
             setImageDrawable(null);
             setVisibility(View.GONE);
