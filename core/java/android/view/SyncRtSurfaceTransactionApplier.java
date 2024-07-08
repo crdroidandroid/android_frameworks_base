@@ -103,6 +103,9 @@ public class SyncRtSurfaceTransactionApplier {
         if ((params.flags & FLAG_TRANSACTION) != 0) {
             t.merge(params.mergeTransaction);
         }
+        if (params.surface == null || !params.surface.isValid()) {
+            return;
+        }
 
         if ((params.flags & FLAG_MATRIX) != 0) {
             t.setMatrix(params.surface, params.matrix, tmpFloat9);
