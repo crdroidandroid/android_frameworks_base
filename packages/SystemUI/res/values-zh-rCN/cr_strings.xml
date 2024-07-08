@@ -142,5 +142,5 @@
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">正在识别面部...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
-    <string name="accessibility_assistant_button">AI Assistant</string>
+    <string name="accessibility_assistant_button">AI 助手</string>
 </resources>
