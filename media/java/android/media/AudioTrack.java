@@ -1796,6 +1796,7 @@ public class AudioTrack extends PlayerBase
                 (flags != 0  // cannot have any special flags
                 || attributes.getUsage() != AudioAttributes.USAGE_MEDIA
                 || (attributes.getContentType() != AudioAttributes.CONTENT_TYPE_UNKNOWN
+                    && attributes.getContentType() != AudioAttributes.CONTENT_TYPE_SPEECH
                     && attributes.getContentType() != AudioAttributes.CONTENT_TYPE_MUSIC
                     && attributes.getContentType() != AudioAttributes.CONTENT_TYPE_MOVIE))) {
             return false;
