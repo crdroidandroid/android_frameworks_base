@@ -11433,6 +11433,8 @@ public class AudioService extends IAudioService.Stub
             permissionOverridesCheck = true;
         } else if (uid < UserHandle.AID_APP_START) {
             permissionOverridesCheck = true;
+        } else if (sdk <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            permissionOverridesCheck = true;
         }
 
         final long token = Binder.clearCallingIdentity();
