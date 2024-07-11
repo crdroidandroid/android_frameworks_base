@@ -18,6 +18,8 @@ package com.android.server.policy.keyguard;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.os.StrictMode;
 import android.util.Slog;
@@ -50,6 +52,8 @@ public class KeyguardStateMonitor extends IKeyguardStateCallback.Stub {
 
     private final LockPatternUtils mLockPatternUtils;
     private final StateCallback mCallback;
+    
+    Handler mHandler = new Handler(Looper.myLooper());
 
     public KeyguardStateMonitor(Context context, IKeyguardService service, StateCallback callback) {
         mLockPatternUtils = new LockPatternUtils(context);
@@ -92,12 +96,15 @@ public class KeyguardStateMonitor extends IKeyguardStateCallback.Stub {
         mCallback.onShowingChanged();
         
         if (showing) {
-            final int oldMask = StrictMode.getThreadPolicyMask();
-            StrictMode.setThreadPolicyMask(0);
-            System.gc();
-            System.runFinalization();
-            System.gc();
-            StrictMode.setThreadPolicyMask(oldMask);
+            // Delay garbage collection until display is shown
+            mHandler.postDelayed(() -> {
+                final int oldMask = StrictMode.getThreadPolicyMask();
+                StrictMode.setThreadPolicyMask(0);
+                System.gc();
+                System.runFinalization();
+                System.gc();
+                StrictMode.setThreadPolicyMask(oldMask);
+            }, 2500);
         }
     }
 
