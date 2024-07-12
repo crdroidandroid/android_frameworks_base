@@ -27,6 +27,9 @@ import static com.android.systemui.screenrecord.ScreenRecordingAudioSource.NONE;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.media.MediaCodecInfo;
+import android.media.MediaCodecList;
+import android.media.MediaFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -144,6 +147,15 @@ public class ScreenRecordDialog extends SystemUIDialog {
             mAudioSwitch.setChecked(true);
         });
 
+        // Disable HEVC when hardware accelerated codec is not available
+        if (!hasHevcHwEncoder()) {
+            View hevcView = findViewById(R.id.show_hevc);
+            if (hevcView != null) {
+                mHEVCSwitch.setChecked(false);
+                hevcView.setVisibility(View.GONE);
+            }
+        }
+
         // disable redundant Touch & Hold accessibility action for Switch Access
         mOptions.setAccessibilityDelegate(new View.AccessibilityDelegate() {
             @Override
@@ -207,6 +219,24 @@ public class ScreenRecordDialog extends SystemUIDialog {
                 requestScreenCapture(captureTarget);
             }
         }
+    }
+
+    private boolean hasHevcHwEncoder() {
+        MediaCodecList mediaCodecList = new MediaCodecList(MediaCodecList.REGULAR_CODECS);
+
+        for (MediaCodecInfo codecInfo : mediaCodecList.getCodecInfos()) {
+            if (!codecInfo.isEncoder() || !codecInfo.isHardwareAccelerated()) {
+                continue;
+            }
+
+            for (String type : codecInfo.getSupportedTypes()) {
+                if (type.equalsIgnoreCase(MediaFormat.MIMETYPE_VIDEO_HEVC)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void savePrefs() {
