@@ -28,11 +28,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Process;
+import android.os.UserHandle;
 
 import com.android.internal.util.crdroid.Utils;
 
-import com.android.systemui.res.R;
 import com.android.systemui.dagger.qualifiers.Background;
+import com.android.systemui.res.R;
 
 import java.util.concurrent.Executor;
 
@@ -44,15 +46,21 @@ public class LensScreenshotReceiver extends BroadcastReceiver {
     private static final String LENS_ACTIVITY = "com.google.android.apps.lens.MainActivity";
     private static final String LENS_SHARE_ACTIVITY = "com.google.android.apps.search.lens.LensShareEntryPointActivity";
     private static final String LENS_URI = "google://lens";
+    private static final String EXTRA_SCREENSHOT_USER_HANDLE = "screenshot-userhandle";
 
-    private final ScreenshotSmartActions mScreenshotSmartActions;
+    private final ActionIntentExecutor mActionExecutor;
     private final Executor mBackgroundExecutor;
+    private final ScreenshotSmartActions mScreenshotSmartActions;
+    private UserHandle mScreenshotUserHandle;
 
     @Inject
-    public LensScreenshotReceiver(ScreenshotSmartActions screenshotSmartActions,
-            @Background Executor backgroundExecutor) {
+    public LensScreenshotReceiver(
+            ActionIntentExecutor actionExecutor,
+            @Background Executor bgExecutor,
+            ScreenshotSmartActions screenshotSmartActions) {
+        mActionExecutor = actionExecutor;
+        mBackgroundExecutor = bgExecutor;
         mScreenshotSmartActions = screenshotSmartActions;
-        mBackgroundExecutor = backgroundExecutor;
     }
 
     public static boolean isGSAEnabled(Context context) {
@@ -63,6 +71,12 @@ public class LensScreenshotReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (!intent.hasExtra(SCREENSHOT_URI_ID)) {
             return;
+        }
+
+        mScreenshotUserHandle = intent.getParcelableExtra(EXTRA_SCREENSHOT_USER_HANDLE,
+                UserHandle.class);
+        if (mScreenshotUserHandle == null) {
+            mScreenshotUserHandle = Process.myUserHandle();
         }
 
         final Uri uri = Uri.parse(intent.getStringExtra(SCREENSHOT_URI_ID));
@@ -80,7 +94,7 @@ public class LensScreenshotReceiver extends BroadcastReceiver {
                     .putExtra(Intent.EXTRA_STREAM, uri)
                     .setClipData(clipdata);
             try {
-                context.startActivity(share);
+                mActionExecutor.launchIntentAsync(share, null, mScreenshotUserHandle, false);
             } catch (Exception e) {
                 return;
             }
