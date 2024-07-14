@@ -582,15 +582,25 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
 
         String notificationPackageName = entry.getSbn().getPackageName();
 
-        // List of packages allowed to show headsup notification
-        List<String> headsUpWhitelistPackages = Arrays.asList(
-            getDefaultDialerPackage(mTm).toLowerCase(),
-            getDefaultSmsPackage(mContext).toLowerCase(),
+        // List of packages allowed to show heads-up notifications
+        List<String> headsUpWhitelistPackages = new ArrayList<>();
+
+        String defaultDialerPackage = getDefaultDialerPackage(mTm);
+        if (defaultDialerPackage != null && !defaultDialerPackage.isEmpty()) {
+            headsUpWhitelistPackages.add(defaultDialerPackage.toLowerCase());
+        }
+
+        String defaultSmsPackage = getDefaultSmsPackage(mContext);
+        if (defaultSmsPackage != null && !defaultSmsPackage.isEmpty()) {
+            headsUpWhitelistPackages.add(defaultSmsPackage.toLowerCase());
+        }
+
+        headsUpWhitelistPackages.addAll(Arrays.asList(
             "dialer",
             "messaging",
             "messenger",
             "clock"
-        );
+        ));
 
         boolean shouldSkip = !headsUpWhitelistPackages.contains(notificationPackageName.toLowerCase());
 
