@@ -30,6 +30,7 @@ import android.database.ContentObserver;
 import android.hardware.display.AmbientDisplayConfiguration;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Telephony.Sms;
 import android.service.notification.StatusBarNotification;
@@ -153,14 +154,14 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
                         mContentResolver,
                         Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED,
                         Settings.Global.HEADS_UP_OFF);
-                mLessBoringHeadsUp = Settings.System.getInt(
+                mLessBoringHeadsUp = Settings.System.getIntForUser(
                         mContentResolver,
                         Settings.System.LESS_BORING_HEADS_UP,
-                        0) == 1;
-                mReTicker = Settings.System.getInt(
+                        0, UserHandle.USER_CURRENT) == 1;
+                mReTicker = Settings.System.getIntForUser(
                         mContentResolver,
                         Settings.System.RETICKER_STATUS,
-                        0) == 1;
+                        0, UserHandle.USER_CURRENT) == 1;
                 mLogger.logHeadsUpFeatureChanged(mUseHeadsUp);
                 if (wasUsing != mUseHeadsUp) {
                     if (!mUseHeadsUp) {
