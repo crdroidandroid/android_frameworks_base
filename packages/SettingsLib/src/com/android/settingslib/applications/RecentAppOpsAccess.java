@@ -18,6 +18,7 @@ package com.android.settingslib.applications;
 
 
 import android.app.AppOpsManager;
+import android.app.AppOpsManager.OpEntry;
 import android.content.Context;
 import android.content.PermissionChecker;
 import android.content.pm.ApplicationInfo;
@@ -50,6 +51,7 @@ public class RecentAppOpsAccess {
     };
     private static final int[] MICROPHONE_OPS = new int[]{
             AppOpsManager.OP_RECORD_AUDIO,
+            AppOpsManager.OP_PHONE_CALL_MICROPHONE,
     };
     private static final int[] CAMERA_OPS = new int[]{
             AppOpsManager.OP_CAMERA,
@@ -131,16 +133,17 @@ public class RecentAppOpsAccess {
             String packageName = ops.getPackageName();
             int uid = ops.getUid();
             UserHandle user = UserHandle.getUserHandleForUid(uid);
-
-            // Don't show apps belonging to background users except managed users.
-            if (!profiles.contains(user)) {
-                continue;
-            }
+            List<OpEntry> entries = ops.getOps();
 
             // Don't show apps that do not have user sensitive location permissions
             boolean showApp = true;
             if (!showSystemApps) {
-                for (int op : mOps) {
+                // Don't show apps belonging to background users except managed users.
+                if (!profiles.contains(user)) {
+                    continue;
+                }
+                for (OpEntry entry : entries) {
+                    int op = entry.getOp();
                     final String permission = AppOpsManager.opToPermission(op);
                     final int permissionFlags = mPackageManager.getPermissionFlags(permission,
                             packageName,
