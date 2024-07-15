@@ -243,7 +243,7 @@ void SkiaRecordingCanvas::onFilterPaint(android::Paint& paint) {
     //  It's better than nothing, though
     SkImage* image = shader ? shader->isAImage(nullptr, nullptr) : nullptr;
     if (image) {
-        mDisplayList->mMutableImages.push_back(image);
+        mDisplayList->mMutableBitmapShaderImages.push_back(image);
     }
 }
 
