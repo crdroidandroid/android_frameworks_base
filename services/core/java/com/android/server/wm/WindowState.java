@@ -5099,6 +5099,7 @@ class WindowState extends WindowContainer<WindowState> implements WindowManagerP
 
     private void applyDims() {
         if (((mAttrs.flags & FLAG_DIM_BEHIND) != 0 || shouldDrawBlurBehind())
+                && mToken.isVisibleRequested()
                 && (Dimmer.DIMMER_REFACTOR ? mWinAnimator.getShown() : isVisibleNow())
                 && !mHidden && mTransitionController.canApplyDim(getTask())) {
             // Only show the Dimmer when the following is satisfied:
