@@ -628,12 +628,16 @@ public class SearchManager
             return;
         }
 
-        final UiModeManager uiModeManager = mContext.getSystemService(UiModeManager.class);
-        // Don't show search dialog on televisions.
-        if (uiModeManager.getCurrentModeType() != Configuration.UI_MODE_TYPE_TELEVISION) {
-            ensureSearchDialog();
+        try {
+            IUiModeManager uiModeService = IUiModeManager.Stub.asInterface(
+                    ServiceManager.getService(Context.UI_MODE_SERVICE));
+            // Don't show search dialog on televisions.
+            if (uiModeService.getCurrentModeType() != Configuration.UI_MODE_TYPE_TELEVISION) {
+                ensureSearchDialog();
 
-            mSearchDialog.show(initialQuery, selectInitialQuery, launchActivity, appSearchData);
+                mSearchDialog.show(initialQuery, selectInitialQuery, launchActivity, appSearchData);
+            }
+        } catch (RemoteException e) {
         }
     }
 
