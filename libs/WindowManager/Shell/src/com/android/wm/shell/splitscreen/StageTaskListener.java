@@ -294,7 +294,9 @@ class StageTaskListener implements ShellTaskOrganizer.TaskListener {
             });
         } else if (mChildrenTaskInfo.contains(taskId)) {
             mChildrenTaskInfo.remove(taskId);
-            mChildrenTasksInZOrder.remove(taskId);
+            if (mChildrenTasksInZOrder.contains(Integer.valueOf(taskId))) {
+                mChildrenTasksInZOrder.remove(Integer.valueOf(taskId));
+            }
             mChildrenLeashes.remove(taskId);
             mCallbacks.onChildTaskStatusChanged(taskId, false /* present */, taskInfo.isVisible);
             if (ENABLE_SHELL_TRANSITIONS) {
