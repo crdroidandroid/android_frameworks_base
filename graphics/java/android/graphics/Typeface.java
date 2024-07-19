@@ -1431,66 +1431,82 @@ public class Typeface {
     /** @hide */
     public static void updateDefaultFont(Resources res) {
         synchronized (SYSTEM_FONT_MAP_LOCK) {
-            String familyName = res.getString(com.android.internal.R.string.config_bodyFontFamily);
-            String familyNameMedium = res.getString(com.android.internal.R.string.config_bodyFontFamilyMedium);
-            String familyNameHeadlineMedium = res.getString(com.android.internal.R.string.config_headlineFontFamilyMedium);
+            Map<String, String> fontFamilies = new HashMap<>();
+            fontFamilies.put("default", res.getString(com.android.internal.R.string.config_bodyFontFamily));
+            fontFamilies.put("medium", res.getString(com.android.internal.R.string.config_bodyFontFamilyMedium));
+            fontFamilies.put("headlineMedium", res.getString(com.android.internal.R.string.config_headlineFontFamilyMedium));
+            fontFamilies.put("headline", res.getString(com.android.internal.R.string.config_headlineFontFamily));
+            fontFamilies.put("light", res.getString(com.android.internal.R.string.config_lightFontFamily));
+            fontFamilies.put("regular", res.getString(com.android.internal.R.string.config_regularFontFamily));
 
-            Typeface tfFamily = sSystemFontMap.get(familyName);
-            Typeface tfMedium = sSystemFontMap.get(familyNameMedium);
-            Typeface tfHeadlineMedium = sSystemFontMap.get(familyNameHeadlineMedium);
-
-            if (tfFamily == null) {
-                tfFamily = create("sans-serif", NORMAL);
+            Map<String, Typeface> typefaces = new HashMap<>();
+            for (Map.Entry<String, String> entry : fontFamilies.entrySet()) {
+                typefaces.put(entry.getKey(), getTypefaceOrDefault(entry.getValue(), getDefaultFont(entry.getKey()), NORMAL));
             }
 
-            if (tfMedium == null) {
-                tfMedium = tfFamily;
-            }
-
-            if (tfHeadlineMedium == null) {
-                tfHeadlineMedium = tfFamily;
-            }
-
-            setDefault(tfFamily);
+            setDefault(typefaces.get("default"));
 
             // Static typefaces in public API
-            setFinalField("DEFAULT", create(getSystemDefaultTypeface(familyName), NORMAL));
-            setFinalField("DEFAULT_BOLD", create(getSystemDefaultTypeface(familyName), BOLD));
-            if (!familyName.equals("sans-serif")) {
-                setFinalField("SANS_SERIF", tfFamily);
-            } else {
-                setFinalField("SANS_SERIF", create("sans-serif", NORMAL));
-            }
-            setFinalField("SERIF", create(familyName, NORMAL));
+            setFinalField("DEFAULT", create(getSystemDefaultTypeface(fontFamilies.get("default")), NORMAL));
+            setFinalField("DEFAULT_BOLD", create(getSystemDefaultTypeface(fontFamilies.get("default")), BOLD));
+            setFinalField("SANS_SERIF", fontFamilies.get("default").equals("sans-serif") ? create("sans-serif", NORMAL) : typefaces.get("default"));
+            setFinalField("SERIF", create("serif", NORMAL));
 
-            if (!familyName.equals("sans-serif")) {
-                // For default aliases used in framework styles
-                sSystemFontOverrides.put("sans-serif", tfFamily);
-                sSystemFontOverrides.put("sans-serif-thin", create(tfFamily, 100, false));
-                sSystemFontOverrides.put("sans-serif-light", create(tfFamily, 300, false));
-                sSystemFontOverrides.put("sans-serif-medium", create(tfHeadlineMedium, 500, false));
-                sSystemFontOverrides.put("sans-serif-black", create(tfFamily, 900, false));
-                sSystemFontOverrides.put("sans-serif-condensed", tfFamily);
-                sSystemFontOverrides.put("sans-serif-condensed-light", create(tfFamily, 300, false));
-                sSystemFontOverrides.put("sans-serif-condensed-medium", create(tfFamily, 500, false));
+            updateFontOverrides("sans-serif", fontFamilies, typefaces);
+            updateFontOverrides("google-sans", fontFamilies, typefaces);
+
+            if (sSystemFontOverrides.containsKey(fontFamilies.get("default"))) {
+                sSystemFontOverrides.remove(fontFamilies.get("default"));
             }
 
-            if (!familyName.equals("google-sans")) {
-                sSystemFontOverrides.put("google-sans", tfFamily);
-                sSystemFontOverrides.put("google-sans-thin", create(tfFamily, 100, false));
-                sSystemFontOverrides.put("google-sans-light", create(tfFamily, 300, false));
-                sSystemFontOverrides.put("google-sans-text", create(tfFamily, 400, false));
-                sSystemFontOverrides.put("google-sans-medium", create(tfHeadlineMedium, 500, false));
-                sSystemFontOverrides.put("google-sans-text-medium", create(tfMedium, 500, false));
-                sSystemFontOverrides.put("google-sans-bold", create(tfFamily, 900, false));
-            }
+            setPublicDefaults(fontFamilies.get("default"));
+        }
+    }
 
-            // We should not override system fonts if its the same font family
-            if (sSystemFontOverrides.containsKey(familyName)) {
-                sSystemFontOverrides.remove(familyName);
-            }
+    /** @hide */
+    private static Typeface getTypefaceOrDefault(String familyName, String defaultFamily, int style) {
+        Typeface typeface = sSystemFontMap.get(familyName);
+        return typeface != null ? typeface : create(defaultFamily, style);
+    }
 
-            setPublicDefaults(familyName);
+    /** @hide */
+    private static String getDefaultFont(String key) {
+        switch (key) {
+            case "medium":
+            case "headlineMedium":
+                return "sans-serif-medium";
+            case "headline":
+            case "bold":
+                return "sans-serif-bold";
+            case "light":
+                return "sans-serif-light";
+            case "regular":
+                return "sans-serif-regular";
+            default:
+                return "sans-serif";
+        }
+    }
+
+    /** @hide */
+    private static void updateFontOverrides(String fontPrefix, Map<String, String> fontFamilies, Map<String, Typeface> typefaces) {
+        String familyName = fontFamilies.get("default");
+        if (!familyName.equals(fontPrefix)) {
+            sSystemFontOverrides.put(fontPrefix, typefaces.get("default"));
+            sSystemFontOverrides.put(fontPrefix + "-flex", typefaces.get("default"));
+            sSystemFontOverrides.put(fontPrefix + "-text", typefaces.get("default"));
+            sSystemFontOverrides.put(fontPrefix + "-thin", create(typefaces.get("default"), 100, false));
+            sSystemFontOverrides.put(fontPrefix + "-light", create(typefaces.get("light"), 300, false));
+            sSystemFontOverrides.put(fontPrefix + "-book", create(typefaces.get("default"), 400, false));
+            sSystemFontOverrides.put(fontPrefix + "-regular", create(typefaces.get("regular"), 400, false));
+            sSystemFontOverrides.put(fontPrefix + "-text-medium", create(typefaces.get("medium"), 500, false));
+            sSystemFontOverrides.put(fontPrefix + "-text-medium-compat", create(typefaces.get("medium"), 500, false));
+            sSystemFontOverrides.put(fontPrefix + "-medium", create(typefaces.get("medium"), 500, false));
+            sSystemFontOverrides.put(fontPrefix + "-bold", create(typefaces.get("headline"), 700, false));
+            sSystemFontOverrides.put(fontPrefix + "-text-bold", create(typefaces.get("headline"), 700, false));
+            sSystemFontOverrides.put(fontPrefix + "-black", create(typefaces.get("headlineMedium"), 900, false));
+            sSystemFontOverrides.put(fontPrefix + "-condensed", typefaces.get("default"));
+            sSystemFontOverrides.put(fontPrefix + "-condensed-light", create(typefaces.get("default"), 300, false));
+            sSystemFontOverrides.put(fontPrefix + "-condensed-medium", create(typefaces.get("default"), 500, false));
         }
     }
 
