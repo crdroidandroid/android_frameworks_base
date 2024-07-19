@@ -450,9 +450,6 @@ open class RLandscapeBatteryDrawable(private val context: Context, frameColor: I
         val plusPathString = context.resources.getString(
                 com.android.internal.R.string.config_batterymeterRLandPowersavePath)
         plusPath.set(PathParser.createPathFromPathData(plusPathString))
-
-        dualTone = context.resources.getBoolean(
-                com.android.internal.R.bool.config_batterymeterDualTone)
     }
 
     companion object {
