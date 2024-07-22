@@ -41,6 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.StyleRes;
 import androidx.annotation.VisibleForTesting;
 
 import com.android.settingslib.Utils;
@@ -422,13 +423,22 @@ public class KeyguardStatusBarView extends RelativeLayout {
 
     /** Should only be called from {@link KeyguardStatusBarViewController}. */
     void onOverlayChanged() {
-        int theme = Utils.getThemeAttr(mContext, com.android.internal.R.attr.textAppearanceSmall);
-        mCarrierLabel.setTextAppearance(R.style.TextAppearance_StatusBar_Clock);
+        final int fallbackTheme = Utils.getThemeAttr(mContext,
+                com.android.internal.R.attr.textAppearanceSmall);
+        @StyleRes int carrierTheme = R.style.TextAppearance_StatusBar_Clock;
+        if (carrierTheme == 0) {
+            carrierTheme = fallbackTheme;
+        }
+        @StyleRes int userSwitcherTheme = R.style.TextAppearance_StatusBar_UserChip;
+        if (userSwitcherTheme == 0) {
+            userSwitcherTheme = fallbackTheme;
+        }
+        mCarrierLabel.setTextAppearance(carrierTheme);
         mBatteryView.updatePercentView();
 
         TextView userSwitcherName = mUserSwitcherContainer.findViewById(R.id.current_user_name);
         if (userSwitcherName != null) {
-            userSwitcherName.setTextAppearance(theme);
+            userSwitcherName.setTextAppearance(userSwitcherTheme);
         }
     }
 
