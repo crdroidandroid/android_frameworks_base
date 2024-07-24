@@ -351,6 +351,9 @@ public final class ProfcollectForwardingService extends SystemService {
 
     private static void createAndUploadReport(ProfcollectForwardingService pfs) {
         BackgroundThread.get().getThreadHandler().post(() -> {
+            if (pfs.mIProfcollect == null) {
+                return;
+            }
             String reportName;
             try {
                 reportName = pfs.mIProfcollect.report(pfs.mUsageSetting) + ".zip";
