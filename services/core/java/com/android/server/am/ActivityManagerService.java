@@ -9330,9 +9330,12 @@ public class ActivityManagerService extends IActivityManager.Stub
         }
 
         boolean recoverable = eventType.equals("native_recoverable_crash");
+        boolean isNativeCrash = eventType.equals("native_crash");
+        int uid = (r != null) ? r.uid : -1;
+        int pid = (r != null) ? r.getPid() : -1;
 
-        EventLogTags.writeAmCrash(Binder.getCallingPid(),
-                UserHandle.getUserId(Binder.getCallingUid()), processName,
+        EventLogTags.writeAmCrash(isNativeCrash ? pid : Binder.getCallingPid(),
+                UserHandle.getUserId(isNativeCrash ? uid : Binder.getCallingUid()), processName,
                 r == null ? -1 : r.info.flags,
                 crashInfo.exceptionClassName,
                 crashInfo.exceptionMessage,
@@ -9343,8 +9346,6 @@ public class ActivityManagerService extends IActivityManager.Stub
         int processClassEnum = processName.equals("system_server") ? ServerProtoEnums.SYSTEM_SERVER
                 : (r != null) ? r.getProcessClassEnum()
                         : ServerProtoEnums.ERROR_SOURCE_UNKNOWN;
-        int uid = (r != null) ? r.uid : -1;
-        int pid = (r != null) ? r.getPid() : -1;
         FrameworkStatsLog.write(FrameworkStatsLog.APP_CRASH_OCCURRED,
                 uid,
                 eventType,
