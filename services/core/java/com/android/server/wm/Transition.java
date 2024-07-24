@@ -35,6 +35,7 @@ import static android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD;
 import static android.view.WindowManager.TRANSIT_CHANGE;
 import static android.view.WindowManager.TRANSIT_CLOSE;
 import static android.view.WindowManager.TRANSIT_FLAG_IS_RECENTS;
+import static android.view.WindowManager.TRANSIT_FLAG_KEYGUARD_GOING_AWAY;
 import static android.view.WindowManager.TRANSIT_FLAG_KEYGUARD_LOCKED;
 import static android.view.WindowManager.TRANSIT_OPEN;
 import static android.view.WindowManager.TRANSIT_TO_BACK;
@@ -1769,6 +1770,26 @@ class Transition implements BLASTSyncEngine.TransactionReadyListener {
             }
         }
 
+        if ((mFlags & TRANSIT_FLAG_KEYGUARD_GOING_AWAY) != 0) {
+            for (int i = mParticipants.size() - 1; i >= 0; --i) {
+                ActivityRecord ar = mParticipants.valueAt(i).asActivityRecord();
+                if (ar != null) {
+                    TaskDisplayArea taskDisplayArea = ar.getTaskDisplayArea();
+                    if (taskDisplayArea == null
+                            || mController.mValidateDisplayVis.contains(taskDisplayArea)) {
+                        continue;
+                    }
+                    for (WindowContainer p = taskDisplayArea; p != null
+                            && !containsChangeFor(p, mTargets);
+                         p = p.getParent()) {
+                        if (p.getSurfaceControl() != null) {
+                            transaction.show(p.getSurfaceControl());
+                        }
+                    }
+                    break;
+                }
+            }
+        }
         // Record windowtokens (activity/wallpaper) that are expected to be visible after the
         // transition animation. This will be used in finishTransition to prevent prematurely
         // committing visibility. Skip transient launches since those are only temporarily visible.
