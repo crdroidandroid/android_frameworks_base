@@ -109,7 +109,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
 
     private int mRefreshInterval = 2;
 
-    private boolean mAttached;
+    protected boolean mAttached;
     private boolean mHideArrows;
 
     protected boolean mVisible = true;
