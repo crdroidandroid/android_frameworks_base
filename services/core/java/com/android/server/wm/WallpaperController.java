@@ -183,8 +183,7 @@ class WallpaperController {
             if (DEBUG_WALLPAPER) Slog.v(TAG, "Found recents animation wallpaper target: " + w);
             mFindResults.setWallpaperTarget(w);
             return true;
-        } else if (hasWallpaper && w.isOnScreen()
-                && (mWallpaperTarget == w || w.isDrawFinishedLw())) {
+        } else if (hasWallpaper && w.isReadyForDisplay()) {
             if (DEBUG_WALLPAPER) Slog.v(TAG, "Found wallpaper target: " + w);
             mFindResults.setWallpaperTarget(w);
             mFindResults.setIsWallpaperTargetForLetterbox(w.hasWallpaperForLetterboxBackground());
