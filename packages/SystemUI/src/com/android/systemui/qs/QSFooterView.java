@@ -81,6 +81,10 @@ public class QSFooterView extends FrameLayout {
     private String mWifiSsid;
     private int mSubId;
     private int mCurrentDataSubId;
+    
+    private static final long DEBOUNCE_DELAY_MS = 200;
+    private Handler mHandler = new Handler();
+    private Runnable mSetUsageTextRunnable = this::setUsageText;
 
     public QSFooterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -100,15 +104,22 @@ public class QSFooterView extends FrameLayout {
         setClickable(false);
         setUsageText();
 
-        mUsageText.setOnClickListener(v -> {
-            if (mSubManager.getActiveSubscriptionInfoCount() > 1) {
-                // Get opposite slot 2 ^ 3 = 1, 1 ^ 3 = 2
-                mSubId = mSubId ^ 3;
-                setUsageText();
-                mUsageText.setSelected(false);
-                postDelayed(() -> mUsageText.setSelected(true), 1000);
-            }
-        });
+        mUsageText.setOnClickListener(this::onUsageTextClick);
+    }
+    
+    private void onUsageTextClick(View v) {
+        if (mSubManager.getActiveSubscriptionInfoCount() > 1) {
+            // Get opposite slot 2 ^ 3 = 1, 1 ^ 3 = 2
+            mSubId = mSubId ^ 3;
+            setUsageText();
+            mUsageText.setSelected(false);
+            postDelayed(() -> mUsageText.setSelected(true), 1000);
+        }
+    }
+    
+    private void setUsageTextDebounced() {
+        mHandler.removeCallbacks(mSetUsageTextRunnable);
+        mHandler.postDelayed(mSetUsageTextRunnable, DEBOUNCE_DELAY_MS);
     }
 
     private void setUsageText() {
@@ -178,28 +189,28 @@ public class QSFooterView extends FrameLayout {
     protected void setWifiSsid(String ssid) {
         if (mWifiSsid != ssid) {
             mWifiSsid = ssid;
-            setUsageText();
+            setUsageTextDebounced();
         }
     }
 
     protected void setIsWifiConnected(boolean connected) {
         if (mIsWifiConnected != connected) {
             mIsWifiConnected = connected;
-            setUsageText();
+            setUsageTextDebounced();
         }
     }
 
     protected void setNoSims(boolean hasNoSims) {
         if (mHasNoSims != hasNoSims) {
             mHasNoSims = hasNoSims;
-            setUsageText();
+            setUsageTextDebounced();
         }
     }
 
     protected void setCurrentDataSubId(int subId) {
         if (mCurrentDataSubId != subId) {
             mSubId = mCurrentDataSubId = subId;
-            setUsageText();
+            setUsageTextDebounced();
         }
     }
 
@@ -298,7 +309,7 @@ public class QSFooterView extends FrameLayout {
     void updateEverything() {
         post(() -> {
             updateVisibilities();
-            setUsageText();
+            setUsageTextDebounced();
         });
     }
 
