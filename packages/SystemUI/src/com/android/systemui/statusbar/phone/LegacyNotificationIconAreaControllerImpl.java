@@ -23,6 +23,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Trace;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -168,6 +169,13 @@ public class LegacyNotificationIconAreaControllerImpl implements
         reloadAodColor();
         darkIconDispatcher.addDarkReceiver(this);
 
+        mNewIconStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.STATUSBAR_COLORED_ICONS, 0, UserHandle.USER_CURRENT) == 1;
+        mShowNotificationCount = Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.STATUSBAR_NOTIF_COUNT,
+            mContext.getResources().getBoolean(R.bool.config_statusBarShowNumber) ? 1 : 0,
+            UserHandle.USER_CURRENT) == 1;
+
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, STATUSBAR_COLORED_ICONS);
         tunerService.addTunable(this, STATUSBAR_NOTIF_COUNT);
@@ -181,7 +189,7 @@ public class LegacyNotificationIconAreaControllerImpl implements
                     TunerService.parseIntegerSwitch(newValue, false);
                 if (mNewIconStyle != newIconStyle) {
                     mNewIconStyle = newIconStyle;
-                    updateNotificationIcons();
+                    updateNotificationIcons(true);
                 }
                 break;
             case STATUSBAR_NOTIF_COUNT:
@@ -189,7 +197,7 @@ public class LegacyNotificationIconAreaControllerImpl implements
                     TunerService.parseIntegerSwitch(newValue, false);
                 if (mShowNotificationCount != showIconCount) {
                     mShowNotificationCount = showIconCount;
-                    updateNotificationIcons();
+                    updateNotificationIcons(true);
                 }
                 break;
             default:
@@ -341,17 +349,21 @@ public class LegacyNotificationIconAreaControllerImpl implements
         updateNotificationIcons();
     }
 
-    private void updateNotificationIcons() {
+    private void updateNotificationIcons(boolean forced) {
         Trace.beginSection("NotificationIconAreaController.updateNotificationIcons");
-        updateStatusBarIcons();
-        updateShelfIcons();
-        updateAodNotificationIcons();
+        updateStatusBarIcons(forced);
+        updateShelfIcons(forced);
+        updateAodNotificationIcons(forced);
 
         applyNotificationIconsTint();
         Trace.endSection();
     }
 
-    private void updateShelfIcons() {
+    private void updateNotificationIcons() {
+        updateNotificationIcons(false);
+    }
+
+    private void updateShelfIcons(boolean forced) {
         if (mShelfIcons == null) {
             return;
         }
@@ -361,10 +373,15 @@ public class LegacyNotificationIconAreaControllerImpl implements
                 false /* hideDismissed */,
                 false /* hideRepliedMessages */,
                 false /* hideCurrentMedia */,
-                false /* hidePulsing */);
+                false /* hidePulsing */,
+                forced /* force update */);
     }
 
     public void updateStatusBarIcons() {
+        updateStatusBarIcons(false);
+    }
+
+    private void updateStatusBarIcons(boolean forced) {
         if (mNotificationIcons == null) {
             return;
         }
@@ -374,10 +391,15 @@ public class LegacyNotificationIconAreaControllerImpl implements
                 true /* hideDismissed */,
                 true /* hideRepliedMessages */,
                 false /* hideCurrentMedia */,
-                false /* hidePulsing */);
+                false /* hidePulsing */,
+                forced /* force update */);
     }
 
     public void updateAodNotificationIcons() {
+        updateAodNotificationIcons(false);
+    }
+
+    private void updateAodNotificationIcons(boolean forced) {
         if (mAodIcons == null) {
             return;
         }
@@ -387,7 +409,8 @@ public class LegacyNotificationIconAreaControllerImpl implements
                 true /* hideDismissed */,
                 true /* hideRepliedMessages */,
                 true /* hideCurrentMedia */,
-                mBypassController.getBypassEnabled() /* hidePulsing */);
+                mBypassController.getBypassEnabled() /* hidePulsing */,
+                forced /* force update */);
     }
 
     @VisibleForTesting
@@ -409,7 +432,7 @@ public class LegacyNotificationIconAreaControllerImpl implements
     private void updateIconsForLayout(Function<NotificationEntry, StatusBarIconView> function,
             NotificationIconContainer hostLayout, boolean showAmbient, boolean showLowPriority,
             boolean hideDismissed, boolean hideRepliedMessages, boolean hideCurrentMedia,
-            boolean hidePulsing) {
+            boolean hidePulsing, boolean forced) {
         ArrayList<StatusBarIconView> toShow = new ArrayList<>(mNotificationEntries.size());
         // Filter out ambient notifications and notification children.
         for (int i = 0; i < mNotificationEntries.size(); i++) {
@@ -491,9 +514,11 @@ public class LegacyNotificationIconAreaControllerImpl implements
                 hostLayout.addView(v, i, params);
             }
             v.setIconStyle(mNewIconStyle);
-            v.updateDrawable();
             v.setShowCount(mShowNotificationCount);
-            v.updateIconForced();
+            if (forced) {
+                v.updateDrawable();
+                v.updateIconForced();
+            }
         }
 
         hostLayout.setChangingViewPositions(true);
