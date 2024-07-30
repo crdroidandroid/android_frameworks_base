@@ -3383,14 +3383,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 updateWakeGestureListenerLp();
             }
 
-            if (mLineageHardware.isSupported(LineageHardwareManager.FEATURE_KEY_DISABLE)) {
+            if (mLineageHardware != null && mLineageHardware.isSupported(LineageHardwareManager.FEATURE_KEY_DISABLE)) {
                 mHardwareKeysDisable = Settings.System.getIntForUser(resolver,
                         Settings.System.HARDWARE_KEYS_DISABLE, 0,
                         UserHandle.USER_CURRENT) == 1;
                 mLineageHardware.set(LineageHardwareManager.FEATURE_KEY_DISABLE, mHardwareKeysDisable);
             }
 
-            if (mLineageHardware.isSupported(LineageHardwareManager.FEATURE_KEY_SWAP)) {
+            if (mLineageHardware != null && mLineageHardware.isSupported(LineageHardwareManager.FEATURE_KEY_SWAP)) {
                 mSwapCapacitiveKeys = Settings.System.getIntForUser(resolver,
                         Settings.System.SWAP_CAPACITIVE_KEYS, 0,
                         UserHandle.USER_CURRENT) == 1;
