@@ -146,4 +146,7 @@
     <string name="face_unlock_recognizing">Prebieha rozpoznávanie...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI asistent</string>
+    <!-- Screen record -->
+    <string name="screenrecord_keep_screen_awake_label">Stay awake</string>
+    <string name="screenrecord_keep_screen_awake_summary">Keep the screen on</string>
 </resources>
