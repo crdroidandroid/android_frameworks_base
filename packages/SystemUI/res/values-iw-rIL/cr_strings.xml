@@ -147,6 +147,6 @@
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">עוזר AI</string>
     <!-- Screen record -->
-    <string name="screenrecord_keep_screen_awake_label">Stay awake</string>
-    <string name="screenrecord_keep_screen_awake_summary">Keep the screen on</string>
+    <string name="screenrecord_keep_screen_awake_label">השארת המסך דולק</string>
+    <string name="screenrecord_keep_screen_awake_summary">השארת המסך דולק</string>
 </resources>
