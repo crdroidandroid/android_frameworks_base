@@ -144,6 +144,6 @@
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">Trợ lý trí tuệ nhân tạo</string>
     <!-- Screen record -->
-    <string name="screenrecord_keep_screen_awake_label">Stay awake</string>
-    <string name="screenrecord_keep_screen_awake_summary">Keep the screen on</string>
+    <string name="screenrecord_keep_screen_awake_label">Giữ màn hình bật</string>
+    <string name="screenrecord_keep_screen_awake_summary">Giữ cho màn hình luôn bật</string>
 </resources>
