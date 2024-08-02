@@ -97,11 +97,17 @@ public class SystemServerAdapter {
      */
     @VisibleForTesting
     public void broadcastStickyIntentToCurrentProfileGroup(Intent intent) {
-        int[] profileIds = LocalServices.getService(
-                ActivityManagerInternal.class).getCurrentProfileIds();
-        for (int userId : profileIds) {
-            ActivityManager.broadcastStickyIntent(intent, userId);
+        final long ident = Binder.clearCallingIdentity();
+        try {
+            int[] profileIds = LocalServices.getService(
+                    ActivityManagerInternal.class).getCurrentProfileIds();
+            for (int userId : profileIds) {
+                ActivityManager.broadcastStickyIntent(intent, userId);
+            }
+        } finally {
+            Binder.restoreCallingIdentity(ident);
         }
+
     }
 
     /**
