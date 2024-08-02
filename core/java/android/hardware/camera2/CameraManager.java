@@ -2126,6 +2126,9 @@ public final class CameraManager {
         private String[] extractCameraIdListLocked() {
             boolean exposeAuxCamera = Camera.shouldExposeAuxCamera();
             int size = exposeAuxCamera ? mDeviceStatus.size() : 2;
+            if (mDeviceStatus.size() < size) {
+                size = mDeviceStatus.size();
+            }
             List<String> cameraIdList = new ArrayList<>();
             for (int i = 0; i < size; i++) {
                 int status = mDeviceStatus.valueAt(i);
