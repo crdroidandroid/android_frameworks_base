@@ -233,13 +233,13 @@ class IslandView : ExtendedFloatingActionButton {
             Notification.EXTRA_LARGE_ICON,
             Notification.EXTRA_SMALL_ICON
         ).mapNotNull { key -> getDrawableFromExtras(notification.extras, key, context) }
-         .firstOrNull() ?: getNotificationIcon(sbn, notification) ?: return
+            .firstOrNull() ?: getNotificationIcon(sbn, notification) ?: return
         val appLabel = getAppLabel(getActiveAppVolumePackage(), context)
-        isNowPlaying = sbn?.packageName == "com.android.systemui" &&
+        isNowPlaying = sbn.packageName == "com.android.systemui" &&
                        islandTitle.toLowerCase(Locale.ENGLISH).equals(
                            context.getString(R.string.now_playing_on, appLabel).toLowerCase(Locale.ENGLISH)
                        )
-        val isSystem = sbn?.packageName == "android" || sbn?.packageName == "com.android.systemui"
+        val isSystem = sbn.packageName == "android" || sbn.packageName == "com.android.systemui"
         notifTitle = when {
             isNowPlaying ->
                 { islandText.takeIf { it.isNotBlank() } ?: return } // island now playing 
@@ -260,6 +260,7 @@ class IslandView : ExtendedFloatingActionButton {
         val resources = context.resources
         val bitmap = drawableToBitmap(iconDrawable)
         val roundedIcon = CircleFramedDrawable(bitmap, this.iconSize)
+        recycleBitmap((this.icon as? BitmapDrawable)?.bitmap)
         this.icon = roundedIcon
         this.iconTint = null
         this.bringToFront()
@@ -313,7 +314,14 @@ class IslandView : ExtendedFloatingActionButton {
         val canvas = Canvas(bitmap)
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
+        recycleBitmap((this.icon as? BitmapDrawable)?.bitmap)
         return bitmap
+    }
+
+    private fun recycleBitmap(bitmap: Bitmap?) {
+        if (bitmap != null && !bitmap.isRecycled) {
+            bitmap.recycle()
+        }
     }
 
     private fun getDrawableFromExtras(extras: Bundle, key: String, context: Context): Drawable? {
