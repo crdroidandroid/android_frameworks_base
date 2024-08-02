@@ -87,4 +87,10 @@
 
     <!-- Maximum vertical offset of statusbar for burn-in protection -->
     <dimen name="status_bar_offset_max_y">4dp</dimen>
+
+    <!-- Maximum horizontal offset of navigation bar for burn-in protection -->
+    <dimen name="navigation_bar_burn_in_offset_max_x">5dp</dimen>
+
+    <!-- Maximum vertical offset of navigation bar for burn-in protection -->
+    <dimen name="navigation_bar_burn_in_offset_max_y">8dp</dimen>
 </resources>
