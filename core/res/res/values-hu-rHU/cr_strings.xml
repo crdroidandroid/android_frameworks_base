@@ -15,6 +15,10 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Az összeomlási napló URL-jének másolása</string>
+    <string name="url_copy_success">Az URL sikeresen másolva</string>
+    <string name="url_copy_failed">Hiba történt a napló Pasty-feltöltése során</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Tartsa lenyomva a bekapcsológombot a feloldáshoz</string>
     <string name="pocket_view_title">A Zsebmód bekapcsolva</string>
@@ -23,10 +27,6 @@
     <string name="pocket_view_top_tag_cancel2">A Bekapcsológomb hosszan nyomása azonnal kikapcsolja a zsebmódot</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
-    <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Az összeomlási napló URL-jének másolása</string>
-    <string name="url_copy_success">Az URL sikeresen másolva</string>
-    <string name="url_copy_failed">Hiba történt a napló Pasty-feltöltése során</string>
     <!-- App lock -->
     <string name="unlock_application">Feloldja a következőt: <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>
