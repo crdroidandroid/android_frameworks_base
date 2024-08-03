@@ -146,4 +146,7 @@
     <string name="face_unlock_recognizing">מזהה הפנים...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">עוזר AI</string>
+    <!-- Screen record -->
+    <string name="screenrecord_keep_screen_awake_label">השארת המסך דולק</string>
+    <string name="screenrecord_keep_screen_awake_summary">השארת המסך דולק</string>
 </resources>

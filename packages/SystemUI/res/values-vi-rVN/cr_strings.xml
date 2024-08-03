@@ -143,4 +143,7 @@
     <string name="face_unlock_recognizing">Đang nhận diện khuôn mặt...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">Trợ lý trí tuệ nhân tạo</string>
+    <!-- Screen record -->
+    <string name="screenrecord_keep_screen_awake_label">Giữ màn hình bật</string>
+    <string name="screenrecord_keep_screen_awake_summary">Giữ cho màn hình luôn bật</string>
 </resources>

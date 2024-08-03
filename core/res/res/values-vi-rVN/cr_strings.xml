@@ -15,6 +15,10 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Button that copies the url to the log of a crashed application -->
+    <string name="aerr_copy">Sao chép địa chỉ nhật ký lỗi</string>
+    <string name="url_copy_success">Đã sao chép thành công</string>
+    <string name="url_copy_failed">Đã xảy ra lỗi khi tải nhật ký lên máy chủ</string>
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Nhấn và giữ nút nguồn để mở khóa</string>
     <string name="pocket_view_title">Chế độ bỏ túi đang được bật</string>
@@ -23,10 +27,6 @@
     <string name="pocket_view_top_tag_cancel2">Nhấn giữ nút nguồn để buộc thoát khỏi chế độ bỏ túi.</string>
     <string name="pocket_view_top_tag_number1">1.\u0020</string>
     <string name="pocket_view_top_tag_number2">2.\u0020</string>
-    <!-- Button that copies the url to the log of a crashed application -->
-    <string name="aerr_copy">Sao chép địa chỉ nhật ký lỗi</string>
-    <string name="url_copy_success">Đã sao chép thành công</string>
-    <string name="url_copy_failed">Đã xảy ra lỗi khi tải nhật ký lên máy chủ</string>
     <!-- App lock -->
     <string name="unlock_application">Mở khóa <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>

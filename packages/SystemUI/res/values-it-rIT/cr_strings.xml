@@ -144,4 +144,7 @@
     <string name="face_unlock_recognizing">Riconoscimento viso...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">Assistente IA</string>
+    <!-- Screen record -->
+    <string name="screenrecord_keep_screen_awake_label">Resta attivo</string>
+    <string name="screenrecord_keep_screen_awake_summary">Mantieni lo schermo acceso</string>
 </resources>

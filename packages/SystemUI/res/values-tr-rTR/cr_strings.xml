@@ -144,4 +144,7 @@
     <string name="face_unlock_recognizing">Yüz tanınıyor...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">Yapay Zekâ Yardımcısı</string>
+    <!-- Screen record -->
+    <string name="screenrecord_keep_screen_awake_label">Uyanık kal</string>
+    <string name="screenrecord_keep_screen_awake_summary">Ekranı açık tut</string>
 </resources>

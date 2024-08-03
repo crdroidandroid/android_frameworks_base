@@ -144,4 +144,7 @@
     <string name="face_unlock_recognizing">Gesichtserkennung …</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">KI-Assistent</string>
+    <!-- Screen record -->
+    <string name="screenrecord_keep_screen_awake_label">Ausschalten verhindern</string>
+    <string name="screenrecord_keep_screen_awake_summary">Sorgt dafür, dass der Bildschirm eingeschaltet bleibt</string>
 </resources>

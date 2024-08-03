@@ -143,4 +143,7 @@
     <string name="face_unlock_recognizing">臉部辨識中...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI 助理</string>
+    <!-- Screen record -->
+    <string name="screenrecord_keep_screen_awake_label">螢幕常亮</string>
+    <string name="screenrecord_keep_screen_awake_summary">保持螢幕開啟</string>
 </resources>

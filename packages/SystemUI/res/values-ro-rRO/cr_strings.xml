@@ -144,5 +144,8 @@
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Recunoașterea feței...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
-    <string name="accessibility_assistant_button">AI Assistant</string>
+    <string name="accessibility_assistant_button">Asistent IA</string>
+    <!-- Screen record -->
+    <string name="screenrecord_keep_screen_awake_label">Menține ecranul activ</string>
+    <string name="screenrecord_keep_screen_awake_summary">Păstraţi ecranul pornit</string>
 </resources>

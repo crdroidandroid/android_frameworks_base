@@ -144,4 +144,7 @@
     <string name="face_unlock_recognizing">Arcfelismerés...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI-asszisztens</string>
+    <!-- Screen record -->
+    <string name="screenrecord_keep_screen_awake_label">Ne zárja le a képernyőt</string>
+    <string name="screenrecord_keep_screen_awake_summary">A kijelző bekapcsolva marad</string>
 </resources>

@@ -143,4 +143,7 @@
     <string name="face_unlock_recognizing">顔を認識中...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI アシスタント</string>
+    <!-- Screen record -->
+    <string name="screenrecord_keep_screen_awake_label">常に画面点灯</string>
+    <string name="screenrecord_keep_screen_awake_summary">画面をオンのままにします</string>
 </resources>
