@@ -183,7 +183,11 @@ public class FlashlightControllerImpl implements FlashlightController {
      */
     @WorkerThread
     private String getCameraId() throws CameraAccessException {
-        String[] ids = mCameraManager.getCameraIdList();
+        String[] ids = mCameraManager == null ? null : mCameraManager.getCameraIdList();
+        if (ids == null || ids.length == 0) {
+            Log.e(TAG, "Camera ID list is null or empty.");
+            return null;
+        }
 
         // First pass: prefer logical multi-camera with flash — the HAL routes torch
         // through these on devices where multiple cameras share a single flash unit.
