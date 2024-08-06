@@ -3472,7 +3472,7 @@ public final class ViewRootImpl implements ViewParent,
                         == RELAYOUT_RES_CANCEL_AND_REDRAW;
                 cancelReason = "relayout";
                 final boolean dragResizing = mPendingDragResizing;
-                if (mSyncSeqId > mLastSyncSeqId) {
+                if (mSyncSeqId > mLastSyncSeqId && isViewVisible) {
                     mLastSyncSeqId = mSyncSeqId;
                     if (DEBUG_BLAST) {
                         Log.d(mTag, "Relayout called with blastSync");
