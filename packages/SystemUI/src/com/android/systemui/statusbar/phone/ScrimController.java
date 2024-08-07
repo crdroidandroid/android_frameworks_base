@@ -1295,6 +1295,14 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
         setScrimAlpha(mScrimBehind, mBehindAlpha);
         setScrimAlpha(mNotificationsScrim, mNotificationsAlpha);
 
+        // Add logging to verify scrim updates
+        Log.d("ScrimController", "Updating scrims with alpha: " + mInFrontAlpha);
+
+        // Ensure the tint is set to black during AOD mode
+        if (mState == ScrimState.AOD) {
+            mScrimInFront.setTint(Color.BLACK);
+        }
+
         // The animation could have all already finished, let's call onFinished just in case
         onFinished(mState);
         dispatchScrimsVisible();
