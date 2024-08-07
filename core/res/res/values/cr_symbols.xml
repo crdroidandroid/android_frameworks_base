@@ -63,5 +63,6 @@
 
     <!-- Pocket Service -->
     <java-symbol type="string" name="config_pocketJudgeVendorSensorName" />
+    <java-symbol type="dimen" name="config_pocketJudgeVendorSensorValue" />
     <java-symbol type="string" name="config_pocketJudgeVendorProximitySensorName" />
 </resources>
