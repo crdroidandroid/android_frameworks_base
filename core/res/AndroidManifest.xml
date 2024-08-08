@@ -933,6 +933,10 @@
     <permission android:name="android.permission.SET_DEFAULT_ACCOUNT_FOR_CONTACTS"
         android:protectionLevel="internal|role" />
 
+    <!-- @hide -->
+    <permission android:name="com.crdroid.permission.START_FREEFORM"
+                android:protectionLevel="signature|privileged" />
+
     <!-- ====================================================================== -->
     <!-- Permissions for accessing user's calendar                              -->
     <!-- ====================================================================== -->
