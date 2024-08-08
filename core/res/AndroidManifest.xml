@@ -947,6 +947,10 @@
         android:knownCerts="@array/config_setContactsDefaultAccountKnownSigners"
         android:featureFlag="android.provider.new_default_account_api_enabled"/>
 
+    <!-- @hide -->
+    <permission android:name="com.libremobileos.permission.START_FREEFORM"
+                android:protectionLevel="signature|privileged" />
+
     <!-- ====================================================================== -->
     <!-- Permissions for accessing user's calendar                              -->
     <!-- ====================================================================== -->
