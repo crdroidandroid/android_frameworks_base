@@ -1,0 +1,27 @@
+//
+// SPDX-FileCopyrightText: 2023 The LibreMobileOS Foundation
+// SPDX-FileCopyrightText: 2024 crDroid Android Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+filegroup {
+    name: "services.freeform-sources",
+    srcs: [
+        "java/**/*.java",
+        "java/**/*.kt"
+    ],
+    path: "java",
+    visibility: ["//frameworks/base/services"],
+}
+
+java_library_static {
+    name: "services.freeform",
+    defaults: ["platform_service_defaults"],
+    srcs: [":services.freeform-sources"],
+    libs: ["services.core"],
+    static_libs: [
+        "kotlinx_coroutines",
+        "lmofreeform-server",
+    ],
+    jarjar_rules: "jarjar-rules.txt",
+}
