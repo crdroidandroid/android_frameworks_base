@@ -23,16 +23,20 @@ import android.graphics.Point;
 import android.hardware.SensorManager;
 import android.hardware.input.HostUsiVersion;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.IntArray;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.DisplayInfo;
+import android.view.Surface;
 import android.view.SurfaceControl;
 import android.view.SurfaceControl.RefreshRateRange;
 import android.view.SurfaceControl.Transaction;
 import android.window.DisplayWindowPolicyController;
 import android.window.ScreenCapture;
+
+import com.libremobileos.freeform.ILMOFreeformDisplayCallback;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -430,6 +434,17 @@ public abstract class DisplayManagerInternal {
      * Get all available DisplayGroupIds.
      */
     public abstract IntArray getDisplayGroupIds();
+
+    // LMOFreeform
+    public abstract void createFreeformLocked(String name, ILMOFreeformDisplayCallback callback,
+            int width, int height, int densityDpi, boolean secure, boolean ownContentOnly,
+            boolean shouldShowSystemDecorations, Surface surface, float refreshRate,
+            long presentationDeadlineNanos);
+
+    public abstract void resizeFreeform(IBinder appToken, int width, int height,
+            int densityDpi);
+
+    public abstract void releaseFreeform(IBinder appToken);
 
     /**
      * Called upon presentation started/ended on the display.
