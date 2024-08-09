@@ -20,18 +20,23 @@ import android.app.ActivityManager.RunningTaskInfo;
 import android.app.WindowConfiguration;
 import android.app.WindowConfiguration.WindowingMode;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.VectorDrawable;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Choreographer;
 import android.view.SurfaceControl;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.window.WindowContainerTransaction;
 
+import com.android.launcher3.icons.IconProvider;
 import com.android.wm.shell.R;
 import com.android.wm.shell.ShellTaskOrganizer;
 import com.android.wm.shell.common.DisplayController;
@@ -44,6 +49,8 @@ import com.android.wm.shell.common.SyncTransactionQueue;
  * maximize button and close button.
  */
 public class CaptionWindowDecoration extends WindowDecoration<WindowDecorLinearLayout> {
+    private static final String TAG = "CaptionWindowDecoration";
+
     private final Handler mHandler;
     private final Choreographer mChoreographer;
     private final SyncTransactionQueue mSyncQueue;
@@ -57,6 +64,9 @@ public class CaptionWindowDecoration extends WindowDecoration<WindowDecorLinearL
     private RelayoutParams mRelayoutParams = new RelayoutParams();
     private final RelayoutResult<WindowDecorLinearLayout> mResult =
             new RelayoutResult<>();
+
+    private ResizeVeil mResizeVeil;
+    private Drawable mAppIcon;
 
     CaptionWindowDecoration(
             Context context,
@@ -73,6 +83,8 @@ public class CaptionWindowDecoration extends WindowDecoration<WindowDecorLinearL
         mHandler = handler;
         mChoreographer = choreographer;
         mSyncQueue = syncQueue;
+
+        loadAppInfo();
     }
 
     void setCaptionListeners(
@@ -299,9 +311,60 @@ public class CaptionWindowDecoration extends WindowDecoration<WindowDecorLinearL
         mDragResizeListener = null;
     }
 
+    private void loadAppInfo() {
+        String packageName = mTaskInfo.realActivity.getPackageName();
+        PackageManager pm = mContext.getApplicationContext().getPackageManager();
+        try {
+            IconProvider provider = new IconProvider(mContext);
+            mAppIcon = provider.getIcon(pm.getActivityInfo(mTaskInfo.baseActivity,
+                    PackageManager.ComponentInfoFlags.of(0)));
+            ApplicationInfo applicationInfo = pm.getApplicationInfo(packageName,
+                    PackageManager.ApplicationInfoFlags.of(0));
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.w(TAG, "Package not found: " + packageName, e);
+        }
+    }
+
+    /**
+     * Create the resize veil for this task. Note the veil's visibility is View.GONE by default
+     * until a resize event calls showResizeVeil below.
+     */
+    void createResizeVeil() {
+        mResizeVeil = new ResizeVeil(mContext, mAppIcon, mTaskInfo,
+                mSurfaceControlBuilderSupplier, mDisplay, mSurfaceControlTransactionSupplier);
+    }
+
+    /**
+     * Fade in the resize veil
+     */
+    void showResizeVeil(Rect taskBounds) {
+        mResizeVeil.showVeil(mTaskSurface, taskBounds);
+    }
+
+    /**
+     * Set new bounds for the resize veil
+     */
+    void updateResizeVeil(Rect newBounds) {
+        mResizeVeil.updateResizeVeil(newBounds);
+    }
+
+    /**
+     * Fade the resize veil out.
+     */
+    void hideResizeVeil() {
+        mResizeVeil.hideVeil();
+    }
+
+    private void disposeResizeVeil() {
+        if (mResizeVeil == null) return;
+        mResizeVeil.dispose();
+        mResizeVeil = null;
+    }
+
     @Override
     public void close() {
         closeDragResizeListener();
+        disposeResizeVeil();
         super.close();
     }
 
