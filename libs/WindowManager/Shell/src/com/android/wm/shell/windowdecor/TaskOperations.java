@@ -83,6 +83,7 @@ class TaskOperations {
 
     void minimizeTask(WindowContainerToken taskToken) {
         WindowContainerTransaction wct = new WindowContainerTransaction();
+        wct.setAlwaysOnTop(taskToken, false);
         wct.reorder(taskToken, false);
         if (Transitions.ENABLE_SHELL_TRANSITIONS) {
             mTransitionStarter.startMinimizedModeTransition(wct);

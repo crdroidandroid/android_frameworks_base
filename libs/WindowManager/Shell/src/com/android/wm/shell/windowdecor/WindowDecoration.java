@@ -351,14 +351,8 @@ public abstract class WindowDecoration<T extends View & TaskFocusStateConsumer>
         }
 
         // Task surface itself
-        float shadowRadius;
+        float shadowRadius = 0;
         final Point taskPosition = mTaskInfo.positionInParent;
-        if (isFullscreen) {
-            // Shadow is not needed for fullscreen tasks
-            shadowRadius = 0;
-        } else {
-            shadowRadius = loadDimension(resources, params.mShadowRadiusId);
-        }
 
         if (params.mSetTaskPositionAndCrop) {
             startT.setWindowCrop(mTaskSurface, outResult.mWidth, outResult.mHeight);
