@@ -270,17 +270,17 @@ public class CaptionWindowDecoration extends WindowDecoration<WindowDecorLinearL
         if (mResult.mRootView == null) {
             return;
         }
+        int nightModeFlags = mContext.getResources().getConfiguration().uiMode & 
+                             android.content.res.Configuration.UI_MODE_NIGHT_MASK;
+        boolean isNightMode = nightModeFlags == android.content.res.Configuration.UI_MODE_NIGHT_YES;
+
+        int mCaptionColor = isNightMode ? Color.BLACK : Color.WHITE;
+        int buttonTintColorRes = isNightMode ? R.color.decor_button_light_color : R.color.decor_button_dark_color;
+        ColorStateList buttonTintColor = mContext.getResources().getColorStateList(buttonTintColorRes, null /* theme */);
 
         final View caption = mResult.mRootView.findViewById(R.id.caption);
         final GradientDrawable captionDrawable = (GradientDrawable) caption.getBackground();
-        captionDrawable.setColor(captionColor);
-
-        final int buttonTintColorRes =
-                Color.valueOf(captionColor).luminance() < 0.5
-                        ? R.color.decor_button_light_color
-                        : R.color.decor_button_dark_color;
-        final ColorStateList buttonTintColor =
-                caption.getResources().getColorStateList(buttonTintColorRes, null /* theme */);
+        captionDrawable.setColor(mCaptionColor);
 
         final View back = caption.findViewById(R.id.back_button);
         final VectorDrawable backBackground = (VectorDrawable) back.getBackground();
