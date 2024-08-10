@@ -19,7 +19,6 @@
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_data_saver">Datan säästäjä</string>
     <string name="status_bar_call_strength">Puhelun voimakkuus</string>
-    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d laite yhdistettynä</item>
@@ -31,6 +30,12 @@
     <string name="quick_settings_sound_vibrate">Värinä</string>
     <string name="quick_settings_sound_mute">Mute</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Roaming indicator</string>
+    <!-- Name of the HD calling status bar icon. -->
+    <string name="status_bar_hd_calling">HD calling (VoLTE/VoNR)</string>
+    <!-- Name of the VoWiFi status bar icon. -->
+    <string name="status_bar_vowifi">Wi-Fi calling (VoWiFi)</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
