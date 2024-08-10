@@ -19,7 +19,6 @@
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_data_saver">데이터 절약 모드</string>
     <string name="status_bar_call_strength">통화 세기</string>
-    <string name="status_bar_ims">VoLTE/voWiFI</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="other">%d개 장치 연결됨</item>
@@ -30,6 +29,12 @@
     <string name="quick_settings_sound_vibrate">진동</string>
     <string name="quick_settings_sound_mute">음소거</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Roaming indicator</string>
+    <!-- Name of the HD calling status bar icon. -->
+    <string name="status_bar_hd_calling">HD calling (VoLTE/VoNR)</string>
+    <!-- Name of the VoWiFi status bar icon. -->
+    <string name="status_bar_vowifi">Wi-Fi calling (VoWiFi)</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/초</string>
     <string name="megabitspersecond_short">Mb/초</string>
