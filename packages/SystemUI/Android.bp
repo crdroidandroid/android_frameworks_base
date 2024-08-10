@@ -166,6 +166,8 @@ android_library {
         "androidx.compose.animation_animation-graphics",
         "vendor.lineage.powershare-V1.0-java",
         "FadingEdgeLayoutLib",
+        "vendor.xiaomi.hardware.fingerprintextension-V1-java",
+        "vendor.xiaomi.hw.touchfeature-V1-java"
     ],
     libs: [
         "keepanno-annotations",
