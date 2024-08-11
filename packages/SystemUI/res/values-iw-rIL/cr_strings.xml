@@ -35,9 +35,9 @@
     <!-- Name of the roaming status bar icon. -->
     <string name="status_bar_roaming">מחוון נדידה</string>
     <!-- Name of the HD calling status bar icon. -->
-    <string name="status_bar_hd_calling">HD calling (VoLTE/VoNR)</string>
+    <string name="status_bar_hd_calling">שיחות HD (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
-    <string name="status_bar_vowifi">Wi-Fi calling (VoWiFi)</string>
+    <string name="status_bar_vowifi">שיחות באמצעות Wi-Fi (VoWiFi)</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">קילוביט/שניה</string>
     <string name="megabitspersecond_short">מגהביט/שניה</string>
