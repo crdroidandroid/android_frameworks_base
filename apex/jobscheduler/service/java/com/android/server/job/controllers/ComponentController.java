@@ -157,6 +157,7 @@ public class ComponentController extends StateController {
         }
 
         ServiceInfo si;
+        boolean jobCleared = false;
         try {
             // createContextAsUser may potentially be expensive
             // TODO: cache user context or improve ContextImpl implementation if this becomes
@@ -168,12 +169,16 @@ public class ComponentController extends StateController {
             if (mService.areUsersStartedLocked(jobStatus)) {
                 // User is fully unlocked but PM still says the package doesn't exist.
                 Slog.e(TAG, "Job exists for non-existent package: " + service.getPackageName());
+                mService.getJobStore().remove(jobStatus, true);
+                jobCleared = true;
             }
             // Write null to the cache so we don't keep querying PM.
             si = null;
         }
         final String processName = si == null ? null : si.processName;
-        mServiceProcessCache.add(userId, service, processName);
+        if (!jobCleared) {
+            mServiceProcessCache.add(userId, service, processName);
+        }
 
         return processName;
     }
