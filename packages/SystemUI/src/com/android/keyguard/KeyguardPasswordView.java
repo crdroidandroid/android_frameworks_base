@@ -155,6 +155,7 @@ public class KeyguardPasswordView extends KeyguardAbsKeyInputView {
     @Override
     protected void updateConstraints(boolean useSplitBouncer) {
         mAlreadyUsingSplitBouncer = useSplitBouncer;
+        if (mContainerMotionLayout == null) return;
         if (useSplitBouncer) {
             mContainerMotionLayout.jumpToState(R.id.split_constraints);
             mContainerMotionLayout.setMaxWidth(Integer.MAX_VALUE);
