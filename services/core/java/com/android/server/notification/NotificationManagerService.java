@@ -310,7 +310,6 @@ import android.util.Slog;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.util.StatsEvent;
-import android.util.TimeUtils;
 import android.util.Xml;
 import android.util.proto.ProtoOutputStream;
 import android.view.Display;
@@ -690,7 +689,6 @@ public class NotificationManagerService extends SystemService {
     @GuardedBy("mToastQueue")
     private final Set<Integer> mToastRateLimitingDisabledUids = new ArraySet<>();
     final ArrayMap<String, NotificationRecord> mSummaryByGroupKey = new ArrayMap<>();
-    final ArrayMap<String, Long> mLastSoundTimestamps = new ArrayMap<>();
 
     // True if the toast that's on top of the queue is being shown at the moment.
     @GuardedBy("mToastQueue")
@@ -1794,9 +1792,17 @@ public class NotificationManagerService extends SystemService {
 
     };
 
-    NotificationManagerPrivate mNotificationManagerPrivate = key -> {
-        synchronized (mNotificationLock) {
-            return mNotificationsByKey.get(key);
+    NotificationManagerPrivate mNotificationManagerPrivate = new NotificationManagerPrivate() {
+        @Override
+        public NotificationRecord getNotificationByKey(String key) {
+            synchronized (mNotificationLock) {
+                return mNotificationsByKey.get(key);
+            }
+        }
+
+        @Override
+        public long getNotificationSoundTimeout(String pkg, int uid) {
+            return mPreferencesHelper.getNotificationSoundTimeout(pkg, uid);
         }
     };
 
@@ -7193,14 +7199,6 @@ public class NotificationManagerService extends SystemService {
                 pw.println("\n  Usage Stats:");
                 mUsageStats.dump(pw, "    ", filter);
             }
-
-            long now = SystemClock.elapsedRealtime();
-            pw.println("\n  Last notification sound timestamps:");
-            for (Map.Entry<String, Long> entry : mLastSoundTimestamps.entrySet()) {
-                pw.print("    " + entry.getKey() + " -> ");
-                TimeUtils.formatDuration(entry.getValue(), now, pw);
-                pw.println(" ago");
-            }
         }
     }
 
@@ -9274,8 +9272,7 @@ public class NotificationManagerService extends SystemService {
                 }
                 hasValidVibrate = vibration != null;
                 boolean hasAudibleAlert = hasValidSound || hasValidVibrate;
-                if (hasAudibleAlert && !shouldMuteNotificationLocked(record)
-                        && !isInSoundTimeoutPeriod(record)) {
+                if (hasAudibleAlert && !shouldMuteNotificationLocked(record)) {
                     if (!sentAccessibilityEvent) {
                         sendAccessibilityEvent(record);
                         sentAccessibilityEvent = true;
@@ -9346,10 +9343,6 @@ public class NotificationManagerService extends SystemService {
         } else if (wasShowLights) {
             updateLightsLocked();
         }
-        if (buzz || beep) {
-            mLastSoundTimestamps.put(generateLastSoundTimeoutKey(record),
-                    SystemClock.elapsedRealtime());
-        }
         final int buzzBeepBlink = (buzz ? 1 : 0) | (beep ? 2 : 0) | (blink ? 4 : 0);
         if (buzzBeepBlink > 0) {
             // Ignore summary updates because we don't display most of the information.
@@ -9378,24 +9371,6 @@ public class NotificationManagerService extends SystemService {
         }
         record.setAudiblyAlerted(buzz || beep);
         return buzzBeepBlink;
-    }
-
-    private boolean isInSoundTimeoutPeriod(NotificationRecord record) {
-        long timeoutMillis = mPreferencesHelper.getNotificationSoundTimeout(
-                record.getSbn().getPackageName(), record.getSbn().getUid());
-        if (timeoutMillis == 0) {
-            return false;
-        }
-
-        Long value = mLastSoundTimestamps.get(generateLastSoundTimeoutKey(record));
-        if (value == null) {
-            return false;
-        }
-        return SystemClock.elapsedRealtime() - value < timeoutMillis;
-    }
-
-    private String generateLastSoundTimeoutKey(NotificationRecord record) {
-        return record.getSbn().getPackageName() + "|" + record.getSbn().getUid();
     }
 
     @GuardedBy("mNotificationLock")
