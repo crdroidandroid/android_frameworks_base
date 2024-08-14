@@ -900,7 +900,8 @@ public class QSPanel extends LinearLayout implements Tunable {
             if (currentParent != null) {
                 currentParent.removeView(child);
             }
-            parent.addView(child, index);
+            int validIndex = Math.min(index, parent.getChildCount());
+            parent.addView(child, validIndex);
             return;
         }
         // Same parent, we are just changing indices
@@ -910,7 +911,8 @@ public class QSPanel extends LinearLayout implements Tunable {
             return;
         }
         parent.removeView(child);
-        parent.addView(child, index);
+        int validIndex = Math.min(index, parent.getChildCount());
+        parent.addView(child, validIndex);
     }
 
     private void setAnimationTile(QSTileView v) {
