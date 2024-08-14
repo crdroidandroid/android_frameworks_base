@@ -1161,6 +1161,12 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
      * device is dozing when the light sensor is on.
      */
     public void setAodFrontScrimAlpha(float alpha) {
+    
+         // Ensure alpha is fully opaque during AOD mode
+        if (mState == ScrimState.AOD) {
+            alpha = 0.0f; // Fully transparent
+        }
+
         if (mInFrontAlpha != alpha && shouldUpdateFrontScrimAlpha()) {
             mInFrontAlpha = alpha;
             updateScrims();
@@ -1256,6 +1262,14 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
         setScrimAlpha(mScrimInFront, mInFrontAlpha);
         setScrimAlpha(mScrimBehind, mBehindAlpha);
         setScrimAlpha(mNotificationsScrim, mNotificationsAlpha);
+
+        // Add logging to verify scrim updates
+        Log.d("ScrimController", "Updating scrims with alpha: " + mInFrontAlpha);
+
+        // Ensure the tint is set to black during AOD mode
+        if (mState == ScrimState.AOD) {
+            mScrimInFront.setTint(Color.BLACK);
+        }
 
         // The animation could have all already finished, let's call onFinished just in case
         onFinished(mState);
