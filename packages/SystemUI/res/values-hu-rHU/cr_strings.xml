@@ -19,7 +19,6 @@
     <string name="status_bar_nfc">NFC</string>
     <string name="status_bar_data_saver">Adatforgalom-csökkentő</string>
     <string name="status_bar_call_strength">Híváserősség</string>
-    <string name="status_bar_ims">VoLTE/VoWiFi</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
         <item quantity="one">%d készülék csatlakoztatva</item>
@@ -31,6 +30,12 @@
     <string name="quick_settings_sound_vibrate">Rezgés</string>
     <string name="quick_settings_sound_mute">Némítás</string>
     <!-- Text to use when the number in a notification info is too large -->
+    <!-- Name of the roaming status bar icon. -->
+    <string name="status_bar_roaming">Barangoláskijelző</string>
+    <!-- Name of the HD calling status bar icon. -->
+    <string name="status_bar_hd_calling">HD-hívás (VoLTE/VoNR)</string>
+    <!-- Name of the VoWiFi status bar icon. -->
+    <string name="status_bar_vowifi">WiFi-hívás (VoWiFi)</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="megabitspersecond_short">Mb/s</string>
