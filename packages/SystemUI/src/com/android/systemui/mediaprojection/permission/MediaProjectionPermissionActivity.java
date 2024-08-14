@@ -313,7 +313,7 @@ public class MediaProjectionPermissionActivity extends Activity
     }
 
     private void setUpDialog(AlertDialog dialog) {
-        SystemUIDialog.registerDismissListener(dialog);
+        SystemUIDialog.registerDismissListener(dialog, this::onDialogDismissed);
         SystemUIDialog.applyFlags(dialog);
         SystemUIDialog.setDialogSize(dialog);
 
@@ -324,6 +324,12 @@ public class MediaProjectionPermissionActivity extends Activity
 
         final Window w = dialog.getWindow();
         w.addSystemFlags(SYSTEM_FLAG_HIDE_NON_SYSTEM_OVERLAY_WINDOWS);
+    }
+
+    private void onDialogDismissed() {
+        if (!isFinishing()) {
+            finish();
+        }
     }
 
     private boolean showScreenCaptureDisabledDialogIfNeeded() {
