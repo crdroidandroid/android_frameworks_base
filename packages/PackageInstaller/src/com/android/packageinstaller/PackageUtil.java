@@ -79,7 +79,8 @@ public class PackageUtil {
         String filePath = sourceFile.getAbsolutePath();
         if (filePath.endsWith(SPLIT_BASE_APK_END_WITH)) {
             File dir = sourceFile.getParentFile();
-            if (dir.listFiles().length > 1) {
+            File[] dirContents = dir.listFiles();
+            if (dirContents != null && dirContents.length > 1) {
                 // split apks, use file directory to get archive info
                 filePath = dir.getPath();
             }
