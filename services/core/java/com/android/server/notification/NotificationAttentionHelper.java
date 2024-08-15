@@ -336,10 +336,6 @@ public final class NotificationAttentionHelper {
     }
 
     private void loadUserSettings() {
-        mSoundVibScreenOn = Settings.System.getIntForUser(
-                mContext.getContentResolver(),
-                Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON, 1,
-                UserHandle.USER_CURRENT) == 1;
         if (Flags.politeNotifications()) {
             try {
                 mCurrentWorkProfileId = getManagedProfileId(ActivityManager.getCurrentUser());
@@ -1625,7 +1621,7 @@ public final class NotificationAttentionHelper {
                     updateLightsLocked();
                 }
             }
-            if (NOTIFICATION_SOUND_VIB_SCREEN_ON_URI.equals(uri)) {
+            if (uri == null || NOTIFICATION_SOUND_VIB_SCREEN_ON_URI.equals(uri)) {
                 mSoundVibScreenOn = Settings.System.getIntForUser(
                         mContext.getContentResolver(),
                         Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON, 1,
