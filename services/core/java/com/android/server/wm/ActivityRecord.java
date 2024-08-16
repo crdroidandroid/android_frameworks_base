@@ -2989,8 +2989,8 @@ public final class ActivityRecord extends WindowToken implements WindowManagerSe
         final boolean animate;
         final boolean hasImeSurface;
         if (mStartingData != null) {
-            if (mStartingData.mWaitForSyncTransactionCommit
-                    || mTransitionController.isCollecting(this)) {
+            if (!isState(DESTROYING, DESTROYED) && (mStartingData.mWaitForSyncTransactionCommit
+                                           || mTransitionController.isCollecting(this))) {
                 mStartingData.mRemoveAfterTransaction = AFTER_TRANSACTION_REMOVE_DIRECTLY;
                 mStartingData.mPrepareRemoveAnimation = prepareAnimation;
                 return;
