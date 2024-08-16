@@ -52,10 +52,13 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.IconDrawableFactory
 import android.util.Log
+import android.view.animation.AccelerateInterpolator
 import android.view.MotionEvent
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
+import android.view.VelocityTracker
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.transition.AutoTransition
@@ -67,6 +70,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import com.android.settingslib.drawable.CircleFramedDrawable
 
+import kotlin.math.abs
 import kotlin.text.Regex
 import java.util.Locale
 
@@ -90,6 +94,7 @@ class IslandView : ExtendedFloatingActionButton {
     private var isNowPlaying = false
     private var isPostPoned = false
     private var isStackRegistered = false
+    private var isLongPress = false
 
     private val effectClick: VibrationEffect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
     private val effectTick: VibrationEffect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
@@ -149,7 +154,7 @@ class IslandView : ExtendedFloatingActionButton {
                 isPostPoned = true
                 return@post
             }
-            if (isIslandAnimating) {
+            if (isIslandAnimating && !isDismissed) {
                 isPostPoned = true
                 shrink()
                 postOnAnimationDelayed({
@@ -158,6 +163,7 @@ class IslandView : ExtendedFloatingActionButton {
                 return@post
             }
             show()
+            translationX = 0f
             isDismissed = false
             isIslandAnimating = true
             postOnAnimationDelayed({
@@ -171,6 +177,7 @@ class IslandView : ExtendedFloatingActionButton {
     }
 
     fun animateDismissIsland() {
+        if (isDismissed) return
         post({
             resetLayout()
             shrink()
@@ -192,6 +199,7 @@ class IslandView : ExtendedFloatingActionButton {
         if (expandedFraction > 0.0f) {
             notificationStackScroller?.visibility = View.VISIBLE
             this.visibility = View.GONE
+            isDismissed = true
             removeInsetsListener()
         } else if (isIslandAnimating && expandedFraction == 0.0f) {
             notificationStackScroller?.visibility = View.GONE
@@ -260,7 +268,7 @@ class IslandView : ExtendedFloatingActionButton {
         this.iconTint = null
         this.bringToFront()
         notifPackage = if (isNowPlaying) getActiveAppVolumePackage() else sbn.packageName
-        setOnTouchListener(sbn.notification.contentIntent ?: return, notifPackage)
+        setOnTouchListener(sbn.notification.contentIntent, notifPackage)
     }
 
     private fun resolveNotificationContent(notification: Notification): Pair<String, String> {
@@ -355,19 +363,85 @@ class IslandView : ExtendedFloatingActionButton {
     }
 
     private fun setOnTouchListener(intent: PendingIntent, packageName: String) {
+        val threshold = dpToPx(40f)
+        val halfThreshold = threshold / 2
         val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+                if (isLongPress) return false
+                val newTranslationX = translationX - distanceX
+                translationX = newTranslationX.coerceIn(-width.toFloat(), width.toFloat())
+                return true
+            }
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+                if (isLongPress) return false
+                if (e1 != null && e2 != null) {
+                    val deltaX = e2.x - e1.x
+                    val deltaY = e2.y - e1.y
+                    if (abs(deltaX) > abs(deltaY) && abs(deltaX) > threshold) {
+                        animateDismiss(if (deltaX > 0) 1 else -1)
+                        return true
+                    }
+                }
+                return false
+            }
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                if (intent == null) return false
                 onSingleTap(intent, packageName)
                 return true
             }
             override fun onLongPress(e: MotionEvent) {
+                isLongPress = true
                 onLongPress()
             }
         })
         this.setOnTouchListener { view, event ->
             gestureDetector.onTouchEvent(event)
+            when (event.action) {
+                MotionEvent.ACTION_UP -> {
+                    if (isLongPress) {
+                        isLongPress = false
+                        return@setOnTouchListener true
+                    }
+                    if (isDismissed) return@setOnTouchListener true
+                    if (abs(translationX) >= halfThreshold) {
+                        if (abs(translationX) >= threshold) {
+                            animateDismiss(if (translationX > 0) 1 else -1)
+                        } else {
+                            visibility = View.GONE
+                            translationX = 0f
+                            alpha = 1f
+                            isDismissed = true
+                            isIslandAnimating = false
+                        }
+                    } else {
+                        animate().translationX(0f).alpha(1f).start()
+                    }
+                }
+            }
             true
         }
+    }
+
+    private fun animateDismiss(direction: Int) {
+        val animationDuration = 300L
+        val endTranslationX = direction * width.toFloat()
+        val endAlpha = 0f
+        val animator = animate()
+            .translationX(endTranslationX)
+            .alpha(endAlpha)
+            .setDuration(animationDuration)
+        animator.interpolator = AccelerateInterpolator()
+        animator.withEndAction {
+            visibility = View.GONE
+            translationX = 0f
+            isDismissed = true
+            isIslandAnimating = false
+        }
+        animator.start()
+    }
+
+    private fun dpToPx(dp: Float): Float {
+        return dp * context.resources.displayMetrics.density
     }
 
     private fun onLongPress() {
