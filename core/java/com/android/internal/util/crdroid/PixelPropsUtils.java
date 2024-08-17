@@ -443,6 +443,8 @@ public class PixelPropsUtils {
     }
 
     private static void spoofBuildGms() {
+        if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
+            return;
         // Alter build parameters to avoid hardware attestation enforcement
         setPropValue("BRAND", "google");
         setPropValue("MANUFACTURER", "Google");
