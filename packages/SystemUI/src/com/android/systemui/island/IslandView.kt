@@ -15,6 +15,8 @@
  */
 package com.android.systemui.island
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.ActivityTaskManager
 import android.app.ActivityOptions
 import android.app.Notification
@@ -52,6 +54,7 @@ import android.util.AttributeSet
 import android.util.IconDrawableFactory
 import android.util.Log
 import android.view.animation.AccelerateInterpolator
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.MotionEvent
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
@@ -182,7 +185,7 @@ class IslandView : ExtendedFloatingActionButton {
         if (expandedFraction > 0.0f) {
             return
         }
-        post({
+        post {
             notificationStackScroller?.visibility = View.GONE
             setIslandContents(true)
             if (!shouldShowIslandNotification() || this.icon == null && this.text.isBlank()) {
@@ -201,6 +204,18 @@ class IslandView : ExtendedFloatingActionButton {
             translationX = 0f
             isDismissed = false
             isIslandAnimating = true
+
+            val animatorSet = AnimatorSet().apply {
+                duration = 600
+                interpolator = AccelerateDecelerateInterpolator()
+                playTogether(
+                    ObjectAnimator.ofFloat(this@IslandView, View.SCALE_X, 0f, 1.1f, 1f),
+                    ObjectAnimator.ofFloat(this@IslandView, View.SCALE_Y, 0f, 1.1f, 1f),
+                    ObjectAnimator.ofFloat(this@IslandView, View.ALPHA, 0f, 1f)
+                )
+                start()
+            }
+
             postOnAnimationDelayed({
                 extend()
                 isPostPoned = false
@@ -208,14 +223,26 @@ class IslandView : ExtendedFloatingActionButton {
                     addInsetsListener()
                 }, 150L)
             }, 150L)
-        })
+        }
     }
 
     fun animateDismissIsland() {
         if (isDismissed) return
-        post({
+        post {
             resetLayout()
             shrink()
+
+            val animatorSet = AnimatorSet().apply {
+                duration = 600
+                interpolator = AccelerateDecelerateInterpolator()
+                playTogether(
+                    ObjectAnimator.ofFloat(this@IslandView, View.SCALE_X, 1f, 0.9f, 0f),
+                    ObjectAnimator.ofFloat(this@IslandView, View.SCALE_Y, 1f, 0.9f, 0f),
+                    ObjectAnimator.ofFloat(this@IslandView, View.ALPHA, 1f, 0f)
+                )
+                start()
+            }
+
             postOnAnimationDelayed({
                 hide()
                 isIslandAnimating = false
@@ -228,7 +255,7 @@ class IslandView : ExtendedFloatingActionButton {
                     }
                 }, 500L)
             }, 150L)
-        })
+        }
     }
 
     fun cleanUpResources() {
@@ -289,7 +316,7 @@ class IslandView : ExtendedFloatingActionButton {
         val isSystem = sbn.packageName == "android" || sbn.packageName == "com.android.systemui"
         notifTitle = when {
             isNowPlaying ->
-                { islandText.takeIf { it.isNotBlank() } ?: return } // island now playing 
+                { islandText.takeIf { it.isNotBlank() } ?: return } // island now playing
             isSystem && !isNowPlaying -> { "" } // USB debugging notification etc
             else -> {
                 islandTitle.takeIf { it.isNotBlank() } ?: return // normal apps
