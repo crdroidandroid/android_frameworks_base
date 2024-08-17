@@ -31,7 +31,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PixelPropsUtils {
+/**
+ * @hide
+ */
+public final class PixelPropsUtils {
 
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final String DEVICE = "ro.product.device";
@@ -44,7 +47,7 @@ public class PixelPropsUtils {
 
     private static final Map<String, Object> propsToChangeGeneric;
     private static final Map<String, Object> propsToChangePixel5a;
-    private static final Map<String, Object> propsToChangePixel8Pro;
+    private static final Map<String, Object> propsToChangePixel9Pro;
     private static final Map<String, Object> propsToChangePixelTablet;
     private static final Map<String, Object> propsToChangePixelXL;
     private static final Map<String, Object> propsToChangeROG6;
@@ -57,8 +60,26 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangeBS4;
     private static final Map<String, ArrayList<String>> propsToKeep;
 
+    private static final String[] pTensorCodenames = {
+            "comet",
+            "komodo",
+            "caiman",
+            "tokay",
+            "akita",
+            "husky",
+            "shiba",
+            "felix",
+            "tangorpro",
+            "lynx",
+            "cheetah",
+            "panther",
+            "bluejay",
+            "oriole",
+            "raven"
+    };
+
     // Packages to Spoof as Pixel 8 Pro
-    private static final String[] packagesToChangePixel8Pro = {
+    private static final String[] packagesToChangePixel9Pro = {
             "com.google.android.apps.aiwallpapers",
             "com.google.android.apps.bard",
             "com.google.android.apps.customization.pixel",
@@ -188,15 +209,15 @@ public class PixelPropsUtils {
         propsToChangeGeneric = new HashMap<>();
         propsToChangeGeneric.put("TYPE", "user");
         propsToChangeGeneric.put("TAGS", "release-keys");
-        propsToChangePixel8Pro = new HashMap<>();
-        propsToChangePixel8Pro.put("BRAND", "google");
-        propsToChangePixel8Pro.put("MANUFACTURER", "Google");
-        propsToChangePixel8Pro.put("DEVICE", "husky");
-        propsToChangePixel8Pro.put("PRODUCT", "husky");
-        propsToChangePixel8Pro.put("HARDWARE", "husky");
-        propsToChangePixel8Pro.put("MODEL", "Pixel 8 Pro");
-        propsToChangePixel8Pro.put("ID", "AP2A.240805.005");
-        propsToChangePixel8Pro.put("FINGERPRINT", "google/husky/husky:14/AP2A.240805.005/12025142:user/release-keys");
+        propsToChangePixel9Pro = new HashMap<>();
+        propsToChangePixel9Pro.put("BRAND", "google");
+        propsToChangePixel9Pro.put("MANUFACTURER", "Google");
+        propsToChangePixel9Pro.put("DEVICE", "caiman");
+        propsToChangePixel9Pro.put("PRODUCT", "caiman");
+        propsToChangePixel9Pro.put("HARDWARE", "caiman");
+        propsToChangePixel9Pro.put("MODEL", "Pixel 9 Pro");
+        propsToChangePixel9Pro.put("ID", "AD1A.240530.047.U1");
+        propsToChangePixel9Pro.put("FINGERPRINT", "google/caiman/caiman:14/AD1A.240530.047.U1/12150698:user/release-keys");
         propsToChangePixelTablet = new HashMap<>();
         propsToChangePixelTablet.put("BRAND", "google");
         propsToChangePixelTablet.put("MANUFACTURER", "Google");
@@ -262,7 +283,7 @@ public class PixelPropsUtils {
         }
         if (packageName.startsWith("com.google.")
                 || packageName.startsWith("com.samsung.")
-                || Arrays.asList(packagesToChangePixel8Pro).contains(packageName)
+                || Arrays.asList(packagesToChangePixel9Pro).contains(packageName)
                 || Arrays.asList(packagesToChangePixel5a).contains(packageName)) {
 
             if (Arrays.asList(packagesToKeep).contains(packageName) ||
@@ -285,24 +306,28 @@ public class PixelPropsUtils {
                 sIsFinsky = true;
                 return;
             } else if (packageName.equals("com.google.android.gms")) {
+                setPropValue("TIME", System.currentTimeMillis());
                 final String processName = Application.getProcessName().toLowerCase();
-                if (processName.contains("gapps")
+                if (processName.contains("unstable")) {
+                    spoofBuildGms();
+                    return;
+                }
+                boolean isTensorDevice = Arrays.asList(pTensorCodenames).contains(SystemProperties.get(DEVICE));
+                if (!isTensorDevice && (processName.contains("gapps")
                         || processName.contains("gservice")
                         || processName.contains("learning")
-                        || processName.contains("persistent")
-                        || processName.contains("search")
-                        || processName.contains("update")) {
+                        || processName.contains("persistent"))) {
                     propsToChange.putAll(propsToChangePixel5a);
                 } else if (isDeviceTablet(context.getApplicationContext())) {
                     propsToChange.putAll(propsToChangePixelTablet);
                 } else {
-                    propsToChange.putAll(propsToChangePixel8Pro);
+                    propsToChange.putAll(propsToChangePixel9Pro);
                 }
-            } else if (Arrays.asList(packagesToChangePixel8Pro).contains(packageName)) {
+            } else if (Arrays.asList(packagesToChangePixel9Pro).contains(packageName)) {
                 if (isDeviceTablet(context.getApplicationContext())) {
                     propsToChange.putAll(propsToChangePixelTablet);
                 } else {
-                    propsToChange.putAll(propsToChangePixel8Pro);
+                    propsToChange.putAll(propsToChangePixel9Pro);
                 }
             } else {
                 propsToChange.putAll(propsToChangePixel5a);
@@ -318,15 +343,6 @@ public class PixelPropsUtils {
                 }
                 if (DEBUG) Log.d(TAG, "Defining " + key + " prop for: " + packageName);
                 setPropValue(key, value);
-            }
-            if (packageName.equals("com.google.android.gms")) {
-                setPropValue("TIME", System.currentTimeMillis());
-                final String processName = Application.getProcessName().toLowerCase();
-                if (processName.contains("unstable")
-                    || processName.contains("instrumentation")) {
-                    spoofBuildGms();
-                }
-                return;
             }
             // Set proper indexing fingerprint
             if (packageName.equals("com.google.android.settings.intelligence")) {
@@ -442,18 +458,35 @@ public class PixelPropsUtils {
         }
     }
 
+    private static void setVersionFieldInt(String key, int value) {
+        try {
+            if (DEBUG) Log.d(TAG, "Defining prop " + key + " to " + value);
+            Field field = Build.VERSION.class.getDeclaredField(key);
+            field.setAccessible(true);
+            field.set(null, value);
+            field.setAccessible(false);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Log.e(TAG, "Failed to set prop " + key, e);
+        }
+    }
+
     private static void spoofBuildGms() {
         if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
             return;
         // Alter build parameters to avoid hardware attestation enforcement
-        setPropValue("BRAND", "google");
         setPropValue("MANUFACTURER", "Google");
-        setPropValue("DEVICE", "akita");
-        setPropValue("ID", "AP31.240617.015");
-        setPropValue("FINGERPRINT", "google/akita_beta/akita:15/AP31.240617.015/12207491:user/release-keys");
-        setPropValue("MODEL", "Pixel 8a");
-        setPropValue("PRODUCT", "akita_beta");
+        setPropValue("MODEL", "Pixel 9 Pro");
+        setPropValue("FINGERPRINT", "google/caiman/caiman:14/AD1A.240530.047.U1/12150698:user/release-keys");
+        setPropValue("BRAND", "google");
+        setPropValue("PRODUCT", "caiman");
+        setPropValue("DEVICE", "caiman");
+        setVersionFieldString("RELEASE", "14");
+        setPropValue("ID", "AD1A.240530.047.U1");
+        setVersionFieldString("INCREMENTAL", "12150698");
+        setPropValue("TYPE", "user");
+        setPropValue("TAGS", "release-keys");
         setVersionFieldString("SECURITY_PATCH", "2024-08-05");
+        setVersionFieldInt("DEVICE_INITIAL_SDK_INT", 34);
     }
 
     private static boolean isCallerSafetyNet() {
