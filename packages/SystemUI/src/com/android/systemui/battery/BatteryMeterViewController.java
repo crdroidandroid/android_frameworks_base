@@ -123,7 +123,8 @@ public class BatteryMeterViewController extends ViewController<BatteryMeterView>
     // Some places may need to show the battery conditionally, and not obey the tuner
     private boolean mIgnoreTunerUpdates;
     private boolean mIsSubscribedForTunerUpdates;
-
+    private boolean mBatteryHidden
+    
     @Inject
     public BatteryMeterViewController(
             BatteryMeterView view,
