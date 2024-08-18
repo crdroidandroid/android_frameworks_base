@@ -92,6 +92,10 @@ public class QSPanel extends LinearLayout implements Tunable {
             "system:" + Settings.System.QQS_LAYOUT_ROWS;
     public static final String QQS_LAYOUT_ROWS_LANDSCAPE =
             "system:" + Settings.System.QQS_LAYOUT_ROWS_LANDSCAPE;
+    public static final String QS_LAYOUT_ROWS =
+            "system:" + Settings.System.QS_LAYOUT_ROWS;
+    public static final String QS_LAYOUT_ROWS_LANDSCAPE =
+            "system:" + Settings.System.QS_LAYOUT_ROWS_LANDSCAPE;
 
     private static final String TAG = "QSPanel";
 
@@ -428,6 +432,8 @@ public class QSPanel extends LinearLayout implements Tunable {
                 break;
             case QS_LAYOUT_COLUMNS:
             case QS_LAYOUT_COLUMNS_LANDSCAPE:
+            case QS_LAYOUT_ROWS:
+            case QS_LAYOUT_ROWS_LANDSCAPE:
             case QQS_LAYOUT_ROWS:
             case QQS_LAYOUT_ROWS_LANDSCAPE:
                 needsDynamicRowsAndColumns();
@@ -540,8 +546,11 @@ public class QSPanel extends LinearLayout implements Tunable {
 
     public void needsDynamicRowsAndColumns() {
         if (mTileLayout != null) {
-            mTileLayout.setMinRows(mTileLayout.getResourceRows());
-            mTileLayout.setMaxColumns(mTileLayout.getResourceColumns());
+            boolean rowUpdate = mTileLayout.setMinRows(mTileLayout.getResourceRows());
+            boolean colUpdate = mTileLayout.setMaxColumns(mTileLayout.getResourceColumns());
+            if (rowUpdate || colUpdate) {
+                mTileLayout.updateSettings();
+            }
         }
     }
 

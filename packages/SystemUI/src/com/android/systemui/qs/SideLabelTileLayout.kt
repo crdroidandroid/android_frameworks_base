@@ -33,21 +33,7 @@ open class SideLabelTileLayout(
 
     override fun updateResources(): Boolean {
         return super.updateResources().also {
-            // TODO (b/293252410) remove condition here when flag is launched
-            //  Instead update quick_settings_max_rows resource to be the same as
-            //  small_land_lockscreen_quick_settings_max_rows whenever is_small_screen_landscape is
-            //  true. Then, only use quick_settings_max_rows resource.
-            val useSmallLandscapeLockscreenResources =
-                    isSmallLandscapeLockscreenEnabled &&
-                    mContext.resources.getBoolean(R.bool.is_small_screen_landscape)
-
-            val maxAllowedRows = if (useSmallLandscapeLockscreenResources) {
-                context.resources.getInteger(
-                        R.integer.small_land_lockscreen_quick_settings_max_rows)
-                } else {
-                    context.resources.getInteger(R.integer.quick_settings_max_rows)
-                }
-            mMaxAllowedRows = Math.max(TileUtils.getQSRowsCount(context), maxAllowedRows)
+            mMaxAllowedRows = getResourceRows()
         }
     }
 
