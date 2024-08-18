@@ -120,7 +120,7 @@ public class QuickQSPanel extends QSPanel implements TunerService.Tunable {
 
     public void setMaxTiles() {
         int columns = TileUtils.getQSColumnsCount(mContext);
-        int maxTiles = columns * TileUtils.getQSRowsCount(mContext);
+        int maxTiles = columns * TileUtils.getQQSRowsCount(mContext);
 
         while (maxTiles > columns && (maxTiles % columns != 0)) {
             maxTiles--;
@@ -239,8 +239,7 @@ public class QuickQSPanel extends QSPanel implements TunerService.Tunable {
         public boolean updateResources() {
             mResourceCellHeightResId = R.dimen.qs_quick_tile_size;
             boolean b = super.updateResources();
-            mMaxAllowedRows = Math.max(TileUtils.getQSRowsCount(mContext),
-                    getResources().getInteger(R.integer.quick_qs_panel_max_rows));
+            mMaxAllowedRows = getResourceRows();
             return b;
         }
 
@@ -308,11 +307,8 @@ public class QuickQSPanel extends QSPanel implements TunerService.Tunable {
         }
 
         @Override
-        public void updateSettings() {
-            updateResources();
-            mQSPanel.setMaxTiles();
-            updateMaxRows(10000, mRecords.size());
-            super.updateSettings();
+        public int getResourceRows() {
+            return TileUtils.getQQSRowsCount(mContext);
         }
     }
 }
