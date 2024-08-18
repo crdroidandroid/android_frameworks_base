@@ -49,7 +49,8 @@ import javax.inject.Named;
  * Controller for {@link QSPanel}.
  */
 @QSScope
-public class QSPanelController extends QSPanelControllerBase<QSPanel> {
+public class QSPanelController extends QSPanelControllerBase<QSPanel>
+        implements TunerService.Tunable {
 
     private final TunerService mTunerService;
     private final QSCustomizerController mQsCustomizerController;
@@ -134,8 +135,8 @@ public class QSPanelController extends QSPanelControllerBase<QSPanel> {
         mTunerService.addTunable(mView, QSPanel.QS_TILE_ANIMATION_INTERPOLATOR);
         mTunerService.addTunable(mView, QSPanel.QS_LAYOUT_COLUMNS);
         mTunerService.addTunable(mView, QSPanel.QS_LAYOUT_COLUMNS_LANDSCAPE);
-        mTunerService.addTunable(mView, QSPanel.QQS_LAYOUT_ROWS);
-        mTunerService.addTunable(mView, QSPanel.QQS_LAYOUT_ROWS_LANDSCAPE);
+        mTunerService.addTunable(mView, QSPanel.QS_LAYOUT_ROWS);
+        mTunerService.addTunable(mView, QSPanel.QS_LAYOUT_ROWS_LANDSCAPE);
 
         mView.setBrightnessRunnable(() -> {
             mView.updateResources();
