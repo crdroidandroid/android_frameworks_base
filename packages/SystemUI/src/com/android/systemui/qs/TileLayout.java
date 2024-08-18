@@ -107,8 +107,12 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     @Override
     public boolean setMaxColumns(int maxColumns) {
-        mMaxColumns = maxColumns;
-        return updateColumns();
+        if (mMaxColumns != maxColumns) {
+            mMaxColumns = maxColumns;
+            updateResources();
+            return true;
+        }
+        return false;
     }
 
     public void addTile(TileRecord tile) {
@@ -142,10 +146,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         mCellMarginHorizontal = res.getDimensionPixelSize(R.dimen.qs_tile_margin_horizontal);
         mSidePadding = useSidePadding() ? mCellMarginHorizontal / 2 : 0;
         mCellMarginVertical= res.getDimensionPixelSize(R.dimen.qs_tile_margin_vertical);
-        int rows = useSmallLandscapeLockscreenResources()
-                ? res.getInteger(R.integer.small_land_lockscreen_quick_settings_max_rows)
-                : res.getInteger(R.integer.quick_settings_max_rows);
-        mMaxAllowedRows = Math.max(getResourceRows(), rows);
+        mMaxAllowedRows = getResourceRows();
         if (mLessRows) {
             mMaxAllowedRows = Math.max(mMinRows, mMaxAllowedRows - 1);
         }
@@ -374,6 +375,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     @Override
     public void updateSettings() {
         updateResources();
+        updateMaxRows(10000, mRecords.size());
         requestLayout();
     }
 }
