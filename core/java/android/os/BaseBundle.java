@@ -1293,13 +1293,10 @@ public class BaseBundle {
         if (o == null) {
             return defaultValue;
         }
-        
-        if (o instanceof Integer) {
+        try {
             return (Integer) o;
-        } else if (o instanceof Boolean) {
-            return (Boolean) o ? 1 : 0;
-        } else {
-            typeWarning(key, o, "Integer", defaultValue, null);
+        } catch (ClassCastException e) {
+            typeWarning(key, o, "Integer", defaultValue, e);
             return defaultValue;
         }
     }
@@ -1364,13 +1361,10 @@ public class BaseBundle {
         if (o == null) {
             return defaultValue;
         }
-        
-        if (o instanceof Float) {
+        try {
             return (Float) o;
-        } else if (o instanceof Integer) {
-            return ((Integer) o).floatValue();
-        } else {
-            typeWarning(key, o, "Float", defaultValue, null);
+        } catch (ClassCastException e) {
+            typeWarning(key, o, "Float", defaultValue, e);
             return defaultValue;
         }
     }
@@ -1421,12 +1415,10 @@ public class BaseBundle {
     public String getString(@Nullable String key) {
         unparcel();
         final Object o = mMap.get(key);
-        if (o instanceof String) {
+        try {
             return (String) o;
-        } else if (o instanceof Long) {
-            return String.valueOf(o);
-        } else {
-            typeWarning(key, o, "String", null);
+        } catch (ClassCastException e) {
+            typeWarning(key, o, "String", e);
             return null;
         }
     }
