@@ -115,7 +115,7 @@ public class BatteryMeterViewController extends ViewController<BatteryMeterView>
                 @Override
                 public void onBatteryPresentChanged(boolean batteryPresent) {
                     mView.setBatteryPresence(batteryPresent);
-                    mView.setVisibility(!batteryPresent || mBatteryHidden
+                    mView.setVisibility(!batteryPresent
                             ? View.GONE : View.VISIBLE);
                 }
             };
