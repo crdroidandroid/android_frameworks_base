@@ -1114,4 +1114,10 @@ interface IActivityManager {
     void setSandboxSpoofSettingEnabled(String packageName, String settingKey, boolean enabled, int userId);
     List<String> getSandboxEnabledSpoofSettings(String packageName, int userId);
     String getSandboxSpoofedSetting(String callingPackage, String settingName, int userId);
+
+    /**
+     *  Should disable touch if three fingers swipe enabled
+     */
+    boolean isThreeFingersSwipeActive();
+    void setThreeFingersSwipeActive(boolean active);
 }
