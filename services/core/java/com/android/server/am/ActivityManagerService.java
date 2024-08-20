@@ -1614,6 +1614,9 @@ public class ActivityManagerService extends IActivityManager.Stub
 
     static final HostingRecord sNullHostingRecord =
             new HostingRecord(HostingRecord.HOSTING_TYPE_EMPTY);
+
+    private boolean mThreeFingersSwipeEnabled;
+
     /**
      * Used to notify activity lifecycle events.
      */
@@ -19437,5 +19440,21 @@ public class ActivityManagerService extends IActivityManager.Stub
 
     private IBackupManager getBackupManager() {
         return IBackupManager.Stub.asInterface(ServiceManager.getService(Context.BACKUP_SERVICE));
+    }
+
+    @Override
+    public boolean isThreeFingersSwipeActive() {
+        if (!mThreeFingersSwipeEnabled)
+            return false;
+        synchronized (this) {
+            return Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.THREE_FINGER_GESTURE_ACTIVE, 0,
+                    UserHandle.USER_CURRENT) == 1;
+        }
+    }
+
+    @Override
+    public void setThreeFingersSwipeActive(boolean active) {
+        mThreeFingersSwipeEnabled = active;
     }
 }
