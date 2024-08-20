@@ -9,14 +9,15 @@
     <item name="keyguard_clock_line_spacing_scale" type="dimen" format="float">.7</item>
 
     <!-- Pocket Mode -->
-    <dimen name="pocket_view_img_height">350dp</dimen>
-    <dimen name="pocket_view_img_width">175dp</dimen>
-    <dimen name="pocket_view_img_margin_top">56dp</dimen>
-    <dimen name="pocket_view_title_size">24sp</dimen>
-    <dimen name="pocket_view_title_margin_horizontal">56dp</dimen>
-    <dimen name="pocket_view_title_cancel_size">16sp</dimen>
-    <dimen name="pocket_view_title_cancel_margin_top">56dp</dimen>
-    <dimen name="pocket_view_cancel_margin_horizontal">24dp</dimen>
-    <dimen name="pocket_view_top_tag_size">14sp</dimen>
-    <dimen name="pocket_view_top_tag_margin_top">8dp</dimen>
+    <dimen name="pocket_mode_illustration_width">175dp</dimen>
+    <dimen name="pocket_mode_illustration_height">350dp</dimen>
+    <dimen name="pocket_mode_illustration_margin_top">56dp</dimen>
+    <dimen name="pocket_mode_title_size">24sp</dimen>
+    <dimen name="pocket_mode_title_margin_horizontal">56dp</dimen>
+    <dimen name="pocket_mode_instructions_container_margin_horizontal">24dp</dimen>
+    <dimen name="pocket_mode_instructions_container_margin_top">56dp</dimen>
+    <dimen name="pocket_mode_instructions_title_size">16sp</dimen>
+    <dimen name="pocket_mode_instructions_steps_margin_top">8dp</dimen>
+    <dimen name="pocket_mode_instructions_step_size">14sp</dimen>
+    <dimen name="pocket_mode_instructions_step_margin_top">8dp</dimen>
 </resources>
