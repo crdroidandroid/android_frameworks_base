@@ -20920,7 +20920,7 @@ public class ActivityManagerService extends IActivityManager.Stub
 
     public boolean isSwipeToScreenshotGestureActive() {
         synchronized (this) {
-            return mIsSwipeToScrenshotEnabled && SystemProperties.getBoolean("sys.android.screenshot", false);
+            return mIsSwipeToScrenshotEnabled;
         }
     }
 
