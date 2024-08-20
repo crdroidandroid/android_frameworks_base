@@ -6,20 +6,21 @@
 <resources>
 
     <!-- Pocket Mode -->
-    <style name="pocket_view_title">
-        <item name="android:fontFamily">@string/config_headlineFontFamily</item>
-        <item name="android:textSize">@dimen/pocket_view_title_size</item>
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:alpha">0.87</item>
+    <style name="PocketModeTitle">
+        <item name="android:textSize">@dimen/pocket_mode_title_size</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:alpha">0.85</item>
     </style>
-    <style name="pocket_view_title_cancel">
-        <item name="android:textSize">@dimen/pocket_view_title_cancel_size</item>
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:alpha">0.54</item>
+
+    <style name="PocketModeInstructionsTitle">
+        <item name="android:textSize">@dimen/pocket_mode_instructions_title_size</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:alpha">0.5</item>
     </style>
-    <style name="pocket_view_top_tag">
-        <item name="android:textSize">@dimen/pocket_view_top_tag_size</item>
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:alpha">0.54</item>
+
+    <style name="PocketModeInstructionStep">
+        <item name="android:textSize">@dimen/pocket_mode_instructions_step_size</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:alpha">0.5</item>
     </style>
 </resources>
