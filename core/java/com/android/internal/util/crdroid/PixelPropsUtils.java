@@ -51,7 +51,7 @@ public final class PixelPropsUtils {
     private static final Map<String, Object> propsToChangePixelTablet;
     private static final Map<String, Object> propsToChangePixelXL;
     private static final Map<String, Object> propsToChangeROG6;
-    private static final Map<String, Object> propsToChangeXP5;
+    private static final Map<String, Object> propsToChangeLenovoY700;
     private static final Map<String, Object> propsToChangeOP8P;
     private static final Map<String, Object> propsToChangeOP9P;
     private static final Map<String, Object> propsToChangeMI11TP;
@@ -135,16 +135,16 @@ public final class PixelPropsUtils {
 
     // Packages to Spoof as ROG Phone 6
     private static final String[] packagesToChangeROG6 = {
-            "com.activision.callofduty.shooter",
-    	     "com.ea.gp.fifamobile",
+            "com.ea.gp.fifamobile",
             "com.gameloft.android.ANMP.GloftA9HM",
             "com.madfingergames.legends",
             "com.pearlabyss.blackdesertm",
             "com.pearlabyss.blackdesertm.gl"
     };
 
-    // Packages to Spoof as Xperia 5
-    private static final String[] packagesToChangeXP5 = {
+    // Packages to Spoof as Lenovo Y700
+    private static final String[] packagesToChangeLenovoY700 = {
+            "com.activision.callofduty.shooter",
             "com.garena.game.codm",
             "com.tencent.tmgp.kr.codm",
             "com.vng.codmvn"
@@ -250,9 +250,9 @@ public final class PixelPropsUtils {
         propsToChangeROG6.put("MANUFACTURER", "asus");
         propsToChangeROG6.put("DEVICE", "AI2201");
         propsToChangeROG6.put("MODEL", "ASUS_AI2201");
-        propsToChangeXP5 = new HashMap<>();
-        propsToChangeXP5.put("MODEL", "SO-52A");
-        propsToChangeXP5.put("MANUFACTURER", "Sony");
+        propsToChangeLenovoY700 = new HashMap<>();
+        propsToChangeLenovoY700.put("MODEL", "Lenovo TB-9707F");
+        propsToChangeLenovoY700.put("MANUFACTURER", "lenovo");
         propsToChangeOP8P = new HashMap<>();
         propsToChangeOP8P.put("MODEL", "IN2020");
         propsToChangeOP8P.put("MANUFACTURER", "OnePlus");
@@ -360,9 +360,9 @@ public final class PixelPropsUtils {
                     Object value = prop.getValue();
                     setPropValue(key, value);
                 }
-            } else if (Arrays.asList(packagesToChangeXP5).contains(packageName)) {
+            } else if (Arrays.asList(packagesToChangeLenovoY700).contains(packageName)) {
                 if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
-                for (Map.Entry<String, Object> prop : propsToChangeXP5.entrySet()) {
+                for (Map.Entry<String, Object> prop : propsToChangeLenovoY700.entrySet()) {
                     String key = prop.getKey();
                     Object value = prop.getValue();
                     setPropValue(key, value);
