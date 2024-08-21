@@ -266,13 +266,6 @@ public class QuickQSPanel extends QSPanel implements TunerService.Tunable {
         }
 
         @Override
-        protected void onConfigurationChanged(Configuration newConfig) {
-            super.onConfigurationChanged(newConfig);
-            updateSettings();
-            requestLayout();
-        }
-
-        @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             // Make sure to always use the correct number of rows. As it's determined by the
             // columns, just use as many as needed.
