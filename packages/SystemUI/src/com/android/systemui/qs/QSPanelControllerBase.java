@@ -116,10 +116,6 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
                         /* containerName= */ mView.getDumpableTag());
 
                     switchTileLayoutIfNeeded();
-                    if (mView.getTileLayout() != null) {
-                        mView.getTileLayout().updateSettings();
-                        setTiles();
-                    }
                     onConfigurationChanged();
                     if (previousSplitShadeState != mShouldUseSplitNotificationShade) {
                         onSplitShadeChanged(mShouldUseSplitNotificationShade);
