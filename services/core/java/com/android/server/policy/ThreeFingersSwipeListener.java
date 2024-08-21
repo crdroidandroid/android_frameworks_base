@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2019 The PixelExperience Project
  * Copyright (C) 2024 crDroid Android Project
+ *               2023-2024 The risingOS Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +31,10 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
     private static final int THREE_GESTURE_STATE_DETECTED_FALSE = 2;
     private static final int THREE_GESTURE_STATE_DETECTED_TRUE = 3;
     private static final int THREE_GESTURE_STATE_NO_DETECT = 4;
+    private static final long LONG_SWIPE_TIMEOUT = 800;
+    private static final float MAX_MOVE_THRESHOLD = 50.0f;
     private float[] mInitMotionY;
+    private float[] mInitMotionX;
     private int[] mPointerIds;
     private int mThreeGestureState = THREE_GESTURE_STATE_NONE;
     private int mThreeGestureThreshold;
@@ -39,10 +43,13 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
     private int mScreenHeight;
     private int mScreenWidth;
     private final Callbacks mCallbacks;
+    private long mDownTime;
+    private boolean isLongSwipeTriggered = false;
 
     public ThreeFingersSwipeListener(Context context, Callbacks callbacks) {
         mPointerIds = new int[3];
         mInitMotionY = new float[3];
+        mInitMotionX = new float[3];
         mCallbacks = callbacks;
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         mDensity = displayMetrics.density;
@@ -54,14 +61,17 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
 
     @Override
     public void onPointerEvent(MotionEvent event) {
-        if (event.getAction() == 0) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            mDownTime = event.getDownTime();
             mThreeGestureState = THREE_GESTURE_STATE_NONE;
+            isLongSwipeTriggered = false;
         } else if (mThreeGestureState == THREE_GESTURE_STATE_NONE && event.getPointerCount() == 3) {
             if (checkIsStartThreeGesture(event)) {
                 mThreeGestureState = THREE_GESTURE_STATE_DETECTING;
                 for (int i = 0; i < 3; i++) {
                     mPointerIds[i] = event.getPointerId(i);
                     mInitMotionY[i] = event.getY(i);
+                    mInitMotionX[i] = event.getX(i);
                 }
             } else {
                 mThreeGestureState = THREE_GESTURE_STATE_NO_DETECT;
@@ -73,7 +83,8 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
                 return;
             }
             if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
-                float distance = 0.0f;
+                float distanceY = 0.0f;
+                float distanceX = 0.0f;
                 int i = 0;
                 while (i < 3) {
                     int index = event.findPointerIndex(mPointerIds[i]);
@@ -81,13 +92,23 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
                         mThreeGestureState = THREE_GESTURE_STATE_DETECTED_FALSE;
                         return;
                     } else {
-                        distance += event.getY(index) - mInitMotionY[i];
+                        distanceY += event.getY(index) - mInitMotionY[i];
+                        distanceX += event.getX(index) - mInitMotionX[i];
                         i++;
                     }
                 }
-                if (distance >= ((float) mThreeGestureThreshold)) {
+                if (Math.abs(distanceY) >= ((float) mThreeGestureThreshold) 
+                        || Math.abs(distanceX) >= ((float) mThreeGestureThreshold)) {
                     mThreeGestureState = THREE_GESTURE_STATE_DETECTED_TRUE;
                     mCallbacks.onSwipeThreeFingers();
+                    return;
+                }
+                if (!isLongSwipeTriggered && event.getEventTime() - mDownTime 
+                        >= LONG_SWIPE_TIMEOUT && Math.abs(distanceY) 
+                        < MAX_MOVE_THRESHOLD && Math.abs(distanceX) < MAX_MOVE_THRESHOLD) {
+                    mThreeGestureState = THREE_GESTURE_STATE_DETECTED_TRUE;
+                    mCallbacks.onLongSwipeThreeFingers();
+                    return;
                 }
             }
         }
@@ -120,5 +141,6 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
 
     interface Callbacks {
         void onSwipeThreeFingers();
+        void onLongSwipeThreeFingers();
     }
 }
