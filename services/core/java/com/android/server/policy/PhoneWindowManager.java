@@ -3337,16 +3337,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 LineageSettings.System.KEY_THREE_FINGERS_LONG_SWIPE_ACTION,
                 Action.NOTHING);
 
-        boolean shouldRegisterThreeFingersListener = (threeFingersSwipeAction != Action.NOTHING ||
-                                                      threeFingersLongSwipeAction != Action.NOTHING) && 
-                                                      !mThreeFingerListenerRegistered;
-
         boolean actionsChanged = mThreeFingersSwipeAction != threeFingersSwipeAction ||
                                  mThreeFingersLongSwipeAction != threeFingersLongSwipeAction;
 
         if (mThreeFingersListener != null && actionsChanged) {
             mThreeFingersSwipeAction = threeFingersSwipeAction;
             mThreeFingersLongSwipeAction = threeFingersLongSwipeAction;
+            boolean shouldRegisterThreeFingersListener = (mThreeFingersSwipeAction != Action.NOTHING) ||
+                                                      (mThreeFingersLongSwipeAction != Action.NOTHING);
             if (shouldRegisterThreeFingersListener && !mThreeFingerListenerRegistered) {
                 mWindowManagerFuncs.registerPointerEventListener(mThreeFingersListener, DEFAULT_DISPLAY);
                 mThreeFingerListenerRegistered = true;
