@@ -32,6 +32,8 @@ import android.system.keystore2.KeyEntryResponse;
 import android.system.keystore2.ResponseCode;
 import android.util.Log;
 
+import com.android.internal.util.crdroid.AttestationHooks;
+
 import java.util.Calendar;
 
 /**
@@ -283,7 +285,9 @@ public class KeyStore2 {
             throws KeyStoreException {
         StrictMode.noteDiskRead();
 
-        return handleRemoteExceptionWithRetry((service) -> service.getKeyEntry(descriptor));
+        KeyEntryResponse response = handleRemoteExceptionWithRetry((service) -> service.getKeyEntry(descriptor));
+
+        return AttestationHooks.onGetKeyEntry(response);
     }
 
     /**
