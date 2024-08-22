@@ -1753,6 +1753,7 @@ public class ActivityManagerService extends IActivityManager.Stub
 
     final ThreeFingersSwipeObserver mThreeFingersSwipeObserver;
     private boolean mThreeFingersSwipeEnabled;
+    private boolean mThreeFingersLongSwipeEnabled;
 
     /**
      * Used to notify activity lifecycle events.
@@ -20756,12 +20757,17 @@ public class ActivityManagerService extends IActivityManager.Stub
             mContext.getContentResolver().registerContentObserver(
                     LineageSettings.System.getUriFor(LineageSettings.System.KEY_THREE_FINGERS_SWIPE_ACTION),
                     false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(
+                    LineageSettings.System.getUriFor(LineageSettings.System.KEY_THREE_FINGERS_LONG_SWIPE_ACTION),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
         private void update() {
             mThreeFingersSwipeEnabled = LineageSettings.System.getIntForUser(mContext.getContentResolver(),
                     LineageSettings.System.KEY_THREE_FINGERS_SWIPE_ACTION, 12, UserHandle.USER_CURRENT) != 0;
+            mThreeFingersLongSwipeEnabled = LineageSettings.System.getIntForUser(mContext.getContentResolver(),
+                    LineageSettings.System.KEY_THREE_FINGERS_LONG_SWIPE_ACTION, 0, UserHandle.USER_CURRENT) != 0;
         }
 
         public void onChange(boolean selfChange) {
@@ -20933,6 +20939,6 @@ public class ActivityManagerService extends IActivityManager.Stub
 
     @Override
     public boolean isThreeFingersSwipeActive() {
-        return mThreeFingersSwipeEnabled;
+        return mThreeFingersSwipeEnabled || mThreeFingersLongSwipeEnabled;
     }
 }
