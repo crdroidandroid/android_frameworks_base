@@ -47,6 +47,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.Icon;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -513,6 +514,7 @@ public class MediaControlPanel {
 
         if (mToken != null) {
             mController = new MediaController(mContext, mToken);
+            mController.registerCallback(mCb);
         } else {
             mController = null;
         }
@@ -1565,5 +1567,21 @@ public class MediaControlPanel {
         set.setVisibility(actionId, visible ? ConstraintSet.VISIBLE : notVisibleValue);
         set.setAlpha(actionId, visible ? 1.0f : 0.0f);
     }
-}
 
+    /**
+      * Here is to solve the problem that the panel title and artist are not syncing in time 
+      * @author alphi-wang-cn
+      */ 
+     private final MediaController.Callback mCb = new MediaController.Callback() { 
+         @Override 
+         public void onMetadataChanged(MediaMetadata metadata) { 
+            if (metadata != null) { 
+                 String title = metadata.getString(MediaMetadata.METADATA_KEY_TITLE); 
+                 String artist = metadata.getString(MediaMetadata.METADATA_KEY_ARTIST); 
+                 mMediaViewHolder.getTitleText().setText(title); 
+                 mMediaViewHolder.getArtistText().setText(artist); 
+                 mMediaViewController.refreshState();        // measure view and refresh the state 
+            }
+         } 
+     };
+}
