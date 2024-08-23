@@ -24,4 +24,20 @@
         <item>VERSION.RELEASE:1.0</item>
       -->
     </string-array>
+
+    <!-- Keybox configuration for device certification -->
+    <string-array name="config_certifiedKeybox" translatable="false">
+      <!--
+        Keybox entries for EC and RSA keys and certificates.
+        These should be populated with valid data for device certification.
+        <item>EC.PRIV:</item>
+        <item>EC.CERT_1:</item>
+        <item>EC.CERT_2:</item>
+        <item>EC.CERT_3:</item>
+        <item>RSA.PRIV:</item>
+        <item>RSA.CERT_1:</item>
+        <item>RSA.CERT_2:</item>
+        <item>RSA.CERT_3:</item>
+      -->
+    </string-array>
 </resources>
