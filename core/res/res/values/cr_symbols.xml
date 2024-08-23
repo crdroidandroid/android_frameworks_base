@@ -90,4 +90,7 @@
 
     <!-- GameSpace -->
     <java-symbol type="string" name="gamespace_new_game_added" />
+
+    <!-- Keybox -->
+    <java-symbol type="array" name="config_certifiedKeybox" />
 </resources>
