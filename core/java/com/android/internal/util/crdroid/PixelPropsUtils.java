@@ -26,6 +26,7 @@ import android.util.ArraySet;
 import android.util.Log;
 
 import com.android.internal.R;
+import com.android.internal.util.KeyProviderManager;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -375,6 +376,11 @@ public final class PixelPropsUtils {
     public static void onEngineGetCertificateChain() {
         if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
             return;
+        // If a keybox is found, don't block key attestation
+        if (KeyProviderManager.isKeyboxAvailable()) {
+            Log.i(TAG, "Key attestation blocking is disabled because a keybox is defined to spoof");
+            return;
+        }
         // Check stack for SafetyNet
         if (isCallerSafetyNet()) {
             Log.i(TAG, "Blocked key attestation");
