@@ -200,9 +200,6 @@ public final class PixelPropsUtils {
             "com.proximabeta.mf.uamo"
     };
 
-    private static volatile boolean sIsFinsky = false;
-    private static volatile boolean sIsExcluded = false;
-
     static {
         propsToKeep = new HashMap<>();
         propsToKeep.put("com.google.android.settings.intelligence", new ArrayList<>(Collections.singletonList("FINGERPRINT")));
@@ -288,7 +285,6 @@ public final class PixelPropsUtils {
 
             if (Arrays.asList(packagesToKeep).contains(packageName) ||
                     packageName.startsWith("com.google.android.GoogleCamera")) {
-                sIsExcluded = true;
                 return;
             }
 
@@ -302,9 +298,6 @@ public final class PixelPropsUtils {
                         !SystemProperties.getBoolean(SPOOF_PIXEL_NETFLIX, false)) {
                     if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by system prop");
                     return;
-            } else if (packageName.equals("com.android.vending")) {
-                sIsFinsky = true;
-                return;
             } else if (packageName.equals("com.google.android.gms")) {
                 setPropValue("TIME", System.currentTimeMillis());
                 final String processName = Application.getProcessName().toLowerCase();
@@ -487,21 +480,5 @@ public final class PixelPropsUtils {
         setPropValue("TAGS", "release-keys");
         setVersionFieldString("SECURITY_PATCH", "2024-08-05");
         setVersionFieldInt("DEVICE_INITIAL_SDK_INT", 34);
-    }
-
-    private static boolean isCallerSafetyNet() {
-        return Arrays.stream(Thread.currentThread().getStackTrace())
-                        .anyMatch(elem -> elem.getClassName().toLowerCase()
-                            .contains("droidguard"));
-    }
-
-    public static void onEngineGetCertificateChain() {
-        if (!SystemProperties.getBoolean(SPOOF_PIXEL_PI, true))
-            return;
-        // Check stack for SafetyNet or Play Integrity
-        if ((isCallerSafetyNet() || sIsFinsky) && !sIsExcluded) {
-            Log.i(TAG, "Blocked key attestation");
-            throw new UnsupportedOperationException();
-        }
     }
 }
