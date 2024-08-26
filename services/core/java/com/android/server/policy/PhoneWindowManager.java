@@ -3322,12 +3322,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 LineageSettings.System.KEY_EDGE_LONG_SWIPE_ACTION,
                 mEdgeLongSwipeAction);
 
-        Action threeFingersSwipeAction = Action.fromIntSafe(res.getInteger(
-                org.lineageos.platform.internal.R.integer.config_threeFingersSwipeBehavior));
-
-        threeFingersSwipeAction = Action.fromSettings(resolver,
+        Action threeFingersSwipeAction = Action.fromSettings(resolver,
                 LineageSettings.System.KEY_THREE_FINGERS_SWIPE_ACTION,
-                threeFingersSwipeAction);
+                Action.NOTHING);
 
         if (mThreeFingersSwipe != null && mThreeFingersSwipeAction != threeFingersSwipeAction) {
             mThreeFingersSwipeAction = threeFingersSwipeAction;
