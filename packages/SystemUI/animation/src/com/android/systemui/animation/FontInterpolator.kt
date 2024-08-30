@@ -27,12 +27,14 @@ import java.lang.Float.min
 
 private const val TAG_WGHT = "wght"
 private const val TAG_ITAL = "ital"
+private const val TAG_WDTH = "wdth"
 
 private const val FONT_WEIGHT_DEFAULT_VALUE = 400f
 private const val FONT_ITALIC_MAX = 1f
 private const val FONT_ITALIC_MIN = 0f
 private const val FONT_ITALIC_ANIMATION_STEP = 0.1f
 private const val FONT_ITALIC_DEFAULT_VALUE = 0f
+private const val DEFAULT_WIDTH_VALUE = 100f
 
 // Benchmarked via Perfetto, difference between 10 and 50 entries is about 0.3ms in
 // frame draw time on a Pixel 6.
@@ -141,11 +143,19 @@ class FontInterpolator(
                                 progress
                             )
                         )
+                    TAG_WDTH ->
+                        MathUtils.lerp(
+                            startValue ?: DEFAULT_WIDTH_VALUE,
+                            endValue ?: DEFAULT_WIDTH_VALUE,
+                            progress
+                        )
                     else -> {
-                        require(startValue != null && endValue != null) {
-                            "Unable to interpolate due to unknown default axes value : $tag"
-                        }
-                        MathUtils.lerp(startValue, endValue, progress)
+                        val defaultValue = getDefaultAxisValue(tag)
+                        MathUtils.lerp(
+                            startValue ?: defaultValue,
+                            endValue ?: defaultValue,
+                            progress
+                        )
                     }
                 }
             }
@@ -234,5 +244,14 @@ class FontInterpolator(
         // Returns true if given two font instance can be interpolated.
         fun canInterpolate(start: Font, end: Font) =
             start.ttcIndex == end.ttcIndex && start.sourceIdentifier == end.sourceIdentifier
+    }
+
+    private fun getDefaultAxisValue(tag: String): Float {
+        return when (tag) {
+            TAG_WGHT -> FONT_WEIGHT_DEFAULT_VALUE
+            TAG_ITAL -> FONT_ITALIC_DEFAULT_VALUE
+            TAG_WDTH -> DEFAULT_WIDTH_VALUE
+            else -> throw IllegalArgumentException("Unknown axis tag: $tag")
+        }
     }
 }
