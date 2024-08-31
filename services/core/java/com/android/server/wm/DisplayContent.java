@@ -796,6 +796,8 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
     /** Last window to hold the screen locked. */
     private WindowState mLastWakeLockHoldingWindow;
 
+    private boolean mHasSecureContent;
+
     /**
      * Whether display is allowed to ignore all activity size restrictions.
      * @see #isDisplayIgnoreActivitySizeRestrictions
@@ -5151,6 +5153,11 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
         return imeLayeringTarget.mSession.mUid == uid && imeLayeringTarget.mSession.mPid == pid;
     }
 
+    boolean hasSecureWindowOnScreen() {
+        final WindowState win = getWindow(w -> w.isOnScreen() && w.isSecureLocked());
+        return win != null;
+    }
+
     // TODO: Super unexpected long method that should be broken down...
     void applySurfaceChangesTransaction() {
         final WindowSurfacePlacer surfacePlacer = mWmService.mWindowPlacerLocked;
@@ -5285,6 +5292,13 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
         mInputMonitor.setUpdateInputWindowsNeededLw();
         if (updateInputWindows) {
             mInputMonitor.updateInputWindowsLw(false /*force*/);
+        }
+
+        // Notify if display added or removed a secure window
+        final boolean hasSecureContent = hasSecureWindowOnScreen();
+        if (hasSecureContent != mHasSecureContent) {
+            mHasSecureContent = hasSecureContent;
+            mWmService.notifyDisplaySecureContentChange(mDisplayId, hasSecureContent);
         }
     }
 

@@ -440,6 +440,14 @@ public abstract class WindowManagerInternal {
     }
 
     /**
+     * Listener interface for secure content showing up on the display.
+     */
+    public interface DisplaySecureContentListener {
+        public void onDisplayHasSecureWindowOnScreenChanged(
+                int displayId, boolean hasSecureWindowOnScreen);
+    }
+
+    /**
      * Request the interface to access features implemented by AccessibilityController.
      */
     public abstract AccessibilityControllerInternal getAccessibilityController();
@@ -1249,4 +1257,12 @@ public abstract class WindowManagerInternal {
      * @throws RuntimeException if the payload cannot be written to the settings file.
      */
     public abstract void restoreDisplayWindowSettings(int userId, byte[] payload);
+
+    /**
+     * Register/unregister callbacks for secure content showing up on the display.
+     */
+    public abstract void registerDisplaySecureContentListener(
+            DisplaySecureContentListener listener);
+    public abstract void unregisterDisplaySecureContentListener(
+            DisplaySecureContentListener listener);
 }
