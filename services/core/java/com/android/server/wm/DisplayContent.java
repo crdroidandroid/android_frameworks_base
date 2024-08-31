@@ -781,6 +781,8 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
     /** Last window to hold the screen locked. */
     private WindowState mLastWakeLockHoldingWindow;
 
+    private boolean mHasSecureContent;
+
     /**
      * Whether display is allowed to ignore all activity size restrictions.
      * @see #isDisplayIgnoreActivitySizeRestrictions
@@ -5157,6 +5159,13 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
         mInputMonitor.setUpdateInputWindowsNeededLw();
         if (updateInputWindows) {
             mInputMonitor.updateInputWindowsLw(false /*force*/);
+        }
+
+        // Notify if display added or removed a secure window
+        final boolean hasSecureContent = hasSecureWindowOnScreen();
+        if (hasSecureContent != mHasSecureContent) {
+            mHasSecureContent = hasSecureContent;
+            mWmService.notifyDisplaySecureContentChange(mDisplayId, hasSecureContent);
         }
     }
 
