@@ -130,6 +130,7 @@ import static com.android.internal.protolog.WmProtoLogGroups.WM_DEBUG_SCREEN_ON;
 import static com.android.internal.protolog.WmProtoLogGroups.WM_DEBUG_WALLPAPER;
 import static com.android.internal.protolog.WmProtoLogGroups.WM_SHOW_TRANSACTIONS;
 import static com.android.internal.util.LatencyTracker.ACTION_ROTATE_SCREEN;
+import static com.android.server.display.LMOFreeformDisplayAdapter.UNIQUE_ID_PREFIX;
 import static com.android.server.policy.WindowManagerPolicy.FINISH_LAYOUT_REDO_ANIM;
 import static com.android.server.policy.WindowManagerPolicy.FINISH_LAYOUT_REDO_CONFIG;
 import static com.android.server.policy.WindowManagerPolicy.FINISH_LAYOUT_REDO_LAYOUT;
@@ -560,6 +561,8 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
 
     // TODO(multi-display): remove some of the usages.
     boolean isDefaultDisplay;
+
+    private boolean isFreeformDisplay;
 
     /** Save allocating when calculating rects */
     private final Rect mTmpRect = new Rect();
@@ -1185,6 +1188,7 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
         mSystemGestureExclusionLimit = mWmService.mConstants.mSystemGestureExclusionLimitDp
                 * mDisplayMetrics.densityDpi / DENSITY_DEFAULT;
         isDefaultDisplay = mDisplayId == DEFAULT_DISPLAY;
+        isFreeformDisplay = mDisplayInfo.uniqueId.startsWith(UNIQUE_ID_PREFIX);
         mInsetsStateController = new InsetsStateController(this);
         initializeDisplayBaseInfo();
         mDisplayFrames = new DisplayFrames(mInsetsStateController.getRawInsetsState(),
@@ -4343,7 +4347,7 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
 
     boolean forceDesktopMode() {
         return ("VNC".equals(mDisplay.getName()) || mWmService.mForceDesktopModeOnExternalDisplays)
-            && !isDefaultDisplay && !isPrivate();
+            && !isDefaultDisplay && !isFreeformDisplay && !isPrivate();
     }
 
     /** @see WindowManagerInternal#onToggleImeRequested */
@@ -5750,7 +5754,7 @@ class DisplayContent extends RootDisplayArea implements WindowManagerPolicy.Disp
      * also check {@link #isSystemDecorationsSupported()} to avoid breaking any security policy.
      */
     boolean isPublicSecondaryDisplayWithDesktopModeForceEnabled() {
-        if (!mWmService.mForceDesktopModeOnExternalDisplays || isDefaultDisplay || isPrivate()) {
+        if (!mWmService.mForceDesktopModeOnExternalDisplays || isDefaultDisplay || isPrivate() && !isFreeformDisplay) {
             return false;
         }
         if (!isWindowingModeSupported(WINDOWING_MODE_FREEFORM)) {
