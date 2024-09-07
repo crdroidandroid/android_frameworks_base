@@ -354,21 +354,25 @@ public class OmniJawsClient {
         if (!isOmniJawsServiceInstalled()) {
             return false;
         }
+        boolean enabled = false;
         try {
             final Cursor c = mContext.getContentResolver().query(SETTINGS_URI, SETTINGS_PROJECTION,
                     null, null, null);
             if (c != null) {
-                int count = c.getCount();
-                if (count == 1) {
-                    c.moveToPosition(0);
-                    boolean enabled = c.getInt(0) == 1;
-                    return enabled;
+                try {
+                    int count = c.getCount();
+                    if (count == 1) {
+                        c.moveToPosition(0);
+                        enabled = c.getInt(0) == 1;
+                    }
+                } finally {
+                    c.close();
                 }
             }
         } catch (Exception e) {
             Log.e(TAG, "isOmniJawsEnabled", e);
         }
-        return false;
+        return enabled;
     }
 
     private String getTemperatureUnit() {
