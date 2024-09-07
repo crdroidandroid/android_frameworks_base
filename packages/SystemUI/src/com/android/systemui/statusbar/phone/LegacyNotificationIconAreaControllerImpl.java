@@ -24,6 +24,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Trace;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -167,6 +168,13 @@ public class LegacyNotificationIconAreaControllerImpl implements
         initializeNotificationAreaViews(context);
         reloadAodColor();
         darkIconDispatcher.addDarkReceiver(this);
+
+        mNewIconStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.STATUSBAR_COLORED_ICONS, 0, UserHandle.USER_CURRENT) == 1;
+        mShowNotificationCount = Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.STATUSBAR_NOTIF_COUNT,
+            mContext.getResources().getBoolean(R.bool.config_statusBarShowNumber) ? 1 : 0,
+            UserHandle.USER_CURRENT) == 1;
 
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, STATUSBAR_COLORED_ICONS);
@@ -506,9 +514,9 @@ public class LegacyNotificationIconAreaControllerImpl implements
                 hostLayout.addView(v, i, params);
             }
             v.setIconStyle(mNewIconStyle);
-            v.updateDrawable();
+            v.setShowCount(mShowNotificationCount);
             if (forced) {
-                v.setShowCount(mShowNotificationCount);
+                v.updateDrawable();
                 v.updateIconForced();
             }
         }
