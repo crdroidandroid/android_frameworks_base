@@ -59,6 +59,16 @@ public abstract class UdfpsDrawable extends Drawable {
     String[] mUdfpsIcons;
 
     int mAlpha = 255; // 0 - 255
+    
+    private TunerService.Tunable mTunable = (key, newValue) -> {
+        if (UDFPS_ICON.equals(key)) {
+            mSelectedIcon = newValue == null ? 0 : Integer.parseInt(newValue);
+            mUdfpsDrawable = mSelectedIcon == 0 ? null :
+                    loadDrawable(udfpsRes,
+                            mUdfpsIcons[mSelectedIcon]);
+        }
+    };
+
     public UdfpsDrawable(@NonNull Context context) {
         mContext = context;
         final String fpPath = context.getResources().getString(R.string.config_udfpsIcon);
@@ -86,17 +96,12 @@ public abstract class UdfpsDrawable extends Drawable {
             int res = udfpsRes.getIdentifier("udfps_icons",
                     "array", udfpsResourcesPackage);
             mUdfpsIcons = udfpsRes.getStringArray(res);
-
-            TunerService.Tunable tunable = (key, newValue) -> {
-                if (UDFPS_ICON.equals(key)) {
-                    mSelectedIcon = newValue == null ? 0 : Integer.parseInt(newValue);
-                    mUdfpsDrawable = mSelectedIcon == 0 ? null :
-                            loadDrawable(udfpsRes,
-                                    mUdfpsIcons[mSelectedIcon]);
-                }
-            };
-            Dependency.get(TunerService.class).addTunable(tunable, UDFPS_ICON);
+            Dependency.get(TunerService.class).addTunable(mTunable, UDFPS_ICON);
         }
+    }
+    
+    public void destroy() {
+        Dependency.get(TunerService.class).removeTunable(mTunable);
     }
 
     void setStrokeWidth(float strokeWidth) {
