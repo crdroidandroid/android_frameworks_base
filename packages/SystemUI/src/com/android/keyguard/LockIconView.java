@@ -258,6 +258,14 @@ public class LockIconView extends FrameLayout implements Dumpable {
 
         return "invalid";
     }
+    
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mFingerprintDrawable != null) {
+            mFingerprintDrawable.destroy();
+        }
+    }
 
     @Override
     public void dump(@NonNull PrintWriter pw, @NonNull String[] args) {

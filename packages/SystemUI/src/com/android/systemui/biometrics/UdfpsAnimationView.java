@@ -164,4 +164,12 @@ public abstract class UdfpsAnimationView extends FrameLayout {
     boolean dozeTimeTick() {
         return false;
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (getDrawable() != null) {
+            getDrawable().destroy();
+        }
+    }
 }
