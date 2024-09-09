@@ -41,6 +41,8 @@ public class ClockController implements TunerService.Tunable {
 
     private Context mContext;
     private Clock mActiveClock, mCenterClock, mLeftClock, mRightClock;
+    
+    private final TunerService mTunerService;
 
     private int mClockPosition = CLOCK_POSITION_LEFT;
 
@@ -56,8 +58,10 @@ public class ClockController implements TunerService.Tunable {
         mContext.getMainExecutor().execute(() -> {
             updateActiveClock();
         });
+        
+        mTunerService = Dependency.get(TunerService.class);
 
-        Dependency.get(TunerService.class).addTunable(this,
+        mTunerService.addTunable(this,
                 STATUS_BAR_CLOCK);
     }
 
@@ -107,6 +111,10 @@ public class ClockController implements TunerService.Tunable {
             default:
                 break;
         }
+    }
+    
+    public void removeTunable() {
+        mTunerService.removeTunable(this);
     }
 
     public void onDensityOrFontScaleChanged() {
