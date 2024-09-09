@@ -93,6 +93,7 @@ public class BrightnessController implements ToggleSlider.Listener, MirroredBrig
 
     private final Executor mMainExecutor;
     private final Handler mBackgroundHandler;
+    private final TunerService mTunerService;
 
     private final DisplayTracker.Callback mBrightnessListener = new DisplayTracker.Callback() {
         @Override
@@ -305,6 +306,7 @@ public class BrightnessController implements ToggleSlider.Listener, MirroredBrig
         mDisplayId = mContext.getDisplayId();
         mDisplayManager = displayManager;
         mVrManager = iVrManager;
+        mTunerService = tunerService;
 
         mMainHandler = new Handler(mainLooper, mHandlerCallback);
 
@@ -319,8 +321,8 @@ public class BrightnessController implements ToggleSlider.Listener, MirroredBrig
                     Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL :
                     Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC,
                 UserHandle.USER_CURRENT));
-        tunerService.addTunable(this, SCREEN_BRIGHTNESS_MODE);
-        tunerService.addTunable(this, QS_BRIGHTNESS_SLIDER_HAPTIC);
+        mTunerService.addTunable(this, SCREEN_BRIGHTNESS_MODE);
+        mTunerService.addTunable(this, QS_BRIGHTNESS_SLIDER_HAPTIC);
     }
 
     public void registerCallbacks() {
@@ -333,6 +335,7 @@ public class BrightnessController implements ToggleSlider.Listener, MirroredBrig
         mBackgroundHandler.removeCallbacks(mStopListeningRunnable);
         mBackgroundHandler.post(mStopListeningRunnable);
         mControlValueInitialized = false;
+        mTunerService.removeTunable(this);
     }
 
     @Override
