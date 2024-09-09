@@ -331,6 +331,7 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
         mColorExtractor.setMediaBackgroundColor(0);
         callback.setMediaNotificationColor(0);
         mMediaListeners.remove(callback);
+        mTunerService.removeTunable(this);
     }
 
     public void findAndUpdateMediaNotifications() {
