@@ -399,6 +399,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
         if (mAttached) {
             clearHandlerCallbacks();
             mContext.unregisterReceiver(mIntentReceiver);
+            mConnectivityManager.unregisterNetworkCallback(mDefaultNetworkCallback);
             mConnectivityManager.unregisterNetworkCallback(mNetworkCallback);
             Dependency.get(TunerService.class).removeTunable(this);
             mAttached = false;
