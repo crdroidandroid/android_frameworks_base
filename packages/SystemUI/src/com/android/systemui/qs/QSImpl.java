@@ -385,6 +385,7 @@ public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateControl
         if (parent != null) {
             parent.removeView(getView());
         }
+        mTunerService.removeTunable(this);
     }
 
     public void onSaveInstanceState(Bundle outState) {
