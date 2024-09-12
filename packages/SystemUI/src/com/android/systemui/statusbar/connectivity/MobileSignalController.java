@@ -87,6 +87,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
     boolean mInflateSignalStrengths = false;
     @VisibleForTesting
     final MobileStatusTracker mMobileStatusTracker;
+    private final TunerService mTunerService;
 
     // Save the previous STATUS_HISTORY_SIZE states for logging.
     private final String[] mMobileStatusHistory = new String[STATUS_HISTORY_SIZE];
@@ -170,8 +171,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         };
         mMobileStatusTracker = mobileStatusTrackerFactory.createTracker(mMobileCallback);
 
-        Dependency.get(TunerService.class).addTunable(this, DATA_DISABLED_ICON);
-        Dependency.get(TunerService.class).addTunable(this, SHOW_FOURG_ICON);
+        mTunerService = Dependency.get(TunerService.class);
     }
 
     @Override
@@ -234,6 +234,8 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         mContext.getContentResolver().registerContentObserver(Global.getUriFor(
                 Global.MOBILE_DATA + mSubscriptionInfo.getSubscriptionId()),
                 true, mObserver);
+        mTunerService.addTunable(this, DATA_DISABLED_ICON);
+        mTunerService.addTunable(this, SHOW_FOURG_ICON);
     }
 
     /**
@@ -242,6 +244,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
     public void unregisterListener() {
         mMobileStatusTracker.setListening(false);
         mContext.getContentResolver().unregisterContentObserver(mObserver);
+        mTunerService.removeTunable(this);
     }
 
     private void updateInflateSignalStrength() {
