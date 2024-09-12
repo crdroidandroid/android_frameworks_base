@@ -60,6 +60,8 @@ public class OmniJawsClient {
     public static final int EXTRA_ERROR_NETWORK = 0;
     public static final int EXTRA_ERROR_LOCATION = 1;
     public static final int EXTRA_ERROR_DISABLED = 2;
+    
+    private boolean mWeatherReceiverRegistered;
 
     public static final String[] WEATHER_PROJECTION = new String[]{
             "city",
@@ -142,8 +144,7 @@ public class OmniJawsClient {
             for (OmniJawsObserver observer : mObserver) {
                 if (action.equals(WEATHER_UPDATE)) {
                     observer.weatherUpdated();
-                }
-                if (action.equals(WEATHER_ERROR)) {
+                } else if (action.equals(WEATHER_ERROR)) {
                     int errorReason = intent.getIntExtra(EXTRA_ERROR, 0);
                     observer.weatherError(errorReason);
                 }
@@ -406,7 +407,24 @@ public class OmniJawsClient {
     }
 
     public void addObserver(OmniJawsObserver observer) {
-        if (mObserver.size() == 0) {
+        if (mObserver.contains(observer)) {
+            removeObserver(observer);
+        }
+        mObserver.add(observer);
+        registerReceiverIfNeeded();
+    }
+
+    public void removeObserver(OmniJawsObserver observer) {
+        if (mObserver.contains(observer)) {
+            mObserver.remove(observer);
+            if (mObserver.isEmpty()) {
+                unregisterReceiver();
+            }
+        }
+    }
+
+    private void registerReceiverIfNeeded() {
+        if (mObserver.size() == 1 && !mWeatherReceiverRegistered) {
             if (mReceiver != null) {
                 try {
                     mContext.unregisterReceiver(mReceiver);
@@ -419,20 +437,14 @@ public class OmniJawsClient {
             filter.addAction(WEATHER_ERROR);
             if (DEBUG) Log.d(TAG, "registerReceiver");
             mContext.registerReceiver(mReceiver, filter, Context.RECEIVER_EXPORTED);
+            mWeatherReceiverRegistered = true;
         }
-        mObserver.add(observer);
     }
-
-    public void removeObserver(OmniJawsObserver observer) {
-        mObserver.remove(observer);
-        if (mObserver.size() == 0 && mReceiver != null) {
-            try {
-                if (DEBUG) Log.d(TAG, "unregisterReceiver");
-                mContext.unregisterReceiver(mReceiver);
-            } catch (Exception e) {
-            }
-            mReceiver = null;
-        }
+    
+    private void unregisterReceiver() {
+        if (!mWeatherReceiverRegistered) return;
+        mContext.unregisterReceiver(mReceiver);
+        mWeatherReceiverRegistered = false;
     }
 
     public boolean isOutlineIconPackage() {
