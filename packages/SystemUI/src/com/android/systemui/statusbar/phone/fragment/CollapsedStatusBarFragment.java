@@ -375,9 +375,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
         mCollapsedStatusBarViewBinder.bind(
                 mStatusBar, mCollapsedStatusBarViewModel, mStatusBarVisibilityChangeListener);
-
-        mTunerService.addTunable(this, STATUS_BAR_SHOW_VIBRATE_ICON);
-        mTunerService.addTunable(this, STATUSBAR_CLOCK_CHIP);
     }
 
     @Override
@@ -428,6 +425,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mStatusBarStateController.addCallback(this);
         initOngoingCallChip();
         mAnimationScheduler.addCallback(this);
+        mTunerService.addTunable(this, STATUS_BAR_SHOW_VIBRATE_ICON);
+        mTunerService.addTunable(this, STATUSBAR_CLOCK_CHIP);
     }
 
     @Override
@@ -435,6 +434,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         super.onPause();
         mCommandQueue.removeCallback(this);
         mStatusBarStateController.removeCallback(this);
+        mTunerService.removeTunable(this);
+        mClockController.removeTunable();
         mOngoingCallController.removeCallback(mOngoingCallListener);
         mAnimationScheduler.removeCallback(this);
     }
@@ -442,8 +443,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mTunerService.removeTunable(this);
-        mClockController.removeTunable();
         mStatusBarIconController.removeIconGroup(mDarkIconManager);
         mCarrierConfigTracker.removeCallback(mCarrierConfigCallback);
         mCarrierConfigTracker.removeDataSubscriptionChangedListener(mDefaultDataListener);
