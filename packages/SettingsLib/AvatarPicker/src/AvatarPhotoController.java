@@ -312,13 +312,15 @@ class AvatarPhotoController {
     }
 
     private void saveBitmapToFile(Bitmap bitmap, File file) {
-        try {
-            OutputStream os = new FileOutputStream(file);
+        try (OutputStream os = new FileOutputStream(file)) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
             os.flush();
-            os.close();
         } catch (IOException e) {
             Log.e(TAG, "Cannot create temp file", e);
+        } finally {
+            if (bitmap != null && !bitmap.isRecycled()) {
+                bitmap.recycle();
+            }
         }
     }
 
