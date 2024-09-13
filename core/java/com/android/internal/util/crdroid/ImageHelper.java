@@ -439,12 +439,12 @@ public class ImageHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-
-        byte[] byteArray = out.toByteArray();
-
-        Bitmap updatedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        Bitmap updatedBitmap = null;
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            byte[] byteArray = out.toByteArray();
+            updatedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        } catch (IOException e) {}
 
         return updatedBitmap;
     }
