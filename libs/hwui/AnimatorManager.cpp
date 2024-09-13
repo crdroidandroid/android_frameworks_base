@@ -112,9 +112,7 @@ public:
         *mDirtyMask |= animator->dirtyMask();
         bool remove = animator->animate(mContext);
         if (remove) {
-            if (animator) {
-                animator->detach();
-            }
+            animator->detach();
         } else {
             if (animator->isRunning()) {
                 mInfo.out.hasAnimations = true;
