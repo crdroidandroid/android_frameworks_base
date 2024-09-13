@@ -89,24 +89,27 @@ public class FileHeaderProvider implements
     }
 
     private void saveHeaderImage(Uri imageUri) {
-        if (DEBUG) Log.i(TAG, "Save header image " + " " + imageUri);
-        try {
-            final InputStream imageStream = mContext.getContentResolver().openInputStream(imageUri);
-            File file = new File(mContext.getFilesDir(), HEADER_FILE_NAME);
+        if (DEBUG) Log.i(TAG, "Save header image " + imageUri);
+        File file = new File(mContext.getFilesDir(), HEADER_FILE_NAME);
+        
+        try (
+            InputStream imageStream = mContext.getContentResolver().openInputStream(imageUri);
+            FileOutputStream output = new FileOutputStream(file)
+        ) {
             if (file.exists()) {
                 file.delete();
             }
-            FileOutputStream output = new FileOutputStream(file);
+
             byte[] buffer = new byte[8 * 1024];
             int read;
-
             while ((read = imageStream.read(buffer)) != -1) {
                 output.write(buffer, 0, read);
             }
+
             output.flush();
-            if (DEBUG) Log.i(TAG, "Saved header image " + " " + file.getAbsolutePath());
+            if (DEBUG) Log.i(TAG, "Saved header image " + file.getAbsolutePath());
         } catch (IOException e) {
-            Log.e(TAG, "Save header image failed " + " " + imageUri);
+            Log.e(TAG, "Save header image failed " + imageUri, e);
         }
     }
 
@@ -117,6 +120,9 @@ public class FileHeaderProvider implements
             if (DEBUG) Log.i(TAG, "Load header image");
             final Bitmap image = ImageHelper.getCompressedBitmap(file.getAbsolutePath());
             mImage = new BitmapDrawable(mContext.getResources(), image);
+            if (image != null && !image.isRecycled()) {
+                image.recycle();
+            }
         }
     }
 
