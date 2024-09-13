@@ -252,7 +252,6 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
                         }
 
                         addViewNowOrLater(this, null)
-                        windowManager.addView(frame, frameLayoutParams)
                         when (requestReason) {
                             REASON_AUTH_KEYGUARD ->
                                 UdfpsTouchOverlayBinder.bind(
@@ -286,7 +285,6 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
                         }
 
                         addViewNowOrLater(this, animation)
-                        windowManager.addView(frame, frameLayoutParams)
                         sensorRect = sensorBounds
                     }
                 }
@@ -322,6 +320,7 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
         if (udfpsViewPerformance()) {
             addViewRunnable = kotlinx.coroutines.Runnable {
                 Trace.setCounter("UdfpsAddView", 1)
+                windowManager.addView(frame, frameLayoutParams)
                 windowManager.addView(
                         view,
                         coreLayoutParams.updateDimensions(animation)
@@ -339,6 +338,7 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
                 }
             }
         } else {
+            windowManager.addView(frame, frameLayoutParams)
             windowManager.addView(
                     view,
                     coreLayoutParams.updateDimensions(animation)
