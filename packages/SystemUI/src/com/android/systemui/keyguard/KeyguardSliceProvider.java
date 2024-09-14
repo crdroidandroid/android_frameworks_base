@@ -220,7 +220,7 @@ public class KeyguardSliceProvider extends SliceProvider implements
             synchronized (this) {
                 ListBuilder builder = new ListBuilder(getContext(), mSliceUri,
                         ListBuilder.INFINITY);
-                builder.addRow(new RowBuilder(mDateUri).setTitle(mLastText));
+                addDateLocked(builder);
                 addNextAlarmLocked(builder);
                 addZenModeLocked(builder);
                 addPrimaryActionLocked(builder);
@@ -235,6 +235,10 @@ public class KeyguardSliceProvider extends SliceProvider implements
             Trace.endSection();
         }
         return slice;
+    }
+
+    protected void addDateLocked(ListBuilder builder) {
+        builder.addRow(new RowBuilder(mDateUri).setTitle(mLastText));
     }
 
     protected boolean needsMediaLocked() {
