@@ -1305,8 +1305,8 @@ public abstract class Window {
      * @see #clearFlags
      */
     public void setFlags(int flags, int mask) {
-        if ((mask & FLAG_SECURE) != 0 && Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.WINDOW_IGNORE_SECURE, 0) == 1) {
+        if ((mask & FLAG_SECURE) != 0 && Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.WINDOW_IGNORE_SECURE, 0) == 1) {
             mask &= ~FLAG_SECURE;
         }
         final WindowManager.LayoutParams attrs = getAttributes();
