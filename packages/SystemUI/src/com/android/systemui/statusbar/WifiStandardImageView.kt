@@ -24,11 +24,10 @@ import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
 import android.os.Handler
 import android.os.Looper
+import android.os.UserHandle
 import android.util.AttributeSet
 import android.widget.ImageView
-import com.android.systemui.Dependency
 import com.android.systemui.res.R
-import com.android.systemui.tuner.TunerService
 
 import android.view.ViewGroup.MarginLayoutParams
 
@@ -36,27 +35,23 @@ class WifiStandardImageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ImageView(context, attrs, defStyleAttr) {
 
-    private val tunerService: TunerService by lazy { Dependency.get(TunerService::class.java) }
     private val connectivityManager: ConnectivityManager by lazy { context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
     private val wifiManager: WifiManager by lazy { context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager }
-    private var wifiStandardEnabled = false
-    private var isTunerRegistered = false
+    private var currWifiStandardEnabled = false
     private var currWifiStandard: Int = -1
-    private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler()
     private val updateRunnable = object : Runnable {
         override fun run() {
-            if (wifiStandardEnabled) {
-                val wifiStandard = getWifiStandard()
-                if (currWifiStandard != wifiStandard) {
-                    updateWifiStandard(wifiStandard)
-                }
-                handler.postDelayed(this, 1000)
+            val wifiStandardEnabled = getWifiStandardEnabled()
+            val wifiStandard = getWifiStandard()
+            if (currWifiStandard != wifiStandard
+                || currWifiStandardEnabled != wifiStandardEnabled) {
+                currWifiStandard = wifiStandard
+                currWifiStandardEnabled = wifiStandardEnabled
+                updateWifiStandard()
             }
+            handler.postDelayed(this, 1000)
         }
-    }
-
-    init {
-        registerTunerService()
     }
 
     override fun onAttachedToWindow() {
@@ -69,20 +64,6 @@ class WifiStandardImageView @JvmOverloads constructor(
         handler.removeCallbacks(updateRunnable)
     }
 
-    private fun registerTunerService() {
-        if (isTunerRegistered) return
-        tunerService.addTunable({ key, value ->
-            wifiStandardEnabled = TunerService.parseIntegerSwitch(value, false)
-            if (wifiStandardEnabled) {
-                handler.post(updateRunnable)
-            } else {
-                handler.removeCallbacks(updateRunnable)
-                visibility = GONE
-            }
-        }, "system:" + Settings.System.WIFI_STANDARD_ICON)
-        isTunerRegistered = true
-    }
-
     private fun getWifiStandard(): Int {
         val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         return if (networkCapabilities != null && networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
@@ -93,20 +74,28 @@ class WifiStandardImageView @JvmOverloads constructor(
         }
     }
 
-    private fun updateWifiStandard(wifiStandard: Int) {
-        currWifiStandard = wifiStandard
-        updateIcon(wifiStandard)
+    private fun updateWifiStandard() {
+        updateIcon()
     }
 
-    private fun updateIcon(wifiStandard: Int) {
+    private fun getWifiStandardEnabled(): Boolean {
+        return Settings.System.getIntForUser(
+            context.contentResolver,
+            Settings.System.WIFI_STANDARD_ICON,
+            0,
+            UserHandle.USER_CURRENT
+        ) == 1
+    }
+
+    private fun updateIcon() {
         post {
-            if (!wifiStandardEnabled || wifiStandard < 4) {
+            if (!currWifiStandardEnabled || currWifiStandard < 4) {
                 visibility = GONE
                 layoutParams = (layoutParams as MarginLayoutParams).apply {
                     marginEnd = 0
                 }
             } else {
-                val drawableId = getDrawableForWifiStandard(wifiStandard)
+                val drawableId = getDrawableForWifiStandard()
                 if (drawableId > 0) {
                     setImageResource(drawableId)
                     visibility = VISIBLE
@@ -118,8 +107,8 @@ class WifiStandardImageView @JvmOverloads constructor(
         }
     }
 
-    private fun getDrawableForWifiStandard(wifiStandard: Int): Int {
-        return when (wifiStandard) {
+    private fun getDrawableForWifiStandard(): Int {
+        return when (currWifiStandard) {
             4 -> R.drawable.ic_wifi_standard_4
             5 -> R.drawable.ic_wifi_standard_5
             6 -> R.drawable.ic_wifi_standard_6
