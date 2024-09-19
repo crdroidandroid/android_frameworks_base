@@ -1979,8 +1979,6 @@ public class SettingsProvider extends ContentProvider {
             if (!isValidMediaUri(name, value)) {
                 return false;
             }
-            // Invalidate any relevant cache files
-            cacheFile.delete();
         }
 
         final boolean success;
@@ -2016,6 +2014,11 @@ public class SettingsProvider extends ContentProvider {
 
         if (!success) {
             return false;
+        }
+
+        if (cacheFile != null) {
+            // Invalidate any relevant cache files
+            cacheFile.delete();
         }
 
         if ((operation == MUTATION_OPERATION_INSERT || operation == MUTATION_OPERATION_UPDATE)
