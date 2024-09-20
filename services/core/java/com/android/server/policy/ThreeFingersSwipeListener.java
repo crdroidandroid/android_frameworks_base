@@ -18,6 +18,8 @@
 package com.android.server.policy;
 
 import android.content.Context;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.WindowManagerPolicyConstants.PointerEventListener;
@@ -32,6 +34,7 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
     private static final int THREE_GESTURE_STATE_NO_DETECT = 4;
     private float[] mInitMotionY;
     private int[] mPointerIds;
+    private final Context mContext;
     private int mThreeGestureState = THREE_GESTURE_STATE_NONE;
     private int mThreeGestureThreshold;
     private int mThreshold;
@@ -44,32 +47,38 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
         mPointerIds = new int[3];
         mInitMotionY = new float[3];
         mCallbacks = callbacks;
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        mContext = context;
+        DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
         mDensity = displayMetrics.density;
         mThreshold = (int) (50.0f * mDensity);
         mThreeGestureThreshold = mThreshold * 3;
         mScreenHeight = displayMetrics.heightPixels;
         mScreenWidth = displayMetrics.widthPixels;
+
+        // reset the setting flag on init
+        Settings.System.putIntForUser(mContext.getContentResolver(),
+                Settings.System.THREE_FINGER_GESTURE_ACTIVE, 0,
+                UserHandle.USER_CURRENT);
     }
 
     @Override
     public void onPointerEvent(MotionEvent event) {
         if (event.getAction() == 0) {
-            mThreeGestureState = THREE_GESTURE_STATE_NONE;
+            changeThreeGestureState(THREE_GESTURE_STATE_NONE);
         } else if (mThreeGestureState == THREE_GESTURE_STATE_NONE && event.getPointerCount() == 3) {
             if (checkIsStartThreeGesture(event)) {
-                mThreeGestureState = THREE_GESTURE_STATE_DETECTING;
+                changeThreeGestureState(THREE_GESTURE_STATE_DETECTING);
                 for (int i = 0; i < 3; i++) {
                     mPointerIds[i] = event.getPointerId(i);
                     mInitMotionY[i] = event.getY(i);
                 }
             } else {
-                mThreeGestureState = THREE_GESTURE_STATE_NO_DETECT;
+                changeThreeGestureState(THREE_GESTURE_STATE_NO_DETECT);
             }
         }
         if (mThreeGestureState == THREE_GESTURE_STATE_DETECTING) {
             if (event.getPointerCount() != 3) {
-                mThreeGestureState = THREE_GESTURE_STATE_DETECTED_FALSE;
+                changeThreeGestureState(THREE_GESTURE_STATE_DETECTED_FALSE);
                 return;
             }
             if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
@@ -78,7 +87,7 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
                 while (i < 3) {
                     int index = event.findPointerIndex(mPointerIds[i]);
                     if (index < 0 || index >= 3) {
-                        mThreeGestureState = THREE_GESTURE_STATE_DETECTED_FALSE;
+                        changeThreeGestureState(THREE_GESTURE_STATE_DETECTED_FALSE);
                         return;
                     } else {
                         distance += event.getY(index) - mInitMotionY[i];
@@ -86,10 +95,21 @@ public class ThreeFingersSwipeListener implements PointerEventListener {
                     }
                 }
                 if (distance >= ((float) mThreeGestureThreshold)) {
-                    mThreeGestureState = THREE_GESTURE_STATE_DETECTED_TRUE;
+                    changeThreeGestureState(THREE_GESTURE_STATE_DETECTED_TRUE);
                     mCallbacks.onSwipeThreeFingers();
                 }
             }
+        }
+    }
+
+    private void changeThreeGestureState(int state) {
+        if (mThreeGestureState != state){
+            mThreeGestureState = state;
+            boolean shouldEnableFlag = mThreeGestureState == THREE_GESTURE_STATE_DETECTED_TRUE ||
+                    mThreeGestureState == THREE_GESTURE_STATE_DETECTING;
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.THREE_FINGER_GESTURE_ACTIVE, shouldEnableFlag ? 1 : 0,
+                    UserHandle.USER_CURRENT);
         }
     }
 
