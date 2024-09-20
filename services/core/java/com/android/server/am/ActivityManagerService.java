@@ -20896,7 +20896,13 @@ public class ActivityManagerService extends IActivityManager.Stub
 
     @Override
     public boolean isThreeFingersSwipeActive() {
-        return mThreeFingersSwipeEnabled;
+        if (!mThreeFingersSwipeEnabled)
+            return false;
+        synchronized (this) {
+            return Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.THREE_FINGER_GESTURE_ACTIVE, 0,
+                    UserHandle.USER_CURRENT) == 1;
+        }
     }
 
     @Override
