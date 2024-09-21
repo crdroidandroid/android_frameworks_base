@@ -15,6 +15,7 @@
  */
 package com.android.server.webkit;
 
+import android.app.AppGlobals;
 import android.annotation.Nullable;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -401,7 +402,7 @@ class WebViewUpdateServiceImpl implements WebViewUpdateServiceInterface {
     @Override
     public WebViewProviderInfo getDefaultWebViewPackage() {
         for (WebViewProviderInfo provider : getWebViewPackages()) {
-            if (provider.availableByDefault) {
+            if (provider.availableByDefault && isPackageAvailable(provider.packageName)) {
                 return provider;
             }
         }
@@ -409,6 +410,15 @@ class WebViewUpdateServiceImpl implements WebViewUpdateServiceInterface {
         // This should be unreachable because the config parser enforces that there is at least
         // one availableByDefault provider.
         throw new AndroidRuntimeException("No available by default WebView Provider.");
+    }
+
+    private static boolean isPackageAvailable(String packageName) {
+        try {
+            AppGlobals.getInitialApplication().getPackageManager().getPackageInfo(packageName, 0);
+            return true;
+        } catch (NameNotFoundException e) {
+            return false;
+        }
     }
 
     private static class ProviderAndPackageInfo {
@@ -649,7 +659,7 @@ class WebViewUpdateServiceImpl implements WebViewUpdateServiceInterface {
      */
     private static WebViewProviderInfo getFallbackProvider(WebViewProviderInfo[] webviewPackages) {
         for (WebViewProviderInfo provider : webviewPackages) {
-            if (provider.isFallback) {
+            if (provider.isFallback && isPackageAvailable(provider.packageName)) {
                 return provider;
             }
         }
