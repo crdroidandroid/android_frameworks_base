@@ -474,7 +474,7 @@ public final class PixelPropsUtils {
         setPropValue("DEVICE", "oriole");
         setVersionFieldString("RELEASE", "15");
         setPropValue("ID", "AP41.240823.009");
-        setVersionFieldString("INCREMENTAL", "12266677");
+        setVersionFieldString("INCREMENTAL", "12329489");
         setPropValue("TYPE", "user");
         setPropValue("TAGS", "release-keys");
         setVersionFieldString("SECURITY_PATCH", "2024-09-05");
