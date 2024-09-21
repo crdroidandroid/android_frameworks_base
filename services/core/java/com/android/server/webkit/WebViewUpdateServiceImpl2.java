@@ -110,12 +110,25 @@ class WebViewUpdateServiceImpl2 {
         mSystemInterface = systemInterface;
         WebViewProviderInfo[] webviewProviders = getWebViewPackages();
 
+        // Prefer the first availableByDefault provider that is actually present on the device,
+        // so that configs listing optional providers (e.g. GMS WebView on non-GApps builds) don't
+        // leave us with a default that can never be loaded or repaired.
         WebViewProviderInfo defaultProvider = null;
+        WebViewProviderInfo firstConfiguredDefault = null;
         for (WebViewProviderInfo provider : webviewProviders) {
-            if (provider.availableByDefault) {
+            if (!provider.availableByDefault) continue;
+            if (firstConfiguredDefault == null) {
+                firstConfiguredDefault = provider;
+            }
+            if (isPackageAvailable(provider)) {
                 defaultProvider = provider;
                 break;
             }
+        }
+        if (defaultProvider == null) {
+            // Nothing is installed yet; keep the AOSP behaviour of using the first configured
+            // default rather than crashing system_server.
+            defaultProvider = firstConfiguredDefault;
         }
         if (defaultProvider == null) {
             // This should be unreachable because the config parser enforces that there is at least
@@ -181,6 +194,20 @@ class WebViewUpdateServiceImpl2 {
         }
     }
 
+    /**
+     * Returns true if the provider's package exists on the device for any user. Goes through
+     * SystemInterface so this class stays usable from tests and works before an Application
+     * context exists.
+     */
+    private boolean isPackageAvailable(WebViewProviderInfo provider) {
+        try {
+            mSystemInterface.getPackageInfoForProvider(provider);
+            return true;
+        } catch (NameNotFoundException e) {
+            return false;
+        }
+    }
+
     private boolean shouldTriggerRepairLocked() {
         if (mAttemptedToRepairBefore) {
             return false;
@@ -207,12 +234,19 @@ class WebViewUpdateServiceImpl2 {
             }
             mAttemptedToRepairBefore = true;
         }
-        Slog.w(
-                TAG,
-                "No provider available for all users, trying to install and enable "
-                        + mDefaultProvider.packageName);
-        mSystemInterface.installExistingPackageForAllUsers(mDefaultProvider.packageName);
-        mSystemInterface.enablePackageForAllUsers(mDefaultProvider.packageName, true);
+        // Repair the default provider if it exists on the device; only fall back to the
+        // fallback provider when the default package is missing entirely.
+        WebViewProviderInfo repairProvider = mDefaultProvider;
+        if (!isPackageAvailable(mDefaultProvider)) {
+            WebViewProviderInfo fallbackProvider = getFallbackProvider(getWebViewPackages());
+            if (fallbackProvider != null) {
+                repairProvider = fallbackProvider;
+            }
+        }
+        Slog.w(TAG, "No provider available for all users, trying to install and enable "
+                + repairProvider.packageName);
+        mSystemInterface.installExistingPackageForAllUsers(repairProvider.packageName);
+        mSystemInterface.enablePackageForAllUsers(repairProvider.packageName, true);
     }
 
     public void prepareWebViewInSystemServer() {
@@ -510,10 +544,46 @@ class WebViewUpdateServiceImpl2 {
             Slog.w(TAG, "Default WebView package (" + mDefaultProvider.packageName + ") not found");
         }
 
+        // Default is missing or invalid; try the fallback provider, then any other valid
+        // availableByDefault provider in config order.
+        WebViewProviderInfo fallbackProvider = getFallbackProvider(getWebViewPackages());
+        if (fallbackProvider != null
+                && !fallbackProvider.packageName.equals(mDefaultProvider.packageName)) {
+            PackageInfo packageInfo = getValidPackageInfo(fallbackProvider);
+            if (packageInfo != null) {
+                return packageInfo;
+            }
+        }
+        for (WebViewProviderInfo provider : getWebViewPackages()) {
+            if (!provider.availableByDefault
+                    || provider.packageName.equals(mDefaultProvider.packageName)
+                    || (fallbackProvider != null
+                            && provider.packageName.equals(fallbackProvider.packageName))) {
+                continue;
+            }
+            PackageInfo packageInfo = getValidPackageInfo(provider);
+            if (packageInfo != null) {
+                return packageInfo;
+            }
+        }
+
         // This should never happen during normal operation (only with modified system images).
         Counter.logIncrement("webview.value_webview_not_usable_for_all_users_counter");
         mAnyWebViewInstalled = false;
         throw new WebViewPackageMissingException("Could not find a loadable WebView package");
+    }
+
+    @Nullable
+    private PackageInfo getValidPackageInfo(WebViewProviderInfo provider) {
+        try {
+            PackageInfo packageInfo = mSystemInterface.getPackageInfoForProvider(provider);
+            if (validityResult(provider, packageInfo) == VALIDITY_OK) {
+                return packageInfo;
+            }
+        } catch (NameNotFoundException e) {
+            // Not installed.
+        }
+        return null;
     }
 
     private WebViewProviderInfo getWebViewProviderForPackage(String packageName) {
@@ -680,11 +750,12 @@ class WebViewUpdateServiceImpl2 {
     }
 
     /**
-     * Returns the only fallback provider in the set of given packages, or null if there is none.
+     * Returns the first fallback provider present on the device, or null if there is none.
      */
-    private static WebViewProviderInfo getFallbackProvider(WebViewProviderInfo[] webviewPackages) {
+    @Nullable
+    private WebViewProviderInfo getFallbackProvider(WebViewProviderInfo[] webviewPackages) {
         for (WebViewProviderInfo provider : webviewPackages) {
-            if (provider.isFallback) {
+            if (provider.isFallback && isPackageAvailable(provider)) {
                 return provider;
             }
         }
