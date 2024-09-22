@@ -200,6 +200,9 @@ public final class PixelPropsUtils {
             "com.proximabeta.mf.uamo"
     };
 
+    private static volatile boolean sIsFinsky = false;
+    private static volatile boolean sIsExcluded = false;
+
     static {
         propsToKeep = new HashMap<>();
         propsToKeep.put("com.google.android.settings.intelligence", new ArrayList<>(Collections.singletonList("FINGERPRINT")));
@@ -285,6 +288,7 @@ public final class PixelPropsUtils {
 
             if (Arrays.asList(packagesToKeep).contains(packageName) ||
                     packageName.startsWith("com.google.android.GoogleCamera")) {
+                sIsExcluded = true;
                 return;
             }
 
@@ -298,6 +302,9 @@ public final class PixelPropsUtils {
                         !SystemProperties.getBoolean(SPOOF_PIXEL_NETFLIX, false)) {
                     if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by system prop");
                     return;
+            } else if (packageName.equals("com.android.vending")) {
+                sIsFinsky = true;
+                propsToChange.putAll(propsToChangePixel5a);
             } else if (packageName.equals("com.google.android.gms")) {
                 setPropValue("TIME", System.currentTimeMillis());
                 final String processName = Application.getProcessName().toLowerCase();
@@ -415,49 +422,23 @@ public final class PixelPropsUtils {
     }
 
     private static void setPropValue(String key, Object value) {
-        try {
-            if (DEBUG) Log.d(TAG, "Defining prop " + key + " to " + value.toString());
-            Field field = Build.class.getDeclaredField(key);
-            field.setAccessible(true);
-            field.set(null, value);
-            field.setAccessible(false);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            Log.e(TAG, "Failed to set prop " + key, e);
-        }
+        setPropValue(key, value.toString());
     }
 
-    private static void setVersionField(String key, Object value) {
-        try {
-            if (DEBUG) Log.d(TAG, "Defining prop " + key + " to " + value.toString());
-            Field field = Build.VERSION.class.getDeclaredField(key);
-            field.setAccessible(true);
-            field.set(null, value);
-            field.setAccessible(false);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            Log.e(TAG, "Failed to set prop " + key, e);
-        }
-    }
-
-    private static void setVersionFieldString(String key, String value) {
+    private static void setPropValue(String key, String value) {
         try {
             if (DEBUG) Log.d(TAG, "Defining prop " + key + " to " + value);
-            Field field = Build.VERSION.class.getDeclaredField(key);
+            Class clazz = Build.class;
+            if (key.startsWith("VERSION.")) {
+                clazz = Build.VERSION.class;
+                key = key.substring(8);
+            }
+            Field field = clazz.getDeclaredField(key);
             field.setAccessible(true);
-            field.set(null, value);
+            // Cast the value to int if it's an integer field, otherwise string.
+            field.set(null, field.getType().equals(Integer.TYPE) ? Integer.parseInt(value) : value);
             field.setAccessible(false);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            Log.e(TAG, "Failed to set prop " + key, e);
-        }
-    }
-
-    private static void setVersionFieldInt(String key, int value) {
-        try {
-            if (DEBUG) Log.d(TAG, "Defining prop " + key + " to " + value);
-            Field field = Build.VERSION.class.getDeclaredField(key);
-            field.setAccessible(true);
-            field.set(null, value);
-            field.setAccessible(false);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Failed to set prop " + key, e);
         }
     }
@@ -472,12 +453,26 @@ public final class PixelPropsUtils {
         setPropValue("BRAND", "google");
         setPropValue("PRODUCT", "oriole_beta");
         setPropValue("DEVICE", "oriole");
-        setVersionFieldString("RELEASE", "15");
+        setPropValue("VERSION.RELEASE", "15");
         setPropValue("ID", "AP41.240823.009");
-        setVersionFieldString("INCREMENTAL", "12329489");
+        setPropValue("VERSION.INCREMENTAL", "12329489");
         setPropValue("TYPE", "user");
         setPropValue("TAGS", "release-keys");
-        setVersionFieldString("SECURITY_PATCH", "2024-09-05");
-        setVersionFieldInt("DEVICE_INITIAL_SDK_INT", 31);
+        setPropValue("VERSION.SECURITY_PATCH", "2024-09-05");
+        setPropValue("VERSION.DEVICE_INITIAL_SDK_INT", "31");
+    }
+
+    private static boolean isCallerSafetyNet() {
+        return Arrays.stream(Thread.currentThread().getStackTrace())
+                        .anyMatch(elem -> elem.getClassName().toLowerCase()
+                            .contains("droidguard"));
+    }
+
+    public static void onEngineGetCertificateChain() {
+        // Check stack for SafetyNet or Play Integrity
+        if ((isCallerSafetyNet() || sIsFinsky) && !sIsExcluded) {
+            Log.i(TAG, "Blocked key attestation");
+            throw new UnsupportedOperationException();
+        }
     }
 }
