@@ -41,7 +41,9 @@ class ActionButtonViewBinder @Inject constructor() {
         if (!viewModel.appearance.tint) {
             iconView.setImageTintList(null)
         }
-        textView.text = viewModel.appearance.label
+        // hide text for now.
+        textView.text = ""
+        textView.visibility = View.GONE
 
         viewModel.appearance.customBackground?.also {
             if (it.canApplyTheme()) {
@@ -50,7 +52,7 @@ class ActionButtonViewBinder @Inject constructor() {
             view.background = it
         }
 
-        setMargins(iconView, textView, viewModel.appearance.label?.isNotEmpty() ?: false)
+        setMargins(iconView, textView, false)
         if (viewModel.onClicked != null) {
             view.setOnClickListener { viewModel.onClicked.invoke() }
         } else {
