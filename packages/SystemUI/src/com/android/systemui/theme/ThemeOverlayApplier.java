@@ -99,6 +99,9 @@ public class ThemeOverlayApplier implements Dumpable {
 
     static final String TIMESTAMP_FIELD = "_applied_timestamp";
 
+    static final String OVERLAY_BERRY_BLACK_THEME =
+            "com.android.system.theme.black";
+
     @VisibleForTesting
     static final String OVERLAY_CATEGORY_FONT = "android.theme.customization.font";
     @VisibleForTesting
@@ -224,7 +227,8 @@ public class ThemeOverlayApplier implements Dumpable {
             FabricatedOverlay[] pendingCreation,
             int currentUser,
             Set<UserHandle> managedProfiles,
-            Runnable onComplete
+            Runnable onComplete,
+            boolean blackMode
     ) {
 
         mBgExecutor.execute(() -> {
@@ -284,7 +288,44 @@ public class ThemeOverlayApplier implements Dumpable {
             } catch (SecurityException | IllegalStateException e) {
                 Log.e(TAG, "setEnabled failed", e);
             }
+
+            checkDarkUserOverlays(currentUser, onComplete, blackMode);
         });
+    }
+
+    public void checkDarkUserOverlays(
+            int currentUser,
+            Runnable onComplete,
+            boolean blackMode
+    ) {
+        OverlayManagerTransaction.Builder transaction = getTransactionBuilder();
+        try {
+            transaction.setEnabled(getOverlayID(OVERLAY_BERRY_BLACK_THEME), blackMode, currentUser);
+            transaction.setEnabled(getOverlayID("android:neutral"), !blackMode, currentUser);
+            mOverlayManager.commit(transaction.build());
+            if (onComplete != null) {
+                Log.d(TAG, "Executing onComplete runnable");
+                mMainExecutor.execute(onComplete);
+            }
+        } catch (SecurityException | IllegalStateException e) {
+            Log.e(TAG, "setEnabled failed", e);
+        }
+    }
+
+    private OverlayIdentifier getOverlayID(String name) throws IllegalStateException {
+        if (name.contains(":")) {
+            final String[] value = name.split(":");
+            final String pkgName = value[0];
+            final String overlayName = value[1];
+            final List<OverlayInfo> infos =
+                    mOverlayManager.getOverlayInfosForTarget(pkgName, UserHandle.CURRENT);
+            for (OverlayInfo info : infos) {
+                if (overlayName.equals(info.getOverlayName()))
+                    return info.getOverlayIdentifier();
+            }
+            throw new IllegalStateException("No overlay found for " + name);
+        }
+        return mOverlayManager.getOverlayInfo(name, UserHandle.CURRENT).getOverlayIdentifier();
     }
 
     @VisibleForTesting
