@@ -123,6 +123,8 @@ public interface StatusBarIconController {
     /** Reads the default hide list from config value unless hideListStr is provided. */
     static ArraySet<String> getIconHideList(Context context, String hideListStr) {
         ArraySet<String> ret = new ArraySet<>();
+        if (context == null)
+            return ret; // not ready yet
         String[] hideList = hideListStr == null
                 ? context.getResources().getStringArray(R.array.config_statusBarIconsToExclude)
                 : hideListStr.split(",");
