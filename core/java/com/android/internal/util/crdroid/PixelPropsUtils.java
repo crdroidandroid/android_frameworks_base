@@ -78,28 +78,31 @@ public final class PixelPropsUtils {
             "raven"
     };
 
-    // Packages to Spoof as Pixel 8 Pro
-    private static final String[] packagesToChangePixel9ProXL = {
+    // Packages to Spoof as the most recent Pixel device
+    private static final String[] packagesToChangeRecentPixel = {
+            "com.android.chrome",
+            "com.android.vending",
+            "com.breel.wallpapers20",
+            "com.google.android.aicore",
             "com.google.android.apps.aiwallpapers",
             "com.google.android.apps.bard",
             "com.google.android.apps.customization.pixel",
             "com.google.android.apps.emojiwallpaper",
             "com.google.android.apps.nexuslauncher",
+            "com.google.android.apps.pixel.agent",
+            "com.google.android.apps.pixel.creativeassistant",
+            "com.google.android.apps.pixel.support",
             "com.google.android.apps.privacy.wildlife",
             "com.google.android.apps.wallpaper",
             "com.google.android.apps.wallpaper.pixel",
+            "com.google.android.apps.weather",
+            "com.google.android.as",
+            "com.google.android.gms",
             "com.google.android.googlequicksearchbox",
             "com.google.android.wallpaper.effects",
-            "com.google.pixel.livewallpaper"
-    };
-
-    // Packages to Spoof as Pixel 5a
-    private static final String[] packagesToChangePixel5a = {
-            "com.android.chrome",
-            "com.android.vending",
-            "com.breel.wallpapers20",
-            "com.nhs.online.nhsonline",
-            "com.netflix.mediaclient"
+            "com.google.pixel.livewallpaper",
+            "com.netflix.mediaclient",
+            "com.nhs.online.nhsonline"
     };
 
     // Packages to Keep with original device
@@ -275,16 +278,16 @@ public final class PixelPropsUtils {
     }
 
     public static void setProps(Context context) {
-        propsToChangeGeneric.forEach((k, v) -> setPropValue(k, v));
-
         final String packageName = context.getPackageName();
         if (packageName == null || packageName.isEmpty()) {
             return;
         }
+
+        propsToChangeGeneric.forEach((k, v) -> setPropValue(k, v));
+
         if (packageName.startsWith("com.google.")
                 || packageName.startsWith("com.samsung.")
-                || Arrays.asList(packagesToChangePixel9ProXL).contains(packageName)
-                || Arrays.asList(packagesToChangePixel5a).contains(packageName)) {
+                || Arrays.asList(packagesToChangeRecentPixel).contains(packageName)) {
 
             if (Arrays.asList(packagesToKeep).contains(packageName) ||
                     packageName.startsWith("com.google.android.GoogleCamera")) {
@@ -322,14 +325,12 @@ public final class PixelPropsUtils {
                 } else {
                     propsToChange.putAll(propsToChangePixel9ProXL);
                 }
-            } else if (Arrays.asList(packagesToChangePixel9ProXL).contains(packageName)) {
+            } else {
                 if (isDeviceTablet(context.getApplicationContext())) {
                     propsToChange.putAll(propsToChangePixelTablet);
                 } else {
                     propsToChange.putAll(propsToChangePixel9ProXL);
                 }
-            } else {
-                propsToChange.putAll(propsToChangePixel5a);
             }
 
             if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
