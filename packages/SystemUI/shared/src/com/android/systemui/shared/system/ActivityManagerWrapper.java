@@ -207,6 +207,16 @@ public class ActivityManagerWrapper {
     }
 
     /**
+     * Preloads the recents activity. The caller should manage the thread on which this is called.
+     */
+    public void preloadRecentsActivity(Intent intent) {
+        try {
+            getService().startRecentsActivity(intent, 0, null);
+        } catch (Exception e) {
+        }
+    }
+
+    /**
      * Starts the recents activity. The caller should manage the thread on which this is called.
      */
     public boolean startRecentsActivity(
