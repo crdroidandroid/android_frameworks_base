@@ -124,16 +124,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private final KeyguardStateController mKeyguardStateController;
     private final PanelExpansionInteractor mPanelExpansionInteractor;
     private MultiSourceMinAlphaController mEndSideAlphaController;
-    private MultiSourceMinAlphaController mNetworkTrafficStartAlphaController;
-    private MultiSourceMinAlphaController mNetworkTrafficCenterAlphaController;
-    private MultiSourceMinAlphaController mNetworkTrafficEndAlphaController;
     private LinearLayout mEndSideContent;
     private View mPrimaryOngoingActivityChip;
     private View mSecondaryOngoingActivityChip;
     private View mNotificationIconAreaInner;
-    private View mNetworkTrafficHolderStart;
-    private View mNetworkTrafficHolderCenter;
-    private View mNetworkTrafficHolderEnd;
     // Visibilities come in from external system callers via disable flags, but we also sometimes
     // modify the visibilities internally. We need to store both so that we don't accidentally
     // propagate our internally modified flags for too long.
@@ -377,15 +371,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mStatusBarIconController.addIconGroup(mDarkIconManager);
         mEndSideContent = mStatusBar.findViewById(R.id.status_bar_end_side_content);
         mEndSideAlphaController = new MultiSourceMinAlphaController(mEndSideContent);
-        mNetworkTrafficHolderStart = mStatusBar.findViewById(R.id.network_traffic_holder_start);
-        mNetworkTrafficHolderCenter = mStatusBar.findViewById(R.id.network_traffic_holder_center);
-        mNetworkTrafficHolderEnd = mStatusBar.findViewById(R.id.network_traffic_holder_end);
-        mNetworkTrafficStartAlphaController =
-                new MultiSourceMinAlphaController(mNetworkTrafficHolderStart);
-        mNetworkTrafficCenterAlphaController =
-                new MultiSourceMinAlphaController(mNetworkTrafficHolderCenter);
-        mNetworkTrafficEndAlphaController =
-                new MultiSourceMinAlphaController(mNetworkTrafficHolderEnd);
         mPrimaryOngoingActivityChip = mStatusBar.findViewById(R.id.ongoing_activity_chip_primary);
         mSecondaryOngoingActivityChip =
                 mStatusBar.findViewById(R.id.ongoing_activity_chip_secondary);
@@ -790,18 +775,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         StatusBarSimpleFragment.assertInLegacyMode();
         if (!animate || !mAnimationsEnabled) {
             mEndSideAlphaController.setAlpha(/*alpha*/ 0f, SOURCE_OTHER);
-            mNetworkTrafficStartAlphaController.setAlpha(/*alpha*/ 0f, SOURCE_OTHER);
-            mNetworkTrafficCenterAlphaController.setAlpha(/*alpha*/ 0f, SOURCE_OTHER);
-            mNetworkTrafficEndAlphaController.setAlpha(/*alpha*/ 0f, SOURCE_OTHER);
         } else {
             mEndSideAlphaController.animateToAlpha(/*alpha*/ 0f, SOURCE_OTHER, FADE_OUT_DURATION,
                     InterpolatorsAndroidX.ALPHA_OUT, /*startDelay*/ 0);
-            mNetworkTrafficStartAlphaController.animateToAlpha(/*alpha*/ 0f, SOURCE_OTHER,
-                    FADE_OUT_DURATION, InterpolatorsAndroidX.ALPHA_OUT, /*startDelay*/ 0);
-            mNetworkTrafficCenterAlphaController.animateToAlpha(/*alpha*/ 0f, SOURCE_OTHER,
-                    FADE_OUT_DURATION, InterpolatorsAndroidX.ALPHA_OUT, /*startDelay*/ 0);
-            mNetworkTrafficEndAlphaController.animateToAlpha(/*alpha*/ 0f, SOURCE_OTHER,
-                    FADE_OUT_DURATION, InterpolatorsAndroidX.ALPHA_OUT, /*startDelay*/ 0);
         }
     }
 
@@ -809,9 +785,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         StatusBarSimpleFragment.assertInLegacyMode();
         if (!animate || !mAnimationsEnabled) {
             mEndSideAlphaController.setAlpha(1f, SOURCE_OTHER);
-            mNetworkTrafficStartAlphaController.setAlpha(1f, SOURCE_OTHER);
-            mNetworkTrafficCenterAlphaController.setAlpha(1f, SOURCE_OTHER);
-            mNetworkTrafficEndAlphaController.setAlpha(1f, SOURCE_OTHER);
             return;
         }
         if (mKeyguardStateController.isKeyguardFadingAway()) {
@@ -819,27 +792,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                     mKeyguardStateController.getKeyguardFadingAwayDuration(),
                     InterpolatorsAndroidX.LINEAR_OUT_SLOW_IN,
                     mKeyguardStateController.getKeyguardFadingAwayDelay());
-            mNetworkTrafficStartAlphaController.animateToAlpha(/*alpha*/ 1f, SOURCE_OTHER,
-                    mKeyguardStateController.getKeyguardFadingAwayDuration(),
-                    InterpolatorsAndroidX.LINEAR_OUT_SLOW_IN,
-                    mKeyguardStateController.getKeyguardFadingAwayDelay());
-            mNetworkTrafficCenterAlphaController.animateToAlpha(/*alpha*/ 1f, SOURCE_OTHER,
-                    mKeyguardStateController.getKeyguardFadingAwayDuration(),
-                    InterpolatorsAndroidX.LINEAR_OUT_SLOW_IN,
-                    mKeyguardStateController.getKeyguardFadingAwayDelay());
-            mNetworkTrafficEndAlphaController.animateToAlpha(/*alpha*/ 1f, SOURCE_OTHER,
-                    mKeyguardStateController.getKeyguardFadingAwayDuration(),
-                    InterpolatorsAndroidX.LINEAR_OUT_SLOW_IN,
-                    mKeyguardStateController.getKeyguardFadingAwayDelay());
         } else {
             mEndSideAlphaController.animateToAlpha(/*alpha*/ 1f, SOURCE_OTHER, FADE_IN_DURATION,
                     InterpolatorsAndroidX.ALPHA_IN, FADE_IN_DELAY);
-            mNetworkTrafficStartAlphaController.animateToAlpha(/*alpha*/ 1f, SOURCE_OTHER,
-                    FADE_IN_DURATION, InterpolatorsAndroidX.ALPHA_IN, FADE_IN_DELAY);
-            mNetworkTrafficCenterAlphaController.animateToAlpha(/*alpha*/ 1f, SOURCE_OTHER,
-                    FADE_IN_DURATION, InterpolatorsAndroidX.ALPHA_IN, FADE_IN_DELAY);
-            mNetworkTrafficEndAlphaController.animateToAlpha(/*alpha*/ 1f, SOURCE_OTHER,
-                    FADE_IN_DURATION, InterpolatorsAndroidX.ALPHA_IN, FADE_IN_DELAY);
         }
     }
 
@@ -1037,15 +992,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private StatusBarSystemEventDefaultAnimator getSystemEventAnimator() {
         return new StatusBarSystemEventDefaultAnimator(getResources(), (alpha) -> {
             mEndSideAlphaController.setAlpha(alpha, SOURCE_SYSTEM_EVENT_ANIMATOR);
-            mNetworkTrafficStartAlphaController.setAlpha(alpha, SOURCE_SYSTEM_EVENT_ANIMATOR);
-            mNetworkTrafficCenterAlphaController.setAlpha(alpha, SOURCE_SYSTEM_EVENT_ANIMATOR);
-            mNetworkTrafficEndAlphaController.setAlpha(alpha, SOURCE_SYSTEM_EVENT_ANIMATOR);
             return Unit.INSTANCE;
         }, (translationX) -> {
             mEndSideContent.setTranslationX(translationX);
-            mNetworkTrafficHolderStart.setTranslationX(translationX);
-            mNetworkTrafficHolderCenter.setTranslationX(translationX);
-            mNetworkTrafficHolderEnd.setTranslationX(translationX);
             return Unit.INSTANCE;
         }, /*isAnimationRunning*/ false);
     }
