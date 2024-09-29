@@ -366,7 +366,7 @@ public class InternetDialogDelegateLegacy implements
             mSecondaryMobileNetworkLayout.setOnClickListener(null);
         }
         mSeeAllLayout.setOnClickListener(null);
-        mWiFiToggle.setOnCheckedChangeListener(null);
+        mWiFiToggle.setOnClickListener(null);
         mDoneButton.setOnClickListener(null);
         mShareWifiButton.setOnClickListener(null);
         mAirplaneModeButton.setOnClickListener(null);
