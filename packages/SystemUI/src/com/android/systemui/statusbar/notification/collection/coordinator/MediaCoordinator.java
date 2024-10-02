@@ -72,7 +72,7 @@ public class MediaCoordinator implements Coordinator {
                     break;
                 case STATE_ICONS_INFLATED:
                     try {
-                        mIconManager.updateIcons(entry, /* usingCache = */ false);
+                        mIconManager.updateIcons(entry, /* usingCache = */ false, /* forceUpdate = */ false);
                     } catch (InflationException e) {
                         reportInflationError(entry, e);
                         mIconsState.put(entry, STATE_ICONS_ERROR);
