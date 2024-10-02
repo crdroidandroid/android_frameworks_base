@@ -19,10 +19,15 @@ package com.android.systemui.statusbar.notification.icon
 import android.app.Notification
 import android.app.Notification.MessagingStyle
 import android.app.Person
+import android.content.Context
 import android.content.pm.LauncherApps
+import android.database.ContentObserver
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.UserHandle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -39,6 +44,7 @@ import com.android.systemui.statusbar.notification.InflationException
 import com.android.systemui.statusbar.notification.collection.NotificationEntry
 import com.android.systemui.statusbar.notification.collection.notifcollection.CommonNotifCollection
 import com.android.systemui.statusbar.notification.collection.notifcollection.NotifCollectionListener
+import com.android.systemui.util.settings.SystemSettings
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -67,6 +73,9 @@ constructor(
     @Application private val applicationCoroutineScope: CoroutineScope,
     @Background private val bgCoroutineContext: CoroutineContext,
     @Main private val mainCoroutineContext: CoroutineContext,
+    private val context: Context,
+    private val systemSettings: SystemSettings,
+    @Main handler: Handler,
 ) : ConversationIconManager {
     private var unimportantConversationKeys: Set<String> = emptySet()
     /**
@@ -78,6 +87,22 @@ constructor(
 
     fun attach() {
         notifCollection.addCollectionListener(entryListener)
+        systemSettings.registerContentObserverForUserSync(
+            Settings.System.STATUSBAR_COLORED_ICONS,
+            settingsObserver, UserHandle.USER_CURRENT
+        )
+        systemSettings.registerContentObserverForUserSync(
+            Settings.System.STATUSBAR_NOTIF_COUNT,
+            settingsObserver, UserHandle.USER_CURRENT
+        )
+    }
+
+    private val settingsObserver = object : ContentObserver(handler) {
+        override fun onChange(selfChange: Boolean) {
+            for (entry in notifCollection.allNotifs) {
+                updateIconsSafe(entry, true)
+            }
+        }
     }
 
     private val entryListener =
@@ -144,13 +169,18 @@ constructor(
             // Set the icon views' icons
             val (normalIconDescriptor, sensitiveIconDescriptor) = getIconDescriptors(entry)
 
+            val iconStyle = Settings.System.getIntForUser(context.contentResolver,
+                Settings.System.STATUSBAR_COLORED_ICONS, 0, UserHandle.USER_CURRENT) == 1
+            val showCount = Settings.System.getIntForUser(context.contentResolver,
+                Settings.System.STATUSBAR_NOTIF_COUNT, 0, UserHandle.USER_CURRENT) == 1
+
             try {
-                setIcon(entry, normalIconDescriptor, sbIcon)
                 if (Flags.statusBarCallChipNotificationIcon() && sbChipIcon != null) {
-                    setIcon(entry, normalIconDescriptor, sbChipIcon)
+                    setIcon(entry, normalIconDescriptor, sbChipIcon, false, false, false)
                 }
-                setIcon(entry, sensitiveIconDescriptor, shelfIcon)
-                setIcon(entry, sensitiveIconDescriptor, aodIcon)
+                setIcon(entry, normalIconDescriptor, sbIcon, iconStyle, showCount, false)
+                setIcon(entry, sensitiveIconDescriptor, shelfIcon, iconStyle, false, false)
+                setIcon(entry, sensitiveIconDescriptor, aodIcon, false, false, false)
                 entry.icons =
                     IconPack.buildPack(
                         sbIcon,
@@ -172,7 +202,7 @@ constructor(
      * @throws InflationException Exception if required icons are not valid or specified
      */
     @Throws(InflationException::class)
-    fun updateIcons(entry: NotificationEntry, usingCache: Boolean = false) =
+    fun updateIcons(entry: NotificationEntry, usingCache: Boolean = false, forceUpdate: Boolean = false) =
         traceSection("IconManager.updateIcons") {
             if (!entry.icons.areIconsAvailable) {
                 return@traceSection
@@ -194,30 +224,35 @@ constructor(
             val notificationContentDescription =
                 entry.sbn.notification?.let { iconBuilder.getIconContentDescription(it) }
 
+            val iconStyle = Settings.System.getIntForUser(context.contentResolver,
+                Settings.System.STATUSBAR_COLORED_ICONS, 0, UserHandle.USER_CURRENT) == 1
+            val showCount = Settings.System.getIntForUser(context.contentResolver,
+                Settings.System.STATUSBAR_NOTIF_COUNT, 0, UserHandle.USER_CURRENT) == 1
+
             entry.icons.statusBarIcon?.let {
                 it.setNotification(entry.sbn, notificationContentDescription)
-                setIcon(entry, normalIconDescriptor, it)
+                setIcon(entry, normalIconDescriptor, it, iconStyle, showCount, forceUpdate)
             }
 
             entry.icons.statusBarChipIcon?.let {
                 it.setNotification(entry.sbn, notificationContentDescription)
-                setIcon(entry, normalIconDescriptor, it)
+                setIcon(entry, normalIconDescriptor, it, false, false, false)
             }
 
             entry.icons.shelfIcon?.let {
                 it.setNotification(entry.sbn, notificationContentDescription)
-                setIcon(entry, sensitiveIconDescriptor, it)
+                setIcon(entry, sensitiveIconDescriptor, it, iconStyle, false, forceUpdate)
             }
 
             entry.icons.aodIcon?.let {
                 it.setNotification(entry.sbn, notificationContentDescription)
-                setIcon(entry, sensitiveIconDescriptor, it)
+                setIcon(entry, sensitiveIconDescriptor, it, false, false, false)
             }
         }
 
-    private fun updateIconsSafe(entry: NotificationEntry) {
+    private fun updateIconsSafe(entry: NotificationEntry, forceUpdate: Boolean = false) {
         try {
-            updateIcons(entry)
+            updateIcons(entry, false, forceUpdate)
         } catch (e: InflationException) {
             // TODO This should mark the entire row as involved in an inflation error
             Log.e(TAG, "Unable to update icon", e)
@@ -312,10 +347,19 @@ constructor(
     private fun setIcon(
         entry: NotificationEntry,
         iconDescriptor: StatusBarIcon,
-        iconView: StatusBarIconView
+        iconView: StatusBarIconView,
+        iconStyle: Boolean,
+        showCount: Boolean,
+        forceUpdate: Boolean
     ) {
         iconView.setShowsConversation(showsConversation(entry, iconView, iconDescriptor))
         iconView.setTag(R.id.icon_is_pre_L, entry.targetSdk < Build.VERSION_CODES.LOLLIPOP)
+        iconView.setIconStyle(iconStyle)
+        iconView.setShowCount(showCount)
+        if (forceUpdate) {
+            iconView.updateDrawable();
+            iconView.updateIconForced();
+        }
         if (!iconView.set(iconDescriptor)) {
             throw InflationException("Couldn't create icon $iconDescriptor")
         }

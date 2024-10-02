@@ -140,7 +140,7 @@ public class NotificationRowBinderImpl implements NotificationRowBinder {
 
         if (entry.rowExists()) {
             mLogger.logUpdatingRow(entry, params);
-            mIconManager.updateIcons(entry, /* usingCache = */ false);
+            mIconManager.updateIcons(entry, /* usingCache = */ false, /* forceUpdate = */ false);
             ExpandableNotificationRow row = entry.getRow();
             row.reset();
             updateRow(entry, row);
