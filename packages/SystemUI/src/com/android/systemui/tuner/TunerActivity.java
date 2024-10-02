@@ -19,7 +19,11 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.graphics.Insets;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceScreen;
@@ -31,6 +35,8 @@ import com.android.systemui.demomode.DemoModeController;
 import com.android.systemui.fragments.FragmentService;
 import com.android.systemui.res.R;
 import com.android.systemui.util.settings.GlobalSettings;
+
+import com.google.android.material.color.DynamicColors;
 
 import javax.inject.Inject;
 
@@ -54,8 +60,25 @@ public class TunerActivity extends CollapsingToolbarBaseActivity implements
     }
 
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tuner_activity);
+
+        DynamicColors.applyToActivityIfAvailable(this);
+        setTheme(com.android.settingslib.widget.theme.R.style.Theme_SubSettingsBase);
+
+        // Handle window insets for padding adjustments
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.content_frame), (view, insets) -> {
+            Insets systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            view.setPadding(
+                view.getPaddingLeft(),
+                view.getPaddingTop(),
+                view.getPaddingRight(),
+                systemInsets.bottom
+            );
+            return insets;
+        });
 
         if (getFragmentManager().findFragmentByTag(TAG_TUNER) == null) {
             final String action = getIntent().getAction();
