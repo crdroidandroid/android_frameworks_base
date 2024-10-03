@@ -159,7 +159,6 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
         addView(mBatteryIconView, mlp);
 
         updatePercentView();
-        updateVisibility();
 
         mDualToneHandler = new DualToneHandler(context);
         // Init to not dark at all.
@@ -204,7 +203,6 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
         updateDrawable();
         scaleBatteryMeterViews();
         updatePercentView();
-        updateVisibility();
     }
 
     protected void setBatteryPercent(int showBatteryPercent) {
@@ -465,19 +463,6 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
         }
     }
 
-    private void updateVisibility() {
-        if (mBatteryStyle == BATTERY_STYLE_HIDDEN || mBatteryStyle == BATTERY_STYLE_TEXT) {
-            mBatteryIconView.setVisibility(View.GONE);
-            mBatteryIconView.setImageDrawable(null);
-        } else {
-            mBatteryIconView.setVisibility(View.VISIBLE);
-            scaleBatteryMeterViews();
-        }
-        for (int i = 0; i < mCallbacks.size(); i++) {
-            mCallbacks.get(i).onHiddenBattery(mBatteryStyle == BATTERY_STYLE_HIDDEN);
-        }
-    }
-
     private Drawable getUnknownStateDrawable() {
         if (mUnknownStateDrawable == null) {
             mUnknownStateDrawable = mContext.getDrawable(R.drawable.ic_battery_unknown);
@@ -591,8 +576,14 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
                 break;
             case BATTERY_STYLE_HIDDEN:
             case BATTERY_STYLE_TEXT:
-                return;
-            default:
+                mBatteryIconView.setImageDrawable(null);
+                break;
+        }
+        boolean shouldHide = mBatteryStyle == BATTERY_STYLE_HIDDEN ||
+            mBatteryStyle == BATTERY_STYLE_TEXT;
+        mBatteryIconView.setVisibility(shouldHide ? View.GONE : View.VISIBLE);
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            mCallbacks.get(i).onHiddenBattery(mBatteryStyle == BATTERY_STYLE_HIDDEN);
         }
     }
 
