@@ -79,6 +79,8 @@ public class BatteryMeterViewController extends ViewController<BatteryMeterView>
                     int batteryStyle = TunerService.parseInteger(newValue,
                             BatteryMeterView.BATTERY_STYLE_PORTRAIT);
                     mView.setBatteryStyle(batteryStyle);
+                    mView.setVisibility(
+                        batteryStyle == BatteryMeterView.BATTERY_STYLE_HIDDEN ? View.GONE : View.VISIBLE);
                     break;
                 case STATUS_BAR_SHOW_BATTERY_PERCENT:
                     int showBatteryPercent =
