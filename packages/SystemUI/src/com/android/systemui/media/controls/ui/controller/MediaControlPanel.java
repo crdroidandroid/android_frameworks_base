@@ -1180,7 +1180,9 @@ public class MediaControlPanel {
     }
 
     private boolean shouldPlayTurbulenceNoise() {
-        return mButtonClicked && !mWasPlaying && isPlaying();
+        boolean isTurbulenceNoiseEnabled = mContext.getResources().getBoolean(
+                com.android.systemui.res.R.bool.config_turbulenceNoise);
+        return mButtonClicked && !mWasPlaying && isPlaying() && isTurbulenceNoiseEnabled;
     }
 
     private TurbulenceNoiseAnimationConfig createTurbulenceNoiseConfig() {
