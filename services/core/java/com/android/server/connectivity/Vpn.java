@@ -1023,14 +1023,12 @@ public class Vpn {
 
         if (isCurrentPreparedPackage(packageName)) {
             updateAlwaysOnNotification(mNetworkInfo.getDetailedState());
-            final boolean anyAllowlistChange = setVpnForcedLocked(mLockdown);
+            setVpnForcedLocked(mLockdown);
 
             // Lockdown forces the VPN to be non-bypassable (see #agentConnect) because it makes
             // no sense for a VPN to be bypassable when connected but not when not connected.
             // As such, changes in lockdown need to restart the agent.
-            // Changes in the lockdown allowlist must also restart the agent to ensure that
-            // the VPN's ranges properly exclude or include allowlisted UIDs.
-            if (mNetworkAgent != null && (anyAllowlistChange || oldLockdownState != mLockdown)) {
+            if (mNetworkAgent != null && oldLockdownState != mLockdown) {
                 startNewNetworkAgent(mNetworkAgent, "Lockdown mode changed");
             }
         } else {
@@ -2045,12 +2043,11 @@ public class Vpn {
      * @param enforce {@code true} to require that all traffic under the jurisdiction of this
      *                {@link Vpn} goes through a VPN connection or is blocked until one is
      *                available, {@code false} to lift the requirement.
-     * @return {@code true} if any lockdown ranges changed.
      *
      * @see #mBlockedUidsAsToldToConnectivity
      */
     @GuardedBy("this")
-    private boolean setVpnForcedLocked(boolean enforce) {
+    private void setVpnForcedLocked(boolean enforce) {
         final List<String> exemptedPackages;
         if (isNullOrLegacyVpn(mPackage)) {
             exemptedPackages = null;
@@ -2094,7 +2091,6 @@ public class Vpn {
         setAllowOnlyVpnForUids(false, rangesToRemove);
         // If nothing should be blocked now, this will now be a no-op.
         setAllowOnlyVpnForUids(true, rangesToAdd);
-        return !rangesToRemove.isEmpty() || !rangesToAdd.isEmpty();
     }
 
     /**
