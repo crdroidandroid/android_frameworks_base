@@ -800,6 +800,9 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
                 mBatteryIconView.setImageDrawable(null);
                 break;
         }
+        boolean shouldHide = mBatteryStyle == BATTERY_STYLE_HIDDEN ||
+            mBatteryStyle == BATTERY_STYLE_TEXT;
+        mBatteryIconView.setVisibility(shouldHide ? View.GONE : View.VISIBLE);
     }
 
     @Override
