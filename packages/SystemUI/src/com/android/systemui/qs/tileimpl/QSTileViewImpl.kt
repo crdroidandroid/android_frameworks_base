@@ -235,7 +235,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
 
     private val locInScreen = IntArray(2)
     private var vertical = false
-    private val forceHideCheveron = true
+    private var forceHideCheveron = false
     private var labelHide = false
     private var labelSize = 14f
 
@@ -249,6 +249,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
 
         vertical = TileUtils.getQSTileVerticalLayout(context, if (vertical) 1 else 0)
         labelHide = TileUtils.getQSTileLabelHide(context)
+        forceHideCheveron = vertical || labelHide
 
         importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
         clipChildren = false
