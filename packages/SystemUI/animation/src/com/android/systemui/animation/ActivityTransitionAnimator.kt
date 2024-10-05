@@ -391,9 +391,9 @@ class ActivityTransitionAnimator(
                     )
                 }
 
-                var animatedView = view;
+                var animatedView = view
                 if (view.getAnimatedView() is View) {
-                    view.getAnimatedView() as View
+                    animatedView = view.getAnimatedView() as View
                 }
 
                 if (animatedView.parent !is ViewGroup) {

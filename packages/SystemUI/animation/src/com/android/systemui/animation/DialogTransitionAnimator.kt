@@ -214,7 +214,7 @@ constructor(
         cuj: DialogCuj? = null,
         animateBackgroundBoundsChange: Boolean = false
     ) {
-        var animatedView = view;
+        var animatedView = view
         if (animatedView is LaunchableView && animatedView.getAnimatedView() is View) {
             animatedView = animatedView.getAnimatedView() as View
         }
