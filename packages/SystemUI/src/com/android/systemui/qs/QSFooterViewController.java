@@ -170,6 +170,7 @@ public class QSFooterViewController extends ViewController<QSFooterView>
     @Override
     protected void onViewDetached() {
         mContext.unregisterReceiver(mReceiver);
+        mWifiTracker.setListening(false);
         mNetworkController.removeCallback(mSignalCallback);
         mTunerService.removeTunable(this);
         mGlobalSettings.unregisterContentObserverSync(mDataSwitchObserver);
