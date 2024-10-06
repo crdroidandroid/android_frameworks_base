@@ -396,9 +396,9 @@
 
     <!-- paddings for container with status icons and battery -->
     <!-- padding start is a bit smaller than end to account for status icon margin-->
-    <dimen name="status_bar_icons_padding_start">3dp</dimen>
+    <dimen name="status_bar_icons_padding_start">0dp</dimen>
 
-    <dimen name="status_bar_icons_padding_end">4dp</dimen>
+    <dimen name="status_bar_icons_padding_end">0dp</dimen>
     <dimen name="status_bar_icons_padding_bottom">0dp</dimen>
     <dimen name="status_bar_icons_padding_top">0dp</dimen>
 
