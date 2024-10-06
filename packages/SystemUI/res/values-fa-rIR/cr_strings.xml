@@ -31,11 +31,11 @@
     <string name="quick_settings_sound_mute">بی‌صدا</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">نشانگر رومینگ</string>
     <!-- Name of the HD calling status bar icon. -->
-    <string name="status_bar_hd_calling">HD calling (VoLTE/VoNR)</string>
+    <string name="status_bar_hd_calling">تماس اچ‌دی (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
-    <string name="status_bar_vowifi">Wi-Fi calling (VoWiFi)</string>
+    <string name="status_bar_vowifi">تماس وای‌فای (VoWiFi)</string>
     <!-- Status bar network traffic monitor strings -->
     <string name="kilobitspersecond_short">ک‌ب/ث</string>
     <string name="megabitspersecond_short">م‌ب/ث</string>
@@ -148,8 +148,8 @@
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">درحال شناسایی چهره...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
-    <string name="accessibility_assistant_button">AI Assistant</string>
+    <string name="accessibility_assistant_button">دستیار هوش مصنوعی</string>
     <!-- Screen record -->
-    <string name="screenrecord_keep_screen_awake_label">Stay awake</string>
-    <string name="screenrecord_keep_screen_awake_summary">Keep the screen on</string>
+    <string name="screenrecord_keep_screen_awake_label">بیدار بمان</string>
+    <string name="screenrecord_keep_screen_awake_summary">روشن نگه‌داشتن صفحه</string>
 </resources>
