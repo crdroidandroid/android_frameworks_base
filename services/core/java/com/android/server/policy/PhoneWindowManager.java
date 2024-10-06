@@ -684,6 +684,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private Action mAssistLongPressAction;
     private Action mAppSwitchPressAction;
     private Action mAppSwitchLongPressAction;
+    private Action mCornerLongSwipeAction;
     private Action mEdgeLongSwipeAction;
     private Action mThreeFingersSwipeAction;
 
@@ -1093,6 +1094,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(LineageSettings.System.getUriFor(
+                    LineageSettings.System.KEY_CORNER_LONG_SWIPE_ACTION), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.KEY_EDGE_LONG_SWIPE_ACTION), false, this,
@@ -3247,6 +3251,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final Resources res = mContext.getResources();
 
         // Initialize all assignments to sane defaults.
+        mCornerLongSwipeAction = Action.SEARCH;
+
         mEdgeLongSwipeAction = Action.NOTHING;
 
         mMenuPressAction = Action.MENU;
@@ -3317,6 +3323,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mAppSwitchLongPressAction = Action.fromSettings(resolver,
                 LineageSettings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION,
                 mAppSwitchLongPressAction);
+
+        mCornerLongSwipeAction = Action.fromSettings(resolver,
+                LineageSettings.System.KEY_CORNER_LONG_SWIPE_ACTION,
+                mCornerLongSwipeAction);
 
         mEdgeLongSwipeAction = Action.fromSettings(resolver,
                 LineageSettings.System.KEY_EDGE_LONG_SWIPE_ACTION,
@@ -5604,6 +5614,23 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             case KeyEvent.KEYCODE_HOME:
+                boolean isLongSwipe = (event.getFlags() & KeyEvent.FLAG_LONG_SWIPE) != 0;
+                if (mLongSwipeDown && isLongSwipe && !down) {
+                    // Trigger long swipe action
+                    performKeyAction(mCornerLongSwipeAction, event);
+                    // Reset long swipe state
+                    mLongSwipeDown = false;
+                    // Don't pass back press to app
+                    result &= ~ACTION_PASS_TO_USER;
+                    break;
+                }
+                mLongSwipeDown = isLongSwipe && down;
+                if (mLongSwipeDown) {
+                    // Don't pass back press to app
+                    result &= ~ACTION_PASS_TO_USER;
+                    break;
+                }
+
                 if (down && !interactive) {
                     isWakeKey = mWakeOnHomeKeyPress;
                     if (!isWakeKey) {
