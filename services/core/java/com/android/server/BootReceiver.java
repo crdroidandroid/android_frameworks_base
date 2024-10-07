@@ -486,11 +486,15 @@ public class BootReceiver extends BroadcastReceiver {
         if (fileTime <= 0) return false;  // File does not exist
 
         final String filename = file.getPath();
-        if (timestamps.containsKey(filename) && timestamps.get(filename) == fileTime) {
-            return false;  // Already logged this particular file
-        }
+        synchronized (timestamps) {
+            Long prevFileTime = timestamps.get(filename);
+            if (prevFileTime != null && prevFileTime.longValue() == fileTime) {
+                Slog.d(TAG, "already logged " + filename);
+                return false;  // Already logged this particular file
+            }
 
-        timestamps.put(filename, fileTime);
+            timestamps.put(filename, fileTime);
+        }
         return true;
     }
 
@@ -869,7 +873,22 @@ public class BootReceiver extends BroadcastReceiver {
         Slog.i(TAG, "fs_stat, partition:" + partition + " stat:0x" + Integer.toHexString(stat));
     }
 
+    private static HashMap<String, Long> logFileTimestamps;
+
     private static HashMap<String, Long> readTimestamps() {
+        synchronized (sFile) {
+            HashMap<String, Long> res = logFileTimestamps;
+            if (res == null) {
+                // Timestamps file is rewritten after it's modified and there's more than one writer
+                // thread. Read timestamps file at most once to avoid a race condition.
+                res = readTimestampsInner();
+                logFileTimestamps = res;
+            }
+            return res;
+        }
+    }
+
+    private static HashMap<String, Long> readTimestampsInner() {
         synchronized (sFile) {
             HashMap<String, Long> timestamps = new HashMap<String, Long>();
             boolean success = false;
