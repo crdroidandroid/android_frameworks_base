@@ -279,9 +279,6 @@ public class ThemeOverlayApplier implements Dumpable {
                 }
             }
 
-            transaction.setEnabled(getOverlayID(OVERLAY_BERRY_BLACK_THEME), blackMode, currentUser);
-            transaction.setEnabled(getOverlayID("android:neutral"), !blackMode, currentUser);
-
             try {
                 mOverlayManager.commit(transaction.build());
                 if (enableHomeDelay() && onComplete != null) {
@@ -291,7 +288,28 @@ public class ThemeOverlayApplier implements Dumpable {
             } catch (SecurityException | IllegalStateException e) {
                 Log.e(TAG, "setEnabled failed", e);
             }
+
+            checkDarkUserOverlays(currentUser, onComplete, blackMode);
         });
+    }
+
+    public void checkDarkUserOverlays(
+            int currentUser,
+            Runnable onComplete,
+            boolean blackMode
+    ) {
+        OverlayManagerTransaction.Builder transaction = getTransactionBuilder();
+        try {
+            transaction.setEnabled(getOverlayID(OVERLAY_BERRY_BLACK_THEME), blackMode, currentUser);
+            transaction.setEnabled(getOverlayID("android:neutral"), !blackMode, currentUser);
+            mOverlayManager.commit(transaction.build());
+            if (onComplete != null) {
+                Log.d(TAG, "Executing onComplete runnable");
+                mMainExecutor.execute(onComplete);
+            }
+        } catch (SecurityException | IllegalStateException e) {
+            Log.e(TAG, "setEnabled failed", e);
+        }
     }
 
     private OverlayIdentifier getOverlayID(String name) throws IllegalStateException {
