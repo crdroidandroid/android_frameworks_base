@@ -17,6 +17,7 @@
 package com.android.keyguard;
 
 import static com.android.keyguard.logging.CarrierTextManagerLogger.REASON_ACTIVE_DATA_SUB_CHANGED;
+import static com.android.keyguard.logging.CarrierTextManagerLogger.REASON_CARRIER_ON_LOCKSCREEN_CHANGED;
 import static com.android.keyguard.logging.CarrierTextManagerLogger.REASON_ON_TELEPHONY_CAPABLE;
 import static com.android.keyguard.logging.CarrierTextManagerLogger.REASON_REFRESH_CARRIER_INFO;
 import static com.android.keyguard.logging.CarrierTextManagerLogger.REASON_SATELLITE_CHANGED;
@@ -27,7 +28,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.database.ContentObserver;
+import android.net.Uri;
+import android.os.Handler;
 import android.os.Trace;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
 import android.telephony.TelephonyCallback.ActiveDataSubscriptionIdListener;
@@ -93,6 +99,8 @@ public class CarrierTextManager {
     private Job mSatelliteConnectionJob;
 
     @Nullable private String mSatelliteCarrierText;
+
+    private boolean mShowCarrierText = true;
 
     private final Context mContext;
     private final TelephonyManager mTelephonyManager;
@@ -231,6 +239,8 @@ public class CarrierTextManager {
                 });
             }
         });
+        SettingsObserver observer = new SettingsObserver();
+        observer.observe();
     }
 
     private TelephonyManager getTelephonyManager() {
@@ -456,6 +466,12 @@ public class CarrierTextManager {
         }
 
         boolean isInSatelliteMode = mSatelliteCarrierText != null;
+
+        // Hide the carrier text if the user requests
+        if (!mShowCarrierText) {
+            displayText = "";
+        }
+
         final CarrierTextCallbackInfo info = new CarrierTextCallbackInfo(
                 displayText,
                 carrierNames,
@@ -667,6 +683,33 @@ public class CarrierTextManager {
         if (job != null) {
             mLogger.logStopListeningForSatelliteCarrierText(reason);
             job.cancel(new CancellationException(reason));
+        }
+    }
+
+    private class SettingsObserver extends ContentObserver {
+        SettingsObserver() {
+            super(new Handler());
+        }
+
+        void observe() {
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_SHOW_CARRIER), false, this,
+                    UserHandle.USER_ALL);
+            updateSettings();
+        }
+
+        void updateSettings() {
+            mShowCarrierText = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_SHOW_CARRIER, 1, UserHandle.USER_CURRENT) != 0;
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (Settings.System.getUriFor(Settings.System.LOCKSCREEN_SHOW_CARRIER).equals(uri)) {
+                mLogger.logUpdateCarrierTextForReason(REASON_CARRIER_ON_LOCKSCREEN_CHANGED);
+                updateSettings();
+                updateCarrierText();
+            }
         }
     }
 
