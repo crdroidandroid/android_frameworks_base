@@ -20,6 +20,7 @@ import static com.android.keyguard.logging.CarrierTextManagerLogger.REASON_ACTIV
 import static com.android.keyguard.logging.CarrierTextManagerLogger.REASON_ON_TELEPHONY_CAPABLE;
 import static com.android.keyguard.logging.CarrierTextManagerLogger.REASON_REFRESH_CARRIER_INFO;
 import static com.android.keyguard.logging.CarrierTextManagerLogger.REASON_SIM_ERROR_STATE_CHANGED;
+import static com.android.keyguard.logging.CarrierTextManagerLogger.REASON_USER_CHANGED_HIDE_CARRIER_SETTING;
 
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,11 @@ import android.telephony.TelephonyCallback.ActiveDataSubscriptionIdListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.provider.Settings;
+import android.database.ContentObserver;
+import android.net.Uri;
+import android.os.Handler;
+import android.content.ContentResolver;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -214,6 +220,9 @@ public class CarrierTextManager {
                 });
             }
         });
+
+        SettingsObserver observer = new SettingsObserver();
+        observer.observe();
     }
 
     private TelephonyManager getTelephonyManager() {
@@ -315,6 +324,7 @@ public class CarrierTextManager {
         Trace.beginSection("CarrierTextManager#updateCarrierText");
         boolean allSimsMissing = true;
         boolean anySimReadyAndInService = false;
+
         CharSequence displayText = null;
         List<SubscriptionInfo> subs = getSubscriptionInfo();
 
@@ -411,6 +421,12 @@ public class CarrierTextManager {
             displayText = getAirplaneModeMessage();
             airplaneMode = true;
         }
+
+        boolean hideCarrier = 
+            Settings.System.getInt(getContext().getContentResolver(), Settings.System.HIDE_CARRIER_ON_LOCKSCREEN, 0) == 1;
+        
+        // hide the carrier text if the user requests so
+        if (hideCarrier) displayText = "";
 
         final CarrierTextCallbackInfo info = new CarrierTextCallbackInfo(
                 displayText,
@@ -615,6 +631,26 @@ public class CarrierTextManager {
             list.add(string);
         }
         return list;
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver() {
+                super(new Handler());
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                Settings.System.HIDE_CARRIER_ON_LOCKSCREEN), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.System.getUriFor(Settings.System.HIDE_CARRIER_ON_LOCKSCREEN))) {
+                mLogger.logUpdateCarrierTextForReason(REASON_USER_CHANGED_HIDE_CARRIER_SETTING);
+                updateCarrierText();
+            }
+        }
     }
 
     /** Injectable Buildeer for {@#link CarrierTextManager}. */
