@@ -20,13 +20,11 @@
     <string name="url_copy_success">링크가 성공적으로 복사되었습니다</string>
     <string name="url_copy_failed">로그를 Pastey에 업로드하는 동안 오류가 발생했습니다.</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">전원 버튼을 길게 눌러 잠금 해제</string>
-    <string name="pocket_view_title">주머니 모드가 켜졌습니다</string>
-    <string name="pocket_view_title_cancel">휴대폰을 활성화하기:</string>
-    <string name="pocket_view_top_tag_cancel">당신의 휴대폰의 파란 부분을 가리지말고 먼지를 제거하세요.</string>
-    <string name="pocket_view_top_tag_cancel2">주머니 감지 모드를 강제 종료하려면 전원 버튼을 길게 누르세요.</string>
-    <string name="pocket_view_top_tag_number1">1.\u0020</string>
-    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <string name="pocket_mode_title">Pocket mode is active</string>
+    <string name="pocket_mode_illustration_description">Illustration of phone in pocket</string>
+    <string name="pocket_mode_instructions_header">To use your phone:</string>
+    <string name="pocket_mode_instruction_step1">1. Ensure the blue area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
+    <string name="pocket_mode_instruction_step2">2. Press and hold the power button to exit pocket mode.</string>
     <!-- App lock -->
     <string name="unlock_application"><xliff:g id="label" example="Telegram">%1$s</xliff:g> 열기</string>
 </resources>
