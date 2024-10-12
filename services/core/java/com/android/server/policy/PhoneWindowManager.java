@@ -6959,9 +6959,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // So it is better not to bind keyguard here.
         mKeyguardDelegate.onSystemReady();
 
-        mPocketManager = (PocketManager) mContext.getSystemService(Context.POCKET_SERVICE);
-        mPocketManager.addCallback(mPocketCallback);
-        mPocketLock = new PocketLock(mContext);
+        if (mContext.getResources().getBoolean(com.android.internal.R.bool.config_pocketModeSupported)) {
+            mPocketManager = (PocketManager) mContext.getSystemService(Context.POCKET_SERVICE);
+            mPocketManager.addCallback(mPocketCallback);
+            mPocketLock = new PocketLock(mContext);
+        }
 
         mVrManagerInternal = LocalServices.getService(VrManagerInternal.class);
         if (mVrManagerInternal != null) {
