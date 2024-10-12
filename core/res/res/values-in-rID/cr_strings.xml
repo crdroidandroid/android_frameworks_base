@@ -20,13 +20,11 @@
     <string name="url_copy_success">URL berhasil disalin</string>
     <string name="url_copy_failed">Terjadi kesalahan pada saat mengunggah log ke Pasty</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Tekan dan tahan tombol daya untuk membuka kunci</string>
-    <string name="pocket_view_title">Mode saku aktif</string>
-    <string name="pocket_view_title_cancel">Untuk mengaktifkan ponsel Anda:</string>
-    <string name="pocket_view_top_tag_cancel">Jangan tutup area biru pada ponsel Anda, dan bersihkan dari kotoran atau debu.</string>
-    <string name="pocket_view_top_tag_cancel2">Tekan lama tombol daya untuk memaksa keluar dari mode saku.</string>
-    <string name="pocket_view_top_tag_number1">1.\u0020</string>
-    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <string name="pocket_mode_title">Pocket mode is active</string>
+    <string name="pocket_mode_illustration_description">Illustration of phone in pocket</string>
+    <string name="pocket_mode_instructions_header">To use your phone:</string>
+    <string name="pocket_mode_instruction_step1">1. Ensure the blue area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
+    <string name="pocket_mode_instruction_step2">2. Press and hold the power button to exit pocket mode.</string>
     <!-- App lock -->
     <string name="unlock_application">Buka <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>
