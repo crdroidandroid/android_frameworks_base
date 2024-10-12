@@ -20,13 +20,11 @@
     <string name="url_copy_success">已成功复制链接</string>
     <string name="url_copy_failed">将日志上传到 Pasty 时出错</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">按住电源按键来解锁</string>
-    <string name="pocket_view_title">口袋模式已开启</string>
-    <string name="pocket_view_title_cancel">激活您的手机</string>
-    <string name="pocket_view_top_tag_cancel">请确保屏幕上的蓝色区域没有被遮挡，并清理上方的污垢及灰尘</string>
-    <string name="pocket_view_top_tag_cancel2">长按电源按钮强制退出口袋模式</string>
-    <string name="pocket_view_top_tag_number1">1.\u0020</string>
-    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <string name="pocket_mode_title">Pocket mode is active</string>
+    <string name="pocket_mode_illustration_description">Illustration of phone in pocket</string>
+    <string name="pocket_mode_instructions_header">To use your phone:</string>
+    <string name="pocket_mode_instruction_step1">1. Ensure the blue area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
+    <string name="pocket_mode_instruction_step2">2. Press and hold the power button to exit pocket mode.</string>
     <!-- App lock -->
     <string name="unlock_application">解锁应用 <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>
