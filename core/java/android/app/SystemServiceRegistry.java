@@ -1049,6 +1049,9 @@ public final class SystemServiceRegistry {
                 new CachedServiceFetcher<PocketManager>() {
                     @Override
                     public PocketManager createService(ContextImpl ctx) {
+                        if (!ctx.getResources().getBoolean(R.bool.config_pocketModeSupported)) {
+                            return null;
+                        }
                         IBinder binder = ServiceManager.getService(Context.POCKET_SERVICE);
                         IPocketService service = IPocketService.Stub.asInterface(binder);
                         return new PocketManager(ctx.getOuterContext(), service);
