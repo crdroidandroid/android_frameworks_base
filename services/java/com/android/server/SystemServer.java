@@ -2692,9 +2692,12 @@ public final class SystemServer implements Dumpable {
             mSystemServiceManager.startService(CrossProfileAppsService.class);
             t.traceEnd();
 
-            t.traceBegin("StartPocketService");
-            mSystemServiceManager.startService(PocketService.class);
-            t.traceEnd();
+            if (context.getResources().getBoolean(
+                    com.android.internal.R.bool.config_pocketModeSupported)) {
+                t.traceBegin("StartPocketService");
+                mSystemServiceManager.startService(PocketService.class);
+                t.traceEnd();
+            }
 
             if (!context.getResources().getString(
                     com.android.internal.R.string.config_pocketBridgeSysfsInpocket).isEmpty()) {
