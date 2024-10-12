@@ -17,6 +17,6 @@
     <string name="pocket_mode_title">Pocket mode is active</string>
     <string name="pocket_mode_illustration_description">Illustration of phone in pocket</string>
     <string name="pocket_mode_instructions_header">To use your phone:</string>
-    <string name="pocket_mode_instruction_step1">1. Ensure the green area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
+    <string name="pocket_mode_instruction_step1">1. Ensure the blue area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
     <string name="pocket_mode_instruction_step2">2. Press and hold the power button to exit pocket mode.</string>
 </resources>
