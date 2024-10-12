@@ -170,6 +170,8 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
 
     private boolean mHomeHandleForceHidden;
 
+    private TunerService mTunerService;
+
     /**
      * Helper that is responsible for showing the right toast when a disallowed activity operation
      * occurred. In pinned mode, we show instructions on how to break out of this mode, whilst in
@@ -354,6 +356,7 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
         mButtonDispatchers.put(R.id.dpad_left, cursorLeftButton);
         mButtonDispatchers.put(R.id.dpad_right, cursorRightButton);
         mDeadZone = new DeadZone(this);
+        mTunerService = Dependency.get(TunerService.class);
     }
 
     public void setEdgeBackGestureHandler(EdgeBackGestureHandler edgeBackGestureHandler) {
@@ -1182,9 +1185,8 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
         super.onAttachedToWindow();
         requestApplyInsets();
         reorient();
-        final TunerService tunerService = Dependency.get(TunerService.class);
-        tunerService.addTunable(this, NAVIGATION_BAR_MENU_ARROW_KEYS);
-        tunerService.addTunable(this, NAVBAR_STYLE);
+        mTunerService.addTunable(this, NAVIGATION_BAR_MENU_ARROW_KEYS);
+        mTunerService.addTunable(this, NAVBAR_STYLE);
         if (mRotationButtonController != null) {
             mRotationButtonController.registerListeners(false /* registerRotationWatcher */);
         }
@@ -1195,6 +1197,7 @@ public class NavigationBarView extends FrameLayout implements TunerService.Tunab
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        mTunerService.removeTunable(this);
         for (int i = 0; i < mButtonDispatchers.size(); ++i) {
             mButtonDispatchers.valueAt(i).onDestroy();
         }
