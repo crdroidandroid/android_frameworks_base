@@ -20,13 +20,11 @@
     <string name="url_copy_success">URL copiado com sucesso</string>
     <string name="url_copy_failed">Ocorreu um erro ao enviar o registo para o dogbin</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Para desbloquear pressione e mantenha pressionado o botão de ligar</string>
-    <string name="pocket_view_title">Modo de bolso ativado</string>
-    <string name="pocket_view_title_cancel">Para ativar o seu telemóvel:</string>
-    <string name="pocket_view_top_tag_cancel">Por favor, não cubra a área azul do seu telemóvel e limpe o pó e sujeira.</string>
-    <string name="pocket_view_top_tag_cancel2">Pressione longamente o botão de energia para forçar a saída do modo de bolso.</string>
-    <string name="pocket_view_top_tag_number1">1.\u0020</string>
-    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <string name="pocket_mode_title">Pocket mode is active</string>
+    <string name="pocket_mode_illustration_description">Illustration of phone in pocket</string>
+    <string name="pocket_mode_instructions_header">To use your phone:</string>
+    <string name="pocket_mode_instruction_step1">1. Ensure the blue area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
+    <string name="pocket_mode_instruction_step2">2. Press and hold the power button to exit pocket mode.</string>
     <!-- App lock -->
     <string name="unlock_application">Desbloquear <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>
