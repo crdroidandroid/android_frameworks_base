@@ -20,13 +20,11 @@
     <string name="url_copy_success">URL copiée avec succès</string>
     <string name="url_copy_failed">Une erreur est survenue pendant l\'envoi du rapport</string>
     <!-- Pocket Lock -->
-    <string name="pocket_lock_message_long_press">Appuyez et maintenez le bouton Marche/Arrêt pour déverrouiller</string>
-    <string name="pocket_view_title">Le mode poche est activé</string>
-    <string name="pocket_view_title_cancel">Pour activer votre téléphone :</string>
-    <string name="pocket_view_top_tag_cancel">Veuillez ne pas couvrir la zone bleue de votre téléphone et nettoyer la saleté ou la poussière si besoin.</string>
-    <string name="pocket_view_top_tag_cancel2">Appuyez longuement sur le bouton d\'alimentation pour quitter le mode poche.</string>
-    <string name="pocket_view_top_tag_number1">1.\u0020</string>
-    <string name="pocket_view_top_tag_number2">2.\u0020</string>
+    <string name="pocket_mode_title">Pocket mode is active</string>
+    <string name="pocket_mode_illustration_description">Illustration of phone in pocket</string>
+    <string name="pocket_mode_instructions_header">To use your phone:</string>
+    <string name="pocket_mode_instruction_step1">1. Ensure the blue area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
+    <string name="pocket_mode_instruction_step2">2. Press and hold the power button to exit pocket mode.</string>
     <!-- App lock -->
     <string name="unlock_application">Dévérouiller <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>
