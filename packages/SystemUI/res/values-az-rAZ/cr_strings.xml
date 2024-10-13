@@ -31,7 +31,7 @@
     <string name="quick_settings_sound_mute">Mute</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">Rouminq göstəricisi</string>
     <!-- Name of the HD calling status bar icon. -->
     <string name="status_bar_hd_calling">HD calling (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
@@ -81,12 +81,12 @@
     <string name="onthego_channel_name">Əsas</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Sistem interfeysi</string>
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Öncəlik</string>
     <string name="volume_ringer_alarms_only">Alarmlar</string>
     <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight">Torch</string>
+    <string name="tristate_flashlight">Fənər</string>
     <string name="tristate_flashlight_on">Fənər açıq</string>
     <string name="tristate_flashlight_off">Fənər bağlı</string>
     <string name="tristate_flashlight_blink">Fənər titrəməsi</string>
@@ -121,11 +121,11 @@
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">Şəbəkə kartını dəyişdir</string>
     <!-- Volume panel QS tile -->
-    <string name="quick_settings_volume_panel_label">Volume panel</string>
+    <string name="quick_settings_volume_panel_label">Səs paneli</string>
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Lens</string>
     <!-- Smart Pixels QS Tile -->
-    <string name="quick_settings_smart_pixels">Smart Pixels</string>
+    <string name="quick_settings_smart_pixels">Ağıllı Piksellər</string>
     <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled Smart Pixels</string>
     <!-- Weather Tile -->
     <string name="omnijaws_service_error">Hava məlumatı yüklənərkən problem yarandı</string>
@@ -144,7 +144,7 @@
     <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
     <!-- Island notification -->
     <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%1$s by %2$s</string>
+    <string name="by_artist">%2$s: %1$s</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Recognizing face...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
