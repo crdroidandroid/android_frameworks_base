@@ -17,7 +17,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">ᱰᱟᱴᱟ ᱵᱟᱸᱪᱟᱣ ᱨᱮᱭᱟᱜ</string>
     <string name="status_bar_call_strength">Call strength</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
@@ -81,7 +81,7 @@
     <string name="onthego_channel_name">Main</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">ᱥᱤᱥᱴᱮᱢ UI</string>
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">ᱯᱨᱟᱭᱚᱨᱤᱴᱭ</string>
     <string name="volume_ringer_alarms_only">ᱟᱠᱟᱨᱟᱢᱠᱚ</string>
@@ -98,8 +98,8 @@
     <string name="tristate_rotation_90">ᱞᱮᱸᱰᱥᱠᱮᱯ (᱙᱐°)</string>
     <string name="tristate_rotation_270">ᱞᱮᱸᱰᱥᱠᱮᱯ (᱒᱗᱐°)</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="force_stop_dlg_title">ᱡᱩᱨ ᱛᱮ ᱵᱚᱸᱫᱽ ᱟᱢ?</string>
+    <string name="force_stop_dlg_text">ᱡᱤᱫᱤ ᱟᱢ ᱮᱯᱯ ᱡᱩᱨ ᱛᱮ ᱵᱚᱸᱫᱽ ᱠᱷᱟᱱᱮᱢ, ᱚᱱᱟ ᱴᱷᱤᱠ ᱥᱮ ᱵᱟᱭ ᱵᱚᱸᱫᱽᱚᱜᱼᱟ ᱾</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU ᱵᱤᱵᱨᱚᱬ</string>
     <!-- FPS Info tile -->
@@ -137,14 +137,14 @@
     <!-- Screenshot Tile -->
     <string name="screenshot_long_press">Long press - selected region</string>
     <!-- SoundSearch Tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">ᱥᱟᱲᱮ ᱥᱮᱸᱫᱽᱨᱟ</string>
     <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">ᱯᱟᱹᱨᱥᱤ</string>
     <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
     <!-- Island notification -->
     <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%1$s by %2$s</string>
+    <string name="by_artist">%1$s ᱵᱭ %2$s</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Recognizing face...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
