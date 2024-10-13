@@ -17,7 +17,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">Икономия на данни</string>
     <string name="status_bar_call_strength">Call strength</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
@@ -31,7 +31,7 @@
     <string name="quick_settings_sound_mute">Mute</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">Индикатор за роуминг</string>
     <!-- Name of the HD calling status bar icon. -->
     <string name="status_bar_hd_calling">HD calling (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
@@ -81,12 +81,12 @@
     <string name="onthego_channel_name">Основен</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">Системен UI</string>
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Приоритет</string>
     <string name="volume_ringer_alarms_only">Будилници</string>
     <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight">Torch</string>
+    <string name="tristate_flashlight">Фенерче</string>
     <string name="tristate_flashlight_on">Фенерчето е включено</string>
     <string name="tristate_flashlight_off">Фенерчето е изключено</string>
     <string name="tristate_flashlight_blink">Мигане на фенерче</string>
@@ -133,7 +133,7 @@
     <string name="omnijaws_label_default">Времето</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Refresh rate</string>
-    <string name="auto_mode_label">Auto</string>
+    <string name="auto_mode_label">Автоматично</string>
     <!-- Screenshot Tile -->
     <string name="screenshot_long_press">Long press - selected region</string>
     <!-- SoundSearch Tile -->
@@ -144,7 +144,7 @@
     <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
     <!-- Island notification -->
     <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%1$s by %2$s</string>
+    <string name="by_artist">%1$s от %2$s</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Recognizing face...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
