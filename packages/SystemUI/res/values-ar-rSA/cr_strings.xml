@@ -35,7 +35,7 @@
     <string name="quick_settings_sound_mute">كتم الصوت</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">أيقونة التجوال</string>
     <!-- Name of the HD calling status bar icon. -->
     <string name="status_bar_hd_calling">HD calling (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
@@ -148,12 +148,12 @@
     <string name="quick_settings_locale_more_locales_toast">قم بتهيئة عدة لغات اولآ</string>
     <!-- Island notification -->
     <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%1$s by %2$s</string>
+    <string name="by_artist">%1$s بواسطة %2$s</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">يتم التعرف على الوجه...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI Assistant</string>
     <!-- Screen record -->
-    <string name="screenrecord_keep_screen_awake_label">Stay awake</string>
+    <string name="screenrecord_keep_screen_awake_label">البقاء في الوضع النشط</string>
     <string name="screenrecord_keep_screen_awake_summary">Keep the screen on</string>
 </resources>

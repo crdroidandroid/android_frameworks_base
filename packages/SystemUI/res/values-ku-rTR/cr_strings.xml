@@ -17,7 +17,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Statusbar Icons -->
     <string name="status_bar_nfc">NFC</string>
-    <string name="status_bar_data_saver">Data saver</string>
+    <string name="status_bar_data_saver">پاراستنی داتا</string>
     <string name="status_bar_call_strength">Call strength</string>
     <!-- QuickSettings: InternetDialog: Summary for how many devices are connected to the hotspot [CHAR LIMIT=NONE] -->
     <plurals name="quick_settings_internet_hotspot_summary_num_devices">
@@ -71,22 +71,22 @@
     <string name="onthego_notif_ticker">On-The-Go activated</string>
     <string name="onthego_notif_title">On-The-Go is active</string>
     <string name="onthego_notif_stop">Stop</string>
-    <string name="onthego_notif_options">Options</string>
+    <string name="onthego_notif_options">بژاردەکان</string>
     <string name="onthego_notif_error">Unable to start On-The-Go</string>
     <string name="onthego_notif_restart">Restart On-The-Go</string>
     <string name="onthego_notif_camera_changed">Camera mode changed</string>
-    <string name="onthego_transparency">Transparency</string>
+    <string name="onthego_transparency">ڕوونێتی</string>
     <string name="onthego_front_camera">Use front camera</string>
     <string name="onthego_service_toggle">Automatically restart service</string>
     <string name="onthego_channel_name">Main</string>
     <string name="global_action_onthego">On-The-Go</string>
     <!-- Button to restart SystemUI, within the Restart Options dialog -->
-    <string name="global_action_restart_systemui">SystemUI</string>
+    <string name="global_action_restart_systemui">ڕووکاری سیستەم</string>
     <!-- Alert slide extras -->
     <string name="volume_ringer_priority_only">Priority</string>
     <string name="volume_ringer_alarms_only">وریاکەرەوە</string>
     <string name="volume_ringer_dnd">DnD</string>
-    <string name="tristate_flashlight">Torch</string>
+    <string name="tristate_flashlight">فلاش</string>
     <string name="tristate_flashlight_on">Torch on</string>
     <string name="tristate_flashlight_off">Torch off</string>
     <string name="tristate_flashlight_blink">Torch blink</string>
@@ -94,12 +94,12 @@
     <string name="tristate_brightness_dark">Min-brightness</string>
     <string name="tristate_brightness_auto">Auto-brightness</string>
     <string name="tristate_rotation_auto">Auto-rotate</string>
-    <string name="tristate_rotation_0">Portrait</string>
+    <string name="tristate_rotation_0">ستوونی</string>
     <string name="tristate_rotation_90">Landscape (90°)</string>
     <string name="tristate_rotation_270">Landscape (270°)</string>
     <!-- Kill button in notification guts -->
-    <string name="force_stop_dlg_title">Force stop?</string>
-    <string name="force_stop_dlg_text">If you force stop an app, it may misbehave.</string>
+    <string name="force_stop_dlg_title">بەتینی ڕابگیرێ؟</string>
+    <string name="force_stop_dlg_text">گەر بەتینی ئەپێک ڕاگری، ڕەنگە کێشەی بۆ دروسکات.</string>
     <!-- CPUInfo tile -->
     <string name="quick_settings_cpuinfo_label">CPU زانیاری</string>
     <!-- FPS Info tile -->
@@ -121,7 +121,7 @@
     <!-- DataSwitch Tile -->
     <string name="qs_data_switch_label">گۆڕینی کارتی داتا</string>
     <!-- Volume panel QS tile -->
-    <string name="quick_settings_volume_panel_label">Volume panel</string>
+    <string name="quick_settings_volume_panel_label">تەختەی دەنگ</string>
     <!-- Label for UI element which allows to use lens on screenshot [CHAR LIMIT=30] -->
     <string name="screenshot_lens_label">Lens</string>
     <!-- Smart Pixels QS Tile -->
@@ -133,18 +133,18 @@
     <string name="omnijaws_label_default">کەش</string>
     <!-- Refresh Rate Tile -->
     <string name="refresh_rate_tile_label">Refresh rate</string>
-    <string name="auto_mode_label">Auto</string>
+    <string name="auto_mode_label">خۆکاری</string>
     <!-- Screenshot Tile -->
     <string name="screenshot_long_press">Long press - selected region</string>
     <!-- SoundSearch Tile -->
-    <string name="quick_settings_sound_search">Sound search</string>
+    <string name="quick_settings_sound_search">گەڕانی دەنگ</string>
     <string name="quick_settings_sound_search_no_app">Install a sound search app first</string>
     <!-- Language toggle tile -->
     <string name="quick_settings_locale_label">زمان</string>
     <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
     <!-- Island notification -->
     <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%1$s by %2$s</string>
+    <string name="by_artist">%1$s لەلایەن %2$s</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Recognizing face...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->

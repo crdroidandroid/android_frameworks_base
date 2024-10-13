@@ -20,11 +20,11 @@
     <string name="url_copy_success">URL-ul a fost copiat cu succes</string>
     <string name="url_copy_failed">A apărut o eroare la încărcarea registrului în pasty</string>
     <!-- Pocket Lock -->
-    <string name="pocket_mode_title">Pocket mode is active</string>
-    <string name="pocket_mode_illustration_description">Illustration of phone in pocket</string>
-    <string name="pocket_mode_instructions_header">To use your phone:</string>
-    <string name="pocket_mode_instruction_step1">1. Ensure the blue area (proximity sensor) shown above is unobstructed and free from dirt or dust.</string>
-    <string name="pocket_mode_instruction_step2">2. Press and hold the power button to exit pocket mode.</string>
+    <string name="pocket_mode_title">Modul de buzunar este activ</string>
+    <string name="pocket_mode_illustration_description">Ilustrație de telefon în buzunar</string>
+    <string name="pocket_mode_instructions_header">Pentru a folosi telefonul:</string>
+    <string name="pocket_mode_instruction_step1">1. Asiguraţi-vă că zona albastră (senzorul de proximitate) de mai sus este neobstrucţionată şi fără noroi sau praf.</string>
+    <string name="pocket_mode_instruction_step2">2. Apăsați și țineți apăsat butonul de pornire pentru a ieși din modul buzunar.</string>
     <!-- App lock -->
     <string name="unlock_application">Deblocare <xliff:g id="label" example="Telegram">%1$s</xliff:g></string>
 </resources>
