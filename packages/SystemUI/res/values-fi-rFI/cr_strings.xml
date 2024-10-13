@@ -31,7 +31,7 @@
     <string name="quick_settings_sound_mute">Mute</string>
     <!-- Text to use when the number in a notification info is too large -->
     <!-- Name of the roaming status bar icon. -->
-    <string name="status_bar_roaming">Roaming indicator</string>
+    <string name="status_bar_roaming">Verkkovierailun osoitin</string>
     <!-- Name of the HD calling status bar icon. -->
     <string name="status_bar_hd_calling">HD calling (VoLTE/VoNR)</string>
     <!-- Name of the VoWiFi status bar icon. -->
@@ -44,17 +44,17 @@
     <string name="megabytespersecond_short">Mt/s</string>
     <string name="gigabytespersecond_short">Gt/s</string>
     <!-- Data usage info in QS footer -->
-    <string name="usage_data">used today</string>
+    <string name="usage_data">käytetty tänään</string>
     <string name="usage_data_default_suffix">Data</string>
     <string name="usage_wifi_default_suffix">Wi-Fi</string>
     <!-- Weather -->
-    <string name="weather_condition_clouds">Cloudy</string>
-    <string name="weather_condition_rain">Rainy</string>
-    <string name="weather_condition_clear">Sunny</string>
-    <string name="weather_condition_storm">Stormy</string>
-    <string name="weather_condition_snow">Snowy</string>
-    <string name="weather_condition_wind">Windy</string>
-    <string name="weather_condition_mist">Misty</string>
+    <string name="weather_condition_clouds">Pilvinen</string>
+    <string name="weather_condition_rain">Sateinen</string>
+    <string name="weather_condition_clear">Aurinkoinen</string>
+    <string name="weather_condition_storm">Myrskyinen</string>
+    <string name="weather_condition_snow">Luminen</string>
+    <string name="weather_condition_wind">Tuulinen</string>
+    <string name="weather_condition_mist">Sumuinen</string>
     <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
     <string name="keyguard_indication_dash_charging_time"><xliff:g id="percentage">%2$s</xliff:g> • Dash-ladataan (<xliff:g id="charging_time_left" example="4 hours and 2 minutes">%1$s</xliff:g> kunnes täynnä)</string>
     <string name="keyguard_plugged_in_dash_charging"><xliff:g id="percentage">%s</xliff:g> • Dash-ladataan</string>
@@ -144,12 +144,12 @@
     <string name="quick_settings_locale_more_locales_toast">Configure multiple languages first</string>
     <!-- Island notification -->
     <string name="now_playing_on">Now Playing on %1$s</string>
-    <string name="by_artist">%1$s by %2$s</string>
+    <string name="by_artist">%1$s, %2$s</string>
     <!-- Text while recognizing face -->
     <string name="face_unlock_recognizing">Tunnistetaan kasvoja...</string>
     <!-- AI Assistant affordance [CHAR LIMIT=32] -->
     <string name="accessibility_assistant_button">AI Assistant</string>
     <!-- Screen record -->
-    <string name="screenrecord_keep_screen_awake_label">Stay awake</string>
+    <string name="screenrecord_keep_screen_awake_label">Pysy hereillä</string>
     <string name="screenrecord_keep_screen_awake_summary">Keep the screen on</string>
 </resources>
